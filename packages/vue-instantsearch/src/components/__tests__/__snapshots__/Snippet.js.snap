@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`allows usage of dot delimited path to access nested attribute 1`] = `
 <span class="ais-Snippet">

@@ -68,7 +68,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -225,7 +225,7 @@ export function createOptionsTests(
       ).toHaveTextContent('1');
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -622,7 +622,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -799,7 +799,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1001,7 +1001,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1123,7 +1123,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1200,7 +1200,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1277,7 +1277,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1354,7 +1354,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1414,7 +1414,7 @@ export function createOptionsTests(
 
 function createMockedSearchClient({ nbHits = 1000 }: { nbHits?: number } = {}) {
   return createAlgoliaSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(

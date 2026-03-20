@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -18,7 +18,7 @@ import type { ChatConnectorParams } from '../connectChat';
 
 describe('connectChat', () => {
   const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
@@ -41,15 +41,15 @@ describe('connectChat', () => {
         // @ts-expect-error
         connectChat()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector]
       `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customChat = connectChat(render, unmount);
       const widget = customChat({});
@@ -186,7 +186,7 @@ describe('connectChat', () => {
     });
 
     it('uses custom `type` as key in getRenderState', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectChat(render);
       const widget = makeWidget({ type: 'customChat', agentId: 'agentId' });
 
@@ -248,7 +248,7 @@ describe('connectChat', () => {
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectChat(() => {}, unmountFn);
       const widget = makeWidget({ agentId: 'agentId' });
 
@@ -395,7 +395,7 @@ describe('connectChat', () => {
 
   describe('default chat instance', () => {
     it('adds a compatibility layer for Algolia MCP Server search tool', async () => {
-      const onSearchToolCall = jest.fn();
+      const onSearchToolCall = vi.fn();
 
       const { widget } = getInitializedWidget({
         agentId: undefined,
@@ -447,7 +447,7 @@ data: [DONE]`,
 
   describe('transport configuration', () => {
     it('throws error when neither agentId nor transport is provided', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectChat(renderFn);
       const widget = makeWidget({});
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -18,15 +18,15 @@ describe('connectPoweredBy', () => {
       // @ts-expect-error
       connectPoweredBy();
     }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/js/#connector]
+    `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customPoweredBy = connectPoweredBy(render, unmount);
     const widget = customPoweredBy({});
@@ -42,7 +42,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
   });
 
   it('renders during init and render', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget({});
 
@@ -58,7 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
   });
 
   it('has a default URL at init', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget({});
 
@@ -73,7 +73,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
   });
 
   it('has a default URL at render', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget({});
 
@@ -88,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
   });
 
   it('can override the URL', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget({
       url: '#custom-url',
@@ -103,7 +103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
   });
 
   it('can override the theme', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectPoweredBy<{ theme: string }>(rendering);
     const widget = makeWidget({
       theme: 'dark',
@@ -129,7 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
   describe('getWidgetRenderState', () => {
     it('uses a default url', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy(rendering);
       const widget = makeWidget({});
 
@@ -140,7 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     });
 
     it('uses a custom url', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy(rendering);
       const widget = makeWidget({
         url: 'hello-world',
@@ -155,7 +155,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     });
 
     it('forwards unknown widget parameters', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy<{ theme: string }>(rendering);
       const widget = makeWidget({
         theme: 'dark',
@@ -172,7 +172,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 
   describe('getRenderState', () => {
     it('uses a default url', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy(rendering);
       const widget = makeWidget({});
 
@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     });
 
     it('uses a custom url', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy(rendering);
       const widget = makeWidget({
         url: 'hello-world',
@@ -202,7 +202,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     });
 
     it('forwards unknown widget parameters', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectPoweredBy<{ theme: string }>(rendering);
       const widget = makeWidget({
         theme: 'dark',

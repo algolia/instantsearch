@@ -9,7 +9,7 @@ var version = require('../../../src/version');
 function makeFakeClient() {
   var client = algoliasearch('what', 'wait', {});
 
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return new Promise(function () {});
   });
 
@@ -34,7 +34,7 @@ test("client without addAlgoliaAgent() doesn't throw on instantiation", function
 
 test('addAlgoliaAgent gets called if exists', function () {
   var client = {
-    addAlgoliaAgent: jest.fn(),
+    addAlgoliaAgent: vi.fn(),
   };
 
   expect(client.addAlgoliaAgent).not.toHaveBeenCalled();
@@ -55,7 +55,7 @@ test("client without clearCache() doesn't throw when clearing cache", function (
 
 test('clearCache gets called if exists', function () {
   var client = {
-    clearCache: jest.fn(),
+    clearCache: vi.fn(),
   };
   var helper = algoliaSearchHelper(client);
 

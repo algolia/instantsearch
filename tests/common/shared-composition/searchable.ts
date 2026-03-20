@@ -23,7 +23,7 @@ export function createSearchableTests(
         instantSearchOptions: {
           compositionID: 'compositionID',
           searchClient: createCompositionClient({
-            search: jest.fn(async ({ compositionID }) => {
+            search: vi.fn(async ({ compositionID }) => {
               if (!compositionID) throw new Error('Missing compositionID');
               await wait(delay);
               return createMultiSearchResponse(
@@ -40,7 +40,7 @@ export function createSearchableTests(
                 })
               );
             }) as ReturnType<typeof createCompositionClient>['search'],
-            searchForFacetValues: jest.fn(async ({ compositionID }) => {
+            searchForFacetValues: vi.fn(async ({ compositionID }) => {
               if (!compositionID) throw new Error('Missing compositionID');
               await wait(delay);
               return {

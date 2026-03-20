@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -29,10 +29,10 @@ describe('connectHitsPerPage', () => {
           items: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`items\` option expects an array of objects.
+        [Error: The \`items\` option expects an array of objects.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector]
+      `);
     });
 
     it('throws with empty items', () => {
@@ -43,10 +43,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect(() => {
         connectHitsPerPage(() => {})(options);
       }).toThrowErrorMatchingInlineSnapshot(`
-"A default value must be specified in \`items\`.
+        [Error: A default value must be specified in \`items\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector]
+      `);
     });
 
     it('throws without default item', () => {
@@ -58,10 +58,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           ],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"A default value must be specified in \`items\`.
+        [Error: A default value must be specified in \`items\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector]
+      `);
     });
 
     it('throws with multiple default items', () => {
@@ -73,14 +73,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           ],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"More than one default value is specified in \`items\`.
+        [Error: More than one default value is specified in \`items\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector]
+      `);
     });
 
     it('warns with an item without a `value`', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectHitsPerPage(renderFn);
       const widget = makeWidget({
         items: [
@@ -91,7 +91,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, '');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       expect(() => {
         widget.init!(
@@ -118,8 +118,8 @@ You may want to add another entry to the \`items\` option with this value.`);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customHitsPerPage = connectHitsPerPage(render, unmount);
       const widget = customHitsPerPage({
@@ -141,7 +141,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -166,7 +166,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 3,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -213,7 +213,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Renders during init and render with transformed items', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -228,7 +228,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 3,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -269,7 +269,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectHitsPerPage(() => {});
     const widget = makeWidget({
       items: [
@@ -302,7 +302,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Configures the search with the default hitsPerPage provided', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -323,7 +323,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Overrides previous hitsPerPage', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -345,7 +345,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -359,7 +359,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 11,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -394,7 +394,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('provides a createURL function', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -408,7 +408,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 20,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -445,7 +445,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('provides the current hitsPerPage value', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -459,7 +459,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -525,7 +525,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -538,7 +538,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -572,7 +572,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('the option for unselecting values should work even if stringified', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -585,7 +585,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -619,7 +619,7 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   it('Should be able to unselect using an empty string', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
@@ -632,7 +632,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -671,7 +671,7 @@ You may want to add another entry to the \`items\` option with this value.`);
       const helper = algoliasearchHelper(searchClient, '');
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
@@ -712,7 +712,7 @@ You may want to add another entry to the \`items\` option with this value.`);
       });
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
@@ -736,8 +736,8 @@ You may want to add another entry to the \`items\` option with this value.`);
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHitsPerPage = connectHitsPerPage(renderFn, unmountFn);
       const hitsPerPage = createHitsPerPage({
         items: [
@@ -915,8 +915,8 @@ You may want to add another entry to the \`items\` option with this value.`);
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHitsPerPage = connectHitsPerPage(renderFn, unmountFn);
       const hitsPerPage = createHitsPerPage({
         items: [
@@ -1021,7 +1021,7 @@ You may want to add another entry to the \`items\` option with this value.`);
 
   describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName');
@@ -1044,7 +1044,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     });
 
     test('returns the `uiState` empty with default value selected', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName', {
@@ -1070,7 +1070,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     });
 
     test('returns the `uiState` with a refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName', {
@@ -1099,7 +1099,7 @@ You may want to add another entry to the \`items\` option with this value.`);
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName');
@@ -1118,7 +1118,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName');
@@ -1139,7 +1139,7 @@ You may want to add another entry to the \`items\` option with this value.`);
     });
 
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectHitsPerPage(render);
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, 'indexName', {

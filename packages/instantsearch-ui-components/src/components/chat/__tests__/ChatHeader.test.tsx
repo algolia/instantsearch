@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -16,7 +16,7 @@ const ChatHeader = createChatHeaderComponent({
 describe('ChatHeader', () => {
   test('renders with default props', () => {
     const { container } = render(
-      <ChatHeader title="Custom title" onClose={jest.fn()} />
+      <ChatHeader title="Custom title" onClose={vi.fn()} />
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -110,7 +110,7 @@ describe('ChatHeader', () => {
   });
 
   test('calls onClose when close button is clicked', () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     const { container } = render(<ChatHeader onClose={onClose} />);
 
     userEvent.click(container.querySelector('.ais-ChatHeader-close')!);
@@ -121,7 +121,7 @@ describe('ChatHeader', () => {
     const { container } = render(
       <ChatHeader
         title="Custom Title"
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         classNames={{
           root: 'custom-root',
           close: 'custom-close',

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -27,10 +27,10 @@ describe('connectHierarchicalMenu', () => {
         // @ts-expect-error
         connectHierarchicalMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector]
+      `);
     });
 
     it('throws without attributes', () => {
@@ -38,20 +38,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         // @ts-expect-error
         connectHierarchicalMenu(() => {})({ attributes: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributes\` option expects an array of strings.
+        [Error: The \`attributes\` option expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector]
+      `);
     });
 
     it('throws with empty attributes', () => {
       expect(() => {
         connectHierarchicalMenu(() => {})({ attributes: [] });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributes\` option expects an array of strings.
+        [Error: The \`attributes\` option expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector]
+      `);
     });
 
     it('throws with non-array attributes', () => {
@@ -59,15 +59,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         // @ts-expect-error
         connectHierarchicalMenu(() => {})({ attributes: 'attributes' });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributes\` option expects an array of strings.
+        [Error: The \`attributes\` option expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customHierarchicalMenu = connectHierarchicalMenu(render, unmount);
       const widget = customHierarchicalMenu({ attributes: ['category'] });
@@ -89,7 +89,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
@@ -120,7 +120,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -160,7 +160,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   it('Provide a function to clear the refinements at each step', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
@@ -171,7 +171,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'value');
 
@@ -209,7 +209,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   it('provides the correct facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -220,7 +220,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -313,7 +313,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   it('provides escaped facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -324,7 +324,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', '-20 degrees');
 
@@ -417,7 +417,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   it('provides the correct transformed facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -433,7 +433,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -490,7 +490,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   it('provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectHierarchicalMenu(() => {});
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -519,7 +519,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const widget = makeWidget({
         attributes: ['category'],
@@ -537,7 +537,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     it('unsets maxValuesPerFacet fully', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const indexName = '';
       const widget = makeWidget({
@@ -557,7 +557,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     it('unsets refinement', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const indexName = '';
       const widget = makeWidget({
@@ -570,7 +570,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -595,8 +595,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHierarchicalMenu = connectHierarchicalMenu(
         renderFn,
         unmountFn
@@ -652,8 +652,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHierarchicalMenu = connectHierarchicalMenu(
         renderFn,
         unmountFn
@@ -725,8 +725,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHierarchicalMenu = connectHierarchicalMenu(
         renderFn,
         unmountFn
@@ -761,8 +761,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the widget render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHierarchicalMenu = connectHierarchicalMenu(
         renderFn,
         unmountFn
@@ -946,8 +946,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {
-          const renderFn = jest.fn();
-          const unmountFn = jest.fn();
+          const renderFn = vi.fn();
+          const unmountFn = vi.fn();
           const createHierarchicalMenu = connectHierarchicalMenu(
             renderFn,
             unmountFn
@@ -1541,7 +1541,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('show more', () => {
     it('can toggle the limits based on the default showMoreLimit value', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const widget = makeWidget({
         attributes: ['category'],
@@ -1556,7 +1556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -1665,7 +1665,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     it('can toggle the limits based on showMoreLimit', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const widget = makeWidget({
         attributes: ['category'],
@@ -1681,7 +1681,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -1784,7 +1784,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('insights', () => {
     it('sends event when a facet is added', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const instantSearchInstance = createInstantSearch();
       const makeWidget = connectHierarchicalMenu(rendering);
       const widget = makeWidget({
@@ -1798,7 +1798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({

@@ -1,8 +1,7 @@
-const loadJsonFile = require('load-json-file');
+import loadJsonFile from 'load-json-file';
+import getConfiguration from '../getConfiguration';
 
-const getConfiguration = require('../getConfiguration');
-
-jest.mock('load-json-file');
+vi.mock('load-json-file');
 
 test('without template throws', async () => {
   expect.assertions(1);

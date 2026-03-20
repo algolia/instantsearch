@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';

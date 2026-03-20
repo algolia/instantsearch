@@ -41,7 +41,7 @@ const fixture = [
 export function createRecommendSearchClient(options: Options = {}) {
   const { minimal = false } = options;
   return createSearchClient({
-    getRecommendations: jest.fn((requests) =>
+    getRecommendations: vi.fn((requests) =>
       Promise.resolve(
         createRecommendResponse(
           // @ts-ignore

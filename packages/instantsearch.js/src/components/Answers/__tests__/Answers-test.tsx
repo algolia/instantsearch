@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 
@@ -58,23 +58,23 @@ describe('Answers', () => {
         <Answers {...defaultProps} isLoading={true} />
       );
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="root empty"
-  >
-    <div
-      class="header"
-    >
-      header
-    </div>
-    <div
-      class="loader"
-    >
-      loader
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="root empty"
+          >
+            <div
+              class="header"
+            >
+              header
+            </div>
+            <div
+              class="loader"
+            >
+              loader
+            </div>
+          </div>
+        </div>
+      `);
     });
 
     it('renders the header with data', () => {

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -17,15 +17,15 @@ describe('connectLookingSimilar', () => {
       // @ts-expect-error
       connectLookingSimilar()({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/looking-similar/js/#connector"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/looking-similar/js/#connector]
     `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customLookingSimilar = connectLookingSimilar(render, unmount);
     const widget = customLookingSimilar({ objectIDs: ['1'] });
@@ -41,8 +41,8 @@ describe('connectLookingSimilar', () => {
   });
 
   it('accepts custom parameters', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customLookingSimilar = connectLookingSimilar<{
       container: string;
@@ -56,7 +56,7 @@ describe('connectLookingSimilar', () => {
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectLookingSimilar(renderFn);
     const widget = makeWidget({ objectIDs: ['1'] });
 
@@ -64,7 +64,7 @@ describe('connectLookingSimilar', () => {
     expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({

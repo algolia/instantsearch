@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 
@@ -20,10 +20,10 @@ describe('answers', () => {
         // @ts-expect-error
         answers({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/]
+      `);
     });
 
     it('throws without `queryLanguages`', () => {
@@ -32,10 +32,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         // @ts-expect-error
         answers({ container });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`queryLanguages\` expects an array of strings.
+        [Error: The \`queryLanguages\` expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector]
+      `);
     });
 
     it('throws when searchClient does not support findAnswers', () => {
@@ -66,10 +66,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
           })
         );
       }).toThrowErrorMatchingInlineSnapshot(`
-"\`algoliasearch\` >= 4.8.0 required.
+        [Error: \`algoliasearch\` >= 4.8.0 required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector]
+      `);
     });
   });
 

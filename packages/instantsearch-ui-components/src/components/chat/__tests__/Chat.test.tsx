@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -17,18 +17,18 @@ describe('Chat', () => {
     const { container } = render(
       <Chat
         open
-        headerProps={{ onClose: jest.fn() }}
+        headerProps={{ onClose: vi.fn() }}
         messagesProps={{
           messages: [],
           indexUiState: {},
-          setIndexUiState: jest.fn(),
+          setIndexUiState: vi.fn(),
           tools: {},
-          onReload: jest.fn(),
-          onClose: jest.fn(),
+          onReload: vi.fn(),
+          onClose: vi.fn(),
         }}
         promptProps={{}}
-        toggleButtonProps={{ open: true, onClick: jest.fn() }}
-        suggestionsProps={{ onSuggestionClick: jest.fn() }}
+        toggleButtonProps={{ open: true, onClick: vi.fn() }}
+        suggestionsProps={{ onSuggestionClick: vi.fn() }}
       />
     );
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -28,7 +28,7 @@ import type {
 } from '../connectMenu';
 
 describe('connectMenu', () => {
-  let rendering: jest.Mock<any, [MenuRenderState, boolean]>;
+  let rendering: Mock<any, [MenuRenderState, boolean]>;
   let makeWidget: WidgetFactory<
     MenuWidgetDescription,
     MenuConnectorParams,
@@ -36,7 +36,7 @@ describe('connectMenu', () => {
   >;
 
   beforeEach(() => {
-    rendering = jest.fn();
+    rendering = vi.fn();
     makeWidget = connectMenu(rendering);
   });
 
@@ -46,10 +46,10 @@ describe('connectMenu', () => {
         // @ts-expect-error
         connectMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector]
+      `);
     });
 
     it('throws when showMoreLimit is equal to limit', () => {
@@ -61,10 +61,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMoreLimit: 20,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`showMoreLimit\` option must be greater than \`limit\`.
+        [Error: The \`showMoreLimit\` option must be greater than \`limit\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector]
+      `);
     });
 
     it('throws when showMoreLimit is lower than limit', () => {
@@ -76,16 +76,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           showMoreLimit: 10,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`showMoreLimit\` option must be greater than \`limit\`.
+        [Error: The \`showMoreLimit\` option must be greater than \`limit\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector]
+      `);
     });
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customMenu = connectMenu(render, unmount);
     const widget = customMenu({ attribute: 'facet' });
@@ -186,7 +186,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -244,7 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'value');
 
@@ -294,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -374,7 +374,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', '-50%');
 
@@ -509,7 +509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -564,7 +564,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   });
 
   it('provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const widget = makeWidget({
       attribute: 'category',
       transformItems,
@@ -608,8 +608,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createMenu = connectMenu(renderFn, unmountFn);
       const menu = createMenu({
         attribute: 'brand',
@@ -639,8 +639,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createMenu = connectMenu(renderFn, unmountFn);
       const menu = createMenu({
         attribute: 'brand',
@@ -687,8 +687,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state (init)', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createMenu = connectMenu(renderFn, unmountFn);
       const menu = createMenu({
         attribute: 'brand',
@@ -717,8 +717,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the widget render state (render)', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createMenu = connectMenu(renderFn, unmountFn);
       const menu = createMenu({
         attribute: 'brand',
@@ -864,8 +864,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {
-          const renderFn = jest.fn();
-          const unmountFn = jest.fn();
+          const renderFn = vi.fn();
+          const unmountFn = vi.fn();
           const createMenu = connectMenu(renderFn, unmountFn);
           const menu = createMenu({
             attribute: 'brand',
@@ -986,7 +986,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         uiState: {},
       });
       const helper = jsHelper(createSearchClient(), '', config);
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -1019,7 +1019,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
       const helper = jsHelper(createSearchClient(), '', config);
 
-      helper.search = jest.fn();
+      helper.search = vi.fn();
       helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init!(
@@ -1089,7 +1089,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
       const helper = jsHelper(createSearchClient(), '', config);
 
-      helper.search = jest.fn();
+      helper.search = vi.fn();
       helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init!(
@@ -1485,7 +1485,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       expect(helper.state).toEqual(
         new SearchParameters({
@@ -1584,7 +1584,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       expect(helper.state).toEqual(
         new SearchParameters({
@@ -1627,7 +1627,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
       const newState = widget.dispose!(createDisposeOptions({ state, helper }));
 
       expect(newState).toEqual(new SearchParameters());
@@ -1647,7 +1647,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({

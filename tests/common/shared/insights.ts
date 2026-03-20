@@ -12,7 +12,7 @@ import type { SearchClient } from 'instantsearch.js';
 
 declare const window: Window &
   typeof globalThis & {
-    aa: jest.Mock;
+    aa: Mock;
   };
 
 export function createInsightsTests(
@@ -27,13 +27,13 @@ export function createInsightsTests(
         const attribute = 'one';
         const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
 
-        window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+        window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
 
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(
@@ -114,14 +114,14 @@ export function createInsightsTests(
         const attribute = 'one';
         const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
 
-        window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+        window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
 
         const options = {
           instantSearchOptions: {
             insights: true,
             indexName: 'indexName',
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(

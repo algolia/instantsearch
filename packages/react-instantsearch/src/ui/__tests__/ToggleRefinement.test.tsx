@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -16,7 +16,7 @@ describe('ToggleRefinement', () => {
   ): ToggleRefinementProps {
     return {
       label: 'Free shipping',
-      onChange: jest.fn(),
+      onChange: vi.fn(),
       classNames: {},
       ...props,
     };

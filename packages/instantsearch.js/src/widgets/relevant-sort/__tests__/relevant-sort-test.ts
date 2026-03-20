@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -17,12 +17,10 @@ import relevantSort from '../relevant-sort';
 
 import type { RelevantSortTemplates } from '../relevant-sort';
 
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 const templates: RelevantSortTemplates = {
@@ -34,7 +32,7 @@ const templates: RelevantSortTemplates = {
 
 describe('relevantSort', () => {
   beforeEach(() => {
-    (render as jest.Mock).mockReset();
+    (render as Mock).mockReset();
   });
 
   describe('Usage', () => {
@@ -43,10 +41,10 @@ describe('relevantSort', () => {
         // @ts-expect-error wrong options
         relevantSort({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/relevant-sort/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/relevant-sort/js/]
+      `);
     });
   });
 
@@ -74,7 +72,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/relevant-so
         ]),
       })
     );
-    const [, secondRender] = (render as jest.Mock).mock.calls;
+    const [, secondRender] = (render as Mock).mock.calls;
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(secondRender[0].props).toEqual(

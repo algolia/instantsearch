@@ -41,7 +41,7 @@ describe('resolveTemplate', () => {
         }
       )
     ).toThrowErrorMatchingInlineSnapshot(
-      `"The template \\"InstantSearch.js\\" does not support the version 1.0.0."`
+      `[Error: The template "InstantSearch.js" does not support the version 1.0.0.]`
     );
   });
 

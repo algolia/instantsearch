@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -15,7 +15,7 @@ const ChatToggleButton = createChatToggleButtonComponent({
 
 describe('ChatToggleButton', () => {
   test('renders with default props', () => {
-    const { container } = render(<ChatToggleButton open onClick={jest.fn()} />);
+    const { container } = render(<ChatToggleButton open onClick={vi.fn()} />);
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
@@ -41,7 +41,7 @@ describe('ChatToggleButton', () => {
 
   test('renders with closed prop', () => {
     const { container } = render(
-      <ChatToggleButton open={false} onClick={jest.fn()} />
+      <ChatToggleButton open={false} onClick={vi.fn()} />
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -73,7 +73,7 @@ describe('ChatToggleButton', () => {
   });
 
   test('calls onClick when clicked', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { container } = render(<ChatToggleButton open onClick={onClick} />);
 
     userEvent.click(container.querySelector('button')!);
@@ -84,7 +84,7 @@ describe('ChatToggleButton', () => {
     const { container } = render(
       <ChatToggleButton
         open
-        onClick={jest.fn()}
+        onClick={vi.fn()}
         classNames={{ root: 'custom-root' }}
       />
     );
@@ -93,7 +93,7 @@ describe('ChatToggleButton', () => {
     );
 
     const { container: classNameContainer } = render(
-      <ChatToggleButton open onClick={jest.fn()} className="custom-root" />
+      <ChatToggleButton open onClick={vi.fn()} className="custom-root" />
     );
     expect(classNameContainer.querySelector('button')!.className).toBe(
       'ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open custom-root'
@@ -108,7 +108,7 @@ describe('ChatToggleButton', () => {
     const { container } = render(
       <ChatToggleButton
         open={false}
-        onClick={jest.fn()}
+        onClick={vi.fn()}
         toggleIconComponent={CustomIcon}
       />
     );

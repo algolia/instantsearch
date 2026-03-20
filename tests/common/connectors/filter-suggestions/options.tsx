@@ -189,7 +189,7 @@ export function createOptionsTests(
         ],
       });
 
-      const transformItems = jest.fn((items) => items);
+      const transformItems = vi.fn((items) => items);
 
       await setup({
         instantSearchOptions: {
@@ -371,7 +371,7 @@ export function createOptionsTests(
 
 function createSearchClientWithHits() {
   return createSearchClient({
-    search: jest.fn(() =>
+    search: vi.fn(() =>
       Promise.resolve({
         results: [
           {
@@ -392,7 +392,7 @@ function createSearchClientWithHits() {
 }
 
 function mockFetch(response?: any) {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
       json: () =>
@@ -402,10 +402,10 @@ function mockFetch(response?: any) {
           }
         ),
     })
-  ) as jest.Mock;
+  ) as Mock;
 }
 
 function getSentMessage() {
-  return JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+  return JSON.parse((global.fetch as Mock).mock.calls[0][1].body)
     .messages[0].parts[0];
 }

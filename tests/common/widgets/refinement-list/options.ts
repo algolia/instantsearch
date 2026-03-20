@@ -73,7 +73,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-RefinementList')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -410,7 +410,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-RefinementList')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -917,7 +917,7 @@ export function createOptionsTests(
         expect(searchInput).toHaveAttribute('placeholder', 'Search brands');
         expect(
           document.querySelector('.ais-RefinementList-labelText')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <span
@@ -964,7 +964,7 @@ export function createOptionsTests(
         );
         expect(
           document.querySelector('.ais-RefinementList-labelText')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <span
@@ -1007,7 +1007,7 @@ export function createOptionsTests(
 
       test('displays a fallback when there are no results', async () => {
         const searchClient = createMockedSearchClient({
-          searchForFacetValues: jest.fn(() =>
+          searchForFacetValues: vi.fn(() =>
             Promise.resolve([createSFFVResponse({ facetHits: [] })])
           ),
         });
@@ -1048,7 +1048,7 @@ export function createOptionsTests(
         expect(document.querySelector('.ais-RefinementList-list')).toBeNull();
         expect(
           document.querySelector('.ais-RefinementList')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -1244,7 +1244,7 @@ export function createOptionsTests(
             '.ais-SearchBox-input'
           ) as HTMLInputElement;
 
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Insignia™ ☐
           Samsung ☐
           Metra ☐
@@ -1261,7 +1261,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Apple ☐
           Alpine ☐
           APC ☐
@@ -1278,7 +1278,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Apple ☒
           Insignia™ ☐
           Samsung ☐
@@ -1295,7 +1295,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Insignia™ ☐
           Samsung ☐
           Metra ☐
@@ -1334,7 +1334,7 @@ export function createOptionsTests(
             '.ais-SearchBox-input'
           ) as HTMLInputElement;
 
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Insignia™ ☐
           Samsung ☐
           Metra ☐
@@ -1351,7 +1351,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Apple ☐
           Alpine ☐
           APC ☐
@@ -1368,7 +1368,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Apple ☐
           Alpine ☐
           APC ☐
@@ -1385,7 +1385,7 @@ export function createOptionsTests(
           await act(async () => {
             await wait(0);
           });
-          expect(textRepresentation()).toMatchInlineSnapshot(`
+          expect(textRepresentation()).toMatchSnapshot(`
           "Apple ☐
           Alpine ☐
           APC ☐
@@ -1432,7 +1432,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-RefinementList')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -1755,7 +1755,7 @@ export function createOptionsTests(
                 showMoreLimit: 1,
               },
             })
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`
+        ).rejects.toThrowErrorMatchingSnapshot(`
                 "\`showMoreLimit\` should be greater than \`limit\`.
 
                 See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
@@ -1845,7 +1845,7 @@ function createMockedSearchClient(
   renderingContent: Record<string, any> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() =>
@@ -1859,7 +1859,7 @@ function createMockedSearchClient(
         )
       );
     }),
-    searchForFacetValues: jest.fn(() =>
+    searchForFacetValues: vi.fn(() =>
       Promise.resolve([
         createSFFVResponse({
           facetHits: FACET_HITS,

@@ -22,28 +22,30 @@ test('addExclude should add an exclusion', function () {
   ).toBeTruthy();
 });
 
-test('removeExclude should remove an exclusion', function (done) {
-  var helper = algoliasearchHelper(fakeClient, null, {
-    facets: ['facet'],
-  });
+test('removeExclude should remove an exclusion', function () {
+  return new Promise(function (done) {
+    var helper = algoliasearchHelper(fakeClient, null, {
+      facets: ['facet'],
+    });
 
-  helper._search = function () {};
+    helper._search = function () {};
 
-  var facetName = 'facet';
-  var facetValueToExclude = 'brand';
+    var facetName = 'facet';
+    var facetValueToExclude = 'brand';
 
-  helper.addExclude(facetName, facetValueToExclude);
-  expect(helper.state.facetsExcludes[facetName].length === 1).toBeTruthy();
-  helper.removeExclude(facetName, facetValueToExclude);
-  expect(helper.state.facetsExcludes[facetName]).toEqual([]);
-
-  try {
+    helper.addExclude(facetName, facetValueToExclude);
+    expect(helper.state.facetsExcludes[facetName].length === 1).toBeTruthy();
     helper.removeExclude(facetName, facetValueToExclude);
-  } catch (e) {
-    done(new Error('Removing unset exclusions should be ok...'));
-  }
+    expect(helper.state.facetsExcludes[facetName]).toEqual([]);
 
-  done();
+    try {
+      helper.removeExclude(facetName, facetValueToExclude);
+    } catch (e) {
+      done(new Error('Removing unset exclusions should be ok...'));
+    }
+
+    done();
+  });
 });
 
 test('isExcluded should allow to omit the value', function () {

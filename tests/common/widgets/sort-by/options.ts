@@ -38,7 +38,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-SortBy')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -101,7 +101,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-SortBy')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div

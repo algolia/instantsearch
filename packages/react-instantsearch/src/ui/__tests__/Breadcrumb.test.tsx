@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -15,8 +15,8 @@ describe('Breadcrumb', () => {
     translations,
     ...props
   }: Partial<BreadcrumbProps> = {}): BreadcrumbProps {
-    const createURL = jest.fn((value) => `#${value}`);
-    const onNavigate = jest.fn();
+    const createURL = vi.fn((value) => `#${value}`);
+    const onNavigate = vi.fn();
 
     return {
       items: [

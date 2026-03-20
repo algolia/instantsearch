@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
@@ -19,7 +19,7 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 
 const testSetups = {
   async createSharedTests({ instantSearchOptions, widgetParams }) {

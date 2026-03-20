@@ -1,11 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import Template from '../__Template.vue';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 it('renders correctly', () => {
@@ -20,7 +20,7 @@ it('renders correctly', () => {
 
 it('behaves correctly', async () => {
   __setState({
-    refine: jest.fn(),
+    refine: vi.fn(),
   });
   const wrapper = mount(Template);
   const button = wrapper.find('button');

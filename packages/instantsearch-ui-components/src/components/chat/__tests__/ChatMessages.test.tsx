@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -18,10 +18,10 @@ describe('ChatMessages', () => {
       <ChatMessages
         messages={[]}
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         tools={{}}
-        onReload={jest.fn()}
-        onClose={jest.fn()}
+        onReload={vi.fn()}
+        onClose={vi.fn()}
       />
     );
 
@@ -64,7 +64,7 @@ describe('ChatMessages', () => {
   });
 
   test('renders with messages', () => {
-    const Messages = jest.fn(() => <span>Messages</span>);
+    const Messages = vi.fn(() => <span>Messages</span>);
 
     const { container } = render(
       <ChatMessages
@@ -77,11 +77,11 @@ describe('ChatMessages', () => {
           },
         ]}
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         messageComponent={Messages}
         tools={{}}
-        onReload={jest.fn()}
-        onClose={jest.fn()}
+        onReload={vi.fn()}
+        onClose={vi.fn()}
       />
     );
 
@@ -150,10 +150,10 @@ describe('ChatMessages', () => {
           scrollToBottom: 'scrollToBottom',
         }}
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         tools={{}}
-        onReload={jest.fn()}
-        onClose={jest.fn()}
+        onReload={vi.fn()}
+        onClose={vi.fn()}
       />
     );
 

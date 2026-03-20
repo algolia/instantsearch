@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { act, render } from '@testing-library/react';
@@ -20,11 +20,11 @@ describe('InfiniteHits', () => {
         { objectID: 'abc', __position: 1 },
         { objectID: 'def', __position: 2 },
       ],
-      sendEvent: jest.fn(),
+      sendEvent: vi.fn(),
       isFirstPage: true,
       isLastPage: false,
-      onShowPrevious: jest.fn(),
-      onShowMore: jest.fn(),
+      onShowPrevious: vi.fn(),
+      onShowMore: vi.fn(),
       translations: {
         showPreviousButtonText: 'Show previous results',
         showMoreButtonText: 'Show more results',
@@ -336,7 +336,7 @@ describe('InfiniteHits', () => {
     userEvent.click(container.querySelector('.hitButton')!);
 
     expect(props.sendEvent).toHaveBeenCalledTimes(2);
-    expect((props.sendEvent as jest.Mock).mock.calls[0][0]).toBe(props.hits[0]);
+    expect((props.sendEvent as Mock).mock.calls[0][0]).toBe(props.hits[0]);
   });
 
   describe('bannerComponent', () => {
@@ -476,7 +476,7 @@ describe('InfiniteHits', () => {
 
     test('passes an `onShowPrevious` callback to the "Show Previous" button', () => {
       const props = createProps({});
-      const onShowPrevious = jest.fn();
+      const onShowPrevious = vi.fn();
 
       const { container } = render(
         <InfiniteHits
@@ -513,7 +513,7 @@ describe('InfiniteHits', () => {
   describe('showMore', () => {
     test('passes an `onShowMore` callback to the "Show More" button', () => {
       const props = createProps({});
-      const onShowMore = jest.fn();
+      const onShowMore = vi.fn();
 
       const { container } = render(
         <InfiniteHits {...props} isFirstPage={false} onShowMore={onShowMore} />

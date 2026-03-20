@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 /**
@@ -21,7 +21,7 @@ function createProps(props?: Partial<HitsPerPageProps>): HitsPerPageProps {
       { label: '30', value: 30 },
     ],
     currentValue: 10,
-    onChange: jest.fn(),
+    onChange: vi.fn(),
     ...props,
   };
 }

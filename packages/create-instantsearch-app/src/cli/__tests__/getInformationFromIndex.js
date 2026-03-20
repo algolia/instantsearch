@@ -2,9 +2,9 @@ const { algoliasearch } = require('algoliasearch');
 
 const getInformationFromIndex = require('../getInformationFromIndex');
 
-jest.mock('algoliasearch', () => {
-  const _algoliasearch = jest.fn(() => ({ search: _algoliasearch.__search }));
-  _algoliasearch.__search = jest.fn(() =>
+vi.mock('algoliasearch', () => {
+  const _algoliasearch = vi.fn(() => ({ search: _algoliasearch.__search }));
+  _algoliasearch.__search = vi.fn(() =>
     Promise.resolve({
       results: [
         {

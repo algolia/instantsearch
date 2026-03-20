@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createCompositionClient } from '@instantsearch/mocks';
@@ -18,9 +18,9 @@ import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
 
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
-  resetWidgetId: jest.fn(),
+vi.mock('instantsearch.js/es/lib/utils', async () => ({
+  ...(await vi.importActual('instantsearch.js/es/lib/utils')),
+  resetWidgetId: vi.fn(),
 }));
 
 const compositionID = 'my-composition';
@@ -34,7 +34,7 @@ const renderComponent = async ({
   children?: React.ReactNode;
   ref?: { current: PromiseWithState<void> | null };
   nonce?: string;
-  insertedHTML?: jest.Mock;
+  insertedHTML?: Mock;
 } = {}) => {
   const client = createCompositionClient();
 
@@ -90,5 +90,5 @@ test('it waits for composition-based search', async () => {
 });
 
 afterAll(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });

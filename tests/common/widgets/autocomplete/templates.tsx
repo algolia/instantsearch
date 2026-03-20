@@ -119,7 +119,7 @@ export function createTemplatesTests(
     });
 
     test('renders recent searches header', async () => {
-      jest
+      vi
         .spyOn(Storage.prototype, 'getItem')
         .mockReturnValue(JSON.stringify(['hello', 'world']));
 
@@ -191,7 +191,7 @@ export function createTemplatesTests(
     });
 
     test('renders custom panel', async () => {
-      jest
+      vi
         .spyOn(Storage.prototype, 'getItem')
         .mockReturnValue(JSON.stringify(['hello']));
 
@@ -279,7 +279,7 @@ export function createTemplatesTests(
       });
 
       const panel = screen.queryByRole('grid');
-      expect(panel).toMatchNormalizedInlineSnapshot(
+      expect(panel).toMatchNormalizedSnapshot(
         normalizeSnapshot('P484'),
         `
         <div
@@ -436,6 +436,6 @@ function createMockedSearchClient(
 ) {
   return createSearchClient({
     // @ts-expect-error - doesn't properly handle multi index, expects all responses to be of the same type
-    search: jest.fn(() => Promise.resolve(response)),
+    search: vi.fn(() => Promise.resolve(response)),
   });
 }

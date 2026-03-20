@@ -11,8 +11,8 @@
     "doc": "node documentation-src/metalsmith.js",
     "test": "../../scripts/retry.sh 3 'scripts/test.sh'",
     "test:v4": "../../scripts/retry.sh 3 'scripts/test.sh'",
-    "test:unit": "jest",
-    "test:watch": "jest --watch",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
     "test:v3": "yarn run test",
     "version": "./scripts/update-version.js",
     "prepare": "patch-package"
@@ -37,7 +37,6 @@
   "devDependencies": {
     "@metalsmith/sass": "1.4.0",
     "handlebars": "4.1.0",
-    "jest-watch-typeahead": "0.3.0",
     "jsdoc-to-markdown": "8.0.0",
     "metalsmith": "2.5.1",
     "metalsmith-in-place": "1.4.4",

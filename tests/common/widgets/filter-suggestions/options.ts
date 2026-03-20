@@ -33,7 +33,7 @@ export function createOptionsTests(
 
     test('renders with default props', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -56,7 +56,7 @@ export function createOptionsTests(
       });
 
       // Mock fetch for the agent API
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () =>
@@ -83,7 +83,7 @@ export function createOptionsTests(
               ],
             }),
         } as Response)
-      ) as jest.Mock;
+      ) as Mock;
 
       await setup({
         instantSearchOptions: {
@@ -118,7 +118,7 @@ export function createOptionsTests(
 
     test('renders empty state when no hits', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -159,7 +159,7 @@ export function createOptionsTests(
 
     test('filters suggestions by attributes', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -181,7 +181,7 @@ export function createOptionsTests(
         ) as any,
       });
 
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () =>
@@ -208,7 +208,7 @@ export function createOptionsTests(
               ],
             }),
         } as Response)
-      ) as jest.Mock;
+      ) as Mock;
 
       await setup({
         instantSearchOptions: {
@@ -243,7 +243,7 @@ export function createOptionsTests(
 
     test('applies transformItems', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -265,7 +265,7 @@ export function createOptionsTests(
         ) as any,
       });
 
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () =>
@@ -286,9 +286,9 @@ export function createOptionsTests(
               ],
             }),
         } as Response)
-      ) as jest.Mock;
+      ) as Mock;
 
-      const transformItems = jest.fn((items: any[]) =>
+      const transformItems = vi.fn((items: any[]) =>
         items.map((item: any) => ({ ...item, label: `Custom ${item.label}` }))
       );
 

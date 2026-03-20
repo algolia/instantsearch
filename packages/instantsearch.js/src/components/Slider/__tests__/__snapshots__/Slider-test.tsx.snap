@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Slider expect to render correctly 1`] = `
+exports[`Slider > expect to render correctly 1`] = `
 <div
   className="root"
 >
@@ -321,11 +321,851 @@ exports[`Slider expect to render correctly 1`] = `
         0,
       ]
     }
-  />
+  >
+    <div
+      className="rheostat rheostat-horizontal "
+      onClick={[Function]}
+      style={
+        {
+          "position": "relative",
+        }
+      }
+    >
+      <div
+        className="rheostat-background"
+      />
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={0}
+        key="handle-0"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Minimum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-lower"
+          data-handle-key={0}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={1}
+        key="handle-1"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Maximum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-upper"
+          data-handle-key={1}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <div
+        className="rheostat-progress"
+        key="progress-bar-1"
+        style={
+          {
+            "left": "0%",
+            "width": "0%",
+          }
+        }
+      />
+      <Pit
+        key="pit-0"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal rheostat-marker-large"
+          style={
+            {
+              "left": "0%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        >
+          <div
+            className="rheostat-value"
+          >
+            0
+          </div>
+        </div>
+      </Pit>
+      <Pit
+        key="pit-14.705882352941176"
+        style={
+          {
+            "left": "2.941176470588235%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "2.941176470588235%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-29.41176470588235"
+        style={
+          {
+            "left": "5.88235294117647%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "5.88235294117647%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-44.11764705882353"
+        style={
+          {
+            "left": "8.823529411764707%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "8.823529411764707%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-58.8235294117647"
+        style={
+          {
+            "left": "11.76470588235294%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "11.76470588235294%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-73.52941176470588"
+        style={
+          {
+            "left": "14.705882352941178%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "14.705882352941178%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-88.23529411764706"
+        style={
+          {
+            "left": "17.647058823529413%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "17.647058823529413%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-102.94117647058823"
+        style={
+          {
+            "left": "20.588235294117645%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "20.588235294117645%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-117.6470588235294"
+        style={
+          {
+            "left": "23.52941176470588%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "23.52941176470588%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-132.35294117647058"
+        style={
+          {
+            "left": "26.47058823529412%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "26.47058823529412%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-147.05882352941177"
+        style={
+          {
+            "left": "29.411764705882355%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "29.411764705882355%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-161.76470588235293"
+        style={
+          {
+            "left": "32.35294117647059%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "32.35294117647059%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-176.47058823529412"
+        style={
+          {
+            "left": "35.294117647058826%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "35.294117647058826%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-191.17647058823528"
+        style={
+          {
+            "left": "38.23529411764706%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "38.23529411764706%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-205.88235294117646"
+        style={
+          {
+            "left": "41.17647058823529%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "41.17647058823529%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-220.58823529411762"
+        style={
+          {
+            "left": "44.11764705882352%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "44.11764705882352%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-235.2941176470588"
+        style={
+          {
+            "left": "47.05882352941176%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "47.05882352941176%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-250"
+        style={
+          {
+            "left": "50%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal rheostat-marker-large"
+          style={
+            {
+              "left": "50%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        >
+          <div
+            className="rheostat-value"
+          >
+            250
+          </div>
+        </div>
+      </Pit>
+      <Pit
+        key="pit-264.70588235294116"
+        style={
+          {
+            "left": "52.94117647058824%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "52.94117647058824%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-279.4117647058823"
+        style={
+          {
+            "left": "55.882352941176464%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "55.882352941176464%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-294.11764705882354"
+        style={
+          {
+            "left": "58.82352941176471%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "58.82352941176471%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-308.8235294117647"
+        style={
+          {
+            "left": "61.76470588235294%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "61.76470588235294%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-323.52941176470586"
+        style={
+          {
+            "left": "64.70588235294117%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "64.70588235294117%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-338.235294117647"
+        style={
+          {
+            "left": "67.6470588235294%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "67.6470588235294%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-352.94117647058823"
+        style={
+          {
+            "left": "70.58823529411765%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "70.58823529411765%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-367.6470588235294"
+        style={
+          {
+            "left": "73.52941176470587%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "73.52941176470587%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-382.35294117647055"
+        style={
+          {
+            "left": "76.47058823529412%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "76.47058823529412%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-397.05882352941177"
+        style={
+          {
+            "left": "79.41176470588235%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "79.41176470588235%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-411.7647058823529"
+        style={
+          {
+            "left": "82.35294117647058%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "82.35294117647058%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-426.4705882352941"
+        style={
+          {
+            "left": "85.29411764705883%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "85.29411764705883%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-441.17647058823525"
+        style={
+          {
+            "left": "88.23529411764704%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "88.23529411764704%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-455.88235294117646"
+        style={
+          {
+            "left": "91.17647058823529%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "91.17647058823529%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-470.5882352941176"
+        style={
+          {
+            "left": "94.11764705882352%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "94.11764705882352%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-485.2941176470588"
+        style={
+          {
+            "left": "97.05882352941175%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal"
+          style={
+            {
+              "left": "97.05882352941175%",
+              "marginLeft": 0,
+              "position": "absolute",
+            }
+          }
+        />
+      </Pit>
+      <Pit
+        key="pit-500"
+        style={
+          {
+            "left": "100%",
+            "position": "absolute",
+          }
+        }
+      >
+        <div
+          className="rheostat-marker rheostat-marker-horizontal rheostat-marker-large"
+          style={
+            {
+              "left": "100%",
+              "marginLeft": "-2px",
+              "position": "absolute",
+            }
+          }
+        >
+          <div
+            className="rheostat-value"
+          >
+            500
+          </div>
+        </div>
+      </Pit>
+    </div>
+  </Rheostat>
 </div>
 `;
 
-exports[`Slider expect to render with CSS classes 1`] = `
+exports[`Slider > expect to render with CSS classes 1`] = `
 <div
   className="root"
 >
@@ -608,11 +1448,133 @@ exports[`Slider expect to render with CSS classes 1`] = `
         0,
       ]
     }
-  />
+  >
+    <div
+      className="rheostat rheostat-horizontal "
+      onClick={[Function]}
+      style={
+        {
+          "position": "relative",
+        }
+      }
+    >
+      <div
+        className="rheostat-background"
+      />
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={0}
+        key="handle-0"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Minimum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-lower"
+          data-handle-key={0}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={1}
+        key="handle-1"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Maximum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-upper"
+          data-handle-key={1}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <div
+        className="rheostat-progress"
+        key="progress-bar-1"
+        style={
+          {
+            "left": "0%",
+            "width": "0%",
+          }
+        }
+      />
+    </div>
+  </Rheostat>
 </div>
 `;
 
-exports[`Slider expect to render without pips 1`] = `
+exports[`Slider > expect to render without pips 1`] = `
 <div
   className="root"
 >
@@ -895,6 +1857,128 @@ exports[`Slider expect to render without pips 1`] = `
         0,
       ]
     }
-  />
+  >
+    <div
+      className="rheostat rheostat-horizontal "
+      onClick={[Function]}
+      style={
+        {
+          "position": "relative",
+        }
+      }
+    >
+      <div
+        className="rheostat-background"
+      />
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={0}
+        key="handle-0"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Minimum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-lower"
+          data-handle-key={0}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <Component
+        aria-disabled={false}
+        aria-valuemax={500}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="rheostat-handle"
+        data-handle-key={1}
+        key="handle-1"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+        role="slider"
+        style={
+          {
+            "left": "0%",
+            "position": "absolute",
+          }
+        }
+        tabIndex={0}
+      >
+        <div
+          aria-disabled={false}
+          aria-label="Maximum Filter Handle"
+          aria-valuemax={500}
+          aria-valuemin={0}
+          aria-valuenow={0}
+          className="rheostat-handle rheostat-handle-upper"
+          data-handle-key={1}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          role="slider"
+          style={
+            {
+              "left": "0%",
+              "position": "absolute",
+            }
+          }
+          tabIndex={0}
+        >
+          <div
+            className="rheostat-tooltip"
+          >
+            0
+          </div>
+        </div>
+      </Component>
+      <div
+        className="rheostat-progress"
+        key="progress-bar-1"
+        style={
+          {
+            "left": "0%",
+            "width": "0%",
+          }
+        }
+      />
+    </div>
+  </Rheostat>
 </div>
 `;

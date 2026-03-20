@@ -5,16 +5,16 @@ import { hydrateSearchClient } from '../hydrateSearchClient';
 import type { InitialResults, CompositionClient } from '../../../types';
 
 const setupCompositionClient = () => {
-  const getCache = jest.fn();
-  const setCache = jest.fn();
-  const search: CompositionClient['search'] = jest.fn();
+  const getCache = vi.fn();
+  const setCache = vi.fn();
+  const search: CompositionClient['search'] = vi.fn();
   const client: CompositionClient & {
     _cacheHydrated?: boolean;
     _useCache?: boolean;
     cache?: Record<string, string>;
   } = createCompositionClient({
     transporter: { responsesCache: { set: setCache, get: getCache } },
-    addAlgoliaAgent: jest.fn(),
+    addAlgoliaAgent: vi.fn(),
     search,
   });
 

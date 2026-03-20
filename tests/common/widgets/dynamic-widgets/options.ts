@@ -149,7 +149,7 @@ export function createOptionsTests(
 
 function createMockedSearchClient() {
   return createAlgoliaSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() => {

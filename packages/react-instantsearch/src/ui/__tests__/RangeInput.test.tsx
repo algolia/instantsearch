@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -16,7 +16,7 @@ describe('RangeInput', () => {
       range: { min: 1, max: 5000 },
       start: [undefined, undefined],
       disabled: false,
-      onSubmit: jest.fn(),
+      onSubmit: vi.fn(),
       translations: { separatorElementText: 'to', submitButtonText: 'Go' },
       ...props,
     };

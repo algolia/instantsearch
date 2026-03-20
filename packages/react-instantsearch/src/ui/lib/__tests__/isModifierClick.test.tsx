@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -10,7 +10,7 @@ import { isModifierClick } from '../isModifierClick';
 
 describe('isModifierClick', () => {
   test('returns `true` when holding the middle button', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'), { button: 1 });
@@ -19,7 +19,7 @@ describe('isModifierClick', () => {
   });
 
   test('returns `true` when holding the Alt key', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'), { altKey: true });
@@ -28,7 +28,7 @@ describe('isModifierClick', () => {
   });
 
   test('returns `true` when holding the Ctrl key', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'), { ctrlKey: true });
@@ -37,7 +37,7 @@ describe('isModifierClick', () => {
   });
 
   test('returns `true` when holding the Meta key', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'), { metaKey: true });
@@ -46,7 +46,7 @@ describe('isModifierClick', () => {
   });
 
   test('returns `true` when holding the Shift key', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'), { shiftKey: true });
@@ -55,7 +55,7 @@ describe('isModifierClick', () => {
   });
 
   test('returns `false` when not holding any key', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(<button onClick={onClick} />);
 
     userEvent.click(getByRole('button'));

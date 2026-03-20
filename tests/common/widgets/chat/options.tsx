@@ -43,7 +43,7 @@ export function createOptionsTests(
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
-      const sendMessageSpy = jest
+      const sendMessageSpy = vi
         .spyOn(chat, 'sendMessage')
         .mockResolvedValue(undefined);
 

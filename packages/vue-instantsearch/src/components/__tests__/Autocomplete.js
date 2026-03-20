@@ -1,15 +1,15 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import Autocomplete from '../Autocomplete.vue';
 import '../../../test/utils/sortedHtmlSerializer';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 const defaultState = {
-  refine: jest.fn(),
+  refine: vi.fn(),
   currentRefinement: '',
   indices: [
     {
@@ -30,23 +30,24 @@ it('renders correctly', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-// eslint-disable-next-line jest/no-done-callback
-it('gives the correct props to the default slot', (done) => {
-  __setState({
-    ...defaultState,
-  });
-  mount(Autocomplete, {
-    scopedSlots: {
-      default(props) {
-        expect(props).toEqual(
-          expect.objectContaining({
-            currentRefinement: defaultState.currentRefinement,
-            refine: defaultState.refine,
-            indices: defaultState.indices,
-          })
-        );
-        done();
+it('gives the correct props to the default slot', () => {
+  return new Promise((done) => {
+    __setState({
+      ...defaultState,
+    });
+    mount(Autocomplete, {
+      scopedSlots: {
+        default(props) {
+          expect(props).toEqual(
+            expect.objectContaining({
+              currentRefinement: defaultState.currentRefinement,
+              refine: defaultState.refine,
+              indices: defaultState.indices,
+            })
+          );
+          done();
+        },
       },
-    },
+    });
   });
 });

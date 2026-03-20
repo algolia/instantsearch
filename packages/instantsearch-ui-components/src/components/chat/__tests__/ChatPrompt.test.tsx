@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -156,9 +156,9 @@ describe('ChatPrompt', () => {
   });
 
   test('renders with user handlers and value props', () => {
-    const onInput = jest.fn();
-    const onSubmit = jest.fn();
-    const onStop = jest.fn();
+    const onInput = vi.fn();
+    const onSubmit = vi.fn();
+    const onStop = vi.fn();
     const { container } = render(
       <ChatPrompt
         value="Hello"

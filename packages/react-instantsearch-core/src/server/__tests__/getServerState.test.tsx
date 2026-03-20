@@ -127,7 +127,7 @@ describe('getServerState', () => {
     await expect(
       getServerState(<App />, { renderToString })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Unable to retrieve InstantSearch's server state in \`getServerState()\`. Did you mount the <InstantSearch> component?"`
+      `[Error: Unable to retrieve InstantSearch's server state in \`getServerState()\`. Did you mount the <InstantSearch> component?]`
     );
   });
 
@@ -150,7 +150,7 @@ describe('getServerState', () => {
     await expect(
       getServerState(<App />, { renderToString })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component."`
+      `[Error: getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component.]`
     );
   });
 
@@ -215,7 +215,7 @@ describe('getServerState', () => {
 
   test('calls search with widgets search parameters', async () => {
     const searchClient = createSearchClient({});
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient });
 
     await getServerState(<App />, { renderToString });
@@ -337,7 +337,7 @@ describe('getServerState', () => {
 
   test('searches twice (cached) with dynamic widgets', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -354,7 +354,7 @@ describe('getServerState', () => {
 
   test('searches twice (cached) with dynamic widgets inside index', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -373,7 +373,7 @@ describe('getServerState', () => {
 
   test('searches twice with dynamic widgets and a refinement', async () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -385,7 +385,7 @@ describe('getServerState', () => {
         );
       }),
     });
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({
       searchClient,
       initialUiState: {
@@ -434,7 +434,7 @@ describe('getServerState', () => {
 
   test('does not call recommend if there is no recommend widget', async () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -445,9 +445,9 @@ describe('getServerState', () => {
           )
         );
       }),
-      getRecommendations: jest.fn(),
+      getRecommendations: vi.fn(),
     });
-    const spiedGetRecommendations = jest.spyOn(
+    const spiedGetRecommendations = vi.spyOn(
       searchClient,
       'getRecommendations'
     );
@@ -462,7 +462,7 @@ describe('getServerState', () => {
 
   test('calls `getRecommendations` but does not call `search` when there are only recommend widgets', async () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -473,13 +473,13 @@ describe('getServerState', () => {
           )
         );
       }),
-      getRecommendations: jest.fn().mockResolvedValue({ results: {} }),
+      getRecommendations: vi.fn().mockResolvedValue({ results: {} }),
     });
-    const spiedGetRecommendations = jest.spyOn(
+    const spiedGetRecommendations = vi.spyOn(
       searchClient,
       'getRecommendations'
     );
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
 
     await getServerState(
       <InstantSearch searchClient={searchClient} indexName="instant_search">
@@ -494,7 +494,7 @@ describe('getServerState', () => {
 
   test('returns HTML from server state', async () => {
     const searchClient = createSearchClient({
-      search: jest.fn((requests) =>
+      search: vi.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -505,7 +505,7 @@ describe('getServerState', () => {
           )
         )
       ) as MockSearchClient['search'],
-      getRecommendations: jest.fn().mockResolvedValue({
+      getRecommendations: vi.fn().mockResolvedValue({
         results: [createSingleSearchResponse({ hits: [{ objectID: '3' }] })],
       }),
     });
@@ -611,7 +611,7 @@ describe('getServerState', () => {
   describe('insights', () => {
     test('userToken is set when insights has been set to true', async () => {
       const searchClient = createSearchClient({});
-      const spiedSearch = jest.spyOn(searchClient, 'search');
+      const spiedSearch = vi.spyOn(searchClient, 'search');
 
       function App({
         serverState,
@@ -646,7 +646,7 @@ describe('getServerState', () => {
 
     test('only a single user token is generated', async () => {
       const searchClient = createSearchClient({});
-      const spiedSearch = jest.spyOn(searchClient, 'search');
+      const spiedSearch = vi.spyOn(searchClient, 'search');
 
       function App({
         serverState,

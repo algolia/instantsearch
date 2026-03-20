@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render, screen } from '@testing-library/react';
@@ -42,11 +42,11 @@ describe('createCarouselTool', () => {
       render(
         <LayoutComponent
           message={message}
-          applyFilters={jest.fn()}
-          onClose={jest.fn()}
+          applyFilters={vi.fn()}
+          onClose={vi.fn()}
           indexUiState={{}}
-          addToolResult={jest.fn()}
-          setIndexUiState={jest.fn()}
+          addToolResult={vi.fn()}
+          setIndexUiState={vi.fn()}
         />
       );
 
@@ -75,11 +75,11 @@ describe('createCarouselTool', () => {
       render(
         <LayoutComponent
           message={message}
-          applyFilters={jest.fn()}
-          onClose={jest.fn()}
+          applyFilters={vi.fn()}
+          onClose={vi.fn()}
           indexUiState={{}}
-          addToolResult={jest.fn()}
-          setIndexUiState={jest.fn()}
+          addToolResult={vi.fn()}
+          setIndexUiState={vi.fn()}
         />
       );
 

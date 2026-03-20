@@ -15,9 +15,9 @@
   },
   "scripts": {
     "start": "node src/cli/index.js",
-    "test": "jest --no-color src && yarn run test:e2e",
-    "test:e2e:templates": "jest e2e/templates.test.js",
-    "test:e2e:installs": "jest e2e/installs.test.js",
+    "test": "vitest run src && yarn run test:e2e",
+    "test:e2e:templates": "vitest run e2e/templates.test.js",
+    "test:e2e:installs": "vitest run e2e/installs.test.js",
     "test:e2e": "yarn run test:e2e:templates && yarn run test:e2e:installs",
     "format": "prettier --write *.{js,md,json}",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",

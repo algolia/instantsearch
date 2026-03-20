@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,11 +7,11 @@ import { __setState } from '../../mixins/widget';
 import Hits from '../Hits';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 const defaultState = {
   items: [{ objectID: 'one' }, { objectID: 'two' }],
-  sendEvent: jest.fn(),
+  sendEvent: vi.fn(),
 };
 
 it('accepts a showBanner prop', () => {
@@ -74,7 +74,7 @@ it('exposes banner prop to the banner slot', () => {
 });
 
 it('exposes insights prop to the default slot', async () => {
-  const insights = jest.fn();
+  const insights = vi.fn();
   __setState({
     ...defaultState,
     insights,
@@ -105,7 +105,7 @@ it('exposes insights prop to the default slot', async () => {
 });
 
 it('exposes insights prop to the item slot', async () => {
-  const insights = jest.fn();
+  const insights = vi.fn();
   __setState({
     ...defaultState,
     insights,
@@ -133,7 +133,7 @@ it('exposes insights prop to the item slot', async () => {
 });
 
 it('exposes send-event method for insights middleware', async () => {
-  const sendEvent = jest.fn();
+  const sendEvent = vi.fn();
   __setState({
     ...defaultState,
     sendEvent,

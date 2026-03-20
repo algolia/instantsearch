@@ -19,10 +19,10 @@ export function createInstantSearchSpy() {
         <InstantSearchContext.Consumer>
           {(searchContextValue) => {
             if (!isSpyAttachedRef.current) {
-              searchContextValue!.start = jest.fn(
+              searchContextValue!.start = vi.fn(
                 searchContextValue!.start.bind(searchContextValue)
               );
-              searchContextValue!.dispose = jest.fn(
+              searchContextValue!.dispose = vi.fn(
                 searchContextValue!.dispose.bind(searchContextValue)
               );
             }
@@ -35,10 +35,10 @@ export function createInstantSearchSpy() {
                 <IndexContext.Consumer>
                   {(indexContextValue) => {
                     if (!isSpyAttachedRef.current) {
-                      indexContextValue!.addWidgets = jest.fn(
+                      indexContextValue!.addWidgets = vi.fn(
                         indexContextValue!.addWidgets.bind(indexContextValue)
                       );
-                      indexContextValue!.removeWidgets = jest.fn(
+                      indexContextValue!.removeWidgets = vi.fn(
                         indexContextValue!.removeWidgets.bind(indexContextValue)
                       );
                     }

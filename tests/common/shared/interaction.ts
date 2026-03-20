@@ -28,7 +28,7 @@ export function createInteractionTests(
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(
@@ -72,7 +72,7 @@ export function createInteractionTests(
         });
 
         const hierarchicalLink = screen.getByRole('link', {
-          name: 'Computers & Tablets 148',
+          name: /Computers & Tablets\s*148/,
         });
         userEvent.click(hierarchicalLink);
 

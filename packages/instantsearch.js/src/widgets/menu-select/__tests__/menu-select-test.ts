@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -18,12 +18,10 @@ import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 describe('menuSelect', () => {
@@ -33,10 +31,10 @@ describe('menuSelect', () => {
         // @ts-expect-error
         menuSelect({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-  "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-  See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select/js/"
-  `);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select/js/]
+      `);
     });
   });
 
@@ -60,7 +58,7 @@ describe('menuSelect', () => {
 
   beforeEach(() => {
     helper = algoliasearchHelper(createSearchClient(), 'index_name');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     render.mockClear();
   });
@@ -86,55 +84,55 @@ describe('menuSelect', () => {
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-  {
-    "cssClasses": {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    },
-    "items": [
-      {
-        "count": 2,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "bar",
-        "value": "bar",
-      },
-      {
-        "count": 1,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "foo",
-        "value": "foo",
-      },
-    ],
-    "refine": [Function],
-    "templateProps": {
-      "templates": {
-        "defaultOption": [Function],
-        "item": [Function],
-      },
-      "templatesConfig": {
-        "compileOptions": {},
-        "helpers": {
-          "formatNumber": [Function],
-          "highlight": [Function],
-          "insights": [Function],
-          "reverseHighlight": [Function],
-          "reverseSnippet": [Function],
-          "snippet": [Function],
-        },
-      },
-      "useCustomCompileOptions": {
-        "defaultOption": false,
-        "item": false,
-      },
-    },
-  }
-  `);
+        {
+          "cssClasses": {
+            "noRefinementRoot": "ais-MenuSelect--noRefinement",
+            "option": "ais-MenuSelect-option",
+            "root": "ais-MenuSelect",
+            "select": "ais-MenuSelect-select",
+          },
+          "items": [
+            {
+              "count": 2,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "bar",
+              "value": "bar",
+            },
+            {
+              "count": 1,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "foo",
+              "value": "foo",
+            },
+          ],
+          "refine": [Function],
+          "templateProps": {
+            "templates": {
+              "defaultOption": [Function],
+              "item": [Function],
+            },
+            "templatesConfig": {
+              "compileOptions": {},
+              "helpers": {
+                "formatNumber": [Function],
+                "highlight": [Function],
+                "insights": [Function],
+                "reverseHighlight": [Function],
+                "reverseSnippet": [Function],
+                "snippet": [Function],
+              },
+            },
+            "useCustomCompileOptions": {
+              "defaultOption": false,
+              "item": false,
+            },
+          },
+        }
+      `);
     });
 
     it('renders transformed items correctly', async () => {
@@ -159,57 +157,57 @@ describe('menuSelect', () => {
       const firstRender = render.mock.calls[0][0] as VNode;
 
       expect(firstRender.props).toMatchInlineSnapshot(`
-  {
-    "cssClasses": {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    },
-    "items": [
-      {
-        "count": 2,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "bar",
-        "transformed": true,
-        "value": "bar",
-      },
-      {
-        "count": 1,
-        "data": null,
-        "exhaustive": true,
-        "isRefined": false,
-        "label": "foo",
-        "transformed": true,
-        "value": "foo",
-      },
-    ],
-    "refine": [Function],
-    "templateProps": {
-      "templates": {
-        "defaultOption": [Function],
-        "item": [Function],
-      },
-      "templatesConfig": {
-        "compileOptions": {},
-        "helpers": {
-          "formatNumber": [Function],
-          "highlight": [Function],
-          "insights": [Function],
-          "reverseHighlight": [Function],
-          "reverseSnippet": [Function],
-          "snippet": [Function],
-        },
-      },
-      "useCustomCompileOptions": {
-        "defaultOption": false,
-        "item": false,
-      },
-    },
-  }
-  `);
+        {
+          "cssClasses": {
+            "noRefinementRoot": "ais-MenuSelect--noRefinement",
+            "option": "ais-MenuSelect-option",
+            "root": "ais-MenuSelect",
+            "select": "ais-MenuSelect-select",
+          },
+          "items": [
+            {
+              "count": 2,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "bar",
+              "transformed": true,
+              "value": "bar",
+            },
+            {
+              "count": 1,
+              "data": null,
+              "exhaustive": true,
+              "isRefined": false,
+              "label": "foo",
+              "transformed": true,
+              "value": "foo",
+            },
+          ],
+          "refine": [Function],
+          "templateProps": {
+            "templates": {
+              "defaultOption": [Function],
+              "item": [Function],
+            },
+            "templatesConfig": {
+              "compileOptions": {},
+              "helpers": {
+                "formatNumber": [Function],
+                "highlight": [Function],
+                "insights": [Function],
+                "reverseHighlight": [Function],
+                "reverseSnippet": [Function],
+                "snippet": [Function],
+              },
+            },
+            "useCustomCompileOptions": {
+              "defaultOption": false,
+              "item": false,
+            },
+          },
+        }
+      `);
     });
   });
 

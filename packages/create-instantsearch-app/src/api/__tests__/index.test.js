@@ -10,11 +10,11 @@ let teardownSpy;
 let createInstantSearchApp;
 
 beforeEach(() => {
-  setupSpy = jest.fn(() => Promise.resolve());
-  buildSpy = jest.fn(() => Promise.resolve());
-  installSpy = jest.fn(() => Promise.resolve());
-  cleanSpy = jest.fn(() => Promise.resolve());
-  teardownSpy = jest.fn(() => Promise.resolve());
+  setupSpy = vi.fn(() => Promise.resolve());
+  buildSpy = vi.fn(() => Promise.resolve());
+  installSpy = vi.fn(() => Promise.resolve());
+  cleanSpy = vi.fn(() => Promise.resolve());
+  teardownSpy = vi.fn(() => Promise.resolve());
 
   createInstantSearchApp = (appPath, config) =>
     createInstantSearchAppFactory(appPath, config, {
@@ -165,7 +165,7 @@ describe('Tasks', () => {
     test('with failing setup should stop the execution', async () => {
       expect.assertions(5);
 
-      const failingSetupSpy = jest.fn(() => Promise.reject(new Error()));
+      const failingSetupSpy = vi.fn(() => Promise.reject(new Error()));
 
       const app = createInstantSearchAppFactory(
         '/tmp/test-app',
@@ -193,7 +193,7 @@ describe('Tasks', () => {
     test('with failing build should stop the execution', async () => {
       expect.assertions(5);
 
-      const failingBuildSpy = jest.fn(() => Promise.reject(new Error()));
+      const failingBuildSpy = vi.fn(() => Promise.reject(new Error()));
 
       const app = createInstantSearchAppFactory(
         '/tmp/test-app',
@@ -221,7 +221,7 @@ describe('Tasks', () => {
     test('with failing install should call clean task and stop the execution', async () => {
       expect.assertions(5);
 
-      const failingInstallSpy = jest.fn(() => Promise.reject(new Error()));
+      const failingInstallSpy = vi.fn(() => Promise.reject(new Error()));
 
       const app = createInstantSearchAppFactory(
         '/tmp/test-app',

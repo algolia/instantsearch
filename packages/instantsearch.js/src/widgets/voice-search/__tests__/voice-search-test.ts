@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -27,12 +27,10 @@ import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 type DefaultSetupWrapper = {
@@ -87,8 +85,8 @@ describe('voiceSearch()', () => {
     render.mockClear();
 
     helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.setQuery = jest.fn();
-    helper.search = jest.fn();
+    helper.setQuery = vi.fn();
+    helper.search = vi.fn();
     helper.state = new SearchParameters({ query: '' });
   });
 
@@ -100,10 +98,10 @@ describe('voiceSearch()', () => {
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/]
+      `);
     });
 
     it('creates custom voice helper', () => {

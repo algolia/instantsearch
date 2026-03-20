@@ -1,7 +1,7 @@
-const getFacetsFromIndex = require('../getFacetsFromIndex');
-const getInformationFromIndex = require('../getInformationFromIndex');
+import getFacetsFromIndex from '../getFacetsFromIndex';
+import getInformationFromIndex from '../getInformationFromIndex';
 
-jest.mock('../getInformationFromIndex');
+vi.mock('../getInformationFromIndex');
 
 test('with search success should fetch attributes', async () => {
   getInformationFromIndex.mockImplementationOnce(() =>

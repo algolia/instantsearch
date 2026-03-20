@@ -45,7 +45,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -98,7 +98,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -184,7 +184,7 @@ export function createOptionsTests(
         [...document.querySelectorAll('.ais-Breadcrumb-item')].map(
           (item) => item.textContent
         )
-      ).toMatchInlineSnapshot(`
+      ).toMatchSnapshot(`
         [
           "Home",
           ">CAMERAS & CAMCORDERS",
@@ -221,7 +221,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -332,7 +332,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -423,7 +423,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -467,7 +467,7 @@ function createMockedSearchClient({
   facets: Record<string, Record<string, number>>;
 }) {
   return createAlgoliaSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() => createSingleSearchResponse({ facets }))

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
@@ -65,10 +65,10 @@ describe('createSendEventForHits', () => {
       expect(() => {
         sendEvent('click');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass hit or hits as the second argument like:
-  sendEvent(eventType, hit);
-  "
-`);
+        [Error: You need to pass hit or hits as the second argument like:
+          sendEvent(eventType, hit);
+          ]
+      `);
     });
 
     it('throws with unknown eventType', () => {
@@ -76,10 +76,10 @@ describe('createSendEventForHits', () => {
       expect(() => {
         sendEvent('my custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass hit or hits as the second argument like:
-  sendEvent(eventType, hit);
-  "
-`);
+        [Error: You need to pass hit or hits as the second argument like:
+          sendEvent(eventType, hit);
+          ]
+      `);
     });
 
     it('throw when eventName is missing for click or conversion event', () => {
@@ -88,23 +88,23 @@ describe('createSendEventForHits', () => {
         // @ts-expect-error wrong input
         sendEvent('click', {});
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass eventName as the third argument for 'click' or 'conversion' events like:
-  sendEvent('click', hit, 'Product Purchased');
+        [Error: You need to pass eventName as the third argument for 'click' or 'conversion' events like:
+          sendEvent('click', hit, 'Product Purchased');
 
-  To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/
-  "
-`);
+          To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/
+          ]
+      `);
 
       expect(() => {
         // @ts-expect-error wrong input
         sendEvent('conversion', {});
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass eventName as the third argument for 'click' or 'conversion' events like:
-  sendEvent('click', hit, 'Product Purchased');
+        [Error: You need to pass eventName as the third argument for 'click' or 'conversion' events like:
+          sendEvent('click', hit, 'Product Purchased');
 
-  To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/
-  "
-`);
+          To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/
+          ]
+      `);
     });
   });
 

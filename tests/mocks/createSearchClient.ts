@@ -10,10 +10,10 @@ import type { SearchClient, SearchResponses } from 'instantsearch.js';
 export const createSearchClient = (
   args: Partial<SearchClient> = {}
 ): SearchClient => ({
-  getRecommendations: jest.fn((requests) =>
+  getRecommendations: vi.fn((requests) =>
     Promise.resolve(createRecommendResponse(requests))
   ),
-  search: jest.fn((requests) =>
+  search: vi.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse())
@@ -21,7 +21,7 @@ export const createSearchClient = (
     )
   ),
   // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-  searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
+  searchForFacetValues: vi.fn(() => Promise.resolve([createSFFVResponse()])),
   // @ts-ignore this allows us to test insights initialization without warning
   applicationID: 'appId',
   apiKey: 'apiKey',
@@ -46,7 +46,7 @@ export const createControlledSearchClient = (
 ): ControlledClient => {
   const searches: ControlledClient['searches'] = [];
   const searchClient = createSearchClient({
-    search: jest.fn((...params) => {
+    search: vi.fn((...params) => {
       let resolver: () => void;
       let rejecter: (value: any) => void;
       const promise: Promise<SearchResponses<any>> = new Promise(

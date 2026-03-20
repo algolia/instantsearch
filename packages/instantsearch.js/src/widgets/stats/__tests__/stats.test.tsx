@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -28,9 +28,9 @@ describe('stats', () => {
         // @ts-expect-error
         stats({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/]
       `);
     });
 
@@ -295,7 +295,7 @@ describe('stats', () => {
       subset: Partial<SearchResponse<CustomHit>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {

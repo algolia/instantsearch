@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Panel collapsible should render component with \`collapsible\` and \`collapsed\` props 1`] = `
+exports[`Panel > collapsible > should render component with \`collapsible\` and \`collapsed\` props 1`] = `
 <div>
   <div
     class="root collapsibleRoot collapsedRoot"
@@ -34,7 +34,7 @@ exports[`Panel collapsible should render component with \`collapsible\` and \`co
 </div>
 `;
 
-exports[`Panel collapsible should render component with \`collapsible\` prop 1`] = `
+exports[`Panel > collapsible > should render component with \`collapsible\` prop 1`] = `
 <div>
   <div
     class="root collapsibleRoot"
@@ -68,7 +68,7 @@ exports[`Panel collapsible should render component with \`collapsible\` prop 1`]
 </div>
 `;
 
-exports[`Panel default should render component with default props 1`] = `
+exports[`Panel > default > should render component with default props 1`] = `
 <div>
   <div
     class="root"
@@ -84,7 +84,7 @@ exports[`Panel default should render component with default props 1`] = `
 </div>
 `;
 
-exports[`Panel hidden should hide component with \`hidden\` prop 1`] = `
+exports[`Panel > hidden > should hide component with \`hidden\` prop 1`] = `
 <div>
   <div
     class="root noRefinementRoot"
@@ -111,7 +111,7 @@ exports[`Panel hidden should hide component with \`hidden\` prop 1`] = `
 </div>
 `;
 
-exports[`Panel templates should render component with custom templates 1`] = `
+exports[`Panel > templates > should render component with custom templates 1`] = `
 <div>
   <div
     class="root"

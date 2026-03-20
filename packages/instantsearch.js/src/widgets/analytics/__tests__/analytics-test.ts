@@ -8,10 +8,10 @@ describe('Usage', () => {
         pushFunction: undefined,
       });
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`pushFunction\` option is required.
+      [Error: The \`pushFunction\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/analytics/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/analytics/js/]
+    `);
   });
 
   it('shows deprecation warning message.', () => {

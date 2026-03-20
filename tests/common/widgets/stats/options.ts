@@ -27,7 +27,7 @@ function createMockedSearchClient(
   } = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) =>
@@ -74,7 +74,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Stats')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div

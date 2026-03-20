@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { safelyRunOnBrowser } from '../safelyRunOnBrowser';
@@ -19,7 +19,7 @@ describe('safelyRunOnBrowser', () => {
   });
 
   test('runs callback on browsers', () => {
-    const callback = jest.fn(() => ({ env: CLIENT }));
+    const callback = vi.fn(() => ({ env: CLIENT }));
 
     const result = safelyRunOnBrowser<CallbackReturn>(callback);
 
@@ -29,8 +29,8 @@ describe('safelyRunOnBrowser', () => {
   });
 
   test('does not run fallback on browsers', () => {
-    const callback = jest.fn(() => ({ env: CLIENT }));
-    const fallback = jest.fn(() => ({ env: SERVER }));
+    const callback = vi.fn(() => ({ env: CLIENT }));
+    const fallback = vi.fn(() => ({ env: SERVER }));
 
     const result = safelyRunOnBrowser<CallbackReturn>(callback, { fallback });
 
@@ -44,7 +44,7 @@ describe('safelyRunOnBrowser', () => {
     // @ts-expect-error
     delete global.window;
 
-    const callback = jest.fn(() => ({ env: CLIENT }));
+    const callback = vi.fn(() => ({ env: CLIENT }));
 
     const result = safelyRunOnBrowser<CallbackReturn>(callback);
 
@@ -56,8 +56,8 @@ describe('safelyRunOnBrowser', () => {
     // @ts-expect-error
     delete global.window;
 
-    const callback = jest.fn(() => ({ env: CLIENT }));
-    const fallback = jest.fn(() => ({ env: SERVER }));
+    const callback = vi.fn(() => ({ env: CLIENT }));
+    const fallback = vi.fn(() => ({ env: SERVER }));
 
     const result = safelyRunOnBrowser<CallbackReturn>(callback, { fallback });
 

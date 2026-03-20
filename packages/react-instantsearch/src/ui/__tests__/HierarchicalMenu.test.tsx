@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -54,9 +54,9 @@ describe('HierarchicalMenu', () => {
         },
       ],
       hasItems: true,
-      onNavigate: jest.fn(),
-      createURL: jest.fn((value: string) => `#${value}`),
-      onToggleShowMore: jest.fn(),
+      onNavigate: vi.fn(),
+      createURL: vi.fn((value: string) => `#${value}`),
+      onToggleShowMore: vi.fn(),
       canToggleShowMore: true,
       isShowingMore: false,
       translations: {

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
@@ -11,7 +11,7 @@ import { isFacetRefined } from '../isFacetRefined';
 
 import type { SearchClient } from '../../../types';
 
-jest.mock('../isFacetRefined', () => ({ isFacetRefined: jest.fn() }));
+vi.mock('../isFacetRefined', () => ({ isFacetRefined: vi.fn() }));
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
@@ -38,12 +38,12 @@ describe('createSendEventForFacet', () => {
       expect(() => {
         sendEvent('click');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        [Error: You need to pass between two and four arguments like:
+          sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
+        ]
+      `);
     });
 
     it('throws with unknown eventType', () => {
@@ -51,12 +51,12 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       expect(() => {
         sendEvent('my custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        [Error: You need to pass between two and four arguments like:
+          sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
+        ]
+      `);
     });
 
     it('throws when eventType is not click', () => {
@@ -64,17 +64,17 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       expect(() => {
         sendEvent('custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        [Error: You need to pass between two and four arguments like:
+          sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
+        ]
+      `);
     });
 
     it('does not send event when a facet is removed', () => {
       const { sendEvent, instantSearchInstance } = createTestEnvironment();
-      (isFacetRefined as jest.Mock).mockImplementation(() => true);
+      (isFacetRefined as Mock).mockImplementation(() => true);
       sendEvent('click', 'value');
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         0

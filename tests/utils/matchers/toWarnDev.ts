@@ -1,20 +1,23 @@
 /* eslint-disable no-console */
 
-import { diff } from 'jest-diff';
+import { diff } from '@vitest/utils/diff';
 
-declare global {
-  // eslint-disable-next-line typescript/no-namespace
-  namespace jest {
-    // eslint-disable-next-line instantsearch/naming-convention
-    interface Matchers<R> {
-      toWarnDev: (expectedMessage?: string) => R;
-    }
+import type { MatcherResult } from 'vitest';
+
+declare module 'vitest' {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface Assertion<T> {
+    toWarnDev: (expectedMessage?: string) => T;
+  }
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface AsymmetricMatchersContaining {
+    toWarnDev: (expectedMessage?: string) => void;
   }
 }
 
 function runCallback(
   callback: () => void | Promise<void>,
-  getValue: () => jest.CustomMatcherResult
+  getValue: () => MatcherResult
 ) {
   const maybePromise = callback();
 
@@ -25,7 +28,7 @@ function runCallback(
   return getValue();
 }
 
-export const toWarnDev: jest.CustomMatcher = (
+export const toWarnDev = (
   callback: () => void | Promise<void>,
   expectedMessage: string
 ) => {

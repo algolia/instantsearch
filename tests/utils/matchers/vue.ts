@@ -4,14 +4,16 @@ import {
   // @ts-ignore file isn't typed
 } from '../../../packages/vue-instantsearch/src/util/vue-compat';
 
+import type { MatcherResult } from 'vitest';
+
 type VueTestWrapper = {
   html: () => string;
   attributes: (attribute: string) => string;
 };
 
-export const vueToHaveEmptyHTML: jest.CustomMatcher = (
+export const vueToHaveEmptyHTML = (
   wrapper: VueTestWrapper
-) => {
+): MatcherResult => {
   const html = wrapper.html();
   if (
     (isVue2 && html === '') ||
@@ -30,8 +32,8 @@ export const vueToHaveEmptyHTML: jest.CustomMatcher = (
 };
 
 const toHaveBooleanAttribute =
-  (attribute: string): jest.CustomMatcher =>
-  (wrapper: VueTestWrapper) => {
+  (attribute: string) =>
+  (wrapper: VueTestWrapper): MatcherResult => {
     // :hidden="true" becomes
     // hidden="hidden" in Vue 2 and
     // hidden="" in Vue 3.
@@ -55,15 +57,12 @@ export const vueToBeDisabled = toHaveBooleanAttribute('disabled');
 export const vueToBeHidden = toHaveBooleanAttribute('hidden');
 export const vueToBeAutofocused = toHaveBooleanAttribute('autofocus');
 
-declare global {
-  // eslint-disable-next-line typescript/no-namespace
-  namespace jest {
-    // eslint-disable-next-line no-unused-vars, instantsearch/naming-convention
-    interface Matchers<R> {
-      vueToHaveEmptyHTML: () => jest.CustomMatcherResult;
-      vueToBeDisabled: () => jest.CustomMatcherResult;
-      vueToBeHidden: () => jest.CustomMatcherResult;
-      vueToBeAutofocused: () => jest.CustomMatcherResult;
-    }
+declare module 'vitest' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  interface Assertion<T> {
+    vueToHaveEmptyHTML: () => MatcherResult;
+    vueToBeDisabled: () => MatcherResult;
+    vueToBeHidden: () => MatcherResult;
+    vueToBeAutofocused: () => MatcherResult;
   }
 }

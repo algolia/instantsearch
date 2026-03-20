@@ -1,9 +1,9 @@
 const utils = require('../../utils');
 const postProcessAnswers = require('../postProcessAnswers');
 
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  fetchLibraryVersions: jest.fn(() => Promise.resolve(['1.0.0'])),
+vi.mock('../../utils', async () => ({
+  ...(await vi.importActual('../../utils')),
+  fetchLibraryVersions: vi.fn(() => Promise.resolve(['1.0.0'])),
 }));
 
 test('merges configuration and answers', async () => {

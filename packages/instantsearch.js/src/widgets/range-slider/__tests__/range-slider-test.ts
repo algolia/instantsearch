@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -25,12 +25,10 @@ import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 type SliderProps = {
@@ -71,10 +69,10 @@ describe('rangeSlider', () => {
       // @ts-expect-error wrong usage
       expect(() => rangeSlider({ container: undefined }))
         .toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+          [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slider/js/"
-`);
+          See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slider/js/]
+        `);
     });
 
     it('is a widget', () => {
@@ -99,7 +97,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
     let instantSearchInstance: InstantSearch;
 
     beforeEach(() => {
-      (render as jest.Mock).mockClear();
+      (render as Mock).mockClear();
 
       container = document.createElement('div');
       helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -333,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           max: 4999.98,
         });
 
-        helper.search = jest.fn();
+        helper.search = vi.fn();
       });
 
       it('configures the disjunctiveFacets', () => {

@@ -1,12 +1,12 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount, nextTick } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import { AisPanel } from '../../widgets';
 import DynamicWidgets from '../DynamicWidgets';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const MockRefinementList = {

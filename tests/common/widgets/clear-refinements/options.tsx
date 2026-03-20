@@ -34,7 +34,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -71,7 +71,7 @@ export function createOptionsTests(
       expect(button).toHaveClass('ais-ClearRefinements-button--disabled');
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -115,7 +115,7 @@ export function createOptionsTests(
       ).toHaveLength(1);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -146,7 +146,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -197,7 +197,7 @@ export function createOptionsTests(
       ).toHaveLength(2);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -231,7 +231,7 @@ export function createOptionsTests(
       ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -278,7 +278,7 @@ export function createOptionsTests(
       ).toHaveLength(2);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -312,7 +312,7 @@ export function createOptionsTests(
       ).toHaveTextContent(/categories:\s?Audio/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -359,7 +359,7 @@ export function createOptionsTests(
       ).toHaveLength(2);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -393,7 +393,7 @@ export function createOptionsTests(
       ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div

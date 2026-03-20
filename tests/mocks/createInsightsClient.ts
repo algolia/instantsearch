@@ -22,11 +22,11 @@ export function createInsights<TVersion extends string | undefined = '2.17.2'>({
 } = {}) {
   const analytics = mockMethods(
     new AlgoliaAnalytics({
-      requestFn: jest.fn(),
+      requestFn: vi.fn(),
     })
   );
   const mockedInsightsClient = castToJestMock(
-    jest.fn(getFunctionalInterface(analytics)) as InsightsClient
+    vi.fn(getFunctionalInterface(analytics)) as InsightsClient
   );
 
   if (forceVersion) {
@@ -59,7 +59,7 @@ export function createInsightsUmdVersion() {
   };
   const analytics = mockMethods(
     new AlgoliaAnalytics({
-      requestFn: jest.fn(),
+      requestFn: vi.fn(),
     })
   );
 
@@ -73,18 +73,18 @@ export function createInsightsUmdVersion() {
 }
 
 function mockMethods(analytics: AlgoliaAnalytics) {
-  analytics.addAlgoliaAgent = jest.fn(analytics.addAlgoliaAgent);
+  analytics.addAlgoliaAgent = vi.fn(analytics.addAlgoliaAgent);
 
-  analytics.viewedFilters = jest.fn(analytics.viewedFilters);
-  analytics.viewedObjectIDs = jest.fn(analytics.viewedObjectIDs);
-  analytics.clickedFilters = jest.fn(analytics.clickedFilters);
-  analytics.clickedObjectIDs = jest.fn(analytics.clickedObjectIDs);
-  analytics.clickedObjectIDsAfterSearch = jest.fn(
+  analytics.viewedFilters = vi.fn(analytics.viewedFilters);
+  analytics.viewedObjectIDs = vi.fn(analytics.viewedObjectIDs);
+  analytics.clickedFilters = vi.fn(analytics.clickedFilters);
+  analytics.clickedObjectIDs = vi.fn(analytics.clickedObjectIDs);
+  analytics.clickedObjectIDsAfterSearch = vi.fn(
     analytics.clickedObjectIDsAfterSearch
   );
-  analytics.convertedFilters = jest.fn(analytics.convertedFilters);
-  analytics.convertedObjectIDs = jest.fn(analytics.convertedObjectIDs);
-  analytics.convertedObjectIDsAfterSearch = jest.fn(
+  analytics.convertedFilters = vi.fn(analytics.convertedFilters);
+  analytics.convertedObjectIDs = vi.fn(analytics.convertedObjectIDs);
+  analytics.convertedObjectIDsAfterSearch = vi.fn(
     analytics.convertedObjectIDsAfterSearch
   );
   return analytics;

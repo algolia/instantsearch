@@ -55,7 +55,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -106,7 +106,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -157,7 +157,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('#hits-with-defaults .ais-Hits')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -206,7 +206,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
           <div
@@ -252,7 +252,7 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<CustomRecord>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) => {

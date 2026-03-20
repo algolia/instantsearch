@@ -70,7 +70,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -194,7 +194,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -257,7 +257,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <li
@@ -346,7 +346,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -408,7 +408,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -817,7 +817,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-HierarchicalMenu')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -973,7 +973,7 @@ function createMockedSearchClientAndAttributes({
     }).slice(0, levels)
   );
 
-  const search = jest.fn((requests) =>
+  const search = vi.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse({ facets }))

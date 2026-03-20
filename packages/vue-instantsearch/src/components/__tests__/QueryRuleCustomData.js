@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,7 +7,7 @@ import { __setState } from '../../mixins/widget';
 import QueryRuleCustomData from '../QueryRuleCustomData.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 it('renders in a list of <pre> by default', () => {
   __setState({
@@ -72,7 +72,7 @@ it('gives individual items to the item slot', () => {
 });
 
 it('accepts transformItems', () => {
-  const transformItems = jest.fn();
+  const transformItems = vi.fn();
   const wrapper = mount(QueryRuleCustomData, {
     propsData: {
       transformItems,

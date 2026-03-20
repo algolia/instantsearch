@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -11,7 +11,7 @@ describe('Carousel', () => {
   test('renders with default props', () => {
     const { container } = render(
       <Carousel
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
         items={[
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -101,7 +101,7 @@ describe('Carousel', () => {
   test('adds custom class names', () => {
     const { container } = render(
       <Carousel
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
         items={[
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -135,7 +135,7 @@ describe('Carousel', () => {
   test('adds custom icon components', () => {
     const { container } = render(
       <Carousel
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
         items={[
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -207,7 +207,7 @@ describe('Carousel', () => {
   test('adds custom translations', () => {
     const { container } = render(
       <Carousel
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
         items={[
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },

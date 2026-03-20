@@ -1,8 +1,8 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
-/* eslint-disable jest/no-conditional-expect */
+/* eslint-disable vitest/no-conditional-expect */
 
 import { mount } from '../../test/utils';
 import InstantSearch from '../instantsearch';
@@ -30,11 +30,11 @@ function getAllComponents() {
   let calls;
   if (isVue3) {
     const app = createApp();
-    app.component = jest.fn();
+    app.component = vi.fn();
     app.use(InstantSearch);
     calls = app.component.mock.calls;
   } else {
-    Vue2.component = jest.fn();
+    Vue2.component = vi.fn();
     Vue2.use(InstantSearch);
     calls = Vue2.component.mock.calls;
   }
@@ -91,7 +91,7 @@ function getAllComponents() {
                 indexName: 'instant_search',
                 searchClient: {
                   search() {
-                    return new Promise({ results: [] });
+                    return Promise.resolve({ results: [] });
                   },
                 },
               },

@@ -34,7 +34,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HitsPerPage')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -87,7 +87,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HitsPerPage')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -254,7 +254,7 @@ describe('panel', () => {
 
     function createMockedSearchClient() {
       return createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) =>

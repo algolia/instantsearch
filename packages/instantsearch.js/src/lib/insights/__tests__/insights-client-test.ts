@@ -30,7 +30,7 @@ const createWidgetWithInsights = ({
   results: SearchResults;
 }): Widget => {
   const connectHitsWithInsights = withInsights(connectHits as any);
-  const widget = connectHitsWithInsights(renderFn, jest.fn())({});
+  const widget = connectHitsWithInsights(renderFn, vi.fn())({});
   widget.render({ results, instantSearchInstance } as any);
   return widget;
 };
@@ -38,9 +38,9 @@ const createWidgetWithInsights = ({
 describe('withInsights', () => {
   describe('when applied on connectHits', () => {
     it('should call the passed renderFn', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -59,9 +59,9 @@ describe('withInsights', () => {
     });
 
     it('should not remove any renderProps passed by connectHits', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -87,9 +87,9 @@ describe('withInsights', () => {
     });
 
     it('should expose the insights client wrapper to renderOptions if passed to instantSearchInstance', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -109,7 +109,7 @@ describe('withInsights', () => {
       expect(renderProps.insights).toBeInstanceOf(Function);
     });
     it('should expose the insights client wrapper even when insightsClient was not provided', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
         insightsClient: null,
       });
@@ -131,7 +131,7 @@ describe('withInsights', () => {
       expect(renderProps.insights).toBeInstanceOf(Function);
     });
     it('should expose the insights client wrapper that throws when insightsClient was not provided', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
         insightsClient: null,
       });
@@ -155,18 +155,18 @@ describe('withInsights', () => {
           objectIDs: ['1'],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`insightsClient\` option has not been provided to \`instantsearch\`.
+        [Error: The \`insightsClient\` option has not been provided to \`instantsearch\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
+      `);
     });
   });
 
   describe('exposed insights client wrapper', () => {
     it('should call the insights client under the hood', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -190,9 +190,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     it('should pass it the correct parameters', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -226,9 +226,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     it('should not infer or pass the positions if method is `convertedObjectIDsAfterSearch`', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -261,9 +261,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     it('should reject non-existing objectIDs', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -285,14 +285,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Could not find objectID \\"xxxxxx\\" passed to \`clickedObjectIDsAfterSearch\` in the returned hits. This is necessary to infer the absolute position and the query ID."`
+        `[Error: Could not find objectID "xxxxxx" passed to \`clickedObjectIDsAfterSearch\` in the returned hits. This is necessary to infer the absolute position and the query ID.]`
       );
     });
 
     it('should reject if objectIDs provided have different queryIDs', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -312,14 +312,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Insights currently allows a single \`queryID\`. The \`objectIDs\` provided map to multiple \`queryID\`s."`
+        `[Error: Insights currently allows a single \`queryID\`. The \`objectIDs\` provided map to multiple \`queryID\`s.]`
       );
     });
 
     it('should reject if no queryID found (clickAnalytics was not set to true)', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -339,16 +339,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with the Configure widget.
+        [Error: Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with the Configure widget.
 
-See: https://alg.li/lNiZZ7"
-`);
+        See: https://alg.li/lNiZZ7]
+      `);
     });
 
     it('should reject unknown method name', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: jest.fn(),
+        insightsClient: vi.fn(),
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -370,7 +370,7 @@ See: https://alg.li/lNiZZ7"
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Unsupported method passed to insights: \\"unknown_method\\"."`
+        `[Error: Unsupported method passed to insights: "unknown_method".]`
       );
     });
   });

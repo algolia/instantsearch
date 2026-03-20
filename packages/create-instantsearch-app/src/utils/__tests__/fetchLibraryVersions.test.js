@@ -10,7 +10,7 @@ describe('fetchLibraryVersions', () => {
   });
 
   test('return versions from cache if available', async () => {
-    const httpsSpy = jest.spyOn(https, 'get');
+    const httpsSpy = vi.spyOn(https, 'get');
 
     await fetchLibraryVersions('react-instantsearch-core');
     expect(httpsSpy).toHaveBeenCalledTimes(1);

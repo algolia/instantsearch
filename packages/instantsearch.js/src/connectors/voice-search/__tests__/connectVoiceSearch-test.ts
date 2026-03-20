@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -17,7 +17,7 @@ import type {
   VoiceSearchHelper,
 } from '../../../lib/voiceSearchHelper/types';
 
-jest.mock('../../../lib/voiceSearchHelper', () => {
+vi.mock('../../../lib/voiceSearchHelper', () => {
   const createVoiceHelper = ({
     onStateChange,
     onQueryChange,
@@ -34,7 +34,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
       startListening: () => {
         isListening = !isListening;
       },
-      dispose: jest.fn(),
+      dispose: vi.fn(),
     } as unknown as VoiceSearchHelper;
 
     return {
@@ -44,7 +44,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
       changeQuery: (query: string) => onQueryChange(query),
     };
   };
-  return createVoiceHelper;
+  return { default: createVoiceHelper };
 });
 
 function getInitializedWidget({ widgetParams = {} } = {}) {
@@ -71,15 +71,15 @@ describe('connectVoiceSearch', () => {
         // @ts-expect-error
         connectVoiceSearch()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customVoiceSearch = connectVoiceSearch(render, unmount);
       const widget = customVoiceSearch({});
@@ -123,7 +123,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   it('calls renderFn during init and render', () => {
     const helper = algoliasearchHelper(createSearchClient(), '');
 
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectVoiceSearch(renderFn);
     const widget = makeWidget({});
 
@@ -151,7 +151,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   it('triggers render when state changes', () => {
     const helper = algoliasearchHelper(createSearchClient(), '');
 
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectVoiceSearch(renderFn);
     const widget = makeWidget({});
 
@@ -171,13 +171,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   it('setQuery and search when query changes', () => {
     const helper = algoliasearchHelper(createSearchClient(), '');
 
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectVoiceSearch(renderFn);
     const widget = makeWidget({});
 
-    jest.spyOn(helper, 'setQuery');
+    vi.spyOn(helper, 'setQuery');
 
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -193,7 +193,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       const helper = algoliasearchHelper(createSearchClient(), '');
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectVoiceSearch(renderFn, unmountFn);
       const widget = makeWidget({});
 
@@ -293,8 +293,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('getRenderState', () => {
     it('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
       const voiceSearchWidget = createVoiceSearch({});
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -326,8 +326,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         stopListening: () => {},
       };
 
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
       const voiceSearchWidget = createVoiceSearch({
         createVoiceSearchHelper: () => voiceHelper,
@@ -356,8 +356,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
       const voiceSearchWidget = createVoiceSearch({});
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -389,8 +389,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         stopListening: () => {},
       };
 
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createVoiceSearch = connectVoiceSearch(renderFn, unmountFn);
       const voiceSearchWidget = createVoiceSearch({
         createVoiceSearchHelper: () => voiceHelper,

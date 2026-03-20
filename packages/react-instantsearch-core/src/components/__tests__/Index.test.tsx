@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -22,15 +22,15 @@ import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 describe('Index', () => {
   test('throws when used outside of <InstantSearch>', () => {
     // Hide the errors from the test logs.
-    jest.spyOn(console, 'error').mockImplementation(noop);
+    vi.spyOn(console, 'error').mockImplementation(noop);
 
     expect(() => {
       render(<Index indexName="childIndex">Children</Index>);
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch] The <Index> component must be used within <InstantSearch>."`
+      `[Error: [InstantSearch] The <Index> component must be used within <InstantSearch>.]`
     );
 
-    jest.spyOn(console, 'error').mockRestore();
+    vi.spyOn(console, 'error').mockRestore();
   });
 
   test('renders children', () => {

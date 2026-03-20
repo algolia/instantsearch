@@ -97,7 +97,7 @@ test('setQueryParameters should omit defined parameters with next values of unde
 test('setQueryParameters should warn about invalid userToken', function () {
   const message =
     '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
-  console.warn = jest.fn();
+  console.warn = vi.fn();
 
   var state = new SearchParameters();
   state.setQueryParameters({ userToken: null });

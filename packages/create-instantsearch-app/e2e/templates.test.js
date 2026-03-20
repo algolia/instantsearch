@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-conditional-expect */
+/* eslint-disable vitest/no-conditional-expect */
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -17,7 +17,7 @@ describe('routing with third-party client-side router', () => {
     // 3. Navigate: '/about'
     // 4. Back: '/?indexName[query]=Apple'
 
-    const pushState = jest.spyOn(window.history, 'pushState');
+    const pushState = vi.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
 
     function App() {

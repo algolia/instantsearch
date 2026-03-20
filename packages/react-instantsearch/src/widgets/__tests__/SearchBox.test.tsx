@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
@@ -29,7 +29,7 @@ describe('SearchBox', () => {
   });
 
   test('refines on submit when searchAsYouType is false, even if custom onSubmit is provided', () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     let lastUiState: UiState = {};
 
     const { container } = render(

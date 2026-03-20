@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -70,7 +70,7 @@ const FACET_HITS = [
 
 function createMockedSearchClient(parameters: Record<string, any> = {}) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() =>
@@ -105,7 +105,7 @@ function createMockedSearchClient(parameters: Record<string, any> = {}) {
       );
     }),
     // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-    searchForFacetValues: jest.fn(() =>
+    searchForFacetValues: vi.fn(() =>
       Promise.resolve([
         createSFFVResponse({
           facetHits: FACET_HITS,
@@ -137,7 +137,7 @@ describe('RefinementList', () => {
 
   test('renders with translations', async () => {
     const searchClient = createMockedSearchClient({
-      searchForFacetValues: jest.fn(
+      searchForFacetValues: vi.fn(
         ([
           {
             params: { facetQuery },

@@ -24,7 +24,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({});
-    const onSubmitListener = jest.fn();
+    const onSubmitListener = vi.fn();
 
     beforeEach(() => {
       searchClient.search.mockClear();
@@ -69,7 +69,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -240,7 +240,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -316,7 +316,7 @@ export function createOptionsTests(
     });
 
     it('clears a refinement by calling the `refine` method in each item', async () => {
-      const refine = jest.fn();
+      const refine = vi.fn();
       await setup({
         instantSearchOptions: {
           searchClient,

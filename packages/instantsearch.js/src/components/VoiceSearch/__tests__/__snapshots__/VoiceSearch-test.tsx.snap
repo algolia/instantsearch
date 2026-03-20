@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`VoiceSearch Rendering with custom template for status 1`] = `
+exports[`VoiceSearch > Rendering > with custom template for status 1`] = `
 <div
   class="status"
 >
@@ -30,7 +30,7 @@ exports[`VoiceSearch Rendering with custom template for status 1`] = `
 </div>
 `;
 
-exports[`VoiceSearch Rendering with default props 1`] = `
+exports[`VoiceSearch > Rendering > with default props 1`] = `
 <div>
   <div
     class="root"

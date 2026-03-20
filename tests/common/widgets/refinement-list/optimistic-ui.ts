@@ -22,7 +22,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(() =>
@@ -63,7 +63,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -81,7 +81,7 @@ export function createOptimisticUiTests(
       // Wait for new results to come in
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
 
         await act(async () => {
@@ -97,7 +97,7 @@ export function createOptimisticUiTests(
       // Unselect the refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -115,7 +115,7 @@ export function createOptimisticUiTests(
       // Wait for new results to come in
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
 
         await act(async () => {
@@ -139,7 +139,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               if (errors) {
                 throw new Error('Network error!');
@@ -186,7 +186,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -209,7 +209,7 @@ export function createOptimisticUiTests(
         });
 
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
 
         // refinement has reverted back to previous state
@@ -225,7 +225,7 @@ export function createOptimisticUiTests(
       // Select the refinement again
       {
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -244,7 +244,7 @@ export function createOptimisticUiTests(
       {
         // refinement is consistent with clicks again
         const firstItem = screen.getByRole('checkbox', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
 
         await act(async () => {

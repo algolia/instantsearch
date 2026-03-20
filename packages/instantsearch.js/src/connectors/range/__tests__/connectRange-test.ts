@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -55,10 +55,10 @@ describe('connectRange', () => {
         // @ts-expect-error
         connectRange()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector]
+      `);
     });
 
     it('throws without attribute', () => {
@@ -66,25 +66,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         // @ts-expect-error
         connectRange(() => {})({ attribute: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+        [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector]
+      `);
     });
 
     it('throws with `max` lower than `min`', () => {
       expect(() => {
         connectRange(() => {})({ attribute: 'price', min: 100, max: 50 });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`max\` option can't be lower than \`min\`.
+        [Error: The \`max\` option can't be lower than \`min\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customRange = connectRange(render, unmount);
       const widget = customRange({ attribute: 'facet' });
@@ -106,7 +106,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -125,7 +125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     const helper = jsHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -231,7 +231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -244,7 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -294,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('should add numeric refinement when refining min boundary without previous configuration', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -305,7 +305,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -330,7 +330,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('should add numeric refinement when refining min boundary with previous configuration', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -343,7 +343,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     const helper = jsHelper(createSearchClient(), '', configuration);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -374,7 +374,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   it('should refine on boundaries when no min/max defined', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -385,7 +385,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       '',
       widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -668,8 +668,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const rendering = () => {};
     const createHelper = () => {
       const helper = jsHelper(createSearchClient(), '');
-      helper.search = jest.fn();
-      jest.spyOn(helper.state, 'removeNumericRefinement');
+      helper.search = vi.fn();
+      vi.spyOn(helper.state, 'removeNumericRefinement');
       return helper;
     };
 
@@ -1310,7 +1310,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('removes active refinement', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectRange(rendering);
       const attribute = 'price';
       const indexName = '';
@@ -1322,7 +1322,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -1358,7 +1358,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1377,7 +1377,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` empty with empty refinements', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1404,7 +1404,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` with a lower refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1434,7 +1434,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` with an upper refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1464,7 +1464,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` with a lower and upper refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1495,7 +1495,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` with an empty upper refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1526,7 +1526,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` with an empty lower refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1557,7 +1557,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1595,8 +1595,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   describe('getRenderState', () => {
     it('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRange = connectRange(renderFn, unmountFn);
       const rangeWidget = createRange({
         attribute: 'price',
@@ -1676,8 +1676,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRange = connectRange(renderFn, unmountFn);
       const rangeWidget = createRange({
         attribute: 'price',
@@ -1749,8 +1749,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('canRefine returns false when the result range is empty', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRange = connectRange(renderFn, unmountFn);
       const rangeWidget = createRange({
         attribute: 'price',
@@ -1795,7 +1795,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -1821,7 +1821,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` without overriding previous disjunctive facets', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price', 'brand'],
@@ -1847,7 +1847,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1872,7 +1872,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` with only the min value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1896,7 +1896,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` with only the max value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1920,7 +1920,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the default `SearchParameters` with an undefined value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1940,7 +1940,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the default `SearchParameters` with non-number values from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1962,7 +1962,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the default `SearchParameters` with a malformed value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1984,7 +1984,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` with the other numeric refinements from `SearchParameters`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         numericRefinements: {
@@ -2018,7 +2018,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('returns the `SearchParameters` with the correct price range', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -2042,7 +2042,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     test('ignores min or max from uiState if they are out of bound', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRange(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['price'],
@@ -2068,7 +2068,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const attribute = 'price';
 
     it('expect to return default configuration', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const widget = connectRange(rendering)({
         attribute,
       });
@@ -2088,7 +2088,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to return default configuration if previous one has already numeric refinements', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const widget = connectRange(rendering)({
         attribute,
         max: 500,
@@ -2118,7 +2118,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to return configuration with min numeric refinement', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const widget = connectRange(rendering)({
         attribute,
         min: 10,
@@ -2141,7 +2141,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to return configuration with max numeric refinement', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const widget = connectRange(rendering)({
         attribute,
         max: 10,
@@ -2164,7 +2164,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
 
     it('expect to return configuration with both numeric refinements', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const widget = connectRange(rendering)({
         attribute,
         min: 10,
@@ -2201,7 +2201,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           },
         },
       });
-      const renderer = jest.fn();
+      const renderer = vi.fn();
       const customRangeInput = connectRange(renderer);
 
       search.addWidgets([
@@ -2226,7 +2226,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 describe('insights', () => {
   // See: https://github.com/algolia/instantsearch/pull/5085
   it(`doesn't send event when a facet is added`, () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRange(rendering);
     const widget = makeWidget({
       attribute: 'price',

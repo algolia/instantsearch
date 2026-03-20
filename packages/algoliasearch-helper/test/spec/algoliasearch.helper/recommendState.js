@@ -26,20 +26,21 @@ describe('_recommendChange', () => {
     expect(helper.recommendState.params).toEqual([params1, params2]);
   });
 
-  test('triggers a change event', (done) => {
-    var params = { $$id: '1', objectID: 'objectID1', model: 'bought-together' };
-    var helper = algoliasearchHelper({}, null, {});
+  test('triggers a change event', function () {
+    return new Promise(function (done) {
+      var params = { $$id: '1', objectID: 'objectID1', model: 'bought-together' };
+      var helper = algoliasearchHelper({}, null, {});
 
-    // eslint-disable-next-line no-warning-comments
-    // TODO: listen to "change" event when events for Recommend are implemented
-    helper.on('recommend:change', (event) => {
-      var recommendState = event.recommend.state;
-      expect(recommendState).toEqual(helper.recommendState);
-      done();
-    });
+      // TODO: listen to "change" event when events for Recommend are implemented
+      helper.on('recommend:change', (event) => {
+        var recommendState = event.recommend.state;
+        expect(recommendState).toEqual(helper.recommendState);
+        done();
+      });
 
-    helper._recommendChange({
-      state: helper.recommendState.addParams(params),
+      helper._recommendChange({
+        state: helper.recommendState.addParams(params),
+      });
     });
   });
 });

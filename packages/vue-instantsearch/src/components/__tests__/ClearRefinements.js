@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,8 +7,8 @@ import { __setState } from '../../mixins/widget';
 import ClearRefinements from '../ClearRefinements.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const defaultState = {
   hasRefinements: true,
@@ -72,7 +72,7 @@ describe('default render', () => {
   });
 
   it('calls refine on button click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,
@@ -152,7 +152,7 @@ describe('custom default render', () => {
   });
 
   it('calls refine on link click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,

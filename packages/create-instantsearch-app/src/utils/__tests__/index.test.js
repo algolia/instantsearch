@@ -1,14 +1,15 @@
-const mockExistsSync = jest.fn();
-const mockLstatSync = jest.fn();
-const mockReaddirSync = jest.fn();
-
-jest.mock('fs', () => ({
-  existsSync: mockExistsSync,
-  lstatSync: mockLstatSync,
-  readdirSync: mockReaddirSync,
+vi.mock('fs', () => ({
+  existsSync: vi.fn(),
+  lstatSync: vi.fn(),
+  readdirSync: vi.fn(),
 }));
 
-const utils = require('../');
+import { existsSync, lstatSync, readdirSync } from 'fs';
+import * as utils from '../';
+
+const mockExistsSync = existsSync;
+const mockLstatSync = lstatSync;
+const mockReaddirSync = readdirSync;
 
 describe('checkAppName', () => {
   test('does not throw when valid', () => {
@@ -18,10 +19,10 @@ describe('checkAppName', () => {
   test('throws with correct error message', () => {
     expect(() => utils.checkAppName('./project-name'))
       .toThrowErrorMatchingInlineSnapshot(`
-      "Could not create a project called \\"<red>./project-name</color>\\" because of npm naming restrictions.
-        - name cannot start with a period
-        - name can only contain URL-friendly characters"
-    `);
+        [Error: Could not create a project called "./project-name" because of npm naming restrictions.
+          - name cannot start with a period
+          - name can only contain URL-friendly characters]
+      `);
   });
 });
 
@@ -94,7 +95,7 @@ describe('checkAppPath', () => {
 
     test('should throw with correct error', () => {
       expect(() => utils.checkAppPath('')).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project without directory"`
+        `[Error: Could not create project without directory]`
       );
     });
 
@@ -108,7 +109,7 @@ describe('checkAppPath', () => {
 describe('checkTemplateConfigFile', () => {
   test('with correct file does not throw', () => {
     expect(() => {
-      const requireMock = jest.fn(() => ({
+      const requireMock = vi.fn(() => ({
         libraryName: 'library-name',
       }));
 

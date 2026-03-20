@@ -38,7 +38,7 @@ export function createRoutingTests(
               router,
             },
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(() =>
@@ -72,7 +72,7 @@ export function createRoutingTests(
             '[data-testid="HierarchicalMenu-link"]'
           );
           if (link) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
               router.createURL({
@@ -231,7 +231,7 @@ export function createRoutingTests(
               router,
             },
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(() =>
@@ -261,7 +261,7 @@ export function createRoutingTests(
             '[data-testid="HierarchicalMenu-link"]'
           );
           if (link) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
               router.createURL({

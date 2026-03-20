@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -39,21 +39,21 @@ describe('queryRuleCustomData', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-QueryRuleCustomData"
-  >
-    [
-  {
-    "banner": "image-1.png"
-  },
-  {
-    "banner": "image-2.png"
-  }
-]
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-QueryRuleCustomData"
+          >
+            [
+          {
+            "banner": "image-1.png"
+          },
+          {
+            "banner": "image-2.png"
+          }
+        ]
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -82,21 +82,21 @@ describe('queryRuleCustomData', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-QueryRuleCustomData"
-  >
-    <ul>
-      <li>
-        image-1.png
-      </li>
-      <li>
-        image-2.png
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-QueryRuleCustomData"
+          >
+            <ul>
+              <li>
+                image-1.png
+              </li>
+              <li>
+                image-2.png
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -127,26 +127,26 @@ describe('queryRuleCustomData', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-QueryRuleCustomData"
-  >
-    <ul>
-      <li>
-        image-1.png
-      </li>
-      <li>
-        image-2.png
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-QueryRuleCustomData"
+          >
+            <ul>
+              <li>
+                image-1.png
+              </li>
+              <li>
+                image-2.png
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
     });
 
     function createMockedSearchClient() {
       return createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) =>

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -17,9 +17,9 @@ describe('connectTrendingItems', () => {
       // @ts-expect-error
       connectTrendingItems()({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector]
     `);
   });
 
@@ -27,9 +27,9 @@ describe('connectTrendingItems', () => {
     expect(() => {
       connectTrendingItems(() => {})({ facetName: 'key' });
     }).toThrowErrorMatchingInlineSnapshot(`
-      "When you provide facetName (received type String), you must also provide facetValue (received type Undefined).
+      [Error: When you provide facetName (received type String), you must also provide facetValue (received type Undefined).
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector]
     `);
   });
 
@@ -37,15 +37,15 @@ describe('connectTrendingItems', () => {
     expect(() => {
       connectTrendingItems(() => {})({ facetValue: 'value' });
     }).toThrowErrorMatchingInlineSnapshot(`
-      "When you provide facetName (received type Undefined), you must also provide facetValue (received type String).
+      [Error: When you provide facetName (received type Undefined), you must also provide facetValue (received type String).
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/#connector]
     `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customTrendingItems = connectTrendingItems(render, unmount);
     const widget = customTrendingItems({});
@@ -61,8 +61,8 @@ describe('connectTrendingItems', () => {
   });
 
   it('accepts custom parameters', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customTrendingItems = connectTrendingItems<{
       container: string;
@@ -73,7 +73,7 @@ describe('connectTrendingItems', () => {
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectTrendingItems(renderFn);
     const widget = makeWidget({});
 
@@ -81,7 +81,7 @@ describe('connectTrendingItems', () => {
     expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({

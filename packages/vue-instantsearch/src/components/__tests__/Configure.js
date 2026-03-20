@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { isProxy } from 'node:util/types';
@@ -9,7 +9,7 @@ import { __setState } from '../../mixins/widget';
 import Configure from '../Configure';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 const defaultState = {
   widgetParams: {

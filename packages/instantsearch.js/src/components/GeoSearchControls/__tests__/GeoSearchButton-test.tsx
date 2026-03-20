@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 
@@ -46,7 +46,7 @@ describe('GeoSearchButton', () => {
   it('expect to call onClick when button is clicked', () => {
     const props = {
       ...defaultProps,
-      onClick: jest.fn(),
+      onClick: vi.fn(),
     };
 
     const wrapper = shallow(

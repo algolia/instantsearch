@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -9,8 +9,8 @@ import DynamicWidgets from '../DynamicWidgets';
 import ExperimentalDynamicWidgets from '../ExperimentalDynamicWidgets';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../util/warn', () => ({ warn: jest.fn() }));
+vi.mock('../../mixins/widget');
+vi.mock('../../util/warn', () => ({ warn: vi.fn() }));
 
 it('warns on mount', () => {
   __setState(null);
@@ -31,18 +31,18 @@ it('behaves the same as DynamicWidgets', () => {
   Object.keys(ExperimentalDynamicWidgets).forEach((key) => {
     if (key === 'name') {
       // name is different
-      // eslint-disable-next-line jest/no-conditional-expect
+      // eslint-disable-next-line vitest/no-conditional-expect
       expect(ExperimentalDynamicWidgets[key]).toBe(
         'AisExperimentalDynamicWidgets'
       );
     } else if (key === 'mounted') {
       // mounted has the warning
-      // eslint-disable-next-line jest/no-conditional-expect
+      // eslint-disable-next-line vitest/no-conditional-expect
       expect(ExperimentalDynamicWidgets[key]).toEqual(expect.any(Function));
     } else if (key[0] === '_') {
       // private Vue behavior, not tested
     } else {
-      // eslint-disable-next-line jest/no-conditional-expect
+      // eslint-disable-next-line vitest/no-conditional-expect
       expect(ExperimentalDynamicWidgets[key]).toEqual(DynamicWidgets[key]);
     }
   });

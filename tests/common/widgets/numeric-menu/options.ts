@@ -53,7 +53,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-NumericMenu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -288,7 +288,7 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<{ name: string; description: string }>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) => {

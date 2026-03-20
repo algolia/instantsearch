@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -57,10 +57,10 @@ describe('hits', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/]
+      `);
     });
 
     test('adds custom CSS classes', async () => {
@@ -123,7 +123,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       subset: Partial<SearchResponse<CustomHit>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {
@@ -843,7 +843,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       subset: Partial<SearchResponse<CustomHit>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {
@@ -911,7 +911,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
 
   describe('insights', () => {
     const createInsightsMiddlewareWithOnEvent = () => {
-      const onEvent = jest.fn();
+      const onEvent = vi.fn();
 
       const insights = createInsightsMiddleware({
         insightsClient: null,
@@ -1279,7 +1279,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
 
     describe('old insights methods', () => {
       it('sends event', async () => {
-        const aa = jest.fn();
+        const aa = vi.fn();
         const hitsPerPage = 2;
         const search = instantsearch({
           indexName: 'indexName',
@@ -1335,7 +1335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       } = { hitsPerPage: 2, page: 0, clickAnalytics: false }
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {

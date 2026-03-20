@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -84,7 +84,7 @@ describe('RoutingManager', () => {
     test('should write in the router on searchParameters change', async () => {
       const searchClient = createSearchClient();
       const router = createFakeRouter({
-        write: jest.fn(),
+        write: vi.fn(),
       });
 
       const search = instantsearch({
@@ -96,12 +96,12 @@ describe('RoutingManager', () => {
       });
 
       const widget = createWidget({
-        render: jest.fn(),
-        getWidgetUiState: jest.fn((uiState, { searchParameters }) => ({
+        render: vi.fn(),
+        getWidgetUiState: vi.fn((uiState, { searchParameters }) => ({
           ...uiState,
           q: searchParameters.query,
         })),
-        getWidgetSearchParameters: jest.fn(
+        getWidgetSearchParameters: vi.fn(
           (searchParameters) => searchParameters
         ),
       });
@@ -132,53 +132,54 @@ describe('RoutingManager', () => {
       });
     });
 
-    // eslint-disable-next-line jest/no-done-callback
-    test('should update the searchParameters on router state update', (done) => {
-      const searchClient = createSearchClient();
+    test('should update the searchParameters on router state update', () => {
+      return new Promise<void>((done) => {
+        const searchClient = createSearchClient();
 
-      let onRouterUpdateCallback: (args: UiState) => void;
-      const router = createFakeRouter({
-        onUpdate: (fn) => {
-          onRouterUpdateCallback = fn;
-        },
-      });
-
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient,
-        routing: {
-          router,
-        },
-      });
-
-      const widget = createWidget({
-        render: jest.fn(),
-        getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
-          searchParameters.setQuery(uiState.query!)
-        ),
-      });
-
-      search.addWidgets([widget]);
-
-      search.start();
-
-      search.once('render', () => {
-        // initialization is done at this point
-
-        expect(search.mainIndex.getHelper()!.state.query).toBeUndefined();
-
-        // this simulates a router update with a uiState of {query: 'a'}
-        onRouterUpdateCallback({
-          indexName: {
-            query: 'a',
+        let onRouterUpdateCallback: (args: UiState) => void;
+        const router = createFakeRouter({
+          onUpdate: (fn) => {
+            onRouterUpdateCallback = fn;
           },
         });
 
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+          routing: {
+            router,
+          },
+        });
+
+        const widget = createWidget({
+          render: vi.fn(),
+          getWidgetSearchParameters: vi.fn((searchParameters, { uiState }) =>
+            searchParameters.setQuery(uiState.query!)
+          ),
+        });
+
+        search.addWidgets([widget]);
+
+        search.start();
+
         search.once('render', () => {
-          // the router update triggers a new search
-          // and given that the widget reads q as a query parameter
-          expect(search.mainIndex.getHelper()!.state.query).toEqual('a');
-          done();
+          // initialization is done at this point
+
+          expect(search.mainIndex.getHelper()!.state.query).toBeUndefined();
+
+          // this simulates a router update with a uiState of {query: 'a'}
+          onRouterUpdateCallback({
+            indexName: {
+              query: 'a',
+            },
+          });
+
+          search.once('render', () => {
+            // the router update triggers a new search
+            // and given that the widget reads q as a query parameter
+            expect(search.mainIndex.getHelper()!.state.query).toEqual('a');
+            done();
+          });
         });
       });
     });
@@ -187,7 +188,7 @@ describe('RoutingManager', () => {
       const searchClient = createSearchClient();
 
       const router = createFakeRouter({
-        write: jest.fn(),
+        write: vi.fn(),
       });
 
       const stateMapping = createFakeStateMapping({
@@ -225,7 +226,7 @@ describe('RoutingManager', () => {
               query: searchParameters.query,
             };
           },
-          getWidgetSearchParameters: jest.fn(
+          getWidgetSearchParameters: vi.fn(
             (searchParameters) => searchParameters
           ),
         }),
@@ -249,7 +250,7 @@ describe('RoutingManager', () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
-        write: jest.fn(),
+        write: vi.fn(),
       });
 
       const search = instantsearch({
@@ -300,7 +301,7 @@ describe('RoutingManager', () => {
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
-        write: jest.fn(),
+        write: vi.fn(),
       });
 
       const search = instantsearch({
@@ -355,7 +356,7 @@ describe('RoutingManager', () => {
             fn(state);
           });
         },
-        write: jest.fn((state) => {
+        write: vi.fn((state) => {
           history.push(state);
         }),
       });
@@ -449,7 +450,7 @@ describe('RoutingManager', () => {
             fn(state);
           });
         },
-        write: jest.fn((state) => {
+        write: vi.fn((state) => {
           history.push(state);
         }),
       });
@@ -520,7 +521,7 @@ describe('RoutingManager', () => {
         url: 'https://website.com/?query=query',
       });
 
-      const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
+      const setWindowTitle = vi.spyOn(window.document, 'title', 'set');
       const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = historyRouter({

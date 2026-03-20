@@ -24,10 +24,10 @@ export type MockSearchClient = OverrideKeys<
   SearchClient,
   SearchClient extends { searchForFacetValues: (...args: any[]) => any }
     ? {
-        search: jest.Mock<any, any>;
-        searchForFacetValues: jest.Mock<any, any>;
+        search: Mock<any, any>;
+        searchForFacetValues: Mock<any, any>;
       }
-    : { search: jest.Mock<any, any> }
+    : { search: Mock<any, any> }
 >;
 
 export function createAlgoliaSearchClient<
@@ -137,11 +137,11 @@ export function createAlgoliaSearchClient<
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return {
     appId,
-    addAlgoliaAgent: jest.fn(),
-    clearCache: jest.fn(),
-    initIndex: jest.fn(),
-    customRequest: jest.fn(),
-    search: jest.fn((requests) =>
+    addAlgoliaAgent: vi.fn(),
+    clearCache: vi.fn(),
+    initIndex: vi.fn(),
+    customRequest: vi.fn(),
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map((request) =>
@@ -153,7 +153,7 @@ export function createAlgoliaSearchClient<
         )
       )
     ),
-    searchForFacetValues: jest.fn(() =>
+    searchForFacetValues: vi.fn(() =>
       Promise.resolve([createSFFVResponse()])
     ),
     ...options,

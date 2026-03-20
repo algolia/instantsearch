@@ -11,7 +11,7 @@ function makeFakeFindAnswersResponse() {
 }
 
 function setupTestEnvironment(helperOptions) {
-  var findAnswers = jest.fn(function () {
+  var findAnswers = vi.fn(function () {
     return Promise.resolve([makeFakeFindAnswersResponse()]);
   });
 

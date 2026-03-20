@@ -53,7 +53,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-SearchBox')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -182,7 +182,7 @@ export function createOptionsTests(
         expect(screen.getByRole('searchbox')).toHaveAttribute('autofocus');
       } catch {
         // For React, it doesn't set the `autofocus` attribute but polyfills it
-        // eslint-disable-next-line jest/no-conditional-expect
+        // eslint-disable-next-line vitest/no-conditional-expect
         expect(screen.getByRole('searchbox')).toHaveFocus();
       }
     });

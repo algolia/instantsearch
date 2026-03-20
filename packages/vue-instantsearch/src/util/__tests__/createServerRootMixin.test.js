@@ -1,8 +1,8 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
-/* eslint-disable jest/no-done-callback */
+/* eslint-disable vitest/no-done-callback */
 import {
   AlgoliaSearchHelper,
   SearchParameters,
@@ -25,7 +25,7 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 
 function renderToString(app) {
   if (isVue3) {
@@ -67,10 +67,10 @@ describe('createServerRootMixin', () => {
           ],
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchClient\` option is required.
+        [Error: The \`searchClient\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
+      `);
     });
 
     it('creates an instantsearch instance on "data"', () => {
@@ -92,45 +92,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       });
     });
 
-    it('provides the instantsearch instance', (done) => {
-      const App = {
-        mixins: [
-          createServerRootMixin({
-            searchClient: createFakeClient(),
-            indexName: 'myIndexName',
-          }),
-        ],
-        template: `<div><slot /></div>`,
-      };
+    it('provides the instantsearch instance', () => {
+      return new Promise((done) => {
+        const App = {
+          mixins: [
+            createServerRootMixin({
+              searchClient: createFakeClient(),
+              indexName: 'myIndexName',
+            }),
+          ],
+          template: `<div><slot /></div>`,
+        };
 
-      const Child = {
-        mixins: [createWidgetMixin({ connector: true })],
-        mounted() {
-          expect(this.instantSearchInstance).toEqual(
-            expect.objectContaining({
-              start: expect.any(Function),
-              dispose: expect.any(Function),
-              mainIndex: expect.any(Object),
-              addWidgets: expect.any(Function),
-              removeWidgets: expect.any(Function),
-            })
-          );
-          done();
-        },
-        render() {
-          return null;
-        },
-      };
+        const Child = {
+          mixins: [createWidgetMixin({ connector: true })],
+          mounted() {
+            expect(this.instantSearchInstance).toEqual(
+              expect.objectContaining({
+                start: expect.any(Function),
+                dispose: expect.any(Function),
+                mainIndex: expect.any(Object),
+                addWidgets: expect.any(Function),
+                removeWidgets: expect.any(Function),
+              })
+            );
+            done();
+          },
+          render() {
+            return null;
+          },
+        };
 
-      mount({
-        components: { App, InstantSearchSsr, Child },
-        template: `
-          <App>
-            <InstantSearchSsr>
-              <Child />
-            </InstantSearchSsr>
-          </App>
-        `,
+        mount({
+          components: { App, InstantSearchSsr, Child },
+          template: `
+            <App>
+              <InstantSearchSsr>
+                <Child />
+              </InstantSearchSsr>
+            </App>
+          `,
+        });
       });
     });
   });
@@ -182,7 +184,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           expect(() =>
             this.instantsearch.findResultsState({ component: this })
           ).toThrowErrorMatchingInlineSnapshot(
-            `"findResultsState requires \`renderToString: (component) => Promise<string>\` in the first argument."`
+            `[Error: findResultsState requires \`renderToString: (component) => Promise<string>\` in the first argument.]`
           );
         },
       };
@@ -635,14 +637,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 this.instantsearch
                   .findResultsState({ component: this, renderToString })
                   .then((res) => {
-                    // eslint-disable-next-line jest/no-conditional-expect
+                    // eslint-disable-next-line vitest/no-conditional-expect
                     expect(
                       this.instantsearch.mainIndex
                         .getWidgets()
                         .map((w) => w.$$type)
                     ).toEqual(['ais.configure']);
 
-                    // eslint-disable-next-line jest/no-conditional-expect
+                    // eslint-disable-next-line vitest/no-conditional-expect
                     expect(res.hello.state.hitsPerPage).toBe(100);
                   })
                   // jest throws an error we need to catch, since stuck in the flow
@@ -689,14 +691,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               this.instantsearch
                 .findResultsState({ component: this, renderToString })
                 .then((res) => {
-                  // eslint-disable-next-line jest/no-conditional-expect
+                  // eslint-disable-next-line vitest/no-conditional-expect
                   expect(
                     this.instantsearch.mainIndex
                       .getWidgets()
                       .map((w) => w.$$type)
                   ).toEqual(['ais.configure']);
 
-                  // eslint-disable-next-line jest/no-conditional-expect
+                  // eslint-disable-next-line vitest/no-conditional-expect
                   expect(res.hello._state.hitsPerPage).toBe(100);
                 })
                 // jest throws an error we need to catch, since stuck in the flow
@@ -1101,8 +1103,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       });
 
       const widget = {
-        init: jest.fn(),
-        render: jest.fn(),
+        init: vi.fn(),
+        render: vi.fn(),
       };
 
       instantSearchInstance.hydrate({
@@ -1174,8 +1176,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       });
 
       const widget = {
-        init: jest.fn(),
-        render: jest.fn(),
+        init: vi.fn(),
+        render: vi.fn(),
       };
 
       const resultsState = createSerializedState();
@@ -1225,8 +1227,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         });
 
         const widget = {
-          init: jest.fn(),
-          render: jest.fn(),
+          init: vi.fn(),
+          render: vi.fn(),
         };
 
         instantSearchInstance.hydrate({
@@ -1259,16 +1261,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         });
 
         const widget = {
-          init: jest.fn(),
-          render: jest.fn(),
+          init: vi.fn(),
+          render: vi.fn(),
           getWidgetState(uiState) {
             return uiState;
           },
         };
 
         const widgetWithoutGetWidgetState = {
-          init: jest.fn(),
-          render: jest.fn(),
+          init: vi.fn(),
+          render: vi.fn(),
         };
 
         instantSearchInstance.hydrate({

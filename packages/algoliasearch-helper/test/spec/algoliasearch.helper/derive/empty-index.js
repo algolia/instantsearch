@@ -5,7 +5,7 @@ var algoliasearchHelper = require('../../../../');
 describe('searches', function () {
   test('calls client.search for each derived helper that has an index', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -34,7 +34,7 @@ describe('searches', function () {
 
   test('does not call client.search if all indices are empty', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -57,7 +57,7 @@ describe('searches', function () {
 
   test('does not call client.search if no derived helpers', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -76,7 +76,7 @@ describe('searches', function () {
 describe('lastResults', function () {
   test('gives a result for each derived helper that has an index', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -109,7 +109,7 @@ describe('lastResults', function () {
 describe('result event', function () {
   test('gives a result event for each derived helper', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -119,13 +119,13 @@ describe('result event', function () {
     };
     var helper = algoliasearchHelper(client, 'indexName');
 
-    var derivedResultSpy1 = jest.fn();
+    var derivedResultSpy1 = vi.fn();
     helper
       .derive(function (state) {
         return state.setIndex('indexName');
       })
       .on('result', derivedResultSpy1);
-    var derivedResultSpy2 = jest.fn();
+    var derivedResultSpy2 = vi.fn();
     helper
       .derive(function (state) {
         return state.setIndex('');
@@ -152,7 +152,7 @@ describe('result event', function () {
 
   test('gives a result event for each derived helper when no query is done', function () {
     var client = {
-      search: jest.fn(function (requests) {
+      search: vi.fn(function (requests) {
         return Promise.resolve({
           results: requests.map(function () {
             return { hits: [] };
@@ -162,7 +162,7 @@ describe('result event', function () {
     };
     var helper = algoliasearchHelper(client, 'indexName');
 
-    var derivedResultSpy1 = jest.fn();
+    var derivedResultSpy1 = vi.fn();
     helper
       .derive(function (state) {
         return state.setIndex('');

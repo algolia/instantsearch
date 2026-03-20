@@ -7,71 +7,75 @@ var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
-test('Numeric filters: numeric filters from constructor', function (done) {
-  var client = algoliasearch('dsf', 'dsfdf');
+test('Numeric filters: numeric filters from constructor', function () {
+  return new Promise(function (done) {
+    var client = algoliasearch('dsf', 'dsfdf');
 
-  client.search = function (queries) {
-    var ps = queries[0].params;
+    client.search = function (queries) {
+      var ps = queries[0].params;
 
-    expect(ps.numericFilters).toEqual([
-      'attribute1>3',
-      'attribute1<=100',
-      'attribute2=42',
-      'attribute2=25',
-      'attribute2=58',
-      ['attribute2=27', 'attribute2=70'],
-    ]);
+      expect(ps.numericFilters).toEqual([
+        'attribute1>3',
+        'attribute1<=100',
+        'attribute2=42',
+        'attribute2=25',
+        'attribute2=58',
+        ['attribute2=27', 'attribute2=70'],
+      ]);
 
-    done();
+      done();
 
-    return new Promise(function () {});
-  };
+      return new Promise(function () {});
+    };
 
-  var helper = algoliasearchHelper(client, 'index', {
-    numericRefinements: {
-      attribute1: {
-        '>': [3],
-        '<=': [100],
+    var helper = algoliasearchHelper(client, 'index', {
+      numericRefinements: {
+        attribute1: {
+          '>': [3],
+          '<=': [100],
+        },
+        attribute2: {
+          '=': [42, 25, 58, [27, 70]],
+        },
       },
-      attribute2: {
-        '=': [42, 25, 58, [27, 70]],
-      },
-    },
+    });
+
+    helper.search();
   });
-
-  helper.search();
 });
 
-test('Numeric filters: numeric filters from setters', function (done) {
-  var client = algoliasearch('dsf', 'dsfdf');
+test('Numeric filters: numeric filters from setters', function () {
+  return new Promise(function (done) {
+    var client = algoliasearch('dsf', 'dsfdf');
 
-  client.search = function (queries) {
-    var ps = queries[0].params;
+    client.search = function (queries) {
+      var ps = queries[0].params;
 
-    expect(ps.numericFilters).toEqual([
-      'attribute1>3',
-      'attribute1<=100',
-      'attribute2=42',
-      'attribute2=25',
-      'attribute2=58',
-      ['attribute2=27', 'attribute2=70'],
-    ]);
+      expect(ps.numericFilters).toEqual([
+        'attribute1>3',
+        'attribute1<=100',
+        'attribute2=42',
+        'attribute2=25',
+        'attribute2=58',
+        ['attribute2=27', 'attribute2=70'],
+      ]);
 
-    done();
+      done();
 
-    return new Promise(function () {});
-  };
+      return new Promise(function () {});
+    };
 
-  var helper = algoliasearchHelper(client, 'index');
+    var helper = algoliasearchHelper(client, 'index');
 
-  helper.addNumericRefinement('attribute1', '>', 3);
-  helper.addNumericRefinement('attribute1', '<=', 100);
-  helper.addNumericRefinement('attribute2', '=', 42);
-  helper.addNumericRefinement('attribute2', '=', 25);
-  helper.addNumericRefinement('attribute2', '=', 58);
-  helper.addNumericRefinement('attribute2', '=', [27, 70]);
+    helper.addNumericRefinement('attribute1', '>', 3);
+    helper.addNumericRefinement('attribute1', '<=', 100);
+    helper.addNumericRefinement('attribute2', '=', 42);
+    helper.addNumericRefinement('attribute2', '=', 25);
+    helper.addNumericRefinement('attribute2', '=', 58);
+    helper.addNumericRefinement('attribute2', '=', [27, 70]);
 
-  helper.search();
+    helper.search();
+  });
 });
 
 test('Should be able to remove values one by one even 0s', function () {

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -19,7 +19,7 @@ import type { SearchClient } from 'instantsearch.js';
 
 function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
   return createAlgoliaSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(

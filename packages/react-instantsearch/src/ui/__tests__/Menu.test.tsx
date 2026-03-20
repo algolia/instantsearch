@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -27,9 +27,9 @@ describe('Menu', () => {
           isRefined: false,
         },
       ],
-      onRefine: jest.fn(),
+      onRefine: vi.fn(),
       createURL: (value) => `#${value}`,
-      onToggleShowMore: jest.fn(),
+      onToggleShowMore: vi.fn(),
       canToggleShowMore: true,
       isShowingMore: false,
       translations: {

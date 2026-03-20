@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -21,7 +21,7 @@ test('does not write the same URL twice', async () => {
   // 2. Refine query: '/?indexName[query]=Apple' (writes)
   // 3. Refine page: '/?indexName[query]=Apple' (does not write)
 
-  const pushState = jest.spyOn(window.history, 'pushState');
+  const pushState = vi.spyOn(window.history, 'pushState');
 
   const search = instantsearch({
     indexName: 'indexName',

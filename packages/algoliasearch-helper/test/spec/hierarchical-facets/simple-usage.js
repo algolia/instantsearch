@@ -78,7 +78,7 @@ describe('hierarchical facets: simple usage', function () {
   };
 
   var client = algoliasearch(appId, apiKey);
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return Promise.resolve(algoliaResponse);
   });
 
@@ -86,173 +86,9 @@ describe('hierarchical facets: simple usage', function () {
     client.search.mockClear();
   });
 
-  test('persistHierarchicalRootCount: false', function (done) {
-    var helper = algoliasearchHelper(client, indexName, {
-      hierarchicalFacets: [
-        {
-          name: 'categories',
-          attributes: [
-            'categories.lvl0',
-            'categories.lvl1',
-            'categories.lvl2',
-            'categories.lvl3',
-          ],
-        },
-      ],
-    });
-
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
-
-    var expectedHelperResponse = [
-      {
-        name: 'categories',
-        count: null,
-        isRefined: true,
-        path: null,
-        escapedValue: null,
-        exhaustive: true,
-        data: [
-          {
-            name: 'beers',
-            path: 'beers',
-            escapedValue: 'beers',
-            count: 9,
-            isRefined: true,
-            exhaustive: true,
-            data: [
-              {
-                name: 'IPA',
-                path: 'beers > IPA',
-                escapedValue: 'beers > IPA',
-                count: 9,
-                isRefined: true,
-                exhaustive: true,
-                data: [
-                  {
-                    name: 'Flying dog',
-                    path: 'beers > IPA > Flying dog',
-                    escapedValue: 'beers > IPA > Flying dog',
-                    count: 3,
-                    isRefined: true,
-                    exhaustive: true,
-                    data: null,
-                  },
-                  {
-                    name: 'Brewdog punk IPA',
-                    path: 'beers > IPA > Brewdog punk IPA',
-                    escapedValue: 'beers > IPA > Brewdog punk IPA',
-                    count: 6,
-                    isRefined: false,
-                    exhaustive: true,
-                    data: null,
-                  },
-                ],
-              },
-              {
-                name: 'Pale Ale',
-                path: 'beers > Pale Ale',
-                escapedValue: 'beers > Pale Ale',
-                count: 10,
-                isRefined: false,
-                exhaustive: true,
-                data: null,
-              },
-              {
-                name: 'Stout',
-                path: 'beers > Stout',
-                escapedValue: 'beers > Stout',
-                count: 1,
-                isRefined: false,
-                exhaustive: true,
-                data: null,
-              },
-            ],
-          },
-          {
-            name: 'fruits',
-            path: 'fruits',
-            escapedValue: 'fruits',
-            count: 5,
-            isRefined: false,
-            exhaustive: true,
-            data: null,
-          },
-          {
-            name: 'sales',
-            path: 'sales',
-            escapedValue: 'sales',
-            count: 20,
-            isRefined: false,
-            exhaustive: true,
-            data: null,
-          },
-        ],
-      },
-    ];
-
-    helper.setQuery('a').search();
-
-    helper.once('result', function (event) {
-      var queries = client.search.mock.calls[0][0];
-      var hitsQuery = queries[0];
-      var parentValuesQuery = queries[1];
-      var fullParentsValuesQueries = queries.slice(2);
-
-      expect(queries.length).toBe(4);
-
-      expect(hitsQuery.params.facets).toEqual([
-        'categories.lvl0',
-        'categories.lvl1',
-        'categories.lvl2',
-        'categories.lvl3',
-      ]);
-      expect(hitsQuery.params.facetFilters).toEqual([
-        ['categories.lvl2:beers > IPA > Flying dog'],
-      ]);
-
-      expect(parentValuesQuery.params.facets).toEqual([
-        'categories.lvl0',
-        'categories.lvl1',
-        'categories.lvl2',
-      ]);
-      expect(parentValuesQuery.params.facetFilters).toEqual([
-        ['categories.lvl1:beers > IPA'],
-      ]);
-
-      // Root
-      expect(fullParentsValuesQueries[0].params.facets).toEqual(
-        'categories.lvl0'
-      );
-      expect(fullParentsValuesQueries[0].params.facetFilters).toBe(undefined);
-
-      // Level 1
-      expect(fullParentsValuesQueries[1].params.facets).toEqual(
-        'categories.lvl1'
-      );
-      expect(fullParentsValuesQueries[1].params.facetFilters).toEqual([
-        'categories.lvl0:beers',
-      ]);
-
-      expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
-
-      // we do not yet support multiple values for hierarchicalFacetsRefinements
-      // but at some point we may want to open multiple leafs of a hierarchical menu
-      // So we set this as an array so that we do not have to bump major to handle it
-      expect(
-        Array.isArray(helper.state.hierarchicalFacetsRefinements.categories)
-      ).toBeTruthy();
-      done();
-    });
-  });
-
-  test('persistHierarchicalRootCount: true', function (done) {
-    var helper = algoliasearchHelper(
-      client,
-      indexName,
-      {
+  test('persistHierarchicalRootCount: false', function () {
+    return new Promise(function (done) {
+      var helper = algoliasearchHelper(client, indexName, {
         hierarchicalFacets: [
           {
             name: 'categories',
@@ -264,156 +100,324 @@ describe('hierarchical facets: simple usage', function () {
             ],
           },
         ],
-      },
-      {
-        persistHierarchicalRootCount: true,
-      }
-    );
+      });
 
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+      helper.toggleRefine('categories', 'beers > IPA > Flying dog');
 
-    var expectedHelperResponse = [
-      {
-        name: 'categories',
-        count: null,
-        isRefined: true,
-        path: null,
-        escapedValue: null,
-        exhaustive: true,
-        data: [
-          {
-            name: 'beers',
-            path: 'beers',
-            escapedValue: 'beers',
-            count: 20,
-            isRefined: true,
-            exhaustive: true,
-            data: [
-              {
-                name: 'IPA',
-                path: 'beers > IPA',
-                escapedValue: 'beers > IPA',
-                count: 9,
-                isRefined: true,
-                exhaustive: true,
-                data: [
-                  {
-                    name: 'Flying dog',
-                    path: 'beers > IPA > Flying dog',
-                    escapedValue: 'beers > IPA > Flying dog',
-                    count: 3,
-                    isRefined: true,
-                    exhaustive: true,
-                    data: null,
-                  },
-                  {
-                    name: 'Brewdog punk IPA',
-                    path: 'beers > IPA > Brewdog punk IPA',
-                    escapedValue: 'beers > IPA > Brewdog punk IPA',
-                    count: 6,
-                    isRefined: false,
-                    exhaustive: true,
-                    data: null,
-                  },
-                ],
-              },
-              {
-                name: 'Pale Ale',
-                path: 'beers > Pale Ale',
-                escapedValue: 'beers > Pale Ale',
-                count: 10,
-                isRefined: false,
-                exhaustive: true,
-                data: null,
-              },
-              {
-                name: 'Stout',
-                path: 'beers > Stout',
-                escapedValue: 'beers > Stout',
-                count: 1,
-                isRefined: false,
-                exhaustive: true,
-                data: null,
-              },
-            ],
-          },
-          {
-            name: 'fruits',
-            path: 'fruits',
-            escapedValue: 'fruits',
-            count: 5,
-            isRefined: false,
-            exhaustive: true,
-            data: null,
-          },
-          {
-            name: 'sales',
-            path: 'sales',
-            escapedValue: 'sales',
-            count: 20,
-            isRefined: false,
-            exhaustive: true,
-            data: null,
-          },
-        ],
-      },
-    ];
+      var expectedHelperResponse = [
+        {
+          name: 'categories',
+          count: null,
+          isRefined: true,
+          path: null,
+          escapedValue: null,
+          exhaustive: true,
+          data: [
+            {
+              name: 'beers',
+              path: 'beers',
+              escapedValue: 'beers',
+              count: 9,
+              isRefined: true,
+              exhaustive: true,
+              data: [
+                {
+                  name: 'IPA',
+                  path: 'beers > IPA',
+                  escapedValue: 'beers > IPA',
+                  count: 9,
+                  isRefined: true,
+                  exhaustive: true,
+                  data: [
+                    {
+                      name: 'Flying dog',
+                      path: 'beers > IPA > Flying dog',
+                      escapedValue: 'beers > IPA > Flying dog',
+                      count: 3,
+                      isRefined: true,
+                      exhaustive: true,
+                      data: null,
+                    },
+                    {
+                      name: 'Brewdog punk IPA',
+                      path: 'beers > IPA > Brewdog punk IPA',
+                      escapedValue: 'beers > IPA > Brewdog punk IPA',
+                      count: 6,
+                      isRefined: false,
+                      exhaustive: true,
+                      data: null,
+                    },
+                  ],
+                },
+                {
+                  name: 'Pale Ale',
+                  path: 'beers > Pale Ale',
+                  escapedValue: 'beers > Pale Ale',
+                  count: 10,
+                  isRefined: false,
+                  exhaustive: true,
+                  data: null,
+                },
+                {
+                  name: 'Stout',
+                  path: 'beers > Stout',
+                  escapedValue: 'beers > Stout',
+                  count: 1,
+                  isRefined: false,
+                  exhaustive: true,
+                  data: null,
+                },
+              ],
+            },
+            {
+              name: 'fruits',
+              path: 'fruits',
+              escapedValue: 'fruits',
+              count: 5,
+              isRefined: false,
+              exhaustive: true,
+              data: null,
+            },
+            {
+              name: 'sales',
+              path: 'sales',
+              escapedValue: 'sales',
+              count: 20,
+              isRefined: false,
+              exhaustive: true,
+              data: null,
+            },
+          ],
+        },
+      ];
 
-    helper.setQuery('a').search();
+      helper.setQuery('a').search();
 
-    helper.once('result', function (event) {
-      var queries = client.search.mock.calls[0][0];
-      var hitsQuery = queries[0];
-      var parentValuesQuery = queries[1];
-      var fullParentsValuesQueries = queries.slice(2);
+      helper.once('result', function (event) {
+        var queries = client.search.mock.calls[0][0];
+        var hitsQuery = queries[0];
+        var parentValuesQuery = queries[1];
+        var fullParentsValuesQueries = queries.slice(2);
 
-      expect(queries.length).toBe(4);
+        expect(queries.length).toBe(4);
 
-      expect(hitsQuery.params.facets).toEqual([
-        'categories.lvl0',
-        'categories.lvl1',
-        'categories.lvl2',
-        'categories.lvl3',
-      ]);
-      expect(hitsQuery.params.facetFilters).toEqual([
-        ['categories.lvl2:beers > IPA > Flying dog'],
-      ]);
+        expect(hitsQuery.params.facets).toEqual([
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ]);
+        expect(hitsQuery.params.facetFilters).toEqual([
+          ['categories.lvl2:beers > IPA > Flying dog'],
+        ]);
 
-      expect(parentValuesQuery.params.facets).toEqual([
-        'categories.lvl0',
-        'categories.lvl1',
-        'categories.lvl2',
-      ]);
-      expect(parentValuesQuery.params.facetFilters).toEqual([
-        ['categories.lvl1:beers > IPA'],
-      ]);
+        expect(parentValuesQuery.params.facets).toEqual([
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+        ]);
+        expect(parentValuesQuery.params.facetFilters).toEqual([
+          ['categories.lvl1:beers > IPA'],
+        ]);
 
-      // Root
-      expect(fullParentsValuesQueries[0].params.facets).toEqual(
-        'categories.lvl0'
+        // Root
+        expect(fullParentsValuesQueries[0].params.facets).toEqual(
+          'categories.lvl0'
+        );
+        expect(fullParentsValuesQueries[0].params.facetFilters).toBe(undefined);
+
+        // Level 1
+        expect(fullParentsValuesQueries[1].params.facets).toEqual(
+          'categories.lvl1'
+        );
+        expect(fullParentsValuesQueries[1].params.facetFilters).toEqual([
+          'categories.lvl0:beers',
+        ]);
+
+        expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
+        expect(event.results.getFacetByName('categories')).toEqual(
+          expectedHelperResponse[0]
+        );
+
+        // we do not yet support multiple values for hierarchicalFacetsRefinements
+        // but at some point we may want to open multiple leafs of a hierarchical menu
+        // So we set this as an array so that we do not have to bump major to handle it
+        expect(
+          Array.isArray(helper.state.hierarchicalFacetsRefinements.categories)
+        ).toBeTruthy();
+        done();
+      });
+    });
+  });
+
+  test('persistHierarchicalRootCount: true', function () {
+    return new Promise(function (done) {
+      var helper = algoliasearchHelper(
+        client,
+        indexName,
+        {
+          hierarchicalFacets: [
+            {
+              name: 'categories',
+              attributes: [
+                'categories.lvl0',
+                'categories.lvl1',
+                'categories.lvl2',
+                'categories.lvl3',
+              ],
+            },
+          ],
+        },
+        {
+          persistHierarchicalRootCount: true,
+        }
       );
-      expect(fullParentsValuesQueries[0].params.facetFilters).toBe(undefined);
 
-      // Level 1
-      expect(fullParentsValuesQueries[1].params.facets).toEqual(
-        'categories.lvl1'
-      );
-      expect(fullParentsValuesQueries[1].params.facetFilters).toEqual([
-        'categories.lvl0:beers',
-      ]);
+      helper.toggleRefine('categories', 'beers > IPA > Flying dog');
 
-      expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
+      var expectedHelperResponse = [
+        {
+          name: 'categories',
+          count: null,
+          isRefined: true,
+          path: null,
+          escapedValue: null,
+          exhaustive: true,
+          data: [
+            {
+              name: 'beers',
+              path: 'beers',
+              escapedValue: 'beers',
+              count: 20,
+              isRefined: true,
+              exhaustive: true,
+              data: [
+                {
+                  name: 'IPA',
+                  path: 'beers > IPA',
+                  escapedValue: 'beers > IPA',
+                  count: 9,
+                  isRefined: true,
+                  exhaustive: true,
+                  data: [
+                    {
+                      name: 'Flying dog',
+                      path: 'beers > IPA > Flying dog',
+                      escapedValue: 'beers > IPA > Flying dog',
+                      count: 3,
+                      isRefined: true,
+                      exhaustive: true,
+                      data: null,
+                    },
+                    {
+                      name: 'Brewdog punk IPA',
+                      path: 'beers > IPA > Brewdog punk IPA',
+                      escapedValue: 'beers > IPA > Brewdog punk IPA',
+                      count: 6,
+                      isRefined: false,
+                      exhaustive: true,
+                      data: null,
+                    },
+                  ],
+                },
+                {
+                  name: 'Pale Ale',
+                  path: 'beers > Pale Ale',
+                  escapedValue: 'beers > Pale Ale',
+                  count: 10,
+                  isRefined: false,
+                  exhaustive: true,
+                  data: null,
+                },
+                {
+                  name: 'Stout',
+                  path: 'beers > Stout',
+                  escapedValue: 'beers > Stout',
+                  count: 1,
+                  isRefined: false,
+                  exhaustive: true,
+                  data: null,
+                },
+              ],
+            },
+            {
+              name: 'fruits',
+              path: 'fruits',
+              escapedValue: 'fruits',
+              count: 5,
+              isRefined: false,
+              exhaustive: true,
+              data: null,
+            },
+            {
+              name: 'sales',
+              path: 'sales',
+              escapedValue: 'sales',
+              count: 20,
+              isRefined: false,
+              exhaustive: true,
+              data: null,
+            },
+          ],
+        },
+      ];
 
-      // we do not yet support multiple values for hierarchicalFacetsRefinements
-      // but at some point we may want to open multiple leafs of a hierarchical menu
-      // So we set this as an array so that we do not have to bump major to handle it
-      expect(
-        Array.isArray(helper.state.hierarchicalFacetsRefinements.categories)
-      ).toBeTruthy();
-      done();
+      helper.setQuery('a').search();
+
+      helper.once('result', function (event) {
+        var queries = client.search.mock.calls[0][0];
+        var hitsQuery = queries[0];
+        var parentValuesQuery = queries[1];
+        var fullParentsValuesQueries = queries.slice(2);
+
+        expect(queries.length).toBe(4);
+
+        expect(hitsQuery.params.facets).toEqual([
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ]);
+        expect(hitsQuery.params.facetFilters).toEqual([
+          ['categories.lvl2:beers > IPA > Flying dog'],
+        ]);
+
+        expect(parentValuesQuery.params.facets).toEqual([
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+        ]);
+        expect(parentValuesQuery.params.facetFilters).toEqual([
+          ['categories.lvl1:beers > IPA'],
+        ]);
+
+        // Root
+        expect(fullParentsValuesQueries[0].params.facets).toEqual(
+          'categories.lvl0'
+        );
+        expect(fullParentsValuesQueries[0].params.facetFilters).toBe(undefined);
+
+        // Level 1
+        expect(fullParentsValuesQueries[1].params.facets).toEqual(
+          'categories.lvl1'
+        );
+        expect(fullParentsValuesQueries[1].params.facetFilters).toEqual([
+          'categories.lvl0:beers',
+        ]);
+
+        expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
+        expect(event.results.getFacetByName('categories')).toEqual(
+          expectedHelperResponse[0]
+        );
+
+        // we do not yet support multiple values for hierarchicalFacetsRefinements
+        // but at some point we may want to open multiple leafs of a hierarchical menu
+        // So we set this as an array so that we do not have to bump major to handle it
+        expect(
+          Array.isArray(helper.state.hierarchicalFacetsRefinements.categories)
+        ).toBeTruthy();
+        done();
+      });
     });
   });
 });

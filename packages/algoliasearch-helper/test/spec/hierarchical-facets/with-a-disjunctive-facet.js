@@ -24,7 +24,7 @@ test('hierarchical facets: combined with a disjunctive facet', function () {
   helper.toggleRefine('categories', 'beers > IPA');
   helper.toggleRefine('colors', 'blue');
 
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return new Promise(function () {});
   });
 

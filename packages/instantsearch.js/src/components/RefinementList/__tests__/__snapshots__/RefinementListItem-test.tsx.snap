@@ -1,23 +1,23 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RefinementListItem renders an item 1`] = `
+exports[`RefinementListItem > renders an item 1`] = `
 <li
   className="item class"
   onClick={[Function]}
 >
-  <Template
+  <default
     data={
       {
         "template": "data",
       }
     }
-    rootTagName="div"
     template="props"
     templateKey="item key"
-    templates={{}}
-    templatesConfig={{}}
-    useCustomCompileOptions={{}}
-  />
+  >
+    <div
+      data-template-key="item key"
+    />
+  </default>
   <div />
 </li>
 `;

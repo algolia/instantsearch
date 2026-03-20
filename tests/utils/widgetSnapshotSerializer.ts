@@ -6,6 +6,7 @@ import { createInitOptions } from 'instantsearch.js/test/createWidget';
 
 import type { InitOptions, Widget } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { SnapshotSerializer } from 'vitest';
 
 function getAttribute(widget: Widget | IndexWidget) {
   try {
@@ -30,7 +31,7 @@ function getAttribute(widget: Widget | IndexWidget) {
  *  attribute: string
  * }
  */
-export const widgetSnapshotSerializer: jest.SnapshotSerializerPlugin = {
+export const widgetSnapshotSerializer: SnapshotSerializer = {
   serialize(widget: Widget | IndexWidget, { indent }, indentation) {
     const keys = {
       $$widgetType: widget.$$widgetType,

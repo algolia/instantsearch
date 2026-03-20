@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -38,9 +38,9 @@ describe('refinementList', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/]
       `);
     });
 
@@ -1165,7 +1165,7 @@ describe('refinementList', () => {
 
 function createMockedSearchClient() {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() =>
@@ -1183,7 +1183,7 @@ function createMockedSearchClient() {
       );
     }),
     // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-    searchForFacetValues: jest.fn((requests) => {
+    searchForFacetValues: vi.fn((requests) => {
       return Promise.resolve([
         createSFFVResponse({
           facetHits:

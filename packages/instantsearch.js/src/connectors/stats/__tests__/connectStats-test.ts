@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -20,7 +20,7 @@ import type { StatsRenderState } from '../connectStats';
 
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn<any, [StatsRenderState, boolean]>();
+    const renderFn = vi.fn<any, [StatsRenderState, boolean]>();
     const makeWidget = connectStats(renderFn);
     const widget = makeWidget({
       ...config,
@@ -46,15 +46,15 @@ describe('connectStats', () => {
         // @ts-expect-error
         connectStats()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector]
+      `);
     });
 
     it('accepts not being passed widgetParams', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customStats = connectStats(render, unmount);
       // @ts-expect-error
@@ -62,8 +62,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customStats = connectStats(render, unmount);
       const widget = customStats({});
@@ -81,8 +81,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
   describe('getRenderState', () => {
     test('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createStats = connectStats(renderFn, unmountFn);
       const stats = createStats({});
       const helper = jsHelper(createSearchClient(), 'indexName', {
@@ -174,8 +174,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createStats = connectStats(renderFn, unmountFn);
       const stats = createStats({});
       const helper = jsHelper(createSearchClient(), 'indexName', {
@@ -344,7 +344,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectStats(rendering);
 
     const widget = makeWidget({
@@ -352,7 +352,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions());
 

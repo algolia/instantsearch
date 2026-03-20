@@ -13,7 +13,7 @@ it('is a connector', () => {
 });
 
 it('state & results are forwarded in render', () => {
-  const renderFn = jest.fn();
+  const renderFn = vi.fn();
   const widgetFactory = connectStateResults(renderFn);
   const widgetInstance = widgetFactory({ myParams: true });
 
@@ -39,7 +39,7 @@ it('state & results are forwarded in render', () => {
 });
 
 it('instantSearchInstance is forwarded', () => {
-  const renderFn = jest.fn();
+  const renderFn = vi.fn();
   const widgetFactory = connectStateResults(renderFn);
   const widgetInstance = widgetFactory({ myParams: true });
 
@@ -67,7 +67,7 @@ it('instantSearchInstance is forwarded', () => {
 });
 
 it('widgetParams are forwarded, and default to {}', () => {
-  const renderFn = jest.fn();
+  const renderFn = vi.fn();
   const widgetFactory = connectStateResults(renderFn);
   const widgetInstance = widgetFactory({ myParams: true });
 
@@ -87,7 +87,7 @@ it('widgetParams are forwarded, and default to {}', () => {
 });
 
 it('widgetParams are optional, and default to {}', () => {
-  const renderFn = jest.fn();
+  const renderFn = vi.fn();
   const widgetFactory = connectStateResults(renderFn);
   const widgetInstance = widgetFactory();
 
@@ -107,7 +107,7 @@ it('widgetParams are optional, and default to {}', () => {
 });
 
 it('unmountFn gets called on dispose', () => {
-  const unmountFn = jest.fn();
+  const unmountFn = vi.fn();
   const widgetFactory = connectStateResults(() => {}, unmountFn);
   const widgetInstance = widgetFactory();
   widgetInstance.dispose();
@@ -116,7 +116,7 @@ it('unmountFn gets called on dispose', () => {
 });
 
 it('unmountFn is optional', () => {
-  const unmountFn = jest.fn();
+  const unmountFn = vi.fn();
   const widgetFactory = connectStateResults(() => {}, unmountFn);
   const widgetInstance = widgetFactory();
   widgetInstance.dispose();

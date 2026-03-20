@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -38,10 +38,10 @@ describe('pagination', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/]
+      `);
     });
 
     test('add custom CSS classes', async () => {
@@ -159,7 +159,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       subset: Partial<SearchResponse<CustomHit>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {

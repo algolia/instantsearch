@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -281,7 +281,7 @@ describe('insights', () => {
       const { instantSearchInstance } = createTestEnvironment();
 
       /* eslint-disable deprecation/deprecation */
-      // eslint-disable-next-line jest/unbound-method
+      // eslint-disable-next-line vitest/unbound-method
       const createElement = document.createElement;
       document.createElement = () => {
         throw new Error('error');
@@ -1297,7 +1297,7 @@ describe('insights', () => {
       const { insightsClient, instantSearchInstance, analytics } =
         createTestEnvironment();
 
-      const onEvent = jest.fn();
+      const onEvent = vi.fn();
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -1332,7 +1332,7 @@ describe('insights', () => {
     it('sends events using onEvent', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
 
-      const onEvent = jest.fn((event, aa) => {
+      const onEvent = vi.fn((event, aa) => {
         aa(event.insightsMethod, event.payload);
       });
 
@@ -1585,7 +1585,7 @@ describe('insights', () => {
 
   test('does not immediately set userToken if a rerender is expected', async () => {
     const searchClient = createSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse<any>(
             ...requests.map(() =>
@@ -1603,7 +1603,7 @@ describe('insights', () => {
           )
         );
       }),
-    }) as SearchClient & { search: jest.Mock };
+    }) as SearchClient & { search: Mock };
 
     const { insightsClient, instantSearchInstance, getUserToken } =
       createTestEnvironment({ searchClient, started: false });

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -21,7 +21,7 @@ describe('routing using `replaceState`', () => {
     // 5. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
     // 6. Back: '/about?external=true'
 
-    const pushState = jest.spyOn(window.history, 'pushState');
+    const pushState = vi.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
 
     function App() {

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom default render renders correctly 1`] = `
+exports[`custom default render > renders correctly 1`] = `
 <div class="ais-Breadcrumb">
   <ul class>
     <li>
@@ -17,7 +17,7 @@ exports[`custom default render renders correctly 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly with an URL for the href 1`] = `
+exports[`custom default render > renders correctly with an URL for the href 1`] = `
 <div class="ais-Breadcrumb">
   <ul class>
     <li>
@@ -34,14 +34,14 @@ exports[`custom default render renders correctly with an URL for the href 1`] = 
 </div>
 `;
 
-exports[`custom default render renders correctly without refinement 1`] = `
+exports[`custom default render > renders correctly without refinement 1`] = `
 <div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
   <ul class="noRefinement">
   </ul>
 </div>
 `;
 
-exports[`custom rootLabel render renders correctly 1`] = `
+exports[`custom rootLabel render > renders correctly 1`] = `
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -71,7 +71,7 @@ exports[`custom rootLabel render renders correctly 1`] = `
 </div>
 `;
 
-exports[`custom rootLabel render renders correctly without refinement 1`] = `
+exports[`custom rootLabel render > renders correctly without refinement 1`] = `
 <div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
@@ -83,7 +83,7 @@ exports[`custom rootLabel render renders correctly without refinement 1`] = `
 </div>
 `;
 
-exports[`custom separator render renders correctly 1`] = `
+exports[`custom separator render > renders correctly 1`] = `
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">
@@ -113,7 +113,7 @@ exports[`custom separator render renders correctly 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly with an URL for the href 1`] = `
+exports[`default render > renders correctly with an URL for the href 1`] = `
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
     <li class="ais-Breadcrumb-item">

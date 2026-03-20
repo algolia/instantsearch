@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { render } from '@testing-library/react';
@@ -31,12 +31,12 @@ describe('RefinementList', () => {
           isRefined: false,
         },
       ],
-      onRefine: jest.fn(),
+      onRefine: vi.fn(),
       query: '',
       searchBox: null,
       canToggleShowMore: true,
       isShowingMore: false,
-      onToggleShowMore: jest.fn(),
+      onToggleShowMore: vi.fn(),
       translations: {
         showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less' : 'Show more';
@@ -222,9 +222,9 @@ describe('RefinementList', () => {
           placeholder="Search brands"
           isSearchStalled={false}
           value=""
-          onChange={jest.fn}
-          onReset={jest.fn}
-          onSubmit={jest.fn}
+          onChange={vi.fn}
+          onReset={vi.fn}
+          onSubmit={vi.fn}
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',
@@ -424,9 +424,9 @@ describe('RefinementList', () => {
           placeholder="Search brands"
           isSearchStalled={false}
           value="sam"
-          onChange={jest.fn}
-          onReset={jest.fn}
-          onSubmit={jest.fn}
+          onChange={vi.fn}
+          onReset={vi.fn}
+          onSubmit={vi.fn}
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',

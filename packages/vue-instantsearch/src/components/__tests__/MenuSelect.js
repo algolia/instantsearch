@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,8 +7,8 @@ import { __setState } from '../../mixins/widget';
 import MenuSelect from '../MenuSelect.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const defaultState = {
   canRefine: true,
@@ -47,7 +47,7 @@ describe('default render', () => {
 });
 
 it('exposes send-event method for insights middleware', async () => {
-  const sendEvent = jest.fn();
+  const sendEvent = vi.fn();
   __setState({
     ...defaultState,
     sendEvent,
@@ -224,7 +224,7 @@ describe('custom default render', () => {
   });
 
   it('calls refine on select change', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,

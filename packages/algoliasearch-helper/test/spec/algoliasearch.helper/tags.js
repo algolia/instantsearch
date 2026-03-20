@@ -26,40 +26,42 @@ test('Tags filters: advanced query', function () {
   expect(requestBuilder._getTagFilters(helper.state)).toEqual(complexQuery);
 });
 
-test('Tags filters: switching between advanced and simple API should be forbidden without clearing the refinements first', function (done) {
-  var helper = algoliasearchHelper(fakeClient, null, null);
+test('Tags filters: switching between advanced and simple API should be forbidden without clearing the refinements first', function () {
+  return new Promise(function (done) {
+    var helper = algoliasearchHelper(fakeClient, null, null);
 
-  helper.addTag('tag').addTag('tag2');
-  expect(requestBuilder._getTagFilters(helper.state)).toEqual('tag,tag2');
-
-  var complexQuery = '(sea, city), romantic, -mountain';
-
-  try {
-    helper.setQueryParameter('tagFilters', complexQuery);
-    done(
-      new Error(
-        "Can't switch directly from the advanced API to the managed API"
-      )
-    );
-  } catch (e0) {
-    helper.clearTags().setQueryParameter('tagFilters', complexQuery);
-    expect(requestBuilder._getTagFilters(helper.state)).toEqual(complexQuery);
-  }
-
-  try {
     helper.addTag('tag').addTag('tag2');
-    done(
-      new Error(
-        "Can't switch directly from the managed API to the advanced API"
-      )
-    );
-  } catch (e1) {
-    helper
-      .setQueryParameter('tagFilters', undefined)
-      .addTag('tag')
-      .addTag('tag2');
     expect(requestBuilder._getTagFilters(helper.state)).toEqual('tag,tag2');
-  }
 
-  done();
+    var complexQuery = '(sea, city), romantic, -mountain';
+
+    try {
+      helper.setQueryParameter('tagFilters', complexQuery);
+      done(
+        new Error(
+          "Can't switch directly from the advanced API to the managed API"
+        )
+      );
+    } catch (e0) {
+      helper.clearTags().setQueryParameter('tagFilters', complexQuery);
+      expect(requestBuilder._getTagFilters(helper.state)).toEqual(complexQuery);
+    }
+
+    try {
+      helper.addTag('tag').addTag('tag2');
+      done(
+        new Error(
+          "Can't switch directly from the managed API to the advanced API"
+        )
+      );
+    } catch (e1) {
+      helper
+        .setQueryParameter('tagFilters', undefined)
+        .addTag('tag')
+        .addTag('tag2');
+      expect(requestBuilder._getTagFilters(helper.state)).toEqual('tag,tag2');
+    }
+
+    done();
+  });
 });

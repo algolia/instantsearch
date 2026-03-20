@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 
@@ -73,7 +73,7 @@ describe('Slider', () => {
 
   it('expect to call handleChange on change', () => {
     const props: SliderProps = {
-      refine: jest.fn(),
+      refine: vi.fn(),
       min: 0,
       max: 500,
       values: [0, 0],

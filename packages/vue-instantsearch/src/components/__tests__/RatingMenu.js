@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,15 +7,15 @@ import { __setState } from '../../mixins/widget';
 import RatingMenu from '../RatingMenu.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const defaultProps = {
   attribute: 'popularity',
 };
 
 it('exposes send-event method for insights middleware', async () => {
-  const sendEvent = jest.fn();
+  const sendEvent = vi.fn();
   __setState({
     createURL: () => '#',
     items: [],

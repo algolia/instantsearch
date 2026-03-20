@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 /* global google */
@@ -22,96 +22,95 @@ import geoSearch from '../geo-search';
 import originalRenderer from '../GeoSearchRenderer';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 const renderer = castToJestMock(originalRenderer);
-jest.mock('../GeoSearchRenderer', () => {
-  const module = jest.requireActual('../GeoSearchRenderer');
+vi.mock('../GeoSearchRenderer', async () => {
+  const module = await vi.importActual<{ default: (...args: any[]) => any }>('../GeoSearchRenderer');
 
-  return jest.fn((...args) => module.default(...args));
+  return { default: vi.fn((...args: any[]) => module.default(...args)) };
 });
 
-jest.mock('../createHTMLMarker');
+vi.mock('../createHTMLMarker');
 
 describe('GeoSearch', () => {
   const createFakeMapInstance = () => ({
-    addListener: jest.fn(),
-    getCenter: jest.fn(),
-    setCenter: jest.fn(),
-    getZoom: jest.fn(),
-    setZoom: jest.fn(),
-    getBounds: jest.fn(() => ({
-      getNorthEast: jest.fn(() => ({
-        toJSON: jest.fn(() => ({
+    addListener: vi.fn(),
+    getCenter: vi.fn(),
+    setCenter: vi.fn(),
+    getZoom: vi.fn(),
+    setZoom: vi.fn(),
+    getBounds: vi.fn(() => ({
+      getNorthEast: vi.fn(() => ({
+        toJSON: vi.fn(() => ({
           lat: 10,
           lng: 12,
         })),
       })),
-      getSouthWest: jest.fn(() => ({
-        toJSON: jest.fn(() => ({
+      getSouthWest: vi.fn(() => ({
+        toJSON: vi.fn(() => ({
           lat: 12,
           lng: 14,
         })),
       })),
     })),
-    fitBounds: jest.fn(),
+    fitBounds: vi.fn(),
   });
 
-  const createFakeMarkerInstance = () => ({
-    setMap: jest.fn(),
-    getPosition: jest.fn(),
-    addListener: jest.fn(),
-  });
+  const createFakeMarkerInstance = function () {
+    return {
+      setMap: vi.fn(),
+      getPosition: vi.fn(),
+      addListener: vi.fn(),
+    };
+  };
 
   const createFakeGoogleReference = ({
     mapInstance = createFakeMapInstance(),
     markerInstance = createFakeMarkerInstance(),
   } = {}): typeof google => ({
     maps: {
-      LatLng: jest.fn(),
-      LatLngBounds: jest.fn((southWest, northEast) => ({
-        northEast,
-        southWest,
-        extend: jest.fn().mockReturnThis(),
-        getNorthEast: jest.fn(() => ({
-          toJSON: jest.fn(() => ({
-            lat: 10,
-            lng: 12,
+      LatLng: vi.fn(),
+      LatLngBounds: vi.fn(function (southWest: any, northEast: any) {
+        return {
+          northEast,
+          southWest,
+          extend: vi.fn().mockReturnThis(),
+          getNorthEast: vi.fn(() => ({
+            toJSON: vi.fn(() => ({
+              lat: 10,
+              lng: 12,
+            })),
           })),
-        })),
-        getSouthWest: jest.fn(() => ({
-          toJSON: jest.fn(() => ({
-            lat: 12,
-            lng: 14,
+          getSouthWest: vi.fn(() => ({
+            toJSON: vi.fn(() => ({
+              lat: 12,
+              lng: 14,
+            })),
           })),
-        })),
-      })),
-      Map: jest.fn(() => mapInstance),
-      Marker: jest.fn((args) => ({
-        ...args,
-        ...markerInstance,
-      })),
+        };
+      }),
+      Map: vi.fn(function () { return mapInstance; }),
+      Marker: vi.fn(function (args) { return { ...args, ...markerInstance }; }),
       ControlPosition: {
         LEFT_TOP: 'left:top',
       },
       event: {
-        addListenerOnce: jest.fn(),
+        addListenerOnce: vi.fn(),
       },
       OverlayView: {
-        setMap: jest.fn(),
-        getPanes: jest.fn(() => ({
+        setMap: vi.fn(),
+        getPanes: vi.fn(() => ({
           overlayMouseTarget: {
-            appendChild: jest.fn(),
+            appendChild: vi.fn(),
           },
         })),
-        getProjection: jest.fn(() => ({
-          fromLatLngToDivPixel: jest.fn(() => ({
+        getProjection: vi.fn(() => ({
+          fromLatLngToDivPixel: vi.fn(() => ({
             x: 0,
             y: 0,
           })),
@@ -126,18 +125,18 @@ describe('GeoSearch', () => {
   const createFakeHelper = () =>
     algoliasearchHelper(createSearchClient(), 'indexName');
 
-  const lastRenderArgs = (fn: jest.MockedFunction<typeof originalRenderer>) =>
+  const lastRenderArgs = (fn: MockedFunction<typeof originalRenderer>) =>
     fn.mock.calls[fn.mock.calls.length - 1][0];
-  const lastRenderState = (fn: jest.MockedFunction<typeof originalRenderer>) =>
+  const lastRenderState = (fn: MockedFunction<typeof originalRenderer>) =>
     lastRenderArgs(fn).widgetParams.renderState;
 
   const simulateMapReadyEvent = (google: typeof window['google']) => {
-    // eslint-disable-next-line jest/unbound-method
+    // eslint-disable-next-line vitest/unbound-method
     castToJestMock(google.maps.event.addListenerOnce).mock.calls[0][2]();
   };
 
   const simulateEvent = (
-    fn: { addListener: jest.Mock },
+    fn: { addListener: Mock },
     eventName: string,
     event?: any
   ) => {
@@ -159,10 +158,10 @@ describe('GeoSearch', () => {
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/]
+      `);
     });
   });
 
@@ -469,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       // Not the best way to check that refine has been called but I didn't
       // find an other way to do it. But it works.
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const widget = geoSearch({
         googleReference,
@@ -507,7 +506,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       // Not the best way to check that refine has been called but I didn't
       // find an other way to do it. But it works.
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const widget = geoSearch({
         googleReference,
@@ -549,7 +548,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       // Not the best way to check that refine has been called but I didn't
       // find an other way to do it. But it works.
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const widget = geoSearch({
         googleReference,
@@ -844,7 +843,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
       expect(
-        (googleReference.maps.Marker as unknown as jest.Mock).mock.calls
+        (googleReference.maps.Marker as unknown as Mock).mock.calls
       ).toEqual([
         [expect.objectContaining({ __id: '123' })],
         [expect.objectContaining({ __id: '456' })],
@@ -894,7 +893,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
       expect(
-        (googleReference.maps.Marker as unknown as jest.Mock).mock.calls
+        (googleReference.maps.Marker as unknown as Mock).mock.calls
       ).toEqual([
         [expect.objectContaining({ __id: '123', title: 'ID: 123' })],
         [expect.objectContaining({ __id: '456', title: 'ID: 456' })],
@@ -913,8 +912,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         markerInstance,
       });
 
-      const onClick = jest.fn();
-      const onMouseOver = jest.fn();
+      const onClick = vi.fn();
+      const onMouseOver = vi.fn();
 
       const widget = geoSearch({
         googleReference,
@@ -980,9 +979,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const googleReference = createFakeGoogleReference();
-      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+      const HTMLMarker = vi.fn(createFakeMarkerInstance);
 
-      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as Mock).mockImplementation(function () { return HTMLMarker; });
 
       const widget = geoSearch({
         googleReference,
@@ -1051,7 +1050,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ],
       ]);
 
-      (createHTMLMarker as jest.Mock).mockRestore();
+      (createHTMLMarker as Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with given options', () => {
@@ -1059,9 +1058,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const googleReference = createFakeGoogleReference();
-      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+      const HTMLMarker = vi.fn(createFakeMarkerInstance);
 
-      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as Mock).mockImplementation(function () { return HTMLMarker; });
 
       const widget = geoSearch({
         googleReference,
@@ -1125,7 +1124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ],
       ]);
 
-      (createHTMLMarker as jest.Mock).mockRestore();
+      (createHTMLMarker as Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with only the template provided', () => {
@@ -1133,9 +1132,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const googleReference = createFakeGoogleReference();
-      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+      const HTMLMarker = vi.fn(createFakeMarkerInstance);
 
-      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as Mock).mockImplementation(function () { return HTMLMarker; });
 
       const widget = geoSearch({
         googleReference,
@@ -1191,7 +1190,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ],
       ]);
 
-      (createHTMLMarker as jest.Mock).mockRestore();
+      (createHTMLMarker as Mock).mockRestore();
     });
 
     it('expect to render custom HTML markers with only the object provided', () => {
@@ -1199,9 +1198,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const googleReference = createFakeGoogleReference();
-      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+      const HTMLMarker = vi.fn(createFakeMarkerInstance);
 
-      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as Mock).mockImplementation(function () { return HTMLMarker; });
 
       const widget = geoSearch({
         googleReference,
@@ -1277,7 +1276,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ],
       ]);
 
-      (createHTMLMarker as jest.Mock).mockRestore();
+      (createHTMLMarker as Mock).mockRestore();
     });
 
     it('expect to setup listeners on custom HTML markers', () => {
@@ -1287,15 +1286,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const mapInstance = createFakeMapInstance();
       const googleReference = createFakeGoogleReference({ mapInstance });
       const markerInstance = createFakeMarkerInstance();
-      const HTMLMarker = jest.fn(({ ...args }) => ({
-        ...args,
-        ...markerInstance,
-      }));
+      const HTMLMarker = vi.fn(function ({ ...args }: any) {
+        return { ...args, ...markerInstance };
+      });
 
-      const onClick = jest.fn();
-      const onMouseOver = jest.fn();
+      const onClick = vi.fn();
+      const onMouseOver = vi.fn();
 
-      (createHTMLMarker as jest.Mock).mockImplementation(() => HTMLMarker);
+      (createHTMLMarker as Mock).mockImplementation(function () { return HTMLMarker; });
 
       const widget = geoSearch({
         googleReference,
@@ -1355,7 +1353,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         map: mapInstance,
       });
 
-      (createHTMLMarker as jest.Mock).mockRestore();
+      (createHTMLMarker as Mock).mockRestore();
     });
   });
 
@@ -1480,7 +1478,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
+      (googleReference.maps.Marker as unknown as Mock).mockClear();
 
       widget.render(
         createRenderOptions({
@@ -1547,7 +1545,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
+      (googleReference.maps.Marker as unknown as Mock).mockClear();
 
       widget.render(
         createRenderOptions({
@@ -1646,14 +1644,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const googleReference = createFakeGoogleReference({ mapInstance });
 
       mapInstance.getBounds.mockImplementation(() => ({
-        getNorthEast: jest.fn(() => ({
-          toJSON: jest.fn(() => ({
+        getNorthEast: vi.fn(() => ({
+          toJSON: vi.fn(() => ({
             lat: 12,
             lng: 14,
           })),
         })),
-        getSouthWest: jest.fn(() => ({
-          toJSON: jest.fn(() => ({
+        getSouthWest: vi.fn(() => ({
+          toJSON: vi.fn(() => ({
             lat: 14,
             lng: 16,
           })),

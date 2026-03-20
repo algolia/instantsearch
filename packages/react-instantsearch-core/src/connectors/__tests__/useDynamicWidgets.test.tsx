@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -17,7 +17,7 @@ describe('useDynamicWidgets', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper({
       searchClient: createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map(() =>

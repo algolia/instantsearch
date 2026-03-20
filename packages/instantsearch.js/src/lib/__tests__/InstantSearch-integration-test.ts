@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -17,7 +17,7 @@ import type { MiddlewareDefinition } from '../../types';
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {
     const container = document.createElement('div');
-    const onStateChange = jest.fn();
+    const onStateChange = vi.fn();
     const search = instantsearch({
       indexName: 'instant_search',
       searchClient: createSearchClient(),
@@ -66,10 +66,10 @@ describe('middleware', () => {
     const middlewareDefinition: MiddlewareDefinition = {
       $$type: 'fake',
       $$internal: false,
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      started: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      started: vi.fn(),
+      unsubscribe: vi.fn(),
     };
 
     search.use(() => middlewareDefinition);
@@ -104,10 +104,10 @@ describe('middleware', () => {
     const middlewareDefinition: MiddlewareDefinition = {
       $$type: 'fake',
       $$internal: false,
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      started: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      started: vi.fn(),
+      unsubscribe: vi.fn(),
     };
 
     search.use(() => middlewareDefinition);

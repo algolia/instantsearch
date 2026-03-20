@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -22,10 +22,10 @@ describe('connectClearRefinements', () => {
         // @ts-expect-error
         connectClearRefinements()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector]
+      `);
     });
 
     it('does not throw when widgetParams is not given', () => {
@@ -47,15 +47,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           excludedAttributes: ['brand'],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
+        [Error: The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customClearRefinements = connectClearRefinements(render, unmount);
       const widget = customClearRefinements({});
@@ -75,7 +75,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     it('renders during init and render', () => {
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       helper.search = () => helper;
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements<{ foo: string }>(rendering);
       const widget = makeWidget({
         foo: 'bar', // dummy param to test `widgetParams`
@@ -142,8 +142,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
     describe('getRenderState', () => {
       test('returns the render state', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createClearRefinements = connectClearRefinements(
           renderFn,
           unmountFn
@@ -224,8 +224,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
     describe('getWidgetRenderState', () => {
       test('returns the widget render state', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createClearRefinements = connectClearRefinements(
           renderFn,
           unmountFn
@@ -312,7 +312,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.setQuery('not empty');
       helper.toggleFacetRefinement('myFacet', 'myValue');
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
@@ -355,7 +355,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.setQuery('a query');
       helper.toggleFacetRefinement('myFacet', 'myValue');
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ excludedAttributes: [] });
 
@@ -395,7 +395,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
@@ -442,7 +442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.toggleFacetRefinement('aFacet', 'some value');
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
@@ -479,7 +479,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.setQuery('no empty');
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         excludedAttributes: [],
@@ -515,7 +515,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         excludedAttributes: [],
@@ -550,7 +550,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.setQuery('not empty');
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
@@ -584,7 +584,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ includedAttributes: ['facet1'] });
 
@@ -638,7 +638,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ includedAttributes: ['facet1', 'query'] });
 
@@ -689,7 +689,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         excludedAttributes: ['facet2'],
@@ -773,7 +773,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       });
       helper.search = () => helper;
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         includedAttributes: ['facet2', 'facet3', 'query'],
@@ -833,7 +833,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('provides search results within transformItems', () => {
-      const transformItems = jest.fn((items) => items);
+      const transformItems = vi.fn((items) => items);
       const makeWidget = connectClearRefinements(() => {});
       const widget = makeWidget({
         includedAttributes: ['facet1'],
@@ -869,7 +869,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         });
         helper.search = () => helper;
 
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectClearRefinements(rendering);
         const widget = makeWidget({
           excludedAttributes: ['facet'],
@@ -938,7 +938,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.search = () => helper;
       helper.setQuery('not empty');
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -36,9 +36,9 @@ describe('connectDynamicWidgets', () => {
         // @ts-expect-error
         connectDynamicWidgets({})
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The render function is not valid (received type Object).
+        [Error: The render function is not valid (received type Object).
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector]
       `);
     });
 
@@ -49,9 +49,9 @@ describe('connectDynamicWidgets', () => {
           {}
         )
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`widgets\` option expects an array of widgets.
+        [Error: The \`widgets\` option expects an array of widgets.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector]
       `);
     });
 
@@ -70,9 +70,9 @@ describe('connectDynamicWidgets', () => {
           widgets: {},
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`widgets\` option expects an array of widgets.
+        [Error: The \`widgets\` option expects an array of widgets.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector]
       `);
     });
 
@@ -84,9 +84,9 @@ describe('connectDynamicWidgets', () => {
           facets: {},
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`facets\` option only accepts an array of facets, you passed {}
+        [Error: The \`facets\` option only accepts an array of facets, you passed {}
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector]
       `);
     });
 
@@ -115,7 +115,7 @@ describe('connectDynamicWidgets', () => {
   describe('init', () => {
     describe('rendering', () => {
       it('calls the render function', () => {
-        const renderFn = jest.fn();
+        const renderFn = vi.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -184,7 +184,7 @@ describe('connectDynamicWidgets', () => {
   describe('render', () => {
     describe('rendering', () => {
       it('calls the render function', () => {
-        const renderFn = jest.fn();
+        const renderFn = vi.fn();
         const widgetParams = {
           transformItems() {
             return [];
@@ -211,7 +211,7 @@ describe('connectDynamicWidgets', () => {
       });
 
       it('calls the render function with the result of transformItems', () => {
-        const renderFn = jest.fn();
+        const renderFn = vi.fn();
         const widgetParams = {
           transformItems() {
             return ['test1'];
@@ -251,9 +251,9 @@ describe('connectDynamicWidgets', () => {
         expect(() => {
           dynamicWidgets.render!(createRenderOptions());
         }).toThrowErrorMatchingInlineSnapshot(`
-          "The \`transformItems\` option expects a function that returns an Array.
+          [Error: The \`transformItems\` option expects a function that returns an Array.
 
-          See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
+          See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector]
         `);
       });
     });
@@ -443,7 +443,7 @@ describe('connectDynamicWidgets', () => {
 
   describe('dispose', () => {
     it('calls unmount function', () => {
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const dynamicWidgets = connectDynamicWidgets(() => {}, unmountFn)({
         transformItems() {
           return ['test1', 'test2'];
@@ -650,7 +650,7 @@ describe('connectDynamicWidgets', () => {
     });
 
     it('provides search results within transformItems', () => {
-      const transformItems = jest.fn((items) => items);
+      const transformItems = vi.fn((items) => items);
       const dynamicWidgets = connectDynamicWidgets(() => {})({
         transformItems,
         widgets: [],

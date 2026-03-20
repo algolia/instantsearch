@@ -3,7 +3,7 @@ import { index } from '../../../widgets';
 
 describe('walkIndex', () => {
   test('calls the callback once for each widget', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     walkIndex(
       index({ indexName: '1', indexId: '1' }).addWidgets([

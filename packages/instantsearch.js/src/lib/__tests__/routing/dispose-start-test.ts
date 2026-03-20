@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -31,7 +31,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
     // 5. Start: '/'
     // 6. Refine: '/?indexName[query]=Apple'
 
-    const pushState = jest.spyOn(window.history, 'pushState');
+    const pushState = vi.spyOn(window.history, 'pushState');
 
     const search = instantsearch({
       indexName: 'indexName',

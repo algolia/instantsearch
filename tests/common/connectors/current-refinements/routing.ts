@@ -38,7 +38,7 @@ export function createRoutingTests(
               router,
             },
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(() =>
@@ -63,7 +63,7 @@ export function createRoutingTests(
             '[data-testid="CurrentRefinements-link"]'
           );
           if (link) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(link).toHaveAttribute('href', router.createURL({}));
           }
         }
@@ -127,7 +127,7 @@ export function createRoutingTests(
               router,
             },
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(() =>
@@ -160,7 +160,7 @@ export function createRoutingTests(
             '[data-testid="CurrentRefinements-link"]'
           );
           if (link) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(link).toHaveAttribute('href', router.createURL({}));
           }
         }
@@ -179,7 +179,7 @@ export function createRoutingTests(
 
         // Select the refinement
         {
-          const samsung = screen.getByRole('checkbox', { name: 'Samsung 100' });
+          const samsung = screen.getByRole('checkbox', { name: /Samsung\s*100/ });
           await act(async () => {
             samsung.click();
             await wait(0);
@@ -197,7 +197,7 @@ export function createRoutingTests(
 
         // Unselect the refinement
         {
-          const samsung = screen.getByRole('checkbox', { name: 'Samsung 100' });
+          const samsung = screen.getByRole('checkbox', { name: /Samsung\s*100/ });
           await act(async () => {
             samsung.click();
             await wait(0);

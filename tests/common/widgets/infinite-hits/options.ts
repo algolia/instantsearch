@@ -73,7 +73,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -142,7 +142,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -214,7 +214,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -555,7 +555,7 @@ export function createOptionsTests(
       // Cached hits are rendered
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -596,7 +596,7 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<BaseHit>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(
@@ -650,10 +650,10 @@ function createCustomCache() {
 
   type Cache = InfiniteHitsCache<Record<string, any>> & { clear: () => void };
 
-  type MockedCache = { [key in keyof Cache]: jest.MockedFunction<Cache[key]> };
+  type MockedCache = { [key in keyof Cache]: MockedFunction<Cache[key]> };
 
   const cache: MockedCache = {
-    read: jest.fn(({ state }) => {
+    read: vi.fn(({ state }) => {
       const shouldReturnFromCache = isEqual(
         cachedState,
         getStateWithoutPage(state)
@@ -665,11 +665,11 @@ function createCustomCache() {
 
       return null;
     }),
-    write: jest.fn(({ state, hits }) => {
+    write: vi.fn(({ state, hits }) => {
       cachedState = getStateWithoutPage(state);
       cachedHits = hits;
     }),
-    clear: jest.fn(() => {
+    clear: vi.fn(() => {
       cachedState = undefined;
       cachedHits = undefined;
     }),

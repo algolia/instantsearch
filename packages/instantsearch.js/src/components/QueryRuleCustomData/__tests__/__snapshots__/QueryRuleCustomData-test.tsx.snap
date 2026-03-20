@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`QueryRuleCustomData renders with empty items 1`] = `
+exports[`QueryRuleCustomData > renders with empty items 1`] = `
 <div>
   <div
     class="root"
@@ -8,7 +8,7 @@ exports[`QueryRuleCustomData renders with empty items 1`] = `
 </div>
 `;
 
-exports[`QueryRuleCustomData renders with items 1`] = `
+exports[`QueryRuleCustomData > renders with items 1`] = `
 <div>
   <div
     class="root"

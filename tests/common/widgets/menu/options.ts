@@ -28,7 +28,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -79,7 +79,7 @@ export function createOptionsTests(
       expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(4);
       expect(
         document.querySelector('.ais-Menu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -189,7 +189,7 @@ export function createOptionsTests(
       expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
       expect(
         document.querySelector('.ais-Menu')
-      ).toMatchNormalizedInlineSnapshot(
+      ).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -479,7 +479,7 @@ export function createOptionsTests(
         expect(showMoreButton).toHaveTextContent('Show more');
         expect(
           document.querySelector('.ais-Menu')
-        ).toMatchNormalizedInlineSnapshot(
+        ).toMatchNormalizedSnapshot(
           normalizeSnapshot,
           `
           <div

@@ -30,7 +30,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -69,7 +69,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(screen.getByRole('combobox')).toMatchNormalizedInlineSnapshot(
+      expect(screen.getByRole('combobox')).toMatchNormalizedSnapshot(
         normalizeSnapshot,
         `
         <select

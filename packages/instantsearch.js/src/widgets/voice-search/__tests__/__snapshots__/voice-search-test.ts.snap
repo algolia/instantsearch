@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`voiceSearch() Rendering renders during init() 1`] = `
+exports[`voiceSearch() > Rendering > renders during init() 1`] = `
 {
   "cssClasses": {
     "button": "ais-VoiceSearch-button",
@@ -23,7 +23,7 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
 }
 `;
 
-exports[`voiceSearch() Rendering renders during render() 1`] = `
+exports[`voiceSearch() > Rendering > renders during render() 1`] = `
 {
   "cssClasses": {
     "button": "ais-VoiceSearch-button",
@@ -46,7 +46,7 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
 }
 `;
 
-exports[`voiceSearch() Rendering renders during render() 2`] = `
+exports[`voiceSearch() > Rendering > renders during render() 2`] = `
 {
   "cssClasses": {
     "button": "ais-VoiceSearch-button",
@@ -69,7 +69,7 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
 }
 `;
 
-exports[`voiceSearch() Rendering sets the correct CSS classes 1`] = `
+exports[`voiceSearch() > Rendering > sets the correct CSS classes 1`] = `
 {
   "button": "ais-VoiceSearch-button",
   "root": "ais-VoiceSearch",

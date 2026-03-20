@@ -26,57 +26,57 @@ export function createOptionsTests(
       });
 
       expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
-        <section
-          class="ais-TrendingItems"
-        >
-          <h3
-            class="ais-TrendingItems-title"
+        .toMatchSnapshot(`
+          <section
+            class="ais-TrendingItems"
           >
-            Trending items
-          </h3>
-          <div
-            class="ais-TrendingItems-container"
-          >
-            <ol
-              class="ais-TrendingItems-list"
+            <h3
+              class="ais-TrendingItems-title"
             >
-              <li
-                class="ais-TrendingItems-item"
+              Trending items
+            </h3>
+            <div
+              class="ais-TrendingItems-container"
+            >
+              <ol
+                class="ais-TrendingItems-list"
               >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
-            }
-          },
-          "name": "Moschino Love – Shoulder bag",
-          "objectID": "1",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-TrendingItems-item"
-              >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
-            }
-          },
-          "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "2",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `);
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+              }
+            },
+            "name": "Moschino Love – Shoulder bag",
+            "objectID": "1",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+              }
+            },
+            "name": "Bag “Sabrina“ medium Gabs",
+            "objectID": "2",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+        `);
     });
 
     test('renders transformed items', async () => {
@@ -104,41 +104,41 @@ export function createOptionsTests(
       });
 
       expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
-        <section
-          class="ais-TrendingItems"
-        >
-          <h3
-            class="ais-TrendingItems-title"
+        .toMatchSnapshot(`
+          <section
+            class="ais-TrendingItems"
           >
-            Trending items
-          </h3>
-          <div
-            class="ais-TrendingItems-container"
-          >
-            <ol
-              class="ais-TrendingItems-list"
+            <h3
+              class="ais-TrendingItems-title"
             >
-              <li
-                class="ais-TrendingItems-item"
+              Trending items
+            </h3>
+            <div
+              class="ais-TrendingItems-container"
+            >
+              <ol
+                class="ais-TrendingItems-list"
               >
-                {
-          "objectID": "(1)",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-TrendingItems-item"
-              >
-                {
-          "objectID": "(2)",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `);
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "objectID": "(1)",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "objectID": "(2)",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+        `);
     });
 
     test('renders with no results', async () => {
@@ -160,13 +160,13 @@ export function createOptionsTests(
       });
 
       expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
-        <section
-          class="ais-TrendingItems ais-TrendingItems--empty"
-        >
-          No results
-        </section>
-      `);
+        .toMatchSnapshot(`
+          <section
+            class="ais-TrendingItems ais-TrendingItems--empty"
+          >
+            No results
+          </section>
+        `);
     });
 
     test('passes parameters correctly', async () => {

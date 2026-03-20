@@ -23,7 +23,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(() =>
@@ -64,7 +64,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('link', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           userEvent.click(firstItem);
@@ -81,7 +81,7 @@ export function createOptimisticUiTests(
           document.querySelector('.ais-HierarchicalMenu-item--selected a')
         ).toEqual(
           screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           })
         );
       }
@@ -99,7 +99,7 @@ export function createOptimisticUiTests(
           document.querySelector('.ais-HierarchicalMenu-item--selected a')
         ).toEqual(
           screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           })
         );
       }
@@ -107,7 +107,7 @@ export function createOptimisticUiTests(
       // Unselect a refinement
       {
         const firstItem = screen.getByRole('link', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           userEvent.click(firstItem);
@@ -143,7 +143,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               if (errors) {
                 throw new Error('Network error!');
@@ -190,7 +190,7 @@ export function createOptimisticUiTests(
       // Select a refinement
       {
         const firstItem = screen.getByRole('link', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -206,7 +206,7 @@ export function createOptimisticUiTests(
           document.querySelector('.ais-HierarchicalMenu-item--selected a')
         ).toEqual(
           screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           })
         );
       }
@@ -230,7 +230,7 @@ export function createOptimisticUiTests(
       // Select the refinement again
       {
         const firstItem = screen.getByRole('link', {
-          name: 'Apple 200',
+          name: /Apple\s*200/,
         });
         await act(async () => {
           firstItem.click();
@@ -246,7 +246,7 @@ export function createOptimisticUiTests(
           document.querySelector('.ais-HierarchicalMenu-item--selected a')
         ).toEqual(
           screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           })
         );
       }
@@ -266,7 +266,7 @@ export function createOptimisticUiTests(
           document.querySelector('.ais-HierarchicalMenu-item--selected a')
         ).toEqual(
           screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           })
         );
       }

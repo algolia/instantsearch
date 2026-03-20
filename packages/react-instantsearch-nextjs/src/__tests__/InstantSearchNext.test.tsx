@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -19,9 +19,9 @@ declare global {
   }
 }
 
-const mockPathname = jest.fn();
-jest.mock('next/navigation', () => ({
-  ...jest.requireActual('next/navigation'),
+const mockPathname = vi.fn();
+vi.mock('next/navigation', async () => ({
+  ...(await vi.importActual('next/navigation')),
   usePathname() {
     return mockPathname();
   },
@@ -39,7 +39,7 @@ describe('rerendering', () => {
   }
 
   beforeEach(() => {
-    (client.search as jest.Mock).mockClear();
+    (client.search as Mock).mockClear();
 
     // Simulate initialResults injection
     window[InstantSearchInitialResults] = {};
@@ -63,5 +63,5 @@ describe('rerendering', () => {
 });
 
 afterAll(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });

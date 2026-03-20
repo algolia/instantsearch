@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -44,10 +44,10 @@ describe('breadcrumb', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/]
+      `);
     });
   });
 
@@ -87,54 +87,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Breadcrumb"
-  >
-    <ul
-      class="ais-Breadcrumb-list"
-    >
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          Home
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          &gt;
-        </span>
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          Cameras & Camcorders
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          &gt;
-        </span>
-        Digital Cameras
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Breadcrumb"
+          >
+            <ul
+              class="ais-Breadcrumb-list"
+            >
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  Home
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  &gt;
+                </span>
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  Cameras & Camcorders
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  &gt;
+                </span>
+                Digital Cameras
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -176,60 +176,60 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Breadcrumb"
-  >
-    <ul
-      class="ais-Breadcrumb-list"
-    >
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          <span>
-            Home
-          </span>
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          <span>
-            /
-          </span>
-        </span>
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          Cameras & Camcorders
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          <span>
-            /
-          </span>
-        </span>
-        Digital Cameras
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Breadcrumb"
+          >
+            <ul
+              class="ais-Breadcrumb-list"
+            >
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  <span>
+                    Home
+                  </span>
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  <span>
+                    /
+                  </span>
+                </span>
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  Cameras & Camcorders
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  <span>
+                    /
+                  </span>
+                </span>
+                Digital Cameras
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -271,67 +271,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Breadcrumb"
-  >
-    <ul
-      class="ais-Breadcrumb-list"
-    >
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          <span>
-            Home
-          </span>
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          <span>
-            /
-          </span>
-        </span>
-        <a
-          class="ais-Breadcrumb-link"
-          href="#"
-        >
-          Cameras & Camcorders
-        </a>
-      </li>
-      <li
-        class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
-      >
-        <span
-          aria-hidden="true"
-          class="ais-Breadcrumb-separator"
-        >
-          <span>
-            /
-          </span>
-        </span>
-        Digital Cameras
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Breadcrumb"
+          >
+            <ul
+              class="ais-Breadcrumb-list"
+            >
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  <span>
+                    Home
+                  </span>
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  <span>
+                    /
+                  </span>
+                </span>
+                <a
+                  class="ais-Breadcrumb-link"
+                  href="#"
+                >
+                  Cameras & Camcorders
+                </a>
+              </li>
+              <li
+                class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              >
+                <span
+                  aria-hidden="true"
+                  class="ais-Breadcrumb-separator"
+                >
+                  <span>
+                    /
+                  </span>
+                </span>
+                Digital Cameras
+              </li>
+            </ul>
+          </div>
+        </div>
+      `);
     });
   });
 });
 
 function createMockedSearchClient() {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() =>

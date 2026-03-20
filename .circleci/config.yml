@@ -282,7 +282,7 @@ jobs:
             yarn run prepare-vue3
       - run:
           name: Vue Unit tests
-          command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
+          command: VUE_VERSION=3 vitest run packages/vue-instantsearch --pool forks --pool.forks.maxForks=4
       - store_test_results:
           path: junit/jest/
       - run:

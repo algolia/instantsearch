@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`rangeSlider Lifecycle max option will use the results min when only max is passed 1`] = `
+exports[`rangeSlider > Lifecycle > max option > will use the results min when only max is passed 1`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",
@@ -19,7 +19,7 @@ exports[`rangeSlider Lifecycle max option will use the results min when only max
 }
 `;
 
-exports[`rangeSlider Lifecycle min option sets the right range 1`] = `
+exports[`rangeSlider > Lifecycle > min option > sets the right range 1`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",
@@ -38,7 +38,7 @@ exports[`rangeSlider Lifecycle min option sets the right range 1`] = `
 }
 `;
 
-exports[`rangeSlider Lifecycle min option will use the results max when only min passed 1`] = `
+exports[`rangeSlider > Lifecycle > min option > will use the results max when only min passed 1`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",
@@ -57,7 +57,7 @@ exports[`rangeSlider Lifecycle min option will use the results max when only min
 }
 `;
 
-exports[`rangeSlider Lifecycle should render without results 1`] = `
+exports[`rangeSlider > Lifecycle > should render without results 1`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",
@@ -76,7 +76,7 @@ exports[`rangeSlider Lifecycle should render without results 1`] = `
 }
 `;
 
-exports[`rangeSlider Lifecycle with results calls twice render 1`] = `
+exports[`rangeSlider > Lifecycle > with results > calls twice render 1`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",
@@ -95,7 +95,7 @@ exports[`rangeSlider Lifecycle with results calls twice render 1`] = `
 }
 `;
 
-exports[`rangeSlider Lifecycle with results calls twice render 2`] = `
+exports[`rangeSlider > Lifecycle > with results > calls twice render 2`] = `
 {
   "cssClasses": {
     "disabledRoot": "ais-RangeSlider--disabled",

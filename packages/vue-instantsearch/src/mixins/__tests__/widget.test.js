@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
@@ -11,13 +11,13 @@ const createFakeComponent = (props = {}) => ({
 });
 
 const createFakeIndexWidget = () => ({
-  addWidgets: jest.fn(),
-  removeWidgets: jest.fn(),
+  addWidgets: vi.fn(),
+  removeWidgets: vi.fn(),
 });
 
 const createFakeInstance = () => ({
-  addWidgets: jest.fn(),
-  removeWidgets: jest.fn(),
+  addWidgets: vi.fn(),
+  removeWidgets: vi.fn(),
   mainIndex: createFakeIndexWidget(),
   started: true,
 });
@@ -26,8 +26,8 @@ describe('on root index', () => {
   it('adds a widget on create', () => {
     const instance = createFakeInstance();
     const widget = { render: () => {} };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -57,8 +57,8 @@ describe('on root index', () => {
       render: () => {},
       dispose: () => {},
     };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const Test = createFakeComponent({
       mixins: [createWidgetMixin({ connector })],
     });
@@ -88,8 +88,8 @@ describe('on root index', () => {
       render: () => {},
       dispose: () => {},
     };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -139,8 +139,8 @@ describe('on root index', () => {
   it('updates local state on connector render', () => {
     const instance = createFakeInstance();
     const widget = { render: () => {} };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const Test = createFakeComponent({
       mixins: [createWidgetMixin({ connector })],
     });
@@ -181,8 +181,8 @@ describe('on child index', () => {
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
     const widget = { render: () => {} };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -214,8 +214,8 @@ describe('on child index', () => {
       render: () => {},
       dispose: () => {},
     };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const Test = createFakeComponent({
       mixins: [createWidgetMixin({ connector })],
     });
@@ -247,8 +247,8 @@ describe('on child index', () => {
       render: () => {},
       dispose: () => {},
     };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -300,8 +300,8 @@ describe('on child index', () => {
     const instance = createFakeInstance();
     const indexWidget = createFakeIndexWidget();
     const widget = { render: () => {} };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -342,8 +342,8 @@ describe('general', () => {
   it('sets additional properties to widget', () => {
     const instance = createFakeInstance();
     const widget = { render: () => {} };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };
@@ -380,8 +380,8 @@ describe('general', () => {
       render: () => {},
       dispose: () => {},
     };
-    const factory = jest.fn(() => widget);
-    const connector = jest.fn(() => factory);
+    const factory = vi.fn(() => widget);
+    const connector = vi.fn(() => factory);
     const widgetParams = {
       attribute: 'brand',
     };

@@ -1,12 +1,12 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { mount } from '../../../test/utils';
 import Snippet from '../Snippet.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 
 test('renders proper HTML', () => {
   const hit = {
@@ -52,7 +52,7 @@ test('should render an empty string in production if attribute is not snippeted'
   const hit = {
     _snippetResult: {},
   };
-  global.console.warn = jest.fn();
+  global.console.warn = vi.fn();
 
   const wrapper = mount(Snippet, {
     propsData: {

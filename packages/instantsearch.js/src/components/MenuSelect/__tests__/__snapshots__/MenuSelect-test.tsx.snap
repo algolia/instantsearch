@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`MenuSelect should render <MenuSelect /> with custom templates 1`] = `
+exports[`MenuSelect > should render <MenuSelect /> with custom templates 1`] = `
 <div
   className="root"
 >
@@ -40,7 +40,7 @@ exports[`MenuSelect should render <MenuSelect /> with custom templates 1`] = `
 </div>
 `;
 
-exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
+exports[`MenuSelect > should render <MenuSelect /> with items 1`] = `
 <div
   className="root"
 >
@@ -80,7 +80,7 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
 </div>
 `;
 
-exports[`MenuSelect should render <MenuSelect /> with no items 1`] = `
+exports[`MenuSelect > should render <MenuSelect /> with no items 1`] = `
 <div
   className="root noRefinementRoot"
 >

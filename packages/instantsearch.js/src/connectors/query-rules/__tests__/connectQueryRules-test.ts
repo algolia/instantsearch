@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -24,8 +24,8 @@ import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 
 describe('connectQueryRules', () => {
   function createWidget() {
-    const renderFn = jest.fn();
-    const unmountFn = jest.fn();
+    const renderFn = vi.fn();
+    const unmountFn = vi.fn();
     const makeWidget = connectQueryRules(renderFn, unmountFn);
 
     return { makeWidget, renderFn, unmountFn };
@@ -36,7 +36,7 @@ describe('connectQueryRules', () => {
     const indexName = '';
     const helper = algoliasearchHelper(client, indexName, state);
 
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     return helper;
   };
@@ -47,10 +47,10 @@ describe('connectQueryRules', () => {
         // @ts-expect-error
         connectQueryRules()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules/js/#connector]
+      `);
     });
 
     test('does not throw without unmount function', () => {
@@ -67,15 +67,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           trackedFilters: { brand: ['Samsung'] },
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"'The \\"brand\\" filter value in the \`trackedFilters\` option expects a function.
+        [Error: 'The "brand" filter value in the \`trackedFilters\` option expects a function.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customQueryRules = connectQueryRules(render, unmount);
       const widget = customQueryRules({});
@@ -320,7 +320,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     });
 
     it('provides search results within transformItems', () => {
-      const transformItems = jest.fn((items) => items);
+      const transformItems = vi.fn((items) => items);
       const makeWidget = connectQueryRules(() => {});
       const widget = makeWidget({
         transformItems,
@@ -429,8 +429,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             },
           },
         });
-        const brandFilterSpy = jest.fn((values) => values);
-        const priceFilterSpy = jest.fn((values) => values);
+        const brandFilterSpy = vi.fn((values) => values);
+        const priceFilterSpy = vi.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -465,7 +465,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
-        const brandFilterSpy = jest.fn((values) => values);
+        const brandFilterSpy = vi.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -490,8 +490,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
-        const brandFilterSpy = jest.fn((values) => values);
-        const priceFilterSpy = jest.fn((values) => values);
+        const brandFilterSpy = vi.fn((values) => values);
+        const priceFilterSpy = vi.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -588,7 +588,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
-        const brandFilterSpy = jest.fn(() => ['Samsung']);
+        const brandFilterSpy = vi.fn(() => ['Samsung']);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -658,7 +658,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       test('can track filters from numeric refinements', () => {
         const helper = createFakeHelper();
-        const priceFilterSpy = jest.fn(() => [500]);
+        const priceFilterSpy = vi.fn(() => [500]);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -717,7 +717,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       test('can track filters from query', () => {
         const helper = createFakeHelper();
-        const querySpy = jest.fn((filters) => {
+        const querySpy = vi.fn((filters) => {
           const [query] = filters as string[];
           return query.includes('cat') ? [query] : [];
         });
@@ -990,7 +990,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             brand: ['Samsung'],
           },
         });
-        const brandFilterSpy = jest.fn((values) => values);
+        const brandFilterSpy = vi.fn((values) => values);
         const { makeWidget } = createWidget();
         const widget = makeWidget({
           trackedFilters: {
@@ -1033,7 +1033,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
           ruleContexts: ['initial-rule'],
         });
-        const transformRuleContextsSpy = jest.fn((rules: string[]) =>
+        const transformRuleContextsSpy = vi.fn((rules: string[]) =>
           rules.map((rule) => rule.replace('ais-', 'transformed-'))
         );
         const { makeWidget } = createWidget();

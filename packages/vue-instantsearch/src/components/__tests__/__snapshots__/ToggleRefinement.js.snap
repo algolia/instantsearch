@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom default render renders correctly 1`] = `
+exports[`custom default render > renders correctly 1`] = `
 <div class="ais-ToggleRefinement">
   <a class>
     <span>
@@ -13,7 +13,7 @@ exports[`custom default render renders correctly 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly with a URL for the href 1`] = `
+exports[`custom default render > renders correctly with a URL for the href 1`] = `
 <div class="ais-ToggleRefinement">
   <a class
      href="/free-shipping"
@@ -28,7 +28,7 @@ exports[`custom default render renders correctly with a URL for the href 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly with the value selected 1`] = `
+exports[`custom default render > renders correctly with the value selected 1`] = `
 <div class="ais-ToggleRefinement">
   <a class>
     <span>
@@ -41,7 +41,7 @@ exports[`custom default render renders correctly with the value selected 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly without refinement 1`] = `
+exports[`custom default render > renders correctly without refinement 1`] = `
 <div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
   <a class="noRefinement">
     <span>

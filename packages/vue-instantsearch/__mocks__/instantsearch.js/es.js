@@ -9,13 +9,13 @@ class RoutingManager {
 
 class Helper {
   constructor() {
-    this.search = jest.fn();
-    this.setClient = jest.fn(() => this);
-    this.setIndex = jest.fn(() => this);
+    this.search = vi.fn();
+    this.setClient = vi.fn(() => this);
+    this.setIndex = vi.fn(() => this);
   }
 }
 
-const fakeInstantSearch = jest.fn(
+const fakeInstantSearch = vi.fn(
   ({
     indexName,
     searchClient,
@@ -36,10 +36,10 @@ const fakeInstantSearch = jest.fn(
       routing: new RoutingManager(routing),
       helper: new Helper(),
       client: searchClient,
-      start: jest.fn(() => {
+      start: vi.fn(() => {
         instantsearchInstance.started = true;
       }),
-      dispose: jest.fn(() => {
+      dispose: vi.fn(() => {
         instantsearchInstance.started = false;
       }),
       mainIndex: {

@@ -15,7 +15,7 @@ export function createTemplatesTests(
   describe('templates', () => {
     test('renders with custom header template', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -37,7 +37,7 @@ export function createTemplatesTests(
         ) as any,
       });
 
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () =>
@@ -58,7 +58,7 @@ export function createTemplatesTests(
               ],
             }),
         } as Response)
-      ) as jest.Mock;
+      ) as Mock;
 
       await setup({
         instantSearchOptions: {
@@ -102,7 +102,7 @@ export function createTemplatesTests(
 
     test('renders with custom item template', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {
@@ -124,7 +124,7 @@ export function createTemplatesTests(
         ) as any,
       });
 
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () =>
@@ -145,7 +145,7 @@ export function createTemplatesTests(
               ],
             }),
         } as Response)
-      ) as jest.Mock;
+      ) as Mock;
 
       await setup({
         instantSearchOptions: {
@@ -190,7 +190,7 @@ export function createTemplatesTests(
 
     test('renders with custom empty template', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve({
             results: [
               {

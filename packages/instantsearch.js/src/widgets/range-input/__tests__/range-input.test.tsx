@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 import {
@@ -24,9 +24,9 @@ describe('rangeInput', () => {
         // @ts-expect-error
         rangeInput({});
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/]
       `);
     });
 
@@ -312,7 +312,7 @@ describe('rangeInput', () => {
 
     function createMockedSearchClient() {
       return createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) =>

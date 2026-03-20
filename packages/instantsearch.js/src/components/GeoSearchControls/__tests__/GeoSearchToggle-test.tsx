@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 /** @jsx h */
 
@@ -48,7 +48,7 @@ describe('GeoSearchToggle', () => {
   it('expect to call onToggle when the input changed', () => {
     const props = {
       ...defaultProps,
-      onToggle: jest.fn(),
+      onToggle: vi.fn(),
     };
 
     const wrapper = shallow(

@@ -6,4 +6,4 @@
   > export * from './index-vue3';
   and revert it back after finished.
 */
-export * from './index-vue2';
+export * from './index-vue2.js';

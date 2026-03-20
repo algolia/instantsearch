@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import instantsearch from 'instantsearch.js/es';
@@ -11,11 +11,11 @@ import InstantSearchSsr from '../InstantSearchSsr';
 import SearchBox from '../SearchBox.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 
 it('requires an injected instantsearch instance ($_ais)', () => {
   expect(() => mount(InstantSearchSsr)).toThrowErrorMatchingInlineSnapshot(
-    `"\`createServerRootMixin\` is required when using SSR."`
+    `[Error: \`createServerRootMixin\` is required when using SSR.]`
   );
 });
 
@@ -73,7 +73,7 @@ it('does not start too many times', async () => {
     },
   });
 
-  const startSpy = jest.spyOn(search, 'start');
+  const startSpy = vi.spyOn(search, 'start');
 
   // not started yet (next tick)
   expect(startSpy).toHaveBeenCalledTimes(0);
@@ -103,7 +103,7 @@ it('does not dispose if not yet started', async () => {
     searchClient: createFakeClient(),
   });
 
-  const disposeSpy = jest.spyOn(instance, 'dispose');
+  const disposeSpy = vi.spyOn(instance, 'dispose');
 
   const wrapper = mount({
     provide: {

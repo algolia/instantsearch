@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> on first page 1`] = `
 <div>
   <div
     class="root"
@@ -28,7 +28,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = 
 </div>
 `;
 
-exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> on last page 1`] = `
 <div>
   <div
     class="root"
@@ -57,7 +57,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
 </div>
 `;
 
-exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on first page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> with "Show previous" button on first page 1`] = `
 <div>
   <div
     class="root"
@@ -91,7 +91,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous"
 </div>
 `;
 
-exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on last page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> with "Show previous" button on last page 1`] = `
 <div>
   <div
     class="root"
@@ -125,7 +125,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous"
 </div>
 `;
 
-exports[`InfiniteHits markup should render <InfiniteHits /> without hits on first page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> without hits on first page 1`] = `
 <div>
   <div
     class="root emptyRoot"
@@ -135,7 +135,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> without hits on firs
 </div>
 `;
 
-exports[`InfiniteHits markup should render <InfiniteHits /> without hits on last page 1`] = `
+exports[`InfiniteHits > markup > should render <InfiniteHits /> without hits on last page 1`] = `
 <div>
   <div
     class="root emptyRoot"

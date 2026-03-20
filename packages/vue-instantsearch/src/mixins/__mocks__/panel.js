@@ -1,3 +1,3 @@
-export const createPanelProviderMixin = jest.fn(() => ({}));
+export const createPanelProviderMixin = vi.fn(() => ({}));
 
-export const createPanelConsumerMixin = jest.fn(() => ({}));
+export const createPanelConsumerMixin = vi.fn(() => ({}));

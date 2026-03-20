@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -26,10 +26,10 @@ describe('connectConfigure', () => {
     it('throws without searchParameters', () => {
       // @ts-expect-error wrong options
       expect(() => connectConfigure()()).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchParameters\` option expects an object.
+        [Error: The \`searchParameters\` option expects an object.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector]
+      `);
     });
 
     it('throws when you pass it a non-plain object', () => {
@@ -37,28 +37,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         // @ts-expect-error wrong options
         connectConfigure()(new Date());
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchParameters\` option expects an object.
+        [Error: The \`searchParameters\` option expects an object.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector]
+      `);
 
       expect(() => {
         // @ts-expect-error wrong options
         connectConfigure()(() => {});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchParameters\` option expects an object.
+        [Error: The \`searchParameters\` option expects an object.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector]
+      `);
     });
 
     it('does not throw with a render function but without an unmount function', () => {
-      expect(() => connectConfigure(jest.fn(), undefined)).not.toThrow();
+      expect(() => connectConfigure(vi.fn(), undefined)).not.toThrow();
     });
 
     it('with a unmount function but no render function does not throw', () => {
       // @ts-expect-error wrong options
-      expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
+      expect(() => connectConfigure(undefined, vi.fn())).not.toThrow();
     });
 
     it('does not throw without render and unmount functions', () => {
@@ -68,8 +68,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customConfigure = connectConfigure(render, unmount);
     const widget = customConfigure({ searchParameters: {} });
@@ -141,8 +141,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
   });
 
   it('should apply new searchParameters on refine()', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectConfigure(renderFn, jest.fn());
+    const renderFn = vi.fn();
+    const makeWidget = connectConfigure(renderFn, vi.fn());
     const widget = makeWidget({
       searchParameters: {
         analytics: true,
@@ -246,8 +246,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createConfigure = connectConfigure(renderFn, unmountFn);
       const configure = createConfigure({
         searchParameters: {
@@ -279,8 +279,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     test('merges the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createConfigure = connectConfigure(renderFn, unmountFn);
       const configure = createConfigure({
         searchParameters: {
@@ -338,8 +338,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createConfigure = connectConfigure(renderFn, unmountFn);
       const configure = createConfigure({
         searchParameters: { facetFilters: ['brand:Samsung'] },
@@ -386,7 +386,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('adds refined parameters', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectConfigure(renderFn);
       const widget = makeWidget({
         searchParameters: {
@@ -407,7 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('adds refined (new) parameters', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectConfigure(renderFn);
       const widget = makeWidget({
         searchParameters: {
@@ -573,7 +573,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('stores refined state', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectConfigure(renderFn);
       const widget = makeWidget({
         searchParameters: {

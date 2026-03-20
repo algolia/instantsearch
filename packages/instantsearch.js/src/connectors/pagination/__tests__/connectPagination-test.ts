@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import {
@@ -27,12 +27,12 @@ describe('connectPagination', () => {
   const getInitializedWidget = (
     widgetParams: PaginationConnectorParams = {}
   ) => {
-    const renderFn = jest.fn<any, [PaginationRenderState, boolean]>();
+    const renderFn = vi.fn<any, [PaginationRenderState, boolean]>();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget(widgetParams);
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -47,15 +47,15 @@ describe('connectPagination', () => {
         // @ts-expect-error
         connectPagination()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customPagination = connectPagination(render, unmount);
       const widget = customPagination({});
@@ -75,7 +75,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('connectPagination - Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({
       // @ts-expect-error
@@ -83,7 +83,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -133,12 +133,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -177,12 +177,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('Provides the pages to render (default)', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -242,7 +242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('Provides the pages to render (extra padding)', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({
       padding: 5,
@@ -311,7 +311,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const helper = algoliasearchHelper(createSearchClient(), '');
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectPagination(renderFn, unmountFn);
       const widget = makeWidget({});
 

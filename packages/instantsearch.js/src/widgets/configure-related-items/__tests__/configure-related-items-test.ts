@@ -5,13 +5,13 @@ import configureRelatedItems from '../configure-related-items';
 
 import type { ConfigureRelatedItemsConnectorParams } from '../../../connectors/configure-related-items/connectConfigureRelatedItems';
 
-jest.mock(
+vi.mock(
   '../../../connectors/configure-related-items/connectConfigureRelatedItems'
 );
 
 describe('configureRelatedItems', () => {
   test('forwards the options to the connector', () => {
-    const makeWidget = jest.fn();
+    const makeWidget = vi.fn();
     castToJestMock(connectConfigureRelatedItems).mockImplementationOnce(
       () => makeWidget
     );
