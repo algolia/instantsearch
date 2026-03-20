@@ -139,7 +139,7 @@ export default defineConfig({
       [
         'junit',
         {
-          outputFile: 'junit/jest/junit.xml',
+          outputFile: 'junit/vitest/junit.xml',
           suiteName: 'InstantSearch Unit Tests',
           ancestorSeparator: ' › ',
         },

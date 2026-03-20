@@ -647,7 +647,7 @@ describe('createServerRootMixin', () => {
                     // eslint-disable-next-line vitest/no-conditional-expect
                     expect(res.hello.state.hitsPerPage).toBe(100);
                   })
-                  // jest throws an error we need to catch, since stuck in the flow
+                  // vitest throws an error we need to catch, since stuck in the flow
                   .catch((e) => {
                     reject(e);
                   })
@@ -701,7 +701,7 @@ describe('createServerRootMixin', () => {
                   // eslint-disable-next-line vitest/no-conditional-expect
                   expect(res.hello._state.hitsPerPage).toBe(100);
                 })
-                // jest throws an error we need to catch, since stuck in the flow
+                // vitest throws an error we need to catch, since stuck in the flow
                 .catch((e) => {
                   done(e);
                 })

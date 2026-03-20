@@ -30,7 +30,7 @@ export const mount = isVue3
         ...restOptions
       } = options;
       // If we `import` this, it will try to import Vue3-only APIs like `defineComponent`,
-      // and jest will fail. So we need to `require` it.
+      // and vitest will fail. So we need to `require` it.
       const wrapper = require('@vue/test-utils2').mount(component, {
         ...restOptions,
         props: propsData,

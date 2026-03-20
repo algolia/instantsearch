@@ -263,7 +263,7 @@ jobs:
           name: Unit & Integration tests
           command: yarn run test:ci:v4
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
       - run:
           name: Type Checking
           command: yarn run type-check:v4
@@ -284,7 +284,7 @@ jobs:
           name: Vue Unit tests
           command: VUE_VERSION=3 vitest run packages/vue-instantsearch --pool forks --pool.forks.maxForks=4
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
       - run:
           name: Vue 3 Test Exports
           command: yarn workspace vue-instantsearch run test:exports:vue3
@@ -302,7 +302,7 @@ jobs:
           name: Unit tests
           command: yarn run test:ci
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
 
   examples:
     <<: *defaults
