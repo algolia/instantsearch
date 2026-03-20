@@ -28,7 +28,7 @@
     "test:e2e": "yarn run test:e2e:templates && yarn run test:e2e:installs",
     "format": "prettier --write *.{js,md,json}",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "release-templates": "node ./scripts/release-templates",
+    "release-templates": "node ./scripts/release-templates.cjs",
     "release": "shipjs prepare"
   },
   "files": [
