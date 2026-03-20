@@ -337,7 +337,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         const preparedItems = prepareItems(state);
         let allIsSelected = true;
         // @TODO avoid for..of for polyfill reasons
-        // eslint-disable-next-line no-restricted-syntax
+        // eslint-disable-next-line instantsearch/no-for-of
         for (const item of preparedItems) {
           if (item.isRefined && decodeURI(item.value) !== '{}') {
             allIsSelected = false;
@@ -480,10 +480,9 @@ function hasNumericRefinement(
   operator: SearchParameters.Operator,
   value: number
 ) {
-  return (
-    currentRefinements[operator] !== undefined &&
-    currentRefinements[operator]!.includes(value)
-  );
+  const refinements = currentRefinements[operator];
+
+  return refinements !== undefined && refinements.includes(value);
 }
 
 function removeEmptyRefinementsFromUiState(

@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "../.oxlintrc.json"
+  ],
+  "rules": {
+    "import/no-commonjs": "off",
+    "instantsearch/naming-convention": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "vue/multi-word-component-names": "off"
+  }
+}

@@ -1,4 +1,4 @@
-import { Playground } from '../decorators';
+import type { Playground } from '../decorators';
 
 const demoQueryRulesPlayground: Playground = function demoQueryRulesPlayground({
   search,
