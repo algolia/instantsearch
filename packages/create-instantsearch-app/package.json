@@ -10,7 +10,13 @@
   "repository": "algolia/instantsearch",
   "author": "Algolia <support@algolia.com>",
   "type": "module",
-  "main": "index.js",
+  "main": "index.cjs",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs"
+    }
+  },
   "bin": {
     "create-instantsearch-app": "src/cli/index.js"
   },
@@ -27,6 +33,7 @@
   },
   "files": [
     "index.js",
+    "index.cjs",
     "src"
   ],
   "engines": {
