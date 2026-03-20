@@ -1,10 +1,10 @@
-const path = require('path');
+import path from 'path';
 
-const semver = require('semver');
+import semver from 'semver';
 
-const { getAppTemplateConfig } = require('../utils');
+import { getAppTemplateConfig } from '../utils/index.js';
 
-module.exports = function resolveTemplate(options, { supportedTemplates }) {
+export default function resolveTemplate(options, { supportedTemplates }) {
   const templateName = options.template || '';
   const templatePath = path.resolve('src/templates', templateName || '');
   let supportedVersion;
@@ -13,7 +13,7 @@ module.exports = function resolveTemplate(options, { supportedTemplates }) {
     const templateConfig = getAppTemplateConfig(templatePath);
     supportedVersion = templateConfig.supportedVersion;
   } catch (error) {
-    // The template doesn't provide a configuration file `.template.js`.
+    // The template doesn't provide a configuration file `.template.cjs`.
   }
 
   if (
@@ -33,4 +33,4 @@ module.exports = function resolveTemplate(options, { supportedTemplates }) {
   return supportedTemplates.includes(templateName)
     ? templatePath
     : options.template;
-};
+}

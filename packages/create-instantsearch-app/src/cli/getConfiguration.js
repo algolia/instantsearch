@@ -1,4 +1,4 @@
-const loadJsonFile = require('load-json-file');
+import loadJsonFile from 'load-json-file';
 
 async function getConfiguration({ options = {}, answers = {} } = {}) {
   const config = options.config
@@ -12,4 +12,4 @@ async function getConfiguration({ options = {}, answers = {} } = {}) {
   return config;
 }
 
-module.exports = getConfiguration;
+export default getConfiguration;

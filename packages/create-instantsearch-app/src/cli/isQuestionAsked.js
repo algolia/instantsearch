@@ -1,4 +1,4 @@
-module.exports = function isQuestionAsked({ question, args }) {
+export default function isQuestionAsked({ question, args }) {
   // if there's a config, ask no questions, even if it would be invalid
   if (args.config || !args.interactive) {
     return true;
@@ -12,4 +12,4 @@ module.exports = function isQuestionAsked({ question, args }) {
   }
 
   return argument !== undefined;
-};
+}

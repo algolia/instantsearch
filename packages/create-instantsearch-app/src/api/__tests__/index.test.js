@@ -1,6 +1,6 @@
-const path = require('path');
+import path from 'path';
 
-const createInstantSearchAppFactory = require('../');
+import createInstantSearchAppFactory from '../index.js';
 
 let setupSpy;
 let buildSpy;

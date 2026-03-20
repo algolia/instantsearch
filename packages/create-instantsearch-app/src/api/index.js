@@ -1,11 +1,11 @@
-const path = require('path');
+import path from 'path';
 
-const buildTask = require('../tasks/common/build');
-const cleanTask = require('../tasks/common/clean');
-const { getAllTemplates } = require('../utils');
+import buildTask from '../tasks/common/build.cjs';
+import cleanTask from '../tasks/common/clean.cjs';
+import { getAllTemplates } from '../utils/index.js';
 
-const checkConfig = require('./check-config');
-const resolveTemplate = require('./resolve-template');
+import checkConfig from './check-config.js';
+import resolveTemplate from './resolve-template.js';
 
 const supportedTemplates = getAllTemplates();
 
@@ -61,4 +61,4 @@ function createInstantSearchApp(appPath, options = {}, tasks = {}) {
   };
 }
 
-module.exports = createInstantSearchApp;
+export default createInstantSearchApp;

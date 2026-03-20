@@ -1,4 +1,4 @@
-const https = require('https');
+import https from 'https';
 
 function fetchCachedLibraryVersions() {
   const cache = new Map();
@@ -32,6 +32,4 @@ function fetchCachedLibraryVersions() {
   };
 }
 
-module.exports = {
-  fetchLibraryVersions: fetchCachedLibraryVersions(),
-};
+export const fetchLibraryVersions = fetchCachedLibraryVersions();

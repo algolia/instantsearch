@@ -1,27 +1,29 @@
 import getFacetsFromIndex from '../getFacetsFromIndex';
 import getInformationFromIndex from '../getInformationFromIndex';
 
-vi.mock('../getInformationFromIndex');
+vi.mock('../getInformationFromIndex', () => ({
+  default: vi.fn(),
+}));
 
 test('with search success should fetch attributes', async () => {
   getInformationFromIndex.mockImplementationOnce(() =>
     Promise.resolve({
       facets: {
-        abc: {},
-        def: {},
-        something: {},
-        'something.nested': {},
+        abc: { a: 1, b: 2 },
+        def: { a: 1, b: 2 },
+        something: { a: 1, b: 2 },
+        other: { a: 1, b: 2 },
       },
     })
   );
 
-  const attributes = await getFacetsFromIndex({
+  const facets = await getFacetsFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
   });
 
-  expect(attributes).toEqual(['abc', 'def', 'something', 'something.nested']);
+  expect(facets).toEqual(['abc', 'def', 'something', 'other']);
 });
 
 test('with search failure should return default attributes', async () => {
@@ -29,11 +31,11 @@ test('with search failure should return default attributes', async () => {
     Promise.reject(new Error())
   );
 
-  const attributes = await getFacetsFromIndex({
+  const facets = await getFacetsFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
   });
 
-  expect(attributes).toEqual([]);
+  expect(facets).toEqual([]);
 });

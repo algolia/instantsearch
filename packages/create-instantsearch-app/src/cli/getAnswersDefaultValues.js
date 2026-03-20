@@ -1,4 +1,4 @@
-module.exports = function getAnswersDefaultValues(
+export default function getAnswersDefaultValues(
   optionsFromArguments,
   configuration,
   template
@@ -10,4 +10,4 @@ module.exports = function getAnswersDefaultValues(
     // name has a default of '', as it's a special case in Commander
     name: optionsFromArguments.name || configuration.name,
   };
-};
+}

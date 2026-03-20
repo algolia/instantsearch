@@ -1,3 +1,1 @@
-const createInstantSearchApp = require('./src/api');
-
-module.exports = createInstantSearchApp;
+export { default } from './src/api/index.js';

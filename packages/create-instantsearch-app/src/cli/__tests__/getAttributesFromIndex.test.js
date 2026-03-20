@@ -1,7 +1,9 @@
 import getAttributesFromIndex from '../getAttributesFromIndex';
 import getInformationFromIndex from '../getInformationFromIndex';
 
-vi.mock('../getInformationFromIndex');
+vi.mock('../getInformationFromIndex', () => ({
+  default: vi.fn(),
+}));
 
 test('with search success should fetch attributes', async () => {
   getInformationFromIndex.mockImplementationOnce(() =>

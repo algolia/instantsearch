@@ -9,6 +9,7 @@
   ],
   "repository": "algolia/instantsearch",
   "author": "Algolia <support@algolia.com>",
+  "type": "module",
   "main": "index.js",
   "bin": {
     "create-instantsearch-app": "src/cli/index.js"

@@ -1,5 +1,8 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import { createRequire } from 'module';
+
+const _require = createRequire(import.meta.url);
 
 describe('Installation', () => {
   let temporaryDirectory;
@@ -104,7 +107,7 @@ describe('Installation', () => {
         { stdio: 'ignore' }
       );
 
-      const { name } = require(`${appPath}/package.json`);
+      const { name } = _require(`${appPath}/package.json`);
 
       expect(name).toBe(appName);
     });
@@ -118,7 +121,7 @@ describe('Installation', () => {
         { stdio: 'ignore' }
       );
 
-      const { name } = require(`${appPath}/package.json`);
+      const { name } = _require(`${appPath}/package.json`);
 
       expect(name).toBe(appName);
     });
@@ -133,7 +136,7 @@ describe('Installation', () => {
         { stdio: 'ignore' }
       );
 
-      const { dependencies } = require(`${appPath}/package.json`);
+      const { dependencies } = _require(`${appPath}/package.json`);
 
       expect(dependencies['instantsearch.js']).toEqual(expect.any(String));
     });
@@ -148,7 +151,7 @@ describe('Installation', () => {
         { stdio: 'ignore' }
       );
 
-      const { dependencies } = require(`${appPath}/react/package.json`);
+      const { dependencies } = _require(`${appPath}/react/package.json`);
 
       expect(dependencies['react-instantsearch']).toEqual(expect.any(String));
     });

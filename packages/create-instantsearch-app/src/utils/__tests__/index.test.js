@@ -1,15 +1,26 @@
-vi.mock('fs', () => ({
-  existsSync: vi.fn(),
-  lstatSync: vi.fn(),
-  readdirSync: vi.fn(),
+const { mockExistsSync, mockLstatSync, mockReaddirSync } = vi.hoisted(() => ({
+  mockExistsSync: vi.fn(),
+  mockLstatSync: vi.fn(),
+  mockReaddirSync: vi.fn(),
 }));
 
-import { existsSync, lstatSync, readdirSync } from 'fs';
-import * as utils from '../';
+vi.mock('fs', async () => {
+  const actual = await vi.importActual('fs');
+  return {
+    ...actual,
+    default: {
+      ...actual,
+      existsSync: mockExistsSync,
+      lstatSync: mockLstatSync,
+      readdirSync: mockReaddirSync,
+    },
+    existsSync: mockExistsSync,
+    lstatSync: mockLstatSync,
+    readdirSync: mockReaddirSync,
+  };
+});
 
-const mockExistsSync = existsSync;
-const mockLstatSync = lstatSync;
-const mockReaddirSync = readdirSync;
+import * as utils from '../';
 
 describe('checkAppName', () => {
   test('does not throw when valid', () => {
@@ -52,7 +63,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project in destination folder \\"<red>path</color>\\" because it is not empty."`
+        `[Error: Could not create project in destination folder "path" because it is not empty.]`
       );
     });
 
@@ -75,7 +86,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project at path <red>path</color> because a file of the same name already exists."`
+        `[Error: Could not create project at path path because a file of the same name already exists.]`
       );
     });
 

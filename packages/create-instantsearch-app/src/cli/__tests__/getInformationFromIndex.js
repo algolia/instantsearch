@@ -1,6 +1,6 @@
-const { algoliasearch } = require('algoliasearch');
+import { algoliasearch } from 'algoliasearch';
 
-const getInformationFromIndex = require('../getInformationFromIndex');
+import getInformationFromIndex from '../getInformationFromIndex.js';
 
 vi.mock('algoliasearch', () => {
   const _algoliasearch = vi.fn(() => ({ search: _algoliasearch.__search }));

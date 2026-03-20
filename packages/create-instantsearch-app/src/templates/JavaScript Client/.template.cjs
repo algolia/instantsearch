@@ -1,5 +1,5 @@
-const install = require('../../tasks/node/install');
-const teardown = require('../../tasks/node/teardown');
+const install = require('../../tasks/node/install.cjs');
+const teardown = require('../../tasks/node/teardown.cjs');
 
 module.exports = {
   libraryName: 'algoliasearch',
