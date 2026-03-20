@@ -13,7 +13,7 @@ export default function resolveTemplate(options, { supportedTemplates }) {
     const templateConfig = getAppTemplateConfig(templatePath);
     supportedVersion = templateConfig.supportedVersion;
   } catch (error) {
-    // The template doesn't provide a configuration file `.template.cjs`.
+    // The template doesn't provide a configuration file.
   }
 
   if (

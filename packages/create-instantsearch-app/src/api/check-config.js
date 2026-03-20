@@ -19,10 +19,13 @@ function getOptions({ supportedTemplates }) {
     },
     template: {
       validate(input) {
-        return fs.existsSync(path.join(input || '', '.template.cjs'));
+        return (
+          fs.existsSync(path.join(input || '', '.template.cjs')) ||
+          fs.existsSync(path.join(input || '', '.template.js'))
+        );
       },
       getErrorMessage() {
-        return `The template directory must contain a configuration file \`.template.cjs\` or must be one of those: ${supportedTemplates.join(
+        return `The template directory must contain a configuration file \`.template.cjs\` (or \`.template.js\`) or must be one of those: ${supportedTemplates.join(
           ', '
         )}`;
       },

@@ -61,11 +61,16 @@ function checkAppPath(appPath) {
 }
 
 function getAppTemplateConfig(templatePath, { loadFileFn = _require } = {}) {
+  // Support both .template.cjs (bundled templates) and .template.js (custom templates)
+  const cjsPath = path.join(templatePath, '.template.cjs');
+  const jsPath = path.join(templatePath, '.template.js');
+  const configPath = fs.existsSync(cjsPath) ? cjsPath : jsPath;
+
   try {
-    return loadFileFn(path.join(templatePath, '.template.cjs'));
+    return loadFileFn(configPath);
   } catch (err) {
     throw new Error(
-      `The template configuration file \`.template.cjs\` contains errors:
+      `The template configuration file \`.template.cjs\` (or \`.template.js\`) contains errors:
 ${err.message}`
     );
   }
@@ -99,7 +104,10 @@ function getTemplatesByCategory() {
   const templates = templatePaths.reduce((allTemplates, source) => {
     const name = path.basename(source);
 
-    const { category } = _require(`${source}/.template.cjs`);
+    const configPath = fs.existsSync(`${source}/.template.cjs`)
+      ? `${source}/.template.cjs`
+      : `${source}/.template.js`;
+    const { category } = _require(configPath);
 
     if (!category) {
       return allTemplates;

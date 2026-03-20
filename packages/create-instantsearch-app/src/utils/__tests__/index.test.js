@@ -131,6 +131,7 @@ describe('checkTemplateConfigFile', () => {
 
 describe('getTemplatesByCategory', () => {
   beforeAll(() => {
+    mockExistsSync.mockImplementation(() => true);
     mockReaddirSync.mockImplementation(() => [
       'InstantSearch.js',
       'React InstantSearch',
