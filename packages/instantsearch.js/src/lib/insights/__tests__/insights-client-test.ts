@@ -4,8 +4,8 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { withInsights, inferInsightsPayload } from '../';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 
-import type { InsightsClient } from '../../../types/insights';
 import type { InstantSearch, Widget } from '../../../types';
+import type { InsightsClient } from '../../../types/insights';
 
 const connectHits =
   (renderFn: any, unmountFn: any) =>
