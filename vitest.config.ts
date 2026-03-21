@@ -12,9 +12,6 @@ const algoliaSearchMajor: '3' | '4' | '5' =
 const isVue3 = process.env.VUE_VERSION === '3';
 
 export default defineConfig({
-  esbuild: {
-    jsxDev: false,
-  },
   oxc: {
     jsx: {
       development: false,
