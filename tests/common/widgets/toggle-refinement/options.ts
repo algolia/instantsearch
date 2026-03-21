@@ -53,7 +53,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -98,7 +98,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -154,7 +154,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

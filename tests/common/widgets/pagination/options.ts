@@ -68,7 +68,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -225,7 +225,7 @@ export function createOptionsTests(
       ).toHaveTextContent('1');
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -622,7 +622,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -799,7 +799,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1001,7 +1001,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1123,7 +1123,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1200,7 +1200,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1277,7 +1277,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -1354,7 +1354,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

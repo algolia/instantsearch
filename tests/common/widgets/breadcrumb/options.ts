@@ -45,7 +45,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -98,7 +98,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -221,7 +221,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -332,7 +332,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -423,7 +423,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

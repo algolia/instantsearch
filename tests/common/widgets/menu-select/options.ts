@@ -69,7 +69,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(screen.getByRole('combobox')).toMatchNormalizedSnapshot(
+      expect(screen.getByRole('combobox')).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <select

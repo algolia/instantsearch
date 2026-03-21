@@ -55,7 +55,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -106,7 +106,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -157,7 +157,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('#hits-with-defaults .ais-Hits')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -206,7 +206,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
           <div
@@ -255,7 +255,7 @@ function createMockedSearchClient(
     search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) => {
+          ...requests.map((request: { indexName: string; params?: Record<string, any> }) => {
             return createSingleSearchResponse<any>({
               index: request.indexName,
               query: request.params?.query,

@@ -73,7 +73,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-RefinementList')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -410,7 +410,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-RefinementList')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -917,7 +917,7 @@ export function createOptionsTests(
         expect(searchInput).toHaveAttribute('placeholder', 'Search brands');
         expect(
           document.querySelector('.ais-RefinementList-labelText')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <span
@@ -964,7 +964,7 @@ export function createOptionsTests(
         );
         expect(
           document.querySelector('.ais-RefinementList-labelText')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <span
@@ -1048,7 +1048,7 @@ export function createOptionsTests(
         expect(document.querySelector('.ais-RefinementList-list')).toBeNull();
         expect(
           document.querySelector('.ais-RefinementList')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <div
@@ -1432,7 +1432,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-RefinementList')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <div

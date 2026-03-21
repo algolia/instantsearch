@@ -53,7 +53,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-SearchBox')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

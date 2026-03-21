@@ -30,7 +30,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-LookingSimilar')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <section
@@ -113,7 +113,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-LookingSimilar')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <section

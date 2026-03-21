@@ -42,7 +42,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-RangeInput')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

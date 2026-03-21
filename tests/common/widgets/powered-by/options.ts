@@ -45,7 +45,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-PoweredBy')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -96,7 +96,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-PoweredBy')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

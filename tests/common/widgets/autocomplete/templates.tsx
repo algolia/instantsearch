@@ -279,7 +279,7 @@ export function createTemplatesTests(
       });
 
       const panel = screen.queryByRole('grid');
-      expect(panel).toMatchNormalizedSnapshot(
+      expect(panel).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot('P484'),
         `
         <div

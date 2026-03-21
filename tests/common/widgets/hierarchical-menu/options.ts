@@ -70,7 +70,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -194,7 +194,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -257,7 +257,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <li
@@ -346,7 +346,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -408,7 +408,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -817,7 +817,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-HierarchicalMenu')
-        ).toMatchNormalizedSnapshot(
+        ).toMatchNormalizedInlineSnapshot(
           normalizeSnapshot,
           `
           <div

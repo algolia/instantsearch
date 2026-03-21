@@ -18,6 +18,7 @@ import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+import type { MockedFunction } from 'vitest';
 
 function normalizeSnapshot(html: string) {
   // Each flavor has its own way to render the hit by default.
@@ -73,7 +74,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -142,7 +143,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -214,7 +215,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -555,7 +556,7 @@ export function createOptionsTests(
       // Cached hits are rendered
       expect(
         document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

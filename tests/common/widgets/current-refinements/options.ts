@@ -69,7 +69,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
@@ -240,7 +240,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

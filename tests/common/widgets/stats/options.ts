@@ -30,7 +30,7 @@ function createMockedSearchClient(
     search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) =>
+          ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
             createSingleSearchResponse({
               index: request.indexName,
               nbHits: 1000,
@@ -74,7 +74,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelector('.ais-Stats')
-      ).toMatchNormalizedSnapshot(
+      ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div

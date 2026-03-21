@@ -10,6 +10,7 @@ import React from 'react';
 
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { Mock } from 'vitest';
 
 function createMockedSearchClient(
   response: ReturnType<typeof createMultiSearchResponse>

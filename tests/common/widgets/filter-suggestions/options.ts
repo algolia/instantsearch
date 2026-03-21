@@ -4,6 +4,7 @@ import { wait } from '@instantsearch/testutils';
 import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { SearchResponse } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 // Minimum loading duration in the connector to avoid skeleton flash
 const MIN_LOADING_DURATION_MS = 300;
