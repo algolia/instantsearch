@@ -1,15 +1,38 @@
 import { readFileSync } from 'fs';
+import { createRequire } from 'module';
 
 import vue2 from '@vitejs/plugin-vue2';
 // @ts-expect-error -- v6 only ships .d.mts types, incompatible with moduleResolution "node"
 import vue3 from '@vitejs/plugin-vue';
 import { defineConfig } from 'vitest/config';
 
+const require = createRequire(import.meta.url);
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 const algoliaSearchMajor: '3' | '4' | '5' =
   packageJson.devDependencies.algoliasearch.split('.')[0];
 
 const isVue3 = process.env.VUE_VERSION === '3';
+const vueInstantSearchRoot = new URL(
+  './packages/vue-instantsearch/',
+  import.meta.url
+).pathname;
+const vue3Compiler = isVue3
+  ? require(
+      require.resolve('@vue/compiler-sfc', {
+        paths: [vueInstantSearchRoot],
+      })
+    )
+  : undefined;
+const vue3Runtime = isVue3
+  ? require.resolve('vue', {
+      paths: [vueInstantSearchRoot],
+    })
+  : undefined;
+const vue3ServerRenderer = isVue3
+  ? require.resolve('@vue/server-renderer', {
+      paths: [vueInstantSearchRoot],
+    })
+  : undefined;
 
 export default defineConfig({
   oxc: {
@@ -18,7 +41,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    isVue3 ? vue3() : vue2(),
+    isVue3 ? vue3({ compiler: vue3Compiler }) : vue2(),
     {
       // Some .js files contain JSX with @jsx pragma (e.g., GeoSearchRenderer.js).
       // Vitest 4 uses rolldown which doesn't parse JSX in .js files by default.
@@ -44,50 +67,83 @@ export default defineConfig({
   },
   resolve: {
     dedupe: ['react', 'react-dom', 'preact'],
-    alias: {
-      'react-instantsearch':
-        new URL('./packages/react-instantsearch/src/index.ts', import.meta.url)
-          .pathname,
-      'react-instantsearch-core/dist/es':
-        new URL(
+    alias: [
+      ...(isVue3
+        ? [
+            { find: /^vue$/, replacement: vue3Runtime! },
+            {
+              find: /^@vue\/server-renderer$/,
+              replacement: vue3ServerRenderer!,
+            },
+          ]
+        : []),
+      {
+        find: 'react-instantsearch',
+        replacement: new URL(
+          './packages/react-instantsearch/src/index.ts',
+          import.meta.url
+        ).pathname,
+      },
+      {
+        find: 'react-instantsearch-core/dist/es',
+        replacement: new URL(
           './packages/react-instantsearch-core/src',
           import.meta.url
         ).pathname,
-      'react-instantsearch-core':
-        new URL(
+      },
+      {
+        find: 'react-instantsearch-core',
+        replacement: new URL(
           './packages/react-instantsearch-core/src/index.ts',
           import.meta.url
         ).pathname,
-      'react-instantsearch-hooks$':
-        new URL(
+      },
+      {
+        find: /^react-instantsearch-hooks$/,
+        replacement: new URL(
           './packages/react-instantsearch-hooks/src/',
           import.meta.url
         ).pathname,
-      'react-instantsearch-hooks-web$':
-        new URL(
+      },
+      {
+        find: /^react-instantsearch-hooks-web$/,
+        replacement: new URL(
           './packages/react-instantsearch-hooks-web/src/',
           import.meta.url
         ).pathname,
-      'instantsearch.js$':
-        new URL('./packages/instantsearch.js/src/', import.meta.url)
+      },
+      {
+        find: /^instantsearch\.js$/,
+        replacement: new URL('./packages/instantsearch.js/src/', import.meta.url)
           .pathname,
-      'instantsearch.js/es':
-        new URL('./packages/instantsearch.js/src', import.meta.url)
+      },
+      {
+        find: 'instantsearch.js/es',
+        replacement: new URL(
+          './packages/instantsearch.js/src',
+          import.meta.url
+        ).pathname,
+      },
+      {
+        find: 'instantsearch.js/',
+        replacement: new URL('./packages/instantsearch.js/', import.meta.url)
           .pathname,
-      'instantsearch.js/':
-        new URL('./packages/instantsearch.js/', import.meta.url)
-          .pathname,
-      'instantsearch-ui-components$':
-        new URL(
+      },
+      {
+        find: /^instantsearch-ui-components$/,
+        replacement: new URL(
           './packages/instantsearch-ui-components/src/',
           import.meta.url
         ).pathname,
-      'instantsearch-ui-components/':
-        new URL(
+      },
+      {
+        find: 'instantsearch-ui-components/',
+        replacement: new URL(
           './packages/instantsearch-ui-components/',
           import.meta.url
         ).pathname,
-    },
+      },
+    ],
   },
   test: {
     globals: true,
