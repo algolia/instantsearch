@@ -75,12 +75,12 @@ See more info here: https://www.algolia.com/doc/api-reference/widgets/instantsea
   if (isVue3) {
     // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"apiKey\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "apiKey"."`
     );
 
     // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[1][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"appId\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "appId"."`
     );
   } else {
     // eslint-disable-next-line vitest/no-conditional-expect
@@ -267,7 +267,7 @@ it('does not allow `routing` to be a boolean', () => {
   if (isVue3) {
     // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"routing\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "routing"."`
     );
   } else {
     // eslint-disable-next-line vitest/no-conditional-expect
