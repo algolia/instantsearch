@@ -4,6 +4,7 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { withInsights, inferInsightsPayload } from '../';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 
+import type { InsightsClient } from '../../../types/insights';
 import type { InstantSearch, Widget } from '../../../types';
 
 const connectHits =
@@ -40,7 +41,7 @@ describe('withInsights', () => {
     it('should call the passed renderFn', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -61,7 +62,7 @@ describe('withInsights', () => {
     it('should not remove any renderProps passed by connectHits', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -89,7 +90,7 @@ describe('withInsights', () => {
     it('should expose the insights client wrapper to renderOptions if passed to instantSearchInstance', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -166,7 +167,7 @@ describe('withInsights', () => {
     it('should call the insights client under the hood', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -192,7 +193,7 @@ describe('withInsights', () => {
     it('should pass it the correct parameters', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -228,7 +229,7 @@ describe('withInsights', () => {
     it('should not infer or pass the positions if method is `convertedObjectIDsAfterSearch`', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -263,7 +264,7 @@ describe('withInsights', () => {
     it('should reject non-existing objectIDs', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -292,7 +293,7 @@ describe('withInsights', () => {
     it('should reject if objectIDs provided have different queryIDs', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -319,7 +320,7 @@ describe('withInsights', () => {
     it('should reject if no queryID found (clickAnalytics was not set to true)', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({
@@ -348,7 +349,7 @@ describe('withInsights', () => {
     it('should reject unknown method name', () => {
       const renderFn = vi.fn();
       const instantSearchInstance = createInstantSearch({
-        insightsClient: vi.fn(),
+        insightsClient: vi.fn() as unknown as InsightsClient,
       });
       const results = new SearchResults(new SearchParameters(), [
         createSingleSearchResponse({

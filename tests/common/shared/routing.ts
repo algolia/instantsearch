@@ -44,7 +44,7 @@ export function createRoutingTests(
               search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  ...requests.map(({ params }) =>
+                  ...requests.map(({ params }: { params: Record<string, any> }) =>
                     createSingleSearchResponse({
                       facets: {
                         [attribute]: {

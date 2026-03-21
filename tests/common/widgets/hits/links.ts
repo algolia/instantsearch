@@ -23,7 +23,7 @@ export function createLinksTests(
             search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
-                ...requests.map(({ params }) =>
+                ...requests.map(({ params }: { params: Record<string, any> }) =>
                   createSingleSearchResponse({
                     hits: Array.from(
                       { length: params.hitsPerPage || 20 },

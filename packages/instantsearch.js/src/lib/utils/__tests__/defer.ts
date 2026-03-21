@@ -139,7 +139,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(1);
 
-    fn.mockImplementation();
+    fn.mockImplementation(() => {});
 
     deferred();
 

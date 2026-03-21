@@ -28,10 +28,10 @@ vi.mock('algoliasearch-helper', async () => {
     const searchForCompositionFacetValues =
       helper.searchForCompositionFacetValues.bind(helper);
 
-    helper.searchWithComposition = vi.fn((...searchArgs) => {
+    helper.searchWithComposition = vi.fn((...searchArgs: Parameters<typeof searchWithComposition>) => {
       return searchWithComposition(...searchArgs);
     });
-    helper.searchForCompositionFacetValues = vi.fn((...searchArgs) => {
+    helper.searchForCompositionFacetValues = vi.fn((...searchArgs: Parameters<typeof searchForCompositionFacetValues>) => {
       return searchForCompositionFacetValues(...searchArgs);
     });
 

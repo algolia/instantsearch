@@ -24,7 +24,7 @@ export function createOptimisticUiTests(
             search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
-                ...requests.map(({ params }) =>
+                ...requests.map(({ params }: { params: Record<string, any> }) =>
                   createSingleSearchResponse({
                     page: params.page,
                     nbPages: 20,
@@ -146,7 +146,7 @@ export function createOptimisticUiTests(
                 throw new Error('Network error!');
               }
               return createMultiSearchResponse(
-                ...requests.map(({ params }) =>
+                ...requests.map(({ params }: { params: Record<string, any> }) =>
                   createSingleSearchResponse({
                     page: params.page,
                     nbPages: 20,

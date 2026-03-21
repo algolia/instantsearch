@@ -222,9 +222,9 @@ describe('RefinementList', () => {
           placeholder="Search brands"
           isSearchStalled={false}
           value=""
-          onChange={vi.fn}
-          onReset={vi.fn}
-          onSubmit={vi.fn}
+          onChange={vi.fn()}
+          onReset={vi.fn()}
+          onSubmit={vi.fn()}
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',
@@ -424,9 +424,9 @@ describe('RefinementList', () => {
           placeholder="Search brands"
           isSearchStalled={false}
           value="sam"
-          onChange={vi.fn}
-          onReset={vi.fn}
-          onSubmit={vi.fn}
+          onChange={vi.fn()}
+          onReset={vi.fn()}
+          onSubmit={vi.fn()}
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',

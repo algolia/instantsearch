@@ -5,4 +5,4 @@ import type { MockedFunction } from 'vitest';
  */
 export const castToJestMock = <TFunction extends (...args: any[]) => any>(
   func: TFunction
-) => func as unknown as MockedFunction<typeof func>;
+) => func as unknown as MockedFunction<typeof func> & TFunction;

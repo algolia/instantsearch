@@ -29,7 +29,7 @@ describe('ratingMenu', () => {
       search: vi.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
-            ...requests.map((request) =>
+            ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
               createSingleSearchResponse({
                 index: request.indexName,
                 facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },
@@ -990,7 +990,7 @@ describe('ratingMenu', () => {
       search: vi.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
-            ...requests.map((request) =>
+            ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
               createSingleSearchResponse({
                 index: request.indexName,
                 facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },

@@ -149,7 +149,7 @@ describe('queryRuleCustomData', () => {
         search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) =>
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
                 createSingleSearchResponse({
                   index: request.indexName,
                   userData: [
