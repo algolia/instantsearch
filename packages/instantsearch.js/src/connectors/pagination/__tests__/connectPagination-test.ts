@@ -18,16 +18,13 @@ import {
 } from '../../../../test/createWidget';
 import connectPagination from '../connectPagination';
 
-import type {
-  PaginationConnectorParams,
-  PaginationRenderState,
-} from '../connectPagination';
+import type { PaginationConnectorParams } from '../connectPagination';
 
 describe('connectPagination', () => {
   const getInitializedWidget = (
     widgetParams: PaginationConnectorParams = {}
   ) => {
-    const renderFn = vi.fn<any, [PaginationRenderState, boolean]>();
+    const renderFn = vi.fn();
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget(widgetParams);
 

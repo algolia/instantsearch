@@ -16,11 +16,9 @@ import {
 } from '../../../../test/createWidget';
 import connectStats from '../connectStats';
 
-import type { StatsRenderState } from '../connectStats';
-
 describe('connectStats', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = vi.fn<any, [StatsRenderState, boolean]>();
+    const renderFn = vi.fn();
     const makeWidget = connectStats(renderFn);
     const widget = makeWidget({
       ...config,

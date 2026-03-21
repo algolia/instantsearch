@@ -23,11 +23,11 @@ import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectAutocomplete from '../connectAutocomplete';
 
 import type { SearchClient, SearchResponse } from '../../../types';
-import type { AutocompleteRenderState } from '../connectAutocomplete';
+import type { Mock } from 'vitest';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = vi.fn<any, [AutocompleteRenderState, boolean]>();
+    const renderFn = vi.fn();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({
       ...config,

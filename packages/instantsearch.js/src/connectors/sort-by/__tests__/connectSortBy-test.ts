@@ -20,8 +20,6 @@ import {
 import { index } from '../../../widgets';
 import connectSortBy from '../connectSortBy';
 
-import type { SortByRenderState } from '../connectSortBy';
-
 describe('connectSortBy', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
@@ -581,7 +579,7 @@ describe('connectSortBy', () => {
 
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
-      const rendering = vi.fn<any, [SortByRenderState, boolean]>();
+      const rendering = vi.fn();
       const makeWidget = connectSortBy(rendering);
       const instantSearchInstance = createInstantSearch({
         indexName: 'relevance',

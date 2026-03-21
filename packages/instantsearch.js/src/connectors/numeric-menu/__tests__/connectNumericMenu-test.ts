@@ -20,7 +20,6 @@ import connectNumericMenu from '../connectNumericMenu';
 
 import type {
   NumericMenuConnectorParamsItem,
-  NumericMenuRenderState,
   NumericMenuRenderStateItem,
 } from '../connectNumericMenu';
 
@@ -38,7 +37,7 @@ const mapOptionsToItems: (
 
 describe('connectNumericMenu', () => {
   const getInitializedWidget = () => {
-    const rendering = vi.fn<any, [NumericMenuRenderState, boolean]>();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
