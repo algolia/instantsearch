@@ -82,6 +82,7 @@
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "4.31.2",
     "@vitejs/plugin-vue": "6.0.5",
+    "vite": "^8.0.1",
     "@vitejs/plugin-vue2": "2.3.4",
     "@vitest/coverage-v8": "4.1.0",
     "@wdio/cli": "5.16.9",

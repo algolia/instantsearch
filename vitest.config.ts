@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 
 import vue2 from '@vitejs/plugin-vue2';
+// @ts-expect-error -- v6 only ships .d.mts types, incompatible with moduleResolution "node"
 import vue3 from '@vitejs/plugin-vue';
 import { defineConfig } from 'vitest/config';
 
@@ -26,7 +27,7 @@ export default defineConfig({
       // Vitest 4 uses rolldown which doesn't parse JSX in .js files by default.
       name: 'jsx-in-js',
       enforce: 'pre',
-      async transform(code, id) {
+      async transform(code: string, id: string) {
         if (id.endsWith('.js') && code.includes('/** @jsx')) {
           const esbuild = await import('esbuild');
           const result = await esbuild.transform(code, {
@@ -37,6 +38,7 @@ export default defineConfig({
           });
           return { code: result.code, map: result.map };
         }
+        return undefined;
       },
     },
   ],
