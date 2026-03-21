@@ -82,7 +82,6 @@
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "4.31.2",
     "@vitejs/plugin-vue": "6.0.5",
-    "vite": "^8.0.1",
     "@vitejs/plugin-vue2": "2.3.4",
     "@vitest/coverage-v8": "4.1.0",
     "@wdio/cli": "5.16.9",
@@ -108,6 +107,7 @@
     "eslint-plugin-vitest": "0.5.4",
     "eslint-plugin-vue": "9.8.0",
     "eslint-plugin-wdio": "5.11.0",
+    "happy-dom": "20.8.4",
     "jsdom": "29.0.0",
     "lerna": "6.0.3",
     "patch-package": "6.2.2",
@@ -123,6 +123,7 @@
     "shelljs": "0.8.5",
     "shipjs": "0.26.0",
     "typescript": "5.5.2",
+    "vite": "^8.0.1",
     "vitest": "4.1.0"
   },
   "optionalDependencies": {

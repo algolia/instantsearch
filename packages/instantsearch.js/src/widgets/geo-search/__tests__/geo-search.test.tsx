@@ -1,5 +1,5 @@
 /**
- * @vitest-environment jsdom
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import { initialize } from '@googlemaps/jest-mocks';

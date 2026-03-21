@@ -1,5 +1,5 @@
 /**
- * @vitest-environment jsdom
+ * @vitest-environment happy-dom
  */
 /** @jsx createElement */
 import { fireEvent, render } from '@testing-library/preact';

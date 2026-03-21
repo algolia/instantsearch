@@ -1,5 +1,5 @@
 /**
- * @vitest-environment jsdom
+ * @vitest-environment happy-dom
  */
 
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';

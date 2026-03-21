@@ -1,5 +1,5 @@
 /**
- * @vitest-environment jsdom
+ * @vitest-environment happy-dom
  */
 import { castToJestMock, wait } from '@instantsearch/testutils';
 

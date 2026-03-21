@@ -1,5 +1,5 @@
 /**
- * @vitest-environment jsdom
+ * @vitest-environment happy-dom
  */
 import { mount } from '../../../test/utils';
 import '../../../test/utils/sortedHtmlSerializer';
