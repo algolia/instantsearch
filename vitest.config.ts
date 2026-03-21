@@ -132,7 +132,7 @@ export default defineConfig({
         ],
       },
     },
-    pool: 'forks',
+    pool: 'threads',
     snapshotFormat: {
       printBasicPrototype: false,
     },

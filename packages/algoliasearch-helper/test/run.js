@@ -24,8 +24,8 @@ async function run() {
     root: path.resolve(__dirname, '..'),
     include: include,
     setupFiles: setupFiles,
-    pool: 'forks',
-    maxForks: 4,
+    pool: 'threads',
+    maxWorkers: 4,
     watch: false,
   });
 
