@@ -23,6 +23,7 @@ import rangeSlider from '../range-slider';
 import type { InstantSearch } from '../../../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
+import type { Mock } from 'vitest';
 
 const render = castToJestMock(preactRender);
 vi.mock('preact', async () => {

@@ -21,6 +21,8 @@ import createHTMLMarker from '../createHTMLMarker';
 import geoSearch from '../geo-search';
 import originalRenderer from '../GeoSearchRenderer';
 
+import type { Mock, MockedFunction } from 'vitest';
+
 const render = castToJestMock(preactRender);
 vi.mock('preact', async () => {
   const module = await vi.importActual('preact');
@@ -140,7 +142,7 @@ describe('GeoSearch', () => {
     eventName: string,
     event?: any
   ) => {
-    fn.addListener.mock.calls.find((call) => call.includes(eventName))[1](
+    fn.addListener.mock.calls.find((call) => call.includes(eventName))![1](
       event
     );
   };

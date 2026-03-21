@@ -17,6 +17,7 @@ import { InitializePromise } from '../InitializePromise';
 import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
+import type { Mock } from 'vitest';
 
 vi.mock('instantsearch.js/es/lib/utils', async () => ({
   ...(await vi.importActual('instantsearch.js/es/lib/utils')),

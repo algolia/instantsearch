@@ -5,6 +5,8 @@
 
 import createVoiceSearchHelper from '..';
 
+import type { Mock } from 'vitest';
+
 type DummySpeechRecognition = () => void;
 declare global {
   interface Window {

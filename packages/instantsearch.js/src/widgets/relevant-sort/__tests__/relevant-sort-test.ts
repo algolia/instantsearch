@@ -16,6 +16,7 @@ import {
 import relevantSort from '../relevant-sort';
 
 import type { RelevantSortTemplates } from '../relevant-sort';
+import type { Mock } from 'vitest';
 
 vi.mock('preact', async () => {
   const module = await vi.importActual('preact');

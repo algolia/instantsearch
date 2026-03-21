@@ -7,6 +7,7 @@ import { skippableDescribe } from '../../common';
 
 import type { FilterSuggestionsConnectorSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { Mock } from 'vitest';
 
 // Minimum loading duration in the connector to avoid skeleton flash
 const MIN_LOADING_DURATION_MS = 300;

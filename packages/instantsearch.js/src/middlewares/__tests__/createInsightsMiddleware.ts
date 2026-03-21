@@ -25,6 +25,7 @@ import type { InsightsProps } from '..';
 import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { JSDOM } from 'jsdom';
+import type { Mock } from 'vitest';
 
 declare const jsdom: JSDOM;
 

@@ -29,6 +29,7 @@ import type {
   HitAttributeHighlightResult,
   SearchResponse,
 } from '../../../types';
+import type { Mock } from 'vitest';
 
 vi.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,

@@ -32,6 +32,7 @@ import type {
 } from '../../connectors/search-box/connectSearchBox';
 import type { UiState, Widget, IndexWidget } from '../../types';
 import type { RefObject } from 'preact';
+import type { Mock } from 'vitest';
 
 type SearchBoxWidgetInstance = Widget<
   SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }
@@ -54,7 +55,7 @@ vi.mock('algoliasearch-helper', async () => {
     const searchOnlyWithDerivedHelpers =
       helper.searchOnlyWithDerivedHelpers.bind(helper);
 
-    helper.searchOnlyWithDerivedHelpers = vi.fn((...searchArgs) => {
+    helper.searchOnlyWithDerivedHelpers = vi.fn((...searchArgs: Parameters<typeof searchOnlyWithDerivedHelpers>) => {
       return searchOnlyWithDerivedHelpers(...searchArgs);
     });
 
@@ -477,10 +478,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   describe('insights middleware', () => {
     const createSearchClientWithAutomaticInsightsOptedIn = () =>
       createSearchClient({
-        search: vi.fn((requests) => {
+        search: vi.fn((requests: Array<{ indexName: string; query?: string; params: Record<string, any> }>) => {
           return Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) => {
+              ...requests.map((request: { indexName: string; query?: string; params: Record<string, any> }) => {
                 return createSingleSearchResponse<any>({
                   ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { _automaticInsights: true }
@@ -2024,7 +2025,7 @@ describe('use', () => {
 
     search.start();
 
-    const widgetsInitCallOrder = (searchBox.init as Mock<any, any>).mock
+    const widgetsInitCallOrder = (searchBox.init as Mock<(...args: any[]) => any>).mock
       .invocationCallOrder[0];
     const middlewareSubscribeCallOrder =
       middlewareSpy.subscribe.mock.invocationCallOrder[0];

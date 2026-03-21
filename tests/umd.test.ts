@@ -3,6 +3,8 @@ import { resolve as resolvePath } from 'path';
 
 import { JSDOM } from 'jsdom';
 
+import type { Mock } from 'vitest';
+
 describe('UMD bundle', () => {
   describe.each([
     {

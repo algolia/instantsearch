@@ -19,6 +19,7 @@ import { InstantSearch } from '../InstantSearch';
 
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearchProps } from '../InstantSearch';
+import type { Mock } from 'vitest';
 
 vi.mock('../../lib/warn');
 

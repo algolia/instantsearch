@@ -10,6 +10,7 @@ import { createSendEventForFacet } from '../createSendEventForFacet';
 import { isFacetRefined } from '../isFacetRefined';
 
 import type { SearchClient } from '../../../types';
+import type { Mock } from 'vitest';
 
 vi.mock('../isFacetRefined', () => ({ isFacetRefined: vi.fn() }));
 

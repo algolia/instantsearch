@@ -11,6 +11,7 @@ import type { HitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchClient } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 declare const window: Window &
   typeof globalThis & {

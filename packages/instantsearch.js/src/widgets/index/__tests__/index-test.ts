@@ -35,6 +35,7 @@ import index from '../index';
 
 import type { Widget } from '../../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { Mock } from 'vitest';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>

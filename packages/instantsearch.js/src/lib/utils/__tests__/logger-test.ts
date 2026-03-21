@@ -1,5 +1,7 @@
 import { deprecate, warning } from '../logger';
 
+import type { MockInstance } from 'vitest';
+
 describe('deprecate', () => {
   const sum = (...args: number[]) => args.reduce((acc, _) => acc + _, 0);
   let warn: MockInstance<typeof global.console.warn>;

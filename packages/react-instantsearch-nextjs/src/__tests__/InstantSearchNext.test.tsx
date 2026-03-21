@@ -11,6 +11,7 @@ import { SearchBox } from 'react-instantsearch';
 import { InstantSearchNext } from '../InstantSearchNext';
 
 import type { InitialResults } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
 declare global {

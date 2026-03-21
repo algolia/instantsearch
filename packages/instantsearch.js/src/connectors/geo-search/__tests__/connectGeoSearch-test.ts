@@ -23,6 +23,7 @@ import instantsearch from '../../../index.es';
 import connectGeoSearch from '../connectGeoSearch';
 
 import type { SearchResponse } from '../../../types';
+import type { Mock } from 'vitest';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = () => {

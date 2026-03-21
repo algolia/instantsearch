@@ -9,6 +9,7 @@ import {
 } from './createAPIResponse';
 
 import type { SearchClient } from 'algoliasearch-helper/types/algoliasearch';
+import type { Mock } from 'vitest';
 
 const algoliasearch = ((AlgoliaSearch as any).algoliasearch ||
   (AlgoliaSearch as any).default) as unknown as (
@@ -24,10 +25,10 @@ export type MockSearchClient = OverrideKeys<
   SearchClient,
   SearchClient extends { searchForFacetValues: (...args: any[]) => any }
     ? {
-        search: Mock<any, any>;
-        searchForFacetValues: Mock<any, any>;
+        search: Mock<(...args: any[]) => any>;
+        searchForFacetValues: Mock<(...args: any[]) => any>;
       }
-    : { search: Mock<any, any> }
+    : { search: Mock<(...args: any[]) => any> }
 >;
 
 export function createAlgoliaSearchClient<
@@ -141,10 +142,10 @@ export function createAlgoliaSearchClient<
     clearCache: vi.fn(),
     initIndex: vi.fn(),
     customRequest: vi.fn(),
-    search: vi.fn((requests) =>
+    search: vi.fn((requests: Array<{ indexName: string; params?: Record<string, any> }>) =>
       Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) =>
+          ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
             createSingleSearchResponse({
               index: request.indexName,
               params: getParams(version, request.params || {}),

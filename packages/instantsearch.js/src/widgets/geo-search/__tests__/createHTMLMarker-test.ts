@@ -5,6 +5,8 @@
 /* global google */
 import createHTMLMarker from '../createHTMLMarker';
 
+import type { Mock } from 'vitest';
+
 describe('createHTMLMarker', () => {
   class FakeOverlayView {
     public setMap = vi.fn();

@@ -26,9 +26,10 @@ import type {
   MenuRenderState,
   MenuWidgetDescription,
 } from '../connectMenu';
+import type { Mock } from 'vitest';
 
 describe('connectMenu', () => {
-  let rendering: Mock<any, [MenuRenderState, boolean]>;
+  let rendering: Mock<(renderState: MenuRenderState, isFirstRender: boolean) => any>;
   let makeWidget: WidgetFactory<
     MenuWidgetDescription,
     MenuConnectorParams,

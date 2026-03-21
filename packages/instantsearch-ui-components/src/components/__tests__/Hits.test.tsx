@@ -10,6 +10,7 @@ import { createHitsComponent } from '../Hits';
 
 import type { HitsProps } from '../Hits';
 import type { Hit } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 describe('Hits', () => {
   const Hits = createHitsComponent({ createElement, Fragment });
