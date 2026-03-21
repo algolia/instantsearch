@@ -3,7 +3,11 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  wait,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
@@ -44,30 +48,30 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Breadcrumb ais-Breadcrumb--noRefinement"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Breadcrumb'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Breadcrumb ais-Breadcrumb--noRefinement"
+      >
+        <ul
+          class="ais-Breadcrumb-list"
         >
-          <ul
-            class="ais-Breadcrumb-list"
+          <li
+            class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
           >
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              Home
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('renders with initial refinements', async () => {
@@ -97,57 +101,57 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Breadcrumb"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Breadcrumb'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Breadcrumb"
+      >
+        <ul
+          class="ais-Breadcrumb-list"
         >
-          <ul
-            class="ais-Breadcrumb-list"
+          <li
+            class="ais-Breadcrumb-item"
           >
-            <li
-              class="ais-Breadcrumb-item"
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item"
+              Home
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Cameras & Camcorders
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              &gt;
+            </span>
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              Digital Cameras
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              Cameras & Camcorders
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
+            >
+              &gt;
+            </span>
+            Digital Cameras
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('transforms the items', async () => {
@@ -220,57 +224,57 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Breadcrumb"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Breadcrumb'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Breadcrumb"
+      >
+        <ul
+          class="ais-Breadcrumb-list"
         >
-          <ul
-            class="ais-Breadcrumb-list"
+          <li
+            class="ais-Breadcrumb-item"
           >
-            <li
-              class="ais-Breadcrumb-item"
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item"
+              Home
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Cameras & Camcorders
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              &gt;
+            </span>
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              Digital Cameras
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              Cameras & Camcorders
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
+            >
+              &gt;
+            </span>
+            Digital Cameras
+          </li>
+        </ul>
+      </div>
+    `);
 
       await act(async () => {
         userEvent.click(screen.getAllByText('Cameras & Camcorders')[0]);
@@ -331,57 +335,57 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Breadcrumb"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Breadcrumb'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Breadcrumb"
+      >
+        <ul
+          class="ais-Breadcrumb-list"
         >
-          <ul
-            class="ais-Breadcrumb-list"
+          <li
+            class="ais-Breadcrumb-item"
           >
-            <li
-              class="ais-Breadcrumb-item"
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item"
+              Home
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Cameras & Camcorders
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              &gt;
+            </span>
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              Digital Cameras
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              Cameras & Camcorders
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
+            >
+              &gt;
+            </span>
+            Digital Cameras
+          </li>
+        </ul>
+      </div>
+    `);
 
       const [firstSeparator, secondSeparator] = [
         ...document.querySelectorAll('.ais-Breadcrumb-separator'),
@@ -422,41 +426,41 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Breadcrumb')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Breadcrumb"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Breadcrumb'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Breadcrumb"
+      >
+        <ul
+          class="ais-Breadcrumb-list"
         >
-          <ul
-            class="ais-Breadcrumb-list"
+          <li
+            class="ais-Breadcrumb-item"
           >
-            <li
-              class="ais-Breadcrumb-item"
+            <a
+              class="ais-Breadcrumb-link"
+              href="#"
             >
-              <a
-                class="ais-Breadcrumb-link"
-                href="#"
-              >
-                Home
-              </a>
-            </li>
-            <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              Home
+            </a>
+          </li>
+          <li
+            class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+          >
+            <span
+              aria-hidden="true"
+              class="ais-Breadcrumb-separator"
             >
-              <span
-                aria-hidden="true"
-                class="ais-Breadcrumb-separator"
-              >
-                &gt;
-              </span>
-              Digital Cameras
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              &gt;
+            </span>
+            Digital Cameras
+          </li>
+        </ul>
+      </div>
+    `);
     });
   });
 }

@@ -1,5 +1,9 @@
 import { createSearchClient } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  wait,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
@@ -37,39 +41,39 @@ export function createOptionsTests(
       );
 
       expect(
-        document.querySelector('.ais-SortBy')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-SortBy"
+        normalizeForSnapshot(
+          document.querySelector('.ais-SortBy'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-SortBy"
+      >
+        <select
+          aria-label="Sort results by"
+          class="ais-SortBy-select"
         >
-          <select
-            aria-label="Sort results by"
-            class="ais-SortBy-select"
+          <option
+            class="ais-SortBy-option"
+            value="instant_search"
           >
-            <option
-              class="ais-SortBy-option"
-              value="instant_search"
-            >
-              Featured
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_asc"
-            >
-              Price (asc)
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_desc"
-            >
-              Price (desc)
-            </option>
-          </select>
-        </div>
-      `
-      );
+            Featured
+          </option>
+          <option
+            class="ais-SortBy-option"
+            value="instant_search_price_asc"
+          >
+            Price (asc)
+          </option>
+          <option
+            class="ais-SortBy-option"
+            value="instant_search_price_desc"
+          >
+            Price (desc)
+          </option>
+        </select>
+      </div>
+    `);
     });
 
     test('transform the passed items', async () => {
@@ -100,39 +104,39 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-SortBy')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-SortBy"
+        normalizeForSnapshot(
+          document.querySelector('.ais-SortBy'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-SortBy"
+      >
+        <select
+          aria-label="Sort results by"
+          class="ais-SortBy-select"
         >
-          <select
-            aria-label="Sort results by"
-            class="ais-SortBy-select"
+          <option
+            class="ais-SortBy-option"
+            value="instant_search"
           >
-            <option
-              class="ais-SortBy-option"
-              value="instant_search"
-            >
-              FEATURED
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_asc"
-            >
-              PRICE (ASC)
-            </option>
-            <option
-              class="ais-SortBy-option"
-              value="instant_search_price_desc"
-            >
-              PRICE (DESC)
-            </option>
-          </select>
-        </div>
-      `
-      );
+            FEATURED
+          </option>
+          <option
+            class="ais-SortBy-option"
+            value="instant_search_price_asc"
+          >
+            PRICE (ASC)
+          </option>
+          <option
+            class="ais-SortBy-option"
+            value="instant_search_price_desc"
+          >
+            PRICE (DESC)
+          </option>
+        </select>
+      </div>
+    `);
     });
 
     test('updates the selected index', async () => {

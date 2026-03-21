@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -69,45 +70,44 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(screen.getByRole('combobox')).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <select
-          class="ais-MenuSelect-select"
+      expect(
+        normalizeForSnapshot(screen.getByRole('combobox'), normalizeSnapshot)
+      ).toMatchInlineSnapshot(`
+      <select
+        class="ais-MenuSelect-select"
+      >
+        <option
+          class="ais-MenuSelect-option"
+          value=""
         >
-          <option
-            class="ais-MenuSelect-option"
-            value=""
-          >
-            See all
-          </option>
-          <option
-            class="ais-MenuSelect-option"
-            value="HP"
-          >
-            HP (530)
-          </option>
-          <option
-            class="ais-MenuSelect-option"
-            value="Insignia™"
-          >
-            Insignia™ (746)
-          </option>
-          <option
-            class="ais-MenuSelect-option"
-            value="Metra"
-          >
-            Metra (591)
-          </option>
-          <option
-            class="ais-MenuSelect-option"
-            value="Samsung"
-          >
-            Samsung (633)
-          </option>
-        </select>
-      `
-      );
+          See all
+        </option>
+        <option
+          class="ais-MenuSelect-option"
+          value="HP"
+        >
+          HP (530)
+        </option>
+        <option
+          class="ais-MenuSelect-option"
+          value="Insignia™"
+        >
+          Insignia™ (746)
+        </option>
+        <option
+          class="ais-MenuSelect-option"
+          value="Metra"
+        >
+          Metra (591)
+        </option>
+        <option
+          class="ais-MenuSelect-option"
+          value="Samsung"
+        >
+          Samsung (633)
+        </option>
+      </select>
+    `);
     });
 
     test('limits the number of items to display', async () => {

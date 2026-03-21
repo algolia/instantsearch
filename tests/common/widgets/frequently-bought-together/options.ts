@@ -1,5 +1,8 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
-import { normalizeSnapshot } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
 import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
@@ -29,61 +32,61 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-FrequentlyBoughtTogether')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <section
-          class="ais-FrequentlyBoughtTogether"
+        normalizeForSnapshot(
+          document.querySelector('.ais-FrequentlyBoughtTogether'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <section
+        class="ais-FrequentlyBoughtTogether"
+      >
+        <h3
+          class="ais-FrequentlyBoughtTogether-title"
         >
-          <h3
-            class="ais-FrequentlyBoughtTogether-title"
+          Frequently bought together
+        </h3>
+        <div
+          class="ais-FrequentlyBoughtTogether-container"
+        >
+          <ol
+            class="ais-FrequentlyBoughtTogether-list"
           >
-            Frequently bought together
-          </h3>
-          <div
-            class="ais-FrequentlyBoughtTogether-container"
-          >
-            <ol
-              class="ais-FrequentlyBoughtTogether-list"
+            <li
+              class="ais-FrequentlyBoughtTogether-item"
             >
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
-            }
-          },
-          "name": "Moschino Love – Shoulder bag",
-          "objectID": "1",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
-            }
-          },
-          "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "2",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `
-      );
+              {
+        "_highlightResult": {
+          "name": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+          }
+        },
+        "name": "Moschino Love – Shoulder bag",
+        "objectID": "1",
+        "__position": 1
+      }
+            </li>
+            <li
+              class="ais-FrequentlyBoughtTogether-item"
+            >
+              {
+        "_highlightResult": {
+          "name": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+          }
+        },
+        "name": "Bag “Sabrina“ medium Gabs",
+        "objectID": "2",
+        "__position": 2
+      }
+            </li>
+          </ol>
+        </div>
+      </section>
+    `);
     });
 
     test('renders transformed items', async () => {
@@ -112,45 +115,45 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-FrequentlyBoughtTogether')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <section
-          class="ais-FrequentlyBoughtTogether"
+        normalizeForSnapshot(
+          document.querySelector('.ais-FrequentlyBoughtTogether'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <section
+        class="ais-FrequentlyBoughtTogether"
+      >
+        <h3
+          class="ais-FrequentlyBoughtTogether-title"
         >
-          <h3
-            class="ais-FrequentlyBoughtTogether-title"
+          Frequently bought together
+        </h3>
+        <div
+          class="ais-FrequentlyBoughtTogether-container"
+        >
+          <ol
+            class="ais-FrequentlyBoughtTogether-list"
           >
-            Frequently bought together
-          </h3>
-          <div
-            class="ais-FrequentlyBoughtTogether-container"
-          >
-            <ol
-              class="ais-FrequentlyBoughtTogether-list"
+            <li
+              class="ais-FrequentlyBoughtTogether-item"
             >
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "objectID": "(1)",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "objectID": "(2)",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `
-      );
+              {
+        "objectID": "(1)",
+        "__position": 1
+      }
+            </li>
+            <li
+              class="ais-FrequentlyBoughtTogether-item"
+            >
+              {
+        "objectID": "(2)",
+        "__position": 2
+      }
+            </li>
+          </ol>
+        </div>
+      </section>
+    `);
     });
 
     test('passes parameters correctly', async () => {

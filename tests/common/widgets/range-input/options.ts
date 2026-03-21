@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
@@ -41,55 +42,55 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-RangeInput')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-RangeInput"
+        normalizeForSnapshot(
+          document.querySelector('.ais-RangeInput'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-RangeInput"
+      >
+        <form
+          class="ais-RangeInput-form"
         >
-          <form
-            class="ais-RangeInput-form"
+          <label
+            class="ais-RangeInput-label"
           >
-            <label
-              class="ais-RangeInput-label"
-            >
-              <input
-                class="ais-RangeInput-input ais-RangeInput-input--min"
-                max="1000"
-                min="1"
-                placeholder="1"
-                step="1"
-                type="number"
-              />
-            </label>
-            <span
-              class="ais-RangeInput-separator"
-            >
-              to
-            </span>
-            <label
-              class="ais-RangeInput-label"
-            >
-              <input
-                class="ais-RangeInput-input ais-RangeInput-input--max"
-                max="1000"
-                min="1"
-                placeholder="1000"
-                step="1"
-                type="number"
-              />
-            </label>
-            <button
-              class="ais-RangeInput-submit"
-              type="submit"
-            >
-              Go
-            </button>
-          </form>
-        </div>
-      `
-      );
+            <input
+              class="ais-RangeInput-input ais-RangeInput-input--min"
+              max="1000"
+              min="1"
+              placeholder="1"
+              step="1"
+              type="number"
+            />
+          </label>
+          <span
+            class="ais-RangeInput-separator"
+          >
+            to
+          </span>
+          <label
+            class="ais-RangeInput-label"
+          >
+            <input
+              class="ais-RangeInput-input ais-RangeInput-input--max"
+              max="1000"
+              min="1"
+              placeholder="1000"
+              step="1"
+              type="number"
+            />
+          </label>
+          <button
+            class="ais-RangeInput-submit"
+            type="submit"
+          >
+            Go
+          </button>
+        </form>
+      </div>
+    `);
     });
 
     test('renders with initial refinements', async () => {

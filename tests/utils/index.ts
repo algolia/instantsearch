@@ -2,6 +2,7 @@ export * from './castToJestMock';
 export * from './createInstantSearchSpy';
 export * from './enzyme';
 export * from './InstantSearchTestWrapper';
+export * from './normalizeForSnapshot';
 export * from './normalizeSnapshot';
 export * from './runAllMicroTasks';
 export * from './wait';

@@ -2,6 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
@@ -52,29 +53,29 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ToggleRefinement"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ToggleRefinement'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ToggleRefinement"
+      >
+        <label
+          class="ais-ToggleRefinement-label"
         >
-          <label
-            class="ais-ToggleRefinement-label"
+          <input
+            class="ais-ToggleRefinement-checkbox"
+            type="checkbox"
+          />
+          <span
+            class="ais-ToggleRefinement-labelText"
           >
-            <input
-              class="ais-ToggleRefinement-checkbox"
-              type="checkbox"
-            />
-            <span
-              class="ais-ToggleRefinement-labelText"
-            >
-              free_shipping
-            </span>
-          </label>
-        </div>
-      `
-      );
+            free_shipping
+          </span>
+        </label>
+      </div>
+    `);
     });
 
     test('renders with custom label', async () => {
@@ -97,29 +98,29 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ToggleRefinement"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ToggleRefinement'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ToggleRefinement"
+      >
+        <label
+          class="ais-ToggleRefinement-label"
         >
-          <label
-            class="ais-ToggleRefinement-label"
+          <input
+            class="ais-ToggleRefinement-checkbox"
+            type="checkbox"
+          />
+          <span
+            class="ais-ToggleRefinement-labelText"
           >
-            <input
-              class="ais-ToggleRefinement-checkbox"
-              type="checkbox"
-            />
-            <span
-              class="ais-ToggleRefinement-labelText"
-            >
-              Free Shipping!
-            </span>
-          </label>
-        </div>
-      `
-      );
+            Free Shipping!
+          </span>
+        </label>
+      </div>
+    `);
     });
 
     test('renders checked when the attribute is refined', async () => {
@@ -153,29 +154,29 @@ export function createOptionsTests(
       ).toBe(true);
 
       expect(
-        document.querySelector('.ais-ToggleRefinement')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ToggleRefinement"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ToggleRefinement'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ToggleRefinement"
+      >
+        <label
+          class="ais-ToggleRefinement-label"
         >
-          <label
-            class="ais-ToggleRefinement-label"
+          <input
+            class="ais-ToggleRefinement-checkbox"
+            type="checkbox"
+          />
+          <span
+            class="ais-ToggleRefinement-labelText"
           >
-            <input
-              class="ais-ToggleRefinement-checkbox"
-              type="checkbox"
-            />
-            <span
-              class="ais-ToggleRefinement-labelText"
-            >
-              free_shipping
-            </span>
-          </label>
-        </div>
-      `
-      );
+            free_shipping
+          </span>
+        </label>
+      </div>
+    `);
     });
 
     test('toggles when clicking the checkbox', async () => {

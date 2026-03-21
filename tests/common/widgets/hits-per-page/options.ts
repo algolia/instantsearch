@@ -1,5 +1,9 @@
 import { createSearchClient } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  wait,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
@@ -33,38 +37,38 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-HitsPerPage')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HitsPerPage"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HitsPerPage'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HitsPerPage"
+      >
+        <select
+          class="ais-HitsPerPage-select"
         >
-          <select
-            class="ais-HitsPerPage-select"
+          <option
+            class="ais-HitsPerPage-option"
+            value="10"
           >
-            <option
-              class="ais-HitsPerPage-option"
-              value="10"
-            >
-              10
-            </option>
-            <option
-              class="ais-HitsPerPage-option"
-              value="20"
-            >
-              20
-            </option>
-            <option
-              class="ais-HitsPerPage-option"
-              value="30"
-            >
-              30
-            </option>
-          </select>
-        </div>
-      `
-      );
+            10
+          </option>
+          <option
+            class="ais-HitsPerPage-option"
+            value="20"
+          >
+            20
+          </option>
+          <option
+            class="ais-HitsPerPage-option"
+            value="30"
+          >
+            30
+          </option>
+        </select>
+      </div>
+    `);
 
       // The `default` item isn't the first one
       await setup({
@@ -86,38 +90,38 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-HitsPerPage')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HitsPerPage"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HitsPerPage'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HitsPerPage"
+      >
+        <select
+          class="ais-HitsPerPage-select"
         >
-          <select
-            class="ais-HitsPerPage-select"
+          <option
+            class="ais-HitsPerPage-option"
+            value="10"
           >
-            <option
-              class="ais-HitsPerPage-option"
-              value="10"
-            >
-              10
-            </option>
-            <option
-              class="ais-HitsPerPage-option"
-              value="20"
-            >
-              20
-            </option>
-            <option
-              class="ais-HitsPerPage-option"
-              value="30"
-            >
-              30
-            </option>
-          </select>
-        </div>
-      `
-      );
+            10
+          </option>
+          <option
+            class="ais-HitsPerPage-option"
+            value="20"
+          >
+            20
+          </option>
+          <option
+            class="ais-HitsPerPage-option"
+            value="30"
+          >
+            30
+          </option>
+        </select>
+      </div>
+    `);
     });
 
     test('transforms the items', async () => {

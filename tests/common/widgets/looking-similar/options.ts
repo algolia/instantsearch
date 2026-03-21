@@ -1,5 +1,8 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
-import { normalizeSnapshot } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
 import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
@@ -29,61 +32,61 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-LookingSimilar')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <section
-          class="ais-LookingSimilar"
+        normalizeForSnapshot(
+          document.querySelector('.ais-LookingSimilar'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <section
+        class="ais-LookingSimilar"
+      >
+        <h3
+          class="ais-LookingSimilar-title"
         >
-          <h3
-            class="ais-LookingSimilar-title"
+          Looking similar
+        </h3>
+        <div
+          class="ais-LookingSimilar-container"
+        >
+          <ol
+            class="ais-LookingSimilar-list"
           >
-            Looking similar
-          </h3>
-          <div
-            class="ais-LookingSimilar-container"
-          >
-            <ol
-              class="ais-LookingSimilar-list"
+            <li
+              class="ais-LookingSimilar-item"
             >
-              <li
-                class="ais-LookingSimilar-item"
-              >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
-            }
-          },
-          "name": "Moschino Love – Shoulder bag",
-          "objectID": "1",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-LookingSimilar-item"
-              >
-                {
-          "_highlightResult": {
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
-            }
-          },
-          "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "2",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `
-      );
+              {
+        "_highlightResult": {
+          "name": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+          }
+        },
+        "name": "Moschino Love – Shoulder bag",
+        "objectID": "1",
+        "__position": 1
+      }
+            </li>
+            <li
+              class="ais-LookingSimilar-item"
+            >
+              {
+        "_highlightResult": {
+          "name": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+          }
+        },
+        "name": "Bag “Sabrina“ medium Gabs",
+        "objectID": "2",
+        "__position": 2
+      }
+            </li>
+          </ol>
+        </div>
+      </section>
+    `);
     });
 
     test('renders transformed items', async () => {
@@ -112,45 +115,45 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-LookingSimilar')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <section
-          class="ais-LookingSimilar"
+        normalizeForSnapshot(
+          document.querySelector('.ais-LookingSimilar'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <section
+        class="ais-LookingSimilar"
+      >
+        <h3
+          class="ais-LookingSimilar-title"
         >
-          <h3
-            class="ais-LookingSimilar-title"
+          Looking similar
+        </h3>
+        <div
+          class="ais-LookingSimilar-container"
+        >
+          <ol
+            class="ais-LookingSimilar-list"
           >
-            Looking similar
-          </h3>
-          <div
-            class="ais-LookingSimilar-container"
-          >
-            <ol
-              class="ais-LookingSimilar-list"
+            <li
+              class="ais-LookingSimilar-item"
             >
-              <li
-                class="ais-LookingSimilar-item"
-              >
-                {
-          "objectID": "(1)",
-          "__position": 1
-        }
-              </li>
-              <li
-                class="ais-LookingSimilar-item"
-              >
-                {
-          "objectID": "(2)",
-          "__position": 2
-        }
-              </li>
-            </ol>
-          </div>
-        </section>
-      `
-      );
+              {
+        "objectID": "(1)",
+        "__position": 1
+      }
+            </li>
+            <li
+              class="ais-LookingSimilar-item"
+            >
+              {
+        "objectID": "(2)",
+        "__position": 2
+      }
+            </li>
+          </ol>
+        </div>
+      </section>
+    `);
     });
 
     test('passes parameters correctly', async () => {
