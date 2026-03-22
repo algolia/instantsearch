@@ -166,8 +166,6 @@ export default defineConfig({
       '**/examples/**',
       'packages/algoliasearch-helper/**',
       'packages/create-instantsearch-app/**',
-      'packages/instantsearch-codemods/**',
-      '**/scripts/transforms/__tests__/**',
       'packages/react-instantsearch-router-nextjs/__tests__/**',
       'packages/react-instantsearch-nextjs/__tests__/**',
       '**/__utils__/**',
