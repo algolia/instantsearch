@@ -15,5 +15,6 @@ test('is valid config', () => {
     },
   };
 
+  // @ts-expect-error -- presets values are transform functions, not strings
   expect(isValidConfig(config)).toBe(true);
 });

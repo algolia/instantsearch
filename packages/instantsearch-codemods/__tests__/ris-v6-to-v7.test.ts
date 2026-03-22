@@ -1,11 +1,17 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
+// @ts-expect-error -- no type declarations for jscodeshift/dist/testUtils
 import { applyTransform } from 'jscodeshift/dist/testUtils';
 
 import transform from '../src/ris-v6-to-v7';
 
-const fixtureDir = join(import.meta.dirname, '..', '__testfixtures__');
+const fixtureDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '__testfixtures__'
+);
 
 function readFixture(name: string) {
   return readFileSync(join(fixtureDir, `${name}.js`), 'utf8');
