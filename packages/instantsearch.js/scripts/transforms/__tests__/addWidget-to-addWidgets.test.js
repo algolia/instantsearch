@@ -1,9 +1,8 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { applyTransform } from 'jscodeshift/dist/testUtils';
-
 import transform from 'instantsearch-codemods/src/addWidget-to-addWidgets';
+import { applyTransform } from 'jscodeshift/dist/testUtils';
 
 const fixtureDir = join(import.meta.dirname, '..', '__testfixtures__');
 
