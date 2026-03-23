@@ -1186,6 +1186,119 @@ export function createOptionsTests(
         ).not.toBeInTheDocument();
       });
 
+      test('exposes sendMessage to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+        const sendMessageSpy = jest
+          .spyOn(chat, 'sendMessage')
+          .mockResolvedValue(undefined);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <button
+                      class="custom-send"
+                      onclick="${() =>
+                        props.sendMessage({ text: 'hello from layout' })}"
+                    >
+                      Send
+                    </button>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <button
+                    className="custom-send"
+                    onClick={() =>
+                      props.sendMessage({ text: 'hello from layout' })
+                    }
+                  >
+                    Send
+                  </button>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(document.querySelector('.custom-send')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(sendMessageSpy).toHaveBeenCalledWith({
+          text: 'hello from layout',
+        });
+      });
+
+      test('exposes status to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <span class="custom-status">${props.status}</span>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <span className="custom-status">{props.status}</span>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('ready');
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('submitted');
+      });
+
       test('renders with inline layout component', async () => {
         const searchClient = createSearchClient();
 
