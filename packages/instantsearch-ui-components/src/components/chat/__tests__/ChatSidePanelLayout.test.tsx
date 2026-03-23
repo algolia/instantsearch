@@ -26,6 +26,10 @@ describe('ChatSidePanelLayout', () => {
     clearMessages: jest.fn(),
     onClearTransitionEnd: jest.fn(),
     tools: {},
+    sendMessage: jest.fn() as any,
+    regenerate: jest.fn() as any,
+    stop: jest.fn() as any,
+    error: undefined,
   };
 
   test('renders with default props', () => {

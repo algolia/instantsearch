@@ -24,6 +24,10 @@ export function createChatSidePanelLayoutComponent({
       onClearTransitionEnd: _onClearTransitionEnd,
       suggestions: _suggestions,
       tools: _tools,
+      sendMessage: _sendMessage,
+      regenerate: _regenerate,
+      stop: _stop,
+      error: _error,
       ...rest
     } = userProps;
 
