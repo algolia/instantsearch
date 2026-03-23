@@ -1,6 +1,8 @@
 # Vendors
 node_modules
 **/node_modules/**
+.yarn
+**/.yarn/**
 
 # Artifacts
 dist
@@ -35,8 +37,15 @@ examples/react/next-app-router
 specs/src/env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates
+packages/create-instantsearch-app/src/templates/**
 ## test fixtures for codemods
 packages/instantsearch-codemods/__testfixtures__
+packages/instantsearch-codemods/__testfixtures__/**
+## legacy ESLint configs kept for reference/migration only
+**/.eslintrc
+**/.eslintrc.js
+**/.eslintrc.cjs
+**/eslint.config.js
 
 # Playwright artifacts and test files (Playwright has its own tsconfig)
 **/playwright-report/**

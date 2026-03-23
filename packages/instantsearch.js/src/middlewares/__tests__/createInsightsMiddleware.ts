@@ -29,7 +29,7 @@ import type { JSDOM } from 'jsdom';
 declare const jsdom: JSDOM;
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
+  // eslint-disable-next-line typescript/no-namespace
   namespace NodeJS {
     interface Global {
       document?: Document;

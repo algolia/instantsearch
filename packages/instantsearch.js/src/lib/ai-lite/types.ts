@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable instantsearch/naming-convention */
 /**
  * Chat status:
  * - `submitted`: The message has been sent to the API and we're awaiting the start of the response stream.

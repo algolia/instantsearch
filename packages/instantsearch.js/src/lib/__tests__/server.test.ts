@@ -449,12 +449,23 @@ describe('getInitialResults', () => {
     ]);
 
     const initialResults = getInitialResults(search.mainIndex, requestParams);
+    const initialResult = initialResults.indexName;
 
-    const indexRequestParams = initialResults.indexName!.requestParams![0];
+    expect(initialResult).toBeDefined();
+
+    if (
+      !initialResult ||
+      !initialResult.requestParams ||
+      !initialResult.state
+    ) {
+      throw new Error('Expected initial results for indexName');
+    }
+
+    const indexRequestParams = initialResult.requestParams[0];
     expect(indexRequestParams.clickAnalytics).toBe(true);
     expect(indexRequestParams.userToken).toMatch(/^anonymous-/);
 
-    const indexState = initialResults.indexName!.state!;
+    const indexState = initialResult.state;
     expect(indexState.clickAnalytics).toBe(true);
     expect(indexState.userToken).toMatch(/^anonymous-/);
 

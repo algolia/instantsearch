@@ -2,11 +2,17 @@
 
 import { cx } from '../../lib/cx';
 
-import type { ComponentChildren, ComponentProps, Renderer } from '../../types';
+import type {
+  ComponentChildren,
+  ComponentProps,
+  MutableRef,
+  Renderer,
+} from '../../types';
 
 export type AutocompleteProps = Omit<ComponentProps<'div'>, 'children'> & {
   children?: ComponentChildren;
   classNames?: Partial<AutocompleteClassNames>;
+  rootRef?: MutableRef<HTMLDivElement | null>;
 };
 
 export type AutocompleteClassNames = {
@@ -54,10 +60,14 @@ export type AutocompleteClassNames = {
 
 export function createAutocompleteComponent({ createElement }: Renderer) {
   return function Autocomplete(userProps: AutocompleteProps) {
-    const { children, classNames = {}, ...props } = userProps;
+    const { children, classNames = {}, rootRef, ...props } = userProps;
 
     return (
-      <div className={cx('ais-Autocomplete', classNames.root)} {...props}>
+      <div
+        className={cx('ais-Autocomplete', classNames.root)}
+        ref={rootRef}
+        {...props}
+      >
         {children}
       </div>
     );

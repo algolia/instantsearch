@@ -148,11 +148,11 @@ See documentation: ${createDocumentationLink({
       })}#widget-param-cleanurlondispose`);
     }
 
-    safelyRunOnBrowser(({ window }) => {
+    safelyRunOnBrowser(({ window: browserWindow }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
       setWindowTitle(title);
 
-      this.latestAcknowledgedHistory = window.history.length;
+      this.latestAcknowledgedHistory = browserWindow.history.length;
     });
   }
 
@@ -167,7 +167,7 @@ See documentation: ${createDocumentationLink({
    * Pushes a search state into the URL.
    */
   public write(routeState: TRouteState): void {
-    safelyRunOnBrowser(({ window }) => {
+    safelyRunOnBrowser(({ window: browserWindow }) => {
       const url = this.createURL(routeState);
       const title = this.windowTitle && this.windowTitle(routeState);
 
@@ -182,9 +182,9 @@ See documentation: ${createDocumentationLink({
           if (this._push) {
             this._push(url);
           } else {
-            window.history.pushState(routeState, title || '', url);
+            browserWindow.history.pushState(routeState, title || '', url);
           }
-          this.latestAcknowledgedHistory = window.history.length;
+          this.latestAcknowledgedHistory = browserWindow.history.length;
         }
         this.inPopState = false;
         this.writeTimer = undefined;
@@ -216,8 +216,8 @@ See documentation: ${createDocumentationLink({
       callback(this.read());
     };
 
-    safelyRunOnBrowser(({ window }) => {
-      window.addEventListener('popstate', this._onPopState!);
+    safelyRunOnBrowser(({ window: browserWindow }) => {
+      browserWindow.addEventListener('popstate', this._onPopState!);
     });
   }
 
@@ -262,9 +262,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 
     this.isDisposed = true;
 
-    safelyRunOnBrowser(({ window }) => {
+    safelyRunOnBrowser(({ window: browserWindow }) => {
       if (this._onPopState) {
-        window.removeEventListener('popstate', this._onPopState);
+        browserWindow.removeEventListener('popstate', this._onPopState);
       }
     });
 
@@ -282,7 +282,7 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
   }
 
   private shouldWrite(url: string): boolean {
-    return safelyRunOnBrowser(({ window }) => {
+    return safelyRunOnBrowser(({ window: browserWindow }) => {
       // When disposed and the cleanUrlOnDispose is set to false, we do not want to write the URL.
       if (this.isDisposed && !this._cleanUrlOnDispose) {
         return false;
@@ -295,7 +295,7 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       // (unlike a SPA, where it would have last written)
       const lastPushWasByISAfterDispose = !(
         this.isDisposed &&
-        this.latestAcknowledgedHistory !== window.history.length
+        this.latestAcknowledgedHistory !== browserWindow.history.length
       );
 
       return (
@@ -305,7 +305,7 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
         // When the previous pushState after dispose was by IS.js, we want to write the URL.
         lastPushWasByISAfterDispose &&
         // When the URL is the same as the current one, we do not want to write it.
-        url !== window.location.href
+        url !== browserWindow.location.href
       );
     });
   }
@@ -342,7 +342,9 @@ export default function historyRouter<TRouteState = UiState>({
   writeDelay = 400,
   windowTitle,
   getLocation = () => {
-    return safelyRunOnBrowser<Location>(({ window }) => window.location, {
+    return safelyRunOnBrowser<Location>(
+      ({ window: browserWindow }) => browserWindow.location,
+      {
       fallback: () => {
         throw new Error(
           'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'

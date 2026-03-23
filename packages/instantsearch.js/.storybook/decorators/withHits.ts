@@ -4,9 +4,11 @@ import {
   liteClient as namedConstructor,
   default as defaultConstructor,
 } from 'algoliasearch/lite';
+
 import instantsearch from '../../src';
 import defaultPlayground from '../playgrounds/default';
-import {
+
+import type {
   InstantSearch,
   InstantSearchOptions,
   SearchClient,

@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "../../.oxlintrc.json"
+  ],
+  "rules": {
+    "import/no-commonjs": "off",
+    "new-cap": "off",
+    "no-console": "off",
+    "no-var": "off"
+  }
+}
