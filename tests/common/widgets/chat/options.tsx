@@ -1152,6 +1152,7 @@ export function createOptionsTests(
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
                     ${props.templates.header()}
+                    ${props.templates.toggleButton()}
                   </div>`,
               },
             },
