@@ -82,6 +82,10 @@ type UiProps = Pick<
   | 'promptComponent'
   | 'suggestionsComponent'
   | 'layoutComponent'
+  | 'sendMessage'
+  | 'regenerate'
+  | 'stop'
+  | 'error'
 >;
 
 type UserToggleButtonProps = Omit<
