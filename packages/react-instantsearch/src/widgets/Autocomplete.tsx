@@ -119,7 +119,9 @@ const useStorage = createAutocompleteStorage({
   useState,
 });
 
-type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
+type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'> & {
+  hitsPerPage?: number;
+};
 
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
@@ -346,6 +348,10 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteClassNames>;
   placeholder?: string;
+  /**
+   * Whether the input should be focused and the panel open initially.
+   */
+  autoFocus?: boolean;
   /**
    * Media query to enable detached (mobile) mode.
    * When the media query matches, the autocomplete switches to a full-screen overlay.
@@ -597,6 +603,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   chatRenderState,
   transformItems,
   placeholder,
+  autoFocus,
   detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
@@ -766,6 +773,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    autoFocus,
   });
 
   // Open panel and focus input when modal opens
@@ -892,10 +900,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         ),
       }
     : classNames;
+  const { ref: rootRef, ...rootProps } = getRootProps();
 
   if (isDetached) {
     return (
-      <Autocomplete {...props} {...getRootProps()} classNames={classNames}>
+      <Autocomplete
+        {...props}
+        {...rootProps}
+        rootRef={rootRef}
+        classNames={classNames}
+      >
         <AutocompleteDetachedSearchButton
           query={currentRefinement || indexUiState.query || ''}
           placeholder={placeholder}
@@ -941,7 +955,12 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   // Normal (non-detached) rendering
   return (
-    <Autocomplete {...props} {...getRootProps()} classNames={classNames}>
+    <Autocomplete
+      {...props}
+      {...rootProps}
+      rootRef={rootRef}
+      classNames={classNames}
+    >
       {searchBoxContent}
       {panelContent}
     </Autocomplete>

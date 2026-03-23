@@ -9,7 +9,7 @@
  * We use it to skip comparing function references.
  */
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
+// eslint-disable-next-line typescript/unbound-method
 const has = Object.prototype.hasOwnProperty;
 
 export function dequal(
@@ -40,7 +40,7 @@ export function dequal(
 
     if (!ctor || typeof foo === 'object') {
       len = 0;
-      // eslint-disable-next-line guard-for-in, no-restricted-syntax
+      // eslint-disable-next-line guard-for-in, instantsearch/no-for-in
       for (ctor in foo) {
         if (has.call(foo, ctor) && ++len && !has.call(bar, ctor)) return false;
         if (!(ctor in bar) || !dequal(foo[ctor], bar[ctor], compare))

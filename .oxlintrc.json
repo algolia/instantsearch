@@ -1,0 +1,383 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    ".yarn/**",
+    "**/.eslintrc",
+    "**/.eslintrc.js",
+    "**/.eslintrc.cjs",
+    "**/eslint.config.js",
+    "packages/create-instantsearch-app/src/templates/**",
+    "packages/instantsearch-codemods/__testfixtures__/**"
+  ],
+  "categories": {
+    "correctness": "off",
+    "nursery": "off",
+    "pedantic": "off",
+    "perf": "off",
+    "restriction": "off",
+    "style": "off",
+    "suspicious": "off"
+  },
+  "plugins": [
+    "eslint",
+    "oxc",
+    "unicorn",
+    "typescript",
+    "import",
+    "react",
+    "jest",
+    "vue"
+  ],
+  "jsPlugins": [
+    {
+      "name": "import-js",
+      "specifier": "eslint-plugin-import"
+    },
+    "./scripts/lint/instantsearch-oxlint-plugin.mjs"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "__DEV__": "readonly"
+  },
+  "settings": {
+    "react": {
+      "version": "19.0.0"
+    }
+  },
+  "rules": {
+    "constructor-super": "error",
+    "no-async-promise-executor": "error",
+    "no-await-in-loop": "error",
+    "no-cond-assign": "error",
+    "no-console": "error",
+    "no-constant-condition": "error",
+    "no-control-regex": "error",
+    "no-debugger": "error",
+    "no-dupe-class-members": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-empty-pattern": "error",
+    "no-eval": "error",
+    "no-ex-assign": "error",
+    "no-fallthrough": "error",
+    "no-func-assign": "error",
+    "no-global-assign": "error",
+    "no-import-assign": "error",
+    "no-invalid-regexp": "error",
+    "no-irregular-whitespace": "error",
+    "no-new-native-nonconstructor": "error",
+    "no-obj-calls": "error",
+    "no-param-reassign": "off",
+    "no-self-assign": "error",
+    "no-setter-return": "error",
+    "no-shadow-restricted-names": "error",
+    "no-sparse-arrays": "error",
+    "no-this-before-super": "error",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTaggedTemplates": true,
+        "allowTernary": true
+      }
+    ],
+    "no-unsafe-finally": "error",
+    "no-unsafe-negation": "error",
+    "no-unsafe-optional-chaining": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "none",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "no-use-before-define": "off",
+    "no-var": "error",
+    "require-yield": "error",
+    "use-isnan": "error",
+    "valid-typeof": "error",
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptionPattern": "(\\\\.|^)EXPERIMENTAL_.+|components\\.[A-Z][a-z]+"
+      }
+    ],
+    "import/extensions": "off",
+    "import/default": "error",
+    "import/named": "error",
+    "import/namespace": "error",
+    "import/no-commonjs": "error",
+    "import-js/order": [
+      "error",
+      {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        },
+        "groups": [
+          "builtin",
+          "external",
+          "parent",
+          "sibling",
+          "index",
+          "type"
+        ],
+        "newlines-between": "always",
+        "pathGroups": [
+          {
+            "group": "parent",
+            "pattern": "@/**/*",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ]
+      }
+    ],
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "(useIsomorphicLayoutEffect)"
+      }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react/no-string-refs": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-namespace": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/unbound-method": "error",
+    "instantsearch/naming-convention": "error",
+    "typescript/no-deprecated": "warn",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          "instantsearch.js/es"
+        ],
+        "patterns": [
+          "instantsearch.js/cjs/*"
+        ]
+      }
+    ],
+    "instantsearch/no-default-props-assignment": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.js",
+        "**/*.cjs",
+        "**/*.mjs",
+        "**/*.d.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-unnecessary-type-assertion": "off",
+        "@typescript-eslint/unbound-method": "off",
+        "typescript/no-deprecated": "off",
+        "instantsearch/naming-convention": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/**/*"
+      ],
+      "rules": {
+        "instantsearch/no-async-functions": "error",
+        "instantsearch/no-for-in": "error",
+        "instantsearch/no-for-of": "error",
+        "instantsearch/no-labels": "error",
+        "instantsearch/no-with": "error",
+        "instantsearch/require-get-render-state-return-type": "error"
+      }
+    },
+    {
+      "files": [
+        "packages/vue-instantsearch/**/*",
+        "examples/vue/**/*"
+      ],
+      "rules": {
+        "react-hooks/exhaustive-deps": "off",
+        "react-hooks/rules-of-hooks": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/**/*.test.*",
+        "packages/**/__tests__/**"
+      ],
+      "rules": {
+        "instantsearch/no-async-functions": "off",
+        "instantsearch/no-for-in": "off",
+        "instantsearch/no-for-of": "off",
+        "instantsearch/no-labels": "off",
+        "instantsearch/no-with": "off",
+        "instantsearch/require-get-render-state-return-type": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/instantsearch.js/src/**/*.js",
+        "packages/instantsearch.js/src/**/*.ts",
+        "packages/instantsearch.js/src/**/*.tsx"
+      ],
+      "rules": {
+        "import/extensions": [
+          "error",
+          "never"
+        ]
+      }
+    },
+    {
+      "files": [
+        "packages/react-instantsearch/src/**/*",
+        "packages/react-instantsearch-*/src/**/*"
+      ],
+      "rules": {
+        "import/extensions": [
+          "error",
+          "never"
+        ]
+      }
+    },
+    {
+      "files": [
+        "packages/*/test/module/**/*.cjs"
+      ],
+      "rules": {
+        "import/extensions": "off"
+      }
+    },
+    {
+      "files": [
+        "**/__tests__/**/*",
+        "**/*.spec.*",
+        "**/*.test.*"
+      ],
+      "rules": {
+        "import/extensions": "off",
+        "new-cap": "off",
+        "no-await-in-loop": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.cjs"
+      ],
+      "rules": {
+        "import/no-commonjs": "off"
+      }
+    },
+    {
+      "files": [
+        "scripts/**/*",
+        "**/*.config.js",
+        "**/*.conf.js"
+      ],
+      "rules": {
+        "import/no-commonjs": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "env": {
+        "jest": true
+      },
+      "files": [
+        "**/__tests__/**/*.ts",
+        "**/__tests__/**/*.tsx",
+        "tests/**/*.ts",
+        "tests/**/*.tsx"
+      ],
+      "rules": {
+        "@typescript-eslint/unbound-method": "off",
+        "jest/expect-expect": "error",
+        "jest/no-conditional-expect": "error",
+        "jest/no-done-callback": "warn",
+        "jest/no-export": "error",
+        "jest/unbound-method": "error",
+        "instantsearch/no-committed-run-test-suites-only": "error"
+      }
+    },
+    {
+      "files": [
+        "tests/e2e/**/*"
+      ],
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "error",
+        "import/no-commonjs": "off",
+        "jest/expect-expect": "off",
+        "jest/no-conditional-expect": "off",
+        "jest/no-done-callback": "off",
+        "jest/no-export": "off",
+        "jest/unbound-method": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "react-hooks/rules-of-hooks": "off",
+        "no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "caughtErrors": "none",
+            "ignoreRestSiblings": true,
+            "varsIgnorePattern": "WebdriverIOAsync"
+          }
+        ]
+      }
+    },
+    {
+      "env": {
+        "jasmine": true
+      },
+      "files": [
+        "tests/e2e/all-flavors.spec.ts",
+        "tests/e2e/helpers/**/*.ts",
+        "tests/e2e/specs/**/*.spec.ts",
+        "tests/e2e/wdio.*.conf.js"
+      ],
+      "rules": {
+        "@typescript-eslint/no-namespace": "off",
+        "jest/no-export": "off"
+      }
+    },
+    {
+      "files": [
+        "**/.storybook/**/*",
+        "**/stories/**/*"
+      ],
+      "rules": {
+        "new-cap": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/instantsearch.js/src/**/*"
+      ],
+      "rules": {
+        "no-restricted-globals": [
+          "error",
+          {
+            "message": "Use `safelyRunOnBrowser()` to access `window`.",
+            "name": "window"
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "packages/instantsearch.js/src/**/__tests__/**",
+        "packages/instantsearch.js/src/widgets/**/*"
+      ],
+      "rules": {
+        "no-restricted-globals": "off"
+      }
+    }
+  ]
+}

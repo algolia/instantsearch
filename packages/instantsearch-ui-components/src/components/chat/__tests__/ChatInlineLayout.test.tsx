@@ -16,16 +16,20 @@ describe('ChatInlineLayout', () => {
   const defaultProps = {
     open: true,
     maximized: false,
-    headerElement: <div className="header">Header</div>,
-    messagesElement: <div className="messages">Messages</div>,
-    promptElement: <div className="prompt">Prompt</div>,
-    toggleButtonElement: <button className="toggle">Toggle</button>,
+    headerComponent: <div className="header">Header</div>,
+    messagesComponent: <div className="messages">Messages</div>,
+    promptComponent: <div className="prompt">Prompt</div>,
+    toggleButtonComponent: <button className="toggle">Toggle</button>,
     messages: [],
     status: 'ready' as const,
     isClearing: false,
     clearMessages: jest.fn(),
     onClearTransitionEnd: jest.fn(),
     tools: {},
+    sendMessage: jest.fn() as any,
+    regenerate: jest.fn() as any,
+    stop: jest.fn() as any,
+    error: undefined,
   };
 
   test('renders with default props', () => {

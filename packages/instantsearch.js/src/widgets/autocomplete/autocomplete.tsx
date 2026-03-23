@@ -224,6 +224,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'showQuerySuggestions'
   | 'showPromptSuggestions'
   | 'placeholder'
+  | 'autofocus'
 > & {
     showRecent:
       | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -352,6 +353,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'showQuerySuggestions'
   | 'showPromptSuggestions'
   | 'placeholder'
+  | 'autofocus'
   | 'detachedMediaQuery'
   | 'translations'
 > &
@@ -372,6 +374,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   showPromptSuggestions,
   templates,
   placeholder,
+  autofocus,
   detachedMediaQuery,
   translations,
 }: AutocompleteWrapperProps<TItem>) {
@@ -666,6 +669,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    autoFocus: autofocus,
   });
 
   // Open panel and focus input when modal opens
@@ -797,13 +801,19 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  const rawInputProps = getInputProps();
+  const inputProps =
+    typeof rawInputProps === 'object' && rawInputProps !== null
+      ? rawInputProps
+      : {};
+
   const searchBoxContent = (
     <AutocompleteSearchBox
       query={localQuery}
       inputProps={{
-        ...getInputProps(),
+        ...inputProps,
         onInput: (event) => {
-          const query = (event.currentTarget as HTMLInputElement).value;
+          const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
         },
@@ -838,10 +848,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         ),
       }
     : cssClasses;
+  const { ref: rootRef, ...rootProps } = getRootProps();
 
   if (isDetached) {
     return (
-      <Autocomplete {...getRootProps()} classNames={cssClasses}>
+      <Autocomplete {...rootProps} rootRef={rootRef} classNames={cssClasses}>
         <AutocompleteDetachedSearchButton
           query={localQuery}
           placeholder={placeholder}
@@ -886,7 +897,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
   // Normal (non-detached) rendering
   return (
-    <Autocomplete {...getRootProps()} classNames={cssClasses}>
+    <Autocomplete {...rootProps} rootRef={rootRef} classNames={cssClasses}>
       {searchBoxContent}
       {panelContent}
     </Autocomplete>
@@ -1016,6 +1027,11 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   placeholder?: string;
 
   /**
+   * Whether the input should be focused and the panel open initially.
+   */
+  autofocus?: boolean;
+
+  /**
    * Media query to enable detached (mobile) mode.
    * When the media query matches, the autocomplete switches to a full-screen overlay.
    * Set to empty string to disable detached mode.
@@ -1053,6 +1069,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     transformItems,
     cssClasses: userCssClasses = {},
     placeholder,
+    autofocus,
     detachedMediaQuery,
     translations: userTranslations = {},
   } = widgetParams || {};
@@ -1200,6 +1217,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     showQuerySuggestions,
     showPromptSuggestions,
     placeholder,
+    autofocus,
     detachedMediaQuery,
     translations,
     renderState: {

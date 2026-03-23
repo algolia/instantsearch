@@ -400,7 +400,15 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript and TypeScript files are validated using a combination of [Prettier](https://github.com/prettier/prettier) (strict syntax form) and [ESLint](https://github.com/eslint/eslint) rules (for common mistakes and patterns).
+JavaScript and TypeScript files are formatted with [Prettier](https://github.com/prettier/prettier) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/).
+
+Useful lint commands:
+
+- `yarn lint` runs the full repo lint flow.
+- `yarn lint:ox <paths...>` lints only the paths you pass.
+- `yarn lint:changed` lints files changed since the branch point with `origin/master`.
+- `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.
+- `yarn lint:fix` applies Oxlint auto-fixes where available.
 
 ## Release
 

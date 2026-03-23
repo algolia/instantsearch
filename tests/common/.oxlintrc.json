@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "../../.oxlintrc.json"
+  ],
+  "rules": {
+    "jest/no-export": "off",
+    "no-lone-blocks": "off"
+  }
+}

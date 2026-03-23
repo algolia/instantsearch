@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-router-nextjs",
-  "version": "7.27.0",
+  "version": "7.28.0",
   "description": "React InstantSearch Router for Next.js",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -43,12 +43,12 @@
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "test:e2e": "playwright test",
     "test:e2e:saucelabs": "playwright test",
-    "watch:es": "yarn --silent build:es:base --watch"
+    "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch.js": "4.91.0",
-    "react-instantsearch-core": "7.27.0"
+    "instantsearch.js": "4.92.0",
+    "react-instantsearch-core": "7.28.0"
   },
   "devDependencies": {
     "@playwright/test": "1.49.1"

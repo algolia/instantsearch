@@ -259,6 +259,10 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
+      sendMessage={sendMessage as ChatUiProps['sendMessage']}
+      regenerate={regenerate}
+      stop={stop}
+      error={error}
       layoutComponent={layoutComponent}
       headerComponent={headerComponent}
       promptComponent={promptComponent}
