@@ -284,6 +284,7 @@ type ChatWrapperProps = {
   sendMessage: ChatRenderState['sendMessage'];
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
+  error: ChatRenderState['error'];
   isClearing: boolean;
   clearMessages: () => void;
   onClearTransitionEnd: () => void;
@@ -350,6 +351,7 @@ function ChatWrapper({
   sendMessage,
   regenerate,
   stop,
+  error,
   isClearing,
   clearMessages,
   onClearTransitionEnd,
@@ -377,6 +379,10 @@ function ChatWrapper({
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
+      sendMessage={sendMessage}
+      regenerate={regenerate}
+      stop={stop}
+      error={error}
       toggleButtonComponent={toggleButtonProps.layoutComponent}
       toggleButtonProps={{
         open: chatOpen,
@@ -871,6 +877,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           sendMessage={sendMessage}
           regenerate={regenerate}
           stop={stop}
+          error={error}
           isClearing={isClearing}
           clearMessages={clearMessages}
           onClearTransitionEnd={onClearTransitionEnd}

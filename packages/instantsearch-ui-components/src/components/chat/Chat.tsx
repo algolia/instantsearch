@@ -84,6 +84,22 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    */
   suggestionsComponent?: (props: ChatPromptSuggestionsOwnProps) => JSX.Element;
   /**
+   * Function to send a message to the chat.
+   */
+  sendMessage: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to regenerate the last assistant response.
+   */
+  regenerate: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Function to stop the current streaming response.
+   */
+  stop: ChatLayoutOwnProps['stop'];
+  /**
+   * The current error, if any.
+   */
+  error: ChatLayoutOwnProps['error'];
+  /**
    * Optional layout component for the chat.
    */
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
@@ -122,6 +138,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       layoutComponent: LayoutComponent,
       classNames = {},
       className: _className,
+      sendMessage,
+      regenerate,
+      stop,
+      error,
       ...props
     } = userProps;
 
@@ -184,6 +204,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         clearMessages={headerProps.onClear}
         onClearTransitionEnd={messagesProps.onClearTransitionEnd}
         suggestions={suggestionsProps.suggestions}
+        sendMessage={sendMessage}
+        regenerate={regenerate}
+        stop={stop}
+        error={error}
       />
     );
   };
