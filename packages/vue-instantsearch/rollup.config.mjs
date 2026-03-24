@@ -73,6 +73,8 @@ const isWatching = process.env.ROLLUP_WATCH;
  * with no render function.
  *
  * This plugin post-processes every generated chunk (after minification) to:
+ *   0. Rewrite bridge modules to compose a new object instead of mutating the
+ *      imported component (mutation gets discarded by some bundlers).
  *   1. Remove bare side-effect imports of bridge files.
  *   2. Redirect every .vue2.js export to the .vue.js bridge, making each
  *      export self-contained and side-effect-free.
@@ -82,8 +84,42 @@ const fixVue3SfcExports = () => ({
   generateBundle(_, bundle) {
     for (const chunk of Object.values(bundle)) {
       if (chunk.type !== 'chunk') continue;
-      // Skip the bridge files themselves — their .vue2.js import is intentional
-      if (chunk.fileName.endsWith('.vue.js')) continue;
+
+      if (chunk.fileName.endsWith('.vue.js')) {
+        const bridgePattern = /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
+
+        const match = chunk.code.match(bridgePattern);
+
+        if (match) {
+          const [
+            ,
+            component,
+            vue2Path,
+            renderAlias,
+            vue3Path,
+            assignmentBlock,
+          ] = match;
+          const extraProps = [];
+
+          const fileMatch = assignmentBlock.match(/__file\s*=\s*([^,;]+)/);
+          if (fileMatch) {
+            extraProps.push(`__file:${fileMatch[1].trim()}`);
+          }
+
+          const scopeMatch = assignmentBlock.match(/__scopeId\s*=\s*([^,;]+)/);
+          if (scopeMatch) {
+            extraProps.push(`__scopeId:${scopeMatch[1].trim()}`);
+          }
+
+          const extraPropsString = extraProps.length
+            ? `,${extraProps.join(',')}`
+            : '';
+
+          chunk.code = `import ${component} from"${vue2Path}";import{render as ${renderAlias}}from"${vue3Path}";export default {...${component},render:${renderAlias}${extraPropsString}};`;
+        }
+
+        continue;
+      }
 
       let { code } = chunk;
 
