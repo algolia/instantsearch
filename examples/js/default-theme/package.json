@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-default-theme",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.28.0",
-    "instantsearch-ui-components": "0.22.0",
+    "algoliasearch-helper": "3.28.1",
+    "instantsearch-ui-components": "0.22.1",
     "instantsearch.css": "8.12.0",
-    "instantsearch.js": "4.92.0"
+    "instantsearch.js": "4.92.1"
   },
   "devDependencies": {
     "vite": "5.0.7",
