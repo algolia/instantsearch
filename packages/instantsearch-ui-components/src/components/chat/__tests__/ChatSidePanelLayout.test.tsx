@@ -118,4 +118,29 @@ describe('ChatSidePanelLayout', () => {
       container.querySelector('.ais-Chat-toggleButtonWrapper')
     ).toBeInTheDocument();
   });
+
+  test('adds body-open class to body when open', () => {
+    render(<ChatSidePanelLayout {...defaultProps} open={true} />);
+    expect(document.body).toHaveClass('ais-ChatSidePanelLayout--body-open');
+  });
+
+  test('removes body-open class from body when closed', () => {
+    render(<ChatSidePanelLayout {...defaultProps} open={false} />);
+    expect(document.body).not.toHaveClass('ais-ChatSidePanelLayout--body-open');
+  });
+
+  test('adds body-open class to custom parentElement', () => {
+    const parent = document.createElement('div');
+    render(
+      <ChatSidePanelLayout
+        {...defaultProps}
+        open={true}
+        parentElement={parent}
+      />
+    );
+    expect(parent).toHaveClass('ais-ChatSidePanelLayout--body-open');
+    expect(document.body).not.toHaveClass(
+      'ais-ChatSidePanelLayout--body-open'
+    );
+  });
 });

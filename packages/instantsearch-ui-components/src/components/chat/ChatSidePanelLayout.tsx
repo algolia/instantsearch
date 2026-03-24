@@ -4,10 +4,14 @@ import { cx } from '../../lib';
 import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
 
+export type ChatSidePanelLayoutProps = ChatLayoutOwnProps & {
+  parentElement?: HTMLElement;
+};
+
 export function createChatSidePanelLayoutComponent({
   createElement,
 }: Renderer) {
-  return function ChatSidePanelLayout(userProps: ChatLayoutOwnProps) {
+  return function ChatSidePanelLayout(userProps: ChatSidePanelLayoutProps) {
     const {
       open,
       maximized,
@@ -16,6 +20,7 @@ export function createChatSidePanelLayoutComponent({
       promptComponent,
       toggleButtonComponent,
       classNames = {},
+      parentElement,
       // Chat state props (destructured to avoid spreading on div)
       messages: _messages,
       status: _status,
@@ -30,6 +35,17 @@ export function createChatSidePanelLayoutComponent({
       error: _error,
       ...rest
     } = userProps;
+
+    const element =
+      parentElement ||
+      (typeof document !== 'undefined' ? document.body : null);
+    if (element) {
+      if (open) {
+        element.classList.add('ais-ChatSidePanelLayout--body-open');
+      } else {
+        element.classList.remove('ais-ChatSidePanelLayout--body-open');
+      }
+    }
 
     return (
       <div
