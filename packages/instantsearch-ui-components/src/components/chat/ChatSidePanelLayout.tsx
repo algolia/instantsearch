@@ -5,12 +5,14 @@ import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
 
 export type ChatSidePanelLayoutProps = ChatLayoutOwnProps & {
-  parentElement?: HTMLElement;
+  parentElement?: string;
 };
 
 export function createChatSidePanelLayoutComponent({
   createElement,
 }: Renderer) {
+  const originalMargins = new WeakMap<HTMLElement, string>();
+
   return function ChatSidePanelLayout(userProps: ChatSidePanelLayoutProps) {
     const {
       open,
@@ -37,13 +39,25 @@ export function createChatSidePanelLayoutComponent({
     } = userProps;
 
     const element =
-      parentElement ||
-      (typeof document !== 'undefined' ? document.body : null);
+      typeof document !== 'undefined'
+        ? parentElement
+          ? document.querySelector<HTMLElement>(parentElement)
+          : document.body
+        : null;
     if (element) {
-      if (open) {
-        element.classList.add('ais-ChatSidePanelLayout--body-open');
-      } else {
-        element.classList.remove('ais-ChatSidePanelLayout--body-open');
+      if (open && !originalMargins.has(element)) {
+        originalMargins.set(element, element.style.marginRight);
+        const chatWidth =
+          getComputedStyle(document.documentElement)
+            .getPropertyValue('--ais-chat-width')
+            .trim() || '22.5rem';
+        const original = originalMargins.get(element)!;
+        element.style.marginRight = original
+          ? `calc(${original} + ${chatWidth})`
+          : chatWidth;
+      } else if (!open && originalMargins.has(element)) {
+        element.style.marginRight = originalMargins.get(element) || '';
+        originalMargins.delete(element);
       }
     }
 

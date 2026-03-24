@@ -119,28 +119,19 @@ describe('ChatSidePanelLayout', () => {
     ).toBeInTheDocument();
   });
 
-  test('adds body-open class to body when open', () => {
-    render(<ChatSidePanelLayout {...defaultProps} open={true} />);
-    expect(document.body).toHaveClass('ais-ChatSidePanelLayout--body-open');
-  });
-
-  test('removes body-open class from body when closed', () => {
-    render(<ChatSidePanelLayout {...defaultProps} open={false} />);
-    expect(document.body).not.toHaveClass('ais-ChatSidePanelLayout--body-open');
-  });
-
-  test('adds body-open class to custom parentElement', () => {
+  test('sets margin-right on custom parentElement when open', () => {
     const parent = document.createElement('div');
+    parent.id = 'test-parent';
+    document.body.appendChild(parent);
     render(
       <ChatSidePanelLayout
         {...defaultProps}
         open={true}
-        parentElement={parent}
+        parentElement="#test-parent"
       />
     );
-    expect(parent).toHaveClass('ais-ChatSidePanelLayout--body-open');
-    expect(document.body).not.toHaveClass(
-      'ais-ChatSidePanelLayout--body-open'
-    );
+    expect(parent.style.marginRight).toBeTruthy();
+    expect(document.body.style.marginRight).toBe('');
+    parent.remove();
   });
 });

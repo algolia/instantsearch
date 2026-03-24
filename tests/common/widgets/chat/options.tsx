@@ -1381,6 +1381,58 @@ export function createOptionsTests(
           document.querySelector('.ais-ChatInlineLayout')
         ).not.toBeInTheDocument();
       });
+
+      test('sidepanel layout adjusts parent margin when opened and closed', async () => {
+        const searchClient = createSearchClient();
+        const parentEl = document.createElement('div');
+        parentEl.id = 'sidepanel-parent';
+        document.body.appendChild(parentEl);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout({
+                  parentElement: '#sidepanel-parent',
+                }),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props: any) => (
+                <ChatSidePanelLayout
+                  {...props}
+                  parentElement="#sidepanel-parent"
+                />
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
+
+        await openChat(act);
+
+        expect(parentEl.style.marginRight).not.toBe('');
+
+        userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
+      });
     });
   });
 }

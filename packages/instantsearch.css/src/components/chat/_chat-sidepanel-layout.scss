@@ -63,10 +63,6 @@ body:has(.ais-ChatSidePanelLayout) {
   }
 }
 
-.ais-ChatSidePanelLayout--body-open {
-  margin-right: var(--ais-chat-width);
-}
-
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-ChatSidePanelLayout {
     inset: 0;
