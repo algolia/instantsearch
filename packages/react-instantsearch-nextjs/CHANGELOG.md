@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.2...react-instantsearch-nextjs@1.1.3) (2026-03-24)
+
+
+### Bug Fixes
+
+* **next:** import headers statically ([#6936](https://github.com/algolia/instantsearch/issues/6936)) ([ee49f25](https://github.com/algolia/instantsearch/commit/ee49f25a4f307a2e50096fcbb74c70ac59f3b2e7)), closes [#6886](https://github.com/algolia/instantsearch/issues/6886) [#6934](https://github.com/algolia/instantsearch/issues/6934)
+
+
+
+
+
 ## [1.1.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.1...react-instantsearch-nextjs@1.1.2) (2026-03-16)
 
 **Note:** Version bump only for package react-instantsearch-nextjs
