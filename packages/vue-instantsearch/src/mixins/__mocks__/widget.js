@@ -40,7 +40,7 @@ export function __overrideInstantSearchInstance(newInstantSearchInstance) {
   );
 }
 
-export const createWidgetMixin = jest.fn(() => ({
+export const createWidgetMixin = vi.fn(() => ({
   data() {
     return {
       state,

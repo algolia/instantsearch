@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';
@@ -35,9 +35,9 @@ describe('sortBy', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/]
       `);
     });
 

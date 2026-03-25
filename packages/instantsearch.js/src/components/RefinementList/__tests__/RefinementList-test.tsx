@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -298,7 +298,7 @@ describe('RefinementList', () => {
 
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
-      const toggleRefinement = jest.fn();
+      const toggleRefinement = vi.fn();
       const props: RefinementListProps<TestDefaultTemplates> = {
         ...defaultProps,
         toggleRefinement,
@@ -653,7 +653,7 @@ describe('RefinementList', () => {
     });
 
     it('should not refine on click on already refined items', () => {
-      const toggleRefinement = jest.fn();
+      const toggleRefinement = vi.fn();
 
       const templates = {
         item: (item: RefinementListItemData) => `

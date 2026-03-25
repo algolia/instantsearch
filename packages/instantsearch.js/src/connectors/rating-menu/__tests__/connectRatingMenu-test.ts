@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -21,7 +21,7 @@ import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount = () => {}) => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRatingMenu(rendering, unmount);
     const instantSearchInstance = createInstantSearch();
 
@@ -36,7 +36,7 @@ describe('connectRatingMenu', () => {
       { uiState: {} }
     );
     const helper = jsHelper(createSearchClient(), '', initialConfig);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -58,10 +58,10 @@ describe('connectRatingMenu', () => {
         // @ts-expect-error
         connectRatingMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector]
+      `);
     });
 
     it('throws without attribute', () => {
@@ -69,15 +69,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         // @ts-expect-error
         connectRatingMenu(() => {})({ attribute: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+        [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customRatingMenu = connectRatingMenu(render, unmount);
       const widget = customRatingMenu({ attribute: 'facet' });
@@ -324,7 +324,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('calls the unmount function', () => {
-      const unmount = jest.fn();
+      const unmount = vi.fn();
       const { widget, helper } = getInitializedWidget({}, unmount);
 
       widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
@@ -333,7 +333,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('resets the state', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectRatingMenu(render);
       const indexName = 'indexName';
       const attribute = 'grade';
@@ -345,7 +345,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         },
       });
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const widget = makeWidget({
         attribute,
@@ -471,8 +471,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   describe('getRenderState', () => {
     it('returns the render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
@@ -506,8 +506,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     it('returns the render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
@@ -592,8 +592,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
@@ -625,8 +625,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     it('returns the widget render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
@@ -707,8 +707,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     it('returns the widget render state with no items without throwing an error', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
       const ratingMenuWidget = createRatingMenu({
         attribute: 'grade',
@@ -748,8 +748,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
     describe('canRefine', () => {
       it('returns `true` if there are no results but a refinement is applied and total facet count is higher than 0', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
         const ratingMenuWidget = createRatingMenu({
           attribute: 'grade',
@@ -784,8 +784,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
 
       it('returns `false`  if there are no results and no refinement is applied', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
         const ratingMenuWidget = createRatingMenu({
           attribute: 'grade',
@@ -815,8 +815,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       });
 
       it('returns `false` if there are no results and a refinement is applied but total facet count is 0', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createRatingMenu = connectRatingMenu(renderFn, unmountFn);
         const ratingMenuWidget = createRatingMenu({
           attribute: 'grade',

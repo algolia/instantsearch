@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -10,11 +10,15 @@ import RefinementListItem from '../RefinementListItem';
 
 import type { RefinementListItemProps } from '../RefinementListItem';
 
+vi.mock('../../Template/Template', () => ({
+  default: (props: any) => <div data-template-key={props.templateKey} />,
+}));
+
 describe('RefinementListItem', () => {
   const props: RefinementListItemProps = {
     facetValueToRefine: 'wi',
     isRefined: false,
-    handleClick: jest.fn(),
+    handleClick: vi.fn(),
     className: 'item class',
     templateData: { template: 'data' },
     templateKey: 'item key',

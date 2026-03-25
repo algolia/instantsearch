@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -24,7 +24,7 @@ import type { ToggleRefinementRenderState } from '../connectToggleRefinement';
 
 describe('connectToggleRefinement', () => {
   const createInitializedWidget = () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const instantSearchInstance = createInstantSearch();
     const makeWidget = connectToggleRefinement(rendering);
 
@@ -57,10 +57,10 @@ describe('connectToggleRefinement', () => {
         // @ts-expect-error
         connectToggleRefinement()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector]
+      `);
     });
 
     it('throws without attribute option', () => {
@@ -68,15 +68,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         // @ts-expect-error
         connectToggleRefinement(() => {})({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+        [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customToggleRefinement = connectToggleRefinement(render, unmount);
       const widget = customToggleRefinement({ attribute: 'facet' });
@@ -97,7 +97,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -118,7 +118,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
 
     const helper = jsHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -205,7 +205,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   it('Renders during init and render with array value', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'whatever';
@@ -228,7 +228,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
 
     const helper = jsHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -332,7 +332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   });
 
   it('Provides a function to add/remove a facet value', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -347,7 +347,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -483,7 +483,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   });
 
   it('Provides a function to toggle between two values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -500,7 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -739,7 +739,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -797,7 +797,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -842,11 +842,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('dispose', () => {
     test('calls the unmount function', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
       const makeWidget = connectToggleRefinement(render, unmount);
       const helper = jsHelper(createSearchClient(), '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const attribute = 'freeShipping';
       const widget = makeWidget({
@@ -859,7 +859,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('resets the state', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const indexName = 'indexName';
       const helper = jsHelper(createSearchClient(), indexName, {
@@ -868,7 +868,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           freeShipping: ['true'],
         },
       });
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const attribute = 'freeShipping';
       const widget = makeWidget({
@@ -899,8 +899,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('getRenderState', () => {
     test('returns the render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createToggleRefinement = connectToggleRefinement(
         renderFn,
         unmountFn
@@ -997,8 +997,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createToggleRefinement = connectToggleRefinement(
         renderFn,
         unmountFn
@@ -1089,7 +1089,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1108,7 +1108,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `uiState` with a refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['freeShipping'],
@@ -1136,7 +1136,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['freeShipping'],
@@ -1171,7 +1171,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['freeShipping'],
@@ -1194,7 +1194,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` without overriding the disjunctive facets', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['freeShipping', 'onSale'],
@@ -1217,7 +1217,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` without overriding the other refinements', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), '', {
         disjunctiveFacets: ['freeShipping', 'onSale'],
@@ -1242,7 +1242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1264,7 +1264,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` with the `off` value when `uiState` is empty', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1284,7 +1284,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` with the `on` value when the `uiState` is `true`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1308,7 +1308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` with the `off` value when the `uiState` is `false`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1332,7 +1332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['freeShipping'],
@@ -1363,7 +1363,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const helper = jsHelper(createSearchClient(), '', {
         hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
       });
-      const widget = connectToggleRefinement(jest.fn())({ attribute: 'brand' });
+      const widget = connectToggleRefinement(vi.fn())({ attribute: 'brand' });
 
       expect(() => {
         const searchParams = widget.getWidgetSearchParameters(helper.state, {
@@ -1378,7 +1378,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const helper = jsHelper(createSearchClient(), '', {
         facets: ['brand'],
       });
-      const widget = connectToggleRefinement(jest.fn())({ attribute: 'brand' });
+      const widget = connectToggleRefinement(vi.fn())({ attribute: 'brand' });
 
       expect(() => {
         const searchParams = widget.getWidgetSearchParameters(helper.state, {

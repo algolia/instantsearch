@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -26,10 +26,10 @@ describe('connectBreadcrumb', () => {
         // @ts-expect-error
         connectBreadcrumb()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector]
+      `);
     });
 
     it('throws with undefined `attributes`', () => {
@@ -39,10 +39,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           attributes: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributes\` option expects an array of strings.
+        [Error: The \`attributes\` option expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector]
+      `);
     });
 
     it('throws with empty `attributes`', () => {
@@ -51,16 +51,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           attributes: [],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attributes\` option expects an array of strings.
+        [Error: The \`attributes\` option expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector]
+      `);
     });
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customBreadcrumb = connectBreadcrumb(render, unmount);
     const widget = customBreadcrumb({ attributes: ['category'] });
@@ -77,8 +77,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -188,8 +188,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -257,8 +257,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
 
     it('returns an empty array of items if no hierarchicalFacets exist', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -299,8 +299,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
 
     it('returns an empty array of items if no hierarchicalFacets result exist', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -350,8 +350,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
 
     it('returns an empty array of items if only non-hierarchicalFacets result exist', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -429,8 +429,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
 
     test('refine method called with null does not mutate the current helper state if no hierarchicalFacets exist', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
@@ -678,7 +678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('Renders during init and render', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
@@ -705,7 +705,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     expect(rendering.mock.calls).toHaveLength(0);
 
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -760,7 +760,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('provides the correct facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
@@ -768,7 +768,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -818,7 +818,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('provides escaped facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
@@ -826,7 +826,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', '-20 degrees > -20°C');
 
@@ -880,7 +880,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('provides items from an empty results', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -891,7 +891,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
 
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -927,7 +927,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('provides the correct facet values when transformed', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -939,7 +939,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'Decoration');
 
@@ -989,7 +989,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({
       attributes: ['category'],
@@ -1020,7 +1020,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('returns the correct URL', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
@@ -1028,7 +1028,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1089,7 +1089,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('returns the correct URL version with 3 levels', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({
       attributes: [
@@ -1103,7 +1103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1268,7 +1268,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   it('toggles the refine function when passed the special value null', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'subCategory'] });
 
@@ -1276,7 +1276,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       uiState: {},
     });
     const helper = algoliasearchHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1349,7 +1349,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           category: ['boxes'],
         },
       });
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({

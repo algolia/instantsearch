@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -21,10 +21,11 @@ import { InitializePromise } from '../InitializePromise';
 import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
+import type { Mock } from 'vitest';
 
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
-  resetWidgetId: jest.fn(),
+vi.mock('instantsearch.js/es/lib/utils', async () => ({
+  ...(await vi.importActual('instantsearch.js/es/lib/utils')),
+  resetWidgetId: vi.fn(),
 }));
 
 const renderComponent = async ({
@@ -36,10 +37,10 @@ const renderComponent = async ({
   children?: React.ReactNode;
   ref?: { current: PromiseWithState<void> | null };
   nonce?: string;
-  insertedHTML?: jest.Mock;
+  insertedHTML?: Mock;
 } = {}) => {
   const client = createSearchClient({
-    getRecommendations: jest.fn().mockResolvedValue({
+    getRecommendations: vi.fn().mockResolvedValue({
       results: [createSingleSearchResponse()],
     }),
   });
@@ -80,7 +81,7 @@ test('it calls resetWidgetId', () => {
 });
 
 test('it applies provided nonce on the injected script tag', async () => {
-  const insertedHTML = jest.fn();
+  const insertedHTML = vi.fn();
   await renderComponent({
     children: <SearchBox />,
     nonce: 'csp-nonce',
@@ -152,5 +153,5 @@ test('it waits for recommend only if there are only recommend widgets', async ()
 });
 
 afterAll(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });

@@ -1,7 +1,34 @@
-/* eslint-disable import/no-commonjs */
-const define = require('jscodeshift/dist/testUtils').defineTest;
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-define(__dirname, 'src/rish-to-ris', null, 'rish-to-ris/import');
-define(__dirname, 'src/rish-to-ris', null, 'rish-to-ris/path');
-define(__dirname, 'src/rish-to-ris', null, 'rish-to-ris/use');
-define(__dirname, 'src/rish-to-ris', null, 'rish-to-ris/renderToString');
+// @ts-expect-error -- no type declarations for jscodeshift/dist/testUtils
+import { applyTransform } from 'jscodeshift/dist/testUtils';
+
+import transform from '../src/rish-to-ris';
+
+const fixtureDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '__testfixtures__'
+);
+
+function readFixture(name: string) {
+  return readFileSync(join(fixtureDir, `${name}.js`), 'utf8');
+}
+
+describe('src/rish-to-ris', () => {
+  it.each([
+    'rish-to-ris/import',
+    'rish-to-ris/path',
+    'rish-to-ris/use',
+    'rish-to-ris/renderToString',
+  ])('transforms correctly using "%s" data', (fixture) => {
+    const input = readFixture(`${fixture}.input`);
+    const expected = readFixture(`${fixture}.output`);
+
+    const result = applyTransform(transform, null, { source: input });
+
+    expect(result.trim()).toEqual(expected.trim());
+  });
+});

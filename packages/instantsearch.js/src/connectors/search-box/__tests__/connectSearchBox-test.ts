@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -22,7 +22,7 @@ import connectSearchBox from '../connectSearchBox';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectSearchBox(renderFn);
     const widget = makeWidget({
       ...config,
@@ -30,7 +30,7 @@ describe('connectSearchBox', () => {
 
     const initialConfig = {};
     const helper = algoliasearchHelper(createSearchClient(), '', initialConfig);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -50,15 +50,15 @@ describe('connectSearchBox', () => {
         // @ts-expect-error
         connectSearchBox()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customSearchBox = connectSearchBox(render, unmount);
       const widget = customSearchBox({});
@@ -79,9 +79,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectSearchBox(renderFn);
-    const queryHook = jest.fn();
+    const queryHook = vi.fn();
     const widget = makeWidget({
       queryHook,
     });
@@ -127,12 +127,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   describe('refine', () => {
     it('Provides a function to update the refinements at init', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -150,12 +150,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     it('Provides a function to update the refinements at render', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -182,12 +182,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     it('searches if query is the same as initial query (init)', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       helper.setState(
         widget.getWidgetSearchParameters(helper.state, { uiState: {} })
@@ -216,12 +216,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     it('searches if query is the same as initial query (render)', () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       helper.setState(
         widget.getWidgetSearchParameters(helper.state, { uiState: {} })
@@ -260,14 +260,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
   });
 
   it('provides a function to clear the query and perform new search', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectSearchBox(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {
       query: 'bup',
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -306,18 +306,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   it('queryHook parameter let the dev control the behavior of the search', () => {
     let letSearchThrough = false;
-    const queryHook = jest.fn((q, search) => {
+    const queryHook = vi.fn((q, search) => {
       if (letSearchThrough) search(q);
     });
 
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectSearchBox(renderFn);
     const widget = makeWidget({
       queryHook,
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -370,39 +370,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     }
   });
 
-  // eslint-disable-next-line jest/no-done-callback
-  it('provides the same `refine` and `clear` function references', (done) => {
-    const initRenderState: Record<string, any> = {};
-    const createSearchBox = connectSearchBox(
-      ({ refine, clear }, isFirstRender) => {
-        if (isFirstRender) {
-          initRenderState.refine = refine;
-          initRenderState.clear = clear;
-        } else {
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(refine).toBe(initRenderState.refine);
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(clear).toBe(initRenderState.clear);
-          done();
+  it('provides the same `refine` and `clear` function references', () => {
+    return new Promise<void>((done) => {
+      const initRenderState: Record<string, any> = {};
+      const createSearchBox = connectSearchBox(
+        ({ refine, clear }, isFirstRender) => {
+          if (isFirstRender) {
+            initRenderState.refine = refine;
+            initRenderState.clear = clear;
+          } else {
+            // eslint-disable-next-line vitest/no-conditional-expect
+            expect(refine).toBe(initRenderState.refine);
+            // eslint-disable-next-line vitest/no-conditional-expect
+            expect(clear).toBe(initRenderState.clear);
+            done();
+          }
         }
-      }
-    );
-    const search = new InstantSearch({
-      searchClient: createSearchClient(),
-      indexName: 'indexName',
-    });
+      );
+      const search = new InstantSearch({
+        searchClient: createSearchClient(),
+        indexName: 'indexName',
+      });
 
-    search.addWidgets([createSearchBox({})]);
-    search.start();
+      search.addWidgets([createSearchBox({})]);
+      search.start();
+    });
   });
 
   it('should clear on init as well', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectSearchBox(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
     helper.setQuery('foobar');
 
     expect(helper.state.query).toBe('foobar');
@@ -423,9 +424,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   describe('getRenderState', () => {
     test('returns the render state with default render options', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const queryHook = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
+      const queryHook = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({
         queryHook,
@@ -457,8 +458,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     test('returns the render state with a query', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -482,8 +483,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     test('returns the render state with stalled search', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({});
 
@@ -508,9 +509,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state with default render options', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const queryHook = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
+      const queryHook = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({
         queryHook,
@@ -548,8 +549,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     test('returns the widget render state with a query', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -572,8 +573,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     test('returns the widget render state with stalled search', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSearchBox = connectSearchBox(renderFn, unmountFn);
       const searchBox = createSearchBox({});
 
@@ -600,7 +601,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const helper = algoliasearchHelper(createSearchClient(), '');
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectSearchBox(renderFn, unmountFn);
       const widget = makeWidget({});
 

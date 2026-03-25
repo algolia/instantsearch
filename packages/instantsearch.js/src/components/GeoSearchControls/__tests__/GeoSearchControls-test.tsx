@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -117,7 +117,7 @@ describe('GeoSearchControls', () => {
         enableRefineControl: true,
         isRefineOnMapMove: true,
         hasMapMoveSinceLastRefine: false,
-        onRefineToggle: jest.fn(),
+        onRefineToggle: vi.fn(),
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -135,7 +135,7 @@ describe('GeoSearchControls', () => {
         enableRefineControl: true,
         isRefineOnMapMove: false,
         hasMapMoveSinceLastRefine: true,
-        onRefineClick: jest.fn(),
+        onRefineClick: vi.fn(),
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -193,7 +193,7 @@ describe('GeoSearchControls', () => {
         enableRefineControl: false,
         isRefineOnMapMove: false,
         hasMapMoveSinceLastRefine: true,
-        onRefineClick: jest.fn(),
+        onRefineClick: vi.fn(),
       };
 
       const { container } = render(<GeoSearchControls {...props} />);
@@ -252,7 +252,7 @@ describe('GeoSearchControls', () => {
         enableRefineControl: false,
         enableClearMapRefinement: true,
         isRefinedWithMap: true,
-        onClearClick: jest.fn(),
+        onClearClick: vi.fn(),
       };
 
       const { container } = render(<GeoSearchControls {...props} />);

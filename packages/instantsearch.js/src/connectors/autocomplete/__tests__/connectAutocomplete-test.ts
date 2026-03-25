@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -23,11 +23,11 @@ import { TAG_PLACEHOLDER } from '../../../lib/utils';
 import connectAutocomplete from '../connectAutocomplete';
 
 import type { SearchClient, SearchResponse } from '../../../types';
-import type { AutocompleteRenderState } from '../connectAutocomplete';
+import type { Mock } from 'vitest';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
-    const renderFn = jest.fn<any, [AutocompleteRenderState, boolean]>();
+    const renderFn = vi.fn();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({
       ...config,
@@ -35,7 +35,7 @@ describe('connectAutocomplete', () => {
 
     const initialConfig = {};
     const helper = algoliasearchHelper({} as SearchClient, '', initialConfig);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -54,14 +54,14 @@ describe('connectAutocomplete', () => {
       // @ts-expect-error
       connectAutocomplete();
     }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplete/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplete/js/#connector]
+    `);
   });
 
   it('warns when using the outdated `indices` option', () => {
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
 
     const trigger = () => {
@@ -91,8 +91,8 @@ search.addWidgets([
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customAutocomplete = connectAutocomplete(render, unmount);
     const widget = customAutocomplete({});
@@ -109,14 +109,14 @@ search.addWidgets([
 
   it('renders during init and render', () => {
     const searchClient = createSearchClient();
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({});
 
     expect(render).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -149,12 +149,12 @@ search.addWidgets([
 
   it('consumes the correct indices', () => {
     const searchClient = createSearchClient();
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: false });
 
     const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -214,12 +214,12 @@ search.addWidgets([
 
   it('sets a query and triggers search on `refine`', () => {
     const searchClient = createSearchClient();
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(createInitOptions({ helper }));
 
@@ -232,12 +232,12 @@ search.addWidgets([
 
   it('with escapeHTML should escape the hits and the results', () => {
     const searchClient = createSearchClient();
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     const hits = [
       {
@@ -296,12 +296,12 @@ search.addWidgets([
 
   it('without escapeHTML should not escape the hits', () => {
     const searchClient = createSearchClient();
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: false });
 
     const helper = algoliasearchHelper(searchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     const hits = [
       {
@@ -346,8 +346,8 @@ search.addWidgets([
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, '');
 
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
       const makeWidget = connectAutocomplete(render, unmount);
       const widget = makeWidget({});
 
@@ -364,7 +364,7 @@ search.addWidgets([
       const searchClient = createSearchClient();
       const helper = algoliasearchHelper(searchClient, '');
 
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
@@ -381,7 +381,7 @@ search.addWidgets([
         query: 'Apple',
       });
 
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
@@ -402,7 +402,7 @@ search.addWidgets([
         ...TAG_PLACEHOLDER,
       });
 
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
@@ -431,7 +431,7 @@ search.addWidgets([
         highlightPostTag: '</mark>',
       });
 
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({
         escapeHTML: false,
@@ -453,8 +453,8 @@ search.addWidgets([
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
 
@@ -483,8 +483,8 @@ search.addWidgets([
     });
 
     test('returns the render state with a query', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -509,8 +509,8 @@ search.addWidgets([
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
 
@@ -540,8 +540,8 @@ search.addWidgets([
     });
 
     test('returns the widget render state with a query', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -713,12 +713,12 @@ search.addWidgets([
   describe('insights', () => {
     const createRenderedWidget = () => {
       const searchClient = createSearchClient();
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({ escapeHTML: false });
 
       const helper = algoliasearchHelper(searchClient, '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const initOptions = createInitOptions({ helper });
       const instantSearchInstance = initOptions.instantSearchInstance;
@@ -775,7 +775,7 @@ search.addWidgets([
       );
 
       const sendEventToInsights =
-        instantSearchInstance.sendEventToInsights as jest.Mock;
+        instantSearchInstance.sendEventToInsights as Mock;
 
       return {
         instantSearchInstance,
@@ -836,7 +836,7 @@ search.addWidgets([
     });
 
     it('does not send view event when hits are stalled rendered', async () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget({});
 
@@ -873,7 +873,7 @@ search.addWidgets([
         indexName: 'indexName',
       });
       instantSearchInstance.start();
-      instantSearchInstance.sendEventToInsights = jest.fn();
+      instantSearchInstance.sendEventToInsights = vi.fn();
 
       instantSearchInstance.addWidgets([widget]);
 

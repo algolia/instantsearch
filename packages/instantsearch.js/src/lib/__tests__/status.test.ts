@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -203,7 +203,7 @@ describe('status', () => {
     // prevent rethrow of error
     search.on('error', () => {});
 
-    const renderer = jest.fn(
+    const renderer = vi.fn(
       (_: { status: InstantSearch['status']; error?: Error }) => undefined
     );
     search.on('render', () =>

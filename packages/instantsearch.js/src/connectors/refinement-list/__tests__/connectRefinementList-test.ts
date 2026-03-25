@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -23,17 +23,17 @@ import connectRefinementList from '../connectRefinementList';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectRefinementList(rendering);
     return { rendering, makeWidget };
   };
 
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
 
     expect(() =>
       connectRefinementList({
@@ -41,18 +41,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Object).
+      [Error: The render function is not valid (received type Object).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
 
     // @ts-expect-error
     expect(() => connectRefinementList(() => {})())
       .toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+        [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+      `);
 
     expect(() =>
       // @ts-expect-error
@@ -60,10 +60,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+      [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
 
     expect(() =>
       connectRefinementList(() => {})({
@@ -72,10 +72,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'YUP',
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"The \`operator\` must one of: \`\\"and\\"\`, \`\\"or\\"\` (got \\"YUP\\").
+      [Error: The \`operator\` must one of: \`"and"\`, \`"or"\` (got "YUP").
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
 
     expect(() =>
       connectRefinementList(() => {})({
@@ -85,10 +85,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 10,
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"\`showMoreLimit\` should be greater than \`limit\`.
+      [Error: \`showMoreLimit\` should be greater than \`limit\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
 
     expect(() =>
       connectRefinementList(() => {})({
@@ -98,15 +98,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 5,
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"\`showMoreLimit\` should be greater than \`limit\`.
+      [Error: \`showMoreLimit\` should be greater than \`limit\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector]
+    `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customRefinementList = connectRefinementList(render, unmount);
     const widget = customRefinementList({ attribute: 'facet' });
@@ -193,7 +193,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -278,7 +278,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -380,7 +380,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(rendering).not.toHaveBeenCalled();
 
     const helper = jsHelper(createSearchClient(), '', config);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -474,7 +474,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -528,7 +528,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   it('Provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectRefinementList(() => {});
     const widget = makeWidget({
       attribute: 'category',
@@ -569,7 +569,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'value');
 
@@ -624,7 +624,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     helper.toggleFacetRefinement('category', 'value');
 
@@ -680,7 +680,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -735,7 +735,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -796,7 +796,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -857,7 +857,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -921,7 +921,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1026,8 +1026,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
-    helper.searchForFacetValues = jest.fn().mockReturnValue(
+    helper.search = vi.fn();
+    helper.searchForFacetValues = vi.fn().mockReturnValue(
       Promise.resolve({
         facetHits: [],
       })
@@ -1236,7 +1236,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       }),
       maxValuesPerFacet: 10,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     // 1st rendering: initialization
     widget.init!(
@@ -1334,7 +1334,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       }),
       maxValuesPerFacet: 10,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     // 1st rendering: initialization
     widget.init!(
@@ -1429,7 +1429,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         uiState: {},
       })
     );
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1516,7 +1516,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       }),
       maxValuesPerFacet: 3,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1629,9 +1629,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
-      const searchForFacetValuesSpy = jest.spyOn(
+      const searchForFacetValuesSpy = vi.spyOn(
         helper,
         'searchForFacetValues'
       );
@@ -1740,8 +1740,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
+      helper.search = vi.fn();
+      const searchForFacetValuesSpy = vi.spyOn(
         helper,
         'searchForFacetValues'
       );
@@ -1834,8 +1834,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
+      helper.search = vi.fn();
+      const searchForFacetValuesSpy = vi.spyOn(
         helper,
         'searchForFacetValues'
       );
@@ -1949,8 +1949,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           ...TAG_PLACEHOLDER,
         }
       );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
+      helper.search = vi.fn();
+      const searchForFacetValuesSpy = vi.spyOn(
         helper,
         'searchForFacetValues'
       );
@@ -2068,8 +2068,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           ...TAG_PLACEHOLDER,
         }
       );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
+      helper.search = vi.fn();
+      const searchForFacetValuesSpy = vi.spyOn(
         helper,
         'searchForFacetValues'
       );
@@ -2165,7 +2165,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   describe('dispose', () => {
     it('removes refinements completely on dispose (and)', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectRefinementList(rendering);
       const instantSearchInstance = createInstantSearch();
 
@@ -2182,7 +2182,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -2260,7 +2260,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     it('removes refinements completely on dispose (or)', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectRefinementList(rendering);
       const instantSearchInstance = createInstantSearch();
 
@@ -2277,7 +2277,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -2441,8 +2441,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   describe('getRenderState', () => {
     it('returns the render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
       const helper = jsHelper(createSearchClient(), 'indexName', {
@@ -2477,8 +2477,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     it('returns the render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
       const helper = jsHelper(createSearchClient(), 'indexName', {
@@ -2561,8 +2561,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
       const helper = jsHelper(createSearchClient(), 'indexName', {
@@ -2596,7 +2596,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     it('returns the widget render state with results', () => {
-      const createRefinementList = connectRefinementList(jest.fn(), jest.fn());
+      const createRefinementList = connectRefinementList(vi.fn(), vi.fn());
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
       const helper = jsHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
@@ -2681,8 +2681,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     describe('items', () => {
       it('returns escaped values', () => {
         const createRefinementList = connectRefinementList(
-          jest.fn(),
-          jest.fn()
+          vi.fn(),
+          vi.fn()
         );
         const refinementListWidget = createRefinementList({
           attribute: 'discounts',
@@ -2828,8 +2828,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       `(
         'renderingContent present: $facetOrderingInResult, sortBy: $sortBy',
         ({ facetOrderingInResult, sortBy, expected }) => {
-          const renderFn = jest.fn();
-          const unmountFn = jest.fn();
+          const renderFn = vi.fn();
+          const unmountFn = vi.fn();
           const createRefinementList = connectRefinementList(
             renderFn,
             unmountFn
@@ -3225,7 +3225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(createSearchClient(), '', {
         hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
       });
-      const widget = connectRefinementList(jest.fn())({ attribute: 'brand' });
+      const widget = connectRefinementList(vi.fn())({ attribute: 'brand' });
 
       expect(() => {
         const searchParams = widget.getWidgetSearchParameters(helper.state, {
@@ -3254,7 +3254,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           uiState: {},
         })
       );
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({

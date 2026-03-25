@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
@@ -18,12 +18,10 @@ import type { Widget } from '../../../types';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  module.render = jest.fn();
-
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 beforeEach(() => {
@@ -91,10 +89,10 @@ describe('Usage', () => {
       // @ts-expect-error
       fakeWithPanel();
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required in the widget within the panel.
+      [Error: The \`container\` option is required in the widget within the panel.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/]
+    `);
   });
 });
 
@@ -110,9 +108,9 @@ describe('Templates', () => {
       widgetParams: Record<string, any>;
     }> = {
       $$type: '',
-      init: jest.fn(),
-      render: jest.fn(),
-      dispose: jest.fn(),
+      init: vi.fn(),
+      render: vi.fn(),
+      dispose: vi.fn(),
     };
     widgetFactory = () => widget;
   });
@@ -208,9 +206,9 @@ describe('Lifecycle', () => {
   test('calls the inner widget lifecycle', () => {
     const widget = {
       $$type: 'mock.widget',
-      init: jest.fn(),
-      render: jest.fn(),
-      dispose: jest.fn(),
+      init: vi.fn(),
+      render: vi.fn(),
+      dispose: vi.fn(),
     };
     const widgetFactory = () => widget;
 
@@ -231,7 +229,7 @@ describe('Lifecycle', () => {
     test("calls the wrapped widget's init", () => {
       const widget = {
         $$type: 'mock.widget',
-        init: jest.fn(),
+        init: vi.fn(),
       };
       const widgetFactory = () => widget;
 
@@ -255,7 +253,7 @@ describe('Lifecycle', () => {
 
       const widget = {
         $$type: 'mock.widget',
-        render: jest.fn(),
+        render: vi.fn(),
         getWidgetRenderState() {
           return renderState;
         },
@@ -263,8 +261,8 @@ describe('Lifecycle', () => {
 
       const widgetFactory = () => widget;
 
-      const hiddenFn = jest.fn();
-      const collapsedFn = jest.fn();
+      const hiddenFn = vi.fn();
+      const collapsedFn = vi.fn();
 
       const widgetWithPanel = panel({
         hidden: hiddenFn,
@@ -289,7 +287,7 @@ describe('Lifecycle', () => {
 
       const widget = {
         $$type: 'mock.widget',
-        render: jest.fn(),
+        render: vi.fn(),
         getWidgetRenderState() {
           return renderState;
         },
@@ -327,7 +325,7 @@ describe('Lifecycle', () => {
     test("calls the wrapped widget's render", () => {
       const widget = {
         $$type: 'mock.widget',
-        render: jest.fn(),
+        render: vi.fn(),
       };
       const widgetFactory = () => widget;
 
@@ -351,7 +349,7 @@ describe('Lifecycle', () => {
 
       const widget = {
         $$type: 'mock.widget',
-        render: jest.fn(),
+        render: vi.fn(),
         getWidgetRenderState() {
           return renderState;
         },
@@ -359,8 +357,8 @@ describe('Lifecycle', () => {
 
       const widgetFactory = () => widget;
 
-      const hiddenFn = jest.fn();
-      const collapsedFn = jest.fn();
+      const hiddenFn = vi.fn();
+      const collapsedFn = vi.fn();
 
       const widgetWithPanel = panel({
         hidden: hiddenFn,
@@ -394,7 +392,7 @@ describe('Lifecycle', () => {
 
       const widget = {
         $$type: 'mock.widget',
-        render: jest.fn(),
+        render: vi.fn(),
         getWidgetRenderState() {
           return renderState;
         },
@@ -435,8 +433,8 @@ describe('Lifecycle', () => {
       });
       const widget = {
         $$type: 'mock.widget',
-        init: jest.fn(),
-        dispose: jest.fn(() => nextSearchParameters),
+        init: vi.fn(),
+        dispose: vi.fn(() => nextSearchParameters),
       };
       const widgetFactory = () => widget;
 

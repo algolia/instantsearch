@@ -2,6 +2,7 @@ import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { queryByText } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -24,7 +25,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({});
-    const onSubmitListener = jest.fn();
+    const onSubmitListener = vi.fn();
 
     beforeEach(() => {
       searchClient.search.mockClear();
@@ -68,161 +69,161 @@ export function createOptionsTests(
       ).toHaveLength(7);
 
       expect(
-        document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-CurrentRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-CurrentRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-CurrentRefinements"
+      >
+        <ul
+          class="ais-CurrentRefinements-list"
         >
-          <ul
-            class="ais-CurrentRefinements-list"
+          <li
+            class="ais-CurrentRefinements-item"
           >
-            <li
-              class="ais-CurrentRefinements-item"
+            <span
+              class="ais-CurrentRefinements-label"
+            >
+              Feature: 
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
             >
               <span
-                class="ais-CurrentRefinements-label"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                Feature: 
+                5G
               </span>
-              <span
-                class="ais-CurrentRefinements-category"
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
               >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  5G
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
-              </span>
-              <span
-                class="ais-CurrentRefinements-category"
-              >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  OLED Display
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
-              </span>
-            </li>
-            <li
-              class="ais-CurrentRefinements-item"
+                ✕
+              </button>
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
             >
               <span
-                class="ais-CurrentRefinements-label"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                Brand: 
+                OLED Display
               </span>
-              <span
-                class="ais-CurrentRefinements-category"
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
               >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  Samsung
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
-              </span>
-              <span
-                class="ais-CurrentRefinements-category"
-              >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  Apple
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
-              </span>
-            </li>
-            <li
-              class="ais-CurrentRefinements-item"
+                ✕
+              </button>
+            </span>
+          </li>
+          <li
+            class="ais-CurrentRefinements-item"
+          >
+            <span
+              class="ais-CurrentRefinements-label"
+            >
+              Brand: 
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
             >
               <span
-                class="ais-CurrentRefinements-label"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                HierarchicalCategories.lvl0: 
+                Samsung
               </span>
-              <span
-                class="ais-CurrentRefinements-category"
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
               >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  Cell Phones
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
-              </span>
-            </li>
-            <li
-              class="ais-CurrentRefinements-item"
+                ✕
+              </button>
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
             >
               <span
-                class="ais-CurrentRefinements-label"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                Price: 
+                Apple
               </span>
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
+              >
+                ✕
+              </button>
+            </span>
+          </li>
+          <li
+            class="ais-CurrentRefinements-item"
+          >
+            <span
+              class="ais-CurrentRefinements-label"
+            >
+              HierarchicalCategories.lvl0: 
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
+            >
               <span
-                class="ais-CurrentRefinements-category"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  ≥ 500
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
+                Cell Phones
               </span>
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
+              >
+                ✕
+              </button>
+            </span>
+          </li>
+          <li
+            class="ais-CurrentRefinements-item"
+          >
+            <span
+              class="ais-CurrentRefinements-label"
+            >
+              Price: 
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
+            >
               <span
-                class="ais-CurrentRefinements-category"
+                class="ais-CurrentRefinements-categoryLabel"
               >
-                <span
-                  class="ais-CurrentRefinements-categoryLabel"
-                >
-                  ≤ 990
-                </span>
-                <button
-                  class="ais-CurrentRefinements-delete"
-                  type="button"
-                >
-                  ✕
-                </button>
+                ≥ 500
               </span>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
+              >
+                ✕
+              </button>
+            </span>
+            <span
+              class="ais-CurrentRefinements-category"
+            >
+              <span
+                class="ais-CurrentRefinements-categoryLabel"
+              >
+                ≤ 990
+              </span>
+              <button
+                class="ais-CurrentRefinements-delete"
+                type="button"
+              >
+                ✕
+              </button>
+            </span>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     it('renders with no refinements', async () => {
@@ -239,19 +240,19 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-CurrentRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement"
-        >
-          <ul
-            class="ais-CurrentRefinements-list"
-          />
-        </div>
-      `
-      );
+        normalizeForSnapshot(
+          document.querySelector('.ais-CurrentRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement"
+      >
+        <ul
+          class="ais-CurrentRefinements-list"
+        />
+      </div>
+    `);
     });
 
     it('clears a refinement', async () => {
@@ -316,7 +317,7 @@ export function createOptionsTests(
     });
 
     it('clears a refinement by calling the `refine` method in each item', async () => {
-      const refine = jest.fn();
+      const refine = vi.fn();
       await setup({
         instantSearchOptions: {
           searchClient,

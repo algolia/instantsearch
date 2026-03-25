@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -69,7 +69,7 @@ describe('RelevantSort', () => {
   });
 
   it('refine on button click', () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
     const { getByText } = render(
       <RelevantSort
         cssClasses={cssClasses}
@@ -115,7 +115,7 @@ describe('RelevantSort', () => {
   });
 
   it('refine with `undefined` on "See relevant results"', () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
     const { getByText } = render(
       <RelevantSort
         cssClasses={cssClasses}
@@ -131,7 +131,7 @@ describe('RelevantSort', () => {
   });
 
   it('refine with `0` on "Seeing all results"', () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
     const { getByText } = render(
       <RelevantSort
         cssClasses={cssClasses}

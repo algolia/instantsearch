@@ -56,7 +56,7 @@ test('Constructor should ignore keys with undefined values', function () {
 test('Constructor should warn about invalid userToken', function () {
   const message =
     '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
-  console.warn = jest.fn();
+  console.warn = vi.fn();
 
   var sp1 = new SearchParameters({
     userToken: '',
@@ -134,7 +134,7 @@ test('Factory should ignore keys with undefined values', function () {
 test('Factory should warn about invalid userToken', function () {
   const message =
     '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
-  console.warn = jest.fn();
+  console.warn = vi.fn();
 
   SearchParameters.make({ userToken: null });
   expect(console.warn).toHaveBeenCalledTimes(1);

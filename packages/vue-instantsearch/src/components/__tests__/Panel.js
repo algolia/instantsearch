@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -36,9 +36,9 @@ describe('default render', () => {
   });
 
   it('passes data without refinement', async () => {
-    const defaultScopedSlot = jest.fn();
-    const headerScopedSlot = jest.fn();
-    const footerScopedSlot = jest.fn();
+    const defaultScopedSlot = vi.fn();
+    const headerScopedSlot = vi.fn();
+    const footerScopedSlot = vi.fn();
     const wrapper = mount(Panel, {
       scopedSlots: {
         default: defaultScopedSlot,
@@ -57,9 +57,9 @@ describe('default render', () => {
   });
 
   it('passes data with refinement', async () => {
-    const defaultScopedSlot = jest.fn();
-    const headerScopedSlot = jest.fn();
-    const footerScopedSlot = jest.fn();
+    const defaultScopedSlot = vi.fn();
+    const headerScopedSlot = vi.fn();
+    const footerScopedSlot = vi.fn();
     const wrapper = mount(Panel, {
       scopedSlots: {
         default: defaultScopedSlot,

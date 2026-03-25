@@ -48,7 +48,7 @@ describe('waitForResults', () => {
     searches[0].rejecter({ message: 'Search error' });
 
     await expect(output).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Search error"`
+      `[Error: Search error]`
     );
   });
 
@@ -66,7 +66,7 @@ describe('waitForResults', () => {
     search.emit('error', new Error('Search error'));
 
     await expect(output).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Search error"`
+      `[Error: Search error]`
     );
   });
 });

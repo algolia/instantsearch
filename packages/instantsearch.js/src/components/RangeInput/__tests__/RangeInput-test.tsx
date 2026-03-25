@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -155,7 +155,7 @@ describe('RangeInput', () => {
   describe('onSubmit', () => {
     it('expect to call refine with min, max as integer', () => {
       const props = {
-        refine: jest.fn(),
+        refine: vi.fn(),
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
@@ -181,7 +181,7 @@ describe('RangeInput', () => {
 
     it('expect to call refine with min, max as float', () => {
       const props = {
-        refine: jest.fn(),
+        refine: vi.fn(),
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
@@ -207,7 +207,7 @@ describe('RangeInput', () => {
 
     it('expect to call refine with min only', () => {
       const props = {
-        refine: jest.fn(),
+        refine: vi.fn(),
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
@@ -230,7 +230,7 @@ describe('RangeInput', () => {
 
     it('expect to call refine with max only', () => {
       const props = {
-        refine: jest.fn(),
+        refine: vi.fn(),
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
@@ -253,7 +253,7 @@ describe('RangeInput', () => {
 
     it('expect to call refine without values', () => {
       const props = {
-        refine: jest.fn(),
+        refine: vi.fn(),
       };
 
       const { container } = render(<RangeInput {...defaultProps} {...props} />);

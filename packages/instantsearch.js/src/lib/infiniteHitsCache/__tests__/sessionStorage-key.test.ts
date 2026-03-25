@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import createInfiniteHitsSessionStorageCache from '../sessionStorage';
@@ -12,11 +12,11 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   delete window.sessionStorage;
 
   let store: Record<string, unknown> = {};
-  const getItem = jest.fn((key) => store[key]);
-  const setItem = jest.fn((key, value) => {
+  const getItem = vi.fn((key) => store[key]);
+  const setItem = vi.fn((key, value) => {
     store[key] = value;
   });
-  const removeItem = jest.fn((key) => delete store[key]);
+  const removeItem = vi.fn((key) => delete store[key]);
   const defaultHits = [
     { objectID: 'a', __position: 0 },
     { objectID: 'b', __position: 1 },

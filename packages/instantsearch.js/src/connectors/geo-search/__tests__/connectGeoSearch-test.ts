@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -23,18 +23,19 @@ import instantsearch from '../../../index.es';
 import connectGeoSearch from '../connectGeoSearch';
 
 import type { SearchResponse } from '../../../types';
+import type { Mock } from 'vitest';
 
 describe('connectGeoSearch', () => {
   const createFakeHelper = () => {
     const helper = algoliasearchHelper(createSearchClient(), '');
 
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     return helper;
   };
 
   const getInitializedWidget = () => {
-    const render = jest.fn();
+    const render = vi.fn();
     const makeWidget = connectGeoSearch(render);
 
     const widget = makeWidget({});
@@ -71,8 +72,8 @@ describe('connectGeoSearch', () => {
         __queryID: 'test-query-id',
       },
     ];
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -109,8 +110,8 @@ describe('connectGeoSearch', () => {
     };
   };
 
-  const firstRenderArgs = (fn: jest.Mock) => fn.mock.calls[0][0];
-  const lastRenderArgs = (fn: jest.Mock) =>
+  const firstRenderArgs = (fn: Mock) => fn.mock.calls[0][0];
+  const lastRenderArgs = (fn: Mock) =>
     fn.mock.calls[fn.mock.calls.length - 1][0];
 
   describe('Usage', () => {
@@ -119,16 +120,16 @@ describe('connectGeoSearch', () => {
         // @ts-expect-error
         connectGeoSearch()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/#connector]
+      `);
     });
   });
 
   it('expect to be a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -146,8 +147,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('accepts custom parameters', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch<{
       container: string;
@@ -158,8 +159,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to render twice during init and render', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -232,8 +233,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to render with enableRefineOnMapMove disabled', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({
@@ -263,8 +264,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to render with only geoloc hits', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -299,8 +300,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to render with transformed hits', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({
@@ -344,8 +345,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to render with position', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -421,7 +422,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to provide search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const customGeoSearch = connectGeoSearch(() => {});
     const widget = customGeoSearch({
       transformItems,
@@ -447,8 +448,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to reset the map state when position changed', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -525,8 +526,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it("expect to not reset the map state when position don't changed", () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -603,8 +604,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to reset the map state when boundingBox is reset', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -682,8 +683,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   it('expect to not reset the map state when boundingBox is preserve', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch({});
@@ -763,8 +764,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('currentRefinement', () => {
     it('expect to render with currentRefinement from a string', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -837,8 +838,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to render with currentRefinement from an array', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -911,8 +912,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('refine', () => {
     it('expect to refine with the given bounds during init', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -965,8 +966,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to refine with the given bounds during render', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1028,8 +1029,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('clearMapRefinement', () => {
     it('expect to clear the map refinement after the map has been refine during init', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1097,8 +1098,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to clear the map refinement after the map has been refine during render', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1175,8 +1176,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('toggleRefineOnMapMove', () => {
     it('expect to toggle refine on map move during init', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1217,8 +1218,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to toggle refine on map move during render', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1258,8 +1259,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('setMapMoveSinceLastRefine', () => {
     it('expect to set map move during init', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1292,8 +1293,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to set map move during render', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1335,8 +1336,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('expect to set map move during render & trigger render only when value change', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1385,8 +1386,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
   describe('dispose', () => {
     it('expect reset insideBoundingBox', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
@@ -1725,7 +1726,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('does not send view event when hits are stalled rendered', async () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectGeoSearch(renderFn);
       const widget = makeWidget({});
 
@@ -1768,7 +1769,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         indexName: 'indexName',
       });
       instantSearchInstance.start();
-      instantSearchInstance.sendEventToInsights = jest.fn();
+      instantSearchInstance.sendEventToInsights = vi.fn();
 
       instantSearchInstance.addWidgets([widget]);
 

@@ -59,7 +59,7 @@ describe('waitForResults', () => {
     searches[0].rejecter({ message: 'Search error' });
 
     await expect(output).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Search error"`
+      `[Error: Search error]`
     );
   });
 
@@ -80,7 +80,7 @@ describe('waitForResults', () => {
     search.emit('error', new Error('Search error'));
 
     await expect(output).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Search error"`
+      `[Error: Search error]`
     );
   });
 });
@@ -95,7 +95,7 @@ describe('getInitialResults', () => {
     expect(() =>
       getInitialResults(search.mainIndex)
     ).toThrowErrorMatchingInlineSnapshot(
-      `"The root index does not have any results. Make sure you have at least one widget that provides results."`
+      `[Error: The root index does not have any results. Make sure you have at least one widget that provides results.]`
     );
   });
 

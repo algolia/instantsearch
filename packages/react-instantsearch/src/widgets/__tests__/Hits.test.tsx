@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -43,7 +43,7 @@ const bannerWidgetRenderingContent = {
 
 function getSearchClient(withBannerWidget = false) {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(
@@ -117,7 +117,7 @@ describe('Hits', () => {
   test('custom hit component should not remount on rerender', async () => {
     const searchClient = getSearchClient();
 
-    const mounted = jest.fn();
+    const mounted = vi.fn();
 
     const CustomHit = () => {
       React.useEffect(() => {

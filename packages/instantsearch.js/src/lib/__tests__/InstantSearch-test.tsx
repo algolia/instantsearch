@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -32,6 +32,7 @@ import type {
 } from '../../connectors/search-box/connectSearchBox';
 import type { UiState, Widget, IndexWidget } from '../../types';
 import type { RefObject } from 'preact';
+import type { Mock } from 'vitest';
 
 type SearchBoxWidgetInstance = Widget<
   SearchBoxWidgetDescription & { widgetParams: SearchBoxConnectorParams }
@@ -44,29 +45,29 @@ type PaginationWidgetInstance = Widget<
 type AlgoliaHelperModule = typeof algoliasearchHelper;
 
 const algoliasearchHelper = castToJestMock(originalHelper);
-jest.mock('algoliasearch-helper', () => {
-  const module = jest.requireActual<AlgoliaHelperModule>(
+vi.mock('algoliasearch-helper', async () => {
+  const module = await vi.importActual<{ default: AlgoliaHelperModule }>(
     'algoliasearch-helper'
   );
-  const mock = jest.fn((...args: Parameters<AlgoliaHelperModule>) => {
-    const helper = module(...args);
+  const mock = vi.fn((...args: Parameters<AlgoliaHelperModule>) => {
+    const helper = module.default(...args);
 
     const searchOnlyWithDerivedHelpers =
       helper.searchOnlyWithDerivedHelpers.bind(helper);
 
-    helper.searchOnlyWithDerivedHelpers = jest.fn((...searchArgs) => {
+    helper.searchOnlyWithDerivedHelpers = vi.fn((...searchArgs: Parameters<typeof searchOnlyWithDerivedHelpers>) => {
       return searchOnlyWithDerivedHelpers(...searchArgs);
     });
 
     return helper;
   });
 
-  Object.entries(module).forEach(([key, value]) => {
+  Object.entries(module.default).forEach(([key, value]) => {
     // @ts-expect-error Object.entries loses type safety
     mock[key] = value;
   });
 
-  return mock;
+  return { ...module, default: mock };
 });
 
 const virtualSearchBox = connectSearchBox(() => {});
@@ -86,9 +87,9 @@ describe('Usage', () => {
       // eslint-disable-next-line no-new
       new InstantSearch({ indexName: 'indexName', searchClient: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`searchClient\` option is required.
+      [Error: The \`searchClient\` option is required.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -98,9 +99,9 @@ describe('Usage', () => {
       // eslint-disable-next-line no-new
       new InstantSearch({ indexName: 'indexName', searchClient: {} });
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`searchClient\` must implement a \`search\` method.
+      [Error: The \`searchClient\` must implement a \`search\` method.
 
-      See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
+      See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/]
     `);
   });
 
@@ -162,7 +163,7 @@ describe('Usage', () => {
   });
 
   it('throws if insightsClient is not a function', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     expect(() => {
@@ -174,9 +175,9 @@ describe('Usage', () => {
         insightsClient: 'insights',
       });
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`insightsClient\` option should be a function.
+      [Error: The \`insightsClient\` option should be a function.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -189,9 +190,9 @@ describe('Usage', () => {
       // @ts-expect-error
       search.addWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
+      [Error: The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -205,9 +206,9 @@ describe('Usage', () => {
       });
       search.addWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The widget definition expects a \`render\` and/or an \`init\` method.
+      [Error: The widget definition expects a \`render\` and/or an \`init\` method.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/]
     `);
   });
 
@@ -244,9 +245,9 @@ describe('Usage', () => {
       // @ts-expect-error
       search.removeWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
+      [Error: The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -262,9 +263,9 @@ describe('Usage', () => {
       });
       search.removeWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The widget definition expects a \`dispose\` method.
+      [Error: The widget definition expects a \`dispose\` method.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/]
     `);
   });
 
@@ -275,9 +276,9 @@ describe('Usage', () => {
     });
 
     expect(() => search.createURL()).toThrowErrorMatchingInlineSnapshot(`
-      "The \`start\` method needs to be called before \`createURL\`.
+      [Error: The \`start\` method needs to be called before \`createURL\`.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -288,15 +289,15 @@ describe('Usage', () => {
     });
 
     expect(() => search.refresh()).toThrowErrorMatchingInlineSnapshot(`
-      "The \`start\` method needs to be called before \`refresh\`.
+      [Error: The \`start\` method needs to be called before \`refresh\`.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
   it('warns dev with EXPERIMENTAL_use', () => {
     const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
     });
 
     const search = new InstantSearch({
@@ -319,7 +320,7 @@ describe('Usage', () => {
 
   it('does not warn dev with use', () => {
     const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
     });
 
     const search = new InstantSearch({
@@ -340,9 +341,9 @@ describe('Usage', () => {
 
   it('warns dev when insightsClient is given', () => {
     const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
     });
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     expect(() => {
@@ -365,7 +366,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
       searchClient: createSearchClient(),
     });
 
-    const subscribe = jest.fn();
+    const subscribe = vi.fn();
     search.use(() => ({
       subscribe,
     }));
@@ -377,7 +378,7 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
 describe('InstantSearch', () => {
   it('calls addAlgoliaAgent', () => {
     const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
     });
 
     // eslint-disable-next-line no-new
@@ -404,7 +405,7 @@ describe('InstantSearch', () => {
 
   it('warns deprecated usage of `searchParameters`', () => {
     warning.cache = {};
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     expect(() => {
@@ -477,16 +478,18 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   describe('insights middleware', () => {
     const createSearchClientWithAutomaticInsightsOptedIn = () =>
       createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests: Array<{ indexName: string; query?: string; params: Record<string, any> }>) => {
           return Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) => {
+              ...requests.map((request: { indexName: string; query?: string; params: Record<string, any> }) => {
                 return createSingleSearchResponse<any>({
                   ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { _automaticInsights: true }
                     : undefined),
                   index: request.indexName,
-                  query: (request as any).query || request.params.query,
+                  query:
+                    ('query' in request ? request.query : undefined) ||
+                    request.params.query,
                   ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { queryID: 'queryID' }
                     : undefined),
@@ -607,7 +610,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     test('insights: options passes options to middleware', () => {
-      const insightsClient = Object.assign(jest.fn(), { version: '2.17.2' });
+      const insightsClient = Object.assign(vi.fn(), { version: '2.17.2' });
       const search = new InstantSearch({
         searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'test',
@@ -758,7 +761,7 @@ describe('addWidget(s)', () => {
   });
 
   it('forwards the call of `addWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const searchClient = createSearchClient();
@@ -791,7 +794,7 @@ describe('addWidget(s)', () => {
   });
 
   it('returns the search instance when calling `addWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const searchClient = createSearchClient();
@@ -853,7 +856,7 @@ describe('removeWidget(s)', () => {
   });
 
   it('forwards the call to `removeWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const searchClient = createSearchClient();
@@ -894,7 +897,7 @@ describe('removeWidget(s)', () => {
   });
 
   it('returns the search instance when calling `removeWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const searchClient = createSearchClient();
@@ -1025,7 +1028,7 @@ describe('start', () => {
   });
 
   it('calls the provided `searchFunction` with a single request', async () => {
-    const searchFunction = jest.fn((helper) =>
+    const searchFunction = vi.fn((helper) =>
       helper.setQuery('test').search()
     );
     const searchClient = createSearchClient();
@@ -1096,17 +1099,17 @@ describe('start', () => {
 
   it('forwards the router state to the main index', () => {
     const router = {
-      read: jest.fn(() => ({
+      read: vi.fn(() => ({
         indexName: {
           hierarchicalMenu: {
             'hierarchicalCategories.lvl0': ['Cell Phones'],
           },
         },
       })),
-      write: jest.fn(),
-      onUpdate: jest.fn(),
-      createURL: jest.fn(() => '#'),
-      dispose: jest.fn(),
+      write: vi.fn(),
+      onUpdate: vi.fn(),
+      createURL: vi.fn(() => '#'),
+      dispose: vi.fn(),
     };
 
     const search = new InstantSearch({
@@ -1178,27 +1181,30 @@ describe('start', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
-  // eslint-disable-next-line jest/no-done-callback
-  it('triggers a search with errors', (done) => {
-    const searchClient = createSearchClient({
-      // @ts-ignore (this fails in v4, not in v3, therefore not ts-expect-error)
-      search: jest.fn(() => Promise.reject(new Error('SERVER_ERROR'))),
-    });
+  it('triggers a search with errors', () => {
+    return new Promise<void>((done) => {
+      const searchClient = createSearchClient({
+        // @ts-ignore (this fails in v4, not in v3, therefore not ts-expect-error)
+        search: vi.fn(() => Promise.reject(new Error('SERVER_ERROR'))),
+      });
 
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+      });
 
-    expect(searchClient.search).toHaveBeenCalledTimes(0);
+      expect(searchClient.search).toHaveBeenCalledTimes(0);
 
-    search.addWidgets([virtualSearchBox({})]);
-    search.start();
+      search.addWidgets([virtualSearchBox({})]);
+      search.start();
 
-    search.on('error', (event) => {
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(event.error).toEqual(new Error('SERVER_ERROR'));
-      done();
+      search.on('error', (event) => {
+        expect(searchClient.search).toHaveBeenCalledTimes(1);
+        expect(event.error).toEqual(
+          expect.objectContaining({ message: 'SERVER_ERROR' })
+        );
+        done();
+      });
     });
   });
 
@@ -1241,9 +1247,9 @@ describe('start', () => {
     expect(() => {
       instance.start();
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`start\` method has already been called once.
+      [Error: The \`start\` method has already been called once.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -1297,7 +1303,7 @@ describe('start', () => {
 });
 
 describe('dispose', () => {
-  // eslint-disable-next-line jest/expect-expect
+  // eslint-disable-next-line vitest/expect-expect
   it('cancels the scheduled search', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1321,7 +1327,7 @@ describe('dispose', () => {
     await wait(0);
   });
 
-  // eslint-disable-next-line jest/expect-expect
+  // eslint-disable-next-line vitest/expect-expect
   it('cancels the scheduled render', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1344,8 +1350,10 @@ describe('dispose', () => {
     await wait(0);
   });
 
-  // eslint-disable-next-line jest/expect-expect
+  // eslint-disable-next-line vitest/expect-expect
   it('cancels the scheduled stalled render', async () => {
+    vi.useFakeTimers();
+
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1356,13 +1364,13 @@ describe('dispose', () => {
 
     search.start();
 
-    await wait(0);
+    await vi.advanceTimersByTimeAsync(0);
 
     // Resolve the `search`
     searches[0].resolver();
 
     // Wait for the `render`
-    await wait(0);
+    await vi.advanceTimersByTimeAsync(0);
 
     // Simulate a search
     search.mainHelper!.search();
@@ -1370,12 +1378,14 @@ describe('dispose', () => {
     search.dispose();
 
     // Reaches the delay
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
 
     // Without the cancel operation, the function call throws an error which
     // prevents the test to complete. We can't assert that the function throws
     // because we don't have access to the promise that throws in the first place.
-    await wait(0);
+    await vi.advanceTimersByTimeAsync(0);
+
+    vi.useRealTimers();
   });
 
   it('removes the widgets from the main index', () => {
@@ -1401,7 +1411,7 @@ describe('dispose', () => {
       searchClient: createSearchClient(),
     });
 
-    const mainIndexDispose = jest.spyOn(search.mainIndex, 'dispose');
+    const mainIndexDispose = vi.spyOn(search.mainIndex, 'dispose');
 
     search.start();
 
@@ -1430,7 +1440,7 @@ describe('dispose', () => {
   });
 
   it('removes the listeners on the main Helper', () => {
-    const onEventName = jest.fn();
+    const onEventName = vi.fn();
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1454,7 +1464,7 @@ describe('dispose', () => {
   });
 
   it('removes the listeners on the instance', async () => {
-    const onRender = jest.fn();
+    const onRender = vi.fn();
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1526,7 +1536,7 @@ describe('scheduleSearch', () => {
 
     search.start();
 
-    const mainHelperSearch = jest.spyOn(search.mainHelper!, 'search');
+    const mainHelperSearch = vi.spyOn(search.mainHelper!, 'search');
 
     search.scheduleSearch();
 
@@ -1547,7 +1557,7 @@ describe('scheduleSearch', () => {
 
     search.start();
 
-    const mainHelperSearch = jest.spyOn(search.mainHelper!, 'search');
+    const mainHelperSearch = vi.spyOn(search.mainHelper!, 'search');
 
     search.scheduleSearch();
     search.scheduleSearch();
@@ -1611,7 +1621,7 @@ describe('scheduleRender', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
-    const renderSpy = jest.fn();
+    const renderSpy = vi.fn();
 
     const widget = createWidget();
 
@@ -1808,11 +1818,11 @@ describe('scheduleStalledRender', () => {
 
 describe('createURL', () => {
   const createRouter = () => ({
-    read: jest.fn(() => ({})),
-    write: jest.fn(),
-    onUpdate: jest.fn(),
-    createURL: jest.fn(() => '#'),
-    dispose: jest.fn(),
+    read: vi.fn(() => ({})),
+    write: vi.fn(),
+    onUpdate: vi.fn(),
+    createURL: vi.fn(() => '#'),
+    dispose: vi.fn(),
   });
 
   it('at top-level returns the default URL for the main index state', () => {
@@ -1938,7 +1948,7 @@ describe('createURL', () => {
 
 describe('refresh', () => {
   it('calls `clearCache` on the main Helper', () => {
-    const clearCache = jest.fn();
+    const clearCache = vi.fn();
     const searchClient = createSearchClient({
       // @ts-expect-error
       clearCache,
@@ -1996,13 +2006,13 @@ describe('use', () => {
     });
     const searchBox = createSearchBox({});
     const searchBoxInit = searchBox.init!;
-    searchBox.init = jest.fn((args) => searchBoxInit.bind(searchBox, args)());
+    searchBox.init = vi.fn((args) => searchBoxInit.bind(searchBox, args)());
     const middlewareSpy = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middleware = jest.fn(() => middlewareSpy);
+    const middleware = vi.fn(() => middlewareSpy);
 
     search.addWidgets([searchBox]);
     search.use(middleware);
@@ -2015,7 +2025,7 @@ describe('use', () => {
 
     search.start();
 
-    const widgetsInitCallOrder = (searchBox.init as jest.Mock<any, any>).mock
+    const widgetsInitCallOrder = (searchBox.init as Mock<(...args: any[]) => any>).mock
       .invocationCallOrder[0];
     const middlewareSubscribeCallOrder =
       middlewareSpy.subscribe.mock.invocationCallOrder[0];
@@ -2068,17 +2078,17 @@ describe('use', () => {
       }
     });
     const middlewareBeforeStartSpy = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middlewareBeforeStart = jest.fn(() => middlewareBeforeStartSpy);
+    const middlewareBeforeStart = vi.fn(() => middlewareBeforeStartSpy);
     const middlewareAfterStartSpy = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middlewareAfterStart = jest.fn(() => middlewareAfterStartSpy);
+    const middlewareAfterStart = vi.fn(() => middlewareAfterStartSpy);
 
     search.addWidgets([searchBox({})]);
     search.use(middlewareBeforeStart);
@@ -2157,17 +2167,17 @@ describe('unuse', () => {
       searchClient,
     });
     const middlewareSpy1 = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middleware1 = jest.fn(() => middlewareSpy1);
+    const middleware1 = vi.fn(() => middlewareSpy1);
     const middlewareSpy2 = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middleware2 = jest.fn(() => middlewareSpy2);
+    const middleware2 = vi.fn(() => middlewareSpy2);
 
     search.addWidgets([connectSearchBox(noop)({})]);
     search.use(middleware1, middleware2);
@@ -2217,9 +2227,9 @@ describe('setUiState', () => {
     expect(() => {
       search.setUiState({});
     }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`start\` method needs to be called before \`setUiState\`.
+      [Error: The \`start\` method needs to be called before \`setUiState\`.
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
     `);
   });
 
@@ -2248,7 +2258,7 @@ describe('setUiState', () => {
       indexName: 'indexName',
       searchClient,
     });
-    const onMiddlewareStateChange = jest.fn();
+    const onMiddlewareStateChange = vi.fn();
     const middleware = () => {
       return {
         subscribe() {},
@@ -2287,7 +2297,7 @@ describe('setUiState', () => {
       index({ indexName: 'test' }),
     ]);
 
-    const onMiddlewareStateChange = jest.fn();
+    const onMiddlewareStateChange = vi.fn();
     const middleware = () => {
       return {
         subscribe() {},
@@ -2575,7 +2585,7 @@ describe('setUiState', () => {
   });
 
   it('warns if UI state contains unmounted widgets in development mode', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const searchClient = createSearchClient();
@@ -2880,7 +2890,7 @@ describe('onStateChange', () => {
         });
       }
     });
-    const middlewareOnStateChange = jest.fn();
+    const middlewareOnStateChange = vi.fn();
     const middleware = () => {
       return {
         subscribe() {},
@@ -2930,7 +2940,7 @@ describe('onStateChange', () => {
 
   test('is triggered when the main index helper changes', () => {
     const searchClient = createSearchClient();
-    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+    const onStateChange = vi.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
     const search = new InstantSearch({
@@ -2985,7 +2995,7 @@ describe('onStateChange', () => {
 
   test("is triggered when nested indices' helper changes", () => {
     const searchClient = createSearchClient();
-    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+    const onStateChange = vi.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
     const search = new InstantSearch({
@@ -3080,7 +3090,7 @@ describe('onStateChange', () => {
   });
 
   test('is triggered when setUiState is called', async () => {
-    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+    const onStateChange = vi.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
     const search = new InstantSearch({
@@ -3195,7 +3205,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
 
 describe('events', () => {
   test('can attach many `render` listeners', () => {
-    const spy = jest.spyOn(console, 'error');
+    const spy = vi.spyOn(console, 'error');
     spy.mockImplementation(() => {});
     const search = new InstantSearch({
       indexName: 'indexName',

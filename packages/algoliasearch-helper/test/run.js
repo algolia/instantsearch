@@ -4,33 +4,44 @@ var path = require('path');
 
 var algoliasearch = require('algoliasearch');
 algoliasearch = algoliasearch.algoliasearch || algoliasearch;
-var jest = require('jest');
-
-var staticJestConfig = require('../jest.config');
 
 var enableIntegrationTest =
   process.env.ONLY_UNIT !== 'true' &&
   process.env.INTEGRATION_TEST_API_KEY &&
   process.env.INTEGRATION_TEST_APPID;
 
-var projectsRootPaths = [path.resolve(__dirname, '..')];
-var dynamicJestConfig = Object.assign({}, staticJestConfig, {
-  maxWorkers: 4,
-  setupFilesAfterEnv: staticJestConfig.setupFilesAfterEnv || [],
-});
+var include = ['test/spec/**/*.[jt]s?(x)'];
+var setupFiles = [];
 
 if (enableIntegrationTest) {
-  dynamicJestConfig.testMatch.push(
-    '<rootDir>/test/integration-spec/**/*.[jt]s?(x)'
-  );
-  dynamicJestConfig.setupFilesAfterEnv.push(
-    path.resolve(__dirname, '..', 'jest.setup.js')
-  );
+  include.push('test/integration-spec/**/*.[jt]s?(x)');
+  setupFiles.push(path.resolve(__dirname, '..', 'vitest.setup.ts'));
 }
 
-jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function (response) {
-  if (!response.results.success) {
-    process.exitCode = response.globalConfig.testFailureExitCode;
+async function run() {
+  var { startVitest } = await import('vitest/node');
+  var vitest = await startVitest('test', [], {
+    root: path.resolve(__dirname, '..'),
+    include: include,
+    setupFiles: setupFiles,
+    pool: 'threads',
+    maxWorkers: 4,
+    watch: false,
+  });
+
+  if (!vitest) {
+    process.exitCode = 1;
+    return;
+  }
+
+  var hasFailed = vitest.state.getFiles().some(function (f) {
+    return f.result && f.result.state === 'fail';
+  });
+
+  await vitest.close();
+
+  if (hasFailed) {
+    process.exitCode = 1;
   }
 
   if (enableIntegrationTest) {
@@ -59,4 +70,6 @@ jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function (response) {
         .forEach((n) => client.deleteIndex(n));
     });
   }
-});
+}
+
+run();

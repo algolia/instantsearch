@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 
 import type { RatingMenuWidgetSetup } from '.';
@@ -52,332 +53,332 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-RatingMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-RatingMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-RatingMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-RatingMenu"
+      >
+        <svg
+          style="display: none;"
         >
-          <svg
-            style="display: none;"
+          <symbol
+            id="ais-RatingMenu-starSymbol"
+            viewBox="0 0 24 24"
           >
-            <symbol
-              id="ais-RatingMenu-starSymbol"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
-              />
-            </symbol>
-            <symbol
-              id="ais-RatingMenu-starEmptySymbol"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
-              />
-            </symbol>
-          </svg>
-          <ul
-            class="ais-RatingMenu-list"
+            <path
+              d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+            />
+          </symbol>
+          <symbol
+            id="ais-RatingMenu-starEmptySymbol"
+            viewBox="0 0 24 24"
           >
-            <li
-              class="ais-RatingMenu-item"
-            >
-              <div>
-                <a
-                  aria-label="4 & up"
-                  class="ais-RatingMenu-link"
-                  href="#"
+            <path
+              d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+            />
+          </symbol>
+        </svg>
+        <ul
+          class="ais-RatingMenu-list"
+        >
+          <li
+            class="ais-RatingMenu-item"
+          >
+            <div>
+              <a
+                aria-label="4 & up"
+                class="ais-RatingMenu-link"
+                href="#"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <span
-                    aria-hidden="true"
-                    class="ais-RatingMenu-label"
-                  >
-                    & Up
-                  </span>
-                  <span
-                    class="ais-RatingMenu-count"
-                  >
-                    16075
-                  </span>
-                </a>
-              </div>
-            </li>
-            <li
-              class="ais-RatingMenu-item"
-            >
-              <div>
-                <a
-                  aria-label="3 & up"
-                  class="ais-RatingMenu-link"
-                  href="#"
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <span
-                    aria-hidden="true"
-                    class="ais-RatingMenu-label"
-                  >
-                    & Up
-                  </span>
-                  <span
-                    class="ais-RatingMenu-count"
-                  >
-                    17697
-                  </span>
-                </a>
-              </div>
-            </li>
-            <li
-              class="ais-RatingMenu-item"
-            >
-              <div>
-                <a
-                  aria-label="2 & up"
-                  class="ais-RatingMenu-link"
-                  href="#"
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <span
-                    aria-hidden="true"
-                    class="ais-RatingMenu-label"
-                  >
-                    & Up
-                  </span>
-                  <span
-                    class="ais-RatingMenu-count"
-                  >
-                    17891
-                  </span>
-                </a>
-              </div>
-            </li>
-            <li
-              class="ais-RatingMenu-item"
-            >
-              <div>
-                <a
-                  aria-label="1 & up"
-                  class="ais-RatingMenu-link"
-                  href="#"
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starSymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <svg
-                    aria-hidden="true"
-                    class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
-                    height="24"
-                    width="24"
-                  >
-                    <use
-                      href="#ais-RatingMenu-starEmptySymbol"
-                    />
-                  </svg>
-                  <span
-                    aria-hidden="true"
-                    class="ais-RatingMenu-label"
-                  >
-                    & Up
-                  </span>
-                  <span
-                    class="ais-RatingMenu-count"
-                  >
-                    18047
-                  </span>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="ais-RatingMenu-label"
+                >
+                  & Up
+                </span>
+                <span
+                  class="ais-RatingMenu-count"
+                >
+                  16075
+                </span>
+              </a>
+            </div>
+          </li>
+          <li
+            class="ais-RatingMenu-item"
+          >
+            <div>
+              <a
+                aria-label="3 & up"
+                class="ais-RatingMenu-link"
+                href="#"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="ais-RatingMenu-label"
+                >
+                  & Up
+                </span>
+                <span
+                  class="ais-RatingMenu-count"
+                >
+                  17697
+                </span>
+              </a>
+            </div>
+          </li>
+          <li
+            class="ais-RatingMenu-item"
+          >
+            <div>
+              <a
+                aria-label="2 & up"
+                class="ais-RatingMenu-link"
+                href="#"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="ais-RatingMenu-label"
+                >
+                  & Up
+                </span>
+                <span
+                  class="ais-RatingMenu-count"
+                >
+                  17891
+                </span>
+              </a>
+            </div>
+          </li>
+          <li
+            class="ais-RatingMenu-item"
+          >
+            <div>
+              <a
+                aria-label="1 & up"
+                class="ais-RatingMenu-link"
+                href="#"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    href="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="ais-RatingMenu-label"
+                >
+                  & Up
+                </span>
+                <span
+                  class="ais-RatingMenu-count"
+                >
+                  18047
+                </span>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('limits the number of stars to display', async () => {
@@ -414,7 +415,7 @@ export function createOptionsTests(
 
 function createMockedSearchClient() {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(() =>

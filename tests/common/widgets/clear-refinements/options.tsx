@@ -1,5 +1,9 @@
 import { createSearchClient } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot,
+  wait,
+  normalizeForSnapshot,
+} from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
 import type { ClearRefinementsWidgetSetup } from '.';
@@ -33,21 +37,21 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button"
         >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
 
     test('renders with a disabled button when there are no refinements', async () => {
@@ -70,22 +74,22 @@ export function createOptionsTests(
       expect(button).toBeDisabled();
       expect(button).toHaveClass('ais-ClearRefinements-button--disabled');
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+          disabled=""
         >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
 
     test('clears all refinements', async () => {
@@ -114,21 +118,21 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')
       ).toHaveLength(1);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button"
         >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector(
@@ -145,22 +149,22 @@ export function createOptionsTests(
       ).toHaveLength(0);
 
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+          disabled=""
         >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
 
     test('inclusively restricts what refinements to clear', async () => {
@@ -196,21 +200,21 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')
       ).toHaveLength(2);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button"
         >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector(
@@ -230,22 +234,22 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
       ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+          disabled=""
         >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
 
     test('exclusively restricts what refinements to clear', async () => {
@@ -277,21 +281,21 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')
       ).toHaveLength(2);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button"
         >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector(
@@ -311,22 +315,22 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
       ).toHaveTextContent(/categories:\s?Audio/i);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+          disabled=""
         >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
 
     test('restricts what refinements to clear with custom logic', async () => {
@@ -358,21 +362,21 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')
       ).toHaveLength(2);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button"
         >
-          <button
-            class="ais-ClearRefinements-button"
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector(
@@ -392,22 +396,22 @@ export function createOptionsTests(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
       ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
-        document.querySelector('.ais-ClearRefinements')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-ClearRefinements"
+        normalizeForSnapshot(
+          document.querySelector('.ais-ClearRefinements'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-ClearRefinements"
+      >
+        <button
+          class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+          disabled=""
         >
-          <button
-            class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
-            disabled=""
-          >
-            Clear refinements
-          </button>
-        </div>
-      `
-      );
+          Clear refinements
+        </button>
+      </div>
+    `);
     });
   });
 }

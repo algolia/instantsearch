@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -178,7 +178,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
         },
       });
       const wrapper = shallow(<Template {...props} />);
-      const onRender = jest.spyOn(wrapper.instance(), 'render');
+      const onRender = vi.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({ data: { items: [] } });
 
@@ -192,7 +192,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
         },
       });
       const wrapper = shallow(<Template {...props} />);
-      const onRender = jest.spyOn(wrapper.instance(), 'render');
+      const onRender = vi.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({ data: { items: [1] } });
 
@@ -202,7 +202,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
     it('calls render when templateKey changes', () => {
       const props = getProps({});
       const wrapper = shallow(<Template {...props} />);
-      const onRender = jest.spyOn(wrapper.instance(), 'render');
+      const onRender = vi.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
         templateKey: 'newTemplateKey',
@@ -217,7 +217,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
     it('calls render when rootProps changes', () => {
       const props = getProps({});
       const wrapper = shallow(<Template {...props} />);
-      const onRender = jest.spyOn(wrapper.instance(), 'render');
+      const onRender = vi.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
         rootProps: {
@@ -235,7 +235,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
         },
       });
       const wrapper = shallow(<Template {...props} />);
-      const onRender = jest.spyOn(wrapper.instance(), 'render');
+      const onRender = vi.spyOn(wrapper.instance(), 'render');
 
       wrapper.setProps({
         rootProps: {

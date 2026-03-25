@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
@@ -18,6 +19,7 @@ import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
 } from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+import type { MockedFunction } from 'vitest';
 
 function normalizeSnapshot(html: string) {
   // Each flavor has its own way to render the hit by default.
@@ -72,40 +74,40 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-InfiniteHits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-InfiniteHits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-InfiniteHits"
+      >
+        <ol
+          class="ais-InfiniteHits-list"
         >
-          <ol
-            class="ais-InfiniteHits-list"
+          <li
+            class="ais-InfiniteHits-item"
           >
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"0"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"1"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"2"}
-            </li>
-          </ol>
-          <button
-            class="ais-InfiniteHits-loadMore"
+            {"objectID":"0"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
           >
-            Show more results
-          </button>
-        </div>
-      `
-      );
+            {"objectID":"1"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
+          >
+            {"objectID":"2"}
+          </li>
+        </ol>
+        <button
+          class="ais-InfiniteHits-loadMore"
+        >
+          Show more results
+        </button>
+      </div>
+    `);
     });
 
     test('renders default banner element with banner widget renderingContent', async () => {
@@ -141,53 +143,53 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-InfiniteHits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-InfiniteHits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-InfiniteHits"
+      >
+        <aside
+          class="ais-InfiniteHits-banner"
         >
-          <aside
-            class="ais-InfiniteHits-banner"
+          <a
+            class="ais-InfiniteHits-banner-link"
+            href="https://www.algolia.com"
           >
-            <a
-              class="ais-InfiniteHits-banner-link"
-              href="https://www.algolia.com"
-            >
-              <img
-                class="ais-InfiniteHits-banner-image"
-                src="https://via.placeholder.com/550x250"
-              />
-            </a>
-          </aside>
-          <ol
-            class="ais-InfiniteHits-list"
+            <img
+              class="ais-InfiniteHits-banner-image"
+              src="https://via.placeholder.com/550x250"
+            />
+          </a>
+        </aside>
+        <ol
+          class="ais-InfiniteHits-list"
+        >
+          <li
+            class="ais-InfiniteHits-item"
           >
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"0"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"1"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"2"}
-            </li>
-          </ol>
-          <button
-            class="ais-InfiniteHits-loadMore"
+            {"objectID":"0"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
           >
-            Show more results
-          </button>
-        </div>
-        `
-      );
+            {"objectID":"1"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
+          >
+            {"objectID":"2"}
+          </li>
+        </ol>
+        <button
+          class="ais-InfiniteHits-loadMore"
+        >
+          Show more results
+        </button>
+      </div>
+      `);
     });
 
     test('renders transformed items', async () => {
@@ -213,40 +215,40 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-InfiniteHits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-InfiniteHits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-InfiniteHits"
+      >
+        <ol
+          class="ais-InfiniteHits-list"
         >
-          <ol
-            class="ais-InfiniteHits-list"
+          <li
+            class="ais-InfiniteHits-item"
           >
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"(0)"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"(1)"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"(2)"}
-            </li>
-          </ol>
-          <button
-            class="ais-InfiniteHits-loadMore"
+            {"objectID":"(0)"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
           >
-            Show more results
-          </button>
-        </div>
-      `
-      );
+            {"objectID":"(1)"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
+          >
+            {"objectID":"(2)"}
+          </li>
+        </ol>
+        <button
+          class="ais-InfiniteHits-loadMore"
+        >
+          Show more results
+        </button>
+      </div>
+    `);
     });
 
     test('displays more hits when clicking the "Show More" button', async () => {
@@ -554,40 +556,40 @@ export function createOptionsTests(
 
       // Cached hits are rendered
       expect(
-        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-InfiniteHits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-InfiniteHits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-InfiniteHits"
+      >
+        <ol
+          class="ais-InfiniteHits-list"
         >
-          <ol
-            class="ais-InfiniteHits-list"
+          <li
+            class="ais-InfiniteHits-item"
           >
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"one"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"two"}
-            </li>
-            <li
-              class="ais-InfiniteHits-item"
-            >
-              {"objectID":"three"}
-            </li>
-          </ol>
-          <button
-            class="ais-InfiniteHits-loadMore"
+            {"objectID":"one"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
           >
-            Show more results
-          </button>
-        </div>
-      `
-      );
+            {"objectID":"two"}
+          </li>
+          <li
+            class="ais-InfiniteHits-item"
+          >
+            {"objectID":"three"}
+          </li>
+        </ol>
+        <button
+          class="ais-InfiniteHits-loadMore"
+        >
+          Show more results
+        </button>
+      </div>
+    `);
     });
   });
 }
@@ -596,7 +598,7 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<BaseHit>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
           ...requests.map(
@@ -650,10 +652,10 @@ function createCustomCache() {
 
   type Cache = InfiniteHitsCache<Record<string, any>> & { clear: () => void };
 
-  type MockedCache = { [key in keyof Cache]: jest.MockedFunction<Cache[key]> };
+  type MockedCache = { [key in keyof Cache]: MockedFunction<Cache[key]> };
 
   const cache: MockedCache = {
-    read: jest.fn(({ state }) => {
+    read: vi.fn(({ state }) => {
       const shouldReturnFromCache = isEqual(
         cachedState,
         getStateWithoutPage(state)
@@ -665,11 +667,11 @@ function createCustomCache() {
 
       return null;
     }),
-    write: jest.fn(({ state, hits }) => {
+    write: vi.fn(({ state, hits }) => {
       cachedState = getStateWithoutPage(state);
       cachedHits = hits;
     }),
-    clear: jest.fn(() => {
+    clear: vi.fn(() => {
       cachedState = undefined;
       cachedHits = undefined;
     }),

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -114,7 +114,7 @@ describe('router', () => {
 
     const searchClient = createSearchClient();
     const router: Router = {
-      onUpdate: jest.fn((callback) => {
+      onUpdate: vi.fn((callback) => {
         callback(state);
       }),
       read: () => state,
@@ -131,7 +131,7 @@ describe('router', () => {
       },
     });
 
-    const setUiStateSpy = jest.spyOn(search, 'setUiState');
+    const setUiStateSpy = vi.spyOn(search, 'setUiState');
     search.start();
 
     await wait(0);
@@ -149,7 +149,7 @@ describe('router', () => {
 
     const searchClient = createSearchClient();
     const router: Router = {
-      onUpdate: jest.fn((callback) => {
+      onUpdate: vi.fn((callback) => {
         callback(state);
       }),
       read: () => state,
@@ -187,7 +187,7 @@ describe('router', () => {
 
     const searchClient = createSearchClient();
     const router: Router = {
-      onUpdate: jest.fn((callback) => {
+      onUpdate: vi.fn((callback) => {
         callback(state);
       }),
       read: () => state,

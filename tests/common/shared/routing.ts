@@ -41,10 +41,10 @@ export function createRoutingTests(
               router,
             },
             searchClient: createSearchClient({
-              search: jest.fn(async (requests) => {
+              search: vi.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  ...requests.map(({ params }) =>
+                  ...requests.map(({ params }: { params: Record<string, any> }) =>
                     createSingleSearchResponse({
                       facets: {
                         [attribute]: {
@@ -78,7 +78,7 @@ export function createRoutingTests(
           // to check that the URL is correct.
           const menuLink = document.querySelector('[data-testid="Menu-link"]');
           if (menuLink) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(menuLink).toHaveAttribute(
               'href',
               router.createURL({
@@ -97,7 +97,7 @@ export function createRoutingTests(
             '[data-testid="Pagination-link"]'
           );
           if (paginationLink) {
-            // eslint-disable-next-line jest/no-conditional-expect
+            // eslint-disable-next-line vitest/no-conditional-expect
             expect(paginationLink).toHaveAttribute(
               'href',
               router.createURL({ indexName: { page: 11 } })
@@ -129,7 +129,7 @@ export function createRoutingTests(
         // Select a refinement
         {
           const firstItem = screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           });
           await act(async () => {
             firstItem.click();
@@ -177,7 +177,7 @@ export function createRoutingTests(
         // Unselect the refinement
         {
           const firstItem = screen.getByRole('link', {
-            name: 'Apple 200',
+            name: /Apple\s*200/,
           });
           await act(async () => {
             firstItem.click();

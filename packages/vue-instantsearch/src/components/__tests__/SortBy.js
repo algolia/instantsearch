@@ -1,13 +1,13 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 import { mount } from '../../../test/utils';
 import '../../../test/utils/sortedHtmlSerializer';
 import { __setState } from '../../mixins/widget';
 import SortBy from '../SortBy.vue';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const defaultState = {
   options: [

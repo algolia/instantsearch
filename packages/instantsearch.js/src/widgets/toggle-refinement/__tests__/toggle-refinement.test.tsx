@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';
@@ -31,9 +31,9 @@ describe('toggleRefinement', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/]
       `);
     });
 

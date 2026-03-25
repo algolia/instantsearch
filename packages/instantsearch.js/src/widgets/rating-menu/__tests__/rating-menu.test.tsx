@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import {
@@ -26,10 +26,10 @@ describe('ratingMenu', () => {
     const container = document.createElement('div');
     const router = history();
     const searchClient = createSearchClient({
-      search: jest.fn((requests) =>
+      search: vi.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
-            ...requests.map((request) =>
+            ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
               createSingleSearchResponse({
                 index: request.indexName,
                 facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },
@@ -93,9 +93,9 @@ describe('ratingMenu', () => {
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/]
       `);
     });
 
@@ -987,10 +987,10 @@ describe('ratingMenu', () => {
 
   function createMockedSearchClient() {
     return createSearchClient({
-      search: jest.fn((requests) =>
+      search: vi.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
-            ...requests.map((request) =>
+            ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
               createSingleSearchResponse({
                 index: request.indexName,
                 facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },

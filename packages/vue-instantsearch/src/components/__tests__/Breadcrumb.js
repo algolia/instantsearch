@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,8 +7,8 @@ import { __setState } from '../../mixins/widget';
 import Breadcrumb from '../Breadcrumb.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const defaultItems = [
   {
@@ -47,7 +47,7 @@ describe('default render', () => {
   });
 
   it('calls refine on root click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,
@@ -65,7 +65,7 @@ describe('default render', () => {
   });
 
   it('calls refine on item click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,
@@ -164,7 +164,7 @@ describe('custom default render', () => {
   });
 
   it('calls refine on link click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,

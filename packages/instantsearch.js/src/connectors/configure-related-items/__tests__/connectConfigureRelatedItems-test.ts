@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -51,10 +51,10 @@ describe('connectConfigureRelatedItems', () => {
         // @ts-expect-error missing options
         configureRelatedItems();
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`hit\` option is required.
+        [Error: The \`hit\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-related-items/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-related-items/js/#connector]
+      `);
     });
 
     test('throws without matchingPatterns option', () => {
@@ -66,10 +66,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           hit,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`matchingPatterns\` option is required.
+        [Error: The \`matchingPatterns\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-related-items/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-related-items/js/#connector]
+      `);
     });
 
     test('does not throw on correct usage', () => {

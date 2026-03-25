@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -18,7 +18,7 @@ import connectHitsWithInsights from '../connectHitsWithInsights';
 
 import type { Hit } from '../../../types';
 
-jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+vi.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: (hits: Hit[]) => hits,
 }));
 
@@ -28,12 +28,12 @@ describe('connectHitsWithInsights', () => {
       insightsClient() {},
     });
 
-    const rendering = jest.fn();
-    const makeWidget = connectHitsWithInsights(rendering, jest.fn());
+    const rendering = vi.fn();
+    const makeWidget = connectHitsWithInsights(rendering, vi.fn());
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -68,12 +68,12 @@ describe('connectHitsWithInsights', () => {
   });
 
   it('should preserve props exposed by connectHits', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsWithInsights(rendering, jest.fn());
+    const rendering = vi.fn();
+    const makeWidget = connectHitsWithInsights(rendering, vi.fn());
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({

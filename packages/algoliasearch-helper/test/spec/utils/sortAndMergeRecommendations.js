@@ -86,44 +86,44 @@ test('sorts the items based on their average index thus preserving applied rules
   );
 
   expect(result).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "_score": 0,
-          "name": "Product B",
-          "objectID": "B",
-        },
-        Object {
-          "_score": 76,
-          "name": "Product E",
-          "objectID": "E",
-        },
-        Object {
-          "_score": 0,
-          "name": "Product C",
-          "objectID": "C",
-        },
-        Object {
-          "_score": 100,
-          "name": "Product F",
-          "objectID": "F",
-        },
-        Object {
-          "_score": 100,
-          "name": "Product A",
-          "objectID": "A",
-        },
-        Object {
-          "_score": 96,
-          "name": "Product G",
-          "objectID": "G",
-        },
-        Object {
-          "_score": 89,
-          "name": "Product D",
-          "objectID": "D",
-        },
-      ]
-    `);
+    [
+      {
+        "_score": 0,
+        "name": "Product B",
+        "objectID": "B",
+      },
+      {
+        "_score": 76,
+        "name": "Product E",
+        "objectID": "E",
+      },
+      {
+        "_score": 0,
+        "name": "Product C",
+        "objectID": "C",
+      },
+      {
+        "_score": 100,
+        "name": "Product F",
+        "objectID": "F",
+      },
+      {
+        "_score": 100,
+        "name": "Product A",
+        "objectID": "A",
+      },
+      {
+        "_score": 96,
+        "name": "Product G",
+        "objectID": "G",
+      },
+      {
+        "_score": 89,
+        "name": "Product D",
+        "objectID": "D",
+      },
+    ]
+  `);
 });
 
 test('filters out input objectIDs', () => {
@@ -135,27 +135,27 @@ test('filters out input objectIDs', () => {
   );
 
   expect(result).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "_score": 76,
-          "name": "Product E",
-          "objectID": "E",
-        },
-        Object {
-          "_score": 100,
-          "name": "Product F",
-          "objectID": "F",
-        },
-        Object {
-          "_score": 96,
-          "name": "Product G",
-          "objectID": "G",
-        },
-        Object {
-          "_score": 89,
-          "name": "Product D",
-          "objectID": "D",
-        },
-      ]
-    `);
+    [
+      {
+        "_score": 76,
+        "name": "Product E",
+        "objectID": "E",
+      },
+      {
+        "_score": 100,
+        "name": "Product F",
+        "objectID": "F",
+      },
+      {
+        "_score": 96,
+        "name": "Product G",
+        "objectID": "G",
+      },
+      {
+        "_score": 89,
+        "name": "Product D",
+        "objectID": "D",
+      },
+    ]
+  `);
 });

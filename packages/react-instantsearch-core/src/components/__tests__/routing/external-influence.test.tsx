@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -16,7 +16,7 @@ describe('routing with external influence', () => {
     // 3. External influence: '/about'
     // 4. Refine: '/about?indexName[query]=Samsung'
 
-    const pushState = jest.spyOn(window.history, 'pushState');
+    const pushState = vi.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
 
     let setQuery = (_query: string) => {};

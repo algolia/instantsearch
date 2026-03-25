@@ -24,7 +24,7 @@ describe('warn', () => {
 
     test('warns a message a single time', () => {
       const originalConsoleWarn = console.warn;
-      console.warn = jest.fn();
+      console.warn = vi.fn();
 
       warn(false, 'warning1');
       warn(false, 'warning1');

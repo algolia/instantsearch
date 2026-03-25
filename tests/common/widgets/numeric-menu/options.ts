@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -52,92 +53,92 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-NumericMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-NumericMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-NumericMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-NumericMenu"
+      >
+        <ul
+          class="ais-NumericMenu-list"
         >
-          <ul
-            class="ais-NumericMenu-list"
+          <li
+            class="ais-NumericMenu-item ais-NumericMenu-item--selected"
           >
-            <li
-              class="ais-NumericMenu-item ais-NumericMenu-item--selected"
+            <label
+              class="ais-NumericMenu-label"
             >
-              <label
-                class="ais-NumericMenu-label"
+              <input
+                class="ais-NumericMenu-radio"
+                name="price"
+                type="radio"
+              />
+              <span
+                class="ais-NumericMenu-labelText"
               >
-                <input
-                  class="ais-NumericMenu-radio"
-                  name="price"
-                  type="radio"
-                />
-                <span
-                  class="ais-NumericMenu-labelText"
-                >
-                  All
-                </span>
-              </label>
-            </li>
-            <li
-              class="ais-NumericMenu-item"
+                All
+              </span>
+            </label>
+          </li>
+          <li
+            class="ais-NumericMenu-item"
+          >
+            <label
+              class="ais-NumericMenu-label"
             >
-              <label
-                class="ais-NumericMenu-label"
+              <input
+                class="ais-NumericMenu-radio"
+                name="price"
+                type="radio"
+              />
+              <span
+                class="ais-NumericMenu-labelText"
               >
-                <input
-                  class="ais-NumericMenu-radio"
-                  name="price"
-                  type="radio"
-                />
-                <span
-                  class="ais-NumericMenu-labelText"
-                >
-                  Less than 500$
-                </span>
-              </label>
-            </li>
-            <li
-              class="ais-NumericMenu-item"
+                Less than 500$
+              </span>
+            </label>
+          </li>
+          <li
+            class="ais-NumericMenu-item"
+          >
+            <label
+              class="ais-NumericMenu-label"
             >
-              <label
-                class="ais-NumericMenu-label"
+              <input
+                class="ais-NumericMenu-radio"
+                name="price"
+                type="radio"
+              />
+              <span
+                class="ais-NumericMenu-labelText"
               >
-                <input
-                  class="ais-NumericMenu-radio"
-                  name="price"
-                  type="radio"
-                />
-                <span
-                  class="ais-NumericMenu-labelText"
-                >
-                  Between 500$ - 1000$
-                </span>
-              </label>
-            </li>
-            <li
-              class="ais-NumericMenu-item"
+                Between 500$ - 1000$
+              </span>
+            </label>
+          </li>
+          <li
+            class="ais-NumericMenu-item"
+          >
+            <label
+              class="ais-NumericMenu-label"
             >
-              <label
-                class="ais-NumericMenu-label"
+              <input
+                class="ais-NumericMenu-radio"
+                name="price"
+                type="radio"
+              />
+              <span
+                class="ais-NumericMenu-labelText"
               >
-                <input
-                  class="ais-NumericMenu-radio"
-                  name="price"
-                  type="radio"
-                />
-                <span
-                  class="ais-NumericMenu-labelText"
-                >
-                  More than 1000$
-                </span>
-              </label>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                More than 1000$
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    `);
       expect(screen.getByRole('radio', { name: 'All' })).toBeChecked();
     });
 
@@ -288,17 +289,19 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<{ name: string; description: string }>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              index: request.indexName,
-              query: request.params?.query,
-              hits: [{ objectID: '1' }, { objectID: '2' }],
-              ...subset,
-            });
-          })
+          ...requests.map(
+            (request: { indexName: string; params?: Record<string, any> }) => {
+              return createSingleSearchResponse<any>({
+                index: request.indexName,
+                query: request.params?.query,
+                hits: [{ objectID: '1' }, { objectID: '2' }],
+                ...subset,
+              });
+            }
+          )
         )
       );
     }),

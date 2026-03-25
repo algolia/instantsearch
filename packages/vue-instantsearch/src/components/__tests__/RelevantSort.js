@@ -1,11 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import RelevantSort from '../RelevantSort.vue';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 describe('renders correctly', () => {
@@ -61,7 +61,7 @@ it("calls the connector's refine function with 0 and undefined", async () => {
   __setState({
     isRelevantSorted: true,
     isVirtualReplica: true,
-    refine: jest.fn(() => {
+    refine: vi.fn(() => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       wrapper.vm.state.isRelevantSorted = !wrapper.vm.state.isRelevantSorted;
     }),

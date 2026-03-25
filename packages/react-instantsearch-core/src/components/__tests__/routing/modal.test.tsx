@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -16,7 +16,7 @@ describe('routing with no navigation', () => {
     // 2. Refine: '/?indexName[query]=Apple'
     // 3. Dispose: '/'
 
-    const pushState = jest.spyOn(window.history, 'pushState');
+    const pushState = vi.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
 
     function App() {

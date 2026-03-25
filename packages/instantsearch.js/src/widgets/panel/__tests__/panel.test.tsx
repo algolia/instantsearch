@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import {
@@ -254,10 +254,10 @@ describe('panel', () => {
 
     function createMockedSearchClient() {
       return createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) =>
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
                 createSingleSearchResponse({
                   index: request.indexName,
                   facets: {

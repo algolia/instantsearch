@@ -25,7 +25,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -100,7 +100,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -175,7 +175,7 @@ export function createOptimisticUiTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               if (errors) {
                 throw new Error('Network error!');

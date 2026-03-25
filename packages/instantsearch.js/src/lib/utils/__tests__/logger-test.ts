@@ -1,11 +1,13 @@
 import { deprecate, warning } from '../logger';
 
+import type { MockInstance } from 'vitest';
+
 describe('deprecate', () => {
   const sum = (...args: number[]) => args.reduce((acc, _) => acc + _, 0);
-  let warn: jest.SpiedFunction<typeof global.console.warn>;
+  let warn: MockInstance<typeof global.console.warn>;
 
   beforeEach(() => {
-    warn = jest.spyOn(global.console, 'warn');
+    warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
   });
 
@@ -38,10 +40,10 @@ describe('deprecate', () => {
 });
 
 describe('warning', () => {
-  let warn: jest.SpiedFunction<typeof global.console.warn>;
+  let warn: MockInstance<typeof global.console.warn>;
 
   beforeEach(() => {
-    warn = jest.spyOn(global.console, 'warn');
+    warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
   });
 

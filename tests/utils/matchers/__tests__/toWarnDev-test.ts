@@ -3,7 +3,7 @@
 import { wait } from '@instantsearch/testutils/wait';
 
 // export is needed for TS isolatedModules
-// eslint-disable-next-line jest/no-export
+// eslint-disable-next-line vitest/no-export
 export {};
 
 describe('toWarnDev', () => {
@@ -13,7 +13,7 @@ describe('toWarnDev', () => {
         // @ts-expect-error
         expect(() => {}).toWarnDev(false);
       }).toThrowErrorMatchingInlineSnapshot(
-        `"toWarnDev() requires a parameter of type string but was given boolean."`
+        `[Error: toWarnDev() requires a parameter of type string but was given boolean.]`
       );
     });
   });
@@ -31,7 +31,7 @@ describe('toWarnDev', () => {
       test('fails if not called', () => {
         expect(() => {
           expect(() => {}).toWarnDev();
-        }).toThrowErrorMatchingInlineSnapshot(`"No warning recorded."`);
+        }).toThrowErrorMatchingInlineSnapshot(`[Error: No warning recorded.]`);
       });
     });
 

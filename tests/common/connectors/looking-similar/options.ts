@@ -24,11 +24,11 @@ export function createOptionsTests(
 
       await expect(async () => {
         await setup(options);
-      }).rejects.toThrowErrorMatchingInlineSnapshot(`
-              "The \`objectIDs\` option is required.
+      }).rejects.toThrowErrorMatchingSnapshot(`
+        [Error: The \`objectIDs\` option is required.
 
-              See documentation: https://www.algolia.com/doc/api-reference/widgets/looking-similar/js/#connector"
-            `);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/looking-similar/js/#connector]
+      `);
     });
 
     test('forwards parameters to the client', async () => {
@@ -82,13 +82,13 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`<ul />`);
+      expect(screen.getByRole('list')).toMatchSnapshot(`<ul />`);
 
       await act(async () => {
         await wait(0);
       });
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`
+      expect(screen.getByRole('list')).toMatchSnapshot(`
         <ul>
           <li>
             1
@@ -121,13 +121,13 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`<ul />`);
+      expect(screen.getByRole('list')).toMatchSnapshot(`<ul />`);
 
       await act(async () => {
         await wait(0);
       });
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`
+      expect(screen.getByRole('list')).toMatchSnapshot(`
         <ul>
           <li>
             (1)

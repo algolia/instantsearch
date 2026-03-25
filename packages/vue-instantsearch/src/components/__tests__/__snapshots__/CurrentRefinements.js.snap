@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom render gives all relevant info to scoped slot 1`] = `
+exports[`custom render > gives all relevant info to scoped slot 1`] = `
 <div class="ais-CurrentRefinements">
   <div>
     <ul>
@@ -21,7 +21,7 @@ exports[`custom render gives all relevant info to scoped slot 1`] = `
 </div>
 `;
 
-exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
+exports[`custom render > item slot gives all relevant info to scoped slot 1`] = `
 <div class="ais-CurrentRefinements">
   <ul class="ais-CurrentRefinements-list">
     <li class="ais-CurrentRefinements-item">

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { usePoweredBy } from '../usePoweredBy';
@@ -15,7 +15,7 @@ describe('usePoweredBy', () => {
 
   test('does not set `utm_content` when `window.location` is not defined', () => {
     const originalWindow = { ...window };
-    const windowSpy = jest.spyOn(global, 'window', 'get');
+    const windowSpy = vi.spyOn(global, 'window', 'get');
     const { location, ...windowWithoutLocation } = originalWindow;
     // @ts-expect-error
     windowSpy.mockImplementation(() => windowWithoutLocation);

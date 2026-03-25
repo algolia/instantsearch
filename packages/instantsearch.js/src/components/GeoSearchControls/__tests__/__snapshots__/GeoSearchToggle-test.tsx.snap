@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GeoSearchToggle expect to render 1`] = `
+exports[`GeoSearchToggle > expect to render 1`] = `
 <label
   className="label"
 >
@@ -14,7 +14,7 @@ exports[`GeoSearchToggle expect to render 1`] = `
 </label>
 `;
 
-exports[`GeoSearchToggle expect to render checked 1`] = `
+exports[`GeoSearchToggle > expect to render checked 1`] = `
 <label
   className="label"
 >

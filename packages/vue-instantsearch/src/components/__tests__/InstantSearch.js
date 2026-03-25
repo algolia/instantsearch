@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
@@ -12,15 +12,18 @@ import { warn } from '../../util/warn';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../util/warn');
+vi.mock('../../util/warn');
+vi.mock('instantsearch.js/es', () => {
+  return import('../../../__mocks__/instantsearch.js/es.js');
+});
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
-  const insightsClient = jest.fn();
+  const insightsClient = vi.fn();
   const searchFunction = (helper) => helper.search();
 
   mount(InstantSearch, {
@@ -51,8 +54,8 @@ it('passes props to InstantSearch.js', () => {
 });
 
 it('throws on usage of appId or apiKey', () => {
-  global.console.error = jest.fn();
-  global.console.warn = jest.fn();
+  global.console.error = vi.fn();
+  global.console.warn = vi.fn();
 
   mount(InstantSearch, {
     propsData: {
@@ -70,35 +73,35 @@ These have been replaced by search-client.
 See more info here: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client`);
 
   if (isVue3) {
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"apiKey\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "apiKey"."`
     );
 
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[1][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"appId\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "appId"."`
     );
   } else {
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
-"[Vue warn]: Invalid prop: custom validator check failed for prop \\"apiKey\\".
+      "[Vue warn]: Invalid prop: custom validator check failed for prop "apiKey".
 
-found in
+      found in
 
----> <AisInstantSearch>
-       <Root>"
-`);
+      ---> <AisInstantSearch>
+             <Root>"
+    `);
 
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.error.mock.calls[1][0]).toMatchInlineSnapshot(`
-"[Vue warn]: Invalid prop: custom validator check failed for prop \\"appId\\".
+      "[Vue warn]: Invalid prop: custom validator check failed for prop "appId".
 
-found in
+      found in
 
----> <AisInstantSearch>
-       <Root>"
-`);
+      ---> <AisInstantSearch>
+             <Root>"
+    `);
   }
 });
 
@@ -251,8 +254,8 @@ it('Allows a change in `stalled-search-delay`', async () => {
 });
 
 it('does not allow `routing` to be a boolean', () => {
-  global.console.error = jest.fn();
-  global.console.warn = jest.fn();
+  global.console.error = vi.fn();
+  global.console.warn = vi.fn();
   mount(InstantSearch, {
     propsData: {
       searchClient: {},
@@ -262,20 +265,20 @@ it('does not allow `routing` to be a boolean', () => {
   });
 
   if (isVue3) {
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[Vue warn]: Invalid prop: custom validator check failed for prop \\"routing\\"."`
+      `"[Vue warn]: Invalid prop: custom validator check failed for prop "routing"."`
     );
   } else {
-    // eslint-disable-next-line jest/no-conditional-expect
+    // eslint-disable-next-line vitest/no-conditional-expect
     expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
-"[Vue warn]: Invalid prop: custom validator check failed for prop \\"routing\\".
+      "[Vue warn]: Invalid prop: custom validator check failed for prop "routing".
 
-found in
+      found in
 
----> <AisInstantSearch>
-       <Root>"
-`);
+      ---> <AisInstantSearch>
+             <Root>"
+    `);
   }
 
   expect(warn)
@@ -339,7 +342,7 @@ Please open a new issue: https://github.com/algolia/instantsearch/discussions/ne
 });
 
 it('will call client.addAlgoliaAgent if present', () => {
-  const client = { addAlgoliaAgent: jest.fn() };
+  const client = { addAlgoliaAgent: vi.fn() };
 
   mount(InstantSearch, {
     propsData: {
@@ -384,45 +387,46 @@ it('disposes the instantsearch instance on unmount', async () => {
   expect(wrapper.vm.instantSearchInstance.dispose).toHaveBeenCalledTimes(1);
 });
 
-// eslint-disable-next-line jest/no-done-callback
-it('provides the instantsearch instance', (done) => {
-  let instantSearchInstance;
+it('provides the instantsearch instance', () => {
+  return new Promise((done) => {
+    let instantSearchInstance;
 
-  const ParentComponent = {
-    ...InstantSearch,
-    created() {
-      instantSearchInstance = this.instantSearchInstance;
-    },
-  };
+    const ParentComponent = {
+      ...InstantSearch,
+      created() {
+        instantSearchInstance = this.instantSearchInstance;
+      },
+    };
 
-  const ChildComponent = {
-    inject: ['$_ais_instantSearchInstance'],
-    mounted() {
-      this.$nextTick(() => {
-        expect(typeof this.$_ais_instantSearchInstance).toBe('object');
-        expect(this.$_ais_instantSearchInstance).toBe(instantSearchInstance);
-        done();
-      });
-    },
-    render() {
-      return null;
-    },
-  };
+    const ChildComponent = {
+      inject: ['$_ais_instantSearchInstance'],
+      mounted() {
+        this.$nextTick(() => {
+          expect(typeof this.$_ais_instantSearchInstance).toBe('object');
+          expect(this.$_ais_instantSearchInstance).toBe(instantSearchInstance);
+          done();
+        });
+      },
+      render() {
+        return null;
+      },
+    };
 
-  mount({
-    components: { ParentComponent, ChildComponent },
-    data() {
-      return {
-        props: {
-          searchClient: {},
-          indexName: 'something',
-        },
-      };
-    },
-    template: `
+    mount({
+      components: { ParentComponent, ChildComponent },
+      data() {
+        return {
+          props: {
+            searchClient: {},
+            indexName: 'something',
+          },
+        };
+      },
+      template: `
       <ParentComponent v-bind="props">
         <ChildComponent />
       </ParentComponent>
     `,
+    });
   });
 });

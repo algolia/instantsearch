@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { render } from '@testing-library/react';
@@ -28,7 +28,7 @@ describe('CurrentRefinements', () => {
   });
 
   test('renders with clickable refinements', () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     const { container } = render(
       <CurrentRefinements
@@ -172,7 +172,7 @@ describe('CurrentRefinements', () => {
           items={[
             {
               label: 'brand',
-              refine: jest.fn(),
+              refine: vi.fn(),
               refinements: [
                 {
                   attribute: 'brand',

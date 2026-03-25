@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -54,30 +55,30 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Hits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-Hits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Hits"
+      >
+        <ol
+          class="ais-Hits-list"
         >
-          <ol
-            class="ais-Hits-list"
+          <li
+            class="ais-Hits-item"
           >
-            <li
-              class="ais-Hits-item"
-            >
-              {"objectID":"1"}
-            </li>
-            <li
-              class="ais-Hits-item"
-            >
-              {"objectID":"2"}
-            </li>
-          </ol>
-        </div>
-      `
-      );
+            {"objectID":"1"}
+          </li>
+          <li
+            class="ais-Hits-item"
+          >
+            {"objectID":"2"}
+          </li>
+        </ol>
+      </div>
+    `);
     });
 
     test('renders transformed items', async () => {
@@ -105,30 +106,30 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Hits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-Hits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Hits"
+      >
+        <ol
+          class="ais-Hits-list"
         >
-          <ol
-            class="ais-Hits-list"
+          <li
+            class="ais-Hits-item"
           >
-            <li
-              class="ais-Hits-item"
-            >
-              {"objectID":"(1)"}
-            </li>
-            <li
-              class="ais-Hits-item"
-            >
-              {"objectID":"(2)"}
-            </li>
-          </ol>
-        </div>
-      `
-      );
+            {"objectID":"(1)"}
+          </li>
+          <li
+            class="ais-Hits-item"
+          >
+            {"objectID":"(2)"}
+          </li>
+        </ol>
+      </div>
+    `);
     });
 
     skippableDescribe('common rendering', skippedTests, () => {
@@ -156,19 +157,19 @@ export function createOptionsTests(
         });
 
         expect(
-          document.querySelector('#hits-with-defaults .ais-Hits')
-        ).toMatchNormalizedInlineSnapshot(
-          normalizeSnapshot,
-          `
-          <div
-            class="ais-Hits ais-Hits--empty"
-          >
-            <ol
-              class="ais-Hits-list"
-            />
-          </div>
-        `
-        );
+          normalizeForSnapshot(
+            document.querySelector('#hits-with-defaults .ais-Hits'),
+            normalizeSnapshot
+          )
+        ).toMatchInlineSnapshot(`
+        <div
+          class="ais-Hits ais-Hits--empty"
+        >
+          <ol
+            class="ais-Hits-list"
+          />
+        </div>
+      `);
       });
     });
 
@@ -205,43 +206,43 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-          <div
-            class="ais-Hits"
+        normalizeForSnapshot(
+          document.querySelector('#hits-with-defaults .ais-Hits'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+        <div
+          class="ais-Hits"
+        >
+          <aside
+            class="ais-Hits-banner"
           >
-            <aside
-              class="ais-Hits-banner"
+            <a
+              class="ais-Hits-banner-link"
+              href="https://www.algolia.com"
             >
-              <a
-                class="ais-Hits-banner-link"
-                href="https://www.algolia.com"
-              >
-                <img
-                  class="ais-Hits-banner-image"
-                  src="https://via.placeholder.com/550x250"
-                />
-              </a>
-            </aside>
-            <ol
-              class="ais-Hits-list"
+              <img
+                class="ais-Hits-banner-image"
+                src="https://via.placeholder.com/550x250"
+              />
+            </a>
+          </aside>
+          <ol
+            class="ais-Hits-list"
+          >
+            <li
+              class="ais-Hits-item"
             >
-              <li
-                class="ais-Hits-item"
-              >
-                {"objectID":"1"}
-              </li>
-              <li
-                class="ais-Hits-item"
-              >
-                {"objectID":"2"}
-              </li>
-            </ol>
-          </div>
-          `
-      );
+              {"objectID":"1"}
+            </li>
+            <li
+              class="ais-Hits-item"
+            >
+              {"objectID":"2"}
+            </li>
+          </ol>
+        </div>
+        `);
     });
   });
 }
@@ -252,20 +253,22 @@ function createMockedSearchClient(
   subset: Partial<SearchResponse<CustomRecord>> = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) => {
+    search: vi.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              index: request.indexName,
-              query: request.params?.query,
-              hits:
-                request.params?.query === 'query with no results'
-                  ? []
-                  : [{ objectID: '1' }, { objectID: '2' }],
-              ...subset,
-            });
-          })
+          ...requests.map(
+            (request: { indexName: string; params?: Record<string, any> }) => {
+              return createSingleSearchResponse<any>({
+                index: request.indexName,
+                query: request.params?.query,
+                hits:
+                  request.params?.query === 'query with no results'
+                    ? []
+                    : [{ objectID: '1' }, { objectID: '2' }],
+                ...subset,
+              });
+            }
+          )
         )
       );
     }),

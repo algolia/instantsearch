@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -28,10 +28,10 @@ describe('connectAnswers', () => {
         // @ts-expect-error: test connectAnswers with invalid parameters
         connectAnswers()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector]
+      `);
     });
 
     it('throws without `queryLanguages`', () => {
@@ -39,10 +39,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
         // @ts-expect-error: test connectAnswers with invalid parameters
         connectAnswers(() => {})({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`queryLanguages\` expects an array of strings.
+        [Error: The \`queryLanguages\` expects an array of strings.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/#connector]
+      `);
     });
   });
 
@@ -57,8 +57,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
     renderDebounceTime?: number;
     searchDebounceTime?: number;
   }) => {
-    const renderFn = jest.fn();
-    const unmountFn = jest.fn();
+    const renderFn = vi.fn();
+    const unmountFn = vi.fn();
     const client = createSearchClient({
       // @ts-ignore-next-line
       initIndex() {
@@ -88,8 +88,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
   };
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const makeWidget = connectAnswers(render, unmount);
     const widget = makeWidget({

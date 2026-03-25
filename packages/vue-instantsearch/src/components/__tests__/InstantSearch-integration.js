@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount, nextTick } from '../../../test/utils';
@@ -7,7 +7,7 @@ import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
 import InstantSearch from '../InstantSearch';
 import SearchBox from '../SearchBox.vue';
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -52,11 +52,11 @@ it('child widgets get added to its parent instantsearch', () => {
 describe('middlewares', () => {
   const createFakeMiddleware = () => {
     const middlewareSpy = {
-      onStateChange: jest.fn(),
-      subscribe: jest.fn(),
-      unsubscribe: jest.fn(),
+      onStateChange: vi.fn(),
+      subscribe: vi.fn(),
+      unsubscribe: vi.fn(),
     };
-    const middleware = jest.fn(() => middlewareSpy);
+    const middleware = vi.fn(() => middlewareSpy);
 
     return [middleware, middlewareSpy];
   };

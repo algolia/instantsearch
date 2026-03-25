@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -25,8 +25,8 @@ const createHelper = () => {
 
 describe('connectRelevantSort', () => {
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customRelevantSort = connectRelevantSort(render, unmount);
     const widget = customRelevantSort({});
@@ -167,8 +167,8 @@ describe('connectRelevantSort', () => {
   describe('getRenderState', () => {
     it('return the render state', () => {
       const helper = createHelper();
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectRelevantSort(renderFn, unmountFn);
       const widget = makeWidget({});
 

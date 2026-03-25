@@ -1,9 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /* global SpeechRecognition */
 
 import createVoiceSearchHelper from '..';
+
+import type { Mock } from 'vitest';
 
 type DummySpeechRecognition = () => void;
 declare global {
@@ -13,19 +15,21 @@ declare global {
   }
 }
 
-const start = jest.fn();
-const stop = jest.fn();
+const start = vi.fn();
+const stop = vi.fn();
 
-const createFakeSpeechRecognition = (): jest.Mock => {
+const createFakeSpeechRecognition = (): Mock => {
   const simulateListener: any = {};
-  const mock = jest.fn().mockImplementation(() => ({
-    start,
-    stop,
-    addEventListener(eventName: string, callback: () => void) {
-      simulateListener[eventName] = callback;
-    },
-    removeEventListener() {},
-  }));
+  const mock = vi.fn().mockImplementation(function () {
+    return {
+      start,
+      stop,
+      addEventListener(eventName: string, callback: () => void) {
+        simulateListener[eventName] = callback;
+      },
+      removeEventListener() {},
+    };
+  });
   (mock as any).simulateListener = simulateListener;
   return mock;
 };
@@ -94,8 +98,8 @@ describe('VoiceSearchHelper', () => {
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
     window.SpeechRecognition = createFakeSpeechRecognition();
     const { simulateListener } = window.SpeechRecognition as any;
-    const onQueryChange = jest.fn();
-    const onStateChange = jest.fn();
+    const onQueryChange = vi.fn();
+    const onStateChange = vi.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,
       onQueryChange,
@@ -132,8 +136,8 @@ describe('VoiceSearchHelper', () => {
   it('works with mock SpeechRecognition (searchAsYouSpeak:true)', () => {
     window.SpeechRecognition = createFakeSpeechRecognition();
     const { simulateListener } = window.SpeechRecognition as any;
-    const onQueryChange = jest.fn();
-    const onStateChange = jest.fn();
+    const onQueryChange = vi.fn();
+    const onStateChange = vi.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
@@ -170,8 +174,8 @@ describe('VoiceSearchHelper', () => {
   it('works with onerror', () => {
     window.SpeechRecognition = createFakeSpeechRecognition();
     const { simulateListener } = window.SpeechRecognition as any;
-    const onQueryChange = jest.fn();
-    const onStateChange = jest.fn();
+    const onQueryChange = vi.fn();
+    const onStateChange = vi.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,

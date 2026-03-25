@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
@@ -24,9 +24,9 @@ describe('useInstantSearch', () => {
       expect(() => {
         renderHook(() => useInstantSearch());
       }).toThrowErrorMatchingInlineSnapshot(`
-        "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
+        [Error: [InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
-        They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."
+        They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`.]
       `);
     });
   });
@@ -296,10 +296,10 @@ describe('useInstantSearch', () => {
 
   describe('middleware', () => {
     test('gives access to the addMiddlewares function', async () => {
-      const subscribe = jest.fn();
-      const onStateChange = jest.fn();
-      const unsubscribe = jest.fn();
-      const middleware = jest.fn(() => ({
+      const subscribe = vi.fn();
+      const onStateChange = vi.fn();
+      const unsubscribe = vi.fn();
+      const middleware = vi.fn(() => ({
         subscribe,
         onStateChange,
         unsubscribe,
@@ -485,9 +485,16 @@ describe('useInstantSearch', () => {
 
     test('turns to loading and error when searching', async () => {
       const searchClient = createAlgoliaSearchClient({});
-      searchClient.search.mockImplementation(async () => {
-        await wait(100);
-        throw new Error('API_ERROR');
+      // Track rejections so they don't leak as unhandled
+      const rejections: Promise<unknown>[] = [];
+      searchClient.search.mockImplementation(() => {
+        const p = wait(100).then(() => {
+          throw new Error('API_ERROR');
+        });
+        // Prevent unhandled rejection by attaching a no-op catch.
+        // InstantSearch still receives the rejection via its own .then() chain.
+        rejections.push(p.catch(() => {}));
+        return p;
       });
 
       const App = () => (
@@ -514,6 +521,8 @@ describe('useInstantSearch', () => {
         expect(getByTestId('status')).toHaveTextContent('error');
         expect(getByTestId('error')).toHaveTextContent('API_ERROR');
       });
+
+      await Promise.all(rejections);
     });
 
     function Status(props: UseInstantSearchProps) {

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`default render renders correctly 1`] = `
+exports[`default render > renders correctly 1`] = `
 <div class="ais-Panel">
   <div class="ais-Panel-body">
     <p>
@@ -10,7 +10,7 @@ exports[`default render renders correctly 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly with footer 1`] = `
+exports[`default render > renders correctly with footer 1`] = `
 <div class="ais-Panel">
   <div class="ais-Panel-body">
     <p>
@@ -25,7 +25,7 @@ exports[`default render renders correctly with footer 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly with header 1`] = `
+exports[`default render > renders correctly with header 1`] = `
 <div class="ais-Panel">
   <div class="ais-Panel-header">
     <span>
@@ -40,7 +40,7 @@ exports[`default render renders correctly with header 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly without refinement 1`] = `
+exports[`default render > renders correctly without refinement 1`] = `
 <div class="ais-Panel ais-Panel--noRefinement">
   <div class="ais-Panel-body">
     <p>

@@ -25,7 +25,7 @@ test('hierarchical facets: toggleRefine behavior', function () {
     ],
   });
 
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return new Promise(function () {});
   });
 
@@ -76,7 +76,7 @@ test('hierarchical facets: toggleRefine behavior when root level', function () {
     ],
   });
 
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return new Promise(function () {});
   });
 
@@ -118,7 +118,7 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
     ],
   });
 
-  client.search = jest.fn(function () {
+  client.search = vi.fn(function () {
     return new Promise(function () {});
   });
 

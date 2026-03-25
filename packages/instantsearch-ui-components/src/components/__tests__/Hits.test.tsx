@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx createElement */
 import { fireEvent, render } from '@testing-library/preact';
@@ -10,20 +10,21 @@ import { createHitsComponent } from '../Hits';
 
 import type { HitsProps } from '../Hits';
 import type { Hit } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 describe('Hits', () => {
   const Hits = createHitsComponent({ createElement, Fragment });
   function createProps<THit extends Hit = Hit>(
     props: Omit<Partial<HitsProps<THit>>, 'sendEvent'>
   ): Omit<HitsProps<THit>, 'sendEvent'> & {
-    sendEvent: jest.Mock;
+    sendEvent: Mock;
   } {
     return {
       hits: [
         { objectID: 'abc', __position: 1 },
         { objectID: 'def', __position: 2 },
       ] as THit[],
-      sendEvent: jest.fn(),
+      sendEvent: vi.fn(),
       itemComponent: ({ hit, index: _index, ...itemProps }) => (
         <li key={hit.objectID} {...itemProps}>
           {hit.objectID}
@@ -235,7 +236,7 @@ describe('Hits', () => {
     test('renders with props', () => {
       const props = createProps({
         hits: [{ objectID: 'abc', __position: 1, custom: 'value' }],
-        itemComponent: jest.fn(({ hit, index, ...itemProps }) => (
+        itemComponent: vi.fn(({ hit, index, ...itemProps }) => (
           <li {...itemProps}>
             {hit.objectID}:{hit.custom}
           </li>

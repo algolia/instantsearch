@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { render, within } from '@testing-library/react';
@@ -12,9 +12,9 @@ import type { SearchBoxProps } from '../SearchBox';
 
 describe('SearchBox', () => {
   function createProps(props: Partial<SearchBoxProps>) {
-    const onChange = jest.fn();
-    const onReset = jest.fn();
-    const onSubmit = jest.fn();
+    const onChange = vi.fn();
+    const onReset = vi.fn();
+    const onSubmit = vi.fn();
 
     return {
       formRef: createRef<HTMLFormElement>(),
@@ -409,7 +409,7 @@ describe('SearchBox', () => {
       const { container } = render(<SearchBox {...props} />);
 
       const form = formRef.current;
-      const listenerSpy = jest.fn();
+      const listenerSpy = vi.fn();
       if (form) {
         form.addEventListener('submit', listenerSpy);
       }

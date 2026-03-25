@@ -3,6 +3,8 @@ import { resolve as resolvePath } from 'path';
 
 import { JSDOM } from 'jsdom';
 
+import type { Mock } from 'vitest';
+
 describe('UMD bundle', () => {
   describe.each([
     {
@@ -95,13 +97,13 @@ function addScript(
 async function createEnvironment(
   bundle: string,
   dependencies?: string[]
-): Promise<{ window: JSDOM['window']; error: jest.Mock }> {
+): Promise<{ window: JSDOM['window']; error: Mock }> {
   const { window } = new JSDOM('', {
     runScripts: 'dangerously',
     resources: 'usable',
   });
 
-  const error = jest.fn();
+  const error = vi.fn();
   window.addEventListener('error', error);
 
   if (dependencies) {

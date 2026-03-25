@@ -1,7 +1,7 @@
-const camelCase = require('lodash.camelcase');
-const semver = require('semver');
+import camelCase from 'lodash.camelcase';
+import semver from 'semver';
 
-const { fetchLibraryVersions } = require('../utils');
+import { fetchLibraryVersions } from '../utils/index.js';
 
 function capitalize(str) {
   return str.substr(0, 1).toUpperCase() + str.substr(1);
@@ -89,4 +89,4 @@ async function postProcessAnswers({
   };
 }
 
-module.exports = postProcessAnswers;
+export default postProcessAnswers;

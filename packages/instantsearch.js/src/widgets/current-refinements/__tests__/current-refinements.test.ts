@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -21,9 +21,9 @@ describe('currentRefinements', () => {
         // @ts-expect-error
         currentRefinements({ container: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/]
       `);
     });
 

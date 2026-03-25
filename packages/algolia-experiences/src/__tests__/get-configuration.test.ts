@@ -9,7 +9,7 @@ describe('fetchConfiguration', () => {
     };
 
     // @ts-ignore
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () =>
@@ -41,7 +41,7 @@ describe('fetchConfiguration', () => {
     };
 
     // @ts-ignore
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
         json: () =>

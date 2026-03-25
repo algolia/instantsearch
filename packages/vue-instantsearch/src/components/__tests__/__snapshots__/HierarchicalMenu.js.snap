@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom default render renders correctly 1`] = `
+exports[`custom default render > renders correctly 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -63,7 +63,7 @@ exports[`custom default render renders correctly 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly with a disabled show more button 1`] = `
+exports[`custom default render > renders correctly with a disabled show more button 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -126,7 +126,7 @@ exports[`custom default render renders correctly with a disabled show more butto
 </div>
 `;
 
-exports[`custom default render renders correctly with a limit 1`] = `
+exports[`custom default render > renders correctly with a limit 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -189,7 +189,7 @@ exports[`custom default render renders correctly with a limit 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly with a show more button toggled 1`] = `
+exports[`custom default render > renders correctly with a show more button toggled 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -252,7 +252,7 @@ exports[`custom default render renders correctly with a show more button toggled
 </div>
 `;
 
-exports[`custom default render renders correctly with a show more button toggled 2`] = `
+exports[`custom default render > renders correctly with a show more button toggled 2`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -315,7 +315,7 @@ exports[`custom default render renders correctly with a show more button toggled
 </div>
 `;
 
-exports[`custom default render renders correctly with an URL for the href 1`] = `
+exports[`custom default render > renders correctly with an URL for the href 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
     <ol>
@@ -378,7 +378,7 @@ exports[`custom default render renders correctly with an URL for the href 1`] = 
 </div>
 `;
 
-exports[`custom default render renders correctly without refinement 1`] = `
+exports[`custom default render > renders correctly without refinement 1`] = `
 <div class="ais-HierarchicalMenu ais-HierarchicalMenu--noRefinement">
   <div class="no-refinement">
     <ol>
@@ -390,7 +390,7 @@ exports[`custom default render renders correctly without refinement 1`] = `
 </div>
 `;
 
-exports[`custom showMoreLabel render renders correctly with a custom show more label 1`] = `
+exports[`custom showMoreLabel render > renders correctly with a custom show more label 1`] = `
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
@@ -528,7 +528,7 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
 </div>
 `;
 
-exports[`custom showMoreLabel render renders correctly with a custom show more label toggled 1`] = `
+exports[`custom showMoreLabel render > renders correctly with a custom show more label toggled 1`] = `
 <div class="ais-HierarchicalMenu">
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">

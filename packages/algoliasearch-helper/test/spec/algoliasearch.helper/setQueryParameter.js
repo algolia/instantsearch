@@ -39,7 +39,7 @@ test('setChange should not change the current state: no real modification', func
 test('setQueryParameter should warn about invalid userToken', function () {
   const message =
     '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
-  console.warn = jest.fn();
+  console.warn = vi.fn();
 
   var helper = algoliasearchHelper(fakeClient, null, {});
   helper.setQueryParameter('userToken', null);

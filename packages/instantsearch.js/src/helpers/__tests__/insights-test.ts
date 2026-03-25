@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { warning, serializePayload } from '../../lib/utils';
@@ -19,7 +19,7 @@ describe('insights', () => {
         eventName: 'Add to Cart',
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
+      `"data-insights-method="clickedObjectIDsAfterSearch" data-insights-payload="JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==""`
     );
   });
 
@@ -50,7 +50,7 @@ describe('writeDataAttributes', () => {
         },
       })
     ).toMatchInlineSnapshot(
-      `"data-insights-method=\\"clickedObjectIDsAfterSearch\\" data-insights-payload=\\"JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==\\""`
+      `"data-insights-method="clickedObjectIDsAfterSearch" data-insights-payload="JTdCJTIyb2JqZWN0SURzJTIyJTNBJTVCJTIyMyUyMiU1RCUyQyUyMmV2ZW50TmFtZSUyMiUzQSUyMkFkZCUyMHRvJTIwQ2FydCUyMiU3RA==""`
     );
   });
   it('should reject undefined payloads', () => {
@@ -60,7 +60,7 @@ describe('writeDataAttributes', () => {
         method: 'clickedObjectIDsAfterSearch',
       })
     ).toThrowErrorMatchingInlineSnapshot(
-      `"The insights helper expects the payload to be an object."`
+      `[Error: The insights helper expects the payload to be an object.]`
     );
   });
   it('should reject non object payloads', () => {
@@ -71,7 +71,7 @@ describe('writeDataAttributes', () => {
         payload: 2,
       })
     ).toThrowErrorMatchingInlineSnapshot(
-      `"The insights helper expects the payload to be an object."`
+      `[Error: The insights helper expects the payload to be an object.]`
     );
   });
   it('should reject non JSON serializable payloads', () => {
@@ -83,7 +83,7 @@ describe('writeDataAttributes', () => {
         payload: circularObject,
       })
     ).toThrowErrorMatchingInlineSnapshot(
-      `"Could not JSON serialize the payload object."`
+      `[Error: Could not JSON serialize the payload object.]`
     );
   });
 });
@@ -128,7 +128,7 @@ describe('readDataAttributes', () => {
       expect(() =>
         readDataAttributes(domElement)
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The insights helper was unable to parse \`data-insights-payload\`."`
+        `[Error: The insights helper was unable to parse \`data-insights-payload\`.]`
       );
     });
   });

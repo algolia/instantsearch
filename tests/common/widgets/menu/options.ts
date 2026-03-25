@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -28,7 +29,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -78,96 +79,96 @@ export function createOptionsTests(
 
       expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(4);
       expect(
-        document.querySelector('.ais-Menu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Menu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Menu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Menu"
+      >
+        <ul
+          class="ais-Menu-list"
         >
-          <ul
-            class="ais-Menu-list"
+          <li
+            class="ais-Menu-item"
           >
-            <li
-              class="ais-Menu-item"
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Insignia™
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  746
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
+                Insignia™
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                746
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-Menu-item"
+          >
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Samsung
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  633
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
+                Samsung
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                633
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-Menu-item"
+          >
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Metra
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  591
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
+                Metra
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                591
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-Menu-item"
+          >
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  HP
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  530
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                HP
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                530
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('limits the number of items to display', async () => {
@@ -188,58 +189,58 @@ export function createOptionsTests(
 
       expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
       expect(
-        document.querySelector('.ais-Menu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Menu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Menu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Menu"
+      >
+        <ul
+          class="ais-Menu-list"
         >
-          <ul
-            class="ais-Menu-list"
+          <li
+            class="ais-Menu-item"
           >
-            <li
-              class="ais-Menu-item"
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Insignia™
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  746
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
+                Insignia™
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                746
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-Menu-item"
+          >
+            <a
+              class="ais-Menu-link"
+              href="#"
             >
-              <a
-                class="ais-Menu-link"
-                href="#"
+              <span
+                class="ais-Menu-label"
               >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Samsung
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  633
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                Samsung
+              </span>
+              <span
+                class="ais-Menu-count"
+              >
+                633
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('transforms the items', async () => {
@@ -478,63 +479,63 @@ export function createOptionsTests(
         const showMoreButton = screen.getByRole('button');
         expect(showMoreButton).toHaveTextContent('Show more');
         expect(
-          document.querySelector('.ais-Menu')
-        ).toMatchNormalizedInlineSnapshot(
-          normalizeSnapshot,
-          `
-          <div
-            class="ais-Menu"
+          normalizeForSnapshot(
+            document.querySelector('.ais-Menu'),
+            normalizeSnapshot
+          )
+        ).toMatchInlineSnapshot(`
+        <div
+          class="ais-Menu"
+        >
+          <ul
+            class="ais-Menu-list"
           >
-            <ul
-              class="ais-Menu-list"
+            <li
+              class="ais-Menu-item"
             >
-              <li
-                class="ais-Menu-item"
+              <a
+                class="ais-Menu-link"
+                href="#"
               >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
+                <span
+                  class="ais-Menu-label"
                 >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Insignia™
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    746
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
+                  Insignia™
+                </span>
+                <span
+                  class="ais-Menu-count"
                 >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Samsung
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    633
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <button
-              class="ais-Menu-showMore"
+                  746
+                </span>
+              </a>
+            </li>
+            <li
+              class="ais-Menu-item"
             >
-              Show more
-            </button>
-          </div>
-        `
-        );
+              <a
+                class="ais-Menu-link"
+                href="#"
+              >
+                <span
+                  class="ais-Menu-label"
+                >
+                  Samsung
+                </span>
+                <span
+                  class="ais-Menu-count"
+                >
+                  633
+                </span>
+              </a>
+            </li>
+          </ul>
+          <button
+            class="ais-Menu-showMore"
+          >
+            Show more
+          </button>
+        </div>
+      `);
 
         await act(async () => {
           userEvent.click(showMoreButton);

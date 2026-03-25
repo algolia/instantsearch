@@ -1,16 +1,19 @@
 #!/usr/bin/env node
-const os = require('os');
-const path = require('path');
-const process = require('process');
+import { createRequire } from 'module';
+import os from 'os';
+import path from 'path';
+import process from 'process';
 
-const chalk = require('chalk');
-const program = require('commander');
-const inquirer = require('inquirer');
-const semver = require('semver');
+import chalk from 'chalk';
+import program from 'commander';
+import inquirer from 'inquirer';
+import semver from 'semver';
 
-const { version } = require('../../package.json');
-const createInstantSearchApp = require('../api');
-const {
+const _require = createRequire(import.meta.url);
+const { version } = _require('../../package.json');
+
+import createInstantSearchApp from '../api/index.js';
+import {
   checkAppPath,
   checkAppName,
   getAppTemplateConfig,
@@ -18,15 +21,15 @@ const {
   getTemplatesByCategory,
   getTemplatePath,
   splitArray,
-} = require('../utils');
+} from '../utils/index.js';
 
-const getAnswersDefaultValues = require('./getAnswersDefaultValues');
-const getAttributesFromIndex = require('./getAttributesFromIndex');
-const getConfiguration = require('./getConfiguration');
-const getFacetsFromIndex = require('./getFacetsFromIndex');
-const getPotentialImageAttributes = require('./getPotentialImageAttributes');
-const isQuestionAsked = require('./isQuestionAsked');
-const postProcessAnswers = require('./postProcessAnswers');
+import getAnswersDefaultValues from './getAnswersDefaultValues.js';
+import getAttributesFromIndex from './getAttributesFromIndex.js';
+import getConfiguration from './getConfiguration.js';
+import getFacetsFromIndex from './getFacetsFromIndex.js';
+import getPotentialImageAttributes from './getPotentialImageAttributes.js';
+import isQuestionAsked from './isQuestionAsked.js';
+import postProcessAnswers from './postProcessAnswers.js';
 
 let appPathFromArgument;
 

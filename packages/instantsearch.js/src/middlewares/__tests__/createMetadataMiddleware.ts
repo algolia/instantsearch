@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -67,6 +67,7 @@ describe('createMetadataMiddleware', () => {
     });
 
     it("does not enable when there's a window but no navigator", () => {
+      const originalNavigator = global.navigator;
       // @ts-expect-error (simulate no navigator)
       global.navigator = undefined;
 
@@ -74,6 +75,7 @@ describe('createMetadataMiddleware', () => {
 
       expect(isMetadataEnabled()).toBe(false);
 
+      global.navigator = originalNavigator;
       global.window = window;
     });
 
@@ -129,7 +131,7 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.searchBox\\",\\"widgetType\\":\\"ais.searchBox\\",\\"params\\":[]},{\\"type\\":\\"ais.hits\\",\\"widgetType\\":\\"ais.hits\\",\\"params\\":[\\"escapeHTML\\"]},{\\"type\\":\\"ais.index\\",\\"widgetType\\":\\"ais.index\\",\\"params\\":[]},{\\"type\\":\\"ais.pagination\\",\\"widgetType\\":\\"ais.pagination\\",\\"params\\":[]},{\\"type\\":\\"ais.configure\\",\\"widgetType\\":\\"ais.configure\\",\\"params\\":[\\"searchParameters\\"]},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true}]}"
+            content="{"widgets":[{"type":"ais.searchBox","widgetType":"ais.searchBox","params":[]},{"type":"ais.searchBox","widgetType":"ais.searchBox","params":[]},{"type":"ais.hits","widgetType":"ais.hits","params":["escapeHTML"]},{"type":"ais.index","widgetType":"ais.index","params":[]},{"type":"ais.pagination","widgetType":"ais.pagination","params":[]},{"type":"ais.configure","widgetType":"ais.configure","params":["searchParameters"]},{"middleware":true,"type":"ais.metadata","internal":true}]}"
             name="instantsearch:widgets"
           />
         </head>
@@ -203,7 +205,7 @@ describe('createMetadataMiddleware', () => {
       expect(document.head).toMatchInlineSnapshot(`
         <head>
           <meta
-            content="{\\"widgets\\":[{\\"middleware\\":true,\\"type\\":\\"ais.router({router:ais.browser, stateMapping:ais.simple})\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"ais.metadata\\",\\"internal\\":true},{\\"middleware\\":true,\\"type\\":\\"test\\",\\"internal\\":false},{\\"middleware\\":true,\\"type\\":\\"__unknown__\\",\\"internal\\":false}]}"
+            content="{"widgets":[{"middleware":true,"type":"ais.router({router:ais.browser, stateMapping:ais.simple})","internal":true},{"middleware":true,"type":"ais.metadata","internal":true},{"middleware":true,"type":"test","internal":false},{"middleware":true,"type":"__unknown__","internal":false}]}"
             name="instantsearch:widgets"
           />
         </head>

@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const { checkAppName, checkAppPath } = require('../utils');
+import { checkAppName, checkAppPath } from '../utils/index.js';
 
 function getOptions({ supportedTemplates }) {
   return {
@@ -19,10 +19,13 @@ function getOptions({ supportedTemplates }) {
     },
     template: {
       validate(input) {
-        return fs.existsSync(path.join(input || '', '.template.js'));
+        return (
+          fs.existsSync(path.join(input || '', '.template.cjs')) ||
+          fs.existsSync(path.join(input || '', '.template.js'))
+        );
       },
       getErrorMessage() {
-        return `The template directory must contain a configuration file \`.template.js\` or must be one of those: ${supportedTemplates.join(
+        return `The template directory must contain a configuration file \`.template.cjs\` (or \`.template.js\`) or must be one of those: ${supportedTemplates.join(
           ', '
         )}`;
       },
@@ -35,7 +38,7 @@ function getOptions({ supportedTemplates }) {
   };
 }
 
-module.exports = function checkConfig(config, { supportedTemplates }) {
+export default function checkConfig(config, { supportedTemplates }) {
   const options = getOptions({ supportedTemplates });
 
   Object.keys(options).forEach((optionName) => {
@@ -49,4 +52,4 @@ module.exports = function checkConfig(config, { supportedTemplates }) {
       throw new Error(errorMessage);
     }
   });
-};
+}

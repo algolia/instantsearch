@@ -11,11 +11,11 @@ function makeFakeSearchForFacetValuesResponse() {
 }
 
 test('searchForFacetValues calls the client method over the index method', function () {
-  var clientSearchForFacetValues = jest.fn(function () {
+  var clientSearchForFacetValues = vi.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
-  var indexSearchForFacetValues = jest.fn(function () {
+  var indexSearchForFacetValues = vi.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
@@ -37,7 +37,7 @@ test('searchForFacetValues calls the client method over the index method', funct
 });
 
 test('searchForFacetValues calls the index method if no client method', function () {
-  var indexSearchForFacetValues = jest.fn(function () {
+  var indexSearchForFacetValues = vi.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
@@ -57,15 +57,15 @@ test('searchForFacetValues calls the index method if no client method', function
 });
 
 test('searchForFacetValues calls client.search if client.searchForFacets exists', function () {
-  var clientSearch = jest.fn(function () {
+  var clientSearch = vi.fn(function () {
     return Promise.resolve({
       results: [makeFakeSearchForFacetValuesResponse()],
     });
   });
 
   var fakeClient = {
-    searchForFacets: jest.fn(),
-    searchForFacetValues: jest.fn(),
+    searchForFacets: vi.fn(),
+    searchForFacetValues: vi.fn(),
     search: clientSearch,
   };
 
@@ -119,7 +119,7 @@ test('searchForFacetValues resolve with the correct response from initIndex', fu
 });
 
 test('index.searchForFacetValues should search for facetValues with the current state', function () {
-  var indexSearchForFacetValues = jest.fn(function () {
+  var indexSearchForFacetValues = vi.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
@@ -149,7 +149,7 @@ test('index.searchForFacetValues should search for facetValues with the current 
 });
 
 test('index.searchForFacetValues can override the current search state', function () {
-  var indexSearchForFacetValues = jest.fn(function () {
+  var indexSearchForFacetValues = vi.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
@@ -182,7 +182,7 @@ test('index.searchForFacetValues can override the current search state', functio
 });
 
 test('client.searchForFacetValues should search for facetValues with the current state', function () {
-  var clientSearchForFacetValues = jest.fn(function () {
+  var clientSearchForFacetValues = vi.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
@@ -209,7 +209,7 @@ test('client.searchForFacetValues should search for facetValues with the current
 });
 
 test('client.searchForFacetValues can override the current search state', function () {
-  var clientSearchForFacetValues = jest.fn(function () {
+  var clientSearchForFacetValues = vi.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
@@ -239,7 +239,7 @@ test('client.searchForFacetValues can override the current search state', functi
 });
 
 test('client.search should search for facetValues with the current state', function () {
-  var clientSearch = jest.fn(function () {
+  var clientSearch = vi.fn(function () {
     return Promise.resolve({
       results: [makeFakeSearchForFacetValuesResponse()],
     });
@@ -269,7 +269,7 @@ test('client.search should search for facetValues with the current state', funct
 });
 
 test('client.search can override the current search state', function () {
-  var clientSearch = jest.fn(function () {
+  var clientSearch = vi.fn(function () {
     return Promise.resolve({
       results: [makeFakeSearchForFacetValuesResponse()],
     });

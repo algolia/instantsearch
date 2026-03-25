@@ -1,44 +1,41 @@
-/* eslint-disable import/no-commonjs */
-const defineTest = require('jscodeshift/dist/testUtils').defineTest;
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-defineTest(__dirname, 'src/ris-v6-to-v7', null, 'ris-v6-to-v7/app-inline');
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/translations-not-inline'
+// @ts-expect-error -- no type declarations for jscodeshift/dist/testUtils
+import { applyTransform } from 'jscodeshift/dist/testUtils';
+
+import transform from '../src/ris-v6-to-v7';
+
+const fixtureDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '__testfixtures__'
 );
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/translations-functions-lambda'
-);
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/translations-functions-declaration'
-);
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/translations-functions-no-param'
-);
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/translations-functions-not-inline'
-);
-defineTest(
-  __dirname,
-  'src/ris-v6-to-v7',
-  null,
-  'ris-v6-to-v7/placeholder-not-inline'
-);
-defineTest(__dirname, 'src/ris-v6-to-v7', null, 'ris-v6-to-v7/import-path');
-defineTest(__dirname, 'src/ris-v6-to-v7', null, 'ris-v6-to-v7/menuselect');
-defineTest(__dirname, 'src/ris-v6-to-v7', null, 'ris-v6-to-v7/connectors');
-defineTest(__dirname, 'src/ris-v6-to-v7', null, 'ris-v6-to-v7/searchbox-icons');
+
+function readFixture(name: string) {
+  return readFileSync(join(fixtureDir, `${name}.js`), 'utf8');
+}
+
+describe('src/ris-v6-to-v7', () => {
+  it.each([
+    'ris-v6-to-v7/app-inline',
+    'ris-v6-to-v7/translations-not-inline',
+    'ris-v6-to-v7/translations-functions-lambda',
+    'ris-v6-to-v7/translations-functions-declaration',
+    'ris-v6-to-v7/translations-functions-no-param',
+    'ris-v6-to-v7/translations-functions-not-inline',
+    'ris-v6-to-v7/placeholder-not-inline',
+    'ris-v6-to-v7/import-path',
+    'ris-v6-to-v7/menuselect',
+    'ris-v6-to-v7/connectors',
+    'ris-v6-to-v7/searchbox-icons',
+  ])('transforms correctly using "%s" data', (fixture) => {
+    const input = readFixture(`${fixture}.input`);
+    const expected = readFixture(`${fixture}.output`);
+
+    const result = applyTransform(transform, null, { source: input });
+
+    expect(result.trim()).toEqual(expected.trim());
+  });
+});

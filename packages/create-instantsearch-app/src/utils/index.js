@@ -1,12 +1,17 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import { createRequire } from 'module';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const chalk = require('chalk');
-const semver = require('semver');
-const validateProjectName = require('validate-npm-package-name');
+import chalk from 'chalk';
+import semver from 'semver';
+import validateProjectName from 'validate-npm-package-name';
 
-const { fetchLibraryVersions } = require('./fetchLibraryVersions');
+import { fetchLibraryVersions } from './fetchLibraryVersions.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const _require = createRequire(import.meta.url);
 const TEMPLATES_FOLDER = path.join(__dirname, '../templates');
 
 function checkAppName(appName) {
@@ -55,12 +60,17 @@ function checkAppPath(appPath) {
   return true;
 }
 
-function getAppTemplateConfig(templatePath, { loadFileFn = require } = {}) {
+function getAppTemplateConfig(templatePath, { loadFileFn = _require } = {}) {
+  // Support both .template.cjs (bundled templates) and .template.js (custom templates)
+  const cjsPath = path.join(templatePath, '.template.cjs');
+  const jsPath = path.join(templatePath, '.template.js');
+  const configPath = fs.existsSync(cjsPath) ? cjsPath : jsPath;
+
   try {
-    return loadFileFn(path.join(templatePath, '.template.js'));
+    return loadFileFn(configPath);
   } catch (err) {
     throw new Error(
-      `The template configuration file \`.template.js\` contains errors:
+      `The template configuration file \`.template.cjs\` (or \`.template.js\`) contains errors:
 ${err.message}`
     );
   }
@@ -94,7 +104,10 @@ function getTemplatesByCategory() {
   const templates = templatePaths.reduce((allTemplates, source) => {
     const name = path.basename(source);
 
-    const { category } = require(`${source}/.template.js`);
+    const configPath = fs.existsSync(`${source}/.template.cjs`)
+      ? `${source}/.template.cjs`
+      : `${source}/.template.js`;
+    const { category } = _require(configPath);
 
     if (!category) {
       return allTemplates;
@@ -143,7 +156,7 @@ const splitArray = (string) =>
     .filter(Boolean)
     .map((x) => x.trim());
 
-module.exports = {
+export {
   checkAppName,
   checkAppPath,
   getAppTemplateConfig,

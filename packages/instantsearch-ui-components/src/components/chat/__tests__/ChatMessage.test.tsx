@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -17,11 +17,11 @@ describe('ChatMessage', () => {
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
         status="ready"
         tools={{}}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -50,7 +50,7 @@ describe('ChatMessage', () => {
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         message={{
           role: 'user',
           id: '1',
@@ -66,7 +66,7 @@ describe('ChatMessage', () => {
           actions: 'actions',
         }}
         tools={{}}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -96,7 +96,7 @@ describe('ChatMessage', () => {
       <div>
         <ChatMessage
           indexUiState={{}}
-          setIndexUiState={jest.fn()}
+          setIndexUiState={vi.fn()}
           message={{
             role: 'user',
             id: '1',
@@ -104,11 +104,11 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
         />
         <ChatMessage
           indexUiState={{}}
-          setIndexUiState={jest.fn()}
+          setIndexUiState={vi.fn()}
           message={{
             role: 'assistant',
             id: '2',
@@ -116,11 +116,11 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
         />
         <ChatMessage
           indexUiState={{}}
-          setIndexUiState={jest.fn()}
+          setIndexUiState={vi.fn()}
           message={{
             role: 'system',
             id: '3',
@@ -128,7 +128,7 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
         />
       </div>
     );
@@ -210,7 +210,7 @@ describe('ChatMessage', () => {
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
-        setIndexUiState={jest.fn()}
+        setIndexUiState={vi.fn()}
         message={{
           role: 'assistant',
           id: '1',
@@ -230,12 +230,12 @@ describe('ChatMessage', () => {
             layoutComponent: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
+            addToolResult: vi.fn(),
+            onToolCall: vi.fn(),
+            applyFilters: vi.fn(),
           },
         }}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`

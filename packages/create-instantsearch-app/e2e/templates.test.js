@@ -1,12 +1,17 @@
-/* eslint-disable jest/no-conditional-expect */
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+/* eslint-disable vitest/no-conditional-expect */
+import { execSync } from 'child_process';
+import fs from 'fs';
+import { createRequire } from 'module';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
-const walkSync = require('walk-sync');
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import walkSync from 'walk-sync';
 
-const { getEarliestLibraryVersion } = require('../src/utils');
+import { getEarliestLibraryVersion } from '../src/utils/index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const _require = createRequire(import.meta.url);
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -19,7 +24,7 @@ const templates = fs
 describe('Templates', () => {
   templates.forEach((templatePath) => {
     const templateName = path.basename(templatePath);
-    const templateConfig = require(`${templatePath}/.template.js`);
+    const templateConfig = _require(`${templatePath}/.template.cjs`);
     if (templateConfig.category === 'Widget') {
       templateConfig.appName = 'date-picker';
     }

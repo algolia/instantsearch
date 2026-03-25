@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment happy-dom
  */
 
 import { createAutocompletePropGetters } from '../createAutocompletePropGetters';
@@ -35,7 +35,7 @@ describe('createAutocompletePropGetters', () => {
 
   const mockUseState: CreateAutocompletePropGettersParams['useState'] = (
     initialState
-  ) => [initialState, jest.fn()];
+  ) => [initialState, vi.fn()];
 
   const createUsePropGetters = (
     overrides: Partial<CreateAutocompletePropGettersParams> = {}
@@ -60,7 +60,7 @@ describe('createAutocompletePropGetters', () => {
       target: EventTarget & HTMLInputElement;
     } = {
       key,
-      preventDefault: jest.fn(),
+      preventDefault: vi.fn(),
       target,
     };
 
@@ -68,7 +68,7 @@ describe('createAutocompletePropGetters', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // Reset body click listeners
     document.body.innerHTML = '';
   });
@@ -76,9 +76,9 @@ describe('createAutocompletePropGetters', () => {
   const defaultParams: DefaultParams = {
     indices: [],
     indicesConfig: [],
-    onRefine: jest.fn(),
-    onSelect: jest.fn(),
-    onApply: jest.fn(),
+    onRefine: vi.fn(),
+    onSelect: vi.fn(),
+    onApply: vi.fn(),
     placeholder: 'Search',
   };
 
@@ -93,7 +93,7 @@ describe('createAutocompletePropGetters', () => {
     });
 
     test('should not add body click listener when isDetached is true', () => {
-      const addEventListenerSpy = jest.spyOn(document.body, 'addEventListener');
+      const addEventListenerSpy = vi.spyOn(document.body, 'addEventListener');
       const usePropGetters = createUsePropGetters();
 
       usePropGetters({
@@ -113,7 +113,7 @@ describe('createAutocompletePropGetters', () => {
     });
 
     test('should add body click listener when isDetached is false', () => {
-      const addEventListenerSpy = jest.spyOn(document.body, 'addEventListener');
+      const addEventListenerSpy = vi.spyOn(document.body, 'addEventListener');
       const usePropGetters = createUsePropGetters();
 
       usePropGetters({
@@ -133,7 +133,7 @@ describe('createAutocompletePropGetters', () => {
     });
 
     test('getInputProps should not close panel on Tab when isDetached is true', () => {
-      const setIsOpenMock = jest.fn();
+      const setIsOpenMock = vi.fn();
 
       // Override useState to capture setIsOpen
       const customUseState: CreateAutocompletePropGettersParams['useState'] = (
@@ -159,7 +159,7 @@ describe('createAutocompletePropGetters', () => {
     });
 
     test('getInputProps should close panel on Tab when isDetached is false', () => {
-      const setIsOpenMock = jest.fn();
+      const setIsOpenMock = vi.fn();
 
       // Override useState to capture setIsOpen
       const customUseState: CreateAutocompletePropGettersParams['useState'] = (
@@ -185,8 +185,8 @@ describe('createAutocompletePropGetters', () => {
     });
 
     test('getInputProps should call onSubmit on Enter', () => {
-      const onSubmit = jest.fn();
-      const onRefine = jest.fn();
+      const onSubmit = vi.fn();
+      const onRefine = vi.fn();
 
       const customUsePropGetters = createUsePropGetters({
         useState: mockUseState,

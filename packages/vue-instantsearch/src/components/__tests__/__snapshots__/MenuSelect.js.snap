@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom default render renders correctly 1`] = `
+exports[`custom default render > renders correctly 1`] = `
 <div class="ais-MenuSelect">
   <select>
     <option value>
@@ -19,7 +19,7 @@ exports[`custom default render renders correctly 1`] = `
 </div>
 `;
 
-exports[`custom default render renders correctly without refinements 1`] = `
+exports[`custom default render > renders correctly without refinements 1`] = `
 <div class="ais-MenuSelect ais-MenuSelect--noRefinement">
   <select disabled="disabled">
     <option value>
@@ -29,7 +29,7 @@ exports[`custom default render renders correctly without refinements 1`] = `
 </div>
 `;
 
-exports[`custom item slot renders correctly 1`] = `
+exports[`custom item slot > renders correctly 1`] = `
 <div class="ais-MenuSelect">
   <select class="ais-MenuSelect-select">
     <option class="ais-MenuSelect-option"
@@ -62,7 +62,7 @@ exports[`custom item slot renders correctly 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly with custom label 1`] = `
+exports[`default render > renders correctly with custom label 1`] = `
 <div class="ais-MenuSelect">
   <select class="ais-MenuSelect-select">
     <option class="ais-MenuSelect-option"

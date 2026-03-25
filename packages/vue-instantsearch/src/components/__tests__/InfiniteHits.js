@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,7 +7,7 @@ import { __setState } from '../../mixins/widget';
 import InfiniteHits from '../InfiniteHits.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 const defaultState = {
   widgetParams: {
@@ -16,7 +16,7 @@ const defaultState = {
     escapeHTML: true,
     transformItems: (items) => items,
   },
-  sendEvent: jest.fn(),
+  sendEvent: vi.fn(),
   items: [
     {
       objectID: '00001',
@@ -161,7 +161,7 @@ it('does not render a banner when showBanner is false', () => {
 });
 
 it('exposes insights prop to the default slot', async () => {
-  const insights = jest.fn();
+  const insights = vi.fn();
 
   __setState({
     ...defaultState,
@@ -193,7 +193,7 @@ it('exposes insights prop to the default slot', async () => {
 });
 
 it('exposes insights prop to the item slot', async () => {
-  const insights = jest.fn();
+  const insights = vi.fn();
 
   __setState({
     ...defaultState,
@@ -223,7 +223,7 @@ it('exposes insights prop to the item slot', async () => {
 });
 
 it('exposes send-event method for insights middleware', async () => {
-  const sendEvent = jest.fn();
+  const sendEvent = vi.fn();
   __setState({
     ...defaultState,
     sendEvent,

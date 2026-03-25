@@ -9,7 +9,7 @@ module.exports = function build(config) {
       .source(config.template)
       .destination(config.path)
       .metadata(config)
-      .use(remove(['.template.js']))
+      .use(remove(['.template.cjs', '.template.js']))
       .use(
         // Add the `.hbs` extension to any templating files that need
         // their placeholders to get filled with `metalsmith-in-place`

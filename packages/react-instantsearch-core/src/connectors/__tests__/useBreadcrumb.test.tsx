@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -67,7 +67,7 @@ describe('useBreadcrumb', () => {
         },
       },
       searchClient: createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
               ...requests.map(

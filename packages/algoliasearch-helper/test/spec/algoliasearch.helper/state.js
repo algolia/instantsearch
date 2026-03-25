@@ -6,21 +6,23 @@ var SearchParameters = algoliasearchHelper.SearchParameters;
 
 var fakeClient = {};
 
-test('setState should set the state of the helper and trigger a change event', function (done) {
-  var state0 = { query: 'a query' };
-  var state1 = { query: 'another query' };
+test('setState should set the state of the helper and trigger a change event', function () {
+  return new Promise(function (done) {
+    var state0 = { query: 'a query' };
+    var state1 = { query: 'another query' };
 
-  var helper = algoliasearchHelper(fakeClient, null, state0);
+    var helper = algoliasearchHelper(fakeClient, null, state0);
 
-  expect(helper.state).toEqual(new SearchParameters(state0));
+    expect(helper.state).toEqual(new SearchParameters(state0));
 
-  helper.on('change', function (event) {
-    expect(helper.state).toEqual(new SearchParameters(state1));
-    expect(event.state).toEqual(new SearchParameters(state1));
-    done();
+    helper.on('change', function (event) {
+      expect(helper.state).toEqual(new SearchParameters(state1));
+      expect(event.state).toEqual(new SearchParameters(state1));
+      done();
+    });
+
+    helper.setState(state1);
   });
-
-  helper.setState(state1);
 });
 
 test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function () {
@@ -66,7 +68,7 @@ test('setState should set a default hierarchicalFacetRefinement when a rootPath 
 test('setState should warn about invalid userToken', function () {
   const message =
     '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
-  console.warn = jest.fn();
+  console.warn = vi.fn();
 
   var helper = algoliasearchHelper(fakeClient, null, {});
   helper.setState({ userToken: null });

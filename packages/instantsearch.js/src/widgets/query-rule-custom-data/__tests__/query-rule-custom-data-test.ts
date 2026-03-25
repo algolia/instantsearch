@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -18,11 +18,10 @@ import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
-  module.render = jest.fn();
+vi.mock('preact', async () => {
+  const module = await vi.importActual('preact');
 
-  return module;
+  return { ...module, render: vi.fn() };
 });
 
 describe('queryRuleCustomData', () => {
@@ -31,7 +30,7 @@ describe('queryRuleCustomData', () => {
     const indexName = '';
     const helper = algoliasearchHelper(client, indexName, state);
 
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     return helper;
   };
@@ -46,10 +45,10 @@ describe('queryRuleCustomData', () => {
         // @ts-expect-error
         queryRuleCustomData();
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/]
+      `);
     });
 
     test('throws container error with empty options', () => {
@@ -57,10 +56,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         // @ts-expect-error
         queryRuleCustomData({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/]
+      `);
     });
 
     it('is a widget', () => {
@@ -152,15 +151,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
             items: [{ banner: '1.jpg' }, { banner: '2.jpg' }],
           })
         ).toMatchInlineSnapshot(`
-"[
-  {
-    \\"banner\\": \\"1.jpg\\"
-  },
-  {
-    \\"banner\\": \\"2.jpg\\"
-  }
-]"
-`);
+          "[
+            {
+              "banner": "1.jpg"
+            },
+            {
+              "banner": "2.jpg"
+            }
+          ]"
+        `);
       });
 
       test('applies custom template', () => {

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -29,8 +29,9 @@ import type {
   HitAttributeHighlightResult,
   SearchResponse,
 } from '../../../types';
+import type { Mock } from 'vitest';
 
-jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+vi.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
@@ -43,15 +44,15 @@ describe('connectHits', () => {
       // @ts-expect-error
       connectHits()({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#connector]
+    `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customHits = connectHits(render, unmount);
     const widget = customHits({});
@@ -67,7 +68,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
@@ -75,7 +76,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -108,12 +109,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('Provides the hits and the whole results', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -156,12 +157,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('escape highlight properties if requested', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -227,7 +228,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('transform items if requested', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
       transformItems: (items) =>
@@ -235,7 +236,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -282,7 +283,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectHits(() => {});
     const widget = makeWidget({
       transformItems,
@@ -309,12 +310,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('adds queryID if provided to results', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -354,7 +355,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('transform items after escaping', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
       transformItems: (items) =>
@@ -378,7 +379,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -460,12 +461,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('keeps the __escaped mark', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -493,8 +494,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
   describe('getRenderState', () => {
     it('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHits = connectHits(renderFn, unmountFn);
       const hitsWidget = createHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -551,8 +552,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createHits = connectHits(renderFn, unmountFn);
       const hitsWidget = createHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -652,7 +653,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       const helper = algoliasearchHelper(createSearchClient(), '');
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectHits(renderFn, unmountFn);
       const widget = makeWidget({});
 
@@ -732,12 +733,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
   describe('insights', () => {
     const createRenderedWidget = () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectHits(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const initOptions = createInitOptions({
         helper,
@@ -778,12 +779,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     describe('insights', () => {
       describe('sendEvent', () => {
         it('sends view event when hits are rendered', () => {
-          const renderFn = jest.fn();
+          const renderFn = vi.fn();
           const makeWidget = connectHits(renderFn);
           const widget = makeWidget({});
 
           const instantSearchInstance = createInstantSearch({
-            sendEventToInsights: jest.fn(),
+            sendEventToInsights: vi.fn(),
           });
 
           widget.init(
@@ -855,7 +856,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         });
 
         it('does not send view event when hits are stalled rendered', async () => {
-          const renderFn = jest.fn();
+          const renderFn = vi.fn();
           const makeWidget = connectHits(renderFn);
           const widget = makeWidget({});
 
@@ -892,7 +893,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             indexName: 'indexName',
           });
           instantSearchInstance.start();
-          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.sendEventToInsights = vi.fn();
 
           instantSearchInstance.addWidgets([widget]);
 
@@ -913,19 +914,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         });
 
         it('sends view event after hits are rendered', () => {
-          const renderFn = jest.fn();
+          const renderFn = vi.fn();
           const makeWidget = connectHits(renderFn);
           const widget = makeWidget({});
 
           const helper = algoliasearchHelper(createSearchClient(), '', {});
-          helper.search = jest.fn();
+          helper.search = vi.fn();
 
           const initOptions = createInitOptions({
             helper,
             state: helper.state,
           });
           const instantSearchInstance = initOptions.instantSearchInstance;
-          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.sendEventToInsights = vi.fn();
           widget.init(initOptions);
 
           const hits = [
@@ -949,14 +950,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             })
           );
 
-          const lastInvocationCallOrder = (mockFn: jest.Mock): number =>
+          const lastInvocationCallOrder = (mockFn: Mock): number =>
             mockFn.mock.invocationCallOrder[
               mockFn.mock.invocationCallOrder.length - 1
             ];
 
           expect(lastInvocationCallOrder(renderFn)).toBeLessThan(
             lastInvocationCallOrder(
-              instantSearchInstance.sendEventToInsights as jest.Mock
+              instantSearchInstance.sendEventToInsights as Mock
             )
           );
         });

@@ -54,13 +54,13 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`<ul />`);
+      expect(screen.getByRole('list')).toMatchSnapshot(`<ul />`);
 
       await act(async () => {
         await wait(0);
       });
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`
+      expect(screen.getByRole('list')).toMatchSnapshot(`
         <ul>
           <li>
             1
@@ -92,13 +92,13 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`<ul />`);
+      expect(screen.getByRole('list')).toMatchSnapshot(`<ul />`);
 
       await act(async () => {
         await wait(0);
       });
 
-      expect(screen.getByRole('list')).toMatchInlineSnapshot(`
+      expect(screen.getByRole('list')).toMatchSnapshot(`
         <ul>
           <li>
             (1)

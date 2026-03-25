@@ -2,7 +2,7 @@ import { defer } from '../defer';
 
 describe('defer', () => {
   it('defers the call to the function', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred();
@@ -15,7 +15,7 @@ describe('defer', () => {
   });
 
   it('deduplicates the calls to the function', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred();
@@ -30,7 +30,7 @@ describe('defer', () => {
   });
 
   it('deduplicates the calls only until the next microtask', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred();
@@ -53,7 +53,7 @@ describe('defer', () => {
   });
 
   it('cancels the deferred function', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred();
@@ -70,7 +70,7 @@ describe('defer', () => {
   });
 
   it('cancels only the current deferred function', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred();
@@ -93,7 +93,7 @@ describe('defer', () => {
   });
 
   it('cancels only the running deferred function', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     deferred.cancel();
@@ -110,16 +110,16 @@ describe('defer', () => {
   });
 
   it('throws an error when `wait` is called before the deferred function', () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     expect(() => deferred.wait()).toThrowErrorMatchingInlineSnapshot(
-      `"The deferred function should be called before calling \`wait()\`"`
+      `[Error: The deferred function should be called before calling \`wait()\`]`
     );
   });
 
   it('recovers a deferred function that throws an error', async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
     const deferred = defer(fn);
 
     fn.mockImplementation(() => {
@@ -139,7 +139,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(1);
 
-    fn.mockImplementation();
+    fn.mockImplementation(() => {});
 
     deferred();
 

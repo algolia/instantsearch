@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -35,7 +35,7 @@ describe('VoiceSearch', () => {
     it('call toggleListening when button is clicked', () => {
       const props = {
         ...defaultProps,
-        toggleListening: jest.fn(),
+        toggleListening: vi.fn(),
       };
 
       const { container } = render(<VoiceSearch {...props} />);

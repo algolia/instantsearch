@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CurrentRefinements options.refinements can be used with a disjunctive facet 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with a disjunctive facet 1`] = `
 <div>
   <div
     class="root"
@@ -38,7 +38,7 @@ exports[`CurrentRefinements options.refinements can be used with a disjunctive f
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with a facet 1`] = `
 <div>
   <div
     class="root"
@@ -76,7 +76,7 @@ exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with a hierarchical facet 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with a hierarchical facet 1`] = `
 <div>
   <div
     class="root"
@@ -114,7 +114,7 @@ exports[`CurrentRefinements options.refinements can be used with a hierarchical 
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with a query 1`] = `
 <div>
   <div
     class="root"
@@ -154,7 +154,7 @@ exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with a tag 1`] = `
 <div>
   <div
     class="root"
@@ -192,7 +192,7 @@ exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with an exclude 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with an exclude 1`] = `
 <div>
   <div
     class="root"
@@ -230,7 +230,7 @@ exports[`CurrentRefinements options.refinements can be used with an exclude 1`] 
 </div>
 `;
 
-exports[`CurrentRefinements options.refinements can be used with numeric filters 1`] = `
+exports[`CurrentRefinements > options.refinements > can be used with numeric filters 1`] = `
 <div>
   <div
     class="root"
@@ -318,7 +318,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
 </div>
 `;
 
-exports[`CurrentRefinements renders 1`] = `
+exports[`CurrentRefinements > renders 1`] = `
 <div>
   <div
     class="root"
@@ -496,7 +496,7 @@ exports[`CurrentRefinements renders 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinements renders without items 1`] = `
+exports[`CurrentRefinements > renders without items 1`] = `
 <div>
   <div
     class="root noRefinementRoot"

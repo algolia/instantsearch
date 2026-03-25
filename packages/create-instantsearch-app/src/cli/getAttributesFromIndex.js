@@ -1,6 +1,6 @@
-const getInformationFromIndex = require('./getInformationFromIndex');
+import getInformationFromIndex from './getInformationFromIndex.js';
 
-module.exports = async function getAttributesFromIndex({
+export default async function getAttributesFromIndex({
   appId,
   apiKey,
   indexName,
@@ -32,4 +32,4 @@ module.exports = async function getAttributesFromIndex({
   }
 
   return attributes;
-};
+}

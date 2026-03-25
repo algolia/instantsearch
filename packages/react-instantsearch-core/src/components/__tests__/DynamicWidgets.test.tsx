@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -75,7 +75,7 @@ function createInstantSearchMock() {
 
 describe('DynamicWidgets', () => {
   test('throws with components that are non-attribute widgets', () => {
-    const consoleError = jest.spyOn(console, 'error');
+    const consoleError = vi.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
     const searchClient = createSearchClient({});
@@ -89,14 +89,14 @@ describe('DynamicWidgets', () => {
         </InstantSearch>
       );
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop."`
+      `[Error: [InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop.]`
     );
 
     consoleError.mockRestore();
   });
 
   test('throws with string components', () => {
-    const consoleError = jest.spyOn(console, 'error');
+    const consoleError = vi.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
     const searchClient = createSearchClient({});
@@ -108,7 +108,7 @@ describe('DynamicWidgets', () => {
         </InstantSearch>
       );
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop."`
+      `[Error: [InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop.]`
     );
 
     consoleError.mockRestore();
@@ -201,7 +201,7 @@ describe('DynamicWidgets', () => {
   });
 
   test('throws when a nested component contains multiple children', () => {
-    const consoleError = jest.spyOn(console, 'error');
+    const consoleError = vi.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
     const searchClient = createSearchClient({});
@@ -226,19 +226,19 @@ describe('DynamicWidgets', () => {
         </InstantSearch>
       );
     }).toThrowErrorMatchingInlineSnapshot(`
-      "[InstantSearch] <DynamicWidgets> only supports a single component in nested components. Make sure to not render multiple children in a parent component.
+      [Error: [InstantSearch] <DynamicWidgets> only supports a single component in nested components. Make sure to not render multiple children in a parent component.
 
       Example of an unsupported scenario:
 
       \`\`\`
       <DynamicWidgets>
         <MyComponent>
-          <RefinementList attribute=\\"brand\\" />
-          <Menu attribute=\\"categories\\" />
+          <RefinementList attribute="brand" />
+          <Menu attribute="categories" />
         </MyComponent>
       </DynamicWidgets>
       \`\`\`
-      "
+      ]
     `);
 
     consoleError.mockRestore();
@@ -247,7 +247,7 @@ describe('DynamicWidgets', () => {
   // Ideally we should be able to render the widgets wrapped in components, but
   // we didn't implement this behavior for simplicity.
   test('does not render no-attribute widgets that are not direct children', () => {
-    const consoleError = jest.spyOn(console, 'error');
+    const consoleError = vi.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
     const searchClient = createSearchClient({});
@@ -265,7 +265,7 @@ describe('DynamicWidgets', () => {
         </InstantSearch>
       );
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop."`
+      `[Error: [InstantSearch] <DynamicWidgets> only supports InstantSearch widgets with an \`attribute\` or \`attributes\` prop.]`
     );
 
     consoleError.mockRestore();
@@ -480,7 +480,7 @@ describe('DynamicWidgets', () => {
 
     // @TODO: we swallow React act errors in this test because we're unable to
     // satisfy them (?)
-    const consoleError = jest.spyOn(console, 'error');
+    const consoleError = vi.spyOn(console, 'error');
     consoleError.mockImplementation(() => {});
 
     const { container, rerender } = render(<App attributes={['brand']} />);

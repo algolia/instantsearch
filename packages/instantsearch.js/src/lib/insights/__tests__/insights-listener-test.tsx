@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -37,8 +37,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -76,8 +76,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -110,8 +110,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -144,8 +144,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -190,8 +190,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -224,8 +224,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -268,8 +268,8 @@ describe('createInsightsEventHandler', () => {
       );
 
       const props = {
-        insights: jest.fn(),
-        sendEvent: jest.fn(),
+        insights: vi.fn(),
+        sendEvent: vi.fn(),
       };
 
       const { container } = render(
@@ -323,7 +323,7 @@ describe('withInsightsListener', () => {
       </div>
     );
 
-    const insights = jest.fn();
+    const insights = vi.fn();
 
     const hits = [
       { objectID: '1' },
@@ -341,7 +341,7 @@ describe('withInsightsListener', () => {
     };
 
     const instantSearchInstance = {
-      insightsClient: jest.fn(),
+      insightsClient: vi.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
     const { container } = render(
@@ -380,7 +380,7 @@ describe('withInsightsListener', () => {
       </div>
     );
 
-    const insights = jest.fn();
+    const insights = vi.fn();
 
     const hits = [
       { objectID: '1' },
@@ -398,7 +398,7 @@ describe('withInsightsListener', () => {
     };
 
     const instantSearchInstance = {
-      insightsClient: jest.fn(),
+      insightsClient: vi.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
     const { container } = render(
@@ -432,7 +432,7 @@ describe('withInsightsListener', () => {
       </div>
     );
 
-    const insights = jest.fn();
+    const insights = vi.fn();
 
     const hits = [
       { objectID: '1' },
@@ -450,7 +450,7 @@ describe('withInsightsListener', () => {
     };
 
     const instantSearchInstance = {
-      insightsClient: jest.fn(),
+      insightsClient: vi.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
     const { container } = render(

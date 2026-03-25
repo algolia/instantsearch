@@ -44,11 +44,11 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should hydrate the client for >= v4 if the cache is enabled and the Algolia agent is present', () => {
-    const setCache = jest.fn();
+    const setCache = vi.fn();
     client = {
       transporter: { responsesCache: { set: setCache } },
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, initialResults);
@@ -68,8 +68,8 @@ describe('hydrateSearchClient', () => {
 
   it('should populate the cache for < v4 if there is no transporter object', () => {
     client = {
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
       _useCache: true,
     } as unknown as SearchClient;
 
@@ -79,11 +79,11 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should use request params by default', () => {
-    const setCache = jest.fn();
+    const setCache = vi.fn();
     client = {
       transporter: { responsesCache: { set: setCache } },
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -113,11 +113,11 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should handle multiple indices and multiple queries per index', () => {
-    const setCache = jest.fn();
+    const setCache = vi.fn();
     client = {
       transporter: { responsesCache: { set: setCache } },
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -180,11 +180,11 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should use results params as a fallback', () => {
-    const setCache = jest.fn();
+    const setCache = vi.fn();
     client = {
       transporter: { responsesCache: { set: setCache } },
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -211,9 +211,9 @@ describe('hydrateSearchClient', () => {
   it('should not throw if there are no params from request or results to generate the cache with', () => {
     expect(() => {
       client = {
-        transporter: { responsesCache: { set: jest.fn() } },
-        addAlgoliaAgent: jest.fn(),
-        search: jest.fn(),
+        transporter: { responsesCache: { set: vi.fn() } },
+        addAlgoliaAgent: vi.fn(),
+        search: vi.fn(),
       } as unknown as SearchClient;
 
       hydrateSearchClient(client, {
@@ -227,11 +227,11 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should not throw if state or results are missing', () => {
-    const setCache = jest.fn();
+    const setCache = vi.fn();
     client = {
       transporter: { responsesCache: { set: setCache } },
-      addAlgoliaAgent: jest.fn(),
-      search: jest.fn(),
+      addAlgoliaAgent: vi.fn(),
+      search: vi.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -248,7 +248,7 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should not throw if search requires to be bound (v5)', async () => {
-    const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
+    const send = vi.fn().mockResolvedValue({ status: 200, content: '{}' });
     const searchClient: any = algoliasearchV5('appId', 'apiKey', {
       requester: {
         send,
@@ -263,7 +263,7 @@ describe('hydrateSearchClient', () => {
   });
 
   it('should not throw if search requires to be bound (v4)', async () => {
-    const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
+    const send = vi.fn().mockResolvedValue({ status: 200, content: '{}' });
     const searchClient: any = algoliasearchV4('appId', 'apiKey', {
       requester: {
         send,
@@ -279,7 +279,7 @@ describe('hydrateSearchClient', () => {
 
   it('should not throw if search requires to be bound (v3)', async () => {
     const searchClient: any = algoliasearchV3('appId', 'apiKey');
-    searchClient._request = jest
+    searchClient._request = vi
       .fn()
       .mockResolvedValue({ body: { status: 200 } });
 

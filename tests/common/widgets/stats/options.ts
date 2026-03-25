@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 
 import type { StatsWidgetSetup } from '.';
@@ -27,19 +28,20 @@ function createMockedSearchClient(
   } = {}
 ) {
   return createSearchClient({
-    search: jest.fn((requests) =>
+    search: vi.fn((requests) =>
       Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map((request) =>
-            createSingleSearchResponse({
-              index: request.indexName,
-              nbHits: 1000,
-              appliedRelevancyStrictness:
-                typeof responseProps.nbSortedHits !== 'undefined' ? 1 : 0,
-              nbSortedHits: 0,
-              processingTimeMS: 10,
-              ...responseProps,
-            })
+          ...requests.map(
+            (request: { indexName: string; params?: Record<string, any> }) =>
+              createSingleSearchResponse({
+                index: request.indexName,
+                nbHits: 1000,
+                appliedRelevancyStrictness:
+                  typeof responseProps.nbSortedHits !== 'undefined' ? 1 : 0,
+                nbSortedHits: 0,
+                processingTimeMS: 10,
+                ...responseProps,
+              })
           )
         )
       )
@@ -73,21 +75,21 @@ export function createOptionsTests(
       expect(searchClient.search).toHaveBeenCalledTimes(1);
 
       expect(
-        document.querySelector('.ais-Stats')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Stats"
+        normalizeForSnapshot(
+          document.querySelector('.ais-Stats'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-Stats"
+      >
+        <span
+          class="ais-Stats-text"
         >
-          <span
-            class="ais-Stats-text"
-          >
-            No results found in 0ms
-          </span>
-        </div>
-      `
-      );
+          No results found in 0ms
+        </span>
+      </div>
+    `);
     });
 
     test('renders with 1 hit', async () => {

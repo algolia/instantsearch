@@ -6,6 +6,7 @@ import {
 import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
+  normalizeForSnapshot,
 } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -69,77 +70,77 @@ export function createOptionsTests(
       ).toHaveLength(3);
 
       expect(
-        document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HierarchicalMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HierarchicalMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HierarchicalMenu"
+      >
+        <ul
+          class="ais-HierarchicalMenu-list"
         >
-          <ul
-            class="ais-HierarchicalMenu-list"
+          <li
+            class="ais-HierarchicalMenu-item"
           >
-            <li
-              class="ais-HierarchicalMenu-item"
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Cameras & Camcorders
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  1369
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
+                Cameras & Camcorders
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                1369
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Video Games
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  505
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
+                Video Games
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                505
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Wearable Technology
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  271
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                Wearable Technology
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                271
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector<HTMLAnchorElement>(
@@ -193,39 +194,39 @@ export function createOptionsTests(
       ).toHaveLength(1);
 
       expect(
-        document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HierarchicalMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HierarchicalMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HierarchicalMenu"
+      >
+        <ul
+          class="ais-HierarchicalMenu-list"
         >
-          <ul
-            class="ais-HierarchicalMenu-list"
+          <li
+            class="ais-HierarchicalMenu-item"
           >
-            <li
-              class="ais-HierarchicalMenu-item"
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Cameras & Camcorders
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  1369
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                Cameras & Camcorders
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                1369
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('takes a custom `separator`', async () => {
@@ -256,73 +257,73 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <li
-          class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
+        normalizeForSnapshot(
+          document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <li
+        class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
+      >
+        <a
+          class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+          href="#"
         >
-          <a
-            class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
-            href="#"
+          <span
+            class="ais-HierarchicalMenu-label"
           >
-            <span
-              class="ais-HierarchicalMenu-label"
-            >
-              Cameras & Camcorders
-            </span>
-            <span
-              class="ais-HierarchicalMenu-count"
-            >
-              1369
-            </span>
-          </a>
-          <ul
-            class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+            Cameras & Camcorders
+          </span>
+          <span
+            class="ais-HierarchicalMenu-count"
           >
-            <li
-              class="ais-HierarchicalMenu-item"
+            1369
+          </span>
+        </a>
+        <ul
+          class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+        >
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Digital Cameras
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  170
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
+                Digital Cameras
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                170
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Memory Cards
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  113
-                </span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      `
-      );
+                Memory Cards
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                113
+              </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    `);
     });
 
     test('renders with a custom `rootPath`', async () => {
@@ -345,58 +346,58 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HierarchicalMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HierarchicalMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HierarchicalMenu"
+      >
+        <ul
+          class="ais-HierarchicalMenu-list"
         >
-          <ul
-            class="ais-HierarchicalMenu-list"
+          <li
+            class="ais-HierarchicalMenu-item"
           >
-            <li
-              class="ais-HierarchicalMenu-item"
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Digital Cameras
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  170
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
+                Digital Cameras
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                170
+              </span>
+            </a>
+          </li>
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Memory Cards
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  113
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                Memory Cards
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                113
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
 
       userEvent.click(
         document.querySelector<HTMLAnchorElement>('.ais-HierarchicalMenu-link')!
@@ -407,100 +408,100 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-HierarchicalMenu')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-HierarchicalMenu"
+        normalizeForSnapshot(
+          document.querySelector('.ais-HierarchicalMenu'),
+          normalizeSnapshot
+        )
+      ).toMatchInlineSnapshot(`
+      <div
+        class="ais-HierarchicalMenu"
+      >
+        <ul
+          class="ais-HierarchicalMenu-list"
         >
-          <ul
-            class="ais-HierarchicalMenu-list"
+          <li
+            class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
           >
-            <li
-              class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
+            <a
+              class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+              href="#"
             >
-              <a
-                class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
-                href="#"
+              <span
+                class="ais-HierarchicalMenu-label"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
-                >
-                  Digital Cameras
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
-                >
-                  170
-                </span>
-              </a>
-              <ul
-                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+                Digital Cameras
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
               >
-                <li
-                  class="ais-HierarchicalMenu-item"
-                >
-                  <a
-                    class="ais-HierarchicalMenu-link"
-                    href="#"
-                  >
-                    <span
-                      class="ais-HierarchicalMenu-label"
-                    >
-                      Digital SLR Cameras
-                    </span>
-                    <span
-                      class="ais-HierarchicalMenu-count"
-                    >
-                      23
-                    </span>
-                  </a>
-                </li>
-                <li
-                  class="ais-HierarchicalMenu-item"
-                >
-                  <a
-                    class="ais-HierarchicalMenu-link"
-                    href="#"
-                  >
-                    <span
-                      class="ais-HierarchicalMenu-label"
-                    >
-                      Mirrorless Cameras
-                    </span>
-                    <span
-                      class="ais-HierarchicalMenu-count"
-                    >
-                      37
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li
-              class="ais-HierarchicalMenu-item"
+                170
+              </span>
+            </a>
+            <ul
+              class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
             >
-              <a
-                class="ais-HierarchicalMenu-link"
-                href="#"
+              <li
+                class="ais-HierarchicalMenu-item"
               >
-                <span
-                  class="ais-HierarchicalMenu-label"
+                <a
+                  class="ais-HierarchicalMenu-link"
+                  href="#"
                 >
-                  Memory Cards
-                </span>
-                <span
-                  class="ais-HierarchicalMenu-count"
+                  <span
+                    class="ais-HierarchicalMenu-label"
+                  >
+                    Digital SLR Cameras
+                  </span>
+                  <span
+                    class="ais-HierarchicalMenu-count"
+                  >
+                    23
+                  </span>
+                </a>
+              </li>
+              <li
+                class="ais-HierarchicalMenu-item"
+              >
+                <a
+                  class="ais-HierarchicalMenu-link"
+                  href="#"
                 >
-                  113
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+                  <span
+                    class="ais-HierarchicalMenu-label"
+                  >
+                    Mirrorless Cameras
+                  </span>
+                  <span
+                    class="ais-HierarchicalMenu-count"
+                  >
+                    37
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li
+            class="ais-HierarchicalMenu-item"
+          >
+            <a
+              class="ais-HierarchicalMenu-link"
+              href="#"
+            >
+              <span
+                class="ais-HierarchicalMenu-label"
+              >
+                Memory Cards
+              </span>
+              <span
+                class="ais-HierarchicalMenu-count"
+              >
+                113
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    `);
     });
 
     test('transforms the items', async () => {
@@ -816,44 +817,44 @@ export function createOptionsTests(
         ).toHaveLength(1);
 
         expect(
-          document.querySelector('.ais-HierarchicalMenu')
-        ).toMatchNormalizedInlineSnapshot(
-          normalizeSnapshot,
-          `
-          <div
-            class="ais-HierarchicalMenu"
+          normalizeForSnapshot(
+            document.querySelector('.ais-HierarchicalMenu'),
+            normalizeSnapshot
+          )
+        ).toMatchInlineSnapshot(`
+        <div
+          class="ais-HierarchicalMenu"
+        >
+          <ul
+            class="ais-HierarchicalMenu-list"
           >
-            <ul
-              class="ais-HierarchicalMenu-list"
+            <li
+              class="ais-HierarchicalMenu-item"
             >
-              <li
-                class="ais-HierarchicalMenu-item"
+              <a
+                class="ais-HierarchicalMenu-link"
+                href="#"
               >
-                <a
-                  class="ais-HierarchicalMenu-link"
-                  href="#"
+                <span
+                  class="ais-HierarchicalMenu-label"
                 >
-                  <span
-                    class="ais-HierarchicalMenu-label"
-                  >
-                    Cameras & Camcorders
-                  </span>
-                  <span
-                    class="ais-HierarchicalMenu-count"
-                  >
-                    1369
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <button
-              class="ais-HierarchicalMenu-showMore"
-            >
-              Show more
-            </button>
-          </div>
-        `
-        );
+                  Cameras & Camcorders
+                </span>
+                <span
+                  class="ais-HierarchicalMenu-count"
+                >
+                  1369
+                </span>
+              </a>
+            </li>
+          </ul>
+          <button
+            class="ais-HierarchicalMenu-showMore"
+          >
+            Show more
+          </button>
+        </div>
+      `);
 
         userEvent.click(showMoreButton);
 
@@ -973,7 +974,7 @@ function createMockedSearchClientAndAttributes({
     }).slice(0, levels)
   );
 
-  const search = jest.fn((requests) =>
+  const search = vi.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse({ facets }))

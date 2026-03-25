@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -11,19 +11,19 @@ import places from '../places';
 
 import type { SearchClient } from '../../../types';
 
-jest.mock('places.js', () => {
-  const module = jest.fn(() => {
+vi.mock('places.js', () => {
+  const module = vi.fn(() => {
     const instance = {
-      on: jest.fn(),
-      setVal: jest.fn(),
-      close: jest.fn(),
+      on: vi.fn(),
+      setVal: vi.fn(),
+      close: vi.fn(),
     };
     (module as any).__instance = instance;
 
     return instance;
   });
 
-  return module;
+  return { default: module };
 });
 
 const createFakeHelper = (
@@ -36,7 +36,7 @@ const createFakeHelper = (
     searchParameters
   );
 
-  helper.search = jest.fn();
+  helper.search = vi.fn();
 
   return helper;
 };
@@ -66,7 +66,7 @@ describe('places', () => {
     test('throws without parameters', () => {
       // @ts-expect-error
       expect(() => places()).toThrowErrorMatchingInlineSnapshot(
-        `"The \`placesReference\` option requires a valid Places.js reference."`
+        `[Error: The \`placesReference\` option requires a valid Places.js reference.]`
       );
     });
   });
@@ -80,7 +80,7 @@ describe('places', () => {
         const helper = createFakeHelper(searchClient);
         const widget = places(defaultOptions);
 
-        helper.setQueryParameter = jest.fn();
+        helper.setQueryParameter = vi.fn();
         widget.init!(createInitOptions({ helper }));
 
         expect(helper.setQueryParameter).toHaveBeenCalledTimes(0);

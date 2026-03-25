@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Rendering renders default template correctly 1`] = `
+exports[`Rendering > renders default template correctly 1`] = `
 <div class="ais-VoiceSearch">
   <button class="ais-VoiceSearch-button"
           title="Search by voice"
@@ -43,7 +43,7 @@ exports[`Rendering renders default template correctly 1`] = `
 </div>
 `;
 
-exports[`Rendering with custom template for status 1`] = `
+exports[`Rendering > with custom template for status 1`] = `
 <div class="ais-VoiceSearch-status">
   <div>
     <p>

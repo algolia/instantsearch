@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GeoSearch expect to render 1`] = `
+exports[`GeoSearch > expect to render 1`] = `
 <div class="ais-GeoSearch">
   <div class="ais-GeoSearch-map">
   </div>
@@ -9,7 +9,7 @@ exports[`GeoSearch expect to render 1`] = `
 </div>
 `;
 
-exports[`GeoSearch expect to render 2`] = `
+exports[`GeoSearch > expect to render 2`] = `
 {
   "cssClasses": {
     "control": "ais-GeoSearch-control",
@@ -50,7 +50,7 @@ exports[`GeoSearch expect to render 2`] = `
 }
 `;
 
-exports[`GeoSearch expect to render with custom classNames 1`] = `
+exports[`GeoSearch > expect to render with custom classNames 1`] = `
 <div class="ais-GeoSearch custom-root">
   <div class="ais-GeoSearch-map custom-map">
   </div>
@@ -59,7 +59,7 @@ exports[`GeoSearch expect to render with custom classNames 1`] = `
 </div>
 `;
 
-exports[`GeoSearch expect to render with custom classNames 2`] = `
+exports[`GeoSearch > expect to render with custom classNames 2`] = `
 {
   "cssClasses": {
     "control": "ais-GeoSearch-control custom-control",

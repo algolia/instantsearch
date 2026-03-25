@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -20,8 +20,6 @@ import {
 import { index } from '../../../widgets';
 import connectSortBy from '../connectSortBy';
 
-import type { SortByRenderState } from '../connectSortBy';
-
 describe('connectSortBy', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
@@ -29,10 +27,10 @@ describe('connectSortBy', () => {
         // @ts-expect-error
         connectSortBy()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector]
+      `);
     });
 
     it('throws without items', () => {
@@ -40,10 +38,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         // @ts-expect-error
         connectSortBy(() => {})({ items: undefined });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`items\` option expects an array of objects.
+        [Error: The \`items\` option expects an array of objects.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector]
+      `);
     });
 
     it('throws with non-array items', () => {
@@ -51,15 +49,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         // @ts-expect-error
         connectSortBy(() => {})({ items: 'items' });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`items\` option expects an array of objects.
+        [Error: The \`items\` option expects an array of objects.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customSortBy = connectSortBy(render, unmount);
       const widget = customSortBy({ items: [] });
@@ -80,7 +78,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
@@ -93,7 +91,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     const widget = makeWidget({ items });
 
     const helper = algoliasearchHelper(createSearchClient(), items[0].value);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -143,7 +141,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   });
 
   it('does not throw without the unmount function', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectSortBy(rendering);
     const items = [
       { label: 'Sort products by relevance', value: 'relevance' },
@@ -158,7 +156,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   });
 
   it('Renders with transformed items', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
@@ -175,7 +173,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     });
 
     const helper = algoliasearchHelper(createSearchClient(), items[0].value);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -218,7 +216,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   });
 
   it('Provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectSortBy(() => {});
     const widget = makeWidget({
       items: [{ label: 'Sort products by relevance', value: 'relevance' }],
@@ -246,7 +244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   });
 
   it('Provides a function to update the index at each step', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
@@ -261,7 +259,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     });
 
     const helper = algoliasearchHelper(createSearchClient(), items[0].value);
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -308,8 +306,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
   describe('getRenderState', () => {
     test('returns the render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSortBy = connectSortBy(renderFn, unmountFn);
       const sortBy = createSortBy({
         items: [
@@ -396,8 +394,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSortBy = connectSortBy(renderFn, unmountFn);
       const sortBy = createSortBy({
         items: [
@@ -475,8 +473,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     });
 
     test('canRefine is false if there are results but no item to chose from', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createSortBy = connectSortBy(renderFn, unmountFn);
       const sortBy = createSortBy({
         items: [],
@@ -508,7 +506,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   describe('options', () => {
     describe('items', () => {
       test('uses the helper index by default', () => {
-        const renderFn = jest.fn();
+        const renderFn = vi.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
           indexName: 'indexName',
@@ -517,7 +515,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'index_featured'
         );
-        helper.search = jest.fn();
+        helper.search = vi.fn();
 
         const items = [
           { label: 'Featured', value: 'index_featured' },
@@ -541,7 +539,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       test('warns and falls back to the helper index if not present in the items', () => {
-        const renderFn = jest.fn();
+        const renderFn = vi.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
           indexName: 'indexName',
@@ -550,7 +548,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'index_initial'
         );
-        helper.search = jest.fn();
+        helper.search = vi.fn();
 
         const items = [
           { label: 'Featured', value: 'index_featured' },
@@ -581,7 +579,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn<any, [SortByRenderState, boolean]>();
+      const rendering = vi.fn();
       const makeWidget = connectSortBy(rendering);
       const instantSearchInstance = createInstantSearch({
         indexName: 'relevance',
@@ -597,7 +595,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       const helper = algoliasearchHelper(createSearchClient(), 'relevance');
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       widget.init!(
         createInitOptions({
@@ -682,7 +680,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       test('should use the top-level `indexName` for the initial index', () => {
-        const render = jest.fn();
+        const render = vi.fn();
         const makeWidget = connectSortBy(render);
         const instantSearchInstance = createInstantSearch({
           indexName: 'initialIndexName',
@@ -699,7 +697,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'initialIndexName'
         );
-        helper.search = jest.fn();
+        helper.search = vi.fn();
 
         // Simulate an URLSync
         helper.setQueryParameter('index', 'indexNamePrice');
@@ -727,7 +725,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       test('should return the same `uiState` when the default value from a parent index is selected', () => {
         const parent = index({ indexName: 'indexNameParent' });
-        const render = jest.fn();
+        const render = vi.fn();
         const makeWidget = connectSortBy(render);
         const instantSearchInstance = createInstantSearch({
           indexName: 'initialIndexName',
@@ -876,7 +874,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('throws when strategies are used without composition mode', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -904,7 +902,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('does not throw when strategies are used with composition mode', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -933,7 +931,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     describe('Normalization', () => {
       it('normalizes strategy items to have value property in options', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -950,7 +948,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'my-composition'
         );
-        helper.search = jest.fn();
+        helper.search = vi.fn();
 
         widget.init!(
           createInitOptions({
@@ -972,7 +970,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('normalizes mixed index and strategy items', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -989,7 +987,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'my-composition'
         );
-        helper.search = jest.fn();
+        helper.search = vi.fn();
 
         widget.init!(
           createInitOptions({
@@ -1013,7 +1011,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     describe('Refine functionality', () => {
       it('calls setQueryParameter with sortBy for strategy items', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1027,8 +1025,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'my-composition'
         );
-        helper.search = jest.fn();
-        helper.setQueryParameter = jest.fn(() => helper);
+        helper.search = vi.fn();
+        helper.setQueryParameter = vi.fn(() => helper);
 
         widget.init!(
           createInitOptions({
@@ -1049,7 +1047,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('calls setIndex for index items', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1063,8 +1061,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'my-composition'
         );
-        helper.search = jest.fn();
-        helper.setIndex = jest.fn(() => helper);
+        helper.search = vi.fn();
+        helper.setIndex = vi.fn(() => helper);
 
         widget.init!(
           createInitOptions({
@@ -1082,7 +1080,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('handles mixed items correctly in refine', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1099,9 +1097,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           createSearchClient(),
           'my-composition'
         );
-        helper.search = jest.fn();
-        helper.setIndex = jest.fn(() => helper);
-        helper.setQueryParameter = jest.fn(() => helper);
+        helper.search = vi.fn();
+        helper.setIndex = vi.fn(() => helper);
+        helper.setQueryParameter = vi.fn(() => helper);
 
         widget.init!(
           createInitOptions({
@@ -1121,8 +1119,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
         expect(helper.setIndex).toHaveBeenCalledWith('products');
 
-        helper.setIndex = jest.fn(() => helper);
-        helper.setQueryParameter = jest.fn(() => helper);
+        helper.setIndex = vi.fn(() => helper);
+        helper.setQueryParameter = vi.fn(() => helper);
 
         // Refine with strategy
         refine('price_asc');
@@ -1136,7 +1134,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     describe('Current refinement', () => {
       it('reads currentRefinement from state.sortBy in composition mode', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1173,7 +1171,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('reads currentRefinement from state.index when sortBy not set', () => {
-        const rendering = jest.fn();
+        const rendering = vi.fn();
         const makeWidget = connectSortBy(rendering);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1352,7 +1350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     describe('Dispose', () => {
       it('clears sortBy parameter on dispose in composition mode', () => {
-        const unmount = jest.fn();
+        const unmount = vi.fn();
         const makeWidget = connectSortBy(() => {}, unmount);
         const instantSearchInstance = createInstantSearch({
           indexName: 'defaultIndex',
@@ -1389,7 +1387,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
 
       it('restores initial index on dispose', () => {
-        const unmount = jest.fn();
+        const unmount = vi.fn();
         const makeWidget = connectSortBy(() => {}, unmount);
         const instantSearchInstance = createInstantSearch({
           indexName: 'my-composition',

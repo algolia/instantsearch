@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -35,7 +35,7 @@ describe('TrendingItems', () => {
           },
         ]}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -82,7 +82,7 @@ describe('TrendingItems', () => {
         status="idle"
         items={[]}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -106,7 +106,7 @@ describe('TrendingItems', () => {
           <div className={classNames.title}>My custom header</div>
         )}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -153,16 +153,16 @@ describe('TrendingItems', () => {
                 <li key={item.objectID} className={props.classNames.item}>
                   <props.itemComponent
                     item={item}
-                    onClick={jest.fn()}
-                    onAuxClick={jest.fn()}
-                    sendEvent={jest.fn()}
+                    onClick={vi.fn()}
+                    onAuxClick={vi.fn()}
+                    sendEvent={vi.fn()}
                   />
                 </li>
               ))}
             </ol>
           </div>
         )}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -203,7 +203,7 @@ describe('TrendingItems', () => {
         items={[]}
         emptyComponent={() => <Fragment>My custom empty component</Fragment>}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -219,7 +219,7 @@ describe('TrendingItems', () => {
   });
 
   test('sends a `click` event when clicking on an item', () => {
-    const sendEvent = jest.fn();
+    const sendEvent = vi.fn();
     const items = [{ objectID: '1', __position: 1 }];
 
     const { container } = render(
@@ -249,7 +249,7 @@ describe('TrendingItems', () => {
         items={[{ objectID: '1', __position: 1 }]}
         translations={{ title: 'My custom title' }}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -290,7 +290,7 @@ describe('TrendingItems', () => {
         items={[{ objectID: '1', __position: 1 }]}
         hidden={true}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 
@@ -312,7 +312,7 @@ describe('TrendingItems', () => {
           item: 'ITEM',
         }}
         itemComponent={ItemComponent}
-        sendEvent={jest.fn()}
+        sendEvent={vi.fn()}
       />
     );
 

@@ -1,4 +1,4 @@
-const getAnswersDefaultValues = require('../getAnswersDefaultValues');
+import getAnswersDefaultValues from '../getAnswersDefaultValues.js';
 
 test('without attributesToDisplay in configuration', () => {
   const { attributesToDisplay } = getAnswersDefaultValues({}, {}, undefined);

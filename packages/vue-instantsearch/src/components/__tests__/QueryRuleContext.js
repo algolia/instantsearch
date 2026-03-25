@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,7 +7,7 @@ import { __setState } from '../../mixins/widget';
 import QueryRuleContext from '../QueryRuleContext';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 
 it('is renderless', () => {
   __setState({
@@ -23,7 +23,7 @@ it('is renderless', () => {
 
 it('accepts only trackedFilters and transformRuleContexts', () => {
   const trackedFilters = {};
-  const transformRuleContexts = jest.fn();
+  const transformRuleContexts = vi.fn();
   const wrapper = mount(QueryRuleContext, {
     propsData: {
       trackedFilters,

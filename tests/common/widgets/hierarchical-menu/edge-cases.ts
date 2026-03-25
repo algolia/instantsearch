@@ -116,7 +116,7 @@ function createMockedSearchClientWithManyChildren({ separator = ' > ' } = {}) {
     },
   };
 
-  const search = jest.fn((requests) =>
+  const search = vi.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse({ facets }))

@@ -1,6 +1,6 @@
-const path = require('path');
+import path from 'path';
 
-const resolveTemplate = require('../resolve-template');
+import resolveTemplate from '../resolve-template.js';
 
 describe('resolveTemplate', () => {
   test('selects the template with unknown template', () => {
@@ -41,7 +41,7 @@ describe('resolveTemplate', () => {
         }
       )
     ).toThrowErrorMatchingInlineSnapshot(
-      `"The template \\"InstantSearch.js\\" does not support the version 1.0.0."`
+      `[Error: The template "InstantSearch.js" does not support the version 1.0.0.]`
     );
   });
 

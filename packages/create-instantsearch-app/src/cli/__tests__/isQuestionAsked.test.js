@@ -1,4 +1,4 @@
-const isQuestionAsked = require('../isQuestionAsked');
+import isQuestionAsked from '../isQuestionAsked.js';
 
 test('with appId undefined should ask', () => {
   expect(

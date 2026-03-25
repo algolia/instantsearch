@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Breadcrumb Rendering renders with a single item 1`] = `
+exports[`Breadcrumb > Rendering > renders with a single item 1`] = `
 <div>
   <div
     class="root"
@@ -33,7 +33,7 @@ exports[`Breadcrumb Rendering renders with a single item 1`] = `
 </div>
 `;
 
-exports[`Breadcrumb Rendering renders with multiple items 1`] = `
+exports[`Breadcrumb > Rendering > renders with multiple items 1`] = `
 <div>
   <div
     class="root"
@@ -82,7 +82,7 @@ exports[`Breadcrumb Rendering renders with multiple items 1`] = `
 </div>
 `;
 
-exports[`Breadcrumb Rendering renders without items 1`] = `
+exports[`Breadcrumb > Rendering > renders without items 1`] = `
 <div>
   <div
     class="root noRefinementRoot"

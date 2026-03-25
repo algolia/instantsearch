@@ -57,7 +57,7 @@ async function build() {
         libraryName,
         keywords,
         supportedVersion,
-      } = require(`${templatesFolder}/${templateTitle}/.template.js`);
+      } = require(`${templatesFolder}/${templateTitle}/.template.cjs`);
       const appPath = `${BUILD_FOLDER}/${templateName}`;
 
       // Remove the old app

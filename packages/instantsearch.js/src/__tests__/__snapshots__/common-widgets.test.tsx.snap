@@ -1,0 +1,2003 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Common widget tests (InstantSearch.js) > Breadcrumb widget common tests > options > specifies a custom separator in records 1`] = `
+<div
+  class="ais-Breadcrumb"
+>
+  <ul
+    class="ais-Breadcrumb-list"
+  >
+    <li
+      class="ais-Breadcrumb-item"
+    >
+      <a
+        class="ais-Breadcrumb-link"
+        href="#"
+      >
+        Home
+      </a>
+    </li>
+    <li
+      class="ais-Breadcrumb-item"
+    >
+      <span
+        aria-hidden="true"
+        class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <a
+        class="ais-Breadcrumb-link"
+        href="#"
+      >
+        Cameras & Camcorders
+      </a>
+    </li>
+    <li
+      class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+    >
+      <span
+        aria-hidden="true"
+        class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      Digital Cameras
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Breadcrumb widget common tests > options > transforms the items > 
+        [
+          "Home",
+          ">CAMERAS & CAMCORDERS",
+          ">DIGITAL CAMERAS",
+        ]
+       1`] = `
+[
+  "Home",
+  ">CAMERAS & CAMCORDERS",
+  ">DIGITAL CAMERAS",
+]
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > exclusively restricts what refinements to clear 1`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button"
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > exclusively restricts what refinements to clear 2`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+    disabled=""
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > inclusively restricts what refinements to clear 1`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button"
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > inclusively restricts what refinements to clear 2`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+    disabled=""
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > renders with a disabled button when there are no refinements 1`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+    disabled=""
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > restricts what refinements to clear with custom logic 1`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button"
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ClearRefinements widget common tests > options > restricts what refinements to clear with custom logic 2`] = `
+<div
+  class="ais-ClearRefinements"
+>
+  <button
+    class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+    disabled=""
+  >
+    Clear refinements
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > FrequentlyBoughtTogether widget common tests > options > renders transformed items 1`] = `
+<section
+  class="ais-FrequentlyBoughtTogether"
+>
+  <h3
+    class="ais-FrequentlyBoughtTogether-title"
+  >
+    Frequently bought together
+  </h3>
+  <div
+    class="ais-FrequentlyBoughtTogether-container"
+  >
+    <ol
+      class="ais-FrequentlyBoughtTogether-list"
+    >
+      <li
+        class="ais-FrequentlyBoughtTogether-item"
+      >
+        {
+  "objectID": "(1)",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-FrequentlyBoughtTogether-item"
+      >
+        {
+  "objectID": "(2)",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > FrequentlyBoughtTogether widget common tests > options > renders with default props 1`] = `
+<section
+  class="ais-FrequentlyBoughtTogether"
+>
+  <h3
+    class="ais-FrequentlyBoughtTogether-title"
+  >
+    Frequently bought together
+  </h3>
+  <div
+    class="ais-FrequentlyBoughtTogether-container"
+  >
+    <ol
+      class="ais-FrequentlyBoughtTogether-list"
+    >
+      <li
+        class="ais-FrequentlyBoughtTogether-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+    }
+  },
+  "name": "Moschino Love – Shoulder bag",
+  "objectID": "1",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-FrequentlyBoughtTogether-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+    }
+  },
+  "name": "Bag “Sabrina“ medium Gabs",
+  "objectID": "2",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > HierarchicalMenu widget common tests > options > limits the number of items to display 1`] = `
+<div
+  class="ais-HierarchicalMenu"
+>
+  <ul
+    class="ais-HierarchicalMenu-list"
+  >
+    <li
+      class="ais-HierarchicalMenu-item"
+    >
+      <a
+        class="ais-HierarchicalMenu-link"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Cameras & Camcorders
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          1369
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > HierarchicalMenu widget common tests > options > renders with a custom \`rootPath\` 1`] = `
+<div
+  class="ais-HierarchicalMenu"
+>
+  <ul
+    class="ais-HierarchicalMenu-list"
+  >
+    <li
+      class="ais-HierarchicalMenu-item"
+    >
+      <a
+        class="ais-HierarchicalMenu-link"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Digital Cameras
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          170
+        </span>
+      </a>
+    </li>
+    <li
+      class="ais-HierarchicalMenu-item"
+    >
+      <a
+        class="ais-HierarchicalMenu-link"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Memory Cards
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          113
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > HierarchicalMenu widget common tests > options > renders with a custom \`rootPath\` 2`] = `
+<div
+  class="ais-HierarchicalMenu"
+>
+  <ul
+    class="ais-HierarchicalMenu-list"
+  >
+    <li
+      class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
+    >
+      <a
+        class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Digital Cameras
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          170
+        </span>
+      </a>
+      <ul
+        class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+      >
+        <li
+          class="ais-HierarchicalMenu-item"
+        >
+          <a
+            class="ais-HierarchicalMenu-link"
+            href="#"
+          >
+            <span
+              class="ais-HierarchicalMenu-label"
+            >
+              Digital SLR Cameras
+            </span>
+            <span
+              class="ais-HierarchicalMenu-count"
+            >
+              23
+            </span>
+          </a>
+        </li>
+        <li
+          class="ais-HierarchicalMenu-item"
+        >
+          <a
+            class="ais-HierarchicalMenu-link"
+            href="#"
+          >
+            <span
+              class="ais-HierarchicalMenu-label"
+            >
+              Mirrorless Cameras
+            </span>
+            <span
+              class="ais-HierarchicalMenu-count"
+            >
+              37
+            </span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li
+      class="ais-HierarchicalMenu-item"
+    >
+      <a
+        class="ais-HierarchicalMenu-link"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Memory Cards
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          113
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > HierarchicalMenu widget common tests > options > show more > displays a "Show more" button 1`] = `
+<div
+  class="ais-HierarchicalMenu"
+>
+  <ul
+    class="ais-HierarchicalMenu-list"
+  >
+    <li
+      class="ais-HierarchicalMenu-item"
+    >
+      <a
+        class="ais-HierarchicalMenu-link"
+        href="#"
+      >
+        <span
+          class="ais-HierarchicalMenu-label"
+        >
+          Cameras & Camcorders
+        </span>
+        <span
+          class="ais-HierarchicalMenu-count"
+        >
+          1369
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button
+    class="ais-HierarchicalMenu-showMore"
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Hits widget common tests > options > renders default banner element with banner widget renderingContent 1`] = `
+<div
+  class="ais-Hits"
+>
+  <aside
+    class="ais-Hits-banner"
+  >
+    <a
+      class="ais-Hits-banner-link"
+      href="https://www.algolia.com"
+    >
+      <img
+        class="ais-Hits-banner-image"
+        src="https://via.placeholder.com/550x250"
+      />
+    </a>
+  </aside>
+  <ol
+    class="ais-Hits-list"
+  >
+    <li
+      class="ais-Hits-item"
+    >
+      {"objectID":"1"}
+    </li>
+    <li
+      class="ais-Hits-item"
+    >
+      {"objectID":"2"}
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > InfiniteHits widget common tests > options > renders default banner element with banner widget renderingContent 1`] = `
+<div
+  class="ais-InfiniteHits"
+>
+  <aside
+    class="ais-InfiniteHits-banner"
+  >
+    <a
+      class="ais-InfiniteHits-banner-link"
+      href="https://www.algolia.com"
+    >
+      <img
+        class="ais-InfiniteHits-banner-image"
+        src="https://via.placeholder.com/550x250"
+      />
+    </a>
+  </aside>
+  <ol
+    class="ais-InfiniteHits-list"
+  >
+    <li
+      class="ais-InfiniteHits-item"
+    >
+      {"objectID":"0"}
+    </li>
+    <li
+      class="ais-InfiniteHits-item"
+    >
+      {"objectID":"1"}
+    </li>
+    <li
+      class="ais-InfiniteHits-item"
+    >
+      {"objectID":"2"}
+    </li>
+  </ol>
+  <button
+    class="ais-InfiniteHits-loadMore"
+  >
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Menu widget common tests > options > show more / less > displays a "Show more" button 1`] = `
+<div
+  class="ais-Menu"
+>
+  <ul
+    class="ais-Menu-list"
+  >
+    <li
+      class="ais-Menu-item"
+    >
+      <a
+        class="ais-Menu-link"
+        href="#"
+      >
+        <span
+          class="ais-Menu-label"
+        >
+          Insignia™
+        </span>
+        <span
+          class="ais-Menu-count"
+        >
+          746
+        </span>
+      </a>
+    </li>
+    <li
+      class="ais-Menu-item"
+    >
+      <a
+        class="ais-Menu-link"
+        href="#"
+      >
+        <span
+          class="ais-Menu-label"
+        >
+          Samsung
+        </span>
+        <span
+          class="ais-Menu-count"
+        >
+          633
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button
+    class="ais-Menu-showMore"
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Pagination widget common tests > options > does not add items around the current one when there are not enough pages 1`] = `
+<div
+  class="ais-Pagination"
+>
+  <ul
+    class="ais-Pagination-list"
+  >
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
+    >
+      <span
+        aria-label="First Page"
+        class="ais-Pagination-link"
+      >
+        ‹‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
+    >
+      <span
+        aria-label="Previous Page"
+        class="ais-Pagination-link"
+      >
+        ‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
+    >
+      <a
+        aria-label="Page 1"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        1
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page"
+    >
+      <a
+        aria-label="Page 2"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        2
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page"
+    >
+      <a
+        aria-label="Page 3"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        3
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page"
+    >
+      <a
+        aria-label="Page 4"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        4
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page"
+    >
+      <a
+        aria-label="Page 5"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        5
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page"
+    >
+      <a
+        aria-label="Page 6"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        6
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--nextPage"
+    >
+      <a
+        aria-label="Next Page"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        ›
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--lastPage"
+    >
+      <a
+        aria-label="Last Page, Page 6"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        ››
+      </a>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Pagination widget common tests > options > hides the "First" item when \`showFirst\` is \`false\` 1`] = `
+<div
+  class="ais-Pagination ais-Pagination--noRefinement"
+>
+  <ul
+    class="ais-Pagination-list"
+  >
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
+    >
+      <span
+        aria-label="Previous Page"
+        class="ais-Pagination-link"
+      >
+        ‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
+    >
+      <a
+        aria-label="Page 1"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        1
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
+    >
+      <span
+        aria-label="Next Page"
+        class="ais-Pagination-link"
+      >
+        ›
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
+    >
+      <span
+        aria-label="Last Page, Page 0"
+        class="ais-Pagination-link"
+      >
+        ››
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Pagination widget common tests > options > hides the "Last" item when \`showLast\` is \`false\` 1`] = `
+<div
+  class="ais-Pagination ais-Pagination--noRefinement"
+>
+  <ul
+    class="ais-Pagination-list"
+  >
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
+    >
+      <span
+        aria-label="First Page"
+        class="ais-Pagination-link"
+      >
+        ‹‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
+    >
+      <span
+        aria-label="Previous Page"
+        class="ais-Pagination-link"
+      >
+        ‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
+    >
+      <a
+        aria-label="Page 1"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        1
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
+    >
+      <span
+        aria-label="Next Page"
+        class="ais-Pagination-link"
+      >
+        ›
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Pagination widget common tests > options > hides the "Next" item when \`showNext\` is \`false\` 1`] = `
+<div
+  class="ais-Pagination ais-Pagination--noRefinement"
+>
+  <ul
+    class="ais-Pagination-list"
+  >
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
+    >
+      <span
+        aria-label="First Page"
+        class="ais-Pagination-link"
+      >
+        ‹‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
+    >
+      <span
+        aria-label="Previous Page"
+        class="ais-Pagination-link"
+      >
+        ‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
+    >
+      <a
+        aria-label="Page 1"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        1
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
+    >
+      <span
+        aria-label="Last Page, Page 0"
+        class="ais-Pagination-link"
+      >
+        ››
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > Pagination widget common tests > options > hides the "Previous" item when \`showPrevious\` is \`false\` 1`] = `
+<div
+  class="ais-Pagination ais-Pagination--noRefinement"
+>
+  <ul
+    class="ais-Pagination-list"
+  >
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
+    >
+      <span
+        aria-label="First Page"
+        class="ais-Pagination-link"
+      >
+        ‹‹
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
+    >
+      <a
+        aria-label="Page 1"
+        class="ais-Pagination-link"
+        href="#"
+      >
+        1
+      </a>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
+    >
+      <span
+        aria-label="Next Page"
+        class="ais-Pagination-link"
+      >
+        ›
+      </span>
+    </li>
+    <li
+      class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
+    >
+      <span
+        aria-label="Last Page, Page 0"
+        class="ais-Pagination-link"
+      >
+        ››
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > Show more/less > displays a "Show more" button 1`] = `
+<div
+  class="ais-RefinementList"
+>
+  <ul
+    class="ais-RefinementList-list"
+  >
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Insignia™"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Insignia™
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          746
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Samsung"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Samsung
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          633
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Metra"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Metra
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          591
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="HP"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          HP
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          530
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Apple"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Apple
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          442
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="GE"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          GE
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          394
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Sony"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Sony
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          350
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Incipio"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Incipio
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          320
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="KitchenAid"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          KitchenAid
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          318
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Whirlpool"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Whirlpool
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          298
+        </span>
+      </label>
+    </li>
+  </ul>
+  <button
+    class="ais-RefinementList-showMore"
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > limits the number of items to display 1`] = `
+<div
+  class="ais-RefinementList"
+>
+  <ul
+    class="ais-RefinementList-list"
+  >
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Insignia™"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Insignia™
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          746
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Samsung"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Samsung
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          633
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Metra"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Metra
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          591
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="HP"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          HP
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          530
+        </span>
+      </label>
+    </li>
+    <li
+      class="ais-RefinementList-item"
+    >
+      <label
+        class="ais-RefinementList-label"
+      >
+        <input
+          class="ais-RefinementList-checkbox"
+          type="checkbox"
+          value="Apple"
+        />
+        <span
+          class="ais-RefinementList-labelText"
+        >
+          Apple
+        </span>
+        <span
+          class="ais-RefinementList-count"
+        >
+          442
+        </span>
+      </label>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > displays a fallback when there are no results 1`] = `
+<div
+  class="ais-RefinementList ais-RefinementList--noRefinement"
+>
+  <div
+    class="ais-RefinementList-searchBox"
+  >
+    <div
+      class="ais-SearchBox"
+    >
+      <form
+        action=""
+        class="ais-SearchBox-form"
+        novalidate=""
+        role="search"
+      >
+        <input
+          aria-label="Search for filters"
+          autocapitalize="off"
+          autocomplete="off"
+          autocorrect="off"
+          class="ais-SearchBox-input"
+          maxlength="512"
+          placeholder="Search brands"
+          spellcheck="false"
+          type="search"
+        />
+        <button
+          class="ais-SearchBox-submit"
+          title="Submit the search query"
+          type="submit"
+        >
+          <svg
+            aria-hidden="true"
+            class="ais-SearchBox-submitIcon"
+            height="10"
+            viewBox="0 0 40 40"
+            width="10"
+          >
+            <path
+              d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
+            />
+          </svg>
+        </button>
+        <button
+          class="ais-SearchBox-reset"
+          title="Clear the search query"
+          type="reset"
+        >
+          <svg
+            aria-hidden="true"
+            class="ais-SearchBox-resetIcon"
+            height="10"
+            viewBox="0 0 20 20"
+            width="10"
+          >
+            <path
+              d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
+            />
+          </svg>
+        </button>
+        <span
+          class="ais-SearchBox-loadingIndicator"
+          hidden=""
+        >
+          <svg
+            aria-hidden="true"
+            aria-label="Results are loading"
+            class="ais-SearchBox-loadingIcon"
+            height="16"
+            stroke="#444"
+            viewBox="0 0 38 38"
+            width="16"
+          >
+            <g
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                stroke-width="2"
+                transform="translate(1 1)"
+              >
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="18"
+                  stroke-opacity=".5"
+                />
+                <path
+                  d="M36 18c0-9.94-8.06-18-18-18"
+                >
+                  <animatetransform
+                    attributeName="transform"
+                    dur="1s"
+                    from="0 18 18"
+                    repeatCount="indefinite"
+                    to="360 18 18"
+                    type="rotate"
+                  />
+                </path>
+              </g>
+            </g>
+          </svg>
+        </span>
+      </form>
+    </div>
+  </div>
+  <div
+    class="ais-RefinementList-noResults"
+  >
+    No results
+  </div>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > displays a search box 1`] = `
+<span
+  class="ais-RefinementList-labelText"
+>
+  Insignia™
+</span>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > displays a search box 2`] = `
+<span
+  class="ais-RefinementList-labelText"
+>
+  <span
+    class="ais-Highlight"
+  >
+    <mark
+      class="ais-Highlight-highlighted"
+    >
+      App
+    </mark>
+    <span
+      class="ais-Highlight-nonHighlighted"
+    >
+      le
+    </span>
+  </span>
+</span>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > does not select first item on submitting the search (with searchableSelectOnSubmit: false) > 
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+         1`] = `
+"Apple ☐
+Alpine ☐
+APC ☐
+Amped Wireless ☐
+Applebee's ☐
+Amplicom ☐
+Apollo Enclosures ☐
+Apple® ☐
+Applica ☐
+Apricorn ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > does not select first item on submitting the search (with searchableSelectOnSubmit: false) > 
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+         2`] = `
+"Apple ☐
+Alpine ☐
+APC ☐
+Amped Wireless ☐
+Applebee's ☐
+Amplicom ☐
+Apollo Enclosures ☐
+Apple® ☐
+Applica ☐
+Apricorn ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > does not select first item on submitting the search (with searchableSelectOnSubmit: false) > 
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+         3`] = `
+"Apple ☐
+Alpine ☐
+APC ☐
+Amped Wireless ☐
+Applebee's ☐
+Amplicom ☐
+Apollo Enclosures ☐
+Apple® ☐
+Applica ☐
+Apricorn ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > does not select first item on submitting the search (with searchableSelectOnSubmit: false) > 
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+         1`] = `
+"Insignia™ ☐
+Samsung ☐
+Metra ☐
+HP ☐
+Apple ☐
+GE ☐
+Sony ☐
+Incipio ☐
+KitchenAid ☐
+Whirlpool ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > selects first item on submitting the search (with searchableSelectOnSubmit: true) > 
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+         1`] = `
+"Apple ☐
+Alpine ☐
+APC ☐
+Amped Wireless ☐
+Applebee's ☐
+Amplicom ☐
+Apollo Enclosures ☐
+Apple® ☐
+Applica ☐
+Apricorn ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > selects first item on submitting the search (with searchableSelectOnSubmit: true) > 
+          "Apple ☒
+          Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+         1`] = `
+"Apple ☒
+Insignia™ ☐
+Samsung ☐
+Metra ☐
+HP ☐
+GE ☐
+Sony ☐
+Incipio ☐
+KitchenAid ☐
+Whirlpool ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > selects first item on submitting the search (with searchableSelectOnSubmit: true) > 
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+         1`] = `
+"Insignia™ ☐
+Samsung ☐
+Metra ☐
+HP ☐
+Apple ☐
+GE ☐
+Sony ☐
+Incipio ☐
+KitchenAid ☐
+Whirlpool ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RefinementList widget common tests > options > searching > selects first item on submitting the search (with searchableSelectOnSubmit: true) > 
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+         2`] = `
+"Insignia™ ☐
+Samsung ☐
+Metra ☐
+HP ☐
+Apple ☐
+GE ☐
+Sony ☐
+Incipio ☐
+KitchenAid ☐
+Whirlpool ☐"
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RelatedProducts widget common tests > options > renders transformed items > 
+          <section
+            class="ais-RelatedProducts"
+          >
+            <h3
+              class="ais-RelatedProducts-title"
+            >
+              Related products
+            </h3>
+            <div
+              class="ais-RelatedProducts-container"
+            >
+              <ol
+                class="ais-RelatedProducts-list"
+              >
+                <li
+                  class="ais-RelatedProducts-item"
+                >
+                  {
+            "objectID": "(1)",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-RelatedProducts-item"
+                >
+                  {
+            "objectID": "(2)",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+         1`] = `
+<section
+  class="ais-RelatedProducts"
+>
+  <h3
+    class="ais-RelatedProducts-title"
+  >
+    Related products
+  </h3>
+  <div
+    class="ais-RelatedProducts-container"
+  >
+    <ol
+      class="ais-RelatedProducts-list"
+    >
+      <li
+        class="ais-RelatedProducts-item"
+      >
+        {
+  "objectID": "(1)",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-RelatedProducts-item"
+      >
+        {
+  "objectID": "(2)",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RelatedProducts widget common tests > options > renders with default props > 
+          <section
+            class="ais-RelatedProducts"
+          >
+            <h3
+              class="ais-RelatedProducts-title"
+            >
+              Related products
+            </h3>
+            <div
+              class="ais-RelatedProducts-container"
+            >
+              <ol
+                class="ais-RelatedProducts-list"
+              >
+                <li
+                  class="ais-RelatedProducts-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+              }
+            },
+            "name": "Moschino Love – Shoulder bag",
+            "objectID": "1",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-RelatedProducts-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+              }
+            },
+            "name": "Bag “Sabrina“ medium Gabs",
+            "objectID": "2",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+         1`] = `
+<section
+  class="ais-RelatedProducts"
+>
+  <h3
+    class="ais-RelatedProducts-title"
+  >
+    Related products
+  </h3>
+  <div
+    class="ais-RelatedProducts-container"
+  >
+    <ol
+      class="ais-RelatedProducts-list"
+    >
+      <li
+        class="ais-RelatedProducts-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+    }
+  },
+  "name": "Moschino Love – Shoulder bag",
+  "objectID": "1",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-RelatedProducts-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+    }
+  },
+  "name": "Bag “Sabrina“ medium Gabs",
+  "objectID": "2",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > RelatedProducts widget common tests > options > renders with no results > 
+          <section
+            class="ais-RelatedProducts ais-RelatedProducts--empty"
+          >
+            No results
+          </section>
+         1`] = `
+<section
+  class="ais-RelatedProducts ais-RelatedProducts--empty"
+>
+  No results
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > ToggleRefinement widget common tests > options > renders checked when the attribute is refined 1`] = `
+<div
+  class="ais-ToggleRefinement"
+>
+  <label
+    class="ais-ToggleRefinement-label"
+  >
+    <input
+      class="ais-ToggleRefinement-checkbox"
+      type="checkbox"
+    />
+    <span
+      class="ais-ToggleRefinement-labelText"
+    >
+      free_shipping
+    </span>
+  </label>
+</div>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > TrendingItems widget common tests > options > renders transformed items > 
+          <section
+            class="ais-TrendingItems"
+          >
+            <h3
+              class="ais-TrendingItems-title"
+            >
+              Trending items
+            </h3>
+            <div
+              class="ais-TrendingItems-container"
+            >
+              <ol
+                class="ais-TrendingItems-list"
+              >
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "objectID": "(1)",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "objectID": "(2)",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+         1`] = `
+<section
+  class="ais-TrendingItems"
+>
+  <h3
+    class="ais-TrendingItems-title"
+  >
+    Trending items
+  </h3>
+  <div
+    class="ais-TrendingItems-container"
+  >
+    <ol
+      class="ais-TrendingItems-list"
+    >
+      <li
+        class="ais-TrendingItems-item"
+      >
+        {
+  "objectID": "(1)",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-TrendingItems-item"
+      >
+        {
+  "objectID": "(2)",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > TrendingItems widget common tests > options > renders with default props > 
+          <section
+            class="ais-TrendingItems"
+          >
+            <h3
+              class="ais-TrendingItems-title"
+            >
+              Trending items
+            </h3>
+            <div
+              class="ais-TrendingItems-container"
+            >
+              <ol
+                class="ais-TrendingItems-list"
+              >
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+              }
+            },
+            "name": "Moschino Love – Shoulder bag",
+            "objectID": "1",
+            "__position": 1
+          }
+                </li>
+                <li
+                  class="ais-TrendingItems-item"
+                >
+                  {
+            "_highlightResult": {
+              "name": {
+                "matchLevel": "none",
+                "matchedWords": [],
+                "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+              }
+            },
+            "name": "Bag “Sabrina“ medium Gabs",
+            "objectID": "2",
+            "__position": 2
+          }
+                </li>
+              </ol>
+            </div>
+          </section>
+         1`] = `
+<section
+  class="ais-TrendingItems"
+>
+  <h3
+    class="ais-TrendingItems-title"
+  >
+    Trending items
+  </h3>
+  <div
+    class="ais-TrendingItems-container"
+  >
+    <ol
+      class="ais-TrendingItems-list"
+    >
+      <li
+        class="ais-TrendingItems-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
+    }
+  },
+  "name": "Moschino Love – Shoulder bag",
+  "objectID": "1",
+  "__position": 1
+}
+      </li>
+      <li
+        class="ais-TrendingItems-item"
+      >
+        {
+  "_highlightResult": {
+    "name": {
+      "matchLevel": "none",
+      "matchedWords": [],
+      "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+    }
+  },
+  "name": "Bag “Sabrina“ medium Gabs",
+  "objectID": "2",
+  "__position": 2
+}
+      </li>
+    </ol>
+  </div>
+</section>
+`;
+
+exports[`Common widget tests (InstantSearch.js) > TrendingItems widget common tests > options > renders with no results > 
+          <section
+            class="ais-TrendingItems ais-TrendingItems--empty"
+          >
+            No results
+          </section>
+         1`] = `
+<section
+  class="ais-TrendingItems ais-TrendingItems--empty"
+>
+  No results
+</section>
+`;

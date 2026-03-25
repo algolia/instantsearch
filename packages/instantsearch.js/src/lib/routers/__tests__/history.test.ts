@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment jsdom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -11,14 +11,14 @@ import historyRouter from '../history';
 
 import type { UiState } from '../../../types';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe('life cycle', () => {
   const originalWindow = (global as any).window;
 
   beforeEach(() => {
     window.history.pushState(null, '-- divider --', 'http://localhost/');
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -27,11 +27,11 @@ describe('life cycle', () => {
 
   describe('pushState', () => {
     test('calls pushState on write', () => {
-      const windowPushState = jest.spyOn(window.history, 'pushState');
+      const windowPushState = vi.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
 
       router.write({ indexName: { query: 'query' } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(windowPushState).toHaveBeenCalledTimes(1);
       expect(windowPushState).toHaveBeenLastCalledWith(
@@ -42,13 +42,13 @@ describe('life cycle', () => {
     });
 
     test('debounces history push calls', () => {
-      const windowPushState = jest.spyOn(window.history, 'pushState');
+      const windowPushState = vi.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
 
       router.write({ indexName: { query: 'query1' } });
       router.write({ indexName: { query: 'query2' } });
       router.write({ indexName: { query: 'query3' } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(windowPushState).toHaveBeenCalledTimes(1);
       expect(windowPushState).toHaveBeenLastCalledWith(
@@ -59,15 +59,15 @@ describe('life cycle', () => {
     });
 
     test('calls user-provided push if set', () => {
-      const windowPushState = jest.spyOn(window.history, 'pushState');
-      const customPush = jest.fn();
+      const windowPushState = vi.spyOn(window.history, 'pushState');
+      const customPush = vi.fn();
       const router = historyRouter<UiState>({
         push: customPush,
         cleanUrlOnDispose: true,
       });
 
       router.write({ indexName: { query: 'query' } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(windowPushState).toHaveBeenCalledTimes(0);
       expect(customPush).toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('life cycle', () => {
 
   describe('getLocation', () => {
     test('calls getLocation on windowTitle', () => {
-      const getLocation = jest.fn(() => window.location);
+      const getLocation = vi.fn(() => window.location);
 
       historyRouter<UiState>({
         windowTitle() {
@@ -93,7 +93,7 @@ describe('life cycle', () => {
     });
 
     test('calls getLocation on read', () => {
-      const getLocation = jest.fn(() => window.location);
+      const getLocation = vi.fn(() => window.location);
       const router = historyRouter<UiState>({
         getLocation,
         cleanUrlOnDispose: true,
@@ -102,7 +102,7 @@ describe('life cycle', () => {
       expect(getLocation).toHaveBeenCalledTimes(0);
 
       router.write({ indexName: { query: 'query1' } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(getLocation).toHaveBeenCalledTimes(1);
 
@@ -112,7 +112,7 @@ describe('life cycle', () => {
     });
 
     test('calls getLocation on createURL', () => {
-      const getLocation = jest.fn(() => window.location);
+      const getLocation = vi.fn(() => window.location);
       const router = historyRouter<UiState>({
         getLocation,
         cleanUrlOnDispose: true,
@@ -126,14 +126,14 @@ describe('life cycle', () => {
 
   describe('pop state', () => {
     test('skips history push on browser back/forward actions', () => {
-      const pushState = jest.spyOn(window.history, 'pushState');
+      const pushState = vi.spyOn(window.history, 'pushState');
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
       router.onUpdate((routeState) => {
         router.write(routeState);
       });
 
       router.write({ indexName: { page: 1 } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       // The regular write pushes in the history
       expect(pushState).toHaveBeenCalledTimes(1);
@@ -142,14 +142,14 @@ describe('life cycle', () => {
         state: { indexName: { page: 2 } },
       });
       window.dispatchEvent(popStateEvent);
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       // The pop state event skips the push in the history
       expect(pushState).toHaveBeenCalledTimes(1);
 
       // The regular write pushes in the history
       router.write({ indexName: { page: 3 } });
-      jest.runAllTimers();
+      vi.runAllTimers();
 
       expect(pushState).toHaveBeenCalledTimes(2);
     });
@@ -167,7 +167,7 @@ describe('life cycle', () => {
         state: { indexName: null },
       });
       window.dispatchEvent(popStateEvent);
-      jest.runAllTimers();
+      vi.runAllTimers();
     });
   });
 
@@ -183,9 +183,9 @@ describe('life cycle', () => {
           routing: true,
         });
         search.start();
-        jest.runAllTimers();
+        vi.runAllTimers();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
+        `[Error: You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist.]`
       );
     });
 
@@ -217,7 +217,7 @@ describe('life cycle', () => {
         });
 
         search.start();
-        jest.runAllTimers();
+        vi.runAllTimers();
       }).not.toThrow();
     });
 
@@ -243,7 +243,7 @@ describe('life cycle', () => {
         // We run the whole lifecycle to make sure none of the steps access `window`.
         router.read();
         router.write({ indexName: { query: 'query1' } });
-        jest.runAllTimers();
+        vi.runAllTimers();
         router.read();
         router.onUpdate(noop);
         router.dispose();
@@ -254,13 +254,13 @@ describe('life cycle', () => {
 
   describe('onUpdate', () => {
     test('calls user-provided start function', () => {
-      const start = jest.fn();
+      const start = vi.fn();
       const router = historyRouter<UiState>({
         start,
         cleanUrlOnDispose: true,
       });
 
-      router.onUpdate(jest.fn());
+      router.onUpdate(vi.fn());
 
       expect(start).toHaveBeenCalledTimes(1);
     });
@@ -268,7 +268,7 @@ describe('life cycle', () => {
 
   describe('dispose', () => {
     test('calls user-provided dispose function', () => {
-      const dispose = jest.fn();
+      const dispose = vi.fn();
       const router = historyRouter<UiState>({
         dispose,
         cleanUrlOnDispose: true,
@@ -280,7 +280,7 @@ describe('life cycle', () => {
     });
 
     describe('cleanUrlOnDispose', () => {
-      const consoleSpy = jest.spyOn(global.console, 'info');
+      const consoleSpy = vi.spyOn(global.console, 'info');
       consoleSpy.mockImplementation(() => {});
 
       beforeEach(() => {
@@ -288,7 +288,7 @@ describe('life cycle', () => {
       });
 
       test('cleans refinements from URL if not defined', () => {
-        const windowPushState = jest.spyOn(window.history, 'pushState');
+        const windowPushState = vi.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>();
 
         expect(consoleSpy)
@@ -300,7 +300,7 @@ To stay with the current behaviour and remove this warning, set the option to tr
 See documentation: https://www.algolia.com/doc/api-reference/widgets/history-router/js/#widget-param-cleanurlondispose`);
 
         router.write({ indexName: { query: 'query1' } });
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(1);
         expect(windowPushState).toHaveBeenLastCalledWith(
@@ -312,7 +312,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         );
 
         router.dispose();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(2);
         expect(windowPushState).toHaveBeenLastCalledWith(
@@ -323,13 +323,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
       });
 
       test('cleans refinements from URL if `true`', () => {
-        const windowPushState = jest.spyOn(window.history, 'pushState');
+        const windowPushState = vi.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
 
         expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(1);
         expect(windowPushState).toHaveBeenLastCalledWith(
@@ -341,7 +341,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         );
 
         router.dispose();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(2);
         expect(windowPushState).toHaveBeenLastCalledWith(
@@ -352,13 +352,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
       });
 
       test('does not clean refinements from URL if `false`', () => {
-        const windowPushState = jest.spyOn(window.history, 'pushState');
+        const windowPushState = vi.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>({ cleanUrlOnDispose: false });
 
         expect(consoleSpy).not.toHaveBeenCalled();
 
         router.write({ indexName: { query: 'query1' } });
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(1);
         expect(windowPushState).toHaveBeenLastCalledWith(
@@ -370,7 +370,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         );
 
         router.dispose();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(windowPushState).toHaveBeenCalledTimes(1);
       });

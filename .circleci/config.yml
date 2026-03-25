@@ -263,7 +263,7 @@ jobs:
           name: Unit & Integration tests
           command: yarn run test:ci:v4
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
       - run:
           name: Type Checking
           command: yarn run type-check:v4
@@ -282,9 +282,9 @@ jobs:
             yarn run prepare-vue3
       - run:
           name: Vue Unit tests
-          command: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
+          command: VUE_VERSION=3 yarn vitest run packages/vue-instantsearch --pool=threads --maxWorkers=4
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
       - run:
           name: Vue 3 Test Exports
           command: yarn workspace vue-instantsearch run test:exports:vue3
@@ -302,7 +302,7 @@ jobs:
           name: Unit tests
           command: yarn run test:ci
       - store_test_results:
-          path: junit/jest/
+          path: junit/vitest/
 
   examples:
     <<: *defaults

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 import { ChatState, CACHE_KEY } from '../chat';
 
@@ -88,7 +88,7 @@ describe('ChatState', () => {
 
   it('should handle sessionStorage being unavailable', () => {
     const agentId = 'agentID4';
-    // eslint-disable-next-line jest/unbound-method
+    // eslint-disable-next-line vitest/unbound-method
     const originalSetItem = sessionStorage.setItem;
     sessionStorage.setItem = () => {
       throw new Error('sessionStorage is full');

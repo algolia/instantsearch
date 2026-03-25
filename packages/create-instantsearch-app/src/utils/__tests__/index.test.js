@@ -1,14 +1,26 @@
-const mockExistsSync = jest.fn();
-const mockLstatSync = jest.fn();
-const mockReaddirSync = jest.fn();
-
-jest.mock('fs', () => ({
-  existsSync: mockExistsSync,
-  lstatSync: mockLstatSync,
-  readdirSync: mockReaddirSync,
+const { mockExistsSync, mockLstatSync, mockReaddirSync } = vi.hoisted(() => ({
+  mockExistsSync: vi.fn(),
+  mockLstatSync: vi.fn(),
+  mockReaddirSync: vi.fn(),
 }));
 
-const utils = require('../');
+vi.mock('fs', async () => {
+  const actual = await vi.importActual('fs');
+  return {
+    ...actual,
+    default: {
+      ...actual,
+      existsSync: mockExistsSync,
+      lstatSync: mockLstatSync,
+      readdirSync: mockReaddirSync,
+    },
+    existsSync: mockExistsSync,
+    lstatSync: mockLstatSync,
+    readdirSync: mockReaddirSync,
+  };
+});
+
+import * as utils from '../';
 
 describe('checkAppName', () => {
   test('does not throw when valid', () => {
@@ -18,10 +30,10 @@ describe('checkAppName', () => {
   test('throws with correct error message', () => {
     expect(() => utils.checkAppName('./project-name'))
       .toThrowErrorMatchingInlineSnapshot(`
-      "Could not create a project called \\"<red>./project-name</color>\\" because of npm naming restrictions.
-        - name cannot start with a period
-        - name can only contain URL-friendly characters"
-    `);
+        [Error: Could not create a project called "./project-name" because of npm naming restrictions.
+          - name cannot start with a period
+          - name can only contain URL-friendly characters]
+      `);
   });
 });
 
@@ -51,7 +63,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project in destination folder \\"<red>path</color>\\" because it is not empty."`
+        `[Error: Could not create project in destination folder "path" because it is not empty.]`
       );
     });
 
@@ -74,7 +86,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project at path <red>path</color> because a file of the same name already exists."`
+        `[Error: Could not create project at path path because a file of the same name already exists.]`
       );
     });
 
@@ -94,7 +106,7 @@ describe('checkAppPath', () => {
 
     test('should throw with correct error', () => {
       expect(() => utils.checkAppPath('')).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project without directory"`
+        `[Error: Could not create project without directory]`
       );
     });
 
@@ -108,7 +120,7 @@ describe('checkAppPath', () => {
 describe('checkTemplateConfigFile', () => {
   test('with correct file does not throw', () => {
     expect(() => {
-      const requireMock = jest.fn(() => ({
+      const requireMock = vi.fn(() => ({
         libraryName: 'library-name',
       }));
 
@@ -119,6 +131,7 @@ describe('checkTemplateConfigFile', () => {
 
 describe('getTemplatesByCategory', () => {
   beforeAll(() => {
+    mockExistsSync.mockImplementation(() => true);
     mockReaddirSync.mockImplementation(() => [
       'InstantSearch.js',
       'React InstantSearch',

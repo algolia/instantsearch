@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -32,15 +32,15 @@ describe('connectCurrentRefinements', () => {
           excludedAttributes: ['brand'],
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
+        [Error: The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customCurrentRefinements = connectCurrentRefinements(
         render,
@@ -63,10 +63,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
   describe('Lifecycle', () => {
     it('renders during init and render', () => {
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
       // test that the dummyRendering is called with the isFirstRendering
       // flag set accordingly
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({
         includedAttributes: ['query'],
@@ -133,8 +133,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
     describe('getRenderState', () => {
       test('returns the render state', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createCurrentRefinements = connectCurrentRefinements(
           renderFn,
           unmountFn
@@ -153,8 +153,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       });
 
       test('returns the render state with scoped results', () => {
-        const renderFn = jest.fn();
-        const unmountFn = jest.fn();
+        const renderFn = vi.fn();
+        const unmountFn = vi.fn();
         const createCurrentRefinements = connectCurrentRefinements(
           renderFn,
           unmountFn
@@ -241,8 +241,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
   describe('getWidgetRenderState', () => {
     test('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createCurrentRefinements = connectCurrentRefinements(
         renderFn,
         unmountFn
@@ -261,8 +261,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     test('returns the widget render state with scoped results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createCurrentRefinements = connectCurrentRefinements(
         renderFn,
         unmountFn
@@ -350,7 +350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       })
         .addFacetRefinement('facet1', 'facetValue1')
         .setPage(5);
-      const widget = connectCurrentRefinements(jest.fn(), jest.fn())({});
+      const widget = connectCurrentRefinements(vi.fn(), vi.fn())({});
 
       const { refine } = widget.getWidgetRenderState(
         createInitOptions({ helper })
@@ -374,11 +374,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
-      helper.search = jest.fn();
+      helper.search = vi.fn();
     });
 
     it('includes all attributes by default except the query', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({});
@@ -429,7 +429,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('includes only the `includedAttributes`', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -468,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('does not include query if empty', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -497,7 +497,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('does not include query if whitespaces', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -526,7 +526,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('excludes the `excludedAttributes` (and overrides the default ["query"])', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -565,7 +565,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('transformItems is applied', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -634,7 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('provides search results within transformItems', () => {
-      const transformItems = jest.fn((items) => items);
+      const transformItems = vi.fn((items) => items);
       const customCurrentRefinements = connectCurrentRefinements(() => {});
       const widget = customCurrentRefinements({
         transformItems,
@@ -660,7 +660,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('sort numeric refinements by numeric value', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
 
       const widget = customCurrentRefinements({
@@ -721,11 +721,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
-      helper.search = jest.fn();
+      helper.search = vi.fn();
     });
 
     it('provides the items', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
 
@@ -846,7 +846,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         facets: ['facet3', 'facet4'],
       });
 
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
 

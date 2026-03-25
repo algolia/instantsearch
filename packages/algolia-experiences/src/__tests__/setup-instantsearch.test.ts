@@ -1,21 +1,21 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 import { castToJestMock, wait } from '@instantsearch/testutils';
 
 import { fetchConfiguration } from '../get-configuration';
 import { setupInstantSearch } from '../setup-instantsearch';
 
-jest.mock('../get-configuration', () => {
-  const actual = jest.requireActual('../get-configuration');
+vi.mock('../get-configuration', async () => {
+  const actual = await vi.importActual('../get-configuration');
   return {
     ...actual,
-    fetchConfiguration: jest.fn(() => Promise.resolve([])),
+    fetchConfiguration: vi.fn(() => Promise.resolve([])),
   };
 });
 
 describe('setup of InstantSearch', () => {
-  const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   beforeEach(() => {
     errorSpy.mockReset();
     document.head.innerHTML = '';

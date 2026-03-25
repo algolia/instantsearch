@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -30,9 +30,9 @@ describe('dynamicWidgets()', () => {
         // @ts-expect-error testing invalid input
         dynamicWidgets({})
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/]
       `);
     });
 
@@ -43,9 +43,9 @@ describe('dynamicWidgets()', () => {
           container: document.createElement('div'),
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`widgets\` option expects an array of callbacks.
+        [Error: The \`widgets\` option expects an array of callbacks.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/]
       `);
     });
 
@@ -66,9 +66,9 @@ describe('dynamicWidgets()', () => {
           widgets: [searchBox({ container: document.createElement('div') })],
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`widgets\` option expects an array of callbacks.
+        [Error: The \`widgets\` option expects an array of callbacks.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/]
       `);
     });
 

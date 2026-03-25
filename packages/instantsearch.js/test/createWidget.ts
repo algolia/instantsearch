@@ -27,7 +27,7 @@ export const createInitOptions = (
     state: helper.state,
     renderState: instantSearchInstance.renderState,
     scopedResults: [],
-    createURL: jest.fn(() => '#'),
+    createURL: vi.fn(() => '#'),
     searchMetadata: {
       isSearchStalled: false,
     },
@@ -81,7 +81,7 @@ export const createRenderOptions = (
     },
     status: instantSearchInstance.status,
     error: instantSearchInstance.error,
-    createURL: jest.fn(() => '#'),
+    createURL: vi.fn(() => '#'),
     ...rest,
   };
 };
@@ -104,8 +104,8 @@ export const createDisposeOptions = (
 export const createWidget = (args: Partial<Widget> = {}): Widget =>
   ({
     $$type: 'mock.widget',
-    init: jest.fn(),
-    render: jest.fn(),
-    dispose: jest.fn(),
+    init: vi.fn(),
+    render: vi.fn(),
+    dispose: vi.fn(),
     ...args,
   } as unknown as Widget);

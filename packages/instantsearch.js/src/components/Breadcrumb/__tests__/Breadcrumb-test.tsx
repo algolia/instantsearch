@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 
@@ -90,7 +90,7 @@ describe('Breadcrumb', () => {
 
   describe('Events', () => {
     test('calls `refine` with the correct values', () => {
-      const refine = jest.fn();
+      const refine = vi.fn();
       const props = {
         ...defaultProps,
         refine,

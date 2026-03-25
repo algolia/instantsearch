@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,8 +7,8 @@ import { __setState } from '../../mixins/widget';
 import CurrentRefinements from '../CurrentRefinements.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 describe('custom render', () => {
   const defaultSlot = `
@@ -90,7 +90,7 @@ describe('custom render', () => {
   it('gives all relevant info to scoped slot', () => {
     __setState({
       items,
-      createURL: jest.fn(
+      createURL: vi.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
       ),
@@ -111,7 +111,7 @@ describe('custom render', () => {
   it('has same amount of items', () => {
     __setState({
       items,
-      createURL: jest.fn(
+      createURL: vi.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
       ),
@@ -132,7 +132,7 @@ describe('custom render', () => {
   it('item slot gives all relevant info to scoped slot', () => {
     __setState({
       items,
-      createURL: jest.fn(
+      createURL: vi.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
       ),
@@ -153,7 +153,7 @@ describe('custom render', () => {
   it('item slot has same amount of items', () => {
     __setState({
       items,
-      createURL: jest.fn(
+      createURL: vi.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
       ),
@@ -174,7 +174,7 @@ describe('custom render', () => {
   it('refinement slot has same amount of items', () => {
     __setState({
       items,
-      createURL: jest.fn(
+      createURL: vi.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
       ),

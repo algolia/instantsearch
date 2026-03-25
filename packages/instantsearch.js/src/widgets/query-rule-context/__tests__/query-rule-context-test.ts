@@ -7,10 +7,10 @@ describe('queryRuleContext', () => {
         // @ts-expect-error
         queryRuleContext();
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`trackedFilters\` option is required.
+        [Error: The \`trackedFilters\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/]
+      `);
     });
 
     test('throws trackedFilters error with empty options', () => {
@@ -18,10 +18,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         // @ts-expect-error
         queryRuleContext({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`trackedFilters\` option is required.
+        [Error: The \`trackedFilters\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/]
+      `);
     });
 
     it('is a widget', () => {

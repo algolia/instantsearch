@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import {
@@ -41,9 +41,9 @@ describe('numericMenu', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/]
       `);
     });
 
@@ -134,98 +134,98 @@ describe('numericMenu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-NumericMenu"
-  >
-    <ul
-      class="ais-NumericMenu-list"
-    >
-      <li
-        class="ais-NumericMenu-item ais-NumericMenu-item--selected"
-      >
         <div>
-          <label
-            class="ais-NumericMenu-label"
+          <div
+            class="ais-NumericMenu"
           >
-            <input
-              checked=""
-              class="ais-NumericMenu-radio"
-              name="price"
-              type="radio"
-            />
-            <span
-              class="ais-NumericMenu-labelText"
+            <ul
+              class="ais-NumericMenu-list"
             >
-              All
-            </span>
-          </label>
+              <li
+                class="ais-NumericMenu-item ais-NumericMenu-item--selected"
+              >
+                <div>
+                  <label
+                    class="ais-NumericMenu-label"
+                  >
+                    <input
+                      checked=""
+                      class="ais-NumericMenu-radio"
+                      name="price"
+                      type="radio"
+                    />
+                    <span
+                      class="ais-NumericMenu-labelText"
+                    >
+                      All
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label
+                    class="ais-NumericMenu-label"
+                  >
+                    <input
+                      class="ais-NumericMenu-radio"
+                      name="price"
+                      type="radio"
+                    />
+                    <span
+                      class="ais-NumericMenu-labelText"
+                    >
+                      Less than 500$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label
+                    class="ais-NumericMenu-label"
+                  >
+                    <input
+                      class="ais-NumericMenu-radio"
+                      name="price"
+                      type="radio"
+                    />
+                    <span
+                      class="ais-NumericMenu-labelText"
+                    >
+                      Between 500$ - 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label
+                    class="ais-NumericMenu-label"
+                  >
+                    <input
+                      class="ais-NumericMenu-radio"
+                      name="price"
+                      type="radio"
+                    />
+                    <span
+                      class="ais-NumericMenu-labelText"
+                    >
+                      More than 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label
-            class="ais-NumericMenu-label"
-          >
-            <input
-              class="ais-NumericMenu-radio"
-              name="price"
-              type="radio"
-            />
-            <span
-              class="ais-NumericMenu-labelText"
-            >
-              Less than 500$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label
-            class="ais-NumericMenu-label"
-          >
-            <input
-              class="ais-NumericMenu-radio"
-              name="price"
-              type="radio"
-            />
-            <span
-              class="ais-NumericMenu-labelText"
-            >
-              Between 500$ - 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label
-            class="ais-NumericMenu-label"
-          >
-            <input
-              class="ais-NumericMenu-radio"
-              name="price"
-              type="radio"
-            />
-            <span
-              class="ais-NumericMenu-labelText"
-            >
-              More than 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+      `);
 
       const [firstRadioInput, secondRadioInput] =
         within(container).getAllByRole('radio');
@@ -274,78 +274,78 @@ describe('numericMenu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-NumericMenu"
-  >
-    <ul
-      class="ais-NumericMenu-list"
-    >
-      <li
-        class="ais-NumericMenu-item ais-NumericMenu-item--selected"
-      >
         <div>
-          <label>
-            <input
-              checked=""
-              name="price"
-              type="radio"
-            />
-            <span>
-              All
-            </span>
-          </label>
+          <div
+            class="ais-NumericMenu"
+          >
+            <ul
+              class="ais-NumericMenu-list"
+            >
+              <li
+                class="ais-NumericMenu-item ais-NumericMenu-item--selected"
+              >
+                <div>
+                  <label>
+                    <input
+                      checked=""
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      All
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      Less than 500$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      Between 500$ - 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      More than 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              Less than 500$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              Between 500$ - 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              More than 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+      `);
 
       const [firstRadioInput, secondRadioInput] =
         within(container).getAllByRole('radio');
@@ -396,78 +396,78 @@ describe('numericMenu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-NumericMenu"
-  >
-    <ul
-      class="ais-NumericMenu-list"
-    >
-      <li
-        class="ais-NumericMenu-item ais-NumericMenu-item--selected"
-      >
         <div>
-          <label>
-            <input
-              checked=""
-              name="price"
-              type="radio"
-            />
-            <span>
-              All
-            </span>
-          </label>
+          <div
+            class="ais-NumericMenu"
+          >
+            <ul
+              class="ais-NumericMenu-list"
+            >
+              <li
+                class="ais-NumericMenu-item ais-NumericMenu-item--selected"
+              >
+                <div>
+                  <label>
+                    <input
+                      checked=""
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      All
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      Less than 500$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      Between 500$ - 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+              <li
+                class="ais-NumericMenu-item"
+              >
+                <div>
+                  <label>
+                    <input
+                      name="price"
+                      type="radio"
+                    />
+                    <span>
+                      More than 1000$
+                    </span>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              Less than 500$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              Between 500$ - 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-      <li
-        class="ais-NumericMenu-item"
-      >
-        <div>
-          <label>
-            <input
-              name="price"
-              type="radio"
-            />
-            <span>
-              More than 1000$
-            </span>
-          </label>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-`);
+      `);
 
       const [firstRadioInput, secondRadioInput] =
         within(container).getAllByRole('radio');
@@ -482,10 +482,10 @@ describe('numericMenu', () => {
 
     function createMockedSearchClient() {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) => {
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) => {
                 return createSingleSearchResponse<any>({
                   index: request.indexName,
                   hits: [

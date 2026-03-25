@@ -1,16 +1,16 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
 import { __setWidget } from '../../mixins/widget';
 import { Vue2, isVue3, isVue2 } from '../../util/vue-compat';
 import Index from '../Index';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
 });
 
 it('passes props to widgetParams', () => {
@@ -59,44 +59,45 @@ it('renders its children', () => {
 `);
 });
 
-// eslint-disable-next-line jest/no-done-callback
-it('provides the index widget', (done) => {
-  const indexWidget = { $$type: 'ais.index' };
-  __setWidget(indexWidget);
+it('provides the index widget', () => {
+  return new Promise((done) => {
+    const indexWidget = { $$type: 'ais.index' };
+    __setWidget(indexWidget);
 
-  const ChildComponent = {
-    inject: ['$_ais_getParentIndex'],
-    mounted() {
-      this.$nextTick(() => {
-        expect(typeof this.$_ais_getParentIndex).toBe('function');
-        expect(this.$_ais_getParentIndex()).toEqual(indexWidget);
-        done();
-      });
-    },
-    render() {
-      return null;
-    },
-  };
+    const ChildComponent = {
+      inject: ['$_ais_getParentIndex'],
+      mounted() {
+        this.$nextTick(() => {
+          expect(typeof this.$_ais_getParentIndex).toBe('function');
+          expect(this.$_ais_getParentIndex()).toEqual(indexWidget);
+          done();
+        });
+      },
+      render() {
+        return null;
+      },
+    };
 
-  if (isVue2) {
-    Vue2.config.errorHandler = done;
-  }
+    if (isVue2) {
+      Vue2.config.errorHandler = done;
+    }
 
-  mount(
-    {
-      components: { Index, ChildComponent },
-      template: `
+    mount(
+      {
+        components: { Index, ChildComponent },
+        template: `
       <Index index-name="something">
         <ChildComponent />
       </Index>
     `,
-    },
-    isVue3 && {
-      global: {
-        config: {
-          errorHandler: done,
-        },
       },
-    }
-  );
+      isVue3 && {
+        global: {
+          config: {
+            errorHandler: done,
+          },
+        },
+      }
+    );
+  });
 });

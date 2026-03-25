@@ -1,5 +1,5 @@
 export const createFakeClient = () => ({
-  search: jest.fn((requests) =>
+  search: vi.fn((requests) =>
     Promise.resolve({
       results: requests.map(({ params: { query } }) => ({ query })),
     })

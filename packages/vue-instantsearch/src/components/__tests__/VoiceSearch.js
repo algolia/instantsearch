@@ -1,11 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import VoiceSearch from '../VoiceSearch.vue';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const defaultState = {
@@ -17,7 +17,7 @@ const defaultState = {
   },
   isBrowserSupported: true,
   isListening: false,
-  toggleListening: jest.fn(),
+  toggleListening: vi.fn(),
 };
 
 const buttonTextSlot = `
@@ -95,7 +95,7 @@ describe('Rendering', () => {
       },
       isBrowserSupported: true,
       isListening: true,
-      toggleListening: jest.fn(),
+      toggleListening: vi.fn(),
     });
     const wrapper = mount({
       components: { VoiceSearch },

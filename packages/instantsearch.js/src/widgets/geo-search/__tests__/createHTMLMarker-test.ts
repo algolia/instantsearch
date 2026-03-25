@@ -1,22 +1,24 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 /* global google */
 import createHTMLMarker from '../createHTMLMarker';
 
+import type { Mock } from 'vitest';
+
 describe('createHTMLMarker', () => {
   class FakeOverlayView {
-    public setMap = jest.fn();
+    public setMap = vi.fn();
 
-    public getPanes = jest.fn(() => ({
+    public getPanes = vi.fn(() => ({
       overlayMouseTarget: {
-        appendChild: jest.fn(),
+        appendChild: vi.fn(),
       },
     }));
 
-    public getProjection = jest.fn(() => ({
-      fromLatLngToDivPixel: jest.fn(() => ({
+    public getProjection = vi.fn(() => ({
+      fromLatLngToDivPixel: vi.fn(() => ({
         x: 0,
         y: 0,
       })),
@@ -25,7 +27,7 @@ describe('createHTMLMarker', () => {
 
   const createFakeGoogleReference = () => ({
     maps: {
-      LatLng: jest.fn((x) => x),
+      LatLng: vi.fn(function (x) { return x; }),
       // Required to be a constructor since
       // we extend from it in the Marker class
       OverlayView: FakeOverlayView,
@@ -85,12 +87,12 @@ describe('createHTMLMarker', () => {
       const HTMLMarker = createHTMLMarker(googleReference);
       const params = createFakeParams();
       const overlayMouseTarget = {
-        appendChild: jest.fn(),
+        appendChild: vi.fn(),
       };
 
       const marker = new HTMLMarker(params);
 
-      (marker.getPanes as jest.Mock).mockImplementationOnce(() => ({
+      (marker.getPanes as Mock).mockImplementationOnce(() => ({
         overlayMouseTarget,
       }));
 
@@ -170,14 +172,14 @@ describe('createHTMLMarker', () => {
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = createHTMLMarker(googleReference);
       const params = createFakeParams();
-      const fromLatLngToDivPixel = jest.fn(() => ({
+      const fromLatLngToDivPixel = vi.fn(() => ({
         x: 100,
         y: 50,
       }));
 
       const marker = new HTMLMarker(params);
 
-      (marker.getProjection as jest.Mock).mockImplementationOnce(() => ({
+      (marker.getProjection as Mock).mockImplementationOnce(() => ({
         fromLatLngToDivPixel,
       }));
 
@@ -198,14 +200,14 @@ describe('createHTMLMarker', () => {
       const googleReference = createFakeGoogleReference();
       const HTMLMarker = createHTMLMarker(googleReference);
       const params = createFakeParams();
-      const fromLatLngToDivPixel = jest.fn(() => ({
+      const fromLatLngToDivPixel = vi.fn(() => ({
         x: 100,
         y: 50,
       }));
 
       const marker = new HTMLMarker(params);
 
-      (marker.getProjection as jest.Mock).mockImplementationOnce(() => ({
+      (marker.getProjection as Mock).mockImplementationOnce(() => ({
         fromLatLngToDivPixel,
       }));
 
@@ -250,7 +252,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
-      const removeEventListener = jest.spyOn(
+      const removeEventListener = vi.spyOn(
         marker.element,
         'removeEventListener'
       );
@@ -286,7 +288,7 @@ describe('createHTMLMarker', () => {
 
       const marker = new HTMLMarker(params);
 
-      const addEventListener = jest.spyOn(marker.element, 'addEventListener');
+      const addEventListener = vi.spyOn(marker.element, 'addEventListener');
 
       marker.addListener('click', onClick);
 

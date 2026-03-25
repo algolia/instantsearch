@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 import {
   createMultiSearchResponse,
@@ -23,7 +23,7 @@ describe('injectStyles', () => {
 });
 
 describe('configToIndex', () => {
-  const error = jest.spyOn(console, 'error').mockImplementation(() => {});
+  const error = vi.spyOn(console, 'error').mockImplementation(() => {});
   beforeEach(() => {
     error.mockClear();
   });
@@ -460,7 +460,7 @@ describe('configToIndex', () => {
   describe('configure', () => {
     it('applies configure widget', async () => {
       const searchClient = createSearchClient({
-        search: jest.fn(() =>
+        search: vi.fn(() =>
           Promise.resolve(
             createMultiSearchResponse({
               hits: [

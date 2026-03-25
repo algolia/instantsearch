@@ -1,8 +1,8 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 import instantsearch from 'instantsearch.js/es';
 
 import { mount } from '../../../test/utils';
@@ -24,7 +24,7 @@ it('child widgets get added to their parent index', () => {
     },
   };
 
-  const rootAddWidgets = jest.fn();
+  const rootAddWidgets = vi.fn();
 
   const wrapper = mount({
     components: { Index, ChildComponent },
@@ -54,8 +54,8 @@ it('child widgets get added to their parent index', () => {
 
 it('child widgets render with right data', () => {
   const widgetInstance = {
-    init: jest.fn(),
-    render: jest.fn(),
+    init: vi.fn(),
+    render: vi.fn(),
   };
 
   const ChildComponent = {

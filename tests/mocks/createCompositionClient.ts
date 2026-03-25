@@ -8,10 +8,10 @@ import type { CompositionClient } from 'instantsearch.js';
 export const createCompositionClient = <T extends Record<string, unknown>>(
   args: Partial<CompositionClient & T> = {}
 ): CompositionClient => ({
-  search: jest.fn(() =>
+  search: vi.fn(() =>
     Promise.resolve({ results: [createSingleSearchResponse()] })
   ),
-  searchForFacetValues: jest.fn(() =>
+  searchForFacetValues: vi.fn(() =>
     Promise.resolve({ results: [createSFFVResponse()] })
   ),
   applicationID: 'appId',
@@ -37,7 +37,7 @@ export const createControlledCompositionClient = <
 ): ControlledCompositionClient => {
   const searches: ControlledCompositionClient['searches'] = [];
   const searchClient = createCompositionClient({
-    search: jest.fn((...params) => {
+    search: vi.fn((...params: Parameters<CompositionClient['search']>) => {
       let resolver: () => void;
       let rejecter: (value: any) => void;
       const promise: ReturnType<CompositionClient['search']> = new Promise(

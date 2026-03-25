@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { render } from '@testing-library/react';
@@ -47,7 +47,7 @@ describe('ShowMoreButton', () => {
   });
 
   test('calls an `onClick` callback when clicking the button', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { getByRole } = render(
       <ShowMoreButton
         isShowingMore={false}
@@ -62,7 +62,7 @@ describe('ShowMoreButton', () => {
   });
 
   test('disables the button', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { container, getByRole } = render(
       <ShowMoreButton
         isShowingMore={false}

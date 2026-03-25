@@ -88,7 +88,7 @@ describe('reverseSnippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Amazon<mark class=\\"ais-ReverseSnippet-highlighted\\"> - Fire TV Stick with Alexa Voice Remote - Black</mark>"`
+      `"Amazon<mark class="ais-ReverseSnippet-highlighted"> - Fire TV Stick with Alexa Voice Remote - Black</mark>"`
     );
   });
 
@@ -221,7 +221,7 @@ describe('reverseSnippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Streaming - (media<mark class=\\"ais-ReverseSnippet-highlighted\\"> plyr)</mark>"`
+      `"Streaming - (media<mark class="ais-ReverseSnippet-highlighted"> plyr)</mark>"`
     );
   });
 

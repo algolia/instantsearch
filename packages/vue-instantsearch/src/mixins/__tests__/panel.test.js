@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import mitt from 'mitt';
@@ -14,10 +14,10 @@ import {
 } from '../panel';
 
 const createFakeEmitter = () => ({
-  on: jest.fn(),
-  emit: jest.fn(),
+  on: vi.fn(),
+  emit: vi.fn(),
   all: {
-    clear: jest.fn(),
+    clear: vi.fn(),
   },
 });
 

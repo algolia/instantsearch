@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`RangeInput expect to render 1`] = `
+exports[`RangeInput > expect to render 1`] = `
 <div
   className="root noRefinement"
 >
@@ -40,7 +40,16 @@ exports[`RangeInput expect to render 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -75,12 +84,23 @@ exports[`RangeInput expect to render 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput expect to render with disabled state 1`] = `
+exports[`RangeInput > expect to render with disabled state 1`] = `
 <div
   className="root noRefinement"
 >
@@ -120,7 +140,16 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -155,12 +184,23 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={true}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput expect to render with values 1`] = `
+exports[`RangeInput > expect to render with values 1`] = `
 <div
   className="root"
 >
@@ -200,7 +240,16 @@ exports[`RangeInput expect to render with values 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -235,12 +284,23 @@ exports[`RangeInput expect to render with values 1`] = `
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput willReceiveProps expect to update the empty state from given props 1`] = `
+exports[`RangeInput > willReceiveProps > expect to update the empty state from given props 1`] = `
 <div
   className="root noRefinement"
 >
@@ -280,7 +340,16 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -315,12 +384,23 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput willReceiveProps expect to update the empty state from given props 2`] = `
+exports[`RangeInput > willReceiveProps > expect to update the empty state from given props 2`] = `
 <div
   className="root"
 >
@@ -360,7 +440,16 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -395,12 +484,23 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput willReceiveProps expect to update the state from given props 1`] = `
+exports[`RangeInput > willReceiveProps > expect to update the state from given props 1`] = `
 <div
   className="root"
 >
@@ -440,7 +540,16 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -475,12 +584,23 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;
 
-exports[`RangeInput willReceiveProps expect to update the state from given props 2`] = `
+exports[`RangeInput > willReceiveProps > expect to update the state from given props 2`] = `
 <div
   className="root"
 >
@@ -520,7 +640,16 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <span
+        className="separator"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "to",
+          }
+        }
+      />
+    </Template>
     <label
       className="label"
     >
@@ -555,7 +684,18 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       templatesConfig={{}}
       useCustomCompileOptions={{}}
-    />
+    >
+      <button
+        className="submit"
+        dangerouslySetInnerHTML={
+          {
+            "__html": "Go",
+          }
+        }
+        disabled={false}
+        type="submit"
+      />
+    </Template>
   </form>
 </div>
 `;

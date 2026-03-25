@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -28,8 +28,9 @@ import type {
   EscapedHits,
   SearchResponse,
 } from '../../../types';
+import type { Mock } from 'vitest';
 
-jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+vi.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
@@ -42,15 +43,15 @@ describe('connectInfiniteHits', () => {
       // @ts-expect-error: test connectInfiniteHits with invalid parameters
       connectInfiniteHits()({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/#connector]
+    `);
   });
 
   it('is a widget', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customInfiniteHits = connectInfiniteHits(render, unmount);
     const widget = customInfiniteHits({});
@@ -69,8 +70,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('accepts custom parameters', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
+    const render = vi.fn();
+    const unmount = vi.fn();
 
     const customInfiniteHits = connectInfiniteHits<{ container: string }>(
       render,
@@ -82,7 +83,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Renders during init and render', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const instantSearchInstance = createInstantSearch();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
@@ -92,7 +93,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -149,12 +150,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Provides the hits and accumulates results on next page', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -213,15 +214,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Provides the hits and prepends results on previous page', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.setPage(1);
-    helper.search = jest.fn();
-    helper.searchWithoutTriggeringOnStateChange = jest.fn();
-    helper.emit = jest.fn();
+    helper.search = vi.fn();
+    helper.searchWithoutTriggeringOnStateChange = vi.fn();
+    helper.emit = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -285,14 +286,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Renders previous page after showing next page', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.setPage(4);
-    helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
-    helper.searchWithoutTriggeringOnStateChange = jest.fn();
+    helper.overrideStateWithoutTriggeringChangeEvent = vi.fn(() => helper);
+    helper.searchWithoutTriggeringOnStateChange = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -317,15 +318,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('goes to previous page correctly when state is mismatched', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(createSearchClient(), '', {
       page: 4,
     });
-    helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
-    helper.searchWithoutTriggeringOnStateChange = jest.fn();
+    helper.overrideStateWithoutTriggeringChangeEvent = vi.fn(() => helper);
+    helper.searchWithoutTriggeringOnStateChange = vi.fn();
 
     // we add a query to the parent helper to simulate multi-index where
     // the parent has a query and the infinite hits index does not
@@ -357,12 +358,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Provides the hits and flush hists cache on query changes', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -420,13 +421,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('sets isLastPage to true when all pages are cached', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
     const helper = algoliasearchHelper({} as SearchClient, '', {
       hitsPerPage: 1,
     });
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -506,12 +507,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('escape highlight properties if requested', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -570,7 +571,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('transform items if requested', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: (items) => {
@@ -579,7 +580,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -632,7 +633,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectInfiniteHits(() => {});
     const widget = makeWidget({
       transformItems,
@@ -659,7 +660,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('transform items after escaping', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: (items) =>
@@ -675,7 +676,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -755,12 +756,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('adds queryID if provided to results', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -813,12 +814,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('does not render the same page twice', () => {
-    const renderFn = jest.fn();
+    const renderFn = vi.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init(
       createInitOptions({
@@ -889,12 +890,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('keeps the __escaped mark', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     createInitOptions();
 
@@ -927,12 +928,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     window.sessionStorage.clear();
 
     function getInstance() {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({ cache: sessionStorageCache });
 
       const helper = algoliasearchHelper({} as SearchClient, '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const instantSearchInstance = createInstantSearch();
       instantSearchInstance.mainIndex.addWidgets([
@@ -1042,12 +1043,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     window.sessionStorage.clear();
 
     function getInstance() {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({ cache: sessionStorageCache });
 
       const helper = algoliasearchHelper({} as SearchClient, '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const instantSearchInstance = createInstantSearch();
       instantSearchInstance.mainIndex.addWidgets([
@@ -1160,7 +1161,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const helper = algoliasearchHelper({} as SearchClient, '', {});
 
       const renderFn = (): void => {};
-      const unmountFn = jest.fn();
+      const unmountFn = vi.fn();
       const makeWidget = connectInfiniteHits(renderFn, unmountFn);
       const widget = makeWidget({});
 
@@ -1261,7 +1262,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('getWidgetUiState', () => {
     test('returns the `uiState` with `page` when `showPrevious` not given', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         page: 1,
@@ -1282,7 +1283,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('returns the `uiState` without `page` on first page', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         page: 0,
@@ -1303,7 +1304,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('returns the `uiState` containing `page` with `showPrevious` option', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         page: 1,
@@ -1326,7 +1327,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('returns the `uiState` containing a page number incremented by one with `showPrevious` option and `page` search parameter', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         page: 3,
@@ -1351,8 +1352,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('getRenderState', () => {
     it('returns the render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
       const infiniteHitsWidget = createInfiniteHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -1380,8 +1381,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('returns the render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
       const infiniteHitsWidget = createInfiniteHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -1446,8 +1447,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state without results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
       const infiniteHitsWidget = createInfiniteHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -1475,8 +1476,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('returns the widget render state with results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
       const infiniteHitsWidget = createInfiniteHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -1552,8 +1553,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('returns the widget render state with artificial results', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
+      const renderFn = vi.fn();
+      const unmountFn = vi.fn();
       const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
       const infiniteHitsWidget = createInfiniteHits({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -1599,7 +1600,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('getWidgetSearchParameters', () => {
     test('return default Search Parameters with highlighted tags by default', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({});
@@ -1613,7 +1614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('return Search Parameters with highlighted tags with `escapeHTML`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1629,7 +1630,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('return Search Parameters without highlighted tags when `escapeHTML` is `false`', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1645,7 +1646,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('return Search Parameters with page reset when `showPrevious` without `page` in the UI state', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1660,7 +1661,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('return Search Parameters with page reset when `showPrevious` and `page` is 0 in the UI state', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1677,7 +1678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     test('return Search Parameters with page decreased when `showPrevious` and `page` in the UI state', () => {
-      const render = jest.fn();
+      const render = vi.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const widget = makeWidget({
@@ -1696,12 +1697,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('insights', () => {
     const createRenderedWidget = () => {
-      const renderFn = jest.fn();
+      const renderFn = vi.fn();
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
-      helper.search = jest.fn();
+      helper.search = vi.fn();
 
       const initOptions = createInitOptions({
         helper,
@@ -1776,7 +1777,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         });
 
         it('does not send view event when hits are stalled rendered', async () => {
-          const renderFn = jest.fn();
+          const renderFn = vi.fn();
           const makeWidget = connectInfiniteHits(renderFn);
           const widget = makeWidget({});
 
@@ -1813,7 +1814,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             indexName: 'indexName',
           });
           instantSearchInstance.start();
-          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.sendEventToInsights = vi.fn();
 
           instantSearchInstance.addWidgets([widget]);
 
@@ -1834,19 +1835,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         });
 
         it('sends view event after hits are rendered', () => {
-          const renderFn = jest.fn();
+          const renderFn = vi.fn();
           const makeWidget = connectInfiniteHits(renderFn);
           const widget = makeWidget({});
 
           const helper = algoliasearchHelper(createSearchClient(), '', {});
-          helper.search = jest.fn();
+          helper.search = vi.fn();
 
           const initOptions = createInitOptions({
             helper,
             state: helper.state,
           });
           const instantSearchInstance = initOptions.instantSearchInstance;
-          instantSearchInstance.sendEventToInsights = jest.fn();
+          instantSearchInstance.sendEventToInsights = vi.fn();
           widget.init(initOptions);
 
           const hits = [
@@ -1870,14 +1871,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             })
           );
 
-          const lastInvocationCallOrder = (mockFn: jest.Mock): number =>
+          const lastInvocationCallOrder = (mockFn: Mock): number =>
             mockFn.mock.invocationCallOrder[
               mockFn.mock.invocationCallOrder.length - 1
             ];
 
           expect(lastInvocationCallOrder(renderFn)).toBeLessThan(
             lastInvocationCallOrder(
-              instantSearchInstance.sendEventToInsights as jest.Mock
+              instantSearchInstance.sendEventToInsights as Mock
             )
           );
         });

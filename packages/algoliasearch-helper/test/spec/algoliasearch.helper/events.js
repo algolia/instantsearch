@@ -4,10 +4,10 @@ var algoliaSearchHelper = require('../../../index');
 
 function makeFakeClient() {
   return {
-    search: jest.fn(function () {
+    search: vi.fn(function () {
       return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function () {
+    searchForFacetValues: vi.fn(function () {
       return new Promise(function () {});
     }),
   };
@@ -18,7 +18,7 @@ function runAllMicroTasks() {
 }
 
 test('Change events should be emitted with reset page to true on implicit reset methods', function () {
-  var changed = jest.fn();
+  var changed = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index');
 
@@ -48,7 +48,7 @@ test('Change events should be emitted with reset page to true on implicit reset 
 });
 
 test('Change events should be emitted with reset page to false on regular methods', function () {
-  var changed = jest.fn();
+  var changed = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index');
 
@@ -210,7 +210,7 @@ test('Change events should only be emitted for meaningful changes', function () 
 });
 
 test('search event should be emitted once when the search is triggered and before the request is sent', function () {
-  var searched = jest.fn();
+  var searched = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
@@ -261,7 +261,7 @@ test('search event should be emitted once when the search is triggered and befor
 });
 
 test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function () {
-  var searchedOnce = jest.fn();
+  var searchedOnce = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
@@ -287,7 +287,7 @@ test(
   'searchForFacetValues event should be emitted once when the search is triggered using' +
     ' searchForFacetValues and before the request is sent',
   function () {
-    var searchedForFacetValues = jest.fn();
+    var searchedForFacetValues = vi.fn();
     var fakeClient = makeFakeClient();
     var helper = algoliaSearchHelper(fakeClient, 'Index', {
       disjunctiveFacets: ['city'],
@@ -311,7 +311,7 @@ test(
 );
 
 test('result event should be emitted once the request is complete', function () {
-  var resulted = jest.fn();
+  var resulted = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
@@ -340,7 +340,7 @@ test('result event should be emitted once the request is complete', function () 
 });
 
 test('error event should be emitted once the request is complete with errors', function () {
-  var errored = jest.fn();
+  var errored = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
@@ -366,7 +366,7 @@ test('error event should be emitted once the request is complete with errors', f
 });
 
 test('error event should be emitted if an error happens at request time', function () {
-  var errored = jest.fn();
+  var errored = vi.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],

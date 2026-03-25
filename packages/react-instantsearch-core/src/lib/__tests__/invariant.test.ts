@@ -29,8 +29,8 @@ describe('invariant', () => {
     });
 
     test('lazily instantiates message', () => {
-      const spy1 = jest.fn(() => 'invariant');
-      const spy2 = jest.fn(() => 'invariant');
+      const spy1 = vi.fn(() => 'invariant');
+      const spy2 = vi.fn(() => 'invariant');
 
       expect(() => {
         invariant(false, spy1);

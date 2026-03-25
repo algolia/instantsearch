@@ -4,20 +4,20 @@ var algoliasearchHelper = require('../../../../');
 
 function makeFakeClient() {
   return {
-    search: jest.fn(function () {
+    search: vi.fn(function () {
       return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function () {
+    searchForFacetValues: vi.fn(function () {
       return new Promise(function () {});
     }),
-    getRecommendations: jest.fn(function () {
+    getRecommendations: vi.fn(function () {
       return new Promise(function () {});
     }),
   };
 }
 
 test('[derived helper] emit a search event', function () {
-  var searched = jest.fn();
+  var searched = vi.fn();
   var client = makeFakeClient();
   var helper = algoliasearchHelper(client, 'index');
   var derivedHelper = helper.derive(function (s) {
@@ -38,7 +38,7 @@ test('[derived helper] emit a search event', function () {
 });
 
 test('[derived helper] emit a fetch event', function () {
-  var fetched = jest.fn();
+  var fetched = vi.fn();
   var client = makeFakeClient();
   var helper = algoliasearchHelper(client, 'index');
   var derivedHelper = helper.derive(

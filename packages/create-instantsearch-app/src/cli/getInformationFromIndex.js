@@ -1,5 +1,5 @@
-const { createMemoryCache } = require('@algolia/client-common');
-const { algoliasearch } = require('algoliasearch');
+import { createMemoryCache } from '@algolia/client-common';
+import { algoliasearch } from 'algoliasearch';
 
 const clients = new Map();
 function getClient(appId, apiKey) {
@@ -37,4 +37,4 @@ async function getInformationFromIndex({ appId, apiKey, indexName }) {
   }
 }
 
-module.exports = getInformationFromIndex;
+export default getInformationFromIndex;

@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { render } from '@testing-library/react';
@@ -75,7 +75,7 @@ describe('SortBy', () => {
   test('calls an `onChange` callback when selecting an option', () => {
     const props = createProps({});
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { getByRole } = render(<SortBy {...props} onChange={onChange} />);
 
     userEvent.selectOptions(

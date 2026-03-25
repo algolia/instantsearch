@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-preact-pure';
 import { createSerializer } from 'enzyme-to-json';
 import htmlSerializer from 'jest-serializer-html/createSerializer';
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom/vitest';
 import { warnCache } from '../../packages/react-instantsearch-core/src/lib/warn';
 import {
   Vue2,
@@ -18,20 +18,27 @@ expect.addSnapshotSerializer(createSerializer({ mode: 'deep' }) as any);
 expect.addSnapshotSerializer(htmlSerializer());
 expect.extend(matchers);
 
+// Provide a `jest` global that maps to `vi` for third-party packages that
+// reference `jest.fn()` internally (e.g., @googlemaps/jest-mocks).
+// @ts-expect-error -- intentional shim for compat
+globalThis.jest = vi;
+
 // We hide console infos and warnings to not pollute the test logs.
-global.console.info = jest.fn();
-global.console.warn = jest.fn();
+global.console.info = vi.fn();
+global.console.warn = vi.fn();
 
 if (typeof window !== 'undefined') {
   // https://github.com/jsdom/jsdom/issues/1695
-  window.Element.prototype.scrollIntoView = jest.fn();
+  window.Element.prototype.scrollIntoView = vi.fn();
 
   // Mock ResizeObserver for Chat component tests
-  window.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-  }));
+  window.ResizeObserver = vi.fn().mockImplementation(function () {
+    return {
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    };
+  });
 }
 
 beforeEach(() => {

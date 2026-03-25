@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -19,10 +19,10 @@ describe('useQueryRules', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper({
       searchClient: createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) =>
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) =>
                 createSingleSearchResponse({
                   index: request.indexName,
                   userData: defaultUserData,

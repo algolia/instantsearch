@@ -10,13 +10,14 @@ import React from 'react';
 
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { Mock } from 'vitest';
 
 function createMockedSearchClient(
   response: ReturnType<typeof createMultiSearchResponse>
 ) {
   return createSearchClient({
     // @ts-expect-error - doesn't properly handle multi index, expects all responses to be of the same type
-    search: jest.fn(() => Promise.resolve(response)),
+    search: vi.fn(() => Promise.resolve(response)),
   });
 }
 
@@ -149,7 +150,7 @@ export function createOptionsTests(
           }),
         },
       ]);
-      (searchClient.search as jest.Mock).mockClear();
+      (searchClient.search as Mock).mockClear();
 
       expect(screen.getAllByRole('row', { hidden: true }).length).toBe(2);
       expect(
@@ -537,7 +538,7 @@ export function createOptionsTests(
           })
         )
       );
-      const mockOnSelect = jest.fn();
+      const mockOnSelect = vi.fn();
 
       await setup({
         instantSearchOptions: {
@@ -1071,9 +1072,9 @@ export function createOptionsTests(
 
       const input = screen.getByRole('combobox', { name: /submit/i });
 
-      const mockScrollIntoView = jest.fn();
+      const mockScrollIntoView = vi.fn();
       const originalGetElementById = document.getElementById.bind(document);
-      jest
+      vi
         .spyOn(document, 'getElementById')
         // @ts-ignore
         .mockImplementation(() => ({ scrollIntoView: mockScrollIntoView }));
@@ -1278,7 +1279,7 @@ export function createOptionsTests(
         expect(input).toHaveAttribute('autofocus');
       } catch {
         // For React, it doesn't set the `autofocus` attribute but polyfills it
-        // eslint-disable-next-line jest/no-conditional-expect
+        // eslint-disable-next-line vitest/no-conditional-expect
         expect(input).toHaveFocus();
       }
 
@@ -1361,15 +1362,15 @@ export function createOptionsTests(
       function mockMatchMedia(matches: boolean) {
         Object.defineProperty(window, 'matchMedia', {
           writable: true,
-          value: jest.fn().mockImplementation((query: string) => ({
+          value: vi.fn().mockImplementation((query: string) => ({
             matches,
             media: query,
             onchange: null,
-            addListener: jest.fn(),
-            removeListener: jest.fn(),
-            addEventListener: jest.fn(),
-            removeEventListener: jest.fn(),
-            dispatchEvent: jest.fn(),
+            addListener: vi.fn(),
+            removeListener: vi.fn(),
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+            dispatchEvent: vi.fn(),
           })),
         });
       }
@@ -1392,23 +1393,23 @@ export function createOptionsTests(
               matches: Boolean(initialMatches[query]),
               media: query,
               onchange: null,
-              addListener: jest.fn(),
-              removeListener: jest.fn(),
-              addEventListener: jest.fn(
+              addListener: vi.fn(),
+              removeListener: vi.fn(),
+              addEventListener: vi.fn(
                 (eventName: string, cb: EventListener) => {
                   if (eventName === 'change') {
                     listenerSet.add(cb);
                   }
                 }
               ),
-              removeEventListener: jest.fn(
+              removeEventListener: vi.fn(
                 (eventName: string, cb: EventListener) => {
                   if (eventName === 'change') {
                     listenerSet.delete(cb);
                   }
                 }
               ),
-              dispatchEvent: jest.fn(),
+              dispatchEvent: vi.fn(),
             };
 
             mqlMap.set(query, mql);
@@ -1418,7 +1419,7 @@ export function createOptionsTests(
         };
 
         return {
-          matchMedia: jest.fn().mockImplementation(getMql),
+          matchMedia: vi.fn().mockImplementation(getMql),
           setMatches: (query: string, matches: boolean) => {
             const mql = getMql(query);
             Object.defineProperty(mql, 'matches', {

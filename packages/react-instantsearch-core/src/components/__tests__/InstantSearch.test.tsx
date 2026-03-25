@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
@@ -19,11 +19,12 @@ import { InstantSearch } from '../InstantSearch';
 
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearchProps } from '../InstantSearch';
+import type { Mock } from 'vitest';
 
-jest.mock('../../lib/warn');
+vi.mock('../../lib/warn');
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 function RefinementList(props: UseRefinementListProps) {
@@ -723,10 +724,10 @@ describe('InstantSearch', () => {
 
   test('updates onStateChange on onStateChange prop change', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const onStateChange1 = jest.fn(({ uiState, setUiState }) => {
+    const onStateChange1 = vi.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
-    const onStateChange2 = jest.fn(({ uiState, setUiState }) => {
+    const onStateChange2 = vi.fn(({ uiState, setUiState }) => {
       setUiState(uiState);
     });
 
@@ -777,10 +778,10 @@ describe('InstantSearch', () => {
 
   test('updates searchFunction on searchFunction prop change', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const searchFunction1 = jest.fn((helper) => {
+    const searchFunction1 = vi.fn((helper) => {
       helper.search();
     });
-    const searchFunction2 = jest.fn((helper) => {
+    const searchFunction2 = vi.fn((helper) => {
       helper.search();
     });
 
@@ -917,7 +918,7 @@ describe('InstantSearch', () => {
 
   describe('warn about Next.js router', () => {
     beforeEach(() => {
-      (warn as jest.Mock).mockClear();
+      (warn as Mock).mockClear();
       delete (window as any).__NEXT_DATA__;
     });
 
@@ -953,8 +954,10 @@ describe('InstantSearch', () => {
               router: {
                 // @ts-expect-error: _isNextRouter is not part of the public API
                 _isNextRouter: true,
-                read: jest.fn(),
-                onUpdate: jest.fn(),
+                read: vi.fn(),
+                write: vi.fn(),
+                onUpdate: vi.fn(),
+                dispose: vi.fn(),
               },
             }}
           >

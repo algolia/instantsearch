@@ -1,12 +1,12 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
 import Highlight from '../Highlight.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
+vi.unmock('instantsearch.js/es');
 
 test('renders proper HTML', () => {
   const hit = {

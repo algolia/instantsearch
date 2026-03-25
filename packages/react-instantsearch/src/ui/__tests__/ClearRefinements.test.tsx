@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 /**
@@ -69,7 +69,7 @@ describe('ClearRefinements', () => {
 
   test('calls an `onClick` callback when clicking the button', () => {
     const props = createProps({});
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { container } = render(
       <ClearRefinements {...props} onClick={onClick} />
     );
@@ -85,7 +85,7 @@ describe('ClearRefinements', () => {
 
   test('disables the button', () => {
     const props = createProps({});
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { container } = render(
       <ClearRefinements {...props} onClick={onClick} disabled />
     );

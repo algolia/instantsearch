@@ -11,10 +11,11 @@ import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchClient } from 'instantsearch.js';
+import type { Mock } from 'vitest';
 
 declare const window: Window &
   typeof globalThis & {
-    aa: jest.Mock;
+    aa: Mock;
   };
 
 export function createInsightsTests(
@@ -26,13 +27,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -138,13 +139,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 25;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -274,13 +275,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -356,13 +357,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -445,13 +446,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -531,13 +532,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -628,13 +629,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(
@@ -710,13 +711,13 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
+      window.aa = Object.assign(vi.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
           insights: true,
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(

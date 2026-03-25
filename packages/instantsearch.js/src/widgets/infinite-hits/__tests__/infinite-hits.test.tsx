@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import {
@@ -57,9 +57,9 @@ describe('infiniteHits', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/]
       `);
     });
 
@@ -138,7 +138,7 @@ describe('infiniteHits', () => {
       subset: Partial<SearchResponse<CustomRecord>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) =>
+        search: vi.fn((requests) =>
           Promise.resolve(
             createMultiSearchResponse(
               ...requests.map(
@@ -846,10 +846,10 @@ describe('infiniteHits', () => {
       subset: Partial<SearchResponse<CustomHit>> = {}
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) => {
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) => {
                 return createSingleSearchResponse<any>({
                   index: request.indexName,
                   query: request.params?.query,
@@ -914,7 +914,7 @@ describe('infiniteHits', () => {
 
   describe('insights', () => {
     const createInsightsMiddlewareWithOnEvent = () => {
-      const onEvent = jest.fn();
+      const onEvent = vi.fn();
 
       const insights = createInsightsMiddleware({
         insightsClient: null,
@@ -1290,10 +1290,10 @@ describe('infiniteHits', () => {
       } = { hitsPerPage: 2, page: 0, clickAnalytics: false }
     ) {
       return createSearchClient({
-        search: jest.fn((requests) => {
+        search: vi.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
-              ...requests.map((request) => {
+              ...requests.map((request: { indexName: string; params?: Record<string, any> }) => {
                 return createSingleSearchResponse<any>({
                   index: request.indexName,
                   query: request.params?.query,

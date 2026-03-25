@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -198,7 +198,7 @@ describe('InstantSearchSSRProvider', () => {
 
   test('renders refinements from local widget state', async () => {
     const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
+      search: vi.fn((requests) => {
         return Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(() =>
@@ -215,7 +215,7 @@ describe('InstantSearchSSRProvider', () => {
         );
       }),
     });
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {
@@ -301,16 +301,16 @@ describe('InstantSearchSSRProvider', () => {
 
     await waitFor(() => {
       expect(spiedSearch).toHaveBeenCalledTimes(0);
-      expect(getByRole('checkbox', { name: 'Apple 442' })).not.toBeChecked();
-      expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: /Apple\s*442/ })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: /Samsung\s*633/ })).not.toBeChecked();
     });
 
-    userEvent.click(getByRole('checkbox', { name: 'Apple 442' }));
+    userEvent.click(getByRole('checkbox', { name: /Apple\s*442/ }));
 
     await waitFor(() => {
       expect(spiedSearch).toHaveBeenCalledTimes(1);
-      expect(getByRole('checkbox', { name: 'Apple 442' })).toBeChecked();
-      expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
+      expect(getByRole('checkbox', { name: /Apple\s*442/ })).toBeChecked();
+      expect(getByRole('checkbox', { name: /Samsung\s*633/ })).not.toBeChecked();
     });
   });
 
@@ -354,7 +354,7 @@ describe('InstantSearchSSRProvider', () => {
 
   test('does not trigger a network request with initialResults', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {},
@@ -397,7 +397,7 @@ describe('InstantSearchSSRProvider', () => {
 
   test('recovers the state on rerender', async () => {
     const searchClient = createAlgoliaSearchClient({});
-    const spiedSearch = jest.spyOn(searchClient, 'search');
+    const spiedSearch = vi.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {},
@@ -478,7 +478,7 @@ describe('InstantSearchSSRProvider', () => {
   ])(
     'caches the initial results to avoid a client-side request (%s)',
     async (_, ctor) => {
-      const send = jest.fn(() =>
+      const send = vi.fn(() =>
         Promise.resolve({
           content: JSON.stringify(createMultiSearchResponse()),
           isTimedOut: false,

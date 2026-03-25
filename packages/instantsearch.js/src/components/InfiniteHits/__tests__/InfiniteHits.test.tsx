@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import { createSingleSearchResponse } from '@instantsearch/mocks';
@@ -47,10 +47,10 @@ describe('InfiniteHits', () => {
         createSingleSearchResponse({ hits }),
       ]),
       hits: hits as THit[],
-      sendEvent: jest.fn(),
-      bindEvent: jest.fn(),
-      showPrevious: jest.fn(),
-      showMore: jest.fn(),
+      sendEvent: vi.fn(),
+      bindEvent: vi.fn(),
+      showPrevious: vi.fn(),
+      showMore: vi.fn(),
       hasShowPrevious: true,
       isFirstPage: true,
       isLastPage: false,

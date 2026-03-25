@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { insights } from '../../helpers';
@@ -9,7 +9,7 @@ import { renderTemplate } from '../templating';
 describe('insights hogan helper', () => {
   const helpers = createHelpers({ numberLocale: 'en-US' });
   it('should produce the same output as the insights function', () => {
-    const warn = jest.spyOn(global.console, 'warn');
+    const warn = vi.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
     const output = renderTemplate({
@@ -63,9 +63,9 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
         },
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"
-The insights helper expects a JSON object of the format:
-{ \\"method\\": \\"method-name\\", \\"payload\\": { \\"eventName\\": \\"name of the event\\" } }"
-`);
+      [Error: 
+      The insights helper expects a JSON object of the format:
+      { "method": "method-name", "payload": { "eventName": "name of the event" } }]
+    `);
   });
 });

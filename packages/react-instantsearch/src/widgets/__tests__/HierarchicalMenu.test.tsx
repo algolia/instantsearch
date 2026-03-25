@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -83,7 +83,7 @@ describe('HierarchicalMenu', () => {
 });
 
 function createMockedSearchClient() {
-  const search = jest.fn((requests) =>
+  const search = vi.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
         ...requests.map(() => createSingleSearchResponse({ facets }))

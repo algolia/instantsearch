@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -20,7 +20,6 @@ import connectNumericMenu from '../connectNumericMenu';
 
 import type {
   NumericMenuConnectorParamsItem,
-  NumericMenuRenderState,
   NumericMenuRenderStateItem,
 } from '../connectNumericMenu';
 
@@ -38,7 +37,7 @@ const mapOptionsToItems: (
 
 describe('connectNumericMenu', () => {
   const getInitializedWidget = () => {
-    const rendering = jest.fn<any, [NumericMenuRenderState, boolean]>();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -70,10 +69,10 @@ describe('connectNumericMenu', () => {
         // @ts-expect-error
         connectNumericMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+        [Error: The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector]
+      `);
     });
 
     it('throws without attribute', () => {
@@ -81,10 +80,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         // @ts-expect-error
         connectNumericMenu(() => {})({ attribute: undefined, items: [] });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`attribute\` option is required.
+        [Error: The \`attribute\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector]
+      `);
     });
 
     it('throws without items', () => {
@@ -95,15 +94,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           items: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`items\` option expects an array of objects.
+        [Error: The \`items\` option expects an array of objects.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector]
+      `);
     });
 
     it('is a widget', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const render = vi.fn();
+      const unmount = vi.fn();
 
       const customNumericMenu = connectNumericMenu(render, unmount);
       const widget = customNumericMenu({
@@ -127,7 +126,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -142,7 +141,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -196,7 +195,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('Renders during init and render with transformed items', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -209,7 +208,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -244,7 +243,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('Provides search results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
+    const transformItems = vi.fn((items) => items);
     const makeWidget = connectNumericMenu(() => {});
     const widget = makeWidget({
       attribute: 'numeric',
@@ -273,7 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('Provide a function to update the refinements at each step', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -287,7 +286,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -377,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('provides the correct facet values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
@@ -389,7 +388,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -440,7 +439,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('provides isRefined for the currently selected value', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { label: 'below 10', end: 10 },
@@ -455,7 +454,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -496,7 +495,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('when only the refinement is cleared, the "no value" value should be refined', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { label: 'below 10', end: 10 },
@@ -511,7 +510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -566,7 +565,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('when all the refinements are cleared, the "no value" value should be refined', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { label: 'below 10', end: 10 },
@@ -581,7 +580,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -636,7 +635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('should set `isRefined: true` after calling `refine(item)`', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { label: 'below 10', end: 10 },
@@ -651,7 +650,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -683,7 +682,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('should set `isRefined: true` after calling `refine(item)` - same start and end values', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { label: 'All' },
@@ -698,7 +697,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -758,7 +757,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('should reset page to 0 on refine() when the page is defined', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
 
     const widget = makeWidget({
@@ -773,7 +772,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
     helper.setPage(2);
 
     widget.init!(
@@ -794,7 +793,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   it('should not reset page on refine() when the page is not defined', () => {
-    const rendering = jest.fn();
+    const rendering = vi.fn();
     const makeWidget = connectNumericMenu(rendering);
 
     const widget = makeWidget({
@@ -809,7 +808,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
 
     const helper = jsHelper(createSearchClient(), '');
-    helper.search = jest.fn();
+    helper.search = vi.fn();
 
     widget.init!(
       createInitOptions({
@@ -1134,7 +1133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   describe('insights', () => {
     // See: https://github.com/algolia/instantsearch/pull/5085
     it(`doesn't send event when a facet is added`, () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectNumericMenu(rendering);
       const widget = makeWidget({
         attribute: 'numerics',
@@ -1276,7 +1275,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
   describe('getWidgetRenderState', () => {
     it('returns the widget render state before init', () => {
-      const rendering = jest.fn();
+      const rendering = vi.fn();
       const makeWidget = connectNumericMenu(rendering);
       const widget = makeWidget({
         attribute: 'numerics',

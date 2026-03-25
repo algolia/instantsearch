@@ -91,7 +91,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Amazon<mark class=\\"ais-ReverseHighlight-highlighted\\"> - Fire TV Stick with Alexa Voice Remote - Black</mark>"`
+      `"Amazon<mark class="ais-ReverseHighlight-highlighted"> - Fire TV Stick with Alexa Voice Remote - Black</mark>"`
     );
   });
 
@@ -224,7 +224,7 @@ describe('reverseHighlight', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Streaming - (media<mark class=\\"ais-ReverseHighlight-highlighted\\"> plyr)</mark>"`
+      `"Streaming - (media<mark class="ais-ReverseHighlight-highlighted"> plyr)</mark>"`
     );
   });
 

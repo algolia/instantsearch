@@ -1,11 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount, htmlCompat } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import SearchBox from '../SearchBox.vue';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 const defaultState = {};
@@ -64,7 +64,7 @@ test('blurs input on form submit', async () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox);
   const input = wrapper.find('.ais-SearchBox-input');
-  input.element.blur = jest.fn();
+  input.element.blur = vi.fn();
 
   await wrapper.find('.ais-SearchBox-form').trigger('submit');
 
@@ -72,7 +72,7 @@ test('blurs input on form submit', async () => {
 });
 
 test('refine on empty string on form reset', async () => {
-  const state = { ...defaultState, refine: jest.fn() };
+  const state = { ...defaultState, refine: vi.fn() };
   __setState(state);
   const wrapper = mount(SearchBox);
 
@@ -82,7 +82,7 @@ test('refine on empty string on form reset', async () => {
 });
 
 test('keep local query when out of sync and input is focused', async () => {
-  const state = { ...defaultState, refine: jest.fn() };
+  const state = { ...defaultState, refine: vi.fn() };
   __setState(state);
 
   const wrapper = mount(SearchBox, { attachTo: document.body });

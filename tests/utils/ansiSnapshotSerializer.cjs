@@ -119,7 +119,7 @@ function serializeAnsi(text) {
   );
 }
 
-/** @type {jest.SnapshotSerializerPlugin} */
+/** @type {import('vitest').SnapshotSerializer} */
 const ansiEscapesSerializer = {
   // eslint-disable-next-line max-params
   serialize(text, config, indentation, depth, refs, printer) {

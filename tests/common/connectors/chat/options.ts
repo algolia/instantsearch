@@ -24,11 +24,11 @@ export function createOptionsTests(
 
       await expect(async () => {
         await setup(options);
-      }).rejects.toThrowErrorMatchingInlineSnapshot(`
-              "You need to provide either an \`agentId\` or a \`transport\`.
+      }).rejects.toThrowErrorMatchingSnapshot(`
+        [Error: You need to provide either an \`agentId\` or a \`transport\`.
 
-              See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
-            `);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector]
+      `);
     });
 
     test('provides `input` state to persist text input', async () => {

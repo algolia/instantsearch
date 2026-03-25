@@ -22,7 +22,7 @@ export function createLinksTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient({
-            search: jest.fn(async (requests) => {
+            search: vi.fn(async (requests) => {
               await wait(delay);
               return createMultiSearchResponse(
                 ...requests.map(() =>

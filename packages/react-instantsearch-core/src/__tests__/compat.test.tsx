@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -19,7 +19,7 @@ function SearchBox() {
 describe('Compat', () => {
   test('throws when using hooks with React InstantSearch Core Provider', () => {
     // Hide the errors from the test logs.
-    jest.spyOn(console, 'error').mockImplementation(noop);
+    vi.spyOn(console, 'error').mockImplementation(noop);
 
     const searchClient = createSearchClient({});
 
@@ -30,11 +30,11 @@ describe('Compat', () => {
         </InstantSearchCore>
       );
     }).toThrowErrorMatchingInlineSnapshot(`
-      "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
+      [Error: [InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
-      They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."
+      They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`.]
     `);
 
-    jest.spyOn(console, 'error').mockRestore();
+    vi.spyOn(console, 'error').mockRestore();
   });
 });

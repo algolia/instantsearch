@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PoweredBy default 1`] = `
+exports[`PoweredBy > default 1`] = `
 <div>
   <div
     class="root"
@@ -32,7 +32,7 @@ exports[`PoweredBy default 1`] = `
 </div>
 `;
 
-exports[`PoweredBy with dark theme 1`] = `
+exports[`PoweredBy > with dark theme 1`] = `
 <div>
   <div
     class="root"

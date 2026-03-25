@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['algolia', 'algolia/jest'],
+  extends: ['algolia', 'plugin:vitest/recommended'],
   rules: {
     'import/no-commonjs': 'off',
     'no-console': 'off',

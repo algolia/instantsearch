@@ -1,18 +1,18 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GeoSearchControls Clear button expect to not render the button when the options is disabled 1`] = `
+exports[`GeoSearchControls > Clear button > expect to not render the button when the options is disabled 1`] = `
 <div>
   <div />
 </div>
 `;
 
-exports[`GeoSearchControls Clear button expect to not render the button when the refinement is not coming from the map 1`] = `
+exports[`GeoSearchControls > Clear button > expect to not render the button when the refinement is not coming from the map 1`] = `
 <div>
   <div />
 </div>
 `;
 
-exports[`GeoSearchControls Clear button expect to render the button when the refinement come from the map 1`] = `
+exports[`GeoSearchControls > Clear button > expect to render the button when the refinement come from the map 1`] = `
 <div>
   <div>
     <button
@@ -26,13 +26,13 @@ exports[`GeoSearchControls Clear button expect to render the button when the ref
 </div>
 `;
 
-exports[`GeoSearchControls Control disabled expect to render nothing when refine on map move is enabled 1`] = `
+exports[`GeoSearchControls > Control disabled > expect to render nothing when refine on map move is enabled 1`] = `
 <div>
   <div />
 </div>
 `;
 
-exports[`GeoSearchControls Control disabled expect to render the button disabled when refine on map move is disabled and the map has not moved 1`] = `
+exports[`GeoSearchControls > Control disabled > expect to render the button disabled when refine on map move is disabled and the map has not moved 1`] = `
 <div>
   <div>
     <div
@@ -51,7 +51,7 @@ exports[`GeoSearchControls Control disabled expect to render the button disabled
 </div>
 `;
 
-exports[`GeoSearchControls Control disabled expect to render the button enabled when refine on map move is disabled and the map as moved 1`] = `
+exports[`GeoSearchControls > Control disabled > expect to render the button enabled when refine on map move is disabled and the map as moved 1`] = `
 <div>
   <div>
     <div
@@ -69,7 +69,7 @@ exports[`GeoSearchControls Control disabled expect to render the button enabled 
 </div>
 `;
 
-exports[`GeoSearchControls Control enabled expect to render the button when refine on map move is disabled and the map has moved 1`] = `
+exports[`GeoSearchControls > Control enabled > expect to render the button when refine on map move is disabled and the map has moved 1`] = `
 <div>
   <div>
     <div
@@ -87,7 +87,7 @@ exports[`GeoSearchControls Control enabled expect to render the button when refi
 </div>
 `;
 
-exports[`GeoSearchControls Control enabled expect to render the toggle checked when refine on map move is enabled 1`] = `
+exports[`GeoSearchControls > Control enabled > expect to render the toggle checked when refine on map move is enabled 1`] = `
 <div>
   <div>
     <div
@@ -109,7 +109,7 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
 </div>
 `;
 
-exports[`GeoSearchControls Control enabled expect to render the toggle checked when refine on map move is enabled even when the map has moved 1`] = `
+exports[`GeoSearchControls > Control enabled > expect to render the toggle checked when refine on map move is enabled even when the map has moved 1`] = `
 <div>
   <div>
     <div
@@ -131,7 +131,7 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
 </div>
 `;
 
-exports[`GeoSearchControls Control enabled expect to render the toggle unchecked when refine on map move is disabled and the map has not moved 1`] = `
+exports[`GeoSearchControls > Control enabled > expect to render the toggle unchecked when refine on map move is disabled and the map has not moved 1`] = `
 <div>
   <div>
     <div
@@ -153,4 +153,4 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
 </div>
 `;
 
-exports[`GeoSearchControls expect to render nothing with refine disabled 1`] = `<div />`;
+exports[`GeoSearchControls > expect to render nothing with refine disabled 1`] = `<div />`;

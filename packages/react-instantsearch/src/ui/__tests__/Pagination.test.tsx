@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { render } from '@testing-library/react';
@@ -12,7 +12,7 @@ import type { PaginationProps } from '../Pagination';
 
 describe('Pagination', () => {
   function createProps(props: Partial<PaginationProps>): PaginationProps {
-    const onNavigate = jest.fn();
+    const onNavigate = vi.fn();
 
     return {
       pages: [0, 1],

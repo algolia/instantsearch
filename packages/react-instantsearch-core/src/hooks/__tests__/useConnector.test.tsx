@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -318,7 +318,7 @@ describe('useConnector', () => {
   });
 
   test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {
-    const getWidgetRenderState = jest.fn(() => ({}));
+    const getWidgetRenderState = vi.fn(() => ({}));
     const connectCustomSearchBoxMock: Connector<
       CustomSearchBoxWidgetDescription,
       Record<string, unknown>
@@ -397,7 +397,7 @@ describe('useConnector', () => {
 
   test('calls getWidgetRenderState with recommend results if available', () => {
     const result = createSingleSearchResponse();
-    const getWidgetRenderState = jest.fn(() => ({}));
+    const getWidgetRenderState = vi.fn(() => ({}));
     const searchClient = createSearchClient({});
     const { InstantSearchSpy } = createInstantSearchSpy();
 
@@ -426,11 +426,11 @@ describe('useConnector', () => {
           () => () => ({
             $$type: '',
             dependsOn: 'recommend',
-            init: jest.fn(),
-            render: jest.fn(),
-            dispose: jest.fn(),
-            getWidgetParameters: jest.fn(),
-            getRenderState: jest.fn(),
+            init: vi.fn(),
+            render: vi.fn(),
+            dispose: vi.fn(),
+            getWidgetParameters: vi.fn(),
+            getRenderState: vi.fn(),
             // @ts-expect-error
             getWidgetRenderState,
           }),

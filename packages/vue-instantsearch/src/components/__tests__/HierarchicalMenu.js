@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
@@ -7,8 +7,8 @@ import { __setState } from '../../mixins/widget';
 import HierarchicalMenu from '../HierarchicalMenu.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.mock('../../mixins/widget');
-jest.mock('../../mixins/panel');
+vi.mock('../../mixins/widget');
+vi.mock('../../mixins/panel');
 
 const apple = {
   label: 'Apple',
@@ -140,7 +140,7 @@ const defaultProps = {
 };
 
 it('exposes send-event method for insights middleware', async () => {
-  const sendEvent = jest.fn();
+  const sendEvent = vi.fn();
   __setState({
     ...defaultState,
     sendEvent,
@@ -350,7 +350,7 @@ describe('custom default render', () => {
   });
 
   it('calls refine on link click', async () => {
-    const refine = jest.fn();
+    const refine = vi.fn();
 
     __setState({
       ...defaultState,

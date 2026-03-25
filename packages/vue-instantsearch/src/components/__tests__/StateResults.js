@@ -1,11 +1,11 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import { mount } from '../../../test/utils';
 import { __setIndexHelper, __setIndexResults } from '../../mixins/widget';
 import StateResults from '../StateResults.vue';
-jest.mock('../../mixins/widget');
+vi.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
 it('renders explanation if no slot is used', () => {

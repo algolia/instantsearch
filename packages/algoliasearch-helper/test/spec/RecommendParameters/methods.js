@@ -93,14 +93,14 @@ describe('_buildQueries', () => {
     var queries = recommendParameters._buildQueries('indexName', {});
     expect(queries).toHaveLength(2);
     expect(queries).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "indexName": "indexName",
           "model": "bought-together",
           "objectID": "objectID1",
           "threshold": 0,
         },
-        Object {
+        {
           "facetName": "brand",
           "indexName": "indexName",
           "model": "trending-facets",
@@ -118,8 +118,8 @@ describe('_buildQueries', () => {
     var queries = recommendParameters._buildQueries('indexName', {});
     expect(queries).toHaveLength(1);
     expect(queries).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "indexName": "indexName",
           "model": "bought-together",
           "objectID": "objectID1",

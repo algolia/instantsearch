@@ -74,7 +74,7 @@ describe('snippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"<mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black"`
+      `"<mark class="ais-Snippet-highlighted">Amazon</mark> - Fire TV Stick with Alexa Voice Remote - Black"`
     );
   });
 
@@ -86,7 +86,7 @@ describe('snippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Enjoy smart access to videos, games and apps with this <em class=\\"ais-Snippet-highlighted\\">Amazon</em> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <em class=\\"ais-Snippet-highlighted\\">Amazon</em> Fire TV stick works fast for buffer-free streaming."`
+      `"Enjoy smart access to videos, games and apps with this <em class="ais-Snippet-highlighted">Amazon</em> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <em class="ais-Snippet-highlighted">Amazon</em> Fire TV stick works fast for buffer-free streaming."`
     );
   });
 
@@ -98,7 +98,7 @@ describe('snippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Enjoy smart access to videos, games and apps with this <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick works fast for buffer-free streaming."`
+      `"Enjoy smart access to videos, games and apps with this <mark class="ais-Snippet-highlighted __highlighted">Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark class="ais-Snippet-highlighted __highlighted">Amazon</mark> Fire TV stick works fast for buffer-free streaming."`
     );
   });
 
@@ -118,7 +118,7 @@ describe('snippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Nested <mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> name"`
+      `"Nested <mark class="ais-Snippet-highlighted">Amazon</mark> name"`
     );
   });
 
@@ -129,7 +129,7 @@ describe('snippet', () => {
         hit,
       })
     ).toMatchInlineSnapshot(
-      `"Nested <mark class=\\"ais-Snippet-highlighted\\">Amazon</mark> name"`
+      `"Nested <mark class="ais-Snippet-highlighted">Amazon</mark> name"`
     );
   });
 

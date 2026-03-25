@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 
 import {
@@ -17,33 +17,33 @@ import InstantSearch from '../InstantSearch';
 type AlgoliaHelperModule = typeof algoliasearchHelper;
 
 const algoliasearchHelper = castToJestMock(originalHelper);
-jest.mock('algoliasearch-helper', () => {
-  const module = jest.requireActual<AlgoliaHelperModule>(
+vi.mock('algoliasearch-helper', async () => {
+  const module = await vi.importActual<{ default: AlgoliaHelperModule }>(
     'algoliasearch-helper'
   );
-  const mock = jest.fn((...args: Parameters<AlgoliaHelperModule>) => {
-    const helper = module(...args);
+  const mock = vi.fn((...args: Parameters<AlgoliaHelperModule>) => {
+    const helper = module.default(...args);
 
     const searchWithComposition = helper.searchWithComposition.bind(helper);
     const searchForCompositionFacetValues =
       helper.searchForCompositionFacetValues.bind(helper);
 
-    helper.searchWithComposition = jest.fn((...searchArgs) => {
+    helper.searchWithComposition = vi.fn((...searchArgs: Parameters<typeof searchWithComposition>) => {
       return searchWithComposition(...searchArgs);
     });
-    helper.searchForCompositionFacetValues = jest.fn((...searchArgs) => {
+    helper.searchForCompositionFacetValues = vi.fn((...searchArgs: Parameters<typeof searchForCompositionFacetValues>) => {
       return searchForCompositionFacetValues(...searchArgs);
     });
 
     return helper;
   });
 
-  Object.entries(module).forEach(([key, value]) => {
+  Object.entries(module.default).forEach(([key, value]) => {
     // @ts-expect-error Object.entries loses type safety
     mock[key] = value;
   });
 
-  return mock;
+  return { ...module, default: mock };
 });
 
 const virtualSearchBox = connectSearchBox(() => {});
@@ -63,10 +63,10 @@ describe('Composition implementation', () => {
 
         search.addWidgets([index({ indexName: 'indexName' })]);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`index\` widget cannot be used with a composition-based InstantSearch implementation.
+        [Error: The \`index\` widget cannot be used with a composition-based InstantSearch implementation.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-        `);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/]
+      `);
     });
 
     it('does not throw if compositionID is not provided while index widget is provided', () => {

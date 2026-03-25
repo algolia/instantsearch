@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ * @vitest-environment happy-dom
  */
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';
@@ -27,10 +27,10 @@ describe('hitsPerPage', () => {
           }),
         ]);
       }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
+        [Error: The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/"
-`);
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/]
+      `);
     });
 
     test('add custom CSS classes', async () => {
