@@ -3,6 +3,32 @@ import type { Renderer } from '../../types';
 
 type IconProps = Pick<Renderer, 'createElement'>;
 
+type LoadingIconProps = IconProps & {
+  isSearchStalled: boolean;
+};
+
+// WebKit can keep this SVG spinner animating while the loading slot is hidden (`hidden` / not stalled),
+// which wastes work. We pause SMIL when idle and unpause when `isSearchStalled`.
+// Same approach as autocomplete-js.
+// https://github.com/algolia/autocomplete/issues/1322
+function syncLoadingSvgAnimation(
+  element: SVGSVGElement | null,
+  isSearchStalled: boolean
+) {
+  if (
+    !element ||
+    typeof element.pauseAnimations !== 'function' ||
+    typeof element.unpauseAnimations !== 'function'
+  ) {
+    return;
+  }
+  if (isSearchStalled) {
+    element.unpauseAnimations();
+  } else {
+    element.pauseAnimations();
+  }
+}
+
 export function SubmitIcon({ createElement }: IconProps) {
   return (
     <svg
@@ -15,9 +41,16 @@ export function SubmitIcon({ createElement }: IconProps) {
   );
 }
 
-export function LoadingIcon({ createElement }: IconProps) {
+export function LoadingIcon({
+  createElement,
+  isSearchStalled,
+}: LoadingIconProps) {
   return (
-    <svg className="ais-AutocompleteLoadingIcon" viewBox="0 0 100 100">
+    <svg
+      className="ais-AutocompleteLoadingIcon"
+      viewBox="0 0 100 100"
+      ref={(element) => syncLoadingSvgAnimation(element, isSearchStalled)}
+    >
       <circle
         cx="50"
         cy="50"
@@ -34,7 +67,7 @@ export function LoadingIcon({ createElement }: IconProps) {
           dur="1s"
           values="0 50 50;90 50 50;180 50 50;360 50 50"
           keyTimes="0;0.40;0.65;1"
-        ></animateTransform>
+        />
       </circle>
     </svg>
   );
