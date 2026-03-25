@@ -22,6 +22,7 @@ export function createChatSidePanelLayoutComponent({
       promptComponent,
       toggleButtonComponent,
       classNames = {},
+      className,
       parentElement,
       // Chat state props (destructured to avoid spreading on div)
       messages: _messages,
@@ -68,7 +69,8 @@ export function createChatSidePanelLayoutComponent({
           'ais-Chat',
           'ais-ChatSidePanelLayout',
           maximized && 'ais-ChatSidePanelLayout--maximized',
-          classNames.root
+          classNames.root,
+          className
         )}
       >
         <div
