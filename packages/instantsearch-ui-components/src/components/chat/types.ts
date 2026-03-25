@@ -476,7 +476,7 @@ export type ChatLayoutOwnProps<
 } & Pick<ChatState<TMessage>, 'messages'> &
   Partial<Pick<ChatState<TMessage>, 'status'>> &
   Pick<AbstractChat<TMessage>, 'sendMessage' | 'regenerate' | 'stop' | 'error'> &
-  Omit<ComponentProps<'div'>, 'className'>;
+  ComponentProps<'div'>;
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;

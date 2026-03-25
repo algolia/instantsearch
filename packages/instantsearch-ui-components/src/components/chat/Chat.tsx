@@ -137,7 +137,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       suggestionsComponent: SuggestionsComponent,
       layoutComponent: LayoutComponent,
       classNames = {},
-      className: _className,
+      className,
       sendMessage,
       regenerate,
       stop,
@@ -197,6 +197,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         promptComponent={promptComponent}
         toggleButtonComponent={toggleButtonComponent}
         classNames={{ root: classNames.root, container: classNames.container }}
+        className={className}
         messages={messagesProps.messages}
         status={messagesProps.status}
         tools={messagesProps.tools}

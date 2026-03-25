@@ -14,6 +14,7 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
       promptComponent,
       toggleButtonComponent,
       classNames = {},
+      className,
       // Chat state props (destructured to avoid spreading on div)
       messages: _messages,
       status: _status,
@@ -36,7 +37,8 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
           'ais-Chat',
           'ais-ChatOverlayLayout',
           maximized && 'ais-ChatOverlayLayout--maximized',
-          classNames.root
+          classNames.root,
+          className
         )}
       >
         <div
