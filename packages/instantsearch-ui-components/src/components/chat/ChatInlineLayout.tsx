@@ -11,6 +11,7 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
       messagesComponent,
       promptComponent,
       classNames = {},
+      className,
       open: _open,
       maximized: _maximized,
       toggleButtonComponent: _toggleButtonElement,
@@ -32,7 +33,7 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
     return (
       <div
         {...rest}
-        className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root)}
+        className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root, className)}
       >
         <div
           className={cx(

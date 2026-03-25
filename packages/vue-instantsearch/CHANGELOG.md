@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.24.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.24.2...vue-instantsearch@4.24.3) (2026-03-24)
+
+
+### Bug Fixes
+
+* **vue:** avoid side-effects ([#6935](https://github.com/algolia/instantsearch/issues/6935)) ([6bef6ec](https://github.com/algolia/instantsearch/commit/6bef6ecb23f0a62ae7ec1529e7954c5d948df55d)), closes [#6932](https://github.com/algolia/instantsearch/issues/6932)
+
+
+
+
+
 ## [4.24.2](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.24.1...vue-instantsearch@4.24.2) (2026-03-16)
 
 **Note:** Version bump only for package vue-instantsearch

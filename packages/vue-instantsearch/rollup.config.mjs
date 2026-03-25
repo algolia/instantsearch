@@ -29,7 +29,7 @@ const createFile = (fileName, content) => ({
   },
 });
 
-const aliasVueCompat = (vueVersion) => ({
+const aliasVueCompat = vueVersion => ({
   name: 'alias-vue-compat',
   resolveId(source, importer) {
     // Only intercept imports that:
@@ -60,7 +60,82 @@ const aliasVueCompat = (vueVersion) => ({
 
 const isWatching = process.env.ROLLUP_WATCH;
 
-const external = (id) =>
+/**
+ * For the vue3 ESM build, rollup-plugin-vue@6 emits three files per .vue source:
+ *   Panel.vue2.js  – component options object (no render function)
+ *   Panel.vue3.js  – render function only
+ *   Panel.vue.js   – bridge: imports both, attaches render, re-exports
+ *
+ * The entry chunks (instantsearch.js, widgets.js) end up exporting from
+ * .vue2.js (no render) while relying on bare side-effect `import "…vue.js"`
+ * lines to attach the render. Bundlers that honour `sideEffects: false` (e.g.
+ * Vite 8 / Rolldown) tree-shake those bare imports away, leaving all widgets
+ * with no render function.
+ *
+ * This plugin post-processes every generated chunk (after minification) to:
+ *   0. Rewrite bridge modules to compose a new object instead of mutating the
+ *      imported component (mutation gets discarded by some bundlers).
+ *   1. Remove bare side-effect imports of bridge files.
+ *   2. Redirect every .vue2.js export to the .vue.js bridge, making each
+ *      export self-contained and side-effect-free.
+ */
+const fixVue3SfcExports = () => ({
+  name: 'fix-vue3-sfc-exports',
+  generateBundle(_, bundle) {
+    for (const chunk of Object.values(bundle)) {
+      if (chunk.type !== 'chunk') continue;
+
+      if (chunk.fileName.endsWith('.vue.js')) {
+        const bridgePattern = /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
+
+        const match = chunk.code.match(bridgePattern);
+
+        if (match) {
+          const [
+            ,
+            component,
+            vue2Path,
+            renderAlias,
+            vue3Path,
+            assignmentBlock,
+          ] = match;
+          const extraProps = [];
+
+          const fileMatch = assignmentBlock.match(/__file\s*=\s*([^,;]+)/);
+          if (fileMatch) {
+            extraProps.push(`__file:${fileMatch[1].trim()}`);
+          }
+
+          const scopeMatch = assignmentBlock.match(/__scopeId\s*=\s*([^,;]+)/);
+          if (scopeMatch) {
+            extraProps.push(`__scopeId:${scopeMatch[1].trim()}`);
+          }
+
+          const extraPropsString = extraProps.length
+            ? `,${extraProps.join(',')}`
+            : '';
+
+          chunk.code = `import ${component} from"${vue2Path}";import{render as ${renderAlias}}from"${vue3Path}";export default {...${component},render:${renderAlias}${extraPropsString}};`;
+        }
+
+        continue;
+      }
+
+      let { code } = chunk;
+
+      // 1. Remove bare side-effect imports of .vue.js bridge files
+      //    Handles both minified (`import"…";`) and non-minified (`import "…";`)
+      code = code.replace(/\bimport\s*"([^"]*\.vue)\.js"\s*;?\s*/g, '');
+
+      // 2. Redirect .vue2.js re-exports to the .vue.js bridge
+      code = code.replace(/\bfrom\s*"([^"]*\.vue)2\.js"/g, 'from"$1.js"');
+
+      chunk.code = code;
+    }
+  },
+});
+
+const external = id =>
   [
     'algoliasearch-helper',
     'instantsearch.js',
@@ -68,7 +143,7 @@ const external = (id) =>
     'vue',
     'mitt',
     '@swc/helpers',
-  ].some((dep) => id === dep || id.startsWith(`${dep}/`));
+  ].some(dep => id === dep || id.startsWith(`${dep}/`));
 
 function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vue3Plugin : vue2Plugin;
@@ -81,14 +156,7 @@ function outputs(vueVersion) {
       include: /\.[jt]sx?$|\.vue$/,
     }),
     createResolvePlugin({
-      extensions: [
-        '.mjs',
-        '.js',
-        '.ts',
-        '.jsx',
-        '.tsx',
-        '.vue',
-      ],
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.vue'],
     }),
     json(),
     createReplacePlugin({ mode: 'production' }),
@@ -133,6 +201,7 @@ function outputs(vueVersion) {
         modulesToResolve: ['instantsearch.js'],
       }),
       createTerserPlugin({ sourceMap: false }),
+      ...(vueVersion === 'vue3' ? [fixVue3SfcExports()] : []),
       createFile(
         'index.js',
         `import InstantSearch from './src/instantsearch.js';

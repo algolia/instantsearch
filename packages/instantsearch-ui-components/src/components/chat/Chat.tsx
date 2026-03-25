@@ -101,6 +101,7 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   error: ChatLayoutOwnProps['error'];
   /**
    * Optional layout component for the chat.
+   * @default ChatOverlayLayout
    */
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
@@ -135,9 +136,9 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       promptComponent: PromptComponent,
       toggleButtonComponent: ToggleButtonComponent,
       suggestionsComponent: SuggestionsComponent,
-      layoutComponent: LayoutComponent,
+      layoutComponent: LayoutComponent = OverlayLayout,
       classNames = {},
-      className: _className,
+      className,
       sendMessage,
       regenerate,
       stop,
@@ -185,10 +186,8 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       }
     );
 
-    const ResolvedLayout = LayoutComponent || OverlayLayout;
-
     return (
-      <ResolvedLayout
+      <LayoutComponent
         {...props}
         open={open}
         maximized={maximized}
@@ -197,6 +196,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         promptComponent={promptComponent}
         toggleButtonComponent={toggleButtonComponent}
         classNames={{ root: classNames.root, container: classNames.container }}
+        className={className}
         messages={messagesProps.messages}
         status={messagesProps.status}
         tools={messagesProps.tools}
