@@ -52,12 +52,17 @@ export function createChatSidePanelLayoutComponent({
           getComputedStyle(document.documentElement)
             .getPropertyValue('--ais-chat-width')
             .trim() || '22.5rem';
-        const original = originalMargins.get(element)!;
+        const original = originalMargins.get(element);
         element.style.marginRight = original
           ? `calc(${original} + ${chatWidth})`
           : chatWidth;
       } else if (!open && originalMargins.has(element)) {
-        element.style.marginRight = originalMargins.get(element) || '';
+        const saved = originalMargins.get(element);
+        if (saved) {
+          element.style.marginRight = saved;
+        } else {
+          element.style.removeProperty('margin-right');
+        }
         originalMargins.delete(element);
       }
     }

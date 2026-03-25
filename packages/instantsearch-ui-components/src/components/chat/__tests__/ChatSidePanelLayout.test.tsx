@@ -13,6 +13,10 @@ const ChatSidePanelLayout = createChatSidePanelLayoutComponent({
 });
 
 describe('ChatSidePanelLayout', () => {
+  afterEach(() => {
+    document.body.style.removeProperty('margin-right');
+  });
+
   const defaultProps = {
     open: true,
     maximized: false,
