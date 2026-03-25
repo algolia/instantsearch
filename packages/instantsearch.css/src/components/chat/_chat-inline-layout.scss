@@ -1,4 +1,6 @@
 .ais-ChatInlineLayout {
+  --ais-chat-height: 32rem;
+
   position: relative;
   width: 100%;
   height: auto;
@@ -12,7 +14,7 @@
     opacity: 1;
     transform: none;
     box-shadow: var(--ais-shadow-sm);
-    max-height: var(--ais-chat-inline-max-height, 32rem);
+    max-height: var(--ais-chat-height);
   }
 
   .ais-ChatHeader-maximize,
