@@ -14,6 +14,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
   return function AutocompleteSearch(userProps: AutocompleteSearchProps) {
     const { inputProps, onClear, query, isSearchStalled } = userProps;
     const inputRef = inputProps.ref as { current: HTMLInputElement | null };
+
     return (
       <form
         className="ais-AutocompleteForm"
@@ -34,6 +35,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               className="ais-AutocompleteSubmitButton"
               type="submit"
               title="Submit"
+              hidden={isSearchStalled}
             >
               <SubmitIcon createElement={createElement} />
             </button>
@@ -42,7 +44,10 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             className="ais-AutocompleteLoadingIndicator"
             hidden={!isSearchStalled}
           >
-            <LoadingIcon createElement={createElement} />
+            <LoadingIcon
+              createElement={createElement}
+              isSearchStalled={isSearchStalled}
+            />
           </div>
         </div>
         <div className="ais-AutocompleteInputWrapper">
