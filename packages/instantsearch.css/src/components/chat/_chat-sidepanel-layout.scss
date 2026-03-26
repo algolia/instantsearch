@@ -52,8 +52,12 @@
     }
   }
 
-  .ais-Chat-container--open~.ais-Chat-toggleButtonWrapper {
+  .ais-Chat-container--open ~ .ais-Chat-toggleButtonWrapper {
     right: calc(var(--ais-chat-width) + var(--ais-chat-margin));
+
+    .ais-ChatToggleButton svg {
+      transform: rotate(-90deg);
+    }
   }
 }
 
