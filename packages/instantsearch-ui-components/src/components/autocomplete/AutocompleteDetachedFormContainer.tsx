@@ -1,7 +1,6 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib/cx';
-import { createButtonComponent } from '../Button';
 
 import type { ComponentChildren, Renderer } from '../../types';
 import type { AutocompleteClassNames } from './Autocomplete';
@@ -17,12 +16,10 @@ export type AutocompleteDetachedFormContainerProps = {
 export function createAutocompleteDetachedFormContainerComponent({
   createElement,
 }: Renderer) {
-  const Button = createButtonComponent({ createElement });
-
   return function AutocompleteDetachedFormContainer(
     userProps: AutocompleteDetachedFormContainerProps
   ) {
-    const { children, classNames = {}, onCancel, translations } = userProps;
+    const { children, classNames = {} } = userProps;
 
     return (
       <div
@@ -32,16 +29,6 @@ export function createAutocompleteDetachedFormContainerComponent({
         )}
       >
         {children}
-        <Button
-          variant="ghost"
-          className={cx(
-            'ais-AutocompleteDetachedCancelButton',
-            classNames.detachedCancelButton
-          )}
-          onClick={onCancel}
-        >
-          {translations.detachedCancelButtonText}
-        </Button>
       </div>
     );
   };

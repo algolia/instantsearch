@@ -15,6 +15,9 @@ export type AutocompleteSearchProps = {
   query: string;
   refine: (query: string) => void;
   isSearchStalled: boolean;
+  onSubmit?: () => void;
+  isDetached?: boolean;
+  submitTitle?: string;
 };
 
 export function AutocompleteSearch({
@@ -24,6 +27,9 @@ export function AutocompleteSearch({
   query,
   refine,
   isSearchStalled,
+  onSubmit,
+  isDetached,
+  submitTitle,
 }: AutocompleteSearchProps) {
   return (
     <AutocompleteSearchComponent
@@ -38,6 +44,9 @@ export function AutocompleteSearch({
       onClear={clearQuery}
       query={query}
       isSearchStalled={isSearchStalled}
+      onSubmit={onSubmit}
+      isDetached={isDetached}
+      submitTitle={submitTitle}
     />
   );
 }
