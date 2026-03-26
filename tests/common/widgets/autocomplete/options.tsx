@@ -1642,9 +1642,17 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        // Cancel is now a dedicated back button inside the search input
+        expect(
+          document.querySelector('.ais-AutocompleteBackButton')
+        ).toHaveAttribute('title', 'Annuler');
+        // Submit button is separate and remains a submit button
+        expect(
+          document.querySelector('.ais-AutocompleteSubmitButton')
+        ).toHaveAttribute('type', 'submit');
         expect(
           document.querySelector('.ais-AutocompleteDetachedCancelButton')
-        ).toHaveTextContent('Annuler');
+        ).toBeNull();
       });
 
       test('disables detached mode when detachedMediaQuery is empty', async () => {

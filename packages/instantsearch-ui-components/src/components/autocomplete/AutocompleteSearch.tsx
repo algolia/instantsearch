@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { ClearIcon, LoadingIcon, SubmitIcon } from './icons';
+import { BackIcon, ClearIcon, LoadingIcon, SubmitIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../..';
 
@@ -8,11 +8,25 @@ export type AutocompleteSearchProps = {
   onClear: () => void;
   query: string;
   isSearchStalled: boolean;
+  onSubmit?: () => void;
+  isDetached?: boolean;
+  submitTitle?: string;
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
   return function AutocompleteSearch(userProps: AutocompleteSearchProps) {
-    const { inputProps, onClear, query, isSearchStalled } = userProps;
+    const {
+      inputProps,
+      onClear,
+      query,
+      isSearchStalled,
+      onSubmit,
+      isDetached,
+      submitTitle,
+    } = userProps;
+
+    const isBackButton = Boolean(isDetached && onSubmit);
+    const resolvedCancelTitle = submitTitle ?? 'Close';
     const inputRef = inputProps.ref as { current: HTMLInputElement | null };
 
     return (
@@ -21,15 +35,30 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
         action=""
         noValidate
         role="search"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
         onReset={() => inputRef.current?.focus()}
       >
         <div className="ais-AutocompleteInputWrapperPrefix">
+          {isBackButton && (
+            <button
+              className="ais-AutocompleteBackButton"
+              type="button"
+              title={resolvedCancelTitle}
+              onClick={onSubmit}
+              hidden={isSearchStalled}
+            >
+              <BackIcon createElement={createElement} />
+            </button>
+          )}
+          {/* Always render the label so aria-labelledby on the input keeps working */}
           <label
             className="ais-AutocompleteLabel"
             aria-label="Submit"
             htmlFor={inputProps.id}
             id={`${inputProps.id}-label`}
+            hidden={isBackButton || undefined}
           >
             <button
               className="ais-AutocompleteSubmitButton"

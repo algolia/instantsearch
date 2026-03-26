@@ -53,7 +53,8 @@ export type AutocompleteClassNames = {
    */
   detachedSearchButtonClear: string | string[];
   /**
-   * Class names to apply to the detached cancel button
+   * Class names to apply to the detached cancel button.
+   * Kept for backwards compatibility.
    */
   detachedCancelButton: string | string[];
 };
