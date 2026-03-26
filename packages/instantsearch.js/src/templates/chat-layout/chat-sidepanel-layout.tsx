@@ -1,9 +1,11 @@
 /** @jsx h */
 
-import { createChatSidePanelLayoutComponent } from 'instantsearch-ui-components';
+import {
+  createChatSidePanelLayoutComponent,
+  ChatSidePanelLayoutProps
+} from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 
-import type { ChatSidePanelLayoutProps } from 'instantsearch-ui-components';
 import type { ChatLayoutTemplateData } from '../../widgets/chat/chat';
 
 const ChatSidePanelLayout = createChatSidePanelLayoutComponent({
