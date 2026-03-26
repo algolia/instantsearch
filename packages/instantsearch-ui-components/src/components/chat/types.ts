@@ -1,3 +1,4 @@
+import type { ComponentProps } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
@@ -456,6 +457,26 @@ export type ApplyFiltersParams = {
   query?: string;
   facetFilters?: string[][];
 };
+
+export type ChatLayoutOwnProps<
+  TMessage extends ChatMessageBase = ChatMessageBase
+> = {
+  open: boolean;
+  maximized: boolean;
+  headerComponent: JSX.Element;
+  messagesComponent: JSX.Element;
+  promptComponent: JSX.Element;
+  toggleButtonComponent: JSX.Element;
+  classNames?: { root?: string | string[]; container?: string | string[] };
+  isClearing?: boolean;
+  clearMessages?: () => void;
+  onClearTransitionEnd?: () => void;
+  suggestions?: string[];
+  tools: ClientSideTools;
+} & Pick<ChatState<TMessage>, 'messages'> &
+  Partial<Pick<ChatState<TMessage>, 'status'>> &
+  Pick<AbstractChat<TMessage>, 'sendMessage' | 'regenerate' | 'stop' | 'error'> &
+  ComponentProps<'div'>;
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;

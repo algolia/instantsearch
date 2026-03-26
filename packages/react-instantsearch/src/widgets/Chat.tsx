@@ -31,6 +31,7 @@ export {
 import type {
   Pragma,
   ChatProps as ChatUiProps,
+  ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -80,6 +81,11 @@ type UiProps = Pick<
   | 'headerComponent'
   | 'promptComponent'
   | 'suggestionsComponent'
+  | 'layoutComponent'
+  | 'sendMessage'
+  | 'regenerate'
+  | 'stop'
+  | 'error'
 >;
 
 type UserToggleButtonProps = Omit<
@@ -125,6 +131,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
     toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
     toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
     headerComponent?: ChatUiProps['headerComponent'];
@@ -161,6 +168,7 @@ export function Chat<
   messagesProps,
   promptProps,
   itemComponent,
+  layoutComponent,
   toggleButtonComponent,
   toggleButtonIconComponent,
   headerComponent,
@@ -255,6 +263,11 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
+      sendMessage={sendMessage as ChatUiProps['sendMessage']}
+      regenerate={regenerate}
+      stop={stop}
+      error={error}
+      layoutComponent={layoutComponent}
       headerComponent={headerComponent}
       promptComponent={promptComponent}
       toggleButtonComponent={toggleButtonComponent}
