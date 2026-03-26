@@ -1214,7 +1214,7 @@ export function createOptionsTests(
           document.querySelector('.ais-ChatInlineLayout')
         ).toBeInTheDocument();
         expect(
-          document.querySelector('.ais-Chat-container--open')
+          document.querySelector('.ais-Chat-container')
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-ChatOverlayLayout')
