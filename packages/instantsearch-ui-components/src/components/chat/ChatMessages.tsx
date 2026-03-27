@@ -62,7 +62,7 @@ export type ChatMessagesTranslations = {
    */
   feedbackThankYouText?: string;
   /**
-   * Text shown while sending feedback
+   * Label for the feedback spinner
    */
   sendingFeedbackLabel?: string;
 };
