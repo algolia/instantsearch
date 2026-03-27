@@ -98,7 +98,6 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   sendChatMessageFeedback?: (messageId: string, vote: 0 | 1) => void;
   /**
    * Map of message IDs to their feedback state.
-   * Maps message IDs to their feedback state.
    * 'sending' means the request is in flight, 0/1 means the vote was recorded.
    */
   feedbackState: Record<string, 'sending' | 0 | 1>;
@@ -279,6 +278,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let _sendChatMessageFeedback:
       | ((messageId: string, vote: 0 | 1) => void)
       | undefined;
+    let feedbackAbortController: AbortController | undefined;
 
     // Extract suggestions from the last assistant message's data-suggestions part
     const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
@@ -329,6 +329,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      feedbackState = {};
       setIsClearing(false);
     };
 
@@ -521,6 +522,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             );
           }
 
+          feedbackAbortController = new AbortController();
           _sendChatMessageFeedback = (messageId: string, vote: 0 | 1) => {
             if (feedbackState[messageId] !== undefined) {
               return;
@@ -532,7 +534,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               messageId,
               appId,
               apiKey,
-              abortSignal: new AbortController().signal,
+              abortSignal: feedbackAbortController!.signal,
             }).finally(() => {
               setFeedbackState(messageId, vote);
             });
@@ -640,6 +642,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       dispose() {
+        feedbackAbortController?.abort();
         unmountFn();
       },
 

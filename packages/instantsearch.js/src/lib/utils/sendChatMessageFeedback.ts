@@ -11,7 +11,7 @@ export function sendChatMessageFeedback({
   messageId: string;
   appId: string;
   apiKey: string;
-  abortSignal: AbortSignal;
+  abortSignal?: AbortSignal;
 }): Promise<Response> {
   return fetch(`https://${appId}.algolia.net/agent-studio/1/feedback`, {
     method: 'POST',
@@ -21,6 +21,6 @@ export function sendChatMessageFeedback({
       'x-algolia-api-key': apiKey,
       'content-type': 'application/json',
     },
-    signal: abortSignal,
+    ...(abortSignal ? { signal: abortSignal } : {}),
   });
 }
