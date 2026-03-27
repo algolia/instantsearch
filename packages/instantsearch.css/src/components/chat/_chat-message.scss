@@ -87,6 +87,32 @@
   }
 }
 
+.ais-ChatMessage-feedbackSpinner {
+  display: inline-flex;
+
+  svg {
+    width: calc(var(--ais-icon-size) * 0.8);
+    height: calc(var(--ais-icon-size) * 0.8);
+    color: rgba(var(--ais-muted-color-rgb), 0.6);
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: ais-chat-loader-spinner 1.4s linear infinite;
+    }
+  }
+}
+
+.ais-ChatMessage-feedbackCheck {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.25);
+}
+
+.ais-ChatMessage-feedbackText {
+  font-size: calc(var(--ais-spacing) * 0.75);
+  color: rgba(var(--ais-muted-color-rgb), 0.6);
+  white-space: nowrap;
+}
+
 @media (hover: hover) {
   .ais-ChatMessage:hover .ais-ChatMessage-actions {
     opacity: 1;

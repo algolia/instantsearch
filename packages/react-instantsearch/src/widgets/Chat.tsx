@@ -28,19 +28,19 @@ export {
   PonderToolType,
 };
 
-import type {
-  Pragma,
-  ChatProps as ChatUiProps,
-  ChatLayoutOwnProps,
-  RecommendComponentProps,
-  RecordWithObjectID,
-  UserClientSideTool,
-  UserClientSideTools,
-  ChatMessageProps,
-} from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { UseChatProps } from 'react-instantsearch-core';
+  import type {
+    Pragma,
+    ChatProps as ChatUiProps,
+    ChatLayoutOwnProps,
+    RecommendComponentProps,
+    RecordWithObjectID,
+    UserClientSideTool,
+    UserClientSideTools,
+    ChatMessageProps,
+  } from 'instantsearch-ui-components';
+  import type { IndexUiState } from 'instantsearch.js';
+  import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+  import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -239,6 +239,8 @@ export function Chat<
     onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
+    sendChatMessageFeedback: onFeedback,
+    feedbackState,
   } = chatState;
 
   const wasOpenRef = useRef(false);
@@ -295,6 +297,8 @@ export function Chat<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        onFeedback,
+        feedbackState,
         messages,
         tools: toolsFromConnector,
         indexUiState,

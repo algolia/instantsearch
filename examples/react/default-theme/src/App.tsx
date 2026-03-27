@@ -200,6 +200,7 @@ export function App() {
 
       <Chat
         agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+        feedback={true}
         itemComponent={ItemComponent}
       />
     </InstantSearch>
