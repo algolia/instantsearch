@@ -3,9 +3,12 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
-import { chatInlineLayout } from 'instantsearch.js/es/templates';
+import {
+  chatInlineLayout,
+  chatSidePanelLayout,
+} from 'instantsearch.js/es/templates';
 import React from 'react';
-import { ChatInlineLayout } from 'react-instantsearch';
+import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -1183,6 +1186,119 @@ export function createOptionsTests(
         ).not.toBeInTheDocument();
       });
 
+      test('exposes sendMessage to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+        const sendMessageSpy = jest
+          .spyOn(chat, 'sendMessage')
+          .mockResolvedValue(undefined);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <button
+                      class="custom-send"
+                      onclick="${() =>
+                      props.sendMessage({ text: 'hello from layout' })}"
+                    >
+                      Send
+                    </button>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <button
+                    className="custom-send"
+                    onClick={() =>
+                      props.sendMessage({ text: 'hello from layout' })
+                    }
+                  >
+                    Send
+                  </button>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(document.querySelector('.custom-send')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(sendMessageSpy).toHaveBeenCalledWith({
+          text: 'hello from layout',
+        });
+      });
+
+      test('exposes status to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <span class="custom-status">${props.status}</span>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <span className="custom-status">{props.status}</span>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('ready');
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('submitted');
+      });
+
       test('renders with inline layout component', async () => {
         const searchClient = createSearchClient();
 
@@ -1222,6 +1338,100 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-Chat-toggleButtonWrapper')
         ).not.toBeInTheDocument();
+      });
+
+      test('renders with sidepanel layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout(),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: ChatSidePanelLayout,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatSidePanelLayout')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).not.toBeInTheDocument();
+      });
+
+      test('sidepanel layout adjusts parent margin when opened and closed', async () => {
+        const searchClient = createSearchClient();
+        const parentEl = document.createElement('div');
+        parentEl.id = 'sidepanel-parent';
+        document.body.appendChild(parentEl);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout({
+                  parentElement: '#sidepanel-parent',
+                }),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props: any) => (
+                <ChatSidePanelLayout
+                  {...props}
+                  parentElement="#sidepanel-parent"
+                />
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
+
+        await openChat(act);
+
+        expect(parentEl.style.marginRight).not.toBe('');
+
+        userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
       });
     });
   });

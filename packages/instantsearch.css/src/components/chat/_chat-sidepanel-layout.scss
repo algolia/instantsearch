@@ -1,0 +1,83 @@
+@use '../../shared/_variables';
+
+.ais-ChatSidePanelLayout {
+  position: fixed;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--ais-chat-width);
+  height: 100%;
+  max-width: calc(100% - var(--ais-chat-margin) * 2);
+  z-index: var(--ais-z-index-chat);
+  pointer-events: none;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: width var(--ais-transition-duration) var(--ais-transition-timing-function);
+  }
+
+  &--maximized {
+    width: var(--ais-chat-maximized-width);
+  }
+
+  .ais-Chat-container {
+    box-shadow: var(--ais-shadow-md);
+    border-radius: 0;
+    opacity: 0;
+    transform: translateX(100%);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity var(--ais-transition-duration) var(--ais-transition-timing-function),
+        transform var(--ais-transition-duration) var(--ais-transition-timing-function);
+    }
+  }
+
+  .ais-Chat-container--open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ais-Chat-toggleButtonWrapper {
+    pointer-events: auto;
+    position: absolute;
+    bottom: var(--ais-chat-margin);
+    right: var(--ais-chat-margin);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: right var(--ais-transition-duration) var(--ais-transition-timing-function),
+        transform var(--ais-transition-duration) var(--ais-transition-timing-function);
+    }
+  }
+
+  .ais-Chat-container--open ~ .ais-Chat-toggleButtonWrapper {
+    right: calc(var(--ais-chat-width) + var(--ais-chat-margin));
+
+    .ais-ChatToggleButton svg {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+body:has(.ais-ChatSidePanelLayout) {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: margin-right var(--ais-transition-duration) var(--ais-transition-timing-function);
+  }
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-ChatSidePanelLayout {
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    transition: none;
+    max-width: initial;
+  }
+
+  .ais-ChatSidePanelLayout .ais-Chat-container {
+    border-radius: 0;
+    transition: none;
+  }
+}
