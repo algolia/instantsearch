@@ -23,6 +23,8 @@ export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
 );
 
 export { connectDynamicWidgets };
+export { default as connectDynamicFacets } from './dynamic-facets/connectDynamicFacets';
+export { default as connectDynamicFacetsComposed } from './dynamic-facets-composed/connectDynamicFacetsComposed';
 
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
