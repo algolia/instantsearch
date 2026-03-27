@@ -38,7 +38,6 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
         <div
           className={cx(
             'ais-Chat-container',
-            'ais-Chat-container--open',
             classNames.container
           )}
         >

@@ -40,7 +40,7 @@ describe('ChatInlineLayout', () => {
           class="ais-Chat ais-ChatInlineLayout"
         >
           <div
-            class="ais-Chat-container ais-Chat-container--open"
+            class="ais-Chat-container"
           >
             <div
               class="header"
@@ -82,7 +82,7 @@ describe('ChatInlineLayout', () => {
       'ais-Chat ais-ChatInlineLayout ROOT'
     );
     expect(container.querySelector('.ais-Chat-container')!.className).toBe(
-      'ais-Chat-container ais-Chat-container--open CONTAINER'
+      'ais-Chat-container CONTAINER'
     );
   });
 

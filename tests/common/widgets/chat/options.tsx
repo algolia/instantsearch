@@ -1209,7 +1209,7 @@ export function createOptionsTests(
                     <button
                       class="custom-send"
                       onclick="${() =>
-                        props.sendMessage({ text: 'hello from layout' })}"
+                      props.sendMessage({ text: 'hello from layout' })}"
                     >
                       Send
                     </button>
@@ -1330,7 +1330,7 @@ export function createOptionsTests(
           document.querySelector('.ais-ChatInlineLayout')
         ).toBeInTheDocument();
         expect(
-          document.querySelector('.ais-Chat-container--open')
+          document.querySelector('.ais-Chat-container')
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-ChatOverlayLayout')
