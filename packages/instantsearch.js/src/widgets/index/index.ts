@@ -1074,6 +1074,9 @@ function storeRenderState({
   instantSearchInstance: InstantSearch;
   parent?: IndexWidget;
 }) {
+  if (instantSearchInstance.future.dontStoreRenderState) {
+    return;
+  }
   const parentIndexName = parent
     ? parent.getIndexId()
     : instantSearchInstance.mainIndex.getIndexId();
