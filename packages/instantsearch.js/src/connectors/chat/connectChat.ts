@@ -93,7 +93,8 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   suggestions?: string[];
   /**
    * Sends feedback (thumbs up/down) for an assistant message.
-   * Only available when using `agentId`. Returns `undefined` otherwise.
+   * Only available when using `agentId` and `feedback` is true.
+   * Returns `undefined` otherwise.
    */
   sendChatMessageFeedback?: (messageId: string, vote: 0 | 1) => void;
   /**
@@ -274,10 +275,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
-    let feedbackState: Record<string, 'sending' | 0 | 1> = {};
-    let _sendChatMessageFeedback:
-      | ((messageId: string, vote: 0 | 1) => void)
-      | undefined;
+    let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
+    let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
 
     // Extract suggestions from the last assistant message's data-suggestions part

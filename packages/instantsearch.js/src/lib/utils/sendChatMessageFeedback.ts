@@ -1,4 +1,4 @@
-export async function sendChatMessageFeedback({
+export function sendChatMessageFeedback({
   agentId,
   vote,
   messageId,
@@ -12,35 +12,25 @@ export async function sendChatMessageFeedback({
   appId: string;
   apiKey: string;
   abortSignal?: AbortSignal;
-}): Promise<Response | undefined> {
-  try {
-    const response = await fetch(
-      `https://${appId}.algolia.net/agent-studio/1/feedback`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ messageId, agentId, vote }),
-        headers: {
-          'x-algolia-application-id': appId,
-          'x-algolia-api-key': apiKey,
-          'content-type': 'application/json',
-        },
-        signal: abortSignal,
-      }
-    );
-
+}): Promise<Response> {
+  return fetch(`https://${appId}.algolia.net/agent-studio/1/feedback`, {
+    method: 'POST',
+    body: JSON.stringify({ messageId, agentId, vote }),
+    headers: {
+      'x-algolia-application-id': appId,
+      'x-algolia-api-key': apiKey,
+      'content-type': 'application/json',
+    },
+    signal: abortSignal,
+  }).then((response) => {
     if (response.status >= 300) {
-      const data = await response.json();
-      console.error(`Cannot send feedback: ${data.message}`);
-      return undefined;
+      return response.json().then((data) => {
+        throw new Error(
+          `Feedback request failed with status ${response.status}: ${data.message}`
+        );
+      });
     }
 
-    return response;
-  } catch (error) {
-    console.error(
-      `Cannot send feedback: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`
-    );
-    return undefined;
-  }
+    return response.json();
+  });
 }

@@ -288,8 +288,8 @@ type ChatWrapperProps = {
   isClearing: boolean;
   clearMessages: () => void;
   onClearTransitionEnd: () => void;
-  onFeedback?: (messageId: string, vote: 0 | 1) => void;
-  feedbackState: Record<string, 'sending' | 0 | 1>;
+  onFeedback?: ChatRenderState['sendChatMessageFeedback'];
+  feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
   toggleButtonProps: {
     layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
