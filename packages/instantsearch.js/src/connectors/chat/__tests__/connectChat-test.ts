@@ -388,6 +388,7 @@ describe('connectChat', () => {
           ...mockTool,
           addToolResult: expect.any(Function),
           applyFilters: expect.any(Function),
+          sendEvent: expect.any(Function),
         },
       });
     });

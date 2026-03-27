@@ -1,4 +1,4 @@
-import type { ComponentProps } from '../../types';
+import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
@@ -485,6 +485,7 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  sendEvent: SendEventForHits;
 };
 
 export type ClientSideToolComponent = (
@@ -494,6 +495,7 @@ export type ClientSideToolComponent = (
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   addToolResult: AddToolResult;
+  sendEvent?: SendEventForHits;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
@@ -507,6 +509,6 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters'
+  'addToolResult' | 'applyFilters' | 'sendEvent'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
