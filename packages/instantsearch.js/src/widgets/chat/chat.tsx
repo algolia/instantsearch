@@ -94,6 +94,7 @@ function createCarouselTool<
     message,
     applyFilters,
     onClose,
+    sendEvent,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -106,9 +107,14 @@ function createCarouselTool<
       | {
           hits?: Array<RecordWithObjectID<THit>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
-    const items = output?.hits || [];
+    const items = (output?.hits || []).map((hit, index) => ({
+      ...hit,
+      __queryID: hit.__queryID || output?.queryID,
+      __position: hit.__position || index + 1,
+    }));
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
@@ -151,7 +157,7 @@ function createCarouselTool<
           />
         ),
       },
-      sendEvent: () => {},
+      sendEvent,
     });
   }
 

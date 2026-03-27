@@ -39,6 +39,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     message,
     applyFilters,
     onClose,
+    sendEvent,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -51,10 +52,15 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
 
-    const items = output?.hits || [];
+    const items = (output?.hits || []).map((hit, index) => ({
+      ...hit,
+      __queryID: hit.__queryID || output?.queryID,
+      __position: hit.__position || index + 1,
+    }));
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (
@@ -85,7 +91,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       <Carousel
         items={items}
         itemComponent={itemComponent}
-        sendEvent={() => {}}
+        sendEvent={sendEvent}
         showNavigation={false}
         headerComponent={MemoedHeaderComponent}
       />
