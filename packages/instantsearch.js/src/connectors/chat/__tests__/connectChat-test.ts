@@ -10,7 +10,6 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { sendChatMessageFeedback } from '../../../lib/utils';
 import connectChat from '../connectChat';
 
 import type { UIMessage } from '../../../lib/chat';
@@ -20,10 +19,6 @@ import type { ChatConnectorParams } from '../connectChat';
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
 }));
-
-const mockedSendFeedback = sendChatMessageFeedback as jest.MockedFunction<
-  typeof sendChatMessageFeedback
->;
 
 describe('connectChat', () => {
   const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
@@ -380,6 +375,63 @@ describe('connectChat', () => {
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toEqual(newMessages);
     });
+
+    it('has empty feedbackState initially', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      expect(renderState.feedbackState).toEqual({});
+    });
+
+    it('sets feedbackState to sending when feedback is submitted', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+
+      const updatedRenderState = getRenderState();
+      expect(updatedRenderState.feedbackState).toEqual({
+        'msg-1': 'sending',
+      });
+    });
+
+    it('sets feedbackState to the vote value after fetch resolves', async () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+
+      await waitFor(() => {
+        expect(getRenderState().feedbackState).toEqual({ 'msg-1': 1 });
+      });
+    });
+
+    it('prevents double voting on the same message', () => {
+      const { sendChatMessageFeedback: mockedFn } = jest.requireMock(
+        '../../../lib/utils/sendChatMessageFeedback'
+      );
+      mockedFn.mockClear();
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+      renderState.sendChatMessageFeedback!('msg-1', 0);
+
+      expect(mockedFn).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('tool handling', () => {
@@ -484,46 +536,4 @@ data: [DONE]`,
     });
   });
 
-  describe('feedback', () => {
-    beforeEach(() => {
-      mockedSendFeedback.mockClear();
-    });
-
-    it('sets feedbackState to sending when feedback is submitted', () => {
-      const { getRenderState } = getInitializedWidget({
-        agentId: 'agentId',
-        feedback: true,
-      });
-
-      getRenderState().sendChatMessageFeedback!('msg-1', 1);
-
-      const updatedState = getRenderState();
-      expect(updatedState.feedbackState).toEqual({ 'msg-1': 'sending' });
-    });
-
-    it('sets feedbackState to the vote value after fetch resolves', async () => {
-      const { getRenderState } = getInitializedWidget({
-        agentId: 'agentId',
-        feedback: true,
-      });
-
-      getRenderState().sendChatMessageFeedback!('msg-1', 1);
-
-      await waitFor(() => {
-        expect(getRenderState().feedbackState).toEqual({ 'msg-1': 1 });
-      });
-    });
-
-    it('prevents double voting on the same message', () => {
-      const { getRenderState } = getInitializedWidget({
-        agentId: 'agentId',
-        feedback: true,
-      });
-
-      getRenderState().sendChatMessageFeedback!('msg-1', 1);
-      getRenderState().sendChatMessageFeedback!('msg-1', 0);
-
-      expect(mockedSendFeedback).toHaveBeenCalledTimes(1);
-    });
-  });
 });
