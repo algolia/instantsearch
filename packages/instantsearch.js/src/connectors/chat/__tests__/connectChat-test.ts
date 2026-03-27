@@ -10,11 +10,20 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { sendChatMessageFeedback } from '../../../lib/utils';
 import connectChat from '../connectChat';
 
 import type { UIMessage } from '../../../lib/chat';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
+
+jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
+  sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
+}));
+
+const mockedSendFeedback = sendChatMessageFeedback as jest.MockedFunction<
+  typeof sendChatMessageFeedback
+>;
 
 describe('connectChat', () => {
   const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
@@ -95,6 +104,7 @@ describe('connectChat', () => {
           input: '',
           open: false,
           isClearing: false,
+          feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
@@ -471,6 +481,49 @@ data: [DONE]`,
           transport: customTransport,
         })
       );
+    });
+  });
+
+  describe('feedback', () => {
+    beforeEach(() => {
+      mockedSendFeedback.mockClear();
+    });
+
+    it('sets feedbackState to sending when feedback is submitted', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      getRenderState().sendChatMessageFeedback!('msg-1', 1);
+
+      const updatedState = getRenderState();
+      expect(updatedState.feedbackState).toEqual({ 'msg-1': 'sending' });
+    });
+
+    it('sets feedbackState to the vote value after fetch resolves', async () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      getRenderState().sendChatMessageFeedback!('msg-1', 1);
+
+      await waitFor(() => {
+        expect(getRenderState().feedbackState).toEqual({ 'msg-1': 1 });
+      });
+    });
+
+    it('prevents double voting on the same message', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      getRenderState().sendChatMessageFeedback!('msg-1', 1);
+      getRenderState().sendChatMessageFeedback!('msg-1', 0);
+
+      expect(mockedSendFeedback).toHaveBeenCalledTimes(1);
     });
   });
 });
