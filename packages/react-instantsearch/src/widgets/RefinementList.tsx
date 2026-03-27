@@ -125,6 +125,7 @@ export function RefinementList({
   const mergedTranslations: Required<RefinementListProps['translations']> = {
     resetButtonTitle: 'Clear the search query',
     submitButtonTitle: 'Submit the search query',
+    aiModeButtonTitle: 'AI Mode',
     noResultsText: 'No results.',
     showMoreButtonText(options) {
       return options.isShowingMore ? 'Show less' : 'Show more';
@@ -149,6 +150,7 @@ export function RefinementList({
         translations={{
           submitButtonTitle: mergedTranslations.submitButtonTitle,
           resetButtonTitle: mergedTranslations.resetButtonTitle,
+          aiModeButtonTitle: mergedTranslations.aiModeButtonTitle,
         }}
       />
     ),

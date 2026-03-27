@@ -13,6 +13,7 @@ type UiProps = Pick<
   | 'onChange'
   | 'onReset'
   | 'onSubmit'
+  | 'onAiModeClick'
   | 'value'
   | 'autoFocus'
   | 'translations'
@@ -34,6 +35,12 @@ export type SearchBoxProps = Omit<
      * @default false
      */
     ignoreCompositionEvents?: boolean;
+    /**
+     * Callback fired when the AI mode button is clicked.
+     * Receives the current search query. The button is only
+     * rendered when this callback is provided.
+     */
+    onAiModeClick?: (query: string) => void;
     translations?: Partial<UiProps['translations']>;
   };
 
@@ -41,6 +48,7 @@ export function SearchBox({
   queryHook,
   searchAsYouType = true,
   ignoreCompositionEvents = false,
+  onAiModeClick,
   translations,
   ...props
 }: SearchBoxProps) {
@@ -100,10 +108,14 @@ export function SearchBox({
     onChange,
     onReset,
     onSubmit,
+    onAiModeClick: onAiModeClick
+      ? () => onAiModeClick(inputValue)
+      : undefined,
     value: inputValue,
     translations: {
       submitButtonTitle: 'Submit the search query',
       resetButtonTitle: 'Clear the search query',
+      aiModeButtonTitle: 'AI Mode',
       ...translations,
     },
   };

@@ -10,6 +10,7 @@ import React, {
   createElement,
   Fragment,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -158,41 +159,50 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     }>;
   };
 
-export function Chat<
+export type ChatHandle = {
+  setOpen: (open: boolean) => void;
+  sendMessage: (params: { text: string }) => void;
+  setInput: (input: string) => void;
+};
+
+function ChatInner<
   TObject extends RecordWithObjectID,
   TUiMessage extends UIMessage
->({
-  tools: userTools,
-  toggleButtonProps,
-  headerProps,
-  messagesProps,
-  promptProps,
-  itemComponent,
-  layoutComponent,
-  toggleButtonComponent,
-  toggleButtonIconComponent,
-  headerComponent,
-  headerTitleIconComponent,
-  headerCloseIconComponent,
-  headerMinimizeIconComponent,
-  headerMaximizeIconComponent,
-  messagesLoaderComponent,
-  messagesErrorComponent,
-  promptComponent,
-  promptHeaderComponent,
-  promptFooterComponent,
-  assistantMessageLeadingComponent,
-  assistantMessageFooterComponent,
-  userMessageLeadingComponent,
-  userMessageFooterComponent,
-  actionsComponent,
-  suggestionsComponent,
-  classNames,
-  translations = {},
-  title,
-  getSearchPageURL,
-  ...props
-}: ChatProps<TObject, TUiMessage>) {
+>(
+  {
+    tools: userTools,
+    toggleButtonProps,
+    headerProps,
+    messagesProps,
+    promptProps,
+    itemComponent,
+    layoutComponent,
+    toggleButtonComponent,
+    toggleButtonIconComponent,
+    headerComponent,
+    headerTitleIconComponent,
+    headerCloseIconComponent,
+    headerMinimizeIconComponent,
+    headerMaximizeIconComponent,
+    messagesLoaderComponent,
+    messagesErrorComponent,
+    promptComponent,
+    promptHeaderComponent,
+    promptFooterComponent,
+    assistantMessageLeadingComponent,
+    assistantMessageFooterComponent,
+    userMessageLeadingComponent,
+    userMessageFooterComponent,
+    actionsComponent,
+    suggestionsComponent,
+    classNames,
+    translations = {},
+    title,
+    getSearchPageURL,
+    ...props
+  }: ChatProps<TObject, TUiMessage>,
+  ref: React.ForwardedRef<ChatHandle>
+) {
   const {
     prompt: promptTranslations,
     header: headerTranslations,
@@ -240,6 +250,12 @@ export function Chat<
     tools: toolsFromConnector,
     suggestions,
   } = chatState;
+
+  useImperativeHandle(ref, () => ({
+    setOpen,
+    sendMessage: (params: { text: string }) => sendMessage(params),
+    setInput,
+  }));
 
   const wasOpenRef = useRef(false);
   useEffect(() => {
@@ -351,3 +367,10 @@ export function Chat<
     />
   );
 }
+
+export const Chat = React.forwardRef(ChatInner) as <
+  TObject extends RecordWithObjectID = RecordWithObjectID,
+  TUiMessage extends UIMessage = UIMessage
+>(
+  props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
+) => React.ReactElement | null;
