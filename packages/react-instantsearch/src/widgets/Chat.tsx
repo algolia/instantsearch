@@ -239,6 +239,8 @@ export function Chat<
     onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
+    sendChatMessageFeedback: onFeedback,
+    feedbackState,
   } = chatState;
 
   const wasOpenRef = useRef(false);
@@ -295,6 +297,8 @@ export function Chat<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        onFeedback,
+        feedbackState,
         messages,
         tools: toolsFromConnector,
         indexUiState,

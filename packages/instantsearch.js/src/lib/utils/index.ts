@@ -13,6 +13,7 @@ export * from './debounce';
 export * from './defer';
 export * from './documentation';
 export * from './escape-highlight';
+export * from './sendChatMessageFeedback';
 export * from './escape-html';
 export * from './escapeFacetValue';
 export * from './find';
