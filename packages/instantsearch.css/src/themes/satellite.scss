@@ -547,10 +547,10 @@ $break-medium: 767px;
 
 .ais-SearchBox-aiModeButton {
   align-items: center;
-  background-color: #f2f4ff;
-  border: 1px solid #c5caff;
+  background-color: $nebula100;
+  border: 1px solid $nebula200;
   border-radius: 6px;
-  color: #003dff;
+  color: $nebula600;
   cursor: pointer;
   display: flex;
   font-family: inherit;
@@ -568,13 +568,13 @@ $break-medium: 767px;
 }
 
 .ais-SearchBox-aiModeButton:hover {
-  background-color: #e6e9ff;
-  border-color: #003dff;
+  background-color: $nebula200;
+  border-color: $nebula600;
 }
 
 .ais-SearchBox-aiModeButton:focus {
-  border-color: #003dff;
-  box-shadow: 0 0 0 1px #003dff;
+  border-color: $nebula600;
+  box-shadow: 0 0 0 1px $nebula600;
   outline: 0;
 }
 
