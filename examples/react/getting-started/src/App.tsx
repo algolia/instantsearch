@@ -68,7 +68,9 @@ export function App() {
                 className="searchbox"
                 onAiModeClick={(query) => {
                   chatRef.current?.setOpen(true);
-                  chatRef.current?.sendMessage({ text: query });
+                  if (query.trim()) {
+                    chatRef.current?.sendMessage({ text: query });
+                  }
                 }}
               />
               <Panel

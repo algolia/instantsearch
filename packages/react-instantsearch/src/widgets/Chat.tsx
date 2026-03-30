@@ -122,7 +122,7 @@ export type Tools = UserClientSideTools;
 
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
-  keyof UiProps
+  keyof UiProps | 'ref'
 > &
   UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
@@ -372,7 +372,5 @@ export const Chat = React.forwardRef(ChatInner) as <
   TObject extends RecordWithObjectID = RecordWithObjectID,
   TUiMessage extends UIMessage = UIMessage
 >(
-  props: Omit<ChatProps<TObject, TUiMessage>, 'ref'> & {
-    ref?: React.Ref<ChatHandle>;
-  }
+  props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
 ) => React.ReactElement | null;
