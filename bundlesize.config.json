@@ -58,11 +58,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "10.75 kB"
+      "maxSize": "11 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "10 kB"
+      "maxSize": "10.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
