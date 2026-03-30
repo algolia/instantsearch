@@ -22,6 +22,8 @@ import {
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
+  addAbsolutePosition,
+  addQueryID,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
@@ -110,11 +112,12 @@ function createCarouselTool<
           queryID?: string;
         }
       | undefined;
-    const items = (output?.hits || []).map((hit, index) => ({
-      ...hit,
-      __queryID: hit.__queryID || output?.queryID,
-      __position: hit.__position || index + 1,
-    }));
+    const hitsWithAbsolutePosition = addAbsolutePosition(
+      output?.hits || [],
+      0, // no page info in the tool input/output so assuming page 0
+      input?.number_of_results ?? 5 // defaulting to 5 if number_of_results is not provided
+    );
+    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
