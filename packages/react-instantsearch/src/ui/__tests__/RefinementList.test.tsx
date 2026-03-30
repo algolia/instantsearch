@@ -228,7 +228,6 @@ describe('RefinementList', () => {
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',
-            aiModeButtonTitle: 'AI Mode',
           }}
         />
       ),
@@ -431,7 +430,6 @@ describe('RefinementList', () => {
           translations={{
             submitButtonTitle: 'Submit the search query.',
             resetButtonTitle: 'Clear the search query.',
-            aiModeButtonTitle: 'AI Mode',
           }}
         />
       ),

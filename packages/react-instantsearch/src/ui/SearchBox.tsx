@@ -64,7 +64,7 @@ export type SearchBoxTranslations = {
   /**
    * The alternative text of the AI mode button.
    */
-  aiModeButtonTitle: string;
+  aiModeButtonTitle?: string;
 };
 
 export type SearchBoxProps = Omit<
@@ -282,7 +282,7 @@ export function SearchBox({
               classNames.aiModeButton
             )}
             type="button"
-            title={translations.aiModeButtonTitle}
+            title={translations.aiModeButtonTitle || 'AI Mode'}
             onClick={(e) => {
               e.preventDefault();
               onAiModeClick();
