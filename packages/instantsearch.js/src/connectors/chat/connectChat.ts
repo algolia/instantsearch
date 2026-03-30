@@ -533,7 +533,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               messageId,
               appId,
               apiKey,
-              abortSignal: feedbackAbortController!.signal,
             }).finally(() => {
               setFeedbackState(messageId, vote);
             });
