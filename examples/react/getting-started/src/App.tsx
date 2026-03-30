@@ -14,8 +14,8 @@ import {
   Chat,
   FilterSuggestions,
   CurrentRefinements,
+  type ChatHandle,
 } from 'react-instantsearch';
-import type { ChatHandle } from 'react-instantsearch';
 
 import { Panel } from './Panel';
 
