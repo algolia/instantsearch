@@ -396,7 +396,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const { renderRefinements, ref: _ref, ...chatWidgetParams } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (

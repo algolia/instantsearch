@@ -372,5 +372,7 @@ export const Chat = React.forwardRef(ChatInner) as <
   TObject extends RecordWithObjectID = RecordWithObjectID,
   TUiMessage extends UIMessage = UIMessage
 >(
-  props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
+  props: Omit<ChatProps<TObject, TUiMessage>, 'ref'> & {
+    ref?: React.Ref<ChatHandle>;
+  }
 ) => React.ReactElement | null;
