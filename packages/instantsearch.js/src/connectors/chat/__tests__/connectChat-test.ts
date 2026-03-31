@@ -443,6 +443,65 @@ data: [DONE]`,
         );
       });
     });
+
+    it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "displayResults"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "displayResults", "inputDelta": "{}"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Show me product groups' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage = chatInstance.messages[chatInstance.messages.length - 1];
+        expect(lastMessage?.role).toBe('assistant');
+
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-displayResults' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: Record<string, unknown>;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        expect(toolPart?.input).toEqual({});
+      });
+    });
   });
 
   describe('transport configuration', () => {

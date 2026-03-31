@@ -44,6 +44,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           query: string;
           number_of_results?: number;
+          facet_filters?: string[][];
         }
       | undefined;
 
@@ -55,6 +56,42 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | undefined;
 
     const items = output?.hits || [];
+
+    const appliedStreamingInputRef = React.useRef<string>('');
+
+    React.useEffect(() => {
+      if (
+        message?.state !== 'input-streaming' &&
+        message?.state !== 'input-available'
+      ) {
+        return;
+      }
+
+      if (!input) {
+        return;
+      }
+
+      const hasQuery = input.query.trim().length > 0;
+      const hasFacetFilters = (input.facet_filters?.length ?? 0) > 0;
+      if (!hasQuery && !hasFacetFilters) {
+        return;
+      }
+
+      const inputSignature = JSON.stringify({
+        query: input.query,
+        facet_filters: input.facet_filters,
+      });
+
+      if (appliedStreamingInputRef.current === inputSignature) {
+        return;
+      }
+
+      appliedStreamingInputRef.current = inputSignature;
+      applyFilters({
+        query: input.query,
+        facetFilters: input.facet_filters,
+      });
+    }, [applyFilters, input, message?.state]);
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (

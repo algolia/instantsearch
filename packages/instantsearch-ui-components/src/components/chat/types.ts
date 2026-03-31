@@ -121,6 +121,7 @@ export type ToolUIPart<TTools extends UITools = UITools> = ValueOf<{
     | {
         state: 'input-streaming';
         input: DeepPartial<TTools[NAME]['input']> | undefined;
+        rawInput?: string;
         providerExecuted?: boolean;
         output?: never;
         errorText?: never;
@@ -165,6 +166,7 @@ export type DynamicToolUIPart = {
   | {
       state: 'input-streaming';
       input: unknown | undefined;
+      rawInput?: string;
       output?: never;
       errorText?: never;
     }
