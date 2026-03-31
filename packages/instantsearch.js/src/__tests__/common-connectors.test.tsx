@@ -537,7 +537,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     const customChat = connectChat<{
       container: HTMLElement;
     }>((renderOptions) => {
-      const { input, setInput, open, setOpen } = renderOptions;
+      const { input, setInput, open, setOpen, sendChatMessageFeedback, feedbackState } = renderOptions;
       renderOptions.widgetParams.container.innerHTML = `
         <div data-testid="Chat-root" style="display: ${
           open ? 'block' : 'none'
@@ -548,6 +548,8 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         <button data-testid="Chat-toggleButton">
           toggle chat
         </button>
+        <span data-testid="Chat-hasFeedback">${sendChatMessageFeedback ? 'true' : 'false'}</span>
+        <span data-testid="Chat-feedbackState">${JSON.stringify(feedbackState)}</span>
       `;
 
       renderOptions.widgetParams.container
