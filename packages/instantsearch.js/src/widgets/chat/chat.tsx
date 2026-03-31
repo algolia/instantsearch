@@ -22,6 +22,8 @@ import {
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
+  addAbsolutePosition,
+  addQueryID,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
@@ -94,6 +96,7 @@ function createCarouselTool<
     message,
     applyFilters,
     onClose,
+    sendEvent,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -106,9 +109,15 @@ function createCarouselTool<
       | {
           hits?: Array<RecordWithObjectID<THit>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
-    const items = output?.hits || [];
+    const hitsWithAbsolutePosition = addAbsolutePosition(
+      output?.hits || [],
+      0,
+      (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
+    );
+    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
@@ -151,7 +160,7 @@ function createCarouselTool<
           />
         ),
       },
-      sendEvent: () => {},
+      sendEvent,
     });
   }
 

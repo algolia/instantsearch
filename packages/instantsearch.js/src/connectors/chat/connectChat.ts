@@ -602,6 +602,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             ...tool,
             addToolResult: _chatInstance.addToolResult,
             applyFilters,
+            sendEvent,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
