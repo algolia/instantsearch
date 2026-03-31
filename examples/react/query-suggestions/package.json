@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-query-suggestions",
-  "version": "6.112.0",
+  "version": "6.113.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,13 +11,13 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.28.1",
-    "instantsearch-ui-components": "0.22.1",
-    "instantsearch.css": "8.12.0",
-    "instantsearch.js": "4.92.1",
+    "instantsearch-ui-components": "0.23.0",
+    "instantsearch.css": "8.13.0",
+    "instantsearch.js": "4.93.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.28.1",
-    "react-instantsearch-core": "7.28.1"
+    "react-instantsearch": "7.29.0",
+    "react-instantsearch-core": "7.28.2"
   },
   "devDependencies": {
     "@types/react": "19.0.3",

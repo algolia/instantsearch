@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.22.1...instantsearch-ui-components@0.23.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* **ui-components:** hide submit button during stalled search and optimize loading SVG ([#6941](https://github.com/algolia/instantsearch/issues/6941)) ([17b24bc](https://github.com/algolia/instantsearch/commit/17b24bc58bf2d36fed311deab2c17929d0271440))
+
+
+### Features
+
+* **chat:** add inline layout to chat widgets ([#6920](https://github.com/algolia/instantsearch/issues/6920)) ([147e2af](https://github.com/algolia/instantsearch/commit/147e2af66c92f2f33a2d9fc9fd83ccee60640eb7))
+* **chat:** add support for feedback ([#6945](https://github.com/algolia/instantsearch/issues/6945)) ([0034a40](https://github.com/algolia/instantsearch/commit/0034a4042cc8b4e65a1554a030be1f85b790805e))
+
+
+
+
+
 ## [0.22.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.22.0...instantsearch-ui-components@0.22.1) (2026-03-24)
 
 **Note:** Version bump only for package instantsearch-ui-components
