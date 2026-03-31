@@ -114,8 +114,8 @@ function createCarouselTool<
       | undefined;
     const hitsWithAbsolutePosition = addAbsolutePosition(
       output?.hits || [],
-      0, // no page info in the tool input/output so assuming page 0
-      input?.number_of_results ?? 5 // defaulting to 5 if number_of_results is not provided
+      0,
+      (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
     );
     const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
 
