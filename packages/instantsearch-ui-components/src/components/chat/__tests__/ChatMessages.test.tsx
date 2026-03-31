@@ -139,6 +139,123 @@ describe('ChatMessages', () => {
     `);
   });
 
+  describe('feedback', () => {
+    const assistantMessage = {
+      role: 'assistant' as const,
+      id: 'msg-1',
+      parts: [{ type: 'text' as const, text: 'Hello!' }],
+    };
+
+    test('renders thumbs up/down when onFeedback is provided', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[assistantMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          onFeedback={jest.fn()}
+          feedbackState={{}}
+        />
+      );
+
+      expect(
+        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+      ).toHaveLength(2);
+    });
+
+    test('does not render thumbs when onFeedback is not provided', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[assistantMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          feedbackState={{}}
+        />
+      );
+
+      expect(
+        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+      ).toHaveLength(0);
+    });
+
+    test('renders spinner when feedbackState is sending', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[assistantMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          onFeedback={jest.fn()}
+          feedbackState={{ 'msg-1': 'sending' }}
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessage-feedbackSpinner')
+      ).not.toBeNull();
+      expect(
+        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+      ).toHaveLength(0);
+    });
+
+    test('renders check icon and thank you text when voted', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[assistantMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          onFeedback={jest.fn()}
+          feedbackState={{ 'msg-1': 1 }}
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessage-feedbackCheck')
+      ).not.toBeNull();
+      expect(
+        container.querySelector('.ais-ChatMessage-feedbackText')
+      ).not.toBeNull();
+      expect(
+        container.querySelector('.ais-ChatMessage-feedbackText')!.textContent
+      ).toBe('Thanks for your feedback!');
+    });
+
+    test('does not render thumbs on user messages', () => {
+      const userMessage = {
+        role: 'user' as const,
+        id: 'msg-2',
+        parts: [{ type: 'text' as const, text: 'Hi' }],
+      };
+
+      const { container } = render(
+        <ChatMessages
+          messages={[userMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          onFeedback={jest.fn()}
+          feedbackState={{}}
+        />
+      );
+
+      expect(
+        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+      ).toHaveLength(0);
+    });
+  });
+
   test('renders with custom class names', () => {
     const { container } = render(
       <ChatMessages

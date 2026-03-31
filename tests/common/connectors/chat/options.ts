@@ -78,5 +78,41 @@ export function createOptionsTests(
 
       expect(screen.getByTestId('Chat-root')).toBeVisible();
     });
+
+    test('exposes `sendChatMessageFeedback` when `feedback` is enabled', async () => {
+      const options: SetupOptions<ChatConnectorSetup> = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          agentId: 'agentId',
+          feedback: true,
+        },
+      };
+
+      await setup(options);
+
+      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent('true');
+      expect(screen.getByTestId('Chat-feedbackState')).toHaveTextContent('{}');
+    });
+
+    test('does not expose `sendChatMessageFeedback` when `feedback` is not enabled', async () => {
+      const options: SetupOptions<ChatConnectorSetup> = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          agentId: 'agentId',
+        },
+      };
+
+      await setup(options);
+
+      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent(
+        'false'
+      );
+    });
   });
 }
