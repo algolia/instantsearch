@@ -42,11 +42,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "9.75 kB"
+      "maxSize": "10 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "9.25 kB"
+      "maxSize": "9.5 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",

@@ -157,7 +157,7 @@ function DefaultLoadingIcon({ classNames }: IconProps) {
 function DefaultAiModeIcon({ classNames }: IconProps) {
   return (
     <svg
-      className={cx('ais-SearchBox-aiModeIcon', classNames.aiModeIcon)}
+      className={cx('ais-AiModeButton-icon', classNames.aiModeIcon)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 20 20"
@@ -278,7 +278,7 @@ export function SearchBox({
         {onAiModeClick && (
           <button
             className={cx(
-              'ais-SearchBox-aiModeButton',
+              'ais-AiModeButton',
               classNames.aiModeButton
             )}
             type="button"
@@ -289,7 +289,7 @@ export function SearchBox({
             }}
           >
             <AiModeIcon classNames={classNames} />
-            <span className="ais-SearchBox-aiModeButtonLabel">
+            <span className="ais-AiModeButton-label">
               {translations.aiModeButtonTitle}
             </span>
           </button>
