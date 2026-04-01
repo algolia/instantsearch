@@ -26,6 +26,7 @@ import type { WidgetFactory, Template, RendererOptions } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
+const aiModeSuit = component('AiModeButton');
 
 export type SearchBoxTemplates = Partial<{
   /**
@@ -40,6 +41,11 @@ export type SearchBoxTemplates = Partial<{
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */
   loadingIndicator: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
+  /**
+   * Template used for displaying the AI mode button content (icon and label).
+   * Can accept a function or a Hogan string.
+   */
+  aiMode: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
 }>;
 
 export type SearchBoxCSSClasses = Partial<{
@@ -79,6 +85,18 @@ export type SearchBoxCSSClasses = Partial<{
    * CSS classes added to the loading indicator icon.
    */
   loadingIcon: string | string[];
+  /**
+   * CSS classes added to the AI mode button.
+   */
+  aiModeButton: string | string[];
+  /**
+   * CSS classes added to the AI mode button icon.
+   */
+  aiModeIcon: string | string[];
+  /**
+   * CSS classes added to the AI mode button label.
+   */
+  aiModeLabel: string | string[];
 }>;
 
 export type SearchBoxWidgetParams = {
@@ -133,6 +151,12 @@ export type SearchBoxWidgetParams = {
    * This `queryHook` can be used to debounce the number of searches done from the search box.
    */
   queryHook?: (query: string, hook: (value: string) => void) => void;
+  /**
+   * A callback fired when the AI mode button is clicked.
+   * Receives the current query as argument.
+   * When provided, an AI mode button is rendered inside the search box.
+   */
+  onAiModeClick?: (query: string) => void;
 };
 
 const renderer =
@@ -147,6 +171,7 @@ const renderer =
     showReset,
     showSubmit,
     showLoadingIndicator,
+    onAiModeClick,
   }: {
     containerNode: HTMLElement;
     cssClasses: SearchBoxComponentCSSClasses;
@@ -158,6 +183,7 @@ const renderer =
     showReset: boolean;
     showSubmit: boolean;
     showLoadingIndicator: boolean;
+    onAiModeClick?: (query: string) => void;
   }) =>
   ({
     refine,
@@ -178,6 +204,7 @@ const renderer =
         showLoadingIndicator={showLoadingIndicator}
         isSearchStalled={isSearchStalled}
         cssClasses={cssClasses}
+        onAiModeClick={onAiModeClick}
       />,
       containerNode
     );
@@ -210,6 +237,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showLoadingIndicator = true,
     queryHook,
     templates: userTemplates = {},
+    onAiModeClick,
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -239,6 +267,15 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
       suit({ descendantName: 'loadingIcon' }),
       userCssClasses.loadingIcon
     ),
+    aiModeButton: cx(aiModeSuit(), userCssClasses.aiModeButton),
+    aiModeIcon: cx(
+      aiModeSuit({ descendantName: 'icon' }),
+      userCssClasses.aiModeIcon
+    ),
+    aiModeLabel: cx(
+      aiModeSuit({ descendantName: 'label' }),
+      userCssClasses.aiModeLabel
+    ),
   };
   const templates = {
     ...defaultTemplates,
@@ -256,6 +293,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showReset,
     showSubmit,
     showLoadingIndicator,
+    onAiModeClick,
   });
 
   const makeWidget = connectSearchBox(specializedRenderer, () =>
