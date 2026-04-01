@@ -249,6 +249,8 @@ function ChatInner<
     onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
+    sendChatMessageFeedback: onFeedback,
+    feedbackState,
   } = chatState;
 
   useImperativeHandle(ref, () => ({
@@ -311,6 +313,8 @@ function ChatInner<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        onFeedback,
+        feedbackState,
         messages,
         tools: toolsFromConnector,
         indexUiState,

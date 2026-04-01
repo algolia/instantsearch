@@ -22,6 +22,8 @@ import {
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
+  addAbsolutePosition,
+  addQueryID,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
@@ -94,6 +96,7 @@ function createCarouselTool<
     message,
     applyFilters,
     onClose,
+    sendEvent,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -106,9 +109,15 @@ function createCarouselTool<
       | {
           hits?: Array<RecordWithObjectID<THit>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
-    const items = output?.hits || [];
+    const hitsWithAbsolutePosition = addAbsolutePosition(
+      output?.hits || [],
+      0,
+      (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
+    );
+    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
@@ -151,7 +160,7 @@ function createCarouselTool<
           />
         ),
       },
-      sendEvent: () => {},
+      sendEvent,
     });
   }
 
@@ -288,6 +297,8 @@ type ChatWrapperProps = {
   isClearing: boolean;
   clearMessages: () => void;
   onClearTransitionEnd: () => void;
+  onFeedback?: ChatRenderState['sendChatMessageFeedback'];
+  feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
   toggleButtonProps: {
     layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
@@ -355,6 +366,8 @@ function ChatWrapper({
   isClearing,
   clearMessages,
   onClearTransitionEnd,
+  onFeedback,
+  feedbackState,
   toolsForUi,
   toggleButtonProps,
   headerProps,
@@ -408,6 +421,8 @@ function ChatWrapper({
         status: chatStatus,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
+        onFeedback,
+        feedbackState,
         messages: chatMessages,
         indexUiState,
         isClearing,
@@ -492,6 +507,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
+      sendChatMessageFeedback: onFeedback,
+      feedbackState,
     } = props;
 
     if (__DEV__ && error) {
@@ -881,6 +898,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           isClearing={isClearing}
           clearMessages={clearMessages}
           onClearTransitionEnd={onClearTransitionEnd}
+          onFeedback={onFeedback}
+          feedbackState={feedbackState}
           toolsForUi={toolsForUi}
           toggleButtonProps={{
             layoutComponent: toggleButtonLayoutComponent,

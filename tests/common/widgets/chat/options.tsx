@@ -1135,6 +1135,80 @@ export function createOptionsTests(
       });
     });
 
+    describe('sendEvent', () => {
+      test('sends click event when a carousel item in the search tool is clicked', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: { query: 'test', number_of_results: 2 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      { objectID: '123', __position: 1 },
+                      { objectID: '456', __position: 2 },
+                    ],
+                    nbHits: 100,
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        (window as any).aa.mockClear();
+
+        const carouselItem = document.querySelector('.ais-Carousel-item');
+        expect(carouselItem).toBeInTheDocument();
+
+        userEvent.click(carouselItem!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          expect.objectContaining({
+            eventName: 'Item Clicked',
+            objectIDs: ['123'],
+            positions: [1],
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
+    });
+
     describe('layoutComponent', () => {
       test('renders with custom layout component', async () => {
         const searchClient = createSearchClient();
