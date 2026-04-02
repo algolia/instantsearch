@@ -1,3 +1,5 @@
+import { startsWith } from './startsWith';
+
 import type { ChatMessageBase } from '../../components';
 
 export const getTextContent = (message: ChatMessageBase) => {
@@ -14,4 +16,10 @@ export const isPartText = (
   part: ChatMessageBase['parts'][number]
 ): part is Extract<ChatMessageBase['parts'][number], { type: 'text' }> => {
   return part.type === 'text';
+};
+
+export const isPartTool = (
+  part: ChatMessageBase['parts'][number]
+): part is Extract<ChatMessageBase['parts'][number], { type: 'tool' }> => {
+  return startsWith(part.type, 'tool-');
 };

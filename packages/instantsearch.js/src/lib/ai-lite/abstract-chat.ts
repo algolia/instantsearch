@@ -755,7 +755,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 existingPart?.rawInput ??
                 toolRawInputByCallId[chunk.toolCallId] ??
                 '';
-              const nextRawInput = `${previousRawInput}${chunk.inputDelta}`;
+              const nextRawInput = `${previousRawInput}${chunk.inputTextDelta}`;
               toolRawInputByCallId[chunk.toolCallId] = nextRawInput;
 
               const parsedInput = parseToolInputDelta(

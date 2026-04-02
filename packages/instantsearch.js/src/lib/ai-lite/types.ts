@@ -269,7 +269,7 @@ export type UIMessageChunk<
       type: 'tool-input-delta';
       toolName: string;
       toolCallId: string;
-      inputDelta: string;
+      inputTextDelta: string;
     }
   | {
       type: 'tool-output-available';

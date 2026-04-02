@@ -457,7 +457,7 @@ data: {"type": "start-step"}
 
 data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "displayResults"}
 
-data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "displayResults", "inputDelta": "{}"}
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "displayResults", "inputTextDelta": "{}"}
 
 data: {"type": "finish-step"}
 
