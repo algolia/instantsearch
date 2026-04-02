@@ -22,6 +22,7 @@ import type {
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
 } from '../../connectors/search-box/connectSearchBox';
+import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type { WidgetFactory, Template, RendererOptions } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
@@ -152,11 +153,11 @@ export type SearchBoxWidgetParams = {
    */
   queryHook?: (query: string, hook: (value: string) => void) => void;
   /**
-   * A callback fired when the AI mode button is clicked.
-   * Receives the current query as argument.
-   * When provided, an AI mode button is rendered inside the search box.
+   * When true, renders an AI mode button inside the search box
+   * that opens the Chat widget and sends the current query.
+   * Requires a Chat widget on the same index.
    */
-  onAiModeClick?: (query: string) => void;
+  aiMode?: boolean;
 };
 
 const renderer =
@@ -171,7 +172,7 @@ const renderer =
     showReset,
     showSubmit,
     showLoadingIndicator,
-    onAiModeClick,
+    aiMode,
   }: {
     containerNode: HTMLElement;
     cssClasses: SearchBoxComponentCSSClasses;
@@ -183,13 +184,29 @@ const renderer =
     showReset: boolean;
     showSubmit: boolean;
     showLoadingIndicator: boolean;
-    onAiModeClick?: (query: string) => void;
+    aiMode?: boolean;
   }) =>
   ({
     refine,
     query,
     isSearchStalled,
+    instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
+    const onAiModeClick = aiMode
+      ? (currentQuery: string) => {
+          const indexId = instantSearchInstance.mainIndex.getIndexId();
+          const chatRenderState = instantSearchInstance.renderState[indexId]
+            ?.chat as Partial<ChatRenderState> | undefined;
+
+          if (chatRenderState) {
+            chatRenderState.setOpen?.(true);
+            if (currentQuery.trim()) {
+              chatRenderState.sendMessage?.({ text: currentQuery });
+            }
+          }
+        }
+      : undefined;
+
     render(
       <SearchBox
         query={query}
@@ -237,7 +254,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showLoadingIndicator = true,
     queryHook,
     templates: userTemplates = {},
-    onAiModeClick,
+    aiMode,
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -293,7 +310,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showReset,
     showSubmit,
     showLoadingIndicator,
-    onAiModeClick,
+    aiMode,
   });
 
   const makeWidget = connectSearchBox(specializedRenderer, () =>

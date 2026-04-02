@@ -364,6 +364,12 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
    * Translations for the Autocomplete widget.
    */
   translations?: Partial<AutocompleteTranslations>;
+  /**
+   * When true, renders an AI mode button inside the search input
+   * that opens the Chat widget and sends the current query.
+   * Requires a Chat widget on the same index.
+   */
+  aiMode?: boolean;
 };
 
 type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
@@ -607,6 +613,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
+  aiMode,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -874,6 +881,20 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       query={currentRefinement || indexUiState.query || ''}
       refine={refineSearchBox}
       isSearchStalled={isSearchStalled}
+      onAiModeClick={
+        aiMode
+          ? () => {
+              if (chatRenderState) {
+                chatRenderState.setOpen?.(true);
+                const query =
+                  currentRefinement || indexUiState.query || '';
+                if (query.trim()) {
+                  chatRenderState.sendMessage?.({ text: query });
+                }
+              }
+            }
+          : undefined
+      }
     />
   );
 

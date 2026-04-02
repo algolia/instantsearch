@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
+import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { UseSearchBoxProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
@@ -36,11 +37,11 @@ export type SearchBoxProps = Omit<
      */
     ignoreCompositionEvents?: boolean;
     /**
-     * Callback fired when the AI mode button is clicked.
-     * Receives the current search query. The button is only
-     * rendered when this callback is provided.
+     * When true, renders an AI mode button inside the search box
+     * that opens the Chat widget and sends the current query.
+     * Requires a Chat widget on the same index.
      */
-    onAiModeClick?: (query: string) => void;
+    aiMode?: boolean;
     translations?: Partial<UiProps['translations']>;
   };
 
@@ -48,7 +49,7 @@ export function SearchBox({
   queryHook,
   searchAsYouType = true,
   ignoreCompositionEvents = false,
-  onAiModeClick,
+  aiMode,
   translations,
   ...props
 }: SearchBoxProps) {
@@ -56,6 +57,7 @@ export function SearchBox({
     { queryHook },
     { $$widgetType: 'ais.searchBox' }
   );
+  const { indexRenderState } = useInstantSearch();
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -108,8 +110,19 @@ export function SearchBox({
     onChange,
     onReset,
     onSubmit,
-    onAiModeClick: onAiModeClick
-      ? () => onAiModeClick(inputValue)
+    onAiModeClick: aiMode
+      ? () => {
+          const chatRenderState = indexRenderState.chat as
+            | Partial<ChatRenderState>
+            | undefined;
+
+          if (chatRenderState) {
+            chatRenderState.setOpen?.(true);
+            if (inputValue.trim()) {
+              chatRenderState.sendMessage?.({ text: inputValue });
+            }
+          }
+        }
       : undefined,
     value: inputValue,
     translations: {

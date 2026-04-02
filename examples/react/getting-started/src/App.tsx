@@ -1,6 +1,6 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit } from 'instantsearch.js';
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   Configure,
   Highlight,
@@ -14,7 +14,6 @@ import {
   Chat,
   FilterSuggestions,
   CurrentRefinements,
-  type ChatHandle,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -29,8 +28,6 @@ const searchClient = algoliasearch(
 );
 
 export function App() {
-  const chatRef = useRef<ChatHandle>(null);
-
   return (
     <div>
       <header className="header">
@@ -63,16 +60,7 @@ export function App() {
             </div>
 
             <div className="search-panel__results">
-              <SearchBox
-                placeholder=""
-                className="searchbox"
-                onAiModeClick={(query) => {
-                  chatRef.current?.setOpen(true);
-                  if (query.trim()) {
-                    chatRef.current?.sendMessage({ text: query });
-                  }
-                }}
-              />
+              <SearchBox placeholder="" className="searchbox" aiMode />
               <Panel
                 header="Current Refinements"
                 hidden={(state) =>
@@ -104,7 +92,6 @@ export function App() {
           </div>
 
           <Chat
-            ref={chatRef}
             agentId="eedef238-5468-470d-bc37-f99fa741bd25"
             feedback={true}
             itemComponent={ItemComponent}
