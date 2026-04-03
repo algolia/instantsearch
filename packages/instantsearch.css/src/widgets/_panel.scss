@@ -1,0 +1,40 @@
+.ais-Panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: calc(var(--ais-spacing) * 0.75);
+  font-size: 0.85em;
+  font-weight: var(--ais-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-Panel-collapseButton {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  transition: color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+@media (hover: hover) {
+  .ais-Panel-collapseButton:hover {
+    color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  }
+}
+
+.ais-Panel--collapsed .ais-Panel-body,
+.ais-Panel--collapsed .ais-Panel-footer {
+  display: none;
+}
+
+.ais-Panel-footer {
+  margin-top: calc(var(--ais-spacing) * 0.75);
+  font-size: 0.85em;
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+}

@@ -1,0 +1,15 @@
+.ais-RelevantSort {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.75);
+}
+
+.ais-RelevantSort-text {
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.ais-RelevantSort-button {
+  align-self: flex-start;
+}

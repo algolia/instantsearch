@@ -1,0 +1,94 @@
+.ais-GeoSearch {
+  position: relative;
+}
+
+.ais-GeoSearch-control {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.ais-GeoSearch-label {
+  display: inline-flex;
+  align-items: center;
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) * 0.625);
+  font-size: 0.85em;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border-radius: var(--ais-border-radius-sm);
+  box-shadow: var(--ais-shadow-sm);
+  cursor: pointer;
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+@media (hover: hover) {
+  .ais-GeoSearch-label:hover {
+    background-color: color-mix(
+      in srgb,
+      rgb(var(--ais-background-color-rgb)) 90%,
+      rgb(var(--ais-muted-color-rgb))
+    );
+  }
+}
+
+.ais-GeoSearch-label--selected {
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+}
+
+.ais-GeoSearch-input {
+  border-radius: calc(var(--ais-spacing) / 4);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.5);
+  appearance: none;
+  width: var(--ais-spacing);
+  height: var(--ais-spacing);
+  margin: 0 calc(var(--ais-spacing) * 0.5) 0 0;
+  cursor: inherit;
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+.ais-GeoSearch-label,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  white-space: nowrap;
+}
+
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) * 0.625);
+  font-size: 0.85em;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border-radius: var(--ais-border-radius-sm);
+  box-shadow: var(--ais-shadow-sm);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+@media (hover: hover) {
+  .ais-GeoSearch-redo:not([disabled]):hover,
+  .ais-GeoSearch-reset:not([disabled]):hover {
+    background-color: color-mix(
+      in srgb,
+      rgb(var(--ais-background-color-rgb)) 90%,
+      rgb(var(--ais-muted-color-rgb))
+    );
+  }
+}
+
+.ais-GeoSearch-reset {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -1,0 +1,30 @@
+@use 'reset';
+
+@use '../shared/_variables';
+@use '../shared/_common';
+
+@use '../components/chat';
+@use '../components/autocomplete';
+@use '../components/filter-suggestions';
+
+@use '../widgets/searchbox';
+@use '../widgets/breadcrumb';
+@use '../widgets/hierarchical-menu';
+@use '../widgets/menu';
+@use '../widgets/menu-select';
+@use '../widgets/refinement-list';
+@use '../widgets/toggle-refinement';
+@use '../widgets/numeric-menu';
+@use '../widgets/range-input';
+@use '../widgets/panel';
+@use '../widgets/current-refinements';
+@use '../widgets/pagination';
+@use '../widgets/hits-per-page';
+@use '../widgets/sort-by';
+@use '../widgets/rating-menu';
+@use '../widgets/hits';
+@use '../widgets/infinite-hits';
+@use '../widgets/geo-search';
+@use '../widgets/highlight';
+@use '../widgets/relevant-sort';
+@use '../widgets/powered-by';

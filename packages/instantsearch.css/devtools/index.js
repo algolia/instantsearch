@@ -412,6 +412,19 @@ const variablesConfig = {
       },
     },
     {
+      name: '--ais-hit-min-width',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Hit Min Width',
+        min: 100,
+        max: 800,
+        step: 10,
+        unit: 'px',
+      },
+    },
+    {
       name: '--ais-autocomplete-search-input-height',
       type: 'dimension-px',
       themeVariable: false,
