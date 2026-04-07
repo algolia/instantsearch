@@ -21,6 +21,7 @@ describe('ChatMessage', () => {
         message={{ role: 'user', id: '1', parts: [] }}
         status="ready"
         tools={{}}
+        loaderComponent={jest.fn()}
         onClose={jest.fn()}
       />
     );
@@ -66,6 +67,7 @@ describe('ChatMessage', () => {
           actions: 'actions',
         }}
         tools={{}}
+        loaderComponent={jest.fn()}
         onClose={jest.fn()}
       />
     );
@@ -104,6 +106,7 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
+          loaderComponent={jest.fn()}
           onClose={jest.fn()}
         />
         <ChatMessage
@@ -116,6 +119,7 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
+          loaderComponent={jest.fn()}
           onClose={jest.fn()}
         />
         <ChatMessage
@@ -128,6 +132,7 @@ describe('ChatMessage', () => {
           }}
           status="ready"
           tools={{}}
+          loaderComponent={jest.fn()}
           onClose={jest.fn()}
         />
       </div>
@@ -235,6 +240,7 @@ describe('ChatMessage', () => {
             applyFilters: jest.fn(),
           },
         }}
+        loaderComponent={jest.fn()}
         onClose={jest.fn()}
       />
     );
