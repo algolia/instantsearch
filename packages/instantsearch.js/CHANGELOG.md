@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.93.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.92.1...instantsearch.js@4.93.0) (2026-03-31)
+
+
+### Features
+
+* **chat:** add inline layout to chat widgets ([#6920](https://github.com/algolia/instantsearch/issues/6920)) ([147e2af](https://github.com/algolia/instantsearch/commit/147e2af66c92f2f33a2d9fc9fd83ccee60640eb7))
+* **chat:** add support for feedback ([#6945](https://github.com/algolia/instantsearch/issues/6945)) ([0034a40](https://github.com/algolia/instantsearch/commit/0034a4042cc8b4e65a1554a030be1f85b790805e))
+
+
+
+
+
 ## [4.92.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.92.0...instantsearch.js@4.92.1) (2026-03-24)
 
 **Note:** Version bump only for package instantsearch.js

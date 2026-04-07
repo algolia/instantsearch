@@ -3,7 +3,9 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
+import { chatInlineLayout } from 'instantsearch.js/es/templates';
 import React from 'react';
+import { ChatInlineLayout } from 'react-instantsearch';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -118,7 +120,7 @@ export function createOptionsTests(
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
 
       expect(document.querySelector('.ais-Chat')).toHaveClass(
-        'ais-Chat--maximized'
+        'ais-ChatOverlayLayout--maximized'
       );
       expect(document.querySelector('.ais-Chat-container')).toHaveClass(
         'ais-Chat-container--maximized'
@@ -127,7 +129,7 @@ export function createOptionsTests(
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
 
       expect(document.querySelector('.ais-Chat')).not.toHaveClass(
-        'ais-Chat--maximized'
+        'ais-ChatOverlayLayout--maximized'
       );
       expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
         'ais-Chat-container--maximized'
@@ -1177,6 +1179,170 @@ export function createOptionsTests(
             }),
           ])
         );
+      });
+    });
+
+    describe('sendEvent', () => {
+      test('sends click event when a carousel item in the search tool is clicked', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: { query: 'test', number_of_results: 2 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      { objectID: '123', __position: 1 },
+                      { objectID: '456', __position: 2 },
+                    ],
+                    nbHits: 100,
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        (window as any).aa.mockClear();
+
+        const carouselItem = document.querySelector('.ais-Carousel-item');
+        expect(carouselItem).toBeInTheDocument();
+
+        userEvent.click(carouselItem!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          expect.objectContaining({
+            eventName: 'Item Clicked',
+            objectIDs: ['123'],
+            positions: [1],
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
+    });
+
+    describe('layoutComponent', () => {
+      test('renders with custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    <span class="custom-layout-title">My Custom Chat</span>
+                    ${props.templates.header()}
+                    ${props.templates.toggleButton()}
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  <span className="custom-layout-title">My Custom Chat</span>
+                  {props.toggleButtonComponent}
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('.custom-layout')).toBeInTheDocument();
+        expect(
+          document.querySelector('.custom-layout-title')!.textContent
+        ).toBe('My Custom Chat');
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).not.toBeInTheDocument();
+      });
+
+      test('renders with inline layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatInlineLayout(),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: ChatInlineLayout,
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-container')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).not.toBeInTheDocument();
       });
     });
   });

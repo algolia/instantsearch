@@ -4,6 +4,10 @@ import {
   ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
+import {
+  addAbsolutePosition,
+  addQueryID,
+} from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
@@ -39,6 +43,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     message,
     applyFilters,
     onClose,
+    sendEvent,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -52,10 +57,16 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
 
-    const items = output?.hits || [];
+    const hitsWithAbsolutePosition = addAbsolutePosition(
+      output?.hits || [],
+      0,
+      (input?.number_of_results ?? output?.hits?.length) || 5
+    );
+    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (
@@ -94,7 +105,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       <Carousel
         items={items}
         itemComponent={itemComponent}
-        sendEvent={() => {}}
+        sendEvent={sendEvent}
         showNavigation={false}
         headerComponent={MemoedHeaderComponent}
       />

@@ -1,9 +1,9 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
-import { cx } from '../../lib';
 
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
+import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
@@ -17,6 +17,7 @@ import type {
   ChatToggleButtonOwnProps,
   ChatToggleButtonProps,
 } from './ChatToggleButton';
+import type { ChatLayoutOwnProps } from './types';
 
 export type ChatClassNames = {
   root?: string | string[];
@@ -82,6 +83,27 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    * Optional suggestions component for the chat
    */
   suggestionsComponent?: (props: ChatPromptSuggestionsOwnProps) => JSX.Element;
+  /**
+   * Function to send a message to the chat.
+   */
+  sendMessage: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to regenerate the last assistant response.
+   */
+  regenerate: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Function to stop the current streaming response.
+   */
+  stop: ChatLayoutOwnProps['stop'];
+  /**
+   * The current error, if any.
+   */
+  error: ChatLayoutOwnProps['error'];
+  /**
+   * Optional layout component for the chat.
+   * @default ChatOverlayLayout
+   */
+  layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -93,6 +115,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
+    createElement,
+    Fragment,
+  });
+  const OverlayLayout = createChatOverlayLayoutComponent({
     createElement,
     Fragment,
   });
@@ -110,64 +136,79 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       promptComponent: PromptComponent,
       toggleButtonComponent: ToggleButtonComponent,
       suggestionsComponent: SuggestionsComponent,
+      layoutComponent: LayoutComponent = OverlayLayout,
       classNames = {},
       className,
+      sendMessage,
+      regenerate,
+      stop,
+      error,
       ...props
     } = userProps;
-    return (
-      <div
-        {...props}
-        className={cx(
-          'ais-Chat',
-          maximized && 'ais-Chat--maximized',
-          classNames.root,
-          className
-        )}
-      >
-        <div
-          className={cx(
-            'ais-Chat-container',
-            open && 'ais-Chat-container--open',
-            maximized && 'ais-Chat-container--maximized',
-            classNames.container
-          )}
-        >
-          {createElement(HeaderComponent || ChatHeader, {
-            ...headerProps,
-            classNames: classNames.header,
-            maximized,
-          })}
-          <ChatMessages
-            {...messagesProps}
-            classNames={classNames.messages}
-            messageClassNames={classNames.message}
-            suggestionsElement={createElement(
-              SuggestionsComponent || ChatPromptSuggestions,
-              {
-                ...suggestionsProps,
-                classNames: classNames.suggestions,
-              }
-            )}
-          />
-          {createElement(PromptComponent || ChatPrompt, {
-            ...promptProps,
-            classNames: classNames.prompt,
-          })}
-        </div>
 
-        <div className="ais-Chat-toggleButtonWrapper">
-          {createElement(ToggleButtonComponent || ChatToggleButton, {
-            ...toggleButtonProps,
-            classNames: classNames.toggleButton,
-            onClick: () => {
-              toggleButtonProps.onClick?.();
-              if (!open) {
-                promptProps.promptRef?.current?.focus();
-              }
-            },
-          })}
-        </div>
-      </div>
+    const headerComponent = createElement(HeaderComponent || ChatHeader, {
+      ...headerProps,
+      classNames: classNames.header,
+      maximized,
+    });
+
+    const messagesComponent = (
+      <ChatMessages
+        {...messagesProps}
+        classNames={classNames.messages}
+        messageClassNames={classNames.message}
+        suggestionsElement={createElement(
+          SuggestionsComponent || ChatPromptSuggestions,
+          {
+            ...suggestionsProps,
+            classNames: classNames.suggestions,
+          }
+        )}
+      />
+    );
+
+    const promptComponent = createElement(PromptComponent || ChatPrompt, {
+      ...promptProps,
+      classNames: classNames.prompt,
+    });
+
+    const toggleButtonComponent = createElement(
+      ToggleButtonComponent || ChatToggleButton,
+      {
+        ...toggleButtonProps,
+        classNames: classNames.toggleButton,
+        onClick: () => {
+          toggleButtonProps.onClick?.();
+          if (!open) {
+            promptProps.promptRef?.current?.focus();
+          }
+        },
+      }
+    );
+
+    return (
+      <LayoutComponent
+        {...props}
+        open={open}
+        maximized={maximized}
+        headerComponent={headerComponent}
+        messagesComponent={messagesComponent}
+        promptComponent={promptComponent}
+        toggleButtonComponent={toggleButtonComponent}
+        classNames={{ root: classNames.root, container: classNames.container }}
+        className={className}
+        messages={messagesProps.messages}
+        status={messagesProps.status}
+        tools={messagesProps.tools}
+        isClearing={messagesProps.isClearing}
+        clearMessages={headerProps.onClear}
+        onClearTransitionEnd={messagesProps.onClearTransitionEnd}
+        suggestions={suggestionsProps.suggestions}
+        sendMessage={sendMessage}
+        regenerate={regenerate}
+        stop={stop}
+        error={error}
+      />
     );
   };
 }

@@ -1,0 +1,24 @@
+.ais-ChatInlineLayout {
+  --ais-chat-height: 32rem;
+
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  pointer-events: auto;
+  gap: 0;
+
+  .ais-Chat-container {
+    pointer-events: auto;
+    opacity: 1;
+    transform: none;
+    box-shadow: var(--ais-shadow-sm);
+    height: var(--ais-chat-height);
+  }
+
+  .ais-ChatHeader-maximize,
+  .ais-ChatHeader-close {
+    display: none;
+  }
+}
