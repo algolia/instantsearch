@@ -136,6 +136,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   tools: ClientSideTools;
   /**
+   * Loader component passed to tool layout components
+   */
+  loaderComponent?: (props: Record<string, unknown>) => JSX.Element;
+  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -171,6 +175,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       indexUiState,
       setIndexUiState,
       onClose,
+      loaderComponent: LoaderComponent,
       translations: userTranslations,
       suggestionsElement,
       ...props
@@ -253,6 +258,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 onClose={onClose}
+                loaderComponent={LoaderComponent}
               />
             </div>
           );

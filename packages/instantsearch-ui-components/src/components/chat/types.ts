@@ -466,6 +466,7 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  loaderComponent?: (props: Record<string, unknown>) => JSX.Element;
 };
 
 export type ClientSideToolComponent = (

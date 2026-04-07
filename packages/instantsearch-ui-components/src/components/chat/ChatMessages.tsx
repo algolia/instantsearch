@@ -192,6 +192,7 @@ function createDefaultMessageComponent<
     onReload,
     onClose,
     actionsComponent,
+    loaderComponent,
     classNames,
     messageTranslations,
     translations,
@@ -208,6 +209,7 @@ function createDefaultMessageComponent<
     onReload: (messageId?: string) => void;
     onClose: () => void;
     actionsComponent?: ChatMessageProps['actionsComponent'];
+    loaderComponent?: ChatMessageProps['loaderComponent'];
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
@@ -247,6 +249,7 @@ function createDefaultMessageComponent<
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
+        loaderComponent={loaderComponent}
         data-role={message.role}
         classNames={classNames}
         translations={messageTranslations}
@@ -376,6 +379,7 @@ export function createChatMessagesComponent({
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
                 actionsComponent={ActionsComponent}
+                loaderComponent={DefaultLoader}
                 onClose={onClose}
                 translations={translations}
                 classNames={messageClassNames}
