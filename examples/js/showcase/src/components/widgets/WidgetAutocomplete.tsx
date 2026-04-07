@@ -1,4 +1,5 @@
 import { EXPERIMENTAL_autocomplete } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetAutocomplete() {

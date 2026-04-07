@@ -1,4 +1,5 @@
 import { hitsPerPage } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetHitsPerPage() {

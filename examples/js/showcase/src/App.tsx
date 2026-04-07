@@ -1,11 +1,13 @@
-import { useState } from "preact/hooks";
-import type { ComponentType } from "preact";
 import { Search, MapPin } from "lucide-preact";
-import type { LucideIcon } from "lucide-preact";
+import { useState } from "preact/hooks";
+
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
 import { FlavorContext, type Flavor } from "./context/flavor";
-import { InstantSearchView } from "./views/InstantSearchView";
 import { GeoSearchView } from "./views/GeoSearchView";
+import { InstantSearchView } from "./views/InstantSearchView";
+
+import type { LucideIcon } from "lucide-preact";
+import type { ComponentType } from "preact";
 
 const VALID_FLAVORS: Flavor[] = ["js", "react", "vue"];
 

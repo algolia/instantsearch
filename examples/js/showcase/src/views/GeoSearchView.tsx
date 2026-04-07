@@ -1,13 +1,14 @@
-import { useRef, useEffect } from "preact/hooks";
-import instantsearch from "instantsearch.js";
 import { liteClient as algoliasearch } from "algoliasearch/lite";
+import instantsearch from "instantsearch.js";
 import { configure } from "instantsearch.js/es/widgets";
-import { SearchContext } from "../context/search";
-import { WidgetSwitcher } from "../components/WidgetSwitcher";
-import { WidgetSearchBox } from "../components/widgets/WidgetSearchBox";
-import { WidgetPoweredBy } from "../components/widgets/WidgetPoweredBy";
+import { useRef, useEffect } from "preact/hooks";
+
 import { WidgetAirportHits } from "../components/widgets/WidgetAirportHits";
 import { WidgetGeoSearch } from "../components/widgets/WidgetGeoSearch";
+import { WidgetPoweredBy } from "../components/widgets/WidgetPoweredBy";
+import { WidgetSearchBox } from "../components/widgets/WidgetSearchBox";
+import { WidgetSwitcher } from "../components/WidgetSwitcher";
+import { SearchContext } from "../context/search";
 
 const searchClient = algoliasearch("CU1AX86Y0U", "bdb7f28818e99b5eec688fd1909d7543");
 

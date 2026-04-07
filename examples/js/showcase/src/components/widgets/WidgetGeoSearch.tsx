@@ -1,6 +1,7 @@
-import { useRef, useEffect, useState } from "preact/hooks";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { geoSearch } from "instantsearch.js/es/widgets";
+import { useRef, useEffect, useState } from "preact/hooks";
+
 import { useSearch } from "../../context/search";
 import { type ColorMode, useColorMode } from "../../hooks/useColorMode";
 

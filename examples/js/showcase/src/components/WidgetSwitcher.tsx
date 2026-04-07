@@ -1,7 +1,9 @@
-import { useState } from "preact/hooks";
-import type { ComponentType } from "preact";
 import { ExternalLink } from "lucide-preact";
+import { useState } from "preact/hooks";
+
 import { useFlavor, type Flavor } from "../context/flavor";
+
+import type { ComponentType } from "preact";
 
 export interface Widget {
   title: string;

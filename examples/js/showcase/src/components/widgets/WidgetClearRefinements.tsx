@@ -1,4 +1,5 @@
 import { clearRefinements } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetClearRefinements() {

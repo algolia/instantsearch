@@ -1,5 +1,7 @@
 import { Monitor, Sun, Moon } from "lucide-preact";
+
 import { useColorMode, type ColorMode } from "../hooks/useColorMode";
+
 import { SegmentedControl, type SegmentedOption } from "./SegmentedControl";
 
 const options: SegmentedOption<ColorMode>[] = [

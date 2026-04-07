@@ -1,7 +1,9 @@
-import { useRef, useEffect } from "preact/hooks";
 import { connectRange } from "instantsearch.js/es/connectors";
 import noUiSlider from "nouislider";
+import { useRef, useEffect } from "preact/hooks";
+
 import { useSearch } from "../../context/search";
+
 import type { Widget } from "instantsearch.js";
 
 import "nouislider/dist/nouislider.css";

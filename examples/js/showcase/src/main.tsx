@@ -1,4 +1,5 @@
 import { render } from "preact";
+
 import { App } from "./App";
 
 import "instantsearch.css/themes/nova.css";

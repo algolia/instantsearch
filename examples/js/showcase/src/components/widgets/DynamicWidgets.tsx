@@ -1,14 +1,15 @@
 import { WidgetSwitcher } from "../WidgetSwitcher";
-import { WidgetRefinementList } from "./WidgetRefinementList";
+
+import { WidgetHierarchicalMenu } from "./WidgetHierarchicalMenu";
 import { WidgetMenu } from "./WidgetMenu";
 import { WidgetMenuSelect } from "./WidgetMenuSelect";
-import { WidgetHierarchicalMenu } from "./WidgetHierarchicalMenu";
 import { WidgetNumericMenu } from "./WidgetNumericMenu";
+import { WidgetPanel } from "./WidgetPanel";
 import { WidgetRangeInput } from "./WidgetRangeInput";
 import { WidgetRangeSlider } from "./WidgetRangeSlider";
 import { WidgetRatingMenu } from "./WidgetRatingMenu";
+import { WidgetRefinementList } from "./WidgetRefinementList";
 import { WidgetToggleRefinement } from "./WidgetToggleRefinement";
-import { WidgetPanel } from "./WidgetPanel";
 
 export function DynamicWidgets() {
   return (

@@ -1,24 +1,25 @@
-import { useRef, useEffect } from "preact/hooks";
-import instantsearch from "instantsearch.js";
 import { liteClient as algoliasearch } from "algoliasearch/lite";
-import { SearchContext } from "../context/search";
-import { WidgetSwitcher } from "../components/WidgetSwitcher";
-import { WidgetConfigure } from "../components/widgets/WidgetConfigure";
-import { WidgetBreadcrumb } from "../components/widgets/WidgetBreadcrumb";
-import { WidgetStats } from "../components/widgets/WidgetStats";
-import { WidgetSortBy } from "../components/widgets/WidgetSortBy";
-import { WidgetSearchBox } from "../components/widgets/WidgetSearchBox";
-import { WidgetPoweredBy } from "../components/widgets/WidgetPoweredBy";
-import { WidgetAutocomplete } from "../components/widgets/WidgetAutocomplete";
-import { WidgetClearRefinements } from "../components/widgets/WidgetClearRefinements";
-import { WidgetCurrentRefinements } from "../components/widgets/WidgetCurrentRefinements";
+import instantsearch from "instantsearch.js";
+import { useRef, useEffect } from "preact/hooks";
+
 import { DynamicWidgets } from "../components/widgets/DynamicWidgets";
+import { WidgetAutocomplete } from "../components/widgets/WidgetAutocomplete";
+import { WidgetBreadcrumb } from "../components/widgets/WidgetBreadcrumb";
+import { WidgetClearRefinements } from "../components/widgets/WidgetClearRefinements";
+import { WidgetConfigure } from "../components/widgets/WidgetConfigure";
+import { WidgetCurrentRefinements } from "../components/widgets/WidgetCurrentRefinements";
 import { WidgetHits } from "../components/widgets/WidgetHits";
+import { WidgetHitsPerPage } from "../components/widgets/WidgetHitsPerPage";
 import { WidgetInfiniteHits } from "../components/widgets/WidgetInfiniteHits";
 import { WidgetPagination } from "../components/widgets/WidgetPagination";
-import { WidgetHitsPerPage } from "../components/widgets/WidgetHitsPerPage";
-import { WidgetVoiceSearch } from "../components/widgets/WidgetVoiceSearch";
+import { WidgetPoweredBy } from "../components/widgets/WidgetPoweredBy";
 import { WidgetRelevantSort } from "../components/widgets/WidgetRelevantSort";
+import { WidgetSearchBox } from "../components/widgets/WidgetSearchBox";
+import { WidgetSortBy } from "../components/widgets/WidgetSortBy";
+import { WidgetStats } from "../components/widgets/WidgetStats";
+import { WidgetVoiceSearch } from "../components/widgets/WidgetVoiceSearch";
+import { WidgetSwitcher } from "../components/WidgetSwitcher";
+import { SearchContext } from "../context/search";
 
 const searchClient = algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76");
 

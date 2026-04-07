@@ -1,4 +1,5 @@
 import { poweredBy } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetPoweredBy() {

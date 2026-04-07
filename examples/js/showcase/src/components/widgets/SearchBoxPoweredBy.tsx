@@ -1,4 +1,5 @@
 import { searchBox, poweredBy } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function SearchBoxPoweredBy() {

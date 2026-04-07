@@ -1,4 +1,5 @@
 import { toggleRefinement } from "instantsearch.js/es/widgets";
+
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetToggleRefinement() {

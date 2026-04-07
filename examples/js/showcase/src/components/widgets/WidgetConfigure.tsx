@@ -1,5 +1,6 @@
-import { useEffect } from "preact/hooks";
 import { configure } from "instantsearch.js/es/widgets";
+import { useEffect } from "preact/hooks";
+
 import { useSearch } from "../../context/search";
 
 const searchParameters = {
