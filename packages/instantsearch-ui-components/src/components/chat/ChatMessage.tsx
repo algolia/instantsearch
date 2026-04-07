@@ -139,7 +139,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Loader component passed to tool layout components
    */
-  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
+  loaderComponent: (props: ChatMessageLoaderProps) => JSX.Element;
   /**
    * Optional suggestions element
    */
@@ -258,7 +258,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
-                sendEvent={tool.sendEvent || (() => {})}
+                sendEvent={tool.sendEvent || (() => { })}
                 onClose={onClose}
                 loaderComponent={LoaderComponent}
               />

@@ -245,7 +245,7 @@ function createDefaultMessageComponent<
     onFeedback?: (messageId: string, vote: 0 | 1) => void;
     feedbackState?: Record<string, 'sending' | 0 | 1>;
     actionsComponent?: ChatMessageProps['actionsComponent'];
-    loaderComponent?: ChatMessageProps['loaderComponent'];
+    loaderComponent: ChatMessageProps['loaderComponent'];
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;

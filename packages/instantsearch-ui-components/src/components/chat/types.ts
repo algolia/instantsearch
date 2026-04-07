@@ -488,7 +488,7 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
+  loaderComponent: (props: ChatMessageLoaderProps) => JSX.Element;
   sendEvent: SendEventForHits;
 };
 

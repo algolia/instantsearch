@@ -97,7 +97,7 @@ function createCarouselTool<
     applyFilters,
     onClose,
     sendEvent,
-  }: ClientSideToolComponentProps) {
+  }: ClientSideToolTemplateData) {
     const input = message?.input as
       | {
           query: string;
@@ -533,29 +533,22 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         widgetTool = tools[SearchIndexToolType];
       }
 
-      const loaderComponent = widgetTool?.templates?.loader
-        ? () => (
-            <TemplateComponent
-              templates={widgetTool.templates}
-              rootTagName="fragment"
-              templateKey="loader"
-              data={{}}
-            />
-          )
-        : undefined;
-
       toolsForUi[key] = {
         ...connectorTool,
         ...(widgetTool?.templates?.layout && {
           layoutComponent: (
             layoutComponentProps: ClientSideToolComponentProps
           ) => {
+            const { loaderComponent: Loader, ...restProps } = layoutComponentProps;
             return (
               <TemplateComponent
                 templates={widgetTool.templates}
                 rootTagName="fragment"
                 templateKey="layout"
-                data={{ ...layoutComponentProps, loader: loaderComponent }}
+                data={{
+                  ...restProps,
+                  loader: () => <Loader />,
+                }}
               />
             );
           },
@@ -973,9 +966,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
 };
 
+export type ClientSideToolTemplateData = Omit<
+  ClientSideToolComponentProps,
+  'loaderComponent'
+> & {
+  loader: () => JSX.Element;
+};
+
 export type UserClientSideToolTemplates = Partial<{
-  layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
-  loader: TemplateWithBindEvent<ClientSideToolComponentProps>;
+  layout: TemplateWithBindEvent<ClientSideToolTemplateData>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<
