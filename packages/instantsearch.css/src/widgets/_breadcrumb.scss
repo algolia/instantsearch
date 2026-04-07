@@ -16,18 +16,18 @@
 }
 
 .ais-Breadcrumb-item--selected {
-  color: rgb(var(--ais-text-color-rgb));
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   font-weight: var(--ais-font-weight-semibold);
 }
 
 .ais-Breadcrumb-separator {
-  color: rgb(var(--ais-muted-color-rgb));
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
   font-weight: normal;
   margin: 0 calc(var(--ais-spacing) / 3);
 }
 
 .ais-Breadcrumb-link {
-  color: rgb(var(--ais-muted-color-rgb));
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
   transition: color var(--ais-transition-duration)
     var(--ais-transition-timing-function);
 
