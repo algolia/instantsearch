@@ -15,11 +15,11 @@ export function DynamicWidgets() {
     <div class="flex flex-col gap-2">
       <WidgetSwitcher
         widgets={[
-          { title: "panel", body: WidgetPanel },
           { title: "refinementList", body: WidgetRefinementList },
+          { title: "hierarchicalMenu", body: WidgetHierarchicalMenu },
           { title: "menu", body: WidgetMenu },
           { title: "menuSelect", body: WidgetMenuSelect },
-          { title: "hierarchicalMenu", body: WidgetHierarchicalMenu },
+          { title: "panel", body: WidgetPanel },
         ]}
         destroy
       />
