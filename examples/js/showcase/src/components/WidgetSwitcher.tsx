@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-preact";
+import { Fragment } from "preact";
 import { useState } from "preact/hooks";
 
 import { useFlavor, type Flavor } from "../context/flavor";
@@ -53,10 +54,9 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
       <header class="-mx-1 -mt-1 mb-3 flex items-start gap-1 text-xs">
         <span class="flex flex-wrap items-center">
           {widgets.map((widget, index) => (
-            <>
+            <Fragment key={index}>
               {index > 0 && <span class="text-neutral-300 dark:text-neutral-600">•</span>}
               <button
-                key={index}
                 type="button"
                 class={`mx-1 font-mono leading-relaxed transition-colors ${hasMultiple ? "cursor-pointer" : "cursor-default"} ${
                   index === currentIndex && hasMultiple
@@ -67,11 +67,12 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
               >
                 {widget.title}
               </button>
-            </>
+            </Fragment>
           ))}
         </span>
         <span
           class={`ml-auto flex gap-1 transition-opacity ${hovered ? "opacity-100" : "opacity-0"}`}
+          inert={!hovered}
         >
           {(widgets[currentIndex].docs ?? [widgets[currentIndex].title]).map((d) => (
             <DocsLink key={d} name={d} flavor={flavor} />

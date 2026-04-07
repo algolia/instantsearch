@@ -10,7 +10,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "types": ["@types/google.maps"],
+    "types": ["google.maps"],
     "skipLibCheck": true,
     "strict": true,
     "noUnusedLocals": true,

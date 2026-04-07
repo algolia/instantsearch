@@ -13,15 +13,16 @@ import { SearchContext } from "../context/search";
 const searchClient = algoliasearch("CU1AX86Y0U", "bdb7f28818e99b5eec688fd1909d7543");
 
 export function GeoSearchView() {
-  const searchRef = useRef(
-    instantsearch({
+  const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
+  if (searchRef.current === null) {
+    searchRef.current = instantsearch({
       indexName: "aiports",
       searchClient,
-    }),
-  );
+    });
+  }
 
   useEffect(() => {
-    const search = searchRef.current;
+    const search = searchRef.current!;
     search.addWidgets([
       configure({
         hitsPerPage: 6,

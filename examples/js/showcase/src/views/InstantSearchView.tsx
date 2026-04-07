@@ -24,15 +24,16 @@ import { SearchContext } from "../context/search";
 const searchClient = algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76");
 
 export function InstantSearchView() {
-  const searchRef = useRef(
-    instantsearch({
+  const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
+  if (searchRef.current === null) {
+    searchRef.current = instantsearch({
       indexName: "instant_search",
       searchClient,
-    }),
-  );
+    });
+  }
 
   useEffect(() => {
-    const search = searchRef.current;
+    const search = searchRef.current!;
     search.start();
     return () => search.dispose();
   }, []);
