@@ -506,6 +506,17 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         widgetTool = tools[SearchIndexToolType];
       }
 
+      const loaderComponent = widgetTool?.templates?.loader
+        ? () => (
+            <TemplateComponent
+              templates={widgetTool.templates}
+              rootTagName="fragment"
+              templateKey="loader"
+              data={{}}
+            />
+          )
+        : undefined;
+
       toolsForUi[key] = {
         ...connectorTool,
         ...(widgetTool?.templates?.layout && {
@@ -517,7 +528,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
                 templates={widgetTool.templates}
                 rootTagName="fragment"
                 templateKey="layout"
-                data={layoutComponentProps}
+                data={{ ...layoutComponentProps, loader: loaderComponent }}
               />
             );
           },
@@ -898,6 +909,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
 export type UserClientSideToolTemplates = Partial<{
   layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
+  loader: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<

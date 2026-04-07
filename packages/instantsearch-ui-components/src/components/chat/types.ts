@@ -1,3 +1,4 @@
+import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
@@ -466,7 +467,7 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-  loaderComponent?: (props: Record<string, unknown>) => JSX.Element;
+  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
 };
 
 export type ClientSideToolComponent = (

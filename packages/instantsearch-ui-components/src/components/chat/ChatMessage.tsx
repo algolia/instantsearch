@@ -7,6 +7,7 @@ import { createButtonComponent } from '../Button';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
+import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -138,7 +139,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Loader component passed to tool layout components
    */
-  loaderComponent?: (props: Record<string, unknown>) => JSX.Element;
+  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
   /**
    * Optional suggestions element
    */
