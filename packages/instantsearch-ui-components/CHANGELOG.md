@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.23.0...instantsearch-ui-components@0.24.0) (2026-04-07)
+
+
+### Features
+
+* **chat:** send events from hits in chat ([#6943](https://github.com/algolia/instantsearch/issues/6943)) ([7c9a6dd](https://github.com/algolia/instantsearch/commit/7c9a6dd20a14547ffdc805058378716ff99ab37a))
+
+
+
+
+
 # [0.23.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.22.1...instantsearch-ui-components@0.23.0) (2026-03-31)
 
 

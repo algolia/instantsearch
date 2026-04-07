@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.101.0",
+  "version": "1.102.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -14,9 +14,9 @@
     "algoliasearch-helper": "3.28.1",
     "date-fns": "2.25.0",
     "htm": "^3.0.0",
-    "instantsearch-ui-components": "0.23.0",
+    "instantsearch-ui-components": "0.24.0",
     "instantsearch.css": "8.13.0",
-    "instantsearch.js": "4.93.0"
+    "instantsearch.js": "4.94.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

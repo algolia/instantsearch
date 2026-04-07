@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.30.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.29.0...react-instantsearch@7.30.0) (2026-04-07)
+
+
+### Features
+
+* **chat:** send events from hits in chat ([#6943](https://github.com/algolia/instantsearch/issues/6943)) ([7c9a6dd](https://github.com/algolia/instantsearch/commit/7c9a6dd20a14547ffdc805058378716ff99ab37a))
+
+
+
+
+
 # [7.29.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.28.1...react-instantsearch@7.29.0) (2026-03-31)
 
 
