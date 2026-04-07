@@ -1,3 +1,12 @@
+@use 'variables';
+
+// Auto dark mode
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include variables.dark-theme;
+  }
+}
+
 // Reduced motion
 @media (prefers-reduced-motion: reduce) {
   [class^='ais-'],

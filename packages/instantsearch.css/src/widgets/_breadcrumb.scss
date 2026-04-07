@@ -8,7 +8,7 @@
 }
 
 .ais-Breadcrumb-item {
-  margin-block-end: var(--ais-spacing-half);
+  margin-block-end: calc(var(--ais-spacing) / 2);
 
   @media screen and (min-width: 768px) {
     margin-block-end: 0;

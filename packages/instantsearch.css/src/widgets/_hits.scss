@@ -1,4 +1,5 @@
-.ais-Hits-list {
+.ais-Hits-list,
+.ais-InfiniteHits-list {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
@@ -7,7 +8,8 @@
   gap: var(--ais-spacing);
 }
 
-.ais-Hits-item {
+.ais-Hits-item,
+.ais-InfiniteHits-item {
   overflow: hidden;
   background-color: rgba(
     var(--ais-background-color-rgb),
@@ -27,4 +29,15 @@
       background-color: rgba(var(--ais-primary-color-rgb), 0.05);
     }
   }
+}
+
+.ais-Hits-banner,
+.ais-InfiniteHits-banner {
+  margin-bottom: var(--ais-spacing);
+}
+
+.ais-Hits-banner-image,
+.ais-InfiniteHits-banner-image {
+  width: 100%;
+  border-radius: var(--ais-border-radius-sm);
 }
