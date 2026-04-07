@@ -40,7 +40,10 @@ export function GeoSearchView() {
         <div class="flex flex-col gap-2 sm:flex-row">
           <WidgetSwitcher
             class="flex-1"
-            widgets={[{ title: "searchBox", body: WidgetSearchBox }]}
+            widgets={[{
+              title: "searchBox",
+              body: () => <WidgetSearchBox placeholder="Search for airports..." />,
+            }]}
           />
           <WidgetSwitcher
             class="shrink-0"
