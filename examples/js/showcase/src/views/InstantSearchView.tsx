@@ -84,7 +84,7 @@ export function InstantSearchView() {
         </div>
 
         {/* Row 4: Sidebar (facets) | Main (hits + pagination) */}
-        <div class="flex flex-col-reverse gap-2 sm:flex-row">
+        <div class="flex flex-col gap-2 sm:flex-row">
           <div class="w-full shrink-0 sm:max-w-[296px]">
             <WidgetSwitcher widgets={[{ title: "dynamicWidgets", body: DynamicWidgets }]} />
           </div>
