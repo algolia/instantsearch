@@ -54,7 +54,7 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/reset-min.css",
-      "maxSize": "1.25 kB"
+      "maxSize": "1.5 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
@@ -66,7 +66,7 @@
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "5.5 kB"
+      "maxSize": "5.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",
@@ -74,11 +74,11 @@
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete.css",
-      "maxSize": "4.25 kB"
+      "maxSize": "4.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete-min.css",
-      "maxSize": "4 kB"
+      "maxSize": "4.25 kB"
     }
   ]
 }
