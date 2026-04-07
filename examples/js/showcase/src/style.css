@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --transition-duration: 300ms;
+}
+
+/* Global */
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: theme(--color-neutral-900);
+  background-color: theme(--color-white);
+}
+
+[data-theme="dark"] body {
+  color: theme(--color-neutral-100);
+  background-color: theme(--color-neutral-950);
+}
+
+/* RangeSlider (noUiSlider) */
+.noUi-target.noUi-target {
+  background: rgba(var(--ais-border-color-rgb), 0.3);
+  border: none;
+  border-radius: var(--ais-border-radius-full);
+  box-shadow: none;
+  height: 6px;
+}
+
+.noUi-connect {
+  background: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  border-radius: var(--ais-border-radius-full);
+}
+
+.noUi-horizontal .noUi-handle {
+  width: 20px;
+  height: 20px;
+  right: -10px;
+  top: -7px;
+  border: 2px solid rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  border-radius: var(--ais-border-radius-full);
+  background: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+  box-shadow: var(--ais-shadow-xs);
+  cursor: grab;
+}
+
+.noUi-handle::before,
+.noUi-handle::after {
+  display: none;
+}
+
+.noUi-handle:active {
+  cursor: grabbing;
+}
+
+.noUi-horizontal .noUi-tooltip {
+  top: unset;
+  bottom: -30px;
+  border: none;
+  border-radius: var(--ais-border-radius-sm);
+  background: rgba(var(--ais-text-color-rgb), 0.85);
+  color: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+  font-size: 12px;
+  padding: 2px 8px;
+  transform: none;
+}
+
+.noUi-handle-lower .noUi-tooltip {
+  left: 0;
+}
+
+.noUi-handle-upper .noUi-tooltip {
+  left: unset;
+  right: 0;
+}
+
+/* CurrentRefinements widget */
+.ais-CurrentRefinements--noRefinement::after {
+  content: "No refinements applied";
+  font-size: theme(--text-sm);
+  color: theme(--color-neutral-400);
+}
+
+[data-theme="dark"] .ais-CurrentRefinements--noRefinement::after {
+  color: theme(--color-neutral-500);
+}
