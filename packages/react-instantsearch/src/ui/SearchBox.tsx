@@ -290,7 +290,7 @@ export function SearchBox({
           >
             <AiModeIcon classNames={classNames} />
             <span className="ais-AiModeButton-label">
-              {translations.aiModeButtonTitle}
+              {translations.aiModeButtonTitle || 'AI Mode'}
             </span>
           </button>
         )}
