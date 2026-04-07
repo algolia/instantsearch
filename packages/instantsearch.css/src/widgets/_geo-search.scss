@@ -26,11 +26,7 @@
 
 @media (hover: hover) {
   .ais-GeoSearch-label:hover {
-    background-color: color-mix(
-      in srgb,
-      rgb(var(--ais-background-color-rgb)) 90%,
-      rgb(var(--ais-muted-color-rgb))
-    );
+    background-color: rgba(var(--ais-muted-color-rgb), 0.1);
   }
 }
 
@@ -78,11 +74,7 @@
 @media (hover: hover) {
   .ais-GeoSearch-redo:not([disabled]):hover,
   .ais-GeoSearch-reset:not([disabled]):hover {
-    background-color: color-mix(
-      in srgb,
-      rgb(var(--ais-background-color-rgb)) 90%,
-      rgb(var(--ais-muted-color-rgb))
-    );
+    background-color: rgba(var(--ais-muted-color-rgb), 0.1);
   }
 }
 

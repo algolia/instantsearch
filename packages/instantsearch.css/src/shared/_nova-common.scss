@@ -7,19 +7,6 @@
   }
 }
 
-// Reduced motion
-@media (prefers-reduced-motion: reduce) {
-  [class^='ais-'],
-  [class^='ais-'] *,
-  [class^='ais-']::before,
-  [class^='ais-']::after,
-  [class^='ais-'] *::before,
-  [class^='ais-'] *::after {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
 // Focus outline (generic)
 a[class^='ais-']:focus-visible,
 button[class^='ais-']:focus-visible,
@@ -82,6 +69,43 @@ select[class^='ais-']:focus-visible {
   );
   white-space: nowrap;
   font-size: 0.75em;
+}
+
+// Custom select (MenuSelect, HitsPerPage, SortBy)
+.ais-MenuSelect,
+.ais-HitsPerPage,
+.ais-SortBy {
+  &:after {
+    transition: transform var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+    background-image: var(--ais-chevron-icon);
+    background-repeat: no-repeat;
+    content: '';
+    display: inline-block;
+    height: 1rem;
+    margin-left: calc(var(--ais-spacing) * -1 - 1rem);
+    transform: translateY(0.2rem);
+    pointer-events: none;
+    user-select: none;
+    width: 1rem;
+  }
+}
+
+.ais-MenuSelect-select,
+.ais-HitsPerPage-select,
+.ais-SortBy-select {
+  width: 100%;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  font: inherit;
+  padding: calc(var(--ais-spacing) / 2) calc(var(--ais-spacing) * 2 + 0.5rem)
+    calc(var(--ais-spacing) / 2) var(--ais-spacing);
+  border-radius: var(--ais-border-radius-sm);
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+
+  &:focus-visible {
+    outline-offset: -1px;
+  }
 }
 
 // Checked checkbox

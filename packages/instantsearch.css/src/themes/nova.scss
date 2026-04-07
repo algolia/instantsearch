@@ -12,7 +12,6 @@
 @use '../widgets/breadcrumb';
 @use '../widgets/hierarchical-menu';
 @use '../widgets/menu';
-@use '../widgets/menu-select';
 @use '../widgets/refinement-list';
 @use '../widgets/toggle-refinement';
 @use '../widgets/numeric-menu';
@@ -20,8 +19,6 @@
 @use '../widgets/panel';
 @use '../widgets/current-refinements';
 @use '../widgets/pagination';
-@use '../widgets/hits-per-page';
-@use '../widgets/sort-by';
 @use '../widgets/rating-menu';
 @use '../widgets/hits';
 @use '../widgets/infinite-hits';

@@ -14,6 +14,8 @@
 }
 
 .ais-RatingMenu-link {
+  display: flex;
+  align-items: center;
   padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) / 2);
   border-radius: var(--ais-border-radius-sm);
   color: inherit;

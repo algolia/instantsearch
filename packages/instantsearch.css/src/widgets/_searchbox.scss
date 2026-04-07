@@ -1,6 +1,10 @@
 .ais-SearchBox-form {
   display: flex;
   align-items: center;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
   border: 1px solid rgba(var(--ais-border-color-rgb), 0.8);
   border-radius: var(--ais-border-radius-sm);
   line-height: 1em;

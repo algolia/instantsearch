@@ -33,11 +33,12 @@
     margin-right: 0.5rem;
     user-select: none;
     width: 1rem;
+    transform: rotate(-90deg);
   }
 }
 
 .ais-HierarchicalMenu-item--selected > .ais-HierarchicalMenu-link:before {
-  transform: rotate(-90deg);
+  transform: rotate(0deg);
   background-image: var(--ais-selected-chevron-icon);
 }
 
