@@ -4,6 +4,7 @@ export * from './Carousel';
 export * from './chat/Chat';
 export * from './chat/ChatOverlayLayout';
 export * from './chat/ChatInlineLayout';
+export * from './chat/ChatSidePanelLayout';
 export * from './chat/ChatHeader';
 export * from './chat/ChatMessage';
 export * from './chat/ChatMessages';
