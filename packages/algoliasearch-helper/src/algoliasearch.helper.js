@@ -1695,7 +1695,8 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
 
     states.push({
       state: derivedState,
-      queriesCount: derivedStateQueries.length,
+      // Infinity so splice grabs all feed results from a multifeed composition response
+      queriesCount: Infinity,
       helper: derivedHelper,
     });
 
@@ -1884,12 +1885,33 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       return;
     }
 
-    helper.lastResults = new SearchResults(
-      state,
-      specificResults,
-      self._searchResultsOptions
-    );
-    if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+    // Multifeed composition: build per-feed SearchResults map
+    if (specificResults.length > 0 && specificResults[0].feedID) {
+      var feedResults = {};
+      var feedOrder = specificResults.map(function (r) {
+        return r.feedID;
+      });
+      specificResults.forEach(function (r) {
+        var sr = new SearchResults(state, [r], self._searchResultsOptions);
+        if (rawContent !== undefined) sr._rawContent = rawContent;
+        feedResults[r.feedID] = sr;
+      });
+      helper.lastResults = new SearchResults(
+        state,
+        [specificResults[0]],
+        self._searchResultsOptions
+      );
+      if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+      helper.lastResults._feedResults = feedResults;
+      helper.lastResults._feedOrder = feedOrder;
+    } else {
+      helper.lastResults = new SearchResults(
+        state,
+        specificResults,
+        self._searchResultsOptions
+      );
+      if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+    }
 
     helper.emit('result', {
       results: helper.lastResults,
