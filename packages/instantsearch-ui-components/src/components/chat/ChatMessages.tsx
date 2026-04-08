@@ -7,7 +7,6 @@ import {
   hasTextContent,
   isPartText,
   isPartTool,
-  isToolPartActivelyRendering,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -438,7 +437,7 @@ export function createChatMessagesComponent({
       })();
 
     const isStreamingNonTextContent =
-      status === 'streaming' && lastPart && !(isPartText(lastPart) || isToolPartActivelyRendering(lastPart));
+      status === 'streaming' && lastPart && !isPartText(lastPart);
 
     const showLoader =
       isWaitingForResponse ||

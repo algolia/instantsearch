@@ -24,14 +24,3 @@ export const isPartTool = (
 ): part is ChatToolMessage => {
   return startsWith(part.type, 'tool-');
 };
-
-export const isToolPartActivelyRendering = (
-  part: ChatMessageBase['parts'][number]
-): boolean => {
-  return (
-    isPartTool(part) &&
-    (part.state === 'input-streaming' ||
-      part.state === 'output-available' ||
-      part.state === 'output-error')
-  );
-};
