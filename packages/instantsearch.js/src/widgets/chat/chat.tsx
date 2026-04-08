@@ -143,6 +143,14 @@ function createCarouselTool<
       );
     }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
+    if (message.state === 'input-streaming') {
+      return (
+        <div className="ais-ChatToolSearchIndex-loading">
+          Searching…
+        </div>
+      );
+    }
+
     return carousel({
       showNavigation: false,
       templates: {

@@ -96,7 +96,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     if (message.state === 'input-streaming') {
       return (
         <div className="ais-ChatToolSearchIndex-loading">
-          Searching{input?.query ? ` for "${input.query}"` : ''}…
+          Searching…
         </div>
       );
     }
