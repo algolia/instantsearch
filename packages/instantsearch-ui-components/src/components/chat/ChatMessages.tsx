@@ -1,10 +1,12 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { startsWith } from '../../lib';
 import {
   getTextContent,
   hasTextContent,
   isPartText,
+  isPartTool,
   isToolPartActivelyRendering,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
@@ -31,7 +33,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatMessageBase, ChatStatus, ClientSideTool, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -417,13 +419,32 @@ export function createChatMessagesComponent({
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     const isWaitingForResponse = status === 'submitted';
     const isStreamingWithNoContent = status === 'streaming' && !lastPart;
+
+    // Check if the last tool part has showLoaderDuringStreaming enabled and is in input-streaming state
+    // if so, it renders nothing inline and we should show the global loader instead
+    const isToolDeferringToGlobalLoader =
+      lastPart &&
+      isPartTool(lastPart) &&
+      lastPart.state === 'input-streaming' &&
+      (() => {
+        const toolName = lastPart.type.replace('tool-', '');
+        let tool: ClientSideTool | undefined = tools[toolName];
+        if (!tool) {
+          tool = Object.entries(tools).find(([key]) =>
+            startsWith(toolName, `${key}_`)
+          )?.[1];
+        }
+        return tool?.showLoaderDuringStreaming;
+      })();
+
     const isStreamingNonTextContent =
       status === 'streaming' && lastPart && !(isPartText(lastPart) || isToolPartActivelyRendering(lastPart));
 
     const showLoader =
       isWaitingForResponse ||
       isStreamingWithNoContent ||
-      isStreamingNonTextContent;
+      isStreamingNonTextContent ||
+      isToolDeferringToGlobalLoader;
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;

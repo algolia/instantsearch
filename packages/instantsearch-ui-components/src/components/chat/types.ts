@@ -498,6 +498,7 @@ export type ClientSideToolComponent = (
 
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
+  showLoaderDuringStreaming?: boolean;
   addToolResult: AddToolResult;
   sendEvent?: SendEventForHits;
   onToolCall?: (
