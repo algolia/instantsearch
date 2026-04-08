@@ -181,6 +181,8 @@ export default (function connectTrendingFacets<
       },
 
       getWidgetParameters(state) {
+        // v4 TrendingFacetsQuery doesn't include queryParameters or
+        // fallbackParameters, but the v5 API and the helper support them.
         return state.removeParams(this.$$id!).addTrendingFacets({
           facetName,
           maxRecommendations: limit,
@@ -196,7 +198,7 @@ export default (function connectTrendingFacets<
             ...(escapeHTML ? TAG_PLACEHOLDER : {}),
           },
           $$id: this.$$id!,
-        });
+        } as any);
       },
     };
   };

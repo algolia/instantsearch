@@ -145,14 +145,14 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
+        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
         new RecommendParameters().addTrendingFacets({
-          // @ts-expect-error
-          $$id: widget.$$id,
+          $$id: (widget as any).$$id,
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
           queryParameters: { userToken: 'token' },
-        })
+        } as any)
       );
     });
 
@@ -174,9 +174,9 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
+        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
         new RecommendParameters().addTrendingFacets({
-          // @ts-expect-error
-          $$id: widget.$$id,
+          $$id: (widget as any).$$id,
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
@@ -190,7 +190,7 @@ describe('connectTrendingFacets', () => {
             highlightPreTag: '__ais-highlight__',
             query: 'query',
           },
-        })
+        } as any)
       );
     });
   });
