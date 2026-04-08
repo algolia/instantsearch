@@ -4,6 +4,7 @@ import {
   noop,
   TAG_PLACEHOLDER,
 } from '../../lib/utils';
+import { escape } from '../../lib/utils/escape-html';
 
 import type {
   Connector,
@@ -80,15 +81,6 @@ export type TrendingFacetsConnector = Connector<
   TrendingFacetsConnectorParams
 >;
 
-function escapeFacetValue(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 export default (function connectTrendingFacets<
   TWidgetParams extends UnknownWidgetParams
 >(
@@ -113,6 +105,12 @@ export default (function connectTrendingFacets<
         TrendingFacetsConnectorParams['transformItems']
       >,
     } = widgetParams || {};
+
+    if (!facetName) {
+      throw new Error(
+        withUsage('The `facetName` option is required.')
+      );
+    }
 
     return {
       dependsOn: 'recommend',
@@ -163,7 +161,7 @@ export default (function connectTrendingFacets<
         if (escapeHTML) {
           items = items.map((item) => ({
             ...item,
-            facetValue: escapeFacetValue(item.facetValue),
+            facetValue: escape(item.facetValue),
           }));
         }
 

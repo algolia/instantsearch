@@ -23,6 +23,19 @@ describe('connectTrendingFacets', () => {
     `);
   });
 
+  it('throws without facetName', () => {
+    expect(() => {
+      connectTrendingFacets(() => {})(
+        // @ts-expect-error
+        {}
+      );
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "The \`facetName\` option is required.
+
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-facets/js/#connector"
+    `);
+  });
+
   it('is a widget', () => {
     const render = jest.fn();
     const unmount = jest.fn();
