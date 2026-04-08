@@ -1431,21 +1431,6 @@ declare namespace algoliasearchHelper {
     _state: SearchParameters;
 
     /**
-     * The feed identifier, present when this result comes from a multifeed composition response.
-     */
-    feedID?: string;
-
-    /**
-     * Map of feed ID to SearchResults, populated when the composition response contains multiple feeds.
-     */
-    _feedResults?: Record<string, SearchResults>;
-
-    /**
-     * Ordered list of feed IDs matching the composition response order.
-     */
-    _feedOrder?: string[];
-
-    /**
      * Marker which can be added to search results to identify them as created without a search response.
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
