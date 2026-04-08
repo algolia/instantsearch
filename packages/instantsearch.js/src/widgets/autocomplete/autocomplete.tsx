@@ -225,6 +225,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'showPromptSuggestions'
   | 'placeholder'
   | 'autofocus'
+  | 'aiMode'
 > & {
     showRecent:
       | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -356,6 +357,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'autofocus'
   | 'detachedMediaQuery'
   | 'translations'
+  | 'aiMode'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -377,6 +379,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   autofocus,
   detachedMediaQuery,
   translations,
+  aiMode,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
@@ -822,6 +825,22 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         onRefine('');
       }}
       isSearchStalled={instantSearchInstance.status === 'stalled'}
+      onAiModeClick={
+        aiMode
+          ? () => {
+              const indexId = targetIndex!.getIndexId();
+              const chatState = instantSearchInstance.renderState[indexId]
+                ?.chat as Partial<ChatRenderState> | undefined;
+
+              if (chatState) {
+                chatState.setOpen?.(true);
+                if (localQuery.trim()) {
+                  chatState.sendMessage?.({ text: localQuery });
+                }
+              }
+            }
+          : undefined
+      }
     />
   );
 
@@ -1044,6 +1063,13 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
    * Translations for the Autocomplete widget.
    */
   translations?: Partial<AutocompleteTranslations>;
+
+  /**
+   * When true, renders an AI mode button inside the search input
+   * that opens the Chat widget and sends the current query.
+   * Requires a Chat widget on the same index.
+   */
+  aiMode?: boolean;
 };
 
 export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
@@ -1072,6 +1098,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     autofocus,
     detachedMediaQuery,
     translations: userTranslations = {},
+    aiMode,
   } = widgetParams || {};
 
   if (!container) {
@@ -1230,6 +1257,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       hasWarnedMissingPromptSuggestionsChat: false,
     },
     templates,
+    aiMode,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>

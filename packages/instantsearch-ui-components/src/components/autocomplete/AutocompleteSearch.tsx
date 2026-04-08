@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { ClearIcon, LoadingIcon, SubmitIcon } from './icons';
+import { AiModeIcon, ClearIcon, LoadingIcon, SubmitIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../..';
 
@@ -8,11 +8,13 @@ export type AutocompleteSearchProps = {
   onClear: () => void;
   query: string;
   isSearchStalled: boolean;
+  onAiModeClick?: () => void;
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
   return function AutocompleteSearch(userProps: AutocompleteSearchProps) {
-    const { inputProps, onClear, query, isSearchStalled } = userProps;
+    const { inputProps, onClear, query, isSearchStalled, onAiModeClick } =
+      userProps;
     const inputRef = inputProps.ref as { current: HTMLInputElement | null };
 
     return (
@@ -76,6 +78,20 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
           >
             <ClearIcon createElement={createElement} />
           </button>
+          {onAiModeClick && (
+            <button
+              className="ais-AiModeButton"
+              type="button"
+              title="AI Mode"
+              onClick={(e) => {
+                e.preventDefault();
+                onAiModeClick();
+              }}
+            >
+              <AiModeIcon createElement={createElement} />
+              <span className="ais-AiModeButton-label">AI Mode</span>
+            </button>
+          )}
         </div>
       </form>
     );

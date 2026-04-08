@@ -15,6 +15,7 @@ export type AutocompleteSearchProps = {
   query: string;
   refine: (query: string) => void;
   isSearchStalled: boolean;
+  onAiModeClick?: () => void;
 };
 
 export function AutocompleteSearch({
@@ -24,6 +25,7 @@ export function AutocompleteSearch({
   query,
   refine,
   isSearchStalled,
+  onAiModeClick,
 }: AutocompleteSearchProps) {
   return (
     <AutocompleteSearchComponent
@@ -38,6 +40,7 @@ export function AutocompleteSearch({
       onClear={clearQuery}
       query={query}
       isSearchStalled={isSearchStalled}
+      onAiModeClick={onAiModeClick}
     />
   );
 }

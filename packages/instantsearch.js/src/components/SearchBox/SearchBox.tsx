@@ -13,9 +13,18 @@ import type {
 import type { ComponentProps } from 'preact';
 
 export type SearchBoxComponentCSSClasses =
-  ComponentCSSClasses<SearchBoxCSSClasses>;
+  ComponentCSSClasses<
+    Omit<SearchBoxCSSClasses, 'aiModeButton' | 'aiModeIcon' | 'aiModeLabel'>
+  > & {
+    aiModeButton?: string;
+    aiModeIcon?: string;
+    aiModeLabel?: string;
+  };
 
-export type SearchBoxComponentTemplates = Required<SearchBoxTemplates>;
+export type SearchBoxComponentTemplates = Required<
+  Omit<SearchBoxTemplates, 'aiMode'>
+> &
+  Pick<SearchBoxTemplates, 'aiMode'>;
 
 type SearchBoxProps = {
   placeholder?: string;
@@ -36,6 +45,7 @@ type SearchBoxProps = {
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
   inputProps?: Partial<ComponentProps<'input'>>;
+  onAiModeClick?: (query: string) => void;
 };
 
 const defaultProps = {
@@ -167,6 +177,11 @@ class SearchBox extends Component<
     this.setState({ focused: true });
   };
 
+  private onAiModeClick = (event: Event) => {
+    event.preventDefault();
+    this.props.onAiModeClick?.(this.state.query);
+  };
+
   public render() {
     const {
       cssClasses,
@@ -179,6 +194,7 @@ class SearchBox extends Component<
       isSearchStalled,
       ariaLabel,
       inputProps,
+      onAiModeClick,
     } = this.props;
 
     return (
@@ -252,6 +268,21 @@ class SearchBox extends Component<
               rootProps={{
                 className: cssClasses.loadingIndicator,
                 hidden: !isSearchStalled,
+              }}
+              templates={templates}
+              data={{ cssClasses }}
+            />
+          )}
+
+          {onAiModeClick && (
+            <Template
+              templateKey="aiMode"
+              rootTagName="button"
+              rootProps={{
+                className: cssClasses.aiModeButton,
+                type: 'button',
+                title: 'AI Mode',
+                onClick: this.onAiModeClick,
               }}
               templates={templates}
               data={{ cssClasses }}

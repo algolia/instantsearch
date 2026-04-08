@@ -5,7 +5,7 @@ import { RefinementList as RefinementListUiComponent } from '../ui/RefinementLis
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
-import type { SearchBoxProps, SearchBoxTranslations } from '../ui/SearchBox';
+import type { SearchBoxProps } from '../ui/SearchBox';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 import type { RefinementListWidgetParams } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 import type { UseRefinementListProps } from 'react-instantsearch-core';
@@ -34,13 +34,14 @@ export type RefinementListProps = Omit<
     'searchable' | 'searchablePlaceholder' | 'searchableSelectOnSubmit'
   > & {
     translations?: Partial<
-      UiProps['translations'] &
-        SearchBoxTranslations & {
-          /**
-           * What to display when there are no results.
-           */
-          noResultsText: string;
-        }
+      UiProps['translations'] & {
+        submitButtonTitle: string;
+        resetButtonTitle: string;
+        /**
+         * What to display when there are no results.
+         */
+        noResultsText: string;
+      }
     >;
   };
 
