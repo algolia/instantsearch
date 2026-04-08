@@ -1695,8 +1695,6 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
 
     states.push({
       state: derivedState,
-      // Infinity so splice grabs all feed results from a multifeed composition response
-      queriesCount: Infinity,
       helper: derivedHelper,
     });
 
@@ -1875,7 +1873,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
     var state = s.state;
     var queriesCount = s.queriesCount;
     var helper = s.helper;
-    var specificResults = results.splice(0, queriesCount);
+    var specificResults = queriesCount !== undefined
+      ? results.splice(0, queriesCount)
+      : results;
 
     if (!state.index) {
       helper.emit('result', {
