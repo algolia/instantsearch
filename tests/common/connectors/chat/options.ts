@@ -59,6 +59,41 @@ export function createOptionsTests(
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, AI!' });
     });
 
+    test('does not send initialUserMessage when messages already exist', async () => {
+      const chat = new Chat({
+        messages: [
+          {
+            id: '1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Previous message' }],
+          },
+        ],
+      });
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const options: SetupOptions<ChatConnectorSetup> = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          chat,
+          agentId: 'agentId',
+          initialUserMessage: 'Hello, AI!',
+        } as any,
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+
     test('provides `input` state to persist text input', async () => {
       const options: SetupOptions<ChatConnectorSetup> = {
         instantSearchOptions: {

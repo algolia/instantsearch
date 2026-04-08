@@ -161,6 +161,12 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   type?: string;
   /**
    * A message to send automatically when the chat is initialized.
+   *
+   * This message is only sent when the chat has no existing messages yet. If
+   * messages were restored or otherwise already exist when the widget starts,
+   * this message is not sent.
+   *
+   * When `resume` is enabled, this message is not sent.
    */
   initialUserMessage?: string;
 };
@@ -552,7 +558,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           _chatInstance.resumeStream();
         }
 
-        if (initialUserMessage && _chatInstance.messages.length === 0) {
+        if (
+          initialUserMessage &&
+          !resume &&
+          _chatInstance.messages.length === 0
+        ) {
           _chatInstance.sendMessage({ text: initialUserMessage });
         }
 
