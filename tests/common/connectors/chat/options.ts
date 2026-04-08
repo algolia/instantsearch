@@ -2,6 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { Chat } from 'instantsearch.js/src/lib/chat';
 
 import { skippableDescribe } from '../../common';
 
@@ -29,6 +30,33 @@ export function createOptionsTests(
 
               See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
             `);
+    });
+
+    test('sends initialUserMessage on init', async () => {
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const options: SetupOptions<ChatConnectorSetup> = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          chat,
+          agentId: 'agentId',
+          initialUserMessage: 'Hello, AI!',
+        } as any,
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, AI!' });
     });
 
     test('provides `input` state to persist text input', async () => {

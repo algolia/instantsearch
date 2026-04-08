@@ -159,6 +159,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * @default 'chat'
    */
   type?: string;
+  /**
+   * A message to send automatically when the chat is initialized.
+   */
+  initialUserMessage?: string;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -260,6 +264,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
+      initialUserMessage,
       ...options
     } = widgetParams || {};
 
@@ -545,6 +550,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         if (resume) {
           _chatInstance.resumeStream();
+        }
+
+        if (initialUserMessage && _chatInstance.messages.length === 0) {
+          _chatInstance.sendMessage({ text: initialUserMessage });
         }
 
         renderFn(
