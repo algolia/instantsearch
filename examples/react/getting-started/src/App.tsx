@@ -60,7 +60,7 @@ export function App() {
             </div>
 
             <div className="search-panel__results">
-              <SearchBox placeholder="" className="searchbox" />
+              <SearchBox placeholder="" className="searchbox" aiMode />
               <Panel
                 header="Current Refinements"
                 hidden={(state) =>
