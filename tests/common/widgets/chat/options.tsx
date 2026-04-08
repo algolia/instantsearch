@@ -139,6 +139,46 @@ export function createOptionsTests(
       );
     });
 
+    test('disables clear button when chat is in progress', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      await act(async () => {
+        chat._state.messages = [
+          {
+            id: '1',
+            role: 'user' as const,
+            parts: [{ type: 'text' as const, text: 'hello' }],
+          },
+        ];
+        await wait(0);
+      });
+
+      const clearButton = document.querySelector('.ais-ChatHeader-clear');
+      expect(clearButton).not.toBeDisabled();
+
+      await act(async () => {
+        chat._state.status = 'streaming';
+        await wait(0);
+      });
+
+      expect(clearButton).toBeDisabled();
+    });
+
     describe('cssClasses', () => {
       test('adds custom CSS classes', async () => {
         const searchClient = createSearchClient();
