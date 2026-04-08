@@ -181,6 +181,10 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'trendingFacets': {
+        const trendingFacets = widget as Widgets['trendingFacets'];
+        return trendingFacets({ container, facetName: 'brand' });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });
