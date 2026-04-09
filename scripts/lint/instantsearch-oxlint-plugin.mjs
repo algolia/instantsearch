@@ -423,70 +423,16 @@ const plugin = {
       meta: {
         docs: {
           description:
-            'Ensure default templates use JSX or htm for rendering to prevent XSS vulnerabilities.',
+            'Disallow JSON.stringify or raw object returns in default templates to prevent XSS.',
         },
         messages: {
           forbidden:
-            'Default templates that render input data must return JSX or htm template literals. Use `<Fragment>...</Fragment>` or backticks with `html`...`.',
+            'Do not use JSON.stringify() or raw objects in default templates. Wrap string output in a Fragment: `<Fragment>{dataString}</Fragment>`.',
         },
         schema: [],
         type: 'problem',
       },
       create(context) {
-        const { sourceCode } = context;
-
-        function addPatternIdentifiers(pattern, names) {
-          if (!pattern || typeof pattern !== 'object') {
-            return;
-          }
-
-          switch (pattern.type) {
-            case 'Identifier':
-              names.add(pattern.name);
-              break;
-            case 'RestElement':
-              addPatternIdentifiers(pattern.argument, names);
-              break;
-            case 'AssignmentPattern':
-              addPatternIdentifiers(pattern.left, names);
-              break;
-            case 'ArrayPattern':
-              for (const element of pattern.elements || []) {
-                addPatternIdentifiers(element, names);
-              }
-              break;
-            case 'ObjectPattern':
-              for (const property of pattern.properties || []) {
-                if (property.type === 'Property') {
-                  addPatternIdentifiers(property.value, names);
-                } else if (property.type === 'RestElement') {
-                  addPatternIdentifiers(property.argument, names);
-                }
-              }
-              break;
-            default:
-              break;
-          }
-        }
-
-        function getFunctionFromReturn(node) {
-          let current = node.parent;
-
-          while (current) {
-            if (
-              current.type === 'FunctionExpression' ||
-              current.type === 'ArrowFunctionExpression' ||
-              current.type === 'FunctionDeclaration'
-            ) {
-              return current;
-            }
-
-            current = current.parent;
-          }
-
-          return null;
-        }
-
         function isInsideDefaultTemplatesObject(node) {
           let current = node;
 
@@ -506,30 +452,6 @@ const plugin = {
           return false;
         }
 
-        function usesFunctionInput(expression, functionNode) {
-          const paramNames = new Set();
-
-          for (const param of functionNode.params || []) {
-            addPatternIdentifiers(param, paramNames);
-          }
-
-          if (paramNames.size === 0) {
-            return false;
-          }
-
-          return someDescendant(
-            expression,
-            sourceCode.visitorKeys,
-            (child) => child.type === 'Identifier' && paramNames.has(child.name)
-          );
-        }
-
-        // Only check files named defaultTemplates
-        const filename = context.getFilename();
-        if (!filename.includes('defaultTemplates')) {
-          return {};
-        }
-
         return {
           ReturnStatement(node) {
             if (!node.argument) {
@@ -540,23 +462,14 @@ const plugin = {
               return;
             }
 
-            const functionNode = getFunctionFromReturn(node);
-
-            if (!functionNode) {
-              return;
-            }
-
             const arg = node.argument;
 
-            if (!usesFunctionInput(arg, functionNode)) {
-              return;
-            }
-
-            // Allowed: JSX element, htm template literal
+            // Allowed: JSX element or Fragment
             if (arg.type === 'JSXElement' || arg.type === 'JSXFragment') {
               return;
             }
 
+            // Allowed: htm template literal
             if (arg.type === 'TaggedTemplateExpression') {
               if (
                 arg.tag.type === 'Identifier' &&
@@ -566,10 +479,20 @@ const plugin = {
               }
             }
 
-            context.report({
-              messageId: 'forbidden',
-              node,
-            });
+            // Flag JSON.stringify - the key XSS vector
+            if (arg.type === 'CallExpression') {
+              if (
+                arg.callee.type === 'MemberExpression' &&
+                arg.callee.object.name === 'JSON' &&
+                arg.callee.property.name === 'stringify'
+              ) {
+                context.report({
+                  messageId: 'forbidden',
+                  node,
+                });
+                return;
+              }
+            }
           },
         };
       },
