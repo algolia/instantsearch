@@ -1,3 +1,7 @@
+/** @jsx h */
+
+import { h, Fragment } from 'preact';
+
 import { omit } from '../../lib/utils';
 
 // false positive lint error
@@ -9,7 +13,9 @@ const defaultTemplates = {
     return 'No results';
   },
   item(data) {
-    return JSON.stringify(omit(data, ['__hitIndex']), null, 2);
+    return (
+      <Fragment>{JSON.stringify(omit(data, ['__hitIndex']), null, 2)}</Fragment>
+    );
   },
 } satisfies HitsTemplates;
 
