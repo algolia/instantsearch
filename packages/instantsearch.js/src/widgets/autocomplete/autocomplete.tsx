@@ -22,10 +22,7 @@ import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import {
-  connectAutocomplete,
-  connectSearchBox,
-} from '../../connectors/index.umd';
+import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
