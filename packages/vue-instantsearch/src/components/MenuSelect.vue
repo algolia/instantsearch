@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { connectMenu } from 'instantsearch.js/es/connectors/index.umd';
+import { connectMenu } from 'instantsearch.js/es/connectors/index';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

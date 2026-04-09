@@ -69,40 +69,121 @@ def rel(root: Path, value: str) -> str:
         return value
 
 
-def build_rows(root: Path, widget: str) -> tuple[str, list[tuple[str, bool, str]], list[str]]:
+def build_rows(
+    root: Path, widget: str
+) -> tuple[str, list[tuple[str, bool, str]], list[str]]:
     pascal = pascal_case(widget)
     camel = pascal[0].lower() + pascal[1:]
 
     vue_component_paths = [
-        root / "packages" / "vue-instantsearch" / "src" / "components" / f"{pascal}.vue",
+        root
+        / "packages"
+        / "vue-instantsearch"
+        / "src"
+        / "components"
+        / f"{pascal}.vue",
         root / "packages" / "vue-instantsearch" / "src" / "components" / f"{pascal}.js",
     ]
 
     rows: list[tuple[str, bool, str]] = [
         (
             "connector",
-            (root / "packages" / "instantsearch.js" / "src" / "connectors" / widget / f"connect{pascal}.ts").exists(),
-            str(root / "packages" / "instantsearch.js" / "src" / "connectors" / widget / f"connect{pascal}.ts"),
+            (
+                root
+                / "packages"
+                / "instantsearch.js"
+                / "src"
+                / "connectors"
+                / widget
+                / f"connect{pascal}.ts"
+            ).exists(),
+            str(
+                root
+                / "packages"
+                / "instantsearch.js"
+                / "src"
+                / "connectors"
+                / widget
+                / f"connect{pascal}.ts"
+            ),
         ),
         (
             "js widget",
-            (root / "packages" / "instantsearch.js" / "src" / "widgets" / widget / f"{widget}.tsx").exists(),
-            str(root / "packages" / "instantsearch.js" / "src" / "widgets" / widget / f"{widget}.tsx"),
+            (
+                root
+                / "packages"
+                / "instantsearch.js"
+                / "src"
+                / "widgets"
+                / widget
+                / f"{widget}.tsx"
+            ).exists(),
+            str(
+                root
+                / "packages"
+                / "instantsearch.js"
+                / "src"
+                / "widgets"
+                / widget
+                / f"{widget}.tsx"
+            ),
         ),
         (
             "react hook",
-            (root / "packages" / "react-instantsearch-core" / "src" / "connectors" / f"use{pascal}.ts").exists(),
-            str(root / "packages" / "react-instantsearch-core" / "src" / "connectors" / f"use{pascal}.ts"),
+            (
+                root
+                / "packages"
+                / "react-instantsearch-core"
+                / "src"
+                / "connectors"
+                / f"use{pascal}.ts"
+            ).exists(),
+            str(
+                root
+                / "packages"
+                / "react-instantsearch-core"
+                / "src"
+                / "connectors"
+                / f"use{pascal}.ts"
+            ),
         ),
         (
             "react widget",
-            (root / "packages" / "react-instantsearch" / "src" / "widgets" / f"{pascal}.tsx").exists(),
-            str(root / "packages" / "react-instantsearch" / "src" / "widgets" / f"{pascal}.tsx"),
+            (
+                root
+                / "packages"
+                / "react-instantsearch"
+                / "src"
+                / "widgets"
+                / f"{pascal}.tsx"
+            ).exists(),
+            str(
+                root
+                / "packages"
+                / "react-instantsearch"
+                / "src"
+                / "widgets"
+                / f"{pascal}.tsx"
+            ),
         ),
         (
             "react ui",
-            (root / "packages" / "react-instantsearch" / "src" / "ui" / f"{pascal}.tsx").exists(),
-            str(root / "packages" / "react-instantsearch" / "src" / "ui" / f"{pascal}.tsx"),
+            (
+                root
+                / "packages"
+                / "react-instantsearch"
+                / "src"
+                / "ui"
+                / f"{pascal}.tsx"
+            ).exists(),
+            str(
+                root
+                / "packages"
+                / "react-instantsearch"
+                / "src"
+                / "ui"
+                / f"{pascal}.tsx"
+            ),
         ),
         ("vue component", *exists_any(vue_component_paths)),
         (
@@ -118,18 +199,15 @@ def build_rows(root: Path, widget: str) -> tuple[str, list[tuple[str, bool, str]
         (
             "js connector export",
             file_contains(
-                root / "packages" / "instantsearch.js" / "src" / "connectors" / "index.ts",
+                root
+                / "packages"
+                / "instantsearch.js"
+                / "src"
+                / "connectors"
+                / "index.ts",
                 f"connect{pascal}",
             ),
             "packages/instantsearch.js/src/connectors/index.ts",
-        ),
-        (
-            "js connector UMD export",
-            file_contains(
-                root / "packages" / "instantsearch.js" / "src" / "connectors" / "index.umd.ts",
-                f"connect{pascal}",
-            ),
-            "packages/instantsearch.js/src/connectors/index.umd.ts",
         ),
         (
             "js widget export",
@@ -138,14 +216,6 @@ def build_rows(root: Path, widget: str) -> tuple[str, list[tuple[str, bool, str]
                 f"./{widget}/{widget}",
             ),
             "packages/instantsearch.js/src/widgets/index.ts",
-        ),
-        (
-            "js widget UMD export",
-            file_contains(
-                root / "packages" / "instantsearch.js" / "src" / "widgets" / "index.umd.ts",
-                f"./{widget}/{widget}",
-            ),
-            "packages/instantsearch.js/src/widgets/index.umd.ts",
         ),
         (
             "react core export",
@@ -158,7 +228,12 @@ def build_rows(root: Path, widget: str) -> tuple[str, list[tuple[str, bool, str]
         (
             "react widget export",
             file_contains(
-                root / "packages" / "react-instantsearch" / "src" / "widgets" / "index.ts",
+                root
+                / "packages"
+                / "react-instantsearch"
+                / "src"
+                / "widgets"
+                / "index.ts",
                 f"./{pascal}",
             ),
             "packages/react-instantsearch/src/widgets/index.ts",
@@ -174,19 +249,37 @@ def build_rows(root: Path, widget: str) -> tuple[str, list[tuple[str, bool, str]
     ]
 
     notes: list[str] = []
-    vue_widget_tests = root / "packages" / "vue-instantsearch" / "src" / "__tests__" / "common-widgets.test.js"
+    vue_widget_tests = (
+        root
+        / "packages"
+        / "vue-instantsearch"
+        / "src"
+        / "__tests__"
+        / "common-widgets.test.js"
+    )
     unsupported_text = f"{pascal} is not supported in Vue InstantSearch"
     if file_contains(vue_widget_tests, unsupported_text):
         notes.append("Vue common widget tests still mark this widget as unsupported.")
 
-    vue_connector_tests = root / "packages" / "vue-instantsearch" / "src" / "__tests__" / "common-connectors.test.js"
+    vue_connector_tests = (
+        root
+        / "packages"
+        / "vue-instantsearch"
+        / "src"
+        / "__tests__"
+        / "common-connectors.test.js"
+    )
     if file_contains(vue_connector_tests, f"create{pascal}ConnectorTests: () => {{}}"):
-        notes.append("Vue common connector tests still use a placeholder setup for this connector.")
+        notes.append(
+            "Vue common connector tests still use a placeholder setup for this connector."
+        )
 
     if widget == "chat":
         notes.append("Chat is intentionally unavailable from the JavaScript UMD build.")
     if widget == "autocomplete":
-        notes.append("Autocomplete still uses EXPERIMENTAL exports in JavaScript and React.")
+        notes.append(
+            "Autocomplete still uses EXPERIMENTAL exports in JavaScript and React."
+        )
     if widget in {
         "related-products",
         "frequently-bought-together",
@@ -226,7 +319,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Audit InstantSearch widget coverage across JavaScript, React, and Vue."
     )
-    parser.add_argument("widgets", nargs="*", help="Widget kebab names such as refinement-list")
+    parser.add_argument(
+        "widgets", nargs="*", help="Widget kebab names such as refinement-list"
+    )
     parser.add_argument("--repo", help="Path to the InstantSearch monorepo")
     parser.add_argument(
         "--all",

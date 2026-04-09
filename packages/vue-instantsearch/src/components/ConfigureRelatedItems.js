@@ -1,4 +1,4 @@
-import { EXPERIMENTAL_connectConfigureRelatedItems } from 'instantsearch.js/es/connectors/index.umd';
+import { EXPERIMENTAL_connectConfigureRelatedItems } from 'instantsearch.js/es/connectors/index';
 
 import { createWidgetMixin } from '../mixins/widget';
 

@@ -3,7 +3,6 @@
  */
 /* global google */
 import * as widgets from '..';
-import * as widgetsUmd from '../index.umd';
 
 import type { UnknownWidgetFactory, Widget } from '../../types';
 import type { IndexWidget } from '../index/index';
@@ -241,12 +240,6 @@ describe('widgets', () => {
           `ais.${name.replace('EXPERIMENTAL_', '')}`
         );
       });
-    });
-  });
-
-  describe('umd', () => {
-    test('has the same number of exports as the main entrypoint', () => {
-      expect(Object.keys(widgetsUmd)).toEqual(Object.keys(widgets));
     });
   });
 });

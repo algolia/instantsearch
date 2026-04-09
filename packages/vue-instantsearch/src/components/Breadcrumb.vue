@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { connectBreadcrumb } from 'instantsearch.js/es/connectors/index.umd';
+import { connectBreadcrumb } from 'instantsearch.js/es/connectors/index';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
