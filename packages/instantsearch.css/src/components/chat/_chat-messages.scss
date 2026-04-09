@@ -23,12 +23,10 @@
   gap: calc(var(--ais-spacing) * 1.5);
   width: 100%;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: opacity var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      filter var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    filter var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-content--clearing {
@@ -45,14 +43,12 @@
   height: calc(var(--ais-spacing) * 1.5);
   border-radius: var(--ais-border-radius-full);
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      transform var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      opacity var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    transform var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-scrollToBottom--hidden {

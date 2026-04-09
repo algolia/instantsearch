@@ -15,9 +15,7 @@
     height: calc(var(--ais-spacing) * 1.5);
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
 
-    @media (prefers-reduced-motion: no-preference) {
-      animation: ais-chat-loader-spinner 1.4s linear infinite;
-    }
+    animation: ais-chat-loader-spinner 1.4s linear infinite;
   }
 
   .ais-ChatMessageLoader-text {
@@ -39,12 +37,10 @@
     background-position: -100% 0;
     font-weight: var(--ais-font-weight-medium);
 
-    @media (prefers-reduced-motion: no-preference) {
-      animation-delay: 0.5s;
-      animation-duration: 3s;
-      animation-iteration-count: infinite;
-      animation-name: ais-chat-loader-text;
-    }
+    animation-delay: 0.5s;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-name: ais-chat-loader-text;
   }
 
   .ais-ChatMessageLoader-skeletonWrapper {
@@ -58,9 +54,7 @@
     background-color: rgba(var(--ais-muted-color-rgb), 0.2);
     border-radius: var(--ais-border-radius-sm);
 
-    @media (prefers-reduced-motion: no-preference) {
-      animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
+    animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
     &:nth-child(2) {
       width: 40%;
