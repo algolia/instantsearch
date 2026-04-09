@@ -879,7 +879,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         refineAutocomplete(query);
       }}
       query={currentRefinement || indexUiState.query || ''}
-      refine={refineSearchBox}
       isSearchStalled={isSearchStalled}
       onAiModeClick={
         aiMode
