@@ -6,7 +6,7 @@ import type { SearchBoxComponentTemplates } from '../../components/SearchBox/Sea
 const defaultTemplate: SearchBoxComponentTemplates = {
   aiMode({ cssClasses }) {
     return (
-      <span>
+      <span style="display:contents">
         <svg
           className={cssClasses.aiModeIcon}
           xmlns="http://www.w3.org/2000/svg"
