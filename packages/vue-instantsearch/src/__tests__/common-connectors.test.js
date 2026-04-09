@@ -342,6 +342,7 @@ const testSetups = {
   createRelatedProductsConnectorTests: () => {},
   createFrequentlyBoughtTogetherConnectorTests: () => {},
   createTrendingItemsConnectorTests: () => {},
+  createTrendingFacetsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
   createFilterSuggestionsConnectorTests: () => {},
@@ -432,6 +433,12 @@ const testOptions = {
     },
   },
   createTrendingItemsConnectorTests: {
+    skippedTests: {
+      options: true,
+      state: true,
+    },
+  },
+  createTrendingFacetsConnectorTests: {
     skippedTests: {
       options: true,
       state: true,
