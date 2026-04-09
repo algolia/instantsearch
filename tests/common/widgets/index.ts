@@ -20,6 +20,7 @@ export * from './numeric-menu';
 export * from './related-products';
 export * from './frequently-bought-together';
 export * from './trending-items';
+export * from './trending-facets';
 export * from './looking-similar';
 export * from './powered-by';
 export * from './menu-select';

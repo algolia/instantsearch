@@ -11,6 +11,7 @@ export * from './current-refinements';
 export * from './related-products';
 export * from './frequently-bought-together';
 export * from './trending-items';
+export * from './trending-facets';
 export * from './looking-similar';
 export * from './chat';
 export * from './filter-suggestions';
