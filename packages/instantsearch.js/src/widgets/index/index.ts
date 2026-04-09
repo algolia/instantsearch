@@ -23,6 +23,7 @@ import type {
   RenderOptions,
   RecommendResponse,
   SearchClient,
+  IndexWidgetType,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -103,8 +104,8 @@ type LocalWidgetRecommendParametersOptions = WidgetSearchParametersOptions & {
 };
 
 export type IndexWidgetDescription = {
-  $$type: 'ais.index';
-  $$widgetType: 'ais.index';
+  $$type: IndexWidgetType;
+  $$widgetType: IndexWidgetType;
 };
 
 export type IndexWidget<TUiState extends UiState = UiState> = Omit<
