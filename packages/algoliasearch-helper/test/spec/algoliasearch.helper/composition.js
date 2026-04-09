@@ -28,7 +28,7 @@ function makeFeedResult(feedID, overrides) {
 }
 
 describe('composition multifeed dispatch', function () {
-  test('multifeed response populates _feedResults and _feedOrder', function () {
+  test('multifeed response populates lastResults.feeds', function () {
     var client = makeFakeCompositionClient({
       results: [
         makeFeedResult('products', {
@@ -55,40 +55,32 @@ describe('composition multifeed dispatch', function () {
 
     helper.searchWithComposition();
 
-    return resultPromise.then(function (event) {
-      var results = event.results;
+    return resultPromise.then(function () {
+      // lastResults.feeds is an ordered array of SearchResults
+      expect(derivedHelper.lastResults.feeds).toHaveLength(2);
 
-      // _feedResults map is populated
-      expect(results._feedResults).toBeDefined();
-      expect(Object.keys(results._feedResults)).toEqual([
-        'products',
-        'articles',
-      ]);
-
-      // _feedOrder preserves response order
-      expect(results._feedOrder).toEqual(['products', 'articles']);
-
-      // Each feed has its own SearchResults with correct data
-      var products = results._feedResults.products;
+      var products = derivedHelper.lastResults.feeds[0];
       expect(products.hits).toEqual([{ objectID: '1', name: 'Product A' }]);
       expect(products.nbHits).toBe(100);
       expect(products.feedID).toBe('products');
 
-      var articles = results._feedResults.articles;
+      var articles = derivedHelper.lastResults.feeds[1];
       expect(articles.hits).toEqual([{ objectID: '2', title: 'Article B' }]);
       expect(articles.nbHits).toBe(50);
       expect(articles.feedID).toBe('articles');
 
-      // Primary lastResults uses first feed
-      expect(results.hits).toEqual([{ objectID: '1', name: 'Product A' }]);
-      expect(results.nbHits).toBe(100);
-      expect(results.feedID).toBe('products');
+      // lastResults points to the first feed
+      expect(derivedHelper.lastResults.hits).toEqual([
+        { objectID: '1', name: 'Product A' },
+      ]);
+      expect(derivedHelper.lastResults.nbHits).toBe(100);
+      expect(derivedHelper.lastResults.feedID).toBe('products');
 
       derivedHelper.detach();
     });
   });
 
-  test('single-feed response without feedID has no _feedResults (backward compat)', function () {
+  test('single-feed response without feedID has no feeds (backward compat)', function () {
     var client = makeFakeCompositionClient({
       results: [
         {
@@ -115,13 +107,10 @@ describe('composition multifeed dispatch', function () {
 
     helper.searchWithComposition();
 
-    return resultPromise.then(function (event) {
-      var results = event.results;
-
-      expect(results._feedResults).toBeUndefined();
-      expect(results._feedOrder).toBeUndefined();
-      expect(results.hits).toEqual([{ objectID: '1' }]);
-      expect(results.nbHits).toBe(1);
+    return resultPromise.then(function () {
+      expect(derivedHelper.lastResults.feeds).toBeUndefined();
+      expect(derivedHelper.lastResults.hits).toEqual([{ objectID: '1' }]);
+      expect(derivedHelper.lastResults.nbHits).toBe(1);
 
       derivedHelper.detach();
     });
@@ -170,15 +159,11 @@ describe('composition multifeed dispatch', function () {
 
     helper.searchWithComposition();
 
-    return resultPromise.then(function (event) {
-      var results = event.results;
-
-      expect(results._feedOrder).toEqual(['feed1', 'feed2', 'feed3']);
-      expect(Object.keys(results._feedResults)).toEqual([
-        'feed1',
-        'feed2',
-        'feed3',
-      ]);
+    return resultPromise.then(function () {
+      expect(derivedHelper.lastResults.feeds).toHaveLength(3);
+      expect(derivedHelper.lastResults.feeds[0].feedID).toBe('feed1');
+      expect(derivedHelper.lastResults.feeds[1].feedID).toBe('feed2');
+      expect(derivedHelper.lastResults.feeds[2].feedID).toBe('feed3');
 
       derivedHelper.detach();
     });
@@ -201,14 +186,16 @@ describe('composition multifeed dispatch', function () {
 
     helper.searchWithComposition();
 
-    return resultPromise.then(function (event) {
-      var results = event.results;
-
-      expect(results._rawContent).toEqual({ compositionID: 'my-composition-id' });
-      expect(results._feedResults.products._rawContent).toEqual({
+    return resultPromise.then(function () {
+      expect(derivedHelper.lastResults.feeds[0]._rawContent).toEqual({
         compositionID: 'my-composition-id',
       });
-      expect(results._feedResults.articles._rawContent).toEqual({
+      expect(derivedHelper.lastResults.feeds[1]._rawContent).toEqual({
+        compositionID: 'my-composition-id',
+      });
+
+      // lastResults (first feed) also has _rawContent
+      expect(derivedHelper.lastResults._rawContent).toEqual({
         compositionID: 'my-composition-id',
       });
 
@@ -285,8 +272,7 @@ describe('composition multifeed dispatch', function () {
       var results = event.results;
 
       expect(results).toBeDefined();
-      expect(results._feedResults).toBeUndefined();
-      expect(results._feedOrder).toBeUndefined();
+      expect(derivedHelper.lastResults.feeds).toBeUndefined();
       expect(results.hits).toBeUndefined();
       expect(results.nbHits).toBeUndefined();
 
@@ -378,13 +364,11 @@ describe('composition multifeed dispatch', function () {
     helper.searchWithComposition();
     helper.searchWithComposition();
 
-    return secondResultPromise.then(function (event) {
-      var results = event.results;
-
+    return secondResultPromise.then(function () {
       // Second response replaces first: only 'videos', no 'products'/'articles'
-      expect(results._feedOrder).toEqual(['videos']);
-      expect(Object.keys(results._feedResults)).toEqual(['videos']);
-      expect(results._feedResults.videos.hits).toEqual([{ objectID: '3' }]);
+      expect(derivedHelper.lastResults.feeds).toHaveLength(1);
+      expect(derivedHelper.lastResults.feeds[0].feedID).toBe('videos');
+      expect(derivedHelper.lastResults.feeds[0].hits).toEqual([{ objectID: '3' }]);
 
       derivedHelper.detach();
     });
