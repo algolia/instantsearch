@@ -1892,7 +1892,13 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
         if (rawContent !== undefined) sr._rawContent = rawContent;
         return sr;
       });
-      helper.lastResults = feeds[0];
+      // Separate instance from feeds[0] to avoid circular ref in JSON.stringify
+      helper.lastResults = new SearchResults(
+        state,
+        [specificResults[0]],
+        self._searchResultsOptions
+      );
+      if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
       helper.lastResults.feeds = feeds;
     } else {
       helper.lastResults = new SearchResults(
