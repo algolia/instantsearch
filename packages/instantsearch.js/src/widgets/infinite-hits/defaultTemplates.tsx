@@ -1,3 +1,7 @@
+/** @jsx h */
+
+import { h, Fragment } from 'preact';
+
 import { omit } from '../../lib/utils';
 
 import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
@@ -13,7 +17,9 @@ const defaultTemplates: InfiniteHitsComponentTemplates = {
     return 'Show more results';
   },
   item(data) {
-    return JSON.stringify(omit(data, ['__hitIndex']), null, 2);
+    return (
+      <Fragment>{JSON.stringify(omit(data, ['__hitIndex']), null, 2)}</Fragment>
+    );
   },
 };
 
