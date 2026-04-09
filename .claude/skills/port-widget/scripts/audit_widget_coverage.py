@@ -274,8 +274,6 @@ def build_rows(
             "Vue common connector tests still use a placeholder setup for this connector."
         )
 
-    if widget == "chat":
-        notes.append("Chat is intentionally unavailable from the JavaScript UMD build.")
     if widget == "autocomplete":
         notes.append(
             "Autocomplete still uses EXPERIMENTAL exports in JavaScript and React."
