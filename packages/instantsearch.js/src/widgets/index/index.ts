@@ -9,6 +9,7 @@ import {
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
+  storeRenderState,
   defer,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
@@ -19,7 +20,6 @@ import type {
   IndexUiState,
   Widget,
   ScopedResult,
-  IndexRenderState,
   RenderOptions,
   RecommendResponse,
   SearchClient,
@@ -1064,28 +1064,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 };
 
 export default index;
-
-function storeRenderState({
-  renderState,
-  instantSearchInstance,
-  parent,
-}: {
-  renderState: IndexRenderState;
-  instantSearchInstance: InstantSearch;
-  parent?: IndexWidget;
-}) {
-  const parentIndexName = parent
-    ? parent.getIndexId()
-    : instantSearchInstance.mainIndex.getIndexId();
-
-  instantSearchInstance.renderState = {
-    ...instantSearchInstance.renderState,
-    [parentIndexName]: {
-      ...instantSearchInstance.renderState[parentIndexName],
-      ...renderState,
-    },
-  };
-}
 
 /**
  * Walk up the parent chain to find the closest isolated index, or fall back to mainHelper
