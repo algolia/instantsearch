@@ -205,6 +205,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
   return {
     layoutComponent: SearchLayoutComponent,
+    showLoaderDuringStreaming: false,
   };
 }
 

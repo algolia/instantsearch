@@ -385,7 +385,7 @@ export function createOptionsTests(
         ).toBeInTheDocument();
       });
 
-      test('does not show loader during streaming when last part is a tool with streaming input', async () => {
+      test('shows loader during streaming when last part is a tool with streaming input', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -415,7 +415,7 @@ export function createOptionsTests(
               role: 'assistant',
               parts: [
                 {
-                  type: `tool-${SearchIndexToolType}`,
+                  type: 'tool-some_tool',
                   toolCallId: '1',
                   state: 'input-streaming',
                   input: undefined,
@@ -429,7 +429,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-ChatMessageLoader')
-        ).not.toBeInTheDocument();
+        ).toBeInTheDocument();
       });
 
       test('shows loader during streaming when last part is a tool with input available', async () => {

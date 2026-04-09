@@ -243,14 +243,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
-          const showBaseLoader =
-            tool.showLoaderDuringStreaming &&
+          if (
             toolMessage.state === 'input-streaming' &&
-            LoaderComponent;
-
-          // If the tool is still streaming and has indicated to show the base loader,
-          // we don't render the tool layout component.
-          if (showBaseLoader) {
+            tool.showLoaderDuringStreaming
+          ) {
             return null;
           }
 

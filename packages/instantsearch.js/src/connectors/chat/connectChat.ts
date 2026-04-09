@@ -599,6 +599,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult: ClientSideTool = {
+            showLoaderDuringStreaming: true,
             ...tool,
             addToolResult: _chatInstance.addToolResult,
             applyFilters,

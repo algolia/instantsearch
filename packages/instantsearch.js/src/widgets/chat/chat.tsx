@@ -265,6 +265,7 @@ function createCarouselTool<
 
   return {
     templates: { layout: SearchLayoutComponent },
+    showLoaderDuringStreaming: false,
   };
 }
 

@@ -419,8 +419,8 @@ export function createChatMessagesComponent({
     const isWaitingForResponse = status === 'submitted';
     const isStreamingWithNoContent = status === 'streaming' && !lastPart;
 
-    // Check if the last tool part has showLoaderDuringStreaming enabled and is in input-streaming state
-    // if so, it renders nothing inline and we should show the global loader instead
+    // Check if the tool opted out of the global loader during input-streaming
+    // via showLoaderDuringStreaming: false.
     const isToolDeferringToGlobalLoader =
       lastPart &&
       isPartTool(lastPart) &&
@@ -437,7 +437,10 @@ export function createChatMessagesComponent({
       })();
 
     const isStreamingNonTextContent =
-      status === 'streaming' && lastPart && !isPartText(lastPart);
+      status === 'streaming' &&
+      lastPart &&
+      !isPartText(lastPart) &&
+      !(isPartTool(lastPart) && lastPart.state === 'output-available');
 
     const showLoader =
       isWaitingForResponse ||
