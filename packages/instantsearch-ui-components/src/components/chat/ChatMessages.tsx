@@ -1,8 +1,8 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
-import { startsWith } from '../../lib';
 import {
+  findTool,
   getTextContent,
   hasTextContent,
   isPartText,
@@ -32,7 +32,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTool, ClientSideTools } from './types';
+import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -416,37 +416,7 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    const isWaitingForResponse = status === 'submitted';
-    const isStreamingWithNoContent = status === 'streaming' && !lastPart;
-
-    // Check if the tool opted out of the global loader during input-streaming
-    // via showLoaderDuringStreaming: false.
-    const isToolDeferringToGlobalLoader =
-      lastPart &&
-      isPartTool(lastPart) &&
-      lastPart.state === 'input-streaming' &&
-      (() => {
-        const toolName = lastPart.type.replace('tool-', '');
-        let tool: ClientSideTool | undefined = tools[toolName];
-        if (!tool) {
-          tool = Object.entries(tools).find(([key]) =>
-            startsWith(toolName, `${key}_`)
-          )?.[1];
-        }
-        return tool?.showLoaderDuringStreaming;
-      })();
-
-    const isStreamingNonTextContent =
-      status === 'streaming' &&
-      lastPart &&
-      !isPartText(lastPart) &&
-      !(isPartTool(lastPart) && lastPart.state === 'output-available');
-
-    const showLoader =
-      isWaitingForResponse ||
-      isStreamingWithNoContent ||
-      isStreamingNonTextContent ||
-      isToolDeferringToGlobalLoader;
+    const showLoader = getShowLoader(status, lastPart, tools);
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
@@ -534,3 +504,27 @@ export function createChatMessagesComponent({
     );
   };
 }
+
+const getShowLoader = (
+  status: ChatStatus,
+  lastPart: ChatMessageBase['parts'][number] | undefined,
+  tools: ClientSideTools
+): boolean => {
+  if (status !== 'submitted' && status !== 'streaming') return false;
+  if (status === 'submitted') return true;
+
+  if (!lastPart) return true;
+  if (isPartText(lastPart)) return false;
+
+  if (isPartTool(lastPart)) {
+    if (lastPart.state === 'output-available') return false;
+    if (lastPart.state === 'input-streaming') {
+      const tool = findTool(lastPart.type, tools);
+      return tool?.showLoaderDuringStreaming !== false;
+    }
+    return true;
+  }
+
+  return true;
+};
+
