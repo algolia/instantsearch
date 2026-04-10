@@ -10,6 +10,7 @@ import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
+import { createChatGreetingComponent } from './ChatGreeting';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
 import {
   ChevronDownIcon,
@@ -29,6 +30,7 @@ import type {
   ChatMessageTranslations,
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
+import type { ChatGreetingProps } from './ChatGreeting';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
@@ -65,6 +67,14 @@ export type ChatMessagesTranslations = {
    * Label for the feedback spinner
    */
   sendingFeedbackLabel?: string;
+  /**
+   * Heading text for the greeting screen
+   */
+  greetingHeading?: string;
+  /**
+   * Subheading text for the greeting screen
+   */
+  greetingSubheading?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -109,6 +119,10 @@ export type ChatMessagesProps<
    * Custom error component
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
+  /**
+   * Custom greeting component shown when there are no messages
+   */
+  greetingComponent?: (props: ChatGreetingProps) => JSX.Element;
   /**
    * Custom actions component
    */
@@ -349,6 +363,9 @@ export function createChatMessagesComponent({
   const DefaultErrorComponent = createChatMessageErrorComponent({
     createElement,
   });
+  const DefaultGreetingComponent = createChatGreetingComponent({
+    createElement,
+  });
 
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
@@ -361,6 +378,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      greetingComponent: GreetingComponent,
       actionsComponent: ActionsComponent,
       tools,
       indexUiState,
@@ -421,9 +439,13 @@ export function createChatMessagesComponent({
       isStreamingWithNoContent ||
       isStreamingNonTextContent;
 
+    const showGreeting =
+      messages.length === 0 && !showLoader && !isClearing;
+
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
+    const DefaultGreeting = GreetingComponent || DefaultGreetingComponent;
 
     return (
       <div
@@ -449,6 +471,15 @@ export function createChatMessagesComponent({
               }
             }}
           >
+            {showGreeting && (
+              <DefaultGreeting
+                translations={{
+                  greetingHeading: translations.greetingHeading,
+                  greetingSubheading: translations.greetingSubheading,
+                }}
+              />
+            )}
+
             {messages.map((message, index) => (
               <DefaultMessage
                 key={message.id}

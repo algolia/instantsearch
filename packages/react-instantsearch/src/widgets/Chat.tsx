@@ -142,6 +142,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
     messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
+    messagesGreetingComponent?: ChatUiProps['messagesProps']['greetingComponent'];
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
@@ -186,6 +187,7 @@ function ChatInner<
     headerMaximizeIconComponent,
     messagesLoaderComponent,
     messagesErrorComponent,
+    messagesGreetingComponent,
     promptComponent,
     promptHeaderComponent,
     promptFooterComponent,
@@ -327,6 +329,7 @@ function ChatInner<
         onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
+        greetingComponent: messagesGreetingComponent,
         actionsComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,

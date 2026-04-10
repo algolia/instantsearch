@@ -54,6 +54,7 @@ import type {
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
+  ChatGreetingProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
@@ -319,6 +320,9 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
+    greetingComponent:
+      | ((props: ChatGreetingProps) => JSX.Element)
+      | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
@@ -435,6 +439,7 @@ function ChatWrapper({
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
+        greetingComponent: messagesProps.greetingComponent,
         actionsComponent: messagesProps.actionsComponent,
         assistantMessageProps: messagesProps.assistantMessageProps,
         userMessageProps: messagesProps.userMessageProps,
@@ -656,12 +661,26 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           );
         }
       : undefined;
+    const messagesGreetingComponent = templates.messages?.greeting
+      ? (greetingProps: ChatGreetingProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="greeting"
+              rootTagName="div"
+              data={greetingProps}
+            />
+          );
+        }
+      : undefined;
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
         loaderText: templates.messages?.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
+        greetingHeading: templates.messages?.greetingHeadingText,
+        greetingSubheading: templates.messages?.greetingSubheadingText,
       });
 
     const assistantMessageTemplateProps = prepareTemplateProps({
@@ -916,6 +935,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           messagesProps={{
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
+            greetingComponent: messagesGreetingComponent,
             actionsComponent,
             assistantMessageProps: {
               leadingComponent: assistantMessageLeadingComponent,
@@ -1083,6 +1103,18 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+      /**
+       * Template to use for the greeting shown when there are no messages
+       */
+      greeting?: Template<ChatGreetingProps>;
+      /**
+       * Heading text for the greeting screen
+       */
+      greetingHeadingText?: string;
+      /**
+       * Subheading text for the greeting screen
+       */
+      greetingSubheadingText?: string;
     }>;
 
     /**
