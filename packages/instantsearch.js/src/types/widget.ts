@@ -93,6 +93,7 @@ export type BuiltinTypes =
   | 'ais.sortBy'
   | 'ais.stats'
   | 'ais.toggleRefinement'
+  | 'ais.trendingFacets'
   | 'ais.trendingItems'
   | 'ais.voiceSearch';
 
@@ -133,6 +134,7 @@ export type BuiltinWidgetTypes =
   | 'ais.sortBy'
   | 'ais.stats'
   | 'ais.toggleRefinement'
+  | 'ais.trendingFacets'
   | 'ais.trendingItems'
   | 'ais.voiceSearch';
 

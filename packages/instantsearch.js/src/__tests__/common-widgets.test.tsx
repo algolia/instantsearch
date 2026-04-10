@@ -28,6 +28,7 @@ import {
   relatedProducts,
   frequentlyBoughtTogether,
   trendingItems,
+  trendingFacets,
   lookingSimilar,
   poweredBy,
   menuSelect,
@@ -553,6 +554,22 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createTrendingFacetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        trendingFacets({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createLookingSimilarWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -725,6 +742,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherWidgetTests: undefined,
   createTrendingItemsWidgetTests: undefined,
+  createTrendingFacetsWidgetTests: undefined,
   createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createMenuSelectWidgetTests: undefined,
