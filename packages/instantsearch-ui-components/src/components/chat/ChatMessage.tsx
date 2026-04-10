@@ -245,7 +245,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
           if (
             toolMessage.state === 'input-streaming' &&
-            tool.showLoaderDuringStreaming
+            !tool.streamInput
           ) {
             return null;
           }

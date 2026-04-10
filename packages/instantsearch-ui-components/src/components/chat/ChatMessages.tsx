@@ -520,7 +520,7 @@ const getShowLoader = (
     if (lastPart.state === 'output-available') return false;
     if (lastPart.state === 'input-streaming') {
       const tool = findTool(lastPart.type, tools);
-      return tool?.showLoaderDuringStreaming !== false;
+      return !tool?.streamInput;
     }
     return true;
   }

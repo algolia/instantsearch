@@ -447,7 +447,6 @@ describe('connectChat', () => {
       const renderState = getRenderState();
       expect(renderState.tools).toEqual({
         testTool: {
-          showLoaderDuringStreaming: true,
           ...mockTool,
           addToolResult: expect.any(Function),
           applyFilters: expect.any(Function),
@@ -567,7 +566,7 @@ data: [DONE]`,
       });
     });
 
-    it('skips JSON repair for tools with showLoaderDuringStreaming enabled (default)', async () => {
+    it('skips JSON repair for tools without streamInput (default)', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
         tools: {
@@ -624,19 +623,19 @@ data: [DONE]`,
           | undefined;
 
         expect(toolPart?.state).toBe('input-streaming');
-        // Input is not repaired since showLoaderDuringStreaming defaults to true
+        // Input is not repaired since streamInput is not set (default)
         expect(toolPart?.input).toBeUndefined();
         // Raw input is still accumulated
         expect(toolPart?.rawInput).toBe('{"query": "sho');
       });
     });
 
-    it('repairs JSON for tools with showLoaderDuringStreaming set to false', async () => {
+    it('repairs JSON for tools with streamInput set to true', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
         tools: {
           myTool: {
-            showLoaderDuringStreaming: false,
+            streamInput: true,
           },
         },
         transport: {
@@ -690,7 +689,7 @@ data: [DONE]`,
           | undefined;
 
         expect(toolPart?.state).toBe('input-streaming');
-        // Input is repaired since showLoaderDuringStreaming is false
+        // Input is repaired since streamInput is true
         expect(toolPart?.input).toEqual({ query: 'sho' });
         expect(toolPart?.rawInput).toBe('{"query": "sho');
       });

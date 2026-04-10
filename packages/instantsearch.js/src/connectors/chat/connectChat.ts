@@ -426,7 +426,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             tool = tools[SearchIndexToolType];
           }
           if (!tool) return true;
-          return tool.showLoaderDuringStreaming === false;
+          return Boolean(tool.streamInput);
         },
         onToolCall({ toolCall }) {
           let tool = tools[toolCall.toolName];
@@ -607,7 +607,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult: ClientSideTool = {
-            showLoaderDuringStreaming: true,
             ...tool,
             addToolResult: _chatInstance.addToolResult,
             applyFilters,
