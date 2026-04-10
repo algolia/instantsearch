@@ -29,6 +29,31 @@ describe('chat', () => {
         See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/"
       `);
     });
+
+    test('throws without `chatTrigger` or AI mode', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+        }),
+      ]);
+
+      expect(() => {
+        search.start();
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`chat\` widget requires a way to open the chat. Add a \`chatTrigger\` widget or enable AI mode on an input widget. Use \`disableTriggerValidation: true\` to opt out.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
+      `);
+    });
   });
 
   describe('search tool compatibility', () => {
@@ -45,6 +70,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {
@@ -90,6 +116,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {

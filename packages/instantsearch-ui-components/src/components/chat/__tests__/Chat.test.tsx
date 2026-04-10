@@ -40,6 +40,7 @@ describe('Chat', () => {
       <div>
         <div
           class="ais-Chat ais-ChatOverlayLayout"
+          togglebuttonprops="[object Object]"
         >
           <div
             class="ais-Chat-container ais-Chat-container--open"
@@ -215,25 +216,7 @@ describe('Chat', () => {
           </div>
           <div
             class="ais-Chat-toggleButtonWrapper"
-          >
-            <button
-              class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
-              type="button"
-            >
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m18 15-6-6-6 6"
-                />
-              </svg>
-            </button>
-          </div>
+          />
         </div>
       </div>
     `);

@@ -106,7 +106,13 @@ function Widget<TWidget extends SingleWidget>({
       );
     }
     case 'Chat': {
-      return <widget.Component agentId="agentId" {...props} />;
+      return (
+        <widget.Component
+          agentId="agentId"
+          disableTriggerValidation
+          {...props}
+        />
+      );
     }
     case 'ToggleRefinement':
     case 'RangeInput':

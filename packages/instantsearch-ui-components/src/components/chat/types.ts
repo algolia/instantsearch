@@ -466,7 +466,7 @@ export type ChatLayoutOwnProps<
   headerComponent: JSX.Element;
   messagesComponent: JSX.Element;
   promptComponent: JSX.Element;
-  toggleButtonComponent: JSX.Element;
+  toggleButtonComponent?: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
   isClearing?: boolean;
   clearMessages?: () => void;
@@ -475,7 +475,10 @@ export type ChatLayoutOwnProps<
   tools: ClientSideTools;
 } & Pick<ChatState<TMessage>, 'messages'> &
   Partial<Pick<ChatState<TMessage>, 'status'>> &
-  Pick<AbstractChat<TMessage>, 'sendMessage' | 'regenerate' | 'stop' | 'error'> &
+  Pick<
+    AbstractChat<TMessage>,
+    'sendMessage' | 'regenerate' | 'stop' | 'error'
+  > &
   ComponentProps<'div'>;
 
 export type ClientSideToolComponentProps = {
