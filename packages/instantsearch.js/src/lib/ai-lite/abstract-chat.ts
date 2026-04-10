@@ -12,6 +12,7 @@ import type {
   FileUIPart,
   IdGenerator,
   InferUIMessageMetadata,
+  InferUIMessageToolCall,
   InferUIMessageTools,
   UIMessage,
   UIMessageChunk,
@@ -21,9 +22,9 @@ import type {
   ChatOnDataCallback,
 } from './types';
 
-type ActiveResponse = {
+type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
-  stream?: ReadableStream<UIMessageChunk>;
+  stream?: ReadableStream<TChunk>;
 };
 
 /**
@@ -685,7 +686,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     toolName: chunk.toolName,
                     toolCallId: chunk.toolCallId,
                     input: chunk.input,
-                  } as any,
+                    dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                  } as InferUIMessageToolCall<TUIMessage>,
                 });
                 if (result && typeof result.then === 'function') {
                   pendingToolCall = pendingToolCall.then(() => result);
