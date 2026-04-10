@@ -93,14 +93,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       );
     }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
-    if (message.state === 'input-streaming') {
-      return (
-        <div className="ais-ChatToolSearchIndex-loading">
-          Searching…
-        </div>
-      );
-    }
-
     return (
       <Carousel
         items={items}
@@ -205,7 +197,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
   return {
     layoutComponent: SearchLayoutComponent,
-    showLoaderDuringStreaming: false,
   };
 }
 
