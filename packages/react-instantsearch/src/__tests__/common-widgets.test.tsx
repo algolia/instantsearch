@@ -406,6 +406,8 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const chatRef = React.createRef<React.ComponentRef<typeof Chat>>();
+
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -422,10 +424,13 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
             />
           </>
         )}
-        <Chat {...chatWidgetParams} />
+        <Chat ref={chatRef} disableTriggerValidation {...chatWidgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
+
+    globalThis.__chatTestSetOpen = (open: boolean) =>
+      chatRef.current?.setOpen(open);
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(

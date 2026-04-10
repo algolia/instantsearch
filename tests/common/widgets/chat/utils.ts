@@ -1,8 +1,14 @@
 import { wait } from '@instantsearch/testutils';
-import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import type { Act } from '../../common';
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __chatTestSetOpen: ((open: boolean) => void) | null;
+}
+
+globalThis.__chatTestSetOpen = null;
 
 export const createDefaultWidgetParams = (chat?: Chat<any>) => ({
   agentId: 'agentId',
@@ -14,7 +20,7 @@ export async function openChat(act: Act) {
     await wait(0);
   });
 
-  userEvent.click(document.querySelector('.ais-ChatToggleButton')!);
+  globalThis.__chatTestSetOpen?.(true);
 
   await act(async () => {
     await wait(0);

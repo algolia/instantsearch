@@ -666,14 +666,15 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       );
     }
 
+    const chatWidget = chat({
+      container: document.body.appendChild(document.createElement('div')),
+      disableTriggerValidation: true,
+      ...chatWidgetParams,
+    });
+    globalThis.__chatTestSetOpen = chatWidget.setOpen.bind(chatWidget);
+
     instantsearch(instantSearchOptions)
-      .addWidgets([
-        ...refinementsWidgets,
-        chat({
-          container: document.body.appendChild(document.createElement('div')),
-          ...chatWidgetParams,
-        }),
-      ])
+      .addWidgets([...refinementsWidgets, chatWidget])
       .on('error', () => {
         /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
