@@ -622,7 +622,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     currentRefinement,
   } = useAutocomplete({
     transformItems,
+    future: { undefinedEmptyQuery: true },
   });
+
+  const resolvedQuery =
+    currentRefinement !== undefined
+      ? currentRefinement
+      : indexUiState.query ?? '';
 
   const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } =
     useDetachedMode(detachedMediaQuery);
@@ -878,18 +884,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       onQueryChange={(query) => {
         refineAutocomplete(query);
       }}
-      query={currentRefinement || indexUiState.query || ''}
-      refine={refineSearchBox}
+      query={resolvedQuery}
       isSearchStalled={isSearchStalled}
       onAiModeClick={
         aiMode
           ? () => {
               if (chatRenderState) {
                 chatRenderState.setOpen?.(true);
-                const query =
-                  currentRefinement || indexUiState.query || '';
-                if (query.trim()) {
-                  chatRenderState.sendMessage?.({ text: query });
+                if (resolvedQuery.trim()) {
+                  chatRenderState.sendMessage?.({ text: resolvedQuery });
                 }
               }
             }
@@ -932,7 +935,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         classNames={classNames}
       >
         <AutocompleteDetachedSearchButton
-          query={currentRefinement || indexUiState.query || ''}
+          query={resolvedQuery}
           placeholder={placeholder}
           classNames={classNames}
           onClick={() => {
