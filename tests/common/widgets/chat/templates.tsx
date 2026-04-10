@@ -264,6 +264,86 @@ export function createTemplatesTests(
         );
       });
 
+      test('renders with custom greeting when no messages', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({ messages: [] as any[] });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                messages: {
+                  greeting:
+                    '<div class="custom-greeting">Custom greeting</div>',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              messagesGreetingComponent: () => (
+                <div className="custom-greeting">Custom greeting</div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('.custom-greeting')!.textContent).toBe(
+          'Custom greeting'
+        );
+      });
+
+      test('does not render greeting when there are messages', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '0',
+              role: 'user',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                messages: {
+                  greeting:
+                    '<div class="custom-greeting">Custom greeting</div>',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              messagesGreetingComponent: () => (
+                <div className="custom-greeting">Custom greeting</div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('.custom-greeting')).toBeNull();
+      });
+
       test('renders with custom assistant and user message parts', async () => {
         const searchClient = createSearchClient();
 
