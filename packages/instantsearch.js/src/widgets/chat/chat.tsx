@@ -337,6 +337,7 @@ type ChatWrapperProps = {
     translations: Partial<ChatMessagesTranslations>;
     messageTranslations: Partial<ChatMessageProps['translations']>;
     sendMessage: ChatLayoutOwnProps['sendMessage'];
+    setInput: (input: string) => void;
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -447,6 +448,7 @@ function ChatWrapper({
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
         sendMessage: messagesProps.sendMessage,
+        setInput: messagesProps.setInput,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -681,8 +683,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         loaderText: templates.messages?.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
-        greetingHeading: templates.messages?.greetingHeadingText,
-        greetingSubheading: templates.messages?.greetingSubheadingText,
       });
 
     const assistantMessageTemplateProps = prepareTemplateProps({
@@ -950,6 +950,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             translations: messagesTranslations,
             messageTranslations,
             sendMessage,
+            setInput,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
@@ -1110,14 +1111,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for the greeting shown when there are no messages
        */
       greeting?: Template<ChatGreetingProps>;
-      /**
-       * Heading text for the greeting screen
-       */
-      greetingHeadingText?: string;
-      /**
-       * Subheading text for the greeting screen
-       */
-      greetingSubheadingText?: string;
     }>;
 
     /**

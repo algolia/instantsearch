@@ -10,7 +10,6 @@ import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
-import { createChatGreetingComponent } from './ChatGreeting';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
 import {
   ChevronDownIcon,
@@ -67,14 +66,6 @@ export type ChatMessagesTranslations = {
    * Label for the feedback spinner
    */
   sendingFeedbackLabel?: string;
-  /**
-   * Heading text for the greeting screen
-   */
-  greetingHeading?: string;
-  /**
-   * Subheading text for the greeting screen
-   */
-  greetingSubheading?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -159,6 +150,10 @@ export type ChatMessagesProps<
    * Function to send a message to the chat
    */
   sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
   /**
    * Optional class names
    */
@@ -367,9 +362,6 @@ export function createChatMessagesComponent({
   const DefaultErrorComponent = createChatMessageErrorComponent({
     createElement,
   });
-  const DefaultGreetingComponent = createChatGreetingComponent({
-    createElement,
-  });
 
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
@@ -392,6 +384,7 @@ export function createChatMessagesComponent({
       onReload,
       onClose,
       sendMessage,
+      setInput,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -450,7 +443,6 @@ export function createChatMessagesComponent({
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
-    const DefaultGreeting = GreetingComponent || DefaultGreetingComponent;
 
     return (
       <div
@@ -476,13 +468,10 @@ export function createChatMessagesComponent({
               }
             }}
           >
-            {showGreeting && (
-              <DefaultGreeting
-                translations={{
-                  greetingHeading: translations.greetingHeading,
-                  greetingSubheading: translations.greetingSubheading,
-                }}
+            {showGreeting && GreetingComponent && (
+              <GreetingComponent
                 sendMessage={sendMessage}
+                setInput={setInput}
                 status={status}
                 onClose={onClose}
               />

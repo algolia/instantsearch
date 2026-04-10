@@ -52,6 +52,10 @@ export type ChatGreetingProps = ComponentProps<'div'> & {
    * Callback to close the chat
    */
   onClose?: () => void;
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
 };
 
 export function createChatGreetingComponent({
@@ -64,6 +68,7 @@ export function createChatGreetingComponent({
       sendMessage: _sendMessage,
       status: _status,
       onClose: _onClose,
+      setInput: _setInput,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
