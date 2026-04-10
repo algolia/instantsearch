@@ -22,6 +22,7 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
+import type { ChatGreetingProps } from './ChatGreeting';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -29,7 +30,6 @@ import type {
   ChatMessageTranslations,
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
-import type { ChatGreetingProps } from './ChatGreeting';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
