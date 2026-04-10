@@ -172,11 +172,25 @@ export function createOptionsTests(
       expect(clearButton).not.toBeDisabled();
 
       await act(async () => {
+        chat._state.status = 'submitted';
+        await wait(0);
+      });
+
+      expect(clearButton).toBeDisabled();
+
+      await act(async () => {
         chat._state.status = 'streaming';
         await wait(0);
       });
 
       expect(clearButton).toBeDisabled();
+
+      await act(async () => {
+        chat._state.status = 'error';
+        await wait(0);
+      });
+
+      expect(clearButton).not.toBeDisabled();
     });
 
     describe('cssClasses', () => {
