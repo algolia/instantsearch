@@ -59,12 +59,10 @@
   outline: 1px solid transparent;
   z-index: 1;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: border-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      outline-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: border-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    outline-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-ChatPrompt-body:focus-within {

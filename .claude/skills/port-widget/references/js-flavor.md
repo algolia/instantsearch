@@ -4,7 +4,6 @@
 
 - Shared UI via `instantsearch-ui-components`: `hits`, `related-products`, `trending-items`, `filter-suggestions`
 - Older Preact widget with templates and CSS helpers: `refinement-list`, `menu`, `pagination`
-- UMD-specific edge case: `chat` is intentionally stubbed in `src/widgets/index.umd.ts`
 
 ## File layout
 
@@ -31,6 +30,5 @@ packages/instantsearch.js/src/widgets/<widget>/
 
 ## Registration checklist
 
-- Export the connector from both `packages/instantsearch.js/src/connectors/index.ts` and `index.umd.ts`.
-- Export the widget from both `packages/instantsearch.js/src/widgets/index.ts` and `index.umd.ts`.
-- If the feature is intentionally unavailable in UMD, match the existing stubbed-error pattern instead of exporting a broken implementation.
+- Export the connector from `packages/instantsearch.js/src/connectors/index.ts`.
+- Export the widget from `packages/instantsearch.js/src/widgets/index.ts`.

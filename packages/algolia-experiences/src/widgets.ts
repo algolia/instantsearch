@@ -22,7 +22,7 @@ import {
   stats,
   toggleRefinement,
   trendingItems,
-} from 'instantsearch.js/es/widgets/index.umd';
+} from 'instantsearch.js/es/widgets';
 
 export const widgets = {
   'ais.breadcrumb': breadcrumb,

@@ -77,10 +77,8 @@
 .ais-ChatMessage--auto-hide-actions .ais-ChatMessage-actions {
   opacity: 0;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
-  }
+  transition: opacity var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessage-feedbackSpinner svg,
@@ -89,9 +87,7 @@
 }
 
 .ais-ChatMessage-feedbackSpinner svg {
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ais-chat-loader-spinner 1.4s linear infinite;
-  }
+  animation: ais-chat-loader-spinner 1.4s linear infinite;
 }
 
 .ais-ChatMessage-feedbackCheck {

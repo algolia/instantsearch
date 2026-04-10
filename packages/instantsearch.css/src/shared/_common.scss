@@ -35,6 +35,19 @@
   }
 }
 
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  [class^='ais-'],
+  [class^='ais-'] *,
+  [class^='ais-']::before,
+  [class^='ais-']::after,
+  [class^='ais-'] *::before,
+  [class^='ais-'] *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 // Fade-in animation
 @keyframes ais-fadeIn {
   from {
