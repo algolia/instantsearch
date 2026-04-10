@@ -185,7 +185,7 @@ export function createAutocompletePropGetters({
 
       const actualDescendant = override.activeDescendant ?? activeDescendant;
 
-      if (!actualDescendant && override.query) {
+      if (!actualDescendant && override.query !== undefined) {
         onRefine(override.query);
       }
 
