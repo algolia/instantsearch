@@ -301,11 +301,7 @@ function ChatInner<
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear:
-          Boolean(messages?.length) &&
-          !isClearing &&
-          status !== 'submitted' &&
-          status !== 'streaming',
+        canClear: Boolean(messages?.length) && !isClearing,
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
         minimizeIconComponent: headerMinimizeIconComponent,

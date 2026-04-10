@@ -410,11 +410,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear:
-          Boolean(chatMessages?.length) &&
-          !isClearing &&
-          chatStatus !== 'submitted' &&
-          chatStatus !== 'streaming',
+        canClear: Boolean(chatMessages?.length) && !isClearing,
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
