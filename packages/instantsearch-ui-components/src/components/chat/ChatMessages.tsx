@@ -32,7 +32,7 @@ import type {
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatGreetingProps } from './ChatGreeting';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -155,6 +155,10 @@ export type ChatMessagesProps<
    * Function to close the chat
    */
   onClose: () => void;
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
   /**
    * Optional class names
    */
@@ -387,6 +391,7 @@ export function createChatMessagesComponent({
       hideScrollToBottom = false,
       onReload,
       onClose,
+      sendMessage,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -477,6 +482,9 @@ export function createChatMessagesComponent({
                   greetingHeading: translations.greetingHeading,
                   greetingSubheading: translations.greetingSubheading,
                 }}
+                sendMessage={sendMessage}
+                status={status}
+                onClose={onClose}
               />
             )}
 

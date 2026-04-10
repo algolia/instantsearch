@@ -3,6 +3,7 @@
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
+import type { ChatLayoutOwnProps, ChatStatus } from './types';
 
 export type ChatGreetingTranslations = {
   /**
@@ -39,13 +40,32 @@ export type ChatGreetingProps = ComponentProps<'div'> & {
    * Optional class names
    */
   classNames?: Partial<ChatGreetingClassNames>;
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Current chat status
+   */
+  status?: ChatStatus;
+  /**
+   * Callback to close the chat
+   */
+  onClose?: () => void;
 };
 
 export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatGreeting(userProps: ChatGreetingProps) {
-    const { translations: userTranslations, classNames = {}, ...props } = userProps;
+    const {
+      translations: userTranslations,
+      classNames = {},
+      sendMessage: _sendMessage,
+      status: _status,
+      onClose: _onClose,
+      ...props
+    } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
       greetingHeading:
         userTranslations?.greetingHeading ??

@@ -315,6 +315,7 @@ function ChatInner<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage: sendMessage as ChatUiProps['sendMessage'],
         onFeedback,
         feedbackState,
         messages,

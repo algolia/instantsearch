@@ -336,6 +336,7 @@ type ChatWrapperProps = {
     };
     translations: Partial<ChatMessagesTranslations>;
     messageTranslations: Partial<ChatMessageProps['translations']>;
+    sendMessage: ChatLayoutOwnProps['sendMessage'];
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -445,6 +446,7 @@ function ChatWrapper({
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
+        sendMessage: messagesProps.sendMessage,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -947,6 +949,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             },
             translations: messagesTranslations,
             messageTranslations,
+            sendMessage,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
