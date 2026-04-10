@@ -190,13 +190,15 @@ export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
   ? DATA_TYPES
   : UIDataTypes;
 
-export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  UIDataTypes,
-  infer TOOLS
->
-  ? TOOLS
-  : UITools;
+type _ExtractTools<
+  T extends UIMessage,
+  D extends UIDataTypes
+> = T extends UIMessage<unknown, D, infer TOOLS> ? TOOLS : UITools;
+
+export type InferUIMessageTools<T extends UIMessage> = _ExtractTools<
+  T,
+  InferUIMessageData<T>
+>;
 
 export type InferUIMessageToolCall<UI_MESSAGE extends UIMessage> =
   | ValueOf<{
@@ -247,12 +249,14 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
         providerExecuted?: boolean;
       };
     }>
-  | {
-      type: 'tool-input-delta';
-      toolName: string;
-      toolCallId: string;
-      inputDelta: string;
-    }
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-input-delta';
+        toolName: NAME;
+        toolCallId: string;
+        inputDelta: string;
+      };
+    }>
   | ValueOf<{
       [NAME in keyof TOOLS & string]: {
         type: 'tool-output-available';
@@ -288,6 +292,13 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
       toolCallId: string;
       input?: unknown;
       providerExecuted?: boolean;
+      dynamic: true;
+    }
+  | {
+      type: 'tool-input-delta';
+      toolName: string;
+      toolCallId: string;
+      inputDelta: string;
       dynamic: true;
     }
   | {

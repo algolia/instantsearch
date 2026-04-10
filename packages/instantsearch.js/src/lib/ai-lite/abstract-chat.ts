@@ -11,6 +11,7 @@ import type {
   CreateUIMessage,
   FileUIPart,
   IdGenerator,
+  InferUIMessageChunk,
   InferUIMessageMetadata,
   InferUIMessageToolCall,
   InferUIMessageTools,
@@ -44,7 +45,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
 
-  private activeResponse: ActiveResponse | null = null;
+  private activeResponse: ActiveResponse<
+    InferUIMessageChunk<TUIMessage>
+  > | null = null;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -424,7 +427,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   private processStreamWithCallbacks(
-    stream: ReadableStream<UIMessageChunk>
+    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>
   ): Promise<void> {
     this.setStatus({ status: 'streaming' });
 
@@ -444,7 +447,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     return new Promise((resolve) => {
       processStream<UIMessageChunk>(
-        stream,
+        stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
           switch (chunk.type) {
