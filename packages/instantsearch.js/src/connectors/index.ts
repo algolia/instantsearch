@@ -43,6 +43,7 @@ export { default as connectSortBy } from './sort-by/connectSortBy';
 export { default as connectRatingMenu } from './rating-menu/connectRatingMenu';
 export { default as connectStats } from './stats/connectStats';
 export { default as connectToggleRefinement } from './toggle-refinement/connectToggleRefinement';
+export { default as connectTrendingFacets } from './trending-facets/connectTrendingFacets';
 export { default as connectTrendingItems } from './trending-items/connectTrendingItems';
 export { default as connectBreadcrumb } from './breadcrumb/connectBreadcrumb';
 export { default as connectGeoSearch } from './geo-search/connectGeoSearch';

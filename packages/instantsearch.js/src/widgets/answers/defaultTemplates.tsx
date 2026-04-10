@@ -1,3 +1,7 @@
+/** @jsx h */
+
+import { h, Fragment } from 'preact';
+
 import type { AnswersComponentTemplates } from '../../components/Answers/Answers';
 
 const defaultTemplates: AnswersComponentTemplates = {
@@ -8,7 +12,7 @@ const defaultTemplates: AnswersComponentTemplates = {
     return '';
   },
   item(item) {
-    return JSON.stringify(item);
+    return <Fragment>{JSON.stringify(item)}</Fragment>;
   },
 };
 

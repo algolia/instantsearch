@@ -18,6 +18,7 @@ import {
   connectRelatedProducts,
   connectFrequentlyBoughtTogether,
   connectTrendingItems,
+  connectTrendingFacets,
   connectLookingSimilar,
   connectChat,
   connectFilterSuggestions,
@@ -504,6 +505,40 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     search.start();
   },
+  createTrendingFacetsConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customTrendingFacets = connectTrendingFacets<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <ul>${renderOptions.items
+          .map((item) => `<li>${item.facetValue}</li>`)
+          .join('')}</ul>
+      `;
+    });
+
+    const widget = customTrendingFacets({
+      container: document.body.appendChild(document.createElement('div')),
+      ...widgetParams,
+    });
+
+    const search = instantsearch(instantSearchOptions)
+      .addWidgets([
+        customTrendingFacets({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      });
+
+    addWidgetToggleUi(search, widget);
+
+    search.start();
+  },
   createLookingSimilarConnectorTests({ instantSearchOptions, widgetParams }) {
     const customLookingSimilar = connectLookingSimilar<{
       container: HTMLElement;
@@ -668,6 +703,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsConnectorTests: undefined,
   createFrequentlyBoughtTogetherConnectorTests: undefined,
   createTrendingItemsConnectorTests: undefined,
+  createTrendingFacetsConnectorTests: undefined,
   createLookingSimilarConnectorTests: undefined,
   createChatConnectorTests: undefined,
   createFilterSuggestionsConnectorTests: undefined,

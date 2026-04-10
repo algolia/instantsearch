@@ -195,7 +195,8 @@
         "instantsearch/no-for-of": "error",
         "instantsearch/no-labels": "error",
         "instantsearch/no-with": "error",
-        "instantsearch/require-get-render-state-return-type": "error"
+        "instantsearch/require-get-render-state-return-type": "error",
+        "instantsearch/no-unsafe-default-templates": "error"
       }
     },
     {
@@ -219,7 +220,8 @@
         "instantsearch/no-for-of": "off",
         "instantsearch/no-labels": "off",
         "instantsearch/no-with": "off",
-        "instantsearch/require-get-render-state-return-type": "off"
+        "instantsearch/require-get-render-state-return-type": "off",
+        "instantsearch/no-unsafe-default-templates": "off"
       }
     },
     {

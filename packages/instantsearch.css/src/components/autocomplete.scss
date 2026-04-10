@@ -36,14 +36,12 @@
     position: relative;
     width: 100%;
 
-    @media (prefers-reduced-motion: no-preference) {
-      transition: border-color var(--ais-transition-duration)
-          var(--ais-transition-timing-function),
-        box-shadow var(--ais-transition-duration)
-          var(--ais-transition-timing-function),
-        outline-color var(--ais-transition-duration)
-          var(--ais-transition-timing-function);
-    }
+    transition: border-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      box-shadow var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      outline-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
 
     &:focus-within {
       border-color: rgba(var(--ais-primary-color-rgb), 1);
@@ -77,11 +75,12 @@
         .ais-AutocompleteLoadingIndicator {
         height: 100%;
         padding-left: calc(var(--ais-spacing) * 0.75 - 1px);
-        padding-right: calc(var(--ais-spacing) / 2);
-        width: calc(var(--ais-spacing) * 1.75 + var(--ais-icon-size) - 1px);
+        padding-right: calc(var(--ais-spacing) * 0.75 - 1px);
+        width: calc(var(--ais-spacing) * 1.5 + var(--ais-icon-size) - 2px);
         @media (hover: none) and (pointer: coarse) {
-          padding-left: calc(calc(var(--ais-spacing) / 2) / 2 - 1px);
-          width: calc(var(--ais-icon-size) + (var(--ais-spacing) * 1.25) - 1px);
+          padding-left: calc(var(--ais-spacing) * 0.625);
+          padding-right: calc(var(--ais-spacing) * 0.625);
+          width: calc(var(--ais-icon-size) + var(--ais-spacing) * 1.25);
         }
       }
       @at-root .ais-AutocompleteSubmitButton {
@@ -149,10 +148,8 @@
         margin: 0;
         padding: 0 calc(var(--ais-spacing) * (5 / 6) - 0.5px);
 
-        @media (prefers-reduced-motion: no-preference) {
-          transition: color var(--ais-transition-duration)
-            var(--ais-transition-timing-function);
-        }
+        transition: color var(--ais-transition-duration)
+          var(--ais-transition-timing-function);
 
         @media (hover: none) and (pointer: coarse) {
           padding: 0 calc(var(--ais-spacing) * (2 / 3) - 0.5px);
@@ -203,12 +200,10 @@
   transform-origin: top center;
   transform: scale(0.95) translateY(calc(var(--ais-spacing) * -1));
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: opacity var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      transform var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    transform var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 
   &--open {
     opacity: 1;
@@ -308,10 +303,8 @@
   min-height: calc(var(--ais-spacing) * 2.5);
   padding: calc(calc(var(--ais-spacing) / 2) / 2);
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
-  }
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 
   // When the result is active, either by hover or keyboard navigation
   @media (hover: hover) {
@@ -387,10 +380,8 @@
     flex-shrink: 0;
     padding: 0;
 
-    @media (prefers-reduced-motion: no-preference) {
-      transition: color var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-    }
+    transition: color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 
     &:hover,
     &:focus {
@@ -562,12 +553,10 @@ body.ais-Autocomplete--detached {
   text-align: left;
   width: 100%;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: border-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      box-shadow var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: border-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    box-shadow var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-AutocompleteDetachedSearchButtonIcon {
@@ -616,10 +605,8 @@ body.ais-Autocomplete--detached {
   margin-left: auto;
   padding: 0 calc(var(--ais-spacing) * 0.5);
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: color var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
-  }
+  transition: color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 
   @media (hover: hover) {
     &:hover {

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { connectCurrentRefinements } from 'instantsearch.js/es/connectors/index.umd';
+import { connectCurrentRefinements } from 'instantsearch.js/es/connectors/index';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
