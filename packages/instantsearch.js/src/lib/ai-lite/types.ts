@@ -434,6 +434,7 @@ export interface ChatInit<UI_MESSAGE extends UIMessage> {
   sendAutomaticallyWhen?: (options: {
     messages: UI_MESSAGE[];
   }) => boolean | PromiseLike<boolean>;
+  shouldRepairToolInput?: (toolName: string) => boolean;
 }
 
 export type CreateUIMessage<UI_MESSAGE extends UIMessage> = Omit<

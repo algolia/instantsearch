@@ -132,6 +132,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private sendAutomaticallyWhen?: (options: {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
+  private shouldRepairToolInput?: (toolName: string) => boolean;
 
   private activeResponse: ActiveResponse | null = null;
   private jobExecutor = new SerialJobExecutor();
@@ -146,6 +147,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onFinish,
     onData,
     sendAutomaticallyWhen,
+    shouldRepairToolInput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
@@ -158,6 +160,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onFinish = onFinish;
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
+    this.shouldRepairToolInput = shouldRepairToolInput;
   }
 
   /**
@@ -758,10 +761,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const nextRawInput = `${previousRawInput}${chunk.inputTextDelta}`;
               toolRawInputByCallId[chunk.toolCallId] = nextRawInput;
 
-              const parsedInput = parseToolInputDelta(
-                nextRawInput,
-                existingPart?.input
-              );
+              const toolName =
+                chunk.toolName ??
+                existingPart?.type?.replace('tool-', '');
+              const shouldRepair =
+                toolName
+                  ? (this.shouldRepairToolInput?.(toolName) ?? true)
+                  : true;
+              const parsedInput = shouldRepair
+                ? parseToolInputDelta(nextRawInput, existingPart?.input)
+                : existingPart?.input;
 
               const nextToolPart = {
                 ...(existingPart ?? {
