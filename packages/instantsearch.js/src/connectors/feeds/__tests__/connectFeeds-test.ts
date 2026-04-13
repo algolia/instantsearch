@@ -4,8 +4,8 @@
 
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createResultsWithFeeds } from '../../../../test/createFeedsTestHelpers';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,

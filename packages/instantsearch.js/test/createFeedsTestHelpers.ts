@@ -1,10 +1,10 @@
 import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
-import { createInstantSearch } from './createInstantSearch';
 import { index } from '../src/widgets';
 
 import type { IndexWidget } from '../src/types';
+import type { createInstantSearch } from './createInstantSearch';
 
 export function createResultsWithFeeds(
   feedIDs: string[],
