@@ -6,7 +6,7 @@ import {
   Vue2,
 } from '../../src/util/vue-compat';
 
-export const htmlCompat = function (html) {
+export const htmlCompat = function(html) {
   if (isVue3) {
     return html
       .replace(/disabled=""/g, 'disabled="disabled"')
@@ -45,20 +45,20 @@ export const mount = isVue3
         },
       });
       wrapper.destroy = wrapper.unmount;
-      wrapper.htmlCompat = function () {
+      wrapper.htmlCompat = function() {
         return htmlCompat(this.html());
       };
       return wrapper;
     }
   : (component, options = {}) => {
       const wrapper = require('@vue/test-utils').mount(component, options);
-      wrapper.htmlCompat = function () {
+      wrapper.htmlCompat = function() {
         return htmlCompat(this.html());
       };
       return wrapper;
     };
 
-export const createApp = (props) => {
+export const createApp = props => {
   if (isVue3) {
     return _createApp(props);
   } else {
@@ -66,7 +66,7 @@ export const createApp = (props) => {
   }
 };
 
-export const createSSRApp = (props) => {
+export const createSSRApp = props => {
   if (isVue3) {
     return _createSSRApp(props);
   } else {

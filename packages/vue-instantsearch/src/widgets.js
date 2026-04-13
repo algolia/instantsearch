@@ -33,3 +33,4 @@ export { default as AisVoiceSearch } from './components/VoiceSearch.vue';
 export { default as AisRelevantSort } from './components/RelevantSort.vue';
 export { default as AisDynamicWidgets } from './components/DynamicWidgets';
 export { default as AisExperimentalDynamicWidgets } from './components/ExperimentalDynamicWidgets';
+export { default as AisFeeds } from './components/Feeds';
