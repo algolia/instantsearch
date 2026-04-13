@@ -383,16 +383,15 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
   const targetIndexQuery = targetIndex?.getHelper()?.state.query;
 
-  // Local query state for immediate updates (especially for detached search button)
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery || targetIndexQuery || ''
+    searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery ?? ''
   );
 
-  // Sync local query with searchbox query when it changes externally
   useEffect(() => {
-    // If the isolated index has a query, use it (user typing).
-    // If not, fall back to the target index query (URL/main state).
-    const query = searchboxQuery || targetIndexQuery;
+    // When the isolated index has a defined query (including ''), use it.
+    // Only fall back to the target index query when not yet set (undefined).
+    const query =
+      searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
     if (query !== undefined) {
       setLocalQuery(query);
     }
@@ -1275,7 +1274,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           ])
       ),
       {
-        ...makeWidget({ escapeHTML, transformItems }),
+        ...makeWidget({
+          escapeHTML,
+          transformItems,
+          future: { undefinedEmptyQuery: true },
+        }),
         $$widgetType: 'ais.autocomplete',
       },
     ]),
