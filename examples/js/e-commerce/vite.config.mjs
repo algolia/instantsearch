@@ -9,9 +9,7 @@ function fixLegacyHtml() {
     transformIndexHtml: {
       order: 'post',
       handler(html) {
-        return html
-          .replace(/ crossorigin/g, '')
-          .replace(/data-src="assets\//g, 'data-src="./assets/');
+        return html.replace(/data-src="assets\//g, 'data-src="./assets/');
       },
     },
   };
@@ -22,7 +20,6 @@ export default defineConfig({
     commonjs(),
     legacy({
       targets: ['defaults', 'IE 11'],
-      renderModernChunks: false,
     }),
     fixLegacyHtml(),
   ],

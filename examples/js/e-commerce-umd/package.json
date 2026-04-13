@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "website:examples": "vite build --outDir ../../../website/examples/js-umd/e-commerce --base /examples/js-umd/e-commerce/ && cp ./polyfills.js ../../../website/examples/js-umd/e-commerce/polyfills.js"
+    "website:examples": "vite build --outDir ../../../website/examples/js-umd/e-commerce --base /examples/js-umd/e-commerce/"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
