@@ -23,6 +23,7 @@ export function createFeedContainer(
   instantSearchInstance: InstantSearch
 ): IndexWidget {
   let localWidgets: Array<Widget | IndexWidget> = [];
+  let initialized = false;
 
   const container: IndexWidget = {
     $$type: 'ais.feedContainer',
@@ -75,7 +76,7 @@ export function createFeedContainer(
       });
       localWidgets = localWidgets.concat(flatWidgets);
 
-      if (instantSearchInstance.started) {
+      if (initialized) {
         flatWidgets.forEach((widget) => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
@@ -146,6 +147,8 @@ export function createFeedContainer(
     },
 
     init() {
+      initialized = true;
+
       localWidgets.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
@@ -235,6 +238,7 @@ export function createFeedContainer(
       });
 
       localWidgets = [];
+      initialized = false;
       return cleanedState;
     },
 

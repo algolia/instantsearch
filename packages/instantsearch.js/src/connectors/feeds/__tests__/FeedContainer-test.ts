@@ -256,7 +256,7 @@ describe('FeedContainer', () => {
       expect(widget.dispose).toHaveBeenCalled();
     });
 
-    it('addWidgets inits widgets when instantSearch is started', () => {
+    it('addWidgets inits widgets only after container init', () => {
       const instantSearchInstance = createInstantSearch({
         started: true,
       } as any);
@@ -272,7 +272,17 @@ describe('FeedContainer', () => {
       const widget = createWidget();
       container.addWidgets([widget]);
 
+      // Widget is stored but not yet initialized
+      expect(widget.init).not.toHaveBeenCalled();
+
+      // After container init, stored widgets are initialized
+      container.init({} as any);
       expect(widget.init).toHaveBeenCalled();
+
+      // Widgets added after init are initialized immediately
+      const widget2 = createWidget();
+      container.addWidgets([widget2]);
+      expect(widget2.init).toHaveBeenCalled();
     });
 
     it('addWidgets flattens nested widget arrays', () => {
