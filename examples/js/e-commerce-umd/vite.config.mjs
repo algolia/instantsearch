@@ -1,6 +1,7 @@
-import { createRequire } from 'module';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { createRequire } from 'module';
 import { resolve } from 'path';
+
 import legacy from '@vitejs/plugin-legacy';
 import { defineConfig } from 'vite';
 import commonjs from 'vite-plugin-commonjs';

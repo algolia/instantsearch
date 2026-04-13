@@ -7,6 +7,7 @@ declare namespace WebdriverIOAsync {
 browser.addCommand('clickHierarchicalMenuItem', async (label: string) => {
   const oldUrl = await browser.getUrl();
   const item = await browser.$(`.ais-HierarchicalMenu-label=${label}`);
+  await item.waitForDisplayed();
   // Assures us that the element is in the viewport
   await item.scrollIntoView();
 
