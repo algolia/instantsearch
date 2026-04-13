@@ -47,7 +47,6 @@ describe('createCarouselTool', () => {
           indexUiState={{}}
           addToolResult={jest.fn()}
           setIndexUiState={jest.fn()}
-          loaderComponent={jest.fn()}
           sendEvent={jest.fn()}
         />
       );
@@ -82,7 +81,6 @@ describe('createCarouselTool', () => {
           indexUiState={{}}
           addToolResult={jest.fn()}
           setIndexUiState={jest.fn()}
-          loaderComponent={jest.fn()}
           sendEvent={jest.fn()}
         />
       );

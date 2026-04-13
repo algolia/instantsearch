@@ -227,7 +227,6 @@ function createDefaultMessageComponent<
     onFeedback,
     feedbackState,
     actionsComponent,
-    loaderComponent,
     classNames,
     messageTranslations,
     translations,
@@ -246,7 +245,6 @@ function createDefaultMessageComponent<
     onFeedback?: (messageId: string, vote: 0 | 1) => void;
     feedbackState?: Record<string, 'sending' | 0 | 1>;
     actionsComponent?: ChatMessageProps['actionsComponent'];
-    loaderComponent: ChatMessageProps['loaderComponent'];
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
@@ -330,7 +328,6 @@ function createDefaultMessageComponent<
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
-        loaderComponent={loaderComponent}
         data-role={message.role}
         classNames={classNames}
         translations={messageTranslations}
@@ -460,7 +457,6 @@ export function createChatMessagesComponent({
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}
                 actionsComponent={ActionsComponent}
-                loaderComponent={DefaultLoader}
                 onClose={onClose}
                 translations={translations}
                 classNames={messageClassNames}

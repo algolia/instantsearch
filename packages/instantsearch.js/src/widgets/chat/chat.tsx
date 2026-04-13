@@ -539,16 +539,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           layoutComponent: (
             layoutComponentProps: ClientSideToolComponentProps
           ) => {
-            const { loaderComponent: Loader, ...restProps } = layoutComponentProps;
             return (
               <TemplateComponent
                 templates={widgetTool.templates}
                 rootTagName="fragment"
                 templateKey="layout"
-                data={{
-                  ...restProps,
-                  loader: () => <Loader />,
-                }}
+                data={layoutComponentProps}
               />
             );
           },
@@ -636,11 +632,18 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.messages,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const messagesLoaderComponent = templates.messages?.loader
+    const loaderTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'loader'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { loader: templates.loader },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesLoaderComponent = templates.loader
       ? (loaderProps: ChatMessageLoaderProps) => {
           return (
             <TemplateComponent
-              {...messagesTemplateProps}
+              {...loaderTemplateProps}
               templateKey="loader"
               rootTagName="div"
               data={loaderProps}
@@ -966,12 +969,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
 };
 
-export type ClientSideToolTemplateData = Omit<
-  ClientSideToolComponentProps,
-  'loaderComponent'
-> & {
-  loader: () => JSX.Element;
-};
+export type ClientSideToolTemplateData = ClientSideToolComponentProps;
 
 export type UserClientSideToolTemplates = Partial<{
   layout: TemplateWithBindEvent<ClientSideToolTemplateData>;
@@ -1019,6 +1017,11 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: TemplateWithBindEvent<Hit<THit>>;
+
+    /**
+     * Custom loader template for the chat widget.
+     */
+    loader: Template<ChatMessageLoaderProps>;
 
     /**
      * Templates to use for the header.
@@ -1070,10 +1073,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Templates to use for the messages.
      */
     messages: Partial<{
-      /**
-       * Template to use when loading messages
-       */
-      loader: Template<ChatMessageLoaderProps>;
       /**
        * Template to use when there is an error loading messages
        */

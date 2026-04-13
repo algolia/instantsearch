@@ -1,5 +1,4 @@
 import type { ComponentProps, SendEventForHits } from '../../types';
-import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
@@ -486,7 +485,6 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-  loaderComponent: (props: ChatMessageLoaderProps) => JSX.Element;
   sendEvent: SendEventForHits;
 };
 

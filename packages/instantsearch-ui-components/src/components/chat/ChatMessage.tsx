@@ -7,7 +7,6 @@ import { createButtonComponent } from '../Button';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
-import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -137,10 +136,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   tools: ClientSideTools;
   /**
-   * Loader component passed to tool layout components
-   */
-  loaderComponent: (props: ChatMessageLoaderProps) => JSX.Element;
-  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -176,7 +171,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       indexUiState,
       setIndexUiState,
       onClose,
-      loaderComponent: LoaderComponent,
       translations: userTranslations,
       suggestionsElement,
       ...props
@@ -267,7 +261,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 applyFilters={tool.applyFilters}
                 sendEvent={tool.sendEvent || (() => {})}
                 onClose={onClose}
-                loaderComponent={LoaderComponent}
               />
             </div>
           );

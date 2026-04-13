@@ -140,11 +140,11 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
     headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
-    messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    loaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
@@ -184,7 +184,7 @@ function ChatInner<
     headerCloseIconComponent,
     headerMinimizeIconComponent,
     headerMaximizeIconComponent,
-    messagesLoaderComponent,
+    loaderComponent,
     messagesErrorComponent,
     promptComponent,
     promptHeaderComponent,
@@ -325,7 +325,7 @@ function ChatInner<
         scrollRef,
         contentRef,
         onScrollToBottom: scrollToBottom,
-        loaderComponent: messagesLoaderComponent,
+        loaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
         assistantMessageProps: {
