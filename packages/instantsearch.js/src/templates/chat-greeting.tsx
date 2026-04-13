@@ -9,8 +9,10 @@ const ChatGreetingComponent = createChatGreetingComponent({
   createElement: h,
 });
 
-export function chatGreeting() {
+export function chatGreeting(
+  options?: Pick<ChatGreetingProps, 'banner'>
+) {
   return function ChatGreetingTemplate(props: ChatGreetingProps) {
-    return <ChatGreetingComponent {...props} />;
+    return <ChatGreetingComponent {...props} banner={options?.banner} />;
   };
 }

@@ -29,6 +29,10 @@ export type ChatGreetingClassNames = {
    * Class names to apply to the subheading element
    */
   subheading?: string | string[];
+  /**
+   * Class names to apply to the banner element
+   */
+  banner?: string | string[];
 };
 
 export type ChatGreetingProps = ComponentProps<'div'> & {
@@ -56,6 +60,10 @@ export type ChatGreetingProps = ComponentProps<'div'> & {
    * Function to set the prompt input value
    */
   setInput?: (input: string) => void;
+  /**
+   * Banner image URL displayed above the heading
+   */
+  banner?: string;
 };
 
 export function createChatGreetingComponent({
@@ -69,6 +77,7 @@ export function createChatGreetingComponent({
       status: _status,
       onClose: _onClose,
       setInput: _setInput,
+      banner,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
@@ -85,6 +94,13 @@ export function createChatGreetingComponent({
         className={cx('ais-ChatGreeting', classNames.root)}
         {...props}
       >
+        {banner && (
+          <img
+            className={cx('ais-ChatGreeting-banner', classNames.banner)}
+            src={banner}
+            alt=""
+          />
+        )}
         <h2 className={cx('ais-ChatGreeting-heading', classNames.heading)}>
           {translations.greetingHeading}
         </h2>
