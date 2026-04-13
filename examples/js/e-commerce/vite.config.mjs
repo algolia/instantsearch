@@ -2,14 +2,16 @@ import legacy from '@vitejs/plugin-legacy';
 import { defineConfig } from 'vite';
 import commonjs from 'vite-plugin-commonjs';
 
-function removeCrossOrigin() {
+function fixLegacyHtml() {
   return {
-    name: 'remove-crossorigin',
+    name: 'fix-legacy-html',
     enforce: 'post',
     transformIndexHtml: {
       order: 'post',
       handler(html) {
-        return html.replace(/ crossorigin/g, '');
+        return html
+          .replace(/ crossorigin/g, '')
+          .replace(/data-src="assets\//g, 'data-src="./assets/');
       },
     },
   };
@@ -22,7 +24,7 @@ export default defineConfig({
       targets: ['defaults', 'IE 11'],
       renderModernChunks: false,
     }),
-    removeCrossOrigin(),
+    fixLegacyHtml(),
   ],
   build: {
     commonjsOptions: {
