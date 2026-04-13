@@ -203,14 +203,12 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                messages: {
-                  loader: '<div class="custom-loader">Custom loader</div>',
-                },
+                loader: '<div class="custom-loader">Custom loader</div>',
               },
             },
             react: {
               ...createDefaultWidgetParams(chat),
-              messagesLoaderComponent: () => (
+              loaderComponent: () => (
                 <div className="custom-loader">Custom loader</div>
               ),
             },
