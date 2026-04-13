@@ -23,6 +23,18 @@
     <link rel="stylesheet" href="./src/app.mobile.css" />
     <link rel="stylesheet" href="./src/widgets/PriceSlider.css" />
     <script src="./polyfills.js"></script>
+    <script>
+      window.onerror = function (msg, url, line, col, error) {
+        var el = document.getElementById('js-error-overlay');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'js-error-overlay';
+          el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;padding:8px;font:12px monospace;z-index:99999;max-height:40%;overflow:auto';
+          document.documentElement.appendChild(el);
+        }
+        el.innerHTML += '<div>' + msg + ' at ' + url + ':' + line + ':' + col + '</div>';
+      };
+    </script>
     <title>E-commerce demo | Algolia</title>
   </head>
 
