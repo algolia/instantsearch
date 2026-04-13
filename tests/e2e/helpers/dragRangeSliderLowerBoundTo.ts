@@ -14,7 +14,7 @@ browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
   const slider = await browser.$(RANGE_SLIDER_RAIL_SELECTOR);
 
   await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
-  let [lowerHandle, upperHandle] = await browser.$$(
+  const [lowerHandle, upperHandle] = await browser.$$(
     RANGE_SLIDER_HANDLE_SELECTOR
   );
 
@@ -49,7 +49,16 @@ browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
 
   // Depending of the steps calculation there can be a difference between
   // the wanted value and the actual value of the slider, so we return
-  // the actual value in case we need it in the rest of the tests
-  [lowerHandle, upperHandle] = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
-  return Number(await lowerHandle.getAttribute('aria-valuenow'));
+  // the actual value in case we need it in the rest of the tests.
+  // Re-query inside waitUntil to avoid stale element references after re-renders.
+  return Number(
+    await browser.waitUntil(async () => {
+      try {
+        const handles = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
+        return await handles[0].getAttribute('aria-valuenow');
+      } catch {
+        return false;
+      }
+    })
+  );
 });

@@ -8,6 +8,14 @@ declare module 'webdriverio' {
 
 browser.addCommand('getRangeSliderLowerBoundValue', async () => {
   await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
-  const [lowerHandle] = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
-  return Number(await lowerHandle.getAttribute('aria-valuenow'));
+  return Number(
+    await browser.waitUntil(async () => {
+      try {
+        const handles = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
+        return await handles[0].getAttribute('aria-valuenow');
+      } catch {
+        return false;
+      }
+    })
+  );
 });
