@@ -3,7 +3,15 @@
  */
 
 import { act, render, screen, waitFor } from '@testing-library/react';
+import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
 import React from 'react';
+
+import { IndexContext } from '../../lib/IndexContext';
+import { InstantSearchContext } from '../../lib/InstantSearchContext';
+import { useIndexContext } from '../../lib/useIndexContext';
+import { Feeds } from '../Feeds';
+
+import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 let mockFeedIDs: string[] = [];
 
@@ -14,15 +22,6 @@ jest.mock('../../connectors/useFeeds', () => ({
 jest.mock('instantsearch.js/es/connectors/feeds/FeedContainer', () => ({
   createFeedContainer: jest.fn(),
 }));
-
-import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
-
-import { IndexContext } from '../../lib/IndexContext';
-import { InstantSearchContext } from '../../lib/InstantSearchContext';
-import { useIndexContext } from '../../lib/useIndexContext';
-import { Feeds } from '../Feeds';
-
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 type ParentIndexStub = {
   widgets: IndexWidget[];

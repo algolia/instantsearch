@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-
 import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
+import React, { useEffect, useRef } from 'react';
 
 import { useFeeds } from '../connectors/useFeeds';
 import { IndexContext } from '../lib/IndexContext';

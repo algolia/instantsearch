@@ -4,8 +4,9 @@
 
 jest.unmock('instantsearch.js/es');
 
-import { mount, nextTick } from '../../../test/utils';
 import { createCompositionClient } from '@instantsearch/mocks';
+
+import { mount, nextTick } from '../../../test/utils';
 import Feeds from '../Feeds';
 import InstantSearch from '../InstantSearch';
 

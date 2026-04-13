@@ -2,22 +2,23 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createCompositionClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+
+import instantsearch from '../../..';
 import {
   createResultsWithFeeds,
   createParentWithHelper,
 } from '../../../../test/createFeedsTestHelpers';
-import { createCompositionClient } from '@instantsearch/mocks';
-import { wait } from '@instantsearch/testutils/wait';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
   createWidget,
 } from '../../../../test/createWidget';
-import feeds from '../feeds';
-import instantsearch from '../../..';
 import searchBox from '../../search-box/search-box';
+import feeds from '../feeds';
 
 describe('feeds()', () => {
   describe('usage', () => {
