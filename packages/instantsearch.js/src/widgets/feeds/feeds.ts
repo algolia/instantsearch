@@ -126,7 +126,7 @@ const feeds: FeedsWidget = function feeds(widgetParams) {
           if (feedWidgets && feedWidgets.length > 0) {
             feedContainer.addWidgets(feedWidgets);
           }
-          feedContainer.render();
+          feedContainer.render(renderOptionsRef);
         }
       });
 
