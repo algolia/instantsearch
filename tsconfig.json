@@ -28,6 +28,8 @@
     // when the RN types work with React 18.
     "examples/react/react-native",
     "examples/js/e-commerce-umd/public/packages",
+    // The showcase example uses Preact with its own tsconfig and JSX transform.
+    "examples/js/showcase",
     "packages/create-instantsearch-app/src/templates/**/*"
   ]
 }

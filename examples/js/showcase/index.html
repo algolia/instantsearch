@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>InstantSearch.js Showcase</title>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var m = localStorage.getItem("color-mode") || "system";
+        var t =
+          m === "system"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+            : m;
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
+    <div id="app"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>
