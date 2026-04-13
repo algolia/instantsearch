@@ -5,59 +5,14 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createResultsWithFeeds } from '../../../../test/createFeedsTestHelpers';
 import {
   createInitOptions,
   createRenderOptions,
-  createDisposeOptions,
-  createWidget,
 } from '../../../../test/createWidget';
-import { index } from '../../../widgets';
 import connectFeeds from '../connectFeeds';
 
-import type { IndexWidget } from '../../../types';
 import type { SearchResponse } from 'algoliasearch-helper/types/algoliasearch';
-
-function createResultsWithFeeds(
-  feedIDs: string[],
-  state?: SearchParameters
-): SearchResults {
-  const searchState = state || new SearchParameters({ index: 'test' });
-  const response: SearchResponse<any> = {
-    hits: [],
-    nbHits: 0,
-    page: 0,
-    nbPages: 0,
-    hitsPerPage: 10,
-    processingTimeMS: 1,
-    query: '',
-    params: '',
-    exhaustiveNbHits: true,
-  };
-
-  const results = new SearchResults(searchState, [response]);
-  (results as any).feeds = feedIDs.map((feedID) => {
-    const feedResponse: SearchResponse<any> = {
-      ...response,
-      hits: [{ objectID: `hit-${feedID}` }],
-      nbHits: 1,
-    };
-    const feedResults = new SearchResults(searchState, [feedResponse]);
-    (feedResults as any).feedID = feedID;
-    return feedResults;
-  });
-
-  return results;
-}
-
-function createParentWithHelper(
-  instantSearchInstance: ReturnType<typeof createInstantSearch>
-): IndexWidget {
-  const parent = index({ indexName: 'test' });
-  // Mock getHelper to return the instantSearch helper,
-  // since the index widget hasn't gone through its full init lifecycle
-  parent.getHelper = () => instantSearchInstance.helper!;
-  return parent;
-}
 
 describe('connectFeeds', () => {
   describe('Usage', () => {
@@ -72,24 +27,9 @@ describe('connectFeeds', () => {
       `);
     });
 
-    it('fails when widgets is not a function', () => {
-      expect(() =>
-        connectFeeds(() => {})({
-          // @ts-expect-error
-          widgets: [],
-          searchScope: 'global',
-        })
-      ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`widgets\` option expects a function.
-
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/feeds/js/#connector"
-      `);
-    });
-
     it('fails when searchScope is not global', () => {
       expect(() =>
         connectFeeds(() => {})({
-          widgets: () => [],
           // @ts-expect-error
           searchScope: 'local',
         })
@@ -103,7 +43,6 @@ describe('connectFeeds', () => {
     it('fails when searchScope is missing', () => {
       expect(() =>
         connectFeeds(() => {})({
-          widgets: () => [],
           // @ts-expect-error
           searchScope: undefined,
         })
@@ -120,7 +59,7 @@ describe('connectFeeds', () => {
     const unmount = jest.fn();
 
     const customFeeds = connectFeeds(render, unmount);
-    const widget = customFeeds({ widgets: () => [], searchScope: 'global' });
+    const widget = customFeeds({ searchScope: 'global' });
 
     expect(widget).toEqual(
       expect.objectContaining({
@@ -137,7 +76,6 @@ describe('connectFeeds', () => {
   describe('init', () => {
     it('throws when compositionID is not set', () => {
       const feedsWidget = connectFeeds(() => {})({
-        widgets: () => [],
         searchScope: 'global',
       });
 
@@ -150,14 +88,13 @@ describe('connectFeeds', () => {
       `);
     });
 
-    it('calls renderFn with empty feeds on init', () => {
+    it('calls renderFn with empty feedIDs on init', () => {
       const renderFn = jest.fn();
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: () => [],
         searchScope: 'global',
       });
 
@@ -166,9 +103,8 @@ describe('connectFeeds', () => {
       expect(renderFn).toHaveBeenCalledTimes(1);
       expect(renderFn).toHaveBeenCalledWith(
         expect.objectContaining({
-          feeds: [],
+          feedIDs: [],
           widgetParams: {
-            widgets: expect.any(Function),
             searchScope: 'global',
           },
         }),
@@ -178,235 +114,91 @@ describe('connectFeeds', () => {
   });
 
   describe('render', () => {
-    it('creates FeedContainers for each feed', () => {
+    it('computes feedIDs from results.feeds', () => {
       const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
         searchScope: 'global',
       });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
 
       const results = createResultsWithFeeds(
         ['products', 'articles'],
         instantSearchInstance.helper!.state
       );
 
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
       feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
+        createRenderOptions({ instantSearchInstance, results })
       );
 
       expect(renderFn).toHaveBeenLastCalledWith(
         expect.objectContaining({
-          feeds: [
-            expect.objectContaining({ feedID: 'products' }),
-            expect.objectContaining({ feedID: 'articles' }),
-          ],
+          feedIDs: ['products', 'articles'],
         }),
         false
       );
-
-      expect(widgetFactory).toHaveBeenCalledTimes(2);
-      expect(widgetFactory).toHaveBeenCalledWith('products');
-      expect(widgetFactory).toHaveBeenCalledWith('articles');
     });
 
-    it('reuses existing FeedContainers on subsequent renders', () => {
+    it('applies transformFeeds to reorder feeds', () => {
       const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
-        searchScope: 'global',
-      });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
-
-      const results = createResultsWithFeeds(
-        ['products'],
-        instantSearchInstance.helper!.state
-      );
-
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
-      feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
-      );
-
-      const firstContainer = renderFn.mock.calls[1][0].feeds[0].container;
-
-      // Second render with same feeds
-      feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
-      );
-
-      const secondContainer = renderFn.mock.calls[2][0].feeds[0].container;
-      expect(secondContainer).toBe(firstContainer);
-      expect(widgetFactory).toHaveBeenCalledTimes(1);
-    });
-
-    it('removes FeedContainers for disappeared feeds (deferred)', () => {
-      jest.useFakeTimers();
-      const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
-      const instantSearchInstance = createInstantSearch({
-        compositionID: 'my-comp',
-      } as any);
-
-      const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
-        searchScope: 'global',
-      });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
-
-      const state = instantSearchInstance.helper!.state;
-
-      // First render with two feeds
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
-      feedsWidget.render!(
-        createRenderOptions({
-          instantSearchInstance,
-          parent,
-          results: createResultsWithFeeds(['products', 'articles'], state),
-        })
-      );
-
-      expect(renderFn.mock.calls[1][0].feeds).toHaveLength(2);
-      const removedContainer = renderFn.mock.calls[1][0].feeds.find(
-        (feed: { feedID: string }) => feed.feedID === 'articles'
-      ).container;
-      expect(parent.getWidgets()).toContain(removedContainer);
-      const removeWidgetsSpy = jest.spyOn(parent, 'removeWidgets');
-
-      // Second render with only one feed
-      feedsWidget.render!(
-        createRenderOptions({
-          instantSearchInstance,
-          parent,
-          results: createResultsWithFeeds(['products'], state),
-        })
-      );
-
-      expect(renderFn.mock.calls[2][0].feeds).toHaveLength(1);
-      expect(renderFn.mock.calls[2][0].feeds[0].feedID).toBe('products');
-      // Removed container is still mounted until deferred cleanup runs.
-      expect(parent.getWidgets()).toContain(removedContainer);
-      expect(removeWidgetsSpy).not.toHaveBeenCalled();
-
-      // Removal is deferred
-      jest.runAllTimers();
-      expect(removeWidgetsSpy).toHaveBeenCalledWith([removedContainer]);
-      expect(parent.getWidgets()).not.toContain(removedContainer);
-      jest.useRealTimers();
-    });
-
-    it('applies transformFeeds to filter/reorder feeds', () => {
-      const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
-      const instantSearchInstance = createInstantSearch({
-        compositionID: 'my-comp',
-      } as any);
-
-      const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
         searchScope: 'global',
         transformFeeds: (feeds) => feeds.reverse(),
       });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
 
       const results = createResultsWithFeeds(
         ['products', 'articles'],
         instantSearchInstance.helper!.state
       );
 
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
       feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
+        createRenderOptions({ instantSearchInstance, results })
       );
 
-      const feeds = renderFn.mock.calls[1][0].feeds;
-      expect(feeds[0].feedID).toBe('articles');
-      expect(feeds[1].feedID).toBe('products');
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          feedIDs: ['articles', 'products'],
+        }),
+        false
+      );
     });
 
-    it('applies transformFeeds to filter out feeds', () => {
+    it('applies transformFeeds to filter feeds', () => {
       const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
         searchScope: 'global',
         transformFeeds: (feeds) =>
           feeds.filter((feedID) => feedID === 'products'),
       });
 
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
-
       const results = createResultsWithFeeds(
         ['products', 'articles'],
         instantSearchInstance.helper!.state
       );
 
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
       feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
+        createRenderOptions({ instantSearchInstance, results })
       );
 
-      const feeds = renderFn.mock.calls[1][0].feeds;
-      expect(feeds).toHaveLength(1);
-      expect(feeds[0].feedID).toBe('products');
-      expect(widgetFactory).toHaveBeenCalledTimes(1);
-      expect(widgetFactory).toHaveBeenCalledWith('products');
-      expect(widgetFactory).not.toHaveBeenCalledWith('articles');
-    });
-
-    it('skips feeds where widgets() returns empty', () => {
-      const renderFn = jest.fn();
-      const widgetFactory = jest.fn((feedID: string) =>
-        feedID === 'products' ? [createWidget()] : []
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          feedIDs: ['products'],
+        }),
+        false
       );
-      const instantSearchInstance = createInstantSearch({
-        compositionID: 'my-comp',
-      } as any);
-
-      const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
-        searchScope: 'global',
-      });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
-
-      const results = createResultsWithFeeds(
-        ['products', 'articles'],
-        instantSearchInstance.helper!.state
-      );
-
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
-      feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
-      );
-
-      expect(renderFn.mock.calls[1][0].feeds).toHaveLength(1);
-      expect(renderFn.mock.calls[1][0].feeds[0].feedID).toBe('products');
     });
 
     it('handles render with no results', () => {
@@ -416,7 +208,6 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: () => [createWidget()],
         searchScope: 'global',
       });
 
@@ -429,63 +220,20 @@ describe('connectFeeds', () => {
       );
 
       expect(renderFn).toHaveBeenLastCalledWith(
-        expect.objectContaining({ feeds: [] }),
+        expect.objectContaining({ feedIDs: [] }),
         false
       );
     });
 
-    it('handles single-feed backward compat (no feedID)', () => {
-      const renderFn = jest.fn();
-      const widgetFactory = jest.fn(() => [createWidget()]);
-      const instantSearchInstance = createInstantSearch({
-        compositionID: 'my-comp',
-      } as any);
-
-      const feedsWidget = connectFeeds(renderFn)({
-        widgets: widgetFactory,
-        searchScope: 'global',
-      });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
-
-      // Results with no feeds property (single-feed composition)
-      const state = instantSearchInstance.helper!.state;
-      const response: SearchResponse<any> = {
-        hits: [{ objectID: '1' }],
-        nbHits: 1,
-        page: 0,
-        nbPages: 1,
-        hitsPerPage: 10,
-        processingTimeMS: 1,
-        query: '',
-        params: '',
-        exhaustiveNbHits: true,
-      };
-      const results = new SearchResults(state, [response]);
-
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
-      feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
-      );
-
-      expect(renderFn.mock.calls[1][0].feeds).toHaveLength(1);
-      expect(renderFn.mock.calls[1][0].feeds[0].feedID).toBe('');
-    });
-
-    it('does not mutate results on single-feed backward compat', () => {
+    it('handles single-feed backward compat (no feeds property)', () => {
       const renderFn = jest.fn();
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: () => [createWidget()],
         searchScope: 'global',
       });
-
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
 
       const state = instantSearchInstance.helper!.state;
       const response: SearchResponse<any> = {
@@ -501,13 +249,17 @@ describe('connectFeeds', () => {
       };
       const results = new SearchResults(state, [response]);
 
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
       feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
+        createRenderOptions({ instantSearchInstance, results })
       );
 
-      expect((results as any).feeds).toBeUndefined();
-      expect((results as any).feedID).toBeUndefined();
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          feedIDs: [''],
+        }),
+        false
+      );
     });
 
     it('throws when transformFeeds does not return an array', () => {
@@ -517,7 +269,6 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        widgets: () => [createWidget()],
         searchScope: 'global',
         transformFeeds: () => 'products' as any,
       });
@@ -542,43 +293,16 @@ describe('connectFeeds', () => {
   });
 
   describe('dispose', () => {
-    it('removes all FeedContainers and calls unmountFn', () => {
+    it('calls unmountFn', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
-      const instantSearchInstance = createInstantSearch({
-        compositionID: 'my-comp',
-      } as any);
 
-      const feedsWidget = connectFeeds(
-        renderFn,
-        unmountFn
-      )({
-        widgets: () => [createWidget()],
+      const feedsWidget = connectFeeds(renderFn, unmountFn)({
         searchScope: 'global',
       });
 
-      const parent = createParentWithHelper(instantSearchInstance);
-      parent.addWidgets([feedsWidget]);
+      feedsWidget.dispose!({} as any);
 
-      const results = createResultsWithFeeds(
-        ['products'],
-        instantSearchInstance.helper!.state
-      );
-
-      feedsWidget.init!(createInitOptions({ instantSearchInstance, parent }));
-      feedsWidget.render!(
-        createRenderOptions({ instantSearchInstance, parent, results })
-      );
-
-      expect(renderFn.mock.calls[1][0].feeds).toHaveLength(1);
-      const createdContainer = renderFn.mock.calls[1][0].feeds[0].container;
-      expect(parent.getWidgets()).toContain(createdContainer);
-      const removeWidgetsSpy = jest.spyOn(parent, 'removeWidgets');
-
-      feedsWidget.dispose!(createDisposeOptions({ parent }));
-
-      expect(removeWidgetsSpy).toHaveBeenCalledWith([createdContainer]);
-      expect(parent.getWidgets()).not.toContain(createdContainer);
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
   });
@@ -586,7 +310,6 @@ describe('connectFeeds', () => {
   describe('getWidgetSearchParameters', () => {
     it('passes through search parameters unchanged', () => {
       const feedsWidget = connectFeeds(() => {})({
-        widgets: () => [],
         searchScope: 'global',
       });
 
@@ -597,10 +320,37 @@ describe('connectFeeds', () => {
     });
   });
 
+  describe('getWidgetRenderState', () => {
+    it('returns empty feedIDs when no results', () => {
+      const feedsWidget = connectFeeds(() => {})({
+        searchScope: 'global',
+      });
+
+      const renderState = feedsWidget.getWidgetRenderState(
+        createRenderOptions({ results: undefined as any })
+      );
+
+      expect(renderState.feedIDs).toEqual([]);
+    });
+
+    it('computes feedIDs from results (stateless)', () => {
+      const feedsWidget = connectFeeds(() => {})({
+        searchScope: 'global',
+      });
+
+      const results = createResultsWithFeeds(['a', 'b']);
+
+      const renderState = feedsWidget.getWidgetRenderState(
+        createRenderOptions({ results })
+      );
+
+      expect(renderState.feedIDs).toEqual(['a', 'b']);
+    });
+  });
+
   describe('getRenderState', () => {
     it('merges feeds into renderState', () => {
       const feedsWidget = connectFeeds(() => {})({
-        widgets: () => [],
         searchScope: 'global',
       });
 
@@ -610,7 +360,7 @@ describe('connectFeeds', () => {
       );
 
       expect(renderState.feeds).toBeDefined();
-      expect(renderState.feeds.feeds).toEqual([]);
+      expect(renderState.feeds.feedIDs).toEqual(['']);
     });
   });
 });

@@ -4,9 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 
-import { createFeedContainer } from './FeedContainer';
-
-import type { Connector, IndexWidget, Widget } from '../../types';
+import type { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'feeds',
@@ -14,15 +12,10 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type FeedsRenderState = {
-  feeds: Array<{ feedID: string; container: IndexWidget }>;
+  feedIDs: string[];
 };
 
 export type FeedsConnectorParams = {
-  /**
-   * Returns widgets for a given feed. Called once per feedID.
-   */
-  widgets: (feedID: string) => Array<Widget>;
-
   /**
    * Explicit search scope. Currently only 'global' is supported
    * (future-proofing for per-feed search parameters).
@@ -55,24 +48,13 @@ const connectFeeds: FeedsConnector = function connectFeeds(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const {
-      widgets,
-      searchScope,
-      transformFeeds = (feeds) => feeds,
-    } = widgetParams;
-
-    if (typeof widgets !== 'function') {
-      throw new Error(withUsage('The `widgets` option expects a function.'));
-    }
+    const { searchScope, transformFeeds = (feeds) => feeds } = widgetParams;
 
     if (searchScope !== 'global') {
       throw new Error(
         withUsage('The `searchScope` option currently only supports "global".')
       );
     }
-
-    // Map of feedID → FeedContainer (IndexWidget)
-    const feedContainers = new Map<string, IndexWidget>();
 
     return {
       $$type: 'ais.feeds',
@@ -99,74 +81,7 @@ const connectFeeds: FeedsConnector = function connectFeeds(
       },
 
       render(renderOptions) {
-        const { results, parent, instantSearchInstance } = renderOptions;
-
-        if (!results) {
-          renderFn(
-            {
-              ...this.getWidgetRenderState(renderOptions),
-              instantSearchInstance,
-            },
-            false
-          );
-          return;
-        }
-
-        // Single-feed backward compat: when no feeds are present in response,
-        // treat it as one anonymous feed without mutating the SearchResults.
-        let feedIDs = results.feeds ? results.feeds.map((f) => f.feedID) : [''];
-        feedIDs = transformFeeds(feedIDs);
-
-        if (!Array.isArray(feedIDs)) {
-          throw new Error(
-            withUsage(
-              'The `transformFeeds` option expects a function that returns an Array.'
-            )
-          );
-        }
-
-        if (!feedIDs.every((feedID) => typeof feedID === 'string')) {
-          throw new Error(
-            withUsage(
-              'The `transformFeeds` option expects a function that returns an array of feed IDs (strings).'
-            )
-          );
-        }
-
-        const activeFeedIDs = new Set(feedIDs);
-
-        // Remove containers for feeds that no longer exist
-        const containersToRemove: IndexWidget[] = [];
-        feedContainers.forEach((container, id) => {
-          if (!activeFeedIDs.has(id)) {
-            containersToRemove.push(container);
-            feedContainers.delete(id);
-          }
-        });
-        if (containersToRemove.length > 0) {
-          // Deferred removal — same pattern as connectDynamicWidgets
-          setTimeout(() => parent.removeWidgets(containersToRemove), 0);
-        }
-
-        // Create containers for new feeds, render them immediately
-        // (existing containers are rendered by the parent's render cycle)
-        feedIDs.forEach((feedID) => {
-          if (!feedContainers.has(feedID)) {
-            const feedWidgets = widgets(feedID);
-            if (!feedWidgets || feedWidgets.length === 0) {
-              return;
-            }
-            const container = createFeedContainer(
-              feedID,
-              parent,
-              instantSearchInstance
-            );
-            feedContainers.set(feedID, container);
-            parent.addWidgets([container]);
-            container.addWidgets(feedWidgets);
-            container.render(renderOptions);
-          }
-        });
+        const { instantSearchInstance } = renderOptions;
 
         renderFn(
           {
@@ -177,10 +92,7 @@ const connectFeeds: FeedsConnector = function connectFeeds(
         );
       },
 
-      dispose({ parent }) {
-        const toRemove = Array.from(feedContainers.values());
-        feedContainers.clear();
-        parent.removeWidgets(toRemove);
+      dispose() {
         unmountFn();
       },
 
@@ -195,15 +107,34 @@ const connectFeeds: FeedsConnector = function connectFeeds(
         };
       },
 
-      getWidgetRenderState() {
-        const feeds = Array.from(feedContainers.entries()).map(
-          ([feedID, container]) => ({ feedID, container })
-        );
+      getWidgetRenderState({ results }) {
+        if (!results) {
+          return { feedIDs: [], widgetParams };
+        }
 
-        return {
-          feeds,
-          widgetParams,
-        };
+        let feedIDs = results.feeds
+          ? results.feeds.map((f: { feedID: string }) => f.feedID)
+          : [''];
+
+        feedIDs = transformFeeds(feedIDs);
+
+        if (!Array.isArray(feedIDs)) {
+          throw new Error(
+            withUsage(
+              'The `transformFeeds` option expects a function that returns an Array.'
+            )
+          );
+        }
+
+        if (!feedIDs.every((feedID: string) => typeof feedID === 'string')) {
+          throw new Error(
+            withUsage(
+              'The `transformFeeds` option expects a function that returns an array of feed IDs (strings).'
+            )
+          );
+        }
+
+        return { feedIDs, widgetParams };
       },
     };
   };
