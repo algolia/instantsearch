@@ -9,8 +9,6 @@ const ChatMessageLoader = createChatMessageLoaderComponent({
   createElement: h,
 });
 
-export function chatMessageLoader() {
-  return function ChatMessageLoaderTemplate(props: ChatMessageLoaderProps) {
-    return <ChatMessageLoader {...props} />;
-  };
+export function chatMessageLoader(props?: ChatMessageLoaderProps) {
+  return <ChatMessageLoader {...props} />;
 }
