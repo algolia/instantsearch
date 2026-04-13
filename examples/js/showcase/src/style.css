@@ -18,7 +18,7 @@ body {
 
 [data-theme="dark"] body {
   color: theme(--color-neutral-100);
-  background-color: theme(--color-neutral-950);
+  background-color: #0a0b11;
 }
 
 /* RangeSlider (noUiSlider) */
