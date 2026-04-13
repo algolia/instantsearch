@@ -69,6 +69,7 @@ workflows:
             branches:
               only:
                 - master
+                - chore/examples-ie11-support
       - helper docs:
           requires:
             - build
@@ -92,6 +93,7 @@ workflows:
             branches:
               only:
                 - master
+                - chore/examples-ie11-support
       - e2e tests router nextjs:
           context: fx-libraries
           requires:

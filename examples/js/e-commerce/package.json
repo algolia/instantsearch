@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "website:examples": "vite build --outDir ../../../website/examples/js/e-commerce --base /examples/js/e-commerce"
+    "website:examples": "vite build --outDir ../../../website/examples/js/e-commerce --base /examples/js/e-commerce/"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
@@ -17,6 +17,8 @@
     "instantsearch.js": "4.93.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-legacy": "5.4.3",
+    "terser": "^5.4.0",
     "vite": "5.0.7",
     "vite-plugin-commonjs": "0.10.0"
   }
