@@ -1,6 +1,7 @@
 export { default as version } from './version';
 export * from './components/Configure';
 export * from './components/DynamicWidgets';
+export * from './components/Feeds';
 export * from './components/Index';
 export * from './components/InstantSearch';
 export * from './components/InstantSearchServerContext';
@@ -12,6 +13,7 @@ export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
 export * from './connectors/useCurrentRefinements';
 export * from './connectors/useDynamicWidgets';
+export * from './connectors/useFeeds';
 export * from './connectors/useFrequentlyBoughtTogether';
 export * from './connectors/useGeoSearch';
 export * from './connectors/useHierarchicalMenu';
