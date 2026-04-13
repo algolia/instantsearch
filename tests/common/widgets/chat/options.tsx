@@ -139,6 +139,66 @@ export function createOptionsTests(
       );
     });
 
+    test('stops streaming and clears when clear is clicked during streaming', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      await act(async () => {
+        chat._state.messages = [
+          {
+            id: '1',
+            role: 'user' as const,
+            parts: [{ type: 'text' as const, text: 'hello' }],
+          },
+        ];
+        await wait(0);
+      });
+
+      const clearButton = document.querySelector(
+        '.ais-ChatHeader-clear'
+      ) as HTMLButtonElement;
+      expect(clearButton).not.toBeDisabled();
+
+      // Clear button remains enabled during submitted status
+      await act(async () => {
+        chat._state.status = 'submitted';
+        await wait(0);
+      });
+
+      expect(clearButton).not.toBeDisabled();
+
+      // Clear button remains enabled during streaming status
+      await act(async () => {
+        chat._state.status = 'streaming';
+        await wait(0);
+      });
+
+      expect(clearButton).not.toBeDisabled();
+
+      // Clicking clear during streaming stops the stream and begins clearing
+      await act(async () => {
+        clearButton.click();
+        await wait(0);
+      });
+
+      expect(chat._state.status).toBe('ready');
+      expect(clearButton).toBeDisabled();
+    });
+
     describe('cssClasses', () => {
       test('adds custom CSS classes', async () => {
         const searchClient = createSearchClient();

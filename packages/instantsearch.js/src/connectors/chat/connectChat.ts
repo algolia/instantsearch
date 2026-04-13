@@ -322,6 +322,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
         return;
       }
+      const status = _chatInstance.status;
+      if (status === 'submitted' || status === 'streaming') {
+        _chatInstance.stop();
+      }
       setIsClearing(true);
     };
 
