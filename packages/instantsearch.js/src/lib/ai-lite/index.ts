@@ -43,6 +43,7 @@ export type {
   FileUIPart,
   StepStartUIPart,
   DataUIPart,
+  ContextUIPart,
 
   // Inference types
   InferUIMessageMetadata,

@@ -206,6 +206,36 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('does not render context parts', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [
+            { type: 'text', text: 'Hello' },
+            {
+              type: 'context',
+              context: {
+                currentPage: 'https://example.com/products',
+                userLocale: 'en-US',
+              },
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.textContent).toBe('Hello');
+    expect(container.textContent).not.toContain('example.com');
+    expect(container.textContent).not.toContain('en-US');
+  });
+
   test('renders with tools', () => {
     const { container } = render(
       <ChatMessage
