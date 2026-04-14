@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.14.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.13.0...instantsearch.css@8.14.0) (2026-04-14)
+
+
+### Features
+
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **instantsearch.css:** add experimental Nova theme ([#6949](https://github.com/algolia/instantsearch/issues/6949)) ([5289c69](https://github.com/algolia/instantsearch/commit/5289c69229fd63ead59b717bc9b8492a73bdc239))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+
+
+
+
+
 # [8.13.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.12.0...instantsearch.css@8.13.0) (2026-03-31)
 
 
