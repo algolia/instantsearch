@@ -1,11 +1,16 @@
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
+import {
+  getInsightsAnonymousUserTokenInternal,
+  getTelemetrySessionId,
+} from '../helpers';
 import {
   warning,
   noop,
+  extractWidgetPayload,
   getAppIdAndApiKey,
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
+import type { WidgetMetadata } from '../lib/utils/extractWidgetPayload';
 import { createUUID } from '../lib/utils/uuid';
 
 import type {
@@ -162,6 +167,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
+    let telemetryOnRender: (() => void) | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -416,10 +422,48 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             );
           }
         };
+
+        // telemetry
+        const telemetrySessionId = getTelemetrySessionId();
+
+        function sendTelemetryEvent(event: any) {
+          const userToken = helper.state?.userToken;
+
+          instantSearchInstance.sendEventToInsights({
+            insightsMethod: 'sendEvents',
+            payload: [
+              {
+                eventType: 'instantsearch_telemetry',
+                timestamp: Date.now(),
+                session_id: telemetrySessionId,
+                userToken: userToken ? String(userToken) : undefined,
+                ...event,
+              },
+            ],
+          } as any);
+        }
+
+        telemetryOnRender = () => {
+          sendTelemetryEvent({
+            eventName: '__render__',
+            performance: {},
+            widgets: collectWidgets(instantSearchInstance),
+          });
+        };
+
+        instantSearchInstance.on('render', telemetryOnRender);
+
+        sendTelemetryEvent({
+          eventName: '__bootstrap__',
+        });
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
+        if (telemetryOnRender) {
+          instantSearchInstance.removeListener('render', telemetryOnRender);
+          telemetryOnRender = null;
+        }
         if (helper && initialParameters) {
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
@@ -484,4 +528,25 @@ function normalizeUserToken(userToken?: string | number): string | undefined {
   }
 
   return typeof userToken === 'number' ? userToken.toString() : userToken;
+}
+
+function collectWidgets(
+  instantSearchInstance: InstantSearch
+): WidgetMetadata[] {
+  const widgetPayload: { widgets: WidgetMetadata[] } = { widgets: [] };
+  extractWidgetPayload(
+    instantSearchInstance.mainIndex.getWidgets(),
+    instantSearchInstance,
+    widgetPayload
+  );
+
+  instantSearchInstance.middleware.forEach((mw) =>
+    widgetPayload.widgets.push({
+      middleware: true,
+      type: mw.instance.$$type,
+      internal: mw.instance.$$internal,
+    })
+  );
+
+  return widgetPayload.widgets;
 }
