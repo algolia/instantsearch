@@ -112,9 +112,7 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent(
-        'false'
-      );
+      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent('false');
     });
   });
 }

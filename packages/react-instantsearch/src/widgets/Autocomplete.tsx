@@ -408,11 +408,14 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     ...userTranslations,
   };
   const { indexUiState, indexRenderState, status } = useInstantSearch();
-  const { refine } = useSearchBox({}, {
-    $$type: 'ais.autocomplete',
-    $$widgetType: 'ais.autocomplete',
-    ...(aiMode ? { opensChat: true } : {}),
-  });
+  const { refine } = useSearchBox(
+    {},
+    {
+      $$type: 'ais.autocomplete',
+      $$widgetType: 'ais.autocomplete',
+      ...(aiMode ? { opensChat: true } : {}),
+    }
+  );
   const isSearchStalled = status === 'stalled';
   const searchParameters = {
     hitsPerPage: 5,
