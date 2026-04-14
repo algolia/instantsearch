@@ -68,6 +68,11 @@ export type StepStartUIPart = {
   type: 'step-start';
 };
 
+export type ContextUIPart = {
+  type: 'context';
+  context: Record<string, unknown>;
+};
+
 export type DataUIPart<DATA_TYPES extends UIDataTypes> = ValueOf<{
   [NAME in keyof DATA_TYPES & string]: {
     type: `data-${NAME}`;
@@ -164,7 +169,8 @@ export type UIMessagePart<
   | SourceDocumentUIPart
   | FileUIPart
   | DataUIPart<DATA_TYPES>
-  | StepStartUIPart;
+  | StepStartUIPart
+  | ContextUIPart;
 
 export interface UIMessage<
   METADATA = unknown,

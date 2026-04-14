@@ -101,6 +101,15 @@ export type StepStartUIPart = {
 };
 
 /**
+ * A context part of a message, used to pass hidden context (e.g. current page info)
+ * alongside user messages. Not rendered in the UI but sent to the API.
+ */
+export type ContextUIPart = {
+  type: 'context';
+  context: Record<string, unknown>;
+};
+
+/**
  * A data part of a message.
  */
 export type DataUIPart<TDataTypes extends UIDataTypes> = ValueOf<{
@@ -208,7 +217,8 @@ export type UIMessagePart<
   | SourceDocumentUIPart
   | FileUIPart
   | DataUIPart<TDataTypes>
-  | StepStartUIPart;
+  | StepStartUIPart
+  | ContextUIPart;
 
 /**
  * AI SDK UI Messages. They are used in the client and to communicate between the frontend and the API routes.
