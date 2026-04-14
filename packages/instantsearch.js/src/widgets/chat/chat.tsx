@@ -665,11 +665,18 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           );
         }
       : undefined;
+    const emptyTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'empty'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { empty: templates.empty },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
     const messagesEmptyComponent = templates.empty
       ? (emptyProps: ChatEmptyProps) => {
           return (
             <TemplateComponent
-              {...messagesTemplateProps}
+              {...emptyTemplateProps}
               templateKey="empty"
               rootTagName="div"
               data={emptyProps}

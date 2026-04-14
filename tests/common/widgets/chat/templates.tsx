@@ -278,15 +278,13 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                messages: {
-                  empty:
-                    '<div class="custom-empty">Custom empty</div>',
-                },
+                empty:
+                  '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
               ...createDefaultWidgetParams(chat),
-              messagesEmptyComponent: () => (
+              emptyComponent: () => (
                 <div className="custom-empty">Custom empty</div>
               ),
             },
@@ -323,15 +321,13 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                messages: {
-                  empty:
-                    '<div class="custom-empty">Custom empty</div>',
-                },
+                empty:
+                  '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
               ...createDefaultWidgetParams(chat),
-              messagesEmptyComponent: () => (
+              emptyComponent: () => (
                 <div className="custom-empty">Custom empty</div>
               ),
             },
