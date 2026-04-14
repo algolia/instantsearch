@@ -665,7 +665,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           );
         }
       : undefined;
-    const messagesEmptyComponent = templates.messages?.empty
+    const messagesEmptyComponent = templates.empty
       ? (emptyProps: ChatGreetingProps) => {
           return (
             <TemplateComponent
@@ -1107,10 +1107,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
-      /**
-       * Template to use for the empty screen shown when there are no messages
-       */
-      empty?: Template<ChatGreetingProps>;
     }>;
 
     /**
@@ -1218,6 +1214,11 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       actions: ChatMessageActionProps[];
       message: ChatMessageBase;
     }>;
+
+    /**
+     * Template to use for the empty screen shown when there are no messages
+     */
+    empty?: Template<ChatGreetingProps>;
 
     /**
      * Template to use for prompt suggestions.

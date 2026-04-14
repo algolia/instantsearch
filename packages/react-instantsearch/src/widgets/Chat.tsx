@@ -142,10 +142,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
     messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
-    messagesEmptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
@@ -187,7 +187,6 @@ function ChatInner<
     headerMaximizeIconComponent,
     messagesLoaderComponent,
     messagesErrorComponent,
-    messagesEmptyComponent,
     promptComponent,
     promptHeaderComponent,
     promptFooterComponent,
@@ -195,6 +194,7 @@ function ChatInner<
     assistantMessageFooterComponent,
     userMessageLeadingComponent,
     userMessageFooterComponent,
+    emptyComponent,
     actionsComponent,
     suggestionsComponent,
     classNames,
@@ -331,7 +331,7 @@ function ChatInner<
         onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
-        emptyComponent: messagesEmptyComponent,
+        emptyComponent: emptyComponent,
         actionsComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
