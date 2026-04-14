@@ -7,8 +7,8 @@ import { wait } from '@instantsearch/testutils/wait';
 import { screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
-import chat from '../chat';
 import chatTrigger from '../../chat-trigger/chat-trigger';
+import chat from '../chat';
 
 describe('chat', () => {
   describe('options', () => {
