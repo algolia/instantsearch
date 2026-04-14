@@ -14,6 +14,7 @@ import {
   noop,
   sendChatMessageFeedback,
   uniq,
+  walkIndex,
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
@@ -343,17 +344,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         return;
       }
 
-      // mainIndex may be absent in test environments or when called from
-      // getWidgetRenderState before a full init has taken place.
+      // warning only relevant once mounted
       if (!instantSearchInstance.mainIndex) {
         return;
       }
 
-      const widgets = instantSearchInstance.mainIndex.getWidgets() as Array<{
-        opensChat?: boolean;
-      }>;
-
-      const hasEntryPoint = widgets.some((w) => w.opensChat === true);
+      let hasEntryPoint = false;
+      walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
+        const widgets = indexWidget.getWidgets() as Array<{
+          opensChat?: boolean;
+        }>;
+        if (widgets.some((w) => w.opensChat === true)) {
+          hasEntryPoint = true;
+        }
+      });
 
       if (!hasEntryPoint) {
         throw new Error(

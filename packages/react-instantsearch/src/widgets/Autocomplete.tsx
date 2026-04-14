@@ -412,7 +412,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     $$type: 'ais.autocomplete',
     $$widgetType: 'ais.autocomplete',
     ...(aiMode ? { opensChat: true } : {}),
-  } as Parameters<typeof useSearchBox>[1]);
+  });
   const isSearchStalled = status === 'stalled';
   const searchParameters = {
     hitsPerPage: 5,

@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useChatTrigger } from 'react-instantsearch-core';
+import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
+import { useChatTrigger, useInstantSearch } from 'react-instantsearch-core';
 
-import type { ChatHandle } from './Chat';
+import type {
+  ChatToggleButtonClassNames,
+  ChatToggleButtonProps as ChatToggleButtonUiProps,
+  Pragma,
+} from 'instantsearch-ui-components';
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
+
+const ChatToggleButton = createChatToggleButtonComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
 
 export type ChatTriggerProps = {
   /**
-   * Reference to the Chat component.
-   * Get this by using React.useRef() and passing it to the Chat component's `ref` prop.
+   * CSS classes to add to the widget elements.
    */
-  chatRef: React.RefObject<ChatHandle>;
+  classNames?: Partial<ChatToggleButtonClassNames>;
 
   /**
-   * CSS class to add to the button.
+   * Custom icon component to replace the default sparkles/chevron icons.
    */
-  className?: string;
-
-  /**
-   * Aria label for accessibility.
-   * @default "Toggle chat"
-   */
-  ariaLabel?: string;
-
-  /**
-   * Custom button content/children.
-   * If not provided, will show "Open" or "Close" text.
-   */
-  children?: React.ReactNode;
+  toggleIconComponent?: ChatToggleButtonUiProps['toggleIconComponent'];
 
   /**
    * Callback when the trigger is clicked.
@@ -34,41 +32,29 @@ export type ChatTriggerProps = {
 };
 
 export function ChatTrigger({
-  chatRef,
-  className = 'ais-ChatTrigger',
-  ariaLabel = 'Toggle chat',
-  children,
+  classNames,
+  toggleIconComponent,
   onClick,
 }: ChatTriggerProps) {
-  const [isOpen, setIsOpen] = useState(false);
   useChatTrigger({}, { $$widgetType: 'ais.chatTrigger' });
 
-  useEffect(() => {
-    if (chatRef.current) {
-      setIsOpen(chatRef.current.getOpen?.() ?? false);
-    }
-  }, [chatRef]);
+  const { indexRenderState } = useInstantSearch();
+  const chatState = indexRenderState.chat as
+    | Partial<ChatRenderState>
+    | undefined;
+  const isOpen = chatState?.open ?? false;
 
   const handleClick = () => {
-    if (chatRef.current) {
-      const currentOpen = chatRef.current.getOpen?.() ?? isOpen;
-      const nextOpen = !currentOpen;
-
-      chatRef.current.setOpen(nextOpen);
-      setIsOpen(nextOpen);
-    }
+    chatState?.setOpen?.(!isOpen);
     onClick?.();
   };
 
   return (
-    <button
-      className={className}
+    <ChatToggleButton
+      open={isOpen}
       onClick={handleClick}
-      aria-label={ariaLabel}
-      aria-pressed={isOpen}
-      type="button"
-    >
-      {children ? children : isOpen ? 'Close' : 'Open'}
-    </button>
+      classNames={classNames}
+      toggleIconComponent={toggleIconComponent}
+    />
   );
 }

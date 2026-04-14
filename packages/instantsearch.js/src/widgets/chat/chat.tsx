@@ -460,7 +460,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode,
   templates,
   tools,
-  externalRefs,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -469,10 +468,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
-  externalRefs: {
-    setOpen: ((open: boolean) => void) | null;
-    getOpen: (() => boolean) | null;
-  };
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
@@ -513,15 +508,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
-      // Wire up the external API references on first render
-      externalRefs.setOpen = setOpen;
-      externalRefs.getOpen = () => open;
       return;
     }
-
-    // Update external references on each render
-    externalRefs.setOpen = setOpen;
-    externalRefs.getOpen = () => open;
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
@@ -1239,25 +1227,19 @@ export default (function chat<
 
   const tools = { ...defaultTools, ...userTools };
 
-  const externalRefs = {
-    setOpen: null as unknown as (open: boolean) => void,
-    getOpen: null as unknown as () => boolean,
-  };
-
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
     renderState: {},
     templates,
     tools,
-    externalRefs,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>
     render(null, containerNode)
   );
 
-  const widget = {
+  return {
     ...makeWidget({
       resume,
       tools,
@@ -1265,21 +1247,7 @@ export default (function chat<
       ...options,
     }),
     $$widgetType: 'ais.chat' as const,
-    /**
-     * Opens or closes the chat
-     */
-    setOpen(open: boolean) {
-      externalRefs.setOpen(open);
-    },
-    /**
-     * Returns whether the chat is currently open
-     */
-    getOpen(): boolean {
-      return externalRefs.getOpen();
-    },
   };
-
-  return widget;
 } satisfies ChatWidget);
 
 function createLocalState() {

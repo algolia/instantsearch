@@ -1,16 +1,23 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
+import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
+import { h, Fragment, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
+import connectChatTrigger from '../../connectors/chat/connectChatTrigger';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
+import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type { Template } from '../../types';
-import type { ChatToggleButtonProps } from 'instantsearch-ui-components';
+import type { InstantSearch } from '../../types';
+import type {
+  ChatToggleButtonProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chatTrigger',
@@ -41,15 +48,6 @@ export type ChatTriggerWidgetParams = {
   container: string | HTMLElement;
 
   /**
-   * Reference to the chat widget instance.
-   * Required for the trigger to control the chat's open/close state.
-   */
-  chat: {
-    setOpen: (open: boolean) => void;
-    getOpen: () => boolean;
-  };
-
-  /**
    * Templates to use for the widget.
    */
   templates?: ChatTriggerTemplates;
@@ -60,24 +58,31 @@ export type ChatTriggerWidgetParams = {
   cssClasses?: ChatTriggerCSSClasses;
 };
 
+function findChatRenderState(
+  instantSearchInstance: InstantSearch
+): Partial<ChatRenderState> | undefined {
+  for (const indexState of Object.values(instantSearchInstance.renderState)) {
+    if (indexState.chat) {
+      return indexState.chat as Partial<ChatRenderState>;
+    }
+  }
+  return undefined;
+}
+
+const ChatToggleButton = createChatToggleButtonComponent({
+  createElement: h as unknown as Pragma,
+  Fragment,
+});
+
 export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
   const {
     container,
-    chat,
     templates: userTemplates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
-  }
-
-  if (!chat) {
-    throw new Error(
-      withUsage(
-        'The `chat` option is required. Pass a reference to the chat widget instance.'
-      )
-    );
   }
 
   const containerNode = getContainerNode(container);
@@ -98,7 +103,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
           <TemplateComponent
             {...defaultTemplateProps}
             templateKey="layout"
-            rootTagName="button"
+            rootTagName="fragment"
             data={props}
           />
         );
@@ -118,45 +123,53 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
       }
     : undefined;
 
-  function renderTrigger() {
-    const isOpen = chat.getOpen();
-    const button = document.createElement('button');
-    button.className = `ais-ChatTrigger ${
-      userCssClasses.button ? String(userCssClasses.button) : ''
-    }`;
-    button.setAttribute('aria-label', 'Open chat');
-    button.setAttribute('aria-pressed', String(isOpen));
+  let lastInstantSearchInstance: InstantSearch | null = null;
 
-    button.addEventListener('click', () => {
-      chat.setOpen(!chat.getOpen());
-      button.setAttribute('aria-pressed', String(chat.getOpen()));
-    });
+  function renderTrigger(
+    renderState: { instantSearchInstance: InstantSearch },
+    _isFirstRender: boolean
+  ) {
+    lastInstantSearchInstance = renderState.instantSearchInstance;
+
+    const chatState = findChatRenderState(renderState.instantSearchInstance);
+    const isOpen = chatState?.open ?? false;
+
+    const toggleChat = () => {
+      const currentChatState = lastInstantSearchInstance
+        ? findChatRenderState(lastInstantSearchInstance)
+        : undefined;
+      const currentOpen = currentChatState?.open ?? false;
+      currentChatState?.setOpen?.(!currentOpen);
+    };
 
     if (LayoutComponent) {
       render(
         <LayoutComponent
           open={isOpen}
-          onClick={() => {
-            chat.setOpen(!isOpen);
-            button.setAttribute('aria-pressed', String(chat.getOpen()));
-          }}
+          onClick={toggleChat}
           toggleIconComponent={iconComponent}
         />,
-        button
+        containerNode
       );
     } else {
-      button.textContent = isOpen ? 'Close' : 'Chat';
+      render(
+        <ChatToggleButton
+          open={isOpen}
+          onClick={toggleChat}
+          toggleIconComponent={iconComponent}
+          classNames={{ root: userCssClasses.button }}
+        />,
+        containerNode
+      );
     }
-
-    render(button, containerNode);
   }
 
-  renderTrigger();
+  const makeWidget = connectChatTrigger(renderTrigger, () =>
+    render(null, containerNode)
+  );
 
   return {
-    $$widgetType: 'ais.chatTrigger',
-    dispose: () => {
-      render(null, containerNode);
-    },
+    ...makeWidget({}),
+    $$widgetType: 'ais.chatTrigger' as const,
   };
 }

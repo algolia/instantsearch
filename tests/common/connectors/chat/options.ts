@@ -19,7 +19,9 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient: createSearchClient(),
         },
-        widgetParams: {},
+        widgetParams: {
+          disableTriggerValidation: true,
+        },
       };
 
       await expect(async () => {

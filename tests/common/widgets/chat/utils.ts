@@ -20,7 +20,15 @@ export async function openChat(act: Act) {
     await wait(0);
   });
 
-  globalThis.__chatTestSetOpen?.(true);
+  const setOpen = globalThis.__chatTestSetOpen;
+
+  if (setOpen == null) {
+    throw new Error(
+      'openChat() requires globalThis.__chatTestSetOpen to be set by the test setup.'
+    );
+  }
+
+  setOpen(true);
 
   await act(async () => {
     await wait(0);
