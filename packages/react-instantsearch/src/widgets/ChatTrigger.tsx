@@ -13,7 +13,10 @@ const ChatToggleButton = createChatToggleButtonComponent({
   Fragment,
 });
 
-export type ChatTriggerProps = {
+export type ChatTriggerProps = Omit<
+  ChatToggleButtonUiProps,
+  'open' | 'onClick'
+> & {
   /**
    * CSS classes to add to the widget elements.
    */
@@ -34,6 +37,7 @@ export function ChatTrigger({
   classNames,
   toggleIconComponent,
   onClick,
+  ...props
 }: ChatTriggerProps) {
   const { open, toggleOpen } = useChatTrigger(
     {},
@@ -51,6 +55,7 @@ export function ChatTrigger({
       onClick={handleClick}
       classNames={classNames}
       toggleIconComponent={toggleIconComponent}
+      {...props}
     />
   );
 }
