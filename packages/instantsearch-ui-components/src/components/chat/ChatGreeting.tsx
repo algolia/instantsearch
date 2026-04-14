@@ -7,13 +7,13 @@ import type { ChatLayoutOwnProps, ChatStatus } from './types';
 
 export type ChatGreetingTranslations = {
   /**
-   * Heading text for the greeting
+   * Heading text for the empty screen
    */
-  greetingHeading: string;
+  heading: string;
   /**
-   * Subheading text for the greeting
+   * Subheading text for the empty screen
    */
-  greetingSubheading: string;
+  subheading: string;
 };
 
 export type ChatGreetingClassNames = {
@@ -35,15 +35,7 @@ export type ChatGreetingClassNames = {
   banner?: string | string[];
 };
 
-export type ChatGreetingProps = ComponentProps<'div'> & {
-  /**
-   * Translations for greeting component texts
-   */
-  translations?: Partial<ChatGreetingTranslations>;
-  /**
-   * Optional class names
-   */
-  classNames?: Partial<ChatGreetingClassNames>;
+export type ChatEmptyProps = ComponentProps<'div'> & {
   /**
    * Function to send a message to the chat
    */
@@ -66,6 +58,17 @@ export type ChatGreetingProps = ComponentProps<'div'> & {
   banner?: string;
 };
 
+export type ChatGreetingProps = ChatEmptyProps & {
+  /**
+   * Optional translations
+   */
+  translations?: Partial<ChatGreetingTranslations>;
+  /**
+   * Optional class names
+   */
+  classNames?: ChatGreetingClassNames;
+};
+
 export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
@@ -81,11 +84,11 @@ export function createChatGreetingComponent({
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
-      greetingHeading:
-        userTranslations?.greetingHeading ??
+      heading:
+        userTranslations?.heading ??
         'How can I help you today?',
-      greetingSubheading:
-        userTranslations?.greetingSubheading ??
+      subheading:
+        userTranslations?.subheading ??
         "Ask me anything about our products, and I'll do my best to assist you.",
     };
 
@@ -102,10 +105,10 @@ export function createChatGreetingComponent({
           />
         )}
         <h2 className={cx('ais-ChatGreeting-heading', classNames.heading)}>
-          {translations.greetingHeading}
+          {translations.heading}
         </h2>
         <p className={cx('ais-ChatGreeting-subheading', classNames.subheading)}>
-          {translations.greetingSubheading}
+          {translations.subheading}
         </p>
       </div>
     );

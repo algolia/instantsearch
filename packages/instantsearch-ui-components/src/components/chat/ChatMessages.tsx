@@ -22,7 +22,7 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
-import type { ChatGreetingProps } from './ChatGreeting';
+import type { ChatEmptyProps } from './ChatGreeting';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -113,7 +113,7 @@ export type ChatMessagesProps<
   /**
    * Custom empty component shown when there are no messages
    */
-  emptyComponent?: (props: ChatGreetingProps) => JSX.Element;
+  emptyComponent?: (props: ChatEmptyProps) => JSX.Element;
   /**
    * Custom actions component
    */

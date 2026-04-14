@@ -54,7 +54,7 @@ import type {
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
-  ChatGreetingProps,
+  ChatEmptyProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
@@ -321,7 +321,7 @@ type ChatWrapperProps = {
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
     emptyComponent:
-      | ((props: ChatGreetingProps) => JSX.Element)
+      | ((props: ChatEmptyProps) => JSX.Element)
       | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
@@ -666,7 +666,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
     const messagesEmptyComponent = templates.empty
-      ? (emptyProps: ChatGreetingProps) => {
+      ? (emptyProps: ChatEmptyProps) => {
           return (
             <TemplateComponent
               {...messagesTemplateProps}
@@ -1218,7 +1218,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatGreetingProps>;
+    empty?: Template<ChatEmptyProps>;
 
     /**
      * Template to use for prompt suggestions.
