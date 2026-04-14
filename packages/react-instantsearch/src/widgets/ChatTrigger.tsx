@@ -1,13 +1,12 @@
 import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useChatTrigger, useInstantSearch } from 'react-instantsearch-core';
+import { useChatTrigger } from 'react-instantsearch-core';
 
 import type {
   ChatToggleButtonClassNames,
   ChatToggleButtonProps as ChatToggleButtonUiProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
 const ChatToggleButton = createChatToggleButtonComponent({
   createElement: createElement as Pragma,
@@ -36,22 +35,19 @@ export function ChatTrigger({
   toggleIconComponent,
   onClick,
 }: ChatTriggerProps) {
-  useChatTrigger({}, { $$widgetType: 'ais.chatTrigger' });
-
-  const { indexRenderState } = useInstantSearch();
-  const chatState = indexRenderState.chat as
-    | Partial<ChatRenderState>
-    | undefined;
-  const isOpen = chatState?.open ?? false;
+  const { open, toggleOpen } = useChatTrigger(
+    {},
+    { $$widgetType: 'ais.chatTrigger' }
+  );
 
   const handleClick = () => {
-    chatState?.setOpen?.(!isOpen);
+    toggleOpen();
     onClick?.();
   };
 
   return (
     <ChatToggleButton
-      open={isOpen}
+      open={open}
       onClick={handleClick}
       classNames={classNames}
       toggleIconComponent={toggleIconComponent}

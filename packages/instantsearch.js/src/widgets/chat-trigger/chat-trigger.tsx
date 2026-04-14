@@ -11,9 +11,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+import type { ChatTriggerRenderState } from '../../connectors/chat/connectChatTrigger';
 import type { Template } from '../../types';
-import type { InstantSearch } from '../../types';
 import type {
   ChatToggleButtonProps,
   Pragma,
@@ -57,17 +56,6 @@ export type ChatTriggerWidgetParams = {
    */
   cssClasses?: ChatTriggerCSSClasses;
 };
-
-function findChatRenderState(
-  instantSearchInstance: InstantSearch
-): Partial<ChatRenderState> | undefined {
-  for (const indexState of Object.values(instantSearchInstance.renderState)) {
-    if (indexState.chat) {
-      return indexState.chat as Partial<ChatRenderState>;
-    }
-  }
-  return undefined;
-}
 
 const ChatToggleButton = createChatToggleButtonComponent({
   createElement: h as unknown as Pragma,
@@ -123,30 +111,17 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
       }
     : undefined;
 
-  let lastInstantSearchInstance: InstantSearch | null = null;
-
   function renderTrigger(
-    renderState: { instantSearchInstance: InstantSearch },
+    renderState: ChatTriggerRenderState,
     _isFirstRender: boolean
   ) {
-    lastInstantSearchInstance = renderState.instantSearchInstance;
-
-    const chatState = findChatRenderState(renderState.instantSearchInstance);
-    const isOpen = chatState?.open ?? false;
-
-    const toggleChat = () => {
-      const currentChatState = lastInstantSearchInstance
-        ? findChatRenderState(lastInstantSearchInstance)
-        : undefined;
-      const currentOpen = currentChatState?.open ?? false;
-      currentChatState?.setOpen?.(!currentOpen);
-    };
+    const { open, toggleOpen } = renderState;
 
     if (LayoutComponent) {
       render(
         <LayoutComponent
-          open={isOpen}
-          onClick={toggleChat}
+          open={open}
+          onClick={toggleOpen}
           toggleIconComponent={iconComponent}
         />,
         containerNode
@@ -154,8 +129,8 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
     } else {
       render(
         <ChatToggleButton
-          open={isOpen}
-          onClick={toggleChat}
+          open={open}
+          onClick={toggleOpen}
           toggleIconComponent={iconComponent}
           classNames={{ root: userCssClasses.button }}
         />,
