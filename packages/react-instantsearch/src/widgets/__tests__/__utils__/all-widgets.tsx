@@ -18,7 +18,6 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
-  'ChatTrigger',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -30,7 +29,6 @@ type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
 // Non-components that should be excluded from SingleWidget type
 const NON_COMPONENTS = [
-  'ChatTrigger',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -139,9 +137,6 @@ function Widget<TWidget extends SingleWidget>({
     }
     case 'FilterSuggestions': {
       return <widget.Component agentId="test-agent-id" {...props} />;
-    }
-    case 'ChatTrigger': {
-      return <widget.Component {...props} />;
     }
     default: {
       return <widget.Component {...props} />;
