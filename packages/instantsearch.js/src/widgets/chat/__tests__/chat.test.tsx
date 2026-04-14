@@ -7,11 +7,19 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
+import { warning } from '../../../lib/utils';
 import { chatInlineLayout } from '../../../templates';
-import chat from '../chat';
 import chatTrigger from '../../chat-trigger/chat-trigger';
+import chat from '../chat';
 
 describe('chat', () => {
+  beforeEach(() => {
+    // The `warning` utility dedupes messages process-wide via this cache,
+    // which would prevent the dev-only chat trigger warning from being
+    // re-emitted in subsequent tests. We reset it for test isolation.
+    warning.cache = {};
+  });
+
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
@@ -32,7 +40,7 @@ describe('chat', () => {
       `);
     });
 
-    test('throws without `chatTrigger` or AI mode', async () => {
+    test('warns (does not throw) when no trigger or AI mode is present', async () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
 
@@ -48,16 +56,22 @@ describe('chat', () => {
         }),
       ]);
 
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
       expect(() => {
         search.start();
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`chat\` widget requires a way to open the chat. Add a \`chatTrigger\` widget or enable AI mode on an input widget. Use \`disableTriggerValidation: true\` to opt out.
+      }).not.toThrow();
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
-      `);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'The `chat` widget has no way to be opened.'
+        )
+      );
+
+      warnSpy.mockRestore();
     });
 
-    test('does not throw when a `chatTrigger` widget is present', () => {
+    test('does not warn when a `chatTrigger` widget is present', () => {
       const chatContainer = document.createElement('div');
       document.body.appendChild(chatContainer);
       const triggerContainer = document.createElement('div');
@@ -78,9 +92,51 @@ describe('chat', () => {
         }),
       ]);
 
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
       expect(() => {
         search.start();
       }).not.toThrow();
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining(
+          'The `chat` widget has no way to be opened.'
+        )
+      );
+
+      warnSpy.mockRestore();
+    });
+
+    test('does not warn when `disableTriggerValidation` is true', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+        }),
+      ]);
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining(
+          'The `chat` widget has no way to be opened.'
+        )
+      );
+
+      warnSpy.mockRestore();
     });
   });
 
