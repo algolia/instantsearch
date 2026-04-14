@@ -94,8 +94,8 @@ export function createChatGreetingComponent({
 
     return (
       <div
-        className={cx('ais-ChatGreeting', classNames.root)}
         {...props}
+        className={cx('ais-ChatGreeting', classNames.root, props.className)}
       >
         {banner && (
           <img
