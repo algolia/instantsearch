@@ -19,7 +19,9 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient: createSearchClient(),
         },
-        widgetParams: {},
+        widgetParams: {
+          disableTriggerValidation: true,
+        },
       };
 
       await expect(async () => {
@@ -110,9 +112,7 @@ export function createOptionsTests(
 
       await setup(options);
 
-      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent(
-        'false'
-      );
+      expect(screen.getByTestId('Chat-hasFeedback')).toHaveTextContent('false');
     });
   });
 }

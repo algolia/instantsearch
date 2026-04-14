@@ -313,13 +313,14 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     aiMode,
   });
 
-  const makeWidget = connectSearchBox(specializedRenderer, () =>
-    render(null, containerNode)
-  );
+  const widgetFactory = connectSearchBox(specializedRenderer, () => {
+    render(null, containerNode);
+  });
 
   return {
-    ...makeWidget({ queryHook }),
+    ...widgetFactory({ queryHook }),
     $$widgetType: 'ais.searchBox',
+    ...(aiMode ? { opensChat: true as const } : {}),
   };
 };
 

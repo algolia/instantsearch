@@ -14,6 +14,7 @@ import {
   noop,
   sendChatMessageFeedback,
   uniq,
+  walkIndex,
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
@@ -147,6 +148,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   | ChatInit<TUiMessage>
 ) & {
   /**
+   * Disable validation that requires either a dedicated trigger or AI mode.
+   */
+  disableTriggerValidation?: boolean;
+  /**
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
@@ -260,6 +265,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
+      disableTriggerValidation = false,
       ...options
     } = widgetParams || {};
 
@@ -273,6 +279,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
     let setIsClearing: (value: boolean) => void;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
+    let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
@@ -334,6 +341,37 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       _chatInstance.clearError();
       feedbackState = {};
       setIsClearing(false);
+    };
+
+    const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
+      if (disableTriggerValidation || hasValidatedEntryPoints) {
+        return;
+      }
+
+      // warning only relevant once mounted
+      if (!instantSearchInstance.mainIndex) {
+        return;
+      }
+
+      let hasEntryPoint = false;
+      walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
+        const widgets = indexWidget.getWidgets() as Array<{
+          opensChat?: boolean;
+        }>;
+        if (widgets.some((w) => w.opensChat === true)) {
+          hasEntryPoint = true;
+        }
+      });
+
+      if (!hasEntryPoint) {
+        throw new Error(
+          withUsage(
+            'The `chat` widget requires a way to open the chat. Add a `chatTrigger` widget or enable AI mode on an input widget. Use `disableTriggerValidation: true` to opt out.'
+          )
+        );
+      }
+
+      hasValidatedEntryPoints = true;
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -474,6 +512,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
+        validateEntryPoints(instantSearchInstance);
+
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -510,8 +550,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        const feedback =
-          'feedback' in options ? options.feedback : undefined;
+        const feedback = 'feedback' in options ? options.feedback : undefined;
         if (agentId && feedback) {
           const [appId, apiKey] = getAppIdAndApiKey(
             initOptions.instantSearchInstance.client
@@ -561,6 +600,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       render(renderOptions) {
+        validateEntryPoints(renderOptions.instantSearchInstance);
+
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),

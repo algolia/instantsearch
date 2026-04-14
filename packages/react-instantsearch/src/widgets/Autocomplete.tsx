@@ -400,6 +400,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   searchParameters: userSearchParameters,
   detachedMediaQuery,
   translations: userTranslations = {},
+  aiMode,
   ...props
 }: AutocompleteProps<TItem>) {
   const translations: AutocompleteTranslations = {
@@ -409,7 +410,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   const { indexUiState, indexRenderState, status } = useInstantSearch();
   const { refine } = useSearchBox(
     {},
-    { $$type: 'ais.autocomplete', $$widgetType: 'ais.autocomplete' }
+    {
+      $$type: 'ais.autocomplete',
+      $$widgetType: 'ais.autocomplete',
+      ...(aiMode ? { opensChat: true } : {}),
+    }
   );
   const isSearchStalled = status === 'stalled';
   const searchParameters = {
@@ -573,6 +578,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         ))}
         <InnerAutocomplete
           {...props}
+          aiMode={aiMode}
           indicesConfig={indicesConfig}
           refineSearchBox={refine}
           isSearchStalled={isSearchStalled}

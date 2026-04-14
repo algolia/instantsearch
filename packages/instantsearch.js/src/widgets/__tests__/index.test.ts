@@ -181,6 +181,12 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'chatTrigger': {
+        const chatTriggerWidget = widget as Widgets['chatTrigger'];
+        return chatTriggerWidget({
+          container,
+        });
+      }
       case 'trendingFacets': {
         const trendingFacets = widget as Widgets['trendingFacets'];
         return trendingFacets({ container, facetName: 'brand' });

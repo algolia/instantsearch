@@ -300,12 +300,6 @@ type ChatWrapperProps = {
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
-  toggleButtonProps: {
-    layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
-    iconComponent: ComponentProps<
-      typeof Chat
-    >['toggleButtonProps']['toggleIconComponent'];
-  };
   headerProps: {
     layoutComponent: ComponentProps<typeof Chat>['headerComponent'];
     closeIconComponent: ChatHeaderProps['closeIconComponent'];
@@ -369,7 +363,6 @@ function ChatWrapper({
   onFeedback,
   feedbackState,
   toolsForUi,
-  toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
@@ -396,12 +389,6 @@ function ChatWrapper({
       regenerate={regenerate}
       stop={stop}
       error={error}
-      toggleButtonComponent={toggleButtonProps.layoutComponent}
-      toggleButtonProps={{
-        open: chatOpen,
-        onClick: () => setChatOpen(!chatOpen),
-        toggleIconComponent: toggleButtonProps.iconComponent,
-      }}
       headerComponent={headerProps.layoutComponent}
       promptComponent={promptProps.layoutComponent}
       suggestionsComponent={suggestionsProps.suggestionsComponent}
@@ -793,38 +780,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
-    const toggleButtonTemplateProps = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['toggleButton']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.toggleButton,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const toggleButtonLayoutComponent = templates.toggleButton?.layout
-      ? (toggleButtonProps: ChatToggleButtonProps) => {
-          return (
-            <TemplateComponent
-              {...toggleButtonTemplateProps}
-              templateKey="layout"
-              rootTagName="button"
-              data={toggleButtonProps}
-            />
-          );
-        }
-      : undefined;
-    const toggleButtonIconComponent = templates.toggleButton?.icon
-      ? ({ isOpen }: { isOpen: boolean }) => {
-          return (
-            <TemplateComponent
-              {...toggleButtonTemplateProps}
-              templateKey="icon"
-              rootTagName="span"
-              data={{ isOpen }}
-            />
-          );
-        }
-      : undefined;
-
     const suggestionsComponent = templates.suggestions
       ? (suggestionsProps: {
           suggestions?: string[];
@@ -901,10 +856,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}
-          toggleButtonProps={{
-            layoutComponent: toggleButtonLayoutComponent,
-            iconComponent: toggleButtonIconComponent,
-          }}
           headerProps={{
             layoutComponent: headerLayoutComponent,
             closeIconComponent: headerCloseIconComponent,
@@ -1228,6 +1179,11 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * CSS classes to add.
    */
   cssClasses?: ChatCSSClasses;
+
+  /**
+   * Disable validation that requires either `chatTrigger` or AI mode.
+   */
+  disableTriggerValidation?: boolean;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1252,6 +1208,7 @@ export default (function chat<
     resume = false,
     tools: userTools,
     getSearchPageURL,
+    disableTriggerValidation = false,
     ...options
   } = widgetParams || {};
 
@@ -1286,9 +1243,10 @@ export default (function chat<
     ...makeWidget({
       resume,
       tools,
+      disableTriggerValidation,
       ...options,
     }),
-    $$widgetType: 'ais.chat',
+    $$widgetType: 'ais.chat' as const,
   };
 } satisfies ChatWidget);
 

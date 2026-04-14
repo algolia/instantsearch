@@ -7,6 +7,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
+import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';
 
 describe('chat', () => {
@@ -29,6 +30,57 @@ describe('chat', () => {
         See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/"
       `);
     });
+
+    test('throws without `chatTrigger` or AI mode', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+        }),
+      ]);
+
+      expect(() => {
+        search.start();
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`chat\` widget requires a way to open the chat. Add a \`chatTrigger\` widget or enable AI mode on an input widget. Use \`disableTriggerValidation: true\` to opt out.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
+      `);
+    });
+
+    test('does not throw when a `chatTrigger` widget is present', () => {
+      const chatContainer = document.createElement('div');
+      document.body.appendChild(chatContainer);
+      const triggerContainer = document.createElement('div');
+      document.body.appendChild(triggerContainer);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container: chatContainer,
+          agentId: 'test-agent-id',
+        }),
+        chatTrigger({
+          container: triggerContainer,
+        }),
+      ]);
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
+    });
   });
 
   describe('search tool compatibility', () => {
@@ -45,6 +97,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {
@@ -90,6 +143,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {

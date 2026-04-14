@@ -406,6 +406,20 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     const { renderRefinements, ...chatWidgetParams } = widgetParams;
+
+    function ChatTestSetup() {
+      const { indexRenderState } = useInstantSearch();
+      const chatState = indexRenderState.chat as
+        | { setOpen?: (open: boolean) => void }
+        | undefined;
+
+      React.useEffect(() => {
+        globalThis.__chatTestSetOpen = chatState?.setOpen ?? null;
+      }, [chatState?.setOpen]);
+
+      return null;
+    }
+
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -422,7 +436,8 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
             />
           </>
         )}
-        <Chat {...chatWidgetParams} />
+        <Chat disableTriggerValidation {...chatWidgetParams} />
+        <ChatTestSetup />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
