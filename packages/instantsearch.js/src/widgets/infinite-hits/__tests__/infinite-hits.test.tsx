@@ -918,7 +918,11 @@ describe('infiniteHits', () => {
 
       const insights = createInsightsMiddleware({
         insightsClient: null,
-        onEvent,
+        onEvent: (event, aa) => {
+          if (event.insightsMethod !== 'sendEvents') {
+            onEvent(event, aa);
+          }
+        },
       });
 
       return { onEvent, insights };
