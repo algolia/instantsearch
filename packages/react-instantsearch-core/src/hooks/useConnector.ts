@@ -72,6 +72,49 @@ export function useConnector<
           const { instantSearchInstance, widgetParams, ...renderState } =
             connectorState;
 
+          const prev = previousRenderStateRef.current;
+          const prevError =
+            prev && typeof prev === 'object' && 'error' in prev
+              ? (prev as { error?: unknown }).error
+              : undefined;
+          const nextError =
+            renderState &&
+            typeof renderState === 'object' &&
+            'error' in renderState
+              ? (renderState as { error?: unknown }).error
+              : undefined;
+          // Chat can transition to/from `error` while InstantSearch’s global
+          // `status` stays `idle`, so we must not rely only on `dequal` + IS
+          // `status` for syncing `renderState.error` into React.
+          const errorRefChanged = prevError !== nextError;
+
+          const prevId =
+            prev && typeof prev === 'object' && 'id' in prev
+              ? (prev as { id?: unknown }).id
+              : undefined;
+          const nextId =
+            renderState &&
+            typeof renderState === 'object' &&
+            'id' in renderState
+              ? (renderState as { id?: unknown }).id
+              : undefined;
+          // Chat (and similar) expose `id`; when it changes (e.g. new conversation),
+          // React must re-sync even if `dequal` treats the rest as unchanged.
+          const renderStateIdChanged = prevId !== nextId;
+
+          const prevConnectorStatus =
+            prev && typeof prev === 'object' && 'status' in prev
+              ? (prev as { status?: unknown }).status
+              : undefined;
+          const nextConnectorStatus =
+            renderState &&
+            typeof renderState === 'object' &&
+            'status' in renderState
+              ? (renderState as { status?: unknown }).status
+              : undefined;
+          const connectorLifecycleStatusChanged =
+            prevConnectorStatus !== nextConnectorStatus;
+
           // We only update the state when a widget render state param changes,
           // except for functions. We ignore function reference changes to avoid
           // infinite loops. It's safe to omit them because they get updated
@@ -83,7 +126,10 @@ export function useConnector<
               (a, b) =>
                 a?.constructor === Function && b?.constructor === Function
             ) ||
-            instantSearchInstance.status !== previousStatusRef.current
+            instantSearchInstance.status !== previousStatusRef.current ||
+            errorRefChanged ||
+            renderStateIdChanged ||
+            connectorLifecycleStatusChanged
           ) {
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             setState(renderState);

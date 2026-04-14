@@ -7,12 +7,17 @@
 
 // Classes
 export { AbstractChat } from './abstract-chat';
-export { DefaultChatTransport, HttpChatTransport } from './transport';
+export {
+  DefaultChatTransport,
+  HttpChatTransport,
+  getHttpErrorMessageFromResponse,
+} from './transport';
 
 // Utilities
 export {
   generateId,
   lastAssistantMessageIsCompleteWithToolCalls,
+  normalizeStreamChunkErrorText,
   SerialJobExecutor,
 } from './utils';
 

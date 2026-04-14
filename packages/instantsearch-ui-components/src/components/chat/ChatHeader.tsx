@@ -7,6 +7,7 @@ import {
   MaximizeIcon as MaximizeIconDefault,
   MinimizeIcon as MinimizeIconDefault,
   CloseIcon as CloseIconDefault,
+  SquarePenIcon,
 } from './icons';
 
 import type { Renderer, ComponentProps } from '../../types';
@@ -29,9 +30,9 @@ export type ChatHeaderTranslations = {
    */
   closeLabel: string;
   /**
-   * Text for the clear button
+   * Accessible label for the new-conversation control
    */
-  clearLabel: string;
+  newConversationLabel: string;
 };
 
 export type ChatHeaderClassNames = {
@@ -56,9 +57,9 @@ export type ChatHeaderClassNames = {
    */
   close?: string | string[];
   /**
-   * Class names to apply to the clear button element
+   * Class names for the new-conversation button
    */
-  clear?: string | string[];
+  newConversation?: string | string[];
 };
 
 export type ChatHeaderOwnProps = {
@@ -75,11 +76,19 @@ export type ChatHeaderOwnProps = {
    */
   onClose: () => void;
   /**
-   * Callback when the clear button is clicked
+   * Callback to start a new conversation. Shown as the square-pen icon when `onStartNewConversation` is not set.
+   */
+  onNewConversation?: () => void;
+  /**
+   * @deprecated Renamed to `onNewConversation`.
    */
   onClear?: () => void;
   /**
-   * Whether the clear button is enabled
+   * Whether the new-conversation action is enabled (when `onNewConversation` is used for the icon).
+   */
+  canStartNewConversation?: boolean;
+  /**
+   * @deprecated Renamed to `canStartNewConversation`.
    */
   canClear?: boolean;
   /**
@@ -98,6 +107,14 @@ export type ChatHeaderOwnProps = {
    * Optional title icon component (defaults to sparkles)
    */
   titleIconComponent?: () => JSX.Element;
+  /**
+   * When set, the square-pen icon calls this instead of `onNewConversation`.
+   */
+  onStartNewConversation?: () => void;
+  /**
+   * Optional icon for the new-conversation control
+   */
+  newConversationIconComponent?: () => JSX.Element;
   /**
    * Optional class names for elements
    */
@@ -118,24 +135,36 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       maximized = false,
       onToggleMaximize,
       onClose,
+      onNewConversation,
       onClear,
-      canClear = false,
+      onStartNewConversation,
+      canStartNewConversation,
+      canClear,
       closeIconComponent: CloseIcon,
       minimizeIconComponent: MinimizeIcon,
       maximizeIconComponent: MaximizeIcon,
       titleIconComponent: TitleIcon,
+      newConversationIconComponent: NewConversationIcon,
       classNames = {},
       translations: userTranslations,
       ...props
     } = userProps;
+    const t = userTranslations ?? {};
     const translations: Required<ChatHeaderTranslations> = {
       title: 'Chat',
       minimizeLabel: 'Minimize chat',
       maximizeLabel: 'Maximize chat',
       closeLabel: 'Close chat',
-      clearLabel: 'Clear',
-      ...userTranslations,
+      newConversationLabel: 'Start a new conversation',
+      ...t,
     };
+
+    const resolvedNewConversation = onNewConversation ?? onClear;
+    const handleStartNewConversation =
+      onStartNewConversation ?? resolvedNewConversation;
+    const startNewConversationDisabled =
+      resolvedNewConversation !== undefined &&
+      !(canStartNewConversation ?? canClear ?? false);
 
     const defaultMaximizeIcon = maximized ? (
       <MinimizeIconDefault createElement={createElement} />
@@ -161,15 +190,26 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
           {translations.title}
         </span>
         <div className={cx('ais-ChatHeader-actions')}>
-          {onClear && (
+          {handleStartNewConversation && (
             <Button
               variant="ghost"
               size="sm"
-              className={cx('ais-ChatHeader-clear', classNames.clear)}
-              onClick={onClear}
-              disabled={!canClear}
+              iconOnly
+              className={cx(
+                'ais-ChatHeader-newConversation',
+                classNames.newConversation
+              )}
+              onClick={handleStartNewConversation}
+              disabled={startNewConversationDisabled}
+              aria-label={translations.newConversationLabel}
+              title={translations.newConversationLabel}
+              type="button"
             >
-              {translations.clearLabel}
+              {NewConversationIcon ? (
+                <NewConversationIcon />
+              ) : (
+                <SquarePenIcon createElement={createElement} />
+              )}
             </Button>
           )}
           <Button

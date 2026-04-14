@@ -238,4 +238,93 @@ describe('Chat', () => {
       </div>
     `);
   });
+
+  test('hides prompt when conversation-limit error is present', () => {
+    const { container } = render(
+      <Chat
+        open
+        sendMessage={jest.fn() as any}
+        regenerate={jest.fn() as any}
+        stop={jest.fn() as any}
+        error={
+          new Error(
+            'Conversation has reached its maximum thread depth of 3 messages.'
+          )
+        }
+        headerProps={{ onClose: jest.fn() }}
+        messagesProps={{
+          messages: [],
+          indexUiState: {},
+          setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
+          status: 'error',
+        }}
+        promptProps={{}}
+        toggleButtonProps={{ open: true, onClick: jest.fn() }}
+        suggestionsProps={{ onSuggestionClick: jest.fn() }}
+      />
+    );
+
+    expect(container.querySelector('.ais-ChatPrompt')).toBeNull();
+  });
+
+  test('hides prompt when rate limit error is present', () => {
+    const { container } = render(
+      <Chat
+        open
+        sendMessage={jest.fn() as any}
+        regenerate={jest.fn() as any}
+        stop={jest.fn() as any}
+        error={new Error('Rate limit exceeded. Retry after 60 seconds.')}
+        headerProps={{ onClose: jest.fn() }}
+        messagesProps={{
+          messages: [],
+          indexUiState: {},
+          setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
+          status: 'error',
+        }}
+        promptProps={{}}
+        toggleButtonProps={{ open: true, onClick: jest.fn() }}
+        suggestionsProps={{ onSuggestionClick: jest.fn() }}
+      />
+    );
+
+    expect(container.querySelector('.ais-ChatPrompt')).toBeNull();
+  });
+
+  test('hides prompt when request origin is not allowed', () => {
+    const { container } = render(
+      <Chat
+        open
+        sendMessage={jest.fn() as any}
+        regenerate={jest.fn() as any}
+        stop={jest.fn() as any}
+        error={
+          new Error(
+            'Request origin is not in the allowed domains list. Add your domain in Agent Studio settings.'
+          )
+        }
+        headerProps={{ onClose: jest.fn() }}
+        messagesProps={{
+          messages: [],
+          indexUiState: {},
+          setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
+          status: 'error',
+        }}
+        promptProps={{}}
+        toggleButtonProps={{ open: true, onClick: jest.fn() }}
+        suggestionsProps={{ onSuggestionClick: jest.fn() }}
+      />
+    );
+
+    expect(container.querySelector('.ais-ChatPrompt')).toBeNull();
+  });
 });

@@ -28,7 +28,7 @@ export function createTranslationsTests(
                 header: {
                   titleText: 'Custom title',
                   closeLabelText: 'Custom close button label',
-                  clearLabelText: 'Custom clear button label',
+                  newConversationLabelText: 'Custom new conversation label',
                   maximizeLabelText: 'Custom maximize button label',
                   minimizeLabelText: 'Custom minimize button label',
                 },
@@ -40,7 +40,7 @@ export function createTranslationsTests(
                 header: {
                   title: 'Custom title',
                   closeLabel: 'Custom close button label',
-                  clearLabel: 'Custom clear button label',
+                  newConversationLabel: 'Custom new conversation label',
                   maximizeLabel: 'Custom maximize button label',
                   minimizeLabel: 'Custom minimize button label',
                 },
@@ -61,8 +61,10 @@ export function createTranslationsTests(
             .getAttribute('aria-label')
         ).toBe('Custom close button label');
         expect(
-          document.querySelector('.ais-ChatHeader-clear')!.textContent
-        ).toBe('Custom clear button label');
+          document
+            .querySelector('.ais-ChatHeader-newConversation')!
+            .getAttribute('aria-label')
+        ).toBe('Custom new conversation label');
         expect(
           document
             .querySelector('.ais-ChatHeader-maximize')!

@@ -16,6 +16,27 @@ import type {
 } from './types';
 
 /**
+ * Reads a failed HTTP response and returns a human-readable message,
+ * preferring JSON bodies shaped like `{ message: string }` (e.g. Agent Studio).
+ */
+export function getHttpErrorMessageFromResponse(
+  response: Response
+): Promise<string> {
+  const fallback = `HTTP error: ${response.status} ${response.statusText}`;
+
+  return response
+    .json()
+    .then((data) => {
+      const parsed = data as { message?: unknown };
+      if (typeof parsed?.message === 'string' && parsed.message.trim()) {
+        return parsed.message;
+      }
+      return fallback;
+    })
+    .catch(() => fallback);
+}
+
+/**
  * Abstract base class for HTTP-based chat transports.
  */
 export abstract class HttpChatTransport<TUIMessage extends UIMessage>
@@ -130,9 +151,9 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
           credentials,
         }).then((response) => {
           if (!response.ok) {
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessageFromResponse(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {
@@ -147,6 +168,7 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
 
   reconnectToStream({
     chatId,
+    abortSignal,
     headers: requestHeaders,
     body: requestBody,
   }: Parameters<
@@ -207,15 +229,16 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
           method: 'GET',
           headers,
           credentials,
+          signal: abortSignal,
         }).then((response) => {
           if (!response.ok) {
             // 404 means no stream to reconnect to, which is not an error
             if (response.status === 404) {
               return null;
             }
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessageFromResponse(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {

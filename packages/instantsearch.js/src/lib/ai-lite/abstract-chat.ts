@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { processStream } from './stream-parser';
-import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
+import {
+  generateId as defaultGenerateId,
+  normalizeStreamChunkErrorText,
+  SerialJobExecutor,
+} from './utils';
 
 import type {
   ChatInit,
@@ -30,7 +34,16 @@ type ActiveResponse = {
  * Abstract base class for chat implementations.
  */
 export abstract class AbstractChat<TUIMessage extends UIMessage> {
-  readonly id: string;
+  private _chatId: string;
+
+  /**
+   * Identifier sent as `chatId` / `id` on transport requests. Regenerate after
+   * clearing the conversation so the backend starts a new thread.
+   */
+  get id(): string {
+    return this._chatId;
+  }
+
   readonly generateId: IdGenerator;
   protected state: ChatState<TUIMessage>;
 
@@ -59,7 +72,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
-    this.id = id;
+    this._chatId = id;
     this.generateId = generateId;
     this.state = state;
     this.transport = transport;
@@ -82,6 +95,24 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return this.state.status;
   }
 
+  /**
+   * Store a fresh {@link Error} instance so UI layers (e.g. React `useConnector` +
+   * `dequal`) never treat a new failure as “unchanged” when the same object
+   * reference is reused or only {@link Error#message} is mutated.
+   */
+  private cloneErrorForState(source: Error): Error {
+    const cause = (source as Error & { cause?: unknown }).cause;
+    const clone =
+      cause !== undefined
+        ? new Error(source.message, { cause })
+        : new Error(source.message);
+    clone.name = source.name;
+    if (source.stack !== undefined) {
+      clone.stack = source.stack;
+    }
+    return clone;
+  }
+
   protected setStatus({
     status,
     error,
@@ -90,8 +121,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     error?: Error;
   }): void {
     this.state.status = status;
-    if (error !== undefined) {
-      this.state.error = error;
+    if (status === 'error' && error !== undefined) {
+      this.state.error = this.cloneErrorForState(error);
+    } else if (status !== 'error') {
+      // Always drop the previous error when leaving `error` (new request, success,
+      // clear, etc.). Passing `error: undefined` previously did not clear because
+      // `undefined` was treated as “omit”, which left stale `Error` instances.
+      this.state.error = undefined;
     }
   }
 
@@ -260,24 +296,59 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         );
       }
 
+      if (this.activeResponse) {
+        this.activeResponse.abortController.abort();
+      }
+
+      const requestChatId = this._chatId;
+      const requestAbortController = new AbortController();
+      this.activeResponse = { abortController: requestAbortController };
+
       this.setStatus({ status: 'submitted' });
 
       return this.transport
         .reconnectToStream({
           chatId: this.id,
+          abortSignal: requestAbortController.signal,
           ...options,
         })
         .then(
           (stream) => {
             if (stream) {
-              return this.processStreamWithCallbacks(stream);
-            } else {
-              this.setStatus({ status: 'ready' });
-              return Promise.resolve();
+              this.activeResponse!.stream = stream;
+              return this.processStreamWithCallbacks(
+                stream,
+                requestChatId,
+                requestAbortController
+              );
             }
+
+            if (
+              this.activeResponse?.abortController === requestAbortController
+            ) {
+              this.activeResponse = null;
+            }
+            this.setStatus({ status: 'ready' });
+            return Promise.resolve();
           },
           (error) => {
-            this.handleError(error as Error);
+            if ((error as Error).name === 'AbortError') {
+              if (
+                this.activeResponse?.abortController === requestAbortController
+              ) {
+                this.activeResponse = null;
+              }
+              return Promise.resolve();
+            }
+            this.handleError(error as Error, {
+              requestChatId,
+              requestAbortController,
+            });
+            if (
+              this.activeResponse?.abortController === requestAbortController
+            ) {
+              this.activeResponse = null;
+            }
             return Promise.resolve();
           }
         );
@@ -289,8 +360,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    */
   clearError = (): void => {
     if (this.state.status === 'error') {
-      this.setStatus({ status: 'ready', error: undefined });
+      this.setStatus({ status: 'ready' });
+    } else if (this.state.error !== undefined) {
+      this.state.error = undefined;
     }
+  };
+
+  /**
+   * Assigns a new id for the next API request so the server opens a fresh
+   * conversation (e.g. after clearing messages or “new conversation”).
+   */
+  regenerateChatId = (): void => {
+    this._chatId = this.generateId();
+    // Always drop error state when the conversation id rotates so the UI
+    // cannot show a failure tied to the previous thread.
+    this.clearError();
   };
 
   /**
@@ -390,6 +474,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       this.activeResponse.abortController.abort();
     }
 
+    /** Binds failures from this request to the conversation id at send time (see {@link handleError}). */
+    const requestChatId = this._chatId;
+
     const abortController = new AbortController();
     this.activeResponse = { abortController };
 
@@ -409,21 +496,30 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       .then(
         (stream) => {
           this.activeResponse!.stream = stream;
-          return this.processStreamWithCallbacks(stream);
+          return this.processStreamWithCallbacks(
+            stream,
+            requestChatId,
+            abortController
+          );
         },
         (error) => {
           if ((error as Error).name === 'AbortError') {
             // Request was aborted, don't treat as error
             return Promise.resolve();
           }
-          this.handleError(error as Error);
+          this.handleError(error as Error, {
+            requestChatId,
+            requestAbortController: abortController,
+          });
           return Promise.resolve();
         }
       );
   }
 
   private processStreamWithCallbacks(
-    stream: ReadableStream<UIMessageChunk>
+    stream: ReadableStream<UIMessageChunk>,
+    requestChatId: string,
+    requestAbortController: AbortController
   ): Promise<void> {
     this.setStatus({ status: 'streaming' });
 
@@ -441,11 +537,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     // Promise chain for handling tool calls that return promises
     let pendingToolCall: Promise<void> = Promise.resolve();
 
+    /** After a mid-stream `error` chunk, ignore further deltas until the stream closes. */
+    let streamHalted = false;
+
     return new Promise((resolve) => {
       processStream<UIMessageChunk>(
         stream,
         // eslint-disable-next-line complexity
         (chunk) => {
+          if (streamHalted) {
+            return;
+          }
+          if (
+            this.activeResponse?.abortController !== requestAbortController ||
+            requestAbortController.signal.aborted
+          ) {
+            return;
+          }
           switch (chunk.type) {
             case 'start': {
               currentMessageId = chunk.messageId || this.generateId();
@@ -827,7 +935,31 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'error': {
               isError = true;
-              throw new Error(chunk.errorText);
+              streamHalted = true;
+
+              if (currentMessage && currentMessageIndex >= 0) {
+                const finalizedParts = currentMessage.parts.map((p) => {
+                  if (
+                    (p.type === 'text' || p.type === 'reasoning') &&
+                    'state' in p &&
+                    p.state === 'streaming'
+                  ) {
+                    return { ...p, state: 'done' as const };
+                  }
+                  return p;
+                });
+                currentMessage = {
+                  ...currentMessage,
+                  parts: finalizedParts,
+                } as TUIMessage;
+                this.state.replaceMessage(currentMessageIndex, currentMessage);
+              }
+
+              this.handleError(
+                new Error(normalizeStreamChunkErrorText(chunk.errorText)),
+                { requestChatId, requestAbortController }
+              );
+              break;
             }
 
             case 'abort': {
@@ -873,12 +1005,24 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         () => {
           // Wait for any pending tool calls to complete
           pendingToolCall.then(() => {
-            // Stream finished successfully
-            this.setStatus({ status: 'ready' });
-            this.activeResponse = null;
+            const completionStillOwnsActiveResponse =
+              this.activeResponse?.abortController === requestAbortController;
+
+            // Mid-stream error chunks set status to `error` via handleError; do not overwrite with `ready`.
+            // Never clear `activeResponse` or set `ready` from a superseded stream (new send / resume).
+            if (!isError && completionStillOwnsActiveResponse) {
+              this.setStatus({ status: 'ready' });
+            }
+            if (completionStillOwnsActiveResponse) {
+              this.activeResponse = null;
+            }
 
             // Trigger onFinish callback
-            if (this.onFinish && currentMessage) {
+            if (
+              this.onFinish &&
+              currentMessage &&
+              completionStillOwnsActiveResponse
+            ) {
               this.onFinish({
                 message: currentMessage,
                 messages: this.state.messages,
@@ -895,16 +1039,32 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           });
         },
         (error) => {
+          const completionStillOwnsActiveResponse =
+            this.activeResponse?.abortController === requestAbortController;
+
+          if (completionStillOwnsActiveResponse) {
+            this.activeResponse = null;
+          }
+
           if (error.name === 'AbortError') {
             isAbort = true;
-            this.setStatus({ status: 'ready' });
+            if (completionStillOwnsActiveResponse) {
+              this.setStatus({ status: 'ready' });
+            }
           } else {
             isDisconnect = true;
-            this.handleError(error);
+            this.handleError(error, {
+              requestChatId,
+              requestAbortController,
+            });
           }
 
           // Still call onFinish even on error/abort
-          if (this.onFinish && currentMessage) {
+          if (
+            this.onFinish &&
+            currentMessage &&
+            completionStillOwnsActiveResponse
+          ) {
             this.onFinish({
               message: currentMessage,
               messages: this.state.messages,
@@ -920,7 +1080,35 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     });
   }
 
-  private handleError(error: Error): void {
+  /**
+   * When {@link regenerateChatId} runs (e.g. after “new conversation”), late
+   * stream / transport callbacks from the previous id must not repopulate
+   * {@link AbstractChat#error} or the UI stays on the old failure text.
+   *
+   * When {@link requestAbortController} is set, errors from a superseded in-flight
+   * request (same {@link _chatId} but a newer {@link makeRequest} replaced
+   * {@link activeResponse}) are ignored as well.
+   */
+  private handleError(
+    error: Error,
+    options?: {
+      requestChatId?: string;
+      requestAbortController?: AbortController;
+    }
+  ): void {
+    if (options?.requestAbortController !== undefined) {
+      if (
+        this.activeResponse?.abortController !== options.requestAbortController
+      ) {
+        return;
+      }
+    } else if (
+      options?.requestChatId !== undefined &&
+      options.requestChatId !== this._chatId
+    ) {
+      return;
+    }
+
     this.setStatus({ status: 'error', error });
 
     if (this.onError) {

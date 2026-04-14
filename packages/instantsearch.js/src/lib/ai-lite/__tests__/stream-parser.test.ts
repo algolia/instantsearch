@@ -188,4 +188,35 @@ describe('stream-parser', () => {
       });
     });
   });
+
+  describe('processStream', () => {
+    it('invokes onError when onChunk throws synchronously', () => {
+      const err = new Error('sync');
+      const onError = jest.fn();
+
+      const stream: ReadableStream<UIMessageChunk> = {
+        getReader: () => ({
+          read: () =>
+            Promise.resolve({
+              done: false,
+              value: { type: 'start', messageId: 'x' } as UIMessageChunk,
+            }),
+          releaseLock: () => {},
+        }),
+      } as ReadableStream<UIMessageChunk>;
+
+      processStream<UIMessageChunk>(
+        stream,
+        () => {
+          throw err;
+        },
+        () => {},
+        onError
+      );
+
+      return Promise.resolve().then(() => {
+        expect(onError).toHaveBeenCalledWith(err);
+      });
+    });
+  });
 });

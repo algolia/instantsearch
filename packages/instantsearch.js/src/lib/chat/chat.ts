@@ -64,7 +64,9 @@ export class ChatState<TUiMessage extends UIMessage>
   }
 
   get error(): Error | undefined {
-    return this._error;
+    // Invariant: error is only meaningful while `status === 'error'`. Otherwise
+    // callers (connectors, React) can observe a stale Error after transitions.
+    return this._status === 'error' ? this._error : undefined;
   }
 
   set error(newError: Error | undefined) {

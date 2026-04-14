@@ -124,7 +124,14 @@ export function processStream<T>(
           return;
         }
 
-        const result = onChunk(value);
+        let result: void | Promise<void>;
+        try {
+          result = onChunk(value);
+        } catch (error) {
+          reader.releaseLock();
+          onError(error as Error);
+          return;
+        }
         if (result && typeof result.then === 'function') {
           result.then(
             () => read(),

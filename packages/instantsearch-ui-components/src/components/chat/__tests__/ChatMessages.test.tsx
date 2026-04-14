@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { fireEvent, render } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
 
 import { createChatMessagesComponent } from '../ChatMessages';
@@ -254,6 +254,306 @@ describe('ChatMessages', () => {
         container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
       ).toHaveLength(0);
     });
+  });
+
+  test('shows API error message when status is error and error is set', () => {
+    const apiMessage =
+      'Conversation has reached its maximum thread depth of 3 messages. Please start a new conversation.';
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe(apiMessage);
+  });
+
+  test('conversation depth error shows API text only, no link or retry without handler', () => {
+    const apiMessage =
+      'Conversation has reached its maximum thread depth of 3 messages. Please start a new conversation.';
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError--conversationLimit')
+    ).not.toBeNull();
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe(apiMessage);
+    expect(container.querySelector('.ais-ChatMessageError-link')).toBeNull();
+    expect(container.querySelector('.ais-ChatMessage-errorAction')).toBeNull();
+  });
+
+  test('conversation depth error renders start-new link when handler is provided', () => {
+    const apiMessage =
+      'Conversation has reached its maximum thread depth of 3 messages. Please start a new conversation.';
+    const onStartNewConversation = jest.fn();
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+        onStartNewConversation={onStartNewConversation}
+      />
+    );
+
+    const link = container.querySelector(
+      '.ais-ChatMessageError-link'
+    );
+    expect(link).not.toBeNull();
+    expect(link?.textContent).toBe('Start a new conversation');
+
+    fireEvent.click(link!);
+    expect(onStartNewConversation).toHaveBeenCalledTimes(1);
+  });
+
+  test('recursion limit error surfaces API text', () => {
+    const long =
+      'Recursion limit of 5 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.';
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(long)}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe(long);
+  });
+
+  test('max_output_tokens error uses conversation-limit variant like thread depth', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Response is incomplete due to: max_output_tokens')}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError--conversationLimit')
+    ).not.toBeNull();
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe('Response is incomplete due to: max_output_tokens');
+    expect(container.querySelector('.ais-ChatMessage-errorAction')).toBeNull();
+    expect(container.querySelector('.ais-ChatMessageError-link')).toBeNull();
+  });
+
+  test('max_output_tokens error renders start-new link when handler is provided', () => {
+    const onStartNewConversation = jest.fn();
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Response is incomplete due to: max_output_tokens')}
+        onStartNewConversation={onStartNewConversation}
+      />
+    );
+
+    const link = container.querySelector(
+      '.ais-ChatMessageError-link'
+    );
+    expect(link).not.toBeNull();
+    fireEvent.click(link!);
+    expect(onStartNewConversation).toHaveBeenCalledTimes(1);
+  });
+
+  test('rate limit error uses conversation-limit variant and API text', () => {
+    const apiMessage = 'Rate limit exceeded. Retry after 60 seconds.';
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError--conversationLimit')
+    ).not.toBeNull();
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe(apiMessage);
+    expect(container.querySelector('.ais-ChatMessage-errorAction')).toBeNull();
+  });
+
+  test('rate limit error renders start-new link when handler is provided', () => {
+    const onStartNewConversation = jest.fn();
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('HTTP error: 429 Too Many Requests')}
+        onStartNewConversation={onStartNewConversation}
+      />
+    );
+
+    const link = container.querySelector(
+      '.ais-ChatMessageError-link'
+    );
+    expect(link).not.toBeNull();
+    fireEvent.click(link!);
+    expect(onStartNewConversation).toHaveBeenCalledTimes(1);
+  });
+
+  test('request origin not allowed error uses conversation-limit layout without retry', () => {
+    const apiMessage =
+      'Request origin is not in the allowed domains list. Add your domain in Agent Studio settings.';
+    const onReload = jest.fn();
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={onReload}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError--conversationLimit')
+    ).not.toBeNull();
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe(apiMessage);
+    expect(container.querySelector('.ais-ChatMessage-errorAction')).toBeNull();
+    expect(onReload).not.toHaveBeenCalled();
+  });
+
+  test('request origin error renders start-new link when handler is provided', () => {
+    const apiMessage =
+      'Request origin is not in the allowed domains list. Add your domain in Agent Studio settings.';
+    const onStartNewConversation = jest.fn();
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+        onStartNewConversation={onStartNewConversation}
+      />
+    );
+
+    const link = container.querySelector(
+      '.ais-ChatMessageError-link'
+    );
+    expect(link).not.toBeNull();
+    expect(link?.textContent).toBe('Start a new conversation');
+    fireEvent.click(link!);
+    expect(onStartNewConversation).toHaveBeenCalledTimes(1);
+  });
+
+  test('requestOriginNotAllowedErrorMessage translation overrides default copy', () => {
+    const apiMessage =
+      'Request origin is not in the allowed domains list. Add your domain in Agent Studio settings.';
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+        translations={{
+          requestOriginNotAllowedErrorMessage: 'Origin blocked — fix in Studio',
+        }}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe('Origin blocked — fix in Studio');
+  });
+
+  test('conversationLimitErrorMessage translation overrides default message', () => {
+    const apiMessage =
+      'Conversation has reached its maximum thread depth of 3 messages. Please start a new conversation.';
+
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error(apiMessage)}
+        translations={{
+          conversationLimitErrorMessage: 'Thread limit — start over',
+        }}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError-primary')?.textContent
+    ).toBe('Thread limit — start over');
   });
 
   test('renders with custom class names', () => {

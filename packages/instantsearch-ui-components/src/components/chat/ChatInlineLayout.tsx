@@ -19,7 +19,7 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
       messages: _messages,
       status: _status,
       isClearing: _isClearing,
-      clearMessages: _clearMessages,
+      onNewConversation: _onNewConversation,
       onClearTransitionEnd: _onClearTransitionEnd,
       suggestions: _suggestions,
       tools: _tools,

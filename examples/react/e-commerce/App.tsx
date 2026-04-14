@@ -32,6 +32,7 @@ import getRouting from './routing';
 import { formatNumber } from './utils';
 
 import 'instantsearch.css/themes/reset.css';
+import 'instantsearch.css/components/chat.css';
 
 import './Theme.css';
 import './App.css';

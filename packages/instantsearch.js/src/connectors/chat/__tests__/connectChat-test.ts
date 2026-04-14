@@ -715,4 +715,54 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
   });
+
+  describe('clearMessages', () => {
+    it('clears error when the thread is empty', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      const instantSearchInstance: Pick<
+        InstantSearch,
+        'client' | 'getUiState'
+      > = {
+        client: createSearchClient(),
+        getUiState: () => ({ indexName: {} }),
+      };
+      const parent: Pick<IndexWidget, 'getIndexId' | 'setIndexUiState'> = {
+        getIndexId: () => 'indexName',
+        setIndexUiState: () => {},
+      };
+
+      const options = createInitOptions({
+        helper,
+        state: helper.state,
+        instantSearchInstance: instantSearchInstance as InstantSearch,
+        parent: parent as IndexWidget,
+      });
+
+      const chat = (widget as { chatInstance: { messages: UIMessage[] } })
+        .chatInstance;
+      chat.messages = [];
+      (
+        widget as unknown as {
+          chatInstance: {
+            setStatus: (p: { status: string; error?: Error }) => void;
+          };
+        }
+      ).chatInstance.setStatus({
+        status: 'error',
+        error: new Error('empty thread failure'),
+      });
+
+      const before = widget.getWidgetRenderState(options);
+      expect(before.messages).toHaveLength(0);
+      expect(before.status).toBe('error');
+
+      before.clearMessages();
+
+      const after = widget.getWidgetRenderState(options);
+      expect(after.status).toBe('ready');
+      expect(after.error).toBeUndefined();
+    });
+  });
+
 });

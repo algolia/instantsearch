@@ -57,8 +57,8 @@
   }
 }
 
-.ais-ChatHeader-clear {
-  font-size: calc(var(--ais-spacing) * 0.875);
+.ais-ChatHeader-newConversation {
+  flex-shrink: 0;
 }
 
 @media (max-width: variables.$ais-chat-breakpoint) {
