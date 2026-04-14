@@ -4,6 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type { ChatRenderState } from './connectChat';
 import type {
   Renderer,
   Unmounter,
@@ -20,14 +21,24 @@ const withUsage = createDocumentationMessageGenerator({
 /**
  * ChatTrigger connector.
  *
- * This connector has no meaningful render state — it exists as a presence
- * marker in the widget tree (`$$type: 'ais.chatTrigger'`). The `connectChat`
- * connector's `validateEntryPoints` check looks for this type to confirm that
- * a trigger widget is mounted before allowing the chat to be rendered.
+ * This connector reads the sibling `chat` widget's render state to expose
+ * `open` (whether the chat is open) and `toggleOpen` (to toggle it).
+ * It also acts as a presence marker in the widget tree
+ * (`$$type: 'ais.chatTrigger'`, `opensChat: true`). The `connectChat`
+ * connector's `validateEntryPoints` check looks for widgets with `opensChat`
+ * to confirm that a trigger is mounted before allowing the chat to render.
  */
 export type ChatTriggerConnectorParams = Record<string, never>;
 
 export type ChatTriggerRenderState = {
+  /**
+   * Whether the sibling chat widget is currently open.
+   */
+  open: boolean;
+  /**
+   * Toggle the sibling chat widget open/closed.
+   */
+  toggleOpen: () => void;
   widgetParams: ChatTriggerConnectorParams;
 };
 
@@ -58,11 +69,27 @@ export default function connectChatTrigger<
       ChatTriggerConnectorParams = {} as TWidgetParams &
       ChatTriggerConnectorParams
   ) => {
+    // Keep a reference to the latest render options so that `toggleOpen`
+    // always reads the most current chat state when invoked (e.g. on click).
+    let lastRenderOptions: { renderState?: IndexRenderState } | null = null;
+
+    function getChatState(): Partial<ChatRenderState> | undefined {
+      return lastRenderOptions?.renderState?.chat as
+        | Partial<ChatRenderState>
+        | undefined;
+    }
+
+    function toggleOpen() {
+      const chatState = getChatState();
+      chatState?.setOpen?.(!chatState?.open);
+    }
+
     return {
       $$type: 'ais.chatTrigger',
       opensChat: true as const,
 
       init(initOptions: any) {
+        lastRenderOptions = initOptions;
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -73,6 +100,7 @@ export default function connectChatTrigger<
       },
 
       render(renderOptions: any) {
+        lastRenderOptions = renderOptions;
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
@@ -86,8 +114,18 @@ export default function connectChatTrigger<
         unmountFn();
       },
 
-      getWidgetRenderState(_renderOptions: any): ChatTriggerRenderState {
-        return { widgetParams };
+      getWidgetRenderState(renderOptions: {
+        renderState?: IndexRenderState;
+      }): ChatTriggerRenderState {
+        const chatState = renderOptions.renderState?.chat as
+          | Partial<ChatRenderState>
+          | undefined;
+
+        return {
+          open: chatState?.open ?? false,
+          toggleOpen,
+          widgetParams,
+        };
       },
 
       getRenderState(
