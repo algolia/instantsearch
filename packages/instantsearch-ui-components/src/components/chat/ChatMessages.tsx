@@ -111,9 +111,9 @@ export type ChatMessagesProps<
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
-   * Custom greeting component shown when there are no messages
+   * Custom empty component shown when there are no messages
    */
-  greetingComponent?: (props: ChatGreetingProps) => JSX.Element;
+  emptyComponent?: (props: ChatGreetingProps) => JSX.Element;
   /**
    * Custom actions component
    */
@@ -374,7 +374,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
-      greetingComponent: GreetingComponent,
+      emptyComponent: EmptyComponent,
       actionsComponent: ActionsComponent,
       tools,
       indexUiState,
@@ -437,7 +437,7 @@ export function createChatMessagesComponent({
       isStreamingWithNoContent ||
       isStreamingNonTextContent;
 
-    const showGreeting =
+    const showEmpty =
       messages.length === 0 && !showLoader && !isClearing;
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
@@ -468,8 +468,8 @@ export function createChatMessagesComponent({
               }
             }}
           >
-            {showGreeting && GreetingComponent && (
-              <GreetingComponent
+            {showEmpty && EmptyComponent && (
+              <EmptyComponent
                 sendMessage={sendMessage}
                 setInput={setInput}
                 status={status}

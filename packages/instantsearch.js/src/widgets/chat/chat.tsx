@@ -320,7 +320,7 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    greetingComponent:
+    emptyComponent:
       | ((props: ChatGreetingProps) => JSX.Element)
       | undefined;
     actionsComponent:
@@ -441,7 +441,7 @@ function ChatWrapper({
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
-        greetingComponent: messagesProps.greetingComponent,
+        emptyComponent: messagesProps.emptyComponent,
         actionsComponent: messagesProps.actionsComponent,
         assistantMessageProps: messagesProps.assistantMessageProps,
         userMessageProps: messagesProps.userMessageProps,
@@ -665,14 +665,14 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           );
         }
       : undefined;
-    const messagesGreetingComponent = templates.messages?.greeting
-      ? (greetingProps: ChatGreetingProps) => {
+    const messagesEmptyComponent = templates.messages?.empty
+      ? (emptyProps: ChatGreetingProps) => {
           return (
             <TemplateComponent
               {...messagesTemplateProps}
-              templateKey="greeting"
+              templateKey="empty"
               rootTagName="div"
-              data={greetingProps}
+              data={emptyProps}
             />
           );
         }
@@ -937,7 +937,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           messagesProps={{
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
-            greetingComponent: messagesGreetingComponent,
+            emptyComponent: messagesEmptyComponent,
             actionsComponent,
             assistantMessageProps: {
               leadingComponent: assistantMessageLeadingComponent,
@@ -1108,9 +1108,9 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        */
       regenerateLabelText?: string;
       /**
-       * Template to use for the greeting shown when there are no messages
+       * Template to use for the empty screen shown when there are no messages
        */
-      greeting?: Template<ChatGreetingProps>;
+      empty?: Template<ChatGreetingProps>;
     }>;
 
     /**

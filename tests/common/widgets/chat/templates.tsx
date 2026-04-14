@@ -264,7 +264,7 @@ export function createTemplatesTests(
         );
       });
 
-      test('renders with custom greeting when no messages', async () => {
+      test('renders with custom empty screen when no messages', async () => {
         const searchClient = createSearchClient();
 
         const chat = new Chat({ messages: [] as any[] });
@@ -279,15 +279,15 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(chat),
               templates: {
                 messages: {
-                  greeting:
-                    '<div class="custom-greeting">Custom greeting</div>',
+                  empty:
+                    '<div class="custom-empty">Custom empty</div>',
                 },
               },
             },
             react: {
               ...createDefaultWidgetParams(chat),
-              messagesGreetingComponent: () => (
-                <div className="custom-greeting">Custom greeting</div>
+              messagesEmptyComponent: () => (
+                <div className="custom-empty">Custom empty</div>
               ),
             },
             vue: {},
@@ -296,12 +296,12 @@ export function createTemplatesTests(
 
         await openChat(act);
 
-        expect(document.querySelector('.custom-greeting')!.textContent).toBe(
-          'Custom greeting'
+        expect(document.querySelector('.custom-empty')!.textContent).toBe(
+          'Custom empty'
         );
       });
 
-      test('does not render greeting when there are messages', async () => {
+      test('does not render empty screen when there are messages', async () => {
         const searchClient = createSearchClient();
 
         const chat = new Chat({
@@ -324,15 +324,15 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(chat),
               templates: {
                 messages: {
-                  greeting:
-                    '<div class="custom-greeting">Custom greeting</div>',
+                  empty:
+                    '<div class="custom-empty">Custom empty</div>',
                 },
               },
             },
             react: {
               ...createDefaultWidgetParams(chat),
-              messagesGreetingComponent: () => (
-                <div className="custom-greeting">Custom greeting</div>
+              messagesEmptyComponent: () => (
+                <div className="custom-empty">Custom empty</div>
               ),
             },
             vue: {},
@@ -341,7 +341,7 @@ export function createTemplatesTests(
 
         await openChat(act);
 
-        expect(document.querySelector('.custom-greeting')).toBeNull();
+        expect(document.querySelector('.custom-empty')).toBeNull();
       });
 
       test('renders with custom assistant and user message parts', async () => {
