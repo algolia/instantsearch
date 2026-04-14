@@ -3,7 +3,7 @@
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatLayoutOwnProps, ChatStatus } from './types';
+import type { ChatEmptyProps } from './types';
 
 export type ChatGreetingTranslations = {
   /**
@@ -35,30 +35,7 @@ export type ChatGreetingClassNames = {
   banner?: string | string[];
 };
 
-export type ChatEmptyProps = ComponentProps<'div'> & {
-  /**
-   * Function to send a message to the chat
-   */
-  sendMessage?: ChatLayoutOwnProps['sendMessage'];
-  /**
-   * Current chat status
-   */
-  status?: ChatStatus;
-  /**
-   * Callback to close the chat
-   */
-  onClose?: () => void;
-  /**
-   * Function to set the prompt input value
-   */
-  setInput?: (input: string) => void;
-  /**
-   * Banner image URL displayed above the heading
-   */
-  banner?: string;
-};
-
-export type ChatGreetingProps = ChatEmptyProps & {
+export type ChatGreetingProps = ChatEmptyProps & ComponentProps<'div'> & {
   /**
    * Optional translations
    */
@@ -67,6 +44,10 @@ export type ChatGreetingProps = ChatEmptyProps & {
    * Optional class names
    */
   classNames?: ChatGreetingClassNames;
+  /**
+   * Optional banner image URL
+   */
+  banner?: string;
 };
 
 export function createChatGreetingComponent({
