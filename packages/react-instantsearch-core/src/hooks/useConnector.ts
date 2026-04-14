@@ -19,6 +19,7 @@ import type {
 
 export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>> & {
   skipSuspense?: boolean;
+  opensChat?: boolean;
 };
 
 export function useConnector<

@@ -31,7 +31,6 @@ describe('Chat', () => {
           onClose: jest.fn(),
         }}
         promptProps={{}}
-        toggleButtonProps={{ open: true, onClick: jest.fn() }}
         suggestionsProps={{ onSuggestionClick: jest.fn() }}
       />
     );
@@ -40,7 +39,6 @@ describe('Chat', () => {
       <div>
         <div
           class="ais-Chat ais-ChatOverlayLayout"
-          togglebuttonprops="[object Object]"
         >
           <div
             class="ais-Chat-container ais-Chat-container--open"

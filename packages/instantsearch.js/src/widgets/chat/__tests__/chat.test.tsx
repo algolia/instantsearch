@@ -9,6 +9,7 @@ import { fireEvent, screen } from '@testing-library/dom';
 import instantsearch from '../../../index.es';
 import { chatInlineLayout } from '../../../templates';
 import chat from '../chat';
+import chatTrigger from '../../chat-trigger/chat-trigger';
 
 describe('chat', () => {
   describe('options', () => {
@@ -54,6 +55,32 @@ describe('chat', () => {
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/#connector"
       `);
+    });
+
+    test('does not throw when a `chatTrigger` widget is present', () => {
+      const chatContainer = document.createElement('div');
+      document.body.appendChild(chatContainer);
+      const triggerContainer = document.createElement('div');
+      document.body.appendChild(triggerContainer);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container: chatContainer,
+          agentId: 'test-agent-id',
+        }),
+        chatTrigger({
+          container: triggerContainer,
+        }),
+      ]);
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
     });
   });
 

@@ -671,9 +671,9 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       disableTriggerValidation: true,
       ...chatWidgetParams,
     });
-    globalThis.__chatTestSetOpen = chatWidget.setOpen.bind(chatWidget);
 
-    instantsearch(instantSearchOptions)
+    const search = instantsearch(instantSearchOptions);
+    search
       .addWidgets([...refinementsWidgets, chatWidget])
       .on('error', () => {
         /*
@@ -682,6 +682,12 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
          */
       })
       .start();
+
+    // Get setOpen from the chat render state after start
+    const chatState = Object.values(search.renderState)
+      .map((s) => s.chat)
+      .find(Boolean) as { setOpen?: (open: boolean) => void } | undefined;
+    globalThis.__chatTestSetOpen = chatState?.setOpen ?? null;
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)

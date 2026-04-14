@@ -406,7 +406,19 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     const { renderRefinements, ...chatWidgetParams } = widgetParams;
-    const chatRef = React.createRef<React.ComponentRef<typeof Chat>>();
+
+    function ChatTestSetup() {
+      const { indexRenderState } = useInstantSearch();
+      const chatState = indexRenderState.chat as
+        | { setOpen?: (open: boolean) => void }
+        | undefined;
+
+      React.useEffect(() => {
+        globalThis.__chatTestSetOpen = chatState?.setOpen ?? null;
+      }, [chatState?.setOpen]);
+
+      return null;
+    }
 
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -424,13 +436,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
             />
           </>
         )}
-        <Chat ref={chatRef} disableTriggerValidation {...chatWidgetParams} />
+        <Chat disableTriggerValidation {...chatWidgetParams} />
+        <ChatTestSetup />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
-
-    globalThis.__chatTestSetOpen = (open: boolean) =>
-      chatRef.current?.setOpen(open);
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
