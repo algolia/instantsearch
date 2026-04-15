@@ -2,6 +2,7 @@ import {
   createMultiSearchResponse,
   createSearchClient,
   createAlgoliaSearchClient,
+  createCompositionClient,
   createSingleSearchResponse,
   defaultRenderingContent,
 } from '@instantsearch/mocks';
@@ -13,6 +14,7 @@ import {
   InstantSearchSSRProvider,
   Index,
   DynamicWidgets,
+  Feeds,
   version,
   useSearchBox,
 } from 'react-instantsearch-core';
@@ -369,6 +371,48 @@ describe('getServerState', () => {
     expect(spiedSearch).toHaveBeenCalledTimes(2);
     // both calls are the same, so they're cached
     expect(spiedSearch.mock.calls[0][0]).toEqual(spiedSearch.mock.calls[1][0]);
+  });
+
+  test('searches twice with feeds widget (composition)', async () => {
+    const searchClient = createCompositionClient({
+      search: jest.fn(() =>
+        Promise.resolve({
+          results: [
+            createSingleSearchResponse({
+              feedID: 'products',
+              hits: [{ objectID: 'p1' }],
+            } as any),
+            createSingleSearchResponse({
+              feedID: 'articles',
+              hits: [{ objectID: 'a1' }],
+            } as any),
+          ],
+        })
+      ),
+    });
+    const spiedSearch = jest.spyOn(searchClient, 'search');
+
+    const serverState = await getServerState(
+      <InstantSearch searchClient={searchClient} compositionID="my-comp">
+        <Feeds searchScope="global">{() => <Hits hitComponent={Hit} />}</Feeds>
+      </InstantSearch>,
+      { renderToString }
+    );
+
+    expect(spiedSearch).toHaveBeenCalledTimes(2);
+
+    const entry = serverState.initialResults['my-comp'];
+    expect(entry?.results).toHaveLength(1);
+    expect(entry?.compositionFeedsResults).toEqual([
+      expect.objectContaining({
+        feedID: 'products',
+        hits: [expect.objectContaining({ objectID: 'p1' })],
+      }),
+      expect.objectContaining({
+        feedID: 'articles',
+        hits: [expect.objectContaining({ objectID: 'a1' })],
+      }),
+    ]);
   });
 
   test('searches twice with dynamic widgets and a refinement', async () => {

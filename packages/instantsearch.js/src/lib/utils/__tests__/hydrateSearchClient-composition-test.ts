@@ -49,6 +49,28 @@ describe('hydrateSearchClient (composition)', () => {
     expect(client.search).toBeDefined();
   });
 
+  it('prefers compositionFeedsResults when hydrating the cache', () => {
+    const { client, setCache } = setupCompositionClient();
+    const rawA = { params: 'a', nbHits: 1, feedID: 'x' };
+    const rawB = { params: 'b', nbHits: 2, feedID: 'y' };
+    const multifeedInitial = {
+      instant_search: {
+        results: [rawA],
+        state: {},
+        compositionFeedsResults: [rawA, rawB],
+      },
+    } as unknown as InitialResults;
+
+    hydrateSearchClient(client, multifeedInitial);
+
+    expect(setCache).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        results: [rawA, rawB],
+      })
+    );
+  });
+
   describe('when calling client.search (with composition params)', () => {
     it('should call getCache but not client initial search function', () => {
       const { client, getCache, search } = setupCompositionClient();

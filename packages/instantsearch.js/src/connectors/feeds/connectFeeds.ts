@@ -1,10 +1,55 @@
+import algoliasearchHelper from 'algoliasearch-helper';
+
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
 
-import type { Connector } from '../../types';
+import type {
+  CompositionFeedResult,
+  Connector,
+  IndexWidget,
+  InstantSearch,
+} from '../../types';
+
+function toFeedSearchResults(
+  state: algoliasearchHelper.SearchResults['_state'],
+  raw: CompositionFeedResult
+): algoliasearchHelper.SearchResults & { feedID: string } {
+  return Object.assign(new algoliasearchHelper.SearchResults(state, [raw]), {
+    feedID: raw.feedID,
+  });
+}
+
+/**
+ * Rebuild `lastResults.feeds` from `_initialResults.compositionFeedsResults`
+ * because the index-widget hydration only restores `lastResults` (the merged
+ * view), not the per-feed breakdown that the Feeds connector needs.
+ */
+function hydrateFeedsFromInitialResultsIfNeeded(
+  instantSearchInstance: InstantSearch,
+  parent: IndexWidget
+) {
+  const initial = instantSearchInstance._initialResults?.[parent.getIndexId()];
+  const compositionFeedsResults = initial?.compositionFeedsResults || [];
+  if (compositionFeedsResults.length === 0) {
+    return;
+  }
+
+  const lastResults = parent.getHelper()?.lastResults;
+  if (!lastResults) {
+    return;
+  }
+
+  if (lastResults.feeds && lastResults.feeds.length > 0) {
+    return;
+  }
+
+  lastResults.feeds = compositionFeedsResults.map((raw) =>
+    toFeedSearchResults(lastResults._state, raw)
+  );
+}
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'feeds',
@@ -71,6 +116,11 @@ const connectFeeds: FeedsConnector = function connectFeeds(
           );
         }
 
+        hydrateFeedsFromInitialResultsIfNeeded(
+          instantSearchInstance,
+          initOptions.parent
+        );
+
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -110,6 +160,23 @@ const connectFeeds: FeedsConnector = function connectFeeds(
       getWidgetRenderState({ results }) {
         if (!results) {
           return { feedIDs: [], widgetParams };
+        }
+
+        if (
+          Array.isArray(results.feeds) &&
+          results.feeds.length > 0 &&
+          !results.feeds.every(
+            (feed) => feed instanceof algoliasearchHelper.SearchResults
+          )
+        ) {
+          results.feeds = results.feeds.map((feed) =>
+            feed instanceof algoliasearchHelper.SearchResults
+              ? feed
+              : toFeedSearchResults(
+                  results._state,
+                  feed as CompositionFeedResult
+                )
+          );
         }
 
         let feedIDs = results.feeds
