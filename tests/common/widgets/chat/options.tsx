@@ -44,6 +44,80 @@ export function createOptionsTests(
       expect(document.querySelector('.ais-ChatPrompt')).toBeInTheDocument();
     });
 
+    test('sends initialUserMessage on init', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, AI!' });
+    });
+
+    test('does not send initialUserMessage when messages already exist', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({
+        messages: [
+          {
+            id: '1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Previous message' }],
+          },
+        ],
+      });
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+
     test('sends messages when prompt is submitted', async () => {
       const searchClient = createSearchClient();
 
