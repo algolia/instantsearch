@@ -242,6 +242,7 @@ class InstantSearch<
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
+  public _createdAt: number = Date.now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */

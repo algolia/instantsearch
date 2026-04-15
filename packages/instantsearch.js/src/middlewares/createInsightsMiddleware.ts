@@ -456,6 +456,14 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
         sendTelemetryEvent({
           eventName: '__bootstrap__',
+          performance: {
+            timeSincePageLoad:
+              typeof performance !== 'undefined'
+                ? Math.round(performance.now())
+                : undefined,
+            timeSinceInit:
+              Date.now() - instantSearchInstance._createdAt,
+          },
         });
       },
       unsubscribe() {
