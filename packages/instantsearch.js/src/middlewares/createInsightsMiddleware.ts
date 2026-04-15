@@ -455,7 +455,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         instantSearchInstance.on('render', telemetryOnRender);
 
         sendTelemetryEvent({
-          eventName: '__bootstrap__',
+          eventName: '__start__',
           performance: {
             timeSincePageLoad:
               typeof performance !== 'undefined'
