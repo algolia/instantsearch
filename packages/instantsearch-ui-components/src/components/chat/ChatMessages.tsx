@@ -22,7 +22,6 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
-import type { ChatEmptyProps } from './ChatGreeting';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -31,7 +30,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -438,7 +437,7 @@ export function createChatMessagesComponent({
       isStreamingNonTextContent;
 
     const showEmpty =
-      messages.length === 0 && !showLoader && !isClearing;
+      messages.length === 0 && !showLoader && !isClearing && status !== 'error';
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;

@@ -340,6 +340,42 @@ export function createTemplatesTests(
         expect(document.querySelector('.custom-empty')).toBeNull();
       });
 
+      test('does not render empty screen when status is error', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({ messages: [] as any[] });
+        Object.defineProperty(chat, 'status', {
+          get: () => 'error',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                empty:
+                  '<div class="custom-empty">Custom empty</div>',
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              emptyComponent: () => (
+                <div className="custom-empty">Custom empty</div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('.custom-empty')).toBeNull();
+      });
+
       test('renders with custom assistant and user message parts', async () => {
         const searchClient = createSearchClient();
 
