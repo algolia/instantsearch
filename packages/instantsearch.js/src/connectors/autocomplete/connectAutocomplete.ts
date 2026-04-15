@@ -1,4 +1,6 @@
 import {
+  addAbsolutePosition,
+  addQueryID,
   escapeHits,
   TAG_PLACEHOLDER,
   checkRendering,
@@ -228,10 +230,21 @@ search.addWidgets([
             widgetType: this.$$type,
           });
 
+          const hits = scopedResult.results
+            ? addQueryID(
+                addAbsolutePosition(
+                  scopedResult.results.hits,
+                  scopedResult.results.page,
+                  scopedResult.results.hitsPerPage
+                ),
+                scopedResult.results.queryID
+              )
+            : [];
+
           return {
             indexId: scopedResult.indexId,
             indexName: scopedResult.results?.index || '',
-            hits: scopedResult.results?.hits || [],
+            hits,
             results: scopedResult.results || ({} as unknown as SearchResults),
           };
         });

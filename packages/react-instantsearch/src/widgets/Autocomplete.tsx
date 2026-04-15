@@ -869,6 +869,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
+        sendEvent={indices.find((idx) => idx.indexId === indexId)?.sendEvent}
         classNames={currentIndexConfig.classNames}
       />
     );

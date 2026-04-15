@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib/cx';
 
-import type { ComponentProps, Renderer } from '../../types';
+import type { ComponentProps, Renderer, SendEventForHits } from '../../types';
 
 export type AutocompleteIndexProps<
   T = { objectID: string; __indexName: string } & Record<string, unknown>
@@ -22,6 +22,7 @@ export type AutocompleteIndexProps<
     onSelect: () => void;
     onApply: () => void;
   };
+  sendEvent?: SendEventForHits;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -56,6 +57,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
       ItemComponent,
       NoResultsComponent,
       getItemProps,
+      sendEvent,
       classNames = {},
     } = userProps;
 
@@ -93,6 +95,20 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
                     classNames.item,
                     className
                   )}
+                  onClick={() => {
+                    sendEvent?.(
+                      'click:internal',
+                      item as Record<string, unknown>,
+                      'Hit Clicked'
+                    );
+                  }}
+                  onAuxClick={() => {
+                    sendEvent?.(
+                      'click:internal',
+                      item as Record<string, unknown>,
+                      'Hit Clicked'
+                    );
+                  }}
                 >
                   <ItemComponent
                     item={item}
