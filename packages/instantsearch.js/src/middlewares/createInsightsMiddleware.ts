@@ -10,8 +10,9 @@ import {
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
-import type { WidgetMetadata } from '../lib/utils/extractWidgetPayload';
+
 import { createUUID } from '../lib/utils/uuid';
+import type { WidgetMetadata } from '../lib/utils/extractWidgetPayload';
 
 import type {
   InsightsClient,
