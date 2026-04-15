@@ -95,6 +95,7 @@ export function createOptionsTests(
     });
 
     test('sets initialMessages on init', async () => {
+      sessionStorage.clear();
       const chat = new Chat({});
 
       const options: SetupOptions<ChatConnectorSetup> = {
@@ -214,6 +215,39 @@ export function createOptionsTests(
         })
       );
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, AI!' });
+    });
+
+    test('does not set initialMessages when resume is enabled', async () => {
+      sessionStorage.clear();
+      const chat = new Chat({});
+      jest.spyOn(chat, 'resumeStream').mockResolvedValue(undefined);
+
+      const options: SetupOptions<ChatConnectorSetup> = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          chat,
+          agentId: 'agentId',
+          resume: true,
+          initialMessages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+            },
+          ],
+        } as any,
+      };
+
+      await setup(options);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(chat.messages).toHaveLength(0);
     });
 
     test('provides `input` state to persist text input', async () => {
