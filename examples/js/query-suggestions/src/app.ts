@@ -157,6 +157,10 @@ search.addWidgets([
   chat({
     container: '#chat',
     agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
+    context: () => ({
+      currentPage: window.location.href,
+      userLocale: navigator.language,
+    }),
     templates: {
       item: (item, { html }) => html`
         <article class="ais-Carousel-hit">

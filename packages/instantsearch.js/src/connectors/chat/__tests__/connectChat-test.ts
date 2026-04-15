@@ -555,10 +555,9 @@ data: [DONE]`,
     }
 
     function createChatWidgetWithContext(
-      params: Omit<
-        Parameters<ReturnType<typeof connectChat>>[0],
-        'transport' | 'agentId'
-      > & { chat: Chat<UIMessage> }
+      params: Omit<ChatConnectorParams<UIMessage>, 'transport' | 'agentId'> & {
+        chat: Chat<UIMessage>;
+      }
     ) {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
@@ -569,7 +568,7 @@ data: [DONE]`,
       return { widget, renderFn };
     }
 
-    it('injects context part when context is a static object', async () => {
+    it('prepends context text part when context is a static object', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -587,11 +586,11 @@ data: [DONE]`,
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
       expect(call.parts).toEqual([
-        { type: 'text', text: 'Hello' },
         {
-          type: 'context',
-          context: { currentPage: '/products', locale: 'en-US' },
+          type: 'text',
+          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
         },
+        { type: 'text', text: 'Hello' },
       ]);
     });
 
@@ -612,15 +611,21 @@ data: [DONE]`,
 
       await sendMessage({ text: 'first' });
       expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/page-1"}</context>',
+        },
         { type: 'text', text: 'first' },
-        { type: 'context', context: { currentPage: '/page-1' } },
       ]);
 
       pageUrl = '/page-2';
       await sendMessage({ text: 'second' });
       expect((sendMessageSpy.mock.calls[1][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/page-2"}</context>',
+        },
         { type: 'text', text: 'second' },
-        { type: 'context', context: { currentPage: '/page-2' } },
       ]);
     });
 
@@ -641,7 +646,7 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
 
-    it('injects context when called with parts', async () => {
+    it('prepends context when called with parts', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -659,8 +664,11 @@ data: [DONE]`,
       });
 
       expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"page":"/about"}</context>',
+        },
         { type: 'text', text: 'Hi from parts' },
-        { type: 'context', context: { page: '/about' } },
       ]);
     });
 

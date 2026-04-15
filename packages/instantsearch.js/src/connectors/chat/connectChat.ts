@@ -23,7 +23,6 @@ import type {
   ChatInit as ChatInitAi,
   UIMessage,
 } from '../../lib/chat';
-import type { ContextUIPart } from '../../lib/ai-lite';
 import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
@@ -622,49 +621,39 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const sendMessageWithContext: typeof _chatInstance.sendMessage = (
           message,
-          options
+          ...rest
         ) => {
           if (!context || !message) {
-            return _chatInstance.sendMessage(message, options);
+            return _chatInstance.sendMessage(message, ...rest);
           }
 
           const resolvedContext =
             typeof context === 'function' ? context() : context;
 
-          const contextPart: ContextUIPart = {
-            type: 'context',
-            context: resolvedContext,
+          const contextTextPart = {
+            type: 'text' as const,
+            text: `<context>${JSON.stringify(resolvedContext)}</context>`,
           };
 
           if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage(
-              {
-                ...message,
-                parts: [...message.parts, contextPart],
-                text: undefined,
-                files: undefined,
-              },
-              options
-            );
+            return _chatInstance.sendMessage({
+              ...message,
+              parts: [contextTextPart, ...message.parts],
+              text: undefined,
+              files: undefined,
+            }, ...rest);
           }
 
-          if ('text' in message && message.text) {
-            return _chatInstance.sendMessage(
-              {
-                parts: [
-                  { type: 'text' as const, text: message.text },
-                  contextPart,
-                ],
-                metadata: message.metadata,
-                messageId: message.messageId,
-                files: undefined,
-                text: undefined,
-              },
-              options
-            );
-          }
-
-          return _chatInstance.sendMessage(message, options);
+          return _chatInstance.sendMessage({
+            parts: [
+              contextTextPart,
+              { type: 'text' as const, text: message.text! },
+            ],
+            metadata: message.metadata,
+            messageId: message.messageId,
+            files: undefined,
+            text: undefined,
+          }, ...rest);
         };
 
         return {

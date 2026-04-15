@@ -206,7 +206,7 @@ describe('ChatMessage', () => {
     `);
   });
 
-  test('does not render context parts', () => {
+  test('does not render context text parts', () => {
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
@@ -215,14 +215,11 @@ describe('ChatMessage', () => {
           role: 'user',
           id: '1',
           parts: [
-            { type: 'text', text: 'Hello' },
             {
-              type: 'context',
-              context: {
-                currentPage: 'https://example.com/products',
-                userLocale: 'en-US',
-              },
+              type: 'text',
+              text: '<context>{"currentPage":"https://example.com/products","userLocale":"en-US"}</context>',
             },
+            { type: 'text', text: 'Hello' },
           ],
         }}
         status="ready"
@@ -233,7 +230,7 @@ describe('ChatMessage', () => {
 
     expect(container.textContent).toBe('Hello');
     expect(container.textContent).not.toContain('example.com');
-    expect(container.textContent).not.toContain('en-US');
+    expect(container.textContent).not.toContain('context');
   });
 
   test('renders with tools', () => {
