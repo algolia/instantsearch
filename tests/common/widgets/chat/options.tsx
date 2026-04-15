@@ -118,6 +118,111 @@ export function createOptionsTests(
       expect(sendMessageSpy).not.toHaveBeenCalled();
     });
 
+    test('sets initialMessages on init', async () => {
+      sessionStorage.clear();
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(chat.messages).toHaveLength(1);
+      expect(chat.messages[0]).toEqual(
+        expect.objectContaining({
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+        })
+      );
+    });
+
+    test('does not set initialMessages when messages already exist', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({
+        messages: [
+          {
+            id: '1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Previous message' }],
+          },
+        ],
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '2',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialMessages: [
+              {
+                id: '2',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Welcome! How can I help?' }],
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(chat.messages).toHaveLength(1);
+      expect(chat.messages[0]).toEqual(
+        expect.objectContaining({
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        })
+      );
+    });
+
     test('sends messages when prompt is submitted', async () => {
       const searchClient = createSearchClient();
 
