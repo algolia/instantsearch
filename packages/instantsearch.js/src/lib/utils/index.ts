@@ -42,6 +42,7 @@ export * from './walkIndex';
 export * from './logger';
 export * from './mergeSearchParameters';
 export * from './omit';
+export * from './buildWidgetTree';
 export * from './extractWidgetPayload';
 export * from './noop';
 export * from './range';

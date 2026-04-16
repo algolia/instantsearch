@@ -5,14 +5,15 @@ import {
 import {
   warning,
   noop,
-  extractWidgetPayload,
+  buildWidgetTree,
+  getAlgoliaAgent,
   getAppIdAndApiKey,
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
+import version from '../lib/version';
 
 import { createUUID } from '../lib/utils/uuid';
-import type { WidgetMetadata } from '../lib/utils/extractWidgetPayload';
 
 import type {
   InsightsClient,
@@ -168,7 +169,6 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
-    let telemetryOnRender: (() => void) | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -444,35 +444,34 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           } as any);
         }
 
-        telemetryOnRender = () => {
-          sendTelemetryEvent({
-            eventName: '__render__',
-            performance: {},
-            widgets: collectWidgets(instantSearchInstance),
-          });
-        };
-
-        instantSearchInstance.on('render', telemetryOnRender);
-
         sendTelemetryEvent({
           eventName: '__start__',
+          algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
+          version,
+          user_agent: safelyRunOnBrowser(
+            ({ window }) => window.navigator.userAgent,
+            { fallback: () => undefined }
+          ),
+          application_id: appId,
           performance: {
-            timeSincePageLoad:
-              typeof performance !== 'undefined'
-                ? Math.round(performance.now())
-                : undefined,
-            timeSinceInit:
+            bootstrap_ms:
               Date.now() - instantSearchInstance._createdAt,
           },
+          widgets: [
+            {
+              type: 'ais.instantSearch',
+              params: [],
+              children: buildWidgetTree(
+                instantSearchInstance.mainIndex.getWidgets(),
+                instantSearchInstance
+              ),
+            },
+          ],
         });
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
-        if (telemetryOnRender) {
-          instantSearchInstance.removeListener('render', telemetryOnRender);
-          telemetryOnRender = null;
-        }
         if (helper && initialParameters) {
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
@@ -539,23 +538,3 @@ function normalizeUserToken(userToken?: string | number): string | undefined {
   return typeof userToken === 'number' ? userToken.toString() : userToken;
 }
 
-function collectWidgets(
-  instantSearchInstance: InstantSearch
-): WidgetMetadata[] {
-  const widgetPayload: { widgets: WidgetMetadata[] } = { widgets: [] };
-  extractWidgetPayload(
-    instantSearchInstance.mainIndex.getWidgets(),
-    instantSearchInstance,
-    widgetPayload
-  );
-
-  instantSearchInstance.middleware.forEach((mw) =>
-    widgetPayload.widgets.push({
-      middleware: true,
-      type: mw.instance.$$type,
-      internal: mw.instance.$$internal,
-    })
-  );
-
-  return widgetPayload.widgets;
-}
