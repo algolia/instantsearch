@@ -12,6 +12,7 @@ import {
   TrendingItems,
   Carousel,
   Chat,
+  ChatGreeting,
   FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
@@ -20,6 +21,7 @@ import { Panel } from './Panel';
 
 import 'instantsearch.css/themes/satellite.css';
 
+import sparklesIcon from './sparkles.svg';
 import './App.css';
 
 const searchClient = algoliasearch(
@@ -95,6 +97,16 @@ export function App() {
             agentId="eedef238-5468-470d-bc37-f99fa741bd25"
             feedback={true}
             itemComponent={ItemComponent}
+            emptyComponent={(props) => (
+              <ChatGreeting
+                {...props}
+                banner={sparklesIcon as unknown as string}
+                translations={{
+                  heading: 'Welcome! How can I help?',
+                  subheading: 'Ask me anything about our products.',
+                }}
+              />
+            )}
           />
         </InstantSearch>
       </div>
