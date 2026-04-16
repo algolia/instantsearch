@@ -18,9 +18,7 @@ import {
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
-
 import 'instantsearch.css/themes/satellite.css';
-
 import sparklesIcon from './sparkles.svg';
 import './App.css';
 
