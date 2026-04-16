@@ -3,16 +3,16 @@
 import { createChatGreetingComponent } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import type { ChatEmptyProps } from 'instantsearch-ui-components';
+import type { ChatGreetingProps } from 'instantsearch-ui-components';
 
 const ChatGreetingComponent = createChatGreetingComponent({
   createElement: h,
 });
 
-export function chatEmpty(
-  options?: Pick<ChatEmptyProps, 'banner'>
+export function chatGreeting(
+  options?: Pick<ChatGreetingProps, 'banner' | 'translations' | 'classNames'>
 ) {
-  return function ChatEmptyTemplate(props: ChatEmptyProps) {
-    return <ChatGreetingComponent {...props} banner={options?.banner} />;
+  return function ChatGreetingTemplate(props: ChatGreetingProps) {
+    return <ChatGreetingComponent {...props} {...options} />;
   };
 }
