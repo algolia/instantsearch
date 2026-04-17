@@ -76,13 +76,14 @@ function TabbedFeeds() {
         </div>
       )}
 
-      <Feeds searchScope="global">
-        {(feedID) => (
+      <Feeds
+        searchScope="global"
+        renderFeed={({ feedID }) => (
           <div style={{ display: feedID === current ? undefined : 'none' }}>
             <FeedHits feedID={feedID} />
           </div>
         )}
-      </Feeds>
+      />
     </>
   );
 }
