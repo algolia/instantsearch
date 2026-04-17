@@ -444,30 +444,39 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           } as any);
         }
 
-        sendTelemetryEvent({
-          eventName: '__start__',
-          algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
-          version,
-          user_agent: safelyRunOnBrowser(
-            ({ window }) => window.navigator.userAgent,
-            { fallback: () => undefined }
-          ),
-          application_id: appId,
-          performance: {
-            bootstrap_ms:
-              Date.now() - instantSearchInstance._createdAt,
-          },
-          widgets: [
-            {
-              type: 'ais.instantSearch',
-              params: [],
-              children: buildWidgetTree(
-                instantSearchInstance.mainIndex.getWidgets(),
-                instantSearchInstance
+        // Defer by a tick so the measurement is taken after `start()`
+        // fully returns (started() is called from within start()), and so
+        // widgets added asynchronously in the same tick (e.g. Vue) are
+        // included in the tree.
+        setTimeout(() => {
+          sendTelemetryEvent({
+            eventName: '__start__',
+            algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
+            version,
+            user_agent: safelyRunOnBrowser(
+              ({ window }) => window.navigator.userAgent,
+              { fallback: () => undefined }
+            ),
+            application_id: appId,
+            performance: {
+              bootstrap_ms: Math.round(
+                (typeof performance !== 'undefined'
+                  ? performance.now()
+                  : Date.now()) - instantSearchInstance._createdAt
               ),
             },
-          ],
-        });
+            widgets: [
+              {
+                type: 'ais.instantSearch',
+                params: [],
+                children: buildWidgetTree(
+                  instantSearchInstance.mainIndex.getWidgets(),
+                  instantSearchInstance
+                ),
+              },
+            ],
+          });
+        }, 0);
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);

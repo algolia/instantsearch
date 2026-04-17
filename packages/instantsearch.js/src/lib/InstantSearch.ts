@@ -242,7 +242,8 @@ class InstantSearch<
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
-  public _createdAt: number = Date.now();
+  public _createdAt: number =
+    typeof performance !== 'undefined' ? performance.now() : Date.now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */
