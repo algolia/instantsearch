@@ -63,9 +63,10 @@ describe('Feeds (integration)', () => {
         searchClient={searchClient}
         compositionID="my-composition"
       >
-        <Feeds searchScope="global">
-          {(feedID) => <FeedScopedChild feedID={feedID} />}
-        </Feeds>
+        <Feeds
+          searchScope="global"
+          renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
+        />
       </InstantSearchMock>
     );
 
@@ -115,9 +116,10 @@ describe('Feeds (integration)', () => {
           searchClient={searchClient}
           compositionID="my-composition"
         >
-          <Feeds searchScope="global">
-            {(feedID) => <FeedScopedChild feedID={feedID} />}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
+          />
         </InstantSearch>
       </InstantSearchSSRProvider>
     );

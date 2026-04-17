@@ -11,10 +11,10 @@ import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 import type { ReactNode } from 'react';
 
 export type FeedsProps = FeedsConnectorParams & {
-  children: (feedID: string) => ReactNode;
+  renderFeed: ({ feedID }: { feedID: string }) => ReactNode;
 };
 
-export function Feeds({ children, ...props }: FeedsProps) {
+export function Feeds({ renderFeed, ...props }: FeedsProps) {
   const { feedIDs } = useFeeds(props, {
     $$widgetType: 'ais.feeds',
   });
@@ -105,7 +105,7 @@ export function Feeds({ children, ...props }: FeedsProps) {
         }
         return (
           <IndexContext.Provider key={feedID} value={container}>
-            {children(feedID)}
+            {renderFeed({ feedID })}
           </IndexContext.Provider>
         );
       })}

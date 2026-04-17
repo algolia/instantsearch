@@ -88,9 +88,10 @@ describe('Feeds', () => {
     const { rerender } = render(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <FeedScopedChild feedID={feedID} />}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -112,9 +113,10 @@ describe('Feeds', () => {
     rerender(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <FeedScopedChild feedID={feedID} />}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -136,9 +138,12 @@ describe('Feeds', () => {
     const { rerender } = render(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <div data-testid={`feed-${feedID}`}>{feedID}</div>}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -152,9 +157,12 @@ describe('Feeds', () => {
     rerender(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <div data-testid={`feed-${feedID}`}>{feedID}</div>}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -182,9 +190,12 @@ describe('Feeds', () => {
     const { rerender } = render(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <div data-testid={`feed-${feedID}`}>{feedID}</div>}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -197,9 +208,12 @@ describe('Feeds', () => {
     rerender(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <div data-testid={`feed-${feedID}`}>{feedID}</div>}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -213,9 +227,12 @@ describe('Feeds', () => {
     rerender(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <div data-testid={`feed-${feedID}`}>{feedID}</div>}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -244,9 +261,10 @@ describe('Feeds', () => {
     render(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) => <MountedFeed feedID={feedID} />}
-          </Feeds>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => <MountedFeed feedID={feedID} />}
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
@@ -271,13 +289,14 @@ describe('Feeds', () => {
     render(
       <InstantSearchContext.Provider value={instantSearch}>
         <IndexContext.Provider value={parentIndex as any}>
-          <Feeds searchScope="global">
-            {(feedID) =>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) =>
               feedID === 'products' ? (
                 <div data-testid={`feed-${feedID}`}>{feedID}</div>
               ) : null
             }
-          </Feeds>
+          />
         </IndexContext.Provider>
       </InstantSearchContext.Provider>
     );
