@@ -16,8 +16,7 @@
 
   transition: width var(--ais-transition-duration)
       var(--ais-transition-timing-function),
-    height var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+    height var(--ais-transition-duration) var(--ais-transition-timing-function);
 
   &--maximized {
     width: var(--ais-chat-maximized-width);

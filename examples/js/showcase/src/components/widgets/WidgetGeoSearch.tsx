@@ -1,29 +1,31 @@
-import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
-import { geoSearch } from "instantsearch.js/es/widgets";
-import { useRef, useEffect, useState } from "preact/hooks";
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
+import { geoSearch } from 'instantsearch.js/es/widgets';
+import { useRef, useEffect, useState } from 'preact/hooks';
 
-import { useSearch } from "../../context/search";
-import { type ColorMode, useColorMode } from "../../hooks/useColorMode";
+import { useSearch } from '../../context/search';
+import { type ColorMode, useColorMode } from '../../hooks/useColorMode';
 
 const GOOGLE_MAPS_API_KEY =
-  import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ";
+  import.meta.env.VITE_GOOGLE_MAPS_API_KEY ??
+  'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 
-type GoogleRef = (typeof window)["google"];
+type GoogleRef = typeof window['google'];
 
-const COLOR_SCHEME_MAP: Record<ColorMode, "FOLLOW_SYSTEM" | "LIGHT" | "DARK"> = {
-  system: "FOLLOW_SYSTEM",
-  light: "LIGHT",
-  dark: "DARK",
-};
+const COLOR_SCHEME_MAP: Record<ColorMode, 'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'> =
+  {
+    system: 'FOLLOW_SYSTEM',
+    light: 'LIGHT',
+    dark: 'DARK',
+  };
 
 let googleMapsPromise: Promise<GoogleRef> | null = null;
 
 function loadGoogleMaps() {
   if (!googleMapsPromise) {
     googleMapsPromise = (async () => {
-      setOptions({ key: GOOGLE_MAPS_API_KEY, v: "weekly" });
-      await importLibrary("maps");
-      await importLibrary("marker");
+      setOptions({ key: GOOGLE_MAPS_API_KEY, v: 'weekly' });
+      await importLibrary('maps');
+      await importLibrary('marker');
       return window.google as GoogleRef;
     })().catch((err) => {
       googleMapsPromise = null;
@@ -54,7 +56,9 @@ export function WidgetGeoSearch() {
           googleReference: googleRef,
           initialZoom: 4,
           initialPosition: { lat: 0, lng: 0 },
-          cssClasses: { map: "!h-[500px] rounded-lg overflow-hidden shadow-sm" },
+          cssClasses: {
+            map: '!h-[500px] rounded-lg overflow-hidden shadow-sm',
+          },
           mapOptions: {
             streetViewControl: false,
             mapTypeControl: false,
@@ -66,7 +70,7 @@ export function WidgetGeoSearch() {
         search.addWidgets([widget]);
       })
       .catch(() => {
-        if (mounted) setError("Failed to load Google Maps.");
+        if (mounted) setError('Failed to load Google Maps.');
       });
 
     return () => {

@@ -383,8 +383,7 @@ a[class^='ais-'] {
   justify-content: center;
 }
 
-.ais-Hits-banner-image
-.ais-InfiniteHits-banner-image {
+.ais-Hits-banner-image .ais-InfiniteHits-banner-image {
   max-width: 100%;
 }
 
@@ -750,8 +749,7 @@ a[class^='ais-'] {
 }
 
 .ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-reset,
-.ais-SearchBox-form:has(.ais-AiModeButton)
-  .ais-SearchBox-loadingIndicator {
+.ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-loadingIndicator {
   right: 7rem;
 }
 

@@ -119,14 +119,7 @@
           "caseInsensitive": true,
           "order": "asc"
         },
-        "groups": [
-          "builtin",
-          "external",
-          "parent",
-          "sibling",
-          "index",
-          "type"
-        ],
+        "groups": ["builtin", "external", "parent", "sibling", "index", "type"],
         "newlines-between": "always",
         "pathGroups": [
           {
@@ -135,9 +128,7 @@
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": [
-          "builtin"
-        ]
+        "pathGroupsExcludedImportTypes": ["builtin"]
       }
     ],
     "react-hooks/exhaustive-deps": [
@@ -157,24 +148,15 @@
     "no-restricted-imports": [
       "error",
       {
-        "paths": [
-          "instantsearch.js/es"
-        ],
-        "patterns": [
-          "instantsearch.js/cjs/*"
-        ]
+        "paths": ["instantsearch.js/es"],
+        "patterns": ["instantsearch.js/cjs/*"]
       }
     ],
     "instantsearch/no-default-props-assignment": "error"
   },
   "overrides": [
     {
-      "files": [
-        "**/*.js",
-        "**/*.cjs",
-        "**/*.mjs",
-        "**/*.d.ts"
-      ],
+      "files": ["**/*.js", "**/*.cjs", "**/*.mjs", "**/*.d.ts"],
       "rules": {
         "@typescript-eslint/consistent-type-imports": "off",
         "@typescript-eslint/no-floating-promises": "off",
@@ -186,9 +168,7 @@
       }
     },
     {
-      "files": [
-        "packages/**/*"
-      ],
+      "files": ["packages/**/*"],
       "rules": {
         "instantsearch/no-async-functions": "error",
         "instantsearch/no-for-in": "error",
@@ -200,20 +180,14 @@
       }
     },
     {
-      "files": [
-        "packages/vue-instantsearch/**/*",
-        "examples/vue/**/*"
-      ],
+      "files": ["packages/vue-instantsearch/**/*", "examples/vue/**/*"],
       "rules": {
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "off"
       }
     },
     {
-      "files": [
-        "packages/**/*.test.*",
-        "packages/**/__tests__/**"
-      ],
+      "files": ["packages/**/*.test.*", "packages/**/__tests__/**"],
       "rules": {
         "instantsearch/no-async-functions": "off",
         "instantsearch/no-for-in": "off",
@@ -231,10 +205,7 @@
         "packages/instantsearch.js/src/**/*.tsx"
       ],
       "rules": {
-        "import/extensions": [
-          "error",
-          "never"
-        ]
+        "import/extensions": ["error", "never"]
       }
     },
     {
@@ -243,26 +214,17 @@
         "packages/react-instantsearch-*/src/**/*"
       ],
       "rules": {
-        "import/extensions": [
-          "error",
-          "never"
-        ]
+        "import/extensions": ["error", "never"]
       }
     },
     {
-      "files": [
-        "packages/*/test/module/**/*.cjs"
-      ],
+      "files": ["packages/*/test/module/**/*.cjs"],
       "rules": {
         "import/extensions": "off"
       }
     },
     {
-      "files": [
-        "**/__tests__/**/*",
-        "**/*.spec.*",
-        "**/*.test.*"
-      ],
+      "files": ["**/__tests__/**/*", "**/*.spec.*", "**/*.test.*"],
       "rules": {
         "import/extensions": "off",
         "new-cap": "off",
@@ -270,19 +232,13 @@
       }
     },
     {
-      "files": [
-        "**/*.cjs"
-      ],
+      "files": ["**/*.cjs"],
       "rules": {
         "import/no-commonjs": "off"
       }
     },
     {
-      "files": [
-        "scripts/**/*",
-        "**/*.config.js",
-        "**/*.conf.js"
-      ],
+      "files": ["scripts/**/*", "**/*.config.js", "**/*.conf.js"],
       "rules": {
         "import/no-commonjs": "off",
         "no-console": "off"
@@ -309,9 +265,7 @@
       }
     },
     {
-      "files": [
-        "tests/e2e/**/*"
-      ],
+      "files": ["tests/e2e/**/*"],
       "rules": {
         "@typescript-eslint/no-floating-promises": "error",
         "import/no-commonjs": "off",
@@ -349,19 +303,14 @@
       }
     },
     {
-      "files": [
-        "**/.storybook/**/*",
-        "**/stories/**/*"
-      ],
+      "files": ["**/.storybook/**/*", "**/stories/**/*"],
       "rules": {
         "new-cap": "off",
         "no-console": "off"
       }
     },
     {
-      "files": [
-        "packages/instantsearch.js/src/**/*"
-      ],
+      "files": ["packages/instantsearch.js/src/**/*"],
       "rules": {
         "no-restricted-globals": [
           "error",

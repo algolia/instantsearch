@@ -320,9 +320,7 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent:
-      | ((props: ChatEmptyProps) => JSX.Element)
-      | undefined;
+    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;

@@ -521,8 +521,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        const feedback =
-          'feedback' in options ? options.feedback : undefined;
+        const feedback = 'feedback' in options ? options.feedback : undefined;
         if (agentId && feedback) {
           const [appId, apiKey] = getAppIdAndApiKey(
             initOptions.instantSearchInstance.client

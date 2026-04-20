@@ -1,19 +1,22 @@
-import { useSyncExternalStore } from "preact/compat";
+import { useSyncExternalStore } from 'preact/compat';
 
-export type ColorMode = "system" | "light" | "dark";
+export type ColorMode = 'system' | 'light' | 'dark';
 
-const STORAGE_KEY = "color-mode";
+const STORAGE_KEY = 'color-mode';
 
-function getSystemTheme(): "light" | "dark" {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+function getSystemTheme(): 'light' | 'dark' {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 }
 
 function applyTheme(mode: ColorMode) {
-  const resolved = mode === "system" ? getSystemTheme() : mode;
-  document.documentElement.setAttribute("data-theme", resolved);
+  const resolved = mode === 'system' ? getSystemTheme() : mode;
+  document.documentElement.setAttribute('data-theme', resolved);
 }
 
-let currentMode: ColorMode = (localStorage.getItem(STORAGE_KEY) as ColorMode) || "system";
+let currentMode: ColorMode =
+  (localStorage.getItem(STORAGE_KEY) as ColorMode) || 'system';
 const listeners = new Set<() => void>();
 
 function subscribe(listener: () => void) {
@@ -35,9 +38,11 @@ function setMode(next: ColorMode) {
 }
 
 applyTheme(currentMode);
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-  if (currentMode === "system") applyTheme("system");
-});
+window
+  .matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', () => {
+    if (currentMode === 'system') applyTheme('system');
+  });
 
 export function useColorMode() {
   const mode = useSyncExternalStore(subscribe, getSnapshot);

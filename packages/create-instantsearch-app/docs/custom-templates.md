@@ -113,24 +113,16 @@ By default, the `build` task supports the [Handlebars](https://handlebarsjs.com)
 <h6 align="center">App.js.hbs</h6>
 
 ```handlebars
-import React, { Component } from 'react';
-import algoliasearch from 'algoliasearch/lite';
-import {
-  InstantSearch,
-  Hits,
-  SearchBox,
-  {{#if attributesToDisplay}}
+import React, { Component } from 'react'; import algoliasearch from
+'algoliasearch/lite'; import { InstantSearch, Hits, SearchBox,
+{{#if attributesToDisplay}}
   Highlight,
-  {{/if}}
-} from 'react-instantsearch-dom';
+{{/if}}
+} from 'react-instantsearch-dom'; const searchClient = algoliasearch( '{{appId}}',
+'{{apiKey}}' );
 
-const searchClient = algoliasearch(
-  '{{appId}}',
-  '{{apiKey}}'
-);
-
-<InstantSearch searchClient={searchClient} indexName="{{indexName}}">
-  <SearchBox placeholder="{{searchPlaceholder}}" />
+<InstantSearch searchClient='{searchClient}' indexName='{{indexName}}'>
+  <SearchBox placeholder='{{searchPlaceholder}}' />
   {/* ... */}
 </InstantSearch>
 ```

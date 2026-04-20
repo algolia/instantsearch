@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -9,14 +9,14 @@
 /* Global */
 body {
   margin: 0;
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: theme(--color-neutral-900);
   background-color: theme(--color-white); /* docs light bg */
 }
 
-[data-theme="dark"] body {
+[data-theme='dark'] body {
   color: theme(--color-neutral-100);
   background-color: #0a0b11; /* docs dark bg */
 }
@@ -31,7 +31,10 @@ body {
 }
 
 .noUi-connect {
-  background: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  background: rgba(
+    var(--ais-primary-color-rgb),
+    var(--ais-primary-color-alpha)
+  );
   border-radius: var(--ais-border-radius-full);
 }
 
@@ -40,9 +43,13 @@ body {
   height: 20px;
   right: -10px;
   top: -7px;
-  border: 2px solid rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  border: 2px solid
+    rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
   border-radius: var(--ais-border-radius-full);
-  background: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+  background: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
   box-shadow: var(--ais-shadow-xs);
   cursor: grab;
 }
@@ -62,7 +69,10 @@ body {
   border: none;
   border-radius: var(--ais-border-radius-sm);
   background: rgba(var(--ais-text-color-rgb), 0.85);
-  color: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+  color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
   font-size: 12px;
   padding: 2px 8px;
   transform: none;
@@ -79,11 +89,11 @@ body {
 
 /* CurrentRefinements widget */
 .ais-CurrentRefinements--noRefinement::after {
-  content: "No refinements applied";
+  content: 'No refinements applied';
   font-size: theme(--text-sm);
   color: theme(--color-neutral-400);
 }
 
-[data-theme="dark"] .ais-CurrentRefinements--noRefinement::after {
+[data-theme='dark'] .ais-CurrentRefinements--noRefinement::after {
   color: theme(--color-neutral-500);
 }

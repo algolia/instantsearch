@@ -14,13 +14,11 @@
       href="https://unpkg.com/instantsearch.css@8/themes/algolia-min.css"
     />
     <title>{{ title }}</title>
-    {{{ renderResourceHints() }}}
-    {{{ renderStyles() }}}
+    {{{ renderResourceHints() }}} {{{ renderStyles() }}}
   </head>
   <body>
     <!--vue-ssr-outlet-->
-    {{{ renderState() }}}
-    {{{ renderState({ contextKey: 'algoliaState', windowKey: '__ALGOLIA_STATE__' }) }}}
-    {{{ renderScripts() }}}
+    {{{ renderState() }}} {{{ renderState({ contextKey: 'algoliaState',
+    windowKey: '__ALGOLIA_STATE__' }) }}} {{{ renderScripts() }}}
   </body>
 </html>

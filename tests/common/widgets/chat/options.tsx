@@ -1417,7 +1417,7 @@ export function createOptionsTests(
                     <button
                       class="custom-send"
                       onclick="${() =>
-                      props.sendMessage({ text: 'hello from layout' })}"
+                        props.sendMessage({ text: 'hello from layout' })}"
                     >
                       Send
                     </button>
@@ -1493,18 +1493,18 @@ export function createOptionsTests(
 
         await openChat(act);
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('ready');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'ready'
+        );
 
         await act(async () => {
           chat._state.status = 'submitted';
           await wait(0);
         });
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('submitted');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'submitted'
+        );
       });
 
       test('renders with inline layout component', async () => {

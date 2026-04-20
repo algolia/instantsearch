@@ -30,7 +30,13 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type {
+  ChatEmptyProps,
+  ChatLayoutOwnProps,
+  ChatMessageBase,
+  ChatStatus,
+  ClientSideTools,
+} from './types';
 
 export type ChatMessagesTranslations = {
   /**

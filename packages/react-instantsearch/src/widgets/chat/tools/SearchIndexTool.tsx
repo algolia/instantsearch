@@ -4,10 +4,7 @@ import {
   ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
-import {
-  addAbsolutePosition,
-  addQueryID,
-} from 'instantsearch.js/es/lib/utils';
+import { addAbsolutePosition, addQueryID } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';

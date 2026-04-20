@@ -10,11 +10,7 @@ import type { UseTrendingFacetsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   TrendingFacetsUiComponentProps,
-  | 'items'
-  | 'itemComponent'
-  | 'headerComponent'
-  | 'emptyComponent'
-  | 'status'
+  'items' | 'itemComponent' | 'headerComponent' | 'emptyComponent' | 'status'
 >;
 
 export type TrendingFacetsProps = Omit<

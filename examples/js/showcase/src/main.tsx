@@ -1,8 +1,8 @@
-import { render } from "preact";
+import { render } from 'preact';
 
-import { App } from "./App";
+import { App } from './App';
 
-import "instantsearch.css/themes/nova.css";
-import "./style.css";
+import 'instantsearch.css/themes/nova.css';
+import './style.css';
 
-render(<App />, document.getElementById("app")!);
+render(<App />, document.getElementById('app')!);

@@ -25,8 +25,7 @@
 
   transition: opacity var(--ais-transition-duration)
       var(--ais-transition-timing-function),
-    filter var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+    filter var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-content--clearing {
@@ -47,8 +46,7 @@
       var(--ais-transition-timing-function),
     transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),
-    opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+    opacity var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 .ais-ChatMessages-scrollToBottom--hidden {

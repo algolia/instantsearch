@@ -411,9 +411,7 @@ Useful lint commands:
 - `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.
 - `yarn lint:fix` applies Oxlint auto-fixes where available.
 
-The root `.eslintrc.cjs` is editor-only: it powers the VS Code ESLint extension for
-`import/order` diagnostics while oxlint's JS-plugin support in editors is still in
-preview. The authoritative lint configuration for CI and the CLI is `.oxlintrc.json`.
+The root `.eslintrc.cjs` is editor-only: it powers the VS Code ESLint extension for `import/order` diagnostics while oxlint's JS-plugin support in editors is still in preview. The authoritative lint configuration for CI and the CLI is `.oxlintrc.json`.
 
 ## Release
 
