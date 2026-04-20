@@ -689,5 +689,30 @@ data: [DONE]`,
 
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
+
+    it('sends message without context when context is not serializable', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const circular: Record<string, unknown> = {};
+      circular.self = circular;
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: circular,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+
+      expect(() => sendMessage({ text: 'Hello' })).toWarnDev(
+        '[InstantSearch.js]: Could not serialize chat context. The message will be sent without context.'
+      );
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+    });
   });
 });

@@ -649,11 +649,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           const resolvedContext =
             typeof context === 'function' ? context() : context;
 
+          let serializedContext: string;
+          try {
+            serializedContext = JSON.stringify(resolvedContext);
+          } catch {
+            warning(
+              false,
+              'Could not serialize chat context. The message will be sent without context.'
+            );
+            return _chatInstance.sendMessage(message, ...rest);
+          }
+
           const contextTextPart = {
             type: 'text' as const,
-            text: '<context>'
-              .concat(JSON.stringify(resolvedContext))
-              .concat('</context>'),
+            text: '<context>'.concat(serializedContext).concat('</context>'),
           };
 
           if ('parts' in message && message.parts) {
