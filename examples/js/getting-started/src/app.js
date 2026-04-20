@@ -1,6 +1,6 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { carousel, chatGreeting } from 'instantsearch.js/es/templates';
+import { carousel } from 'instantsearch.js/es/templates';
 import {
   configure,
   hits,
@@ -14,7 +14,6 @@ import {
   currentRefinements,
 } from 'instantsearch.js/es/widgets';
 
-import sparklesIcon from './sparkles.svg';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
@@ -112,13 +111,6 @@ search.addWidgets([
     agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
     templates: {
       item: productItemTemplate,
-      empty: chatGreeting({
-        banner: sparklesIcon,
-        translations: {
-          heading: 'Welcome! How can I help?',
-          subheading: 'Ask me anything about our products.',
-        },
-      }),
     },
   }),
 ]);
