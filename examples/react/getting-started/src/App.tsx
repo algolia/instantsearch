@@ -95,10 +95,6 @@ export function App() {
             agentId="eedef238-5468-470d-bc37-f99fa741bd25"
             feedback={true}
             itemComponent={ItemComponent}
-            context={() => ({
-              currentPage: window.location.href,
-              userLocale: navigator.language,
-            })}
           />
         </InstantSearch>
       </div>

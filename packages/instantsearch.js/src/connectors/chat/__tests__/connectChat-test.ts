@@ -578,7 +578,7 @@ data: [DONE]`,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
       await sendMessage({ text: 'Hello' });
@@ -605,7 +605,7 @@ data: [DONE]`,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
 
@@ -638,7 +638,7 @@ data: [DONE]`,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
       await sendMessage({ text: 'Hello' });
@@ -656,7 +656,7 @@ data: [DONE]`,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
       await sendMessage({
@@ -682,7 +682,7 @@ data: [DONE]`,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init!(createInitOptions({ helper, state: helper.state }));
+      widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
       await sendMessage();

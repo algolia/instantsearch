@@ -235,10 +235,6 @@ search.addWidgets([
     container: '#chat',
     agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
     feedback: true,
-    context: () => ({
-      currentPage: window.location.href,
-      userLocale: navigator.language,
-    }),
     templates: {
       item: itemTemplate,
     },

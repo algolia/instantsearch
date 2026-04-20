@@ -632,7 +632,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           const contextTextPart = {
             type: 'text' as const,
-            text: `<context>${JSON.stringify(resolvedContext)}</context>`,
+            text: '<context>'
+              .concat(JSON.stringify(resolvedContext))
+              .concat('</context>'),
           };
 
           if ('parts' in message && message.parts) {
@@ -644,10 +646,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             }, ...rest);
           }
 
+          const textContent =
+            'text' in message && message.text ? message.text : '';
+
           return _chatInstance.sendMessage({
             parts: [
               contextTextPart,
-              { type: 'text' as const, text: message.text! },
+              { type: 'text' as const, text: textContent },
             ],
             metadata: message.metadata,
             messageId: message.messageId,

@@ -79,6 +79,143 @@ export function createOptionsTests(
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
     });
 
+    test('sends messages with context when context is provided', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const contextValue = { currentPage: '/products', locale: 'en-US' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          react: { ...createDefaultWidgetParams(chat), context: contextValue },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello, world!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
+        },
+        { type: 'text', text: 'Hello, world!' },
+      ]);
+    });
+
+    test('sends messages with dynamic context from function', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const contextFn = () => ({ currentPage: '/dynamic-page' });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          react: { ...createDefaultWidgetParams(chat), context: contextFn },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/dynamic-page"}</context>',
+        },
+        { type: 'text', text: 'Hello!' },
+      ]);
+    });
+
+    test('does not render context parts in the UI', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
+        chat.messages = [
+          {
+            id: '1',
+            role: 'user',
+            parts: (message as any).parts,
+          },
+        ] as any;
+      });
+
+      const contextValue = { currentPage: '/products' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          react: { ...createDefaultWidgetParams(chat), context: contextValue },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const messagesContainer = document.querySelector('.ais-ChatMessages');
+      if (messagesContainer) {
+        expect(messagesContainer.textContent).not.toContain('<context>');
+        expect(messagesContainer.textContent).not.toContain('/products');
+      }
+    });
+
     test('closes chat when close button is clicked', async () => {
       const searchClient = createSearchClient();
 
