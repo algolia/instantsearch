@@ -404,11 +404,16 @@ JavaScript and TypeScript files are formatted with [Prettier](https://github.com
 
 Useful lint commands:
 
-- `yarn lint` runs the full repo lint flow.
+- `yarn lint` runs the full repo lint flow (Prettier format check + Oxlint).
+- `yarn format` rewrites files with Prettier; `yarn format:check` only reports violations.
 - `yarn lint:ox <paths...>` lints only the paths you pass.
 - `yarn lint:changed` lints files changed since the branch point with `origin/master`.
 - `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.
 - `yarn lint:fix` applies Oxlint auto-fixes where available.
+
+The root `.eslintrc.cjs` is editor-only: it powers the VS Code ESLint extension for
+`import/order` diagnostics while oxlint's JS-plugin support in editors is still in
+preview. The authoritative lint configuration for CI and the CLI is `.oxlintrc.json`.
 
 ## Release
 

@@ -6,6 +6,7 @@ const path = require('path');
 const repoRoot = path.resolve(__dirname, '..', '..');
 
 const commands = [
+  ['yarn', ['format:check']],
   [process.execPath, [path.join(repoRoot, 'scripts/lint/run-oxlint.cjs')]],
   ['yarn', ['workspace', 'example-react-instantsearch-next-example', 'lint']],
   [
