@@ -79,8 +79,8 @@ export function createInsightsTests(
         });
 
         // initial calls because the middleware is attached
-        // 5 base calls + 2 telemetry events (bootstrap + render)
-        expect(window.aa).toHaveBeenCalledTimes(7);
+        // 5 base calls + 1 telemetry event (__start__)
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -158,8 +158,8 @@ export function createInsightsTests(
         await setup(options);
 
         // initial calls because the middleware is attached
-        // 4 base calls + telemetry events (bootstrap + possible render)
-        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(5);
+        // 4 base calls (telemetry __start__ is deferred to the next tick)
+        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(4);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -172,8 +172,8 @@ export function createInsightsTests(
         });
 
         // Once result is available
-        // 5 base calls + 3 telemetry events (bootstrap + renders)
-        expect(window.aa).toHaveBeenCalledTimes(8);
+        // 5 base calls + 1 telemetry event (__start__)
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {

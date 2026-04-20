@@ -169,6 +169,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
+    let telemetryTimeout: ReturnType<typeof setTimeout> | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -448,37 +449,46 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         // fully returns (started() is called from within start()), and so
         // widgets added asynchronously in the same tick (e.g. Vue) are
         // included in the tree.
-        setTimeout(() => {
-          sendTelemetryEvent({
-            eventName: '__start__',
-            algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
-            version,
-            user_agent: safelyRunOnBrowser(
-              ({ window }) => window.navigator.userAgent,
-              { fallback: () => undefined }
-            ),
-            application_id: appId,
-            performance: {
-              bootstrap_ms: Math.round(
-                (typeof performance !== 'undefined'
-                  ? performance.now()
-                  : Date.now()) - instantSearchInstance._createdAt
+        telemetryTimeout = setTimeout(() => {
+          telemetryTimeout = null;
+          try {
+            sendTelemetryEvent({
+              eventName: '__start__',
+              algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
+              version,
+              user_agent: safelyRunOnBrowser(
+                ({ window }) => window.navigator.userAgent,
+                { fallback: () => undefined }
               ),
-            },
-            widgets: [
-              {
-                type: 'ais.instantSearch',
-                params: [],
-                children: buildWidgetTree(
-                  instantSearchInstance.mainIndex.getWidgets(),
-                  instantSearchInstance
+              application_id: appId,
+              performance: {
+                bootstrap_ms: Math.round(
+                  (typeof performance !== 'undefined'
+                    ? performance.now()
+                    : Date.now()) - instantSearchInstance._createdAt
                 ),
               },
-            ],
-          });
+              widgets: [
+                {
+                  type: 'ais.instantSearch',
+                  params: [],
+                  children: buildWidgetTree(
+                    instantSearchInstance.mainIndex.getWidgets(),
+                    instantSearchInstance
+                  ),
+                },
+              ],
+            });
+          } catch {
+            // telemetry must never crash the host app
+          }
         }, 0);
       },
       unsubscribe() {
+        if (telemetryTimeout) {
+          clearTimeout(telemetryTimeout);
+          telemetryTimeout = null;
+        }
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
