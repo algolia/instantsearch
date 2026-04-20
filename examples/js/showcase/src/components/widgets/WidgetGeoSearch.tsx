@@ -9,7 +9,8 @@ const GOOGLE_MAPS_API_KEY =
   import.meta.env.VITE_GOOGLE_MAPS_API_KEY ??
   'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 
-type GoogleRef = typeof window['google'];
+// eslint-disable-next-line prettier/prettier
+type GoogleRef = (typeof window)['google'];
 
 const COLOR_SCHEME_MAP: Record<ColorMode, 'FOLLOW_SYSTEM' | 'LIGHT' | 'DARK'> =
   {
