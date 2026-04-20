@@ -103,6 +103,7 @@
     "enzyme": "3.11.0",
     "eslint": "6.8.0",
     "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-prettier": "3.4.0",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",

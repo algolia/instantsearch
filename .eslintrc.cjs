@@ -8,13 +8,14 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: { jsx: true },
   },
-  plugins: ['import'],
+  plugins: ['import', 'prettier'],
   settings: {
     'import/resolver': {
       node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     },
   },
   rules: {
+    'prettier/prettier': 'error',
     'import/order': [
       'error',
       {

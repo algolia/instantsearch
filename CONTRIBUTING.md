@@ -404,8 +404,8 @@ JavaScript and TypeScript files are formatted with [Prettier](https://github.com
 
 Useful lint commands:
 
-- `yarn lint` runs the full repo lint flow (Prettier format check + Oxlint).
-- `yarn format` rewrites files with Prettier; `yarn format:check` only reports violations.
+- `yarn lint` runs Oxlint across the repo and workspace examples.
+- `yarn format` rewrites files with Prettier; `yarn format:check` only reports violations. CI runs it separately from `yarn lint`.
 - `yarn lint:ox <paths...>` lints only the paths you pass.
 - `yarn lint:changed` lints files changed since the branch point with `origin/master`.
 - `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.

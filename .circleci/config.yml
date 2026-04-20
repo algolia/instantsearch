@@ -221,7 +221,10 @@ jobs:
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
-          name: Lint & Code styles
+          name: Format check
+          command: yarn run format:check
+      - run:
+          name: Lint
           command: yarn run lint
       - run:
           name: Type Checking

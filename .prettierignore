@@ -58,3 +58,11 @@ tests/e2e/playwright/**
 
 ## Rollup configs use import attributes syntax not yet supported by the parser
 **/rollup.config.mjs
+
+## Handlebars partials aren't supported by Prettier
+packages/algoliasearch-helper/documentation-src/partials/**/*.hbs
+
+## Generated CSS output from instantsearch.css SCSS build
+packages/instantsearch.css/components/**
+packages/instantsearch.css/themes/**
+specs/public/themes/**
