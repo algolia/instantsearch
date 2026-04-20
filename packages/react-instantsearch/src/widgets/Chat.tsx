@@ -145,6 +145,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
@@ -193,6 +194,7 @@ function ChatInner<
     assistantMessageFooterComponent,
     userMessageLeadingComponent,
     userMessageFooterComponent,
+    emptyComponent,
     actionsComponent,
     suggestionsComponent,
     classNames,
@@ -313,6 +315,8 @@ function ChatInner<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage: sendMessage as ChatUiProps['sendMessage'],
+        setInput,
         onFeedback,
         feedbackState,
         messages,
@@ -327,6 +331,7 @@ function ChatInner<
         onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
+        emptyComponent: emptyComponent,
         actionsComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
