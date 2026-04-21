@@ -1,0 +1,8 @@
+{
+  "name": "eslint-plugin-instantsearch-editor",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Editor-only ESLint rules that mirror .oxlintrc.json's custom rules so VS Code gets live diagnostics for them.",
+  "main": "index.cjs",
+  "license": "MIT"
+}

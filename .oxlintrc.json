@@ -152,7 +152,8 @@
         "patterns": ["instantsearch.js/cjs/*"]
       }
     ],
-    "instantsearch/no-default-props-assignment": "error"
+    "instantsearch/no-default-props-assignment": "error",
+    "instantsearch/prefer-prettier-ignore-comment": "error"
   },
   "overrides": [
     {

@@ -222,7 +222,13 @@ jobs:
       - *run_yarn_install
       - run:
           name: Format check
-          command: yarn run format:check
+          command: |
+            yarn run format:check && exit 0
+            echo ""
+            echo "=== Formatting violations (showing intended prettier output as diff) ==="
+            yarn prettier --write . > /dev/null
+            git --no-pager diff --color
+            exit 1
       - run:
           name: Lint
           command: yarn run lint

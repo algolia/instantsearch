@@ -8,7 +8,7 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: { jsx: true },
   },
-  plugins: ['import', 'prettier'],
+  plugins: ['import', 'prettier', 'instantsearch-editor'],
   settings: {
     'import/resolver': {
       node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
@@ -16,6 +16,7 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'error',
+    'instantsearch-editor/prefer-prettier-ignore-comment': 'error',
     'import/order': [
       'error',
       {
