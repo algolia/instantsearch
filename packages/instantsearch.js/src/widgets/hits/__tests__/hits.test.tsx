@@ -915,11 +915,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
 
       const insights = createInsightsMiddleware({
         insightsClient: null,
-        onEvent: (event, aa) => {
-          if (event.insightsMethod !== 'sendEvents') {
-            onEvent(event, aa);
-          }
-        },
+        onEvent,
       });
 
       return { onEvent, insights };
