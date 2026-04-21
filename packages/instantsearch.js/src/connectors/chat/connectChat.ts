@@ -665,27 +665,33 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           };
 
           if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
-              ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
+            return _chatInstance.sendMessage(
+              {
+                ...message,
+                parts: [contextTextPart, ...message.parts],
+                text: undefined,
+                files: undefined,
+              },
+              ...rest
+            );
           }
 
           const textContent =
             'text' in message && message.text ? message.text : '';
 
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
+          return _chatInstance.sendMessage(
+            {
+              parts: [
+                contextTextPart,
+                { type: 'text' as const, text: textContent },
+              ],
+              metadata: message.metadata,
+              messageId: message.messageId,
+              files: undefined,
+              text: undefined,
+            },
+            ...rest
+          );
         };
 
         return {

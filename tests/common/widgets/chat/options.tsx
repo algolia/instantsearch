@@ -169,7 +169,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -214,7 +217,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextFn,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextFn },
           vue: {},
         },
@@ -265,7 +271,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
