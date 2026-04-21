@@ -430,18 +430,15 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         function sendTelemetryEvent(event: any) {
           const userToken = helper.state?.userToken;
 
-          instantSearchInstance.sendEventToInsights({
-            insightsMethod: 'sendEvents',
-            payload: [
-              {
-                eventType: 'instantsearch_telemetry',
-                timestamp: Date.now(),
-                session_id: telemetrySessionId,
-                userToken: userToken ? String(userToken) : undefined,
-                ...event,
-              },
-            ],
-          } as any);
+          (insightsClientWithLocalCredentials as any)('sendEvents', [
+            {
+              eventType: 'instantsearch_telemetry',
+              timestamp: Date.now(),
+              session_id: telemetrySessionId,
+              userToken: userToken ? String(userToken) : undefined,
+              ...event,
+            },
+          ]);
         }
 
         // Defer by a tick so the measurement is taken after `start()`
@@ -555,4 +552,3 @@ function normalizeUserToken(userToken?: string | number): string | undefined {
 
   return typeof userToken === 'number' ? userToken.toString() : userToken;
 }
-
