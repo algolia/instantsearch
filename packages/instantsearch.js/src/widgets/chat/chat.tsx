@@ -54,6 +54,7 @@ import type {
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
+  ChatEmptyProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
@@ -319,6 +320,9 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
+    emptyComponent:
+      | ((props: ChatEmptyProps) => JSX.Element)
+      | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
@@ -332,6 +336,8 @@ type ChatWrapperProps = {
     };
     translations: Partial<ChatMessagesTranslations>;
     messageTranslations: Partial<ChatMessageProps['translations']>;
+    sendMessage: ChatLayoutOwnProps['sendMessage'];
+    setInput: (input: string) => void;
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -435,11 +441,14 @@ function ChatWrapper({
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
+        emptyComponent: messagesProps.emptyComponent,
         actionsComponent: messagesProps.actionsComponent,
         assistantMessageProps: messagesProps.assistantMessageProps,
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
+        sendMessage: messagesProps.sendMessage,
+        setInput: messagesProps.setInput,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -659,6 +668,25 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
               templateKey="error"
               rootTagName="div"
               data={errorProps}
+            />
+          );
+        }
+      : undefined;
+    const emptyTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'empty'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { empty: templates.empty },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesEmptyComponent = templates.empty
+      ? (emptyProps: ChatEmptyProps) => {
+          return (
+            <TemplateComponent
+              {...emptyTemplateProps}
+              templateKey="empty"
+              rootTagName="div"
+              data={emptyProps}
             />
           );
         }
@@ -923,6 +951,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           messagesProps={{
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
+            emptyComponent: messagesEmptyComponent,
             actionsComponent,
             assistantMessageProps: {
               leadingComponent: assistantMessageLeadingComponent,
@@ -934,6 +963,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             },
             translations: messagesTranslations,
             messageTranslations,
+            sendMessage,
+            setInput,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
@@ -1200,6 +1231,11 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       actions: ChatMessageActionProps[];
       message: ChatMessageBase;
     }>;
+
+    /**
+     * Template to use for the empty screen shown when there are no messages
+     */
+    empty?: Template<ChatEmptyProps>;
 
     /**
      * Template to use for prompt suggestions.

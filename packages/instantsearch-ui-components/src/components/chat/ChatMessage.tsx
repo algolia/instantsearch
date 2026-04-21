@@ -211,6 +211,12 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'text') {
+        if (
+          part.text.startsWith('<context>') &&
+          part.text.endsWith('</context>')
+        ) {
+          return null;
+        }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
           disableParsingRawHTML: true,

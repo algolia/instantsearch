@@ -32,7 +32,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -112,6 +112,10 @@ export type ChatMessagesProps<
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
+   * Custom empty component shown when there are no messages
+   */
+  emptyComponent?: (props: ChatEmptyProps) => JSX.Element;
+  /**
    * Custom actions component
    */
   actionsComponent?: ChatMessageProps['actionsComponent'];
@@ -143,6 +147,14 @@ export type ChatMessagesProps<
    * Function to close the chat
    */
   onClose: () => void;
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
   /**
    * Optional class names
    */
@@ -363,6 +375,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      emptyComponent: EmptyComponent,
       actionsComponent: ActionsComponent,
       tools,
       indexUiState,
@@ -371,6 +384,8 @@ export function createChatMessagesComponent({
       hideScrollToBottom = false,
       onReload,
       onClose,
+      sendMessage,
+      setInput,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -415,6 +430,9 @@ export function createChatMessagesComponent({
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     const showLoader = getShowLoader(status, lastPart, tools);
 
+    const showEmpty =
+      messages.length === 0 && !showLoader && !isClearing && status !== 'error';
+
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
@@ -443,6 +461,15 @@ export function createChatMessagesComponent({
               }
             }}
           >
+            {showEmpty && EmptyComponent && (
+              <EmptyComponent
+                sendMessage={sendMessage}
+                setInput={setInput}
+                status={status}
+                onClose={onClose}
+              />
+            )}
+
             {messages.map((message, index) => (
               <DefaultMessage
                 key={message.id}

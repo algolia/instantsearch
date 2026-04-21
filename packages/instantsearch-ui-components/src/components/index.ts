@@ -10,6 +10,7 @@ export * from './chat/ChatMessage';
 export * from './chat/ChatMessages';
 export * from './chat/ChatMessageLoader';
 export * from './chat/ChatMessageError';
+export * from './chat/ChatGreeting';
 export * from './chat/ChatPrompt';
 export * from './chat/ChatPromptSuggestions';
 export * from './chat/ChatToggleButton';
