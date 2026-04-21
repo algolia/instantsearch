@@ -512,3 +512,23 @@ export type UserClientSideTool = Omit<
   'addToolResult' | 'applyFilters' | 'sendEvent'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
+
+export type ChatEmptyProps = {
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Current chat status
+   */
+  status?: ChatStatus;
+  /**
+   * Callback to close the chat
+   */
+  onClose?: () => void;
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
+};
+
