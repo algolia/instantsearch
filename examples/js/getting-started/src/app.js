@@ -46,6 +46,7 @@ const productItemTemplate = (item, { html }) => html`
 search.addWidgets([
   searchBox({
     container: '#searchbox',
+    aiMode: true,
   }),
   panel({
     templates: { header: 'Current Refinements' },

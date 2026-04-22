@@ -74,6 +74,15 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    * - Tab key doesn't close panel
    */
   isDetached?: boolean;
+  /**
+   * Whether the panel should be hidden even when open
+   * (e.g., when all sources are empty and there's no custom content to show).
+   */
+  shouldHidePanel?: boolean;
+  /**
+   * Whether the input should be focused and the panel open initially.
+   */
+  autoFocus?: boolean;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -109,11 +118,13 @@ export function createAutocompletePropGetters({
     onSubmit,
     placeholder,
     isDetached = false,
+    shouldHidePanel = false,
+    autoFocus = false,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const inputRef = useRef<HTMLInputElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(autoFocus);
     const [activeDescendant, setActiveDescendant] = useState<
       string | undefined
     >(undefined);
@@ -147,12 +158,10 @@ export function createAutocompletePropGetters({
 
     const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
-        case 'ArrowLeft':
         case 'ArrowUp': {
           const prevIndex = itemsIds.indexOf(activeDescendant || '') - 1;
           return itemsIds[prevIndex] || itemsIds[itemsIds.length - 1];
         }
-        case 'ArrowRight':
         case 'ArrowDown': {
           const nextIndex = itemsIds.indexOf(activeDescendant || '') + 1;
           return itemsIds[nextIndex] || itemsIds[0];
@@ -176,7 +185,7 @@ export function createAutocompletePropGetters({
 
       const actualDescendant = override.activeDescendant ?? activeDescendant;
 
-      if (!actualDescendant && override.query) {
+      if (!actualDescendant && override.query !== undefined) {
         onRefine(override.query);
       }
 
@@ -203,6 +212,7 @@ export function createAutocompletePropGetters({
         id: getElementId('input'),
         ref: inputRef,
         role: 'combobox',
+        autoFocus,
         'aria-autocomplete': 'list',
         'aria-expanded': isOpen,
         'aria-haspopup': 'grid',
@@ -221,9 +231,7 @@ export function createAutocompletePropGetters({
               }
               break;
             }
-            case 'ArrowLeft':
             case 'ArrowUp':
-            case 'ArrowRight':
             case 'ArrowDown': {
               setIsOpen(true);
 
@@ -285,7 +293,7 @@ export function createAutocompletePropGetters({
         };
       },
       getPanelProps: () => ({
-        hidden: !isOpen,
+        hidden: !isOpen || shouldHidePanel,
         id: getElementId('panel'),
         role: 'grid',
         'aria-labelledby': getElementId('input'),

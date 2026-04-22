@@ -147,7 +147,7 @@ export function createSearchIndexToolComponent<
       itemComponent: ItemComponent,
       headerComponent: HeaderComponent,
       getSearchPageURL,
-      toolProps: { message, applyFilters, onClose },
+      toolProps: { message, applyFilters, onClose, sendEvent },
       headerProps: { showViewAll },
     } = userProps;
 
@@ -155,6 +155,7 @@ export function createSearchIndexToolComponent<
       | {
           query: string;
           number_of_results?: number;
+          facet_filters?: string[][];
         }
       | undefined;
 
@@ -162,10 +163,17 @@ export function createSearchIndexToolComponent<
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
+          queryID?: string;
         }
       | undefined;
 
-    const items = output?.hits || [];
+    const hitsPerPage =
+      (input?.number_of_results ?? output?.hits?.length) || 5;
+    const items = (output?.hits || []).map((hit, idx) => ({
+      ...hit,
+      __position: idx + 1,
+      ...(output?.queryID ? { __queryID: output.queryID } : {}),
+    }));
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -198,7 +206,7 @@ export function createSearchIndexToolComponent<
             showViewAll={showViewAll}
             nbHits={output?.nbHits}
             input={input}
-            hitsPerPage={items.length}
+            hitsPerPage={hitsPerPage}
             applyFilters={applyFilters}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
@@ -212,7 +220,7 @@ export function createSearchIndexToolComponent<
           showViewAll={showViewAll}
           nbHits={output?.nbHits}
           input={input}
-          hitsPerPage={items.length}
+          hitsPerPage={hitsPerPage}
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
@@ -224,7 +232,7 @@ export function createSearchIndexToolComponent<
       HeaderComponent,
       output?.nbHits,
       input,
-      items.length,
+      hitsPerPage,
       applyFilters,
       getSearchPageURL,
       onClose,
@@ -237,7 +245,7 @@ export function createSearchIndexToolComponent<
         itemComponent={ItemComponent}
         headerComponent={MemoedHeaderComponent}
         showNavigation={false}
-        sendEvent={() => {}}
+        sendEvent={sendEvent}
       />
     );
   };

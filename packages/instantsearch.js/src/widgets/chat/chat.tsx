@@ -41,9 +41,11 @@ import type {
   ChatClassNames,
   ChatHeaderProps,
   ChatHeaderTranslations,
+  ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
+  ChatEmptyProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
@@ -90,6 +92,7 @@ function createDefaultTools<
 }
 
 type ChatWrapperProps = {
+  layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
@@ -102,9 +105,12 @@ type ChatWrapperProps = {
   sendMessage: ChatRenderState['sendMessage'];
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
+  error: ChatRenderState['error'];
   isClearing: boolean;
   clearMessages: () => void;
   onClearTransitionEnd: () => void;
+  onFeedback?: ChatRenderState['sendChatMessageFeedback'];
+  feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
   toggleButtonProps: {
     layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
@@ -125,6 +131,9 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
+    emptyComponent:
+      | ((props: ChatEmptyProps) => JSX.Element)
+      | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
@@ -138,6 +147,8 @@ type ChatWrapperProps = {
     };
     translations: Partial<ChatMessagesTranslations>;
     messageTranslations: Partial<ChatMessageProps['translations']>;
+    sendMessage: ChatLayoutOwnProps['sendMessage'];
+    setInput: (input: string) => void;
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -155,6 +166,7 @@ type ChatWrapperProps = {
 };
 
 function ChatWrapper({
+  layoutComponent,
   cssClasses,
   chatOpen,
   setChatOpen,
@@ -167,9 +179,12 @@ function ChatWrapper({
   sendMessage,
   regenerate,
   stop,
+  error,
   isClearing,
   clearMessages,
   onClearTransitionEnd,
+  onFeedback,
+  feedbackState,
   toolsForUi,
   toggleButtonProps,
   headerProps,
@@ -190,9 +205,14 @@ function ChatWrapper({
 
   return (
     <Chat
+      layoutComponent={layoutComponent}
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
+      sendMessage={sendMessage}
+      regenerate={regenerate}
+      stop={stop}
+      error={error}
       toggleButtonComponent={toggleButtonProps.layoutComponent}
       toggleButtonProps={{
         open: chatOpen,
@@ -218,6 +238,8 @@ function ChatWrapper({
         status: chatStatus,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
+        onFeedback,
+        feedbackState,
         messages: chatMessages,
         indexUiState,
         isClearing,
@@ -230,11 +252,14 @@ function ChatWrapper({
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
+        emptyComponent: messagesProps.emptyComponent,
         actionsComponent: messagesProps.actionsComponent,
         assistantMessageProps: messagesProps.assistantMessageProps,
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
+        sendMessage: messagesProps.sendMessage,
+        setInput: messagesProps.setInput,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -279,6 +304,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
+  let wasOpen = false;
 
   // eslint-disable-next-line complexity
   return (props, isFirstRendering) => {
@@ -301,6 +327,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
+      sendChatMessageFeedback: onFeedback,
+      feedbackState,
     } = props;
 
     if (__DEV__ && error) {
@@ -318,7 +346,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
-      const widgetTool = tools[key];
+      let widgetTool = tools[key];
+
+      // Compatibility shim with Algolia MCP Server search tool
+      if (!widgetTool && key.startsWith(`${SearchIndexToolType}_`)) {
+        widgetTool = tools[SearchIndexToolType];
+      }
 
       toolsForUi[key] = {
         ...connectorTool,
@@ -439,6 +472,25 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
               templateKey="error"
               rootTagName="div"
               data={errorProps}
+            />
+          );
+        }
+      : undefined;
+    const emptyTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'empty'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { empty: templates.empty },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesEmptyComponent = templates.empty
+      ? (emptyProps: ChatEmptyProps) => {
+          return (
+            <TemplateComponent
+              {...emptyTemplateProps}
+              templateKey="empty"
+              rootTagName="div"
+              data={emptyProps}
             />
           );
         }
@@ -628,11 +680,47 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
+    const layoutTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'layout'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { layout: templates.layout },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const layoutComponent = templates.layout
+      ? (layoutProps: ChatLayoutOwnProps) => {
+          const {
+            headerComponent,
+            messagesComponent,
+            promptComponent,
+            toggleButtonComponent,
+            ...restLayoutProps
+          } = layoutProps;
+          return (
+            <TemplateComponent
+              {...layoutTemplateProps}
+              templateKey="layout"
+              rootTagName="fragment"
+              data={{
+                ...restLayoutProps,
+                templates: {
+                  header: () => headerComponent,
+                  messages: () => messagesComponent,
+                  prompt: () => promptComponent,
+                  toggleButton: () => toggleButtonComponent,
+                },
+              }}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
       render(
         <ChatWrapper
+          layoutComponent={layoutComponent}
           cssClasses={cssClasses}
           chatOpen={open}
           setChatOpen={setOpen}
@@ -645,9 +733,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           sendMessage={sendMessage}
           regenerate={regenerate}
           stop={stop}
+          error={error}
           isClearing={isClearing}
           clearMessages={clearMessages}
           onClearTransitionEnd={onClearTransitionEnd}
+          onFeedback={onFeedback}
+          feedbackState={feedbackState}
           toolsForUi={toolsForUi}
           toggleButtonProps={{
             layoutComponent: toggleButtonLayoutComponent,
@@ -664,6 +755,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           messagesProps={{
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
+            emptyComponent: messagesEmptyComponent,
             actionsComponent,
             assistantMessageProps: {
               leadingComponent: assistantMessageLeadingComponent,
@@ -675,6 +767,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             },
             translations: messagesTranslations,
             messageTranslations,
+            sendMessage,
+            setInput,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
@@ -696,7 +790,17 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       );
     }
 
+    const shouldFocusPrompt = !wasOpen && open;
+
     rerender();
+
+    if (shouldFocusPrompt) {
+      window.requestAnimationFrame(() => {
+        promptRef.current?.focus();
+      });
+    }
+
+    wasOpen = open;
   };
 };
 
@@ -720,8 +824,28 @@ export type Tools = UserClientSideToolsWithTemplate;
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
 
+export type ChatLayoutTemplateData = Omit<
+  ChatLayoutOwnProps,
+  | 'headerComponent'
+  | 'messagesComponent'
+  | 'promptComponent'
+  | 'toggleButtonComponent'
+> & {
+  templates: {
+    header: () => JSX.Element;
+    messages: () => JSX.Element;
+    prompt: () => JSX.Element;
+    toggleButton: () => JSX.Element;
+  };
+};
+
 export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
   Partial<{
+    /**
+     * Custom layout template for the chat widget.
+     */
+    layout: Template<ChatLayoutTemplateData>;
+
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
@@ -910,6 +1034,11 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
 
     /**
+     * Template to use for the empty screen shown when there are no messages
+     */
+    empty?: Template<ChatEmptyProps>;
+
+    /**
      * Template to use for prompt suggestions.
      */
     suggestions: Template<{
@@ -956,7 +1085,7 @@ export type ChatWidget = WidgetFactory<
 
 const defaultTemplates: ChatTemplates = {
   item(item) {
-    return JSON.stringify(item, null, 2);
+    return <Fragment>{JSON.stringify(item, null, 2)}</Fragment>;
   },
 };
 

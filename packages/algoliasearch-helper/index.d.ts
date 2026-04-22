@@ -1,6 +1,6 @@
 import EventEmitter from '@algolia/events';
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+// eslint-disable-next-line typescript/consistent-type-imports
 import type {
   FindAnswersResponse,
   FrequentlyBoughtTogetherQuery,

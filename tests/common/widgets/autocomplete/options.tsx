@@ -123,12 +123,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -196,13 +196,13 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: true,
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: true,
@@ -297,7 +297,7 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: {
@@ -307,7 +307,7 @@ export function createOptionsTests(
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: {
@@ -607,6 +607,22 @@ export function createOptionsTests(
         selectedItem!.id
       );
 
+      // ArrowRight should not navigate items
+      await act(async () => {
+        userEvent.keyboard('{ArrowRight}');
+        await wait(0);
+      });
+
+      expect(selectedItem!.textContent).toBe('Item 1');
+
+      // ArrowLeft should not navigate items
+      await act(async () => {
+        userEvent.keyboard('{ArrowLeft}');
+        await wait(0);
+      });
+
+      expect(selectedItem!.textContent).toBe('Item 1');
+
       await act(async () => {
         userEvent.keyboard('{ArrowUp}');
         await wait(0);
@@ -700,6 +716,138 @@ export function createOptionsTests(
           }),
         },
       ]);
+    });
+
+    test('only triggers one search when typing, not a duplicate on the parent', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      (searchClient.search as jest.Mock).mockClear();
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        await userEvent.click(input);
+        await userEvent.paste(input, 'hello');
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              query: 'hello',
+            }),
+          }),
+        ])
+      );
+    });
+
+    test('triggers a search on the parent index when submitting', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        await userEvent.click(input);
+        await userEvent.paste(input, 'hello');
+        await wait(0);
+      });
+
+      (searchClient.search as jest.Mock).mockClear();
+
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.length
+      ).toBeGreaterThanOrEqual(2);
     });
 
     test('closes the panel then blurs the input when pressing enter', async () => {
@@ -938,6 +1086,71 @@ export function createOptionsTests(
       ]);
     });
 
+    test('does not show the submitted query after clearing the input', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      // Type and submit a query
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'hello');
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      // Clear the input by typing
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.clear(input);
+        await wait(0);
+      });
+
+      expect(input).toHaveValue('');
+    });
+
     test('refocuses the input after clearing the query', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
@@ -1120,12 +1333,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -1211,6 +1424,66 @@ export function createOptionsTests(
       expect(input).toHaveFocus();
     });
 
+    test('focuses the input and opens the panel when autofocus is set', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [{ objectID: '1', name: 'Item 1' }],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            autofocus: true,
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            autoFocus: true,
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      try {
+        // For IS.js, jsdom does not implement autofocus so we test the attribute
+        expect(input).toHaveAttribute('autofocus');
+      } catch {
+        // For React, it doesn't set the `autofocus` attribute but polyfills it
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(input).toHaveFocus();
+      }
+
+      // Panel should be open initially
+      const panel = document.querySelector('.ais-AutocompletePanel');
+      expect(panel).not.toHaveAttribute('hidden');
+    });
+
     test('applies query suggestions when clicking on the fill action button', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
@@ -1231,12 +1504,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -1806,7 +2079,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             javascript: {
-              showSuggestions: {
+              showQuerySuggestions: {
                 indexName: 'query_suggestions',
               },
               indices: [
@@ -1833,7 +2106,7 @@ export function createOptionsTests(
               },
             },
             react: {
-              showSuggestions: {
+              showQuerySuggestions: {
                 indexName: 'query_suggestions',
               },
               indices: [
@@ -2051,6 +2324,530 @@ export function createOptionsTests(
         );
         expect(selectedItem).not.toBeNull();
         expect(selectedItem!.textContent).toBe('Item 1');
+      });
+    });
+
+    describe('prompt suggestions', () => {
+      test('renders prompt suggestions', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [
+                { objectID: '1', prompt: 'What is the best product?' },
+                { objectID: '2', prompt: 'How do I get started?' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePromptSuggestions')
+        ).toBeInTheDocument();
+
+        const promptItems = document.querySelectorAll(
+          '.ais-AutocompletePromptSuggestionsItem'
+        );
+        expect(promptItems).toHaveLength(2);
+        expect(promptItems[0]).toHaveTextContent('What is the best product?');
+        expect(promptItems[1]).toHaveTextContent('How do I get started?');
+      });
+
+      test('renders prompt suggestions with custom search parameters', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                searchParameters: {
+                  hitsPerPage: 5,
+                },
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                searchParameters: {
+                  hitsPerPage: 5,
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              indexName: 'prompt_suggestions',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('renders prompt suggestions alongside query suggestions', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [
+                { objectID: '1', query: 'laptop' },
+                { objectID: '2', query: 'phone' },
+              ],
+            }),
+            // @ts-expect-error - ignore second response type
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [
+                { objectID: '1', prompt: 'What is the best laptop?' },
+                { objectID: '2', prompt: 'Compare phones' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            react: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Query suggestions should be rendered
+        const querySuggestionItems = document.querySelectorAll(
+          '.ais-AutocompleteSuggestionsItem'
+        );
+        expect(querySuggestionItems).toHaveLength(2);
+
+        // Prompt suggestions should be rendered
+        const promptSuggestionItems = document.querySelectorAll(
+          '.ais-AutocompletePromptSuggestionsItem'
+        );
+        expect(promptSuggestionItems).toHaveLength(2);
+      });
+
+      test('renders prompt suggestions with custom CSS classes', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                cssClasses: {
+                  root: 'custom-root',
+                  list: 'custom-list',
+                  item: 'custom-item',
+                },
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                classNames: {
+                  root: 'custom-root',
+                  list: 'custom-list',
+                  item: 'custom-item',
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestions.custom-root'
+          )
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestionsList.custom-list'
+          )
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestionsItem.custom-item'
+          )
+        ).toBeInTheDocument();
+      });
+
+      test('exposes prompt suggestions in custom panel', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [{ objectID: '1', query: 'laptop' }],
+            }),
+            // @ts-expect-error - ignore second response type
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best laptop?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+              templates: {
+                panel: ({ elements }, { html }) => html`
+                  <div>
+                    <div class="left">${elements.suggestions}</div>
+                    <div class="right">${elements.promptSuggestions}</div>
+                  </div>
+                `,
+              },
+            },
+            react: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+              panelComponent: ({ elements }) => (
+                <div>
+                  <div className="left">{elements.suggestions}</div>
+                  <div className="right">{elements.promptSuggestions}</div>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Verify that prompt suggestions are in the "right" section
+        const rightSection = document.querySelector('.right');
+        expect(rightSection).toBeInTheDocument();
+        expect(
+          rightSection!.querySelector('.ais-AutocompletePromptSuggestions')
+        ).toBeInTheDocument();
+        expect(
+          rightSection!.querySelector('.ais-AutocompletePromptSuggestionsItem')
+        ).toHaveTextContent('What is the best laptop?');
+
+        // Verify that query suggestions are in the "left" section
+        const leftSection = document.querySelector('.left');
+        expect(leftSection).toBeInTheDocument();
+        expect(
+          leftSection!.querySelector('.ais-AutocompleteSuggestions')
+        ).toBeInTheDocument();
+      });
+    });
+
+    describe('noResults', () => {
+      test('renders noResults template when index returns empty hits', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).toHaveTextContent('No results found');
+        expect(
+          document.querySelectorAll('.ais-AutocompleteIndexItem')
+        ).toHaveLength(0);
+      });
+
+      test('does not render noResults when index has hits', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelectorAll('.ais-AutocompleteIndexItem')
+        ).toHaveLength(1);
+      });
+
+      test('hides panel when all indices are empty and no noResults template exists', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Focus the input to open the panel
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        const panel = document.querySelector('.ais-AutocompletePanel');
+        expect(panel).toBeInTheDocument();
+        expect(panel).toHaveAttribute('aria-hidden', 'true');
+      });
+
+      test('keeps panel visible when all indices are empty but noResults template exists', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Focus the input to open the panel
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        const panel = document.querySelector('.ais-AutocompletePanel');
+        expect(panel).toBeInTheDocument();
+        expect(panel).not.toHaveAttribute('aria-hidden', 'true');
       });
     });
   });

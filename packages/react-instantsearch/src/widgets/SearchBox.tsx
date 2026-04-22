@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
+import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { UseSearchBoxProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
@@ -13,6 +14,7 @@ type UiProps = Pick<
   | 'onChange'
   | 'onReset'
   | 'onSubmit'
+  | 'onAiModeClick'
   | 'value'
   | 'autoFocus'
   | 'translations'
@@ -34,6 +36,12 @@ export type SearchBoxProps = Omit<
      * @default false
      */
     ignoreCompositionEvents?: boolean;
+    /**
+     * When true, renders an AI mode button inside the search box
+     * that opens the Chat widget and sends the current query.
+     * Requires a Chat widget on the same index.
+     */
+    aiMode?: boolean;
     translations?: Partial<UiProps['translations']>;
   };
 
@@ -41,6 +49,7 @@ export function SearchBox({
   queryHook,
   searchAsYouType = true,
   ignoreCompositionEvents = false,
+  aiMode,
   translations,
   ...props
 }: SearchBoxProps) {
@@ -48,6 +57,7 @@ export function SearchBox({
     { queryHook },
     { $$widgetType: 'ais.searchBox' }
   );
+  const { indexRenderState } = useInstantSearch();
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -100,10 +110,25 @@ export function SearchBox({
     onChange,
     onReset,
     onSubmit,
+    onAiModeClick: aiMode
+      ? () => {
+          const chatRenderState = indexRenderState.chat as
+            | Partial<ChatRenderState>
+            | undefined;
+
+          if (chatRenderState) {
+            chatRenderState.setOpen?.(true);
+            if (inputValue.trim()) {
+              chatRenderState.sendMessage?.({ text: inputValue });
+            }
+          }
+        }
+      : undefined,
     value: inputValue,
     translations: {
       submitButtonTitle: 'Submit the search query',
       resetButtonTitle: 'Clear the search query',
+      aiModeButtonTitle: 'AI Mode',
       ...translations,
     },
   };

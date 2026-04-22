@@ -10,6 +10,7 @@ import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
+  ChatStatus,
   ChatToolMessage,
   ClientSideTools,
 } from './types';
@@ -84,6 +85,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   message: ChatMessageBase;
   /**
+   * The status of the message (e.g. whether it's still streaming)
+   */
+  status: ChatStatus;
+  /**
    * The side of the message
    */
   side?: ChatMessageSide;
@@ -144,6 +149,9 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   translations?: Partial<ChatMessageTranslations>;
 };
 
+// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
+const SearchIndexToolType = 'algolia_search_index';
+
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
@@ -151,6 +159,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const {
       classNames = {},
       message,
+      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -174,7 +183,9 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     const hasLeading = Boolean(LeadingComponent);
-    const hasActions = Boolean(actions.length > 0 || ActionsComponent);
+
+    const showActions =
+      Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
 
     const cssClasses: ChatMessageClassNames = {
       root: cx(
@@ -200,6 +211,12 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'text') {
+        if (
+          part.text.startsWith('<context>') &&
+          part.text.endsWith('</context>')
+        ) {
+          return null;
+        }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
           disableParsingRawHTML: true,
@@ -208,7 +225,12 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       }
       if (startsWith(part.type, 'tool-')) {
         const toolName = part.type.replace('tool-', '');
-        const tool = tools[toolName];
+        let tool = tools[toolName];
+
+        // Compatibility shim with Algolia MCP Server search tool
+        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
+          tool = tools[SearchIndexToolType];
+        }
 
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
@@ -236,6 +258,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
+                sendEvent={tool.sendEvent || (() => {})}
                 onClose={onClose}
               />
             </div>
@@ -265,7 +288,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
             {suggestionsElement}
 
-            {hasActions && (
+            {showActions && (
               <div
                 className={cx(cssClasses.actions)}
                 aria-label={translations.actionsLabel}

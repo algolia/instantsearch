@@ -3,6 +3,74 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.4...react-instantsearch-nextjs@1.1.5) (2026-04-21)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.1.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.3...react-instantsearch-nextjs@1.1.4) (2026-03-31)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.1.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.2...react-instantsearch-nextjs@1.1.3) (2026-03-24)
+
+
+### Bug Fixes
+
+* **next:** import headers statically ([#6936](https://github.com/algolia/instantsearch/issues/6936)) ([ee49f25](https://github.com/algolia/instantsearch/commit/ee49f25a4f307a2e50096fcbb74c70ac59f3b2e7)), closes [#6886](https://github.com/algolia/instantsearch/issues/6886) [#6934](https://github.com/algolia/instantsearch/issues/6934)
+
+
+
+
+
+## [1.1.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.1...react-instantsearch-nextjs@1.1.2) (2026-03-16)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.1.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.0...react-instantsearch-nextjs@1.1.1) (2026-03-10)
+
+
+### Bug Fixes
+
+* **build:** correct cjs interop ([#6915](https://github.com/algolia/instantsearch/issues/6915)) ([366e8a7](https://github.com/algolia/instantsearch/commit/366e8a7f586e470c8485c1b86b722ff73a92dc43)), closes [#6914](https://github.com/algolia/instantsearch/issues/6914) [#8668](https://github.com/algolia/instantsearch/issues/8668)
+
+
+
+
+
+# [1.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.16...react-instantsearch-nextjs@1.1.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
+## [1.0.16](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.15...react-instantsearch-nextjs@1.0.16) (2026-02-24)
+
+
+### Bug Fixes
+
+* **next:** remove experimental warning ([#6909](https://github.com/algolia/instantsearch/issues/6909)) ([d624f06](https://github.com/algolia/instantsearch/commit/d624f064259d892ca4902cb0cd44f7cd393ca1e6))
+
+
+
+
+
 ## [1.0.15](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.14...react-instantsearch-nextjs@1.0.15) (2026-02-17)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

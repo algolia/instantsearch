@@ -19,6 +19,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
+        status="ready"
         tools={{}}
         onClose={jest.fn()}
       />
@@ -55,6 +56,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [],
         }}
+        status="ready"
         classNames={{
           root: 'root',
           container: 'container',
@@ -100,6 +102,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
+          status="ready"
           tools={{}}
           onClose={jest.fn()}
         />
@@ -111,6 +114,7 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
+          status="ready"
           tools={{}}
           onClose={jest.fn()}
         />
@@ -122,6 +126,7 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
+          status="ready"
           tools={{}}
           onClose={jest.fn()}
         />
@@ -201,6 +206,33 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('does not render context text parts', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [
+            {
+              type: 'text',
+              text: '<context>{"currentPage":"https://example.com/products","userLocale":"en-US"}</context>',
+            },
+            { type: 'text', text: 'Hello' },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.textContent).toBe('Hello');
+    expect(container.textContent).not.toContain('example.com');
+    expect(container.textContent).not.toContain('context');
+  });
+
   test('renders with tools', () => {
     const { container } = render(
       <ChatMessage
@@ -219,6 +251,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
+        status="ready"
         tools={{
           test_tool: {
             layoutComponent: ({ message }) => (

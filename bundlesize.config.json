@@ -2,7 +2,7 @@
   "files": [
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
-      "maxSize": "42.25 kB"
+      "maxSize": "43 kB"
     },
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
@@ -10,31 +10,31 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "119 kB"
+      "maxSize": "122.75 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "240.50 kB"
+      "maxSize": "254.5 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "61.50 kB"
+      "maxSize": "61.5 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
-      "maxSize": "98.5 kB"
+      "maxSize": "99 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "80 kB"
+      "maxSize": "73 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "80 kB"
+      "maxSize": "73.25 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
-      "maxSize": "20.50 kB"
+      "maxSize": "20.5 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/cjs/index.js",
@@ -42,43 +42,51 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "9.75 kB"
+      "maxSize": "10.5 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "9.25 kB"
-    },
-    {
-      "path": "./packages/instantsearch.css/themes/reset.css",
-      "maxSize": "1.50 kB"
-    },
-    {
-      "path": "./packages/instantsearch.css/themes/reset-min.css",
-      "maxSize": "1.50 kB"
-    },
-    {
-      "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "10.75 kB"
-    },
-    {
-      "path": "./packages/instantsearch.css/themes/satellite-min.css",
       "maxSize": "10 kB"
     },
     {
+      "path": "./packages/instantsearch.css/themes/reset.css",
+      "maxSize": "1.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/reset-min.css",
+      "maxSize": "1.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/nova.css",
+      "maxSize": "10.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/nova-min.css",
+      "maxSize": "10 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite.css",
+      "maxSize": "11.5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/themes/satellite-min.css",
+      "maxSize": "10.75 kB"
+    },
+    {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "5.25 kB"
+      "maxSize": "6 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",
-      "maxSize": "5 kB"
+      "maxSize": "5.5 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete.css",
-      "maxSize": "4.25 kB"
+      "maxSize": "4.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete-min.css",
-      "maxSize": "3.75 kB"
+      "maxSize": "4.25 kB"
     }
   ]
 }

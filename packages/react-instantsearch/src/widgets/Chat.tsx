@@ -6,7 +6,15 @@ import {
   MemorySearchToolType,
   PonderToolType,
 } from 'instantsearch.js/es/lib/chat';
-import React, { createElement, Fragment } from 'react';
+import React, {
+  createElement,
+  Fragment,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
@@ -24,6 +32,7 @@ export {
 import type {
   Pragma,
   ChatProps as ChatUiProps,
+  ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -73,6 +82,11 @@ type UiProps = Pick<
   | 'headerComponent'
   | 'promptComponent'
   | 'suggestionsComponent'
+  | 'layoutComponent'
+  | 'sendMessage'
+  | 'regenerate'
+  | 'stop'
+  | 'error'
 >;
 
 type UserToggleButtonProps = Omit<
@@ -108,7 +122,7 @@ export type Tools = UserClientSideTools;
 
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
-  keyof UiProps
+  keyof UiProps | 'ref'
 > &
   UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
@@ -118,6 +132,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
     toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
     toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
     headerComponent?: ChatUiProps['headerComponent'];
@@ -130,6 +145,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
@@ -144,40 +160,51 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     }>;
   };
 
-export function Chat<
+export type ChatHandle = {
+  setOpen: (open: boolean) => void;
+  sendMessage: (params: { text: string }) => void;
+  setInput: (input: string) => void;
+};
+
+function ChatInner<
   TObject extends RecordWithObjectID,
   TUiMessage extends UIMessage
->({
-  tools: userTools,
-  toggleButtonProps,
-  headerProps,
-  messagesProps,
-  promptProps,
-  itemComponent,
-  toggleButtonComponent,
-  toggleButtonIconComponent,
-  headerComponent,
-  headerTitleIconComponent,
-  headerCloseIconComponent,
-  headerMinimizeIconComponent,
-  headerMaximizeIconComponent,
-  messagesLoaderComponent,
-  messagesErrorComponent,
-  promptComponent,
-  promptHeaderComponent,
-  promptFooterComponent,
-  assistantMessageLeadingComponent,
-  assistantMessageFooterComponent,
-  userMessageLeadingComponent,
-  userMessageFooterComponent,
-  actionsComponent,
-  suggestionsComponent,
-  classNames,
-  translations = {},
-  title,
-  getSearchPageURL,
-  ...props
-}: ChatProps<TObject, TUiMessage>) {
+>(
+  {
+    tools: userTools,
+    toggleButtonProps,
+    headerProps,
+    messagesProps,
+    promptProps,
+    itemComponent,
+    layoutComponent,
+    toggleButtonComponent,
+    toggleButtonIconComponent,
+    headerComponent,
+    headerTitleIconComponent,
+    headerCloseIconComponent,
+    headerMinimizeIconComponent,
+    headerMaximizeIconComponent,
+    messagesLoaderComponent,
+    messagesErrorComponent,
+    promptComponent,
+    promptHeaderComponent,
+    promptFooterComponent,
+    assistantMessageLeadingComponent,
+    assistantMessageFooterComponent,
+    userMessageLeadingComponent,
+    userMessageFooterComponent,
+    emptyComponent,
+    actionsComponent,
+    suggestionsComponent,
+    classNames,
+    translations = {},
+    title,
+    getSearchPageURL,
+    ...props
+  }: ChatProps<TObject, TUiMessage>,
+  ref: React.ForwardedRef<ChatHandle>
+) {
   const {
     prompt: promptTranslations,
     header: headerTranslations,
@@ -187,9 +214,9 @@ export function Chat<
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
-  const [maximized, setMaximized] = React.useState(false);
+  const [maximized, setMaximized] = useState(false);
 
-  const promptRef = React.useRef<HTMLTextAreaElement>(null);
+  const promptRef = useRef<HTMLTextAreaElement>(null);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -197,7 +224,7 @@ export function Chat<
       resize: 'smooth',
     });
 
-  const tools = React.useMemo(() => {
+  const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
     return { ...defaults, ...userTools };
@@ -224,7 +251,28 @@ export function Chat<
     onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
+    sendChatMessageFeedback: onFeedback,
+    feedbackState,
   } = chatState;
+
+  useImperativeHandle(ref, () => ({
+    setOpen,
+    sendMessage: (params: { text: string }) => sendMessage(params),
+    setInput,
+  }));
+
+  const wasOpenRef = useRef(false);
+  useEffect(() => {
+    const shouldFocusPrompt = !wasOpenRef.current && open;
+
+    if (shouldFocusPrompt) {
+      window.requestAnimationFrame(() => {
+        promptRef.current?.focus();
+      });
+    }
+
+    wasOpenRef.current = open;
+  }, [open]);
 
   if (__DEV__ && error) {
     throw error;
@@ -235,6 +283,11 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
+      sendMessage={sendMessage as ChatUiProps['sendMessage']}
+      regenerate={regenerate}
+      stop={stop}
+      error={error}
+      layoutComponent={layoutComponent}
       headerComponent={headerComponent}
       promptComponent={promptComponent}
       toggleButtonComponent={toggleButtonComponent}
@@ -262,6 +315,10 @@ export function Chat<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage: sendMessage as ChatUiProps['sendMessage'],
+        setInput,
+        onFeedback,
+        feedbackState,
         messages,
         tools: toolsFromConnector,
         indexUiState,
@@ -274,6 +331,7 @@ export function Chat<
         onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
+        emptyComponent: emptyComponent,
         actionsComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
@@ -318,3 +376,10 @@ export function Chat<
     />
   );
 }
+
+export const Chat = React.forwardRef(ChatInner) as <
+  TObject extends RecordWithObjectID = RecordWithObjectID,
+  TUiMessage extends UIMessage = UIMessage
+>(
+  props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
+) => React.ReactElement | null;

@@ -3,11 +3,15 @@
 @use '../shared/_common';
 @use 'button';
 @use 'chat/chat';
+@use 'chat/chat-overlay-layout';
+@use 'chat/chat-inline-layout';
+@use 'chat/chat-sidepanel-layout';
 @use 'chat/chat-toggle-button';
 @use 'chat/chat-header';
 @use 'chat/chat-messages';
 @use 'chat/chat-message';
 @use 'chat/chat-message-loader';
+@use 'chat/chat-greeting';
 @use 'chat/chat-prompt';
 @use 'chat/chat-carousel';
 @use 'chat/chat-suggestions';

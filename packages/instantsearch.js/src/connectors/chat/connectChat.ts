@@ -2,7 +2,7 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat } from '../../lib/chat';
+import { Chat, SearchIndexToolType } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -12,6 +12,7 @@ import {
   getAppIdAndApiKey,
   getRefinements,
   noop,
+  sendChatMessageFeedback,
   uniq,
   warning,
 } from '../../lib/utils';
@@ -59,6 +60,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   setInput: (input: string) => void;
   setOpen: (open: boolean) => void;
   /**
+   * Opens the chat (if needed) and focuses the prompt input.
+   */
+  focusInput: () => void;
+  /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
    * manually to regenerate the AI response.
@@ -86,6 +91,17 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Suggestions received from the AI model.
    */
   suggestions?: string[];
+  /**
+   * Sends feedback (thumbs up/down) for an assistant message.
+   * Only available when using `agentId` and `feedback` is true.
+   * Returns `undefined` otherwise.
+   */
+  sendChatMessageFeedback?: (messageId: string, vote: 0 | 1) => void;
+  /**
+   * Map of message IDs to their feedback state.
+   * 'sending' means the request is in flight, 0/1 means the vote was recorded.
+   */
+  feedbackState: Record<string, 'sending' | 0 | 1>;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -106,9 +122,17 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
 >;
 
 export type ChatTransport = {
-  agentId?: string;
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
-};
+} & (
+  | {
+      agentId: string;
+      /**
+       * Whether to enable feedback (thumbs up/down) on assistant messages.
+       */
+      feedback?: boolean;
+    }
+  | { agentId?: undefined; feedback?: never }
+);
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -135,6 +159,23 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * @default 'chat'
    */
   type?: string;
+  /**
+   * Additional context to send with each user message (e.g. current page info).
+   * This context is included in the message parts sent to the API but is not
+   * displayed in the chat UI.
+   * Can be a static object or a function that returns the context at send time.
+   */
+  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  /**
+   * A message to send automatically when the chat is initialized.
+   *
+   * This message is only sent when the chat has no existing messages yet. If
+   * messages were restored or otherwise already exist when the widget starts,
+   * this message is not sent.
+   *
+   * When `resume` is enabled, this message is not sent.
+   */
+  initialUserMessage?: string;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -236,6 +277,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
+      context,
+      initialUserMessage,
       ...options
     } = widgetParams || {};
 
@@ -246,9 +289,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
+    let focusInput: ChatRenderState<TUiMessage>['focusInput'];
     let setIsClearing: (value: boolean) => void;
+    let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
+    let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
+    let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
+    let feedbackAbortController: AbortController | undefined;
 
     // Extract suggestions from the last assistant message's data-suggestions part
     const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
@@ -293,12 +341,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
         return;
       }
+      const status = _chatInstance.status;
+      if (status === 'submitted' || status === 'streaming') {
+        _chatInstance.stop();
+      }
       setIsClearing(true);
     };
 
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      feedbackState = {};
       setIsClearing(false);
     };
 
@@ -352,6 +405,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             )
           );
         }
+
         const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
         transport = new DefaultChatTransport({
           api: baseApi,
@@ -390,7 +444,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         onToolCall({ toolCall }) {
-          const tool = tools[toolCall.toolName];
+          let tool = tools[toolCall.toolName];
+
+          // Compatibility shim with Algolia MCP Server search tool
+          if (
+            !tool &&
+            toolCall.toolName.startsWith(`${SearchIndexToolType}_`)
+          ) {
+            tool = tools[SearchIndexToolType];
+          }
 
           if (!tool) {
             if (__DEV__) {
@@ -448,6 +510,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
+        focusInput = () => {
+          setOpen(true);
+        };
+
         setInput = (i) => {
           input = i;
           render();
@@ -458,12 +524,58 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
+        setFeedbackState = (messageId, state) => {
+          feedbackState = { ...feedbackState, [messageId]: state };
+          render();
+        };
+
+        const feedback =
+          'feedback' in options ? options.feedback : undefined;
+        if (agentId && feedback) {
+          const [appId, apiKey] = getAppIdAndApiKey(
+            initOptions.instantSearchInstance.client
+          );
+
+          if (!appId || !apiKey) {
+            throw new Error(
+              withUsage(
+                'Could not extract Algolia credentials from the search client.'
+              )
+            );
+          }
+
+          feedbackAbortController = new AbortController();
+          _sendChatMessageFeedback = (messageId: string, vote: 0 | 1) => {
+            if (feedbackState[messageId] !== undefined) {
+              return;
+            }
+            setFeedbackState(messageId, 'sending');
+            sendChatMessageFeedback({
+              agentId,
+              vote,
+              messageId,
+              appId,
+              apiKey,
+            }).finally(() => {
+              setFeedbackState(messageId, vote);
+            });
+          };
+        }
+
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
 
         if (resume) {
           _chatInstance.resumeStream();
+        }
+
+        if (
+          initialUserMessage &&
+          !resume &&
+          _chatInstance.messages.length === 0
+        ) {
+          _chatInstance.sendMessage({ text: initialUserMessage });
         }
 
         renderFn(
@@ -521,9 +633,61 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             ...tool,
             addToolResult: _chatInstance.addToolResult,
             applyFilters,
+            sendEvent,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
+
+        const sendMessageWithContext: typeof _chatInstance.sendMessage = (
+          message,
+          ...rest
+        ) => {
+          if (!context || !message) {
+            return _chatInstance.sendMessage(message, ...rest);
+          }
+
+          const resolvedContext =
+            typeof context === 'function' ? context() : context;
+
+          let serializedContext: string;
+          try {
+            serializedContext = JSON.stringify(resolvedContext);
+          } catch {
+            warning(
+              false,
+              'Could not serialize chat context. The message will be sent without context.'
+            );
+            return _chatInstance.sendMessage(message, ...rest);
+          }
+
+          const contextTextPart = {
+            type: 'text' as const,
+            text: '<context>'.concat(serializedContext).concat('</context>'),
+          };
+
+          if ('parts' in message && message.parts) {
+            return _chatInstance.sendMessage({
+              ...message,
+              parts: [contextTextPart, ...message.parts],
+              text: undefined,
+              files: undefined,
+            }, ...rest);
+          }
+
+          const textContent =
+            'text' in message && message.text ? message.text : '';
+
+          return _chatInstance.sendMessage({
+            parts: [
+              contextTextPart,
+              { type: 'text' as const, text: textContent },
+            ],
+            metadata: message.metadata,
+            messageId: message.messageId,
+            files: undefined,
+            text: undefined,
+          }, ...rest);
+        };
 
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
@@ -533,12 +697,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setIndexUiState: parent.setIndexUiState.bind(parent),
           setInput,
           setOpen,
+          focusInput,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           isClearing,
           clearMessages,
           onClearTransitionEnd,
           tools: toolsWithAddToolResult,
+          sendChatMessageFeedback: _sendChatMessageFeedback,
+          feedbackState,
           widgetParams,
 
           // Chat instance render state
@@ -549,13 +716,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           messages: _chatInstance.messages,
           regenerate: _chatInstance.regenerate,
           resumeStream: _chatInstance.resumeStream,
-          sendMessage: _chatInstance.sendMessage,
+          sendMessage: sendMessageWithContext,
           status: _chatInstance.status,
           stop: _chatInstance.stop,
         };
       },
 
       dispose() {
+        feedbackAbortController?.abort();
         unmountFn();
       },
 

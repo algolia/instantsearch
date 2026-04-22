@@ -1,12 +1,25 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import {
+  getTextContent,
+  hasTextContent,
+  isPartText,
+} from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
-import { ChevronDownIcon, CopyIcon, ReloadIcon } from './icons';
+import {
+  ChevronDownIcon,
+  CheckIcon,
+  CopyIcon,
+  LoadingSpinnerIcon,
+  ReloadIcon,
+  ThumbsUpIcon,
+  ThumbsDownIcon,
+} from './icons';
 
 import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
 import type {
@@ -17,7 +30,7 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -36,6 +49,22 @@ export type ChatMessagesTranslations = {
    * Label for the regenerate action
    */
   regenerateLabel?: string;
+  /**
+   * Label for the thumbs up action
+   */
+  thumbsUpLabel?: string;
+  /**
+   * Label for the thumbs down action
+   */
+  thumbsDownLabel?: string;
+  /**
+   * Text shown after submitting feedback
+   */
+  feedbackThankYouText?: string;
+  /**
+   * Label for the feedback spinner
+   */
+  sendingFeedbackLabel?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -81,6 +110,10 @@ export type ChatMessagesProps<
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
+   * Custom empty component shown when there are no messages
+   */
+  emptyComponent?: (props: ChatEmptyProps) => JSX.Element;
+  /**
    * Custom actions component
    */
   actionsComponent?: ChatMessageProps['actionsComponent'];
@@ -112,6 +145,14 @@ export type ChatMessagesProps<
    * Function to close the chat
    */
   onClose: () => void;
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
   /**
    * Optional class names
    */
@@ -164,16 +205,14 @@ export type ChatMessagesProps<
    * Suggestions element to display below a message
    */
   suggestionsElement?: VNode;
-};
-
-const getTextContent = (message: ChatMessageBase) => {
-  return message.parts
-    .map((part) => ('text' in part ? part.text : ''))
-    .join('');
-};
-
-const hasTextContent = (message: ChatMessageBase) => {
-  return getTextContent(message).trim() !== '';
+  /**
+   * Callback for feedback (thumbs up/down) on a message.
+   */
+  onFeedback?: (messageId: string, vote: 0 | 1) => void;
+  /**
+   * Map of message IDs to their feedback state.
+   */
+  feedbackState?: Record<string, 'sending' | 0 | 1>;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -187,6 +226,7 @@ function createDefaultMessageComponent<
 
   return function DefaultMessage({
     message,
+    status,
     userMessageProps,
     assistantMessageProps,
     tools,
@@ -194,6 +234,8 @@ function createDefaultMessageComponent<
     setIndexUiState,
     onReload,
     onClose,
+    onFeedback,
+    feedbackState,
     actionsComponent,
     classNames,
     messageTranslations,
@@ -202,6 +244,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
@@ -209,6 +252,8 @@ function createDefaultMessageComponent<
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
+    onFeedback?: (messageId: string, vote: 0 | 1) => void;
+    feedbackState?: Record<string, 'sending' | 0 | 1>;
     actionsComponent?: ChatMessageProps['actionsComponent'];
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
@@ -232,6 +277,50 @@ function createDefaultMessageComponent<
       },
     ];
 
+    const messageFeedback = feedbackState?.[message.id];
+    const hasVoted = messageFeedback !== undefined;
+
+    if (onFeedback) {
+      const isSending = messageFeedback === 'sending';
+      if (isSending) {
+        defaultAssistantActions.push({
+          title: translations.sendingFeedbackLabel,
+          icon: () => (
+            <span className="ais-ChatMessage-feedbackSpinner">
+              <LoadingSpinnerIcon createElement={createElement} />
+            </span>
+          ),
+          disabled: true,
+        });
+      } else if (hasVoted) {
+        defaultAssistantActions.push({
+          title: translations.feedbackThankYouText,
+          icon: () => (
+            <span className="ais-ChatMessage-feedbackCheck">
+              <CheckIcon createElement={createElement} />
+              <span className="ais-ChatMessage-feedbackText">
+                {translations.feedbackThankYouText}
+              </span>
+            </span>
+          ),
+          disabled: true,
+        });
+      } else {
+        defaultAssistantActions.push(
+          {
+            title: translations.thumbsUpLabel,
+            icon: () => <ThumbsUpIcon createElement={createElement} />,
+            onClick: (m: ChatMessageBase) => onFeedback(m.id, 1),
+          },
+          {
+            title: translations.thumbsDownLabel,
+            icon: () => <ThumbsDownIcon createElement={createElement} />,
+            onClick: (m: ChatMessageBase) => onFeedback(m.id, 0),
+          }
+        );
+      }
+    }
+
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
     const defaultActions =
@@ -242,6 +331,7 @@ function createDefaultMessageComponent<
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
+        status={status}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
@@ -283,6 +373,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      emptyComponent: EmptyComponent,
       actionsComponent: ActionsComponent,
       tools,
       indexUiState,
@@ -291,6 +382,8 @@ export function createChatMessagesComponent({
       hideScrollToBottom = false,
       onReload,
       onClose,
+      sendMessage,
+      setInput,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -301,6 +394,8 @@ export function createChatMessagesComponent({
       contentRef,
       onScrollToBottom,
       suggestionsElement,
+      onFeedback,
+      feedbackState,
       ...props
     } = userProps;
 
@@ -308,6 +403,10 @@ export function createChatMessagesComponent({
       scrollToBottomLabel: 'Scroll to bottom',
       copyToClipboardLabel: 'Copy to clipboard',
       regenerateLabel: 'Regenerate',
+      thumbsUpLabel: 'Like',
+      thumbsDownLabel: 'Dislike',
+      feedbackThankYouText: 'Thanks for your feedback!',
+      sendingFeedbackLabel: 'Sending feedback...',
       ...userTranslations,
     };
 
@@ -324,6 +423,21 @@ export function createChatMessagesComponent({
         classNames.scrollToBottomHidden
       ),
     };
+
+    const lastMessage = messages[messages.length - 1];
+    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    const isWaitingForResponse = status === 'submitted';
+    const isStreamingWithNoContent = status === 'streaming' && !lastPart;
+    const isStreamingNonTextContent =
+      status === 'streaming' && lastPart && !isPartText(lastPart);
+
+    const showLoader =
+      isWaitingForResponse ||
+      isStreamingWithNoContent ||
+      isStreamingNonTextContent;
+
+    const showEmpty =
+      messages.length === 0 && !showLoader && !isClearing && status !== 'error';
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
@@ -353,16 +467,28 @@ export function createChatMessagesComponent({
               }
             }}
           >
+            {showEmpty && EmptyComponent && (
+              <EmptyComponent
+                sendMessage={sendMessage}
+                setInput={setInput}
+                status={status}
+                onClose={onClose}
+              />
+            )}
+
             {messages.map((message, index) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
+                status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
                 tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
+                onFeedback={onFeedback}
+                feedbackState={feedbackState}
                 actionsComponent={ActionsComponent}
                 onClose={onClose}
                 translations={translations}
@@ -378,7 +504,7 @@ export function createChatMessagesComponent({
               />
             ))}
 
-            {status === 'submitted' && (
+            {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
               />

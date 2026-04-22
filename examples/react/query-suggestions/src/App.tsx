@@ -97,12 +97,26 @@ export function App() {
                         </>
                       ),
                     }}
-                    showSuggestions={{
+                    showQuerySuggestions={{
                       indexName: 'instant_search_demo_query_suggestions',
                       headerComponent: () => (
                         <>
                           <span className="ais-AutocompleteIndexHeaderTitle">
                             Suggestions
+                          </span>
+                          <span className="ais-AutocompleteIndexHeaderLine" />
+                        </>
+                      ),
+                    }}
+                    showPromptSuggestions={{
+                      indexName: 'instant_search_prompt_suggestions_poc',
+                      searchParameters: {
+                        hitsPerPage: 2,
+                      },
+                      headerComponent: () => (
+                        <>
+                          <span className="ais-AutocompleteIndexHeaderTitle">
+                            Ask AI
                           </span>
                           <span className="ais-AutocompleteIndexHeaderLine" />
                         </>
@@ -164,6 +178,7 @@ export function App() {
 
           <Chat
             agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+            feedback={true}
             itemComponent={ItemComponent}
           />
         </InstantSearch>

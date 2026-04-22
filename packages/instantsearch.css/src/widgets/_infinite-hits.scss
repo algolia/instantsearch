@@ -1,0 +1,34 @@
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore {
+  border-radius: var(--ais-border-radius-sm);
+  font-size: 0.9em;
+  font-weight: var(--ais-font-weight-medium);
+  color: rgba(
+    var(--ais-button-text-color-rgb),
+    var(--ais-button-text-color-alpha)
+  );
+  padding: calc(var(--ais-spacing) / 2) var(--ais-spacing);
+  background-color: rgba(
+    var(--ais-primary-color-rgb),
+    var(--ais-primary-color-alpha)
+  );
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+  box-shadow: var(--ais-shadow-xs);
+  width: 100%;
+}
+
+.ais-InfiniteHits-loadPrevious {
+  margin-bottom: var(--ais-spacing);
+}
+
+.ais-InfiniteHits-loadMore {
+  margin-top: var(--ais-spacing);
+}
+
+@media (hover: hover) {
+  .ais-InfiniteHits-loadPrevious:not([disabled]):hover,
+  .ais-InfiniteHits-loadMore:not([disabled]):hover {
+    background-color: rgba(var(--ais-primary-color-rgb), 0.85);
+  }
+}

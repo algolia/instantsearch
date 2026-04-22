@@ -3,6 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 
+const {
+  PACKAGE_GROUPS,
+  VERSION_FILES,
+  buildVersionFileContent,
+} = require('./shared');
+
 // This file does not use any dependencies, so that it can be ran before installing
 
 // It checks whether the versions of packages that should be versioned synchronously
@@ -12,14 +18,6 @@ const path = require('path');
 let hasError = false;
 
 {
-  const PACKAGE_GROUPS = {
-    react: [
-      'react-instantsearch',
-      'react-instantsearch-core',
-      'react-instantsearch-router-nextjs',
-    ],
-  };
-
   const results = Object.entries(PACKAGE_GROUPS).map(([group, packages]) => {
     const versions = packages.map((name) => [
       name,
@@ -42,30 +40,7 @@ let hasError = false;
 }
 
 {
-  const versions = [
-    {
-      name: 'react-instantsearch-core',
-      versionFile: 'src/version.ts',
-      format: 'esm',
-    },
-    {
-      name: 'instantsearch.js',
-      versionFile: 'src/lib/version.ts',
-      format: 'esm',
-    },
-    {
-      name: 'algoliasearch-helper',
-      versionFile: 'src/version.js',
-      format: 'cjs',
-    },
-    {
-      name: 'instantsearch-ui-components',
-      versionFile: 'src/version.ts',
-      format: 'esm',
-    },
-  ];
-
-  const results = versions.map(({ name, versionFile, format }) => {
+  const results = VERSION_FILES.map(({ name, versionFile, format }) => {
     const version = require(`../../packages/${name}/package.json`).version;
 
     const versionFileContent = fs
@@ -74,19 +49,7 @@ let hasError = false;
       )
       .toString();
 
-    const expectedVersionFileContent = (() => {
-      switch (format) {
-        case 'esm': {
-          return `export default '${version}';\n`;
-        }
-        case 'cjs': {
-          return `'use strict';\n\nmodule.exports = '${version}';\n`;
-        }
-        default: {
-          throw new Error(`Unknown format: ${format}`);
-        }
-      }
-    })();
+    const expectedVersionFileContent = buildVersionFileContent(version, format);
 
     return {
       name,
@@ -108,5 +71,11 @@ let hasError = false;
 }
 
 if (hasError) {
-  process.exit(1);
+  if (process.argv.includes('--fix')) {
+    console.log('\nAttempting to fix mismatches...\n');
+    const { fixMismatches } = require('./fix-mismatches');
+    fixMismatches();
+  } else {
+    process.exit(1);
+  }
 }

@@ -3,9 +3,9 @@
 import { diff } from 'jest-diff';
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
+  // eslint-disable-next-line typescript/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+    // eslint-disable-next-line instantsearch/naming-convention
     interface Matchers<R> {
       toWarnDev: (expectedMessage?: string) => R;
     }

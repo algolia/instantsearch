@@ -20,7 +20,7 @@ function _merge(target, source) {
     return target;
   }
 
-  // eslint-disable-next-line no-restricted-syntax
+  // eslint-disable-next-line instantsearch/no-for-in
   for (var key in source) {
     if (
       !Object.prototype.hasOwnProperty.call(source, key) ||

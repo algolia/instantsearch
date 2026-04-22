@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.14.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.13.0...instantsearch.css@8.14.0) (2026-04-21)
+
+
+### Features
+
+* **chat:** add greeting screen component ([#6965](https://github.com/algolia/instantsearch/issues/6965)) ([8797bad](https://github.com/algolia/instantsearch/commit/8797bad681f1cddb1f8e36cfbf0b78412957e7db))
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **instantsearch.css:** add experimental Nova theme ([#6949](https://github.com/algolia/instantsearch/issues/6949)) ([5289c69](https://github.com/algolia/instantsearch/commit/5289c69229fd63ead59b717bc9b8492a73bdc239))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+
+
+
+
+
+# [8.13.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.12.0...instantsearch.css@8.13.0) (2026-03-31)
+
+
+### Features
+
+* **chat:** add inline layout to chat widgets ([#6920](https://github.com/algolia/instantsearch/issues/6920)) ([147e2af](https://github.com/algolia/instantsearch/commit/147e2af66c92f2f33a2d9fc9fd83ccee60640eb7))
+* **chat:** add support for feedback ([#6945](https://github.com/algolia/instantsearch/issues/6945)) ([0034a40](https://github.com/algolia/instantsearch/commit/0034a4042cc8b4e65a1554a030be1f85b790805e))
+
+
+
+
+
+# [8.12.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.11.0...instantsearch.css@8.12.0) (2026-03-10)
+
+
+### Features
+
+* **autocomplete:** add prompt suggestions ([#6900](https://github.com/algolia/instantsearch/issues/6900)) ([02c3cfe](https://github.com/algolia/instantsearch/commit/02c3cfe6e30b3577066250c2dcac69a695b9c7ad))
+
+
+
+
+
 # [8.11.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.10.0...instantsearch.css@8.11.0) (2026-02-17)
 
 

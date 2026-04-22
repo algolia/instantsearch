@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.30.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.29.0...react-instantsearch-core@7.30.0) (2026-04-21)
+
+
+### Features
+
+* **recommend:** add Trending Facets widget ([#6957](https://github.com/algolia/instantsearch/issues/6957)) ([7a4b137](https://github.com/algolia/instantsearch/commit/7a4b137264b5814bc21d9011bab877e9661729c9))
+
+
+
+
+
+## [7.29.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.29.0...react-instantsearch-core@7.29.0) (2026-03-31)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+
+## [7.28.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.28.0...react-instantsearch-core@7.28.1) (2026-03-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.28.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.27.1...react-instantsearch-core@7.28.0) (2026-03-16)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.27.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.27.0...react-instantsearch-core@7.27.1) (2026-03-16)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.27.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.26.1...react-instantsearch-core@7.27.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **build:** correct cjs interop ([#6915](https://github.com/algolia/instantsearch/issues/6915)) ([366e8a7](https://github.com/algolia/instantsearch/commit/366e8a7f586e470c8485c1b86b722ff73a92dc43)), closes [#6914](https://github.com/algolia/instantsearch/issues/6914) [#8668](https://github.com/algolia/instantsearch/issues/8668)
+
+
+
+
+
+
+
+
+## [7.26.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.26.0...react-instantsearch-core@7.26.1) (2026-02-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+# [7.26.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.25.0...react-instantsearch-core@7.26.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
+## [7.25.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.24.0...react-instantsearch-core@7.25.0) (2026-02-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
 ## [7.23.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.23.2...react-instantsearch-core@7.23.3) (2026-02-17)
 
 **Note:** Version bump only for package react-instantsearch-core

@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.23.0...instantsearch-ui-components@0.24.0) (2026-04-21)
+
+
+### Features
+
+* **chat:** add greeting screen component ([#6965](https://github.com/algolia/instantsearch/issues/6965)) ([8797bad](https://github.com/algolia/instantsearch/commit/8797bad681f1cddb1f8e36cfbf0b78412957e7db))
+* **chat:** add hidden context support for completions ([#6973](https://github.com/algolia/instantsearch/issues/6973)) ([6f8b05b](https://github.com/algolia/instantsearch/commit/6f8b05b5996b16cbb48dbdf060414b51ca74f589))
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **chat:** send events from hits in chat ([#6943](https://github.com/algolia/instantsearch/issues/6943)) ([7c9a6dd](https://github.com/algolia/instantsearch/commit/7c9a6dd20a14547ffdc805058378716ff99ab37a))
+* **recommend:** add Trending Facets widget ([#6957](https://github.com/algolia/instantsearch/issues/6957)) ([7a4b137](https://github.com/algolia/instantsearch/commit/7a4b137264b5814bc21d9011bab877e9661729c9))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+
+
+
+
+
+# [0.23.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.22.1...instantsearch-ui-components@0.23.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* **ui-components:** hide submit button during stalled search and optimize loading SVG ([#6941](https://github.com/algolia/instantsearch/issues/6941)) ([17b24bc](https://github.com/algolia/instantsearch/commit/17b24bc58bf2d36fed311deab2c17929d0271440))
+
+
+### Features
+
+* **chat:** add inline layout to chat widgets ([#6920](https://github.com/algolia/instantsearch/issues/6920)) ([147e2af](https://github.com/algolia/instantsearch/commit/147e2af66c92f2f33a2d9fc9fd83ccee60640eb7))
+* **chat:** add support for feedback ([#6945](https://github.com/algolia/instantsearch/issues/6945)) ([0034a40](https://github.com/algolia/instantsearch/commit/0034a4042cc8b4e65a1554a030be1f85b790805e))
+
+
+
+
+
+## [0.22.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.22.0...instantsearch-ui-components@0.22.1) (2026-03-24)
+
+**Note:** Version bump only for package instantsearch-ui-components
+
+
+
+
+
+# [0.22.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.21.0...instantsearch-ui-components@0.22.0) (2026-03-16)
+
+
+### Bug Fixes
+
+* **autocomplete:** forward the root ref ([#6922](https://github.com/algolia/instantsearch/issues/6922)) ([a7f62d8](https://github.com/algolia/instantsearch/commit/a7f62d81a7d68dc2b8bd5645425df0f9ec3dab8c))
+
+
+### Features
+
+* **autocomplete:** `noResults` template ([#6917](https://github.com/algolia/instantsearch/issues/6917)) ([a59db2f](https://github.com/algolia/instantsearch/commit/a59db2f45a430b0ca5324e6cf4bb1809cc5a4598))
+* **autocomplete:** support autofocus ([#6921](https://github.com/algolia/instantsearch/issues/6921)) ([1d2156a](https://github.com/algolia/instantsearch/commit/1d2156aac5f5d236dabdbfa11821d0fee7a5f41d))
+
+
+
+
+
+# [0.21.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.20.0...instantsearch-ui-components@0.21.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **build:** correct cjs interop ([#6915](https://github.com/algolia/instantsearch/issues/6915)) ([366e8a7](https://github.com/algolia/instantsearch/commit/366e8a7f586e470c8485c1b86b722ff73a92dc43)), closes [#6914](https://github.com/algolia/instantsearch/issues/6914) [#8668](https://github.com/algolia/instantsearch/issues/8668)
+* **chat:** show loader when agent is still processing on the backend ([#6912](https://github.com/algolia/instantsearch/issues/6912)) ([6d180e6](https://github.com/algolia/instantsearch/commit/6d180e69893e2bbe73131746ee52c774893c1fb7))
+
+
+### Features
+
+* **autocomplete:** add prompt suggestions ([#6900](https://github.com/algolia/instantsearch/issues/6900)) ([02c3cfe](https://github.com/algolia/instantsearch/commit/02c3cfe6e30b3577066250c2dcac69a695b9c7ad))
+
+
+
+
+
+# [0.20.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.19.0...instantsearch-ui-components@0.20.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
+# [0.19.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.18.0...instantsearch-ui-components@0.19.0) (2026-02-24)
+
+
+### Bug Fixes
+
+* **autocomplete:** left and right arrow keys do not navigate items ([#6907](https://github.com/algolia/instantsearch/issues/6907)) ([d47dc84](https://github.com/algolia/instantsearch/commit/d47dc8497cbd3043d7bf7a6178d3c0133d1ae559))
+
+
+### Features
+
+* **chat:** add compatibility with algolia mcp search tool [DASH-2294] ([#6904](https://github.com/algolia/instantsearch/issues/6904)) ([adf1037](https://github.com/algolia/instantsearch/commit/adf1037eb4f7088e2972212917ed2ac32b23072a))
+
+
+
+
+
 # [0.18.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.17.1...instantsearch-ui-components@0.18.0) (2026-02-17)
 
 

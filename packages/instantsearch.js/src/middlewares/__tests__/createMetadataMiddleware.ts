@@ -48,7 +48,7 @@ describe('createMetadataMiddleware', () => {
 
   describe('metadata disabled', () => {
     it('does not enable on normal user agent', () => {
-      global.navigator!.userAgent = defaultUserAgent;
+      global.navigator.userAgent = defaultUserAgent;
 
       expect(isMetadataEnabled()).toBe(false);
 
@@ -79,7 +79,7 @@ describe('createMetadataMiddleware', () => {
 
     it("does not enable when navigator is different from browser's (React Native)", () => {
       // @ts-expect-error (simulate no userAgent)
-      global.navigator!.userAgent = undefined;
+      global.navigator.userAgent = undefined;
 
       createMetadataMiddleware();
 
@@ -91,7 +91,7 @@ describe('createMetadataMiddleware', () => {
 
   describe('metadata enabled', () => {
     beforeEach(() => {
-      global.navigator!.userAgent = algoliaUserAgent;
+      global.navigator.userAgent = algoliaUserAgent;
     });
 
     it('metadata enabled returns true', () => {

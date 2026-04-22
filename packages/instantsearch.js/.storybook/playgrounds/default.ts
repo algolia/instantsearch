@@ -1,5 +1,5 @@
-import { HitsTemplates } from '../../src/widgets/hits/hits';
-import { Playground } from '../decorators';
+import type { HitsTemplates } from '../../src/widgets/hits/hits';
+import type { Playground } from '../decorators';
 
 export const hitsItemTemplate: HitsTemplates['item'] = (
   hit,

@@ -34,6 +34,7 @@ $ais-chat-breakpoint: 680px;
   --ais-spacing: calc(var(--ais-base-unit) * var(--ais-spacing-factor) * 1px);
 
   /* Shadows */
+  --ais-shadow-xs: 0px 1px 2px 0px rgba(var(--ais-shadow-color-rgb), 0.15);
   --ais-shadow-sm: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0px 1px 3px 0px rgba(var(--ais-shadow-color-rgb), 0.25);
   --ais-shadow-md: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
@@ -56,6 +57,9 @@ $ais-chat-breakpoint: 680px;
   /* Icons */
   --ais-icon-size: 20px;
   --ais-icon-stroke-width: 1.6;
+  --ais-chevron-icon: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23262626%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+  --ais-selected-chevron-icon: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231f6ff2%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+  --ais-check-icon: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20aria-hidden%3D%22true%22%20viewBox%3D%220%200%2016%2012%22%3E%3Cpath%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.6%22%20d%3D%22M1%205.917%205.724%2010.5%2015%201.5%22%2F%3E%3C%2Fsvg%3E');
 
   /* Transitions */
   --ais-transition-duration: 0.3s;
@@ -74,6 +78,9 @@ $ais-chat-breakpoint: 680px;
 
   /* Chat carousel component */
   --ais-chat-carousel-item-width: calc(var(--ais-spacing) * 10);
+
+  /* Hit grid */
+  --ais-hit-min-width: 200px;
 
   /* Autocomplete component */
   --ais-autocomplete-search-input-height: 44px;
@@ -105,16 +112,13 @@ $ais-chat-breakpoint: 680px;
 
   /* Shadow color */
   --ais-shadow-color-rgb: 0, 0, 0;
+
+  /* Icons */
+  --ais-chevron-icon: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ebebeb%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+  --ais-selected-chevron-icon: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%235B96F5%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
 }
 
 :root[data-theme='dark'],
 .dark {
   @include dark-theme;
 }
-
-// Disabled until all widgets support dark mode
-// @media (prefers-color-scheme: dark) {
-//   :root:not([data-theme='light']) {
-//     @include dark-theme;
-//   }
-// }

@@ -60,7 +60,7 @@ export function App() {
             </div>
 
             <div className="search-panel__results">
-              <SearchBox placeholder="" className="searchbox" />
+              <SearchBox placeholder="" className="searchbox" aiMode />
               <Panel
                 header="Current Refinements"
                 hidden={(state) =>
@@ -93,6 +93,7 @@ export function App() {
 
           <Chat
             agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+            feedback={true}
             itemComponent={ItemComponent}
           />
         </InstantSearch>

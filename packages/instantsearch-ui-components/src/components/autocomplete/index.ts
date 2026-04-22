@@ -5,6 +5,7 @@ export * from './AutocompleteDetachedOverlay';
 export * from './AutocompleteDetachedSearchButton';
 export * from './AutocompleteIndex';
 export * from './AutocompletePanel';
+export * from './AutocompletePromptSuggestion';
 export * from './AutocompleteRecentSearch';
 export * from './AutocompleteSearch';
 export * from './AutocompleteSuggestion';

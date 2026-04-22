@@ -3,7 +3,12 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
+import {
+  chatInlineLayout,
+  chatSidePanelLayout,
+} from 'instantsearch.js/es/templates';
 import React from 'react';
+import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -39,6 +44,80 @@ export function createOptionsTests(
       expect(document.querySelector('.ais-ChatPrompt')).toBeInTheDocument();
     });
 
+    test('sends initialUserMessage on init', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, AI!' });
+    });
+
+    test('does not send initialUserMessage when messages already exist', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({
+        messages: [
+          {
+            id: '1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Previous message' }],
+          },
+        ],
+      });
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            initialUserMessage: 'Hello, AI!',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+
     test('sends messages when prompt is submitted', async () => {
       const searchClient = createSearchClient();
 
@@ -72,6 +151,143 @@ export function createOptionsTests(
       });
 
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
+    });
+
+    test('sends messages with context when context is provided', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const contextValue = { currentPage: '/products', locale: 'en-US' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          react: { ...createDefaultWidgetParams(chat), context: contextValue },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello, world!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
+        },
+        { type: 'text', text: 'Hello, world!' },
+      ]);
+    });
+
+    test('sends messages with dynamic context from function', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
+
+      const contextFn = () => ({ currentPage: '/dynamic-page' });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          react: { ...createDefaultWidgetParams(chat), context: contextFn },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/dynamic-page"}</context>',
+        },
+        { type: 'text', text: 'Hello!' },
+      ]);
+    });
+
+    test('does not render context parts in the UI', async () => {
+      const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
+        chat.messages = [
+          {
+            id: '1',
+            role: 'user',
+            parts: (message as any).parts,
+          },
+        ] as any;
+      });
+
+      const contextValue = { currentPage: '/products' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          react: { ...createDefaultWidgetParams(chat), context: contextValue },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.type(
+        document.querySelector('.ais-ChatPrompt-textarea')!,
+        'Hello!'
+      );
+      userEvent.click(document.querySelector('.ais-ChatPrompt-submit')!);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const messagesContainer = document.querySelector('.ais-ChatMessages');
+      if (messagesContainer) {
+        expect(messagesContainer.textContent).not.toContain('<context>');
+        expect(messagesContainer.textContent).not.toContain('/products');
+      }
     });
 
     test('closes chat when close button is clicked', async () => {
@@ -118,7 +334,7 @@ export function createOptionsTests(
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
 
       expect(document.querySelector('.ais-Chat')).toHaveClass(
-        'ais-Chat--maximized'
+        'ais-ChatOverlayLayout--maximized'
       );
       expect(document.querySelector('.ais-Chat-container')).toHaveClass(
         'ais-Chat-container--maximized'
@@ -127,11 +343,71 @@ export function createOptionsTests(
       userEvent.click(document.querySelector('.ais-ChatHeader-maximize')!);
 
       expect(document.querySelector('.ais-Chat')).not.toHaveClass(
-        'ais-Chat--maximized'
+        'ais-ChatOverlayLayout--maximized'
       );
       expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
         'ais-Chat-container--maximized'
       );
+    });
+
+    test('stops streaming and clears when clear is clicked during streaming', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      await act(async () => {
+        chat._state.messages = [
+          {
+            id: '1',
+            role: 'user' as const,
+            parts: [{ type: 'text' as const, text: 'hello' }],
+          },
+        ];
+        await wait(0);
+      });
+
+      const clearButton = document.querySelector(
+        '.ais-ChatHeader-clear'
+      ) as HTMLButtonElement;
+      expect(clearButton).not.toBeDisabled();
+
+      // Clear button remains enabled during submitted status
+      await act(async () => {
+        chat._state.status = 'submitted';
+        await wait(0);
+      });
+
+      expect(clearButton).not.toBeDisabled();
+
+      // Clear button remains enabled during streaming status
+      await act(async () => {
+        chat._state.status = 'streaming';
+        await wait(0);
+      });
+
+      expect(clearButton).not.toBeDisabled();
+
+      // Clicking clear during streaming stops the stream and begins clearing
+      await act(async () => {
+        clearButton.click();
+        await wait(0);
+      });
+
+      expect(chat._state.status).toBe('ready');
+      expect(clearButton).toBeDisabled();
     });
 
     describe('cssClasses', () => {
@@ -263,6 +539,289 @@ export function createOptionsTests(
         expect(document.querySelector('.ais-ChatMessage-actions')).toHaveClass(
           'MESSAGE-ACTIONS'
         );
+      });
+    });
+
+    describe('loader', () => {
+      test('shows loader when status is submitted', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('shows loader during streaming with no parts yet', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when last part is not text', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              // message has text content but ends with a step-start,
+              // so the loader should still show (last part is not text)
+              parts: [
+                { type: 'text', text: 'Searching...' },
+                { type: 'step-start' },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when last part is a tool without output', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when last part is a tool with output', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Let me search for that.' },
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'output-available',
+                  input: {},
+                  output: { hits: [] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('does not show loader during streaming when last part is text', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Hello back!' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
+      });
+
+      test('does not show loader when status is ready', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Hello!' }],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
       });
     });
 
@@ -698,6 +1257,73 @@ export function createOptionsTests(
         );
       });
 
+      test('shows actions for assistant messages when status is ready', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Hello!' }],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatMessage-actions')
+        ).toBeInTheDocument();
+      });
+
+      test('does not show actions when status is not ready', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Hello!' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessage-actions')
+        ).not.toBeInTheDocument();
+      });
+
       test('handles hierarchical facets when applying filters', async () => {
         const searchClient = createSearchClient();
 
@@ -780,6 +1406,377 @@ export function createOptionsTests(
             }),
           ])
         );
+      });
+    });
+
+    describe('sendEvent', () => {
+      test('sends click event when a carousel item in the search tool is clicked', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: { query: 'test', number_of_results: 2 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      { objectID: '123', __position: 1 },
+                      { objectID: '456', __position: 2 },
+                    ],
+                    nbHits: 100,
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        (window as any).aa.mockClear();
+
+        const carouselItem = document.querySelector('.ais-Carousel-item');
+        expect(carouselItem).toBeInTheDocument();
+
+        userEvent.click(carouselItem!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          expect.objectContaining({
+            eventName: 'Item Clicked',
+            objectIDs: ['123'],
+            positions: [1],
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
+    });
+
+    describe('layoutComponent', () => {
+      test('renders with custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    <span class="custom-layout-title">My Custom Chat</span>
+                    ${props.templates.header()}
+                    ${props.templates.toggleButton()}
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  <span className="custom-layout-title">My Custom Chat</span>
+                  {props.toggleButtonComponent}
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('.custom-layout')).toBeInTheDocument();
+        expect(
+          document.querySelector('.custom-layout-title')!.textContent
+        ).toBe('My Custom Chat');
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).not.toBeInTheDocument();
+      });
+
+      test('exposes sendMessage to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+        const sendMessageSpy = jest
+          .spyOn(chat, 'sendMessage')
+          .mockResolvedValue(undefined);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <button
+                      class="custom-send"
+                      onclick="${() =>
+                      props.sendMessage({ text: 'hello from layout' })}"
+                    >
+                      Send
+                    </button>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <button
+                    className="custom-send"
+                    onClick={() =>
+                      props.sendMessage({ text: 'hello from layout' })
+                    }
+                  >
+                    Send
+                  </button>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(document.querySelector('.custom-send')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(sendMessageSpy).toHaveBeenCalledWith({
+          text: 'hello from layout',
+        });
+      });
+
+      test('exposes status to custom layout component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                layout: (props, { html }: any) =>
+                  html`<div class="custom-layout">
+                    ${props.templates.toggleButton()}
+                    <span class="custom-status">${props.status}</span>
+                  </div>`,
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              layoutComponent: (props) => (
+                <div className="custom-layout">
+                  {props.toggleButtonComponent}
+                  <span className="custom-status">{props.status}</span>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('ready');
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.custom-status')!.textContent
+        ).toBe('submitted');
+      });
+
+      test('renders with inline layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatInlineLayout(),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: ChatInlineLayout,
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-container')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).not.toBeInTheDocument();
+      });
+
+      test('renders with sidepanel layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout(),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: ChatSidePanelLayout,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatSidePanelLayout')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
+        ).not.toBeInTheDocument();
+      });
+
+      test('sidepanel layout adjusts parent margin when opened and closed', async () => {
+        const searchClient = createSearchClient();
+        const parentEl = document.createElement('div');
+        parentEl.id = 'sidepanel-parent';
+        document.body.appendChild(parentEl);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout({
+                  parentElement: '#sidepanel-parent',
+                }),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: (props: any) => (
+                <ChatSidePanelLayout
+                  {...props}
+                  parentElement="#sidepanel-parent"
+                />
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
+
+        await openChat(act);
+
+        expect(parentEl.style.marginRight).not.toBe('');
+
+        userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(parentEl.style.marginRight).toBe('');
       });
     });
   });
