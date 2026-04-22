@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator snapshot: React + TypeScript algolia-client.ts 1`] = `
+"import { algoliasearch } from 'algoliasearch';
+
+export const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
+"
+`;
+
+exports[`generator snapshot: React + plain JS algolia-client.js 1`] = `
+"import { algoliasearch } from 'algoliasearch';
+
+export const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
+"
+`;

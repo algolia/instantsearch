@@ -1,0 +1,118 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+import type { Flavor, Framework } from '../types';
+
+export type Detection = {
+  flavor: Flavor;
+  framework: Framework | null;
+  typescript: boolean;
+  componentsPath: string;
+  aliases: Record<string, string>;
+};
+
+export type DetectSuccess = { ok: true; detection: Detection };
+export type DetectFailure = { ok: false; code: string; message: string };
+export type DetectResult = DetectSuccess | DetectFailure;
+
+function readJSON(filePath: string): Record<string, any> | null {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function collectDependencies(
+  packageJson: Record<string, any>
+): Record<string, string> {
+  return {
+    ...(packageJson.dependencies ?? {}),
+    ...(packageJson.devDependencies ?? {}),
+  };
+}
+
+function extractComponentsAlias(
+  tsconfig: Record<string, any> | null
+): string | null {
+  const paths = tsconfig?.compilerOptions?.paths as
+    | Record<string, string[]>
+    | undefined;
+  if (!paths) return null;
+
+  for (const alias of Object.keys(paths)) {
+    const match = alias.match(/^(.+\/components)\/\*$/);
+    if (match) {
+      return match[1];
+    }
+  }
+  return null;
+}
+
+export function detect(projectDir: string): DetectResult {
+  const packageJson = readJSON(path.join(projectDir, 'package.json'));
+  if (!packageJson) {
+    return {
+      ok: false,
+      code: 'unsupported_framework',
+      message:
+        'No package.json found. InstantSearch CLI requires an existing project.',
+    };
+  }
+
+  const deps = collectDependencies(packageJson);
+  const hasReactIs = Boolean(deps['react-instantsearch']);
+  const hasNextIs = Boolean(deps['react-instantsearch-nextjs']);
+  const hasJsIs = Boolean(deps['instantsearch.js']);
+
+  const flavors: Flavor[] = [];
+  if (hasReactIs || hasNextIs) flavors.push('react');
+  if (hasJsIs) flavors.push('js');
+
+  if (flavors.length === 0) {
+    return {
+      ok: false,
+      code: 'unsupported_framework',
+      message:
+        'No InstantSearch package found. Install react-instantsearch or instantsearch.js first, then rerun.',
+    };
+  }
+
+  if (flavors.length > 1) {
+    return {
+      ok: false,
+      code: 'unsupported_framework',
+      message:
+        'Ambiguous flavor: both react-instantsearch and instantsearch.js are installed. Pass --flavor react or --flavor js explicitly.',
+    };
+  }
+
+  const flavor = flavors[0];
+  // Phase 5 will refine this to 'nextjs' when react-instantsearch-nextjs
+  // and an app/ directory are both present.
+  const framework: Framework | null = null;
+
+  const typescript = fs.existsSync(path.join(projectDir, 'tsconfig.json'));
+  const hasSrc = fs.existsSync(path.join(projectDir, 'src'));
+  const componentsPath = hasSrc ? 'src/components' : 'components';
+
+  const aliases: Record<string, string> = {};
+  if (typescript) {
+    const tsconfig = readJSON(path.join(projectDir, 'tsconfig.json'));
+    const componentsAlias = extractComponentsAlias(tsconfig);
+    if (componentsAlias) {
+      aliases.components = componentsAlias;
+    }
+  }
+
+  return {
+    ok: true,
+    detection: {
+      flavor,
+      framework,
+      typescript,
+      componentsPath,
+      aliases,
+    },
+  };
+}
