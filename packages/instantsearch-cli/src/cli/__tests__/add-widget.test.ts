@@ -194,6 +194,70 @@ describe('add widget command', () => {
     expect(root?.experiences).toEqual([]);
   });
 
+  test('success payload includes nextSteps.imports and mountingGuidance', async () => {
+    const projectDir = makeInitializedProject();
+    await seedExperience(projectDir);
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'product-search',
+      widget: 'refinement-list',
+      schema: { refinementList: { attribute: 'category' } },
+    });
+
+    if (!report.ok) throw new Error('expected success');
+    const nextSteps = (report as any).nextSteps;
+    // Auto-suffixed file (RefinementListCategory) aliases the widget export.
+    expect(nextSteps.imports).toContain(
+      "import { RefinementList as RefinementListCategory } from 'src/components/product-search/RefinementListCategory';"
+    );
+    expect(nextSteps.mountingGuidance).toMatch(/RefinementListCategory/);
+    expect(nextSteps.mountingGuidance).toMatch(/ProductSearchProvider/);
+  });
+
+  test('nextSteps includes provider import when auto-materializing an experience', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'docs-search',
+      widget: 'hits',
+      indexName: 'docs',
+      schema: { hits: { title: 'page_title' } },
+    });
+
+    if (!report.ok) throw new Error('expected success');
+    const imports = (report as any).nextSteps.imports as string[];
+    expect(imports).toContain(
+      "import { DocsSearchProvider } from 'src/components/docs-search/provider';"
+    );
+    expect(imports).toContain(
+      "import { Hits } from 'src/components/docs-search/Hits';"
+    );
+  });
+
+  test('nextSteps uses JS mounting guidance for the JS flavor', async () => {
+    const projectDir = makeInitializedProject({ flavor: 'js', typescript: false });
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'product-search',
+      widget: 'search-box',
+      indexName: 'products',
+    });
+
+    if (!report.ok) throw new Error('expected success');
+    const { imports, mountingGuidance } = (report as any).nextSteps;
+    expect(imports).toContain(
+      "import { SearchBox } from 'src/components/product-search/SearchBox';"
+    );
+    expect(imports).toContain(
+      "import { startProductSearch } from 'src/components/product-search/provider';"
+    );
+    expect(mountingGuidance).toMatch(/startProductSearch/);
+    expect(mountingGuidance).toMatch(/container|'#/);
+  });
+
   test('adds a single Hits widget to an existing experience', async () => {
     const projectDir = makeInitializedProject();
     // Seed with a partial experience that does NOT include Hits.

@@ -20,6 +20,10 @@ import {
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
 import { toPascalCase } from '../utils/naming';
+import {
+  buildWidgetNextSteps,
+  experienceImportBase,
+} from '../utils/next-steps';
 import { writeOrConflict } from '../utils/write-files';
 
 const COMMAND = 'add widget';
@@ -95,6 +99,14 @@ async function materializeExperience(params: {
       experience: { name: experienceName, path: experiencePath },
       widget,
       filesCreated: outcome.filesCreated,
+      nextSteps: buildWidgetNextSteps({
+        flavor: rootManifest.flavor,
+        experienceName,
+        importBase: experienceImportBase(rootManifest, experienceName),
+        widget,
+        fileName: widget,
+        includeProvider: true,
+      }),
     },
   });
 }
@@ -195,6 +207,14 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
       experience: { name: experienceName, path: entry.path },
       widget,
       filesCreated: outcome.filesCreated,
+      nextSteps: buildWidgetNextSteps({
+        flavor: rootManifest.flavor,
+        experienceName,
+        importBase: experienceImportBase(rootManifest, experienceName),
+        widget,
+        fileName: suffixedName ?? widget,
+        includeProvider: false,
+      }),
     },
   });
 }

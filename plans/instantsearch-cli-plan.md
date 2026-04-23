@@ -225,9 +225,9 @@ If both flows work end-to-end in the recording, the POC is done.
 
 ### Acceptance criteria
 
-- [ ] Flag parity: a walkthrough table in the README or design doc lists every interactive prompt and its equivalent flag. `--yes --json` with all flags set produces deterministic, no-prompt runs for both `init` and `add experience`.
-- [ ] Every documented error code in the failure taxonomy appears in the `--json` output when triggered, with a non-zero exit.
-- [ ] `nextSteps.imports` + `nextSteps.mountingGuidance` present on every success payload for `add experience` and `add widget`.
-- [ ] Stderr is empty under `--json` on both success and failure.
+- [x] Flag parity: a walkthrough table in the README or design doc lists every interactive prompt and its equivalent flag. `--yes --json` with all flags set produces deterministic, no-prompt runs for both `init` and `add experience`. _(Table added to design doc `plans/instantsearch-cli-poc.md` under "Flag parity".)_
+- [x] Every documented error code in the failure taxonomy appears in the `--json` output when triggered, with a non-zero exit. _(Covered by introspector + cli unit tests; `cli-surface.test.ts` additionally covers `missing_required_flag`, `unsupported_framework`, `not_initialized`, `unknown_command`, and `commander.unknownOption` end-to-end through the CLI binary.)_
+- [x] `nextSteps.imports` + `nextSteps.mountingGuidance` present on every success payload for `add experience` and `add widget`.
+- [x] Stderr is empty under `--json` on both success and failure. _(Enforced by `cli-surface.test.ts`, which spawns the CLI binary and asserts empty stderr across five failure variants.)_
 - [ ] Recording of Flow A exists, exercised against a real Algolia index, and the host app renders a working search page without manual edits.
 - [ ] Recording of Flow B exists, same criteria.

@@ -11,9 +11,8 @@ import {
   type ExperienceSchema,
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
-import { providerComponentName, startFunctionName } from '../utils/naming';
+import { buildExperienceNextSteps, experienceImportBase } from '../utils/next-steps';
 import { writeOrConflict } from '../utils/write-files';
-import type { Flavor } from '../types';
 
 const COMMAND = 'add experience';
 
@@ -54,57 +53,6 @@ function missingSchemaParts(
     missing.push('--sort-by-replicas');
   }
   return missing;
-}
-
-type NextStepsHead = { providerImport: string; mountingGuidance: string };
-
-function buildJsHead(
-  experienceName: string,
-  widgets: string[],
-  importBase: string
-): NextStepsHead {
-  const startName = startFunctionName(experienceName);
-  const widgetCalls = widgets.map((w) => `${w}('#container')`).join(', ');
-  return {
-    providerImport: `import { ${startName} } from '${importBase}/provider';`,
-    mountingGuidance: `Call ${startName}([${widgetCalls}]) once the DOM is ready, passing a container selector for each widget.`,
-  };
-}
-
-function buildReactHead(
-  experienceName: string,
-  importBase: string
-): NextStepsHead {
-  const providerName = providerComponentName(experienceName);
-  return {
-    providerImport: `import { ${providerName} } from '${importBase}/provider';`,
-    mountingGuidance: `Render <${providerName}> around the widgets wherever the search should appear.`,
-  };
-}
-
-function buildNextSteps(params: {
-  flavor: Flavor;
-  experienceName: string;
-  componentsPath: string;
-  componentsAlias: string | undefined;
-  widgets: string[];
-}): { imports: string[]; mountingGuidance: string } {
-  const importBase = params.componentsAlias
-    ? `${params.componentsAlias}/${params.experienceName}`
-    : `${params.componentsPath}/${params.experienceName}`;
-  const head =
-    params.flavor === 'js'
-      ? buildJsHead(params.experienceName, params.widgets, importBase)
-      : buildReactHead(params.experienceName, importBase);
-  return {
-    imports: [
-      head.providerImport,
-      ...params.widgets.map(
-        (widget) => `import { ${widget} } from '${importBase}/${widget}';`
-      ),
-    ],
-    mountingGuidance: head.mountingGuidance,
-  };
 }
 
 export async function addExperience(
@@ -178,11 +126,10 @@ export async function addExperience(
       experience: { name, path: experiencePath },
       filesCreated: outcome.filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
-      nextSteps: buildNextSteps({
+      nextSteps: buildExperienceNextSteps({
         flavor: rootManifest.flavor,
         experienceName: name,
-        componentsPath: rootManifest.componentsPath,
-        componentsAlias: rootManifest.aliases.components,
+        importBase: experienceImportBase(rootManifest, name),
         widgets,
       }),
     },

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import process from 'node:process';
 
-import { Command } from 'commander';
+import { Command, CommanderError } from 'commander';
 
 import { init, type InitOptions } from './init';
 import { addExperience } from './add-experience';
@@ -9,6 +9,23 @@ import { addWidget } from './add-widget';
 import type { ExperienceSchema } from '../manifest';
 import { failure, type Report } from '../reporter';
 import type { Flavor, Framework } from '../types';
+
+const JSON_MODE = process.argv.includes('--json');
+
+if (JSON_MODE) {
+  // Commander 4.1.1 writes parse errors via console.error before throwing.
+  // Silence them so --json output is a single clean JSON object on stdout.
+  // eslint-disable-next-line no-console
+  console.error = () => {};
+}
+
+function emitAndExit(report: Report): never {
+  const serialized = JSON_MODE
+    ? JSON.stringify(report)
+    : JSON.stringify(report, null, 2);
+  process.stdout.write(serialized + '\n');
+  process.exit(report.ok ? 0 : 1);
+}
 
 type InitFlagOptions = {
   json?: boolean;
@@ -21,8 +38,6 @@ type InitFlagOptions = {
 };
 
 async function runInit(cliOptions: InitFlagOptions): Promise<void> {
-  const json = Boolean(cliOptions.json);
-
   const missing: string[] = [];
   if (!cliOptions.appId) missing.push('--app-id');
   if (!cliOptions.searchKey) missing.push('--search-key');
@@ -46,13 +61,13 @@ async function runInit(cliOptions: InitFlagOptions): Promise<void> {
     report = await init(options);
   }
 
-  process.stdout.write(
-    json ? JSON.stringify(report) + '\n' : JSON.stringify(report, null, 2) + '\n'
-  );
-  process.exit(report.ok ? 0 : 1);
+  emitAndExit(report);
 }
 
 const program = new Command();
+// Must be set before defining subcommands so they inherit the override; otherwise
+// commander calls process.exit directly from subcommand parse errors.
+program.exitOverride();
 
 program
   .name('instantsearch')
@@ -117,7 +132,6 @@ async function runAddExperience(
   name: string,
   cliOptions: AddExperienceFlagOptions
 ): Promise<void> {
-  const json = Boolean(cliOptions.json);
   const template = cliOptions.template ?? 'search';
 
   let report: Report;
@@ -138,10 +152,7 @@ async function runAddExperience(
     });
   }
 
-  process.stdout.write(
-    json ? JSON.stringify(report) + '\n' : JSON.stringify(report, null, 2) + '\n'
-  );
-  process.exit(report.ok ? 0 : 1);
+  emitAndExit(report);
 }
 
 program
@@ -175,8 +186,6 @@ async function runAddWidget(
   widget: string,
   cliOptions: AddWidgetFlagOptions
 ): Promise<void> {
-  const json = Boolean(cliOptions.json);
-
   let report: Report;
   if (!cliOptions.experience) {
     report = failure({
@@ -195,10 +204,7 @@ async function runAddWidget(
     });
   }
 
-  process.stdout.write(
-    json ? JSON.stringify(report) + '\n' : JSON.stringify(report, null, 2) + '\n'
-  );
-  process.exit(report.ok ? 0 : 1);
+  emitAndExit(report);
 }
 
 program
@@ -231,7 +237,64 @@ function normalizeArgv(argv: string[]): string[] {
   return copy;
 }
 
-program.parseAsync(normalizeArgv(process.argv)).catch((err) => {
-  process.stderr.write(String(err) + '\n');
-  process.exit(1);
+program.on('command:*', (operands: string[]) => {
+  const invoked = operands.join(' ');
+  emitAndExit(
+    failure({
+      command: 'cli',
+      code: 'unknown_command',
+      message: `Unknown command '${invoked}'. Supported: init, add experience, add widget.`,
+    })
+  );
 });
+
+const COMMANDER_SILENT_EXIT_CODES = new Set([
+  'commander.helpDisplayed',
+  'commander.help',
+  'commander.version',
+]);
+
+// Map commander's internal error codes to our public failure taxonomy so
+// agents don't couple to commander's naming.
+const COMMANDER_CODE_MAP: Record<string, string> = {
+  'commander.unknownOption': 'unknown_option',
+  'commander.unknownCommand': 'unknown_command',
+  'commander.missingArgument': 'missing_argument',
+  'commander.optionMissingArgument': 'missing_argument',
+  'commander.missingMandatoryOptionValue': 'missing_required_flag',
+  'commander.invalidOptionArgument': 'invalid_option_value',
+  'commander.invalidArgument': 'invalid_argument',
+  'commander.variadicArgNotLast': 'invalid_argument',
+};
+
+function handleTopLevelError(err: unknown): never {
+  if (err instanceof CommanderError && COMMANDER_SILENT_EXIT_CODES.has(err.code)) {
+    process.exit(0);
+  }
+  if (err instanceof CommanderError) {
+    emitAndExit(
+      failure({
+        command: 'cli',
+        code: COMMANDER_CODE_MAP[err.code] ?? 'commander_error',
+        message: err.message,
+      })
+    );
+  }
+  emitAndExit(
+    failure({
+      command: 'cli',
+      code: 'internal_error',
+      message: err instanceof Error ? err.message : String(err),
+    })
+  );
+}
+
+// commander's parseAsync can throw synchronously on parse errors (before the
+// Promise is created), so a try/catch is needed in addition to .catch.
+(async () => {
+  try {
+    await program.parseAsync(normalizeArgv(process.argv));
+  } catch (err) {
+    handleTopLevelError(err);
+  }
+})();

@@ -251,6 +251,29 @@ Every command accepts `--json`. Returns structured output with `apiVersion`. Age
 - Stderr stays quiet under `--json` — all command-relevant output goes to stdout.
 - Schema is versioned via `apiVersion` so we can evolve without breaking consumers.
 
+### Flag parity
+
+Every interactive prompt has an equivalent CLI flag so `--yes --json` runs are fully deterministic. The table below maps prompts to flags.
+
+| Command | Prompt | Equivalent flag |
+| --- | --- | --- |
+| `init` | "Detected flavor (react/js) — confirm?" | `--flavor <react\|js>` |
+| `init` | "Detected framework (nextjs) — confirm?" | `--framework <nextjs>` |
+| `init` | "Algolia application ID" | `--app-id <id>` |
+| `init` | "Algolia search-only API key" | `--search-key <key>` |
+| `init` | "Where should generated components live?" | `--components-path <path>` |
+| `add experience` | "Which template?" | `--template <name>` (default `search`) |
+| `add experience` | "Which index?" | `--index <name>` |
+| `add experience` (Hits) | "Which attribute is the title?" | `--hits-title <attr>` |
+| `add experience` (Hits) | "Which attribute is the image?" | `--hits-image <attr>` |
+| `add experience` (Hits) | "Which attribute is the description?" | `--hits-description <attr>` |
+| `add experience` (RefinementList) | "Which facet attribute?" | `--refinement-list-attribute <attr>` |
+| `add experience` (SortBy) | "Which replicas?" | `--sort-by-replicas <a,b,c>` |
+| `add widget` | "Which experience to attach to?" | `--experience <name>` |
+| `add widget` (auto-materialize) | "Which index for the new experience?" | `--index <name>` |
+| all commands | "Skip confirmations?" | `--yes` (implied by `--json`) |
+| all commands | "Emit JSON?" | `--json` |
+
 ### Deferred
 
 - MCP server wrapping the CLI — natural follow-up once CLI is stable.
