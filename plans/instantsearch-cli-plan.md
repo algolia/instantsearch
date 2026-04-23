@@ -194,11 +194,11 @@ Harden the incremental and multi-experience flows:
 
 ### Acceptance criteria
 
-- [ ] `add widget refinement-list --experience product-search` invoked twice (different facets) produces two differently-named files without overwriting the first.
-- [ ] `add widget hits --experience docs-search` where `docs-search` doesn't exist creates the experience inline, prompts for index + schema, and emits provider + Hits.
-- [ ] Two successive `add experience` commands in the same project yield two folders with independent providers and indices; both render when mounted side-by-side.
-- [ ] Re-running a command that would overwrite any existing generated file errors with `{ code: "file_conflict", ... }`, non-zero exit, nothing changed on disk.
-- [ ] `--yes` without `--index` on an auto-materializing `add widget` errors with `index_required`.
+- [x] `add widget refinement-list --experience product-search` invoked twice (different facets) produces two differently-named files without overwriting the first.
+- [x] `add widget hits --experience docs-search` where `docs-search` doesn't exist creates the experience inline, prompts for index + schema, and emits provider + Hits. _(Flag-driven path only; interactive prompting deferred per the Phase 3 scope note.)_
+- [x] Two successive `add experience` commands in the same project yield two folders with independent providers and indices; both render when mounted side-by-side. _(File creation + independent providers verified; render-time check shares the Phase 8 acceptance recording gate.)_
+- [x] Re-running a command that would overwrite any existing generated file errors with `{ code: "file_conflict", ... }`, non-zero exit, nothing changed on disk.
+- [x] `--yes` without `--index` on an auto-materializing `add widget` errors with `index_required`.
 
 ---
 

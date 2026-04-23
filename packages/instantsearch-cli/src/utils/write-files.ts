@@ -1,6 +1,44 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { failure, type FailureReport } from '../reporter';
+
+function findExistingFiles(
+  projectDir: string,
+  files: Map<string, string>
+): string[] {
+  const conflicts: string[] = [];
+  for (const relativePath of files.keys()) {
+    if (fs.existsSync(path.join(projectDir, relativePath))) {
+      conflicts.push(relativePath);
+    }
+  }
+  return conflicts;
+}
+
+export type WriteOutcome =
+  | { ok: true; filesCreated: string[] }
+  | { ok: false; failure: FailureReport };
+
+export function writeOrConflict(
+  projectDir: string,
+  files: Map<string, string>,
+  command: string
+): WriteOutcome {
+  const conflicts = findExistingFiles(projectDir, files);
+  if (conflicts.length > 0) {
+    return {
+      ok: false,
+      failure: failure({
+        command,
+        code: 'file_conflict',
+        message: `Refusing to overwrite existing files: ${conflicts.join(', ')}.`,
+      }),
+    };
+  }
+  return { ok: true, filesCreated: writeGeneratedFiles(projectDir, files) };
+}
+
 export function writeGeneratedFiles(
   projectDir: string,
   files: Map<string, string>

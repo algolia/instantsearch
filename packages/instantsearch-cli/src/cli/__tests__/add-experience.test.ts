@@ -100,6 +100,51 @@ describe('add experience command', () => {
     expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
   });
 
+  test('two successive add experience calls yield two independent experiences', async () => {
+    const projectDir = makeInitializedProject();
+
+    await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+    });
+
+    await addExperience({
+      projectDir,
+      name: 'docs-search',
+      template: 'search',
+      indexName: 'docs',
+      schema: {
+        hits: { title: 'page_title' },
+        refinementList: { attribute: 'section' },
+        sortBy: { replicas: ['docs_updated_desc'] },
+      },
+    });
+
+    const productProvider = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/provider.tsx'),
+      'utf8'
+    );
+    const docsProvider = fs.readFileSync(
+      path.join(projectDir, 'src/components/docs-search/provider.tsx'),
+      'utf8'
+    );
+    expect(productProvider).toMatch(/indexName="products"/);
+    expect(docsProvider).toMatch(/indexName="docs"/);
+    expect(productProvider).toMatch(/ProductSearchProvider/);
+    expect(docsProvider).toMatch(/DocsSearchProvider/);
+
+    const root = JSON.parse(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    );
+    expect(root.experiences).toEqual([
+      { name: 'product-search', path: 'src/components/product-search' },
+      { name: 'docs-search', path: 'src/components/docs-search' },
+    ]);
+  });
+
   test('updates root manifest experiences array', async () => {
     const projectDir = makeInitializedProject();
 
@@ -506,6 +551,54 @@ describe('add experience command', () => {
       expect(
         fs.existsSync(path.join(projectDir, 'src/components/product-search'))
       ).toBe(false);
+    });
+
+    test('re-running add experience on an existing experience fails with file_conflict', async () => {
+      const projectDir = makeInitializedProject();
+
+      const first = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+      expect(first.ok).toBe(true);
+
+      const manifestBefore = fs.readFileSync(
+        path.join(projectDir, 'instantsearch.json'),
+        'utf8'
+      );
+      const searchBoxBefore = fs.readFileSync(
+        path.join(projectDir, 'src/components/product-search/SearchBox.tsx'),
+        'utf8'
+      );
+
+      const second = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(second).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'file_conflict',
+      });
+
+      // Root manifest unchanged (no duplicate experiences entry).
+      expect(
+        fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+      ).toBe(manifestBefore);
+      // Existing generated file is not overwritten.
+      expect(
+        fs.readFileSync(
+          path.join(projectDir, 'src/components/product-search/SearchBox.tsx'),
+          'utf8'
+        )
+      ).toBe(searchBoxBefore);
     });
 
     test('search template with partial schema (missing refinementList) fails with missing_schema', async () => {

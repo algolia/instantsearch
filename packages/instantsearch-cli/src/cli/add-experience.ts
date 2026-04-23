@@ -12,7 +12,7 @@ import {
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
 import { providerComponentName, startFunctionName } from '../utils/naming';
-import { writeGeneratedFiles } from '../utils/write-files';
+import { writeOrConflict } from '../utils/write-files';
 import type { Flavor } from '../types';
 
 const COMMAND = 'add experience';
@@ -166,7 +166,8 @@ export async function addExperience(
   });
 
   const files = generateExperience(resolved);
-  const filesCreated = writeGeneratedFiles(projectDir, files);
+  const outcome = writeOrConflict(projectDir, files, COMMAND);
+  if (!outcome.ok) return outcome.failure;
 
   const experiencePath = path.posix.join(rootManifest.componentsPath, name);
   addExperienceToRoot(projectDir, rootManifest, { name, path: experiencePath });
@@ -175,7 +176,7 @@ export async function addExperience(
     command: COMMAND,
     payload: {
       experience: { name, path: experiencePath },
-      filesCreated,
+      filesCreated: outcome.filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
       nextSteps: buildNextSteps({
         flavor: rootManifest.flavor,

@@ -100,6 +100,13 @@ type StructuralWidget = (typeof STRUCTURAL_WIDGETS)[number];
 const SCHEMA_WIDGETS = ['Hits', 'RefinementList', 'SortBy'] as const;
 type SchemaWidget = (typeof SCHEMA_WIDGETS)[number];
 
+export type WidgetName = StructuralWidget | SchemaWidget;
+
+export const SUPPORTED_WIDGETS: readonly WidgetName[] = [
+  ...STRUCTURAL_WIDGETS,
+  ...SCHEMA_WIDGETS,
+];
+
 const JS_WIDGET_FACTORY: Record<StructuralWidget | SchemaWidget, string> = {
   SearchBox: 'searchBox',
   Pagination: 'pagination',
@@ -393,6 +400,48 @@ const SOURCES_BY_FLAVOR: Record<Flavor, FlavorSources> = {
   },
 };
 
+function widgetSource(
+  widget: WidgetName,
+  manifest: ResolvedExperienceManifest
+): string {
+  const sources = SOURCES_BY_FLAVOR[manifest.flavor];
+  if (isStructuralWidget(widget)) return sources.structural(widget);
+  return sources.schema(widget, manifest);
+}
+
+export function widgetFilePath(
+  manifest: ResolvedExperienceManifest,
+  widget: WidgetName,
+  fileName?: string
+): string {
+  const experienceDir = path.posix.join(
+    manifest.componentsPath,
+    manifest.experience.name
+  );
+  return path.posix.join(
+    experienceDir,
+    `${fileName ?? widget}.${widgetExtension(manifest)}`
+  );
+}
+
+export function generateWidget(
+  manifest: ResolvedExperienceManifest,
+  params: { widget: WidgetName; fileName?: string }
+): GeneratedFiles {
+  return new Map([
+    [
+      widgetFilePath(manifest, params.widget, params.fileName),
+      widgetSource(params.widget, manifest),
+    ],
+  ]);
+}
+
+function assertKnownWidget(widget: string): asserts widget is WidgetName {
+  if (!isStructuralWidget(widget) && !isSchemaWidget(widget)) {
+    throw new Error(`Unknown widget: ${widget}`);
+  }
+}
+
 export function generateExperience(
   manifest: ResolvedExperienceManifest
 ): GeneratedFiles {
@@ -414,16 +463,11 @@ export function generateExperience(
   );
 
   for (const widget of manifest.experience.widgets) {
-    const filePath = path.posix.join(experienceDir, `${widget}.${ext}`);
-    if (isStructuralWidget(widget)) {
-      files.set(filePath, sources.structural(widget));
-      continue;
-    }
-    if (isSchemaWidget(widget)) {
-      files.set(filePath, sources.schema(widget, manifest));
-      continue;
-    }
-    throw new Error(`Unknown widget: ${widget}`);
+    assertKnownWidget(widget);
+    files.set(
+      path.posix.join(experienceDir, `${widget}.${ext}`),
+      widgetSource(widget, manifest)
+    );
   }
 
   return files;
