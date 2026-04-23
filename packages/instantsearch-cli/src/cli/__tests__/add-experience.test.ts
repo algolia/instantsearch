@@ -1,9 +1,52 @@
+jest.mock('algoliasearch', () => ({
+  algoliasearch: jest.fn(),
+}));
+
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import { algoliasearch } from 'algoliasearch';
+
 import { addExperience } from '../add-experience';
 import { writeRootManifest, type RootManifest } from '../../manifest';
+
+const mockedAlgoliasearch = algoliasearch as unknown as jest.Mock;
+
+function mockAlgolia({
+  hits,
+  getSettings,
+}: {
+  hits?: Array<Record<string, unknown>>;
+  getSettings?: () => Promise<unknown>;
+} = {}): void {
+  mockedAlgoliasearch.mockImplementation(() => ({
+    searchSingleIndex: () =>
+      Promise.resolve({
+        hits: hits ?? [
+          {
+            objectID: '1',
+            name: 'Widget',
+            image_url: 'https://example.com/w.jpg',
+            description: 'A nice widget',
+            _highlightResult: {
+              name: { value: 'Widget' },
+              description: { value: 'A nice widget' },
+            },
+          },
+        ],
+        facets: { brand: { Apple: 10 } },
+      }),
+    getSettings:
+      getSettings ??
+      (() => Promise.resolve({ replicas: ['products_price_asc'] })),
+  }));
+}
+
+beforeEach(() => {
+  mockedAlgoliasearch.mockReset();
+  mockAlgolia();
+});
 
 function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
   const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'is-cli-add-exp-'));
@@ -21,8 +64,14 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
   return projectDir;
 }
 
+const SEARCH_SCHEMA = {
+  hits: { title: 'name', image: 'image_url', description: 'description' },
+  refinementList: { attribute: 'brand' },
+  sortBy: { replicas: ['products_price_asc'] },
+};
+
 describe('add experience command', () => {
-  test('happy path: creates experience folder with provider + structural widgets + config', async () => {
+  test('happy path: creates experience folder with provider + all six widgets + config', async () => {
     const projectDir = makeInitializedProject();
 
     const report = await addExperience({
@@ -30,6 +79,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     expect(report).toMatchObject({
@@ -45,6 +95,9 @@ describe('add experience command', () => {
     expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
   });
 
   test('updates root manifest experiences array', async () => {
@@ -55,6 +108,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     const root = JSON.parse(
@@ -73,6 +127,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     if (!report.ok) throw new Error('expected success');
@@ -82,6 +137,9 @@ describe('add experience command', () => {
         'src/components/product-search/instantsearch.config.json',
         'src/components/product-search/provider.tsx',
         'src/components/product-search/SearchBox.tsx',
+        'src/components/product-search/Hits.tsx',
+        'src/components/product-search/RefinementList.tsx',
+        'src/components/product-search/SortBy.tsx',
         'src/components/product-search/Pagination.tsx',
         'src/components/product-search/ClearRefinements.tsx',
       ])
@@ -109,6 +167,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     if (!report.ok) throw new Error('expected success');
@@ -129,6 +188,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     if (!report.ok) throw new Error('expected success');
@@ -146,6 +206,7 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'search',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     expect(report).toMatchObject({
@@ -164,12 +225,159 @@ describe('add experience command', () => {
       name: 'product-search',
       template: 'autocomplete',
       indexName: 'products',
+      schema: SEARCH_SCHEMA,
     });
 
     expect(report).toMatchObject({
       ok: false,
       command: 'add experience',
       code: 'unknown_template',
+    });
+  });
+
+  describe('introspection failures', () => {
+    function algoliaReject(status: number): void {
+      const error = Object.assign(new Error(`Algolia ${status}`), { status });
+      mockedAlgoliasearch.mockImplementation(() => ({
+        searchSingleIndex: () => Promise.reject(error),
+        getSettings: () => Promise.reject(error),
+      }));
+    }
+
+    test('credentials_invalid bubbles up and no files are written', async () => {
+      const projectDir = makeInitializedProject();
+      algoliaReject(403);
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'credentials_invalid',
+      });
+      expect(
+        fs.existsSync(path.join(projectDir, 'src/components/product-search'))
+      ).toBe(false);
+      const root = JSON.parse(
+        fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+      );
+      expect(root.experiences).toEqual([]);
+    });
+
+    test('index_not_found bubbles up and no files are written', async () => {
+      const projectDir = makeInitializedProject();
+      algoliaReject(404);
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'missing',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'index_not_found',
+      });
+      expect(
+        fs.existsSync(path.join(projectDir, 'src/components/product-search'))
+      ).toBe(false);
+    });
+
+    test('index_empty bubbles up and no files are written', async () => {
+      const projectDir = makeInitializedProject();
+      mockAlgolia({ hits: [] });
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'index_empty',
+      });
+      expect(
+        fs.existsSync(path.join(projectDir, 'src/components/product-search'))
+      ).toBe(false);
+    });
+
+    test('network_error bubbles up and no files are written', async () => {
+      const projectDir = makeInitializedProject();
+      mockedAlgoliasearch.mockImplementation(() => ({
+        searchSingleIndex: () => Promise.reject(new Error('ECONNRESET')),
+        getSettings: () => Promise.reject(new Error('ECONNRESET')),
+      }));
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'network_error',
+      });
+    });
+  });
+
+  describe('schema validation', () => {
+    test('search template without schema fails with missing_schema and writes nothing', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        // no schema
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        command: 'add experience',
+        code: 'missing_schema',
+      });
+      expect(
+        fs.existsSync(path.join(projectDir, 'src/components/product-search'))
+      ).toBe(false);
+    });
+
+    test('search template with partial schema (missing refinementList) fails with missing_schema', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: {
+          hits: { title: 'name' },
+          sortBy: { replicas: ['products_price_asc'] },
+        },
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        code: 'missing_schema',
+      });
+      expect((report as any).message).toMatch(/refinement-list|refinementList/);
     });
   });
 });

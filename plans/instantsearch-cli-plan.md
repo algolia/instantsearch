@@ -96,13 +96,23 @@ Add the three schema-driven widgets: Hits (prompts for title/image/description a
 
 `--template search` now delivers the full six-widget experience against a real index with correct schema mapping on the first run.
 
+#### Scope note: interactive prompts deferred
+
+Phase 3 implements the **flag-driven / `--json` / `--yes` path only**. Interactive prompts (inquirer flow) are deferred to a later phase. Rationale: no inquirer wiring exists in phases 1–2, so building it from scratch would balloon Phase 3. The flag-driven path satisfies the non-interactive acceptance criteria (agent use case, CI, and the Phase 8 recording gate) and is what unlocks downstream phases. Interactive fallbacks for `index_not_found`, `index_empty`, `index_has_no_facets`, `settings_forbidden`, `no_replicas` will be added alongside the broader interactive prompt wiring (likely folded into Phase 8's agent-surface hardening, or a dedicated interactive-UX phase between 7 and 8). In `--yes` mode these all surface as non-zero-exit report failures — which is the documented agent-mode behavior anyway.
+
+New flags on `add experience` for Phase 3:
+
+- `--hits-title <attr>`, `--hits-image <attr>`, `--hits-description <attr>` (description optional)
+- `--refinement-list-attribute <attr>`
+- `--sort-by-replicas <comma-separated-list>`
+
 ### Acceptance criteria
 
-- [ ] `instantsearch add experience product-search --template search --index products` interactively prompts for Hits title/image, RefinementList facet, SortBy replicas, and generates `Hits.tsx`, `RefinementList.tsx`, `SortBy.tsx` with the correct attributes and types baked in.
-- [ ] Each failure variant produces the documented error code in `--json` mode and the documented fallback UX in interactive mode.
-- [ ] Against a real sandbox index (e.g., the Algolia ecommerce demo), a fresh `init` + `add experience` run produces a working six-widget search page with no manual edits.
-- [ ] Introspector unit tests cover each success beat and every failure variant with mocked Algolia responses.
-- [ ] Generator snapshot tests extend to Hits/RefinementList/SortBy variants parameterized on schema.
+- [x] `instantsearch add experience product-search --template search --index products --hits-title name --hits-image image_url --refinement-list-attribute brand --sort-by-replicas products_price_asc,products_price_desc --yes --json` generates `Hits.tsx`, `RefinementList.tsx`, `SortBy.tsx` with the correct attributes and types baked in.
+- [x] Each failure variant produces the documented error code in `--json` mode. (Interactive fallback UX deferred — see scope note.)
+- [ ] Against a real sandbox index (e.g., the Algolia ecommerce demo), a fresh `init` + `add experience` run (flag-driven) produces a working six-widget search page with no manual edits. _(Requires live Algolia creds — deferred to the Phase 8 acceptance recording gate.)_
+- [x] Introspector unit tests cover each success beat and every failure variant with mocked Algolia responses.
+- [x] Generator snapshot tests extend to Hits/RefinementList/SortBy variants parameterized on schema.
 
 ---
 

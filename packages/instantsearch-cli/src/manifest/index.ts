@@ -17,10 +17,17 @@ export type RootManifest = {
   experiences: Array<{ name: string; path: string }>;
 };
 
+export type ExperienceSchema = {
+  hits?: { title: string; image?: string; description?: string };
+  refinementList?: { attribute: string };
+  sortBy?: { replicas: string[] };
+};
+
 export type ExperienceManifest = {
   apiVersion: 1;
   indexName: string;
   widgets: string[];
+  schema?: ExperienceSchema;
 };
 
 export function readRootManifest(projectDir: string): RootManifest | null {
@@ -85,6 +92,7 @@ export type ResolvedExperienceManifest = {
     name: string;
     indexName: string;
     widgets: string[];
+    schema?: ExperienceSchema;
   };
 };
 
@@ -103,6 +111,7 @@ export function resolveExperience(
       name: params.name,
       indexName: params.experience.indexName,
       widgets: params.experience.widgets,
+      schema: params.experience.schema,
     },
   };
 }

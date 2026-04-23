@@ -147,3 +147,107 @@ describe('generator: experience (React + TypeScript)', () => {
     ).toMatchSnapshot();
   });
 });
+
+describe('generator: schema-driven widgets (React + TypeScript)', () => {
+  const baseManifest = {
+    flavor: 'react' as const,
+    framework: null,
+    typescript: true,
+    componentsPath: 'src/components',
+    aliases: {},
+    algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+    experience: {
+      name: 'product-search',
+      indexName: 'products',
+      widgets: ['Hits', 'RefinementList', 'SortBy'],
+      schema: {
+        hits: { title: 'name', image: 'image_url', description: 'description' },
+        refinementList: { attribute: 'brand' },
+        sortBy: {
+          replicas: ['products_price_asc', 'products_price_desc'],
+        },
+      },
+    },
+  };
+
+  test('Hits.tsx renders a typed ProductHit with the schema-mapped attributes', () => {
+    const files = generateExperience(baseManifest);
+    const hits = files.get('src/components/product-search/Hits.tsx')!;
+    expect(hits).toMatch(/from ['"]react-instantsearch['"]/);
+    expect(hits).toMatch(/hit\.name/);
+    expect(hits).toMatch(/hit\.image_url/);
+    expect(hits).toMatch(/hit\.description/);
+    expect(hits).toMatch(/export function Hits/);
+  });
+
+  test('Hits.tsx omits the image element when no image attribute is configured', () => {
+    const files = generateExperience({
+      ...baseManifest,
+      experience: {
+        ...baseManifest.experience,
+        schema: {
+          ...baseManifest.experience.schema,
+          hits: { title: 'name' },
+        },
+      },
+    });
+    const hits = files.get('src/components/product-search/Hits.tsx')!;
+    expect(hits).toMatch(/hit\.name/);
+    expect(hits).not.toMatch(/<img/);
+    expect(hits).not.toMatch(/image_url/);
+  });
+
+  test('RefinementList.tsx bakes in the facet attribute', () => {
+    const files = generateExperience(baseManifest);
+    const refinement = files.get(
+      'src/components/product-search/RefinementList.tsx'
+    )!;
+    expect(refinement).toMatch(/attribute=['"]brand['"]/);
+  });
+
+  test('SortBy.tsx lists the index + replicas as sort items', () => {
+    const files = generateExperience(baseManifest);
+    const sortBy = files.get('src/components/product-search/SortBy.tsx')!;
+    // Primary index should be first in the items array.
+    expect(sortBy).toMatch(/value:\s*['"]products['"]/);
+    expect(sortBy).toMatch(/value:\s*['"]products_price_asc['"]/);
+    expect(sortBy).toMatch(/value:\s*['"]products_price_desc['"]/);
+  });
+
+  test('snapshot: Hits.tsx', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/Hits.tsx')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: Hits.tsx without image', () => {
+    const files = generateExperience({
+      ...baseManifest,
+      experience: {
+        ...baseManifest.experience,
+        schema: {
+          ...baseManifest.experience.schema,
+          hits: { title: 'name', description: 'description' },
+        },
+      },
+    });
+    expect(
+      files.get('src/components/product-search/Hits.tsx')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: RefinementList.tsx', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/RefinementList.tsx')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: SortBy.tsx', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/SortBy.tsx')
+    ).toMatchSnapshot();
+  });
+});

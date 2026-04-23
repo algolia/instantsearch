@@ -1,12 +1,14 @@
 import path from 'node:path';
 
 import { generateExperience } from '../generator';
+import { introspectRecords } from '../introspector';
 import {
   addExperienceToRoot,
   readRootManifest,
   resolveExperience,
   ROOT_MANIFEST_FILENAME,
   type ExperienceManifest,
+  type ExperienceSchema,
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
 import { providerComponentName } from '../utils/naming';
@@ -19,11 +21,39 @@ export type AddExperienceOptions = {
   name: string;
   template: string;
   indexName: string;
+  schema?: ExperienceSchema;
 };
 
 const TEMPLATE_WIDGETS: Record<string, string[]> = {
-  search: ['SearchBox', 'Pagination', 'ClearRefinements'],
+  search: [
+    'SearchBox',
+    'Hits',
+    'RefinementList',
+    'SortBy',
+    'Pagination',
+    'ClearRefinements',
+  ],
 };
+
+function missingSchemaParts(
+  widgets: string[],
+  schema: ExperienceSchema | undefined
+): string[] {
+  const missing: string[] = [];
+  if (widgets.includes('Hits') && !schema?.hits?.title) {
+    missing.push('--hits-title');
+  }
+  if (widgets.includes('RefinementList') && !schema?.refinementList?.attribute) {
+    missing.push('--refinement-list-attribute');
+  }
+  if (
+    widgets.includes('SortBy') &&
+    (!schema?.sortBy?.replicas || schema.sortBy.replicas.length === 0)
+  ) {
+    missing.push('--sort-by-replicas');
+  }
+  return missing;
+}
 
 function buildNextSteps(params: {
   experienceName: string;
@@ -50,7 +80,7 @@ function buildNextSteps(params: {
 export async function addExperience(
   options: AddExperienceOptions
 ): Promise<Report> {
-  const { projectDir, name, template, indexName } = options;
+  const { projectDir, name, template, indexName, schema } = options;
 
   const rootManifest = readRootManifest(projectDir);
   if (!rootManifest) {
@@ -71,10 +101,33 @@ export async function addExperience(
     });
   }
 
+  const missingFlags = missingSchemaParts(widgets, schema);
+  if (missingFlags.length > 0) {
+    return failure({
+      command: COMMAND,
+      code: 'missing_schema',
+      message: `Missing schema inputs for template '${template}': ${missingFlags.join(', ')}.`,
+    });
+  }
+
+  const introspection = await introspectRecords({
+    appId: rootManifest.algolia.appId,
+    searchApiKey: rootManifest.algolia.searchApiKey,
+    indexName,
+  });
+  if (!introspection.ok) {
+    return failure({
+      command: COMMAND,
+      code: introspection.code,
+      message: introspection.message,
+    });
+  }
+
   const experienceManifest: ExperienceManifest = {
     apiVersion: 1,
     indexName,
     widgets,
+    ...(schema ? { schema } : {}),
   };
 
   const resolved = resolveExperience(rootManifest, {

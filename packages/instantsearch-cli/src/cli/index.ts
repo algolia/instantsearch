@@ -5,6 +5,7 @@ import { Command } from 'commander';
 
 import { init, type InitOptions } from './init';
 import { addExperience } from './add-experience';
+import type { ExperienceSchema } from '../manifest';
 import { failure, type Report } from '../reporter';
 import type { Flavor, Framework } from '../types';
 
@@ -74,7 +75,20 @@ type AddExperienceFlagOptions = {
   yes?: boolean;
   template?: string;
   index?: string;
+  hitsTitle?: string;
+  hitsImage?: string;
+  hitsDescription?: string;
+  refinementListAttribute?: string;
+  sortByReplicas?: string;
 };
+
+function parseReplicasFlag(value: string | undefined): string[] | undefined {
+  if (!value) return undefined;
+  return value
+    .split(',')
+    .map((r) => r.trim())
+    .filter(Boolean);
+}
 
 async function runAddExperience(
   name: string,
@@ -94,11 +108,30 @@ async function runAddExperience(
       message: `Missing required flags: ${missing.join(', ')}`,
     });
   } else {
+    const schema: ExperienceSchema = {};
+    if (cliOptions.hitsTitle) {
+      schema.hits = {
+        title: cliOptions.hitsTitle,
+        ...(cliOptions.hitsImage ? { image: cliOptions.hitsImage } : {}),
+        ...(cliOptions.hitsDescription
+          ? { description: cliOptions.hitsDescription }
+          : {}),
+      };
+    }
+    if (cliOptions.refinementListAttribute) {
+      schema.refinementList = { attribute: cliOptions.refinementListAttribute };
+    }
+    const replicas = parseReplicasFlag(cliOptions.sortByReplicas);
+    if (replicas) {
+      schema.sortBy = { replicas };
+    }
+
     report = await addExperience({
       projectDir: process.cwd(),
       name,
       template,
       indexName: cliOptions.index!,
+      ...(Object.keys(schema).length > 0 ? { schema } : {}),
     });
   }
 
@@ -115,6 +148,17 @@ program
   .option('--yes', 'Accept defaults without prompting.')
   .option('--template <template>', 'Template to use (search)', 'search')
   .option('--index <index>', 'Algolia index name')
+  .option('--hits-title <attr>', 'Record attribute for Hits title')
+  .option('--hits-image <attr>', 'Record attribute for Hits image')
+  .option('--hits-description <attr>', 'Record attribute for Hits description')
+  .option(
+    '--refinement-list-attribute <attr>',
+    'Facet attribute for RefinementList'
+  )
+  .option(
+    '--sort-by-replicas <list>',
+    'Comma-separated replica index names for SortBy'
+  )
   .action(runAddExperience);
 
 function normalizeArgv(argv: string[]): string[] {

@@ -56,3 +56,75 @@ export function ProductSearchProvider({ children }: { children: ReactNode }) {
 }
 "
 `;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: Hits.tsx 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+type HitRecord = {
+  name: string;
+  image_url: string;
+  description: string;
+};
+
+function Hit({ hit }: { hit: HitRecord }) {
+  return (
+    <article>
+      <img src={hit.image_url} alt={hit.name} />
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits<HitRecord> hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: Hits.tsx without image 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+type HitRecord = {
+  name: string;
+  description: string;
+};
+
+function Hit({ hit }: { hit: HitRecord }) {
+  return (
+    <article>
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits<HitRecord> hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: RefinementList.tsx 1`] = `
+"import { RefinementList as InstantSearchRefinementList } from 'react-instantsearch';
+
+export function RefinementList() {
+  return <InstantSearchRefinementList attribute=\\"brand\\" />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: SortBy.tsx 1`] = `
+"import { SortBy as InstantSearchSortBy } from 'react-instantsearch';
+
+const items = [
+  { value: 'products', label: 'Featured' },
+  { value: 'products_price_asc', label: 'price asc' },
+  { value: 'products_price_desc', label: 'price desc' },
+];
+
+export function SortBy() {
+  return <InstantSearchSortBy items={items} />;
+}
+"
+`;
