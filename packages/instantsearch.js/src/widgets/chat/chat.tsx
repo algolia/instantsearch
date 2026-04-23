@@ -29,6 +29,7 @@ import {
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
+import type { TemplateProps } from '../../components/Template/Template';
 import type {
   ChatRenderState,
   ChatConnectorParams,
@@ -495,6 +496,212 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const promptRef = { current: null as HTMLTextAreaElement | null };
   let wasOpen = false;
 
+  // Template wrappers are rendered as component types downstream. Recreating
+  // them each render would make Preact remount the chat subtree (and drop
+  // textarea focus) on every keystroke. Create them once and read the latest
+  // `PreparedTemplateProps` from mutable refs updated per render.
+  type TemplateRef = {
+    current: PreparedTemplateProps<ChatTemplates<THit>> | undefined;
+  };
+  const makeTemplateRef = (): TemplateRef => ({ current: undefined });
+  const headerTemplateRef = makeTemplateRef();
+  const messagesTemplateRef = makeTemplateRef();
+  const emptyTemplateRef = makeTemplateRef();
+  const assistantMessageTemplateRef = makeTemplateRef();
+  const userMessageTemplateRef = makeTemplateRef();
+  const promptTemplateRef = makeTemplateRef();
+  const toggleButtonTemplateRef = makeTemplateRef();
+  const layoutTemplateRef = makeTemplateRef();
+
+  function createStableTemplateComponent<TProps>(
+    templateRef: TemplateRef,
+    templateKey: string,
+    rootTagName: TemplateProps['rootTagName']
+  ): (props?: TProps) => JSX.Element {
+    return (props?: TProps) => (
+      <TemplateComponent
+        {...(templateRef.current as PreparedTemplateProps<ChatTemplates<THit>>)}
+        templateKey={templateKey}
+        rootTagName={rootTagName}
+        data={props as unknown as Record<string, unknown>}
+      />
+    );
+  }
+
+  const stableHeaderLayoutComponent = templates.header?.layout
+    ? createStableTemplateComponent<ChatHeaderProps>(
+        headerTemplateRef,
+        'layout',
+        'div'
+      )
+    : undefined;
+  const stableHeaderCloseIconComponent = templates.header?.closeIcon
+    ? createStableTemplateComponent<Record<string, never>>(
+        headerTemplateRef,
+        'closeIcon',
+        'span'
+      )
+    : undefined;
+  const stableHeaderMinimizeIconComponent = templates.header?.minimizeIcon
+    ? createStableTemplateComponent<Record<string, never>>(
+        headerTemplateRef,
+        'minimizeIcon',
+        'span'
+      )
+    : undefined;
+  const stableHeaderMaximizeIconComponent = templates.header?.maximizeIcon
+    ? createStableTemplateComponent<{ maximized: boolean }>(
+        headerTemplateRef,
+        'maximizeIcon',
+        'span'
+      )
+    : undefined;
+  const stableHeaderTitleIconComponent = templates.header?.titleIcon
+    ? createStableTemplateComponent<Record<string, never>>(
+        headerTemplateRef,
+        'titleIcon',
+        'span'
+      )
+    : undefined;
+  const stableMessagesLoaderComponent = templates.messages?.loader
+    ? createStableTemplateComponent<ChatMessageLoaderProps>(
+        messagesTemplateRef,
+        'loader',
+        'div'
+      )
+    : undefined;
+  const stableMessagesErrorComponent = templates.messages?.error
+    ? createStableTemplateComponent<ChatMessageErrorProps>(
+        messagesTemplateRef,
+        'error',
+        'div'
+      )
+    : undefined;
+  const stableMessagesEmptyComponent = templates.empty
+    ? createStableTemplateComponent<ChatEmptyProps>(
+        emptyTemplateRef,
+        'empty',
+        'div'
+      )
+    : undefined;
+  const stableAssistantMessageLeadingComponent = templates.assistantMessage
+    ?.leading
+    ? createStableTemplateComponent<Record<string, never>>(
+        assistantMessageTemplateRef,
+        'leading',
+        'fragment'
+      )
+    : undefined;
+  const stableAssistantMessageFooterComponent = templates.assistantMessage
+    ?.footer
+    ? createStableTemplateComponent<Record<string, never>>(
+        assistantMessageTemplateRef,
+        'footer',
+        'fragment'
+      )
+    : undefined;
+  const stableUserMessageLeadingComponent = templates.userMessage?.leading
+    ? createStableTemplateComponent<Record<string, never>>(
+        userMessageTemplateRef,
+        'leading',
+        'fragment'
+      )
+    : undefined;
+  const stableUserMessageFooterComponent = templates.userMessage?.footer
+    ? createStableTemplateComponent<Record<string, never>>(
+        userMessageTemplateRef,
+        'footer',
+        'fragment'
+      )
+    : undefined;
+  const stablePromptLayoutComponent = templates.prompt?.layout
+    ? createStableTemplateComponent<ChatPromptProps>(
+        promptTemplateRef,
+        'layout',
+        'div'
+      )
+    : undefined;
+  const stablePromptHeaderComponent = templates.prompt?.header
+    ? createStableTemplateComponent<Record<string, never>>(
+        promptTemplateRef,
+        'header',
+        'fragment'
+      )
+    : undefined;
+  const stablePromptFooterComponent = templates.prompt?.footer
+    ? createStableTemplateComponent<Record<string, never>>(
+        promptTemplateRef,
+        'footer',
+        'fragment'
+      )
+    : undefined;
+  const stableToggleButtonLayoutComponent = templates.toggleButton?.layout
+    ? createStableTemplateComponent<ChatToggleButtonProps>(
+        toggleButtonTemplateRef,
+        'layout',
+        'button'
+      )
+    : undefined;
+  const stableToggleButtonIconComponent = templates.toggleButton?.icon
+    ? createStableTemplateComponent<{ isOpen: boolean }>(
+        toggleButtonTemplateRef,
+        'icon',
+        'span'
+      )
+    : undefined;
+  const stableActionsComponent = templates.actions
+    ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="actions"
+          rootTagName="div"
+          data={actionsProps}
+        />
+      )
+    : undefined;
+  const stableSuggestionsComponent = templates.suggestions
+    ? (suggestionsProps: {
+        suggestions?: string[];
+        onSuggestionClick: (suggestion: string) => void;
+      }) => (
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="suggestions"
+          rootTagName="fragment"
+          data={suggestionsProps}
+        />
+      )
+    : undefined;
+  const stableLayoutComponent = templates.layout
+    ? (layoutProps: ChatLayoutOwnProps) => {
+        const {
+          headerComponent,
+          messagesComponent,
+          promptComponent,
+          toggleButtonComponent,
+          ...restLayoutProps
+        } = layoutProps;
+        return (
+          <TemplateComponent
+            {...(layoutTemplateRef.current as PreparedTemplateProps<
+              ChatTemplates<THit>
+            >)}
+            templateKey="layout"
+            rootTagName="fragment"
+            data={{
+              ...restLayoutProps,
+              templates: {
+                header: () => headerComponent,
+                messages: () => messagesComponent,
+                prompt: () => promptComponent,
+                toggleButton: () => toggleButtonComponent,
+              },
+            }}
+          />
+        );
+      }
+    : undefined;
+
   // eslint-disable-next-line complexity
   return (props, isFirstRendering) => {
     const {
@@ -561,70 +768,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       };
     });
 
-    const headerTemplateProps = prepareTemplateProps({
+    headerTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['header']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.header,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const headerLayoutComponent = templates.header?.layout
-      ? (headerProps: ChatHeaderProps) => {
-          return (
-            <TemplateComponent
-              {...headerTemplateProps}
-              templateKey="layout"
-              rootTagName="div"
-              data={headerProps}
-            />
-          );
-        }
-      : undefined;
-    const headerCloseIconComponent = templates.header?.closeIcon
-      ? () => {
-          return (
-            <TemplateComponent
-              {...headerTemplateProps}
-              templateKey="closeIcon"
-              rootTagName="span"
-            />
-          );
-        }
-      : undefined;
-    const headerMinimizeIconComponent = templates.header?.minimizeIcon
-      ? () => {
-          return (
-            <TemplateComponent
-              {...headerTemplateProps}
-              templateKey="minimizeIcon"
-              rootTagName="span"
-            />
-          );
-        }
-      : undefined;
-    const headerMaximizeIconComponent = templates.header?.maximizeIcon
-      ? ({ maximized }: { maximized: boolean }) => {
-          return (
-            <TemplateComponent
-              {...headerTemplateProps}
-              templateKey="maximizeIcon"
-              rootTagName="span"
-              data={{ maximized }}
-            />
-          );
-        }
-      : undefined;
-    const headerTitleIconComponent = templates.header?.titleIcon
-      ? () => {
-          return (
-            <TemplateComponent
-              {...headerTemplateProps}
-              templateKey="titleIcon"
-              rootTagName="span"
-            />
-          );
-        }
-      : undefined;
     const headerTranslations: Partial<ChatHeaderTranslations> =
       getDefinedProperties({
         title: templates.header?.titleText,
@@ -634,56 +784,20 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         clearLabel: templates.header?.clearLabelText,
       });
 
-    const messagesTemplateProps = prepareTemplateProps({
+    messagesTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['messages']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.messages,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const messagesLoaderComponent = templates.messages?.loader
-      ? (loaderProps: ChatMessageLoaderProps) => {
-          return (
-            <TemplateComponent
-              {...messagesTemplateProps}
-              templateKey="loader"
-              rootTagName="div"
-              data={loaderProps}
-            />
-          );
-        }
-      : undefined;
-    const messagesErrorComponent = templates.messages?.error
-      ? (errorProps: ChatMessageErrorProps) => {
-          return (
-            <TemplateComponent
-              {...messagesTemplateProps}
-              templateKey="error"
-              rootTagName="div"
-              data={errorProps}
-            />
-          );
-        }
-      : undefined;
-    const emptyTemplateProps = prepareTemplateProps({
+    emptyTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'empty'>>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: { empty: templates.empty },
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const messagesEmptyComponent = templates.empty
-      ? (emptyProps: ChatEmptyProps) => {
-          return (
-            <TemplateComponent
-              {...emptyTemplateProps}
-              templateKey="empty"
-              rootTagName="div"
-              data={emptyProps}
-            />
-          );
-        }
-      : undefined;
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
@@ -692,112 +806,34 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
 
-    const assistantMessageTemplateProps = prepareTemplateProps({
+    assistantMessageTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['assistantMessage']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.assistantMessage,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const assistantMessageLeadingComponent = templates.assistantMessage?.leading
-      ? () => {
-          return (
-            <TemplateComponent
-              {...assistantMessageTemplateProps}
-              templateKey="leading"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
-    const assistantMessageFooterComponent = templates.assistantMessage?.footer
-      ? () => {
-          return (
-            <TemplateComponent
-              {...assistantMessageTemplateProps}
-              templateKey="footer"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
 
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
     });
 
-    const userMessageTemplateProps = prepareTemplateProps({
+    userMessageTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['userMessage']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.userMessage,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const userMessageLeadingComponent = templates.userMessage?.leading
-      ? () => {
-          return (
-            <TemplateComponent
-              {...userMessageTemplateProps}
-              templateKey="leading"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
-    const userMessageFooterComponent = templates.userMessage?.footer
-      ? () => {
-          return (
-            <TemplateComponent
-              {...userMessageTemplateProps}
-              templateKey="footer"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
 
-    const promptTemplateProps = prepareTemplateProps({
+    promptTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.prompt,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const promptLayoutComponent = templates.prompt?.layout
-      ? (promptProps: ChatPromptProps) => {
-          return (
-            <TemplateComponent
-              {...promptTemplateProps}
-              templateKey="layout"
-              rootTagName="div"
-              data={promptProps}
-            />
-          );
-        }
-      : undefined;
-    const promptHeaderComponent = templates.prompt?.header
-      ? () => {
-          return (
-            <TemplateComponent
-              {...promptTemplateProps}
-              templateKey="header"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
-    const promptFooterComponent = templates.prompt?.footer
-      ? () => {
-          return (
-            <TemplateComponent
-              {...promptTemplateProps}
-              templateKey="footer"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
     const promptTranslations: Partial<ChatPromptTranslations> =
       getDefinedProperties({
         textareaLabel: templates.prompt?.textareaLabelText,
@@ -808,108 +844,28 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
-    const actionsComponent = templates.actions
-      ? (actionsProps: { actions: ChatMessageActionProps[] }) => {
-          return (
-            <TemplateComponent
-              {...renderState.templateProps}
-              templateKey="actions"
-              rootTagName="div"
-              data={actionsProps}
-            />
-          );
-        }
-      : undefined;
-
-    const toggleButtonTemplateProps = prepareTemplateProps({
+    toggleButtonTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['toggleButton']>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.toggleButton,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const toggleButtonLayoutComponent = templates.toggleButton?.layout
-      ? (toggleButtonProps: ChatToggleButtonProps) => {
-          return (
-            <TemplateComponent
-              {...toggleButtonTemplateProps}
-              templateKey="layout"
-              rootTagName="button"
-              data={toggleButtonProps}
-            />
-          );
-        }
-      : undefined;
-    const toggleButtonIconComponent = templates.toggleButton?.icon
-      ? ({ isOpen }: { isOpen: boolean }) => {
-          return (
-            <TemplateComponent
-              {...toggleButtonTemplateProps}
-              templateKey="icon"
-              rootTagName="span"
-              data={{ isOpen }}
-            />
-          );
-        }
-      : undefined;
 
-    const suggestionsComponent = templates.suggestions
-      ? (suggestionsProps: {
-          suggestions?: string[];
-          onSuggestionClick: (suggestion: string) => void;
-        }) => {
-          return (
-            <TemplateComponent
-              {...renderState.templateProps}
-              templateKey="suggestions"
-              rootTagName="fragment"
-              data={suggestionsProps}
-            />
-          );
-        }
-      : undefined;
-
-    const layoutTemplateProps = prepareTemplateProps({
+    layoutTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'layout'>>
       >,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: { layout: templates.layout },
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const layoutComponent = templates.layout
-      ? (layoutProps: ChatLayoutOwnProps) => {
-          const {
-            headerComponent,
-            messagesComponent,
-            promptComponent,
-            toggleButtonComponent,
-            ...restLayoutProps
-          } = layoutProps;
-          return (
-            <TemplateComponent
-              {...layoutTemplateProps}
-              templateKey="layout"
-              rootTagName="fragment"
-              data={{
-                ...restLayoutProps,
-                templates: {
-                  header: () => headerComponent,
-                  messages: () => messagesComponent,
-                  prompt: () => promptComponent,
-                  toggleButton: () => toggleButtonComponent,
-                },
-              }}
-            />
-          );
-        }
-      : undefined;
 
     state.subscribe(rerender);
 
     function rerender() {
       render(
         <ChatWrapper
-          layoutComponent={layoutComponent}
+          layoutComponent={stableLayoutComponent}
           cssClasses={cssClasses}
           chatOpen={open}
           setChatOpen={setOpen}
@@ -930,29 +886,29 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}
           toggleButtonProps={{
-            layoutComponent: toggleButtonLayoutComponent,
-            iconComponent: toggleButtonIconComponent,
+            layoutComponent: stableToggleButtonLayoutComponent,
+            iconComponent: stableToggleButtonIconComponent,
           }}
           headerProps={{
-            layoutComponent: headerLayoutComponent,
-            closeIconComponent: headerCloseIconComponent,
-            minimizeIconComponent: headerMinimizeIconComponent,
-            maximizeIconComponent: headerMaximizeIconComponent,
-            titleIconComponent: headerTitleIconComponent,
+            layoutComponent: stableHeaderLayoutComponent,
+            closeIconComponent: stableHeaderCloseIconComponent,
+            minimizeIconComponent: stableHeaderMinimizeIconComponent,
+            maximizeIconComponent: stableHeaderMaximizeIconComponent,
+            titleIconComponent: stableHeaderTitleIconComponent,
             translations: headerTranslations,
           }}
           messagesProps={{
-            loaderComponent: messagesLoaderComponent,
-            errorComponent: messagesErrorComponent,
-            emptyComponent: messagesEmptyComponent,
-            actionsComponent,
+            loaderComponent: stableMessagesLoaderComponent,
+            errorComponent: stableMessagesErrorComponent,
+            emptyComponent: stableMessagesEmptyComponent,
+            actionsComponent: stableActionsComponent,
             assistantMessageProps: {
-              leadingComponent: assistantMessageLeadingComponent,
-              footerComponent: assistantMessageFooterComponent,
+              leadingComponent: stableAssistantMessageLeadingComponent,
+              footerComponent: stableAssistantMessageFooterComponent,
             },
             userMessageProps: {
-              leadingComponent: userMessageLeadingComponent,
-              footerComponent: userMessageFooterComponent,
+              leadingComponent: stableUserMessageLeadingComponent,
+              footerComponent: stableUserMessageFooterComponent,
             },
             translations: messagesTranslations,
             messageTranslations,
@@ -960,9 +916,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             setInput,
           }}
           promptProps={{
-            layoutComponent: promptLayoutComponent,
-            headerComponent: promptHeaderComponent,
-            footerComponent: promptFooterComponent,
+            layoutComponent: stablePromptLayoutComponent,
+            headerComponent: stablePromptHeaderComponent,
+            footerComponent: stablePromptFooterComponent,
             translations: promptTranslations,
             promptRef,
           }}
@@ -972,7 +928,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             onSuggestionClick: (message: string) => {
               sendMessage({ text: message });
             },
-            suggestionsComponent,
+            suggestionsComponent: stableSuggestionsComponent,
           }}
         />,
         containerNode
