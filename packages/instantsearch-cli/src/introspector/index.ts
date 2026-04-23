@@ -208,6 +208,23 @@ export type ReplicasResult =
   | { ok: true; replicas: string[] }
   | { ok: false; code: ReplicasFailureCode; message: string };
 
+export type ListIndicesResult =
+  | { ok: true; indices: string[] }
+  | { ok: false; code: CommonFailureCode; message: string };
+
+export async function listIndices({
+  appId,
+  searchApiKey,
+}: AlgoliaCredentials): Promise<ListIndicesResult> {
+  const client = algoliasearch(appId, searchApiKey);
+  try {
+    const response = await withRetry(() => client.listIndices());
+    return { ok: true, indices: response.items.map((i) => i.name) };
+  } catch (err) {
+    return mapAlgoliaError(err, '');
+  }
+}
+
 export async function introspectReplicas(
   params: IntrospectParams
 ): Promise<ReplicasResult> {

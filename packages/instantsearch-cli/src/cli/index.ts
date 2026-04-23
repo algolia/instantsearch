@@ -7,16 +7,23 @@ import { init, type InitOptions } from './init';
 import { addExperience } from './add-experience';
 import { addWidget } from './add-widget';
 import type { ExperienceSchema } from '../manifest';
+import { createInquirerPrompter, type Prompter } from '../prompter';
 import { failure, type Report } from '../reporter';
 import type { Flavor, Framework } from '../types';
+import { parseCommaSeparated } from '../utils/parsing';
 
 const JSON_MODE = process.argv.includes('--json');
+const YES_MODE = JSON_MODE || process.argv.includes('--yes');
 
 if (JSON_MODE) {
   // Commander 4.1.1 writes parse errors via console.error before throwing.
   // Silence them so --json output is a single clean JSON object on stdout.
   // eslint-disable-next-line no-console
   console.error = () => {};
+}
+
+function getPrompter(): Prompter | undefined {
+  return YES_MODE ? undefined : createInquirerPrompter();
 }
 
 function emitAndExit(report: Report): never {
@@ -38,30 +45,33 @@ type InitFlagOptions = {
 };
 
 async function runInit(cliOptions: InitFlagOptions): Promise<void> {
-  const missing: string[] = [];
-  if (!cliOptions.appId) missing.push('--app-id');
-  if (!cliOptions.searchKey) missing.push('--search-key');
+  const prompter = getPrompter();
 
-  let report: Report;
-  if (missing.length > 0) {
-    report = failure({
-      command: 'init',
-      code: 'missing_required_flag',
-      message: `Missing required flags: ${missing.join(', ')}`,
-    });
-  } else {
-    const options: InitOptions = {
-      projectDir: process.cwd(),
-      flavor: cliOptions.flavor,
-      framework: cliOptions.framework,
-      componentsPath: cliOptions.componentsPath,
-      appId: cliOptions.appId!,
-      searchApiKey: cliOptions.searchKey!,
-    };
-    report = await init(options);
+  // In non-interactive mode without required flags, fail fast.
+  if (!prompter && (!cliOptions.appId || !cliOptions.searchKey)) {
+    const missing: string[] = [];
+    if (!cliOptions.appId) missing.push('--app-id');
+    if (!cliOptions.searchKey) missing.push('--search-key');
+    emitAndExit(
+      failure({
+        command: 'init',
+        code: 'missing_required_flag',
+        message: `Missing required flags: ${missing.join(', ')}`,
+      })
+    );
   }
 
-  emitAndExit(report);
+  const options: InitOptions = {
+    projectDir: process.cwd(),
+    flavor: cliOptions.flavor,
+    framework: cliOptions.framework,
+    componentsPath: cliOptions.componentsPath,
+    appId: cliOptions.appId,
+    searchApiKey: cliOptions.searchKey,
+    prompter,
+  };
+
+  emitAndExit(await init(options));
 }
 
 const program = new Command();
@@ -103,10 +113,7 @@ type AddExperienceFlagOptions = SchemaFlagOptions & {
 
 function parseReplicasFlag(value: string | undefined): string[] | undefined {
   if (!value) return undefined;
-  return value
-    .split(',')
-    .map((r) => r.trim())
-    .filter(Boolean);
+  return parseCommaSeparated(value);
 }
 
 function buildSchemaFromFlags(opts: SchemaFlagOptions): ExperienceSchema {
@@ -132,25 +139,29 @@ async function runAddExperience(
   name: string,
   cliOptions: AddExperienceFlagOptions
 ): Promise<void> {
+  const prompter = getPrompter();
   const template = cliOptions.template ?? 'search';
 
-  let report: Report;
-  if (!cliOptions.index) {
-    report = failure({
-      command: 'add experience',
-      code: 'missing_required_flag',
-      message: 'Missing required flags: --index',
-    });
-  } else {
-    const schema = buildSchemaFromFlags(cliOptions);
-    report = await addExperience({
-      projectDir: process.cwd(),
-      name,
-      template,
-      indexName: cliOptions.index,
-      ...(Object.keys(schema).length > 0 ? { schema } : {}),
-    });
+  // In non-interactive mode without --index, fail fast.
+  if (!prompter && !cliOptions.index) {
+    emitAndExit(
+      failure({
+        command: 'add experience',
+        code: 'missing_required_flag',
+        message: 'Missing required flags: --index',
+      })
+    );
   }
+
+  const schema = buildSchemaFromFlags(cliOptions);
+  const report = await addExperience({
+    projectDir: process.cwd(),
+    name,
+    template,
+    indexName: cliOptions.index,
+    ...(Object.keys(schema).length > 0 ? { schema } : {}),
+    prompter,
+  });
 
   emitAndExit(report);
 }
@@ -186,6 +197,8 @@ async function runAddWidget(
   widget: string,
   cliOptions: AddWidgetFlagOptions
 ): Promise<void> {
+  const prompter = getPrompter();
+
   let report: Report;
   if (!cliOptions.experience) {
     report = failure({
@@ -201,6 +214,7 @@ async function runAddWidget(
       widget,
       ...(cliOptions.index ? { indexName: cliOptions.index } : {}),
       ...(Object.keys(schema).length > 0 ? { schema } : {}),
+      prompter,
     });
   }
 

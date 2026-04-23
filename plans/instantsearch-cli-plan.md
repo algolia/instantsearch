@@ -43,7 +43,7 @@ Happy-path cred verification only; full Introspector failure taxonomy arrives in
 ### Acceptance criteria
 
 - [x] `packages/instantsearch-cli/` exists with bin `instantsearch`, runnable via `yarn workspace @algolia/instantsearch-cli start init` from the monorepo.
-- [ ] `instantsearch init` in a React+TS fixture detects the flavor/framework/TS signal, prompts for Algolia creds, verifies them with a test search call, and writes `instantsearch.json` + `src/lib/algolia-client.ts`. _(Detect + verify + write are done; interactive prompts deferred — see Phase 3 scope note.)_
+- [x] `instantsearch init` in a React+TS fixture detects the flavor/framework/TS signal, prompts for Algolia creds, verifies them with a test search call, and writes `instantsearch.json` + `src/lib/algolia-client.ts`.
 - [x] `instantsearch init --yes --json --flavor react --framework react-plain --app-id ... --search-key ... --components-path src/components` runs non-interactively and emits a single JSON object with `apiVersion: 1`.
 - [x] Invalid creds produce `{ ok: false, code: "credentials_invalid", message: ... }` on stdout, non-zero exit, no files written.
 - [x] Unsupported or ambiguous framework produces `unsupported_framework` with a specific hint.
@@ -96,9 +96,9 @@ Add the three schema-driven widgets: Hits (prompts for title/image/description a
 
 `--template search` now delivers the full six-widget experience against a real index with correct schema mapping on the first run.
 
-#### Scope note: interactive prompts deferred
+#### Scope note: interactive prompts ~~deferred~~ done
 
-Phase 3 implements the **flag-driven / `--json` / `--yes` path only**. Interactive prompts (inquirer flow) are deferred to a later phase. Rationale: no inquirer wiring exists in phases 1–2, so building it from scratch would balloon Phase 3. The flag-driven path satisfies the non-interactive acceptance criteria (agent use case, CI, and the Phase 8 recording gate) and is what unlocks downstream phases. Interactive fallbacks for `index_not_found`, `index_empty`, `index_has_no_facets`, `settings_forbidden`, `no_replicas` will be added alongside the broader interactive prompt wiring (likely folded into Phase 8's agent-surface hardening, or a dedicated interactive-UX phase between 7 and 8). In `--yes` mode these all surface as non-zero-exit report failures — which is the documented agent-mode behavior anyway.
+Interactive prompts (inquirer flow) have been implemented. The `Prompter` abstraction (`src/prompter/`) wraps inquirer behind a testable interface. All seven failure-variant fallbacks (`index_not_found`, `index_empty`, `index_has_no_facets`, `settings_forbidden`, `no_replicas`, `credentials_invalid`, `network_error`) are handled interactively when `--yes`/`--json` is not set. In `--yes` mode these still surface as non-zero-exit report failures — the documented agent-mode behavior.
 
 New flags on `add experience` for Phase 3:
 

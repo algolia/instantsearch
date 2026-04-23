@@ -16,6 +16,7 @@ import {
   readRootManifest,
   type RootManifest,
 } from '../../manifest';
+import { createScriptedPrompter } from '../../prompter';
 
 const mockedAlgoliasearch = algoliasearch as unknown as jest.Mock;
 
@@ -301,5 +302,48 @@ describe('add widget command', () => {
 
     const expManifest = readExperienceManifest(experienceDir);
     expect(expManifest?.widgets).toEqual(['SearchBox', 'Hits']);
+  });
+});
+
+describe('add widget — interactive prompts', () => {
+  test('prompts for index when auto-materializing an experience', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'brand-new',
+      widget: 'search-box',
+      prompter: createScriptedPrompter([
+        'my-products', // indexName prompt
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add widget' });
+
+    const root = JSON.parse(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    );
+    expect(root.experiences).toContainEqual(
+      expect.objectContaining({ name: 'brand-new' })
+    );
+
+    const config = readExperienceManifest(
+      path.join(projectDir, 'src/components/brand-new')
+    );
+    expect(config?.indexName).toBe('my-products');
+  });
+
+  test('no prompt needed when index is provided via flag', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'brand-new',
+      widget: 'search-box',
+      indexName: 'my-products',
+      prompter: createScriptedPrompter([]), // empty — no prompts expected
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add widget' });
   });
 });

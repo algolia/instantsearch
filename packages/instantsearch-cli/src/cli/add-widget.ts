@@ -18,6 +18,7 @@ import {
   type ExperienceSchema,
   type RootManifest,
 } from '../manifest';
+import type { Prompter } from '../prompter';
 import { success, failure, type Report } from '../reporter';
 import { toPascalCase } from '../utils/naming';
 import {
@@ -34,6 +35,7 @@ export type AddWidgetOptions = {
   widget: string;
   indexName?: string;
   schema?: ExperienceSchema;
+  prompter?: Prompter;
 };
 
 function resolveWidgetName(input: string): WidgetName | null {
@@ -141,7 +143,13 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
 
   const entry = rootManifest.experiences.find((e) => e.name === experienceName);
   if (!entry) {
-    if (!indexName) {
+    let resolvedIndex = indexName;
+    if (!resolvedIndex && options.prompter) {
+      resolvedIndex = await options.prompter.text(
+        `Experience '${experienceName}' does not exist. Enter an Algolia index to create it:`
+      );
+    }
+    if (!resolvedIndex) {
       return failure({
         command: COMMAND,
         code: 'index_required',
@@ -153,7 +161,7 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
       rootManifest,
       experienceName,
       widget,
-      indexName,
+      indexName: resolvedIndex,
       schema,
     });
   }

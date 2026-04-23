@@ -10,6 +10,7 @@ import { algoliasearch } from 'algoliasearch';
 
 import { addExperience } from '../add-experience';
 import { writeRootManifest, type RootManifest } from '../../manifest';
+import { createScriptedPrompter } from '../../prompter';
 
 const mockedAlgoliasearch = algoliasearch as unknown as jest.Mock;
 
@@ -621,5 +622,313 @@ describe('add experience command', () => {
       });
       expect((report as any).message).toMatch(/refinement-list|refinementList/);
     });
+  });
+});
+
+describe('add experience command — interactive prompts', () => {
+  beforeEach(() => {
+    mockedAlgoliasearch.mockReset();
+    mockAlgolia();
+  });
+
+  test('index_not_found: lists accessible indices and re-prompts for the index name', async () => {
+    const projectDir = makeInitializedProject();
+    let callCount = 0;
+    mockedAlgoliasearch.mockImplementation(() => ({
+      searchSingleIndex: () => {
+        callCount++;
+        if (callCount === 1) {
+          // First call on 'wrong-index' → 404
+          return Promise.reject(Object.assign(new Error('Not found'), { status: 404 }));
+        }
+        // Second call on 'products' → success
+        return Promise.resolve({
+          hits: [
+            {
+              objectID: '1',
+              name: 'Widget',
+              _highlightResult: { name: { value: 'Widget' } },
+            },
+          ],
+          facets: { brand: { Apple: 10 } },
+        });
+      },
+      listIndices: () =>
+        Promise.resolve({ items: [{ name: 'products' }, { name: 'docs' }] }),
+      getSettings: () => Promise.resolve({ replicas: ['products_price_asc'] }),
+    }));
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      schema: SEARCH_SCHEMA,
+      prompter: createScriptedPrompter([
+        'wrong-index', // first index attempt → index_not_found
+        'products',    // re-prompted, picks from listed indices
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+    const config = JSON.parse(
+      fs.readFileSync(
+        path.join(projectDir, 'src/components/product-search/instantsearch.config.json'),
+        'utf8'
+      )
+    );
+    expect(config.indexName).toBe('products');
+  });
+
+  test('prompts for index when not provided', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      schema: SEARCH_SCHEMA,
+      prompter: createScriptedPrompter([
+        'products', // indexName
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+    const config = JSON.parse(
+      fs.readFileSync(
+        path.join(projectDir, 'src/components/product-search/instantsearch.config.json'),
+        'utf8'
+      )
+    );
+    expect(config.indexName).toBe('products');
+  });
+
+  test('prompts for hits title, image, and refinementList attribute, sortBy replicas when schema not provided', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      prompter: createScriptedPrompter([
+        'name',          // hits title (selected from attributes)
+        'image_url',     // hits image (selected from imageCandidates)
+        // hits description is optional — not prompted
+        'brand',         // refinementList attribute (selected from facets)
+        ['products_price_asc'], // sortBy replicas (multi-select)
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+    const hitsFile = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/Hits.tsx'),
+      'utf8'
+    );
+    expect(hitsFile).toContain('name');
+    expect(hitsFile).toContain('image_url');
+
+    const rlFile = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/RefinementList.tsx'),
+      'utf8'
+    );
+    expect(rlFile).toContain('brand');
+  });
+
+  test('flags take precedence; prompts fill only missing schema fields', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: {
+        hits: { title: 'name', image: 'image_url' },
+        // refinementList and sortBy missing — should be prompted
+      },
+      prompter: createScriptedPrompter([
+        'brand',                  // refinementList attribute
+        ['products_price_asc'],   // sortBy replicas
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+  });
+
+  test('no schema prompts when all schema fields are provided via flags', async () => {
+    const projectDir = makeInitializedProject();
+
+    // ScriptedPrompter with no answers — if any prompt fires it will throw.
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+      prompter: createScriptedPrompter([]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+  });
+
+  test('index_empty: warns and prompts for manual schema entry', async () => {
+    const projectDir = makeInitializedProject();
+    mockedAlgoliasearch.mockImplementation(() => ({
+      searchSingleIndex: () =>
+        Promise.resolve({ hits: [], facets: { brand: { Apple: 10 } } }),
+      getSettings: () =>
+        Promise.resolve({ replicas: ['products_price_asc'] }),
+    }));
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      prompter: createScriptedPrompter([
+        'title_field',    // manual hits title (free text)
+        'img_field',      // manual hits image (free text)
+        'category',       // manual refinementList attribute (free text)
+        ['price_asc'],    // manual sortBy replicas (free text comma-list)
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+    const hitsFile = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/Hits.tsx'),
+      'utf8'
+    );
+    expect(hitsFile).toContain('title_field');
+  });
+
+  test('index_has_no_facets: warns and prompts for RefinementList attribute manually', async () => {
+    const projectDir = makeInitializedProject();
+    mockedAlgoliasearch.mockImplementation(() => ({
+      searchSingleIndex: (params: { searchParams?: { facets?: unknown } }) => {
+        if (params?.searchParams?.facets) {
+          // facets search returns no facets
+          return Promise.resolve({ hits: [], facets: {} });
+        }
+        return Promise.resolve({
+          hits: [
+            {
+              objectID: '1',
+              name: 'Widget',
+              _highlightResult: { name: { value: 'Widget' } },
+            },
+          ],
+          facets: {},
+        });
+      },
+      getSettings: () =>
+        Promise.resolve({ replicas: ['products_price_asc'] }),
+    }));
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: {
+        hits: { title: 'name' },
+        sortBy: { replicas: ['products_price_asc'] },
+      },
+      prompter: createScriptedPrompter([
+        'manual_facet', // manual RefinementList attribute despite no configured facets
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+    const rlFile = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/RefinementList.tsx'),
+      'utf8'
+    );
+    expect(rlFile).toContain('manual_facet');
+  });
+
+  test('settings_forbidden: falls back to manual replica entry', async () => {
+    const projectDir = makeInitializedProject();
+    mockedAlgoliasearch.mockImplementation(() => ({
+      searchSingleIndex: () =>
+        Promise.resolve({
+          hits: [
+            {
+              objectID: '1',
+              name: 'Widget',
+              image_url: 'https://example.com/w.jpg',
+              _highlightResult: { name: { value: 'Widget' } },
+            },
+          ],
+          facets: { brand: { Apple: 10 } },
+        }),
+      getSettings: () =>
+        Promise.reject(Object.assign(new Error('Forbidden'), { status: 403 })),
+    }));
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: {
+        hits: { title: 'name', image: 'image_url' },
+        refinementList: { attribute: 'brand' },
+      },
+      prompter: createScriptedPrompter([
+        'products_price_asc,products_price_desc', // manual comma-separated replicas
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+    const sortByFile = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/SortBy.tsx'),
+      'utf8'
+    );
+    expect(sortByFile).toContain('products_price_asc');
+    expect(sortByFile).toContain('products_price_desc');
+  });
+
+  test('no_replicas: offers to skip SortBy and generates without it', async () => {
+    const projectDir = makeInitializedProject();
+    mockedAlgoliasearch.mockImplementation(() => ({
+      searchSingleIndex: () =>
+        Promise.resolve({
+          hits: [
+            {
+              objectID: '1',
+              name: 'Widget',
+              image_url: 'https://example.com/w.jpg',
+              _highlightResult: { name: { value: 'Widget' } },
+            },
+          ],
+          facets: { brand: { Apple: 10 } },
+        }),
+      getSettings: () => Promise.resolve({ replicas: [] }),
+    }));
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: {
+        hits: { title: 'name', image: 'image_url' },
+        refinementList: { attribute: 'brand' },
+      },
+      prompter: createScriptedPrompter([
+        true, // confirm: skip SortBy
+      ]),
+    });
+
+    expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+    const experienceDir = path.join(projectDir, 'src/components/product-search');
+    expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
+    expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
   });
 });
