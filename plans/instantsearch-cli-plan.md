@@ -42,14 +42,14 @@ Happy-path cred verification only; full Introspector failure taxonomy arrives in
 
 ### Acceptance criteria
 
-- [ ] `packages/instantsearch-cli/` exists with bin `instantsearch`, runnable via `yarn workspace @algolia/instantsearch-cli start init` from the monorepo.
-- [ ] `instantsearch init` in a React+TS fixture detects the flavor/framework/TS signal, prompts for Algolia creds, verifies them with a test search call, and writes `instantsearch.json` + `src/lib/algolia-client.ts`.
-- [ ] `instantsearch init --yes --json --flavor react --framework react-plain --app-id ... --search-key ... --components-path src/components` runs non-interactively and emits a single JSON object with `apiVersion: 1`.
-- [ ] Invalid creds produce `{ ok: false, code: "credentials_invalid", message: ... }` on stdout, non-zero exit, no files written.
-- [ ] Unsupported or ambiguous framework produces `unsupported_framework` with a specific hint.
-- [ ] Detector unit tests cover: React-plain+TS, React-plain+JS, ambiguous, unsupported.
-- [ ] Manifest unit tests cover round-trip read → mutate → write → read.
-- [ ] JSON reporter unit tests cover success shape and error shape, both with `apiVersion`.
+- [x] `packages/instantsearch-cli/` exists with bin `instantsearch`, runnable via `yarn workspace @algolia/instantsearch-cli start init` from the monorepo.
+- [ ] `instantsearch init` in a React+TS fixture detects the flavor/framework/TS signal, prompts for Algolia creds, verifies them with a test search call, and writes `instantsearch.json` + `src/lib/algolia-client.ts`. _(Detect + verify + write are done; interactive prompts deferred — see Phase 3 scope note.)_
+- [x] `instantsearch init --yes --json --flavor react --framework react-plain --app-id ... --search-key ... --components-path src/components` runs non-interactively and emits a single JSON object with `apiVersion: 1`.
+- [x] Invalid creds produce `{ ok: false, code: "credentials_invalid", message: ... }` on stdout, non-zero exit, no files written.
+- [x] Unsupported or ambiguous framework produces `unsupported_framework` with a specific hint.
+- [x] Detector unit tests cover: React-plain+TS, React-plain+JS, ambiguous, unsupported.
+- [x] Manifest unit tests cover round-trip read → mutate → write → read.
+- [x] JSON reporter unit tests cover success shape and error shape, both with `apiVersion`.
 
 ---
 
@@ -67,12 +67,12 @@ The command runner's `nextSteps` block returns the generated imports and a one-s
 
 ### Acceptance criteria
 
-- [ ] `instantsearch add experience product-search --template search --index products` creates `src/components/product-search/` containing `instantsearch.config.json`, `provider.tsx`, `SearchBox.tsx`, `Pagination.tsx`, `ClearRefinements.tsx`.
-- [ ] Root `instantsearch.json` gains an entry in `experiences` pointing at the new folder.
-- [ ] Running the same command with a generated provider in place in a minimal Vite + React + TS host renders a working SearchBox + Pagination + ClearRefinements against the configured index.
-- [ ] `--yes --json` mode emits `filesCreated`, `manifestUpdated`, and a `nextSteps` block with imports + mounting guidance.
-- [ ] Generator snapshot tests cover each of the three widgets plus provider, for React + TS.
-- [ ] Manifest unit tests cover root + experience merge semantics.
+- [x] `instantsearch add experience product-search --template search --index products` creates `src/components/product-search/` containing `instantsearch.config.json`, `provider.tsx`, `SearchBox.tsx`, `Pagination.tsx`, `ClearRefinements.tsx`. _(Phase 3 expanded `--template search` to additionally emit `Hits.tsx`, `RefinementList.tsx`, `SortBy.tsx`; all five originals still present.)_
+- [x] Root `instantsearch.json` gains an entry in `experiences` pointing at the new folder.
+- [ ] Running the same command with a generated provider in place in a minimal Vite + React + TS host renders a working SearchBox + Pagination + ClearRefinements against the configured index. _(Requires live Algolia creds — deferred to the Phase 8 acceptance recording gate.)_
+- [x] `--yes --json` mode emits `filesCreated`, `manifestUpdated`, and a `nextSteps` block with imports + mounting guidance.
+- [x] Generator snapshot tests cover each of the three widgets plus provider, for React + TS.
+- [x] Manifest unit tests cover root + experience merge semantics.
 
 ---
 
