@@ -11,7 +11,7 @@
 }
 
 @media (hover: hover) {
-  .ais-ToggleRefinement-label:hover {
+  .ais-ToggleRefinement-label:not(:has(:disabled)):hover {
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
 
     .ais-ToggleRefinement-checkbox {
