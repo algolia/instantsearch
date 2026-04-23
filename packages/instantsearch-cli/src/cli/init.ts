@@ -1,6 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
 import { detect } from '../detector';
 import { generate } from '../generator';
 import { verifyCredentials } from '../introspector';
@@ -11,6 +8,7 @@ import {
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
 import type { Flavor, Framework } from '../types';
+import { writeGeneratedFiles } from '../utils/write-files';
 
 const COMMAND = 'init';
 
@@ -22,20 +20,6 @@ export type InitOptions = {
   appId: string;
   searchApiKey: string;
 };
-
-function writeGeneratedFiles(
-  projectDir: string,
-  files: Map<string, string>
-): string[] {
-  const written: string[] = [];
-  for (const [relativePath, contents] of files) {
-    const absolutePath = path.join(projectDir, relativePath);
-    fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
-    fs.writeFileSync(absolutePath, contents, 'utf8');
-    written.push(relativePath);
-  }
-  return written;
-}
 
 export async function init(options: InitOptions): Promise<Report> {
   const {

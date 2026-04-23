@@ -13,3 +13,46 @@ exports[`generator snapshot: React + plain JS algolia-client.js 1`] = `
 export const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
 "
 `;
+
+exports[`generator: experience (React + TypeScript) snapshot: ClearRefinements.tsx 1`] = `
+"import { ClearRefinements as InstantSearchClearRefinements } from 'react-instantsearch';
+
+export function ClearRefinements() {
+  return <InstantSearchClearRefinements />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: Pagination.tsx 1`] = `
+"import { Pagination as InstantSearchPagination } from 'react-instantsearch';
+
+export function Pagination() {
+  return <InstantSearchPagination />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: SearchBox.tsx 1`] = `
+"import { SearchBox as InstantSearchSearchBox } from 'react-instantsearch';
+
+export function SearchBox() {
+  return <InstantSearchSearchBox />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: provider.tsx 1`] = `
+"import type { ReactNode } from 'react';
+import { InstantSearch } from 'react-instantsearch';
+
+import { searchClient } from '../../lib/algolia-client';
+
+export function ProductSearchProvider({ children }: { children: ReactNode }) {
+  return (
+    <InstantSearch searchClient={searchClient} indexName=\\"products\\">
+      {children}
+    </InstantSearch>
+  );
+}
+"
+`;

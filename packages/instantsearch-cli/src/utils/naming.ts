@@ -1,0 +1,11 @@
+export function toPascalCase(name: string): string {
+  return name
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join('');
+}
+
+export function providerComponentName(experienceName: string): string {
+  return `${toPascalCase(experienceName)}Provider`;
+}

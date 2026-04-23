@@ -5,7 +5,13 @@ import path from 'node:path';
 import {
   readRootManifest,
   writeRootManifest,
+  readExperienceManifest,
+  writeExperienceManifest,
+  addExperienceToRoot,
+  resolveExperience,
   ROOT_MANIFEST_FILENAME,
+  EXPERIENCE_MANIFEST_FILENAME,
+  type RootManifest,
 } from '../index';
 
 function makeTempProject(): string {
@@ -47,5 +53,116 @@ describe('manifest', () => {
     const projectDir = makeTempProject();
 
     expect(readRootManifest(projectDir)).toBeNull();
+  });
+
+  test('writeExperienceManifest then readExperienceManifest returns the same content', () => {
+    const projectDir = makeTempProject();
+    const experienceDir = path.join(projectDir, 'src/components/product-search');
+    fs.mkdirSync(experienceDir, { recursive: true });
+
+    const manifest = {
+      apiVersion: 1 as const,
+      indexName: 'products',
+      widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
+    };
+
+    writeExperienceManifest(experienceDir, manifest);
+
+    expect(readExperienceManifest(experienceDir)).toEqual(manifest);
+    expect(
+      fs.existsSync(path.join(experienceDir, EXPERIENCE_MANIFEST_FILENAME))
+    ).toBe(true);
+  });
+
+  test('readExperienceManifest returns null when no manifest exists', () => {
+    const projectDir = makeTempProject();
+    expect(readExperienceManifest(projectDir)).toBeNull();
+  });
+
+  test('addExperienceToRoot appends an entry to the experiences array', () => {
+    const projectDir = makeTempProject();
+    const manifest: RootManifest = {
+      apiVersion: 1,
+      flavor: 'react',
+      framework: null,
+      typescript: true,
+      componentsPath: 'src/components',
+      aliases: {},
+      algolia: { appId: 'APP', searchApiKey: 'KEY' },
+      experiences: [],
+    };
+    writeRootManifest(projectDir, manifest);
+
+    addExperienceToRoot(projectDir, manifest, {
+      name: 'product-search',
+      path: 'src/components/product-search',
+    });
+
+    expect(readRootManifest(projectDir)?.experiences).toEqual([
+      { name: 'product-search', path: 'src/components/product-search' },
+    ]);
+  });
+
+  test('addExperienceToRoot preserves existing experiences', () => {
+    const projectDir = makeTempProject();
+    const manifest: RootManifest = {
+      apiVersion: 1,
+      flavor: 'react',
+      framework: null,
+      typescript: true,
+      componentsPath: 'src/components',
+      aliases: {},
+      algolia: { appId: 'APP', searchApiKey: 'KEY' },
+      experiences: [
+        { name: 'product-search', path: 'src/components/product-search' },
+      ],
+    };
+    writeRootManifest(projectDir, manifest);
+
+    addExperienceToRoot(projectDir, manifest, {
+      name: 'docs-search',
+      path: 'src/components/docs-search',
+    });
+
+    expect(readRootManifest(projectDir)?.experiences).toEqual([
+      { name: 'product-search', path: 'src/components/product-search' },
+      { name: 'docs-search', path: 'src/components/docs-search' },
+    ]);
+  });
+
+  test('resolveExperience merges root manifest fields with the experience config', () => {
+    const resolved = resolveExperience(
+      {
+        apiVersion: 1,
+        flavor: 'react',
+        framework: null,
+        typescript: true,
+        componentsPath: 'src/components',
+        aliases: {},
+        algolia: { appId: 'APP', searchApiKey: 'KEY' },
+        experiences: [],
+      },
+      {
+        name: 'product-search',
+        experience: {
+          apiVersion: 1,
+          indexName: 'products',
+          widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
+        },
+      }
+    );
+
+    expect(resolved).toMatchObject({
+      flavor: 'react',
+      framework: null,
+      typescript: true,
+      componentsPath: 'src/components',
+      algolia: { appId: 'APP', searchApiKey: 'KEY' },
+      experience: {
+        name: 'product-search',
+        indexName: 'products',
+        widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
+      },
+    });
   });
 });
