@@ -29,12 +29,12 @@ import {
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
+import type { TemplateProps } from '../../components/Template/Template';
 import type {
   ChatRenderState,
   ChatConnectorParams,
   ChatWidgetDescription,
 } from '../../connectors/chat/connectChat';
-import type { TemplateProps } from '../../components/Template/Template';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
