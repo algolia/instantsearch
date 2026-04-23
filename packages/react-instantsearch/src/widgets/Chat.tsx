@@ -5,6 +5,7 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, {
   createElement,
@@ -19,6 +20,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
+import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export {
@@ -27,12 +29,14 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 };
 
 import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
+  DisplayResultsItemComponentProps,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -50,7 +54,8 @@ const ChatUiComponent = createChatComponent({
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  displayResultsItemComponent?: DisplayResultsItemComponent<TObject>
 ): UserClientSideTools {
   return {
     [SearchIndexToolType]: createCarouselTool(
@@ -63,6 +68,9 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
+    [DisplayResultsToolType]: createDisplayResultsTool(
+      displayResultsItemComponent
+    ),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
@@ -70,6 +78,9 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
+type DisplayResultsItemComponent<TObject> = (
+  props: DisplayResultsItemComponentProps<TObject>
+) => JSX.Element;
 
 type UiProps = Pick<
   ChatUiProps,
@@ -126,6 +137,12 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
 > &
   UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
+    /**
+     * Renders each result in the `algolia_display_results` tool. Receives the
+     * full hit (resolved by objectID from a prior search tool call) plus the
+     * optional `why` string coming from the tool output.
+     */
+    displayResultsItemComponent?: DisplayResultsItemComponent<TObject>;
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
@@ -177,6 +194,7 @@ function ChatInner<
     messagesProps,
     promptProps,
     itemComponent,
+    displayResultsItemComponent,
     layoutComponent,
     toggleButtonComponent,
     toggleButtonIconComponent,
@@ -225,10 +243,19 @@ function ChatInner<
     });
 
   const tools = useMemo(() => {
-    const defaults = createDefaultTools(itemComponent, getSearchPageURL);
+    const defaults = createDefaultTools(
+      itemComponent,
+      getSearchPageURL,
+      displayResultsItemComponent
+    );
 
     return { ...defaults, ...userTools };
-  }, [getSearchPageURL, itemComponent, userTools]);
+  }, [
+    getSearchPageURL,
+    itemComponent,
+    displayResultsItemComponent,
+    userTools,
+  ]);
 
   const chatState = useChat<TUiMessage>({
     ...props,

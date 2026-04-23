@@ -19,6 +19,14 @@ export {
 // Stream parsing
 export { parseJsonEventStream, processStream } from './stream-parser';
 
+// Partial JSON parsing (used to drive tool input/output streaming)
+export {
+  parsePartialJson,
+  parsePartialJsonWithFallback,
+  repairPartialJson,
+  tryParseJson,
+} from './parse-partial-json';
+
 // Types
 export type {
   // Status

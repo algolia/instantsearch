@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
+  createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
@@ -18,6 +19,9 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
+  buildConversationHits,
+  normalizeDisplayResultsOutput,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -74,7 +78,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
-export { SearchIndexToolType, RecommendToolType };
+export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -261,6 +265,40 @@ function createCarouselTool<
   };
 }
 
+function createDisplayResultsTool<
+  THit extends RecordWithObjectID = RecordWithObjectID
+>(templates: ChatTemplates<THit>): UserClientSideToolWithTemplate {
+  const DisplayResultsLayout = createDisplayResultsToolComponent<
+    RecordWithObjectID<THit>
+  >({
+    createElement: h,
+    Fragment,
+  });
+
+  function DisplayResultsLayoutComponent(toolProps: ClientSideToolTemplateData) {
+    return (
+      <DisplayResultsLayout
+        useMemo={useMemo}
+        toolProps={toolProps}
+        normalizeOutput={normalizeDisplayResultsOutput}
+        buildConversationHits={buildConversationHits}
+        itemComponent={({ item }) => (
+          <TemplateComponent
+            templates={templates}
+            templateKey="item"
+            data={item}
+            rootTagName="fragment"
+          />
+        )}
+      />
+    );
+  }
+
+  return {
+    templates: { layout: DisplayResultsLayoutComponent },
+  };
+}
+
 function createDefaultTools<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
@@ -274,6 +312,7 @@ function createDefaultTools<
       getSearchPageURL
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+    [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },

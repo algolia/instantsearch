@@ -695,6 +695,149 @@ data: [DONE]`,
         expect(toolPart?.rawInput).toBe('{"query": "sho');
       });
     });
+
+    it('accumulates tool-output-delta chunks into a parsed partial output', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "{\\"intro\\":\\"curated"}
+
+data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        expect(toolPart?.preliminary).toBe(true);
+        expect(toolPart?.output).toEqual({
+          intro: 'curated',
+          groups: [{ title: 'Shoes' }],
+        });
+        expect(toolPart?.rawOutput).toBe(
+          '{"intro":"curated","groups":[{"title":"Shoes"}]}'
+        );
+      });
+    });
+
+    it('finalizes a streamed tool output with tool-output-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "{\\"intro\\":\\"cur"}
+
+data: {"type": "tool-output-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "output": {"intro": "curated", "groups": []}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        // final output-available without a preliminary flag replaces the partial
+        expect(toolPart?.preliminary).toBeUndefined();
+        expect(toolPart?.output).toEqual({ intro: 'curated', groups: [] });
+        // bookkeeping for rawOutput is cleared once the final output arrives
+        expect(toolPart?.rawOutput).toBeUndefined();
+      });
+    });
   });
 
   describe('transport configuration', () => {

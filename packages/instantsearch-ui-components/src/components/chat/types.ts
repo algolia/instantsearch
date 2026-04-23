@@ -480,6 +480,12 @@ export type ChatLayoutOwnProps<
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
+  /**
+   * All messages in the current chat conversation. Exposed so that tools which
+   * need cross-message context (e.g. a display tool that references objectIDs
+   * from previous search results) can look them up.
+   */
+  messages?: ChatMessageBase[];
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
