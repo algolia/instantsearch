@@ -364,6 +364,211 @@ describe('generator: experience (React + Next.js App Router + TypeScript)', () =
   });
 });
 
+describe('generator: experience (JS flavor)', () => {
+  const baseManifest = {
+    flavor: 'js' as const,
+    framework: null,
+    typescript: false,
+    componentsPath: 'src/components',
+    aliases: {},
+    algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+    experience: {
+      name: 'product-search',
+      indexName: 'products',
+      widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
+    },
+  };
+
+  test('emits .js files for provider and structural widgets', () => {
+    const files = generateExperience(baseManifest);
+    expect(Array.from(files.keys()).sort()).toEqual(
+      [
+        'src/components/product-search/ClearRefinements.js',
+        'src/components/product-search/Pagination.js',
+        'src/components/product-search/SearchBox.js',
+        'src/components/product-search/instantsearch.config.json',
+        'src/components/product-search/provider.js',
+      ].sort()
+    );
+  });
+
+  test('provider.js holds the instantsearch() instance with addWidgets + start orchestration', () => {
+    const files = generateExperience(baseManifest);
+    const provider = files.get('src/components/product-search/provider.js')!;
+
+    expect(provider).toMatch(/from ['"]instantsearch\.js['"]/);
+    expect(provider).toMatch(/searchClient/);
+    expect(provider).toMatch(/indexName:\s*['"]products['"]/);
+    expect(provider).toMatch(/export function startProductSearch/);
+    expect(provider).toMatch(/\.addWidgets\(/);
+    expect(provider).toMatch(/\.start\(\)/);
+    // No React bits.
+    expect(provider).not.toMatch(/react-instantsearch/);
+    expect(provider).not.toMatch(/ReactNode/);
+  });
+
+  test('widget factories take a container and return the configured widget', () => {
+    const files = generateExperience(baseManifest);
+
+    const searchBox = files.get('src/components/product-search/SearchBox.js')!;
+    expect(searchBox).toMatch(/from ['"]instantsearch\.js\/es\/widgets['"]/);
+    expect(searchBox).toMatch(/export function SearchBox\(container\)/);
+    expect(searchBox).toMatch(/return searchBox\({ container }\)/);
+
+    const pagination = files.get('src/components/product-search/Pagination.js')!;
+    expect(pagination).toMatch(/export function Pagination\(container\)/);
+    expect(pagination).toMatch(/return pagination\({ container }\)/);
+
+    const clear = files.get(
+      'src/components/product-search/ClearRefinements.js'
+    )!;
+    expect(clear).toMatch(/export function ClearRefinements\(container\)/);
+    expect(clear).toMatch(/return clearRefinements\({ container }\)/);
+  });
+
+  test('widget files contain no JSX or TS syntax', () => {
+    const files = generateExperience(baseManifest);
+    for (const widget of baseManifest.experience.widgets) {
+      const content = files.get(`src/components/product-search/${widget}.js`)!;
+      expect(content).not.toMatch(/<\/?[A-Z]/);
+      expect(content).not.toMatch(/: string/);
+      expect(content).not.toMatch(/type /);
+    }
+  });
+
+  test('snapshot: provider.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/provider.js')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: SearchBox.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/SearchBox.js')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: Pagination.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/Pagination.js')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: ClearRefinements.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/ClearRefinements.js')
+    ).toMatchSnapshot();
+  });
+});
+
+describe('generator: schema-driven widgets (JS flavor)', () => {
+  const baseManifest = {
+    flavor: 'js' as const,
+    framework: null,
+    typescript: false,
+    componentsPath: 'src/components',
+    aliases: {},
+    algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+    experience: {
+      name: 'product-search',
+      indexName: 'products',
+      widgets: ['Hits', 'RefinementList', 'SortBy'],
+      schema: {
+        hits: { title: 'name', image: 'image_url', description: 'description' },
+        refinementList: { attribute: 'brand' },
+        sortBy: {
+          replicas: ['products_price_asc', 'products_price_desc'],
+        },
+      },
+    },
+  };
+
+  test('Hits.js templates against the schema-mapped attributes', () => {
+    const files = generateExperience(baseManifest);
+    const hits = files.get('src/components/product-search/Hits.js')!;
+    expect(hits).toMatch(/from ['"]instantsearch\.js\/es\/widgets['"]/);
+    expect(hits).toMatch(/export function Hits\(container\)/);
+    expect(hits).toMatch(/return hits\(/);
+    expect(hits).toMatch(/hit\.name/);
+    expect(hits).toMatch(/hit\.image_url/);
+    expect(hits).toMatch(/hit\.description/);
+    // No React imports or JSX expressions.
+    expect(hits).not.toMatch(/from ['"]react-instantsearch['"]/);
+    expect(hits).not.toMatch(/InstantSearchHits/);
+  });
+
+  test('Hits.js omits the image expression when no image attribute is configured', () => {
+    const files = generateExperience({
+      ...baseManifest,
+      experience: {
+        ...baseManifest.experience,
+        schema: {
+          ...baseManifest.experience.schema,
+          hits: { title: 'name' },
+        },
+      },
+    });
+    const hits = files.get('src/components/product-search/Hits.js')!;
+    expect(hits).toMatch(/hit\.name/);
+    expect(hits).not.toMatch(/image_url/);
+  });
+
+  test('RefinementList.js bakes in the facet attribute', () => {
+    const files = generateExperience(baseManifest);
+    const refinement = files.get(
+      'src/components/product-search/RefinementList.js'
+    )!;
+    expect(refinement).toMatch(/export function RefinementList\(container\)/);
+    expect(refinement).toMatch(/attribute:\s*['"]brand['"]/);
+  });
+
+  test('SortBy.js lists the index + replicas as sort items', () => {
+    const files = generateExperience(baseManifest);
+    const sortBy = files.get('src/components/product-search/SortBy.js')!;
+    expect(sortBy).toMatch(/export function SortBy\(container\)/);
+    expect(sortBy).toMatch(/value:\s*['"]products['"]/);
+    expect(sortBy).toMatch(/value:\s*['"]products_price_asc['"]/);
+    expect(sortBy).toMatch(/value:\s*['"]products_price_desc['"]/);
+  });
+
+  test('snapshot: Hits.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(files.get('src/components/product-search/Hits.js')).toMatchSnapshot();
+  });
+
+  test('snapshot: Hits.js without image', () => {
+    const files = generateExperience({
+      ...baseManifest,
+      experience: {
+        ...baseManifest.experience,
+        schema: {
+          ...baseManifest.experience.schema,
+          hits: { title: 'name', description: 'description' },
+        },
+      },
+    });
+    expect(files.get('src/components/product-search/Hits.js')).toMatchSnapshot();
+  });
+
+  test('snapshot: RefinementList.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/RefinementList.js')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: SortBy.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/SortBy.js')
+    ).toMatchSnapshot();
+  });
+});
+
 describe('generator: schema-driven widgets (React + plain JS)', () => {
   const baseManifest = {
     flavor: 'react' as const,

@@ -14,6 +14,50 @@ export const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
 "
 `;
 
+exports[`generator: experience (JS flavor) snapshot: ClearRefinements.js 1`] = `
+"import { clearRefinements } from 'instantsearch.js/es/widgets';
+
+export function ClearRefinements(container) {
+  return clearRefinements({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: Pagination.js 1`] = `
+"import { pagination } from 'instantsearch.js/es/widgets';
+
+export function Pagination(container) {
+  return pagination({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: SearchBox.js 1`] = `
+"import { searchBox } from 'instantsearch.js/es/widgets';
+
+export function SearchBox(container) {
+  return searchBox({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: provider.js 1`] = `
+"import instantsearch from 'instantsearch.js';
+
+import { searchClient } from '../../lib/algolia-client';
+
+export function startProductSearch(widgets) {
+  const search = instantsearch({
+    indexName: 'products',
+    searchClient,
+  });
+  search.addWidgets(widgets);
+  search.start();
+  return search;
+}
+"
+`;
+
 exports[`generator: experience (React + Next.js App Router + TypeScript) snapshot: provider.tsx (Next.js App Router) 1`] = `
 "'use client';
 
@@ -113,6 +157,72 @@ export function ProductSearchProvider({ children }) {
       {children}
     </InstantSearch>
   );
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: Hits.js 1`] = `
+"import { hits } from 'instantsearch.js/es/widgets';
+
+export function Hits(container) {
+  return hits({
+    container,
+    templates: {
+      item: (hit, { html }) => html\`
+        <article>
+          <img src=\\"\${hit.image_url}\\" alt=\\"\${hit.name}\\" />
+          <h3>\${hit.name}</h3>
+          <p>\${hit.description}</p>
+        </article>
+      \`,
+    },
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: Hits.js without image 1`] = `
+"import { hits } from 'instantsearch.js/es/widgets';
+
+export function Hits(container) {
+  return hits({
+    container,
+    templates: {
+      item: (hit, { html }) => html\`
+        <article>
+          <h3>\${hit.name}</h3>
+          <p>\${hit.description}</p>
+        </article>
+      \`,
+    },
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: RefinementList.js 1`] = `
+"import { refinementList } from 'instantsearch.js/es/widgets';
+
+export function RefinementList(container) {
+  return refinementList({
+    container,
+    attribute: 'brand',
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: SortBy.js 1`] = `
+"import { sortBy } from 'instantsearch.js/es/widgets';
+
+const items = [
+  { value: 'products', label: 'Featured' },
+  { value: 'products_price_asc', label: 'price asc' },
+  { value: 'products_price_desc', label: 'price desc' },
+];
+
+export function SortBy(container) {
+  return sortBy({ container, items });
 }
 "
 `;

@@ -171,11 +171,11 @@ Covers the second acceptance flow from the PRD (JS bundler, e.g., Rails + esbuil
 
 ### Acceptance criteria
 
-- [ ] `instantsearch init` in a JS-flavor fixture (`instantsearch.js` in deps, no React) detects `flavor: "js"` and writes the root manifest accordingly.
-- [ ] `add experience product-search --template search` emits a provider (`provider.js` with the `instantsearch()` instance) plus six widget factories wired to container selectors.
-- [ ] A minimal Vite-bundled JS host using the generated output renders a working search page.
-- [ ] Generator snapshots cover every widget in the JS variant.
-- [ ] Introspector tests are reused without duplication.
+- [x] `instantsearch init` in a JS-flavor fixture (`instantsearch.js` in deps, no React) detects `flavor: "js"` and writes the root manifest accordingly.
+- [x] `add experience product-search --template search` emits a provider (`provider.js` with the `instantsearch()` instance) plus six widget factories wired to container selectors.
+- [ ] A minimal Vite-bundled JS host using the generated output renders a working search page. _(Requires live Algolia creds + host app — deferred to the Phase 8 acceptance recording gate, consistent with Phase 2/3/4/5.)_
+- [x] Generator snapshots cover every widget in the JS variant.
+- [x] Introspector tests are reused without duplication.
 
 ---
 

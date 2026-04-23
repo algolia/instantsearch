@@ -9,3 +9,7 @@ export function toPascalCase(name: string): string {
 export function providerComponentName(experienceName: string): string {
   return `${toPascalCase(experienceName)}Provider`;
 }
+
+export function startFunctionName(experienceName: string): string {
+  return `start${toPascalCase(experienceName)}`;
+}

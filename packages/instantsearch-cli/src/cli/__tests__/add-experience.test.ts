@@ -394,6 +394,98 @@ describe('add experience command', () => {
     });
   });
 
+  describe('JS flavor output', () => {
+    test('emits .js files for provider + six widget factories + config', async () => {
+      const projectDir = makeInitializedProject({
+        flavor: 'js',
+        typescript: false,
+      });
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report.ok).toBe(true);
+
+      const experienceDir = path.join(
+        projectDir,
+        'src/components/product-search'
+      );
+      expect(
+        fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
+      ).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'provider.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Pagination.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementList.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.js'))).toBe(true);
+
+      // No React artefacts.
+      expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(false);
+    });
+
+    test('provider.js imports instantsearch.js, not react-instantsearch', async () => {
+      const projectDir = makeInitializedProject({
+        flavor: 'js',
+        typescript: false,
+      });
+
+      await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      const provider = fs.readFileSync(
+        path.join(projectDir, 'src/components/product-search/provider.js'),
+        'utf8'
+      );
+      expect(provider).toMatch(/from ['"]instantsearch\.js['"]/);
+      expect(provider).not.toMatch(/react-instantsearch/);
+    });
+
+    test('nextSteps imports point at the start helper + JS widget files', async () => {
+      const projectDir = makeInitializedProject({
+        flavor: 'js',
+        typescript: false,
+      });
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      if (!report.ok) throw new Error('expected success');
+      const imports = (report as any).nextSteps.imports as string[];
+      expect(imports).toContain(
+        "import { startProductSearch } from 'src/components/product-search/provider';"
+      );
+      expect(imports).toContain(
+        "import { SearchBox } from 'src/components/product-search/SearchBox';"
+      );
+      // No Provider component in JS.
+      expect(imports.some((line) => line.includes('ProductSearchProvider'))).toBe(
+        false
+      );
+
+      const guidance = (report as any).nextSteps.mountingGuidance as string;
+      expect(guidance).toMatch(/startProductSearch/);
+      expect(guidance).toMatch(/container/i);
+    });
+  });
+
   describe('schema validation', () => {
     test('search template without schema fails with missing_schema and writes nothing', async () => {
       const projectDir = makeInitializedProject();

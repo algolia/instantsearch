@@ -194,6 +194,30 @@ describe('init command', () => {
     });
   });
 
+  test('JS-only fixture: manifest records flavor "js", framework null', async () => {
+    const projectDir = copyFixture('js-only');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+    });
+
+    expect(report.ok).toBe(true);
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    );
+    expect(manifest).toMatchObject({
+      flavor: 'js',
+      framework: null,
+      typescript: false,
+    });
+    expect(
+      fs.existsSync(path.join(projectDir, 'src', 'lib', 'algolia-client.js'))
+    ).toBe(true);
+  });
+
   test('falls back to Detector when flavor/framework flags are omitted', async () => {
     const projectDir = copyFixture('react-js');
     mockAlgolia(() => Promise.resolve({ hits: [] }));

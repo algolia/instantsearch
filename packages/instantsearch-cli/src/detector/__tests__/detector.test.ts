@@ -64,6 +64,21 @@ describe('detector', () => {
     expect(result.message).toMatch(/app.*pages|pages.*app/i);
   });
 
+  test('JS-only fixture detects js flavor with no framework, typescript: false', () => {
+    const result = detect(fixturePath('js-only'));
+
+    expect(result).toEqual({
+      ok: true,
+      detection: {
+        flavor: 'js',
+        framework: null,
+        typescript: false,
+        componentsPath: 'src/components',
+        aliases: {},
+      },
+    });
+  });
+
   test('Next.js App Router + TS fixture detects react flavor with framework nextjs', () => {
     const result = detect(fixturePath('nextjs-ts'));
 

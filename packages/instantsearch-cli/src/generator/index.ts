@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import type { AlgoliaCredentials, Flavor, Framework } from '../types';
 import type { ResolvedExperienceManifest } from '../manifest';
-import { providerComponentName } from '../utils/naming';
+import { providerComponentName, startFunctionName } from '../utils/naming';
 
 export type ResolvedManifest = {
   flavor: Flavor;
@@ -34,7 +34,7 @@ function clientImportSpecifier(experienceDir: string): string {
   return specifier.startsWith('.') ? specifier : `./${specifier}`;
 }
 
-function providerSource(
+function reactProviderSource(
   manifest: ResolvedExperienceManifest,
   experienceDir: string
 ): string {
@@ -71,17 +71,59 @@ export function ${componentName}({ children }${paramAnnotation}) {
 `;
 }
 
+function jsProviderSource(
+  manifest: ResolvedExperienceManifest,
+  experienceDir: string
+): string {
+  const startName = startFunctionName(manifest.experience.name);
+  const clientImport = clientImportSpecifier(experienceDir);
+
+  return `import instantsearch from 'instantsearch.js';
+
+import { searchClient } from '${clientImport}';
+
+export function ${startName}(widgets) {
+  const search = instantsearch({
+    indexName: '${manifest.experience.indexName}',
+    searchClient,
+  });
+  search.addWidgets(widgets);
+  search.start();
+  return search;
+}
+`;
+}
+
 const STRUCTURAL_WIDGETS = ['SearchBox', 'Pagination', 'ClearRefinements'] as const;
 type StructuralWidget = (typeof STRUCTURAL_WIDGETS)[number];
 
 const SCHEMA_WIDGETS = ['Hits', 'RefinementList', 'SortBy'] as const;
 type SchemaWidget = (typeof SCHEMA_WIDGETS)[number];
 
+const JS_WIDGET_FACTORY: Record<StructuralWidget | SchemaWidget, string> = {
+  SearchBox: 'searchBox',
+  Pagination: 'pagination',
+  ClearRefinements: 'clearRefinements',
+  Hits: 'hits',
+  RefinementList: 'refinementList',
+  SortBy: 'sortBy',
+};
+
 function structuralWidgetSource(widget: StructuralWidget): string {
   return `import { ${widget} as InstantSearch${widget} } from 'react-instantsearch';
 
 export function ${widget}() {
   return <InstantSearch${widget} />;
+}
+`;
+}
+
+function jsStructuralWidgetSource(widget: StructuralWidget): string {
+  const factory = JS_WIDGET_FACTORY[widget];
+  return `import { ${factory} } from 'instantsearch.js/es/widgets';
+
+export function ${widget}(container) {
+  return ${factory}({ container });
 }
 `;
 }
@@ -94,16 +136,49 @@ function isSchemaWidget(widget: string): widget is SchemaWidget {
   return (SCHEMA_WIDGETS as readonly string[]).includes(widget);
 }
 
-function hitsSource(
-  schema: NonNullable<ResolvedExperienceManifest['experience']['schema']>['hits'],
-  typescript: boolean
-): string {
+type ExperienceSchema = NonNullable<
+  ResolvedExperienceManifest['experience']['schema']
+>;
+type HitsSchema = NonNullable<ExperienceSchema['hits']>;
+type RefinementListSchema = NonNullable<ExperienceSchema['refinementList']>;
+type SortBySchema = NonNullable<ExperienceSchema['sortBy']>;
+
+function requireHitsSchema(schema: ExperienceSchema['hits']): HitsSchema {
   if (!schema?.title) {
     throw new Error(
       "Hits widget requires schema.hits.title. Pass --hits-title <attr>."
     );
   }
-  const { title, image, description } = schema;
+  return schema;
+}
+
+function requireRefinementListSchema(
+  schema: ExperienceSchema['refinementList']
+): RefinementListSchema {
+  if (!schema?.attribute) {
+    throw new Error(
+      'RefinementList widget requires schema.refinementList.attribute. Pass --refinement-list-attribute <attr>.'
+    );
+  }
+  return schema;
+}
+
+function requireSortBySchema(
+  schema: ExperienceSchema['sortBy']
+): SortBySchema {
+  if (!schema || schema.replicas.length === 0) {
+    throw new Error(
+      'SortBy widget requires schema.sortBy.replicas. Pass --sort-by-replicas <comma-list>.'
+    );
+  }
+  return schema;
+}
+
+function hitsSource(
+  schemaInput: ExperienceSchema['hits'],
+  typescript: boolean
+): string {
+  const { title, image, description } = requireHitsSchema(schemaInput);
 
   const body = [
     image ? `      <img src={hit.${image}} alt={hit.${title}} />` : '',
@@ -143,19 +218,13 @@ export function Hits() {
 }
 
 function refinementListSource(
-  schema: NonNullable<
-    ResolvedExperienceManifest['experience']['schema']
-  >['refinementList']
+  schemaInput: ExperienceSchema['refinementList']
 ): string {
-  if (!schema?.attribute) {
-    throw new Error(
-      'RefinementList widget requires schema.refinementList.attribute. Pass --refinement-list-attribute <attr>.'
-    );
-  }
+  const { attribute } = requireRefinementListSchema(schemaInput);
   return `import { RefinementList as InstantSearchRefinementList } from 'react-instantsearch';
 
 export function RefinementList() {
-  return <InstantSearchRefinementList attribute="${schema.attribute}" />;
+  return <InstantSearchRefinementList attribute="${attribute}" />;
 }
 `;
 }
@@ -171,28 +240,27 @@ function replicaLabel(replica: string, indexName: string): string {
   return suffix.replace(/_/g, ' ');
 }
 
-function sortBySource(
+function sortByItems(
   indexName: string,
-  schema: NonNullable<
-    ResolvedExperienceManifest['experience']['schema']
-  >['sortBy']
+  replicas: readonly string[]
 ): string {
-  if (!schema || schema.replicas.length === 0) {
-    throw new Error(
-      'SortBy widget requires schema.sortBy.replicas. Pass --sort-by-replicas <comma-list>.'
-    );
-  }
-  const items = [
+  return [
     sortByItem(indexName, 'Featured'),
-    ...schema.replicas.map((replica) =>
+    ...replicas.map((replica) =>
       sortByItem(replica, replicaLabel(replica, indexName))
     ),
   ].join(',\n');
+}
 
+function sortBySource(
+  indexName: string,
+  schemaInput: ExperienceSchema['sortBy']
+): string {
+  const { replicas } = requireSortBySchema(schemaInput);
   return `import { SortBy as InstantSearchSortBy } from 'react-instantsearch';
 
 const items = [
-${items},
+${sortByItems(indexName, replicas)},
 ];
 
 export function SortBy() {
@@ -211,6 +279,77 @@ function schemaWidgetSource(
   return sortBySource(manifest.experience.indexName, schema.sortBy);
 }
 
+function jsHitsSource(schemaInput: ExperienceSchema['hits']): string {
+  const { title, image, description } = requireHitsSchema(schemaInput);
+  const lines = [
+    image
+      ? `          <img src="\${hit.${image}}" alt="\${hit.${title}}" />`
+      : '',
+    `          <h3>\${hit.${title}}</h3>`,
+    description ? `          <p>\${hit.${description}}</p>` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  return `import { ${JS_WIDGET_FACTORY.Hits} } from 'instantsearch.js/es/widgets';
+
+export function Hits(container) {
+  return ${JS_WIDGET_FACTORY.Hits}({
+    container,
+    templates: {
+      item: (hit, { html }) => html\`
+        <article>
+${lines}
+        </article>
+      \`,
+    },
+  });
+}
+`;
+}
+
+function jsRefinementListSource(
+  schemaInput: ExperienceSchema['refinementList']
+): string {
+  const { attribute } = requireRefinementListSchema(schemaInput);
+  return `import { ${JS_WIDGET_FACTORY.RefinementList} } from 'instantsearch.js/es/widgets';
+
+export function RefinementList(container) {
+  return ${JS_WIDGET_FACTORY.RefinementList}({
+    container,
+    attribute: '${attribute}',
+  });
+}
+`;
+}
+
+function jsSortBySource(
+  indexName: string,
+  schemaInput: ExperienceSchema['sortBy']
+): string {
+  const { replicas } = requireSortBySchema(schemaInput);
+  return `import { ${JS_WIDGET_FACTORY.SortBy} } from 'instantsearch.js/es/widgets';
+
+const items = [
+${sortByItems(indexName, replicas)},
+];
+
+export function SortBy(container) {
+  return ${JS_WIDGET_FACTORY.SortBy}({ container, items });
+}
+`;
+}
+
+function jsSchemaWidgetSource(
+  widget: SchemaWidget,
+  manifest: ResolvedExperienceManifest
+): string {
+  const schema = manifest.experience.schema ?? {};
+  if (widget === 'Hits') return jsHitsSource(schema.hits);
+  if (widget === 'RefinementList') return jsRefinementListSource(schema.refinementList);
+  return jsSortBySource(manifest.experience.indexName, schema.sortBy);
+}
+
 function experienceConfigSource(manifest: ResolvedExperienceManifest): string {
   return (
     JSON.stringify(
@@ -225,6 +364,35 @@ function experienceConfigSource(manifest: ResolvedExperienceManifest): string {
   );
 }
 
+function widgetExtension(manifest: ResolvedExperienceManifest): string {
+  if (manifest.flavor === 'js') {
+    return manifest.typescript ? 'ts' : 'js';
+  }
+  return manifest.typescript ? 'tsx' : 'jsx';
+}
+
+type FlavorSources = {
+  provider: (
+    manifest: ResolvedExperienceManifest,
+    experienceDir: string
+  ) => string;
+  structural: (widget: StructuralWidget) => string;
+  schema: (widget: SchemaWidget, manifest: ResolvedExperienceManifest) => string;
+};
+
+const SOURCES_BY_FLAVOR: Record<Flavor, FlavorSources> = {
+  react: {
+    provider: reactProviderSource,
+    structural: structuralWidgetSource,
+    schema: schemaWidgetSource,
+  },
+  js: {
+    provider: jsProviderSource,
+    structural: jsStructuralWidgetSource,
+    schema: jsSchemaWidgetSource,
+  },
+};
+
 export function generateExperience(
   manifest: ResolvedExperienceManifest
 ): GeneratedFiles {
@@ -233,7 +401,8 @@ export function generateExperience(
     manifest.componentsPath,
     manifest.experience.name
   );
-  const ext = manifest.typescript ? 'tsx' : 'jsx';
+  const ext = widgetExtension(manifest);
+  const sources = SOURCES_BY_FLAVOR[manifest.flavor];
 
   files.set(
     path.posix.join(experienceDir, 'instantsearch.config.json'),
@@ -241,17 +410,17 @@ export function generateExperience(
   );
   files.set(
     path.posix.join(experienceDir, `provider.${ext}`),
-    providerSource(manifest, experienceDir)
+    sources.provider(manifest, experienceDir)
   );
 
   for (const widget of manifest.experience.widgets) {
     const filePath = path.posix.join(experienceDir, `${widget}.${ext}`);
     if (isStructuralWidget(widget)) {
-      files.set(filePath, structuralWidgetSource(widget));
+      files.set(filePath, sources.structural(widget));
       continue;
     }
     if (isSchemaWidget(widget)) {
-      files.set(filePath, schemaWidgetSource(widget, manifest));
+      files.set(filePath, sources.schema(widget, manifest));
       continue;
     }
     throw new Error(`Unknown widget: ${widget}`);

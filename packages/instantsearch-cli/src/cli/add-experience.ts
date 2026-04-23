@@ -11,8 +11,9 @@ import {
   type ExperienceSchema,
 } from '../manifest';
 import { success, failure, type Report } from '../reporter';
-import { providerComponentName } from '../utils/naming';
+import { providerComponentName, startFunctionName } from '../utils/naming';
 import { writeGeneratedFiles } from '../utils/write-files';
+import type { Flavor } from '../types';
 
 const COMMAND = 'add experience';
 
@@ -55,25 +56,54 @@ function missingSchemaParts(
   return missing;
 }
 
+type NextStepsHead = { providerImport: string; mountingGuidance: string };
+
+function buildJsHead(
+  experienceName: string,
+  widgets: string[],
+  importBase: string
+): NextStepsHead {
+  const startName = startFunctionName(experienceName);
+  const widgetCalls = widgets.map((w) => `${w}('#container')`).join(', ');
+  return {
+    providerImport: `import { ${startName} } from '${importBase}/provider';`,
+    mountingGuidance: `Call ${startName}([${widgetCalls}]) once the DOM is ready, passing a container selector for each widget.`,
+  };
+}
+
+function buildReactHead(
+  experienceName: string,
+  importBase: string
+): NextStepsHead {
+  const providerName = providerComponentName(experienceName);
+  return {
+    providerImport: `import { ${providerName} } from '${importBase}/provider';`,
+    mountingGuidance: `Render <${providerName}> around the widgets wherever the search should appear.`,
+  };
+}
+
 function buildNextSteps(params: {
+  flavor: Flavor;
   experienceName: string;
   componentsPath: string;
   componentsAlias: string | undefined;
   widgets: string[];
 }): { imports: string[]; mountingGuidance: string } {
-  const providerName = providerComponentName(params.experienceName);
   const importBase = params.componentsAlias
     ? `${params.componentsAlias}/${params.experienceName}`
     : `${params.componentsPath}/${params.experienceName}`;
-  const imports = [
-    `import { ${providerName} } from '${importBase}/provider';`,
-    ...params.widgets.map(
-      (widget) => `import { ${widget} } from '${importBase}/${widget}';`
-    ),
-  ];
+  const head =
+    params.flavor === 'js'
+      ? buildJsHead(params.experienceName, params.widgets, importBase)
+      : buildReactHead(params.experienceName, importBase);
   return {
-    imports,
-    mountingGuidance: `Render <${providerName}> around the widgets wherever the search should appear.`,
+    imports: [
+      head.providerImport,
+      ...params.widgets.map(
+        (widget) => `import { ${widget} } from '${importBase}/${widget}';`
+      ),
+    ],
+    mountingGuidance: head.mountingGuidance,
   };
 }
 
@@ -148,6 +178,7 @@ export async function addExperience(
       filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
       nextSteps: buildNextSteps({
+        flavor: rootManifest.flavor,
         experienceName: name,
         componentsPath: rootManifest.componentsPath,
         componentsAlias: rootManifest.aliases.components,
