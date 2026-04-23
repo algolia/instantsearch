@@ -158,7 +158,7 @@ describe('chat', () => {
       search.start();
       await wait(0);
 
-      const textareaBefore = container.querySelector(
+      const textareaBefore = container.querySelector<HTMLTextAreaElement>(
         '.ais-ChatPrompt-textarea'
       );
       expect(textareaBefore).toBeInstanceOf(HTMLTextAreaElement);

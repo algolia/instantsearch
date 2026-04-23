@@ -517,8 +517,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     templateRef: TemplateRef,
     templateKey: string,
     rootTagName: TemplateProps['rootTagName']
-  ): (props: TProps) => JSX.Element {
-    return (props: TProps) => (
+  ): (props?: TProps) => JSX.Element {
+    return (props?: TProps) => (
       <TemplateComponent
         {...(templateRef.current as PreparedTemplateProps<ChatTemplates<THit>>)}
         templateKey={templateKey}
