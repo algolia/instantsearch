@@ -10,14 +10,3 @@ export const MemorizeToolType = 'algolia_memorize';
 export const MemorySearchToolType = 'algolia_memory_search';
 export const PonderToolType = 'algolia_ponder';
 export const DisplayResultsToolType = 'algolia_display_results';
-
-export {
-  buildConversationHits,
-  extractSearchHits,
-  normalizeDisplayResultsOutput,
-} from './display-results';
-export type {
-  DisplayResult,
-  DisplayResultsGroup,
-  DisplayResultsOutput,
-} from './display-results';

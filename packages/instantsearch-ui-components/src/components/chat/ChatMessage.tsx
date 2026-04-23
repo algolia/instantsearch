@@ -85,10 +85,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   message: ChatMessageBase;
   /**
-   * The full conversation, forwarded to tools that need cross-message context.
-   */
-  messages?: ChatMessageBase[];
-  /**
    * The status of the message (e.g. whether it's still streaming)
    */
   status: ChatStatus;
@@ -163,7 +159,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const {
       classNames = {},
       message,
-      messages,
       status,
       side = 'left',
       variant = 'subtle',
@@ -266,7 +261,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             >
               <ToolLayoutComponent
                 message={toolMessage}
-                messages={messages}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}

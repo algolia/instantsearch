@@ -9,7 +9,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -20,8 +20,6 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
-  buildConversationHits,
-  normalizeDisplayResultsOutput,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -268,7 +266,7 @@ function createCarouselTool<
 function createDisplayResultsTool<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(templates: ChatTemplates<THit>): UserClientSideToolWithTemplate {
-  const DisplayResultsLayout = createDisplayResultsToolComponent<
+  const DisplayResultsUIComponent = createDisplayResultsToolComponent<
     RecordWithObjectID<THit>
   >({
     createElement: h,
@@ -277,11 +275,10 @@ function createDisplayResultsTool<
 
   function DisplayResultsLayoutComponent(toolProps: ClientSideToolTemplateData) {
     return (
-      <DisplayResultsLayout
+      <DisplayResultsUIComponent
         useMemo={useMemo}
-        toolProps={toolProps}
-        normalizeOutput={normalizeDisplayResultsOutput}
-        buildConversationHits={buildConversationHits}
+        useRef={useRef}
+        useState={useState}
         itemComponent={({ item }) => (
           <TemplateComponent
             templates={templates}
@@ -290,6 +287,7 @@ function createDisplayResultsTool<
             rootTagName="fragment"
           />
         )}
+        toolProps={toolProps}
       />
     );
   }

@@ -228,7 +228,6 @@ function createDefaultMessageComponent<
 
   return function DefaultMessage({
     message,
-    messages,
     status,
     userMessageProps,
     assistantMessageProps,
@@ -247,7 +246,6 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
-    messages: TMessage[];
     status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
@@ -335,7 +333,6 @@ function createDefaultMessageComponent<
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
-        messages={messages}
         status={status}
         tools={tools}
         indexUiState={indexUiState}
@@ -477,7 +474,6 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
-                messages={messages}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}

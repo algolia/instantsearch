@@ -36,7 +36,6 @@ import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
-  DisplayResultsItemComponentProps,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -54,8 +53,7 @@ const ChatUiComponent = createChatComponent({
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string,
-  displayResultsItemComponent?: DisplayResultsItemComponent<TObject>
+  getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
   return {
     [SearchIndexToolType]: createCarouselTool(
@@ -68,9 +66,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
-    [DisplayResultsToolType]: createDisplayResultsTool(
-      displayResultsItemComponent
-    ),
+    [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
@@ -78,9 +74,6 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
-type DisplayResultsItemComponent<TObject> = (
-  props: DisplayResultsItemComponentProps<TObject>
-) => JSX.Element;
 
 type UiProps = Pick<
   ChatUiProps,
@@ -137,12 +130,6 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
 > &
   UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
-    /**
-     * Renders each result in the `algolia_display_results` tool. Receives the
-     * full hit (resolved by objectID from a prior search tool call) plus the
-     * optional `why` string coming from the tool output.
-     */
-    displayResultsItemComponent?: DisplayResultsItemComponent<TObject>;
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
@@ -194,7 +181,6 @@ function ChatInner<
     messagesProps,
     promptProps,
     itemComponent,
-    displayResultsItemComponent,
     layoutComponent,
     toggleButtonComponent,
     toggleButtonIconComponent,
@@ -243,19 +229,10 @@ function ChatInner<
     });
 
   const tools = useMemo(() => {
-    const defaults = createDefaultTools(
-      itemComponent,
-      getSearchPageURL,
-      displayResultsItemComponent
-    );
+    const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
     return { ...defaults, ...userTools };
-  }, [
-    getSearchPageURL,
-    itemComponent,
-    displayResultsItemComponent,
-    userTools,
-  ]);
+  }, [getSearchPageURL, itemComponent, userTools]);
 
   const chatState = useChat<TUiMessage>({
     ...props,

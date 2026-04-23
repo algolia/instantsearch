@@ -1,187 +1,144 @@
 /** @jsx createElement */
 
+import { createCarouselComponent, generateCarouselId } from '../../Carousel';
+
 import type { RecordWithObjectID, Renderer } from '../../../types';
-import type { ChatMessageBase, ClientSideToolComponentProps } from '../types';
+import type { CarouselProps } from '../../Carousel';
+import type { ClientSideToolComponentProps } from '../types';
 
-export type DisplayResultsItemComponentProps<THit> = {
-  item: THit;
-  why?: string;
-};
-
-export type DisplayResultsGroupHeaderProps = {
+type DisplayResultsGroup<THit> = {
   title?: string;
   why?: string;
-  hitsPerPage: number;
+  hits?: Array<RecordWithObjectID<THit>>;
+  queryID?: string;
 };
 
-export type DisplayResultsTranslations = {
-  /**
-   * Caption shown under the groups while the tool is still streaming its
-   * output. Defaults to "Curating results…".
-   */
-  streamingLabel: string;
-};
-
-/**
- * Shape the tool expects `normalizeOutput` to return. Intentionally
- * structural so ui-components does not need to reference lib-defined types.
- */
-export type DisplayResultsViewModel = {
+type DisplayResultsOutput<THit> = {
   intro?: string;
-  groups: Array<{
-    title?: string;
-    why?: string;
-    results: Array<{ objectID: string; why?: string }>;
-  }>;
+  groups?: Array<DisplayResultsGroup<THit>>;
 };
 
 export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
   useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
+  useRef: <TType>(initialValue: TType) => { current: TType };
+  useState: <TType>(
+    initialState: TType
+  ) => [TType, (newState: TType) => unknown];
   toolProps: ClientSideToolComponentProps;
-  /**
-   * Turns the tool's raw `output` (whatever the lib has assembled so far —
-   * partial during streaming, final on `output-available`) into the shape
-   * this component renders. The lib ships a canonical implementation at
-   * `instantsearch.js/es/lib/chat#normalizeDisplayResultsOutput` — the UI
-   * takes it as a prop so ui-components stays dependency-free.
-   */
-  normalizeOutput: (raw: unknown) => DisplayResultsViewModel;
-  /**
-   * Resolves each `objectID` referenced by the display tool to the full hit
-   * record that was previously surfaced by a search tool call in the same
-   * conversation. The lib ships a canonical implementation at
-   * `instantsearch.js/es/lib/chat#buildConversationHits`.
-   */
-  buildConversationHits: (
-    messages: ChatMessageBase[] | undefined
-  ) => Map<string, THit>;
-  /**
-   * Renders each result inside a group. Receives the full hit record resolved
-   * by `buildConversationHits`.
-   */
-  itemComponent?: (
-    props: DisplayResultsItemComponentProps<THit>
-  ) => JSX.Element;
-  /**
-   * Optional custom header for each group. Defaults to a simple title row.
-   */
-  groupHeaderComponent?: (
-    props: DisplayResultsGroupHeaderProps
-  ) => JSX.Element | null;
-  translations?: Partial<DisplayResultsTranslations>;
+  itemComponent?: CarouselProps<THit>['itemComponent'];
 };
 
-const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
-  streamingLabel: 'Curating results…',
+type GroupCarouselProps<THit extends RecordWithObjectID> = Pick<
+  DisplayResultsToolProps<THit>,
+  'useRef' | 'useState' | 'itemComponent'
+> & {
+  items: Array<RecordWithObjectID<THit>>;
+  sendEvent: ClientSideToolComponentProps['sendEvent'];
 };
 
 export function createDisplayResultsToolComponent<
-  THit extends RecordWithObjectID
+  TObject extends RecordWithObjectID
 >({ createElement, Fragment }: Renderer) {
-  return function DisplayResultsTool(userProps: DisplayResultsToolProps<THit>) {
-    const {
-      useMemo,
-      toolProps,
-      normalizeOutput,
-      buildConversationHits,
-      itemComponent: ItemComponent,
-      groupHeaderComponent: GroupHeaderComponent,
-      translations: userTranslations,
-    } = userProps;
-    const { message, messages } = toolProps;
+  const Carousel = createCarouselComponent({ createElement, Fragment });
 
-    const translations: DisplayResultsTranslations = {
-      ...DEFAULT_TRANSLATIONS,
-      ...userTranslations,
+  function GroupCarousel({
+    useRef,
+    useState,
+    items,
+    itemComponent: ItemComponent,
+    sendEvent,
+  }: GroupCarouselProps<TObject>) {
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const carouselRefs: Pick<
+      CarouselProps<TObject>,
+      | 'listRef'
+      | 'nextButtonRef'
+      | 'previousButtonRef'
+      | 'carouselIdRef'
+      | 'canScrollLeft'
+      | 'canScrollRight'
+      | 'setCanScrollLeft'
+      | 'setCanScrollRight'
+    > = {
+      listRef: useRef(null),
+      nextButtonRef: useRef(null),
+      previousButtonRef: useRef(null),
+      carouselIdRef: useRef(generateCarouselId()),
+      canScrollLeft,
+      canScrollRight,
+      setCanScrollLeft,
+      setCanScrollRight,
     };
 
-    const conversationHits = useMemo(
-      () => buildConversationHits(messages),
-      [buildConversationHits, messages]
+    return (
+      <Carousel
+        {...carouselRefs}
+        items={items}
+        itemComponent={ItemComponent}
+        showNavigation={false}
+        sendEvent={sendEvent}
+      />
     );
+  }
 
-    const parsed = useMemo(() => {
-      if (!message || message.state !== 'output-available') {
-        return normalizeOutput(null);
-      }
-      return normalizeOutput((message as { output?: unknown }).output);
-    }, [normalizeOutput, message]);
+  return function DisplayResultsTool(
+    userProps: DisplayResultsToolProps<TObject>
+  ) {
+    const { useRef, useState, itemComponent, toolProps } = userProps;
+    const { message, sendEvent } = toolProps;
 
-    const isStreaming =
-      message?.state === 'output-available' &&
-      (message as { preliminary?: boolean }).preliminary === true;
+    const output = message?.output as
+      | DisplayResultsOutput<TObject>
+      | undefined;
+    const groups = output?.groups ?? [];
 
-    if (!parsed.groups.length && !parsed.intro) {
-      return null;
+    if (!output?.intro && groups.length === 0) {
+      return <Fragment />;
     }
 
     return (
       <div className="ais-ChatToolDisplayResults">
-        {parsed.intro && (
-          <div className="ais-ChatToolDisplayResults-intro">{parsed.intro}</div>
+        {output?.intro && (
+          <div className="ais-ChatToolDisplayResults-intro">{output.intro}</div>
         )}
 
-        {parsed.groups.map((group, groupIndex) => {
-          const items = group.results
-            .map((result) => {
-              const hit = conversationHits.get(result.objectID);
-              return hit ? { hit, why: result.why } : null;
-            })
-            .filter(
-              (entry): entry is { hit: THit; why: string | undefined } =>
-                entry !== null
-            );
+        {groups.map((group, groupIndex) => {
+          const hits = group.hits ?? [];
+          if (hits.length === 0) return null;
 
-          if (items.length === 0) return null;
-
-          const headerProps: DisplayResultsGroupHeaderProps = {
-            title: group.title,
-            why: group.why,
-            hitsPerPage: items.length,
-          };
+          const items = hits.map((hit, idx) => ({
+            ...hit,
+            __position: idx + 1,
+            ...(group.queryID ? { __queryID: group.queryID } : {}),
+          }));
 
           return (
-            <div key={groupIndex} className="ais-ChatToolDisplayResults-group">
-              {GroupHeaderComponent ? (
-                <GroupHeaderComponent {...headerProps} />
-              ) : (
-                group.title && (
-                  <div className="ais-ChatToolDisplayResults-groupTitle">
-                    {group.title}
-                  </div>
-                )
+            <div
+              key={groupIndex}
+              className="ais-ChatToolDisplayResults-group"
+            >
+              {group.title && (
+                <div className="ais-ChatToolDisplayResults-groupTitle">
+                  {group.title}
+                </div>
               )}
-
-              <div className="ais-ChatToolDisplayResults-items">
-                {items.map(({ hit, why }) =>
-                  ItemComponent ? (
-                    <div
-                      key={String(hit.objectID)}
-                      className="ais-ChatToolDisplayResults-item"
-                    >
-                      <ItemComponent item={hit} why={why} />
-                    </div>
-                  ) : (
-                    <div
-                      key={String(hit.objectID)}
-                      className="ais-ChatToolDisplayResults-item"
-                    >
-                      {String(hit.objectID)}
-                    </div>
-                  )
-                )}
-              </div>
+              {group.why && (
+                <div className="ais-ChatToolDisplayResults-groupWhy">
+                  {group.why}
+                </div>
+              )}
+              <GroupCarousel
+                useRef={useRef}
+                useState={useState}
+                items={items}
+                itemComponent={itemComponent}
+                sendEvent={sendEvent}
+              />
             </div>
           );
         })}
-
-        {isStreaming && (
-          <div className="ais-ChatToolDisplayResults-streaming">
-            {translations.streamingLabel}
-          </div>
-        )}
-
-        <Fragment />
       </div>
     );
   };
