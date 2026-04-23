@@ -4,9 +4,10 @@
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
+import { chatInlineLayout } from '../../../templates';
 import chat from '../chat';
 
 describe('chat', () => {
@@ -128,6 +129,59 @@ describe('chat', () => {
 
       expect(screen.getByText('MCP Product 1')).toBeInTheDocument();
       expect(screen.getByText('MCP Product 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('prompt focus stability', () => {
+    // A fresh `layoutComponent` per render would remount the chat subtree
+    // and drop textarea focus on every keystroke.
+    test('keeps the prompt textarea mounted across re-renders with a custom templates.layout', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          templates: {
+            item: (hit) => `<div>${hit.name}</div>`,
+            layout: chatInlineLayout(),
+          },
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      const textareaBefore = container.querySelector(
+        '.ais-ChatPrompt-textarea'
+      );
+      expect(textareaBefore).toBeInstanceOf(HTMLTextAreaElement);
+
+      textareaBefore!.focus();
+      expect(document.activeElement).toBe(textareaBefore);
+
+      // Typing into the prompt triggers the widget's internal setInput ->
+      // connector re-render path. Before the fix, the chat subtree was
+      // remounted here and the textarea DOM node was replaced.
+      fireEvent.input(textareaBefore!, { target: { value: 'h' } });
+      await wait(0);
+      fireEvent.input(textareaBefore!, { target: { value: 'he' } });
+      await wait(0);
+      fireEvent.input(textareaBefore!, { target: { value: 'hel' } });
+      await wait(0);
+
+      const textareaAfter = container.querySelector(
+        '.ais-ChatPrompt-textarea'
+      );
+
+      expect(textareaAfter).toBe(textareaBefore);
+      expect(document.activeElement).toBe(textareaAfter);
     });
   });
 });
