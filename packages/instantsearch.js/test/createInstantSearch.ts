@@ -74,6 +74,8 @@ export const createInstantSearch = (
     emit: jest.fn(),
     listenerCount: jest.fn(),
     sendEventToInsights: jest.fn(),
+    _createdAt:
+      typeof performance !== 'undefined' ? performance.now() : Date.now(),
     future: {
       ...INSTANTSEARCH_FUTURE_DEFAULTS,
       ...(args.future || {}),

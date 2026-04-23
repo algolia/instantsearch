@@ -1,6 +1,24 @@
 import { warning, serializePayload, deserializePayload } from '../lib/utils';
+import { createUUID } from '../lib/utils/uuid';
 
 import type { InsightsClientMethod, InsightsClientPayload } from '../types';
+
+const TELEMETRY_SESSION_KEY = 'ais.telemetry.sessionId';
+
+export function getTelemetrySessionId(): string {
+  try {
+    const existing = sessionStorage.getItem(TELEMETRY_SESSION_KEY);
+    if (existing) {
+      return existing;
+    }
+    const id = createUUID();
+    sessionStorage.setItem(TELEMETRY_SESSION_KEY, id);
+    return id;
+  } catch {
+    // sessionStorage unavailable (SSR, privacy mode, etc.)
+    return createUUID();
+  }
+}
 
 /** @deprecated use bindEvent instead */
 export function readDataAttributes(domElement: HTMLElement): {

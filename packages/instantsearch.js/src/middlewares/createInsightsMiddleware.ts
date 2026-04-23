@@ -1,12 +1,18 @@
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
+import {
+  getInsightsAnonymousUserTokenInternal,
+  getTelemetrySessionId,
+} from '../helpers';
 import {
   warning,
   noop,
+  buildWidgetTree,
+  getAlgoliaAgent,
   getAppIdAndApiKey,
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
 import { createUUID } from '../lib/utils/uuid';
+import version from '../lib/version';
 
 import type {
   InsightsClient,
@@ -162,6 +168,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
+    let telemetryTimeout: ReturnType<typeof setTimeout> | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -416,8 +423,68 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             );
           }
         };
+
+        // telemetry
+        const telemetrySessionId = getTelemetrySessionId();
+
+        function sendTelemetryEvent(event: any) {
+          const userToken = helper.state?.userToken;
+
+          (insightsClientWithLocalCredentials as any)('sendEvents', [
+            {
+              eventType: 'instantsearch_telemetry',
+              timestamp: Date.now(),
+              session_id: telemetrySessionId,
+              userToken: userToken ? String(userToken) : undefined,
+              ...event,
+            },
+          ]);
+        }
+
+        // Defer by a tick so the measurement is taken after `start()`
+        // fully returns (started() is called from within start()), and so
+        // widgets added asynchronously in the same tick (e.g. Vue) are
+        // included in the tree.
+        telemetryTimeout = setTimeout(() => {
+          telemetryTimeout = null;
+          try {
+            sendTelemetryEvent({
+              eventName: '__start__',
+              algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
+              version,
+              user_agent: safelyRunOnBrowser(
+                ({ window }) => window.navigator.userAgent,
+                { fallback: () => undefined }
+              ),
+              application_id: appId,
+              performance: {
+                bootstrap_ms: Math.round(
+                  (typeof performance !== 'undefined'
+                    ? performance.now()
+                    : Date.now()) - instantSearchInstance._createdAt
+                ),
+              },
+              widgets: [
+                {
+                  type: 'ais.instantSearch',
+                  params: [],
+                  children: buildWidgetTree(
+                    instantSearchInstance.mainIndex.getWidgets(),
+                    instantSearchInstance
+                  ),
+                },
+              ],
+            });
+          } catch {
+            // telemetry must never crash the host app
+          }
+        }, 0);
       },
       unsubscribe() {
+        if (telemetryTimeout) {
+          clearTimeout(telemetryTimeout);
+          telemetryTimeout = null;
+        }
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
