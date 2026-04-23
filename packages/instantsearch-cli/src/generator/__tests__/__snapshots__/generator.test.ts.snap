@@ -14,6 +14,24 @@ export const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
 "
 `;
 
+exports[`generator: experience (React + Next.js App Router + TypeScript) snapshot: provider.tsx (Next.js App Router) 1`] = `
+"'use client';
+
+import type { ReactNode } from 'react';
+import { InstantSearchNext } from 'react-instantsearch-nextjs';
+
+import { searchClient } from '../../lib/algolia-client';
+
+export function ProductSearchProvider({ children }: { children: ReactNode }) {
+  return (
+    <InstantSearchNext searchClient={searchClient} indexName=\\"products\\">
+      {children}
+    </InstantSearchNext>
+  );
+}
+"
+`;
+
 exports[`generator: experience (React + TypeScript) snapshot: ClearRefinements.tsx 1`] = `
 "import { ClearRefinements as InstantSearchClearRefinements } from 'react-instantsearch';
 

@@ -44,15 +44,28 @@ function providerSource(
     ? `import type { ReactNode } from 'react';\n`
     : '';
   const paramAnnotation = manifest.typescript ? ': { children: ReactNode }' : '';
-  return `${typeImport}import { InstantSearch } from 'react-instantsearch';
+  const { directive, componentImport, element } =
+    manifest.framework === 'nextjs'
+      ? {
+          directive: `'use client';\n\n`,
+          componentImport: `import { InstantSearchNext } from 'react-instantsearch-nextjs';`,
+          element: 'InstantSearchNext',
+        }
+      : {
+          directive: '',
+          componentImport: `import { InstantSearch } from 'react-instantsearch';`,
+          element: 'InstantSearch',
+        };
+
+  return `${directive}${typeImport}${componentImport}
 
 import { searchClient } from '${clientImport}';
 
 export function ${componentName}({ children }${paramAnnotation}) {
   return (
-    <InstantSearch searchClient={searchClient} indexName="${manifest.experience.indexName}">
+    <${element} searchClient={searchClient} indexName="${manifest.experience.indexName}">
       {children}
-    </InstantSearch>
+    </${element}>
   );
 }
 `;

@@ -317,6 +317,53 @@ describe('generator: experience (React + plain JS)', () => {
   });
 });
 
+describe('generator: experience (React + Next.js App Router + TypeScript)', () => {
+  const baseManifest = {
+    flavor: 'react' as const,
+    framework: 'nextjs' as const,
+    typescript: true,
+    componentsPath: 'src/components',
+    aliases: {},
+    algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+    experience: {
+      name: 'product-search',
+      indexName: 'products',
+      widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
+    },
+  };
+
+  test('provider.tsx is a client component importing InstantSearchNext from react-instantsearch-nextjs', () => {
+    const files = generateExperience(baseManifest);
+    const provider = files.get('src/components/product-search/provider.tsx')!;
+    expect(provider).toBeDefined();
+    expect(provider.startsWith("'use client';")).toBe(true);
+    expect(provider).toMatch(/from ['"]react-instantsearch-nextjs['"]/);
+    expect(provider).toMatch(/InstantSearchNext/);
+    expect(provider).not.toMatch(/from ['"]react-instantsearch['"]/);
+    expect(provider).toMatch(/indexName=['"]products['"]/);
+    expect(provider).toMatch(/export function ProductSearchProvider/);
+  });
+
+  test('widget files are identical to the React-plain path', () => {
+    const nextFiles = generateExperience(baseManifest);
+    const reactFiles = generateExperience({
+      ...baseManifest,
+      framework: null,
+    });
+    for (const widget of baseManifest.experience.widgets) {
+      const key = `src/components/product-search/${widget}.tsx`;
+      expect(nextFiles.get(key)).toBe(reactFiles.get(key));
+    }
+  });
+
+  test('snapshot: provider.tsx (Next.js App Router)', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/provider.tsx')
+    ).toMatchSnapshot();
+  });
+});
+
 describe('generator: schema-driven widgets (React + plain JS)', () => {
   const baseManifest = {
     flavor: 'react' as const,

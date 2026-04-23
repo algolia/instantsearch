@@ -133,6 +133,67 @@ describe('init command', () => {
     );
   });
 
+  test('ambiguous Next.js layout: --framework nextjs override proceeds past ambiguity', async () => {
+    const projectDir = copyFixture('next-ambiguous');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      framework: 'nextjs',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+    });
+
+    expect(report.ok).toBe(true);
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    );
+    expect(manifest).toMatchObject({
+      flavor: 'react',
+      framework: 'nextjs',
+    });
+  });
+
+  test('ambiguous Next.js layout without --framework: fails with unsupported_framework', async () => {
+    const projectDir = copyFixture('next-ambiguous');
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+    });
+
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'unsupported_framework',
+    });
+    expect(fs.existsSync(path.join(projectDir, 'instantsearch.json'))).toBe(
+      false
+    );
+  });
+
+  test('Next.js App Router fixture: manifest records framework "nextjs"', async () => {
+    const projectDir = copyFixture('nextjs-ts');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+    });
+
+    expect(report.ok).toBe(true);
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    );
+    expect(manifest).toMatchObject({
+      flavor: 'react',
+      framework: 'nextjs',
+      typescript: true,
+    });
+  });
+
   test('falls back to Detector when flavor/framework flags are omitted', async () => {
     const projectDir = copyFixture('react-js');
     mockAlgolia(() => Promise.resolve({ hits: [] }));

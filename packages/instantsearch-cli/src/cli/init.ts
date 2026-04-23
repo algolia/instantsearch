@@ -15,7 +15,7 @@ const COMMAND = 'init';
 export type InitOptions = {
   projectDir: string;
   flavor?: Flavor;
-  framework?: Framework | null;
+  framework?: Framework;
   componentsPath?: string;
   appId: string;
   searchApiKey: string;
@@ -31,7 +31,7 @@ export async function init(options: InitOptions): Promise<Report> {
     searchApiKey,
   } = options;
 
-  const detection = detect(projectDir);
+  const detection = detect(projectDir, { frameworkOverride });
   if (!detection.ok) {
     return failure({
       command: COMMAND,

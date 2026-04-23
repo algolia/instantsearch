@@ -149,11 +149,11 @@ This phase lights up the PRD's headline use case — a working search page in an
 
 ### Acceptance criteria
 
-- [ ] `instantsearch init` in a Next.js App Router + TS fixture detects `next-app` and writes the root manifest with `"framework": "next-app"`.
-- [ ] `add experience product-search --template search` emits a provider using `InstantSearchNext` with `'use client'` at the top.
-- [ ] The generated output in an existing Next.js App Router host renders a working search page when the provider is mounted.
-- [ ] Projects with both `app/` and `pages/` fail with a specific ambiguity error; explicit `--framework` flag lets the user proceed.
-- [ ] Detector and Generator tests extend to cover the Next App Router variant.
+- [x] `instantsearch init` in a Next.js App Router + TS fixture detects the App Router and writes the root manifest with `"framework": "nextjs"`.
+- [x] `add experience product-search --template search` emits a provider using `InstantSearchNext` with `'use client'` at the top.
+- [ ] The generated output in an existing Next.js App Router host renders a working search page when the provider is mounted. _(Requires live Algolia creds + host app — deferred to the Phase 8 acceptance recording gate, consistent with Phase 2/3/4.)_
+- [x] Projects with both `app/` and `pages/` fail with a specific ambiguity error; explicit `--framework` flag lets the user proceed.
+- [x] Detector and Generator tests extend to cover the Next App Router variant.
 
 ---
 

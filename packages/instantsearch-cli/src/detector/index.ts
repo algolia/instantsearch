@@ -49,7 +49,14 @@ function extractComponentsAlias(
   return null;
 }
 
-export function detect(projectDir: string): DetectResult {
+export type DetectOptions = {
+  frameworkOverride?: Framework;
+};
+
+export function detect(
+  projectDir: string,
+  options: DetectOptions = {}
+): DetectResult {
   const packageJson = readJSON(path.join(projectDir, 'package.json'));
   if (!packageJson) {
     return {
@@ -88,9 +95,26 @@ export function detect(projectDir: string): DetectResult {
   }
 
   const flavor = flavors[0];
-  // Phase 5 will refine this to 'nextjs' when react-instantsearch-nextjs
-  // and an app/ directory are both present.
-  const framework: Framework | null = null;
+  const { frameworkOverride } = options;
+
+  let framework: Framework | null = null;
+  if (frameworkOverride !== undefined) {
+    framework = frameworkOverride;
+  } else if (hasNextIs) {
+    const hasAppDir = fs.existsSync(path.join(projectDir, 'app'));
+    const hasPagesDir = fs.existsSync(path.join(projectDir, 'pages'));
+    if (hasAppDir && hasPagesDir) {
+      return {
+        ok: false,
+        code: 'unsupported_framework',
+        message:
+          'Ambiguous Next.js layout: both app/ and pages/ directories exist. Pass --framework nextjs explicitly to proceed.',
+      };
+    }
+    if (hasAppDir) {
+      framework = 'nextjs';
+    }
+  }
 
   const typescript = fs.existsSync(path.join(projectDir, 'tsconfig.json'));
   const hasSrc = fs.existsSync(path.join(projectDir, 'src'));
