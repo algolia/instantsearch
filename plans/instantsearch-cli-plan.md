@@ -128,10 +128,10 @@ Detector's `typescript: false` signal (no `tsconfig.json`) routes generation to 
 
 ### Acceptance criteria
 
-- [ ] `instantsearch init` in a React+JS fixture (no `tsconfig.json`) writes `src/lib/algolia-client.js` and a root manifest with `"typescript": false`.
-- [ ] `add experience` in that project emits `.jsx` / `.js` files for all six widgets + provider, matching the TypeScript variant's structure but without types.
-- [ ] A minimal Vite + React (no TS) host renders the same working search page as the TS path.
-- [ ] Generator snapshots cover the JS variants for every widget + provider.
+- [x] `instantsearch init` in a React+JS fixture (no `tsconfig.json`) writes `src/lib/algolia-client.js` and a root manifest with `"typescript": false`.
+- [x] `add experience` in that project emits `.jsx` / `.js` files for all six widgets + provider, matching the TypeScript variant's structure but without types.
+- [ ] A minimal Vite + React (no TS) host renders the same working search page as the TS path. _(Requires live Algolia creds + host app — deferred to the Phase 8 acceptance recording gate, consistent with Phase 2/3.)_
+- [x] Generator snapshots cover the JS variants for every widget + provider.
 
 ---
 

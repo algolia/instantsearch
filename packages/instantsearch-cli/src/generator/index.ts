@@ -40,12 +40,15 @@ function providerSource(
 ): string {
   const componentName = providerComponentName(manifest.experience.name);
   const clientImport = clientImportSpecifier(experienceDir);
-  return `import type { ReactNode } from 'react';
-import { InstantSearch } from 'react-instantsearch';
+  const typeImport = manifest.typescript
+    ? `import type { ReactNode } from 'react';\n`
+    : '';
+  const paramAnnotation = manifest.typescript ? ': { children: ReactNode }' : '';
+  return `${typeImport}import { InstantSearch } from 'react-instantsearch';
 
 import { searchClient } from '${clientImport}';
 
-export function ${componentName}({ children }: { children: ReactNode }) {
+export function ${componentName}({ children }${paramAnnotation}) {
   return (
     <InstantSearch searchClient={searchClient} indexName="${manifest.experience.indexName}">
       {children}
@@ -79,7 +82,8 @@ function isSchemaWidget(widget: string): widget is SchemaWidget {
 }
 
 function hitsSource(
-  schema: NonNullable<ResolvedExperienceManifest['experience']['schema']>['hits']
+  schema: NonNullable<ResolvedExperienceManifest['experience']['schema']>['hits'],
+  typescript: boolean
 ): string {
   if (!schema?.title) {
     throw new Error(
@@ -87,13 +91,6 @@ function hitsSource(
     );
   }
   const { title, image, description } = schema;
-  const recordFields = [
-    `  ${title}: string;`,
-    image ? `  ${image}: string;` : '',
-    description ? `  ${description}: string;` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
 
   const body = [
     image ? `      <img src={hit.${image}} alt={hit.${title}} />` : '',
@@ -103,13 +100,22 @@ function hitsSource(
     .filter(Boolean)
     .join('\n');
 
+  const recordFields = [
+    `  ${title}: string;`,
+    image ? `  ${image}: string;` : '',
+    description ? `  ${description}: string;` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+  const typeBlock = typescript
+    ? `type HitRecord = {\n${recordFields}\n};\n\n`
+    : '';
+  const hitAnnotation = typescript ? ': { hit: HitRecord }' : '';
+  const hitsGeneric = typescript ? '<HitRecord>' : '';
+
   return `import { Hits as InstantSearchHits } from 'react-instantsearch';
 
-type HitRecord = {
-${recordFields}
-};
-
-function Hit({ hit }: { hit: HitRecord }) {
+${typeBlock}function Hit({ hit }${hitAnnotation}) {
   return (
     <article>
 ${body}
@@ -118,7 +124,7 @@ ${body}
 }
 
 export function Hits() {
-  return <InstantSearchHits<HitRecord> hitComponent={Hit} />;
+  return <InstantSearchHits${hitsGeneric} hitComponent={Hit} />;
 }
 `;
 }
@@ -187,7 +193,7 @@ function schemaWidgetSource(
   manifest: ResolvedExperienceManifest
 ): string {
   const schema = manifest.experience.schema ?? {};
-  if (widget === 'Hits') return hitsSource(schema.hits);
+  if (widget === 'Hits') return hitsSource(schema.hits, manifest.typescript);
   if (widget === 'RefinementList') return refinementListSource(schema.refinementList);
   return sortBySource(manifest.experience.indexName, schema.sortBy);
 }

@@ -337,6 +337,63 @@ describe('add experience command', () => {
     });
   });
 
+  describe('plain JS output (typescript: false)', () => {
+    test('emits .jsx / .js files for provider + six widgets + config', async () => {
+      const projectDir = makeInitializedProject({ typescript: false });
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report.ok).toBe(true);
+
+      const experienceDir = path.join(
+        projectDir,
+        'src/components/product-search'
+      );
+      expect(
+        fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
+      ).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Pagination.jsx'))).toBe(true);
+      expect(
+        fs.existsSync(path.join(experienceDir, 'ClearRefinements.jsx'))
+      ).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.jsx'))).toBe(true);
+      expect(
+        fs.existsSync(path.join(experienceDir, 'RefinementList.jsx'))
+      ).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.jsx'))).toBe(true);
+
+      expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(false);
+    });
+
+    test('provider.jsx has no TypeScript syntax', () => {
+      const projectDir = makeInitializedProject({ typescript: false });
+
+      return addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      }).then(() => {
+        const provider = fs.readFileSync(
+          path.join(projectDir, 'src/components/product-search/provider.jsx'),
+          'utf8'
+        );
+        expect(provider).not.toMatch(/import type/);
+        expect(provider).not.toMatch(/ReactNode/);
+      });
+    });
+  });
+
   describe('schema validation', () => {
     test('search template without schema fails with missing_schema and writes nothing', async () => {
       const projectDir = makeInitializedProject();
