@@ -3,8 +3,8 @@ import { useState } from "preact/hooks";
 
 import { DocsLinks } from "./DocsLink";
 
-import type { ComponentChildren } from "preact";
 import type { ChatLayout } from "./widgets/WidgetChat";
+import type { ComponentChildren } from "preact";
 
 interface Props {
   layout: ChatLayout;

@@ -1,9 +1,9 @@
-import { chat } from "instantsearch.js/es/widgets";
 import {
   chatInlineLayout,
   chatOverlayLayout,
   chatSidePanelLayout,
 } from "instantsearch.js/es/templates";
+import { chat } from "instantsearch.js/es/widgets";
 import { useEffect, useRef } from "preact/hooks";
 
 import { useSearch } from "../../context/search";
