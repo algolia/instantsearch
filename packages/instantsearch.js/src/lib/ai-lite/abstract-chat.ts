@@ -26,15 +26,15 @@ type ActiveResponse = {
   stream?: ReadableStream<UIMessageChunk>;
 };
 
-function tryParseJson(value: string): unknown | undefined {
+const tryParseJson = (value: string): unknown | undefined => {
   try {
     return JSON.parse(value);
   } catch {
     return undefined;
   }
-}
+};
 
-function repairPartialJson(value: string): string {
+const repairPartialJson = (value: string): string => {
   let repaired = value.trim();
 
   if (!repaired) {
@@ -82,39 +82,39 @@ function repairPartialJson(value: string): string {
     repaired += '"';
   }
 
-  repaired = repaired.replace(/\s+$/u, '');
-  repaired = repaired.replace(/,$/u, '');
-
-  if (repaired.endsWith(':')) {
-    repaired += 'null';
-  }
+  repaired = repaired.replace(/,\s*$/u, '');
 
   if (stack.length > 0) {
     repaired += stack
-      .slice()
       .reverse()
       .map((opening) => (opening === '{' ? '}' : ']'))
       .join('');
   }
 
   return repaired.replace(/,\s*([}\]])/gu, '$1');
-}
+};
 
-function parsePartialJsonWithFallback(
-  accumulated: string,
-  fallback: unknown
-): unknown {
-  const normalized = accumulated.trim();
-  if (!normalized) return fallback;
+const parseToolInputDelta = (
+  accumulatedRawInput: string,
+  fallbackInput: unknown
+): unknown => {
+  const normalized = accumulatedRawInput.trim();
+  if (!normalized) {
+    return fallbackInput;
+  }
 
-  const direct = tryParseJson(normalized);
-  if (direct !== undefined) return direct;
+  const directParsed = tryParseJson(normalized);
+  if (directParsed !== undefined) {
+    return directParsed;
+  }
 
-  const repaired = tryParseJson(repairPartialJson(normalized));
-  if (repaired !== undefined) return repaired;
+  const repairedParsed = tryParseJson(repairPartialJson(normalized));
+  if (repairedParsed !== undefined) {
+    return repairedParsed;
+  }
 
-  return fallback;
-}
+  return fallbackInput;
+};
 
 /**
  * Abstract base class for chat implementations.
@@ -770,10 +770,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   ? (this.shouldRepairToolInput?.(toolName) ?? true)
                   : true;
               const parsedInput = shouldRepair
-                ? parsePartialJsonWithFallback(
-                    nextRawInput,
-                    existingPart?.input
-                  )
+                ? parseToolInputDelta(nextRawInput, existingPart?.input)
                 : existingPart?.input;
 
               const nextToolPart = {
@@ -879,7 +876,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const nextRawOutput = `${previousRawOutput}${delta}`;
               toolRawOutputByCallId[toolCallId] = nextRawOutput;
 
-              const parsedOutput = parsePartialJsonWithFallback(
+              const parsedOutput = parseToolInputDelta(
                 nextRawOutput,
                 existingPart?.output
               );
