@@ -1,6 +1,11 @@
 /** @jsx h */
 
-import { createDisplayResultsToolComponent } from 'instantsearch-ui-components';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  createButtonComponent,
+  createDisplayResultsToolComponent,
+} from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
@@ -23,7 +28,7 @@ export function createDisplayResultsTool<
     Fragment,
   });
 
-  const GroupCarousel = carousel({ showNavigation: false });
+  const Button = createButtonComponent({ createElement: h });
 
   function DisplayResultsLayoutComponent(
     toolProps: ClientSideToolTemplateData
@@ -32,7 +37,47 @@ export function createDisplayResultsTool<
       <DisplayResultsUIComponent
         toolProps={toolProps}
         groupCarouselComponent={({ items, sendEvent }) =>
-          GroupCarousel({
+          carousel({
+            showNavigation: false,
+            templates: {
+              header: ({
+                canScrollLeft,
+                canScrollRight,
+                scrollLeft,
+                scrollRight,
+              }) => (
+                <div className="ais-ChatToolDisplayResultsCarouselHeader">
+                  <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
+                    {items.length} result{items.length > 1 ? 's' : ''}
+                  </div>
+                  {items.length > 2 && (
+                    <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        iconOnly
+                        onClick={scrollLeft}
+                        disabled={!canScrollLeft}
+                        className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                      >
+                        <ChevronLeftIcon createElement={h} />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        iconOnly
+                        onClick={scrollRight}
+                        disabled={!canScrollRight}
+                        className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                      >
+                        <ChevronRightIcon createElement={h} />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ),
+            },
+          })({
             items,
             templates: {
               item: ({ item }) => (
