@@ -2,6 +2,8 @@
 @use '../shared/_common';
 
 .ais-AiModeButton {
+  @extend %ais-focus-outline;
+
   align-items: center;
   background-color: rgba(var(--ais-primary-color-rgb), 0.08);
   border: 1px solid rgba(var(--ais-primary-color-rgb), 0.3);
@@ -29,12 +31,6 @@
       background-color: rgba(var(--ais-primary-color-rgb), 0.15);
       border-color: rgba(var(--ais-primary-color-rgb), 1);
     }
-  }
-
-  &:focus-visible {
-    border-color: rgba(var(--ais-primary-color-rgb), 1);
-    box-shadow: 0 0 0 1px rgba(var(--ais-primary-color-rgb), 1);
-    outline: 0;
   }
 
   svg {
