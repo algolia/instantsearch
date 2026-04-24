@@ -10,9 +10,6 @@
     "examples/react/next-routing",
     "examples/react/next-app-router",
     "examples/react/react-native",
-    // @algolia/composition is not compatible with algoliasearch v4.
-    "examples/js/autocomplete-multifeed",
-    "examples/react/autocomplete-multifeed",
     "examples/js/e-commerce-umd/public/packages",
     "packages/create-instantsearch-app/src/templates/**/*",
     "packages/algolia-experiences"
