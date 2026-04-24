@@ -671,7 +671,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         EXPERIMENTAL_autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
-        }),
+        } as Parameters<typeof EXPERIMENTAL_autocomplete>[0]),
       ])
       .on('error', () => {
         /*
