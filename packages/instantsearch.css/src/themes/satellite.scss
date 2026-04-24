@@ -4,6 +4,7 @@
 @use '../components/chat';
 @use '../components/autocomplete';
 @use '../components/filter-suggestions';
+@use '../components/ai-mode-button';
 
 ////////////////
 // Shared
@@ -545,22 +546,12 @@ $break-medium: 767px;
   display: none;
 }
 
+// Satellite palette overrides on top of the shared `ai-mode-button` baseline.
 .ais-AiModeButton {
-  align-items: center;
   background-color: $nebula100;
-  border: 1px solid $nebula200;
+  border-color: $nebula200;
   border-radius: 6px;
   color: $nebula600;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  gap: 0.25rem;
-  height: 30px;
-  line-height: 1;
-  padding: 0 0.75rem 0 0.5rem;
-  white-space: nowrap;
 }
 
 .ais-AiModeButton:hover {
@@ -571,26 +562,6 @@ $break-medium: 767px;
 .ais-AiModeButton:focus {
   border-color: $nebula600;
   box-shadow: 0 0 0 1px $nebula600;
-  outline: 0;
-}
-
-.ais-AiModeButton svg {
-  flex-shrink: 0;
-  height: 16px;
-  width: 16px;
-}
-
-.ais-SearchBox-form .ais-AiModeButton {
-  position: absolute;
-  right: 0.375rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-reset,
-.ais-SearchBox-form:has(.ais-AiModeButton)
-  .ais-SearchBox-loadingIndicator {
-  right: 7rem;
 }
 
 .ais-Menu-searchBox,
