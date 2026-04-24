@@ -1,16 +1,20 @@
 /** @jsx createElement */
 
-import { createCarouselComponent, generateCarouselId } from '../../Carousel';
-
 import type { RecordWithObjectID, Renderer } from '../../../types';
-import type { CarouselProps } from '../../Carousel';
 import type { ClientSideToolComponentProps } from '../types';
+
+export type DisplayResultsTranslations = {
+  /**
+   * Caption shown under the groups while the tool is still streaming its
+   * output. Defaults to "Curating results…".
+   */
+  streamingLabel: string;
+};
 
 type DisplayResultsGroup<THit> = {
   title?: string;
   why?: string;
-  hits?: Array<RecordWithObjectID<THit>>;
-  queryID?: string;
+  results?: Array<RecordWithObjectID<THit>>;
 };
 
 type DisplayResultsOutput<THit> = {
@@ -18,107 +22,85 @@ type DisplayResultsOutput<THit> = {
   groups?: Array<DisplayResultsGroup<THit>>;
 };
 
+export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
+  {
+    items: Array<RecordWithObjectID<THit>>;
+    sendEvent: ClientSideToolComponentProps['sendEvent'];
+  };
+
 export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
-  useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
-  useRef: <TType>(initialValue: TType) => { current: TType };
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => unknown];
   toolProps: ClientSideToolComponentProps;
-  itemComponent?: CarouselProps<THit>['itemComponent'];
+  /**
+   * Renders a single group's carousel. The framework wrapper owns the
+   * carousel implementation (and its internal hooks/refs) — ui-components
+   * just lays out the intro, per-group headers, and the streaming caption.
+   */
+  groupCarouselComponent: (
+    props: DisplayResultsGroupCarouselProps<THit>
+  ) => JSX.Element;
+  translations?: Partial<DisplayResultsTranslations>;
 };
 
-type GroupCarouselProps<THit extends RecordWithObjectID> = Pick<
-  DisplayResultsToolProps<THit>,
-  'useRef' | 'useState' | 'itemComponent'
-> & {
-  items: Array<RecordWithObjectID<THit>>;
-  sendEvent: ClientSideToolComponentProps['sendEvent'];
+const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
+  streamingLabel: 'Curating results…',
 };
 
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID
+  // oxlint-disable-next-line no-unused-vars
 >({ createElement, Fragment }: Renderer) {
-  const Carousel = createCarouselComponent({ createElement, Fragment });
-
-  function GroupCarousel({
-    useRef,
-    useState,
-    items,
-    itemComponent: ItemComponent,
-    sendEvent,
-  }: GroupCarouselProps<TObject>) {
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(true);
-
-    const carouselRefs: Pick<
-      CarouselProps<TObject>,
-      | 'listRef'
-      | 'nextButtonRef'
-      | 'previousButtonRef'
-      | 'carouselIdRef'
-      | 'canScrollLeft'
-      | 'canScrollRight'
-      | 'setCanScrollLeft'
-      | 'setCanScrollRight'
-    > = {
-      listRef: useRef(null),
-      nextButtonRef: useRef(null),
-      previousButtonRef: useRef(null),
-      carouselIdRef: useRef(generateCarouselId()),
-      canScrollLeft,
-      canScrollRight,
-      setCanScrollLeft,
-      setCanScrollRight,
-    };
-
-    return (
-      <Carousel
-        {...carouselRefs}
-        items={items}
-        itemComponent={ItemComponent}
-        showNavigation={false}
-        sendEvent={sendEvent}
-      />
-    );
-  }
-
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
-    const { useRef, useState, itemComponent, toolProps } = userProps;
+    const {
+      toolProps,
+      groupCarouselComponent: GroupCarousel,
+      translations: userTranslations,
+    } = userProps;
     const { message, sendEvent } = toolProps;
 
-    const output = message?.output as
-      | DisplayResultsOutput<TObject>
-      | undefined;
-    const groups = output?.groups ?? [];
+    const translations: DisplayResultsTranslations = {
+      ...DEFAULT_TRANSLATIONS,
+      ...userTranslations,
+    };
 
-    if (!output?.intro && groups.length === 0) {
+    const output = message?.output as DisplayResultsOutput<TObject> | undefined;
+    const intro = typeof output?.intro === 'string' ? output.intro : undefined;
+    const groups = Array.isArray(output?.groups) ? output!.groups! : [];
+
+    const isStreaming =
+      message?.state === 'output-available' &&
+      (message as { preliminary?: boolean }).preliminary === true;
+
+    if (!intro && groups.length === 0) {
       return <Fragment />;
     }
 
     return (
       <div className="ais-ChatToolDisplayResults">
-        {output?.intro && (
-          <div className="ais-ChatToolDisplayResults-intro">{output.intro}</div>
+        {intro && (
+          <div className="ais-ChatToolDisplayResults-intro">{intro}</div>
         )}
 
         {groups.map((group, groupIndex) => {
-          const hits = group.hits ?? [];
-          if (hits.length === 0) return null;
+          const results = Array.isArray(group.results)
+            ? group.results.filter(
+                (r): r is RecordWithObjectID<TObject> =>
+                  Boolean(r) &&
+                  typeof r.objectID === 'string' &&
+                  r.objectID !== ''
+              )
+            : [];
 
-          const items = hits.map((hit, idx) => ({
-            ...hit,
+          if (results.length === 0) return null;
+
+          const items = results.map((result, idx) => ({
+            ...result,
             __position: idx + 1,
-            ...(group.queryID ? { __queryID: group.queryID } : {}),
-          }));
+          })) as Array<RecordWithObjectID<TObject>>;
 
           return (
-            <div
-              key={groupIndex}
-              className="ais-ChatToolDisplayResults-group"
-            >
+            <div key={groupIndex} className="ais-ChatToolDisplayResults-group">
               {group.title && (
                 <div className="ais-ChatToolDisplayResults-groupTitle">
                   {group.title}
@@ -129,16 +111,16 @@ export function createDisplayResultsToolComponent<
                   {group.why}
                 </div>
               )}
-              <GroupCarousel
-                useRef={useRef}
-                useState={useState}
-                items={items}
-                itemComponent={itemComponent}
-                sendEvent={sendEvent}
-              />
+              <GroupCarousel items={items} sendEvent={sendEvent} />
             </div>
           );
         })}
+
+        {isStreaming && (
+          <div className="ais-ChatToolDisplayResults-streaming">
+            {translations.streamingLabel}
+          </div>
+        )}
       </div>
     );
   };

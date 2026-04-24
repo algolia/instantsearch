@@ -696,7 +696,7 @@ data: [DONE]`,
       });
     });
 
-    it('accumulates tool-output-delta chunks into a parsed partial output', async () => {
+    it('accumulates data-tool-output-delta chunks into a parsed partial output', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
         tools: {
@@ -714,9 +714,9 @@ data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_
 
 data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
 
-data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "{\\"intro\\":\\"curated"}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
 
-data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
 
 data: {"type": "finish-step"}
 
@@ -787,7 +787,7 @@ data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_
 
 data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
 
-data: {"type": "tool-output-delta", "toolCallId": "call_1", "toolName": "algolia_display_results", "outputTextDelta": "{\\"intro\\":\\"cur"}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"cur"}, "transient": true}
 
 data: {"type": "tool-output-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "output": {"intro": "curated", "groups": []}}
 

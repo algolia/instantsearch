@@ -1,6 +1,8 @@
 import { createDisplayResultsToolComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 
+import { Carousel } from '../../../components';
+
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -24,11 +26,15 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
   ) => {
     return (
       <DisplayResultsUIComponent
-        useMemo={React.useMemo}
-        useRef={React.useRef}
-        useState={React.useState}
-        itemComponent={itemComponent}
         toolProps={toolProps}
+        groupCarouselComponent={({ items, sendEvent }) => (
+          <Carousel
+            items={items}
+            itemComponent={itemComponent}
+            sendEvent={sendEvent}
+            showNavigation={false}
+          />
+        )}
       />
     );
   };

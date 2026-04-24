@@ -766,11 +766,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
-            case 'tool-output-delta': {
+            case 'data-tool-output-delta': {
               if (!currentMessage) break;
 
+              const { toolCallId, toolName, delta } = chunk.data as {
+                toolCallId: string;
+                toolName: string;
+                delta: string;
+              };
+
               const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
+                (p) => 'toolCallId' in p && p.toolCallId === toolCallId
               );
 
               const existingPart =
@@ -779,10 +785,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   : null;
               const previousRawOutput =
                 existingPart?.rawOutput ??
-                toolRawOutputByCallId[chunk.toolCallId] ??
+                toolRawOutputByCallId[toolCallId] ??
                 '';
-              const nextRawOutput = `${previousRawOutput}${chunk.outputTextDelta}`;
-              toolRawOutputByCallId[chunk.toolCallId] = nextRawOutput;
+              const nextRawOutput = `${previousRawOutput}${delta}`;
+              toolRawOutputByCallId[toolCallId] = nextRawOutput;
 
               const parsedOutput = parsePartialJsonWithFallback(
                 nextRawOutput,
@@ -791,8 +797,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               const nextToolPart = {
                 ...(existingPart ?? {
-                  type: `tool-${chunk.toolName}` as const,
-                  toolCallId: chunk.toolCallId,
+                  type: `tool-${toolName}` as const,
+                  toolCallId,
                   input: undefined,
                 }),
                 state: 'output-available' as const,

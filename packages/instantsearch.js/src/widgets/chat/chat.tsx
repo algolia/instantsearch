@@ -9,7 +9,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -273,21 +273,28 @@ function createDisplayResultsTool<
     Fragment,
   });
 
+  const GroupCarousel = carousel({ showNavigation: false });
+
   function DisplayResultsLayoutComponent(toolProps: ClientSideToolTemplateData) {
     return (
       <DisplayResultsUIComponent
-        useMemo={useMemo}
-        useRef={useRef}
-        useState={useState}
-        itemComponent={({ item }) => (
-          <TemplateComponent
-            templates={templates}
-            templateKey="item"
-            data={item}
-            rootTagName="fragment"
-          />
-        )}
         toolProps={toolProps}
+        groupCarouselComponent={({ items, sendEvent }) =>
+          GroupCarousel({
+            items,
+            templates: {
+              item: ({ item }) => (
+                <TemplateComponent
+                  templates={templates}
+                  templateKey="item"
+                  data={item}
+                  rootTagName="fragment"
+                />
+              ),
+            },
+            sendEvent,
+          })
+        }
       />
     );
   }

@@ -9,19 +9,22 @@ import { createDisplayResultsTool } from '../DisplayResultsTool';
 
 import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
 
-type TestHit = {
+type TestResult = {
   objectID: string;
-  name: string;
+  why?: string;
   __position: number;
 };
 
-const mockItemComponent = ({ item }: { item: TestHit }) => (
-  <div data-testid={`item-${item.objectID}`}>{item.name}</div>
+const mockItemComponent = ({ item }: { item: TestResult }) => (
+  <div data-testid={`item-${item.objectID}`}>
+    <span>{item.objectID}</span>
+    {item.why && <small data-testid={`why-${item.objectID}`}>{item.why}</small>}
+  </div>
 );
 
 describe('createDisplayResultsTool', () => {
-  test('renders intro and one carousel per group of hits', () => {
-    const tool = createDisplayResultsTool<TestHit>(mockItemComponent);
+  test('renders intro and one carousel per group, passing results straight through', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['message'] = {
@@ -35,11 +38,11 @@ describe('createDisplayResultsTool', () => {
           {
             title: 'Runners',
             why: 'matches your stride',
-            hits: [{ objectID: '1', name: 'Air Pegasus', __position: 1 }],
+            results: [{ objectID: '1', why: 'iconic' }],
           },
           {
             title: 'Casual',
-            hits: [{ objectID: '2', name: 'Chuck Taylor', __position: 1 }],
+            results: [{ objectID: '2', why: 'everyday classic' }],
           },
         ],
       },
@@ -60,13 +63,86 @@ describe('createDisplayResultsTool', () => {
     expect(screen.getByText('Curated for you')).toBeInTheDocument();
     expect(screen.getByText('Runners')).toBeInTheDocument();
     expect(screen.getByText('matches your stride')).toBeInTheDocument();
-    expect(screen.getByText('Air Pegasus')).toBeInTheDocument();
     expect(screen.getByText('Casual')).toBeInTheDocument();
-    expect(screen.getByText('Chuck Taylor')).toBeInTheDocument();
+    expect(screen.getByTestId('why-1')).toHaveTextContent('iconic');
+    expect(screen.getByTestId('why-2')).toHaveTextContent('everyday classic');
+  });
+
+  test('shows streaming caption while preliminary flag is true', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    render(
+      <LayoutComponent
+        message={
+          {
+            type: 'tool-algolia_display_results',
+            state: 'output-available',
+            toolCallId: 'display',
+            input: {},
+            output: {
+              intro: 'Curating',
+              groups: [
+                { title: 'Runners', results: [{ objectID: '1' }] },
+              ],
+            },
+            preliminary: true,
+          } as ClientSideToolComponentProps['message']
+        }
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.getByText('Curating')).toBeInTheDocument();
+    expect(screen.getByText('Runners')).toBeInTheDocument();
+    expect(screen.getByTestId('item-1')).toBeInTheDocument();
+    expect(screen.getByText('Curating results…')).toBeInTheDocument();
+  });
+
+  test('drops results that are missing an objectID and skips groups with no valid results', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    render(
+      <LayoutComponent
+        message={
+          {
+            type: 'tool-algolia_display_results',
+            state: 'output-available',
+            toolCallId: 'display',
+            input: {},
+            output: {
+              groups: [
+                { title: 'Empty', results: [{}, { objectID: '' }] },
+                {
+                  title: 'Full',
+                  results: [{}, { objectID: '1', why: 'iconic' }],
+                },
+              ],
+            },
+          } as ClientSideToolComponentProps['message']
+        }
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.queryByText('Empty')).not.toBeInTheDocument();
+    expect(screen.getByText('Full')).toBeInTheDocument();
+    expect(screen.getByTestId('item-1')).toBeInTheDocument();
   });
 
   test('renders nothing when there are no groups and no intro', () => {
-    const tool = createDisplayResultsTool<TestHit>(mockItemComponent);
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const { container } = render(
@@ -90,42 +166,5 @@ describe('createDisplayResultsTool', () => {
     );
 
     expect(container).toBeEmptyDOMElement();
-  });
-
-  test('skips groups with no hits', () => {
-    const tool = createDisplayResultsTool<TestHit>(mockItemComponent);
-    const LayoutComponent = tool.layoutComponent!;
-
-    render(
-      <LayoutComponent
-        message={
-          {
-            type: 'tool-algolia_display_results',
-            state: 'output-available',
-            toolCallId: 'display',
-            input: {},
-            output: {
-              groups: [
-                { title: 'Empty', hits: [] },
-                {
-                  title: 'Full',
-                  hits: [{ objectID: '1', name: 'Air Pegasus', __position: 1 }],
-                },
-              ],
-            },
-          } as ClientSideToolComponentProps['message']
-        }
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
-      />
-    );
-
-    expect(screen.queryByText('Empty')).not.toBeInTheDocument();
-    expect(screen.getByText('Full')).toBeInTheDocument();
-    expect(screen.getByText('Air Pegasus')).toBeInTheDocument();
   });
 });
