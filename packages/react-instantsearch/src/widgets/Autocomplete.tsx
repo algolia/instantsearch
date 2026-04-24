@@ -841,7 +841,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   }
 
-  indicesForPanel.forEach(({ indexId, indexName, hits }) => {
+  indicesForPanel.forEach(({ indexId, indexName, hits, sendEvent }) => {
     let elementId = indexName;
     if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
@@ -869,7 +869,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
-        sendEvent={indices.find((idx) => idx.indexId === indexId)?.sendEvent}
+        sendEvent={sendEvent}
         classNames={currentIndexConfig.classNames}
       />
     );

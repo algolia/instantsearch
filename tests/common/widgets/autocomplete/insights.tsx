@@ -30,6 +30,7 @@ function createMockedSearchClient({
           ({ indexName }: Parameters<SearchClient['search']>[0][number]) =>
             createSingleSearchResponse({
               index: indexName,
+              queryID: 'test-query-id',
               hits: Array.from({ length: hitsPerPage }).map((_, index) => ({
                 objectID: `${indexName}-${index}`,
                 name: `Item ${index}`,
@@ -103,6 +104,7 @@ export function createInsightsTests(
           index: 'indexName',
           objectIDs: ['indexName-0'],
           positions: [1],
+          queryID: 'test-query-id',
         },
         expect.objectContaining({
           headers: expect.objectContaining({
@@ -177,6 +179,7 @@ export function createInsightsTests(
           index: 'indexName',
           objectIDs: ['indexName-0'],
           positions: [1],
+          queryID: 'test-query-id',
         },
         expect.objectContaining({
           headers: expect.objectContaining({
@@ -260,6 +263,7 @@ export function createInsightsTests(
           index: 'indexName2',
           objectIDs: ['indexName2-0'],
           positions: [1],
+          queryID: 'test-query-id',
         },
         expect.objectContaining({
           headers: expect.objectContaining({
