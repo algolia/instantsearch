@@ -1,14 +1,6 @@
-import type { Hit } from "instantsearch.js";
+import type { Hit, TemplateParams } from "instantsearch.js";
 
-type TemplateHelpers = {
-  html: (strings: TemplateStringsArray, ...values: unknown[]) => unknown;
-  components: {
-    Highlight: unknown;
-    Snippet: unknown;
-  };
-};
-
-export function renderProductCard(hit: Hit, { html, components }: TemplateHelpers) {
+export function renderProductCard(hit: Hit, { html, components }: TemplateParams) {
   return html`
     <div class="flex h-full flex-col">
       <div class="flex aspect-square items-center justify-center bg-white p-4">
@@ -32,7 +24,7 @@ export function renderProductCard(hit: Hit, { html, components }: TemplateHelper
 
 // Compact card used inside the chat's `.ais-Carousel` where
 // `instantsearch.css` ships dedicated `ais-Carousel-hit-*` styles.
-export function renderCarouselHit(hit: Hit, { html, components }: TemplateHelpers) {
+export function renderCarouselHit(hit: Hit, { html, components }: TemplateParams) {
   return html`
     <article class="ais-Carousel-hit">
       <div class="ais-Carousel-hit-image flex aspect-square items-center justify-center bg-white p-4">
