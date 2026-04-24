@@ -50,32 +50,30 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
                 <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
                   {items.length} result{items.length > 1 ? 's' : ''}
                 </div>
-                {items.length > 2 && (
-                  <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      iconOnly
-                      onClick={scrollLeft}
-                      disabled={!canScrollLeft}
-                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                    >
-                      <ChevronLeftIcon createElement={createElement as Pragma} />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      iconOnly
-                      onClick={scrollRight}
-                      disabled={!canScrollRight}
-                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                    >
-                      <ChevronRightIcon
-                        createElement={createElement as Pragma}
-                      />
-                    </Button>
-                  </div>
-                )}
+                <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    iconOnly
+                    onClick={scrollLeft}
+                    disabled={!canScrollLeft}
+                    className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                  >
+                    <ChevronLeftIcon createElement={createElement as Pragma} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    iconOnly
+                    onClick={scrollRight}
+                    disabled={!canScrollRight}
+                    className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                  >
+                    <ChevronRightIcon
+                      createElement={createElement as Pragma}
+                    />
+                  </Button>
+                </div>
               </div>
             )}
           />

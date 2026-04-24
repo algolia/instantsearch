@@ -50,30 +50,28 @@ export function createDisplayResultsTool<
                   <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
                     {items.length} result{items.length > 1 ? 's' : ''}
                   </div>
-                  {items.length > 2 && (
-                    <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        iconOnly
-                        onClick={scrollLeft}
-                        disabled={!canScrollLeft}
-                        className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                      >
-                        <ChevronLeftIcon createElement={h} />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        iconOnly
-                        onClick={scrollRight}
-                        disabled={!canScrollRight}
-                        className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                      >
-                        <ChevronRightIcon createElement={h} />
-                      </Button>
-                    </div>
-                  )}
+                  <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      iconOnly
+                      onClick={scrollLeft}
+                      disabled={!canScrollLeft}
+                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                    >
+                      <ChevronLeftIcon createElement={h} />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      iconOnly
+                      onClick={scrollRight}
+                      disabled={!canScrollRight}
+                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+                    >
+                      <ChevronRightIcon createElement={h} />
+                    </Button>
+                  </div>
                 </div>
               ),
             },
