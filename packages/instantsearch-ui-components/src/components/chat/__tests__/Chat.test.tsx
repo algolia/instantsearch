@@ -17,6 +17,10 @@ describe('Chat', () => {
     const { container } = render(
       <Chat
         open
+        sendMessage={jest.fn() as any}
+        regenerate={jest.fn() as any}
+        stop={jest.fn() as any}
+        error={undefined}
         headerProps={{ onClose: jest.fn() }}
         messagesProps={{
           messages: [],
@@ -35,7 +39,7 @@ describe('Chat', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Chat"
+          class="ais-Chat ais-ChatOverlayLayout"
         >
           <div
             class="ais-Chat-container ais-Chat-container--open"

@@ -38,6 +38,45 @@ const fixture = [
   },
 ];
 
+const trendingFacetsFixture = [
+  {
+    facetName: 'brand',
+    facetValue: 'Apple',
+    _score: 95,
+  },
+  {
+    facetName: 'brand',
+    facetValue: 'Samsung',
+    _score: 87,
+  },
+];
+
+export function createTrendingFacetsSearchClient() {
+  return createSearchClient({
+    getRecommendations: jest.fn((requests) =>
+      Promise.resolve(
+        createRecommendResponse(
+          // @ts-ignore
+          requests.map((request) => {
+            return createSingleSearchResponse({
+              // @ts-expect-error trending facet items aren't Hit objects
+              hits: trendingFacetsFixture.slice(
+                0,
+                typeof request.maxRecommendations === 'number'
+                  ? Math.min(
+                      request.maxRecommendations,
+                      trendingFacetsFixture.length
+                    )
+                  : trendingFacetsFixture.length
+              ),
+            });
+          })
+        )
+      )
+    ),
+  });
+}
+
 export function createRecommendSearchClient(options: Options = {}) {
   const { minimal = false } = options;
   return createSearchClient({

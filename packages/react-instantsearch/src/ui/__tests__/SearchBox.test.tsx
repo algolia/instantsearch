@@ -29,6 +29,7 @@ describe('SearchBox', () => {
       translations: {
         submitButtonTitle: 'Submit the search query.',
         resetButtonTitle: 'Clear the search query.',
+        aiModeButtonTitle: 'AI Mode',
       },
       ...props,
     };
@@ -153,6 +154,7 @@ describe('SearchBox', () => {
       translations: {
         submitButtonTitle: 'Submit search',
         resetButtonTitle: 'Reset query',
+        aiModeButtonTitle: 'AI Mode',
       },
     });
     const { container } = render(<SearchBox {...props} />);

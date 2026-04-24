@@ -12,12 +12,10 @@
     width: calc(var(--ais-icon-size) * 1.4);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: transform var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      background-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: transform var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-ChatToggleButton--open {

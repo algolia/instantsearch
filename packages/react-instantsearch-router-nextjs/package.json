@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-router-nextjs",
-  "version": "7.28.0",
+  "version": "7.30.0",
   "description": "React InstantSearch Router for Next.js",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -47,8 +47,8 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch.js": "4.92.0",
-    "react-instantsearch-core": "7.28.0"
+    "instantsearch.js": "4.94.0",
+    "react-instantsearch-core": "7.30.0"
   },
   "devDependencies": {
     "@playwright/test": "1.49.1"

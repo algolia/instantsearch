@@ -42,6 +42,14 @@ export type SearchBoxClassNames = {
    * Class names to apply to the loading icon
    */
   loadingIcon: string;
+  /**
+   * Class names to apply to the AI mode button
+   */
+  aiModeButton: string;
+  /**
+   * Class names to apply to the AI mode icon
+   */
+  aiModeIcon: string;
 };
 
 export type SearchBoxTranslations = {
@@ -53,6 +61,10 @@ export type SearchBoxTranslations = {
    * The alternative text of the reset button.
    */
   resetButtonTitle: string;
+  /**
+   * The alternative text of the AI mode button.
+   */
+  aiModeButtonTitle?: string;
 };
 
 export type SearchBoxProps = Omit<
@@ -78,6 +90,8 @@ export type SearchBoxProps = Omit<
     resetIconComponent?: React.JSXElementConstructor<IconProps>;
     submitIconComponent?: React.JSXElementConstructor<IconProps>;
     loadingIconComponent?: React.JSXElementConstructor<IconProps>;
+    aiModeIconComponent?: React.JSXElementConstructor<IconProps>;
+    onAiModeClick?: () => void;
     classNames?: Partial<SearchBoxClassNames>;
     translations: SearchBoxTranslations;
   };
@@ -140,6 +154,33 @@ function DefaultLoadingIcon({ classNames }: IconProps) {
   );
 }
 
+function DefaultAiModeIcon({ classNames }: IconProps) {
+  return (
+    <svg
+      className={cx('ais-AiModeButton-icon', classNames.aiModeIcon)}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M10 1.875c.27 0 .51.173.594.43l1.593 4.844a1.043 1.043 0 0 0 .664.664l4.844 1.593a.625.625 0 0 1 0 1.188l-4.844 1.593a1.043 1.043 0 0 0-.664.664l-1.593 4.844a.625.625 0 0 1-1.188 0l-1.593-4.844a1.042 1.042 0 0 0-.664-.664l-4.844-1.593a.625.625 0 0 1 0-1.188l4.844-1.593a1.042 1.042 0 0 0 .664-.664l1.593-4.844a.625.625 0 0 1 .594-.43ZM9 7.539A2.292 2.292 0 0 1 7.54 9L4.5 10l3.04 1A2.292 2.292 0 0 1 9 12.46l1 3.04 1-3.04A2.293 2.293 0 0 1 12.46 11l3.04-1-3.04-1A2.292 2.292 0 0 1 11 7.54L10 4.5 9 7.54ZM4.167 1.875c.345 0 .625.28.625.625v3.333a.625.625 0 0 1-1.25 0V2.5c0-.345.28-.625.625-.625ZM15.833 13.542c.345 0 .625.28.625.625V17.5a.625.625 0 1 1-1.25 0v-3.333c0-.345.28-.625.625-.625Z"
+        clipRule="evenodd"
+      />
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M1.875 4.167c0-.346.28-.625.625-.625h3.333a.625.625 0 1 1 0 1.25H2.5a.625.625 0 0 1-.625-.625ZM13.542 15.833c0-.345.28-.625.625-.625H17.5a.625.625 0 0 1 0 1.25h-3.333a.625.625 0 0 1-.625-.625Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 export function SearchBox({
   formRef,
   inputRef,
@@ -154,6 +195,8 @@ export function SearchBox({
   resetIconComponent: ResetIcon = DefaultResetIcon,
   submitIconComponent: SubmitIcon = DefaultSubmitIcon,
   loadingIconComponent: LoadingIcon = DefaultLoadingIcon,
+  aiModeIconComponent: AiModeIcon = DefaultAiModeIcon,
+  onAiModeClick,
   classNames = {},
   translations,
   ...props
@@ -232,6 +275,25 @@ export function SearchBox({
         >
           <ResetIcon classNames={classNames} />
         </button>
+        {onAiModeClick && (
+          <button
+            className={cx(
+              'ais-AiModeButton',
+              classNames.aiModeButton
+            )}
+            type="button"
+            title={translations.aiModeButtonTitle || 'AI Mode'}
+            onClick={(e) => {
+              e.preventDefault();
+              onAiModeClick();
+            }}
+          >
+            <AiModeIcon classNames={classNames} />
+            <span className="ais-AiModeButton-label">
+              {translations.aiModeButtonTitle || 'AI Mode'}
+            </span>
+          </button>
+        )}
         <span
           className={cx(
             'ais-SearchBox-loadingIndicator',

@@ -3,6 +3,32 @@ import type { Renderer } from '../../types';
 
 type IconProps = Pick<Renderer, 'createElement'>;
 
+type LoadingIconProps = IconProps & {
+  isSearchStalled: boolean;
+};
+
+// WebKit can keep this SVG spinner animating while the loading slot is hidden (`hidden` / not stalled),
+// which wastes work. We pause SMIL when idle and unpause when `isSearchStalled`.
+// Same approach as autocomplete-js.
+// https://github.com/algolia/autocomplete/issues/1322
+function syncLoadingSvgAnimation(
+  element: SVGSVGElement | null,
+  isSearchStalled: boolean
+) {
+  if (
+    !element ||
+    typeof element.pauseAnimations !== 'function' ||
+    typeof element.unpauseAnimations !== 'function'
+  ) {
+    return;
+  }
+  if (isSearchStalled) {
+    element.unpauseAnimations();
+  } else {
+    element.pauseAnimations();
+  }
+}
+
 export function SubmitIcon({ createElement }: IconProps) {
   return (
     <svg
@@ -15,9 +41,16 @@ export function SubmitIcon({ createElement }: IconProps) {
   );
 }
 
-export function LoadingIcon({ createElement }: IconProps) {
+export function LoadingIcon({
+  createElement,
+  isSearchStalled,
+}: LoadingIconProps) {
   return (
-    <svg className="ais-AutocompleteLoadingIcon" viewBox="0 0 100 100">
+    <svg
+      className="ais-AutocompleteLoadingIcon"
+      viewBox="0 0 100 100"
+      ref={(element) => syncLoadingSvgAnimation(element, isSearchStalled)}
+    >
       <circle
         cx="50"
         cy="50"
@@ -34,7 +67,7 @@ export function LoadingIcon({ createElement }: IconProps) {
           dur="1s"
           values="0 50 50;90 50 50;180 50 50;360 50 50"
           keyTimes="0;0.40;0.65;1"
-        ></animateTransform>
+        />
       </circle>
     </svg>
   );
@@ -72,6 +105,33 @@ export function ApplyIcon({ createElement }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor">
       <path d="M8 17v-7.586l8.293 8.293c0.391 0.391 1.024 0.391 1.414 0s0.391-1.024 0-1.414l-8.293-8.293h7.586c0.552 0 1-0.448 1-1s-0.448-1-1-1h-10c-0.552 0-1 0.448-1 1v10c0 0.552 0.448 1 1 1s1-0.448 1-1z"></path>
+    </svg>
+  );
+}
+
+export function AiModeIcon({ createElement }: IconProps) {
+  return (
+    <svg
+      className="ais-AiModeButton-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M10 1.875c.27 0 .51.173.594.43l1.593 4.844a1.043 1.043 0 0 0 .664.664l4.844 1.593a.625.625 0 0 1 0 1.188l-4.844 1.593a1.043 1.043 0 0 0-.664.664l-1.593 4.844a.625.625 0 0 1-1.188 0l-1.593-4.844a1.042 1.042 0 0 0-.664-.664l-4.844-1.593a.625.625 0 0 1 0-1.188l4.844-1.593a1.042 1.042 0 0 0 .664-.664l1.593-4.844a.625.625 0 0 1 .594-.43ZM9 7.539A2.292 2.292 0 0 1 7.54 9L4.5 10l3.04 1A2.292 2.292 0 0 1 9 12.46l1 3.04 1-3.04A2.293 2.293 0 0 1 12.46 11l3.04-1-3.04-1A2.292 2.292 0 0 1 11 7.54L10 4.5 9 7.54ZM4.167 1.875c.345 0 .625.28.625.625v3.333a.625.625 0 0 1-1.25 0V2.5c0-.345.28-.625.625-.625ZM15.833 13.542c.345 0 .625.28.625.625V17.5a.625.625 0 1 1-1.25 0v-3.333c0-.345.28-.625.625-.625Z"
+        clipRule="evenodd"
+      />
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M1.875 4.167c0-.346.28-.625.625-.625h3.333a.625.625 0 1 1 0 1.25H2.5a.625.625 0 0 1-.625-.625ZM13.542 15.833c0-.345.28-.625.625-.625H17.5a.625.625 0 0 1 0 1.25h-3.333a.625.625 0 0 1-.625-.625Z"
+        clipRule="evenodd"
+      />
     </svg>
   );
 }

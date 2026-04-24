@@ -13,8 +13,8 @@ export type AutocompleteSearchProps = {
   clearQuery: () => void;
   onQueryChange?: (query: string) => void;
   query: string;
-  refine: (query: string) => void;
   isSearchStalled: boolean;
+  onAiModeClick?: () => void;
 };
 
 export function AutocompleteSearch({
@@ -22,8 +22,8 @@ export function AutocompleteSearch({
   clearQuery,
   onQueryChange,
   query,
-  refine,
   isSearchStalled,
+  onAiModeClick,
 }: AutocompleteSearchProps) {
   return (
     <AutocompleteSearchComponent
@@ -31,13 +31,13 @@ export function AutocompleteSearch({
         ...(inputProps as NonNullable<AutocompleteSearchProps['inputProps']>),
         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
           const value = event.currentTarget.value;
-          refine(value);
           onQueryChange?.(value);
         },
       }}
       onClear={clearQuery}
       query={query}
       isSearchStalled={isSearchStalled}
+      onAiModeClick={onAiModeClick}
     />
   );
 }

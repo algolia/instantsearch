@@ -1,0 +1,69 @@
+.ais-RatingMenu-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: calc(var(--ais-spacing) / 4);
+}
+
+.ais-RatingMenu-item {
+  color: rgba(var(--ais-text-color-rgb), 0.9);
+}
+
+.ais-RatingMenu-item--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ais-RatingMenu-link {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) / 2);
+  border-radius: var(--ais-border-radius-sm);
+  color: inherit;
+  transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    color var(--ais-transition-duration) var(--ais-transition-timing-function);
+}
+
+.ais-RatingMenu-item--selected .ais-RatingMenu-link {
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+}
+
+.ais-RatingMenu-starIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.ais-RatingMenu-starIcon--full {
+  fill: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  transition: fill var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+.ais-RatingMenu-starIcon--empty {
+  fill: rgba(var(--ais-muted-color-rgb), 0.3);
+}
+
+.ais-RatingMenu-item--selected .ais-RatingMenu-starIcon--full {
+  fill: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+}
+
+.ais-RatingMenu-label {
+  margin-left: calc(var(--ais-spacing) * 0.25);
+  margin-right: var(--ais-spacing);
+}
+
+@media (hover: hover) {
+  .ais-RatingMenu-link:hover {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+    color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+    .ais-RatingMenu-starIcon--full {
+      fill: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+    }
+  }
+
+  .ais-RatingMenu-item--selected .ais-RatingMenu-link:hover {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+  }
+}

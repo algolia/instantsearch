@@ -22,10 +22,7 @@ import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import {
-  connectAutocomplete,
-  connectSearchBox,
-} from '../../connectors/index.umd';
+import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
@@ -225,6 +222,7 @@ type RendererParams<TItem extends BaseHit> = {
   | 'showPromptSuggestions'
   | 'placeholder'
   | 'autofocus'
+  | 'aiMode'
 > & {
     showRecent:
       | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -356,6 +354,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'autofocus'
   | 'detachedMediaQuery'
   | 'translations'
+  | 'aiMode'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -377,22 +376,22 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   autofocus,
   detachedMediaQuery,
   translations,
+  aiMode,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
   const targetIndexQuery = targetIndex?.getHelper()?.state.query;
 
-  // Local query state for immediate updates (especially for detached search button)
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery || targetIndexQuery || ''
+    searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery ?? ''
   );
 
-  // Sync local query with searchbox query when it changes externally
   useEffect(() => {
-    // If the isolated index has a query, use it (user typing).
-    // If not, fall back to the target index query (URL/main state).
-    const query = searchboxQuery || targetIndexQuery;
+    // When the isolated index has a defined query (including ''), use it.
+    // Only fall back to the target index query when not yet set (undefined).
+    const query =
+      searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
     if (query !== undefined) {
       setLocalQuery(query);
     }
@@ -822,6 +821,22 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         onRefine('');
       }}
       isSearchStalled={instantSearchInstance.status === 'stalled'}
+      onAiModeClick={
+        aiMode
+          ? () => {
+              const indexId = targetIndex!.getIndexId();
+              const chatState = instantSearchInstance.renderState[indexId]
+                ?.chat as Partial<ChatRenderState> | undefined;
+
+              if (chatState) {
+                chatState.setOpen?.(true);
+                if (localQuery.trim()) {
+                  chatState.sendMessage?.({ text: localQuery });
+                }
+              }
+            }
+          : undefined
+      }
     />
   );
 
@@ -1044,6 +1059,13 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
    * Translations for the Autocomplete widget.
    */
   translations?: Partial<AutocompleteTranslations>;
+
+  /**
+   * When true, renders an AI mode button inside the search input
+   * that opens the Chat widget and sends the current query.
+   * Requires a Chat widget on the same index.
+   */
+  aiMode?: boolean;
 };
 
 export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
@@ -1072,6 +1094,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     autofocus,
     detachedMediaQuery,
     translations: userTranslations = {},
+    aiMode,
   } = widgetParams || {};
 
   if (!container) {
@@ -1230,6 +1253,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       hasWarnedMissingPromptSuggestionsChat: false,
     },
     templates,
+    aiMode,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>
@@ -1250,7 +1274,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           ])
       ),
       {
-        ...makeWidget({ escapeHTML, transformItems }),
+        ...makeWidget({
+          escapeHTML,
+          transformItems,
+          future: { undefinedEmptyQuery: true },
+        }),
         $$widgetType: 'ais.autocomplete',
       },
     ]),

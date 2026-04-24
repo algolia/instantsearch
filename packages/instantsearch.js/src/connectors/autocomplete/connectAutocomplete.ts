@@ -37,13 +37,28 @@ export type AutocompleteConnectorParams = {
   transformItems?: (
     indices: TransformItemsIndicesConfig[]
   ) => TransformItemsIndicesConfig[];
+  /**
+   * Enable usage of future Autocomplete behavior.
+   */
+  future?: {
+    /**
+     * When set to true, `currentRefinement` is `undefined` when no query has
+     * been set (instead of an empty string). This lets consumers distinguish
+     * between "initial/submitted state" and "user explicitly cleared the input".
+     *
+     * @default `false`
+     */
+    undefinedEmptyQuery?: boolean;
+  };
 };
 
 export type AutocompleteRenderState = {
   /**
    * The current value of the query.
+   * When `future.undefinedEmptyQuery` is `true`, this is `undefined` when no
+   * query has been set yet (e.g. on init or after submit).
    */
-  currentRefinement: string;
+  currentRefinement: string | undefined;
 
   /**
    * The indices this widget has access to.
@@ -111,6 +126,7 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
       transformItems = ((indices) => indices) as NonNullable<
         AutocompleteConnectorParams['transformItems']
       >,
+      future: { undefinedEmptyQuery = false } = {},
     } = widgetParams || {};
 
     warning(
@@ -221,7 +237,9 @@ search.addWidgets([
         });
 
         return {
-          currentRefinement: state.query || '',
+          currentRefinement: undefinedEmptyQuery
+            ? state.query
+            : state.query || '',
           indices: transformItems(indices).map((transformedIndex) => ({
             ...transformedIndex,
             sendEvent: sendEventMap[transformedIndex.indexId],
@@ -232,9 +250,11 @@ search.addWidgets([
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
-        const query = searchParameters.query || '';
+        const query = undefinedEmptyQuery
+          ? searchParameters.query
+          : searchParameters.query || '';
 
-        if (query === '' || (uiState && uiState.query === query)) {
+        if (!query || query === '' || (uiState && uiState.query === query)) {
           return uiState;
         }
 
@@ -246,7 +266,7 @@ search.addWidgets([
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const parameters = {
-          query: uiState.query || '',
+          query: undefinedEmptyQuery ? uiState.query : uiState.query || '',
         };
 
         if (!escapeHTML) {

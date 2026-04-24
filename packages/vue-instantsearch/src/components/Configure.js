@@ -1,4 +1,4 @@
-import { connectConfigure } from 'instantsearch.js/es/connectors/index.umd';
+import { connectConfigure } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
