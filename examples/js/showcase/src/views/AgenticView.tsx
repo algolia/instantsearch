@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "preact/hooks";
 import { ChatLayoutSwitcher } from "../components/ChatLayoutSwitcher";
 import { WidgetAiAutocomplete } from "../components/widgets/WidgetAiAutocomplete";
 import { WidgetChat, type ChatLayout } from "../components/widgets/WidgetChat";
+// TODO: wire this up once the `filterSuggestions` widget ships.
 // import { WidgetFilterSuggestions } from "../components/widgets/WidgetFilterSuggestions";
 import { WidgetHits } from "../components/widgets/WidgetHits";
 import { WidgetSwitcher } from "../components/WidgetSwitcher";
