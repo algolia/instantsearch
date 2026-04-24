@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { parsePartialJsonWithFallback } from './parse-partial-json';
 import { processStream } from './stream-parser';
 import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
 
@@ -26,6 +25,96 @@ type ActiveResponse = {
   abortController: AbortController;
   stream?: ReadableStream<UIMessageChunk>;
 };
+
+function tryParseJson(value: string): unknown | undefined {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return undefined;
+  }
+}
+
+function repairPartialJson(value: string): string {
+  let repaired = value.trim();
+
+  if (!repaired) {
+    return repaired;
+  }
+
+  let inString = false;
+  let isEscaped = false;
+  const stack: Array<'{' | '['> = [];
+
+  for (let index = 0; index < repaired.length; index++) {
+    const char = repaired[index];
+    if (inString) {
+      if (isEscaped) {
+        isEscaped = false;
+      } else if (char === '\\') {
+        isEscaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+
+    if (char === '{' || char === '[') {
+      stack.push(char);
+      continue;
+    }
+
+    if (char === '}' && stack[stack.length - 1] === '{') {
+      stack.pop();
+      continue;
+    }
+
+    if (char === ']' && stack[stack.length - 1] === '[') {
+      stack.pop();
+    }
+  }
+
+  if (inString && !isEscaped) {
+    repaired += '"';
+  }
+
+  repaired = repaired.replace(/\s+$/u, '');
+  repaired = repaired.replace(/,$/u, '');
+
+  if (repaired.endsWith(':')) {
+    repaired += 'null';
+  }
+
+  if (stack.length > 0) {
+    repaired += stack
+      .slice()
+      .reverse()
+      .map((opening) => (opening === '{' ? '}' : ']'))
+      .join('');
+  }
+
+  return repaired.replace(/,\s*([}\]])/gu, '$1');
+}
+
+function parsePartialJsonWithFallback(
+  accumulated: string,
+  fallback: unknown
+): unknown {
+  const normalized = accumulated.trim();
+  if (!normalized) return fallback;
+
+  const direct = tryParseJson(normalized);
+  if (direct !== undefined) return direct;
+
+  const repaired = tryParseJson(repairPartialJson(normalized));
+  if (repaired !== undefined) return repaired;
+
+  return fallback;
+}
 
 /**
  * Abstract base class for chat implementations.
