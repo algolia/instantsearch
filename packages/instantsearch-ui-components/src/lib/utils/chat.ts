@@ -78,9 +78,7 @@ export function flattenErrorMessageForMatching(raw: string): string {
  */
 function getUnwrappedApiErrorDisplayMessage(error: Error): string {
   const segments = collectErrorMessageSegments(error.message);
-  return segments.length > 1
-    ? segments[segments.length - 1]
-    : error.message;
+  return segments.length > 1 ? segments[segments.length - 1] : error.message;
 }
 
 /**

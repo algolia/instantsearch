@@ -476,7 +476,10 @@ export type ChatLayoutOwnProps<
   tools: ClientSideTools;
 } & Pick<ChatState<TMessage>, 'messages'> &
   Partial<Pick<ChatState<TMessage>, 'status'>> &
-  Pick<AbstractChat<TMessage>, 'sendMessage' | 'regenerate' | 'stop' | 'error'> &
+  Pick<
+    AbstractChat<TMessage>,
+    'sendMessage' | 'regenerate' | 'stop' | 'error'
+  > &
   ComponentProps<'div'>;
 
 export type ClientSideToolComponentProps = {
@@ -532,4 +535,3 @@ export type ChatEmptyProps = {
    */
   setInput?: (input: string) => void;
 };
-

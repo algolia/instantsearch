@@ -152,12 +152,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     } = userProps;
 
     const startNewConversationError =
-      messagesProps.status === 'error' &&
-      isStartNewConversationError(error);
+      messagesProps.status === 'error' && isStartNewConversationError(error);
 
     const requestOriginNotAllowedError =
-      messagesProps.status === 'error' &&
-      isRequestOriginNotAllowedError(error);
+      messagesProps.status === 'error' && isRequestOriginNotAllowedError(error);
 
     const promptBlockedByKnownChatError =
       startNewConversationError || requestOriginNotAllowedError;
@@ -180,7 +178,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         onStartNewConversation={
           messagesProps.onStartNewConversation ??
           ((startNewConversationError || requestOriginNotAllowedError) &&
-            headerStartNewConversation
+          headerStartNewConversation
             ? headerStartNewConversation
             : undefined)
         }

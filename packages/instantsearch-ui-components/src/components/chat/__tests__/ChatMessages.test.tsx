@@ -161,7 +161,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -179,7 +181,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -201,7 +205,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -251,7 +257,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });
@@ -324,9 +332,7 @@ describe('ChatMessages', () => {
       />
     );
 
-    const link = container.querySelector(
-      '.ais-ChatMessageError-link'
-    );
+    const link = container.querySelector('.ais-ChatMessageError-link');
     expect(link).not.toBeNull();
     expect(link?.textContent).toBe('Start a new conversation');
 
@@ -396,9 +402,7 @@ describe('ChatMessages', () => {
       />
     );
 
-    const link = container.querySelector(
-      '.ais-ChatMessageError-link'
-    );
+    const link = container.querySelector('.ais-ChatMessageError-link');
     expect(link).not.toBeNull();
     fireEvent.click(link!);
     expect(onStartNewConversation).toHaveBeenCalledTimes(1);
@@ -444,9 +448,7 @@ describe('ChatMessages', () => {
       />
     );
 
-    const link = container.querySelector(
-      '.ais-ChatMessageError-link'
-    );
+    const link = container.querySelector('.ais-ChatMessageError-link');
     expect(link).not.toBeNull();
     fireEvent.click(link!);
     expect(onStartNewConversation).toHaveBeenCalledTimes(1);
@@ -497,9 +499,7 @@ describe('ChatMessages', () => {
       />
     );
 
-    const link = container.querySelector(
-      '.ais-ChatMessageError-link'
-    );
+    const link = container.querySelector('.ais-ChatMessageError-link');
     expect(link).not.toBeNull();
     expect(link?.textContent).toBe('Start a new conversation');
     fireEvent.click(link!);

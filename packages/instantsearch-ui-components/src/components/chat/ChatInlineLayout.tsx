@@ -33,14 +33,14 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
     return (
       <div
         {...rest}
-        className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root, className)}
+        className={cx(
+          'ais-Chat',
+          'ais-ChatInlineLayout',
+          classNames.root,
+          className
+        )}
       >
-        <div
-          className={cx(
-            'ais-Chat-container',
-            classNames.container
-          )}
-        >
+        <div className={cx('ais-Chat-container', classNames.container)}>
           {headerComponent}
           {messagesComponent}
           {promptComponent}

@@ -23,7 +23,7 @@ describe('ChatInlineLayout', () => {
     messages: [],
     status: 'ready' as const,
     isClearing: false,
-      onNewConversation: jest.fn(),
+    onNewConversation: jest.fn(),
     onClearTransitionEnd: jest.fn(),
     tools: {},
     sendMessage: jest.fn() as any,

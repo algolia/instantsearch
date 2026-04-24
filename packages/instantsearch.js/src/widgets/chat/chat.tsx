@@ -321,9 +321,7 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent:
-      | ((props: ChatEmptyProps) => JSX.Element)
-      | undefined;
+    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
@@ -699,7 +697,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
         conversationLimitErrorMessage:
           templates.messages?.conversationLimitErrorMessageText,
-        genericChatErrorMessage: templates.messages?.genericChatErrorMessageText,
+        genericChatErrorMessage:
+          templates.messages?.genericChatErrorMessageText,
       });
 
     const assistantMessageTemplateProps = prepareTemplateProps({

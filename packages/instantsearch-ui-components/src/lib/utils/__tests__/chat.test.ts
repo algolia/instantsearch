@@ -43,7 +43,9 @@ describe('isConversationThreadDepthLimitError', () => {
   test('returns false for LangGraph recursion errors (use isStartNewConversationError)', () => {
     expect(
       isConversationThreadDepthLimitError(
-        new Error('Recursion limit of 5 reached. recursion_limit GRAPH_RECURSION_LIMIT')
+        new Error(
+          'Recursion limit of 5 reached. recursion_limit GRAPH_RECURSION_LIMIT'
+        )
       )
     ).toBe(false);
   });
@@ -89,7 +91,9 @@ describe('isStartNewConversationError', () => {
       )
     ).toBe(true);
     expect(
-      isStartNewConversationError(new Error('HTTP error: 429 Too Many Requests'))
+      isStartNewConversationError(
+        new Error('HTTP error: 429 Too Many Requests')
+      )
     ).toBe(true);
   });
 
@@ -215,9 +219,9 @@ describe('getStartNewConversationErrorDisplayMessage', () => {
   test('prefers recursion when the same payload also mentions thread depth', () => {
     const combined =
       'Recursion limit of 5 reached.\nConversation has reached its maximum thread depth of 3 messages. Please start a new conversation.';
-    expect(getStartNewConversationErrorDisplayMessage(new Error(combined))).toBe(
-      combined
-    );
+    expect(
+      getStartNewConversationErrorDisplayMessage(new Error(combined))
+    ).toBe(combined);
   });
 
   test('unwraps JSON message field for thread depth display', () => {
@@ -250,7 +254,9 @@ describe('getStartNewConversationErrorDisplayMessage', () => {
   test('surfaces rate limit API text', () => {
     const msg = 'Rate limit exceeded. Retry after 60 seconds.';
     expect(isStartNewConversationError(new Error(msg))).toBe(true);
-    expect(getStartNewConversationErrorDisplayMessage(new Error(msg))).toBe(msg);
+    expect(getStartNewConversationErrorDisplayMessage(new Error(msg))).toBe(
+      msg
+    );
     expect(getChatErrorDisplayMessage(new Error(msg))).toBe(msg);
   });
 

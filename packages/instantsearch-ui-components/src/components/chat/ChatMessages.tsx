@@ -33,7 +33,13 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type {
+  ChatEmptyProps,
+  ChatLayoutOwnProps,
+  ChatMessageBase,
+  ChatStatus,
+  ClientSideTools,
+} from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -500,12 +506,12 @@ export function createChatMessagesComponent({
             getChatErrorDisplayMessage(error) ??
             error.message
           : requestOriginNotAllowedError
-            ? translations.requestOriginNotAllowedErrorMessage ??
-              getChatErrorDisplayMessage(error) ??
-              error.message
-            : translations.genericChatErrorMessage ??
-              getChatErrorDisplayMessage(error) ??
-              error.message
+          ? translations.requestOriginNotAllowedErrorMessage ??
+            getChatErrorDisplayMessage(error) ??
+            error.message
+          : translations.genericChatErrorMessage ??
+            getChatErrorDisplayMessage(error) ??
+            error.message
         : undefined;
 
     const errorComponentTranslations =
@@ -596,7 +602,9 @@ export function createChatMessagesComponent({
               <DefaultError
                 key={
                   error
-                    ? `${conversationId ?? 'no-conv'}:${error.name}:${error.message}:${(error.stack ?? '').slice(0, 160)}`
+                    ? `${conversationId ?? 'no-conv'}:${error.name}:${
+                        error.message
+                      }:${(error.stack ?? '').slice(0, 160)}`
                     : 'chat-error-no-error-instance'
                 }
                 variant={
