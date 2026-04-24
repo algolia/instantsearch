@@ -2,8 +2,11 @@
 
 import { cx } from '../../lib';
 import {
+  getChatErrorDisplayMessage,
   getTextContent,
   hasTextContent,
+  isRequestOriginNotAllowedError,
+  isStartNewConversationError,
   isPartText,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
@@ -65,6 +68,29 @@ export type ChatMessagesTranslations = {
    * Label for the feedback spinner
    */
   sendingFeedbackLabel?: string;
+  /**
+   * Label for the “start a new conversation” action (link-style) when the error
+   * is non-retryable (limits, allowlist, etc.).
+   */
+  conversationLimitActionLabel?: string;
+  /**
+   * Overrides the default message for “start a new conversation” errors
+   * (otherwise the API error text is shown). When omitted,
+   * {@link getChatErrorDisplayMessage} applies; use
+   * {@link registerStartNewConversationErrorDisplayResolver} for global customization.
+   */
+  conversationLimitErrorMessage?: string;
+  /**
+   * Overrides copy for retryable / generic chat errors.
+   * When omitted, {@link getChatErrorDisplayMessage} applies built-in mappings.
+   */
+  genericChatErrorMessage?: string;
+  /**
+   * Overrides copy for Agent Studio “request origin not allowed” (HTTP 403) errors.
+   * When omitted, the API error text is shown; this key is used instead of
+   * {@link genericChatErrorMessage} for that error only.
+   */
+  requestOriginNotAllowedErrorMessage?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -213,6 +239,19 @@ export type ChatMessagesProps<
    * Map of message IDs to their feedback state.
    */
   feedbackState?: Record<string, 'sending' | 0 | 1>;
+  /**
+   * When `status` is `error`, used to show `error.message` (e.g. API error text).
+   */
+  error?: Error;
+  /**
+   * Current server/client conversation id (from the chat connector). Used to
+   * remount the error row when the thread changes so UI never shows a stale line.
+   */
+  conversationId?: string;
+  /**
+   * When the conversation thread depth limit is hit, invoked from the in-thread action (e.g. same as header Clear).
+   */
+  onStartNewConversation?: () => void;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -360,6 +399,7 @@ export function createChatMessagesComponent({
   });
   const DefaultErrorComponent = createChatMessageErrorComponent({
     createElement,
+    Fragment,
   });
 
   return function ChatMessages<
@@ -396,6 +436,9 @@ export function createChatMessagesComponent({
       suggestionsElement,
       onFeedback,
       feedbackState,
+      error,
+      conversationId,
+      onStartNewConversation,
       ...props
     } = userProps;
 
@@ -407,6 +450,7 @@ export function createChatMessagesComponent({
       thumbsDownLabel: 'Dislike',
       feedbackThankYouText: 'Thanks for your feedback!',
       sendingFeedbackLabel: 'Sending feedback...',
+      conversationLimitActionLabel: 'Start a new conversation',
       ...userTranslations,
     };
 
@@ -442,6 +486,44 @@ export function createChatMessagesComponent({
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
+
+    const startNewConversationError =
+      status === 'error' && isStartNewConversationError(error);
+
+    const requestOriginNotAllowedError =
+      status === 'error' && isRequestOriginNotAllowedError(error);
+
+    const errorMessageForDisplay =
+      status === 'error' && error?.message
+        ? startNewConversationError
+          ? translations.conversationLimitErrorMessage ??
+            getChatErrorDisplayMessage(error) ??
+            error.message
+          : requestOriginNotAllowedError
+            ? translations.requestOriginNotAllowedErrorMessage ??
+              getChatErrorDisplayMessage(error) ??
+              error.message
+            : translations.genericChatErrorMessage ??
+              getChatErrorDisplayMessage(error) ??
+              error.message
+        : undefined;
+
+    const errorComponentTranslations =
+      errorMessageForDisplay !== undefined ||
+      startNewConversationError ||
+      requestOriginNotAllowedError
+        ? {
+            ...(errorMessageForDisplay !== undefined
+              ? { errorMessage: errorMessageForDisplay }
+              : {}),
+            ...(startNewConversationError || requestOriginNotAllowedError
+              ? {
+                  conversationLimitActionLabel:
+                    translations.conversationLimitActionLabel,
+                }
+              : {}),
+          }
+        : undefined;
 
     return (
       <div
@@ -510,7 +592,31 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {status === 'error' && <DefaultError onReload={onReload} />}
+            {status === 'error' && (
+              <DefaultError
+                key={
+                  error
+                    ? `${conversationId ?? 'no-conv'}:${error.name}:${error.message}:${(error.stack ?? '').slice(0, 160)}`
+                    : 'chat-error-no-error-instance'
+                }
+                variant={
+                  startNewConversationError || requestOriginNotAllowedError
+                    ? 'conversationLimit'
+                    : 'default'
+                }
+                onReload={
+                  startNewConversationError || requestOriginNotAllowedError
+                    ? undefined
+                    : onReload
+                }
+                onStartNewConversation={
+                  startNewConversationError || requestOriginNotAllowedError
+                    ? onStartNewConversation
+                    : undefined
+                }
+                translations={errorComponentTranslations}
+              />
+            )}
           </div>
         </div>
 

@@ -75,13 +75,22 @@ export type ChatHeaderOwnProps = {
    */
   onClose: () => void;
   /**
-   * Callback when the clear button is clicked
+   * Callback when the clear / “new conversation” text button is clicked
    */
   onClear?: () => void;
+  /**
+   * Same role as {@link onClear} when the host passes the Agent Studio / widget
+   * naming (`clearMessages` wired here).
+   */
+  onNewConversation?: () => void;
   /**
    * Whether the clear button is enabled
    */
   canClear?: boolean;
+  /**
+   * Same role as {@link canClear} for {@link onNewConversation}.
+   */
+  canStartNewConversation?: boolean;
   /**
    * Optional close icon component
    */
@@ -119,7 +128,9 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       onToggleMaximize,
       onClose,
       onClear,
-      canClear = false,
+      onNewConversation,
+      canClear,
+      canStartNewConversation,
       closeIconComponent: CloseIcon,
       minimizeIconComponent: MinimizeIcon,
       maximizeIconComponent: MaximizeIcon,
@@ -136,6 +147,10 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       clearLabel: 'Clear',
       ...userTranslations,
     };
+
+    const clearAction = onClear ?? onNewConversation;
+    const canRunClear =
+      (canClear ?? canStartNewConversation ?? false) && Boolean(clearAction);
 
     const defaultMaximizeIcon = maximized ? (
       <MinimizeIconDefault createElement={createElement} />
@@ -161,13 +176,13 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
           {translations.title}
         </span>
         <div className={cx('ais-ChatHeader-actions')}>
-          {onClear && (
+          {clearAction && (
             <Button
               variant="ghost"
               size="sm"
               className={cx('ais-ChatHeader-clear', classNames.clear)}
-              onClick={onClear}
-              disabled={!canClear}
+              onClick={clearAction}
+              disabled={!canRunClear}
             >
               {translations.clearLabel}
             </Button>

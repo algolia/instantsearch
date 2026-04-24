@@ -23,7 +23,7 @@ describe('ChatOverlayLayout', () => {
     messages: [],
     status: 'ready' as const,
     isClearing: false,
-    clearMessages: jest.fn(),
+      onNewConversation: jest.fn(),
     onClearTransitionEnd: jest.fn(),
     tools: {},
     sendMessage: jest.fn() as any,
