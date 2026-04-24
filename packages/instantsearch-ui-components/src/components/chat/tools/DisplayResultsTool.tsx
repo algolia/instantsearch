@@ -66,7 +66,7 @@ export function createDisplayResultsToolComponent<
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
-    const groups = Array.isArray(output?.groups) ? output!.groups! : [];
+    const groups = Array.isArray(output?.groups) ? output.groups : [];
 
     const isStreaming =
       message?.state === 'output-available' &&
