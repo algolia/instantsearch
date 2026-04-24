@@ -262,7 +262,7 @@ SearchParameters._parseNumbers = function (partialState) {
     if (typeof value === 'string') {
       var parsedValue = parseFloat(value);
       if (isNaN(parsedValue)) {
-        // Unparseable string like "all" — keep original
+        // originally an unparseable string like "all", keep NaN
         numbers[k] = value;
       } else if (!isFinite(parsedValue)) {
         // Infinity/-Infinity — convert to null
