@@ -419,6 +419,84 @@ const plugin = {
         };
       },
     },
+    'no-unsafe-default-templates': {
+      meta: {
+        docs: {
+          description:
+            'Disallow JSON.stringify or raw object returns in default templates to prevent XSS.',
+        },
+        messages: {
+          forbidden:
+            'Do not use JSON.stringify() or raw objects in default templates. Wrap string output in a Fragment: `<Fragment>{dataString}</Fragment>`.',
+        },
+        schema: [],
+        type: 'problem',
+      },
+      create(context) {
+        function isInsideDefaultTemplatesObject(node) {
+          let current = node;
+
+          while (current) {
+            if (
+              current.type === 'ObjectExpression' &&
+              current.parent?.type === 'VariableDeclarator' &&
+              current.parent.id?.type === 'Identifier' &&
+              current.parent.id.name === 'defaultTemplates'
+            ) {
+              return true;
+            }
+
+            current = current.parent;
+          }
+
+          return false;
+        }
+
+        return {
+          ReturnStatement(node) {
+            if (!node.argument) {
+              return;
+            }
+
+            if (!isInsideDefaultTemplatesObject(node)) {
+              return;
+            }
+
+            const arg = node.argument;
+
+            // Allowed: JSX element or Fragment
+            if (arg.type === 'JSXElement' || arg.type === 'JSXFragment') {
+              return;
+            }
+
+            // Allowed: htm template literal
+            if (arg.type === 'TaggedTemplateExpression') {
+              if (
+                arg.tag.type === 'Identifier' &&
+                (arg.tag.name === 'html' || arg.tag.name === 'htm')
+              ) {
+                return;
+              }
+            }
+
+            // Flag JSON.stringify - the key XSS vector
+            if (arg.type === 'CallExpression') {
+              if (
+                arg.callee.type === 'MemberExpression' &&
+                arg.callee.object.name === 'JSON' &&
+                arg.callee.property.name === 'stringify'
+              ) {
+                context.report({
+                  messageId: 'forbidden',
+                  node,
+                });
+                return;
+              }
+            }
+          },
+        };
+      },
+    },
   },
 };
 

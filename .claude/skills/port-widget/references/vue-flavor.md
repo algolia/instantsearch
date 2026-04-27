@@ -22,7 +22,7 @@
 
 ## Implementation rules
 
-- Import connectors from `instantsearch.js/es/connectors/index.umd` to match the existing Vue package pattern. **Exception**: connectors intentionally excluded from UMD (e.g. `connectChat`) must be imported directly: `import connectChat from 'instantsearch.js/es/connectors/chat/connectChat'`. The UMD stub throws at runtime.
+- Import connectors from `instantsearch.js/es/connectors/index`.
 - Use `createWidgetMixin({ connector: ... }, { $$widgetType: 'ais.<camelName>' })`.
 - Use `createSuitMixin({ name: '<Pascal>' })` for BEM classes. When the widget delegates all rendering to a shared `createXxxComponent` factory, the suit mixin's `suit()` method goes unused but the `classNames` prop it provides is still convenient. Pass `this.classNames` directly to the shared component's `classNames` prop (semantic keys like `{ root, container }`, not BEM keys).
 - Expose connector params through a computed `widgetParams()` object.

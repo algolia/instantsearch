@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { connectRefinementList } from 'instantsearch.js/es/connectors/index.umd';
+import { connectRefinementList } from 'instantsearch.js/es/connectors/index';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

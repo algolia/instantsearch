@@ -37,6 +37,7 @@ Choose the closest precedent before writing code:
 ### Variant widgets (shared connector)
 
 Some widgets reuse another widget's hook instead of having a dedicated one. For example, `MenuSelect` uses `useMenu` (not `useMenuSelect`). In this case:
+
 - Import the existing hook directly in the widget file.
 - Pick only the relevant connector params (e.g., exclude `showMore`/`showMoreLimit` for `MenuSelect`).
 - Set a distinct `$$widgetType` (e.g., `'ais.menuSelect'`).
@@ -44,7 +45,7 @@ Some widgets reuse another widget's hook instead of having a dedicated one. For 
 ## Registration checklist
 
 - Export the hook from `packages/react-instantsearch-core/src/index.ts` (skip for variant widgets that reuse an existing hook).
-- Export the widget from both `packages/react-instantsearch/src/widgets/index.ts` and `index.umd.ts`.
+- Export the widget from `packages/react-instantsearch/src/widgets/index.ts`.
 - If the widget is public, `packages/react-instantsearch/src/index.ts` already re-exports it through `./widgets`.
 - Add the widget to the switch in `packages/react-instantsearch/src/widgets/__tests__/__utils__/all-widgets.tsx` with required minimum props (e.g., `attribute="brand"`).
 - In `packages/react-instantsearch/src/__tests__/common-widgets.test.tsx`:

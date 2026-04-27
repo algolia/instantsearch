@@ -1,3 +1,4 @@
+import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
@@ -457,6 +458,26 @@ export type ApplyFiltersParams = {
   facetFilters?: string[][];
 };
 
+export type ChatLayoutOwnProps<
+  TMessage extends ChatMessageBase = ChatMessageBase
+> = {
+  open: boolean;
+  maximized: boolean;
+  headerComponent: JSX.Element;
+  messagesComponent: JSX.Element;
+  promptComponent: JSX.Element;
+  toggleButtonComponent: JSX.Element;
+  classNames?: { root?: string | string[]; container?: string | string[] };
+  isClearing?: boolean;
+  clearMessages?: () => void;
+  onClearTransitionEnd?: () => void;
+  suggestions?: string[];
+  tools: ClientSideTools;
+} & Pick<ChatState<TMessage>, 'messages'> &
+  Partial<Pick<ChatState<TMessage>, 'status'>> &
+  Pick<AbstractChat<TMessage>, 'sendMessage' | 'regenerate' | 'stop' | 'error'> &
+  ComponentProps<'div'>;
+
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
@@ -464,6 +485,7 @@ export type ClientSideToolComponentProps = {
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  sendEvent: SendEventForHits;
 };
 
 export type ClientSideToolComponent = (
@@ -473,6 +495,7 @@ export type ClientSideToolComponent = (
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   addToolResult: AddToolResult;
+  sendEvent?: SendEventForHits;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
@@ -486,6 +509,26 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters'
+  'addToolResult' | 'applyFilters' | 'sendEvent'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
+
+export type ChatEmptyProps = {
+  /**
+   * Function to send a message to the chat
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Current chat status
+   */
+  status?: ChatStatus;
+  /**
+   * Callback to close the chat
+   */
+  onClose?: () => void;
+  /**
+   * Function to set the prompt input value
+   */
+  setInput?: (input: string) => void;
+};
+

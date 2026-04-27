@@ -3,6 +3,7 @@
 @use '../shared/_common';
 @use '../components/chat';
 @use '../components/autocomplete';
+@use '../components/ai-mode-button';
 @use '../components/filter-suggestions';
 
 ////////////////
@@ -543,6 +544,19 @@ $break-medium: 767px;
 // Algolia magnifier glass.
 .ais-SearchBox-submit {
   display: none;
+}
+
+.ais-SearchBox-form .ais-AiModeButton {
+  position: absolute;
+  right: 0.375rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-reset,
+.ais-SearchBox-form:has(.ais-AiModeButton)
+  .ais-SearchBox-loadingIndicator {
+  right: 7rem;
 }
 
 .ais-Menu-searchBox,

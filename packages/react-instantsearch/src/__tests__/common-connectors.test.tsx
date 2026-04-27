@@ -23,6 +23,7 @@ import {
   useRelatedProducts,
   useFrequentlyBoughtTogether,
   useTrendingItems,
+  useTrendingFacets,
   useLookingSimilar,
   useFilterSuggestions,
 } from '..';
@@ -40,6 +41,7 @@ import type {
   UseRelatedProductsProps,
   UseFrequentlyBoughtTogetherProps,
   UseTrendingItemsProps,
+  UseTrendingFacetsProps,
   UseLookingSimilarProps,
   UseFilterSuggestionsProps,
 } from '..';
@@ -409,6 +411,34 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
 
     render(<App />);
   },
+  createTrendingFacetsConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomTrendingFacets(props: UseTrendingFacetsProps) {
+      const { items } = useTrendingFacets(props);
+
+      return (
+        <ul>
+          {items.map((item, i) => (
+            <li key={i}>{item.facetValue}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomTrendingFacets {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
+  },
   createLookingSimilarConnectorTests: ({
     instantSearchOptions,
     widgetParams,
@@ -495,6 +525,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsConnectorTests: { act },
   createFrequentlyBoughtTogetherConnectorTests: { act },
   createTrendingItemsConnectorTests: { act },
+  createTrendingFacetsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
   createChatConnectorTests: { act, skippedTests: { options: true } },
   createFilterSuggestionsConnectorTests: { act },

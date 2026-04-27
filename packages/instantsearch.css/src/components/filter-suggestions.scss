@@ -91,9 +91,7 @@
     width: 20%;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ais-filter-suggestions-skeleton 1.5s ease-in-out infinite;
-  }
+  animation: ais-filter-suggestions-skeleton 1.5s ease-in-out infinite;
 }
 
 @keyframes ais-filter-suggestions-skeleton {

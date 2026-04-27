@@ -10,11 +10,16 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
-import type { UIMessage } from '../../../lib/chat';
+import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
+
+jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
+  sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
+}));
 
 describe('connectChat', () => {
   const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
@@ -95,6 +100,7 @@ describe('connectChat', () => {
           input: '',
           open: false,
           isClearing: false,
+          feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
@@ -370,6 +376,63 @@ describe('connectChat', () => {
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toEqual(newMessages);
     });
+
+    it('has empty feedbackState initially', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      expect(renderState.feedbackState).toEqual({});
+    });
+
+    it('sets feedbackState to sending when feedback is submitted', () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+
+      const updatedRenderState = getRenderState();
+      expect(updatedRenderState.feedbackState).toEqual({
+        'msg-1': 'sending',
+      });
+    });
+
+    it('sets feedbackState to the vote value after fetch resolves', async () => {
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+
+      await waitFor(() => {
+        expect(getRenderState().feedbackState).toEqual({ 'msg-1': 1 });
+      });
+    });
+
+    it('prevents double voting on the same message', () => {
+      const { sendChatMessageFeedback: mockedFn } = jest.requireMock(
+        '../../../lib/utils/sendChatMessageFeedback'
+      );
+      mockedFn.mockClear();
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        feedback: true,
+      });
+
+      const renderState = getRenderState();
+      renderState.sendChatMessageFeedback!('msg-1', 1);
+      renderState.sendChatMessageFeedback!('msg-1', 0);
+
+      expect(mockedFn).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('tool handling', () => {
@@ -388,6 +451,7 @@ describe('connectChat', () => {
           ...mockTool,
           addToolResult: expect.any(Function),
           applyFilters: expect.any(Function),
+          sendEvent: expect.any(Function),
         },
       });
     });
@@ -471,6 +535,184 @@ data: [DONE]`,
           transport: customTransport,
         })
       );
+    });
+  });
+
+  describe('context', () => {
+    function createMockTransport(): ChatTransport<UIMessage> {
+      return {
+        sendMessages: jest.fn(() =>
+          Promise.resolve(
+            new ReadableStream({ start(ctrl) { ctrl.close(); } })
+          )
+        ),
+        reconnectToStream: jest.fn(() => Promise.resolve(null)),
+      };
+    }
+
+    function createTestChat() {
+      return new Chat<UIMessage>({ transport: createMockTransport() });
+    }
+
+    function createChatWidgetWithContext(
+      params: Omit<ChatConnectorParams<UIMessage>, 'transport' | 'agentId'> & {
+        chat: Chat<UIMessage>;
+      }
+    ) {
+      const renderFn = jest.fn();
+      const makeWidget = connectChat(renderFn);
+      const widget = makeWidget({
+        ...params,
+        transport: { api: 'http://unused' },
+      });
+      return { widget, renderFn };
+    }
+
+    it('prepends context text part when context is a static object', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { currentPage: '/products', locale: 'en-US' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'Hello' });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
+        },
+        { type: 'text', text: 'Hello' },
+      ]);
+    });
+
+    it('evaluates context function at send time', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      let pageUrl = '/page-1';
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: () => ({ currentPage: pageUrl }),
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+
+      await sendMessage({ text: 'first' });
+      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/page-1"}</context>',
+        },
+        { type: 'text', text: 'first' },
+      ]);
+
+      pageUrl = '/page-2';
+      await sendMessage({ text: 'second' });
+      expect((sendMessageSpy.mock.calls[1][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"currentPage":"/page-2"}</context>',
+        },
+        { type: 'text', text: 'second' },
+      ]);
+    });
+
+    it('passes through without modification when no context is set', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'Hello' });
+
+      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+    });
+
+    it('prepends context when called with parts', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/about' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        parts: [{ type: 'text', text: 'Hi from parts' }],
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
+        {
+          type: 'text',
+          text: '<context>{"page":"/about"}</context>',
+        },
+        { type: 'text', text: 'Hi from parts' },
+      ]);
+    });
+
+    it('passes through when called with no message', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/about' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage();
+
+      expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
+    });
+
+    it('sends message without context when context is not serializable', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const circular: Record<string, unknown> = {};
+      circular.self = circular;
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: circular,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+
+      expect(() => sendMessage({ text: 'Hello' })).toWarnDev(
+        '[InstantSearch.js]: Could not serialize chat context. The message will be sent without context.'
+      );
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
   });
 });

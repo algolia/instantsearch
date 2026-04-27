@@ -14,7 +14,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
-} from 'instantsearch.js/es/connectors/index.umd';
+} from 'instantsearch.js/es/connectors/index';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {
@@ -342,6 +342,7 @@ const testSetups = {
   createRelatedProductsConnectorTests: () => {},
   createFrequentlyBoughtTogetherConnectorTests: () => {},
   createTrendingItemsConnectorTests: () => {},
+  createTrendingFacetsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
   createFilterSuggestionsConnectorTests: () => {},
@@ -432,6 +433,12 @@ const testOptions = {
     },
   },
   createTrendingItemsConnectorTests: {
+    skippedTests: {
+      options: true,
+      state: true,
+    },
+  },
+  createTrendingFacetsConnectorTests: {
     skippedTests: {
       options: true,
       state: true,

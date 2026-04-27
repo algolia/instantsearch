@@ -364,6 +364,12 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
    * Translations for the Autocomplete widget.
    */
   translations?: Partial<AutocompleteTranslations>;
+  /**
+   * When true, renders an AI mode button inside the search input
+   * that opens the Chat widget and sends the current query.
+   * Requires a Chat widget on the same index.
+   */
+  aiMode?: boolean;
 };
 
 type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
@@ -607,6 +613,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
+  aiMode,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -615,7 +622,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     currentRefinement,
   } = useAutocomplete({
     transformItems,
+    future: { undefinedEmptyQuery: true },
   });
+
+  const resolvedQuery =
+    currentRefinement !== undefined
+      ? currentRefinement
+      : indexUiState.query ?? '';
 
   const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } =
     useDetachedMode(detachedMediaQuery);
@@ -876,8 +889,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       onQueryChange={(query) => {
         refineAutocomplete(query);
       }}
-      query={currentRefinement || indexUiState.query || ''}
-      refine={refineSearchBox}
+      query={resolvedQuery}
       isSearchStalled={isSearchStalled}
       onSubmit={() => {
         if (isDetached) {
@@ -887,6 +899,22 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       isDetached={isDetached}
       submitTitle={
         isDetached ? translations.detachedCancelButtonText : undefined
+      }
+      onAiModeClick={
+        aiMode
+          ? () => {
+              setIsOpen(false);
+              if (isDetached) {
+                setIsModalOpen(false);
+              }
+              if (chatRenderState) {
+                chatRenderState.setOpen?.(true);
+                if (resolvedQuery.trim()) {
+                  chatRenderState.sendMessage?.({ text: resolvedQuery });
+                }
+              }
+            }
+          : undefined
       }
     />
   );
@@ -925,7 +953,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         classNames={classNames}
       >
         <AutocompleteDetachedSearchButton
-          query={currentRefinement || indexUiState.query || ''}
+          query={resolvedQuery}
           placeholder={placeholder}
           classNames={classNames}
           onClick={() => {

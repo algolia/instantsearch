@@ -4,7 +4,6 @@
 .ais-ChatPrompt {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   gap: calc(var(--ais-spacing) * 0.5);
   width: 100%;
   position: relative;
@@ -60,12 +59,10 @@
   outline: 1px solid transparent;
   z-index: 1;
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: border-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      outline-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
+  transition: border-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    outline-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
 }
 
 .ais-ChatPrompt-body:focus-within {
@@ -87,7 +84,6 @@
   padding-bottom: 0;
   caret-color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   font-family: inherit;
-  line-height: inherit;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   font-size: calc(var(--ais-spacing) * 0.875);
   line-height: 1.25rem;
@@ -104,7 +100,6 @@
 
 .ais-ChatPrompt-actions {
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
   padding: calc(var(--ais-spacing) * 0.75);
   padding-top: calc(var(--ais-spacing) * 0.5);

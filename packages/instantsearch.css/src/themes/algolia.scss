@@ -3,6 +3,7 @@
 @use '../shared/_common';
 @use '../components/chat';
 @use '../components/autocomplete';
+@use '../components/ai-mode-button';
 @use '../components/filter-suggestions';
 
 // Colors
@@ -705,6 +706,19 @@ a[class^='ais-'] {
 .ais-SearchBox-loadingIcon {
   width: 16px;
   height: 16px;
+}
+
+.ais-SearchBox-form .ais-AiModeButton {
+  position: absolute;
+  right: 0.3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-reset,
+.ais-SearchBox-form:has(.ais-AiModeButton)
+  .ais-SearchBox-loadingIndicator {
+  right: 7rem;
 }
 
 .ais-VoiceSearch-button {

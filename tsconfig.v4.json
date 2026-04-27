@@ -11,6 +11,7 @@
     "examples/react/next-app-router",
     "examples/react/react-native",
     "examples/js/e-commerce-umd/public/packages",
+    "examples/js/showcase",
     "packages/create-instantsearch-app/src/templates/**/*",
     "packages/algolia-experiences"
   ]

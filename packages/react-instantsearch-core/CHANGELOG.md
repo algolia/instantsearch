@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.30.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.29.0...react-instantsearch-core@7.30.0) (2026-04-21)
+
+
+### Features
+
+* **recommend:** add Trending Facets widget ([#6957](https://github.com/algolia/instantsearch/issues/6957)) ([7a4b137](https://github.com/algolia/instantsearch/commit/7a4b137264b5814bc21d9011bab877e9661729c9))
+
+
+
+
+
+## [7.29.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.29.0...react-instantsearch-core@7.29.0) (2026-03-31)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+
 ## [7.28.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.28.0...react-instantsearch-core@7.28.1) (2026-03-24)
 
 **Note:** Version bump only for package react-instantsearch-core

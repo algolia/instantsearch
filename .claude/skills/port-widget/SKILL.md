@@ -39,10 +39,10 @@ Known variants: `menuSelect` → `connectMenu`/`useMenu`.
    - Pick one close widget in the target flavor and one close widget in another flavor.
    - Reuse the same prop names, slot or component escape hatches, `$$widgetType`, and test style.
 3. Build from the bottom up.
-   - Connector exports belong in `packages/instantsearch.js/src/connectors/index.ts` and `index.umd.ts`.
-   - JS widget exports belong in `packages/instantsearch.js/src/widgets/index.ts` and `index.umd.ts`.
+   - Connector exports belong in `packages/instantsearch.js/src/connectors/index.ts`.
+   - JS widget exports belong in `packages/instantsearch.js/src/widgets/index.ts`.
    - React hook exports belong in `packages/react-instantsearch-core/src/index.ts`.
-   - React widget exports belong in both `packages/react-instantsearch/src/widgets/index.ts` and `index.umd.ts`; `packages/react-instantsearch/src/index.ts` already re-exports widgets.
+   - React widget exports belong in `packages/react-instantsearch/src/widgets/index.ts`; `packages/react-instantsearch/src/index.ts` already re-exports widgets.
    - Vue exports belong in `packages/vue-instantsearch/src/widgets.js`; `src/instantsearch.js` and the plugin re-export and register from there automatically.
 4. Choose the right sharing model.
    - JS and React: prefer `instantsearch-ui-components` when the markup can be shared.
@@ -64,7 +64,7 @@ Known variants: `menuSelect` → `connectMenu`/`useMenu`.
 - Keep `$$widgetType` aligned across flavors.
 - Do not invent new Vue patterns; match `createWidgetMixin`, `createSuitMixin`, scoped slots, and `renderCompat`.
 - Do not add memoization hooks in React unless an adjacent widget uses them for the same reason.
-- Check UMD behavior before exporting; `chat` is intentionally unavailable there.
+- `chat` is now available in UMD; no special exclusions apply.
 
 ## References
 
