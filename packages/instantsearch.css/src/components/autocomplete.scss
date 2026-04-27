@@ -174,7 +174,7 @@
       }
 
       .ais-AiModeButton {
-        margin-right: 0.375rem;
+        margin-right: calc(var(--ais-spacing) * 0.25);
       }
     }
   }
