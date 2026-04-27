@@ -55,12 +55,8 @@ describe('CLI binary surface under --json', () => {
     expect(report.code.length).toBeGreaterThan(0);
   });
 
-  test('init --json in unsupported project: stderr empty, exit 1', () => {
+  test('init --json without package.json: stderr empty, exit 1', () => {
     const cwd = mkTmp();
-    fs.writeFileSync(
-      path.join(cwd, 'package.json'),
-      JSON.stringify({ name: 'host', dependencies: {} })
-    );
 
     const { stdout, stderr, exitCode } = runCli(
       ['init', '--json', '--app-id', 'APP', '--search-key', 'KEY'],

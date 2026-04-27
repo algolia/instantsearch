@@ -36,13 +36,59 @@ describe('detector', () => {
     });
   });
 
-  test('no InstantSearch package → unsupported_framework error', () => {
+  test('react in deps but no IS package → needs_install with inferred flavor react', () => {
+    const result = detect(fixturePath('react-no-is'));
+
+    expect(result).toEqual({
+      ok: true,
+      detection: {
+        flavor: 'react',
+        framework: null,
+        typescript: false,
+        componentsPath: 'src/components',
+        aliases: {},
+
+        packagesToInstall: ['react-instantsearch', 'algoliasearch'],
+      },
+    });
+  });
+
+  test('next in deps but no IS package → needs_install with react + nextjs', () => {
+    const result = detect(fixturePath('next-no-is'));
+
+    expect(result).toEqual({
+      ok: true,
+      detection: {
+        flavor: 'react',
+        framework: 'nextjs',
+        typescript: false,
+        componentsPath: 'components',
+        aliases: {},
+
+        packagesToInstall: [
+          'react-instantsearch',
+          'react-instantsearch-nextjs',
+          'algoliasearch',
+        ],
+      },
+    });
+  });
+
+  test('no InstantSearch package and no react/next → needs_install with inferred flavor js', () => {
     const result = detect(fixturePath('unsupported'));
 
-    expect(result.ok).toBe(false);
-    if (result.ok) throw new Error('expected failure');
-    expect(result.code).toBe('unsupported_framework');
-    expect(result.message).toMatch(/react-instantsearch|instantsearch\.js/);
+    expect(result).toEqual({
+      ok: true,
+      detection: {
+        flavor: 'js',
+        framework: null,
+        typescript: false,
+        componentsPath: 'components',
+        aliases: {},
+
+        packagesToInstall: ['instantsearch.js', 'algoliasearch'],
+      },
+    });
   });
 
   test('both react-instantsearch and instantsearch.js present → unsupported_framework error', () => {

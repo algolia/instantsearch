@@ -1,5 +1,6 @@
 import { detect } from '../detector';
 import { generate } from '../generator';
+import { installPackages } from '../installer';
 import { verifyCredentials } from '../introspector';
 import {
   writeRootManifest,
@@ -32,29 +33,32 @@ export async function init(options: InitOptions): Promise<Report> {
     prompter,
   } = options;
 
-  const detection = detect(projectDir, { frameworkOverride });
-  if (!detection.ok) {
+  const result = detect(projectDir, { frameworkOverride });
+  if (!result.ok) {
     return failure({
       command: COMMAND,
-      code: detection.code,
-      message: detection.message,
+      code: result.code,
+      message: result.message,
     });
   }
+
+  const det = result.detection;
+  const packages = det.packagesToInstall ?? [];
 
   let appId = options.appId;
   let searchApiKey = options.searchApiKey;
   let componentsPath = componentsPathOverride;
-  let resolvedFlavor = flavorOverride ?? detection.detection.flavor;
+  let resolvedFlavor = flavorOverride ?? det.flavor;
   const FRAMEWORK_NONE = 'none' as const;
   let resolvedFramework: Framework | null =
     frameworkOverride !== undefined
       ? frameworkOverride
-      : detection.detection.framework;
+      : det.framework;
 
   if (prompter) {
     if (!flavorOverride) {
       resolvedFlavor = await prompter.select<Flavor>(
-        `Detected flavor: ${detection.detection.flavor}. Confirm or change:`,
+        `Detected flavor: ${det.flavor}. Confirm or change:`,
         [
           { name: 'react (react-instantsearch)', value: 'react' },
           { name: 'js (instantsearch.js)', value: 'js' },
@@ -62,15 +66,29 @@ export async function init(options: InitOptions): Promise<Report> {
       );
     }
 
-    if (frameworkOverride === undefined && detection.detection.framework !== null) {
+    if (frameworkOverride === undefined && det.framework !== null) {
       const frameworkAnswer = await prompter.select<Framework | typeof FRAMEWORK_NONE>(
-        `Detected framework: ${detection.detection.framework}. Confirm or change:`,
+        `Detected framework: ${det.framework}. Confirm or change:`,
         [
           { name: 'none (plain React / Vite / CRA)', value: FRAMEWORK_NONE },
           { name: 'nextjs (Next.js App Router)', value: 'nextjs' },
         ]
       );
       resolvedFramework = frameworkAnswer === FRAMEWORK_NONE ? null : frameworkAnswer;
+    }
+
+    if (packages.length > 0) {
+      const confirmInstall = await prompter.confirm(
+        `Install ${packages.join(', ')}?`,
+        { default: true }
+      );
+      if (!confirmInstall) {
+        return failure({
+          command: COMMAND,
+          code: 'install_declined',
+          message: 'Package installation declined.',
+        });
+      }
     }
 
     if (!appId) {
@@ -81,7 +99,20 @@ export async function init(options: InitOptions): Promise<Report> {
     }
     if (!componentsPath) {
       componentsPath = await prompter.text('Where should generated components live?', {
-        default: detection.detection.componentsPath,
+        default: det.componentsPath,
+      });
+    }
+  }
+
+  if (packages.length > 0) {
+    const installResult = installPackages(projectDir, packages, {
+      stdio: prompter ? 'inherit' : 'pipe',
+    });
+    if (!installResult.ok) {
+      return failure({
+        command: COMMAND,
+        code: installResult.code,
+        message: installResult.message,
       });
     }
   }
@@ -110,9 +141,9 @@ export async function init(options: InitOptions): Promise<Report> {
     apiVersion: 1,
     flavor: resolvedFlavor,
     framework: resolvedFramework,
-    typescript: detection.detection.typescript,
-    componentsPath: componentsPath ?? detection.detection.componentsPath,
-    aliases: detection.detection.aliases,
+    typescript: det.typescript,
+    componentsPath: componentsPath ?? det.componentsPath,
+    aliases: det.aliases,
     algolia: { appId, searchApiKey },
     experiences: [],
   };

@@ -9,6 +9,7 @@ export type Detection = {
   typescript: boolean;
   componentsPath: string;
   aliases: Record<string, string>;
+  packagesToInstall?: string[];
 };
 
 export type DetectSuccess = { ok: true; detection: Detection };
@@ -49,6 +50,27 @@ function extractComponentsAlias(
   return null;
 }
 
+type ProjectMeta = {
+  typescript: boolean;
+  componentsPath: string;
+  aliases: Record<string, string>;
+};
+
+function detectProjectMeta(projectDir: string): ProjectMeta {
+  const tsconfig = readJSON(path.join(projectDir, 'tsconfig.json'));
+  const typescript = tsconfig !== null;
+  const hasSrc = fs.existsSync(path.join(projectDir, 'src'));
+  const componentsPath = hasSrc ? 'src/components' : 'components';
+
+  const aliases: Record<string, string> = {};
+  const componentsAlias = extractComponentsAlias(tsconfig);
+  if (componentsAlias) {
+    aliases.components = componentsAlias;
+  }
+
+  return { typescript, componentsPath, aliases };
+}
+
 export type DetectOptions = {
   frameworkOverride?: Framework;
 };
@@ -77,11 +99,37 @@ export function detect(
   if (hasJsIs) flavors.push('js');
 
   if (flavors.length === 0) {
+    const hasReact = Boolean(deps['react']);
+    const hasNext = Boolean(deps['next']);
+
+    let inferredFlavor: Flavor;
+    let inferredFramework: Framework | null = null;
+    const packagesToInstall: string[] = [];
+
+    if (hasNext) {
+      inferredFlavor = 'react';
+      inferredFramework = 'nextjs';
+      packagesToInstall.push('react-instantsearch', 'react-instantsearch-nextjs');
+    } else if (hasReact) {
+      inferredFlavor = 'react';
+      packagesToInstall.push('react-instantsearch');
+    } else {
+      inferredFlavor = 'js';
+      packagesToInstall.push('instantsearch.js');
+    }
+
+    if (!deps['algoliasearch']) {
+      packagesToInstall.push('algoliasearch');
+    }
+
     return {
-      ok: false,
-      code: 'unsupported_framework',
-      message:
-        'No InstantSearch package found. Install react-instantsearch or instantsearch.js first, then rerun.',
+      ok: true,
+      detection: {
+        flavor: inferredFlavor,
+        framework: inferredFramework,
+        ...detectProjectMeta(projectDir),
+        packagesToInstall,
+      },
     };
   }
 
@@ -116,27 +164,12 @@ export function detect(
     }
   }
 
-  const typescript = fs.existsSync(path.join(projectDir, 'tsconfig.json'));
-  const hasSrc = fs.existsSync(path.join(projectDir, 'src'));
-  const componentsPath = hasSrc ? 'src/components' : 'components';
-
-  const aliases: Record<string, string> = {};
-  if (typescript) {
-    const tsconfig = readJSON(path.join(projectDir, 'tsconfig.json'));
-    const componentsAlias = extractComponentsAlias(tsconfig);
-    if (componentsAlias) {
-      aliases.components = componentsAlias;
-    }
-  }
-
   return {
     ok: true,
     detection: {
       flavor,
       framework,
-      typescript,
-      componentsPath,
-      aliases,
+      ...detectProjectMeta(projectDir),
     },
   };
 }

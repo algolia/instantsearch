@@ -5,13 +5,20 @@ import path from 'node:path';
 jest.mock('algoliasearch', () => ({
   algoliasearch: jest.fn(),
 }));
+jest.mock('../../installer', () => ({
+  installPackages: jest.fn(),
+}));
 
 import { algoliasearch } from 'algoliasearch';
 
 import { init } from '../init';
 import { createScriptedPrompter } from '../../prompter';
+import { installPackages } from '../../installer';
 
 const mockedAlgoliasearch = algoliasearch as unknown as jest.Mock;
+const mockedInstallPackages = installPackages as jest.MockedFunction<
+  typeof installPackages
+>;
 
 const FIXTURES = path.join(
   __dirname,
@@ -38,6 +45,8 @@ function mockAlgolia(
 
 beforeEach(() => {
   mockedAlgoliasearch.mockReset();
+  mockedInstallPackages.mockReset();
+  mockedInstallPackages.mockReturnValue({ ok: true });
 });
 
 describe('init command', () => {
@@ -113,8 +122,8 @@ describe('init command', () => {
     ).toBe(false);
   });
 
-  test('unsupported framework: returns unsupported_framework without calling Algolia', async () => {
-    const projectDir = copyFixture('unsupported');
+  test('no package.json: returns unsupported_framework without calling Algolia', async () => {
+    const projectDir = path.join(FIXTURES, 'no-package-json');
 
     const report = await init({
       projectDir,
@@ -129,9 +138,6 @@ describe('init command', () => {
       code: 'unsupported_framework',
     });
     expect(mockedAlgoliasearch).not.toHaveBeenCalled();
-    expect(fs.existsSync(path.join(projectDir, 'instantsearch.json'))).toBe(
-      false
-    );
   });
 
   test('ambiguous Next.js layout: --framework nextjs override proceeds past ambiguity', async () => {
@@ -416,5 +422,131 @@ describe('init command — interactive prompts', () => {
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
     expect(manifest.framework).toBeNull();
+  });
+});
+
+describe('init command — auto-install', () => {
+  test('installs packages when no IS package found, then generates files', async () => {
+    const projectDir = copyFixture('react-no-is');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      flavor: 'react',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      componentsPath: 'src/components',
+    });
+
+    expect(mockedInstallPackages).toHaveBeenCalledWith(
+      projectDir,
+      ['react-instantsearch', 'algoliasearch'],
+      { stdio: 'pipe' }
+    );
+    expect(report).toMatchObject({ ok: true, command: 'init' });
+    expect(fs.existsSync(path.join(projectDir, 'instantsearch.json'))).toBe(
+      true
+    );
+  });
+
+  test('bails when package install fails', async () => {
+    const projectDir = copyFixture('react-no-is');
+    mockedInstallPackages.mockReturnValue({
+      ok: false,
+      code: 'install_failed',
+      message: 'Package install failed: network error',
+    });
+
+    const report = await init({
+      projectDir,
+      flavor: 'react',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      componentsPath: 'src/components',
+    });
+
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'install_failed',
+    });
+    expect(fs.existsSync(path.join(projectDir, 'instantsearch.json'))).toBe(
+      false
+    );
+  });
+
+  test('interactive: prompts to confirm install before proceeding', async () => {
+    const projectDir = copyFixture('react-no-is');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      prompter: createScriptedPrompter([
+        'react',          // flavor confirmation
+        true,             // confirm install
+        'src/components', // componentsPath
+      ]),
+    });
+
+    expect(mockedInstallPackages).toHaveBeenCalled();
+    expect(report).toMatchObject({ ok: true, command: 'init' });
+  });
+
+  test('interactive: user declines install → aborts', async () => {
+    const projectDir = copyFixture('react-no-is');
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      prompter: createScriptedPrompter([
+        'react', // flavor confirmation
+        false,   // decline install
+      ]),
+    });
+
+    expect(mockedInstallPackages).not.toHaveBeenCalled();
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'install_declined',
+    });
+  });
+
+  test('--yes mode skips install confirmation', async () => {
+    const projectDir = copyFixture('react-no-is');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      flavor: 'react',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      componentsPath: 'src/components',
+    });
+
+    expect(mockedInstallPackages).toHaveBeenCalled();
+    expect(report).toMatchObject({ ok: true, command: 'init' });
+  });
+
+  test('--yes without --flavor infers from deps and succeeds', async () => {
+    const projectDir = copyFixture('unsupported');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const report = await init({
+      projectDir,
+      appId: 'APP',
+      searchApiKey: 'KEY',
+    });
+
+    // unsupported fixture has no react/next, so infers js.
+    expect(mockedInstallPackages).toHaveBeenCalledWith(
+      projectDir,
+      ['instantsearch.js', 'algoliasearch'],
+      { stdio: 'pipe' }
+    );
+    expect(report).toMatchObject({ ok: true, command: 'init' });
   });
 });
