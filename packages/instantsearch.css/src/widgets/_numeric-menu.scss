@@ -63,7 +63,7 @@
 }
 
 @media (hover: hover) {
-  .ais-NumericMenu-label:hover {
+  .ais-NumericMenu-label:not(:has(:disabled)):hover {
     background-color: rgba(var(--ais-muted-color-rgb), 0.1);
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
 
@@ -72,7 +72,8 @@
     }
   }
 
-  .ais-NumericMenu-item--selected .ais-NumericMenu-label:hover {
+  .ais-NumericMenu-item--selected
+    .ais-NumericMenu-label:not(:has(:disabled)):hover {
     background-color: rgba(var(--ais-muted-color-rgb), 0.2);
   }
 }

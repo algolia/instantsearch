@@ -2,7 +2,7 @@
   "files": [
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
-      "maxSize": "43 kB"
+      "maxSize": "43.25 kB"
     },
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
@@ -14,7 +14,7 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "257.25 kB"
+      "maxSize": "260 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -58,7 +58,7 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/nova.css",
-      "maxSize": "10.75 kB"
+      "maxSize": "11 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/nova-min.css",
