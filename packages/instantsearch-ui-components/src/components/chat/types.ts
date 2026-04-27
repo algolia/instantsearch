@@ -353,6 +353,7 @@ export interface ChatTransport<TUIMessage extends UIMessage> {
 
   reconnectToStream: (options: {
     chatId: string;
+    abortSignal?: AbortSignal;
   }) => Promise<ReadableStream<unknown> | null>;
 }
 
@@ -465,11 +466,11 @@ export type ChatLayoutOwnProps<
   maximized: boolean;
   headerComponent: JSX.Element;
   messagesComponent: JSX.Element;
-  promptComponent: JSX.Element;
+  promptComponent: JSX.Element | null;
   toggleButtonComponent: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
   isClearing?: boolean;
-  clearMessages?: () => void;
+  onNewConversation?: () => void;
   onClearTransitionEnd?: () => void;
   suggestions?: string[];
   tools: ClientSideTools;

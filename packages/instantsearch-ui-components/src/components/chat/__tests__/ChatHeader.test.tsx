@@ -109,6 +109,53 @@ describe('ChatHeader', () => {
     `);
   });
 
+  test('renders new conversation control when onStartNewConversation is set', () => {
+    const onStart = jest.fn();
+    const { container } = render(
+      <ChatHeader onClose={jest.fn()} onStartNewConversation={onStart} />
+    );
+
+    const btn = container.querySelector('.ais-ChatHeader-newConversation');
+    expect(btn).not.toBeNull();
+    expect(btn?.getAttribute('aria-label')).toBe('Start a new conversation');
+  });
+
+  test('renders new conversation control when onNewConversation is set', () => {
+    const onNewConversation = jest.fn();
+    const { container } = render(
+      <ChatHeader
+        onClose={jest.fn()}
+        onNewConversation={onNewConversation}
+        canStartNewConversation
+        translations={{ newConversationLabel: 'Reset thread' }}
+      />
+    );
+
+    const btn = container.querySelector(
+      '.ais-ChatHeader-newConversation'
+    ) as HTMLButtonElement;
+    expect(btn).not.toBeNull();
+    expect(btn.getAttribute('aria-label')).toBe('Reset thread');
+    expect(btn.disabled).toBe(false);
+    userEvent.click(btn);
+    expect(onNewConversation).toHaveBeenCalledTimes(1);
+  });
+
+  test('disables new conversation when onNewConversation is set and canStartNewConversation is false', () => {
+    const { container } = render(
+      <ChatHeader
+        onClose={jest.fn()}
+        onNewConversation={jest.fn()}
+        canStartNewConversation={false}
+      />
+    );
+
+    const btn = container.querySelector(
+      '.ais-ChatHeader-newConversation'
+    ) as HTMLButtonElement;
+    expect(btn.disabled).toBe(true);
+  });
+
   test('calls onClose when close button is clicked', () => {
     const onClose = jest.fn();
     const { container } = render(<ChatHeader onClose={onClose} />);

@@ -1,6 +1,11 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
+import {
+  isRequestOriginNotAllowedError,
+  isStartNewConversationError,
+} from '../../lib/utils/chat';
+
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
@@ -146,6 +151,20 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       ...props
     } = userProps;
 
+    const startNewConversationError =
+      messagesProps.status === 'error' &&
+      isStartNewConversationError(error);
+
+    const requestOriginNotAllowedError =
+      messagesProps.status === 'error' &&
+      isRequestOriginNotAllowedError(error);
+
+    const promptBlockedByKnownChatError =
+      startNewConversationError || requestOriginNotAllowedError;
+
+    const headerStartNewConversation =
+      headerProps.onNewConversation ?? headerProps.onClear;
+
     const headerComponent = createElement(HeaderComponent || ChatHeader, {
       ...headerProps,
       classNames: classNames.header,
@@ -157,6 +176,14 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         {...messagesProps}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
+        error={error}
+        onStartNewConversation={
+          messagesProps.onStartNewConversation ??
+          ((startNewConversationError || requestOriginNotAllowedError) &&
+            headerStartNewConversation
+            ? headerStartNewConversation
+            : undefined)
+        }
         suggestionsElement={createElement(
           SuggestionsComponent || ChatPromptSuggestions,
           {
@@ -167,10 +194,16 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       />
     );
 
-    const promptComponent = createElement(PromptComponent || ChatPrompt, {
-      ...promptProps,
-      classNames: classNames.prompt,
-    });
+    const promptComponent = promptBlockedByKnownChatError
+      ? null
+      : createElement(PromptComponent || ChatPrompt, {
+          ...promptProps,
+          classNames: classNames.prompt,
+          disabled: promptProps.disabled,
+          autoFocus: promptProps.autoFocus,
+          placeholder: promptProps.placeholder,
+          translations: promptProps.translations,
+        });
 
     const toggleButtonComponent = createElement(
       ToggleButtonComponent || ChatToggleButton,
@@ -201,7 +234,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         status={messagesProps.status}
         tools={messagesProps.tools}
         isClearing={messagesProps.isClearing}
-        clearMessages={headerProps.onClear}
+        onNewConversation={headerStartNewConversation}
         onClearTransitionEnd={messagesProps.onClearTransitionEnd}
         suggestions={suggestionsProps.suggestions}
         sendMessage={sendMessage}

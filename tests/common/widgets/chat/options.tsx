@@ -350,7 +350,7 @@ export function createOptionsTests(
       );
     });
 
-    test('stops streaming and clears when clear is clicked during streaming', async () => {
+    test('stops streaming and clears when new conversation is clicked during streaming', async () => {
       const searchClient = createSearchClient();
       const chat = new Chat({});
 
@@ -379,35 +379,35 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const clearButton = document.querySelector(
-        '.ais-ChatHeader-clear'
+      const newConversationButton = document.querySelector(
+        '.ais-ChatHeader-newConversation'
       ) as HTMLButtonElement;
-      expect(clearButton).not.toBeDisabled();
+      expect(newConversationButton).not.toBeDisabled();
 
-      // Clear button remains enabled during submitted status
+      // New conversation remains enabled during submitted status
       await act(async () => {
         chat._state.status = 'submitted';
         await wait(0);
       });
 
-      expect(clearButton).not.toBeDisabled();
+      expect(newConversationButton).not.toBeDisabled();
 
-      // Clear button remains enabled during streaming status
+      // New conversation remains enabled during streaming status
       await act(async () => {
         chat._state.status = 'streaming';
         await wait(0);
       });
 
-      expect(clearButton).not.toBeDisabled();
+      expect(newConversationButton).not.toBeDisabled();
 
-      // Clicking clear during streaming stops the stream and begins clearing
+      // Clicking new conversation during streaming stops the stream and begins clearing
       await act(async () => {
-        clearButton.click();
+        newConversationButton.click();
         await wait(0);
       });
 
       expect(chat._state.status).toBe('ready');
-      expect(clearButton).toBeDisabled();
+      expect(newConversationButton).toBeDisabled();
     });
 
     describe('cssClasses', () => {

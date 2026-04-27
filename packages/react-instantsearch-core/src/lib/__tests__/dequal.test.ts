@@ -32,4 +32,13 @@ describe('dequal', () => {
       true
     );
   });
+
+  test('distinct Error instances are never equal (even with the same .message)', () => {
+    expect(dequal(new Error('x'), new Error('x'))).toEqual(false);
+  });
+
+  test('same Error reference is equal', () => {
+    const e = new Error('x');
+    expect(dequal(e, e)).toEqual(true);
+  });
 });

@@ -92,3 +92,57 @@ export function resolveValue<T>(
   }
   return Promise.resolve(value);
 }
+
+/**
+ * Produces a readable message string from a stream `error` chunk's `errorText`
+ * (may be JSON-encoded or nested, e.g. LangGraph payloads mid-response).
+ * Unwrapping order matches `flattenErrorMessageForMatching` in
+ * instantsearch-ui-components (`message` before `error`) so `Error.message`
+ * matches what the chat UI uses for short copy.
+ */
+export function normalizeStreamChunkErrorText(
+  raw: string | null | undefined
+): string {
+  if (raw == null || raw === '') {
+    return '';
+  }
+
+  let best = raw;
+  let remaining = raw.trim();
+
+  for (let i = 0; i < 8; i += 1) {
+    try {
+      const parsed: unknown = JSON.parse(remaining);
+      if (typeof parsed === 'string') {
+        best = parsed;
+        remaining = parsed.trim();
+        continue;
+      }
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        'message' in parsed &&
+        typeof (parsed as { message: unknown }).message === 'string'
+      ) {
+        best = (parsed as { message: string }).message;
+        remaining = best.trim();
+        continue;
+      }
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        'error' in parsed &&
+        typeof (parsed as { error: unknown }).error === 'string'
+      ) {
+        best = (parsed as { error: string }).error;
+        remaining = best.trim();
+        continue;
+      }
+      break;
+    } catch {
+      break;
+    }
+  }
+
+  return best;
+}

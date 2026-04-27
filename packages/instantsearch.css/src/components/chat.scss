@@ -10,6 +10,7 @@
 @use 'chat/chat-header';
 @use 'chat/chat-messages';
 @use 'chat/chat-message';
+@use 'chat/chat-message-error';
 @use 'chat/chat-message-loader';
 @use 'chat/chat-greeting';
 @use 'chat/chat-prompt';

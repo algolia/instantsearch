@@ -1,4 +1,8 @@
-import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  createChatComponent,
+  isRequestOriginNotAllowedError,
+  isStartNewConversationError,
+} from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
@@ -236,6 +240,7 @@ function ChatInner<
   });
 
   const {
+    id: chatInstanceId,
     messages,
     sendMessage,
     status,
@@ -254,6 +259,8 @@ function ChatInner<
     sendChatMessageFeedback: onFeedback,
     feedbackState,
   } = chatState;
+
+  const displayError = status === 'error' ? error : undefined;
 
   useImperativeHandle(ref, () => ({
     setOpen,
@@ -274,9 +281,17 @@ function ChatInner<
     wasOpenRef.current = open;
   }, [open]);
 
-  if (__DEV__ && error) {
-    throw error;
+  if (
+    __DEV__ &&
+    displayError &&
+    !isStartNewConversationError(displayError) &&
+    !isRequestOriginNotAllowedError(displayError)
+  ) {
+    throw displayError;
   }
+
+  const defaultCanStartNewConversation =
+    (Boolean(messages?.length) || status === 'error') && !isClearing;
 
   return (
     <ChatUiComponent
@@ -286,7 +301,7 @@ function ChatInner<
       sendMessage={sendMessage as ChatUiProps['sendMessage']}
       regenerate={regenerate}
       stop={stop}
-      error={error}
+      error={displayError}
       layoutComponent={layoutComponent}
       headerComponent={headerComponent}
       promptComponent={promptComponent}
@@ -302,14 +317,15 @@ function ChatInner<
         onClose: () => setOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear: clearMessages,
-        canClear: Boolean(messages?.length) && !isClearing,
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
         minimizeIconComponent: headerMinimizeIconComponent,
         maximizeIconComponent: headerMaximizeIconComponent,
         translations: headerTranslations,
         ...headerProps,
+        onNewConversation: headerProps?.onNewConversation ?? clearMessages,
+        canStartNewConversation:
+          headerProps?.canStartNewConversation ?? defaultCanStartNewConversation,
       }}
       messagesProps={{
         status,
@@ -346,6 +362,7 @@ function ChatInner<
         translations: messagesTranslations,
         messageTranslations,
         ...messagesProps,
+        conversationId: chatInstanceId,
       }}
       promptProps={{
         promptRef,

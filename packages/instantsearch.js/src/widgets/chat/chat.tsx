@@ -296,6 +296,7 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
+  chatInstanceId: ChatRenderState['id'];
   isClearing: boolean;
   clearMessages: () => void;
   onClearTransitionEnd: () => void;
@@ -370,6 +371,7 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
+  chatInstanceId,
   isClearing,
   clearMessages,
   onClearTransitionEnd,
@@ -383,6 +385,7 @@ function ChatWrapper({
   suggestionsProps,
   state,
 }: ChatWrapperProps) {
+  const displayError = chatStatus === 'error' ? error : undefined;
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
       initial: 'smooth',
@@ -402,7 +405,7 @@ function ChatWrapper({
       sendMessage={sendMessage}
       regenerate={regenerate}
       stop={stop}
-      error={error}
+      error={displayError}
       toggleButtonComponent={toggleButtonProps.layoutComponent}
       toggleButtonProps={{
         open: chatOpen,
@@ -416,8 +419,10 @@ function ChatWrapper({
         onClose: () => setChatOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        onNewConversation: clearMessages,
+        canStartNewConversation:
+          (Boolean(chatMessages?.length) || chatStatus === 'error') &&
+          !isClearing,
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -450,6 +455,7 @@ function ChatWrapper({
         messageTranslations: messagesProps.messageTranslations,
         sendMessage: messagesProps.sendMessage,
         setInput: messagesProps.setInput,
+        conversationId: chatInstanceId,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -725,6 +731,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       suggestions,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
+      id: chatInstanceId,
     } = props;
 
     if (__DEV__ && error) {
@@ -781,7 +788,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         minimizeLabel: templates.header?.minimizeLabelText,
         maximizeLabel: templates.header?.maximizeLabelText,
         closeLabel: templates.header?.closeLabelText,
-        clearLabel: templates.header?.clearLabelText,
+        newConversationLabel: templates.header?.newConversationLabelText,
       });
 
     messagesTemplateRef.current = prepareTemplateProps({
@@ -804,6 +811,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         loaderText: templates.messages?.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
+        conversationLimitErrorMessage:
+          templates.messages?.conversationLimitErrorMessageText,
+        genericChatErrorMessage: templates.messages?.genericChatErrorMessageText,
       });
 
     assistantMessageTemplateRef.current = prepareTemplateProps({
@@ -879,6 +889,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
+          chatInstanceId={chatInstanceId}
           isClearing={isClearing}
           clearMessages={clearMessages}
           onClearTransitionEnd={onClearTransitionEnd}
@@ -1037,9 +1048,9 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        */
       closeLabelText: string;
       /**
-       * Text for the clear button
+       * Accessible label for the new-conversation control
        */
-      clearLabelText: string;
+      newConversationLabelText: string;
     }>;
 
     /**
@@ -1070,6 +1081,16 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+      /**
+       * Overrides the default message for “start a new conversation” errors
+       * (otherwise the API error text is shown). When omitted, built-in mappings apply.
+       */
+      conversationLimitErrorMessageText?: string;
+      /**
+       * Overrides short copy for other chat errors (e.g. output limit). When
+       * omitted, built-in mappings from instantsearch-ui-components apply.
+       */
+      genericChatErrorMessageText?: string;
     }>;
 
     /**

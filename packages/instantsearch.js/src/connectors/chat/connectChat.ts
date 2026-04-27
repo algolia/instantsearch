@@ -110,6 +110,7 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   | 'id'
   | 'messages'
   | 'regenerate'
+  | 'regenerateChatId'
   | 'resumeStream'
   | 'sendMessage'
   | 'status'
@@ -338,19 +339,40 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
+      const noMessages =
+        !_chatInstance.messages || _chatInstance.messages.length === 0;
+      const status = _chatInstance.status;
+
+      // Empty thread but still in error / in-flight: we must reset chat state.
+      // Otherwise `clearMessages` returned early and never called `clearError()`,
+      // so the error banner and connector `error` stayed stuck (e.g. after a
+      // failure before any message was stored, or empty session + error).
+      if (noMessages) {
+        if (status === 'ready' && !_chatInstance.error) {
+          return;
+        }
+        if (status === 'submitted' || status === 'streaming') {
+          _chatInstance.stop();
+        }
+        if (status === 'error' || _chatInstance.error !== undefined) {
+          _chatInstance.clearError();
+        }
         return;
       }
-      const status = _chatInstance.status;
+
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
       }
+      // Clear error immediately so UI/connectors never keep a stale Error until
+      // the opacity transition ends (onClearTransitionEnd may not fire in some cases).
+      _chatInstance.clearError();
       setIsClearing(true);
     };
 
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      _chatInstance.regenerateChatId();
       feedbackState = {};
       setIsClearing(false);
     };
@@ -715,6 +737,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           id: _chatInstance.id,
           messages: _chatInstance.messages,
           regenerate: _chatInstance.regenerate,
+          regenerateChatId: _chatInstance.regenerateChatId,
           resumeStream: _chatInstance.resumeStream,
           sendMessage: sendMessageWithContext,
           status: _chatInstance.status,

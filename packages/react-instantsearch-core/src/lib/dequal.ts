@@ -27,6 +27,20 @@ export function dequal(
   let len;
   if (foo === bar) return true;
 
+  // `Error` instances often have no enumerable own properties, so the object
+  // branch below can incorrectly treat two different failures as equal. That
+  // skipped React updates in useConnector when a new Error had the same
+  // `.message` as the previous one (stale chat error UI).
+  if (
+    foo &&
+    bar &&
+    foo instanceof Error &&
+    bar instanceof Error &&
+    foo !== bar
+  ) {
+    return false;
+  }
+
   if (foo && bar && (ctor = foo.constructor) === bar.constructor) {
     if (ctor === Date) return foo.getTime() === bar.getTime();
     if (ctor === RegExp) return foo.toString() === bar.toString();

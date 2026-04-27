@@ -1,0 +1,34 @@
+.ais-ChatMessageError--conversationLimit .ais-ChatMessage-content {
+  padding: calc(var(--ais-spacing) * 1);
+  border-radius: var(--ais-border-radius-md);
+  border: 1px solid
+    color-mix(in srgb, rgb(202 138 4) 55%, rgba(var(--ais-border-color-rgb), 0.35));
+  background: color-mix(
+    in srgb,
+    rgb(146 64 14) 12%,
+    rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha))
+  );
+  box-shadow: inset 0 1px 0 0 rgba(253, 230, 138, 0.12);
+}
+
+.ais-ChatMessageError--conversationLimit .ais-ChatMessageError-primary {
+  margin: 0;
+  font-size: calc(var(--ais-spacing) * 0.875);
+  line-height: calc(var(--ais-spacing) * 1.35);
+  font-weight: var(--ais-font-weight-semibold);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  text-wrap: pretty;
+}
+
+.ais-ChatMessageError--conversationLimit .ais-ChatMessageError-hint {
+  margin: calc(var(--ais-spacing) * 0.75) 0 0;
+}
+
+.ais-ChatMessageError--conversationLimit .ais-ChatMessageError-link {
+  text-align: left;
+  text-decoration: underline;
+  font-size: calc(var(--ais-spacing) * 0.875);
+  line-height: calc(var(--ais-spacing) * 1.25);
+  font-weight: var(--ais-font-weight-normal);
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+}

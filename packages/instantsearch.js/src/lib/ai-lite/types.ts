@@ -339,6 +339,7 @@ export interface ChatTransport<UI_MESSAGE extends UIMessage> {
   reconnectToStream: (
     options: {
       chatId: string;
+      abortSignal?: AbortSignal;
     } & ChatRequestOptions
   ) => Promise<ReadableStream<UIMessageChunk> | null>;
 }
