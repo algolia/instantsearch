@@ -98,14 +98,14 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
                   onClick={() => {
                     sendEvent?.(
                       'click:internal',
-                      item as Record<string, unknown>,
+                      item,
                       'Hit Clicked'
                     );
                   }}
                   onAuxClick={() => {
                     sendEvent?.(
                       'click:internal',
-                      item as Record<string, unknown>,
+                      item,
                       'Hit Clicked'
                     );
                   }}
