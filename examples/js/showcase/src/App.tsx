@@ -37,16 +37,16 @@ const experiences: Experience[] = [
     view: InstantSearchView,
   },
   {
-    title: "GeoSearch",
-    description: "Search through locations",
-    icon: MapPin,
-    view: GeoSearchView,
-  },
-  {
     title: "Agentic",
     description: "AI-powered search and chat",
     icon: Sparkles,
     view: AgenticView,
+  },
+  {
+    title: "GeoSearch",
+    description: "Search through locations",
+    icon: MapPin,
+    view: GeoSearchView,
   },
 ];
 
