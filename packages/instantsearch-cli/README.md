@@ -24,6 +24,17 @@ yarn workspace @algolia/instantsearch-cli start add experience product-search \
   --hits-title name --hits-image image_url \
   --refinement-list-attribute brand \
   --sort-by-replicas products_price_asc,products_price_desc
+
+# Only generate specific widgets (skip SortBy and ClearRefinements)
+yarn workspace @algolia/instantsearch-cli start add experience product-search \
+  --yes --json \
+  --template search --index products \
+  --hits-title name \
+  --widgets SearchBox,Hits,RefinementList,Pagination
+
+# Discover index schema before scaffolding
+yarn workspace @algolia/instantsearch-cli start introspect \
+  --yes --json --index products
 ```
 
 ## Supported flavors and frameworks
@@ -77,10 +88,11 @@ Add a new search experience from a template. Creates an experience folder with a
 | `--hits-description <attr>` | Record attribute for Hits description |
 | `--refinement-list-attribute <attr>` | Facet attribute for RefinementList |
 | `--sort-by-replicas <list>` | Comma-separated replica index names for SortBy |
+| `--widgets <list>` | Comma-separated widget list (overrides template defaults) |
 
 In `--yes` mode, `--index` is required. Schema flags (`--hits-title`, etc.) are optional — when omitted, the CLI introspects the index and picks sensible defaults interactively.
 
-The `search` template generates all six widgets: SearchBox, Hits, RefinementList, SortBy, Pagination, ClearRefinements.
+The `search` template generates all six widgets by default: SearchBox, Hits, RefinementList, SortBy, Pagination, ClearRefinements. Use `--widgets` to override the list, e.g., `--widgets SearchBox,Hits,Pagination` to skip RefinementList, SortBy, and ClearRefinements.
 
 ### `instantsearch add widget <widget>`
 
@@ -101,6 +113,38 @@ Add a single widget to an existing experience.
 Adding the same widget twice auto-suffixes files by attribute (e.g., `RefinementListBrand.tsx`, `RefinementListCategory.tsx`).
 
 If the experience doesn't exist yet, the CLI creates it inline — prompting for index and schema interactively, or requiring `--index` in `--yes` mode.
+
+### `instantsearch introspect`
+
+Discover attributes, facets, and replicas of an Algolia index. Useful for understanding an index's schema before scaffolding an experience, or for agents that need to plan which flags to pass.
+
+| Flag | Description |
+| --- | --- |
+| `--json` | Emit a single JSON object on stdout (implies `--yes`) |
+| `--yes` | Accept defaults without prompting |
+| `--index <index>` | Algolia index name (required) |
+| `--app-id <appId>` | Algolia application ID (overrides `instantsearch.json`) |
+| `--search-key <searchKey>` | Algolia search-only API key (overrides `instantsearch.json`) |
+
+Credentials are read from `instantsearch.json` by default. Pass `--app-id` and `--search-key` to override, or when the project hasn't been initialized yet.
+
+Returns partial results with warnings when some introspections fail (e.g., facets or replicas inaccessible but records are readable).
+
+**Example JSON output:**
+
+```json
+{
+  "apiVersion": 1,
+  "ok": true,
+  "command": "introspect",
+  "indexName": "products",
+  "attributes": ["name", "brand", "price", "image_url", "description"],
+  "imageCandidates": ["image_url"],
+  "facets": ["brand", "category"],
+  "replicas": ["products_price_asc", "products_price_desc"],
+  "warnings": []
+}
+```
 
 ## Widgets
 
@@ -127,7 +171,7 @@ Every command emits a JSON report on stdout when `--json` is set. Stderr stays s
   "ok": true,
   "command": "add experience",
   "filesCreated": ["src/components/product-search/provider.tsx", "..."],
-  "manifestUpdated": true,
+  "manifestUpdated": "instantsearch.json",
   "nextSteps": {
     "imports": [
       "import { ProductSearchProvider } from '@/components/product-search/provider'"
@@ -169,6 +213,9 @@ Exit code is `0` on success, non-zero on failure.
 | `file_conflict` | Generated file already exists on disk |
 | `missing_required_flag` | A required flag was omitted in `--yes` mode |
 | `index_required` | `--index` required when auto-creating an experience in `--yes` mode |
+| `missing_schema` | Schema inputs missing for required widgets in `--yes` mode |
+| `unknown_template` | Template name not recognized |
+| `unknown_widget` | Widget name not in supported list |
 | `unknown_command` | Command not recognized |
 | `unknown_option` | Flag not recognized |
 
