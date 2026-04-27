@@ -236,7 +236,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           (message.metadata as { displayResultsEnabled?: boolean } | undefined)
             ?.displayResultsEnabled === true;
 
-        if (displayResultsEnabled && toolName === SearchIndexToolType) {
+        if (
+          displayResultsEnabled &&
+          tool &&
+          tool === tools[SearchIndexToolType]
+        ) {
           return null;
         }
 
