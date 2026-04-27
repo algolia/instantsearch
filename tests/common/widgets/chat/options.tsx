@@ -1630,6 +1630,64 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
+        test('skips the search index tool when the display results tool needs to rendered', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { displayResultsEnabled: true },
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${DisplayResultsToolType}`,
+                    toolCallId: '2',
+                    input: {},
+                    state: 'output-available',
+                    output: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )
+          ).not.toBeInTheDocument();
+        });
+
         test('allows overriding the display results tool via the tools option', async () => {
           const searchClient = createSearchClient();
 
