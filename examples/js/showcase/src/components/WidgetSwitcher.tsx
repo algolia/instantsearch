@@ -1,10 +1,10 @@
-import { ExternalLink } from "lucide-preact";
-import { Fragment } from "preact";
-import { useState } from "preact/hooks";
+import { ExternalLink } from 'lucide-preact';
+import { Fragment } from 'preact';
+import { useState } from 'preact/hooks';
 
-import { useFlavor, type Flavor } from "../context/flavor";
+import { useFlavor, type Flavor } from '../context/flavor';
 
-import type { ComponentType } from "preact";
+import type { ComponentType } from 'preact';
 
 export interface Widget {
   title: string;
@@ -18,10 +18,10 @@ interface Props {
   class?: string;
 }
 
-const BASE_URL = "https://www.algolia.com/doc/api-reference/widgets";
+const BASE_URL = 'https://www.algolia.com/doc/api-reference/widgets';
 
 function docsUrl(name: string, flavor: Flavor): string {
-  const kebab = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+  const kebab = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
   return `${BASE_URL}/${kebab}/${flavor}/`;
 }
 
@@ -39,7 +39,11 @@ function DocsLink({ name, flavor }: { name: string; flavor: Flavor }) {
   );
 }
 
-export function WidgetSwitcher({ widgets, destroy = false, class: className }: Props) {
+export function WidgetSwitcher({
+  widgets,
+  destroy = false,
+  class: className,
+}: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const hasMultiple = widgets.length > 1;
@@ -47,7 +51,9 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
 
   return (
     <div
-      class={`rounded-lg border border-dashed border-neutral-300 p-4 text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-900 ${className ?? ""}`}
+      class={`rounded-lg border border-dashed border-neutral-300 p-4 text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-900 ${
+        className ?? ''
+      }`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -55,13 +61,21 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
         <span class="flex flex-wrap items-center">
           {widgets.map((widget, index) => (
             <Fragment key={index}>
-              {index > 0 && <span class="text-neutral-300 dark:text-neutral-600">•</span>}
+              {index > 0 && (
+                <span class="text-neutral-300 dark:text-neutral-600">•</span>
+              )}
               <button
                 type="button"
-                class={`mx-1 font-mono leading-relaxed transition-colors ${hasMultiple ? "cursor-pointer" : "cursor-default"} ${
+                class={`mx-1 font-mono leading-relaxed transition-colors ${
+                  hasMultiple ? 'cursor-pointer' : 'cursor-default'
+                } ${
                   index === currentIndex && hasMultiple
-                    ? "font-semibold text-blue-600 dark:text-blue-400"
-                    : `text-neutral-400 dark:text-neutral-500${hasMultiple ? " hover:text-neutral-600 dark:hover:text-neutral-300" : ""}`
+                    ? 'font-semibold text-blue-600 dark:text-blue-400'
+                    : `text-neutral-400 dark:text-neutral-500${
+                        hasMultiple
+                          ? ' hover:text-neutral-600 dark:hover:text-neutral-300'
+                          : ''
+                      }`
                 }`}
                 onClick={() => setCurrentIndex(index)}
               >
@@ -71,12 +85,16 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
           ))}
         </span>
         <span
-          class={`ml-auto flex gap-1 transition-opacity ${hovered ? "opacity-100" : "opacity-0"}`}
+          class={`ml-auto flex gap-1 transition-opacity ${
+            hovered ? 'opacity-100' : 'opacity-0'
+          }`}
           inert={!hovered}
         >
-          {(widgets[currentIndex].docs ?? [widgets[currentIndex].title]).map((d) => (
-            <DocsLink key={d} name={d} flavor={flavor} />
-          ))}
+          {(widgets[currentIndex].docs ?? [widgets[currentIndex].title]).map(
+            (d) => (
+              <DocsLink key={d} name={d} flavor={flavor} />
+            )
+          )}
         </span>
       </header>
 
@@ -84,7 +102,7 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
         <CurrentBody key={currentIndex} Body={widgets[currentIndex].body} />
       ) : (
         widgets.map((widget, index) => (
-          <div key={index} class={index !== currentIndex ? "hidden" : ""}>
+          <div key={index} class={index !== currentIndex ? 'hidden' : ''}>
             <widget.body />
           </div>
         ))

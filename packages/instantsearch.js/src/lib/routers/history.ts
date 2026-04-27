@@ -345,12 +345,13 @@ export default function historyRouter<TRouteState = UiState>({
     return safelyRunOnBrowser<Location>(
       ({ window: browserWindow }) => browserWindow.location,
       {
-      fallback: () => {
-        throw new Error(
-          'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
-        );
-      },
-    });
+        fallback: () => {
+          throw new Error(
+            'You need to provide `getLocation` to the `history` router in environments where `window` does not exist.'
+          );
+        },
+      }
+    );
   },
   start,
   dispose,

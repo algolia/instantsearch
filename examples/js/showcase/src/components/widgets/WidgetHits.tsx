@@ -1,6 +1,6 @@
-import { hits } from "instantsearch.js/es/widgets";
+import { hits } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetHits() {
   const ref = useWidget((el) =>
@@ -10,7 +10,9 @@ export function WidgetHits() {
         item(hit, { html, components }) {
           return html`
             <div class="flex h-full flex-col">
-              <div class="flex aspect-square items-center justify-center bg-white p-4">
+              <div
+                class="flex aspect-square items-center justify-center bg-white p-4"
+              >
                 <img
                   class="max-h-full max-w-full object-contain"
                   src="${hit.image}"
@@ -18,11 +20,17 @@ export function WidgetHits() {
                 />
               </div>
               <div class="flex flex-1 flex-col gap-1 p-4">
-                <p class="text-xs text-neutral-400 dark:text-neutral-500">${hit.categories?.[0]}</p>
-                <h5 class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                  ${hit.categories?.[0]}
+                </p>
+                <h5
+                  class="text-sm font-semibold text-neutral-900 dark:text-neutral-100"
+                >
                   <${components.Highlight} hit=${hit} attribute="name" />
                 </h5>
-                <p class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+                <p
+                  class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400"
+                >
                   <${components.Snippet} hit=${hit} attribute="description" />
                 </p>
                 <p
@@ -35,7 +43,7 @@ export function WidgetHits() {
           `;
         },
       },
-    }),
+    })
   );
   return <div ref={ref} />;
 }

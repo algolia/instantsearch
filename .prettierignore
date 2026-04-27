@@ -1,2 +1,68 @@
-packages/*/CHANGELOG.md
+# Vendors
+node_modules
+**/node_modules/**
+.yarn
+**/.yarn/**
+yarn.lock
+
+# Artifacts
+dist
+build
+website
+**/cjs
+**/es
+**/dist
+**/vue2
+**/vue3
+coverage
+**/CHANGELOG.md
+
+# Caches
+.cache
+.parcel-cache
+.expo
+.next
+**/.nuxt
+**/.nuxt/**
+
+# Non-formattable source files
+## Symlinked packages in examples (already formatted from their real location)
+examples/js/e-commerce-umd/public/packages
+## Polyfills for examples, retrieved from polyfill.io
 examples/**/polyfills.js
+## React-Native TypeScript wasn't supporting the mix of react 18 and 17
+examples/react/react-native
+## Next.js examples have their own tsconfig and are type-checked during their build
+examples/react/next
+examples/react/next-routing
+examples/react/next-app-router
+## Excluded from global typescript config
+**/next-env.d.ts
+specs/src/env.d.ts
+## templates that don't get installed
+packages/create-instantsearch-app/src/templates
+packages/create-instantsearch-app/src/templates/**
+## test fixtures for codemods
+packages/instantsearch-codemods/__testfixtures__
+packages/instantsearch-codemods/__testfixtures__/**
+## legacy ESLint configs kept for reference/migration only
+**/.eslintrc
+**/.eslintrc.js
+**/.eslintrc.cjs
+**/eslint.config.js
+
+# Playwright artifacts and test files (Playwright has its own tsconfig)
+**/playwright-report/**
+**/test-results/**
+tests/e2e/playwright/**
+
+## Rollup configs use import attributes syntax not yet supported by the parser
+**/rollup.config.mjs
+
+## Handlebars partials aren't supported by Prettier
+packages/algoliasearch-helper/documentation-src/partials/**/*.hbs
+
+## Generated CSS output from instantsearch.css SCSS build
+packages/instantsearch.css/components/**
+packages/instantsearch.css/themes/**
+specs/public/themes/**

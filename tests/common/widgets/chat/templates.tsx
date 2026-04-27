@@ -278,8 +278,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
@@ -321,8 +320,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {
@@ -357,8 +355,7 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty:
-                  '<div class="custom-empty">Custom empty</div>',
+                empty: '<div class="custom-empty">Custom empty</div>',
               },
             },
             react: {

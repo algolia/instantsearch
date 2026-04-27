@@ -107,9 +107,7 @@ export default (function connectTrendingFacets<
     } = widgetParams || {};
 
     if (!facetName) {
-      throw new Error(
-        withUsage('The `facetName` option is required.')
-      );
+      throw new Error(withUsage('The `facetName` option is required.'));
     }
 
     return {

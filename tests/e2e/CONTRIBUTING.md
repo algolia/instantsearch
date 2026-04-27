@@ -29,9 +29,7 @@ E2E_BROWSER="internet explorer" yarn test:e2e:saucelabs
 # Possible values: chrome, firefox, internet explorer
 ```
 
-> [!NOTE]
-> To run tests locally with Sauce Labs, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
-> Additionally, the latest version of the Sauce Connect v4 tunnel (4.9.2) [doesn't support macOS](https://docs.saucelabs.com/secure-connections/sauce-connect/installation/#downloading-sauce-connect-proxy). You can pin it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
+> [!NOTE] To run tests locally with Sauce Labs, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`. Additionally, the latest version of the Sauce Connect v4 tunnel (4.9.2) [doesn't support macOS](https://docs.saucelabs.com/secure-connections/sauce-connect/installation/#downloading-sauce-connect-proxy). You can pin it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
 
 You can also run the tests with [WebdriverIO](https://webdriver.io) options. For example, to run a specific test in watch mode:
 

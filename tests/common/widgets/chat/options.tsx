@@ -169,7 +169,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -214,7 +217,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextFn,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextFn },
           vue: {},
         },
@@ -265,7 +271,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -1554,7 +1563,7 @@ export function createOptionsTests(
                     <button
                       class="custom-send"
                       onclick="${() =>
-                      props.sendMessage({ text: 'hello from layout' })}"
+                        props.sendMessage({ text: 'hello from layout' })}"
                     >
                       Send
                     </button>
@@ -1630,18 +1639,18 @@ export function createOptionsTests(
 
         await openChat(act);
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('ready');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'ready'
+        );
 
         await act(async () => {
           chat._state.status = 'submitted';
           await wait(0);
         });
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('submitted');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'submitted'
+        );
       });
 
       test('renders with inline layout component', async () => {

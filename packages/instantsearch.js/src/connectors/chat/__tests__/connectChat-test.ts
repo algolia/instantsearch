@@ -543,7 +543,11 @@ data: [DONE]`,
       return {
         sendMessages: jest.fn(() =>
           Promise.resolve(
-            new ReadableStream({ start(ctrl) { ctrl.close(); } })
+            new ReadableStream({
+              start(ctrl) {
+                ctrl.close();
+              },
+            })
           )
         ),
         reconnectToStream: jest.fn(() => Promise.resolve(null)),

@@ -156,6 +156,36 @@ const plugin = {
         };
       },
     },
+    'prefer-prettier-ignore-comment': {
+      meta: {
+        docs: {
+          description:
+            'Disallow disabling the `prettier/prettier` rule via `eslint-disable`; use the native `// prettier-ignore` directive instead.',
+        },
+        messages: {
+          forbidden:
+            "`eslint-disable prettier/prettier` only silences the editor rule; CI's standalone `prettier --check` does not honor it. Use `// prettier-ignore` on the line above instead.",
+        },
+        schema: [],
+        type: 'problem',
+      },
+      create(context) {
+        const pattern = /eslint-disable[^\n]*\bprettier\/prettier\b/;
+
+        return {
+          Program() {
+            for (const comment of context.sourceCode.getAllComments()) {
+              if (pattern.test(comment.value)) {
+                context.report({
+                  messageId: 'forbidden',
+                  node: comment,
+                });
+              }
+            }
+          },
+        };
+      },
+    },
     'no-default-props-assignment': {
       meta: {
         docs: {

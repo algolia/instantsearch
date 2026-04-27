@@ -11,14 +11,14 @@
   <body>
     <script>
       (function () {
-        var m = localStorage.getItem("color-mode") || "system";
+        var m = localStorage.getItem('color-mode') || 'system';
         var t =
-          m === "system"
-            ? window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light"
+          m === 'system'
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
             : m;
-        document.documentElement.setAttribute("data-theme", t);
+        document.documentElement.setAttribute('data-theme', t);
       })();
     </script>
     <div id="app"></div>

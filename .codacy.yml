@@ -5,4 +5,4 @@
 engines:
   semgrep:
     exclude_paths:
-      - "**/rollup.config.mjs"
+      - '**/rollup.config.mjs'

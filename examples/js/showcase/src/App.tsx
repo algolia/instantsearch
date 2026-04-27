@@ -1,22 +1,22 @@
-import { Search, MapPin } from "lucide-preact";
-import { useState } from "preact/hooks";
+import { Search, MapPin } from 'lucide-preact';
+import { useState } from 'preact/hooks';
 
-import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
-import { FlavorContext, type Flavor } from "./context/flavor";
-import { GeoSearchView } from "./views/GeoSearchView";
-import { InstantSearchView } from "./views/InstantSearchView";
+import { ColorModeSwitcher } from './components/ColorModeSwitcher';
+import { FlavorContext, type Flavor } from './context/flavor';
+import { GeoSearchView } from './views/GeoSearchView';
+import { InstantSearchView } from './views/InstantSearchView';
 
-import type { LucideIcon } from "lucide-preact";
-import type { ComponentType } from "preact";
+import type { LucideIcon } from 'lucide-preact';
+import type { ComponentType } from 'preact';
 
-const VALID_FLAVORS: Flavor[] = ["js", "react", "vue"];
+const VALID_FLAVORS: Flavor[] = ['js', 'react', 'vue'];
 
 function getFlavorFromURL(): Flavor {
-  const param = new URLSearchParams(window.location.search).get("flavor");
+  const param = new URLSearchParams(window.location.search).get('flavor');
   if (param && VALID_FLAVORS.includes(param as Flavor)) {
     return param as Flavor;
   }
-  return "js";
+  return 'js';
 }
 
 interface Experience {
@@ -28,14 +28,14 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
-    title: "InstantSearch",
-    description: "Full search interface",
+    title: 'InstantSearch',
+    description: 'Full search interface',
     icon: Search,
     view: InstantSearchView,
   },
   {
-    title: "GeoSearch",
-    description: "Search through locations",
+    title: 'GeoSearch',
+    description: 'Search through locations',
     icon: MapPin,
     view: GeoSearchView,
   },
@@ -56,8 +56,8 @@ export function App() {
                 type="button"
                 class={`group flex cursor-pointer flex-col items-center gap-1.5 rounded-xl border px-5 py-4 text-center transition-all ${
                   currentIndex === index
-                    ? "border-neutral-200 bg-white shadow-xs dark:border-neutral-700 dark:bg-neutral-800"
-                    : "border-transparent bg-neutral-50 hover:border-neutral-200 hover:bg-white hover:shadow-xs dark:bg-neutral-800/40 dark:hover:border-neutral-700 dark:hover:bg-neutral-800"
+                    ? 'border-neutral-200 bg-white shadow-xs dark:border-neutral-700 dark:bg-neutral-800'
+                    : 'border-transparent bg-neutral-50 hover:border-neutral-200 hover:bg-white hover:shadow-xs dark:bg-neutral-800/40 dark:hover:border-neutral-700 dark:hover:bg-neutral-800'
                 }`}
                 onClick={() => setCurrentIndex(index)}
               >
@@ -65,16 +65,16 @@ export function App() {
                   size={20}
                   class={`transition-[color] ${
                     currentIndex === index
-                      ? "text-blue-500 dark:text-blue-400"
-                      : "text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400"
+                      ? 'text-blue-500 dark:text-blue-400'
+                      : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400'
                   }`}
                 />
                 <div class="flex flex-col gap-0.5">
                   <span
                     class={`text-sm font-semibold transition-colors ${
                       currentIndex === index
-                        ? "text-neutral-900 dark:text-neutral-100"
-                        : "text-neutral-500 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200"
+                        ? 'text-neutral-900 dark:text-neutral-100'
+                        : 'text-neutral-500 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200'
                     }`}
                   >
                     {experience.title}
@@ -82,8 +82,8 @@ export function App() {
                   <span
                     class={`text-xs transition-colors ${
                       currentIndex === index
-                        ? "text-neutral-500 dark:text-neutral-400"
-                        : "text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400"
+                        ? 'text-neutral-500 dark:text-neutral-400'
+                        : 'text-neutral-400 group-hover:text-neutral-500 dark:text-neutral-500 dark:group-hover:text-neutral-400'
                     }`}
                   >
                     {experience.description}
@@ -96,7 +96,7 @@ export function App() {
         </div>
 
         {experiences.map((experience, index) => (
-          <div key={index} class={currentIndex !== index ? "hidden" : ""}>
+          <div key={index} class={currentIndex !== index ? 'hidden' : ''}>
             <experience.view />
           </div>
         ))}
