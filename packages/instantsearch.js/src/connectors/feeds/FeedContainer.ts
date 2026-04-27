@@ -117,7 +117,7 @@ export function createFeedContainer(
           { uiState: {} }
         );
         if (withChildParams !== parentHelper.state) {
-          parentHelper.state = withChildParams;
+          parentHelper.setState(withChildParams);
         }
       }
 
