@@ -9,6 +9,7 @@ import { addWidget } from './add-widget';
 import type { ExperienceSchema } from '../manifest';
 import { createInquirerPrompter, type Prompter } from '../prompter';
 import { failure, type Report } from '../reporter';
+import { formatHuman } from '../reporter/format-human';
 import type { Flavor, Framework } from '../types';
 import { parseCommaSeparated } from '../utils/parsing';
 
@@ -27,10 +28,10 @@ function getPrompter(): Prompter | undefined {
 }
 
 function emitAndExit(report: Report): never {
-  const serialized = JSON_MODE
+  const output = JSON_MODE
     ? JSON.stringify(report)
-    : JSON.stringify(report, null, 2);
-  process.stdout.write(serialized + '\n');
+    : formatHuman(report);
+  process.stdout.write(output + '\n');
   process.exit(report.ok ? 0 : 1);
 }
 
