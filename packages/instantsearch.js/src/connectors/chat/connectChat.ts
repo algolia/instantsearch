@@ -185,6 +185,9 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * are not applied.
    *
    * When `resume` is enabled, these messages are not applied.
+   *
+   * `initialUserMessage` is sent after `initialMessages` are applied, so an
+   * assistant welcome followed by a user prompt works.
    */
   initialMessages?: TUiMessage[];
 };
@@ -578,7 +581,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         // Set initialMessages before registering callbacks to avoid
         // triggering re-renders during init
-        if (initialMessages && !resume && !hasExistingMessages) {
+        if (initialMessages?.length && !resume && !hasExistingMessages) {
           _chatInstance.messages = initialMessages;
         }
 
