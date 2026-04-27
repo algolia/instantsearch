@@ -1,8 +1,7 @@
-import { ExternalLink } from "lucide-preact";
 import { Fragment } from "preact";
 import { useState } from "preact/hooks";
 
-import { useFlavor, type Flavor } from "../context/flavor";
+import { DocsLinks } from "./DocsLink";
 
 import type { ComponentType } from "preact";
 
@@ -18,32 +17,10 @@ interface Props {
   class?: string;
 }
 
-const BASE_URL = "https://www.algolia.com/doc/api-reference/widgets";
-
-function docsUrl(name: string, flavor: Flavor): string {
-  const kebab = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-  return `${BASE_URL}/${kebab}/${flavor}/`;
-}
-
-function DocsLink({ name, flavor }: { name: string; flavor: Flavor }) {
-  return (
-    <a
-      href={docsUrl(name, flavor)}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center gap-1 rounded bg-neutral-400 px-2 py-0.5 text-[10px] font-semibold uppercase text-white no-underline transition-colors hover:bg-neutral-500 dark:bg-neutral-600"
-    >
-      Docs
-      <ExternalLink size={10} />
-    </a>
-  );
-}
-
 export function WidgetSwitcher({ widgets, destroy = false, class: className }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const hasMultiple = widgets.length > 1;
-  const flavor = useFlavor();
 
   return (
     <div
@@ -70,14 +47,10 @@ export function WidgetSwitcher({ widgets, destroy = false, class: className }: P
             </Fragment>
           ))}
         </span>
-        <span
-          class={`ml-auto flex gap-1 transition-opacity ${hovered ? "opacity-100" : "opacity-0"}`}
-          inert={!hovered}
-        >
-          {(widgets[currentIndex].docs ?? [widgets[currentIndex].title]).map((d) => (
-            <DocsLink key={d} name={d} flavor={flavor} />
-          ))}
-        </span>
+        <DocsLinks
+          names={widgets[currentIndex].docs ?? [widgets[currentIndex].title]}
+          visible={hovered}
+        />
       </header>
 
       {destroy ? (
