@@ -46,6 +46,7 @@ describe('routing', () => {
         <InstantSearchNext
           searchClient={client}
           routing={{
+            router: { writeDelay: 0 },
             stateMapping: {
               stateToRoute(uiState) {
                 const query = uiState[indexId]?.query;
@@ -68,10 +69,8 @@ describe('routing', () => {
       );
     });
 
-    // Wait longer than the default `writeDelay` (400ms) to let any debounced
-    // `pushState` from the router middleware run.
     await act(async () => {
-      await wait(500);
+      await wait(0);
     });
 
     expect(window.location.search).toBe('?q=iphone');
@@ -91,6 +90,7 @@ describe('routing', () => {
           searchClient={client}
           indexName={indexName}
           routing={{
+            router: { writeDelay: 0 },
             stateMapping: {
               stateToRoute(uiState) {
                 const query = uiState[indexName]?.query;
@@ -112,7 +112,7 @@ describe('routing', () => {
     });
 
     await act(async () => {
-      await wait(500);
+      await wait(0);
     });
 
     expect(window.location.search).toBe('?q=iphone');
@@ -126,18 +126,20 @@ describe('routing', () => {
 
     const client = createSearchClient();
 
+    const routing = { router: { writeDelay: 0 } };
+
     const { rerender } = render(
       <InstantSearchNext
         searchClient={client}
         indexName={indexName}
-        routing={true}
+        routing={routing}
       >
         <SearchBox />
       </InstantSearchNext>
     );
 
     await act(async () => {
-      await wait(500);
+      await wait(0);
     });
 
     expect(window.location.search).toBe('');
@@ -155,7 +157,7 @@ describe('routing', () => {
         <InstantSearchNext
           searchClient={client}
           indexName={indexName}
-          routing={true}
+          routing={routing}
         >
           <SearchBox />
         </InstantSearchNext>
@@ -163,7 +165,7 @@ describe('routing', () => {
     });
 
     await act(async () => {
-      await wait(500);
+      await wait(0);
     });
 
     expect(window.location.search).toBe('?indexName%5Bquery%5D=iphone');
