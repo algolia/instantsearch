@@ -151,7 +151,7 @@ export async function introspectRecords(
     return {
       ok: false,
       code: 'index_empty',
-      message: `Index '${params.indexName}' is empty. Populate it with at least one record before scaffolding schema-driven widgets.`,
+      message: `Index '${params.indexName}' is empty. Pass attribute names manually with --hits-title, --hits-image, and --refinement-list-attribute.`,
     };
   }
 

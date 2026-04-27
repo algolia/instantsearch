@@ -291,7 +291,10 @@ export async function addExperience(
 
   const files = generateExperience(resolved);
   const outcome = writeOrConflict(projectDir, files, COMMAND);
-  if (!outcome.ok) return outcome.failure;
+  if (!outcome.ok) {
+    outcome.failure.message += ' Use `add widget` to add individual widgets to an existing experience.';
+    return outcome.failure;
+  }
 
   const experiencePath = path.posix.join(rootManifest.componentsPath, name);
   addExperienceToRoot(projectDir, rootManifest, { name, path: experiencePath });

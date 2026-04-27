@@ -142,6 +142,9 @@ describe('introspector.introspectRecords', () => {
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected failure');
     expect(result.code).toBe('index_empty');
+    expect(result.message).toContain(
+      'Pass attribute names manually'
+    );
   });
 
   test('returns index_not_found on 404', async () => {

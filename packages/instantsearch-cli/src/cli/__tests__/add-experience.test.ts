@@ -666,6 +666,8 @@ describe('add experience command', () => {
         command: 'add experience',
         code: 'file_conflict',
       });
+      if (second.ok) throw new Error('expected failure');
+      expect(second.message).toContain('add widget');
 
       // Root manifest unchanged (no duplicate experiences entry).
       expect(
