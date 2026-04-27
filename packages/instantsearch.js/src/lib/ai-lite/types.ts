@@ -190,15 +190,13 @@ export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
   ? DATA_TYPES
   : UIDataTypes;
 
-type _ExtractTools<
-  T extends UIMessage,
-  D extends UIDataTypes
-> = T extends UIMessage<unknown, D, infer TOOLS> ? TOOLS : UITools;
-
-export type InferUIMessageTools<T extends UIMessage> = _ExtractTools<
-  T,
-  InferUIMessageData<T>
->;
+export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
+  unknown,
+  any,
+  infer TOOLS
+>
+  ? TOOLS
+  : UITools;
 
 export type InferUIMessageToolCall<UI_MESSAGE extends UIMessage> =
   | ValueOf<{

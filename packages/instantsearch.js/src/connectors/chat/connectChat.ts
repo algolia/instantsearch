@@ -461,7 +461,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           return Promise.resolve();
         },
-      });
+      } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
     return {
