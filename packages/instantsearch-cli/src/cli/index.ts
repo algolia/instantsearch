@@ -181,16 +181,16 @@ program
   .option('--template <template>', 'Template to use (search)', 'search')
   .option('--index <index>', 'Algolia index name')
   .option('--widgets <list>', 'Comma-separated widget list (overrides template defaults)')
-  .option('--hits-title <attr>', 'Record attribute for Hits title')
-  .option('--hits-image <attr>', 'Record attribute for Hits image')
-  .option('--hits-description <attr>', 'Record attribute for Hits description')
+  .option('--hits-title <attr>', 'Searchable record attribute to display as the hit title')
+  .option('--hits-image <attr>', 'Record attribute containing an image URL')
+  .option('--hits-description <attr>', 'Searchable record attribute to display as the hit description')
   .option(
     '--refinement-list-attribute <attr>',
-    'Facet attribute for RefinementList'
+    'Attribute configured for faceting in your Algolia index'
   )
   .option(
     '--sort-by-replicas <list>',
-    'Comma-separated replica index names for SortBy'
+    'Comma-separated replica index names configured in your Algolia index'
   )
   .action(runAddExperience);
 
@@ -236,16 +236,16 @@ program
   .option('--yes', 'Accept defaults without prompting.')
   .option('--experience <name>', 'Experience to add the widget to')
   .option('--index <index>', 'Algolia index (required to auto-create the experience)')
-  .option('--hits-title <attr>', 'Record attribute for Hits title')
-  .option('--hits-image <attr>', 'Record attribute for Hits image')
-  .option('--hits-description <attr>', 'Record attribute for Hits description')
+  .option('--hits-title <attr>', 'Searchable record attribute to display as the hit title')
+  .option('--hits-image <attr>', 'Record attribute containing an image URL')
+  .option('--hits-description <attr>', 'Searchable record attribute to display as the hit description')
   .option(
     '--refinement-list-attribute <attr>',
-    'Facet attribute for RefinementList'
+    'Attribute configured for faceting in your Algolia index'
   )
   .option(
     '--sort-by-replicas <list>',
-    'Comma-separated replica index names for SortBy'
+    'Comma-separated replica index names configured in your Algolia index'
   )
   .action(runAddWidget);
 
