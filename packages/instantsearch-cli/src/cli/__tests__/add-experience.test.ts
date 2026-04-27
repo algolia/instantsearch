@@ -188,6 +188,7 @@ describe('add experience command', () => {
         'src/components/product-search/SortBy.tsx',
         'src/components/product-search/Pagination.tsx',
         'src/components/product-search/ClearRefinements.tsx',
+        'src/components/product-search/index.tsx',
       ])
     );
     expect((report as any).experience).toEqual({
@@ -197,7 +198,7 @@ describe('add experience command', () => {
     const nextSteps = (report as any).nextSteps;
     expect(Array.isArray(nextSteps.imports)).toBe(true);
     expect(nextSteps.imports.some((line: string) =>
-      line.includes('ProductSearchProvider')
+      line.includes('ProductSearch')
     )).toBe(true);
     expect(typeof nextSteps.mountingGuidance).toBe('string');
     expect(nextSteps.mountingGuidance.length).toBeGreaterThan(0);
@@ -219,10 +220,7 @@ describe('add experience command', () => {
     if (!report.ok) throw new Error('expected success');
     const imports = (report as any).nextSteps.imports as string[];
     expect(imports).toContain(
-      "import { ProductSearchProvider } from '@/components/product-search/provider';"
-    );
-    expect(imports).toContain(
-      "import { SearchBox } from '@/components/product-search/SearchBox';"
+      "import { ProductSearch } from '@/components/product-search';"
     );
   });
 
@@ -240,7 +238,7 @@ describe('add experience command', () => {
     if (!report.ok) throw new Error('expected success');
     const imports = (report as any).nextSteps.imports as string[];
     expect(imports).toContain(
-      "import { ProductSearchProvider } from 'src/components/product-search/provider';"
+      "import { ProductSearch } from 'src/components/product-search';"
     );
   });
 
@@ -516,18 +514,13 @@ describe('add experience command', () => {
       if (!report.ok) throw new Error('expected success');
       const imports = (report as any).nextSteps.imports as string[];
       expect(imports).toContain(
-        "import { startProductSearch } from 'src/components/product-search/provider';"
+        "import 'src/components/product-search';"
       );
-      expect(imports).toContain(
-        "import { SearchBox } from 'src/components/product-search/SearchBox';"
-      );
-      // No Provider component in JS.
       expect(imports.some((line) => line.includes('ProductSearchProvider'))).toBe(
         false
       );
 
       const guidance = (report as any).nextSteps.mountingGuidance as string;
-      expect(guidance).toMatch(/startProductSearch/);
       expect(guidance).toMatch(/container/i);
     });
   });

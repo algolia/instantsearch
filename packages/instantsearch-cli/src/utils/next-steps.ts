@@ -1,6 +1,6 @@
 import type { RootManifest } from '../manifest';
 import type { Flavor } from '../types';
-import { providerComponentName, startFunctionName } from './naming';
+import { providerComponentName, startFunctionName, experienceComponentName, widgetContainerId } from './naming';
 
 export type NextSteps = {
   imports: string[];
@@ -47,26 +47,21 @@ export function buildExperienceNextSteps(params: {
   widgets: string[];
 }): NextSteps {
   const { flavor, experienceName, importBase, widgets } = params;
-  const imports = [
-    providerImportLine(flavor, experienceName, importBase),
-    ...widgets.map((widget) =>
-      widgetImportLine({ importBase, exportName: widget, fileName: widget })
-    ),
-  ];
 
   if (flavor === 'js') {
-    const startName = startFunctionName(experienceName);
-    const widgetCalls = widgets.map((w) => `${w}('#container')`).join(', ');
+    const containers = widgets
+      .map((w) => `<div id="${widgetContainerId(w)}"></div>`)
+      .join(', ');
     return {
-      imports,
-      mountingGuidance: `Call ${startName}([${widgetCalls}]) once the DOM is ready, passing a container selector for each widget.`,
+      imports: [`import '${importBase}';`],
+      mountingGuidance: `Add the following container elements to your HTML: ${containers}`,
     };
   }
 
-  const providerName = providerComponentName(experienceName);
+  const componentName = experienceComponentName(experienceName);
   return {
-    imports,
-    mountingGuidance: `Render <${providerName}> around the widgets wherever the search should appear.`,
+    imports: [`import { ${componentName} } from '${importBase}';`],
+    mountingGuidance: `Render <${componentName} /> wherever the search should appear.`,
   };
 }
 

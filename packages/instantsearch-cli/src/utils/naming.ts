@@ -13,3 +13,13 @@ export function providerComponentName(experienceName: string): string {
 export function startFunctionName(experienceName: string): string {
   return `start${toPascalCase(experienceName)}`;
 }
+
+export function experienceComponentName(experienceName: string): string {
+  return toPascalCase(experienceName);
+}
+
+export function widgetContainerId(widget: string): string {
+  return widget
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+}

@@ -41,6 +41,20 @@ export function SearchBox(container) {
 "
 `;
 
+exports[`generator: experience (JS flavor) snapshot: index.js 1`] = `
+"import { startProductSearch } from './provider';
+import { SearchBox } from './SearchBox';
+import { Pagination } from './Pagination';
+import { ClearRefinements } from './ClearRefinements';
+
+startProductSearch([
+  SearchBox('#search-box'),
+  Pagination('#pagination'),
+  ClearRefinements('#clear-refinements'),
+]);
+"
+`;
+
 exports[`generator: experience (JS flavor) snapshot: provider.js 1`] = `
 "import instantsearch from 'instantsearch.js';
 
@@ -103,6 +117,24 @@ export function SearchBox() {
 "
 `;
 
+exports[`generator: experience (React + TypeScript) snapshot: index.tsx 1`] = `
+"import { ProductSearchProvider } from './provider';
+import { SearchBox } from './SearchBox';
+import { Pagination } from './Pagination';
+import { ClearRefinements } from './ClearRefinements';
+
+export function ProductSearch() {
+  return (
+    <ProductSearchProvider>
+      <SearchBox />
+      <Pagination />
+      <ClearRefinements />
+    </ProductSearchProvider>
+  );
+}
+"
+`;
+
 exports[`generator: experience (React + TypeScript) snapshot: provider.tsx 1`] = `
 "import type { ReactNode } from 'react';
 import { InstantSearch } from 'react-instantsearch';
@@ -142,6 +174,24 @@ exports[`generator: experience (React + plain JS) snapshot: SearchBox.jsx 1`] = 
 
 export function SearchBox() {
   return <InstantSearchSearchBox />;
+}
+"
+`;
+
+exports[`generator: experience (React + plain JS) snapshot: index.jsx 1`] = `
+"import { ProductSearchProvider } from './provider';
+import { SearchBox } from './SearchBox';
+import { Pagination } from './Pagination';
+import { ClearRefinements } from './ClearRefinements';
+
+export function ProductSearch() {
+  return (
+    <ProductSearchProvider>
+      <SearchBox />
+      <Pagination />
+      <ClearRefinements />
+    </ProductSearchProvider>
+  );
 }
 "
 `;

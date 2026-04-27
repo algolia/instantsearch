@@ -65,7 +65,7 @@ describe('generator: experience (React + TypeScript)', () => {
     },
   };
 
-  test('emits provider, three structural widgets, and the experience config', () => {
+  test('emits provider, index, three structural widgets, and the experience config', () => {
     const files = generateExperience(baseManifest);
 
     expect(Array.from(files.keys()).sort()).toEqual(
@@ -73,6 +73,7 @@ describe('generator: experience (React + TypeScript)', () => {
         'src/components/product-search/ClearRefinements.tsx',
         'src/components/product-search/Pagination.tsx',
         'src/components/product-search/SearchBox.tsx',
+        'src/components/product-search/index.tsx',
         'src/components/product-search/instantsearch.config.json',
         'src/components/product-search/provider.tsx',
       ].sort()
@@ -144,6 +145,41 @@ describe('generator: experience (React + TypeScript)', () => {
     const files = generateExperience(baseManifest);
     expect(
       files.get('src/components/product-search/ClearRefinements.tsx')
+    ).toMatchSnapshot();
+  });
+
+  test('index.tsx exports ProductSearch, imports provider and all widgets', () => {
+    const files = generateExperience(baseManifest);
+    const index = files.get('src/components/product-search/index.tsx')!;
+    expect(index).toMatch(/export function ProductSearch\(\)/);
+    expect(index).toMatch(/import { ProductSearchProvider } from '\.\/provider'/);
+    expect(index).toMatch(/import { SearchBox } from '\.\/SearchBox'/);
+    expect(index).toMatch(/import { Pagination } from '\.\/Pagination'/);
+    expect(index).toMatch(/import { ClearRefinements } from '\.\/ClearRefinements'/);
+    expect(index).toMatch(/<ProductSearchProvider>/);
+    expect(index).toMatch(/<SearchBox \/>/);
+    expect(index).toMatch(/<Pagination \/>/);
+    expect(index).toMatch(/<ClearRefinements \/>/);
+  });
+
+  test('index.tsx only includes widgets listed in the experience', () => {
+    const files = generateExperience({
+      ...baseManifest,
+      experience: {
+        ...baseManifest.experience,
+        widgets: ['SearchBox'],
+      },
+    });
+    const index = files.get('src/components/product-search/index.tsx')!;
+    expect(index).toMatch(/<SearchBox \/>/);
+    expect(index).not.toMatch(/Pagination/);
+    expect(index).not.toMatch(/ClearRefinements/);
+  });
+
+  test('snapshot: index.tsx', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/index.tsx')
     ).toMatchSnapshot();
   });
 });
@@ -282,6 +318,7 @@ describe('generator: experience (React + plain JS)', () => {
         'src/components/product-search/ClearRefinements.jsx',
         'src/components/product-search/Pagination.jsx',
         'src/components/product-search/SearchBox.jsx',
+        'src/components/product-search/index.jsx',
         'src/components/product-search/instantsearch.config.json',
         'src/components/product-search/provider.jsx',
       ].sort()
@@ -313,6 +350,13 @@ describe('generator: experience (React + plain JS)', () => {
     const files = generateExperience(baseManifest);
     expect(
       files.get('src/components/product-search/ClearRefinements.jsx')
+    ).toMatchSnapshot();
+  });
+
+  test('snapshot: index.jsx', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/index.jsx')
     ).toMatchSnapshot();
   });
 });
@@ -362,6 +406,18 @@ describe('generator: experience (React + Next.js App Router + TypeScript)', () =
       files.get('src/components/product-search/provider.tsx')
     ).toMatchSnapshot();
   });
+
+  test('index.tsx is a client component for Next.js App Router', () => {
+    const files = generateExperience(baseManifest);
+    const index = files.get('src/components/product-search/index.tsx')!;
+    expect(index.startsWith("'use client';")).toBe(true);
+  });
+
+  test('index.tsx omits use client for non-Next.js React', () => {
+    const files = generateExperience({ ...baseManifest, framework: null });
+    const index = files.get('src/components/product-search/index.tsx')!;
+    expect(index).not.toMatch(/use client/);
+  });
 });
 
 describe('generator: experience (JS flavor)', () => {
@@ -386,6 +442,7 @@ describe('generator: experience (JS flavor)', () => {
         'src/components/product-search/ClearRefinements.js',
         'src/components/product-search/Pagination.js',
         'src/components/product-search/SearchBox.js',
+        'src/components/product-search/index.js',
         'src/components/product-search/instantsearch.config.json',
         'src/components/product-search/provider.js',
       ].sort()
@@ -461,6 +518,34 @@ describe('generator: experience (JS flavor)', () => {
     const files = generateExperience(baseManifest);
     expect(
       files.get('src/components/product-search/ClearRefinements.js')
+    ).toMatchSnapshot();
+  });
+
+  test('index.js calls startProductSearch with all widgets and prefilled container IDs', () => {
+    const files = generateExperience(baseManifest);
+    const index = files.get('src/components/product-search/index.js')!;
+    expect(index).toMatch(/import { startProductSearch } from '\.\/provider'/);
+    expect(index).toMatch(/import { SearchBox } from '\.\/SearchBox'/);
+    expect(index).toMatch(/import { Pagination } from '\.\/Pagination'/);
+    expect(index).toMatch(/import { ClearRefinements } from '\.\/ClearRefinements'/);
+    expect(index).toMatch(/startProductSearch\(\[/);
+    expect(index).toMatch(/SearchBox\('#search-box'\)/);
+    expect(index).toMatch(/Pagination\('#pagination'\)/);
+    expect(index).toMatch(/ClearRefinements\('#clear-refinements'\)/);
+  });
+
+  test('index.js contains no JSX or TS syntax', () => {
+    const files = generateExperience(baseManifest);
+    const index = files.get('src/components/product-search/index.js')!;
+    expect(index).not.toMatch(/<\/?[A-Z]/);
+    expect(index).not.toMatch(/: string/);
+    expect(index).not.toMatch(/type /);
+  });
+
+  test('snapshot: index.js', () => {
+    const files = generateExperience(baseManifest);
+    expect(
+      files.get('src/components/product-search/index.js')
     ).toMatchSnapshot();
   });
 });

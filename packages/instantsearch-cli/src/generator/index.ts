@@ -2,7 +2,12 @@ import path from 'node:path';
 
 import type { AlgoliaCredentials, Flavor, Framework } from '../types';
 import type { ResolvedExperienceManifest } from '../manifest';
-import { providerComponentName, startFunctionName } from '../utils/naming';
+import {
+  providerComponentName,
+  startFunctionName,
+  experienceComponentName,
+  widgetContainerId,
+} from '../utils/naming';
 
 export type ResolvedManifest = {
   flavor: Flavor;
@@ -15,7 +20,10 @@ export type GeneratedFiles = Map<string, string>;
 
 const ALGOLIA_CLIENT_PATH = 'src/lib/algolia-client';
 
-function algoliaClientSource({ appId, searchApiKey }: AlgoliaCredentials): string {
+function algoliaClientSource({
+  appId,
+  searchApiKey,
+}: AlgoliaCredentials): string {
   return `import { algoliasearch } from 'algoliasearch';
 
 export const searchClient = algoliasearch('${appId}', '${searchApiKey}');
@@ -25,7 +33,10 @@ export const searchClient = algoliasearch('${appId}', '${searchApiKey}');
 export function generate(manifest: ResolvedManifest): GeneratedFiles {
   const files: GeneratedFiles = new Map();
   const ext = manifest.typescript ? 'ts' : 'js';
-  files.set(`${ALGOLIA_CLIENT_PATH}.${ext}`, algoliaClientSource(manifest.algolia));
+  files.set(
+    `${ALGOLIA_CLIENT_PATH}.${ext}`,
+    algoliaClientSource(manifest.algolia)
+  );
   return files;
 }
 
@@ -43,7 +54,9 @@ function reactProviderSource(
   const typeImport = manifest.typescript
     ? `import type { ReactNode } from 'react';\n`
     : '';
-  const paramAnnotation = manifest.typescript ? ': { children: ReactNode }' : '';
+  const paramAnnotation = manifest.typescript
+    ? ': { children: ReactNode }'
+    : '';
   const { directive, componentImport, element } =
     manifest.framework === 'nextjs'
       ? {
@@ -94,11 +107,15 @@ export function ${startName}(widgets) {
 `;
 }
 
-const STRUCTURAL_WIDGETS = ['SearchBox', 'Pagination', 'ClearRefinements'] as const;
-type StructuralWidget = (typeof STRUCTURAL_WIDGETS)[number];
+const STRUCTURAL_WIDGETS = [
+  'SearchBox',
+  'Pagination',
+  'ClearRefinements',
+] as const;
+type StructuralWidget = typeof STRUCTURAL_WIDGETS[number];
 
 const SCHEMA_WIDGETS = ['Hits', 'RefinementList', 'SortBy'] as const;
-type SchemaWidget = (typeof SCHEMA_WIDGETS)[number];
+type SchemaWidget = typeof SCHEMA_WIDGETS[number];
 
 export type WidgetName = StructuralWidget | SchemaWidget;
 
@@ -153,7 +170,7 @@ type SortBySchema = NonNullable<ExperienceSchema['sortBy']>;
 function requireHitsSchema(schema: ExperienceSchema['hits']): HitsSchema {
   if (!schema?.title) {
     throw new Error(
-      "Hits widget requires schema.hits.title. Pass --hits-title <attr>."
+      'Hits widget requires schema.hits.title. Pass --hits-title <attr>.'
     );
   }
   return schema;
@@ -170,9 +187,7 @@ function requireRefinementListSchema(
   return schema;
 }
 
-function requireSortBySchema(
-  schema: ExperienceSchema['sortBy']
-): SortBySchema {
+function requireSortBySchema(schema: ExperienceSchema['sortBy']): SortBySchema {
   if (!schema || schema.replicas.length === 0) {
     throw new Error(
       'SortBy widget requires schema.sortBy.replicas. Pass --sort-by-replicas <comma-list>.'
@@ -247,10 +262,7 @@ function replicaLabel(replica: string, indexName: string): string {
   return suffix.replace(/_/g, ' ');
 }
 
-function sortByItems(
-  indexName: string,
-  replicas: readonly string[]
-): string {
+function sortByItems(indexName: string, replicas: readonly string[]): string {
   return [
     sortByItem(indexName, 'Featured'),
     ...replicas.map((replica) =>
@@ -282,7 +294,8 @@ function schemaWidgetSource(
 ): string {
   const schema = manifest.experience.schema ?? {};
   if (widget === 'Hits') return hitsSource(schema.hits, manifest.typescript);
-  if (widget === 'RefinementList') return refinementListSource(schema.refinementList);
+  if (widget === 'RefinementList')
+    return refinementListSource(schema.refinementList);
   return sortBySource(manifest.experience.indexName, schema.sortBy);
 }
 
@@ -335,7 +348,9 @@ function jsSortBySource(
   schemaInput: ExperienceSchema['sortBy']
 ): string {
   const { replicas } = requireSortBySchema(schemaInput);
-  return `import { ${JS_WIDGET_FACTORY.SortBy} } from 'instantsearch.js/es/widgets';
+  return `import { ${
+    JS_WIDGET_FACTORY.SortBy
+  } } from 'instantsearch.js/es/widgets';
 
 const items = [
 ${sortByItems(indexName, replicas)},
@@ -353,7 +368,8 @@ function jsSchemaWidgetSource(
 ): string {
   const schema = manifest.experience.schema ?? {};
   if (widget === 'Hits') return jsHitsSource(schema.hits);
-  if (widget === 'RefinementList') return jsRefinementListSource(schema.refinementList);
+  if (widget === 'RefinementList')
+    return jsRefinementListSource(schema.refinementList);
   return jsSortBySource(manifest.experience.indexName, schema.sortBy);
 }
 
@@ -384,7 +400,10 @@ type FlavorSources = {
     experienceDir: string
   ) => string;
   structural: (widget: StructuralWidget) => string;
-  schema: (widget: SchemaWidget, manifest: ResolvedExperienceManifest) => string;
+  schema: (
+    widget: SchemaWidget,
+    manifest: ResolvedExperienceManifest
+  ) => string;
 };
 
 const SOURCES_BY_FLAVOR: Record<Flavor, FlavorSources> = {
@@ -442,6 +461,53 @@ function assertKnownWidget(widget: string): asserts widget is WidgetName {
   }
 }
 
+function reactIndexSource(manifest: ResolvedExperienceManifest): string {
+  const componentName = experienceComponentName(manifest.experience.name);
+  const providerName = providerComponentName(manifest.experience.name);
+  const widgets = manifest.experience.widgets;
+
+  const imports = [
+    `import { ${providerName} } from './provider';`,
+    ...widgets.map((w) => `import { ${w} } from './${w}';`),
+  ].join('\n');
+
+  const widgetElements = widgets.map((w) => `      <${w} />`).join('\n');
+  const directive =
+    manifest.framework === 'nextjs' ? `'use client';\n\n` : '';
+
+  return `${directive}${imports}
+
+export function ${componentName}() {
+  return (
+    <${providerName}>
+${widgetElements}
+    </${providerName}>
+  );
+}
+`;
+}
+
+function jsIndexSource(manifest: ResolvedExperienceManifest): string {
+  const startName = startFunctionName(manifest.experience.name);
+  const widgets = manifest.experience.widgets;
+
+  const imports = [
+    `import { ${startName} } from './provider';`,
+    ...widgets.map((w) => `import { ${w} } from './${w}';`),
+  ].join('\n');
+
+  const widgetCalls = widgets
+    .map((w) => `  ${w}('#${widgetContainerId(w)}')`)
+    .join(',\n');
+
+  return `${imports}
+
+${startName}([
+${widgetCalls},
+]);
+`;
+}
+
 export function generateExperience(
   manifest: ResolvedExperienceManifest
 ): GeneratedFiles {
@@ -469,6 +535,12 @@ export function generateExperience(
       widgetSource(widget, manifest)
     );
   }
+
+  const indexSource =
+    manifest.flavor === 'js'
+      ? jsIndexSource(manifest)
+      : reactIndexSource(manifest);
+  files.set(path.posix.join(experienceDir, `index.${ext}`), indexSource);
 
   return files;
 }
