@@ -102,6 +102,59 @@ describe('formatHuman', () => {
     );
   });
 
+  test('introspect shows attributes, facets, and replicas', () => {
+    const report = success({
+      command: 'introspect',
+      payload: {
+        indexName: 'products',
+        attributes: ['name', 'description'],
+        imageCandidates: ['image_url'],
+        facets: ['brand', 'category'],
+        replicas: ['products_price_asc'],
+        warnings: [],
+      },
+    });
+
+    expect(formatHuman(report)).toBe(
+      [
+        'Index: products',
+        '',
+        'Attributes:  name, description',
+        'Images:      image_url',
+        'Facets:      brand, category',
+        'Replicas:    products_price_asc',
+      ].join('\n')
+    );
+  });
+
+  test('introspect shows warnings when present', () => {
+    const report = success({
+      command: 'introspect',
+      payload: {
+        indexName: 'products',
+        attributes: ['name'],
+        imageCandidates: [],
+        facets: [],
+        replicas: [],
+        warnings: ['Could not read replicas: settings ACL missing.'],
+      },
+    });
+
+    expect(formatHuman(report)).toBe(
+      [
+        'Index: products',
+        '',
+        'Attributes:  name',
+        'Images:      (none)',
+        'Facets:      (none)',
+        'Replicas:    (none)',
+        '',
+        'Warnings:',
+        '  Could not read replicas: settings ACL missing.',
+      ].join('\n')
+    );
+  });
+
   test('unknown command falls back to pretty JSON', () => {
     const report = success({
       command: 'some-future-command',

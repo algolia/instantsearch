@@ -24,6 +24,32 @@ export function formatHuman(report: Report): string {
       lines.push(`Widget "${widget}" added to experience "${exp.name}".`);
       break;
     }
+    case 'introspect': {
+      const indexName = report.indexName as string;
+      const attributes = report.attributes as string[];
+      const imageCandidates = report.imageCandidates as string[];
+      const facets = report.facets as string[];
+      const replicas = report.replicas as string[];
+      const warnings = report.warnings as string[];
+
+      const fmt = (arr: string[]) => arr.length > 0 ? arr.join(', ') : '(none)';
+
+      lines.push(`Index: ${indexName}`);
+      lines.push('');
+      lines.push(`Attributes:  ${fmt(attributes)}`);
+      lines.push(`Images:      ${fmt(imageCandidates)}`);
+      lines.push(`Facets:      ${fmt(facets)}`);
+      lines.push(`Replicas:    ${fmt(replicas)}`);
+
+      if (warnings.length > 0) {
+        lines.push('');
+        lines.push('Warnings:');
+        for (const w of warnings) {
+          lines.push(`  ${w}`);
+        }
+      }
+      break;
+    }
     default: {
       return JSON.stringify(report, null, 2);
     }

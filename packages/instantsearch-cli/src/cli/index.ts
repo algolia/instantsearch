@@ -6,6 +6,7 @@ import { Command, CommanderError } from 'commander';
 import { init, type InitOptions } from './init';
 import { addExperience } from './add-experience';
 import { addWidget } from './add-widget';
+import { introspect } from './introspect';
 import type { ExperienceSchema } from '../manifest';
 import { createInquirerPrompter, type Prompter } from '../prompter';
 import { failure, type Report } from '../reporter';
@@ -248,6 +249,45 @@ program
   )
   .action(runAddWidget);
 
+type IntrospectFlagOptions = {
+  json?: boolean;
+  yes?: boolean;
+  index?: string;
+  appId?: string;
+  searchKey?: string;
+};
+
+async function runIntrospect(cliOptions: IntrospectFlagOptions): Promise<void> {
+  if (!cliOptions.index) {
+    return emitAndExit(
+      failure({
+        command: 'introspect',
+        code: 'missing_required_flag',
+        message: 'Missing required flags: --index',
+      })
+    );
+  }
+
+  const report = await introspect({
+    projectDir: process.cwd(),
+    indexName: cliOptions.index,
+    appId: cliOptions.appId,
+    searchApiKey: cliOptions.searchKey,
+  });
+
+  emitAndExit(report);
+}
+
+program
+  .command('introspect')
+  .description('Introspect an Algolia index to discover attributes, facets, and replicas.')
+  .option('--json', 'Emit a single JSON object on stdout (implies --yes).')
+  .option('--yes', 'Accept defaults without prompting.')
+  .option('--index <index>', 'Algolia index name')
+  .option('--app-id <appId>', 'Algolia application ID (overrides instantsearch.json)')
+  .option('--search-key <searchKey>', 'Algolia search-only API key (overrides instantsearch.json)')
+  .action(runIntrospect);
+
 function normalizeArgv(argv: string[]): string[] {
   const copy = argv.slice();
   if (copy[2] === 'add' && copy[3] === 'experience') {
@@ -264,7 +304,7 @@ program.on('command:*', (operands: string[]) => {
     failure({
       command: 'cli',
       code: 'unknown_command',
-      message: `Unknown command '${invoked}'. Supported: init, add experience, add widget.`,
+      message: `Unknown command '${invoked}'. Supported: init, add experience, add widget, introspect.`,
     })
   );
 });

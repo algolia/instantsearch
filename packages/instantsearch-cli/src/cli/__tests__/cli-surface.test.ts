@@ -97,6 +97,42 @@ describe('CLI binary surface under --json', () => {
     expect(report.code).toBe('unknown_option');
   });
 
+  test('introspect --json without --index: stderr empty, JSON failure on stdout, exit 1', () => {
+    const cwd = mkTmp();
+    const { stdout, stderr, exitCode } = runCli(
+      ['introspect', '--json'],
+      cwd
+    );
+
+    expect(stderr).toBe('');
+    expect(exitCode).toBe(1);
+    const report = JSON.parse(stdout.trim());
+    expect(report).toMatchObject({
+      apiVersion: 1,
+      ok: false,
+      command: 'introspect',
+      code: 'missing_required_flag',
+    });
+  });
+
+  test('introspect --json in uninitialized project: stderr empty, exit 1', () => {
+    const cwd = mkTmp();
+    const { stdout, stderr, exitCode } = runCli(
+      ['introspect', '--json', '--index', 'products'],
+      cwd
+    );
+
+    expect(stderr).toBe('');
+    expect(exitCode).toBe(1);
+    const report = JSON.parse(stdout.trim());
+    expect(report).toMatchObject({
+      apiVersion: 1,
+      ok: false,
+      command: 'introspect',
+      code: 'not_initialized',
+    });
+  });
+
   test('add experience --json in uninitialized project: stderr empty, exit 1', () => {
     const cwd = mkTmp();
 
