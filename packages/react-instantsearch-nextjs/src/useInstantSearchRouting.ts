@@ -23,8 +23,25 @@ export function useInstantSearchRouting<
     useRef<InstantSearchProps<TUiState, TRouteState>['routing']>(null);
   const onUpdateRef = useRef<() => void>(null);
   const isUnmounting = useRef(false);
+  // Skip the on-mount fire of the effect below: `subscribe()` already merges
+  // the URL into `_initialUiState`, and a redundant `setUiState` can wipe the
+  // URL with a nested `<Index>` (see #6980).
+  const previousRouteRef = useRef<string | null>(null);
 
   useEffect(() => {
+    const currentRoute = `${pathname ?? ''}?${searchParams?.toString() ?? ''}`;
+
+    if (previousRouteRef.current === currentRoute) {
+      return;
+    }
+
+    const isFirstRun = previousRouteRef.current === null;
+    previousRouteRef.current = currentRoute;
+
+    if (isFirstRun) {
+      return;
+    }
+
     if (onUpdateRef.current) {
       onUpdateRef.current();
     }
