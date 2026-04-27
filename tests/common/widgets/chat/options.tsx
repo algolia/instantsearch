@@ -1630,7 +1630,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('skips the search index tool when the display results tool needs to rendered', async () => {
+        test('skips the search index tool when the display results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
