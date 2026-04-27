@@ -955,8 +955,15 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
                 const updatedParts = [...currentMessage.parts];
                 const existingPart = updatedParts[toolIndex] as any;
+                const {
+                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                  rawOutput: _ignoredRawOutput,
+                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                  preliminary: _ignoredPreliminary,
+                  ...rest
+                } = existingPart;
                 updatedParts[toolIndex] = {
-                  ...existingPart,
+                  ...rest,
                   state: 'output-error',
                   errorText: chunk.errorText,
                   input: chunk.input ?? existingPart.input,
