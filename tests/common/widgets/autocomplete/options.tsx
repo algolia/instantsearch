@@ -2632,6 +2632,77 @@ export function createOptionsTests(
       });
     });
 
+    describe('aiMode', () => {
+      test('closes the panel when clicking the AI mode button', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+            },
+            react: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).toBeInTheDocument();
+
+        const aiModeButton =
+          document.querySelector<HTMLButtonElement>('.ais-AiModeButton');
+        expect(aiModeButton).toBeInTheDocument();
+
+        await act(async () => {
+          userEvent.click(aiModeButton!);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).not.toBeInTheDocument();
+      });
+    });
+
     describe('noResults', () => {
       test('renders noResults template when index returns empty hits', async () => {
         const searchClient = createMockedSearchClient(

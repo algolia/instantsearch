@@ -62,7 +62,7 @@ export function InstantSearchView() {
             destroy
             widgets={[
               { title: "autocomplete", body: WidgetAutocomplete },
-              { title: "searchBox", body: WidgetSearchBox },
+              { title: "searchBox", body: () => <WidgetSearchBox /> },
               { title: "voiceSearch", body: WidgetVoiceSearch },
             ]}
           />
