@@ -825,6 +825,10 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       onAiModeClick={
         aiMode
           ? () => {
+              setIsOpen(false);
+              if (isDetached) {
+                setIsModalOpen(false);
+              }
               const indexId = targetIndex!.getIndexId();
               const chatState = instantSearchInstance.renderState[indexId]
                 ?.chat as Partial<ChatRenderState> | undefined;

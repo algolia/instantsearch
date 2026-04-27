@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.94.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.93.0...instantsearch.js@4.94.0) (2026-04-21)
+
+
+### Bug Fixes
+
+* **chat:** stop streaming when you clear ([#6955](https://github.com/algolia/instantsearch/issues/6955)) ([b55057c](https://github.com/algolia/instantsearch/commit/b55057c6301dcd4411eabdafe39ac9c5bf4ea749))
+* **searchbox:** fix AI Mode button icon and text alignment ([#6959](https://github.com/algolia/instantsearch/issues/6959)) ([fd91508](https://github.com/algolia/instantsearch/commit/fd91508dfb5f7dcc81ed219cfad7f75789aecd3f))
+* **templates:** safe default json template ([#6961](https://github.com/algolia/instantsearch/issues/6961)) ([c665950](https://github.com/algolia/instantsearch/commit/c6659500dd2278a2f40a3dd25606dc555546cad8))
+
+
+### Features
+
+* **chat:** add `initialUserMessage` option ([#6956](https://github.com/algolia/instantsearch/issues/6956)) ([5775e0d](https://github.com/algolia/instantsearch/commit/5775e0de9c9e784a0d0056e0414ab1f8b442b27d))
+* **chat:** add greeting screen component ([#6965](https://github.com/algolia/instantsearch/issues/6965)) ([8797bad](https://github.com/algolia/instantsearch/commit/8797bad681f1cddb1f8e36cfbf0b78412957e7db))
+* **chat:** add hidden context support for completions ([#6973](https://github.com/algolia/instantsearch/issues/6973)) ([6f8b05b](https://github.com/algolia/instantsearch/commit/6f8b05b5996b16cbb48dbdf060414b51ca74f589))
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **chat:** send events from hits in chat ([#6943](https://github.com/algolia/instantsearch/issues/6943)) ([7c9a6dd](https://github.com/algolia/instantsearch/commit/7c9a6dd20a14547ffdc805058378716ff99ab37a))
+* **recommend:** add Trending Facets widget ([#6957](https://github.com/algolia/instantsearch/issues/6957)) ([7a4b137](https://github.com/algolia/instantsearch/commit/7a4b137264b5814bc21d9011bab877e9661729c9))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+* **widgets:** ensure all widgets are available from UMD ([#6960](https://github.com/algolia/instantsearch/issues/6960)) ([3c3dbad](https://github.com/algolia/instantsearch/commit/3c3dbad3c169b6330690b628e03531f0d57e60f0))
+
+
+
+
+
 # [4.93.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.92.1...instantsearch.js@4.93.0) (2026-03-31)
 
 

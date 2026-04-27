@@ -890,6 +890,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       onAiModeClick={
         aiMode
           ? () => {
+              setIsOpen(false);
+              if (isDetached) {
+                setIsModalOpen(false);
+              }
               if (chatRenderState) {
                 chatRenderState.setOpen?.(true);
                 if (resolvedQuery.trim()) {
