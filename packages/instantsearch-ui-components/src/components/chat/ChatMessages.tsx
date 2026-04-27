@@ -134,6 +134,11 @@ export type ChatMessagesProps<
    */
   status?: ChatStatus;
   /**
+   * Error from the last failed request, if any. When set, its `message` is
+   * shown in the error UI (for example API `message` fields on 403 responses).
+   */
+  error?: Error;
+  /**
    * Whether to hide the scroll to bottom button
    */
   hideScrollToBottom?: boolean;
@@ -379,6 +384,7 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      error,
       hideScrollToBottom = false,
       onReload,
       onClose,
@@ -510,7 +516,16 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {status === 'error' && <DefaultError onReload={onReload} />}
+            {status === 'error' && (
+              <DefaultError
+                onReload={onReload}
+                translations={
+                  error?.message
+                    ? { errorMessage: error.message }
+                    : undefined
+                }
+              />
+            )}
           </div>
         </div>
 

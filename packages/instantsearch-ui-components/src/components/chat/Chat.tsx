@@ -155,6 +155,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     const messagesComponent = (
       <ChatMessages
         {...messagesProps}
+        error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
         suggestionsElement={createElement(

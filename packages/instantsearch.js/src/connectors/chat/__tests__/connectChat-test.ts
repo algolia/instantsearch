@@ -340,6 +340,7 @@ describe('connectChat', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
+      const conversationIdBeforeClear = renderState.id;
 
       const message: UIMessage = {
         id: '1',
@@ -351,12 +352,14 @@ describe('connectChat', () => {
 
       let updatedRenderState = getRenderState();
       expect(updatedRenderState.isClearing).toBe(true);
+      expect(updatedRenderState.id).toBe(conversationIdBeforeClear);
 
       renderState.onClearTransitionEnd();
 
       updatedRenderState = getRenderState();
       expect(updatedRenderState.isClearing).toBe(false);
       expect(updatedRenderState.messages).toHaveLength(0);
+      expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
     it('updates messages', () => {

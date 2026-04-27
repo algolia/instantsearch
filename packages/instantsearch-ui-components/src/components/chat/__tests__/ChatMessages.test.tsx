@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
 
 import { createChatMessagesComponent } from '../ChatMessages';
@@ -254,6 +254,25 @@ describe('ChatMessages', () => {
         container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
       ).toHaveLength(0);
     });
+  });
+
+  test('shows API error message when status is error and error is set', () => {
+    render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Request blocked for this domain')}
+      />
+    );
+
+    expect(
+      screen.getByText('Request blocked for this domain')
+    ).toBeInTheDocument();
   });
 
   test('renders with custom class names', () => {

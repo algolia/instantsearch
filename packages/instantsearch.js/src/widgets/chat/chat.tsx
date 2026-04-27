@@ -426,6 +426,7 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
+        error,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
         onFeedback,

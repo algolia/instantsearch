@@ -92,3 +92,69 @@ export function resolveValue<T>(
   }
   return Promise.resolve(value);
 }
+
+function messageFromErrorObject(o: Record<string, unknown>): string | undefined {
+  const direct =
+    (typeof o.error === 'string' && o.error.trim()) ||
+    (typeof o.message === 'string' && o.message.trim());
+  if (direct) {
+    return direct;
+  }
+  const nested = o.error;
+  if (nested && typeof nested === 'object') {
+    const ne = nested as Record<string, unknown>;
+    return (
+      (typeof ne.message === 'string' && ne.message.trim()) ||
+      (typeof ne.error === 'string' && ne.error.trim()) ||
+      undefined
+    );
+  }
+  return undefined;
+}
+
+/**
+ * Turns chat stream `error` chunk `errorText` into a short user-facing string.
+ * Handles plain text, single JSON objects (`error` / `message`), and
+ * double-encoded JSON strings returned by some APIs.
+ */
+export function getMessageFromStreamErrorText(errorText: string): string {
+  const trimmed = errorText.trim();
+  if (!trimmed) {
+    return 'Unknown error';
+  }
+
+  let remaining: unknown = trimmed;
+  for (let depth = 0; depth < 5; depth++) {
+    if (typeof remaining === 'string') {
+      const s = remaining.trim();
+      if (!s) {
+        break;
+      }
+      try {
+        remaining = JSON.parse(s) as unknown;
+        continue;
+      } catch {
+        return s;
+      }
+    }
+
+    if (remaining && typeof remaining === 'object' && !Array.isArray(remaining)) {
+      const o = remaining as Record<string, unknown>;
+      const msg = messageFromErrorObject(o);
+      if (msg) {
+        return msg;
+      }
+      if (typeof o.type === 'string' && o.type.trim()) {
+        return o.type.trim();
+      }
+      break;
+    }
+
+    break;
+  }
+
+  if (typeof remaining === 'string') {
+    return remaining.trim() || trimmed;
+  }
+  return trimmed;
+}

@@ -346,6 +346,7 @@ function ChatInner<
         translations: messagesTranslations,
         messageTranslations,
         ...messagesProps,
+        error,
       }}
       promptProps={{
         promptRef,
