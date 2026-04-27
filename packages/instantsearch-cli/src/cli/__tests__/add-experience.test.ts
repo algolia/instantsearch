@@ -525,6 +525,91 @@ describe('add experience command', () => {
     });
   });
 
+  describe('custom widget list', () => {
+    test('rejects unknown widget names', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        widgets: ['SearchBox', 'Foobar'],
+        schema: { hits: { title: 'name' } },
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        code: 'unknown_widget',
+      });
+      expect((report as any).message).toMatch(/Foobar/);
+    });
+
+    test('schema validation still applies to widgets in a custom list', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        widgets: ['SearchBox', 'Hits', 'Pagination'],
+        schema: {},
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        code: 'missing_schema',
+      });
+      expect((report as any).message).toMatch(/hits-title/);
+    });
+
+    test('omitting SortBy from widgets does not require --sort-by-replicas', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        widgets: ['SearchBox', 'Hits', 'RefinementList', 'Pagination', 'ClearRefinements'],
+        schema: {
+          hits: { title: 'name' },
+          refinementList: { attribute: 'brand' },
+        },
+      });
+
+      expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+      const experienceDir = path.join(projectDir, 'src/components/product-search');
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+    });
+
+    test('generates only the specified widgets', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        widgets: ['SearchBox', 'Hits', 'Pagination'],
+        schema: { hits: { title: 'name' } },
+      });
+
+      expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+      const experienceDir = path.join(projectDir, 'src/components/product-search');
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(false);
+    });
+  });
+
   describe('schema validation', () => {
     test('search template without schema fails with missing_schema and writes nothing', async () => {
       const projectDir = makeInitializedProject();

@@ -110,6 +110,7 @@ type AddExperienceFlagOptions = SchemaFlagOptions & {
   yes?: boolean;
   template?: string;
   index?: string;
+  widgets?: string;
 };
 
 function parseReplicasFlag(value: string | undefined): string[] | undefined {
@@ -155,11 +156,15 @@ async function runAddExperience(
   }
 
   const schema = buildSchemaFromFlags(cliOptions);
+  const widgets = cliOptions.widgets
+    ? parseCommaSeparated(cliOptions.widgets)
+    : undefined;
   const report = await addExperience({
     projectDir: process.cwd(),
     name,
     template,
     indexName: cliOptions.index,
+    widgets,
     ...(Object.keys(schema).length > 0 ? { schema } : {}),
     prompter,
   });
@@ -174,6 +179,7 @@ program
   .option('--yes', 'Accept defaults without prompting.')
   .option('--template <template>', 'Template to use (search)', 'search')
   .option('--index <index>', 'Algolia index name')
+  .option('--widgets <list>', 'Comma-separated widget list (overrides template defaults)')
   .option('--hits-title <attr>', 'Record attribute for Hits title')
   .option('--hits-image <attr>', 'Record attribute for Hits image')
   .option('--hits-description <attr>', 'Record attribute for Hits description')

@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { generateExperience } from '../generator';
+import { generateExperience, SUPPORTED_WIDGETS, type WidgetName } from '../generator';
 import {
   introspectRecords,
   introspectFacets,
@@ -30,11 +30,12 @@ export type AddExperienceOptions = {
   name: string;
   template: string;
   indexName?: string;
+  widgets?: string[];
   schema?: ExperienceSchema;
   prompter?: Prompter;
 };
 
-const TEMPLATE_WIDGETS: Record<string, string[]> = {
+const TEMPLATE_WIDGETS: Record<string, WidgetName[]> = {
   search: [
     'SearchBox',
     'Hits',
@@ -46,7 +47,7 @@ const TEMPLATE_WIDGETS: Record<string, string[]> = {
 };
 
 function missingSchemaParts(
-  widgets: string[],
+  widgets: WidgetName[],
   schema: ExperienceSchema | undefined
 ): string[] {
   const missing: string[] = [];
@@ -129,14 +130,29 @@ export async function addExperience(
     });
   }
 
-  const widgets = TEMPLATE_WIDGETS[template];
-  if (!widgets) {
+  const templateWidgets = TEMPLATE_WIDGETS[template];
+  if (!templateWidgets) {
     return failure({
       command: COMMAND,
       code: 'unknown_template',
       message: `Unknown template '${template}'. Supported templates: ${Object.keys(TEMPLATE_WIDGETS).join(', ')}.`,
     });
   }
+
+  if (options.widgets) {
+    const unknown = options.widgets.filter(
+      (w) => !(SUPPORTED_WIDGETS as readonly string[]).includes(w)
+    );
+    if (unknown.length > 0) {
+      return failure({
+        command: COMMAND,
+        code: 'unknown_widget',
+        message: `Unknown widget(s): ${unknown.join(', ')}. Supported widgets: ${SUPPORTED_WIDGETS.join(', ')}.`,
+      });
+    }
+  }
+
+  const widgets: WidgetName[] = (options.widgets as WidgetName[] | undefined) ?? templateWidgets;
 
   const indexResolution = await resolveIndexName({
     initial: options.indexName,
