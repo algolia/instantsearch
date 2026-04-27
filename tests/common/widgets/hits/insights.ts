@@ -51,7 +51,9 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
-                      queryID: 'test-query-id',
+                      queryID: query
+                        ? `test-query-id-${query}`
+                        : 'test-query-id',
                     })
                 )
               );
