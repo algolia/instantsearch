@@ -848,6 +848,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
       });
+
+      test('warns and falls back to the current index when sortBy value is not in items', () => {
+        const [widget, helper] = getInitializedWidget();
+
+        const uiState = { sortBy: 'non-existing-index' };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+
+        let searchParametersAfter: SearchParameters;
+        expect(() => {
+          searchParametersAfter = widget.getWidgetSearchParameters(
+            searchParametersBefore,
+            { uiState }
+          );
+        }).toWarnDev(
+          '[InstantSearch.js]: The index named "non-existing-index" is not listed in the `items` of `sortBy`.'
+        );
+
+        expect(searchParametersAfter!).toEqual(
+          new SearchParameters({ index: 'relevance' })
+        );
+      });
+
+      test('does not warn when sortBy value is in items', () => {
+        const [widget, helper] = getInitializedWidget();
+
+        const uiState = { sortBy: 'other' };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+
+        expect(() => {
+          widget.getWidgetSearchParameters(searchParametersBefore, { uiState });
+        }).not.toWarnDev();
+      });
     });
   });
 

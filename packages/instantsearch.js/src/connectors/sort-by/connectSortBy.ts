@@ -362,8 +362,16 @@ const connectSortBy: SortByConnector = function connectSortBy(
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isUiStateSortByInItems =
+          !uiState.sortBy || connectorState.itemsLookup![uiState.sortBy];
+
+        warning(
+          Boolean(isUiStateSortByInItems),
+          `The index named "${uiState.sortBy}" is not listed in the \`items\` of \`sortBy\`.`
+        );
+
         const sortByValue =
-          uiState.sortBy ||
+          (isUiStateSortByInItems ? uiState.sortBy : undefined) ||
           connectorState.initialValue ||
           searchParameters.index;
 
