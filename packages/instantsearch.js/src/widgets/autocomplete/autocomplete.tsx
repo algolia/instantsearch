@@ -807,6 +807,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       ? rawInputProps
       : {};
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsOpen(false);
+  };
+
   const searchBoxContent = (
     <AutocompleteSearchBox
       query={localQuery}
@@ -822,6 +827,15 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         onRefine('');
       }}
       isSearchStalled={instantSearchInstance.status === 'stalled'}
+      onCancel={() => {
+        if (isDetached) {
+          handleCancel();
+        }
+      }}
+      isDetached={isDetached}
+      submitTitle={
+        isDetached ? translations.detachedCancelButtonText : undefined
+      }
       onAiModeClick={
         aiMode
           ? () => {
@@ -889,21 +903,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         {isModalOpen && (
           <AutocompleteDetachedOverlay
             classNames={cssClasses}
-            onClose={() => {
-              setIsModalOpen(false);
-              setIsOpen(false);
-            }}
+            onClose={handleCancel}
           >
             <AutocompleteDetachedContainer
               classNames={detachedContainerCssClasses}
             >
               <AutocompleteDetachedFormContainer
                 classNames={cssClasses}
-                onCancel={() => {
-                  setIsModalOpen(false);
-                  setIsOpen(false);
-                }}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>

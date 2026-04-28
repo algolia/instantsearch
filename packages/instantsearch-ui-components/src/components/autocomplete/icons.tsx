@@ -147,3 +147,15 @@ export function SearchIcon({ createElement }: IconProps) {
     </svg>
   );
 }
+
+export function BackIcon({ createElement }: IconProps) {
+  return (
+    <svg
+      className="ais-AutocompleteBackIcon"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M9.828 11H21a1 1 0 110 2H9.828l3.586 3.586a1 1 0 01-1.414 1.414l-5.3-5.3a1 1 0 010-1.414l5.3-5.3a1 1 0 111.414 1.414L9.828 11z" />
+    </svg>
+  );
+}

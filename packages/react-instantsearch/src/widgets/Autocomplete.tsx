@@ -875,6 +875,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   });
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsOpen(false);
+  };
+
   const searchBoxContent = (
     <AutocompleteSearch
       inputProps={getInputProps()}
@@ -887,6 +892,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }}
       query={resolvedQuery}
       isSearchStalled={isSearchStalled}
+      onCancel={() => {
+        if (isDetached) {
+          handleCancel();
+        }
+      }}
+      isDetached={isDetached}
+      submitTitle={
+        isDetached ? translations.detachedCancelButtonText : undefined
+      }
       onAiModeClick={
         aiMode
           ? () => {
@@ -956,21 +970,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         {isModalOpen && (
           <AutocompleteDetachedOverlay
             classNames={classNames}
-            onClose={() => {
-              setIsModalOpen(false);
-              setIsOpen(false);
-            }}
+            onClose={handleCancel}
           >
             <AutocompleteDetachedContainer
               classNames={detachedContainerClassNames}
             >
               <AutocompleteDetachedFormContainer
                 classNames={classNames}
-                onCancel={() => {
-                  setIsModalOpen(false);
-                  setIsOpen(false);
-                }}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
