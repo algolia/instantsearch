@@ -22,7 +22,7 @@ const AutocompleteDetachedFormContainer =
 
 describe('AutocompleteSearch', () => {
   test('renders a back button and closes on click in detached mode', () => {
-    const onSubmit = jest.fn();
+    const onCancel = jest.fn();
     const inputRef = createRef<HTMLInputElement>();
     const { container, getByTitle } = render(
       <AutocompleteSearch
@@ -34,7 +34,7 @@ describe('AutocompleteSearch', () => {
         onClear={jest.fn()}
         query="iphone"
         isSearchStalled={false}
-        onSubmit={onSubmit}
+        onCancel={onCancel}
         isDetached={true}
         submitTitle="Close"
       />
@@ -42,7 +42,7 @@ describe('AutocompleteSearch', () => {
 
     userEvent.click(getByTitle('Close'));
 
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onCancel).toHaveBeenCalledTimes(1);
     // A dedicated back button is rendered – not the submit button
     expect(
       container.querySelector('.ais-AutocompleteBackButton')
@@ -83,22 +83,14 @@ describe('AutocompleteSearch', () => {
 });
 
 describe('AutocompleteDetachedFormContainer', () => {
-  test('keeps backwards-compatible props without rendering a cancel button', () => {
+  test('renders children without a cancel button', () => {
     const { container, queryByText } = render(
-      <AutocompleteDetachedFormContainer
-        onCancel={jest.fn()}
-        translations={{
-          detachedCancelButtonText: 'Cancel',
-          detachedSearchButtonTitle: 'Search',
-          detachedClearButtonTitle: 'Clear',
-        }}
-      >
+      <AutocompleteDetachedFormContainer>
         <div>Search form</div>
       </AutocompleteDetachedFormContainer>
     );
 
     expect(queryByText('Search form')).not.toBeNull();
-    expect(queryByText('Cancel')).toBeNull();
     expect(
       container.querySelector('.ais-AutocompleteDetachedCancelButton')
     ).toBeNull();
