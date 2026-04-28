@@ -67,7 +67,7 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
 
 const SEARCH_SCHEMA = {
   hits: { title: 'name', image: 'image_url', description: 'description' },
-  refinementList: { attribute: 'brand' },
+  refinementList: [{ attribute: 'brand' }],
   sortBy: { replicas: ['products_price_asc'] },
 };
 
@@ -97,7 +97,7 @@ describe('add experience command', () => {
     expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
-    expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
   });
 
@@ -119,7 +119,7 @@ describe('add experience command', () => {
       indexName: 'docs',
       schema: {
         hits: { title: 'page_title' },
-        refinementList: { attribute: 'section' },
+        refinementList: [{ attribute: 'section' }],
         sortBy: { replicas: ['docs_updated_desc'] },
       },
     });
@@ -184,7 +184,7 @@ describe('add experience command', () => {
         'src/components/product-search/provider.tsx',
         'src/components/product-search/SearchBox.tsx',
         'src/components/product-search/Hits.tsx',
-        'src/components/product-search/RefinementList.tsx',
+        'src/components/product-search/RefinementListBrand.tsx',
         'src/components/product-search/SortBy.tsx',
         'src/components/product-search/Pagination.tsx',
         'src/components/product-search/ClearRefinements.tsx',
@@ -410,7 +410,7 @@ describe('add experience command', () => {
       ).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.jsx'))).toBe(true);
       expect(
-        fs.existsSync(path.join(experienceDir, 'RefinementList.jsx'))
+        fs.existsSync(path.join(experienceDir, 'RefinementListBrand.jsx'))
       ).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'SortBy.jsx'))).toBe(true);
 
@@ -467,7 +467,7 @@ describe('add experience command', () => {
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.js'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.js'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.js'))).toBe(true);
-      expect(fs.existsSync(path.join(experienceDir, 'RefinementList.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.js'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'SortBy.js'))).toBe(true);
 
       // No React artefacts.
@@ -575,7 +575,7 @@ describe('add experience command', () => {
         widgets: ['SearchBox', 'Hits', 'RefinementList', 'Pagination', 'ClearRefinements'],
         schema: {
           hits: { title: 'name' },
-          refinementList: { attribute: 'brand' },
+          refinementList: [{ attribute: 'brand' }],
         },
       });
 
@@ -584,6 +584,7 @@ describe('add experience command', () => {
       const experienceDir = path.join(projectDir, 'src/components/product-search');
       expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
     });
 
     test('generates only the specified widgets', async () => {
@@ -794,7 +795,7 @@ describe('add experience command — interactive prompts', () => {
         'name',          // hits title (selected from attributes)
         'image_url',     // hits image (selected from imageCandidates)
         // hits description is optional — not prompted
-        'brand',         // refinementList attribute (selected from facets)
+        ['brand'],       // refinementList attributes (multi-select from facets)
         ['products_price_asc'], // sortBy replicas (multi-select)
       ]),
     });
@@ -809,7 +810,7 @@ describe('add experience command — interactive prompts', () => {
     expect(hitsFile).toContain('image_url');
 
     const rlFile = fs.readFileSync(
-      path.join(projectDir, 'src/components/product-search/RefinementList.tsx'),
+      path.join(projectDir, 'src/components/product-search/RefinementListBrand.tsx'),
       'utf8'
     );
     expect(rlFile).toContain('brand');
@@ -828,7 +829,7 @@ describe('add experience command — interactive prompts', () => {
         // refinementList and sortBy missing — should be prompted
       },
       prompter: createScriptedPrompter([
-        'brand',                  // refinementList attribute
+        ['brand'],                // refinementList attributes (multi-select)
         ['products_price_asc'],   // sortBy replicas
       ]),
     });
@@ -869,8 +870,8 @@ describe('add experience command — interactive prompts', () => {
       prompter: createScriptedPrompter([
         'title_field',    // manual hits title (free text)
         'img_field',      // manual hits image (free text)
-        'category',       // manual refinementList attribute (free text)
-        ['price_asc'],    // manual sortBy replicas (free text comma-list)
+        ['category'],     // refinementList attributes (multi-select from facets)
+        ['price_asc'],    // sortBy replicas (multi-select)
       ]),
     });
 
@@ -923,7 +924,7 @@ describe('add experience command — interactive prompts', () => {
     expect(report).toMatchObject({ ok: true, command: 'add experience' });
 
     const rlFile = fs.readFileSync(
-      path.join(projectDir, 'src/components/product-search/RefinementList.tsx'),
+      path.join(projectDir, 'src/components/product-search/RefinementListManualFacet.tsx'),
       'utf8'
     );
     expect(rlFile).toContain('manual_facet');
@@ -955,7 +956,7 @@ describe('add experience command — interactive prompts', () => {
       indexName: 'products',
       schema: {
         hits: { title: 'name', image: 'image_url' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
       },
       prompter: createScriptedPrompter([
         'products_price_asc,products_price_desc', // manual comma-separated replicas
@@ -997,7 +998,7 @@ describe('add experience command — interactive prompts', () => {
       indexName: 'products',
       schema: {
         hits: { title: 'name', image: 'image_url' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
       },
       prompter: createScriptedPrompter([
         true, // confirm: skip SortBy

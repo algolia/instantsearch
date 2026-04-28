@@ -177,7 +177,7 @@ describe('manifest', () => {
       widgets: ['Hits', 'RefinementList', 'SortBy'],
       schema: {
         hits: { title: 'name', image: 'image_url', description: 'description' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
         sortBy: { replicas: ['products_price_asc', 'products_price_desc'] },
       },
     };
@@ -207,7 +207,7 @@ describe('manifest', () => {
           widgets: ['Hits', 'RefinementList', 'SortBy'],
           schema: {
             hits: { title: 'name', image: 'image_url' },
-            refinementList: { attribute: 'brand' },
+            refinementList: [{ attribute: 'brand' }],
             sortBy: { replicas: ['products_price_asc'] },
           },
         },
@@ -216,7 +216,7 @@ describe('manifest', () => {
 
     expect(resolved.experience.schema).toEqual({
       hits: { title: 'name', image: 'image_url' },
-      refinementList: { attribute: 'brand' },
+      refinementList: [{ attribute: 'brand' }],
       sortBy: { replicas: ['products_price_asc'] },
     });
   });

@@ -19,7 +19,7 @@ export type RootManifest = {
 
 export type ExperienceSchema = {
   hits?: { title: string; image?: string; description?: string };
-  refinementList?: { attribute: string };
+  refinementList?: Array<{ attribute: string }>;
   sortBy?: { replicas: string[] };
 };
 

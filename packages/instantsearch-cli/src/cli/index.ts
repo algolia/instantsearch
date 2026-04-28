@@ -42,7 +42,7 @@ type InitFlagOptions = {
   flavor?: Flavor;
   framework?: Framework;
   appId?: string;
-  searchKey?: string;
+  searchApiKey?: string;
   componentsPath?: string;
 };
 
@@ -50,10 +50,10 @@ async function runInit(cliOptions: InitFlagOptions): Promise<void> {
   const prompter = getPrompter();
 
   // In non-interactive mode without required flags, fail fast.
-  if (!prompter && (!cliOptions.appId || !cliOptions.searchKey)) {
+  if (!prompter && (!cliOptions.appId || !cliOptions.searchApiKey)) {
     const missing: string[] = [];
     if (!cliOptions.appId) missing.push('--app-id');
-    if (!cliOptions.searchKey) missing.push('--search-key');
+    if (!cliOptions.searchApiKey) missing.push('--search-api-key');
     emitAndExit(
       failure({
         command: 'init',
@@ -69,7 +69,7 @@ async function runInit(cliOptions: InitFlagOptions): Promise<void> {
     framework: cliOptions.framework,
     componentsPath: cliOptions.componentsPath,
     appId: cliOptions.appId,
-    searchApiKey: cliOptions.searchKey,
+    searchApiKey: cliOptions.searchApiKey,
     prompter,
   };
 
@@ -94,7 +94,7 @@ program
   .option('--flavor <flavor>', 'react | js')
   .option('--framework <framework>', 'nextjs (omit for bare library)')
   .option('--app-id <appId>', 'Algolia application ID')
-  .option('--search-key <searchKey>', 'Algolia search-only API key')
+  .option('--search-api-key <searchApiKey>', 'Algolia search-only API key')
   .option('--components-path <path>', 'Path where components will be generated')
   .action(runInit);
 
@@ -129,7 +129,8 @@ function buildSchemaFromFlags(opts: SchemaFlagOptions): ExperienceSchema {
     };
   }
   if (opts.refinementListAttribute) {
-    schema.refinementList = { attribute: opts.refinementListAttribute };
+    const attributes = parseCommaSeparated(opts.refinementListAttribute);
+    schema.refinementList = attributes.map((a) => ({ attribute: a }));
   }
   const replicas = parseReplicasFlag(opts.sortByReplicas);
   if (replicas) {
@@ -254,7 +255,7 @@ type IntrospectFlagOptions = {
   yes?: boolean;
   index?: string;
   appId?: string;
-  searchKey?: string;
+  searchApiKey?: string;
 };
 
 async function runIntrospect(cliOptions: IntrospectFlagOptions): Promise<void> {
@@ -272,7 +273,7 @@ async function runIntrospect(cliOptions: IntrospectFlagOptions): Promise<void> {
     projectDir: process.cwd(),
     indexName: cliOptions.index,
     appId: cliOptions.appId,
-    searchApiKey: cliOptions.searchKey,
+    searchApiKey: cliOptions.searchApiKey,
   });
 
   emitAndExit(report);
@@ -285,7 +286,7 @@ program
   .option('--yes', 'Accept defaults without prompting.')
   .option('--index <index>', 'Algolia index name')
   .option('--app-id <appId>', 'Algolia application ID (overrides instantsearch.json)')
-  .option('--search-key <searchKey>', 'Algolia search-only API key (overrides instantsearch.json)')
+  .option('--search-api-key <searchApiKey>', 'Algolia search-only API key (overrides instantsearch.json)')
   .action(runIntrospect);
 
 function normalizeArgv(argv: string[]): string[] {

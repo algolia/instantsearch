@@ -19,6 +19,7 @@ import {
 } from '../manifest';
 import type { Prompter } from '../prompter';
 import { success, failure, type Report } from '../reporter';
+import { refinementListWidgetName } from '../utils/naming';
 import { buildExperienceNextSteps, experienceImportBase } from '../utils/next-steps';
 import { parseCommaSeparated } from '../utils/parsing';
 import { writeOrConflict } from '../utils/write-files';
@@ -54,7 +55,7 @@ function missingSchemaParts(
   if (widgets.includes('Hits') && !schema?.hits?.title) {
     missing.push('--hits-title');
   }
-  if (widgets.includes('RefinementList') && !schema?.refinementList?.attribute) {
+  if (widgets.includes('RefinementList') && (!schema?.refinementList || schema.refinementList.length === 0)) {
     missing.push('--refinement-list-attribute');
   }
   if (
@@ -177,7 +178,7 @@ export async function addExperience(
   const needsSortBy = widgets.includes('SortBy');
 
   const needsHitsPrompt = needsHits && !schema.hits?.title;
-  const needsRLPrompt = needsRL && !schema.refinementList?.attribute;
+  const needsRLPrompt = needsRL && (!schema.refinementList || schema.refinementList.length === 0);
   const needsSortByPrompt = needsSortBy && (!schema.sortBy?.replicas || schema.sortBy.replicas.length === 0);
 
   let introspectionDone = indexResolution.probe !== null;
@@ -219,13 +220,13 @@ export async function addExperience(
     if (needsRLPrompt && facetsResult) {
       if (facetsResult.ok) {
         const facetChoices = facetsResult.facets.map((f) => ({ name: f, value: f }));
-        const attribute = await prompter.select<string>('Which facet attribute for RefinementList?', facetChoices);
-        schema = { ...schema, refinementList: { attribute } };
+        const attributes = await prompter.multiSelect<string>('Which facet attributes for RefinementList?', facetChoices);
+        schema = { ...schema, refinementList: attributes.map((a) => ({ attribute: a })) };
       } else if (facetsResult.code === 'index_has_no_facets') {
         const attribute = await prompter.text(
           'No facets configured. Enter a facet attribute name manually:'
         );
-        schema = { ...schema, refinementList: { attribute } };
+        schema = { ...schema, refinementList: [{ attribute }] };
       } else {
         return failure({ command: COMMAND, code: facetsResult.code, message: facetsResult.message });
       }
@@ -275,7 +276,24 @@ export async function addExperience(
     }
   }
 
-  const finalWidgets = skipSortBy ? widgets.filter((w) => w !== 'SortBy') : widgets;
+  if (schema.refinementList && schema.refinementList.length > 1) {
+    const names = schema.refinementList.map((e) => refinementListWidgetName(e.attribute));
+    if (new Set(names).size < names.length) {
+      return failure({
+        command: COMMAND,
+        code: 'duplicate_widget',
+        message: `Two or more RefinementList attributes produce the same widget name. Use distinct attribute names.`,
+      });
+    }
+  }
+
+  const expandedWidgets = widgets.flatMap((w) => {
+    if (w === 'RefinementList' && schema.refinementList && schema.refinementList.length > 0) {
+      return schema.refinementList.map((entry) => refinementListWidgetName(entry.attribute));
+    }
+    return [w];
+  });
+  const finalWidgets = skipSortBy ? expandedWidgets.filter((w) => w !== 'SortBy') : expandedWidgets;
 
   const experienceManifest: ExperienceManifest = {
     apiVersion: 1,

@@ -120,7 +120,7 @@ export async function init(options: InitOptions): Promise<Report> {
   if (!appId || !searchApiKey) {
     const missing: string[] = [];
     if (!appId) missing.push('--app-id');
-    if (!searchApiKey) missing.push('--search-key');
+    if (!searchApiKey) missing.push('--search-api-key');
     return failure({
       command: COMMAND,
       code: 'missing_required_flag',

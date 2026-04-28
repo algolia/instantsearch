@@ -198,7 +198,7 @@ describe('generator: schema-driven widgets (React + TypeScript)', () => {
       widgets: ['Hits', 'RefinementList', 'SortBy'],
       schema: {
         hits: { title: 'name', image: 'image_url', description: 'description' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
         sortBy: {
           replicas: ['products_price_asc', 'products_price_desc'],
         },
@@ -285,6 +285,52 @@ describe('generator: schema-driven widgets (React + TypeScript)', () => {
     expect(
       files.get('src/components/product-search/SortBy.tsx')
     ).toMatchSnapshot();
+  });
+});
+
+describe('generator: multiple RefinementLists (React + TypeScript)', () => {
+  const baseManifest = {
+    flavor: 'react' as const,
+    framework: null,
+    typescript: true,
+    componentsPath: 'src/components',
+    aliases: {},
+    algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+    experience: {
+      name: 'product-search',
+      indexName: 'products',
+      widgets: ['SearchBox', 'RefinementListBrand', 'RefinementListCategory', 'Pagination'],
+      schema: {
+        refinementList: [
+          { attribute: 'brand' },
+          { attribute: 'category' },
+        ],
+      },
+    },
+  };
+
+  test('generates one file per RefinementList attribute with the correct content', () => {
+    const files = generateExperience(baseManifest);
+
+    const brandFile = files.get('src/components/product-search/RefinementListBrand.tsx')!;
+    expect(brandFile).toBeDefined();
+    expect(brandFile).toMatch(/attribute=['"]brand['"]/);
+    expect(brandFile).toMatch(/export function RefinementListBrand/);
+
+    const categoryFile = files.get('src/components/product-search/RefinementListCategory.tsx')!;
+    expect(categoryFile).toBeDefined();
+    expect(categoryFile).toMatch(/attribute=['"]category['"]/);
+    expect(categoryFile).toMatch(/export function RefinementListCategory/);
+  });
+
+  test('index.tsx imports and renders all RefinementList instances', () => {
+    const files = generateExperience(baseManifest);
+    const index = files.get('src/components/product-search/index.tsx')!;
+
+    expect(index).toMatch(/import { RefinementListBrand } from '\.\/RefinementListBrand'/);
+    expect(index).toMatch(/import { RefinementListCategory } from '\.\/RefinementListCategory'/);
+    expect(index).toMatch(/<RefinementListBrand \/>/);
+    expect(index).toMatch(/<RefinementListCategory \/>/);
   });
 });
 
@@ -564,7 +610,7 @@ describe('generator: schema-driven widgets (JS flavor)', () => {
       widgets: ['Hits', 'RefinementList', 'SortBy'],
       schema: {
         hits: { title: 'name', image: 'image_url', description: 'description' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
         sortBy: {
           replicas: ['products_price_asc', 'products_price_desc'],
         },
@@ -668,7 +714,7 @@ describe('generator: schema-driven widgets (React + plain JS)', () => {
       widgets: ['Hits', 'RefinementList', 'SortBy'],
       schema: {
         hits: { title: 'name', image: 'image_url', description: 'description' },
-        refinementList: { attribute: 'brand' },
+        refinementList: [{ attribute: 'brand' }],
         sortBy: {
           replicas: ['products_price_asc', 'products_price_desc'],
         },

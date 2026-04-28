@@ -20,7 +20,7 @@ import {
 } from '../manifest';
 import type { Prompter } from '../prompter';
 import { success, failure, type Report } from '../reporter';
-import { toPascalCase } from '../utils/naming';
+import { toPascalCase, refinementListWidgetName } from '../utils/naming';
 import {
   buildWidgetNextSteps,
   experienceImportBase,
@@ -43,12 +43,13 @@ function resolveWidgetName(input: string): WidgetName | null {
   return SUPPORTED_WIDGETS.find((w) => w === pascal) ?? null;
 }
 
-function attributeSuffix(
+function refinementListSuffixedName(
   widget: WidgetName,
   schema: ExperienceSchema | undefined
 ): string | null {
-  if (widget === 'RefinementList' && schema?.refinementList?.attribute) {
-    return toPascalCase(schema.refinementList.attribute);
+  if (widget === 'RefinementList' && schema?.refinementList && schema.refinementList.length > 0) {
+    const last = schema.refinementList[schema.refinementList.length - 1];
+    return refinementListWidgetName(last.attribute);
   }
   return null;
 }
@@ -176,10 +177,19 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
     });
   }
 
+  const existingSchema = experienceManifest.schema ?? {};
+  const newSchema = schema ?? {};
   const mergedSchema: ExperienceSchema = {
-    ...(experienceManifest.schema ?? {}),
-    ...(schema ?? {}),
+    ...existingSchema,
+    ...newSchema,
+    refinementList: [
+      ...(existingSchema.refinementList ?? []),
+      ...(newSchema.refinementList ?? []),
+    ],
   };
+  if (mergedSchema.refinementList?.length === 0) {
+    delete mergedSchema.refinementList;
+  }
 
   const resolved = resolveExperience(rootManifest, {
     name: experienceName,
@@ -191,10 +201,7 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
     },
   });
 
-  const defaultPath = widgetFilePath(resolved, widget);
-  const collides = fs.existsSync(path.join(projectDir, defaultPath));
-  const suffix = attributeSuffix(widget, mergedSchema);
-  const suffixedName = collides && suffix ? `${widget}${suffix}` : null;
+  const suffixedName = refinementListSuffixedName(widget, newSchema);
   const files = generateWidget(resolved, {
     widget,
     ...(suffixedName ? { fileName: suffixedName } : {}),

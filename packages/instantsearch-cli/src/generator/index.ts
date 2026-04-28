@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { AlgoliaCredentials, Flavor, Framework } from '../types';
 import type { ResolvedExperienceManifest } from '../manifest';
 import {
+  refinementListWidgetName,
   providerComponentName,
   startFunctionName,
   experienceComponentName,
@@ -164,7 +165,7 @@ type ExperienceSchema = NonNullable<
   ResolvedExperienceManifest['experience']['schema']
 >;
 type HitsSchema = NonNullable<ExperienceSchema['hits']>;
-type RefinementListSchema = NonNullable<ExperienceSchema['refinementList']>;
+type RefinementListSchema = { attribute: string };
 type SortBySchema = NonNullable<ExperienceSchema['sortBy']>;
 
 function requireHitsSchema(schema: ExperienceSchema['hits']): HitsSchema {
@@ -176,15 +177,27 @@ function requireHitsSchema(schema: ExperienceSchema['hits']): HitsSchema {
   return schema;
 }
 
-function requireRefinementListSchema(
-  schema: ExperienceSchema['refinementList']
+function findRefinementListSchema(
+  schemaList: ExperienceSchema['refinementList'],
+  widgetName: string
 ): RefinementListSchema {
-  if (!schema?.attribute) {
+  if (!schemaList || schemaList.length === 0) {
     throw new Error(
-      'RefinementList widget requires schema.refinementList.attribute. Pass --refinement-list-attribute <attr>.'
+      'RefinementList widget requires schema.refinementList. Pass --refinement-list-attribute <attr>.'
     );
   }
-  return schema;
+  if (widgetName === 'RefinementList') {
+    return schemaList[0];
+  }
+  const match = schemaList.find(
+    (entry) => refinementListWidgetName(entry.attribute) === widgetName
+  );
+  if (!match) {
+    throw new Error(
+      `No schema entry found for RefinementList widget '${widgetName}'.`
+    );
+  }
+  return match;
 }
 
 function requireSortBySchema(schema: ExperienceSchema['sortBy']): SortBySchema {
@@ -240,12 +253,13 @@ export function Hits() {
 }
 
 function refinementListSource(
-  schemaInput: ExperienceSchema['refinementList']
+  schemaInput: ExperienceSchema['refinementList'],
+  widgetName: string
 ): string {
-  const { attribute } = requireRefinementListSchema(schemaInput);
+  const { attribute } = findRefinementListSchema(schemaInput, widgetName);
   return `import { RefinementList as InstantSearchRefinementList } from 'react-instantsearch';
 
-export function RefinementList() {
+export function ${widgetName}() {
   return <InstantSearchRefinementList attribute="${attribute}" />;
 }
 `;
@@ -290,12 +304,13 @@ export function SortBy() {
 
 function schemaWidgetSource(
   widget: SchemaWidget,
-  manifest: ResolvedExperienceManifest
+  manifest: ResolvedExperienceManifest,
+  widgetName: string
 ): string {
   const schema = manifest.experience.schema ?? {};
   if (widget === 'Hits') return hitsSource(schema.hits, manifest.typescript);
   if (widget === 'RefinementList')
-    return refinementListSource(schema.refinementList);
+    return refinementListSource(schema.refinementList, widgetName);
   return sortBySource(manifest.experience.indexName, schema.sortBy);
 }
 
@@ -329,12 +344,13 @@ ${lines}
 }
 
 function jsRefinementListSource(
-  schemaInput: ExperienceSchema['refinementList']
+  schemaInput: ExperienceSchema['refinementList'],
+  widgetName: string
 ): string {
-  const { attribute } = requireRefinementListSchema(schemaInput);
+  const { attribute } = findRefinementListSchema(schemaInput, widgetName);
   return `import { ${JS_WIDGET_FACTORY.RefinementList} } from 'instantsearch.js/es/widgets';
 
-export function RefinementList(container) {
+export function ${widgetName}(container) {
   return ${JS_WIDGET_FACTORY.RefinementList}({
     container,
     attribute: '${attribute}',
@@ -364,12 +380,13 @@ export function SortBy(container) {
 
 function jsSchemaWidgetSource(
   widget: SchemaWidget,
-  manifest: ResolvedExperienceManifest
+  manifest: ResolvedExperienceManifest,
+  widgetName: string
 ): string {
   const schema = manifest.experience.schema ?? {};
   if (widget === 'Hits') return jsHitsSource(schema.hits);
   if (widget === 'RefinementList')
-    return jsRefinementListSource(schema.refinementList);
+    return jsRefinementListSource(schema.refinementList, widgetName);
   return jsSortBySource(manifest.experience.indexName, schema.sortBy);
 }
 
@@ -402,7 +419,8 @@ type FlavorSources = {
   structural: (widget: StructuralWidget) => string;
   schema: (
     widget: SchemaWidget,
-    manifest: ResolvedExperienceManifest
+    manifest: ResolvedExperienceManifest,
+    widgetName: string
   ) => string;
 };
 
@@ -419,13 +437,22 @@ const SOURCES_BY_FLAVOR: Record<Flavor, FlavorSources> = {
   },
 };
 
+function baseWidgetName(widget: string): WidgetName | null {
+  if (isStructuralWidget(widget)) return widget;
+  if (isSchemaWidget(widget)) return widget;
+  if (/^RefinementList[A-Z]/.test(widget)) return 'RefinementList';
+  return null;
+}
+
 function widgetSource(
-  widget: WidgetName,
+  widgetName: string,
   manifest: ResolvedExperienceManifest
 ): string {
   const sources = SOURCES_BY_FLAVOR[manifest.flavor];
-  if (isStructuralWidget(widget)) return sources.structural(widget);
-  return sources.schema(widget, manifest);
+  const base = baseWidgetName(widgetName);
+  if (!base) throw new Error(`Unknown widget: ${widgetName}`);
+  if (isStructuralWidget(base)) return sources.structural(base);
+  return sources.schema(base, manifest, widgetName);
 }
 
 export function widgetFilePath(
@@ -455,8 +482,8 @@ export function generateWidget(
   ]);
 }
 
-function assertKnownWidget(widget: string): asserts widget is WidgetName {
-  if (!isStructuralWidget(widget) && !isSchemaWidget(widget)) {
+function assertKnownWidget(widget: string): void {
+  if (!baseWidgetName(widget)) {
     throw new Error(`Unknown widget: ${widget}`);
   }
 }

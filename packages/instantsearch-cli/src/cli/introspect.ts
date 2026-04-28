@@ -26,7 +26,7 @@ export async function introspect(options: IntrospectOptions): Promise<Report> {
         command: COMMAND,
         code: 'not_initialized',
         message:
-          'No instantsearch.json found and no --app-id / --search-key provided.',
+          'No instantsearch.json found and no --app-id / --search-api-key provided.',
       });
     }
     appId = manifest.algolia.appId;

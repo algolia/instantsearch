@@ -73,7 +73,7 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
 
 const SEARCH_SCHEMA = {
   hits: { title: 'name', image: 'image_url', description: 'description' },
-  refinementList: { attribute: 'brand' },
+  refinementList: [{ attribute: 'brand' }],
   sortBy: { replicas: ['products_price_asc'] },
 };
 
@@ -124,19 +124,19 @@ describe('add widget command', () => {
     await seedExperience(projectDir);
 
     const experienceDir = path.join(projectDir, 'src/components/product-search');
-    // Seeded experience already has RefinementList.tsx for 'brand'.
-    expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(true);
+    // Seeded experience already has RefinementListBrand.tsx for 'brand'.
+    expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
 
     const report = await addWidget({
       projectDir,
       experience: 'product-search',
       widget: 'refinement-list',
-      schema: { refinementList: { attribute: 'category' } },
+      schema: { refinementList: [{ attribute: 'category' }] },
     });
 
     expect(report.ok).toBe(true);
     // Original file untouched.
-    expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
     // New file suffixed by PascalCased attribute.
     const suffixed = path.join(experienceDir, 'RefinementListCategory.tsx');
     expect(fs.existsSync(suffixed)).toBe(true);
@@ -203,7 +203,7 @@ describe('add widget command', () => {
       projectDir,
       experience: 'product-search',
       widget: 'refinement-list',
-      schema: { refinementList: { attribute: 'category' } },
+      schema: { refinementList: [{ attribute: 'category' }] },
     });
 
     if (!report.ok) throw new Error('expected success');

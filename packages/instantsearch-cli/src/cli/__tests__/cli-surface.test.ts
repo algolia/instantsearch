@@ -59,7 +59,7 @@ describe('CLI binary surface under --json', () => {
     const cwd = mkTmp();
 
     const { stdout, stderr, exitCode } = runCli(
-      ['init', '--json', '--app-id', 'APP', '--search-key', 'KEY'],
+      ['init', '--json', '--app-id', 'APP', '--search-api-key', 'KEY'],
       cwd
     );
 
@@ -83,7 +83,7 @@ describe('CLI binary surface under --json', () => {
         '--json',
         '--app-id',
         'APP',
-        '--search-key',
+        '--search-api-key',
         'KEY',
         '--totally-made-up-flag',
       ],

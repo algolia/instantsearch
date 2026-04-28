@@ -18,6 +18,10 @@ export function experienceComponentName(experienceName: string): string {
   return toPascalCase(experienceName);
 }
 
+export function refinementListWidgetName(attribute: string): string {
+  return `RefinementList${toPascalCase(attribute)}`;
+}
+
 export function widgetContainerId(widget: string): string {
   return widget
     .replace(/([a-z])([A-Z])/g, '$1-$2')
