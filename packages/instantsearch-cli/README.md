@@ -25,12 +25,11 @@ yarn workspace @algolia/instantsearch-cli start add experience product-search \
   --refinement-list-attribute brand \
   --sort-by-replicas products_price_asc,products_price_desc
 
-# Only generate specific widgets (skip SortBy and ClearRefinements)
+# Only generate SearchBox, Hits, RefinementList, Pagination, ClearRefinements (skip SortBy)
 yarn workspace @algolia/instantsearch-cli start add experience product-search \
   --yes --json \
   --template search --index products \
-  --hits-title name \
-  --widgets SearchBox,Hits,RefinementList,Pagination
+  --hits-title name --refinement-list-attribute brand
 
 # Discover index schema before scaffolding
 yarn workspace @algolia/instantsearch-cli start introspect \
@@ -88,11 +87,10 @@ Add a new search experience from a template. Creates an experience folder with a
 | `--hits-description <attr>` | Record attribute for Hits description |
 | `--refinement-list-attribute <attr>` | Facet attribute for RefinementList |
 | `--sort-by-replicas <list>` | Comma-separated replica index names for SortBy |
-| `--widgets <list>` | Comma-separated widget list (overrides template defaults) |
 
 In `--yes` mode, `--index` is required. Schema flags (`--hits-title`, etc.) are optional — when omitted, the CLI introspects the index and picks sensible defaults interactively.
 
-The `search` template generates all six widgets by default: SearchBox, Hits, RefinementList, SortBy, Pagination, ClearRefinements. Use `--widgets` to override the list, e.g., `--widgets SearchBox,Hits,Pagination` to skip RefinementList, SortBy, and ClearRefinements.
+The `search` template generates all six widgets by default: SearchBox, Hits, RefinementList, SortBy, Pagination, ClearRefinements. Schema-driven widgets are automatically skipped when their required flags are not provided: omit `--refinement-list-attribute` to skip RefinementList, omit `--sort-by-replicas` to skip SortBy.
 
 ### `instantsearch add widget <widget>`
 

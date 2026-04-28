@@ -45,11 +45,7 @@ Use the introspect output to understand what the index contains, then use your j
 
 **Multiple RefinementLists:** `--refinement-list-attribute` accepts comma-separated values (e.g. `--refinement-list-attribute brand,category,color`). Each attribute generates its own suffixed widget file (`RefinementListBrand.tsx`, `RefinementListCategory.tsx`, etc.). Use introspect's facets output to pick the most useful facets for the search experience.
 
-If a field has no viable options (e.g., no replicas, no facets), drop the corresponding widget via `--widgets` instead of passing an empty flag:
-
-```bash
---widgets SearchBox,Hits,Pagination,ClearRefinements
-```
+If a field has no viable options (e.g., no replicas, no facets), simply omit the corresponding schema flag. The CLI automatically skips widgets whose required schema flags are not provided — omit `--sort-by-replicas` to skip SortBy, omit `--refinement-list-attribute` to skip RefinementList.
 
 **Error recovery:** If `ok` is `false`, the `code` and `message` fields explain the problem and what to do next.
 
@@ -86,6 +82,7 @@ Go beyond the scaffold:
 - **Always introspect before `add experience`.** Don't guess attribute names or retry in a loop.
 - **Parse the JSON response** and use `nextSteps` to guide your integration work.
 - **Never regenerate files the CLI already created.** Edit them instead. The user owns these files.
+- **Don't replace bootstrapped widgets with hooks.** The CLI generates thin wrappers (e.g., `<InstantSearchSearchBox />`) intentionally. Never rewrite them to use hooks like `useSearchBox()` — that replaces a clean scaffold with a reimplementation of the library widget. Customize the wrapper, don't replace it.
 - **Don't duplicate what the CLI does.** Don't manually create provider files, don't manually wire up `algoliasearch`, don't query Algolia APIs directly.
 - **Do the things the CLI can't.** Mount components, edit routes, add styling, build rich product tiles, wire up navigation. That's your value.
 - **Check `ok` before proceeding.** If the CLI returns `ok: false`, diagnose and fix before moving on.

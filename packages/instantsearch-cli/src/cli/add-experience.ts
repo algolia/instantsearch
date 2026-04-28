@@ -1,6 +1,7 @@
 import path from 'node:path';
 
-import { generateExperience, SUPPORTED_WIDGETS, type WidgetName } from '../generator';
+import { generateExperience, type WidgetName } from '../generator';
+import { getSchemaStatus } from '../registry';
 import {
   introspectRecords,
   introspectFacets,
@@ -31,7 +32,6 @@ export type AddExperienceOptions = {
   name: string;
   template: string;
   indexName?: string;
-  widgets?: string[];
   schema?: ExperienceSchema;
   prompter?: Prompter;
 };
@@ -46,26 +46,6 @@ const TEMPLATE_WIDGETS: Record<string, WidgetName[]> = {
     'ClearRefinements',
   ],
 };
-
-function missingSchemaParts(
-  widgets: WidgetName[],
-  schema: ExperienceSchema | undefined
-): string[] {
-  const missing: string[] = [];
-  if (widgets.includes('Hits') && !schema?.hits?.title) {
-    missing.push('--hits-title');
-  }
-  if (widgets.includes('RefinementList') && (!schema?.refinementList || schema.refinementList.length === 0)) {
-    missing.push('--refinement-list-attribute');
-  }
-  if (
-    widgets.includes('SortBy') &&
-    (!schema?.sortBy?.replicas || schema.sortBy.replicas.length === 0)
-  ) {
-    missing.push('--sort-by-replicas');
-  }
-  return missing;
-}
 
 type IndexResolution =
   | { ok: true; indexName: string; probe: RecordsResult | null }
@@ -140,20 +120,7 @@ export async function addExperience(
     });
   }
 
-  if (options.widgets) {
-    const unknown = options.widgets.filter(
-      (w) => !(SUPPORTED_WIDGETS as readonly string[]).includes(w)
-    );
-    if (unknown.length > 0) {
-      return failure({
-        command: COMMAND,
-        code: 'unknown_widget',
-        message: `Unknown widget(s): ${unknown.join(', ')}. Supported widgets: ${SUPPORTED_WIDGETS.join(', ')}.`,
-      });
-    }
-  }
-
-  const widgets: WidgetName[] = (options.widgets as WidgetName[] | undefined) ?? templateWidgets;
+  let widgets: WidgetName[] = [...templateWidgets];
 
   const indexResolution = await resolveIndexName({
     initial: options.indexName,
@@ -173,13 +140,9 @@ export async function addExperience(
 
   let schema: ExperienceSchema = { ...(options.schema ?? {}) };
 
-  const needsHits = widgets.includes('Hits');
-  const needsRL = widgets.includes('RefinementList');
-  const needsSortBy = widgets.includes('SortBy');
-
-  const needsHitsPrompt = needsHits && !schema.hits?.title;
-  const needsRLPrompt = needsRL && (!schema.refinementList || schema.refinementList.length === 0);
-  const needsSortByPrompt = needsSortBy && (!schema.sortBy?.replicas || schema.sortBy.replicas.length === 0);
+  const needsHitsPrompt = widgets.includes('Hits') && getSchemaStatus('Hits', schema) !== 'satisfied';
+  const needsRLPrompt = widgets.includes('RefinementList') && getSchemaStatus('RefinementList', schema) !== 'satisfied';
+  const needsSortByPrompt = widgets.includes('SortBy') && getSchemaStatus('SortBy', schema) !== 'satisfied';
 
   let introspectionDone = indexResolution.probe !== null;
   let skipSortBy = false;
@@ -255,7 +218,13 @@ export async function addExperience(
       }
     }
   } else if (!prompter) {
-    const missingFlags = missingSchemaParts(widgets, schema);
+    const missingFlags: string[] = [];
+    widgets = widgets.filter((w) => {
+      const status = getSchemaStatus(w, schema);
+      if (status === 'skippable') return false;
+      if (status !== 'satisfied') missingFlags.push(status.missing);
+      return true;
+    });
     if (missingFlags.length > 0) {
       return failure({
         command: COMMAND,

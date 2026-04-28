@@ -525,8 +525,8 @@ describe('add experience command', () => {
     });
   });
 
-  describe('custom widget list', () => {
-    test('rejects unknown widget names', async () => {
+  describe('implicit widget skipping', () => {
+    test('skips SortBy when --sort-by-replicas is not provided', async () => {
       const projectDir = makeInitializedProject();
 
       const report = await addExperience({
@@ -534,45 +534,6 @@ describe('add experience command', () => {
         name: 'product-search',
         template: 'search',
         indexName: 'products',
-        widgets: ['SearchBox', 'Foobar'],
-        schema: { hits: { title: 'name' } },
-      });
-
-      expect(report).toMatchObject({
-        ok: false,
-        code: 'unknown_widget',
-      });
-      expect((report as any).message).toMatch(/Foobar/);
-    });
-
-    test('schema validation still applies to widgets in a custom list', async () => {
-      const projectDir = makeInitializedProject();
-
-      const report = await addExperience({
-        projectDir,
-        name: 'product-search',
-        template: 'search',
-        indexName: 'products',
-        widgets: ['SearchBox', 'Hits', 'Pagination'],
-        schema: {},
-      });
-
-      expect(report).toMatchObject({
-        ok: false,
-        code: 'missing_schema',
-      });
-      expect((report as any).message).toMatch(/hits-title/);
-    });
-
-    test('omitting SortBy from widgets does not require --sort-by-replicas', async () => {
-      const projectDir = makeInitializedProject();
-
-      const report = await addExperience({
-        projectDir,
-        name: 'product-search',
-        template: 'search',
-        indexName: 'products',
-        widgets: ['SearchBox', 'Hits', 'RefinementList', 'Pagination', 'ClearRefinements'],
         schema: {
           hits: { title: 'name' },
           refinementList: [{ attribute: 'brand' }],
@@ -587,7 +548,7 @@ describe('add experience command', () => {
       expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
     });
 
-    test('generates only the specified widgets', async () => {
+    test('skips RefinementList when --refinement-list-attribute is not provided', async () => {
       const projectDir = makeInitializedProject();
 
       const report = await addExperience({
@@ -595,7 +556,29 @@ describe('add experience command', () => {
         name: 'product-search',
         template: 'search',
         indexName: 'products',
-        widgets: ['SearchBox', 'Hits', 'Pagination'],
+        schema: {
+          hits: { title: 'name' },
+          sortBy: { replicas: ['products_price_asc'] },
+        },
+      });
+
+      expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+      const experienceDir = path.join(projectDir, 'src/components/product-search');
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+    });
+
+    test('skips both SortBy and RefinementList when neither flag is provided', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
         schema: { hits: { title: 'name' } },
       });
 
@@ -605,9 +588,49 @@ describe('add experience command', () => {
       expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(false);
-      expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(false);
+    });
+
+    test('still errors when --hits-title is missing (required schema)', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: {},
+      });
+
+      expect(report).toMatchObject({
+        ok: false,
+        code: 'missing_schema',
+      });
+      expect((report as any).message).toMatch(/hits-title/);
+    });
+
+    test('generates all template widgets when all schema flags are provided', async () => {
+      const projectDir = makeInitializedProject();
+
+      const report = await addExperience({
+        projectDir,
+        name: 'product-search',
+        template: 'search',
+        indexName: 'products',
+        schema: SEARCH_SCHEMA,
+      });
+
+      expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+      const experienceDir = path.join(projectDir, 'src/components/product-search');
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
     });
   });
 
@@ -683,7 +706,7 @@ describe('add experience command', () => {
       ).toBe(searchBoxBefore);
     });
 
-    test('search template with partial schema (missing refinementList) fails with missing_schema', async () => {
+    test('search template with partial schema (missing refinementList) succeeds by skipping RefinementList', async () => {
       const projectDir = makeInitializedProject();
 
       const report = await addExperience({
@@ -697,11 +720,11 @@ describe('add experience command', () => {
         },
       });
 
-      expect(report).toMatchObject({
-        ok: false,
-        code: 'missing_schema',
-      });
-      expect((report as any).message).toMatch(/refinement-list|refinementList/);
+      expect(report).toMatchObject({ ok: true, command: 'add experience' });
+
+      const experienceDir = path.join(projectDir, 'src/components/product-search');
+      expect(fs.existsSync(path.join(experienceDir, 'RefinementList.tsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
     });
   });
 });
