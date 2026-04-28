@@ -892,7 +892,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }}
       query={resolvedQuery}
       isSearchStalled={isSearchStalled}
-      onSubmit={() => {
+      onCancel={() => {
         if (isDetached) {
           handleCancel();
         }
@@ -977,8 +977,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             >
               <AutocompleteDetachedFormContainer
                 classNames={classNames}
-                onCancel={handleCancel}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>

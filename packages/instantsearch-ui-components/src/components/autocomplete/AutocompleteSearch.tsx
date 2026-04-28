@@ -14,7 +14,7 @@ export type AutocompleteSearchProps = {
   onClear: () => void;
   query: string;
   isSearchStalled: boolean;
-  onSubmit?: () => void;
+  onCancel?: () => void;
   isDetached?: boolean;
   submitTitle?: string;
   onAiModeClick?: () => void;
@@ -27,13 +27,13 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
       onClear,
       query,
       isSearchStalled,
-      onSubmit,
+      onCancel,
       isDetached,
       submitTitle,
       onAiModeClick,
     } = userProps;
 
-    const isBackButton = Boolean(isDetached && onSubmit);
+    const isBackButton = Boolean(isDetached && onCancel);
     const resolvedCancelTitle = submitTitle ?? 'Close';
     const inputRef = inputProps.ref as { current: HTMLInputElement | null };
 
@@ -54,7 +54,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               className="ais-AutocompleteBackButton"
               type="button"
               title={resolvedCancelTitle}
-              onClick={onSubmit}
+              onClick={onCancel}
               hidden={isSearchStalled}
             >
               <BackIcon createElement={createElement} />

@@ -827,7 +827,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         onRefine('');
       }}
       isSearchStalled={instantSearchInstance.status === 'stalled'}
-      onSubmit={() => {
+      onCancel={() => {
         if (isDetached) {
           handleCancel();
         }
@@ -910,8 +910,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             >
               <AutocompleteDetachedFormContainer
                 classNames={cssClasses}
-                onCancel={handleCancel}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
