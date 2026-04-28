@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.28.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.28.1...algoliasearch-helper@3.28.2) (2026-04-28)
+
+
+### Bug Fixes
+
+* **algoliasearch-helper:** convert Infinity/-Infinity to null in _parseNumbers ([#6938](https://github.com/algolia/instantsearch/issues/6938)) ([031d88a](https://github.com/algolia/instantsearch/commit/031d88a2dbefe6c621a844c4abfc4938b3cc38e1)), closes [#14131](https://github.com/algolia/instantsearch/issues/14131)
+
+
+
+
+
 ## [3.28.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.28.0...algoliasearch-helper@3.28.1) (2026-03-24)
 
 **Note:** Version bump only for package algoliasearch-helper
