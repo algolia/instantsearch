@@ -52,10 +52,6 @@ export type AutocompleteClassNames = {
    * Class names to apply to the detached search button clear button
    */
   detachedSearchButtonClear: string | string[];
-  /**
-   * Class names to apply to the detached cancel button
-   */
-  detachedCancelButton: string | string[];
 };
 
 export function createAutocompleteComponent({ createElement }: Renderer) {

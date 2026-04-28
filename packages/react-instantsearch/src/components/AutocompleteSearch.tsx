@@ -14,6 +14,9 @@ export type AutocompleteSearchProps = {
   onQueryChange?: (query: string) => void;
   query: string;
   isSearchStalled: boolean;
+  onCancel?: () => void;
+  isDetached?: boolean;
+  submitTitle?: string;
   onAiModeClick?: () => void;
 };
 
@@ -23,6 +26,9 @@ export function AutocompleteSearch({
   onQueryChange,
   query,
   isSearchStalled,
+  onCancel,
+  isDetached,
+  submitTitle,
   onAiModeClick,
 }: AutocompleteSearchProps) {
   return (
@@ -37,6 +43,9 @@ export function AutocompleteSearch({
       onClear={clearQuery}
       query={query}
       isSearchStalled={isSearchStalled}
+      onCancel={onCancel}
+      isDetached={isDetached}
+      submitTitle={submitTitle}
       onAiModeClick={onAiModeClick}
     />
   );
