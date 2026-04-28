@@ -1,5 +1,6 @@
 import type { GeneratorContext, GenerateResult } from '../../../shared-types';
 import { replicaLabel } from '../../../shared-types';
+import { jsString } from '../../../utils/codegen';
 
 export function generate(ctx: GeneratorContext): GenerateResult {
   const indexName = ctx.params.indexName as string;
@@ -14,7 +15,7 @@ export function generate(ctx: GeneratorContext): GenerateResult {
   ];
 
   const itemsStr = items
-    .map((item) => `  { value: '${item.value}', label: '${item.label}' }`)
+    .map((item) => `  { value: ${jsString(item.value)}, label: ${jsString(item.label)} }`)
     .join(',\n');
 
   const code = `import { SortBy as InstantSearchSortBy } from 'react-instantsearch';

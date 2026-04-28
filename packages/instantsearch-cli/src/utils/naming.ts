@@ -1,9 +1,11 @@
 export function toPascalCase(name: string): string {
-  return name
-    .split(/[-_\s]+/)
+  const pascal = name
+    .split(/[^A-Za-z0-9]+/)
     .filter(Boolean)
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join('');
+
+  return /^\d/.test(pascal) ? `_${pascal}` : pascal;
 }
 
 export function providerComponentName(experienceName: string): string {

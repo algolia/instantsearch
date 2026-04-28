@@ -12,8 +12,8 @@ describe('generator', () => {
     const contents = files.get('src/lib/algolia-client.ts');
     expect(contents).toBeDefined();
     expect(contents).toMatch(/from ['"]algoliasearch['"]/);
-    expect(contents).toContain("'APP_ID_XYZ'");
-    expect(contents).toContain("'SEARCH_KEY_XYZ'");
+    expect(contents).toContain('"APP_ID_XYZ"');
+    expect(contents).toContain('"SEARCH_KEY_XYZ"');
     expect(contents).toMatch(/export const searchClient/);
   });
 
@@ -98,7 +98,7 @@ describe('generator: experience (React + TypeScript)', () => {
     expect(provider).toMatch(/from ['"]react-instantsearch['"]/);
     expect(provider).toMatch(/InstantSearch/);
     expect(provider).toMatch(/searchClient/);
-    expect(provider).toMatch(/indexName=['"]products['"]/);
+    expect(provider).toMatch(/indexName=\{["']products["']\}/);
     expect(provider).toMatch(/export function ProductSearchProvider/);
   });
 
@@ -152,10 +152,10 @@ describe('generator: experience (React + TypeScript)', () => {
     const files = generateExperience(baseManifest);
     const index = files.get('src/components/product-search/index.tsx')!;
     expect(index).toMatch(/export function ProductSearch\(\)/);
-    expect(index).toMatch(/import { ProductSearchProvider } from '\.\/provider'/);
-    expect(index).toMatch(/import { SearchBox } from '\.\/SearchBox'/);
-    expect(index).toMatch(/import { Pagination } from '\.\/Pagination'/);
-    expect(index).toMatch(/import { ClearRefinements } from '\.\/ClearRefinements'/);
+    expect(index).toMatch(/import { ProductSearchProvider } from ["']\.\/provider["']/);
+    expect(index).toMatch(/import { SearchBox } from ["']\.\/SearchBox["']/);
+    expect(index).toMatch(/import { Pagination } from ["']\.\/Pagination["']/);
+    expect(index).toMatch(/import { ClearRefinements } from ["']\.\/ClearRefinements["']/);
     expect(index).toMatch(/<ProductSearchProvider>/);
     expect(index).toMatch(/<SearchBox \/>/);
     expect(index).toMatch(/<Pagination \/>/);
@@ -238,7 +238,7 @@ describe('generator: schema-driven widgets (React + TypeScript)', () => {
     const refinement = files.get(
       'src/components/product-search/RefinementList.tsx'
     )!;
-    expect(refinement).toMatch(/attribute=['"]brand['"]/);
+    expect(refinement).toMatch(/attribute=\{["']brand["']\}/);
   });
 
   test('SortBy.tsx lists the index + replicas as sort items', () => {
@@ -314,12 +314,12 @@ describe('generator: multiple RefinementLists (React + TypeScript)', () => {
 
     const brandFile = files.get('src/components/product-search/RefinementListBrand.tsx')!;
     expect(brandFile).toBeDefined();
-    expect(brandFile).toMatch(/attribute=['"]brand['"]/);
+    expect(brandFile).toMatch(/attribute=\{["']brand["']\}/);
     expect(brandFile).toMatch(/export function RefinementListBrand/);
 
     const categoryFile = files.get('src/components/product-search/RefinementListCategory.tsx')!;
     expect(categoryFile).toBeDefined();
-    expect(categoryFile).toMatch(/attribute=['"]category['"]/);
+    expect(categoryFile).toMatch(/attribute=\{["']category["']\}/);
     expect(categoryFile).toMatch(/export function RefinementListCategory/);
   });
 
@@ -327,10 +327,96 @@ describe('generator: multiple RefinementLists (React + TypeScript)', () => {
     const files = generateExperience(baseManifest);
     const index = files.get('src/components/product-search/index.tsx')!;
 
-    expect(index).toMatch(/import { RefinementListBrand } from '\.\/RefinementListBrand'/);
-    expect(index).toMatch(/import { RefinementListCategory } from '\.\/RefinementListCategory'/);
+    expect(index).toMatch(/import { RefinementListBrand } from ["']\.\/RefinementListBrand["']/);
+    expect(index).toMatch(/import { RefinementListCategory } from ["']\.\/RefinementListCategory["']/);
     expect(index).toMatch(/<RefinementListBrand \/>/);
     expect(index).toMatch(/<RefinementListCategory \/>/);
+  });
+});
+
+describe('generator: escaped schema values', () => {
+  test('escapes credentials in algolia-client source', () => {
+    const files = generate({
+      flavor: 'react',
+      framework: null,
+      typescript: true,
+      algolia: { appId: `APP'ID`, searchApiKey: 'KEY\nVALUE' },
+    });
+
+    expect(files.get('src/lib/algolia-client.ts')).toContain(
+      `algoliasearch("APP'ID", "KEY\\nVALUE")`
+    );
+  });
+
+  test('uses safe literals and bracket access for React schema values', () => {
+    const files = generateExperience({
+      flavor: 'react',
+      framework: null,
+      typescript: true,
+      componentsPath: 'src/components',
+      aliases: {},
+      algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+      experience: {
+        name: 'product-search',
+        indexName: 'products"main',
+        widgets: ['Hits', 'RefinementListCategoriesLvl0', 'SortBy'],
+        schema: {
+          hits: {
+            title: 'product-name',
+            image: 'image.url',
+            description: 'desc text',
+          },
+          refinementList: [{ attribute: 'categories.lvl0' }],
+          sortBy: { replicas: ['products"main_price_asc'] },
+        },
+      },
+    });
+
+    const hits = files.get('src/components/product-search/Hits.tsx')!;
+    expect(hits).toContain('"product-name": string;');
+    expect(hits).toContain('hit["product-name"]');
+    expect(hits).toContain('hit["image.url"]');
+    expect(hits).toContain('hit["desc text"]');
+
+    const refinement = files.get(
+      'src/components/product-search/RefinementListCategoriesLvl0.tsx'
+    )!;
+    expect(refinement).toContain('attribute={"categories.lvl0"}');
+
+    const provider = files.get('src/components/product-search/provider.tsx')!;
+    expect(provider).toContain('indexName={"products\\"main"}');
+
+    const sortBy = files.get('src/components/product-search/SortBy.tsx')!;
+    expect(sortBy).toContain('value: "products\\"main"');
+    expect(sortBy).toContain('value: "products\\"main_price_asc"');
+  });
+
+  test('uses safe bracket access for JS hit templates', () => {
+    const files = generateExperience({
+      flavor: 'js',
+      framework: null,
+      typescript: false,
+      componentsPath: 'src/components',
+      aliases: {},
+      algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
+      experience: {
+        name: 'product-search',
+        indexName: 'products',
+        widgets: ['Hits'],
+        schema: {
+          hits: {
+            title: 'product-name',
+            image: 'image.url',
+            description: 'desc text',
+          },
+        },
+      },
+    });
+
+    const hits = files.get('src/components/product-search/Hits.js')!;
+    expect(hits).toContain('${hit["product-name"]}');
+    expect(hits).toContain('${hit["image.url"]}');
+    expect(hits).toContain('${hit["desc text"]}');
   });
 });
 
@@ -430,7 +516,7 @@ describe('generator: experience (React + Next.js App Router + TypeScript)', () =
     expect(provider).toMatch(/from ['"]react-instantsearch-nextjs['"]/);
     expect(provider).toMatch(/InstantSearchNext/);
     expect(provider).not.toMatch(/from ['"]react-instantsearch['"]/);
-    expect(provider).toMatch(/indexName=['"]products['"]/);
+    expect(provider).toMatch(/indexName=\{["']products["']\}/);
     expect(provider).toMatch(/export function ProductSearchProvider/);
   });
 
@@ -570,14 +656,14 @@ describe('generator: experience (JS flavor)', () => {
   test('index.js calls startProductSearch with all widgets and prefilled container IDs', () => {
     const files = generateExperience(baseManifest);
     const index = files.get('src/components/product-search/index.js')!;
-    expect(index).toMatch(/import { startProductSearch } from '\.\/provider'/);
-    expect(index).toMatch(/import { SearchBox } from '\.\/SearchBox'/);
-    expect(index).toMatch(/import { Pagination } from '\.\/Pagination'/);
-    expect(index).toMatch(/import { ClearRefinements } from '\.\/ClearRefinements'/);
+    expect(index).toMatch(/import { startProductSearch } from ["']\.\/provider["']/);
+    expect(index).toMatch(/import { SearchBox } from ["']\.\/SearchBox["']/);
+    expect(index).toMatch(/import { Pagination } from ["']\.\/Pagination["']/);
+    expect(index).toMatch(/import { ClearRefinements } from ["']\.\/ClearRefinements["']/);
     expect(index).toMatch(/startProductSearch\(\[/);
-    expect(index).toMatch(/SearchBox\('#search-box'\)/);
-    expect(index).toMatch(/Pagination\('#pagination'\)/);
-    expect(index).toMatch(/ClearRefinements\('#clear-refinements'\)/);
+    expect(index).toMatch(/SearchBox\(["']#search-box["']\)/);
+    expect(index).toMatch(/Pagination\(["']#pagination["']\)/);
+    expect(index).toMatch(/ClearRefinements\(["']#clear-refinements["']\)/);
   });
 
   test('index.js contains no JSX or TS syntax', () => {

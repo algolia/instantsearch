@@ -11,8 +11,8 @@ import {
 import { introspectRecords } from '../introspector';
 import {
   addExperienceToRoot,
-  readRootManifest,
-  readExperienceManifest,
+  readRootManifestResult,
+  readExperienceManifestResult,
   writeExperienceManifest,
   resolveExperience,
   type ExperienceSchema,
@@ -20,6 +20,7 @@ import {
 } from '../manifest';
 import type { Prompter } from '../prompter';
 import { success, failure, type Report } from '../reporter';
+import { manifestReadFailure } from './manifest-errors';
 import { toPascalCase, refinementListWidgetName } from '../utils/naming';
 import {
   buildWidgetNextSteps,
@@ -123,15 +124,16 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
     schema,
   } = options;
 
-  const rootManifest = readRootManifest(projectDir);
-  if (!rootManifest) {
-    return failure({
+  const rootResult = readRootManifestResult(projectDir);
+  if (!rootResult.ok) {
+    return manifestReadFailure({
       command: COMMAND,
-      code: 'not_initialized',
-      message:
+      result: rootResult,
+      notFoundMessage:
         'No instantsearch.json found. Run `instantsearch init` before adding a widget.',
     });
   }
+  const rootManifest = rootResult.manifest;
 
   const widget = resolveWidgetName(widgetInput);
   if (!widget) {
@@ -168,14 +170,15 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
   }
 
   const experienceDir = path.join(projectDir, entry.path);
-  const experienceManifest = readExperienceManifest(experienceDir);
-  if (!experienceManifest) {
-    return failure({
+  const experienceResult = readExperienceManifestResult(experienceDir);
+  if (!experienceResult.ok) {
+    return manifestReadFailure({
       command: COMMAND,
-      code: 'not_initialized',
-      message: `Experience manifest missing at '${entry.path}'.`,
+      result: experienceResult,
+      notFoundMessage: `Experience manifest missing at '${entry.path}'.`,
     });
   }
+  const experienceManifest = experienceResult.manifest;
 
   const existingSchema = experienceManifest.schema ?? {};
   const newSchema = schema ?? {};

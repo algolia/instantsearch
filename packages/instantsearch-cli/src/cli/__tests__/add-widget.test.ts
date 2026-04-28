@@ -140,7 +140,9 @@ describe('add widget command', () => {
     // New file suffixed by PascalCased attribute.
     const suffixed = path.join(experienceDir, 'RefinementListCategory.tsx');
     expect(fs.existsSync(suffixed)).toBe(true);
-    expect(fs.readFileSync(suffixed, 'utf8')).toMatch(/attribute="category"/);
+    expect(fs.readFileSync(suffixed, 'utf8')).toMatch(
+      /attribute=\{["']category["']\}/
+    );
 
     const expManifest = readExperienceManifest(experienceDir);
     // Second entry should reference the suffixed file (not the bare widget name).
@@ -302,6 +304,35 @@ describe('add widget command', () => {
 
     const expManifest = readExperienceManifest(experienceDir);
     expect(expManifest?.widgets).toEqual(['SearchBox', 'Hits']);
+  });
+
+  test('existing experience with invalid manifest returns invalid_manifest', async () => {
+    const projectDir = makeInitializedProject({
+      experiences: [
+        { name: 'product-search', path: 'src/components/product-search' },
+      ],
+    });
+    const experienceDir = path.join(projectDir, 'src/components/product-search');
+    fs.mkdirSync(experienceDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(experienceDir, 'instantsearch.config.json'),
+      JSON.stringify({ apiVersion: 1 }, null, 2) + '\n',
+      'utf8'
+    );
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'product-search',
+      widget: 'hits',
+      schema: { hits: { title: 'name' } },
+    });
+
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'add widget',
+      code: 'invalid_manifest',
+    });
+    expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(false);
   });
 });
 

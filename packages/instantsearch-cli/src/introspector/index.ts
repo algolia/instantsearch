@@ -218,7 +218,9 @@ export async function listIndices({
 }: AlgoliaCredentials): Promise<ListIndicesResult> {
   const client = algoliasearch(appId, searchApiKey);
   try {
-    const response = await withRetry(() => client.listIndices());
+    const response = (await withRetry(() => client.listIndices())) as {
+      items: Array<{ name: string }>;
+    };
     return { ok: true, indices: response.items.map((i) => i.name) };
   } catch (err) {
     return mapAlgoliaError(err, '');

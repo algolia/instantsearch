@@ -1,4 +1,6 @@
 import type { GeneratorContext, GenerateResult } from '../../../shared-types';
+import { propertyAccess } from '../../../utils/codegen';
+
 export function generate(ctx: GeneratorContext): GenerateResult {
   const title = ctx.introspection.title as string;
   const image = ctx.introspection.image as string | undefined;
@@ -6,10 +8,10 @@ export function generate(ctx: GeneratorContext): GenerateResult {
 
   const lines = [
     image
-      ? `          <img src="\${hit.${image}}" alt="\${hit.${title}}" />`
+      ? `          <img src="\${${propertyAccess('hit', image)}}" alt="\${${propertyAccess('hit', title)}}" />`
       : '',
-    `          <h3>\${hit.${title}}</h3>`,
-    description ? `          <p>\${hit.${description}}</p>` : '',
+    `          <h3>\${${propertyAccess('hit', title)}}</h3>`,
+    description ? `          <p>\${${propertyAccess('hit', description)}}</p>` : '',
   ]
     .filter(Boolean)
     .join('\n');

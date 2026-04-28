@@ -132,8 +132,8 @@ describe('add experience command', () => {
       path.join(projectDir, 'src/components/docs-search/provider.tsx'),
       'utf8'
     );
-    expect(productProvider).toMatch(/indexName="products"/);
-    expect(docsProvider).toMatch(/indexName="docs"/);
+    expect(productProvider).toMatch(/indexName=\{["']products["']\}/);
+    expect(docsProvider).toMatch(/indexName=\{["']docs["']\}/);
     expect(productProvider).toMatch(/ProductSearchProvider/);
     expect(docsProvider).toMatch(/DocsSearchProvider/);
 
@@ -259,6 +259,26 @@ describe('add experience command', () => {
       code: 'not_initialized',
     });
     expect(fs.existsSync(path.join(projectDir, 'src/components'))).toBe(false);
+  });
+
+  test('fails with invalid_manifest when root manifest is malformed', async () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'is-cli-add-exp-'));
+    writeRootManifest(projectDir, { apiVersion: 1, flavor: 'react' });
+
+    const report = await addExperience({
+      projectDir,
+      name: 'product-search',
+      template: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+    });
+
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'add experience',
+      code: 'invalid_manifest',
+    });
+    expect(mockedAlgoliasearch).not.toHaveBeenCalled();
   });
 
   test('fails with unknown_template for unsupported template', async () => {

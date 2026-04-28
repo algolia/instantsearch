@@ -90,8 +90,8 @@ describe('init command', () => {
       path.join(projectDir, 'src', 'lib', 'algolia-client.ts'),
       'utf8'
     );
-    expect(clientFile).toContain("'APP_ID_XYZ'");
-    expect(clientFile).toContain("'SEARCH_KEY_XYZ'");
+    expect(clientFile).toContain('"APP_ID_XYZ"');
+    expect(clientFile).toContain('"SEARCH_KEY_XYZ"');
   });
 
   test('invalid credentials: returns credentials_invalid and writes no files', async () => {
@@ -120,6 +120,42 @@ describe('init command', () => {
     expect(
       fs.existsSync(path.join(projectDir, 'src', 'lib', 'algolia-client.ts'))
     ).toBe(false);
+    expect(mockedInstallPackages).not.toHaveBeenCalled();
+  });
+
+  test('existing manifest: returns file_conflict and writes no files', async () => {
+    const projectDir = copyFixture('react-ts');
+    mockAlgolia(() => Promise.resolve({ hits: [] }));
+
+    const existingManifest = '{ "apiVersion": 1, "existing": true }\n';
+    fs.writeFileSync(
+      path.join(projectDir, 'instantsearch.json'),
+      existingManifest,
+      'utf8'
+    );
+
+    const report = await init({
+      projectDir,
+      flavor: 'react',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      componentsPath: 'src/components',
+    });
+
+    expect(report).toMatchObject({
+      apiVersion: 1,
+      ok: false,
+      command: 'init',
+      code: 'file_conflict',
+    });
+    expect(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    ).toBe(existingManifest);
+    expect(
+      fs.existsSync(path.join(projectDir, 'src', 'lib', 'algolia-client.ts'))
+    ).toBe(false);
+    expect(mockedAlgoliasearch).not.toHaveBeenCalled();
+    expect(mockedInstallPackages).not.toHaveBeenCalled();
   });
 
   test('no package.json: returns unsupported_framework without calling Algolia', async () => {
@@ -426,6 +462,35 @@ describe('init command — interactive prompts', () => {
 });
 
 describe('init command — auto-install', () => {
+  test('checks generated file conflicts before installing packages', async () => {
+    const projectDir = copyFixture('react-no-is');
+    const existingManifest = '{ "apiVersion": 1, "existing": true }\n';
+    fs.writeFileSync(
+      path.join(projectDir, 'instantsearch.json'),
+      existingManifest,
+      'utf8'
+    );
+
+    const report = await init({
+      projectDir,
+      flavor: 'react',
+      appId: 'APP',
+      searchApiKey: 'KEY',
+      componentsPath: 'src/components',
+    });
+
+    expect(report).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'file_conflict',
+    });
+    expect(
+      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    ).toBe(existingManifest);
+    expect(mockedInstallPackages).not.toHaveBeenCalled();
+    expect(mockedAlgoliasearch).not.toHaveBeenCalled();
+  });
+
   test('installs packages when no IS package found, then generates files', async () => {
     const projectDir = copyFixture('react-no-is');
     mockAlgolia(() => Promise.resolve({ hits: [] }));

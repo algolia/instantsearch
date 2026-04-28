@@ -14,7 +14,7 @@ function parseReactBarrel(): string[] {
 }
 
 describe('widget registry coverage', () => {
-  const supported = new Set(getSupportedWidgets());
+  const supported = new Set<string>(getSupportedWidgets());
   const reactWidgets = parseReactBarrel();
 
   test('every React widget is either supported or explicitly unsupported', () => {

@@ -16,7 +16,7 @@ yarn workspace @algolia/instantsearch-cli start add experience product-search --
 # Non-interactive (for agents / CI)
 yarn workspace @algolia/instantsearch-cli start init \
   --yes --json \
-  --flavor react --app-id YOUR_APP_ID --search-key YOUR_SEARCH_KEY
+  --flavor react --app-id YOUR_APP_ID --search-api-key YOUR_SEARCH_KEY
 
 yarn workspace @algolia/instantsearch-cli start add experience product-search \
   --yes --json \
@@ -67,10 +67,10 @@ Initialize InstantSearch in the current project. Writes `instantsearch.json` (ro
 | `--flavor <flavor>` | `react` or `js` |
 | `--framework <framework>` | `nextjs` (omit for bare library) |
 | `--app-id <appId>` | Algolia application ID |
-| `--search-key <searchKey>` | Algolia search-only API key |
+| `--search-api-key <searchApiKey>` | Algolia search-only API key |
 | `--components-path <path>` | Path where components will be generated |
 
-In `--yes` mode, `--app-id` and `--search-key` are required.
+In `--yes` mode, `--app-id` and `--search-api-key` are required.
 
 ### `instantsearch add experience <name>`
 
@@ -122,9 +122,9 @@ Discover attributes, facets, and replicas of an Algolia index. Useful for unders
 | `--yes` | Accept defaults without prompting |
 | `--index <index>` | Algolia index name (required) |
 | `--app-id <appId>` | Algolia application ID (overrides `instantsearch.json`) |
-| `--search-key <searchKey>` | Algolia search-only API key (overrides `instantsearch.json`) |
+| `--search-api-key <searchApiKey>` | Algolia search-only API key (overrides `instantsearch.json`) |
 
-Credentials are read from `instantsearch.json` by default. Pass `--app-id` and `--search-key` to override, or when the project hasn't been initialized yet.
+Credentials are read from `instantsearch.json` by default. Pass `--app-id` and `--search-api-key` to override, or when the project hasn't been initialized yet.
 
 Returns partial results with warnings when some introspections fail (e.g., facets or replicas inaccessible but records are readable).
 
@@ -208,6 +208,7 @@ Exit code is `0` on success, non-zero on failure.
 | `network_error` | Algolia API unreachable after retry |
 | `unsupported_framework` | Framework not recognized or ambiguous detection |
 | `not_initialized` | `instantsearch.json` not found (run `init` first) |
+| `invalid_manifest` | `instantsearch.json` or `instantsearch.config.json` is malformed |
 | `file_conflict` | Generated file already exists on disk |
 | `missing_required_flag` | A required flag was omitted in `--yes` mode |
 | `index_required` | `--index` required when auto-creating an experience in `--yes` mode |

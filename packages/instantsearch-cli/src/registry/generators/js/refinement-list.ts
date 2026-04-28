@@ -1,4 +1,6 @@
 import type { GeneratorContext, GenerateResult } from '../../../shared-types';
+import { jsString } from '../../../utils/codegen';
+
 export function generate(ctx: GeneratorContext): GenerateResult {
   const attribute = ctx.params.attribute as string;
 
@@ -7,7 +9,7 @@ export function generate(ctx: GeneratorContext): GenerateResult {
 export function ${ctx.widgetName}(container) {
   return refinementList({
     container,
-    attribute: '${attribute}',
+    attribute: ${jsString(attribute)},
   });
 }
 `;

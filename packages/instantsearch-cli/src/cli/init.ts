@@ -3,14 +3,14 @@ import { generate } from '../generator';
 import { installPackages } from '../installer';
 import { verifyCredentials } from '../introspector';
 import {
-  writeRootManifest,
   ROOT_MANIFEST_FILENAME,
+  serializeManifest,
   type RootManifest,
 } from '../manifest';
 import type { Prompter } from '../prompter';
 import { success, failure, type Report } from '../reporter';
 import type { Flavor, Framework } from '../types';
-import { writeGeneratedFiles } from '../utils/write-files';
+import { fileConflict, writeOrConflict } from '../utils/write-files';
 
 const COMMAND = 'init';
 
@@ -104,19 +104,6 @@ export async function init(options: InitOptions): Promise<Report> {
     }
   }
 
-  if (packages.length > 0) {
-    const installResult = installPackages(projectDir, packages, {
-      stdio: prompter ? 'inherit' : 'pipe',
-    });
-    if (!installResult.ok) {
-      return failure({
-        command: COMMAND,
-        code: installResult.code,
-        message: installResult.message,
-      });
-    }
-  }
-
   if (!appId || !searchApiKey) {
     const missing: string[] = [];
     if (!appId) missing.push('--app-id');
@@ -125,15 +112,6 @@ export async function init(options: InitOptions): Promise<Report> {
       command: COMMAND,
       code: 'missing_required_flag',
       message: `Missing required flags: ${missing.join(', ')}`,
-    });
-  }
-
-  const credsResult = await verifyCredentials({ appId, searchApiKey });
-  if (!credsResult.ok) {
-    return failure({
-      command: COMMAND,
-      code: credsResult.code,
-      message: credsResult.message,
     });
   }
 
@@ -148,15 +126,42 @@ export async function init(options: InitOptions): Promise<Report> {
     experiences: [],
   };
 
-  const files = generate(manifest);
-  const filesCreated = writeGeneratedFiles(projectDir, files);
-  writeRootManifest(projectDir, manifest);
-  filesCreated.unshift(ROOT_MANIFEST_FILENAME);
+  const files = new Map([
+    [ROOT_MANIFEST_FILENAME, serializeManifest(manifest)],
+    ...generate(manifest),
+  ]);
+  const conflict = fileConflict(projectDir, files, COMMAND);
+  if (conflict) return conflict;
+
+  if (packages.length > 0) {
+    const installResult = installPackages(projectDir, packages, {
+      stdio: prompter ? 'inherit' : 'pipe',
+    });
+    if (!installResult.ok) {
+      return failure({
+        command: COMMAND,
+        code: installResult.code,
+        message: installResult.message,
+      });
+    }
+  }
+
+  const credsResult = await verifyCredentials({ appId, searchApiKey });
+  if (!credsResult.ok) {
+    return failure({
+      command: COMMAND,
+      code: credsResult.code,
+      message: credsResult.message,
+    });
+  }
+
+  const outcome = writeOrConflict(projectDir, files, COMMAND);
+  if (!outcome.ok) return outcome.failure;
 
   return success({
     command: COMMAND,
     payload: {
-      filesCreated,
+      filesCreated: outcome.filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
     },
   });

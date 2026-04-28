@@ -49,6 +49,17 @@ const SORT_BY_META: WidgetMeta = {
   params: { items: { required: true, source: 'replica' } },
 };
 
+const WIDGET_NAMES = [
+  'SearchBox',
+  'Pagination',
+  'ClearRefinements',
+  'Hits',
+  'RefinementList',
+  'SortBy',
+] as const;
+
+export type WidgetName = (typeof WIDGET_NAMES)[number];
+
 const SCHEMA_CHECKS: Record<string, SchemaCheck> = {
   Hits: (schema) =>
     schema.hits?.title ? 'satisfied' : { missing: '--hits-title' },
@@ -82,7 +93,7 @@ export const UNSUPPORTED_WIDGETS: ReadonlySet<string> = new Set([
   'FilterSuggestions',
 ]);
 
-const REACT_GENERATORS: Record<string, WidgetGenerator> = {
+const REACT_GENERATORS: Record<WidgetName, WidgetGenerator> = {
   SearchBox: { meta: SEARCH_BOX_META, generate: generateReactStructural },
   Pagination: { meta: PAGINATION_META, generate: generateReactStructural },
   ClearRefinements: { meta: CLEAR_REFINEMENTS_META, generate: generateReactStructural },
@@ -91,9 +102,7 @@ const REACT_GENERATORS: Record<string, WidgetGenerator> = {
   SortBy: { meta: SORT_BY_META, generate: generateReactSortBy },
 };
 
-const WIDGET_NAMES: readonly string[] = Object.keys(REACT_GENERATORS);
-
-const JS_GENERATORS: Record<string, WidgetGenerator> = {
+const JS_GENERATORS: Record<WidgetName, WidgetGenerator> = {
   SearchBox: { meta: SEARCH_BOX_META, generate: generateJsStructural },
   Pagination: { meta: PAGINATION_META, generate: generateJsStructural },
   ClearRefinements: { meta: CLEAR_REFINEMENTS_META, generate: generateJsStructural },
@@ -102,7 +111,7 @@ const JS_GENERATORS: Record<string, WidgetGenerator> = {
   SortBy: { meta: SORT_BY_META, generate: generateJsSortBy },
 };
 
-const REGISTRY: Record<Flavor, Record<string, WidgetGenerator>> = {
+const REGISTRY: Record<Flavor, Record<WidgetName, WidgetGenerator>> = {
   react: REACT_GENERATORS,
   js: JS_GENERATORS,
 };
@@ -111,10 +120,10 @@ export function getGenerator(
   widgetName: string,
   flavor: Flavor
 ): WidgetGenerator | null {
-  return REGISTRY[flavor][widgetName] ?? null;
+  return isWidgetName(widgetName) ? REGISTRY[flavor][widgetName] : null;
 }
 
-export function getSupportedWidgets(): readonly string[] {
+export function getSupportedWidgets(): readonly WidgetName[] {
   return WIDGET_NAMES;
 }
 
@@ -128,7 +137,11 @@ export function getSchemaStatus(
 }
 
 export function resolveBaseWidgetName(widgetName: string): string | null {
-  if (WIDGET_NAMES.includes(widgetName)) return widgetName;
-  if (/^RefinementList[A-Z]/.test(widgetName)) return 'RefinementList';
+  if (isWidgetName(widgetName)) return widgetName;
+  if (/^RefinementList[A-Z_]/.test(widgetName)) return 'RefinementList';
   return null;
+}
+
+function isWidgetName(widgetName: string): widgetName is WidgetName {
+  return (WIDGET_NAMES as readonly string[]).includes(widgetName);
 }

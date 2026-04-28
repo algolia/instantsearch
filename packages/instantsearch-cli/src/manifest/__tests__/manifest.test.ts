@@ -4,8 +4,10 @@ import path from 'node:path';
 
 import {
   readRootManifest,
+  readRootManifestResult,
   writeRootManifest,
   readExperienceManifest,
+  readExperienceManifestResult,
   writeExperienceManifest,
   addExperienceToRoot,
   resolveExperience,
@@ -55,6 +57,31 @@ describe('manifest', () => {
     expect(readRootManifest(projectDir)).toBeNull();
   });
 
+  test('readRootManifestResult reports invalid JSON', () => {
+    const projectDir = makeTempProject();
+    fs.writeFileSync(
+      path.join(projectDir, ROOT_MANIFEST_FILENAME),
+      '{not json',
+      'utf8'
+    );
+
+    expect(readRootManifestResult(projectDir)).toMatchObject({
+      ok: false,
+      code: 'invalid_manifest',
+      message: expect.stringContaining('invalid JSON'),
+    });
+  });
+
+  test('readRootManifestResult validates required fields', () => {
+    const projectDir = makeTempProject();
+    writeRootManifest(projectDir, { apiVersion: 1, flavor: 'react' });
+
+    expect(readRootManifestResult(projectDir)).toMatchObject({
+      ok: false,
+      code: 'invalid_manifest',
+    });
+  });
+
   test('writeExperienceManifest then readExperienceManifest returns the same content', () => {
     const projectDir = makeTempProject();
     const experienceDir = path.join(projectDir, 'src/components/product-search');
@@ -77,6 +104,16 @@ describe('manifest', () => {
   test('readExperienceManifest returns null when no manifest exists', () => {
     const projectDir = makeTempProject();
     expect(readExperienceManifest(projectDir)).toBeNull();
+  });
+
+  test('readExperienceManifestResult validates required fields', () => {
+    const projectDir = makeTempProject();
+    writeExperienceManifest(projectDir, { apiVersion: 1 });
+
+    expect(readExperienceManifestResult(projectDir)).toMatchObject({
+      ok: false,
+      code: 'invalid_manifest',
+    });
   });
 
   test('addExperienceToRoot appends an entry to the experiences array', () => {

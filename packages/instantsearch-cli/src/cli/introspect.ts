@@ -3,8 +3,9 @@ import {
   introspectFacets,
   introspectReplicas,
 } from '../introspector';
-import { readRootManifest } from '../manifest';
+import { readRootManifestResult } from '../manifest';
 import { success, failure, type Report } from '../reporter';
+import { manifestReadFailure } from './manifest-errors';
 
 const COMMAND = 'introspect';
 
@@ -20,15 +21,16 @@ export async function introspect(options: IntrospectOptions): Promise<Report> {
   let { appId, searchApiKey } = options;
 
   if (!appId || !searchApiKey) {
-    const manifest = readRootManifest(projectDir);
-    if (!manifest) {
-      return failure({
+    const rootResult = readRootManifestResult(projectDir);
+    if (!rootResult.ok) {
+      return manifestReadFailure({
         command: COMMAND,
-        code: 'not_initialized',
-        message:
+        result: rootResult,
+        notFoundMessage:
           'No instantsearch.json found and no --app-id / --search-api-key provided.',
       });
     }
+    const manifest = rootResult.manifest;
     appId = manifest.algolia.appId;
     searchApiKey = manifest.algolia.searchApiKey;
   }

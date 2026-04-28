@@ -3,38 +3,24 @@ import process from 'node:process';
 
 import { Command, CommanderError } from 'commander';
 
+import { normalizeArgv } from './aliases';
+import {
+  commanderErrorToFailure,
+  isSilentCommanderExit,
+} from './commander-errors';
 import { init, type InitOptions } from './init';
 import { addExperience } from './add-experience';
 import { addWidget } from './add-widget';
 import { introspect } from './introspect';
-import type { ExperienceSchema } from '../manifest';
-import { createInquirerPrompter, type Prompter } from '../prompter';
+import { createCliRuntime } from './runtime';
+import {
+  buildSchemaFromFlags,
+  type SchemaFlagOptions,
+} from './schema-flags';
 import { failure, type Report } from '../reporter';
-import { formatHuman } from '../reporter/format-human';
 import type { Flavor, Framework } from '../types';
-import { parseCommaSeparated } from '../utils/parsing';
 
-const JSON_MODE = process.argv.includes('--json');
-const YES_MODE = JSON_MODE || process.argv.includes('--yes');
-
-if (JSON_MODE) {
-  // Commander 4.1.1 writes parse errors via console.error before throwing.
-  // Silence them so --json output is a single clean JSON object on stdout.
-  // eslint-disable-next-line no-console
-  console.error = () => {};
-}
-
-function getPrompter(): Prompter | undefined {
-  return YES_MODE ? undefined : createInquirerPrompter();
-}
-
-function emitAndExit(report: Report): never {
-  const output = JSON_MODE
-    ? JSON.stringify(report)
-    : formatHuman(report);
-  process.stdout.write(output + '\n');
-  process.exit(report.ok ? 0 : 1);
-}
+const runtime = createCliRuntime();
 
 type InitFlagOptions = {
   json?: boolean;
@@ -47,14 +33,14 @@ type InitFlagOptions = {
 };
 
 async function runInit(cliOptions: InitFlagOptions): Promise<void> {
-  const prompter = getPrompter();
+  const prompter = runtime.getPrompter();
 
   // In non-interactive mode without required flags, fail fast.
   if (!prompter && (!cliOptions.appId || !cliOptions.searchApiKey)) {
     const missing: string[] = [];
     if (!cliOptions.appId) missing.push('--app-id');
     if (!cliOptions.searchApiKey) missing.push('--search-api-key');
-    emitAndExit(
+    runtime.emitAndExit(
       failure({
         command: 'init',
         code: 'missing_required_flag',
@@ -73,7 +59,7 @@ async function runInit(cliOptions: InitFlagOptions): Promise<void> {
     prompter,
   };
 
-  emitAndExit(await init(options));
+  runtime.emitAndExit(await init(options));
 }
 
 const program = new Command();
@@ -98,14 +84,6 @@ program
   .option('--components-path <path>', 'Path where components will be generated')
   .action(runInit);
 
-type SchemaFlagOptions = {
-  hitsTitle?: string;
-  hitsImage?: string;
-  hitsDescription?: string;
-  refinementListAttribute?: string;
-  sortByReplicas?: string;
-};
-
 type AddExperienceFlagOptions = SchemaFlagOptions & {
   json?: boolean;
   yes?: boolean;
@@ -113,41 +91,16 @@ type AddExperienceFlagOptions = SchemaFlagOptions & {
   index?: string;
 };
 
-function parseReplicasFlag(value: string | undefined): string[] | undefined {
-  if (!value) return undefined;
-  return parseCommaSeparated(value);
-}
-
-function buildSchemaFromFlags(opts: SchemaFlagOptions): ExperienceSchema {
-  const schema: ExperienceSchema = {};
-  if (opts.hitsTitle) {
-    schema.hits = {
-      title: opts.hitsTitle,
-      ...(opts.hitsImage ? { image: opts.hitsImage } : {}),
-      ...(opts.hitsDescription ? { description: opts.hitsDescription } : {}),
-    };
-  }
-  if (opts.refinementListAttribute) {
-    const attributes = parseCommaSeparated(opts.refinementListAttribute);
-    schema.refinementList = attributes.map((a) => ({ attribute: a }));
-  }
-  const replicas = parseReplicasFlag(opts.sortByReplicas);
-  if (replicas) {
-    schema.sortBy = { replicas };
-  }
-  return schema;
-}
-
 async function runAddExperience(
   name: string,
   cliOptions: AddExperienceFlagOptions
 ): Promise<void> {
-  const prompter = getPrompter();
+  const prompter = runtime.getPrompter();
   const template = cliOptions.template ?? 'search';
 
   // In non-interactive mode without --index, fail fast.
   if (!prompter && !cliOptions.index) {
-    emitAndExit(
+    runtime.emitAndExit(
       failure({
         command: 'add experience',
         code: 'missing_required_flag',
@@ -166,7 +119,7 @@ async function runAddExperience(
     prompter,
   });
 
-  emitAndExit(report);
+  runtime.emitAndExit(report);
 }
 
 program
@@ -200,7 +153,7 @@ async function runAddWidget(
   widget: string,
   cliOptions: AddWidgetFlagOptions
 ): Promise<void> {
-  const prompter = getPrompter();
+  const prompter = runtime.getPrompter();
 
   let report: Report;
   if (!cliOptions.experience) {
@@ -221,7 +174,7 @@ async function runAddWidget(
     });
   }
 
-  emitAndExit(report);
+  runtime.emitAndExit(report);
 }
 
 program
@@ -254,7 +207,7 @@ type IntrospectFlagOptions = {
 
 async function runIntrospect(cliOptions: IntrospectFlagOptions): Promise<void> {
   if (!cliOptions.index) {
-    return emitAndExit(
+    return runtime.emitAndExit(
       failure({
         command: 'introspect',
         code: 'missing_required_flag',
@@ -270,7 +223,7 @@ async function runIntrospect(cliOptions: IntrospectFlagOptions): Promise<void> {
     searchApiKey: cliOptions.searchApiKey,
   });
 
-  emitAndExit(report);
+  runtime.emitAndExit(report);
 }
 
 program
@@ -283,19 +236,9 @@ program
   .option('--search-api-key <searchApiKey>', 'Algolia search-only API key (overrides instantsearch.json)')
   .action(runIntrospect);
 
-function normalizeArgv(argv: string[]): string[] {
-  const copy = argv.slice();
-  if (copy[2] === 'add' && copy[3] === 'experience') {
-    copy.splice(2, 2, 'add-experience');
-  } else if (copy[2] === 'add' && copy[3] === 'widget') {
-    copy.splice(2, 2, 'add-widget');
-  }
-  return copy;
-}
-
 program.on('command:*', (operands: string[]) => {
   const invoked = operands.join(' ');
-  emitAndExit(
+  runtime.emitAndExit(
     failure({
       command: 'cli',
       code: 'unknown_command',
@@ -304,39 +247,14 @@ program.on('command:*', (operands: string[]) => {
   );
 });
 
-const COMMANDER_SILENT_EXIT_CODES = new Set([
-  'commander.helpDisplayed',
-  'commander.help',
-  'commander.version',
-]);
-
-// Map commander's internal error codes to our public failure taxonomy so
-// agents don't couple to commander's naming.
-const COMMANDER_CODE_MAP: Record<string, string> = {
-  'commander.unknownOption': 'unknown_option',
-  'commander.unknownCommand': 'unknown_command',
-  'commander.missingArgument': 'missing_argument',
-  'commander.optionMissingArgument': 'missing_argument',
-  'commander.missingMandatoryOptionValue': 'missing_required_flag',
-  'commander.invalidOptionArgument': 'invalid_option_value',
-  'commander.invalidArgument': 'invalid_argument',
-  'commander.variadicArgNotLast': 'invalid_argument',
-};
-
 function handleTopLevelError(err: unknown): never {
-  if (err instanceof CommanderError && COMMANDER_SILENT_EXIT_CODES.has(err.code)) {
-    process.exit(0);
+  if (err instanceof CommanderError && isSilentCommanderExit(err)) {
+    return process.exit(0);
   }
   if (err instanceof CommanderError) {
-    emitAndExit(
-      failure({
-        command: 'cli',
-        code: COMMANDER_CODE_MAP[err.code] ?? 'commander_error',
-        message: err.message,
-      })
-    );
+    return runtime.emitAndExit(commanderErrorToFailure(err));
   }
-  emitAndExit(
+  return runtime.emitAndExit(
     failure({
       command: 'cli',
       code: 'internal_error',

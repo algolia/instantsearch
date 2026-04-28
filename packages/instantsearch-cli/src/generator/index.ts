@@ -7,6 +7,7 @@ import {
   getGenerator,
   getSupportedWidgets,
   resolveBaseWidgetName,
+  type WidgetName,
 } from '../registry';
 import {
   refinementListWidgetName,
@@ -15,6 +16,7 @@ import {
   experienceComponentName,
   widgetContainerId,
 } from '../utils/naming';
+import { jsString } from '../utils/codegen';
 
 export type ResolvedManifest = {
   flavor: Flavor;
@@ -25,8 +27,8 @@ export type ResolvedManifest = {
 
 export type GeneratedFiles = Map<string, string>;
 
-export type WidgetName = string;
-export const SUPPORTED_WIDGETS: readonly string[] = getSupportedWidgets();
+export type { WidgetName };
+export const SUPPORTED_WIDGETS: readonly WidgetName[] = getSupportedWidgets();
 
 const ALGOLIA_CLIENT_PATH = 'src/lib/algolia-client';
 
@@ -36,7 +38,7 @@ function algoliaClientSource({
 }: AlgoliaCredentials): string {
   return `import { algoliasearch } from 'algoliasearch';
 
-export const searchClient = algoliasearch('${appId}', '${searchApiKey}');
+export const searchClient = algoliasearch(${jsString(appId)}, ${jsString(searchApiKey)});
 `;
 }
 
@@ -82,11 +84,11 @@ function reactProviderSource(
 
   return `${directive}${typeImport}${componentImport}
 
-import { searchClient } from '${clientImport}';
+import { searchClient } from ${jsString(clientImport)};
 
 export function ${componentName}({ children }${paramAnnotation}) {
   return (
-    <${element} searchClient={searchClient} indexName="${manifest.experience.indexName}">
+    <${element} searchClient={searchClient} indexName={${jsString(manifest.experience.indexName)}}>
       {children}
     </${element}>
   );
@@ -103,11 +105,11 @@ function jsProviderSource(
 
   return `import instantsearch from 'instantsearch.js';
 
-import { searchClient } from '${clientImport}';
+import { searchClient } from ${jsString(clientImport)};
 
 export function ${startName}(widgets) {
   const search = instantsearch({
-    indexName: '${manifest.experience.indexName}',
+    indexName: ${jsString(manifest.experience.indexName)},
     searchClient,
   });
   search.addWidgets(widgets);
@@ -267,8 +269,8 @@ function reactIndexSource(manifest: ResolvedExperienceManifest): string {
   const widgets = manifest.experience.widgets;
 
   const imports = [
-    `import { ${providerName} } from './provider';`,
-    ...widgets.map((w) => `import { ${w} } from './${w}';`),
+    `import { ${providerName} } from ${jsString('./provider')};`,
+    ...widgets.map((w) => `import { ${w} } from ${jsString(`./${w}`)};`),
   ].join('\n');
 
   const widgetElements = widgets.map((w) => `      <${w} />`).join('\n');
@@ -292,12 +294,12 @@ function jsIndexSource(manifest: ResolvedExperienceManifest): string {
   const widgets = manifest.experience.widgets;
 
   const imports = [
-    `import { ${startName} } from './provider';`,
-    ...widgets.map((w) => `import { ${w} } from './${w}';`),
+    `import { ${startName} } from ${jsString('./provider')};`,
+    ...widgets.map((w) => `import { ${w} } from ${jsString(`./${w}`)};`),
   ].join('\n');
 
   const widgetCalls = widgets
-    .map((w) => `  ${w}('#${widgetContainerId(w)}')`)
+    .map((w) => `  ${w}(${jsString(`#${widgetContainerId(w)}`)})`)
     .join(',\n');
 
   return `${imports}

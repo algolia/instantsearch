@@ -16,6 +16,21 @@ function findExistingFiles(
   return conflicts;
 }
 
+export function fileConflict(
+  projectDir: string,
+  files: Map<string, string>,
+  command: string
+): FailureReport | null {
+  const conflicts = findExistingFiles(projectDir, files);
+  if (conflicts.length === 0) return null;
+
+  return failure({
+    command,
+    code: 'file_conflict',
+    message: `Refusing to overwrite existing files: ${conflicts.join(', ')}.`,
+  });
+}
+
 export type WriteOutcome =
   | { ok: true; filesCreated: string[] }
   | { ok: false; failure: FailureReport };
@@ -25,17 +40,9 @@ export function writeOrConflict(
   files: Map<string, string>,
   command: string
 ): WriteOutcome {
-  const conflicts = findExistingFiles(projectDir, files);
-  if (conflicts.length > 0) {
-    return {
-      ok: false,
-      failure: failure({
-        command,
-        code: 'file_conflict',
-        message: `Refusing to overwrite existing files: ${conflicts.join(', ')}.`,
-      }),
-    };
-  }
+  const conflict = fileConflict(projectDir, files, command);
+  if (conflict) return { ok: false, failure: conflict };
+
   return { ok: true, filesCreated: writeGeneratedFiles(projectDir, files) };
 }
 

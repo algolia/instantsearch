@@ -188,6 +188,28 @@ describe('introspect command', () => {
     });
   });
 
+  test('invalid manifest and no explicit credentials → invalid_manifest', async () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'is-cli-introspect-invalid-'));
+    fs.writeFileSync(
+      path.join(projectDir, 'instantsearch.json'),
+      '{not json',
+      'utf8'
+    );
+
+    const report = await introspect({
+      projectDir,
+      indexName: 'products',
+    });
+
+    expect(report).toMatchObject({
+      apiVersion: 1,
+      ok: false,
+      command: 'introspect',
+      code: 'invalid_manifest',
+    });
+    expect(mockedAlgoliasearch).not.toHaveBeenCalled();
+  });
+
   test('explicit credentials bypass manifest', async () => {
     const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'is-cli-introspect-nocfg-'));
 
