@@ -10,7 +10,9 @@ export type ChatMessageErrorTranslations = {
   /**
    * Error message text
    */
-  errorMessage: string;
+  errorMessage:
+    | string
+    | ((params: { errorMessage?: string }) => string);
   /**
    * Retry button text
    */
@@ -18,6 +20,10 @@ export type ChatMessageErrorTranslations = {
 };
 
 export type ChatMessageErrorProps = ComponentProps<'article'> & {
+  /**
+   * Raw error message received from the API/transport layer.
+   */
+  errorMessage?: string;
   /**
    * Callback for reload action
    */
@@ -39,17 +45,21 @@ export function createChatMessageErrorComponent({
 
   return function ChatMessageError(userProps: ChatMessageErrorProps) {
     const {
+      errorMessage,
       onReload,
       actions,
       translations: userTranslations,
       ...props
     } = userProps;
-    const translations: Required<ChatMessageErrorTranslations> = {
-      errorMessage:
-        'Sorry, we are not able to generate a response at the moment. Please retry or contact support.',
-      retryText: 'Retry',
-      ...userTranslations,
-    };
+    const defaultErrorMessage =
+      'Sorry, we are not able to generate a response at the moment. Please retry or contact support.';
+    const defaultRetryText = 'Retry';
+    const errorMessageTranslation = userTranslations?.errorMessage;
+    const resolvedErrorMessage =
+      typeof errorMessageTranslation === 'function'
+        ? errorMessageTranslation({ errorMessage })
+        : errorMessageTranslation || defaultErrorMessage;
+    const retryText = userTranslations?.retryText || defaultRetryText;
 
     return (
       <article
@@ -59,7 +69,7 @@ export function createChatMessageErrorComponent({
         <div className="ais-ChatMessage-container">
           <div className="ais-ChatMessage-content">
             <div className="ais-ChatMessage-message">
-              {translations.errorMessage}
+              {resolvedErrorMessage}
             </div>
             {(actions || onReload) && (
               <div className="ais-ChatMessage-actions">
@@ -82,7 +92,7 @@ export function createChatMessageErrorComponent({
                     onClick={() => onReload?.()}
                   >
                     <ReloadIcon createElement={createElement} />
-                    {translations.retryText}
+                    {retryText}
                   </Button>
                 )}
               </div>

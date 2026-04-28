@@ -5,12 +5,16 @@
 import { render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
 
+import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
+
+import type { ChatMessageErrorProps } from '../ChatMessageError';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
 });
+const ChatMessageError = createChatMessageErrorComponent({ createElement });
 
 describe('ChatMessages', () => {
   test('renders with default props', () => {
@@ -256,7 +260,7 @@ describe('ChatMessages', () => {
     });
   });
 
-  test('shows API error message when status is error and error is set', () => {
+  test('does not expose raw API error message by default', () => {
     render(
       <ChatMessages
         messages={[]}
@@ -271,7 +275,67 @@ describe('ChatMessages', () => {
     );
 
     expect(
-      screen.getByText('Request blocked for this domain')
+      screen.getByText(
+        'Sorry, we are not able to generate a response at the moment. Please retry or contact support.'
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText('Request blocked for this domain')
+    ).not.toBeInTheDocument();
+  });
+
+  test('passes raw error message to custom error component', () => {
+    const ErrorComponent = jest.fn(() => <span>Custom error</span>);
+
+    render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Request blocked for this domain')}
+        errorComponent={ErrorComponent}
+      />
+    );
+
+    expect(ErrorComponent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errorMessage: 'Request blocked for this domain',
+      }),
+      {}
+    );
+  });
+
+  test('allows error translation to use raw error message', () => {
+    const CustomError = (props: ChatMessageErrorProps) => (
+      <ChatMessageError
+        {...props}
+        translations={{
+          errorMessage: ({ errorMessage }) =>
+            errorMessage ? `Friendly: ${errorMessage}` : 'Friendly fallback',
+        }}
+      />
+    );
+
+    render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Request blocked for this domain')}
+        errorComponent={CustomError}
+      />
+    );
+
+    expect(
+      screen.getByText('Friendly: Request blocked for this domain')
     ).toBeInTheDocument();
   });
 

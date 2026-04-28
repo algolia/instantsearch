@@ -112,6 +112,34 @@ function messageFromErrorObject(o: Record<string, unknown>): string | undefined 
   return undefined;
 }
 
+function unwrapNestedJsonString(
+  value: unknown,
+  seenStrings: ReadonlySet<string> = new Set()
+): unknown {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  if (seenStrings.has(trimmed)) {
+    return trimmed;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed) as unknown;
+    if (typeof parsed === 'string') {
+      return unwrapNestedJsonString(parsed, new Set([...seenStrings, trimmed]));
+    }
+    return parsed;
+  } catch {
+    return trimmed;
+  }
+}
+
 /**
  * Turns chat stream `error` chunk `errorText` into a short user-facing string.
  * Handles plain text, single JSON objects (`error` / `message`), and
@@ -123,34 +151,16 @@ export function getMessageFromStreamErrorText(errorText: string): string {
     return 'Unknown error';
   }
 
-  let remaining: unknown = trimmed;
-  for (let depth = 0; depth < 5; depth++) {
-    if (typeof remaining === 'string') {
-      const s = remaining.trim();
-      if (!s) {
-        break;
-      }
-      try {
-        remaining = JSON.parse(s) as unknown;
-        continue;
-      } catch {
-        return s;
-      }
+  const remaining = unwrapNestedJsonString(trimmed);
+  if (remaining && typeof remaining === 'object' && !Array.isArray(remaining)) {
+    const o = remaining as Record<string, unknown>;
+    const msg = messageFromErrorObject(o);
+    if (msg) {
+      return msg;
     }
-
-    if (remaining && typeof remaining === 'object' && !Array.isArray(remaining)) {
-      const o = remaining as Record<string, unknown>;
-      const msg = messageFromErrorObject(o);
-      if (msg) {
-        return msg;
-      }
-      if (typeof o.type === 'string' && o.type.trim()) {
-        return o.type.trim();
-      }
-      break;
+    if (typeof o.type === 'string' && o.type.trim()) {
+      return o.type.trim();
     }
-
-    break;
   }
 
   if (typeof remaining === 'string') {

@@ -519,11 +519,7 @@ export function createChatMessagesComponent({
             {status === 'error' && (
               <DefaultError
                 onReload={onReload}
-                translations={
-                  error?.message
-                    ? { errorMessage: error.message }
-                    : undefined
-                }
+                errorMessage={error?.message}
               />
             )}
           </div>

@@ -4,6 +4,14 @@
 import { getMessageFromStreamErrorText } from '../utils';
 
 describe('getMessageFromStreamErrorText', () => {
+  function encodeAsNestedJson(value: unknown, depth: number): string {
+    let result = JSON.stringify(value);
+    for (let i = 0; i < depth; i++) {
+      result = JSON.stringify(result);
+    }
+    return result;
+  }
+
   it('unwraps double-encoded JSON with error field (Agent Studio / AI SDK style)', () => {
     const inner = {
       error: 'Max steps per completion limit was reached',
@@ -38,6 +46,17 @@ describe('getMessageFromStreamErrorText', () => {
   it('uses type when object has no error or message', () => {
     expect(getMessageFromStreamErrorText('{"type":"CustomError"}')).toBe(
       'CustomError'
+    );
+  });
+
+  it('unwraps deeply nested JSON strings without fixed depth limits', () => {
+    const errorText = encodeAsNestedJson(
+      { error: 'Deep nested error message' },
+      25
+    );
+
+    expect(getMessageFromStreamErrorText(errorText)).toBe(
+      'Deep nested error message'
     );
   });
 
