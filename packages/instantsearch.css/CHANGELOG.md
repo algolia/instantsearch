@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.15.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.14.0...instantsearch.css@8.15.0) (2026-04-28)
+
+
+### Bug Fixes
+
+* **instantsearch.css:** skip hover styles on disabled items in Nova theme ([#6986](https://github.com/algolia/instantsearch/issues/6986)) ([a306fde](https://github.com/algolia/instantsearch/commit/a306fde67a0b816bdb5629f7d46cea6d7c710f41)), closes [#6984](https://github.com/algolia/instantsearch/issues/6984)
+
+
+### Features
+
+* **autocomplete:** replace "cancel" with a back button in detached mode ([#6942](https://github.com/algolia/instantsearch/issues/6942)) ([14f1ba7](https://github.com/algolia/instantsearch/commit/14f1ba7689194a133b4b3aa64f2b559736188d6d))
+* **instantsearch.css:** share `AiModeButton` styles across themes ([#6990](https://github.com/algolia/instantsearch/issues/6990)) ([8b1cb61](https://github.com/algolia/instantsearch/commit/8b1cb61d97cb2f9f87457fadf71fe9bb6ec9618f))
+
+
+
+
+
 # [8.14.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.13.0...instantsearch.css@8.14.0) (2026-04-21)
 
 
