@@ -795,6 +795,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
+        sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
         classNames={currentIndexConfig.cssClasses}
       />
     );

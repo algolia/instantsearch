@@ -656,7 +656,54 @@ export function createOptionsTests(
         ).toBeInTheDocument();
       });
 
-      test('shows loader during streaming when last part is a tool without output', async () => {
+      test('shows loader during streaming when last part is a tool with streaming input', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'tool-some_tool',
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when last part is a tool with input available', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -688,8 +735,8 @@ export function createOptionsTests(
                 {
                   type: `tool-${SearchIndexToolType}`,
                   toolCallId: '1',
-                  state: 'input-streaming',
-                  input: undefined,
+                  state: 'input-available',
+                  input: { query: 'shoes' },
                 },
               ],
             },
@@ -703,7 +750,7 @@ export function createOptionsTests(
         ).toBeInTheDocument();
       });
 
-      test('shows loader during streaming when last part is a tool with output', async () => {
+      test('does not show loader during streaming when last part is a tool with output', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -749,7 +796,7 @@ export function createOptionsTests(
 
         expect(
           document.querySelector('.ais-ChatMessageLoader')
-        ).toBeInTheDocument();
+        ).not.toBeInTheDocument();
       });
 
       test('does not show loader during streaming when last part is text', async () => {

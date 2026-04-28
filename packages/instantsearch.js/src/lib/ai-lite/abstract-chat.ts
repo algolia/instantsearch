@@ -11,7 +11,9 @@ import type {
   CreateUIMessage,
   FileUIPart,
   IdGenerator,
+  InferUIMessageChunk,
   InferUIMessageMetadata,
+  InferUIMessageToolCall,
   InferUIMessageTools,
   UIMessage,
   UIMessageChunk,
@@ -21,9 +23,99 @@ import type {
   ChatOnDataCallback,
 } from './types';
 
-type ActiveResponse = {
+type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
-  stream?: ReadableStream<UIMessageChunk>;
+  stream?: ReadableStream<TChunk>;
+};
+
+const tryParseJson = (value: string): unknown | undefined => {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return undefined;
+  }
+};
+
+const repairPartialJson = (value: string): string => {
+  let repaired = value.trim();
+
+  if (!repaired) {
+    return repaired;
+  }
+
+  let inString = false;
+  let isEscaped = false;
+  const stack: Array<'{' | '['> = [];
+
+  for (let index = 0; index < repaired.length; index++) {
+    const char = repaired[index];
+    if (inString) {
+      if (isEscaped) {
+        isEscaped = false;
+      } else if (char === '\\') {
+        isEscaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+
+    if (char === '{' || char === '[') {
+      stack.push(char);
+      continue;
+    }
+
+    if (char === '}' && stack[stack.length - 1] === '{') {
+      stack.pop();
+      continue;
+    }
+
+    if (char === ']' && stack[stack.length - 1] === '[') {
+      stack.pop();
+    }
+  }
+
+  if (inString && !isEscaped) {
+    repaired += '"';
+  }
+
+  repaired = repaired.replace(/,\s*$/u, '');
+
+  if (stack.length > 0) {
+    repaired += stack
+      .reverse()
+      .map((opening) => (opening === '{' ? '}' : ']'))
+      .join('');
+  }
+
+  return repaired.replace(/,\s*([}\]])/gu, '$1');
+};
+
+const parseToolInputDelta = (
+  accumulatedRawInput: string,
+  fallbackInput: unknown
+): unknown => {
+  const normalized = accumulatedRawInput.trim();
+  if (!normalized) {
+    return fallbackInput;
+  }
+
+  const directParsed = tryParseJson(normalized);
+  if (directParsed !== undefined) {
+    return directParsed;
+  }
+
+  const repairedParsed = tryParseJson(repairPartialJson(normalized));
+  if (repairedParsed !== undefined) {
+    return repairedParsed;
+  }
+
+  return fallbackInput;
 };
 
 /**
@@ -42,8 +134,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private sendAutomaticallyWhen?: (options: {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
+  private shouldRepairToolInput?: (toolName: string) => boolean;
 
-  private activeResponse: ActiveResponse | null = null;
+  private activeResponse: ActiveResponse<
+    InferUIMessageChunk<TUIMessage>
+  > | null = null;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -56,6 +151,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onFinish,
     onData,
     sendAutomaticallyWhen,
+    shouldRepairToolInput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
@@ -68,6 +164,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onFinish = onFinish;
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
+    this.shouldRepairToolInput = shouldRepairToolInput;
   }
 
   /**
@@ -423,7 +520,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   private processStreamWithCallbacks(
-    stream: ReadableStream<UIMessageChunk>
+    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>
   ): Promise<void> {
     this.setStatus({ status: 'streaming' });
 
@@ -437,13 +534,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     // Track current text/reasoning part state
     let currentTextPartId: string | undefined;
     let currentReasoningPartId: string | undefined;
+    const toolRawInputByCallId: Record<string, string> = {};
 
     // Promise chain for handling tool calls that return promises
     let pendingToolCall: Promise<void> = Promise.resolve();
 
     return new Promise((resolve) => {
       processStream<UIMessageChunk>(
-        stream,
+        stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
           switch (chunk.type) {
@@ -623,11 +721,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'tool-input-start': {
               if (!currentMessage) break;
 
+              const initialRawInput =
+                typeof chunk.input === 'string'
+                  ? chunk.input
+                  : chunk.input !== undefined
+                  ? JSON.stringify(chunk.input)
+                  : '';
+
+              toolRawInputByCallId[chunk.toolCallId] = initialRawInput;
+
               const toolPart = {
                 type: `tool-${chunk.toolName}` as const,
                 toolCallId: chunk.toolCallId,
                 state: 'input-streaming' as const,
                 input: chunk.input,
+                rawInput: initialRawInput || undefined,
                 providerExecuted: chunk.providerExecuted,
               };
 
@@ -640,13 +748,66 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             }
 
             case 'tool-input-delta': {
-              // Tool input streaming - we'd need to parse partial JSON
-              // For now, we'll wait for tool-input-available
+              if (!currentMessage) break;
+
+              const toolIndex = currentMessage.parts.findIndex(
+                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
+              );
+
+              const existingPart =
+                toolIndex >= 0
+                  ? (currentMessage.parts[toolIndex] as any)
+                  : null;
+              const previousRawInput =
+                existingPart?.rawInput ??
+                toolRawInputByCallId[chunk.toolCallId] ??
+                '';
+              const nextRawInput = `${previousRawInput}${chunk.inputTextDelta}`;
+              toolRawInputByCallId[chunk.toolCallId] = nextRawInput;
+
+              const toolName =
+                chunk.toolName ??
+                existingPart?.type?.replace('tool-', '');
+              const shouldRepair =
+                toolName
+                  ? (this.shouldRepairToolInput?.(toolName) ?? true)
+                  : true;
+              const parsedInput = shouldRepair
+                ? parseToolInputDelta(nextRawInput, existingPart?.input)
+                : existingPart?.input;
+
+              const nextToolPart = {
+                ...(existingPart ?? {
+                  type: `tool-${chunk.toolName}` as const,
+                  toolCallId: chunk.toolCallId,
+                }),
+                state: 'input-streaming' as const,
+                input: parsedInput,
+                rawInput: nextRawInput,
+              };
+
+              if (toolIndex >= 0) {
+                const updatedParts = [...currentMessage.parts];
+                updatedParts[toolIndex] = nextToolPart;
+                currentMessage = {
+                  ...currentMessage,
+                  parts: updatedParts,
+                } as TUIMessage;
+              } else {
+                currentMessage = {
+                  ...currentMessage,
+                  parts: [...currentMessage.parts, nextToolPart],
+                } as TUIMessage;
+              }
+
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
               break;
             }
 
             case 'tool-input-available': {
               if (!currentMessage) break;
+
+              delete toolRawInputByCallId[chunk.toolCallId];
 
               // Find existing tool part or create new one
               const existingIndex = currentMessage.parts.findIndex(
@@ -685,7 +846,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     toolName: chunk.toolName,
                     toolCallId: chunk.toolCallId,
                     input: chunk.input,
-                  } as any,
+                    dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                  } as InferUIMessageToolCall<TUIMessage>,
                 });
                 if (result && typeof result.then === 'function') {
                   pendingToolCall = pendingToolCall.then(() => result);
@@ -702,6 +864,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               );
 
               if (toolIndex >= 0) {
+                delete toolRawInputByCallId[chunk.toolCallId];
+
                 const updatedParts = [...currentMessage.parts];
                 const existingPart = updatedParts[toolIndex] as any;
                 updatedParts[toolIndex] = {
@@ -728,6 +892,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               );
 
               if (toolIndex >= 0) {
+                delete toolRawInputByCallId[chunk.toolCallId];
+
                 const updatedParts = [...currentMessage.parts];
                 const existingPart = updatedParts[toolIndex] as any;
                 updatedParts[toolIndex] = {

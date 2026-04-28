@@ -49,6 +49,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           query: string;
           number_of_results?: number;
+          facet_filters?: string[][];
         }
       | undefined;
 

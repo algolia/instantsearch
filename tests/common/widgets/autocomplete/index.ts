@@ -1,5 +1,6 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
+import { createInsightsTests } from './insights';
 import { createOptionsTests } from './options';
 import { createTemplatesTests } from './templates';
 
@@ -59,6 +60,7 @@ export function createAutocompleteWidgetTests(
   skippableDescribe('Autocomplete widget common tests', skippedTests, () => {
     createOptionsTests(setup, { act, skippedTests, flavor });
     createTemplatesTests(setup, { act, skippedTests, flavor });
+    createInsightsTests(setup, { act, skippedTests, flavor });
   });
 }
 createAutocompleteWidgetTests.flavored = true;
