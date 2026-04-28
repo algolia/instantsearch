@@ -131,18 +131,39 @@ export function createFeedContainer(
       );
       const helper = parentIndex.getHelper();
 
+      if (!helper) {
+        localWidgets = localWidgets.filter((w) => !flatWidgets.includes(w));
+        return container;
+      }
+
+      // Chain through children's dispose so widgets clean up the
+      // SearchParameters they declared (e.g. RefinementList removes its
+      // disjunctiveFacet) instead of leaving them stale on the parent helper.
+      let cleanedState: SearchParameters = helper.state;
+
       flatWidgets.forEach((widget) => {
-        if (widget.dispose && helper) {
-          widget.dispose({
+        if (widget.dispose) {
+          const next = widget.dispose({
             helper,
-            state: helper.state,
+            state: cleanedState,
             recommendState: helper.recommendState,
             parent: container,
           });
+
+          if (next instanceof algoliasearchHelper.RecommendParameters) {
+            // ignore — FeedContainer doesn't manage recommend state
+          } else if (next) {
+            cleanedState = next;
+          }
         }
       });
 
       localWidgets = localWidgets.filter((w) => !flatWidgets.includes(w));
+
+      if (cleanedState !== helper.state) {
+        helper.setState(cleanedState);
+      }
+
       return container;
     },
 

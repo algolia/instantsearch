@@ -256,6 +256,66 @@ describe('FeedContainer', () => {
       expect(widget.dispose).toHaveBeenCalled();
     });
 
+    it('removeWidgets chains dispose state through children', () => {
+      const instantSearchInstance = createInstantSearch();
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+
+      const container = createFeedContainer(
+        'products',
+        parent,
+        instantSearchInstance
+      );
+
+      const initialState = instantSearchInstance.helper!.state;
+      const stateAfterFirst = new SearchParameters({ index: 'after-first' });
+      const stateAfterSecond = new SearchParameters({ index: 'after-second' });
+
+      const widget1 = createWidget({
+        dispose: jest.fn(() => stateAfterFirst),
+      });
+      const widget2 = createWidget({
+        dispose: jest.fn(() => stateAfterSecond),
+      });
+
+      container.addWidgets([widget1, widget2]);
+      container.removeWidgets([widget1, widget2]);
+
+      expect(widget1.dispose).toHaveBeenCalledWith(
+        expect.objectContaining({ state: initialState })
+      );
+      expect(widget2.dispose).toHaveBeenCalledWith(
+        expect.objectContaining({ state: stateAfterFirst })
+      );
+    });
+
+    it('removeWidgets applies cleaned state to the helper', () => {
+      const instantSearchInstance = createInstantSearch();
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+
+      const container = createFeedContainer(
+        'products',
+        parent,
+        instantSearchInstance
+      );
+
+      const cleanedState = instantSearchInstance.helper!.state.setQueryParameter(
+        'disjunctiveFacets',
+        []
+      );
+      const widget = createWidget({
+        dispose: jest.fn(() => cleanedState),
+      });
+
+      container.addWidgets([widget]);
+      const setStateSpy = jest.spyOn(instantSearchInstance.helper!, 'setState');
+
+      container.removeWidgets([widget]);
+
+      expect(setStateSpy).toHaveBeenCalledWith(cleanedState);
+    });
+
     it('addWidgets inits widgets only after container init', () => {
       const instantSearchInstance = createInstantSearch({
         started: true,
