@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.25.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.24.0...instantsearch-ui-components@0.25.0) (2026-04-28)
+
+
+### Features
+
+* **autocomplete:** default insights events ([#6976](https://github.com/algolia/instantsearch/issues/6976)) ([aac9b5d](https://github.com/algolia/instantsearch/commit/aac9b5d9ac48f864c3411946409f23988561181c))
+
+
+
+
+
 # [0.24.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.23.0...instantsearch-ui-components@0.24.0) (2026-04-21)
 
 

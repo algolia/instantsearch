@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.95.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.94.0...instantsearch.js@4.95.0) (2026-04-28)
+
+
+### Bug Fixes
+
+* **autocomplete:** close panel when clicking AI mode button ([#6989](https://github.com/algolia/instantsearch/issues/6989)) ([7d5e317](https://github.com/algolia/instantsearch/commit/7d5e317d62c77db4d1674ef013abfbf52c5c61e5))
+* **chat:** stabilize template-driven component references ([#6985](https://github.com/algolia/instantsearch/issues/6985)) ([0f948e8](https://github.com/algolia/instantsearch/commit/0f948e81f08f5283ead3a770b9ffb6d4edfc3738))
+
+
+### Features
+
+* **autocomplete:** default insights events ([#6976](https://github.com/algolia/instantsearch/issues/6976)) ([aac9b5d](https://github.com/algolia/instantsearch/commit/aac9b5d9ac48f864c3411946409f23988561181c))
+
+
+
+
+
 # [4.94.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.93.0...instantsearch.js@4.94.0) (2026-04-21)
 
 
