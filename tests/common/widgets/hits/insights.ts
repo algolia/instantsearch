@@ -51,6 +51,9 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: query
+                        ? `test-query-id-${query}`
+                        : 'test-query-id',
                     })
                 )
               );
@@ -163,6 +166,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -299,6 +303,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -341,6 +346,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -381,6 +387,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -430,6 +437,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -470,6 +478,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -516,6 +525,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -556,6 +566,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -597,6 +608,7 @@ export function createInsightsTests(
             algoliaSource: ['instantsearch'],
             index: 'indexName',
             objectIDs: ['indexName-0'],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -613,6 +625,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -653,6 +666,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -695,6 +709,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -735,6 +750,7 @@ export function createInsightsTests(
                       query,
                       page,
                       nbPages: 20,
+                      queryID: 'test-query-id',
                     })
                 )
               );
@@ -779,6 +795,7 @@ export function createInsightsTests(
             index: 'nested',
             objectIDs: ['nested-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {
@@ -795,6 +812,7 @@ export function createInsightsTests(
             index: 'indexName',
             objectIDs: ['indexName-0'],
             positions: [1],
+            queryID: 'test-query-id',
           },
           {
             headers: {

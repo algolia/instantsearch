@@ -11,7 +11,9 @@ import type {
   CreateUIMessage,
   FileUIPart,
   IdGenerator,
+  InferUIMessageChunk,
   InferUIMessageMetadata,
+  InferUIMessageToolCall,
   InferUIMessageTools,
   UIMessage,
   UIMessageChunk,
@@ -21,9 +23,9 @@ import type {
   ChatOnDataCallback,
 } from './types';
 
-type ActiveResponse = {
+type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
-  stream?: ReadableStream<UIMessageChunk>;
+  stream?: ReadableStream<TChunk>;
 };
 
 const tryParseJson = (value: string): unknown | undefined => {
@@ -134,7 +136,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
 
-  private activeResponse: ActiveResponse | null = null;
+  private activeResponse: ActiveResponse<
+    InferUIMessageChunk<TUIMessage>
+  > | null = null;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -516,7 +520,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   private processStreamWithCallbacks(
-    stream: ReadableStream<UIMessageChunk>
+    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>
   ): Promise<void> {
     this.setStatus({ status: 'streaming' });
 
@@ -537,7 +541,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     return new Promise((resolve) => {
       processStream<UIMessageChunk>(
-        stream,
+        stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
           switch (chunk.type) {
@@ -842,7 +846,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     toolName: chunk.toolName,
                     toolCallId: chunk.toolCallId,
                     input: chunk.input,
-                  } as any,
+                    dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                  } as InferUIMessageToolCall<TUIMessage>,
                 });
                 if (result && typeof result.then === 'function') {
                   pendingToolCall = pendingToolCall.then(() => result);

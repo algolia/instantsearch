@@ -194,7 +194,7 @@ export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
 
 export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
   unknown,
-  UIDataTypes,
+  any,
   infer TOOLS
 >
   ? TOOLS
@@ -229,9 +229,101 @@ type DataUIMessageChunk<DATA_TYPES extends UIDataTypes> = ValueOf<{
   };
 }>;
 
+type ToolUIMessageChunk<TOOLS extends UITools> =
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-input-available';
+        toolName: NAME;
+        toolCallId: string;
+        input: TOOLS[NAME]['input'];
+        callProviderMetadata?: ProviderMetadata;
+        providerExecuted?: boolean;
+      };
+    }>
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-input-start';
+        toolName: NAME;
+        toolCallId: string;
+        input?: DeepPartial<TOOLS[NAME]['input']>;
+        providerExecuted?: boolean;
+      };
+    }>
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-input-delta';
+        toolName: NAME;
+        toolCallId: string;
+        inputTextDelta: string;
+      };
+    }>
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-output-available';
+        toolName: NAME;
+        toolCallId: string;
+        output: TOOLS[NAME]['output'];
+        callProviderMetadata?: ProviderMetadata;
+        preliminary?: boolean;
+      };
+    }>
+  | ValueOf<{
+      [NAME in keyof TOOLS & string]: {
+        type: 'tool-error';
+        toolName: NAME;
+        toolCallId: string;
+        errorText: string;
+        input?: TOOLS[NAME]['input'];
+        callProviderMetadata?: ProviderMetadata;
+      };
+    }>
+  | {
+      type: 'tool-input-available';
+      toolName: string;
+      toolCallId: string;
+      input: unknown;
+      callProviderMetadata?: ProviderMetadata;
+      providerExecuted?: boolean;
+      dynamic: true;
+    }
+  | {
+      type: 'tool-input-start';
+      toolName: string;
+      toolCallId: string;
+      input?: unknown;
+      providerExecuted?: boolean;
+      dynamic: true;
+    }
+  | {
+      type: 'tool-input-delta';
+      toolName: string;
+      toolCallId: string;
+      inputTextDelta: string;
+      dynamic: true;
+    }
+  | {
+      type: 'tool-output-available';
+      toolName: string;
+      toolCallId: string;
+      output: unknown;
+      callProviderMetadata?: ProviderMetadata;
+      preliminary?: boolean;
+      dynamic: true;
+    }
+  | {
+      type: 'tool-error';
+      toolName: string;
+      toolCallId: string;
+      errorText: string;
+      input?: unknown;
+      callProviderMetadata?: ProviderMetadata;
+      dynamic: true;
+    };
+
 export type UIMessageChunk<
   METADATA = unknown,
-  DATA_TYPES extends UIDataTypes = UIDataTypes
+  DATA_TYPES extends UIDataTypes = UIDataTypes,
+  TOOLS extends UITools = UITools
 > =
   | { type: 'text-start'; id: string; providerMetadata?: ProviderMetadata }
   | {
@@ -250,43 +342,7 @@ export type UIMessageChunk<
     }
   | { type: 'reasoning-end'; id: string; providerMetadata?: ProviderMetadata }
   | { type: 'error'; errorText: string }
-  | {
-      type: 'tool-input-available';
-      toolName: string;
-      toolCallId: string;
-      input: unknown;
-      callProviderMetadata?: ProviderMetadata;
-      providerExecuted?: boolean;
-    }
-  | {
-      type: 'tool-input-start';
-      toolName: string;
-      toolCallId: string;
-      input?: unknown;
-      providerExecuted?: boolean;
-    }
-  | {
-      type: 'tool-input-delta';
-      toolName: string;
-      toolCallId: string;
-      inputTextDelta: string;
-    }
-  | {
-      type: 'tool-output-available';
-      toolName: string;
-      toolCallId: string;
-      output: unknown;
-      callProviderMetadata?: ProviderMetadata;
-      preliminary?: boolean;
-    }
-  | {
-      type: 'tool-error';
-      toolName: string;
-      toolCallId: string;
-      errorText: string;
-      input?: unknown;
-      callProviderMetadata?: ProviderMetadata;
-    }
+  | ToolUIMessageChunk<TOOLS>
   | { type: 'source-url'; sourceId: string; url: string; title?: string }
   | {
       type: 'source-document';
@@ -307,7 +363,8 @@ export type UIMessageChunk<
 
 export type InferUIMessageChunk<T extends UIMessage> = UIMessageChunk<
   InferUIMessageMetadata<T>,
-  InferUIMessageData<T>
+  InferUIMessageData<T>,
+  InferUIMessageTools<T>
 >;
 
 export interface ChatState<UI_MESSAGE extends UIMessage> {
@@ -336,13 +393,13 @@ export interface ChatTransport<UI_MESSAGE extends UIMessage> {
       trigger: 'submit-message' | 'regenerate-message';
       messageId?: string;
     } & ChatRequestOptions
-  ) => Promise<ReadableStream<UIMessageChunk>>;
+  ) => Promise<ReadableStream<InferUIMessageChunk<UI_MESSAGE>>>;
 
   reconnectToStream: (
     options: {
       chatId: string;
     } & ChatRequestOptions
-  ) => Promise<ReadableStream<UIMessageChunk> | null>;
+  ) => Promise<ReadableStream<InferUIMessageChunk<UI_MESSAGE>> | null>;
 }
 
 export type PrepareSendMessagesRequest<UI_MESSAGE extends UIMessage> = (
