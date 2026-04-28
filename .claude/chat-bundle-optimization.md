@@ -22,7 +22,9 @@ Measured against `examples/js/e-commerce` with the chat widget added. All sizes 
 
 ### Dynamic import of the chat widget
 
-**Impact: −31 kB gz from initial JS** **App change only — no package work needed**
+**Impact: −31 kB gz from initial JS**
+
+**App change only — no package work needed**
 
 Split the chat widget into a lazy chunk so it doesn't block the initial page render. The chunk loads immediately after the main bundle (or on first interaction, depending on preference), so perceived load time for chat is only marginally delayed. This is the single highest-impact change available and requires no library work — it belongs in integration guides and example apps.
 
@@ -57,7 +59,11 @@ Measured result:
 
 ### 1. Replace `markdown-to-jsx` with a lighter renderer
 
-**Impact: −9.5 kB gz from the lazy chat chunk (30.4 → ~21 kB gz)** **Effort: medium — change in `instantsearch-ui-components`** **Breaking: minor (markdown rendering fidelity)**
+**Impact: −9.5 kB gz from the lazy chat chunk (30.4 → ~21 kB gz)**
+
+**Effort: medium — change in `instantsearch-ui-components`**
+
+**Breaking: minor (markdown rendering fidelity)**
 
 `markdown-to-jsx` (20 kB unminified, ~9.5 kB gz contribution) is a spec-compliant markdown parser. It's only used in one place: `packages/instantsearch-ui-components/src/components/chat/ChatMessage.tsx` to render AI response text.
 
@@ -92,7 +98,11 @@ function renderMarkdown(text: string, createElement: Pragma): VNode {
 
 ### 2. Per-framework static builds of `instantsearch-ui-components`
 
-**Impact: −3 kB gz (factory boilerplate) + unlocks further tree-shaking** **Effort: high — build pipeline change, API change** **Breaking: yes (import path / API shape)**
+**Impact: −3 kB gz (factory boilerplate) + unlocks further tree-shaking**
+
+**Effort: high — build pipeline change, API change**
+
+**Breaking: yes (import path / API shape)**
 
 The current design injects `createElement` and `Fragment` at runtime:
 
@@ -155,8 +165,8 @@ The compiled `instantsearch.js` widget file (`es/widgets/chat/chat.js`) contains
 
 ```js
 var Chat = createChatComponent({
-    createElement: h,
-    Fragment: Fragment,
+  createElement: h,
+  Fragment: Fragment,
 });
 ```
 
@@ -207,12 +217,12 @@ env: {
 
 This forces SWC to downcompile modern syntax to ES5, which causes it to replace language features with helper imports:
 
-| Syntax | Compiled to |
-|--------|-------------|
-| `{ ...spread }` | `@swc/helpers/esm/_object_spread` |
-| `{ ...props, key }` | `@swc/helpers/esm/_object_spread_props` |
+| Syntax                       | Compiled to                                   |
+| ---------------------------- | --------------------------------------------- |
+| `{ ...spread }`              | `@swc/helpers/esm/_object_spread`             |
+| `{ ...props, key }`          | `@swc/helpers/esm/_object_spread_props`       |
 | `const { a, ...rest } = obj` | `@swc/helpers/esm/_object_without_properties` |
-| `[...arr]` | `@swc/helpers/esm/_to_consumable_array` |
+| `[...arr]`                   | `@swc/helpers/esm/_to_consumable_array`       |
 
 These helpers appear across every chat component file. They're small individually (~500–900 bytes each) but add up across the whole component tree.
 
@@ -226,7 +236,11 @@ Rough saving: difficult to measure precisely without rebuilding, but removing 4�
 
 ### 3. Move icons out of JS (SVG sprite or CSS)
 
-**Impact: −4 kB gz from the lazy chat chunk** **Effort: medium — requires changing rendering approach for icons** **Breaking: yes (customization API for icons)**
+**Impact: −4 kB gz from the lazy chat chunk**
+
+**Effort: medium — requires changing rendering approach for icons**
+
+**Breaking: yes (customization API for icons)**
 
 All 18 icons in `icons.js` end up in the bundle when chat is used. They're all genuinely needed (no unused icons to tree-shake):
 
@@ -288,7 +302,11 @@ Components emit `<span class="ais-icon--sparkles" />`. No SVG in JS at all. SVG 
 
 ### 4. Replace `stickToBottom` spring physics with simple scroll lock
 
-**Impact: −7 kB gz from the lazy chat chunk** **Effort: medium — replaces a complex lib with simpler logic** **Breaking: no (behavior change, not API change)**
+**Impact: −7 kB gz from the lazy chat chunk**
+
+**Effort: medium — replaces a complex lib with simpler logic**
+
+**Breaking: no (behavior change, not API change)**
 
 `stickToBottom.ts` is a 693-line spring physics engine (ported from StackBlitz) that smoothly animates the chat scroll container as new message content streams in. Compiled it's 21 kB raw / ~7 kB gz.
 
@@ -332,7 +350,11 @@ function createScrollLock(container: HTMLElement) {
 
 ### 5. Incremental-only chat CSS (package change)
 
-**Impact: −3 kB gz from initial CSS (for apps that already load reset CSS)** **Effort: low — `instantsearch.css` packaging change** **Breaking: no (new file alongside existing)**
+**Impact: −3 kB gz from initial CSS (for apps that already load reset CSS)**
+
+**Effort: low — `instantsearch.css` packaging change**
+
+**Breaking: no (new file alongside existing)**
 
 `instantsearch.css/components/chat-min.css` (32 kB) bundles the full reset stylesheet alongside the chat-specific styles. This is intentional — makes it self-contained for apps that don't already load the reset.
 
@@ -385,16 +407,16 @@ All 18 icons in `icons.js` are genuinely used when the full chat widget is activ
 
 Starting from the with-chat baseline (110.2 kB gz JS, 8.9 kB gz CSS):
 
-| Item                              | JS saving                    | CSS saving         |
-| --------------------------------- | ---------------------------- | ------------------ |
-| Dynamic import (app-level)        | −31 kB initial → lazy chunk  | —                  |
-| §1 Lighter markdown               | −9.5 kB gz (from lazy chunk) | —                  |
-| §2 Per-framework builds           | −3 kB gz (from lazy chunk)   | —                  |
-| §2a `/*#__PURE__*/` quick win     | small, unquantified          | —                  |
-| §2b Modern `env.targets` for ESM  | small, unquantified          | —                  |
-| §3 CSS icons                      | −4 kB gz (from lazy chunk)   | —                  |
-| §4 Simpler stickToBottom          | −7 kB gz (from lazy chunk)   | —                  |
-| §5 Incremental CSS                | —                            | −3 kB gz (initial) |
+| Item | JS saving | CSS saving |
+| --- | --- | --- |
+| Dynamic import (app-level) | −31 kB initial → lazy chunk | — |
+| §1 Lighter markdown | −9.5 kB gz (from lazy chunk) | — |
+| §2 Per-framework builds | −3 kB gz (from lazy chunk) | — |
+| §2a `/*#__PURE__*/` quick win | small, unquantified | — |
+| §2b Modern `env.targets` for ESM | small, unquantified | — |
+| §3 CSS icons | −4 kB gz (from lazy chunk) | — |
+| §4 Simpler stickToBottom | −7 kB gz (from lazy chunk) | — |
+| §5 Incremental CSS | — | −3 kB gz (initial) |
 
 **Floor estimate:**
 
