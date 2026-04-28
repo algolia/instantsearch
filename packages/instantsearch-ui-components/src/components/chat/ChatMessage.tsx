@@ -243,6 +243,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
+          if (
+            toolMessage.state === 'input-streaming' &&
+            !tool.streamInput
+          ) {
+            return null;
+          }
+
           if (!ToolLayoutComponent) {
             return null;
           }

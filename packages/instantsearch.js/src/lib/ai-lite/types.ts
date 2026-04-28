@@ -84,6 +84,7 @@ export type ToolUIPart<TOOLS extends UITools = UITools> = ValueOf<{
     | {
         state: 'input-streaming';
         input: DeepPartial<TOOLS[NAME]['input']> | undefined;
+        rawInput?: string;
         providerExecuted?: boolean;
         output?: never;
         errorText?: never;
@@ -125,6 +126,7 @@ export type DynamicToolUIPart = {
   | {
       state: 'input-streaming';
       input: unknown | undefined;
+      rawInput?: string;
       output?: never;
       errorText?: never;
     }
@@ -252,7 +254,7 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
         type: 'tool-input-delta';
         toolName: NAME;
         toolCallId: string;
-        inputDelta: string;
+        inputTextDelta: string;
       };
     }>
   | ValueOf<{
@@ -296,7 +298,7 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
       type: 'tool-input-delta';
       toolName: string;
       toolCallId: string;
-      inputDelta: string;
+      inputTextDelta: string;
       dynamic: true;
     }
   | {
@@ -489,6 +491,7 @@ export interface ChatInit<UI_MESSAGE extends UIMessage> {
   sendAutomaticallyWhen?: (options: {
     messages: UI_MESSAGE[];
   }) => boolean | PromiseLike<boolean>;
+  shouldRepairToolInput?: (toolName: string) => boolean;
 }
 
 export type CreateUIMessage<UI_MESSAGE extends UIMessage> = Omit<

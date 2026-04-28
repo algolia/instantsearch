@@ -443,6 +443,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         ...options,
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        shouldRepairToolInput(toolName) {
+          let tool = tools[toolName];
+          if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
+            tool = tools[SearchIndexToolType];
+          }
+          if (!tool) return true;
+          return Boolean(tool.streamInput);
+        },
         onToolCall({ toolCall }) {
           let tool = tools[toolCall.toolName];
 
