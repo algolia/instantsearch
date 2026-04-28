@@ -545,7 +545,8 @@ data: [DONE]`,
       });
 
       await waitFor(() => {
-        const lastMessage = chatInstance.messages[chatInstance.messages.length - 1];
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
         expect(lastMessage?.role).toBe('assistant');
 
         const toolPart = lastMessage?.parts.find(
@@ -874,7 +875,11 @@ data: [DONE]`,
       return {
         sendMessages: jest.fn(() =>
           Promise.resolve(
-            new ReadableStream({ start(ctrl) { ctrl.close(); } })
+            new ReadableStream({
+              start(ctrl) {
+                ctrl.close();
+              },
+            })
           )
         ),
         reconnectToStream: jest.fn(() => Promise.resolve(null)),
