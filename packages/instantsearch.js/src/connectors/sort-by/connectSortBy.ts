@@ -363,7 +363,11 @@ const connectSortBy: SortByConnector = function connectSortBy(
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const isUiStateSortByInItems =
-          !uiState.sortBy || connectorState.itemsLookup![uiState.sortBy];
+          !uiState.sortBy ||
+          Object.prototype.hasOwnProperty.call(
+            connectorState.itemsLookup,
+            uiState.sortBy
+          );
 
         warning(
           Boolean(isUiStateSortByInItems),
