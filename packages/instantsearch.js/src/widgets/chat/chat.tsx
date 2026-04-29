@@ -807,7 +807,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
-        loaderText: templates.messages?.loaderText,
+        loaderText: templates.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
@@ -1010,6 +1010,11 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     loader: Template<ChatMessageLoaderProps>;
 
     /**
+     * Text to display in the loader
+     */
+    loaderText: string;
+
+    /**
      * Templates to use for the header.
      */
     header: Partial<{
@@ -1067,10 +1072,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the scroll to bottom button
        */
       scrollToBottomLabelText?: string;
-      /**
-       * Text to display in the loader
-       */
-      loaderText?: string;
       /**
        * Label for the copy to clipboard action
        */
