@@ -18,6 +18,7 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -28,6 +29,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { carousel } from '../../templates';
+
+import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type {
@@ -75,7 +78,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
-export { SearchIndexToolType, RecommendToolType };
+export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -275,6 +278,7 @@ function createDefaultTools<
       getSearchPageURL
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+    [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },

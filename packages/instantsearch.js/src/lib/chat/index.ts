@@ -9,3 +9,4 @@ export const RecommendToolType = 'algolia_recommend';
 export const MemorizeToolType = 'algolia_memorize';
 export const MemorySearchToolType = 'algolia_memory_search';
 export const PonderToolType = 'algolia_ponder';
+export const DisplayResultsToolType = 'algolia_display_results';

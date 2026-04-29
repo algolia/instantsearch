@@ -343,6 +343,15 @@ export type UIMessageChunk<
   | { type: 'reasoning-end'; id: string; providerMetadata?: ProviderMetadata }
   | { type: 'error'; errorText: string }
   | ToolUIMessageChunk<TOOLS>
+  | {
+      type: 'data-tool-output-delta';
+      data: {
+        toolCallId: string;
+        toolName: string;
+        delta: string;
+      };
+      transient?: boolean;
+    }
   | { type: 'source-url'; sourceId: string; url: string; title?: string }
   | {
       type: 'source-document';

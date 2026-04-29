@@ -535,6 +535,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     let currentTextPartId: string | undefined;
     let currentReasoningPartId: string | undefined;
     const toolRawInputByCallId: Record<string, string> = {};
+    const toolRawOutputByCallId: Record<string, string> = {};
 
     // Promise chain for handling tool calls that return promises
     let pendingToolCall: Promise<void> = Promise.resolve();
@@ -766,12 +767,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               toolRawInputByCallId[chunk.toolCallId] = nextRawInput;
 
               const toolName =
-                chunk.toolName ??
-                existingPart?.type?.replace('tool-', '');
-              const shouldRepair =
-                toolName
-                  ? (this.shouldRepairToolInput?.(toolName) ?? true)
-                  : true;
+                chunk.toolName ?? existingPart?.type?.replace('tool-', '');
+              const shouldRepair = toolName
+                ? this.shouldRepairToolInput?.(toolName) ?? true
+                : true;
               const parsedInput = shouldRepair
                 ? parseToolInputDelta(nextRawInput, existingPart?.input)
                 : existingPart?.input;
@@ -856,6 +855,65 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
+            case 'data-tool-output-delta': {
+              if (!currentMessage) break;
+
+              const { toolCallId, toolName, delta } = chunk.data as {
+                toolCallId: string;
+                toolName: string;
+                delta: string;
+              };
+
+              const toolIndex = currentMessage.parts.findIndex(
+                (p) => 'toolCallId' in p && p.toolCallId === toolCallId
+              );
+
+              const existingPart =
+                toolIndex >= 0
+                  ? (currentMessage.parts[toolIndex] as any)
+                  : null;
+              const previousRawOutput =
+                existingPart?.rawOutput ??
+                toolRawOutputByCallId[toolCallId] ??
+                '';
+              const nextRawOutput = `${previousRawOutput}${delta}`;
+              toolRawOutputByCallId[toolCallId] = nextRawOutput;
+
+              const parsedOutput = parseToolInputDelta(
+                nextRawOutput,
+                existingPart?.output
+              );
+
+              const nextToolPart = {
+                ...(existingPart ?? {
+                  type: `tool-${toolName}` as const,
+                  toolCallId,
+                  input: undefined,
+                }),
+                state: 'output-available' as const,
+                output: parsedOutput,
+                rawOutput: nextRawOutput,
+                preliminary: true,
+              };
+
+              if (toolIndex >= 0) {
+                const updatedParts = [...currentMessage.parts];
+                updatedParts[toolIndex] = nextToolPart;
+                currentMessage = {
+                  ...currentMessage,
+                  parts: updatedParts,
+                } as TUIMessage;
+              } else {
+                currentMessage = {
+                  ...currentMessage,
+                  parts: [...currentMessage.parts, nextToolPart],
+                } as TUIMessage;
+              }
+
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              break;
+            }
+
             case 'tool-output-available': {
               if (!currentMessage) break;
 
@@ -865,11 +923,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               if (toolIndex >= 0) {
                 delete toolRawInputByCallId[chunk.toolCallId];
+                delete toolRawOutputByCallId[chunk.toolCallId];
 
                 const updatedParts = [...currentMessage.parts];
                 const existingPart = updatedParts[toolIndex] as any;
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                const { rawOutput: _ignored, ...rest } = existingPart;
                 updatedParts[toolIndex] = {
-                  ...existingPart,
+                  ...rest,
                   state: 'output-available',
                   output: chunk.output,
                   callProviderMetadata: chunk.callProviderMetadata,
@@ -893,11 +954,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               if (toolIndex >= 0) {
                 delete toolRawInputByCallId[chunk.toolCallId];
+                delete toolRawOutputByCallId[chunk.toolCallId];
 
                 const updatedParts = [...currentMessage.parts];
                 const existingPart = updatedParts[toolIndex] as any;
+                const {
+                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                  rawOutput: _ignoredRawOutput,
+                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                  preliminary: _ignoredPreliminary,
+                  ...rest
+                } = existingPart;
                 updatedParts[toolIndex] = {
-                  ...existingPart,
+                  ...rest,
                   state: 'output-error',
                   errorText: chunk.errorText,
                   input: chunk.input ?? existingPart.input,

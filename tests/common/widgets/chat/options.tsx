@@ -2,7 +2,11 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
-import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
+import {
+  Chat,
+  DisplayResultsToolType,
+  SearchIndexToolType,
+} from 'instantsearch.js/es/lib/chat';
 import {
   chatInlineLayout,
   chatSidePanelLayout,
@@ -1453,6 +1457,349 @@ export function createOptionsTests(
             }),
           ])
         );
+      });
+
+      describe('display results tool', () => {
+        const displayResultsMessage = (
+          output: unknown,
+          { preliminary = false } = {}
+        ) =>
+          ({
+            id: '1',
+            role: 'assistant',
+            parts: [
+              {
+                type: `tool-${DisplayResultsToolType}`,
+                toolCallId: '1',
+                input: {},
+                state: 'output-available',
+                output,
+                ...(preliminary ? { preliminary: true } : {}),
+              },
+            ],
+          } as any);
+
+        test('renders the default layout', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage({
+                intro: 'Curated for you',
+                groups: [
+                  {
+                    title: 'Runners',
+                    why: 'matches your stride',
+                    results: [{ objectID: '1' }, { objectID: '2' }],
+                  },
+                  {
+                    title: 'Casual',
+                    results: [
+                      { objectID: '3' },
+                      { objectID: '4' },
+                      { objectID: '5' },
+                    ],
+                  },
+                ],
+              }),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-intro')!
+              .textContent
+          ).toBe('Curated for you');
+
+          const titles = document.querySelectorAll(
+            '.ais-ChatToolDisplayResults-groupTitle'
+          );
+          expect(titles).toHaveLength(2);
+          expect(titles[0].textContent).toBe('Runners');
+          expect(titles[1].textContent).toBe('Casual');
+
+          const whys = document.querySelectorAll(
+            '.ais-ChatToolDisplayResults-groupWhy'
+          );
+          expect(whys).toHaveLength(1);
+          expect(whys[0].textContent).toBe('matches your stride');
+
+          expect(document.querySelectorAll('.ais-Carousel')).toHaveLength(2);
+          expect(document.querySelectorAll('.ais-Carousel-item')).toHaveLength(
+            5
+          );
+
+          const counts = document.querySelectorAll(
+            '.ais-ChatToolDisplayResultsCarouselHeaderCount'
+          );
+          expect(counts).toHaveLength(2);
+          expect(counts[0].textContent).toBe('2 results');
+          expect(counts[1].textContent).toBe('3 results');
+
+          const scrollButtonGroups = document.querySelectorAll(
+            '.ais-ChatToolDisplayResultsCarouselHeaderScrollButtons'
+          );
+          expect(scrollButtonGroups).toHaveLength(2);
+          scrollButtonGroups.forEach((group) => {
+            expect(
+              group.querySelectorAll(
+                '.ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+              )
+            ).toHaveLength(2);
+          });
+        });
+
+        test('shows streaming caption while preliminary flag is true', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage(
+                {
+                  intro: 'Curating',
+                  groups: [
+                    { title: 'Runners', results: [{ objectID: '1' }] },
+                  ],
+                },
+                { preliminary: true }
+              ),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).toBeInTheDocument();
+        });
+
+        test('renders nothing when output has no intro and no groups', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [displayResultsMessage({ groups: [] })],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+        });
+
+        test('skips the search index tool when the display results tool needs to be rendered', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { displayResultsEnabled: true },
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${DisplayResultsToolType}`,
+                    toolCallId: '2',
+                    input: {},
+                    state: 'output-available',
+                    output: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )
+          ).not.toBeInTheDocument();
+        });
+
+        test('skips the MCP-shimmed search index tool when the display results tool needs to be rendered', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { displayResultsEnabled: true },
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}_test`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${DisplayResultsToolType}`,
+                    toolCallId: '2',
+                    input: {},
+                    state: 'output-available',
+                    output: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )
+          ).not.toBeInTheDocument();
+        });
+
+        test('allows overriding the display results tool via the tools option', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage({
+                groups: [
+                  { title: 'Runners', results: [{ objectID: '1' }] },
+                ],
+              }),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    templates: {
+                      layout:
+                        '<div id="custom-display">custom display</div>',
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    layoutComponent: () => (
+                      <div id="custom-display">custom display</div>
+                    ),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('#custom-display')!.textContent
+          ).toBe('custom display');
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+        });
       });
     });
 

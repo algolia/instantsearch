@@ -232,6 +232,18 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           tool = tools[SearchIndexToolType];
         }
 
+        const displayResultsEnabled =
+          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
+            ?.displayResultsEnabled === true;
+
+        if (
+          displayResultsEnabled &&
+          tool &&
+          tool === tools[SearchIndexToolType]
+        ) {
+          return null;
+        }
+
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;

@@ -5,6 +5,7 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, {
   createElement,
@@ -19,6 +20,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
+import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export {
@@ -27,6 +29,7 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 };
 
 import type {
@@ -63,6 +66,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
+    [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
