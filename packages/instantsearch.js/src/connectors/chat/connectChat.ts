@@ -374,10 +374,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           ...options.transport,
           prepareSendMessagesRequest: (params) => {
             // Call the original prepareSendMessagesRequest if it exists,
-            // otherwise construct the default body
+            // otherwise construct a minimal default body containing only the
+            // request payload — without leaking transport metadata such as
+            // resolved headers, api URL, credentials, or `requestMetadata`.
             const preparedOrPromise = originalPrepare
               ? originalPrepare(params)
-              : { body: { ...params } };
+              : {
+                  body: {
+                    id: params.id,
+                    messageId: params.messageId,
+                    trigger: params.trigger,
+                    messages: params.messages,
+                    ...params.body,
+                  },
+                };
             // Then filter out data-* parts
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
@@ -413,16 +423,28 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+            // Identify the calling InstantSearch component so the agent can
+            // attribute the request without parsing the user agent.
+            'x-algolia-component': 'ais-chat',
           },
-          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:
                 trigger === 'regenerate-message'
                   ? `${baseApi}&cache=false`
                   : baseApi,
+              // Only forward the actual request payload. The previous
+              // implementation spread every prepare param (`headers`, `body`,
+              // `api`, `credentials`, `requestMetadata`, …) into the body,
+              // duplicating values already sent in the headers and HTTP
+              // metadata. Returning no `headers` here also lets per-request
+              // headers — such as `algolia-referer` from `aiMode` /
+              // `prompt-suggestions` — flow through the transport's default
+              // header merge.
               body: {
-                ...rest,
+                id,
+                messageId,
                 messages: filterDataParts(messages),
               },
             };

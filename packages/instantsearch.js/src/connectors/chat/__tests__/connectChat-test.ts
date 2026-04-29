@@ -868,6 +868,120 @@ data: [DONE]`,
         })
       );
     });
+
+    describe('agent endpoint requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      function getRequestPayload() {
+        const [, init] = fetchMock.mock.calls[0];
+        return {
+          headers: init.headers as Record<string, string>,
+          body: JSON.parse(init.body as string),
+        };
+      }
+
+      it('adds the x-algolia-component header on agent requests', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-Key': 'apiKey',
+            'x-algolia-component': 'ais-chat',
+          })
+        );
+      });
+
+      it('forwards the algolia-referer header from sendMessage options', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'algolia-referer': 'prompt-suggestions' } }
+        );
+
+        const { headers } = getRequestPayload();
+        expect(headers).toMatchObject({
+          'algolia-referer': 'prompt-suggestions',
+          'x-algolia-component': 'ais-chat',
+        });
+      });
+
+      it('does not duplicate transport metadata in the request body', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { body } = getRequestPayload();
+        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+        expect(body).not.toHaveProperty('body');
+        expect(body).not.toHaveProperty('requestMetadata');
+      });
+    });
+
+    describe('custom transport requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      it('does not leak transport metadata in the default body', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          transport: { api: 'https://custom.api' },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const [, init] = fetchMock.mock.calls[0];
+        const body = JSON.parse(init.body as string);
+
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+          'trigger',
+        ]);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+      });
+    });
   });
 
   describe('context', () => {
