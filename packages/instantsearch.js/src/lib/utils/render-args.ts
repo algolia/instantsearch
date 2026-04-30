@@ -1,4 +1,10 @@
-import type { InstantSearch, UiState, Widget, IndexWidget } from '../../types';
+import type {
+  InstantSearch,
+  UiState,
+  Widget,
+  IndexWidget,
+  IndexRenderState,
+} from '../../types';
 
 export function createInitArgs(
   instantSearchInstance: InstantSearch,
@@ -47,5 +53,27 @@ export function createRenderArgs(
     },
     status: instantSearchInstance.status,
     error: instantSearchInstance.error,
+  };
+}
+
+export function storeRenderState({
+  renderState,
+  instantSearchInstance,
+  parent,
+}: {
+  renderState: IndexRenderState;
+  instantSearchInstance: InstantSearch;
+  parent?: IndexWidget;
+}) {
+  const parentIndexName = parent
+    ? parent.getIndexId()
+    : instantSearchInstance.mainIndex.getIndexId();
+
+  instantSearchInstance.renderState = {
+    ...instantSearchInstance.renderState,
+    [parentIndexName]: {
+      ...instantSearchInstance.renderState[parentIndexName],
+      ...renderState,
+    },
   };
 }
