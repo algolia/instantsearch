@@ -1417,6 +1417,30 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       ...feeds.map((feed) => feed.feedID),
       ...(promptSuggestionsKey ? [promptSuggestionsKey] : []),
     ];
+
+    if (__DEV__) {
+      const seen = new Set<string>();
+      const duplicates = new Set<string>();
+      for (const id of feedIDs) {
+        if (seen.has(id)) {
+          duplicates.add(id);
+        } else {
+          seen.add(id);
+        }
+      }
+      if (duplicates.size > 0) {
+        warn(
+          `Duplicate feedID(s) detected in autocomplete configuration: ${[
+            ...duplicates,
+          ]
+            .map((d) => `"${d}"`)
+            .join(
+              ', '
+            )}. Each \`feeds[]\` entry, \`showQuerySuggestions\`, and \`showPromptSuggestions\` must use a unique feedID.`
+        );
+      }
+    }
+
     let bootstrappedTree: IndexWidget | null = null;
     const bootstrap: Widget = {
       $$type: 'ais.autocomplete',
