@@ -9,7 +9,11 @@
     "examples/react/next",
     "examples/react/next-routing",
     "examples/react/next-app-router",
+    "examples/react/next-app-router-with-composition",
     "examples/react/react-native",
+    "examples/js/e-commerce-with-composition",
+    "examples/react/e-commerce-with-composition",
+    "examples/vue/e-commerce-with-composition",
     "examples/js/e-commerce-umd/public/packages",
     "packages/create-instantsearch-app/src/templates/**/*",
     "packages/algolia-experiences"

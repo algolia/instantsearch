@@ -181,6 +181,79 @@ describe('Feeds', () => {
     jest.useRealTimers();
   });
 
+  it('reuses a pending feed container when the feed reappears before deferred cleanup', async () => {
+    jest.useFakeTimers();
+    mockFeedIDs = ['products'];
+    const containerByFeed = new Map<string, IndexWidget>();
+    const parentIndex = createParentIndexStub(undefined, containerByFeed);
+    const instantSearch = {} as any;
+
+    const { rerender } = render(
+      <InstantSearchContext.Provider value={instantSearch}>
+        <IndexContext.Provider value={parentIndex as any}>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
+        </IndexContext.Provider>
+      </InstantSearchContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('feed-products')).toBeTruthy();
+    });
+
+    const firstFeedContainer = containerByFeed.get('products');
+
+    mockFeedIDs = [];
+    rerender(
+      <InstantSearchContext.Provider value={instantSearch}>
+        <IndexContext.Provider value={parentIndex as any}>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
+        </IndexContext.Provider>
+      </InstantSearchContext.Provider>
+    );
+
+    expect(screen.queryByTestId('feed-products')).toBeNull();
+    expect(parentIndex.removeWidgets).not.toHaveBeenCalled();
+
+    mockFeedIDs = ['products'];
+    rerender(
+      <InstantSearchContext.Provider value={instantSearch}>
+        <IndexContext.Provider value={parentIndex as any}>
+          <Feeds
+            searchScope="global"
+            renderFeed={({ feedID }) => (
+              <div data-testid={`feed-${feedID}`}>{feedID}</div>
+            )}
+          />
+        </IndexContext.Provider>
+      </InstantSearchContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('feed-products')).toBeTruthy();
+    });
+
+    expect(parentIndex.addWidgets).toHaveBeenCalledTimes(1);
+    expect(parentIndex.widgets).toEqual([firstFeedContainer]);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    expect(parentIndex.removeWidgets).not.toHaveBeenCalled();
+    expect(parentIndex.widgets).toEqual([firstFeedContainer]);
+    jest.useRealTimers();
+  });
+
   it('does not duplicate add/remove on stable feedIDs', async () => {
     jest.useFakeTimers();
     mockFeedIDs = ['products'];
