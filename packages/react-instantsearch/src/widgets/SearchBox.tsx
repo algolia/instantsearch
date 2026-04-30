@@ -121,7 +121,7 @@ export function SearchBox({
             if (inputValue.trim()) {
               chatRenderState.sendMessage?.(
                 { text: inputValue },
-                { headers: { 'algolia-referer': 'ai-mode' } }
+                { headers: { 'x-algolia-referer': 'ai-mode' } }
               );
             }
           }

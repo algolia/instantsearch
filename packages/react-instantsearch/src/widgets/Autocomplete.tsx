@@ -751,7 +751,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             chatRenderStateWithFocus.focusInput?.();
             chatRenderStateWithFocus.sendMessage?.(
               { text: item.prompt },
-              { headers: { 'algolia-referer': 'prompt-suggestions' } }
+              { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
             );
             return;
           }
@@ -916,7 +916,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
                 if (resolvedQuery.trim()) {
                   chatRenderState.sendMessage?.(
                     { text: resolvedQuery },
-                    { headers: { 'algolia-referer': 'ai-mode' } }
+                    { headers: { 'x-algolia-referer': 'ai-mode' } }
                   );
                 }
               }

@@ -421,10 +421,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
-            'x-algolia-api-Key': apiKey,
+            'x-algolia-api-key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
-            // Identify the calling InstantSearch component so the agent can
-            // attribute the request without parsing the user agent.
             'x-algolia-component': 'ais-chat',
           },
           prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
@@ -434,14 +432,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                 trigger === 'regenerate-message'
                   ? `${baseApi}&cache=false`
                   : baseApi,
-              // Only forward the actual request payload. The previous
-              // implementation spread every prepare param (`headers`, `body`,
-              // `api`, `credentials`, `requestMetadata`, …) into the body,
-              // duplicating values already sent in the headers and HTTP
-              // metadata. Returning no `headers` here also lets per-request
-              // headers — such as `algolia-referer` from `aiMode` /
-              // `prompt-suggestions` — flow through the transport's default
-              // header merge.
               body: {
                 id,
                 messageId,

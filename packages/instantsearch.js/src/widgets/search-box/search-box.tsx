@@ -203,7 +203,7 @@ const renderer =
             if (currentQuery.trim()) {
               chatRenderState.sendMessage?.(
                 { text: currentQuery },
-                { headers: { 'algolia-referer': 'ai-mode' } }
+                { headers: { 'x-algolia-referer': 'ai-mode' } }
               );
             }
           }

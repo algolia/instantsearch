@@ -628,7 +628,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             chatRenderState.focusInput?.();
             chatRenderState.sendMessage?.(
               { text: item.prompt },
-              { headers: { 'algolia-referer': 'prompt-suggestions' } }
+              { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
             );
             return;
           }
@@ -855,7 +855,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
                 if (localQuery.trim()) {
                   chatState.sendMessage?.(
                     { text: localQuery },
-                    { headers: { 'algolia-referer': 'ai-mode' } }
+                    { headers: { 'x-algolia-referer': 'ai-mode' } }
                   );
                 }
               }

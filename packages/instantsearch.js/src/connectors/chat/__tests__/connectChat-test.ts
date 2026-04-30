@@ -905,23 +905,51 @@ data: [DONE]`,
         expect(headers).toEqual(
           expect.objectContaining({
             'x-algolia-application-id': 'appId',
-            'x-algolia-api-Key': 'apiKey',
+            'x-algolia-api-key': 'apiKey',
             'x-algolia-component': 'ais-chat',
           })
         );
       });
 
-      it('forwards the algolia-referer header from sendMessage options', async () => {
+      it('forwards the x-algolia-referer header from sendMessage options', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
         await widget.chatInstance.sendMessage(
           { text: 'hello' },
-          { headers: { 'algolia-referer': 'prompt-suggestions' } }
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
         );
 
         const { headers } = getRequestPayload();
         expect(headers).toMatchObject({
-          'algolia-referer': 'prompt-suggestions',
+          'x-algolia-referer': 'prompt-suggestions',
+          'x-algolia-component': 'ais-chat',
+        });
+      });
+
+      it('does not carry over the x-algolia-referer to follow-up messages', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
+        expect(secondHeaders).toMatchObject({
           'x-algolia-component': 'ais-chat',
         });
       });
