@@ -30,7 +30,9 @@ describe('EXPERIMENTAL_Autocomplete', () => {
 
   describe('feeds-mode guards', () => {
     test('throws when both `feeds` and `indices` are provided', () => {
-      jest.spyOn(console, 'error').mockImplementation(noop);
+      const consoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation(noop);
 
       const compositionClient = createCompositionClient();
 
@@ -55,11 +57,13 @@ describe('EXPERIMENTAL_Autocomplete', () => {
         );
       }).toThrow(/mutually exclusive/);
 
-      jest.spyOn(console, 'error').mockRestore();
+      consoleError.mockRestore();
     });
 
     test('throws in feeds-mode when outer InstantSearch has no compositionID', () => {
-      jest.spyOn(console, 'error').mockImplementation(noop);
+      const consoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation(noop);
 
       const searchClient = createSearchClient({});
 
@@ -79,11 +83,13 @@ describe('EXPERIMENTAL_Autocomplete', () => {
         );
       }).toThrow(/composition-based/);
 
-      jest.spyOn(console, 'error').mockRestore();
+      consoleError.mockRestore();
     });
 
     test('does not throw in indices-mode when outer InstantSearch has no compositionID', () => {
-      jest.spyOn(console, 'error').mockImplementation(noop);
+      const consoleError = jest
+        .spyOn(console, 'error')
+        .mockImplementation(noop);
 
       const searchClient = createSearchClient({});
 
@@ -103,7 +109,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
         );
       }).not.toThrow();
 
-      jest.spyOn(console, 'error').mockRestore();
+      consoleError.mockRestore();
     });
   });
 });
