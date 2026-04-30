@@ -3,21 +3,19 @@ import process from 'node:process';
 
 import { Command, CommanderError } from 'commander';
 
-import { normalizeArgv } from './aliases';
 import {
   commanderErrorToFailure,
   isSilentCommanderExit,
 } from './commander-errors';
 import { init, type InitOptions } from './init';
-import { addExperience } from './add-experience';
-import { addWidget } from './add-widget';
+import { add } from './add';
 import { introspect } from './introspect';
 import { createCliRuntime } from './runtime';
 import {
   buildSchemaFromFlags,
   type SchemaFlagOptions,
 } from './schema-flags';
-import { failure, type Report } from '../reporter';
+import { failure } from '../reporter';
 import type { Flavor, Framework } from '../types';
 
 const runtime = createCliRuntime();
@@ -84,37 +82,25 @@ program
   .option('--components-path <path>', 'Path where components will be generated')
   .action(runInit);
 
-type AddExperienceFlagOptions = SchemaFlagOptions & {
+type AddFlagOptions = SchemaFlagOptions & {
   json?: boolean;
   yes?: boolean;
-  template?: string;
   index?: string;
 };
 
-async function runAddExperience(
-  name: string,
-  cliOptions: AddExperienceFlagOptions
+async function runAdd(
+  item: string,
+  target: string | undefined,
+  cliOptions: AddFlagOptions
 ): Promise<void> {
   const prompter = runtime.getPrompter();
-  const template = cliOptions.template ?? 'search';
-
-  // In non-interactive mode without --index, fail fast.
-  if (!prompter && !cliOptions.index) {
-    runtime.emitAndExit(
-      failure({
-        command: 'add experience',
-        code: 'missing_required_flag',
-        message: 'Missing required flags: --index',
-      })
-    );
-  }
-
   const schema = buildSchemaFromFlags(cliOptions);
-  const report = await addExperience({
+
+  const report = await add({
     projectDir: process.cwd(),
-    name,
-    template,
-    indexName: cliOptions.index,
+    item,
+    ...(target ? { target } : {}),
+    ...(cliOptions.index ? { indexName: cliOptions.index } : {}),
     ...(Object.keys(schema).length > 0 ? { schema } : {}),
     prompter,
   });
@@ -123,11 +109,10 @@ async function runAddExperience(
 }
 
 program
-  .command('add-experience <name>')
-  .description('Add a new InstantSearch experience from a template.')
+  .command('add <item> [target]')
+  .description('Add a composite feature or a widget.')
   .option('--json', 'Emit a single JSON object on stdout (implies --yes).')
   .option('--yes', 'Accept defaults without prompting.')
-  .option('--template <template>', 'Template to use (search)', 'search')
   .option('--index <index>', 'Algolia index name')
   .option('--hits-title <attr>', 'Searchable record attribute to display as the hit title')
   .option('--hits-image <attr>', 'Record attribute containing an image URL')
@@ -140,62 +125,8 @@ program
     '--sort-by-replicas <list>',
     'Comma-separated replica index names configured in your Algolia index'
   )
-  .action(runAddExperience);
+  .action(runAdd);
 
-type AddWidgetFlagOptions = SchemaFlagOptions & {
-  json?: boolean;
-  yes?: boolean;
-  experience?: string;
-  index?: string;
-};
-
-async function runAddWidget(
-  widget: string,
-  cliOptions: AddWidgetFlagOptions
-): Promise<void> {
-  const prompter = runtime.getPrompter();
-
-  let report: Report;
-  if (!cliOptions.experience) {
-    report = failure({
-      command: 'add widget',
-      code: 'missing_required_flag',
-      message: 'Missing required flags: --experience',
-    });
-  } else {
-    const schema = buildSchemaFromFlags(cliOptions);
-    report = await addWidget({
-      projectDir: process.cwd(),
-      experience: cliOptions.experience,
-      widget,
-      ...(cliOptions.index ? { indexName: cliOptions.index } : {}),
-      ...(Object.keys(schema).length > 0 ? { schema } : {}),
-      prompter,
-    });
-  }
-
-  runtime.emitAndExit(report);
-}
-
-program
-  .command('add-widget <widget>')
-  .description('Add a single InstantSearch widget to an experience.')
-  .option('--json', 'Emit a single JSON object on stdout (implies --yes).')
-  .option('--yes', 'Accept defaults without prompting.')
-  .option('--experience <name>', 'Experience to add the widget to')
-  .option('--index <index>', 'Algolia index (required to auto-create the experience)')
-  .option('--hits-title <attr>', 'Searchable record attribute to display as the hit title')
-  .option('--hits-image <attr>', 'Record attribute containing an image URL')
-  .option('--hits-description <attr>', 'Searchable record attribute to display as the hit description')
-  .option(
-    '--refinement-list-attribute <attr>',
-    'Attribute configured for faceting in your Algolia index'
-  )
-  .option(
-    '--sort-by-replicas <list>',
-    'Comma-separated replica index names configured in your Algolia index'
-  )
-  .action(runAddWidget);
 
 type IntrospectFlagOptions = {
   json?: boolean;
@@ -242,7 +173,7 @@ program.on('command:*', (operands: string[]) => {
     failure({
       command: 'cli',
       code: 'unknown_command',
-      message: `Unknown command '${invoked}'. Supported: init, add experience, add widget, introspect.`,
+      message: `Unknown command '${invoked}'. Supported: init, add, introspect.`,
     })
   );
 });
@@ -267,7 +198,7 @@ function handleTopLevelError(err: unknown): never {
 // Promise is created), so a try/catch is needed in addition to .catch.
 (async () => {
   try {
-    await program.parseAsync(normalizeArgv(process.argv));
+    await program.parseAsync(process.argv);
   } catch (err) {
     handleTopLevelError(err);
   }

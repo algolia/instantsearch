@@ -61,7 +61,7 @@ export function buildExperienceNextSteps(params: {
   const componentName = experienceComponentName(experienceName);
   return {
     imports: [`import { ${componentName} } from '${importBase}';`],
-    mountingGuidance: `Render <${componentName} /> wherever the search should appear.`,
+    mountingGuidance: `Render <${componentName} /> on the search page.`,
   };
 }
 

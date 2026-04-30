@@ -65,7 +65,7 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
     componentsPath: 'src/components',
     aliases: {},
     algolia: { appId: 'APP_ID_XYZ', searchApiKey: 'SEARCH_KEY_XYZ' },
-    experiences: [],
+    features: [],
     ...overrides,
   });
   return projectDir;
@@ -164,7 +164,7 @@ describe('add widget command', () => {
 
     const experienceDir = path.join(projectDir, 'src/components/docs-search');
     expect(fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))).toBe(true);
-    expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
 
     const expManifest = readExperienceManifest(experienceDir);
@@ -172,7 +172,7 @@ describe('add widget command', () => {
     expect(expManifest?.widgets).toEqual(['Hits']);
 
     const root = readRootManifest(projectDir);
-    expect(root?.experiences).toEqual([
+    expect(root?.features).toEqual([
       { name: 'docs-search', path: 'src/components/docs-search' },
     ]);
   });
@@ -194,7 +194,7 @@ describe('add widget command', () => {
     });
     expect(fs.existsSync(path.join(projectDir, 'src/components/docs-search'))).toBe(false);
     const root = readRootManifest(projectDir);
-    expect(root?.experiences).toEqual([]);
+    expect(root?.features).toEqual([]);
   });
 
   test('success payload includes nextSteps.imports and mountingGuidance', async () => {
@@ -272,7 +272,7 @@ describe('add widget command', () => {
       componentsPath: 'src/components',
       aliases: {},
       algolia: { appId: 'APP_ID_XYZ', searchApiKey: 'SEARCH_KEY_XYZ' },
-      experiences: [
+      features: [
         { name: 'product-search', path: 'src/components/product-search' },
       ],
     });
@@ -308,7 +308,7 @@ describe('add widget command', () => {
 
   test('existing experience with invalid manifest returns invalid_manifest', async () => {
     const projectDir = makeInitializedProject({
-      experiences: [
+      features: [
         { name: 'product-search', path: 'src/components/product-search' },
       ],
     });
@@ -354,7 +354,7 @@ describe('add widget — interactive prompts', () => {
     const root = JSON.parse(
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
-    expect(root.experiences).toContainEqual(
+    expect(root.features).toContainEqual(
       expect.objectContaining({ name: 'brand-new' })
     );
 

@@ -59,7 +59,7 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
     componentsPath: 'src/components',
     aliases: {},
     algolia: { appId: 'APP_ID', searchApiKey: 'SEARCH_KEY' },
-    experiences: [],
+    features: [],
     ...overrides,
   });
   return projectDir;

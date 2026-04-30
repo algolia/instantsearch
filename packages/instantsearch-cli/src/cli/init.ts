@@ -123,7 +123,7 @@ export async function init(options: InitOptions): Promise<Report> {
     componentsPath: componentsPath ?? det.componentsPath,
     aliases: det.aliases,
     algolia: { appId, searchApiKey },
-    experiences: [],
+    features: [],
   };
 
   const files = new Map([
@@ -163,6 +163,15 @@ export async function init(options: InitOptions): Promise<Report> {
     payload: {
       filesCreated: outcome.filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
+      nextSteps: manifest.flavor === 'react'
+        ? {
+            imports: [`import { AlgoliaProvider } from 'src/lib/algolia-provider';`],
+            mountingGuidance: 'Wrap your app with <AlgoliaProvider> high in the component tree (e.g., root layout).',
+          }
+        : {
+            imports: [`import { search } from 'src/lib/algolia-provider';`],
+            mountingGuidance: 'Import the search instance in each page entry point, add widgets, and call search.start().',
+          },
     },
   });
 }

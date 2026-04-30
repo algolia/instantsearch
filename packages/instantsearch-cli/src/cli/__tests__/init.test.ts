@@ -83,7 +83,7 @@ describe('init command', () => {
       typescript: true,
       componentsPath: 'src/components',
       algolia: { appId: 'APP_ID_XYZ', searchApiKey: 'SEARCH_KEY_XYZ' },
-      experiences: [],
+      features: [],
     });
 
     const clientFile = fs.readFileSync(
@@ -92,6 +92,14 @@ describe('init command', () => {
     );
     expect(clientFile).toContain('"APP_ID_XYZ"');
     expect(clientFile).toContain('"SEARCH_KEY_XYZ"');
+
+    const providerFile = fs.readFileSync(
+      path.join(projectDir, 'src', 'lib', 'algolia-provider.tsx'),
+      'utf8'
+    );
+    expect(providerFile).toContain('InstantSearch');
+    expect(providerFile).toContain('searchClient');
+    expect(providerFile).not.toContain('indexName');
   });
 
   test('invalid credentials: returns credentials_invalid and writes no files', async () => {

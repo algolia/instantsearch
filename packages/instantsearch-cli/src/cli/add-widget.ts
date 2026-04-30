@@ -144,7 +144,7 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
     });
   }
 
-  const entry = rootManifest.experiences.find((e) => e.name === experienceName);
+  const entry = rootManifest.features.find((e) => e.name === experienceName);
   if (!entry) {
     let resolvedIndex = indexName;
     if (!resolvedIndex && options.prompter) {

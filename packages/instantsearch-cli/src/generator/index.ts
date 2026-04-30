@@ -11,7 +11,6 @@ import {
 } from '../registry';
 import {
   refinementListWidgetName,
-  providerComponentName,
   startFunctionName,
   experienceComponentName,
   widgetContainerId,
@@ -31,6 +30,7 @@ export type { WidgetName };
 export const SUPPORTED_WIDGETS: readonly WidgetName[] = getSupportedWidgets();
 
 const ALGOLIA_CLIENT_PATH = 'src/lib/algolia-client';
+const ALGOLIA_PROVIDER_PATH = 'src/lib/algolia-provider';
 
 function algoliaClientSource({
   appId,
@@ -42,27 +42,7 @@ export const searchClient = algoliasearch(${jsString(appId)}, ${jsString(searchA
 `;
 }
 
-export function generate(manifest: ResolvedManifest): GeneratedFiles {
-  const files: GeneratedFiles = new Map();
-  const ext = manifest.typescript ? 'ts' : 'js';
-  files.set(
-    `${ALGOLIA_CLIENT_PATH}.${ext}`,
-    algoliaClientSource(manifest.algolia)
-  );
-  return files;
-}
-
-function clientImportSpecifier(experienceDir: string): string {
-  const specifier = path.posix.relative(experienceDir, ALGOLIA_CLIENT_PATH);
-  return specifier.startsWith('.') ? specifier : `./${specifier}`;
-}
-
-function reactProviderSource(
-  manifest: ResolvedExperienceManifest,
-  experienceDir: string
-): string {
-  const componentName = providerComponentName(manifest.experience.name);
-  const clientImport = clientImportSpecifier(experienceDir);
+function reactSharedProviderSource(manifest: ResolvedManifest): string {
   const typeImport = manifest.typescript
     ? `import type { ReactNode } from 'react';\n`
     : '';
@@ -84,11 +64,11 @@ function reactProviderSource(
 
   return `${directive}${typeImport}${componentImport}
 
-import { searchClient } from ${jsString(clientImport)};
+import { searchClient } from './algolia-client';
 
-export function ${componentName}({ children }${paramAnnotation}) {
+export function AlgoliaProvider({ children }${paramAnnotation}) {
   return (
-    <${element} searchClient={searchClient} indexName={${jsString(manifest.experience.indexName)}}>
+    <${element} searchClient={searchClient}>
       {children}
     </${element}>
   );
@@ -96,36 +76,38 @@ export function ${componentName}({ children }${paramAnnotation}) {
 `;
 }
 
-function jsProviderSource(
-  manifest: ResolvedExperienceManifest,
-  experienceDir: string
-): string {
-  const startName = startFunctionName(manifest.experience.name);
-  const clientImport = clientImportSpecifier(experienceDir);
-
+function jsSharedProviderSource(): string {
   return `import instantsearch from 'instantsearch.js';
 
-import { searchClient } from ${jsString(clientImport)};
+import { searchClient } from './algolia-client';
 
-export function ${startName}(widgets) {
-  const search = instantsearch({
-    indexName: ${jsString(manifest.experience.indexName)},
-    searchClient,
-  });
-  search.addWidgets(widgets);
-  search.start();
-  return search;
-}
+export const search = instantsearch({ searchClient });
 `;
 }
 
-function providerSource(
-  manifest: ResolvedExperienceManifest,
-  experienceDir: string
-): string {
-  return manifest.flavor === 'js'
-    ? jsProviderSource(manifest, experienceDir)
-    : reactProviderSource(manifest, experienceDir);
+function fileExtension(manifest: { flavor: Flavor; typescript: boolean }): string {
+  if (manifest.flavor === 'js') {
+    return manifest.typescript ? 'ts' : 'js';
+  }
+  return manifest.typescript ? 'tsx' : 'jsx';
+}
+
+export function generate(manifest: ResolvedManifest): GeneratedFiles {
+  const files: GeneratedFiles = new Map();
+  const ext = manifest.typescript ? 'ts' : 'js';
+  files.set(
+    `${ALGOLIA_CLIENT_PATH}.${ext}`,
+    algoliaClientSource(manifest.algolia)
+  );
+  const providerExt = fileExtension(manifest);
+  const providerSource = manifest.flavor === 'js'
+    ? jsSharedProviderSource()
+    : reactSharedProviderSource(manifest);
+  files.set(
+    `${ALGOLIA_PROVIDER_PATH}.${providerExt}`,
+    providerSource
+  );
+  return files;
 }
 
 type ExperienceSchema = NonNullable<
@@ -216,10 +198,7 @@ function widgetSource(
 }
 
 function widgetExtension(manifest: ResolvedExperienceManifest): string {
-  if (manifest.flavor === 'js') {
-    return manifest.typescript ? 'ts' : 'js';
-  }
-  return manifest.typescript ? 'tsx' : 'jsx';
+  return fileExtension(manifest);
 }
 
 function experienceConfigSource(manifest: ResolvedExperienceManifest): string {
@@ -265,11 +244,11 @@ export function generateWidget(
 
 function reactIndexSource(manifest: ResolvedExperienceManifest): string {
   const componentName = experienceComponentName(manifest.experience.name);
-  const providerName = providerComponentName(manifest.experience.name);
   const widgets = manifest.experience.widgets;
+  const indexName = manifest.experience.indexName;
 
   const imports = [
-    `import { ${providerName} } from ${jsString('./provider')};`,
+    `import { Index } from 'react-instantsearch';`,
     ...widgets.map((w) => `import { ${w} } from ${jsString(`./${w}`)};`),
   ].join('\n');
 
@@ -281,9 +260,9 @@ function reactIndexSource(manifest: ResolvedExperienceManifest): string {
 
 export function ${componentName}() {
   return (
-    <${providerName}>
+    <Index indexName={${jsString(indexName)}}>
 ${widgetElements}
-    </${providerName}>
+    </Index>
   );
 }
 `;
@@ -323,10 +302,6 @@ export function generateExperience(
   files.set(
     path.posix.join(experienceDir, 'instantsearch.config.json'),
     experienceConfigSource(manifest)
-  );
-  files.set(
-    path.posix.join(experienceDir, `provider.${ext}`),
-    providerSource(manifest, experienceDir)
   );
 
   for (const widget of manifest.experience.widgets) {

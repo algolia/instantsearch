@@ -133,14 +133,13 @@ describe('CLI binary surface under --json', () => {
     });
   });
 
-  test('add experience --json in uninitialized project: stderr empty, exit 1', () => {
+  test('add search --json in uninitialized project: stderr empty, exit 1', () => {
     const cwd = mkTmp();
 
     const { stdout, stderr, exitCode } = runCli(
       [
         'add',
-        'experience',
-        'product-search',
+        'search',
         '--json',
         '--index',
         'products',
@@ -160,7 +159,6 @@ describe('CLI binary surface under --json', () => {
     expect(report).toMatchObject({
       apiVersion: 1,
       ok: false,
-      command: 'add experience',
       code: 'not_initialized',
     });
   });

@@ -59,7 +59,7 @@ function makeInitializedProject(overrides: Partial<RootManifest> = {}): string {
     componentsPath: 'src/components',
     aliases: {},
     algolia: { appId: 'APP_ID_XYZ', searchApiKey: 'SEARCH_KEY_XYZ' },
-    experiences: [],
+    features: [],
     ...overrides,
   });
   return projectDir;
@@ -72,7 +72,7 @@ const SEARCH_SCHEMA = {
 };
 
 describe('add experience command', () => {
-  test('happy path: creates experience folder with provider + all six widgets + config', async () => {
+  test('happy path: creates experience folder with widgets + config (no provider, no SearchBox)', async () => {
     const projectDir = makeInitializedProject();
 
     const report = await addExperience({
@@ -92,8 +92,8 @@ describe('add experience command', () => {
 
     const experienceDir = path.join(projectDir, 'src/components/product-search');
     expect(fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))).toBe(true);
-    expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(true);
-    expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
+    expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
@@ -124,23 +124,21 @@ describe('add experience command', () => {
       },
     });
 
-    const productProvider = fs.readFileSync(
-      path.join(projectDir, 'src/components/product-search/provider.tsx'),
+    const productIndex = fs.readFileSync(
+      path.join(projectDir, 'src/components/product-search/index.tsx'),
       'utf8'
     );
-    const docsProvider = fs.readFileSync(
-      path.join(projectDir, 'src/components/docs-search/provider.tsx'),
+    const docsIndex = fs.readFileSync(
+      path.join(projectDir, 'src/components/docs-search/index.tsx'),
       'utf8'
     );
-    expect(productProvider).toMatch(/indexName=\{["']products["']\}/);
-    expect(docsProvider).toMatch(/indexName=\{["']docs["']\}/);
-    expect(productProvider).toMatch(/ProductSearchProvider/);
-    expect(docsProvider).toMatch(/DocsSearchProvider/);
+    expect(productIndex).toMatch(/indexName=\{"products"\}/);
+    expect(docsIndex).toMatch(/indexName=\{"docs"\}/);
 
     const root = JSON.parse(
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
-    expect(root.experiences).toEqual([
+    expect(root.features).toEqual([
       { name: 'product-search', path: 'src/components/product-search' },
       { name: 'docs-search', path: 'src/components/docs-search' },
     ]);
@@ -160,7 +158,7 @@ describe('add experience command', () => {
     const root = JSON.parse(
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
-    expect(root.experiences).toEqual([
+    expect(root.features).toEqual([
       { name: 'product-search', path: 'src/components/product-search' },
     ]);
   });
@@ -181,8 +179,6 @@ describe('add experience command', () => {
     expect((report as any).filesCreated).toEqual(
       expect.arrayContaining([
         'src/components/product-search/instantsearch.config.json',
-        'src/components/product-search/provider.tsx',
-        'src/components/product-search/SearchBox.tsx',
         'src/components/product-search/Hits.tsx',
         'src/components/product-search/RefinementListBrand.tsx',
         'src/components/product-search/SortBy.tsx',
@@ -331,7 +327,7 @@ describe('add experience command', () => {
       const root = JSON.parse(
         fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
       );
-      expect(root.experiences).toEqual([]);
+      expect(root.features).toEqual([]);
     });
 
     test('index_not_found bubbles up and no files are written', async () => {
@@ -402,7 +398,7 @@ describe('add experience command', () => {
   });
 
   describe('plain JS output (typescript: false)', () => {
-    test('emits .jsx / .js files for provider + six widgets + config', async () => {
+    test('emits .jsx / .js files for five widgets + config (no provider, no SearchBox)', async () => {
       const projectDir = makeInitializedProject({ typescript: false });
 
       const report = await addExperience({
@@ -422,8 +418,8 @@ describe('add experience command', () => {
       expect(
         fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
       ).toBe(true);
-      expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(true);
-      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.jsx'))).toBe(true);
       expect(
         fs.existsSync(path.join(experienceDir, 'ClearRefinements.jsx'))
@@ -437,29 +433,10 @@ describe('add experience command', () => {
       expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(false);
     });
-
-    test('provider.jsx has no TypeScript syntax', () => {
-      const projectDir = makeInitializedProject({ typescript: false });
-
-      return addExperience({
-        projectDir,
-        name: 'product-search',
-        template: 'search',
-        indexName: 'products',
-        schema: SEARCH_SCHEMA,
-      }).then(() => {
-        const provider = fs.readFileSync(
-          path.join(projectDir, 'src/components/product-search/provider.jsx'),
-          'utf8'
-        );
-        expect(provider).not.toMatch(/import type/);
-        expect(provider).not.toMatch(/ReactNode/);
-      });
-    });
   });
 
   describe('JS flavor output', () => {
-    test('emits .js files for provider + six widget factories + config', async () => {
+    test('emits .js files for five widget factories + config (no provider, no SearchBox)', async () => {
       const projectDir = makeInitializedProject({
         flavor: 'js',
         typescript: false,
@@ -482,8 +459,8 @@ describe('add experience command', () => {
       expect(
         fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
       ).toBe(true);
-      expect(fs.existsSync(path.join(experienceDir, 'provider.js'))).toBe(true);
-      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.js'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'provider.js'))).toBe(false);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.js'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.js'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.js'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.js'))).toBe(true);
@@ -493,28 +470,6 @@ describe('add experience command', () => {
       // No React artefacts.
       expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(false);
-    });
-
-    test('provider.js imports instantsearch.js, not react-instantsearch', async () => {
-      const projectDir = makeInitializedProject({
-        flavor: 'js',
-        typescript: false,
-      });
-
-      await addExperience({
-        projectDir,
-        name: 'product-search',
-        template: 'search',
-        indexName: 'products',
-        schema: SEARCH_SCHEMA,
-      });
-
-      const provider = fs.readFileSync(
-        path.join(projectDir, 'src/components/product-search/provider.js'),
-        'utf8'
-      );
-      expect(provider).toMatch(/from ['"]instantsearch\.js['"]/);
-      expect(provider).not.toMatch(/react-instantsearch/);
     });
 
     test('nextSteps imports point at the start helper + JS widget files', async () => {
@@ -605,7 +560,7 @@ describe('add experience command', () => {
       expect(report).toMatchObject({ ok: true, command: 'add experience' });
 
       const experienceDir = path.join(projectDir, 'src/components/product-search');
-      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'ClearRefinements.tsx'))).toBe(true);
@@ -645,7 +600,7 @@ describe('add experience command', () => {
       expect(report).toMatchObject({ ok: true, command: 'add experience' });
 
       const experienceDir = path.join(projectDir, 'src/components/product-search');
-      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
+      expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
       expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(true);
@@ -692,8 +647,8 @@ describe('add experience command', () => {
         path.join(projectDir, 'instantsearch.json'),
         'utf8'
       );
-      const searchBoxBefore = fs.readFileSync(
-        path.join(projectDir, 'src/components/product-search/SearchBox.tsx'),
+      const hitsBefore = fs.readFileSync(
+        path.join(projectDir, 'src/components/product-search/Hits.tsx'),
         'utf8'
       );
 
@@ -720,10 +675,10 @@ describe('add experience command', () => {
       // Existing generated file is not overwritten.
       expect(
         fs.readFileSync(
-          path.join(projectDir, 'src/components/product-search/SearchBox.tsx'),
+          path.join(projectDir, 'src/components/product-search/Hits.tsx'),
           'utf8'
         )
-      ).toBe(searchBoxBefore);
+      ).toBe(hitsBefore);
     });
 
     test('search template with partial schema (missing refinementList) succeeds by skipping RefinementList', async () => {
@@ -1052,7 +1007,6 @@ describe('add experience command — interactive prompts', () => {
 
     const experienceDir = path.join(projectDir, 'src/components/product-search');
     expect(fs.existsSync(path.join(experienceDir, 'SortBy.tsx'))).toBe(false);
-    expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(true);
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
   });
 });

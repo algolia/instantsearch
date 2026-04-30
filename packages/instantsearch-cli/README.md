@@ -2,39 +2,37 @@
 
 A CLI that scaffolds InstantSearch widgets into your project. It detects your framework, introspects your Algolia index, and generates ready-to-mount components without the need for manual wiring.
 
-> **Status:** proof of concept (unpublished). Run it from the monorepo.
-
 ## Quick start
-
-From the monorepo root:
 
 ```bash
 # Interactive
-yarn workspace @algolia/instantsearch-cli start init
-yarn workspace @algolia/instantsearch-cli start add experience product-search --template search
+npx instantsearch init
+npx instantsearch add search
 
 # Non-interactive (for agents / CI)
-yarn workspace @algolia/instantsearch-cli start init \
+npx instantsearch init \
   --yes --json \
   --flavor react --app-id YOUR_APP_ID --search-api-key YOUR_SEARCH_KEY
 
-yarn workspace @algolia/instantsearch-cli start add experience product-search \
+npx instantsearch add search product-search \
   --yes --json \
-  --template search --index products \
+  --index products \
   --hits-title name --hits-image image_url \
   --refinement-list-attribute brand \
   --sort-by-replicas products_price_asc,products_price_desc
 
-# Only generate SearchBox, Hits, RefinementList, Pagination, ClearRefinements (skip SortBy)
-yarn workspace @algolia/instantsearch-cli start add experience product-search \
-  --yes --json \
-  --template search --index products \
-  --hits-title name --refinement-list-attribute brand
-
 # Discover index schema before scaffolding
-yarn workspace @algolia/instantsearch-cli start introspect \
-  --yes --json --index products
+npx instantsearch introspect --yes --json --index products
 ```
+
+## Concepts
+
+The CLI uses a **shadcn-inspired unified `add` command**. What you add determines what gets generated:
+
+- **Composite features** (like shadcn blocks): `add search`, `add search product-search`. Generates a folder with multiple widgets, a config manifest, and an index component that wraps everything in an `<Index>` widget.
+- **Widgets** (like shadcn components): `add refinement-list search`. Adds a single widget to an existing feature.
+
+There is a single `<InstantSearch>` provider generated at `init` time. Features use `<Index>` to target their Algolia index — no per-feature provider.
 
 ## Supported flavors and frameworks
 
@@ -47,18 +45,18 @@ yarn workspace @algolia/instantsearch-cli start introspect \
 Detection is automatic. The CLI reads your `package.json` and project layout:
 
 - If `react-instantsearch` or `instantsearch.js` is already installed, the CLI uses it directly.
-- If no InstantSearch package is found, the CLI infers the right flavor from your project dependencies (`next` → react + nextjs, `react` → react, neither → js) and **installs the packages for you** before proceeding. In interactive mode, it prompts for confirmation first.
+- If no InstantSearch package is found, the CLI infers the right flavor from your project dependencies (`next` -> react + nextjs, `react` -> react, neither -> js) and **installs the packages for you** before proceeding. In interactive mode, it prompts for confirmation first.
 - When detection is ambiguous (e.g., both `react-instantsearch` and `instantsearch.js` installed), pass `--flavor` explicitly.
 
-The package manager is auto-detected from your lockfile (`yarn.lock` → yarn, `package-lock.json` → npm, `pnpm-lock.yaml` → pnpm).
+The package manager is auto-detected from your lockfile (`yarn.lock` -> yarn, `package-lock.json` -> npm, `pnpm-lock.yaml` -> pnpm).
 
 TypeScript output is emitted when `tsconfig.json` is present; plain JavaScript otherwise.
 
 ## Commands
 
-### `instantsearch init`
+### `npx instantsearch init`
 
-Initialize InstantSearch in the current project. Writes `instantsearch.json` (root manifest) and `algolia-client.ts|js`.
+Initialize InstantSearch in the current project. Writes `instantsearch.json` (root manifest), `algolia-client.ts|js`, and `algolia-provider.tsx|jsx|ts|js` (shared provider with no `indexName`).
 
 | Flag | Description |
 | --- | --- |
@@ -72,15 +70,18 @@ Initialize InstantSearch in the current project. Writes `instantsearch.json` (ro
 
 In `--yes` mode, `--app-id` and `--search-api-key` are required.
 
-### `instantsearch add experience <name>`
+### `npx instantsearch add <item> [name]`
 
-Add a new search experience from a template. Creates an experience folder with a provider, widgets, and a per-experience manifest (`instantsearch.config.json`).
+Add a composite feature or a widget. The CLI determines what to generate based on the item name.
+
+**Composite features** (e.g., `add search`, `add search product-search`):
+
+Creates a feature folder with widgets wrapped in an `<Index>` component and a per-feature manifest (`instantsearch.config.json`). The second argument is an optional custom name (defaults to the item name).
 
 | Flag | Description |
 | --- | --- |
 | `--json` | Emit a single JSON object on stdout (implies `--yes`) |
 | `--yes` | Accept defaults without prompting |
-| `--template <template>` | Template to use (default: `search`) |
 | `--index <index>` | Algolia index name |
 | `--hits-title <attr>` | Record attribute for Hits title |
 | `--hits-image <attr>` | Record attribute for Hits image |
@@ -88,20 +89,17 @@ Add a new search experience from a template. Creates an experience folder with a
 | `--refinement-list-attribute <attr>` | Facet attribute for RefinementList |
 | `--sort-by-replicas <list>` | Comma-separated replica index names for SortBy |
 
-In `--yes` mode, `--index` is required. Schema flags (`--hits-title`, etc.) are optional — when omitted, the CLI introspects the index and picks sensible defaults interactively.
+The `search` template generates: Hits, RefinementList, SortBy, Pagination, ClearRefinements. Schema-driven widgets are automatically skipped when their required flags are not provided: omit `--refinement-list-attribute` to skip RefinementList, omit `--sort-by-replicas` to skip SortBy.
 
-The `search` template generates all six widgets by default: SearchBox, Hits, RefinementList, SortBy, Pagination, ClearRefinements. Schema-driven widgets are automatically skipped when their required flags are not provided: omit `--refinement-list-attribute` to skip RefinementList, omit `--sort-by-replicas` to skip SortBy.
+**Widgets** (e.g., `add refinement-list search`):
 
-### `instantsearch add widget <widget>`
-
-Add a single widget to an existing experience.
+Adds a single widget to an existing feature. The second argument is the target feature name (required).
 
 | Flag | Description |
 | --- | --- |
 | `--json` | Emit a single JSON object on stdout (implies `--yes`) |
 | `--yes` | Accept defaults without prompting |
-| `--experience <name>` | Experience to add the widget to (required) |
-| `--index <index>` | Algolia index (required when auto-creating the experience) |
+| `--index <index>` | Algolia index (required when auto-creating the feature) |
 | `--hits-title <attr>` | Record attribute for Hits title |
 | `--hits-image <attr>` | Record attribute for Hits image |
 | `--hits-description <attr>` | Record attribute for Hits description |
@@ -110,11 +108,11 @@ Add a single widget to an existing experience.
 
 Adding the same widget twice auto-suffixes files by attribute (e.g., `RefinementListBrand.tsx`, `RefinementListCategory.tsx`).
 
-If the experience doesn't exist yet, the CLI creates it inline — prompting for index and schema interactively, or requiring `--index` in `--yes` mode.
+If the feature doesn't exist yet, the CLI creates it inline — prompting for index and schema interactively, or requiring `--index` in `--yes` mode.
 
-### `instantsearch introspect`
+### `npx instantsearch introspect`
 
-Discover attributes, facets, and replicas of an Algolia index. Useful for understanding an index's schema before scaffolding an experience, or for agents that need to plan which flags to pass.
+Discover attributes, facets, and replicas of an Algolia index. Useful for understanding an index's schema before scaffolding a feature, or for agents that need to plan which flags to pass.
 
 | Flag | Description |
 | --- | --- |
@@ -148,9 +146,8 @@ Returns partial results with warnings when some introspections fail (e.g., facet
 
 | Widget | Type | Schema flags |
 | --- | --- | --- |
-| `SearchBox` | Structural | — |
-| `Pagination` | Structural | — |
-| `ClearRefinements` | Structural | — |
+| `Pagination` | Structural | -- |
+| `ClearRefinements` | Structural | -- |
 | `Hits` | Schema-driven | `--hits-title`, `--hits-image`, `--hits-description` |
 | `RefinementList` | Schema-driven | `--refinement-list-attribute` |
 | `SortBy` | Schema-driven | `--sort-by-replicas` |
@@ -168,14 +165,8 @@ Every command emits a JSON report on stdout when `--json` is set. Stderr stays s
   "apiVersion": 1,
   "ok": true,
   "command": "add experience",
-  "filesCreated": ["src/components/product-search/provider.tsx", "..."],
-  "manifestUpdated": "instantsearch.json",
-  "nextSteps": {
-    "imports": [
-      "import { ProductSearchProvider } from '@/components/product-search/provider'"
-    ],
-    "mountingGuidance": "Render <ProductSearchProvider> around the widgets wherever the search should appear."
-  }
+  "filesCreated": ["src/components/product-search/Hits.tsx", "..."],
+  "manifestUpdated": "instantsearch.json"
 }
 ```
 
@@ -211,28 +202,30 @@ Exit code is `0` on success, non-zero on failure.
 | `invalid_manifest` | `instantsearch.json` or `instantsearch.config.json` is malformed |
 | `file_conflict` | Generated file already exists on disk |
 | `missing_required_flag` | A required flag was omitted in `--yes` mode |
-| `index_required` | `--index` required when auto-creating an experience in `--yes` mode |
+| `index_required` | `--index` required when auto-creating a feature in `--yes` mode |
 | `missing_schema` | Schema inputs missing for required widgets in `--yes` mode |
 | `unknown_template` | Template name not recognized |
 | `unknown_widget` | Widget name not in supported list |
+| `unknown_item` | Item name not recognized by the unified `add` command |
+| `target_required` | Widget requires a target feature name |
 | `unknown_command` | Command not recognized |
 | `unknown_option` | Flag not recognized |
 
 ## Generated file structure
 
-After `init` + `add experience product-search --template search` in a React + TypeScript project:
+After `init` + `add search product-search` in a React + TypeScript project:
 
 ```
 your-project/
 ├── instantsearch.json                              # Root manifest
 ├── src/
 │   ├── lib/
-│   │   └── algolia-client.ts                       # Search client
+│   │   ├── algolia-client.ts                       # Search client
+│   │   └── algolia-provider.tsx                    # Shared InstantSearch provider
 │   └── components/
 │       └── product-search/
-│           ├── instantsearch.config.json            # Experience manifest
-│           ├── provider.tsx                          # InstantSearch provider
-│           ├── SearchBox.tsx
+│           ├── instantsearch.config.json            # Feature manifest
+│           ├── index.tsx                             # <Index> wrapper + widget composition
 │           ├── Hits.tsx
 │           ├── RefinementList.tsx
 │           ├── SortBy.tsx
@@ -240,7 +233,7 @@ your-project/
 │           └── ClearRefinements.tsx
 ```
 
-The CLI only writes new files — it never edits existing code. Mount the provider in your layout manually (or follow the `nextSteps` guidance from the JSON output).
+The CLI only writes new files — it never edits existing code. Mount the provider in your layout and render the feature component wherever the search should appear (or follow the `nextSteps` guidance from the JSON output).
 
 ## Running tests
 

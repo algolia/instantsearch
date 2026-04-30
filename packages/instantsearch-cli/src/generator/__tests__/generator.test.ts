@@ -65,7 +65,7 @@ describe('generator: experience (React + TypeScript)', () => {
     },
   };
 
-  test('emits provider, index, three structural widgets, and the experience config', () => {
+  test('emits index, three structural widgets, and the experience config (no provider)', () => {
     const files = generateExperience(baseManifest);
 
     expect(Array.from(files.keys()).sort()).toEqual(
@@ -75,7 +75,6 @@ describe('generator: experience (React + TypeScript)', () => {
         'src/components/product-search/SearchBox.tsx',
         'src/components/product-search/index.tsx',
         'src/components/product-search/instantsearch.config.json',
-        'src/components/product-search/provider.tsx',
       ].sort()
     );
   });
@@ -90,16 +89,6 @@ describe('generator: experience (React + TypeScript)', () => {
       indexName: 'products',
       widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
     });
-  });
-
-  test('provider exports ProductSearchProvider, imports InstantSearch + searchClient, uses indexName', () => {
-    const files = generateExperience(baseManifest);
-    const provider = files.get('src/components/product-search/provider.tsx')!;
-    expect(provider).toMatch(/from ['"]react-instantsearch['"]/);
-    expect(provider).toMatch(/InstantSearch/);
-    expect(provider).toMatch(/searchClient/);
-    expect(provider).toMatch(/indexName=\{["']products["']\}/);
-    expect(provider).toMatch(/export function ProductSearchProvider/);
   });
 
   test('only emits widgets listed in the experience', () => {
@@ -118,13 +107,6 @@ describe('generator: experience (React + TypeScript)', () => {
     expect(
       files.has('src/components/product-search/ClearRefinements.tsx')
     ).toBe(false);
-  });
-
-  test('snapshot: provider.tsx', () => {
-    const files = generateExperience(baseManifest);
-    expect(
-      files.get('src/components/product-search/provider.tsx')
-    ).toMatchSnapshot();
   });
 
   test('snapshot: SearchBox.tsx', () => {
@@ -148,15 +130,15 @@ describe('generator: experience (React + TypeScript)', () => {
     ).toMatchSnapshot();
   });
 
-  test('index.tsx exports ProductSearch, imports provider and all widgets', () => {
+  test('index.tsx exports ProductSearch, imports Index and all widgets', () => {
     const files = generateExperience(baseManifest);
     const index = files.get('src/components/product-search/index.tsx')!;
     expect(index).toMatch(/export function ProductSearch\(\)/);
-    expect(index).toMatch(/import { ProductSearchProvider } from ["']\.\/provider["']/);
+    expect(index).toMatch(/import { Index } from ["']react-instantsearch["']/);
     expect(index).toMatch(/import { SearchBox } from ["']\.\/SearchBox["']/);
     expect(index).toMatch(/import { Pagination } from ["']\.\/Pagination["']/);
     expect(index).toMatch(/import { ClearRefinements } from ["']\.\/ClearRefinements["']/);
-    expect(index).toMatch(/<ProductSearchProvider>/);
+    expect(index).toMatch(/<Index indexName=\{["']products["']\}>/);
     expect(index).toMatch(/<SearchBox \/>/);
     expect(index).toMatch(/<Pagination \/>/);
     expect(index).toMatch(/<ClearRefinements \/>/);
@@ -172,6 +154,7 @@ describe('generator: experience (React + TypeScript)', () => {
     });
     const index = files.get('src/components/product-search/index.tsx')!;
     expect(index).toMatch(/<SearchBox \/>/);
+    expect(index).toMatch(/<Index indexName=\{["']products["']\}>/);
     expect(index).not.toMatch(/Pagination/);
     expect(index).not.toMatch(/ClearRefinements/);
   });
@@ -383,8 +366,8 @@ describe('generator: escaped schema values', () => {
     )!;
     expect(refinement).toContain('attribute={"categories.lvl0"}');
 
-    const provider = files.get('src/components/product-search/provider.tsx')!;
-    expect(provider).toContain('indexName={"products\\"main"}');
+    const index = files.get('src/components/product-search/index.tsx')!;
+    expect(index).toContain('indexName={"products\\"main"}');
 
     const sortBy = files.get('src/components/product-search/SortBy.tsx')!;
     expect(sortBy).toContain('value: "products\\"main"');
@@ -435,15 +418,7 @@ describe('generator: experience (React + plain JS)', () => {
     },
   };
 
-  test('provider.jsx does not import the ReactNode type', () => {
-    const files = generateExperience(baseManifest);
-    const provider = files.get('src/components/product-search/provider.jsx')!;
-    expect(provider).toBeDefined();
-    expect(provider).not.toMatch(/import type/);
-    expect(provider).not.toMatch(/ReactNode/);
-  });
-
-  test('emits structural widgets at .jsx paths, not .tsx', () => {
+  test('emits structural widgets at .jsx paths, not .tsx (no provider)', () => {
     const files = generateExperience(baseManifest);
     expect(Array.from(files.keys()).sort()).toEqual(
       [
@@ -452,16 +427,8 @@ describe('generator: experience (React + plain JS)', () => {
         'src/components/product-search/SearchBox.jsx',
         'src/components/product-search/index.jsx',
         'src/components/product-search/instantsearch.config.json',
-        'src/components/product-search/provider.jsx',
       ].sort()
     );
-  });
-
-  test('snapshot: provider.jsx', () => {
-    const files = generateExperience(baseManifest);
-    expect(
-      files.get('src/components/product-search/provider.jsx')
-    ).toMatchSnapshot();
   });
 
   test('snapshot: SearchBox.jsx', () => {
@@ -508,18 +475,6 @@ describe('generator: experience (React + Next.js App Router + TypeScript)', () =
     },
   };
 
-  test('provider.tsx is a client component importing InstantSearchNext from react-instantsearch-nextjs', () => {
-    const files = generateExperience(baseManifest);
-    const provider = files.get('src/components/product-search/provider.tsx')!;
-    expect(provider).toBeDefined();
-    expect(provider.startsWith("'use client';")).toBe(true);
-    expect(provider).toMatch(/from ['"]react-instantsearch-nextjs['"]/);
-    expect(provider).toMatch(/InstantSearchNext/);
-    expect(provider).not.toMatch(/from ['"]react-instantsearch['"]/);
-    expect(provider).toMatch(/indexName=\{["']products["']\}/);
-    expect(provider).toMatch(/export function ProductSearchProvider/);
-  });
-
   test('widget files are identical to the React-plain path', () => {
     const nextFiles = generateExperience(baseManifest);
     const reactFiles = generateExperience({
@@ -530,13 +485,6 @@ describe('generator: experience (React + Next.js App Router + TypeScript)', () =
       const key = `src/components/product-search/${widget}.tsx`;
       expect(nextFiles.get(key)).toBe(reactFiles.get(key));
     }
-  });
-
-  test('snapshot: provider.tsx (Next.js App Router)', () => {
-    const files = generateExperience(baseManifest);
-    expect(
-      files.get('src/components/product-search/provider.tsx')
-    ).toMatchSnapshot();
   });
 
   test('index.tsx is a client component for Next.js App Router', () => {
@@ -567,7 +515,7 @@ describe('generator: experience (JS flavor)', () => {
     },
   };
 
-  test('emits .js files for provider and structural widgets', () => {
+  test('emits .js files for structural widgets (no provider)', () => {
     const files = generateExperience(baseManifest);
     expect(Array.from(files.keys()).sort()).toEqual(
       [
@@ -576,24 +524,8 @@ describe('generator: experience (JS flavor)', () => {
         'src/components/product-search/SearchBox.js',
         'src/components/product-search/index.js',
         'src/components/product-search/instantsearch.config.json',
-        'src/components/product-search/provider.js',
       ].sort()
     );
-  });
-
-  test('provider.js holds the instantsearch() instance with addWidgets + start orchestration', () => {
-    const files = generateExperience(baseManifest);
-    const provider = files.get('src/components/product-search/provider.js')!;
-
-    expect(provider).toMatch(/from ['"]instantsearch\.js['"]/);
-    expect(provider).toMatch(/searchClient/);
-    expect(provider).toMatch(/indexName:\s*['"]products['"]/);
-    expect(provider).toMatch(/export function startProductSearch/);
-    expect(provider).toMatch(/\.addWidgets\(/);
-    expect(provider).toMatch(/\.start\(\)/);
-    // No React bits.
-    expect(provider).not.toMatch(/react-instantsearch/);
-    expect(provider).not.toMatch(/ReactNode/);
   });
 
   test('widget factories take a container and return the configured widget', () => {
@@ -623,13 +555,6 @@ describe('generator: experience (JS flavor)', () => {
       expect(content).not.toMatch(/: string/);
       expect(content).not.toMatch(/type /);
     }
-  });
-
-  test('snapshot: provider.js', () => {
-    const files = generateExperience(baseManifest);
-    expect(
-      files.get('src/components/product-search/provider.js')
-    ).toMatchSnapshot();
   });
 
   test('snapshot: SearchBox.js', () => {

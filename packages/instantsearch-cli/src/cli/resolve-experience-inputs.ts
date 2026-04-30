@@ -17,7 +17,6 @@ import { parseCommaSeparated } from '../utils/parsing';
 
 const TEMPLATE_WIDGETS: Record<string, WidgetName[]> = {
   search: [
-    'SearchBox',
     'Hits',
     'RefinementList',
     'SortBy',

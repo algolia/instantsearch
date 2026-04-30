@@ -14,7 +14,7 @@ export type RootManifest = {
   componentsPath: string;
   aliases: Record<string, string>;
   algolia: AlgoliaCredentials;
-  experiences: Array<{ name: string; path: string }>;
+  features: Array<{ name: string; path: string }>;
 };
 
 export type ExperienceSchema = {
@@ -129,7 +129,7 @@ export function addExperienceToRoot(
   manifest: RootManifest,
   entry: { name: string; path: string }
 ): void {
-  manifest.experiences = [...manifest.experiences, entry];
+  manifest.features = [...manifest.features, entry];
   writeRootManifest(projectDir, manifest);
 }
 
@@ -196,8 +196,8 @@ function isRootManifest(value: unknown): value is RootManifest {
     isRecord(algolia) &&
     typeof algolia.appId === 'string' &&
     typeof algolia.searchApiKey === 'string' &&
-    Array.isArray(value.experiences) &&
-    value.experiences.every(isExperienceEntry)
+    Array.isArray(value.features) &&
+    value.features.every(isExperienceEntry)
   );
 }
 

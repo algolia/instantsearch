@@ -55,41 +55,6 @@ startProductSearch([
 "
 `;
 
-exports[`generator: experience (JS flavor) snapshot: provider.js 1`] = `
-"import instantsearch from 'instantsearch.js';
-
-import { searchClient } from \\"../../lib/algolia-client\\";
-
-export function startProductSearch(widgets) {
-  const search = instantsearch({
-    indexName: \\"products\\",
-    searchClient,
-  });
-  search.addWidgets(widgets);
-  search.start();
-  return search;
-}
-"
-`;
-
-exports[`generator: experience (React + Next.js App Router + TypeScript) snapshot: provider.tsx (Next.js App Router) 1`] = `
-"'use client';
-
-import type { ReactNode } from 'react';
-import { InstantSearchNext } from 'react-instantsearch-nextjs';
-
-import { searchClient } from \\"../../lib/algolia-client\\";
-
-export function ProductSearchProvider({ children }: { children: ReactNode }) {
-  return (
-    <InstantSearchNext searchClient={searchClient} indexName={\\"products\\"}>
-      {children}
-    </InstantSearchNext>
-  );
-}
-"
-`;
-
 exports[`generator: experience (React + TypeScript) snapshot: ClearRefinements.tsx 1`] = `
 "import { ClearRefinements as InstantSearchClearRefinements } from 'react-instantsearch';
 
@@ -118,34 +83,18 @@ export function SearchBox() {
 `;
 
 exports[`generator: experience (React + TypeScript) snapshot: index.tsx 1`] = `
-"import { ProductSearchProvider } from \\"./provider\\";
+"import { Index } from 'react-instantsearch';
 import { SearchBox } from \\"./SearchBox\\";
 import { Pagination } from \\"./Pagination\\";
 import { ClearRefinements } from \\"./ClearRefinements\\";
 
 export function ProductSearch() {
   return (
-    <ProductSearchProvider>
+    <Index indexName={\\"products\\"}>
       <SearchBox />
       <Pagination />
       <ClearRefinements />
-    </ProductSearchProvider>
-  );
-}
-"
-`;
-
-exports[`generator: experience (React + TypeScript) snapshot: provider.tsx 1`] = `
-"import type { ReactNode } from 'react';
-import { InstantSearch } from 'react-instantsearch';
-
-import { searchClient } from \\"../../lib/algolia-client\\";
-
-export function ProductSearchProvider({ children }: { children: ReactNode }) {
-  return (
-    <InstantSearch searchClient={searchClient} indexName={\\"products\\"}>
-      {children}
-    </InstantSearch>
+    </Index>
   );
 }
 "
@@ -179,33 +128,18 @@ export function SearchBox() {
 `;
 
 exports[`generator: experience (React + plain JS) snapshot: index.jsx 1`] = `
-"import { ProductSearchProvider } from \\"./provider\\";
+"import { Index } from 'react-instantsearch';
 import { SearchBox } from \\"./SearchBox\\";
 import { Pagination } from \\"./Pagination\\";
 import { ClearRefinements } from \\"./ClearRefinements\\";
 
 export function ProductSearch() {
   return (
-    <ProductSearchProvider>
+    <Index indexName={\\"products\\"}>
       <SearchBox />
       <Pagination />
       <ClearRefinements />
-    </ProductSearchProvider>
-  );
-}
-"
-`;
-
-exports[`generator: experience (React + plain JS) snapshot: provider.jsx 1`] = `
-"import { InstantSearch } from 'react-instantsearch';
-
-import { searchClient } from \\"../../lib/algolia-client\\";
-
-export function ProductSearchProvider({ children }) {
-  return (
-    <InstantSearch searchClient={searchClient} indexName={\\"products\\"}>
-      {children}
-    </InstantSearch>
+    </Index>
   );
 }
 "

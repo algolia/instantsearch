@@ -31,7 +31,7 @@ describe('manifest', () => {
       componentsPath: 'src/components',
       aliases: { components: '@/components' },
       algolia: { appId: 'APP', searchApiKey: 'KEY' },
-      experiences: [],
+      features: [],
     };
 
     writeRootManifest(projectDir, manifest);
@@ -126,7 +126,7 @@ describe('manifest', () => {
       componentsPath: 'src/components',
       aliases: {},
       algolia: { appId: 'APP', searchApiKey: 'KEY' },
-      experiences: [],
+      features: [],
     };
     writeRootManifest(projectDir, manifest);
 
@@ -135,7 +135,7 @@ describe('manifest', () => {
       path: 'src/components/product-search',
     });
 
-    expect(readRootManifest(projectDir)?.experiences).toEqual([
+    expect(readRootManifest(projectDir)?.features).toEqual([
       { name: 'product-search', path: 'src/components/product-search' },
     ]);
   });
@@ -150,7 +150,7 @@ describe('manifest', () => {
       componentsPath: 'src/components',
       aliases: {},
       algolia: { appId: 'APP', searchApiKey: 'KEY' },
-      experiences: [
+      features: [
         { name: 'product-search', path: 'src/components/product-search' },
       ],
     };
@@ -161,7 +161,7 @@ describe('manifest', () => {
       path: 'src/components/docs-search',
     });
 
-    expect(readRootManifest(projectDir)?.experiences).toEqual([
+    expect(readRootManifest(projectDir)?.features).toEqual([
       { name: 'product-search', path: 'src/components/product-search' },
       { name: 'docs-search', path: 'src/components/docs-search' },
     ]);
@@ -177,7 +177,7 @@ describe('manifest', () => {
         componentsPath: 'src/components',
         aliases: {},
         algolia: { appId: 'APP', searchApiKey: 'KEY' },
-        experiences: [],
+        features: [],
       },
       {
         name: 'product-search',
@@ -234,7 +234,7 @@ describe('manifest', () => {
         componentsPath: 'src/components',
         aliases: {},
         algolia: { appId: 'APP', searchApiKey: 'KEY' },
-        experiences: [],
+        features: [],
       },
       {
         name: 'product-search',
