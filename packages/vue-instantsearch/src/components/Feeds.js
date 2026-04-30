@@ -1,5 +1,5 @@
 import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
-import { connectFeeds } from 'instantsearch.js/es/connectors/index.umd';
+import { connectFeeds } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
