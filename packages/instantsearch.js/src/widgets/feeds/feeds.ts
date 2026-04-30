@@ -31,8 +31,12 @@ export type FeedsWidgetParams = {
   /**
    * Returns widgets for a given feed. Called once per feedID.
    * The container is a DOM element scoped to this feed.
+   * Return `null` or `undefined` to render the feed container without widgets.
    */
-  widgets: (container: HTMLElement, feedID: string) => Array<Widget>;
+  widgets: (
+    container: HTMLElement,
+    feedID: string
+  ) => Array<Widget> | null | undefined;
 };
 
 export type FeedsWidget = WidgetFactory<
@@ -67,7 +71,7 @@ const feeds: FeedsWidget = function feeds(widgetParams) {
   rootContainer.className = suit();
 
   const feedEntries = new Map<string, FeedEntry>();
-  let pendingRemovals: IndexWidget[] = [];
+  const pendingRemovals = new Map<string, FeedEntry>();
   let removalTimer: ReturnType<typeof setTimeout> | null = null;
 
   let parentRef: IndexWidget;
@@ -83,32 +87,47 @@ const feeds: FeedsWidget = function feeds(widgetParams) {
       const activeFeedIDs = new Set(feedIDs);
 
       // Remove containers for feeds that no longer exist (deferred)
-      const toRemove: IndexWidget[] = [];
+      const toRemove: Array<[string, FeedEntry]> = [];
       feedEntries.forEach((entry, id) => {
         if (!activeFeedIDs.has(id)) {
-          toRemove.push(entry.feedContainer);
+          toRemove.push([id, entry]);
           rootContainer.removeChild(entry.domElement);
           feedEntries.delete(id);
         }
       });
       if (toRemove.length > 0) {
-        pendingRemovals.push(...toRemove);
+        toRemove.forEach(([id, entry]) => {
+          pendingRemovals.set(id, entry);
+        });
 
         if (removalTimer !== null) {
           clearTimeout(removalTimer);
         }
 
         removalTimer = setTimeout(() => {
-          const widgetsToRemove = pendingRemovals;
-          pendingRemovals = [];
+          const widgetsToRemove = Array.from(pendingRemovals.values()).map(
+            (entry) => entry.feedContainer
+          );
+          pendingRemovals.clear();
           removalTimer = null;
-          parentRef.removeWidgets(widgetsToRemove);
+          if (widgetsToRemove.length > 0) {
+            parentRef.removeWidgets(widgetsToRemove);
+          }
         }, 0);
       }
 
       // Create containers for new feeds
       feedIDs.forEach((feedID) => {
         if (!feedEntries.has(feedID)) {
+          const pendingEntry = pendingRemovals.get(feedID);
+          if (pendingEntry) {
+            pendingRemovals.delete(feedID);
+            feedEntries.set(feedID, pendingEntry);
+            rootContainer.appendChild(pendingEntry.domElement);
+            pendingEntry.feedContainer.render(renderOptionsRef);
+            return;
+          }
+
           const domElement = document.createElement('div');
           domElement.className = suit({ descendantName: 'feed' });
           const feedWidgets = widgets(domElement, feedID);
@@ -167,10 +186,13 @@ const feeds: FeedsWidget = function feeds(widgetParams) {
       const activeContainers = Array.from(feedEntries.values()).map(
         (entry) => entry.feedContainer
       );
-      const toRemove = Array.from(
-        new Set([...activeContainers, ...pendingRemovals])
+      const pendingContainers = Array.from(pendingRemovals.values()).map(
+        (entry) => entry.feedContainer
       );
-      pendingRemovals = [];
+      const toRemove = Array.from(
+        new Set([...activeContainers, ...pendingContainers])
+      );
+      pendingRemovals.clear();
       feedEntries.clear();
       if (toRemove.length > 0) {
         disposeOptions.parent.removeWidgets(toRemove);

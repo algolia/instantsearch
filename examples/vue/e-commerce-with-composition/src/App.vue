@@ -114,19 +114,29 @@ export default {
       routing: getRouting({ indexName: multifeedCompositionID }),
       activeTab: null,
       feedIDs: [],
+      feedTabsObserver: null,
     };
   },
   mounted() {
     this.$nextTick(() => {
       const feedsEl = this.$el.querySelector('.ais-Feeds');
       if (feedsEl) {
-        new MutationObserver(() => this.syncFeedTabs()).observe(feedsEl, {
+        this.feedTabsObserver = new MutationObserver(() =>
+          this.syncFeedTabs()
+        );
+        this.feedTabsObserver.observe(feedsEl, {
           childList: true,
           subtree: true,
         });
       }
       this.syncFeedTabs();
     });
+  },
+  beforeDestroy() {
+    if (this.feedTabsObserver) {
+      this.feedTabsObserver.disconnect();
+      this.feedTabsObserver = null;
+    }
   },
   methods: {
     syncFeedTabs() {
