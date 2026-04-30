@@ -78,6 +78,39 @@ describe('hydrateSearchClient', () => {
     expect(client.cache).toBeDefined();
   });
 
+  it('should prefer compositionFeedsResults for each index slice in the < v4 cache', () => {
+    client = {
+      addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
+      _useCache: true,
+    } as unknown as SearchClient;
+
+    const rawA = {
+      index: 'instant_search',
+      params: 'a',
+      nbHits: 1,
+      feedID: 'x',
+    };
+    const rawB = {
+      index: 'instant_search',
+      params: 'b',
+      nbHits: 2,
+      feedID: 'y',
+    };
+
+    hydrateSearchClient(client, {
+      instant_search: {
+        results: [rawA],
+        state: { index: 'instant_search' },
+        compositionFeedsResults: [rawA, rawB],
+      },
+    } as unknown as InitialResults);
+
+    const cachePayload = Object.values(client.cache!)[0];
+    const parsed = JSON.parse(cachePayload);
+    expect(parsed.results).toEqual([[rawA, rawB]]);
+  });
+
   it('should use request params by default', () => {
     const setCache = jest.fn();
     client = {

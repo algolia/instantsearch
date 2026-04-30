@@ -2,6 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { createResultsWithFeeds } from '../../../../test/createFeedsTestHelpers';
@@ -292,12 +293,94 @@ describe('connectFeeds', () => {
     });
   });
 
+  describe('hydration from _initialResults', () => {
+    it('hydrates lastResults.feeds when initial payload has feeds', () => {
+      const renderFn = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        compositionID: 'my-comp',
+      } as any);
+      const state = instantSearchInstance.helper!.state;
+      const rawA = createSingleSearchResponse({
+        feedID: 'a',
+        hits: [{ objectID: '1' }],
+      } as any);
+      const rawB = createSingleSearchResponse({
+        feedID: 'b',
+        hits: [{ objectID: '2' }],
+      } as any);
+
+      instantSearchInstance.helper!.lastResults = new SearchResults(state, [
+        rawA,
+      ]);
+      instantSearchInstance._initialResults = {
+        indexName: {
+          state,
+          results: [rawA],
+          compositionFeedsResults: [rawA, rawB],
+        },
+      } as any;
+
+      jest
+        .spyOn(instantSearchInstance.mainIndex, 'getHelper')
+        .mockReturnValue(instantSearchInstance.helper);
+
+      const feedsWidget = connectFeeds(renderFn)({
+        searchScope: 'global',
+      });
+
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
+
+      const feeds = instantSearchInstance.helper?.lastResults?.feeds;
+      expect(feeds).toHaveLength(2);
+      expect(feeds![0]).toBeInstanceOf(SearchResults);
+      expect(feeds![1]).toBeInstanceOf(SearchResults);
+    });
+
+    it('does not replace lastResults.feeds when already set', () => {
+      const renderFn = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        compositionID: 'my-comp',
+      } as any);
+      const state = instantSearchInstance.helper!.state;
+      const existing = createResultsWithFeeds(['x', 'y'], state);
+      instantSearchInstance.helper!.lastResults = existing;
+
+      instantSearchInstance._initialResults = {
+        indexName: {
+          state,
+          results: existing._rawResults,
+          compositionFeedsResults: [
+            createSingleSearchResponse({ feedID: 'other1' } as any),
+            createSingleSearchResponse({ feedID: 'other2' } as any),
+          ],
+        },
+      } as any;
+
+      jest
+        .spyOn(instantSearchInstance.mainIndex, 'getHelper')
+        .mockReturnValue(instantSearchInstance.helper);
+
+      const feedsWidget = connectFeeds(renderFn)({
+        searchScope: 'global',
+      });
+
+      feedsWidget.init!(createInitOptions({ instantSearchInstance }));
+
+      expect(instantSearchInstance.helper?.lastResults?.feeds).toEqual(
+        existing.feeds
+      );
+    });
+  });
+
   describe('dispose', () => {
     it('calls unmountFn', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
 
-      const feedsWidget = connectFeeds(renderFn, unmountFn)({
+      const feedsWidget = connectFeeds(
+        renderFn,
+        unmountFn
+      )({
         searchScope: 'global',
       });
 
@@ -346,6 +429,79 @@ describe('connectFeeds', () => {
 
       expect(renderState.feedIDs).toEqual(['a', 'b']);
     });
+
+    it('reconstructs SearchResults from plain feed objects (hydration)', () => {
+      const feedsWidget = connectFeeds(() => {})({
+        searchScope: 'global',
+      });
+
+      const state = new SearchParameters({ index: 'test' });
+      const parent = new SearchResults(state, [createSingleSearchResponse()]);
+      const rawA = createSingleSearchResponse({
+        feedID: 'products',
+        hits: [{ objectID: 'p1' }],
+      } as any);
+      const rawB = createSingleSearchResponse({
+        feedID: 'articles',
+        hits: [{ objectID: 'a1' }],
+      } as any);
+      (parent as any).feeds = [rawA, rawB];
+
+      feedsWidget.getWidgetRenderState(
+        createRenderOptions({ results: parent })
+      );
+
+      expect(parent.feeds![0]).toBeInstanceOf(SearchResults);
+      expect(parent.feeds![1]).toBeInstanceOf(SearchResults);
+      expect(parent.feeds![0].hits).toEqual([{ objectID: 'p1' }]);
+      expect(parent.feeds![1].hits).toEqual([{ objectID: 'a1' }]);
+      expect(
+        feedsWidget.getWidgetRenderState(
+          createRenderOptions({ results: parent })
+        ).feedIDs
+      ).toEqual(['products', 'articles']);
+    });
+
+    it('reconstructs feeds after JSON.stringify/parse round-trip', () => {
+      const feedsWidget = connectFeeds(() => {})({
+        searchScope: 'global',
+      });
+
+      const state = new SearchParameters({ index: 'test' });
+      const parent = new SearchResults(state, [createSingleSearchResponse()]);
+      const rawA = createSingleSearchResponse({
+        feedID: 'products',
+        hits: [{ objectID: 'p1' }],
+      } as any);
+      const rawB = createSingleSearchResponse({
+        feedID: 'articles',
+        hits: [{ objectID: 'a1' }],
+      } as any);
+      (parent as any).feeds = JSON.parse(JSON.stringify([rawA, rawB]));
+
+      feedsWidget.getWidgetRenderState(
+        createRenderOptions({ results: parent })
+      );
+
+      expect(parent.feeds![0]).toBeInstanceOf(SearchResults);
+      expect(parent.feeds![1]).toBeInstanceOf(SearchResults);
+    });
+
+    it('leaves SearchResults feed entries unchanged', () => {
+      const feedsWidget = connectFeeds(() => {})({
+        searchScope: 'global',
+      });
+
+      const results = createResultsWithFeeds(['a', 'b']);
+      const before0 = results.feeds![0];
+      const before1 = results.feeds![1];
+
+      feedsWidget.getWidgetRenderState(createRenderOptions({ results }));
+      feedsWidget.getWidgetRenderState(createRenderOptions({ results }));
+
+      expect(results.feeds![0]).toBe(before0);
+      expect(results.feeds![1]).toBe(before1);
+    });
   });
 
   describe('getRenderState', () => {
@@ -354,10 +510,7 @@ describe('connectFeeds', () => {
         searchScope: 'global',
       });
 
-      const renderState = feedsWidget.getRenderState(
-        {},
-        createRenderOptions()
-      );
+      const renderState = feedsWidget.getRenderState({}, createRenderOptions());
 
       expect(renderState.feeds).toBeDefined();
       expect(renderState.feeds.feedIDs).toEqual(['']);

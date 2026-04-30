@@ -1,3 +1,4 @@
+import { isTwoPassWidget } from 'instantsearch.js/es/lib/utils';
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';
@@ -100,9 +101,10 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
 
   if (waitForResultsRef?.current && !skipSuspense) {
     use(waitForResultsRef.current);
-    // If we made a second request because of DynamicWidgets, we need to wait for the second result,
-    // except for DynamicWidgets itself which needs to render its children after the first result.
-    if (widget.$$type !== 'ais.dynamicWidgets' && search.helper?.lastResults) {
+    // If we made a second request because of two-pass widgets, we need to
+    // wait for the second result — except for the two-pass widgets themselves
+    // which need to render their children after the first result.
+    if (!isTwoPassWidget(widget) && search.helper?.lastResults) {
       use(waitForResultsRef.current);
     }
   }
