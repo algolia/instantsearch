@@ -184,6 +184,79 @@ describe('add command', () => {
     expect(fs.existsSync(path.join(featureDir, 'SearchBox.tsx'))).toBe(false);
   });
 
+  test('add search: generates an autocomplete component', async () => {
+    const projectDir = makeInitializedProject();
+
+    const report = await add({
+      projectDir,
+      item: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+    });
+
+    expect(report).toMatchObject({ ok: true });
+
+    const autocompleteFile = path.join(
+      projectDir,
+      'src/components/autocomplete/Autocomplete.tsx'
+    );
+    expect(fs.existsSync(autocompleteFile)).toBe(true);
+
+    const content = fs.readFileSync(autocompleteFile, 'utf8');
+    expect(content).toContain('EXPERIMENTAL_Autocomplete');
+    expect(content).toContain('products');
+    expect(content).toContain('name');
+    expect(content).toContain('image_url');
+  });
+
+  test('add search: autocomplete without image when schema has no image', async () => {
+    const projectDir = makeInitializedProject();
+
+    await add({
+      projectDir,
+      item: 'search',
+      indexName: 'docs',
+      schema: { hits: { title: 'page_title' } },
+    });
+
+    const content = fs.readFileSync(
+      path.join(projectDir, 'src/components/autocomplete/Autocomplete.tsx'),
+      'utf8'
+    );
+    expect(content).toContain('page_title');
+    expect(content).not.toContain('img');
+  });
+
+  test('add search: does not regenerate autocomplete if it already exists', async () => {
+    const projectDir = makeInitializedProject();
+
+    await add({
+      projectDir,
+      item: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+    });
+
+    const autocompleteFile = path.join(
+      projectDir,
+      'src/components/autocomplete/Autocomplete.tsx'
+    );
+    const contentBefore = fs.readFileSync(autocompleteFile, 'utf8');
+
+    const report = await add({
+      projectDir,
+      item: 'search',
+      target: 'docs-search',
+      indexName: 'docs',
+      schema: { hits: { title: 'page_title' } },
+    });
+
+    expect(report).toMatchObject({ ok: true });
+
+    const contentAfter = fs.readFileSync(autocompleteFile, 'utf8');
+    expect(contentAfter).toBe(contentBefore);
+  });
+
   test('add bogus: fails with unknown_item', async () => {
     const projectDir = makeInitializedProject();
 

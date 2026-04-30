@@ -1,10 +1,15 @@
-import type { ExperienceSchema } from '../manifest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+import type { ExperienceSchema, RootManifest } from '../manifest';
+import { readRootManifest } from '../manifest';
 import type { Prompter } from '../prompter';
 import { failure, type Report } from '../reporter';
 import { addExperience } from './add-experience';
 import { addWidget } from './add-widget';
 import { toPascalCase } from '../utils/naming';
 import { SUPPORTED_WIDGETS } from '../generator';
+import { generateAutocomplete } from '../generator/autocomplete';
 
 const COMMAND = 'add';
 
@@ -30,7 +35,7 @@ export async function add(options: AddOptions): Promise<Report> {
 
   const template = COMPOSITE_FEATURES[item as keyof typeof COMPOSITE_FEATURES];
   if (template) {
-    return addExperience({
+    const report = await addExperience({
       projectDir,
       name: options.target ?? item,
       template,
@@ -38,6 +43,27 @@ export async function add(options: AddOptions): Promise<Report> {
       schema: options.schema,
       prompter,
     });
+
+    if (report.ok && options.indexName && options.schema) {
+      const rootManifest = readRootManifest(projectDir);
+      if (rootManifest) {
+        const autocomplete = maybeGenerateAutocomplete({
+          projectDir,
+          manifest: rootManifest,
+          indexName: options.indexName,
+          schema: options.schema,
+        });
+        if (autocomplete.created) {
+          const payload = report as Record<string, unknown>;
+          const files = payload.filesCreated as string[] | undefined;
+          if (files) {
+            files.push(autocomplete.filePath);
+          }
+        }
+      }
+    }
+
+    return report;
   }
 
   if (isWidgetName(item) && options.target) {
@@ -64,4 +90,34 @@ export async function add(options: AddOptions): Promise<Report> {
     code: 'unknown_item',
     message: `Unknown item '${item}'.`,
   });
+}
+
+function maybeGenerateAutocomplete(params: {
+  projectDir: string;
+  manifest: RootManifest;
+  indexName: string;
+  schema: ExperienceSchema;
+}): { created: true; filePath: string } | { created: false } {
+  const { projectDir, manifest, indexName, schema } = params;
+  const autocompleteDir = path.join(
+    projectDir,
+    manifest.componentsPath,
+    'autocomplete'
+  );
+  const ext = manifest.typescript ? 'tsx' : 'jsx';
+  const filePath = path.join(autocompleteDir, `Autocomplete.${ext}`);
+
+  if (fs.existsSync(filePath)) return { created: false };
+
+  const code = generateAutocomplete({
+    indexName,
+    hitsSchema: schema.hits,
+    typescript: manifest.typescript,
+  });
+
+  fs.mkdirSync(autocompleteDir, { recursive: true });
+  fs.writeFileSync(filePath, code, 'utf8');
+
+  const relativePath = path.posix.join(manifest.componentsPath, 'autocomplete', `Autocomplete.${ext}`);
+  return { created: true, filePath: relativePath };
 }
