@@ -1421,13 +1421,13 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     if (__DEV__) {
       const seen = new Set<string>();
       const duplicates = new Set<string>();
-      for (const id of feedIDs) {
+      feedIDs.forEach((id) => {
         if (seen.has(id)) {
           duplicates.add(id);
         } else {
           seen.add(id);
         }
-      }
+      });
       if (duplicates.size > 0) {
         warn(
           `Duplicate feedID(s) detected in autocomplete configuration: ${[
