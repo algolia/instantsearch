@@ -13,6 +13,12 @@ type ClientWithTransporter = ClientV3_4 & {
   search: (requests: any, ...args: any[]) => any;
 };
 
+function getServerResults(entry: InitialResults[string]) {
+  return entry.compositionFeedsResults?.length
+    ? entry.compositionFeedsResults
+    : entry.results || [];
+}
+
 export function hydrateSearchClient(
   client: (SearchClient | CompositionClient) & {
     _cacheHydrated?: boolean;
@@ -42,7 +48,9 @@ export function hydrateSearchClient(
         indexName?: string;
       }>
     >((acc, key) => {
-      const { state, requestParams, results: serverResults } = results[key];
+      const entry = results[key];
+      const { state, requestParams } = entry;
+      const serverResults = getServerResults(entry);
       const mappedResults =
         serverResults && state
           ? serverResults.map((result, idx) => ({
@@ -67,7 +75,7 @@ export function hydrateSearchClient(
 
   const cachedResults = Object.keys(results).reduce<Array<SearchResponse<any>>>(
     (acc, key) => {
-      const res = results[key].results;
+      const res = getServerResults(results[key]);
       if (!res) {
         return acc;
       }
@@ -140,7 +148,9 @@ export function hydrateSearchClient(
     (client as ClientWithCache).cache = {
       ...(client as ClientWithCache).cache,
       [cacheKey]: JSON.stringify({
-        results: Object.keys(results).map((key) => results[key].results),
+        results: Object.keys(results).map((key) =>
+          getServerResults(results[key])
+        ),
       }),
     };
   }

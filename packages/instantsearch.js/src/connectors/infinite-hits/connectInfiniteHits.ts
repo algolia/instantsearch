@@ -10,6 +10,7 @@ import {
   createSendEventForHits,
   createBindEventForHits,
   walkIndex,
+  isTwoPassWidget,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -402,15 +403,13 @@ export default (function connectInfiniteHits<
           /*
             With dynamic widgets, facets are not included in the state before their relevant widgets are mounted. Until then, we need to bail out of writing this incomplete state representation in cache.
           */
-          let hasDynamicWidgets = false;
+          let hasTwoPassWidgets = false;
           walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
             if (
-              !hasDynamicWidgets &&
-              indexWidget
-                .getWidgets()
-                .some(({ $$type }) => $$type === 'ais.dynamicWidgets')
+              !hasTwoPassWidgets &&
+              indexWidget.getWidgets().some(isTwoPassWidget)
             ) {
-              hasDynamicWidgets = true;
+              hasTwoPassWidgets = true;
             }
           });
 
@@ -423,7 +422,7 @@ export default (function connectInfiniteHits<
             cachedHits[page] === undefined &&
             !results.__isArtificial &&
             instantSearchInstance.status === 'idle' &&
-            !(hasDynamicWidgets && hasNoFacets)
+            !(hasTwoPassWidgets && hasNoFacets)
           ) {
             cachedHits[page] = transformedHits;
             cache.write({ state: normalizeState(state), hits: cachedHits });

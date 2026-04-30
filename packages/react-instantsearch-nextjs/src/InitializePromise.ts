@@ -1,5 +1,9 @@
 import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import { resetWidgetId, walkIndex } from 'instantsearch.js/es/lib/utils';
+import {
+  isTwoPassWidget,
+  walkIndex,
+  resetWidgetId,
+} from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import { useContext } from 'react';
 import {
@@ -88,9 +92,8 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         .then(() => {
           let shouldRefetch = false;
           walkIndex(search.mainIndex, (index) => {
-            shouldRefetch = index
-              .getWidgets()
-              .some((widget) => widget.$$type === 'ais.dynamicWidgets');
+            shouldRefetch =
+              shouldRefetch || index.getWidgets().some(isTwoPassWidget);
           });
 
           if (shouldRefetch) {
