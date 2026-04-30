@@ -182,6 +182,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'feeds': {
+        const feedsWidget = widget as Widgets['feeds'];
+        return feedsWidget({
+          container,
+          widgets: () => [],
+          searchScope: 'global',
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });

@@ -18,6 +18,7 @@ class Helper {
 const fakeInstantSearch = jest.fn(
   ({
     indexName,
+    compositionID,
     searchClient,
     routing,
     stalledSearchDelay,
@@ -26,8 +27,8 @@ const fakeInstantSearch = jest.fn(
     if (!searchClient && !isPlainObject(searchClient)) {
       throw new Error('need searchClient to be a plain object');
     }
-    if (!indexName) {
-      throw new Error('need indexName to be a string');
+    if (!indexName && !compositionID) {
+      throw new Error('need indexName or compositionID to be a string');
     }
 
     const instantsearchInstance = {
@@ -56,8 +57,8 @@ const fakeInstantSearch = jest.fn(
         instantsearchInstance.mainIndex.addWidgets(widgets);
       },
       removeWidgets(widgets) {
-        widgets.forEach((widget) => {
-          const i = instantsearchInstance.mainIndex._widgets.findIndex(widget);
+        widgets.forEach(widget => {
+          const i = instantsearchInstance.mainIndex._widgets.indexOf(widget);
           if (i === -1) {
             return;
           }
