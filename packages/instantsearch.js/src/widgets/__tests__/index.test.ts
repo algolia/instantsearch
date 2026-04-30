@@ -183,7 +183,15 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       }
       case 'trendingFacets': {
         const trendingFacets = widget as Widgets['trendingFacets'];
-        return trendingFacets({ container, facetName: 'brand' });
+        return trendingFacets({container, facetName: 'brand'});
+      }
+      case 'feeds': {
+        const feedsWidget = widget as Widgets['feeds'];
+        return feedsWidget({
+          container,
+          widgets: () => [],
+          searchScope: 'global',
+        });
       }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;

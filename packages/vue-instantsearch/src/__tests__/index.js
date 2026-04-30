@@ -46,7 +46,7 @@ function getAllComponents() {
 
     try {
       suitClass = mixins
-        .find((mixin) => mixin.methods && mixin.methods.suit)
+        .find(mixin => mixin.methods && mixin.methods.suit)
         .methods.suit();
     } catch (e) {
       /* no suit class, so will fail the assertions */
@@ -78,17 +78,21 @@ function getAllComponents() {
         props.trackedFilters = {};
       } else if (name === 'AisIndex') {
         props.indexName = 'indexName';
+      } else if (name === 'AisFeeds') {
+        props.searchScope = 'global';
       } else {
         props.attribute = 'attr';
       }
 
       const Component = {
-        render: renderCompat((h) =>
+        render: renderCompat(h =>
           h(
             AisInstantSearch,
             {
               props: {
-                indexName: 'instant_search',
+                ...(name === 'AisFeeds'
+                  ? { compositionID: 'my-composition' }
+                  : { indexName: 'instant_search' }),
                 searchClient: {
                   search() {
                     return new Promise({ results: [] });
