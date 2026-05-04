@@ -283,15 +283,15 @@ search.addWidgets([
         // Build recommend sources from the shared map written by recommend widgets.
         const recommendSourceMap = new Map<string, AutocompleteSource>();
         if (_recommendSources) {
-          (_recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits }>).forEach(
-            ({ hits: rawHits, sendEvent }, sourceId) => {
+          (_recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits; indexName: string }>).forEach(
+            ({ hits: rawHits, sendEvent, indexName }, sourceId) => {
               // Hits from recommend connectors already have __position and __queryID set.
               const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
               sendEventMap[sourceId] = sendEvent;
               recommendSourceMap.set(sourceId, {
                 sourceType: 'recommend',
                 indexId: sourceId,
-                indexName: '',
+                indexName,
                 hits: escapedHits,
                 results: {},
                 sendEvent,
