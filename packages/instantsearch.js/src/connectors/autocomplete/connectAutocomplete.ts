@@ -12,19 +12,12 @@ import {
 
 import type { SendEventForHits } from '../../lib/utils';
 import type { Hit, Connector, WidgetRenderState } from '../../types';
-import type { RecommendResponse } from '../../types/algoliasearch';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
   connector: true,
 });
-
-function isSearchResults(
-  results: SearchResults | RecommendResponse<any>
-): results is SearchResults {
-  return 'page' in results;
-}
 
 export type AutocompleteSource = {
   /**
@@ -38,7 +31,7 @@ export type AutocompleteSource = {
   indexName: string;
 
   /**
-   * The id of the source (indexId for search, recommend model key for recommend).
+   * The id of the source (indexId for search, sourceId/model for recommend).
    */
   indexId: string;
 
@@ -50,7 +43,7 @@ export type AutocompleteSource = {
   /**
    * The full results object from the Algolia API.
    */
-  results: SearchResults | RecommendResponse<any>;
+  results: SearchResults | Record<string, never>;
 
   /**
    * Send event to insights middleware.
@@ -158,6 +151,12 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
       future: { undefinedEmptyQuery = false } = {},
     } = widgetParams || {};
 
+    // Private params set by EXPERIMENTAL_autocomplete — not part of the public API.
+    const {
+      _recommendSources,
+      _sourcesOrder,
+    } = (widgetParams as any) || {};
+
     warning(
       !(widgetParams as any).indices,
       `
@@ -241,65 +240,95 @@ search.addWidgets([
           };
         }
 
+        // sendEvent is keyed by indexId/sourceId to survive transformItems reordering.
         const sendEventMap: Record<string, SendEventForHits> = {};
-        const sources: AutocompleteSource[] = scopedResults.map(
-          (scopedResult) => {
-            const results = scopedResult.results;
 
-            // Escape hits regardless of source type.
-            if (results) {
-              results.hits = escapeHTML
-                ? escapeHits(results.hits)
-                : results.hits;
-            }
-
-            sendEventMap[scopedResult.indexId] = createSendEventForHits({
-              instantSearchInstance,
-              helper: scopedResult.helper,
-              widgetType: this.$$type,
-            });
-
-            if (results && !isSearchResults(results)) {
-              // Recommend source: no pagination, treat as a single flat page so
-              // that __position is set to 0, 1, 2, … and can be extended to
-              // real pagination later without changing the shape.
-              const hits = addQueryID(
-                addAbsolutePosition(results.hits as any, 0, results.hits.length || 1),
-                results.queryID
-              );
-
-              return {
-                sourceType: 'recommend' as const,
-                indexId: scopedResult.indexId,
-                indexName: results.index || '',
-                hits,
-                results,
-                sendEvent: sendEventMap[scopedResult.indexId],
-              };
-            }
-
-            const hits = results
-              ? addQueryID(
-                  addAbsolutePosition(
-                    results.hits,
-                    results.page,
-                    results.hitsPerPage
-                  ),
-                  results.queryID
-                )
-              : [];
-
-            return {
-              sourceType: 'index' as const,
-              indexId: scopedResult.indexId,
-              indexName: results?.index || '',
-              hits,
-              results:
-                results || ({} as unknown as SearchResults),
-              sendEvent: sendEventMap[scopedResult.indexId],
-            };
+        // Build search sources from scopedResults.
+        const searchSourceMap = new Map<string, AutocompleteSource>();
+        for (const scopedResult of scopedResults) {
+          const results = scopedResult.results as SearchResults | null;
+          if (results) {
+            results.hits = escapeHTML
+              ? escapeHits(results.hits)
+              : results.hits;
           }
-        );
+
+          sendEventMap[scopedResult.indexId] = createSendEventForHits({
+            instantSearchInstance,
+            helper: scopedResult.helper,
+            widgetType: this.$$type,
+          });
+
+          const hits = results
+            ? addQueryID(
+                addAbsolutePosition(
+                  results.hits,
+                  results.page,
+                  results.hitsPerPage
+                ),
+                results.queryID
+              )
+            : [];
+
+          searchSourceMap.set(scopedResult.indexId, {
+            sourceType: 'index',
+            indexId: scopedResult.indexId,
+            indexName: results?.index || '',
+            hits,
+            results: results || ({} as Record<string, never>),
+            sendEvent: sendEventMap[scopedResult.indexId],
+          });
+        }
+
+        // Build recommend sources from the shared map written by recommend widgets.
+        const recommendSourceMap = new Map<string, AutocompleteSource>();
+        if (_recommendSources) {
+          for (const [sourceId, { hits: rawHits, sendEvent }] of (
+            _recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits }>
+          )) {
+            const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
+            const positionedHits = addAbsolutePosition(
+              escapedHits,
+              0,
+              escapedHits.length || 1
+            );
+            sendEventMap[sourceId] = sendEvent;
+            recommendSourceMap.set(sourceId, {
+              sourceType: 'recommend',
+              indexId: sourceId,
+              indexName: '',
+              hits: positionedHits,
+              results: {},
+              sendEvent,
+            });
+          }
+        }
+
+        // Merge sources in the order requested by EXPERIMENTAL_autocomplete.
+        // Fall back to search-first if no order is provided (plain connectAutocomplete usage).
+        let sources: AutocompleteSource[];
+        if (_sourcesOrder) {
+          const order = _sourcesOrder as Array<{ sourceId: string; sourceType: 'index' | 'recommend' }>;
+          sources = [];
+          for (const { sourceId, sourceType } of order) {
+            const source =
+              sourceType === 'recommend'
+                ? recommendSourceMap.get(sourceId)
+                : searchSourceMap.get(sourceId);
+            if (source) sources.push(source);
+          }
+          // Safety net: include any search sources not in the order list.
+          for (const [indexId, source] of searchSourceMap) {
+            if (!order.some((o) => o.sourceId === indexId)) {
+              sources.push(source);
+            }
+          }
+        } else {
+          sources = [
+            ...searchSourceMap.values(),
+            ...recommendSourceMap.values(),
+          ];
+        }
 
         const transformedSources = transformItems(sources).map(
           (transformedSource) => ({

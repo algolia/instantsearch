@@ -13,7 +13,7 @@ import type {
 
 export type ScopedResult = {
   indexId: string;
-  results: SearchResults | RecommendResponse<any> | null;
+  results: SearchResults | null;
   helper: Helper;
 };
 
