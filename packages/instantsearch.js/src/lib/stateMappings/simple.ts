@@ -28,10 +28,16 @@ export default function simpleStateMapping<
 
     routeToState(routeState = {} as TUiState) {
       return Object.keys(routeState).reduce(
-        (state, indexId) => ({
-          ...state,
-          [indexId]: getIndexStateWithoutConfigure(routeState[indexId]),
-        }),
+        (state, indexId) => {
+          const indexState = routeState[indexId];
+          if (typeof indexState !== 'object' || indexState === null) {
+            return state;
+          }
+          return {
+            ...state,
+            [indexId]: getIndexStateWithoutConfigure(indexState),
+          };
+        },
         {} as TUiState
       );
     },
