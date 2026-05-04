@@ -35,11 +35,11 @@ import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
-  createSendEventForHits,
   find,
   getContainerNode,
   warn,
   walkIndex,
+  type createSendEventForHits,
 } from '../../lib/utils';
 import configure from '../configure/configure';
 import index from '../index/index';
@@ -634,8 +634,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         sourcesConfig,
         (c) =>
           c.sourceType === 'recommend' &&
-          ((c as RecommendSourceConfig<TItem>).sourceId ||
-            (c as RecommendSourceConfig<TItem>).model) === source.indexId
+          (c.sourceId || c.model) === source.indexId
       ) as RecommendSourceConfig<TItem> | undefined;
       return config ? { sourceId: source.indexId, config, hits: source.hits, sendEvent: source.sendEvent } : null;
     })
@@ -917,20 +916,24 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
-  // Re-order elements to respect allSources order.
-  // Special entries (recent, suggestions, promptSuggestions) keep their anchor positions.
+  // Re-order elements to respect sources order (which respects transformItems reordering).
+  // recent always leads; other positions follow the transformed sources order.
   const panelElements: PanelElements = {};
   if (elements.recent) panelElements.recent = elements.recent;
-  if (elements.suggestions) panelElements.suggestions = elements.suggestions;
-  sourcesConfig.forEach((config) => {
-    const id =
-      config.sourceType === 'recommend'
-        ? (config as RecommendSourceConfig<TItem>).sourceId ||
-          (config as RecommendSourceConfig<TItem>).model
-        : (config as IndexSourceConfig<TItem>).indexName;
-    if (elements[id]) panelElements[id] = elements[id];
+  sources.forEach((source) => {
+    if (source.sourceType !== 'index') {
+      if (elements[source.indexId]) panelElements[source.indexId] = elements[source.indexId];
+      return;
+    }
+    // Map index sources to their element key (special sources use canonical names).
+    let elementKey: string = source.indexName;
+    if (source.indexName === showQuerySuggestions?.indexName) {
+      elementKey = 'suggestions';
+    } else if (source.indexName === showPromptSuggestions?.indexName) {
+      elementKey = 'promptSuggestions';
+    }
+    if (elements[elementKey]) panelElements[elementKey] = elements[elementKey];
   });
-  if (elements.promptSuggestions) panelElements.promptSuggestions = elements.promptSuggestions;
 
   const rawInputProps = getInputProps();
   const inputProps =
@@ -948,7 +951,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onInput: (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
+        onInput: (event: { currentTarget: EventTarget & HTMLInputElement }) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
@@ -1581,14 +1584,18 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           future: { undefinedEmptyQuery: true },
           // Private params consumed by the connector — not part of the public API.
           _recommendSources: recommendResults,
-          _sourcesOrder: allSources.map((s) => ({
-            sourceId:
-              s.sourceType === 'recommend'
-                ? ((s as RecommendSourceConfig<TItem>).sourceId ||
-                    (s as RecommendSourceConfig<TItem>).model)
-                : (s as IndexSourceConfig<TItem>).indexName,
-            sourceType: s.sourceType === 'recommend' ? 'recommend' as const : 'index' as const,
-          })),
+          _sourcesOrder: [
+            // indicesConfig already has showQuerySuggestions/showPromptSuggestions
+            // in their correct positions (unshift/push respectively).
+            ...indicesConfig.map(({ indexName }) => ({
+              sourceId: indexName,
+              sourceType: 'index' as const,
+            })),
+            ...recommendSources.map((s) => ({
+              sourceId: s.sourceId || s.model,
+              sourceType: 'recommend' as const,
+            })),
+          ],
         } as any),
         $$widgetType: 'ais.autocomplete',
       },

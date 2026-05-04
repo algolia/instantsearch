@@ -245,8 +245,8 @@ search.addWidgets([
 
         // Build search sources from scopedResults.
         const searchSourceMap = new Map<string, AutocompleteSource>();
-        for (const scopedResult of scopedResults) {
-          const results = scopedResult.results as SearchResults | null;
+        scopedResults.forEach((scopedResult) => {
+          const results = scopedResult.results;
           if (results) {
             results.hits = escapeHTML
               ? escapeHits(results.hits)
@@ -278,26 +278,26 @@ search.addWidgets([
             results: results || ({} as Record<string, never>),
             sendEvent: sendEventMap[scopedResult.indexId],
           });
-        }
+        });
 
         // Build recommend sources from the shared map written by recommend widgets.
         const recommendSourceMap = new Map<string, AutocompleteSource>();
         if (_recommendSources) {
-          for (const [sourceId, { hits: rawHits, sendEvent }] of (
-            _recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits }>
-          )) {
-            // Hits from recommend connectors already have __position and __queryID set.
-            const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
-            sendEventMap[sourceId] = sendEvent;
-            recommendSourceMap.set(sourceId, {
-              sourceType: 'recommend',
-              indexId: sourceId,
-              indexName: '',
-              hits: escapedHits,
-              results: {},
-              sendEvent,
-            });
-          }
+          (_recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits }>).forEach(
+            ({ hits: rawHits, sendEvent }, sourceId) => {
+              // Hits from recommend connectors already have __position and __queryID set.
+              const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
+              sendEventMap[sourceId] = sendEvent;
+              recommendSourceMap.set(sourceId, {
+                sourceType: 'recommend',
+                indexId: sourceId,
+                indexName: '',
+                hits: escapedHits,
+                results: {},
+                sendEvent,
+              });
+            }
+          );
         }
 
         // Merge sources in the order requested by EXPERIMENTAL_autocomplete.
@@ -306,19 +306,19 @@ search.addWidgets([
         if (_sourcesOrder) {
           const order = _sourcesOrder as Array<{ sourceId: string; sourceType: 'index' | 'recommend' }>;
           sources = [];
-          for (const { sourceId, sourceType } of order) {
+          order.forEach(({ sourceId, sourceType }) => {
             const source =
               sourceType === 'recommend'
                 ? recommendSourceMap.get(sourceId)
                 : searchSourceMap.get(sourceId);
             if (source) sources.push(source);
-          }
+          });
           // Safety net: include any search sources not in the order list.
-          for (const [indexId, source] of searchSourceMap) {
+          searchSourceMap.forEach((source, indexId) => {
             if (!order.some((o) => o.sourceId === indexId)) {
               sources.push(source);
             }
-          }
+          });
         } else {
           sources = [
             ...searchSourceMap.values(),
