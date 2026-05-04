@@ -1521,6 +1521,18 @@ declare namespace algoliasearchHelper {
      * @return all the refinements
      */
     getRefinements(): SearchResults.Refinement[];
+
+    /** Ordered array of per-feed results, present when results come from a multifeed composition response. */
+    feeds?: CompositionSearchResults[];
+  }
+
+  /**
+   * SearchResults from a composition feed response.
+   * Each feed in the composition response produces one of these.
+   */
+  export interface CompositionSearchResults extends SearchResults {
+    /** The feed identifier for this result set. */
+    feedID: string;
   }
 
   export type Banner = {

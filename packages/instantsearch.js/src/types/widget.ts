@@ -55,6 +55,9 @@ export type DisposeOptions = {
   parent: IndexWidget;
 };
 
+export const indexWidgetTypes = ['ais.index', 'ais.feedContainer'] as const;
+export type IndexWidgetType = (typeof indexWidgetTypes)[number];
+
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
   | 'ais.analytics'
@@ -67,6 +70,8 @@ export type BuiltinTypes =
   | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
+  | 'ais.feedContainer'
+  | 'ais.feeds'
   | 'ais.frequentlyBoughtTogether'
   | 'ais.geoSearch'
   | 'ais.hierarchicalMenu'
@@ -108,6 +113,8 @@ export type BuiltinWidgetTypes =
   | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
+  | 'ais.feedContainer'
+  | 'ais.feeds'
   | 'ais.frequentlyBoughtTogether'
   | 'ais.geoSearch'
   | 'ais.hierarchicalMenu'

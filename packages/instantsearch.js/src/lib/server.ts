@@ -120,6 +120,13 @@ export function getInitialResults(
             userToken: requestParams?.[0]?.userToken,
           },
           results: searchResults._rawResults,
+          ...(searchResults.feeds &&
+            searchResults.feeds.length > 0 && {
+              compositionFeedsResults: searchResults.feeds.map((feed) => ({
+                ...feed._rawResults[0],
+                feedID: feed.feedID,
+              })),
+            }),
         }),
         ...(recommendResults && {
           recommendResults: {

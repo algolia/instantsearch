@@ -98,9 +98,16 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
+export type CompositionFeedResult = NonNullable<
+  SearchResults['_rawResults']
+>[number] & {
+  feedID: string;
+};
+
 type InitialResult = {
   state?: PlainSearchParameters;
   results?: SearchResults['_rawResults'];
+  compositionFeedsResults?: CompositionFeedResult[];
   recommendResults?: {
     params: NonNullable<RecommendParametersOptions['params']>;
     results: RecommendResults['_rawResults'];
