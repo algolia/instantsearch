@@ -286,18 +286,14 @@ search.addWidgets([
           for (const [sourceId, { hits: rawHits, sendEvent }] of (
             _recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits }>
           )) {
+            // Hits from recommend connectors already have __position and __queryID set.
             const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
-            const positionedHits = addAbsolutePosition(
-              escapedHits,
-              0,
-              escapedHits.length || 1
-            );
             sendEventMap[sourceId] = sendEvent;
             recommendSourceMap.set(sourceId, {
               sourceType: 'recommend',
               indexId: sourceId,
               indexName: '',
-              hits: positionedHits,
+              hits: escapedHits,
               results: {},
               sendEvent,
             });

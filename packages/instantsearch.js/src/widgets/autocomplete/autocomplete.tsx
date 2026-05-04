@@ -211,7 +211,6 @@ type RendererParams<TItem extends BaseHit> = {
   containerNode: HTMLElement;
   indicesConfig: Array<IndexConfig<TItem>>;
   sourcesConfig: Array<SourceConfig<TItem>>;
-  recommendResults: Map<string, RecommendHitsState>;
   renderState: {
     indexTemplateProps: Array<
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
@@ -918,6 +917,21 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  // Re-order elements to respect allSources order.
+  // Special entries (recent, suggestions, promptSuggestions) keep their anchor positions.
+  const panelElements: PanelElements = {};
+  if (elements.recent) panelElements.recent = elements.recent;
+  if (elements.suggestions) panelElements.suggestions = elements.suggestions;
+  sourcesConfig.forEach((config) => {
+    const id =
+      config.sourceType === 'recommend'
+        ? (config as RecommendSourceConfig<TItem>).sourceId ||
+          (config as RecommendSourceConfig<TItem>).model
+        : (config as IndexSourceConfig<TItem>).indexName;
+    if (elements[id]) panelElements[id] = elements[id];
+  });
+  if (elements.promptSuggestions) panelElements.promptSuggestions = elements.promptSuggestions;
+
   const rawInputProps = getInputProps();
   const inputProps =
     typeof rawInputProps === 'object' && rawInputProps !== null
@@ -983,10 +997,10 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           {...renderState.templateProps}
           templateKey="panel"
           rootTagName="fragment"
-          data={{ elements, indices: indicesForPanel, sources }}
+          data={{ elements: panelElements, indices: indicesForPanel, sources }}
         />
       ) : (
-        Object.keys(elements).map((elementId) => elements[elementId])
+        Object.keys(panelElements).map((elementId) => panelElements[elementId])
       )}
     </AutocompletePanel>
   );
@@ -1472,7 +1486,6 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     containerNode,
     indicesConfig,
     sourcesConfig: allSources,
-    recommendResults,
     getSearchPageURL,
     onSelect,
     cssClasses,
@@ -1506,16 +1519,29 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     };
 
     // Map model to the appropriate connector.
+    let widget = null;
     if (config.model === 'trendingItems') {
-      return connectTrendingItems(storeResults)({
+      widget = connectTrendingItems(storeResults)({
         limit: config.limit,
         threshold: config.threshold,
         queryParameters: config.queryParameters,
       });
-    }
-
-    if (config.model === 'frequentlyBoughtTogether') {
-      return connectFrequentlyBoughtTogether(storeResults)({
+    } else if (config.model === 'frequentlyBoughtTogether') {
+      widget = connectFrequentlyBoughtTogether(storeResults)({
+        objectIDs: config.objectID ? [config.objectID] : [],
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    } else if (config.model === 'relatedProducts') {
+      widget = connectRelatedProducts(storeResults)({
+        objectIDs: config.objectID ? [config.objectID] : [],
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    } else if (config.model === 'lookingSimilar') {
+      widget = connectLookingSimilar(storeResults)({
         objectIDs: config.objectID ? [config.objectID] : [],
         limit: config.limit,
         threshold: config.threshold,
@@ -1523,25 +1549,15 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       });
     }
 
-    if (config.model === 'relatedProducts') {
-      return connectRelatedProducts(storeResults)({
-        objectIDs: config.objectID ? [config.objectID] : [],
-        limit: config.limit,
-        threshold: config.threshold,
-        queryParameters: config.queryParameters,
-      });
+    if (!widget) return null;
+
+    // Wrap in an index widget when the user specifies a different indexName,
+    // so recommendations are fetched from that index rather than the parent.
+    if (config.indexName) {
+      return index({ indexName: config.indexName }).addWidgets([widget]);
     }
 
-    if (config.model === 'lookingSimilar') {
-      return connectLookingSimilar(storeResults)({
-        objectIDs: config.objectID ? [config.objectID] : [],
-        limit: config.limit,
-        threshold: config.threshold,
-        queryParameters: config.queryParameters,
-      });
-    }
-
-    return null;
+    return widget;
   }).filter((w): w is NonNullable<typeof w> => w !== null);
 
   return [
