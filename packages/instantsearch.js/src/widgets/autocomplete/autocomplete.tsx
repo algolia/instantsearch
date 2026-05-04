@@ -948,7 +948,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onInput: (event) => {
+        onInput: (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
