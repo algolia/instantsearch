@@ -15,7 +15,8 @@ import type {
   WidgetRenderState,
   ScopedResult,
 } from '../../types';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import { SearchResults } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -244,7 +245,9 @@ function getAttributesToClear({
     items: transformItems(
       uniq(
         getRefinements(
-          scopedResult.results,
+          scopedResult.results instanceof SearchResults
+            ? scopedResult.results
+            : null,
           scopedResult.helper.state,
           includesQuery
         )

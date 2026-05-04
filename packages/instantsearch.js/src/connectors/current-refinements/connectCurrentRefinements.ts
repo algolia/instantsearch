@@ -17,10 +17,10 @@ import type {
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import { SearchResults } from 'algoliasearch-helper';
 import type {
   AlgoliaSearchHelper,
   SearchParameters,
-  SearchResults,
 } from 'algoliasearch-helper';
 
 export type CurrentRefinementsConnectorParamsRefinement = {
@@ -248,7 +248,9 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
               return accResults.concat(
                 transformItems(
                   getRefinementsItems({
-                    results: scopedResult.results,
+                    results: scopedResult.results instanceof SearchResults
+                      ? scopedResult.results
+                      : null,
                     helper: scopedResult.helper,
                     indexId: scopedResult.indexId,
                     includedAttributes,

@@ -22,12 +22,20 @@ import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
+import {
+  connectAutocomplete,
+  connectSearchBox,
+  connectTrendingItems,
+  connectFrequentlyBoughtTogether,
+  connectRelatedProducts,
+  connectLookingSimilar,
+} from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
+  createSendEventForHits,
   find,
   getContainerNode,
   warn,
@@ -39,8 +47,8 @@ import index from '../index/index';
 import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
+  AutocompleteSource,
   AutocompleteWidgetDescription,
-  TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
 import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type { PreparedTemplateProps } from '../../lib/templating';
@@ -193,10 +201,17 @@ function getMediaQueryList(mediaQuery: string) {
   return window.matchMedia(mediaQuery);
 }
 
+type RecommendHitsState = {
+  hits: Hit[];
+  sendEvent: ReturnType<typeof createSendEventForHits>;
+};
+
 type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
   containerNode: HTMLElement;
   indicesConfig: Array<IndexConfig<TItem>>;
+  sourcesConfig: Array<SourceConfig<TItem>>;
+  recommendResults: Map<string, RecommendHitsState>;
   renderState: {
     indexTemplateProps: Array<
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
@@ -211,6 +226,9 @@ type RendererParams<TItem extends BaseHit> = {
       | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
       | undefined;
     hasWarnedMissingPromptSuggestionsChat: boolean;
+    lastConnectorParams: (AutocompleteRenderState & { widgetParams: AutocompleteConnectorParams }) | undefined;
+    /** Called by recommend widgets when their results arrive, to re-render the panel. */
+    forceRender: () => void;
   };
   detachedMediaQuery: string | undefined;
   translations: AutocompleteTranslations;
@@ -239,6 +257,8 @@ const createRenderer = <TItem extends BaseHit>(
 > => {
   const { instanceId, containerNode, ...rendererParams } = params;
   return (connectorParams, isFirstRendering) => {
+    rendererParams.renderState.lastConnectorParams = connectorParams as any;
+
     if (isFirstRendering) {
       const showRecentObj = rendererParams.showRecent;
       let isolatedIndex = connectorParams.instantSearchInstance.mainIndex;
@@ -326,6 +346,20 @@ const createRenderer = <TItem extends BaseHit>(
         RecentSearchComponent,
         recentSearchHeaderComponent,
         hasWarnedMissingPromptSuggestionsChat: false,
+        lastConnectorParams: undefined,
+        forceRender: () => {
+          // Triggered by recommend widgets when their results arrive.
+          // Re-renders the panel with the latest connector params.
+          if (rendererParams.renderState.lastConnectorParams) {
+            render(
+              <AutocompleteWrapper<TItem>
+                {...rendererParams}
+                {...(rendererParams.renderState.lastConnectorParams as any)}
+              />,
+              containerNode
+            );
+          }
+        },
       };
 
       connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
@@ -342,6 +376,8 @@ const createRenderer = <TItem extends BaseHit>(
 type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   RendererParams<TItem>,
   | 'indicesConfig'
+  | 'sourcesConfig'
+  | 'recommendResults'
   | 'getSearchPageURL'
   | 'onSelect'
   | 'cssClasses'
@@ -356,11 +392,14 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'translations'
   | 'aiMode'
 > &
-  Pick<AutocompleteRenderState, 'indices' | 'refine'> &
+  Pick<AutocompleteRenderState, 'sources' | 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
 
 function AutocompleteWrapper<TItem extends BaseHit>({
   indicesConfig,
+  sourcesConfig,
+  recommendResults,
+  sources,
   indices,
   getSearchPageURL,
   onSelect: userOnSelect,
@@ -507,7 +546,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
   const promptSuggestionsLimit =
     showPromptSuggestions?.searchParameters?.hitsPerPage ?? 3;
-  const indicesForPanel = indices.map((autocompleteIndex) => {
+  const indicesForPanelRaw = indices.map((autocompleteIndex) => {
     const dedupedHits =
       autocompleteIndex.indexName === showQuerySuggestions?.indexName &&
       showRecent
@@ -593,7 +632,43 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     query.length > 0 && storage.onAdd(query);
   };
 
+  // Apply showWhen filtering for index sources. Index sources default to 'always'.
+  const indicesForPanel = indicesForPanelRaw.filter((autocompleteIndex) => {
+    const config = find(
+      sourcesConfig,
+      (c): c is IndexSourceConfig<TItem> =>
+        c.sourceType !== 'recommend' &&
+        c.indexName === autocompleteIndex.indexName
+    );
+    const showWhen = config?.showWhen ?? 'always';
+    if (showWhen === 'empty') return !localQuery;
+    if (showWhen === 'querying') return Boolean(localQuery);
+    return true;
+  });
+
+  // Resolve recommend sources for this render, filtered by showWhen.
+  // Recommend sources default to 'empty' (show only when no query).
+  const recommendForPanel = sourcesConfig
+    .filter((config): config is RecommendSourceConfig<TItem> =>
+      config.sourceType === 'recommend'
+    )
+    .filter((config) => {
+      const showWhen = config.showWhen ?? 'empty';
+      if (showWhen === 'empty') return !localQuery;
+      if (showWhen === 'querying') return Boolean(localQuery);
+      return true;
+    })
+    .map((config) => {
+      const sourceId = config.sourceId || config.model;
+      const state = recommendResults.get(sourceId);
+      return state ? { sourceId, config, hits: state.hits, sendEvent: state.sendEvent } : null;
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+
   const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const allRecommendEmpty = recommendForPanel.every(
     ({ hits }) => hits.length === 0
   );
   const recentEmpty = !storageHits || storageHits.length === 0;
@@ -601,7 +676,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     (c) => c.templates?.noResults !== undefined
   );
   const shouldHideEmptyPanel =
-    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
+    allIndicesEmpty && allRecommendEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
 
   const {
     getInputProps,
@@ -801,6 +876,65 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  // Render recommend sources into the elements map.
+  recommendForPanel.forEach(({ sourceId, config, hits, sendEvent }) => {
+    const recommendIndexInConfig = sourcesConfig
+      .filter((c): c is RecommendSourceConfig<TItem> => c.sourceType === 'recommend')
+      .indexOf(config);
+    const recommendTemplateProps = renderState.indexTemplateProps[
+      indicesForPanel.length + recommendIndexInConfig
+    ] ?? prepareTemplateProps({
+      defaultTemplates: {} as any,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: config.templates,
+    });
+
+    if (!renderState.indexTemplateProps[indicesForPanel.length + recommendIndexInConfig]) {
+      renderState.indexTemplateProps[indicesForPanel.length + recommendIndexInConfig] = recommendTemplateProps;
+    }
+
+    const headerComponent = config.templates?.header
+      ? ({
+          items,
+        }: Parameters<NonNullable<AutocompleteIndexProps['HeaderComponent']>>[0]) => (
+          <TemplateComponent
+            {...recommendTemplateProps}
+            templateKey="header"
+            rootTagName="fragment"
+            data={{ items }}
+          />
+        )
+      : undefined;
+
+    const itemComponent = ({
+      item,
+      onSelect,
+      onApply,
+    }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => (
+      <TemplateComponent
+        {...recommendTemplateProps}
+        templateKey="item"
+        rootTagName="fragment"
+        data={{ item, onSelect, onApply }}
+      />
+    );
+
+    elements[sourceId] = (
+      <AutocompleteIndex
+        key={sourceId}
+        HeaderComponent={headerComponent}
+        ItemComponent={itemComponent}
+        items={hits.map((item) => ({
+          ...item,
+          __indexName: sourceId,
+        }))}
+        getItemProps={getItemProps}
+        sendEvent={sendEvent}
+        classNames={config.cssClasses}
+      />
+    );
+  });
+
   const rawInputProps = getInputProps();
   const inputProps =
     typeof rawInputProps === 'object' && rawInputProps !== null
@@ -866,7 +1000,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           {...renderState.templateProps}
           templateKey="panel"
           rootTagName="fragment"
-          data={{ elements, indices: indicesForPanel }}
+          data={{ elements, indices: indicesForPanel, sources }}
         />
       ) : (
         Object.keys(elements).map((elementId) => elements[elementId])
@@ -934,13 +1068,20 @@ export type AutocompleteCSSClasses = Partial<AutocompleteClassNames>;
 
 export type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 
+/** Controls when a source is visible relative to the current query. */
+export type ShowWhen = 'always' | 'empty' | 'querying';
+
 export type AutocompleteTemplates = {
   /**
-   * Template to use for the panel.
+   * Template to use for the panel. Receives `elements` (keyed by index name or
+   * recommend sourceId), the legacy `indices` array, and the unified `sources`
+   * array from the connector.
    */
   panel?: Template<{
     elements: PanelElements;
+    /** @deprecated Use `sources` instead. */
     indices: AutocompleteRenderState['indices'];
+    sources: AutocompleteRenderState['sources'];
   }>;
 };
 
@@ -968,6 +1109,66 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   cssClasses?: Partial<AutocompleteIndexClassNames>;
 };
 
+/** A search-index-backed source. Extends `IndexConfig` with `showWhen`. */
+export type IndexSourceConfig<TItem extends BaseHit> = IndexConfig<TItem> & {
+  sourceType?: 'index';
+  /**
+   * When to display this source.
+   * @default 'always'
+   */
+  showWhen?: ShowWhen;
+};
+
+/** A Recommend-backed source. */
+export type RecommendSourceConfig<TItem extends BaseHit> = {
+  sourceType: 'recommend';
+  /**
+   * The Recommend model to use.
+   */
+  model: 'trendingItems' | 'frequentlyBoughtTogether' | 'relatedProducts' | 'lookingSimilar';
+  /**
+   * The index to fetch recommendations from. Defaults to the parent index.
+   */
+  indexName?: string;
+  /**
+   * The objectID of the item to use as the basis for recommendations.
+   * Required for frequentlyBoughtTogether, relatedProducts, and lookingSimilar.
+   */
+  objectID?: string;
+  /**
+   * Maximum number of recommendations to return.
+   */
+  limit?: number;
+  /**
+   * Minimum recommendation score threshold (0–100).
+   */
+  threshold?: number;
+  /**
+   * Search parameters to apply as filters to the recommendations.
+   */
+  queryParameters?: AutocompleteSearchParameters;
+  /**
+   * When to display this source.
+   * @default 'empty'
+   */
+  showWhen?: ShowWhen;
+  /**
+   * Identifier for this source in the `elements` map and `sources` array.
+   * Defaults to `model`.
+   */
+  sourceId?: string;
+  templates?: Partial<{
+    header: Template<{ items: TItem[] }>;
+    item: Template<{ item: TItem; onSelect: () => void }>;
+  }>;
+  cssClasses?: Partial<AutocompleteIndexClassNames>;
+};
+
+/** A source in the autocomplete panel — either a search index or a Recommend model. */
+export type SourceConfig<TItem extends BaseHit> =
+  | IndexSourceConfig<TItem>
+  | RecommendSourceConfig<TItem>;
+
 type PanelElements = Partial<
   // eslint-disable-next-line @typescript-eslint/ban-types
   Record<'recent' | 'suggestions' | (string & {}), preact.JSX.Element>
@@ -980,7 +1181,19 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   container: string | HTMLElement;
 
   /**
-   * Indices to use in the Autocomplete.
+   * Sources to show in the Autocomplete panel. Each source can be a search
+   * index or a Recommend-powered source. The order here controls the display
+   * order in the panel.
+   *
+   * Use `showWhen` on each source to control visibility:
+   * - `'always'` — always shown (default for index sources)
+   * - `'empty'` — shown only when the query is empty (default for recommend sources)
+   * - `'querying'` — shown only when the user is typing
+   */
+  sources?: Array<SourceConfig<TItem>>;
+
+  /**
+   * @deprecated Use `sources` with `{ sourceType: 'index', indexName: '...' }` instead.
    */
   indices?: Array<IndexConfig<TItem>>;
 
@@ -1024,9 +1237,11 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
         cssClasses?: Partial<AutocompleteIndexClassNames>;
       };
 
-  transformItems?: (
-    indices: TransformItemsIndicesConfig[]
-  ) => TransformItemsIndicesConfig[];
+  /**
+   * Transforms all sources before rendering. Receives the unified sources
+   * array (both index and recommend sources).
+   */
+  transformItems?: (sources: AutocompleteSource[]) => AutocompleteSource[];
 
   /**
    * Search parameters to apply to the autocomplete indices.
@@ -1091,7 +1306,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   const {
     container,
     escapeHTML,
-    indices = [],
+    sources: userSources = [],
+    indices: legacyIndices = [],
     showQuerySuggestions,
     showPromptSuggestions,
     showRecent,
@@ -1108,6 +1324,13 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     aiMode,
   } = widgetParams || {};
 
+  // Normalize: legacy `indices` become IndexSourceConfig entries appended after
+  // any explicitly declared sources.
+  const allSources: SourceConfig<TItem>[] = [
+    ...userSources,
+    ...legacyIndices.map((idx) => ({ ...idx, sourceType: 'index' as const })),
+  ];
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -1123,7 +1346,18 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     root: cx(suit(), userCssClasses.root),
   } satisfies AutocompleteCSSClasses;
 
-  const indicesConfig = [...indices];
+  // Split allSources into index-backed and recommend-backed.
+  const indexSources = allSources.filter(
+    (s): s is IndexSourceConfig<TItem> => s.sourceType !== 'recommend'
+  );
+  const recommendSources = allSources.filter(
+    (s): s is RecommendSourceConfig<TItem> => s.sourceType === 'recommend'
+  );
+
+  // Shared map for recommend results — written by recommend widgets, read by the renderer.
+  const recommendResults = new Map<string, RecommendHitsState>();
+
+  const indicesConfig = [...indexSources];
   if (showQuerySuggestions?.indexName) {
     indicesConfig.unshift({
       indexName: showQuerySuggestions.indexName,
@@ -1240,10 +1474,24 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     ...userTranslations,
   };
 
+  const sharedRenderState: RendererParams<TItem>['renderState'] = {
+    indexTemplateProps: [],
+    isolatedIndex: undefined,
+    targetIndex: undefined,
+    templateProps: undefined,
+    RecentSearchComponent: AutocompleteRecentSearch,
+    recentSearchHeaderComponent: undefined,
+    hasWarnedMissingPromptSuggestionsChat: false,
+    lastConnectorParams: undefined,
+    forceRender: () => {},
+  };
+
   const specializedRenderer = createRenderer({
     instanceId,
     containerNode,
     indicesConfig,
+    sourcesConfig: allSources,
+    recommendResults,
     getSearchPageURL,
     onSelect,
     cssClasses,
@@ -1254,15 +1502,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     autofocus,
     detachedMediaQuery,
     translations,
-    renderState: {
-      indexTemplateProps: [],
-      isolatedIndex: undefined,
-      targetIndex: undefined,
-      templateProps: undefined,
-      RecentSearchComponent: AutocompleteRecentSearch,
-      recentSearchHeaderComponent: undefined,
-      hasWarnedMissingPromptSuggestionsChat: false,
-    },
+    renderState: sharedRenderState,
     templates,
     aiMode,
   });
@@ -1270,6 +1510,60 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   const makeWidget = connectAutocomplete(specializedRenderer, () =>
     render(null, containerNode)
   );
+
+  // Build recommend widgets — each stores its results in `recommendResults` and
+  // re-renders the autocomplete component when new recommendations arrive.
+  const recommendWidgets = recommendSources.map((config) => {
+    const sourceId = config.sourceId || config.model;
+    // sharedRenderState.forceRender is set up by createRenderer on first render.
+    const onRecommendRender = () => sharedRenderState.forceRender();
+
+    const storeAndRender = (renderState: { items: any[]; sendEvent: any }, isFirstRender: boolean) => {
+      recommendResults.set(sourceId, {
+        hits: renderState.items as Hit[],
+        sendEvent: renderState.sendEvent,
+      });
+      if (!isFirstRender) onRecommendRender();
+    };
+
+    // Map model to the appropriate connector.
+    if (config.model === 'trendingItems') {
+      return connectTrendingItems(storeAndRender)({
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    }
+
+    if (config.model === 'frequentlyBoughtTogether') {
+      return connectFrequentlyBoughtTogether(storeAndRender)({
+        objectIDs: config.objectID ? [config.objectID] : [],
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    }
+
+    if (config.model === 'relatedProducts') {
+      return connectRelatedProducts(storeAndRender)({
+        objectIDs: config.objectID ? [config.objectID] : [],
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    }
+
+    if (config.model === 'lookingSimilar') {
+      return connectLookingSimilar(storeAndRender)({
+        objectIDs: config.objectID ? [config.objectID] : [],
+        limit: config.limit,
+        threshold: config.threshold,
+        queryParameters: config.queryParameters,
+      });
+    }
+
+    return null;
+  }).filter((w): w is NonNullable<typeof w> => w !== null);
 
   return [
     connectSearchBox(() => null)({}),
@@ -1284,6 +1578,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             configure(indexSearchParameters || {}),
           ])
       ),
+      ...recommendWidgets,
       {
         ...makeWidget({
           escapeHTML,
