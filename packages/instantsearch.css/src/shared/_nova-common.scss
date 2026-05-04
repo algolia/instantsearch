@@ -71,12 +71,6 @@ select[class^='ais-']:focus-visible {
   font-size: 0.75em;
 }
 
-// Strip native select appearance for custom chevron rendering
-select[class^='ais-'] {
-  appearance: none;
-  background: none;
-}
-
 // Custom select (MenuSelect, HitsPerPage, SortBy)
 .ais-MenuSelect,
 .ais-HitsPerPage,
@@ -100,6 +94,8 @@ select[class^='ais-'] {
 .ais-MenuSelect-select,
 .ais-HitsPerPage-select,
 .ais-SortBy-select {
+  appearance: none;
+  background: none;
   width: 100%;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   font: inherit;
