@@ -21,28 +21,31 @@ import type {
  */
 function getHttpErrorMessage(response: Response): Promise<string> {
   const fallback = `HTTP error: ${response.status} ${response.statusText}`;
-  return response.text().then((text) => {
-    if (!text) {
-      return fallback;
-    }
-    try {
-      const parsed: unknown = JSON.parse(text);
-      if (
-        parsed &&
-        typeof parsed === 'object' &&
-        'message' in parsed &&
-        typeof (parsed as { message: unknown }).message === 'string'
-      ) {
-        const message = (parsed as { message: string }).message.trim();
-        if (message) {
-          return message;
-        }
+  return response
+    .text()
+    .then((text) => {
+      if (!text) {
+        return fallback;
       }
-    } catch {
-      // Non-JSON body or empty response — use fallback
-    }
-    return fallback;
-  });
+      try {
+        const parsed: unknown = JSON.parse(text);
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          'message' in parsed &&
+          typeof (parsed as { message: unknown }).message === 'string'
+        ) {
+          const message = (parsed as { message: string }).message.trim();
+          if (message) {
+            return message;
+          }
+        }
+      } catch {
+        // Non-JSON body or empty response — use fallback
+      }
+      return fallback;
+    })
+    .catch(() => fallback);
 }
 
 /**
