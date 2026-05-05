@@ -58,8 +58,8 @@ export function createChatMessageErrorComponent({
     const resolvedErrorMessage =
       typeof errorMessageTranslation === 'function'
         ? errorMessageTranslation({ errorMessage })
-        : errorMessageTranslation || defaultErrorMessage;
-    const retryText = userTranslations?.retryText || defaultRetryText;
+        : errorMessageTranslation ?? defaultErrorMessage;
+    const retryText = userTranslations?.retryText ?? defaultRetryText;
 
     return (
       <article
