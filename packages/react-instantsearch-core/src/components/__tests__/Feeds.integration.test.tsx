@@ -64,7 +64,7 @@ describe('Feeds (integration)', () => {
         compositionID="my-composition"
       >
         <Feeds
-          searchScope="global"
+          isolated={false}
           renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
         />
       </InstantSearchMock>
@@ -117,7 +117,7 @@ describe('Feeds (integration)', () => {
           compositionID="my-composition"
         >
           <Feeds
-            searchScope="global"
+            isolated={false}
             renderFeed={({ feedID }) => <FeedScopedChild feedID={feedID} />}
           />
         </InstantSearch>

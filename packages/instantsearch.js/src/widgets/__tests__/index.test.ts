@@ -190,7 +190,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return feedsWidget({
           container,
           widgets: () => [],
-          searchScope: 'global',
+          isolated: false,
         });
       }
       default: {

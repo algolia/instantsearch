@@ -45,7 +45,7 @@ describe('composition multifeed SSR (integration)', () => {
     });
     search.addWidgets([
       connectSearchBox(() => {})({}),
-      connectFeeds(() => {})({ searchScope: 'global' }),
+      connectFeeds(() => {})({ isolated: false }),
     ]);
     search.start();
 
@@ -89,7 +89,7 @@ describe('composition multifeed SSR (integration)', () => {
     searchAfterJson._initialResults = roundTrip;
     searchAfterJson.addWidgets([
       connectSearchBox(() => {})({}),
-      connectFeeds(() => {})({ searchScope: 'global' }),
+      connectFeeds(() => {})({ isolated: false }),
     ]);
     searchAfterJson.start();
 

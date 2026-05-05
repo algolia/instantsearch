@@ -20,13 +20,13 @@ describe('AisFeeds', () => {
     const transformFeeds = feeds => feeds;
     const wrapper = mount(Feeds, {
       propsData: {
-        searchScope: 'global',
+        isolated: false,
         transformFeeds,
       },
     });
 
     expect(wrapper.vm.widgetParams).toEqual({
-      searchScope: 'global',
+      isolated: false,
       transformFeeds,
     });
   });
@@ -40,7 +40,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,
@@ -75,7 +75,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,
@@ -111,7 +111,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,
@@ -170,7 +170,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds, ScopedFeed },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <ScopedFeed :feedid="feedID" />
         </Feeds>
       `,
@@ -196,7 +196,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div v-if="feedID === 'products'" class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,

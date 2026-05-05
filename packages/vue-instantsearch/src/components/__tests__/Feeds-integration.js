@@ -26,7 +26,7 @@ describe('AisFeeds (integration)', () => {
         <InstantSearch
           v-bind="{ searchClient, indexName, compositionID }"
         >
-          <Feeds search-scope="global" v-slot="{ feedID }">
+          <Feeds :isolated="false" v-slot="{ feedID }">
             <ScopedFeed :feedid="feedID || 'default'" />
           </Feeds>
         </InstantSearch>
