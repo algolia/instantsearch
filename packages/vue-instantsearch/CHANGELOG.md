@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.26.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.25.1...vue-instantsearch@4.26.0) (2026-05-05)
+
+
+### Features
+
+* **composition:** add Feeds widget to support multifeed ([#7004](https://github.com/algolia/instantsearch/issues/7004)) ([ecc40d9](https://github.com/algolia/instantsearch/commit/ecc40d98dd19922b510dd3d769fc490519cede64)), closes [#6954](https://github.com/algolia/instantsearch/issues/6954)
+
+
+
+
+
 ## [4.25.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.25.0...vue-instantsearch@4.25.1) (2026-04-28)
 
 **Note:** Version bump only for package vue-instantsearch
