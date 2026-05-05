@@ -17,7 +17,7 @@ You have access to the `instantsearch` CLI. It scaffolds correctly-wired Instant
 | Generating shared provider, widget wrappers, assembled index file | Styling and layout (CSS, Tailwind, design system) |
 | Writing `instantsearch.json` and feature config | Editing existing files (imports, routing, navigation links) |
 | Installing missing InstantSearch packages | Building the product tile / hit card beyond the basic scaffold |
-| | Adding responsive design, loading states, empty states |
+|  | Adding responsive design, loading states, empty states |
 
 The CLI never edits existing user files. That is your job.
 
@@ -44,7 +44,7 @@ Run the three commands in order (skip `init` if `instantsearch.json` already exi
 
 Use the introspect output to understand what the index contains, then use your judgment to pick the best values for the `add search` flags.
 
-**Autocomplete:** `add search` automatically generates an `Autocomplete` component in `components/autocomplete/` alongside the search feature. It uses `EXPERIMENTAL_Autocomplete` from `react-instantsearch`, wired to the feature's index with a default item template based on the hits schema. If an autocomplete already exists (e.g., from a previous `add search`), it is left untouched.
+**Autocomplete:** `add search` automatically generates an `Autocomplete` component in `components/autocomplete/` alongside the search feature. It uses `EXPERIMENTAL_Autocomplete` from `react-instantsearch`, wired to the feature's index with a default item template based on the hits schema. If an autocomplete already exists (e.g., from a previous `add search`), it is left untouched. **Autocomplete replaces SearchBox** — never render both. When mounting, place Autocomplete in the site header/layout and do not mount the SearchBox component.
 
 **Multiple RefinementLists:** `--refinement-list-attribute` accepts comma-separated values (e.g. `--refinement-list-attribute brand,category,color`). Each attribute generates its own suffixed widget file (`RefinementListBrand.tsx`, `RefinementListCategory.tsx`, etc.). Use introspect's facets output to pick the most useful facets for the search experience.
 
@@ -70,6 +70,8 @@ After the CLI succeeds, **you** must:
 
 The generated widgets use semantic HTML with no styling. Style them using whatever approach the project uses (Tailwind, CSS modules, styled-components, design system).
 
+**Use the same styling approach for every component.** If the project uses a utility-first CSS framework (Tailwind, UnoCSS, etc.), use the `classNames` prop on InstantSearch widgets where available. Before styling a widget, read its source in `react-instantsearch` to discover which elements support `classNames` and which use hardcoded `ais-*` CSS classes. For elements only reachable via `ais-*` classes, target them in CSS — this is expected, not a workaround.
+
 Focus especially on the **hit card** (`Hit` component inside `Hits.tsx`). The CLI generates a minimal `<article>` with title and image. Enhance it to match the project's design: price formatting, badges, ratings, hover states, responsive grid layout.
 
 ### 5. Polish
@@ -89,6 +91,8 @@ Go beyond the scaffold:
 - **Parse the JSON response** and use `nextSteps` to guide your integration work.
 - **Never regenerate files the CLI already created.** Edit them instead. The user owns these files.
 - **Don't replace bootstrapped widgets with hooks.** The CLI generates thin wrappers (e.g., `<InstantSearchSearchBox />`) intentionally. Never rewrite them to use hooks like `useSearchBox()` — that replaces a clean scaffold with a reimplementation of the library widget. Customize the wrapper, don't replace it.
+- **Don't remove `<Index>` from the generated experience.** The CLI wraps widgets in an `<Index indexName="...">` component — this is required. The shared provider has no `indexName` on purpose; each feature targets its index via `<Index>`. Never remove the `<Index>` wrapper or move `indexName` onto the provider.
 - **Don't duplicate what the CLI does.** Don't manually create provider files, don't manually wire up `algoliasearch`, don't query Algolia APIs directly.
 - **Do the things the CLI can't.** Mount the provider, mount components, edit routes, add styling, build rich product tiles, wire up navigation. That's your value.
+- **Don't start the dev server, open a browser, or fetch from localhost.** After making changes, run the type checker to verify correctness and ask the user to verify the result in their browser.
 - **Check `ok` before proceeding.** If the CLI returns `ok: false`, diagnose and fix before moving on.
