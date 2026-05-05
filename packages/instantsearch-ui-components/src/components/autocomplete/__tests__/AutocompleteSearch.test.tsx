@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { createElement, createRef, Fragment } from 'preact';
 
 import { createAutocompleteDetachedFormContainerComponent } from '../AutocompleteDetachedFormContainer';
+import { createAutocompleteDetachedSearchButtonComponent } from '../AutocompleteDetachedSearchButton';
 import { createAutocompletePanelComponent } from '../AutocompletePanel';
 import { createAutocompleteSearchComponent } from '../AutocompleteSearch';
 
@@ -231,6 +232,76 @@ describe('AutocompletePanel', () => {
     expect(
       container.querySelector('.ais-AutocompletePanelLayout')
     ).toHaveClass('custom-layout');
+  });
+
+  test('applies open classNames when panel is visible', () => {
+    const { container } = render(
+      <AutocompletePanel
+        id="panel"
+        role="grid"
+        aria-labelledby="input"
+        hidden={false}
+        classNames={{ open: 'custom-open' }}
+      >
+        <div>results</div>
+      </AutocompletePanel>
+    );
+
+    expect(container.querySelector('.ais-AutocompletePanel')).toHaveClass(
+      'custom-open'
+    );
+  });
+
+  test('does not apply open classNames when panel is hidden', () => {
+    const { container } = render(
+      <AutocompletePanel
+        id="panel"
+        role="grid"
+        aria-labelledby="input"
+        hidden={true}
+        classNames={{ open: 'custom-open' }}
+      >
+        <div>results</div>
+      </AutocompletePanel>
+    );
+
+    expect(
+      container.querySelector('.ais-AutocompletePanel')
+    ).not.toHaveClass('custom-open');
+  });
+});
+
+describe('AutocompleteDetachedSearchButton', () => {
+  const AutocompleteDetachedSearchButton =
+    createAutocompleteDetachedSearchButtonComponent({
+      createElement,
+      Fragment,
+    });
+
+  test('applies classNames to search and clear icons', () => {
+    const { container } = render(
+      <AutocompleteDetachedSearchButton
+        query="test"
+        onClick={jest.fn()}
+        onClear={jest.fn()}
+        translations={{
+          detachedCancelButtonText: 'Cancel',
+          detachedSearchButtonTitle: 'Search',
+          detachedClearButtonTitle: 'Clear',
+        }}
+        classNames={{
+          detachedSearchButtonSearchIcon: 'custom-search-icon',
+          detachedSearchButtonClearIcon: 'custom-clear-icon',
+        }}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-AutocompleteDetachedSearchIcon')
+    ).toHaveClass('custom-search-icon');
+    expect(
+      container.querySelector('.ais-AutocompleteClearIcon')
+    ).toHaveClass('custom-clear-icon');
   });
 });
 
