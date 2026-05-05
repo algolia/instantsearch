@@ -10,12 +10,12 @@
   },
   "devDependencies": {
     "eslint": "8.15.0",
-    "parcel": "2.0.1",
+    "parcel": "2.16.4",
     "prettier": "2.6.2"
   },
   "dependencies": {
     "algoliasearch": "4",
-    "instantsearch.js": "4.95.0"
+    "instantsearch.js": "4.96.0"
   },
   "keywords": [
     "algolia",
