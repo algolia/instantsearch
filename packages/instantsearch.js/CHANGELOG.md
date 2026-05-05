@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.96.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.96.0...instantsearch.js@4.96.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* **feeds:** rename searchScope to isolated ([#7013](https://github.com/algolia/instantsearch/issues/7013)) ([8c43f3a](https://github.com/algolia/instantsearch/commit/8c43f3a4741ebbf52a331fa3f65006d4d0695df7))
+
+
+
+
+
 # [4.96.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.95.0...instantsearch.js@4.96.0) (2026-05-05)
 
 
