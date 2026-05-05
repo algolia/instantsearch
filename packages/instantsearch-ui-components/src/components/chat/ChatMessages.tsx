@@ -135,7 +135,8 @@ export type ChatMessagesProps<
   status?: ChatStatus;
   /**
    * Error from the last failed request, if any. When set, its `message` is
-   * shown in the error UI (for example API `message` fields on 403 responses).
+   * available to custom error components or translation functions (for example
+   * API `message` fields on 403 responses).
    */
   error?: Error;
   /**
