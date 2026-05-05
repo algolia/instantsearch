@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.32.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.31.0...react-instantsearch-core@7.32.0) (2026-05-05)
+
+
+### Features
+
+* **composition:** add Feeds widget to support multifeed ([#7004](https://github.com/algolia/instantsearch/issues/7004)) ([ecc40d9](https://github.com/algolia/instantsearch/commit/ecc40d98dd19922b510dd3d769fc490519cede64)), closes [#6954](https://github.com/algolia/instantsearch/issues/6954)
+
+
+
+
+
 ## [7.31.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.30.0...react-instantsearch-core@7.31.0) (2026-04-28)
 
 **Note:** Version bump only for package react-instantsearch-core

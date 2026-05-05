@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.48](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.47...create-instantsearch-app@7.5.48) (2026-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update parcel in CISA templates ([#7005](https://github.com/algolia/instantsearch/issues/7005)) ([b19b4ed](https://github.com/algolia/instantsearch/commit/b19b4ed0c3d58d35b6dc11cd0fe096e0ae4fec7e))
+
+
+
+
+
 ## [7.5.47](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.46...create-instantsearch-app@7.5.47) (2026-04-28)
 
 **Note:** Version bump only for package create-instantsearch-app

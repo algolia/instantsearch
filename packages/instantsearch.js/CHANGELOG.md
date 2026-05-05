@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.96.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.95.0...instantsearch.js@4.96.0) (2026-05-05)
+
+
+### Bug Fixes
+
+* **chat:** move `loaderText` template to base of the templates object ([#7001](https://github.com/algolia/instantsearch/issues/7001)) ([f14bdf7](https://github.com/algolia/instantsearch/commit/f14bdf7c61f0bdb517c6a648c4af50a161bbfe37))
+* **instantsearch.js:** ignore non-object top-level URL params in simpleStateMapping ([#7011](https://github.com/algolia/instantsearch/issues/7011)) ([e06b417](https://github.com/algolia/instantsearch/commit/e06b4178933bae0f72bb368ecb0ef44f10d3dedd)), closes [#7010](https://github.com/algolia/instantsearch/issues/7010)
+* **sortby:** don't allow non-detected index ([#7000](https://github.com/algolia/instantsearch/issues/7000)) ([2edd110](https://github.com/algolia/instantsearch/commit/2edd110f1631126a881be8f3955984d90d1991d5)), closes [#6972](https://github.com/algolia/instantsearch/issues/6972)
+
+
+### Features
+
+* **chat:** add search display tool to chat ([#6987](https://github.com/algolia/instantsearch/issues/6987)) ([b8655df](https://github.com/algolia/instantsearch/commit/b8655dfa98baade5ce0177849bac44e7a36d9ab3))
+* **composition:** add Feeds widget to support multifeed ([#7004](https://github.com/algolia/instantsearch/issues/7004)) ([ecc40d9](https://github.com/algolia/instantsearch/commit/ecc40d98dd19922b510dd3d769fc490519cede64)), closes [#6954](https://github.com/algolia/instantsearch/issues/6954)
+
+
+
+
+
 # [4.95.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.94.0...instantsearch.js@4.95.0) (2026-04-28)
 
 
