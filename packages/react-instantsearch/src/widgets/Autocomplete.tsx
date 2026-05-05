@@ -917,11 +917,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             }
           : undefined
       }
+      classNames={classNames}
     />
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      classNames={{ root: classNames?.panel, open: classNames?.panelOpen, layout: classNames?.panelLayout }}
+    >
       {PanelComponent ? (
         <PanelComponent
           elements={elements}

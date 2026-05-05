@@ -1,7 +1,11 @@
 /** @jsx createElement */
+import { cx } from '../../lib/cx';
+
 import type { Renderer } from '../../types';
 
-type IconProps = Pick<Renderer, 'createElement'>;
+type IconProps = Pick<Renderer, 'createElement'> & {
+  className?: string | string[];
+};
 
 type LoadingIconProps = IconProps & {
   isSearchStalled: boolean;
@@ -29,10 +33,10 @@ function syncLoadingSvgAnimation(
   }
 }
 
-export function SubmitIcon({ createElement }: IconProps) {
+export function SubmitIcon({ createElement, className }: IconProps) {
   return (
     <svg
-      className="ais-AutocompleteSubmitIcon"
+      className={cx('ais-AutocompleteSubmitIcon', className)}
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -44,10 +48,11 @@ export function SubmitIcon({ createElement }: IconProps) {
 export function LoadingIcon({
   createElement,
   isSearchStalled,
+  className,
 }: LoadingIconProps) {
   return (
     <svg
-      className="ais-AutocompleteLoadingIcon"
+      className={cx('ais-AutocompleteLoadingIcon', className)}
       viewBox="0 0 100 100"
       ref={(element) => syncLoadingSvgAnimation(element, isSearchStalled)}
     >
@@ -73,10 +78,10 @@ export function LoadingIcon({
   );
 }
 
-export function ClearIcon({ createElement }: IconProps) {
+export function ClearIcon({ createElement, className }: IconProps) {
   return (
     <svg
-      className="ais-AutocompleteClearIcon"
+      className={cx('ais-AutocompleteClearIcon', className)}
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -109,10 +114,10 @@ export function ApplyIcon({ createElement }: IconProps) {
   );
 }
 
-export function AiModeIcon({ createElement }: IconProps) {
+export function AiModeIcon({ createElement, className }: IconProps) {
   return (
     <svg
-      className="ais-AiModeButton-icon"
+      className={cx('ais-AiModeButton-icon', className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 20 20"
@@ -136,10 +141,10 @@ export function AiModeIcon({ createElement }: IconProps) {
   );
 }
 
-export function SearchIcon({ createElement }: IconProps) {
+export function SearchIcon({ createElement, className }: IconProps) {
   return (
     <svg
-      className="ais-AutocompleteDetachedSearchIcon"
+      className={cx('ais-AutocompleteDetachedSearchIcon', className)}
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -148,10 +153,10 @@ export function SearchIcon({ createElement }: IconProps) {
   );
 }
 
-export function BackIcon({ createElement }: IconProps) {
+export function BackIcon({ createElement, className }: IconProps) {
   return (
     <svg
-      className="ais-AutocompleteBackIcon"
+      className={cx('ais-AutocompleteBackIcon', className)}
       viewBox="0 0 24 24"
       fill="currentColor"
     >

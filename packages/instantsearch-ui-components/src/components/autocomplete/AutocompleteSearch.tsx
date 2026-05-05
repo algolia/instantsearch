@@ -1,4 +1,6 @@
 /** @jsx createElement */
+import { cx } from '../../lib/cx';
+
 import {
   AiModeIcon,
   BackIcon,
@@ -8,6 +10,7 @@ import {
 } from './icons';
 
 import type { ComponentProps, Renderer } from '../..';
+import type { AutocompleteClassNames } from './Autocomplete';
 
 export type AutocompleteSearchProps = {
   inputProps: ComponentProps<'input'>;
@@ -18,6 +21,7 @@ export type AutocompleteSearchProps = {
   isDetached?: boolean;
   submitTitle?: string;
   onAiModeClick?: () => void;
+  classNames?: Partial<AutocompleteClassNames>;
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
@@ -31,6 +35,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
       isDetached,
       submitTitle,
       onAiModeClick,
+      classNames = {},
     } = userProps;
 
     const isBackButton = Boolean(isDetached && onCancel);
@@ -39,7 +44,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
 
     return (
       <form
-        className="ais-AutocompleteForm"
+        className={cx('ais-AutocompleteForm', classNames.form)}
         action=""
         noValidate
         role="search"
@@ -48,48 +53,74 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
         }}
         onReset={() => inputRef.current?.focus()}
       >
-        <div className="ais-AutocompleteInputWrapperPrefix">
+        <div
+          className={cx(
+            'ais-AutocompleteInputWrapperPrefix',
+            classNames.inputWrapperPrefix
+          )}
+        >
           {isBackButton && (
             <button
-              className="ais-AutocompleteBackButton"
+              className={cx(
+                'ais-AutocompleteBackButton',
+                classNames.backButton
+              )}
               type="button"
               title={resolvedCancelTitle}
               onClick={onCancel}
               hidden={isSearchStalled}
             >
-              <BackIcon createElement={createElement} />
+              <BackIcon
+                createElement={createElement}
+                className={classNames.backButtonIcon}
+              />
             </button>
           )}
           {/* Always render the label so aria-labelledby on the input keeps working */}
           <label
-            className="ais-AutocompleteLabel"
+            className={cx('ais-AutocompleteLabel', classNames.label)}
             aria-label="Submit"
             htmlFor={inputProps.id}
             id={`${inputProps.id}-label`}
             hidden={isBackButton || undefined}
           >
             <button
-              className="ais-AutocompleteSubmitButton"
+              className={cx(
+                'ais-AutocompleteSubmitButton',
+                classNames.submitButton
+              )}
               type="submit"
               title="Submit"
               hidden={isSearchStalled}
             >
-              <SubmitIcon createElement={createElement} />
+              <SubmitIcon
+                createElement={createElement}
+                className={classNames.submitButtonIcon}
+              />
             </button>
           </label>
           <div
-            className="ais-AutocompleteLoadingIndicator"
+            className={cx(
+              'ais-AutocompleteLoadingIndicator',
+              classNames.loadingIndicator
+            )}
             hidden={!isSearchStalled}
           >
             <LoadingIcon
               createElement={createElement}
               isSearchStalled={isSearchStalled}
+              className={classNames.loadingIndicatorIcon}
             />
           </div>
         </div>
-        <div className="ais-AutocompleteInputWrapper">
+        <div
+          className={cx(
+            'ais-AutocompleteInputWrapper',
+            classNames.inputWrapper
+          )}
+        >
           <input
-            className="ais-AutocompleteInput"
+            className={cx('ais-AutocompleteInput', classNames.input)}
             aria-autocomplete="both"
             aria-labelledby={`${inputProps.id}-label`}
             autoComplete="off"
@@ -103,19 +134,30 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             {...inputProps}
           />
         </div>
-        <div className="ais-AutocompleteInputWrapperSuffix">
+        <div
+          className={cx(
+            'ais-AutocompleteInputWrapperSuffix',
+            classNames.inputWrapperSuffix
+          )}
+        >
           <button
-            className="ais-AutocompleteClearButton"
+            className={cx(
+              'ais-AutocompleteClearButton',
+              classNames.resetButton
+            )}
             type="reset"
             title="Clear"
             hidden={query.length === 0 || isSearchStalled}
             onClick={onClear}
           >
-            <ClearIcon createElement={createElement} />
+            <ClearIcon
+              createElement={createElement}
+              className={classNames.resetButtonIcon}
+            />
           </button>
           {onAiModeClick && (
             <button
-              className="ais-AiModeButton"
+              className={cx('ais-AiModeButton', classNames.aiModeButton)}
               type="button"
               title="AI Mode"
               onClick={(e) => {
@@ -123,8 +165,18 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
                 onAiModeClick();
               }}
             >
-              <AiModeIcon createElement={createElement} />
-              <span className="ais-AiModeButton-label">AI Mode</span>
+              <AiModeIcon
+                createElement={createElement}
+                className={classNames.aiModeButtonIcon}
+              />
+              <span
+                className={cx(
+                  'ais-AiModeButton-label',
+                  classNames.aiModeButtonLabel
+                )}
+              >
+                AI Mode
+              </span>
             </button>
           )}
         </div>
