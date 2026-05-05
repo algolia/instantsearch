@@ -38,8 +38,8 @@ export default {
     createSuitMixin({ name: 'Feeds' }),
   ],
   props: {
-    searchScope: {
-      type: String,
+    isolated: {
+      type: Boolean,
       required: true,
     },
     transformFeeds: {
@@ -172,7 +172,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        searchScope: this.searchScope,
+        isolated: this.isolated,
         transformFeeds: this.transformFeeds,
       };
     },

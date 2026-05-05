@@ -79,7 +79,7 @@ function getAllComponents() {
       } else if (name === 'AisIndex') {
         props.indexName = 'indexName';
       } else if (name === 'AisFeeds') {
-        props.searchScope = 'global';
+        props.isolated = false;
       } else {
         props.attribute = 'attr';
       }

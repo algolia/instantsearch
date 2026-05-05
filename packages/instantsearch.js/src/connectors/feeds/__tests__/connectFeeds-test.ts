@@ -28,27 +28,27 @@ describe('connectFeeds', () => {
       `);
     });
 
-    it('fails when searchScope is not global', () => {
+    it('fails when isolated is not false', () => {
       expect(() =>
         connectFeeds(() => {})({
           // @ts-expect-error
-          searchScope: 'local',
+          isolated: true,
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`searchScope\` option currently only supports \\"global\\".
+        "The \`isolated\` option currently only supports \`false\`.
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/feeds/js/#connector"
       `);
     });
 
-    it('fails when searchScope is missing', () => {
+    it('fails when isolated is missing', () => {
       expect(() =>
         connectFeeds(() => {})({
           // @ts-expect-error
-          searchScope: undefined,
+          isolated: undefined,
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`searchScope\` option currently only supports \\"global\\".
+        "The \`isolated\` option currently only supports \`false\`.
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/feeds/js/#connector"
       `);
@@ -60,7 +60,7 @@ describe('connectFeeds', () => {
     const unmount = jest.fn();
 
     const customFeeds = connectFeeds(render, unmount);
-    const widget = customFeeds({ searchScope: 'global' });
+    const widget = customFeeds({ isolated: false });
 
     expect(widget).toEqual(
       expect.objectContaining({
@@ -77,7 +77,7 @@ describe('connectFeeds', () => {
   describe('init', () => {
     it('throws when compositionID is not set', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       expect(() => {
@@ -96,7 +96,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       feedsWidget.init!(createInitOptions({ instantSearchInstance }));
@@ -106,7 +106,7 @@ describe('connectFeeds', () => {
         expect.objectContaining({
           feedIDs: [],
           widgetParams: {
-            searchScope: 'global',
+            isolated: false,
           },
         }),
         true
@@ -122,7 +122,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const results = createResultsWithFeeds(
@@ -150,7 +150,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
         transformFeeds: (feeds) => feeds.reverse(),
       });
 
@@ -179,7 +179,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
         transformFeeds: (feeds) =>
           feeds.filter((feedID) => feedID === 'products'),
       });
@@ -209,7 +209,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       feedsWidget.init!(createInitOptions({ instantSearchInstance }));
@@ -233,7 +233,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const state = instantSearchInstance.helper!.state;
@@ -270,7 +270,7 @@ describe('connectFeeds', () => {
       } as any);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
         transformFeeds: () => 'products' as any,
       });
 
@@ -325,7 +325,7 @@ describe('connectFeeds', () => {
         .mockReturnValue(instantSearchInstance.helper);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       feedsWidget.init!(createInitOptions({ instantSearchInstance }));
@@ -361,7 +361,7 @@ describe('connectFeeds', () => {
         .mockReturnValue(instantSearchInstance.helper);
 
       const feedsWidget = connectFeeds(renderFn)({
-        searchScope: 'global',
+        isolated: false,
       });
 
       feedsWidget.init!(createInitOptions({ instantSearchInstance }));
@@ -381,7 +381,7 @@ describe('connectFeeds', () => {
         renderFn,
         unmountFn
       )({
-        searchScope: 'global',
+        isolated: false,
       });
 
       feedsWidget.dispose!({} as any);
@@ -393,7 +393,7 @@ describe('connectFeeds', () => {
   describe('getWidgetSearchParameters', () => {
     it('passes through search parameters unchanged', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const state = new SearchParameters({ index: 'test' });
@@ -406,7 +406,7 @@ describe('connectFeeds', () => {
   describe('getWidgetRenderState', () => {
     it('returns empty feedIDs when no results', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const renderState = feedsWidget.getWidgetRenderState(
@@ -418,7 +418,7 @@ describe('connectFeeds', () => {
 
     it('computes feedIDs from results (stateless)', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const results = createResultsWithFeeds(['a', 'b']);
@@ -432,7 +432,7 @@ describe('connectFeeds', () => {
 
     it('reconstructs SearchResults from plain feed objects (hydration)', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const state = new SearchParameters({ index: 'test' });
@@ -464,7 +464,7 @@ describe('connectFeeds', () => {
 
     it('reconstructs feeds after JSON.stringify/parse round-trip', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const state = new SearchParameters({ index: 'test' });
@@ -489,7 +489,7 @@ describe('connectFeeds', () => {
 
     it('leaves SearchResults feed entries unchanged', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const results = createResultsWithFeeds(['a', 'b']);
@@ -507,7 +507,7 @@ describe('connectFeeds', () => {
   describe('getRenderState', () => {
     it('merges feeds into renderState', () => {
       const feedsWidget = connectFeeds(() => {})({
-        searchScope: 'global',
+        isolated: false,
       });
 
       const renderState = feedsWidget.getRenderState({}, createRenderOptions());

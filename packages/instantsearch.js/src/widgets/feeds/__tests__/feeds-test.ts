@@ -39,7 +39,7 @@ describe('feeds()', () => {
           container: document.createElement('div'),
           // @ts-expect-error testing invalid input
           widgets: [],
-          searchScope: 'global',
+          isolated: false,
         })
       ).toThrowErrorMatchingInlineSnapshot(`
         "The \`widgets\` option expects a function.
@@ -53,7 +53,7 @@ describe('feeds()', () => {
         feeds({
           container: document.createElement('div'),
           widgets: () => [],
-          searchScope: 'global',
+          isolated: false,
         })
       ).not.toThrow();
     });
@@ -69,7 +69,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -89,7 +89,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -136,7 +136,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -167,7 +167,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -206,7 +206,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -255,7 +255,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -325,7 +325,7 @@ describe('feeds()', () => {
           feedLabels.push(feedID);
           return [createWidget()];
         },
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -373,7 +373,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [createWidget()],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -408,7 +408,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [createWidget()],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -462,7 +462,7 @@ describe('feeds()', () => {
               container: feedContainer,
             }),
           ],
-          searchScope: 'global',
+          isolated: false,
         }),
       ]);
 
