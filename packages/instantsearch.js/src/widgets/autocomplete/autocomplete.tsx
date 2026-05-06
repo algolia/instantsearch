@@ -856,11 +856,19 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             }
           : undefined
       }
+      classNames={cssClasses}
     />
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      classNames={{
+        root: cssClasses?.panel,
+        open: cssClasses?.panelOpen,
+        layout: cssClasses?.panelLayout,
+      }}
+    >
       {templates.panel ? (
         <TemplateComponent
           {...renderState.templateProps}
