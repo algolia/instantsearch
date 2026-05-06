@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.32.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.0...react-instantsearch@7.32.1) (2026-05-05)
+
+
+### Features
+
+* **autocomplete:** add missing `classNames`/`cssClasses` support ([#7015](https://github.com/algolia/instantsearch/issues/7015)) ([c5a8fbe](https://github.com/algolia/instantsearch/commit/c5a8fbe6bcecf3a0a50d88f7fa5aa2feb1d98631))
+
+
+
+
+
 # [7.32.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.31.0...react-instantsearch@7.32.0) (2026-05-05)
 
 
