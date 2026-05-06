@@ -5,7 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [7.32.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.0...react-instantsearch@7.32.1) (2026-05-05)
 
-**Note:** Version bump only for package react-instantsearch
+
+### Features
+
+* **autocomplete:** add missing `classNames`/`cssClasses` support ([#7015](https://github.com/algolia/instantsearch/issues/7015)) ([c5a8fbe](https://github.com/algolia/instantsearch/commit/c5a8fbe6bcecf3a0a50d88f7fa5aa2feb1d98631))
 
 
 

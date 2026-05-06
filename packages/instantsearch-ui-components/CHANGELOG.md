@@ -8,6 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
+* **autocomplete:** add missing `classNames`/`cssClasses` support ([#7015](https://github.com/algolia/instantsearch/issues/7015)) ([c5a8fbe](https://github.com/algolia/instantsearch/commit/c5a8fbe6bcecf3a0a50d88f7fa5aa2feb1d98631))
 * **chat:** add search display tool to chat ([#6987](https://github.com/algolia/instantsearch/issues/6987)) ([b8655df](https://github.com/algolia/instantsearch/commit/b8655dfa98baade5ce0177849bac44e7a36d9ab3))
 
 

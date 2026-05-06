@@ -11,6 +11,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **feeds:** rename searchScope to isolated ([#7013](https://github.com/algolia/instantsearch/issues/7013)) ([8c43f3a](https://github.com/algolia/instantsearch/commit/8c43f3a4741ebbf52a331fa3f65006d4d0695df7))
 
 
+### Features
+
+* **autocomplete:** add missing `classNames`/`cssClasses` support ([#7015](https://github.com/algolia/instantsearch/issues/7015)) ([c5a8fbe](https://github.com/algolia/instantsearch/commit/c5a8fbe6bcecf3a0a50d88f7fa5aa2feb1d98631))
+
+
 
 
 
