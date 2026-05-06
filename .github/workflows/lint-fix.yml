@@ -1,0 +1,297 @@
+name: Lint Auto-Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      rule:
+        description: 'Oxlint rule code, e.g. "eslint(no-debugger)". Use "auto" to pick the highest-count rule (skip-list honored).'
+        type: string
+        default: 'auto'
+        required: true
+      dry_run:
+        description: 'Run agent + verifications, but do not push or open a PR.'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: lint-fix-${{ inputs.rule }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    name: Fix oxlint rule
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Pick rule and scope
+        id: pick
+        env:
+          RULE_INPUT: ${{ inputs.rule }}
+        run: |
+          set -euo pipefail
+          node scripts/lint/pick-rule.cjs --rule "$RULE_INPUT" --out lint-fix-context.json
+
+          STATUS=$(jq -r .status lint-fix-context.json)
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+          if [ "$STATUS" != "ok" ]; then
+            REASON=$(jq -r '.reason // "no rule with violations matched"' lint-fix-context.json)
+            echo "::notice::Nothing to do: $REASON"
+            exit 0
+          fi
+
+          jq -r '
+            "rule=\(.rule)",
+            "total=\(.totalViolations)",
+            "in_scope_files=\(.inScopeFiles | length)",
+            "in_scope_violations=\(.inScopeViolations)",
+            "deferred_files=\(.deferredFiles | length)",
+            "deferred_violations=\(.deferredViolations)"
+          ' lint-fix-context.json >> "$GITHUB_OUTPUT"
+
+      - name: Apply oxlint autofixer
+        if: steps.pick.outputs.status == 'ok'
+        id: autofix
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < <(jq -r '.inScopeFiles[]' lint-fix-context.json)
+          # Autofixer exits non-zero when violations remain; that's expected.
+          node_modules/.bin/oxlint --type-aware --fix "${FILES[@]}" || true
+
+          # Record diff size so we can isolate the agent's contribution later.
+          STATS=$(git diff --shortstat || true)
+          INS=$(echo "$STATS" | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo 0)
+          DEL=$(echo "$STATS" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo 0)
+          BASELINE=$((INS + DEL))
+          echo "Autofixer changed lines: $BASELINE"
+          echo "baseline=$BASELINE" >> "$GITHUB_OUTPUT"
+
+      - name: Install Claude Code CLI
+        if: steps.pick.outputs.status == 'ok'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code
+        if: steps.pick.outputs.status == 'ok'
+        timeout-minutes: 18
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "$(cat .github/prompts/lint-fix.md)" \
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(node_modules/.bin/oxlint *)" \
+            --max-turns 30 \
+            --verbose \
+            --output-format stream-json \
+            < /dev/null
+
+      - name: Verify in-scope files are clean of the rule
+        if: steps.pick.outputs.status == 'ok'
+        env:
+          RULE: ${{ steps.pick.outputs.rule }}
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < <(jq -r '.inScopeFiles[]' lint-fix-context.json)
+          # Non-zero exit is expected when *any* violation exists — we inspect the JSON.
+          node_modules/.bin/oxlint --type-aware -f json "${FILES[@]}" > /tmp/post-lint.json || true
+
+          REMAINING=$(jq --arg rule "$RULE" '[.diagnostics[]? | select(.code == $rule)] | length' /tmp/post-lint.json)
+          echo "Remaining violations of $RULE in scope: $REMAINING"
+
+          if [ "$REMAINING" != "0" ]; then
+            echo "::error::Bot left $REMAINING violations of $RULE in in-scope files."
+            jq --arg rule "$RULE" '.diagnostics[]? | select(.code == $rule) | {filename, message}' /tmp/post-lint.json
+            exit 1
+          fi
+
+      - name: Verify diff size
+        if: steps.pick.outputs.status == 'ok'
+        env:
+          BASELINE: ${{ steps.autofix.outputs.baseline }}
+        run: |
+          set -euo pipefail
+          STATS=$(git diff --shortstat || true)
+          echo "Diff: ${STATS:-<empty>}"
+          INS=$(echo "$STATS" | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo 0)
+          DEL=$(echo "$STATS" | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo 0)
+          TOTAL=$((INS + DEL))
+          AGENT=$((TOTAL - BASELINE))
+          echo "Changed lines: $TOTAL (autofixer: $BASELINE, agent: $AGENT)"
+          # Agent cap mirrors the ~400 line contract in .github/prompts/lint-fix.md.
+          # Total cap allows headroom for the autofixer on top of that.
+          if [ "$AGENT" -gt 400 ]; then
+            echo "::error::Agent diff exceeds 400 lines ($AGENT). The prompt caps agent edits at ~400."
+            exit 1
+          fi
+          if [ "$TOTAL" -gt 800 ]; then
+            echo "::error::Total diff exceeds 800 lines ($TOTAL). Aborting."
+            exit 1
+          fi
+
+      - name: Verify no forbidden paths touched
+        if: steps.pick.outputs.status == 'ok'
+        run: |
+          set -euo pipefail
+          # Defense-in-depth: scripts/lint/pick-rule.cjs already excludes these
+          # paths at selection time (see SELECTION_EXCLUDED_PREFIXES /
+          # SELECTION_EXCLUDED_PATTERNS). Keep this regex aligned with that list.
+          DENY_REGEX='^(package\.json|.+/package\.json|yarn\.lock|\.oxlintrc\.json|lerna\.json|tsconfig.*\.json|.+/tsconfig.*\.json|\.github/.*|\.circleci/.*|examples/.*|packages/create-instantsearch-app/src/templates/.*|packages/instantsearch-codemods/__testfixtures__/.*)$'
+          OFFENDERS=$(git diff --name-only | grep -E "$DENY_REGEX" || true)
+          if [ -n "$OFFENDERS" ]; then
+            echo "::error::Bot touched forbidden paths:"
+            echo "$OFFENDERS"
+            exit 1
+          fi
+
+      - name: Dry run summary
+        if: steps.pick.outputs.status == 'ok' && inputs.dry_run == true
+        env:
+          RULE: ${{ steps.pick.outputs.rule }}
+          IN_SCOPE_FILES: ${{ steps.pick.outputs.in_scope_files }}
+          IN_SCOPE_VIOL: ${{ steps.pick.outputs.in_scope_violations }}
+        run: |
+          {
+            echo "## Dry run — would have opened a PR"
+            echo ""
+            echo "**Rule:** \`$RULE\`"
+            echo "**Files in scope:** $IN_SCOPE_FILES"
+            echo "**Violations fixed:** $IN_SCOPE_VIOL"
+            echo ""
+            echo "### Diff"
+            echo '```diff'
+            git diff
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create branch, commit, push
+        if: steps.pick.outputs.status == 'ok' && inputs.dry_run != true
+        id: commit
+        env:
+          RULE: ${{ steps.pick.outputs.rule }}
+          IN_SCOPE_VIOL: ${{ steps.pick.outputs.in_scope_violations }}
+          IN_SCOPE_FILES_COUNT: ${{ steps.pick.outputs.in_scope_files }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          SLUG=$(echo "$RULE" | sed -E 's/[()/ ]/-/g; s/[^A-Za-z0-9-]//g; s/-+/-/g; s/^-+|-+$//g' | tr '[:upper:]' '[:lower:]')
+          SHA=$(git rev-parse --short HEAD)
+          # Include RUN_ID so re-running the workflow on the same base SHA + rule
+          # never collides with an earlier branch.
+          BRANCH="chore/lint-fix/${SLUG}/${SHA}-${RUN_ID}"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH"
+          rm -f lint-fix-context.json
+          git add -A
+          git commit -m "chore(lint): fix \`${RULE}\` (${IN_SCOPE_VIOL} violations, ${IN_SCOPE_FILES_COUNT} files)
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push origin "$BRANCH"
+
+      - name: Create draft PR
+        if: steps.pick.outputs.status == 'ok' && inputs.dry_run != true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RULE: ${{ steps.pick.outputs.rule }}
+          BRANCH: ${{ steps.commit.outputs.branch }}
+          IN_SCOPE_VIOL: ${{ steps.pick.outputs.in_scope_violations }}
+          IN_SCOPE_FILES_COUNT: ${{ steps.pick.outputs.in_scope_files }}
+          DEFERRED_FILES: ${{ steps.pick.outputs.deferred_files }}
+          DEFERRED_VIOL: ${{ steps.pick.outputs.deferred_violations }}
+          RULE_INPUT: ${{ inputs.rule }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          export DEFERRED_NOTE=""
+          if [ "$DEFERRED_FILES" != "0" ]; then
+            DEFERRED_NOTE=$(envsubst <<'EOF'
+
+          **Deferred (cap hit):** ${DEFERRED_VIOL} more violations across ${DEFERRED_FILES} more files. Re-run this workflow with \`rule=${RULE}\` to continue.
+          EOF
+          )
+          fi
+
+          BODY_FILE="$RUNNER_TEMP/pr-body.md"
+          envsubst > "$BODY_FILE" <<'EOF'
+          ## Summary
+
+          Automated fix of oxlint rule `${RULE}`.
+
+          - **Violations fixed in this PR:** ${IN_SCOPE_VIOL}
+          - **Files touched:** ${IN_SCOPE_FILES_COUNT}${DEFERRED_NOTE}
+
+          ## How this PR was generated
+
+          1. `scripts/lint/pick-rule.cjs --rule ${RULE_INPUT}` selected this rule and the file scope.
+          2. `oxlint --fix` applied autofixable cases.
+          3. Claude Code edited the remaining cases following `.github/prompts/lint-fix.md`.
+          4. Workflow asserted: zero violations of `${RULE}` remain in scope; diff ≤ 800 lines; no forbidden paths touched.
+
+          ## Review checklist
+
+          - [ ] All edits look intentional (not regex-y mistakes)
+          - [ ] No behavior changes (only lint compliance)
+          - [ ] Any `oxlint-disable` comments include a justification
+
+          ---
+          *Triggered by [Lint Auto-Fix workflow](https://github.com/${REPO}/actions/runs/${RUN_ID})*
+          EOF
+
+          TITLE="chore(lint): fix \`${RULE}\` (${IN_SCOPE_VIOL} violations, ${IN_SCOPE_FILES_COUNT} files)"
+
+          PR_URL=$(gh pr create \
+            --base master \
+            --head "$BRANCH" \
+            --draft \
+            --title "$TITLE" \
+            --body-file "$BODY_FILE" \
+            --label "chore" \
+            --label "automated")
+          echo "Created PR: $PR_URL"
+
+          # Team reviewer assignment requires org-read scope, which the default
+          # GITHUB_TOKEN may not have. Failure here is a warning, not an error.
+          gh pr edit "$PR_URL" \
+            --add-reviewer "algolia/frontend-experiences-web" \
+            || echo "::warning::Could not assign team reviewer; please add one manually."
+
+      - name: Final summary
+        if: always() && steps.pick.outputs.status == 'ok'
+        env:
+          RULE: ${{ steps.pick.outputs.rule }}
+          IS_DRY_RUN: ${{ inputs.dry_run }}
+          IN_SCOPE_VIOL: ${{ steps.pick.outputs.in_scope_violations }}
+          IN_SCOPE_FILES_COUNT: ${{ steps.pick.outputs.in_scope_files }}
+          DEFERRED_VIOL: ${{ steps.pick.outputs.deferred_violations }}
+          DEFERRED_FILES: ${{ steps.pick.outputs.deferred_files }}
+        run: |
+          MODE="PR"
+          if [ "$IS_DRY_RUN" = "true" ]; then MODE="dry run"; fi
+          {
+            echo "## Lint Auto-Fix"
+            echo ""
+            echo "- **Rule:** \`$RULE\`"
+            echo "- **Mode:** $MODE"
+            echo "- **In scope:** $IN_SCOPE_VIOL violations across $IN_SCOPE_FILES_COUNT files"
+            echo "- **Deferred:** $DEFERRED_VIOL violations across $DEFERRED_FILES files"
+          } >> "$GITHUB_STEP_SUMMARY"
