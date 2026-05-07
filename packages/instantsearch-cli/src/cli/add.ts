@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import path from 'node:path';
 
 import type { ExperienceSchema, RootManifest } from '../manifest';
@@ -10,6 +9,7 @@ import { addWidget } from './add-widget';
 import { toPascalCase } from '../utils/naming';
 import { SUPPORTED_WIDGETS } from '../generator';
 import { generateAutocomplete } from '../generator/autocomplete';
+import { writeOrConflict } from '../utils/write-files';
 
 const COMMAND = 'add';
 
@@ -99,15 +99,8 @@ function maybeGenerateAutocomplete(params: {
   schema: ExperienceSchema;
 }): { created: true; filePath: string } | { created: false } {
   const { projectDir, manifest, indexName, schema } = params;
-  const autocompleteDir = path.join(
-    projectDir,
-    manifest.componentsPath,
-    'autocomplete'
-  );
   const ext = manifest.typescript ? 'tsx' : 'jsx';
-  const filePath = path.join(autocompleteDir, `Autocomplete.${ext}`);
-
-  if (fs.existsSync(filePath)) return { created: false };
+  const relativePath = path.posix.join(manifest.componentsPath, 'autocomplete', `Autocomplete.${ext}`);
 
   const code = generateAutocomplete({
     indexName,
@@ -115,9 +108,9 @@ function maybeGenerateAutocomplete(params: {
     typescript: manifest.typescript,
   });
 
-  fs.mkdirSync(autocompleteDir, { recursive: true });
-  fs.writeFileSync(filePath, code, 'utf8');
+  const files = new Map([[relativePath, code]]);
+  const outcome = writeOrConflict(projectDir, files, 'add');
+  if (!outcome.ok) return { created: false };
 
-  const relativePath = path.posix.join(manifest.componentsPath, 'autocomplete', `Autocomplete.${ext}`);
   return { created: true, filePath: relativePath };
 }

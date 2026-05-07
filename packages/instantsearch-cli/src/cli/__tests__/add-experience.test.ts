@@ -9,7 +9,7 @@ import path from 'node:path';
 import { algoliasearch } from 'algoliasearch';
 
 import { addExperience } from '../add-experience';
-import { writeRootManifest, type RootManifest } from '../../manifest';
+import { readRootManifest, writeRootManifest, type RootManifest } from '../../manifest';
 import { createScriptedPrompter } from '../../prompter';
 
 const mockedAlgoliasearch = algoliasearch as unknown as jest.Mock;
@@ -91,7 +91,7 @@ describe('add experience command', () => {
     });
 
     const experienceDir = path.join(projectDir, 'src/components/product-search');
-    expect(fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))).toBe(true);
+    expect(fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'SearchBox.tsx'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'Pagination.tsx'))).toBe(true);
@@ -139,8 +139,8 @@ describe('add experience command', () => {
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
     expect(root.features).toEqual([
-      { name: 'product-search', path: 'src/components/product-search' },
-      { name: 'docs-search', path: 'src/components/docs-search' },
+      { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
+      { name: 'docs-search', path: 'src/components/docs-search', indexName: 'docs' },
     ]);
   });
 
@@ -159,7 +159,7 @@ describe('add experience command', () => {
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
     expect(root.features).toEqual([
-      { name: 'product-search', path: 'src/components/product-search' },
+      { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
     ]);
   });
 
@@ -176,9 +176,11 @@ describe('add experience command', () => {
 
     if (!report.ok) throw new Error('expected success');
 
+    expect((report as any).filesCreated).not.toContain(
+      'src/components/product-search/instantsearch.config.json'
+    );
     expect((report as any).filesCreated).toEqual(
       expect.arrayContaining([
-        'src/components/product-search/instantsearch.config.json',
         'src/components/product-search/Hits.tsx',
         'src/components/product-search/RefinementListBrand.tsx',
         'src/components/product-search/SortBy.tsx',
@@ -417,7 +419,7 @@ describe('add experience command', () => {
       );
       expect(
         fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
-      ).toBe(true);
+      ).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'provider.jsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'SearchBox.jsx'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.jsx'))).toBe(true);
@@ -458,7 +460,7 @@ describe('add experience command', () => {
       );
       expect(
         fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))
-      ).toBe(true);
+      ).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'provider.js'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'SearchBox.js'))).toBe(false);
       expect(fs.existsSync(path.join(experienceDir, 'Pagination.js'))).toBe(true);
@@ -749,13 +751,8 @@ describe('add experience command — interactive prompts', () => {
     });
 
     expect(report).toMatchObject({ ok: true, command: 'add experience' });
-    const config = JSON.parse(
-      fs.readFileSync(
-        path.join(projectDir, 'src/components/product-search/instantsearch.config.json'),
-        'utf8'
-      )
-    );
-    expect(config.indexName).toBe('products');
+    const root = readRootManifest(projectDir);
+    expect(root?.features[0]).toMatchObject({ indexName: 'products' });
   });
 
   test('prompts for index when not provided', async () => {
@@ -772,13 +769,8 @@ describe('add experience command — interactive prompts', () => {
     });
 
     expect(report).toMatchObject({ ok: true, command: 'add experience' });
-    const config = JSON.parse(
-      fs.readFileSync(
-        path.join(projectDir, 'src/components/product-search/instantsearch.config.json'),
-        'utf8'
-      )
-    );
-    expect(config.indexName).toBe('products');
+    const root = readRootManifest(projectDir);
+    expect(root?.features[0]).toMatchObject({ indexName: 'products' });
   });
 
   test('prompts for hits title, image, and refinementList attribute, sortBy replicas when schema not provided', async () => {

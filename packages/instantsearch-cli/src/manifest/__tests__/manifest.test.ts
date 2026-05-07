@@ -6,13 +6,9 @@ import {
   readRootManifest,
   readRootManifestResult,
   writeRootManifest,
-  readExperienceManifest,
-  readExperienceManifestResult,
-  writeExperienceManifest,
   addExperienceToRoot,
   resolveExperience,
   ROOT_MANIFEST_FILENAME,
-  EXPERIENCE_MANIFEST_FILENAME,
   type RootManifest,
 } from '../index';
 
@@ -82,41 +78,7 @@ describe('manifest', () => {
     });
   });
 
-  test('writeExperienceManifest then readExperienceManifest returns the same content', () => {
-    const projectDir = makeTempProject();
-    const experienceDir = path.join(projectDir, 'src/components/product-search');
-    fs.mkdirSync(experienceDir, { recursive: true });
-
-    const manifest = {
-      apiVersion: 1 as const,
-      indexName: 'products',
-      widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
-    };
-
-    writeExperienceManifest(experienceDir, manifest);
-
-    expect(readExperienceManifest(experienceDir)).toEqual(manifest);
-    expect(
-      fs.existsSync(path.join(experienceDir, EXPERIENCE_MANIFEST_FILENAME))
-    ).toBe(true);
-  });
-
-  test('readExperienceManifest returns null when no manifest exists', () => {
-    const projectDir = makeTempProject();
-    expect(readExperienceManifest(projectDir)).toBeNull();
-  });
-
-  test('readExperienceManifestResult validates required fields', () => {
-    const projectDir = makeTempProject();
-    writeExperienceManifest(projectDir, { apiVersion: 1 });
-
-    expect(readExperienceManifestResult(projectDir)).toMatchObject({
-      ok: false,
-      code: 'invalid_manifest',
-    });
-  });
-
-  test('addExperienceToRoot appends an entry to the experiences array', () => {
+  test('addExperienceToRoot appends an entry with indexName to the features array', () => {
     const projectDir = makeTempProject();
     const manifest: RootManifest = {
       apiVersion: 1,
@@ -133,10 +95,11 @@ describe('manifest', () => {
     addExperienceToRoot(projectDir, manifest, {
       name: 'product-search',
       path: 'src/components/product-search',
+      indexName: 'products',
     });
 
     expect(readRootManifest(projectDir)?.features).toEqual([
-      { name: 'product-search', path: 'src/components/product-search' },
+      { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
     ]);
   });
 
@@ -151,7 +114,7 @@ describe('manifest', () => {
       aliases: {},
       algolia: { appId: 'APP', searchApiKey: 'KEY' },
       features: [
-        { name: 'product-search', path: 'src/components/product-search' },
+        { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
       ],
     };
     writeRootManifest(projectDir, manifest);
@@ -159,11 +122,12 @@ describe('manifest', () => {
     addExperienceToRoot(projectDir, manifest, {
       name: 'docs-search',
       path: 'src/components/docs-search',
+      indexName: 'docs',
     });
 
     expect(readRootManifest(projectDir)?.features).toEqual([
-      { name: 'product-search', path: 'src/components/product-search' },
-      { name: 'docs-search', path: 'src/components/docs-search' },
+      { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
+      { name: 'docs-search', path: 'src/components/docs-search', indexName: 'docs' },
     ]);
   });
 
@@ -201,27 +165,6 @@ describe('manifest', () => {
         widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
       },
     });
-  });
-
-  test('experience manifest round-trips the schema block (hits / refinementList / sortBy)', () => {
-    const projectDir = makeTempProject();
-    const experienceDir = path.join(projectDir, 'src/components/product-search');
-    fs.mkdirSync(experienceDir, { recursive: true });
-
-    const manifest = {
-      apiVersion: 1 as const,
-      indexName: 'products',
-      widgets: ['Hits', 'RefinementList', 'SortBy'],
-      schema: {
-        hits: { title: 'name', image: 'image_url', description: 'description' },
-        refinementList: [{ attribute: 'brand' }],
-        sortBy: { replicas: ['products_price_asc', 'products_price_desc'] },
-      },
-    };
-
-    writeExperienceManifest(experienceDir, manifest);
-
-    expect(readExperienceManifest(experienceDir)).toEqual(manifest);
   });
 
   test('resolveExperience propagates the schema block into the resolved manifest', () => {

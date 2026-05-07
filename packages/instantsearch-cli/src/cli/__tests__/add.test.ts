@@ -95,7 +95,7 @@ describe('add command', () => {
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
     expect(root.features).toEqual([
-      { name: 'search', path: 'src/components/search' },
+      { name: 'search', path: 'src/components/search', indexName: 'products' },
     ]);
   });
 
@@ -119,7 +119,7 @@ describe('add command', () => {
       fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
     );
     expect(root.features).toEqual([
-      { name: 'product-search', path: 'src/components/product-search' },
+      { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
     ]);
   });
 

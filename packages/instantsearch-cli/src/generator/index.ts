@@ -201,20 +201,6 @@ function widgetExtension(manifest: ResolvedExperienceManifest): string {
   return fileExtension(manifest);
 }
 
-function experienceConfigSource(manifest: ResolvedExperienceManifest): string {
-  return (
-    JSON.stringify(
-      {
-        apiVersion: 1,
-        indexName: manifest.experience.indexName,
-        widgets: manifest.experience.widgets,
-      },
-      null,
-      2
-    ) + '\n'
-  );
-}
-
 export function widgetFilePath(
   manifest: ResolvedExperienceManifest,
   widget: string,
@@ -298,11 +284,6 @@ export function generateExperience(
     manifest.experience.name
   );
   const ext = widgetExtension(manifest);
-
-  files.set(
-    path.posix.join(experienceDir, 'instantsearch.config.json'),
-    experienceConfigSource(manifest)
-  );
 
   for (const widget of manifest.experience.widgets) {
     files.set(

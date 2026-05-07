@@ -1,10 +1,8 @@
-import fs from 'node:fs';
 import path from 'node:path';
 
 import {
   generateExperience,
   generateWidget,
-  widgetFilePath,
   SUPPORTED_WIDGETS,
   type WidgetName,
 } from '../generator';
@@ -12,8 +10,6 @@ import { introspectRecords } from '../introspector';
 import {
   addExperienceToRoot,
   readRootManifestResult,
-  readExperienceManifestResult,
-  writeExperienceManifest,
   resolveExperience,
   type ExperienceSchema,
   type RootManifest,
@@ -95,6 +91,7 @@ async function materializeExperience(params: {
   addExperienceToRoot(projectDir, rootManifest, {
     name: experienceName,
     path: experiencePath,
+    indexName,
   });
 
   return success({
@@ -169,42 +166,19 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
     });
   }
 
-  const experienceDir = path.join(projectDir, entry.path);
-  const experienceResult = readExperienceManifestResult(experienceDir);
-  if (!experienceResult.ok) {
-    return manifestReadFailure({
-      command: COMMAND,
-      result: experienceResult,
-      notFoundMessage: `Experience manifest missing at '${entry.path}'.`,
-    });
-  }
-  const experienceManifest = experienceResult.manifest;
-
-  const existingSchema = experienceManifest.schema ?? {};
   const newSchema = schema ?? {};
-  const mergedSchema: ExperienceSchema = {
-    ...existingSchema,
-    ...newSchema,
-    refinementList: [
-      ...(existingSchema.refinementList ?? []),
-      ...(newSchema.refinementList ?? []),
-    ],
-  };
-  if (mergedSchema.refinementList?.length === 0) {
-    delete mergedSchema.refinementList;
-  }
+  const suffixedName = refinementListSuffixedName(widget, newSchema);
 
   const resolved = resolveExperience(rootManifest, {
     name: experienceName,
     experience: {
       apiVersion: 1,
-      indexName: experienceManifest.indexName,
-      widgets: experienceManifest.widgets,
-      schema: mergedSchema,
+      indexName: entry.indexName,
+      widgets: [widget],
+      schema: newSchema,
     },
   });
 
-  const suffixedName = refinementListSuffixedName(widget, newSchema);
   const files = generateWidget(resolved, {
     widget,
     ...(suffixedName ? { fileName: suffixedName } : {}),
@@ -212,12 +186,6 @@ export async function addWidget(options: AddWidgetOptions): Promise<Report> {
 
   const outcome = writeOrConflict(projectDir, files, COMMAND);
   if (!outcome.ok) return outcome.failure;
-
-  writeExperienceManifest(experienceDir, {
-    ...experienceManifest,
-    widgets: [...experienceManifest.widgets, suffixedName ?? widget],
-    schema: mergedSchema,
-  });
 
   return success({
     command: COMMAND,

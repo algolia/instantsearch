@@ -73,7 +73,7 @@ export async function addExperience(
   }
 
   const experiencePath = path.posix.join(rootManifest.componentsPath, name);
-  addExperienceToRoot(projectDir, rootManifest, { name, path: experiencePath });
+  addExperienceToRoot(projectDir, rootManifest, { name, path: experiencePath, indexName: inputs.indexName });
 
   return success({
     command: COMMAND,

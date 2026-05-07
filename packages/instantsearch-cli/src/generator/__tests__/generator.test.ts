@@ -65,7 +65,7 @@ describe('generator: experience (React + TypeScript)', () => {
     },
   };
 
-  test('emits index, three structural widgets, and the experience config (no provider)', () => {
+  test('emits index and three structural widgets (no config file, no provider)', () => {
     const files = generateExperience(baseManifest);
 
     expect(Array.from(files.keys()).sort()).toEqual(
@@ -74,21 +74,8 @@ describe('generator: experience (React + TypeScript)', () => {
         'src/components/product-search/Pagination.tsx',
         'src/components/product-search/SearchBox.tsx',
         'src/components/product-search/index.tsx',
-        'src/components/product-search/instantsearch.config.json',
       ].sort()
     );
-  });
-
-  test('experience config encodes apiVersion, indexName, widgets', () => {
-    const files = generateExperience(baseManifest);
-    const config = JSON.parse(
-      files.get('src/components/product-search/instantsearch.config.json')!
-    );
-    expect(config).toEqual({
-      apiVersion: 1,
-      indexName: 'products',
-      widgets: ['SearchBox', 'Pagination', 'ClearRefinements'],
-    });
   });
 
   test('only emits widgets listed in the experience', () => {
@@ -426,7 +413,6 @@ describe('generator: experience (React + plain JS)', () => {
         'src/components/product-search/Pagination.jsx',
         'src/components/product-search/SearchBox.jsx',
         'src/components/product-search/index.jsx',
-        'src/components/product-search/instantsearch.config.json',
       ].sort()
     );
   });
@@ -523,7 +509,6 @@ describe('generator: experience (JS flavor)', () => {
         'src/components/product-search/Pagination.js',
         'src/components/product-search/SearchBox.js',
         'src/components/product-search/index.js',
-        'src/components/product-search/instantsearch.config.json',
       ].sort()
     );
   });

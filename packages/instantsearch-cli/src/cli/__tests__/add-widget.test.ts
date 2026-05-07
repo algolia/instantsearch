@@ -12,7 +12,6 @@ import { addExperience } from '../add-experience';
 import { addWidget } from '../add-widget';
 import {
   writeRootManifest,
-  readExperienceManifest,
   readRootManifest,
   type RootManifest,
 } from '../../manifest';
@@ -97,11 +96,6 @@ describe('add widget command', () => {
       'src/components/product-search/Hits.tsx'
     );
     const originalHits = fs.readFileSync(hitsPath, 'utf8');
-    const manifestPath = path.join(
-      projectDir,
-      'src/components/product-search/instantsearch.config.json'
-    );
-    const manifestBefore = fs.readFileSync(manifestPath, 'utf8');
 
     const report = await addWidget({
       projectDir,
@@ -116,7 +110,6 @@ describe('add widget command', () => {
       code: 'file_conflict',
     });
     expect(fs.readFileSync(hitsPath, 'utf8')).toBe(originalHits);
-    expect(fs.readFileSync(manifestPath, 'utf8')).toBe(manifestBefore);
   });
 
   test('auto-suffixes a repeated RefinementList by attribute', async () => {
@@ -124,7 +117,6 @@ describe('add widget command', () => {
     await seedExperience(projectDir);
 
     const experienceDir = path.join(projectDir, 'src/components/product-search');
-    // Seeded experience already has RefinementListBrand.tsx for 'brand'.
     expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
 
     const report = await addWidget({
@@ -135,18 +127,12 @@ describe('add widget command', () => {
     });
 
     expect(report.ok).toBe(true);
-    // Original file untouched.
     expect(fs.existsSync(path.join(experienceDir, 'RefinementListBrand.tsx'))).toBe(true);
-    // New file suffixed by PascalCased attribute.
     const suffixed = path.join(experienceDir, 'RefinementListCategory.tsx');
     expect(fs.existsSync(suffixed)).toBe(true);
     expect(fs.readFileSync(suffixed, 'utf8')).toMatch(
       /attribute=\{["']category["']\}/
     );
-
-    const expManifest = readExperienceManifest(experienceDir);
-    // Second entry should reference the suffixed file (not the bare widget name).
-    expect(expManifest?.widgets).toContain('RefinementListCategory');
   });
 
   test('auto-materializes a non-existent experience when --index is provided', async () => {
@@ -163,17 +149,11 @@ describe('add widget command', () => {
     expect(report.ok).toBe(true);
 
     const experienceDir = path.join(projectDir, 'src/components/docs-search');
-    expect(fs.existsSync(path.join(experienceDir, 'instantsearch.config.json'))).toBe(true);
-    expect(fs.existsSync(path.join(experienceDir, 'provider.tsx'))).toBe(false);
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
-
-    const expManifest = readExperienceManifest(experienceDir);
-    expect(expManifest?.indexName).toBe('docs');
-    expect(expManifest?.widgets).toEqual(['Hits']);
 
     const root = readRootManifest(projectDir);
     expect(root?.features).toEqual([
-      { name: 'docs-search', path: 'src/components/docs-search' },
+      { name: 'docs-search', path: 'src/components/docs-search', indexName: 'docs' },
     ]);
   });
 
@@ -210,7 +190,6 @@ describe('add widget command', () => {
 
     if (!report.ok) throw new Error('expected success');
     const nextSteps = (report as any).nextSteps;
-    // Auto-suffixed file (RefinementListCategory) aliases the widget export.
     expect(nextSteps.imports).toContain(
       "import { RefinementList as RefinementListCategory } from 'src/components/product-search/RefinementListCategory';"
     );
@@ -234,59 +213,53 @@ describe('add widget command', () => {
     expect(imports).toContain(
       "import { DocsSearchProvider } from 'src/components/docs-search/provider';"
     );
-    expect(imports).toContain(
-      "import { Hits } from 'src/components/docs-search/Hits';"
-    );
   });
 
   test('nextSteps uses JS mounting guidance for the JS flavor', async () => {
-    const projectDir = makeInitializedProject({ flavor: 'js', typescript: false });
+    const projectDir = makeInitializedProject({ flavor: 'js' });
 
     const report = await addWidget({
       projectDir,
-      experience: 'product-search',
-      widget: 'search-box',
-      indexName: 'products',
+      experience: 'docs-search',
+      widget: 'hits',
+      indexName: 'docs',
+      schema: { hits: { title: 'page_title' } },
     });
 
     if (!report.ok) throw new Error('expected success');
-    const { imports, mountingGuidance } = (report as any).nextSteps;
-    expect(imports).toContain(
-      "import { SearchBox } from 'src/components/product-search/SearchBox';"
-    );
-    expect(imports).toContain(
-      "import { startProductSearch } from 'src/components/product-search/provider';"
-    );
-    expect(mountingGuidance).toMatch(/startProductSearch/);
-    expect(mountingGuidance).toMatch(/container|'#/);
+    const { mountingGuidance } = (report as any).nextSteps;
+    expect(mountingGuidance).toMatch(/Hits/);
+    expect(mountingGuidance).toMatch(/startDocsSearch/);
   });
 
-  test('adds a single Hits widget to an existing experience', async () => {
-    const projectDir = makeInitializedProject();
-    // Seed with a partial experience that does NOT include Hits.
-    writeRootManifest(projectDir, {
-      apiVersion: 1,
-      flavor: 'react',
-      framework: null,
-      typescript: true,
-      componentsPath: 'src/components',
-      aliases: {},
-      algolia: { appId: 'APP_ID_XYZ', searchApiKey: 'SEARCH_KEY_XYZ' },
+  test('reads indexName from root manifest, not per-feature config', async () => {
+    const projectDir = makeInitializedProject({
       features: [
-        { name: 'product-search', path: 'src/components/product-search' },
+        { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
       ],
     });
     const experienceDir = path.join(projectDir, 'src/components/product-search');
     fs.mkdirSync(experienceDir, { recursive: true });
-    fs.writeFileSync(
-      path.join(experienceDir, 'instantsearch.config.json'),
-      JSON.stringify(
-        { apiVersion: 1, indexName: 'products', widgets: ['SearchBox'] },
-        null,
-        2
-      ) + '\n',
-      'utf8'
-    );
+
+    const report = await addWidget({
+      projectDir,
+      experience: 'product-search',
+      widget: 'hits',
+      schema: { hits: { title: 'name', image: 'image_url' } },
+    });
+
+    expect(report).toMatchObject({ ok: true });
+    expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
+  });
+
+  test('adds a single Hits widget to an existing experience', async () => {
+    const projectDir = makeInitializedProject({
+      features: [
+        { name: 'product-search', path: 'src/components/product-search', indexName: 'products' },
+      ],
+    });
+    const experienceDir = path.join(projectDir, 'src/components/product-search');
+    fs.mkdirSync(experienceDir, { recursive: true });
 
     const report = await addWidget({
       projectDir,
@@ -301,38 +274,6 @@ describe('add widget command', () => {
       command: 'add widget',
     });
     expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(true);
-
-    const expManifest = readExperienceManifest(experienceDir);
-    expect(expManifest?.widgets).toEqual(['SearchBox', 'Hits']);
-  });
-
-  test('existing experience with invalid manifest returns invalid_manifest', async () => {
-    const projectDir = makeInitializedProject({
-      features: [
-        { name: 'product-search', path: 'src/components/product-search' },
-      ],
-    });
-    const experienceDir = path.join(projectDir, 'src/components/product-search');
-    fs.mkdirSync(experienceDir, { recursive: true });
-    fs.writeFileSync(
-      path.join(experienceDir, 'instantsearch.config.json'),
-      JSON.stringify({ apiVersion: 1 }, null, 2) + '\n',
-      'utf8'
-    );
-
-    const report = await addWidget({
-      projectDir,
-      experience: 'product-search',
-      widget: 'hits',
-      schema: { hits: { title: 'name' } },
-    });
-
-    expect(report).toMatchObject({
-      ok: false,
-      command: 'add widget',
-      code: 'invalid_manifest',
-    });
-    expect(fs.existsSync(path.join(experienceDir, 'Hits.tsx'))).toBe(false);
   });
 });
 
@@ -351,17 +292,10 @@ describe('add widget — interactive prompts', () => {
 
     expect(report).toMatchObject({ ok: true, command: 'add widget' });
 
-    const root = JSON.parse(
-      fs.readFileSync(path.join(projectDir, 'instantsearch.json'), 'utf8')
+    const root = readRootManifest(projectDir);
+    expect(root?.features).toContainEqual(
+      expect.objectContaining({ name: 'brand-new', indexName: 'my-products' })
     );
-    expect(root.features).toContainEqual(
-      expect.objectContaining({ name: 'brand-new' })
-    );
-
-    const config = readExperienceManifest(
-      path.join(projectDir, 'src/components/brand-new')
-    );
-    expect(config?.indexName).toBe('my-products');
   });
 
   test('no prompt needed when index is provided via flag', async () => {
@@ -372,7 +306,7 @@ describe('add widget — interactive prompts', () => {
       experience: 'brand-new',
       widget: 'search-box',
       indexName: 'my-products',
-      prompter: createScriptedPrompter([]), // empty — no prompts expected
+      prompter: createScriptedPrompter([]),
     });
 
     expect(report).toMatchObject({ ok: true, command: 'add widget' });

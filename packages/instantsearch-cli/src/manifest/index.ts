@@ -4,7 +4,6 @@ import path from 'node:path';
 import type { AlgoliaCredentials, Flavor, Framework } from '../types';
 
 export const ROOT_MANIFEST_FILENAME = 'instantsearch.json';
-export const EXPERIENCE_MANIFEST_FILENAME = 'instantsearch.config.json';
 
 export type RootManifest = {
   apiVersion: 1;
@@ -14,7 +13,7 @@ export type RootManifest = {
   componentsPath: string;
   aliases: Record<string, string>;
   algolia: AlgoliaCredentials;
-  features: Array<{ name: string; path: string }>;
+  features: Array<{ name: string; path: string; indexName: string }>;
 };
 
 export type ExperienceSchema = {
@@ -56,26 +55,6 @@ export function writeRootManifest(
   fs.writeFileSync(filePath, serializeManifest(manifest), 'utf8');
 }
 
-export function readExperienceManifest(
-  experienceDir: string
-): ExperienceManifest | null {
-  const result = readExperienceManifestResult(experienceDir);
-  if (result.ok) return result.manifest;
-  if (result.code === 'not_found') return null;
-  throw new Error(result.message);
-}
-
-export function readExperienceManifestResult(
-  experienceDir: string
-): ManifestReadResult<ExperienceManifest> {
-  const filePath = path.join(experienceDir, EXPERIENCE_MANIFEST_FILENAME);
-  return readManifest(
-    filePath,
-    EXPERIENCE_MANIFEST_FILENAME,
-    isExperienceManifest
-  );
-}
-
 function readManifest<T>(
   filePath: string,
   label: string,
@@ -110,16 +89,8 @@ function readManifest<T>(
   }
 }
 
-export function writeExperienceManifest(
-  experienceDir: string,
-  manifest: ExperienceManifest | Record<string, unknown>
-): void {
-  const filePath = path.join(experienceDir, EXPERIENCE_MANIFEST_FILENAME);
-  fs.writeFileSync(filePath, serializeManifest(manifest), 'utf8');
-}
-
 export function serializeManifest(
-  manifest: RootManifest | ExperienceManifest | Record<string, unknown>
+  manifest: RootManifest | Record<string, unknown>
 ): string {
   return JSON.stringify(manifest, null, 2) + '\n';
 }
@@ -127,7 +98,7 @@ export function serializeManifest(
 export function addExperienceToRoot(
   projectDir: string,
   manifest: RootManifest,
-  entry: { name: string; path: string }
+  entry: { name: string; path: string; indexName: string }
 ): void {
   manifest.features = [...manifest.features, entry];
   writeRootManifest(projectDir, manifest);
@@ -179,10 +150,6 @@ function isStringRecord(value: unknown): value is Record<string, string> {
   );
 }
 
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((entry) => typeof entry === 'string');
-}
-
 function isRootManifest(value: unknown): value is RootManifest {
   if (!isRecord(value)) return false;
   const algolia = value.algolia;
@@ -201,50 +168,12 @@ function isRootManifest(value: unknown): value is RootManifest {
   );
 }
 
-function isExperienceEntry(value: unknown): value is { name: string; path: string } {
+function isExperienceEntry(value: unknown): value is { name: string; path: string; indexName: string } {
   return (
     isRecord(value) &&
     typeof value.name === 'string' &&
-    typeof value.path === 'string'
+    typeof value.path === 'string' &&
+    typeof value.indexName === 'string'
   );
 }
 
-function isExperienceManifest(value: unknown): value is ExperienceManifest {
-  return (
-    isRecord(value) &&
-    value.apiVersion === 1 &&
-    typeof value.indexName === 'string' &&
-    isStringArray(value.widgets) &&
-    (value.schema === undefined || isExperienceSchema(value.schema))
-  );
-}
-
-function isExperienceSchema(value: unknown): value is ExperienceSchema {
-  if (!isRecord(value)) return false;
-  return (
-    (value.hits === undefined || isHitsSchema(value.hits)) &&
-    (value.refinementList === undefined ||
-      (Array.isArray(value.refinementList) &&
-        value.refinementList.every(isRefinementListSchema))) &&
-    (value.sortBy === undefined || isSortBySchema(value.sortBy))
-  );
-}
-
-function isHitsSchema(value: unknown): value is NonNullable<ExperienceSchema['hits']> {
-  return (
-    isRecord(value) &&
-    typeof value.title === 'string' &&
-    (value.image === undefined || typeof value.image === 'string') &&
-    (value.description === undefined || typeof value.description === 'string')
-  );
-}
-
-function isRefinementListSchema(
-  value: unknown
-): value is NonNullable<ExperienceSchema['refinementList']>[number] {
-  return isRecord(value) && typeof value.attribute === 'string';
-}
-
-function isSortBySchema(value: unknown): value is NonNullable<ExperienceSchema['sortBy']> {
-  return isRecord(value) && isStringArray(value.replicas);
-}
