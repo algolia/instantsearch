@@ -29,6 +29,7 @@ export type GeneratedFiles = Map<string, string>;
 export type { WidgetName };
 export const SUPPORTED_WIDGETS: readonly WidgetName[] = getSupportedWidgets();
 
+const DEFAULT_HITS_PER_PAGE = 20;
 const ALGOLIA_CLIENT_PATH = 'src/lib/algolia-client';
 const ALGOLIA_PROVIDER_PATH = 'src/lib/algolia-provider';
 
@@ -234,7 +235,7 @@ function reactIndexSource(manifest: ResolvedExperienceManifest): string {
   const indexName = manifest.experience.indexName;
 
   const imports = [
-    `import { Index } from 'react-instantsearch';`,
+    `import { Configure, Index } from 'react-instantsearch';`,
     ...widgets.map((w) => `import { ${w} } from ${jsString(`./${w}`)};`),
   ].join('\n');
 
@@ -247,6 +248,7 @@ function reactIndexSource(manifest: ResolvedExperienceManifest): string {
 export function ${componentName}() {
   return (
     <Index indexName={${jsString(indexName)}}>
+      <Configure hitsPerPage={20} />
 ${widgetElements}
     </Index>
   );
@@ -259,13 +261,15 @@ function jsIndexSource(manifest: ResolvedExperienceManifest): string {
   const widgets = manifest.experience.widgets;
 
   const imports = [
+    `import { configure } from 'instantsearch.js/es/widgets';`,
     `import { ${startName} } from ${jsString('./provider')};`,
     ...widgets.map((w) => `import { ${w} } from ${jsString(`./${w}`)};`),
   ].join('\n');
 
-  const widgetCalls = widgets
-    .map((w) => `  ${w}(${jsString(`#${widgetContainerId(w)}`)})`)
-    .join(',\n');
+  const widgetCalls = [
+    `  configure({ hitsPerPage: ${DEFAULT_HITS_PER_PAGE} })`,
+    ...widgets.map((w) => `  ${w}(${jsString(`#${widgetContainerId(w)}`)})`)
+  ].join(',\n');
 
   return `${imports}
 

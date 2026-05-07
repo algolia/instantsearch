@@ -121,7 +121,7 @@ describe('generator: experience (React + TypeScript)', () => {
     const files = generateExperience(baseManifest);
     const index = files.get('src/components/product-search/index.tsx')!;
     expect(index).toMatch(/export function ProductSearch\(\)/);
-    expect(index).toMatch(/import { Index } from ["']react-instantsearch["']/);
+    expect(index).toMatch(/import { Configure, Index } from ["']react-instantsearch["']/);
     expect(index).toMatch(/import { SearchBox } from ["']\.\/SearchBox["']/);
     expect(index).toMatch(/import { Pagination } from ["']\.\/Pagination["']/);
     expect(index).toMatch(/import { ClearRefinements } from ["']\.\/ClearRefinements["']/);

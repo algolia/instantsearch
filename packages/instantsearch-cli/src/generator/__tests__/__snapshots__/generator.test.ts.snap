@@ -42,12 +42,14 @@ export function SearchBox(container) {
 `;
 
 exports[`generator: experience (JS flavor) snapshot: index.js 1`] = `
-"import { startProductSearch } from \\"./provider\\";
+"import { configure } from 'instantsearch.js/es/widgets';
+import { startProductSearch } from \\"./provider\\";
 import { SearchBox } from \\"./SearchBox\\";
 import { Pagination } from \\"./Pagination\\";
 import { ClearRefinements } from \\"./ClearRefinements\\";
 
 startProductSearch([
+  configure({ hitsPerPage: 20 }),
   SearchBox(\\"#search-box\\"),
   Pagination(\\"#pagination\\"),
   ClearRefinements(\\"#clear-refinements\\"),
@@ -83,7 +85,7 @@ export function SearchBox() {
 `;
 
 exports[`generator: experience (React + TypeScript) snapshot: index.tsx 1`] = `
-"import { Index } from 'react-instantsearch';
+"import { Configure, Index } from 'react-instantsearch';
 import { SearchBox } from \\"./SearchBox\\";
 import { Pagination } from \\"./Pagination\\";
 import { ClearRefinements } from \\"./ClearRefinements\\";
@@ -91,6 +93,7 @@ import { ClearRefinements } from \\"./ClearRefinements\\";
 export function ProductSearch() {
   return (
     <Index indexName={\\"products\\"}>
+      <Configure hitsPerPage={20} />
       <SearchBox />
       <Pagination />
       <ClearRefinements />
@@ -128,7 +131,7 @@ export function SearchBox() {
 `;
 
 exports[`generator: experience (React + plain JS) snapshot: index.jsx 1`] = `
-"import { Index } from 'react-instantsearch';
+"import { Configure, Index } from 'react-instantsearch';
 import { SearchBox } from \\"./SearchBox\\";
 import { Pagination } from \\"./Pagination\\";
 import { ClearRefinements } from \\"./ClearRefinements\\";
@@ -136,6 +139,7 @@ import { ClearRefinements } from \\"./ClearRefinements\\";
 export function ProductSearch() {
   return (
     <Index indexName={\\"products\\"}>
+      <Configure hitsPerPage={20} />
       <SearchBox />
       <Pagination />
       <ClearRefinements />
