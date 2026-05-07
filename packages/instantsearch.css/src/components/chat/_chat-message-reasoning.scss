@@ -1,0 +1,147 @@
+.ais-ChatMessageReasoning {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.25);
+  margin-block-end: calc(var(--ais-spacing) * 0.5);
+  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
+  border-radius: var(--ais-border-radius-md);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.04);
+  font-size: calc(var(--ais-spacing) * 0.8125);
+  color: rgba(var(--ais-text-color-rgb), 0.85);
+  overflow: hidden;
+}
+
+.ais-ChatMessageReasoning-header {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+  width: 100%;
+  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 0.75);
+  cursor: pointer;
+  font-weight: var(--ais-font-weight-medium);
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--ais-primary-color-rgb), 0.5);
+    outline-offset: -2px;
+  }
+}
+
+.ais-ChatMessageReasoning-icon {
+  display: inline-flex;
+  width: calc(var(--ais-icon-size) * 0.85);
+  height: calc(var(--ais-icon-size) * 0.85);
+  color: rgba(var(--ais-primary-color-rgb), 0.85);
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-icon {
+  animation: ais-reasoning-pulse 1.6s ease-in-out infinite;
+}
+
+.ais-ChatMessageReasoning-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Reuse the loader's text shimmer while streaming - it tells the user the
+// label is "live" and not a stale title.
+.ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-label {
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha))
+    linear-gradient(
+      to right,
+      rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 0%,
+      rgba(var(--ais-text-color-rgb), 0.9) 40%,
+      rgba(var(--ais-text-color-rgb), 0.9) 60%,
+      rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 100%
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-size: 50% 200%;
+  background-position: -100% 0;
+
+  animation: ais-chat-loader-text 3s linear infinite;
+}
+
+.ais-ChatMessageReasoning-timer {
+  flex-shrink: 0;
+  color: rgba(var(--ais-muted-color-rgb), 0.9);
+  font-variant-numeric: tabular-nums;
+  font-size: calc(var(--ais-spacing) * 0.75);
+}
+
+.ais-ChatMessageReasoning-chevron {
+  display: inline-flex;
+  width: calc(var(--ais-icon-size) * 0.7);
+  height: calc(var(--ais-icon-size) * 0.7);
+  color: rgba(var(--ais-muted-color-rgb), 0.9);
+  transition: transform var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ais-ChatMessageReasoning--open .ais-ChatMessageReasoning-chevron {
+  transform: rotate(180deg);
+}
+
+.ais-ChatMessageReasoning-body {
+  padding: 0 calc(var(--ais-spacing) * 0.75)
+    calc(var(--ais-spacing) * 0.75) calc(var(--ais-spacing) * 0.75);
+  border-block-start: 1px solid rgba(var(--ais-muted-color-rgb), 0.15);
+  color: rgba(var(--ais-text-color-rgb), 0.6);
+  line-height: 1.5;
+  font-style: italic;
+  max-height: 18rem;
+  overflow-y: auto;
+
+  p {
+    margin: calc(var(--ais-spacing) * 0.5) 0 0 0;
+
+    &:first-child {
+      margin-block-start: calc(var(--ais-spacing) * 0.5);
+    }
+
+    animation: ais-reasoning-line-in 320ms ease-out;
+  }
+}
+
+.ais-ChatMessageReasoning[data-state='closed'] .ais-ChatMessageReasoning-body {
+  display: none;
+}
+
+@keyframes ais-reasoning-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.9); }
+}
+
+@keyframes ais-reasoning-line-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ais-ChatMessageReasoning-icon,
+  .ais-ChatMessageReasoning-label,
+  .ais-ChatMessageReasoning-chevron,
+  .ais-ChatMessageReasoning-body p {
+    animation: none !important;
+    transition: none !important;
+  }
+}

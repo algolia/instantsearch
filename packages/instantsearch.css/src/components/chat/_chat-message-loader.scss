@@ -60,6 +60,29 @@
       width: 40%;
     }
   }
+
+  // Animate the caption every time the key changes (i.e. when the
+  // substitute label is updated). Pairs with `key={caption}` in the
+  // ChatMessageLoader component.
+  &.ais-ChatMessageLoader--withPreview .ais-ChatMessageLoader-text {
+    animation: ais-chat-loader-text-in 280ms ease-out, ais-chat-loader-text 3s linear infinite;
+    animation-delay: 0s, 0.5s;
+  }
+
+  // Progress hairline: turn the second skeleton bar into a thin,
+  // filled progress line driven by the `--ais-loader-progress` CSS var.
+  &.ais-ChatMessageLoader--withPreview .ais-ChatMessageLoader-skeletonItem:nth-child(2) {
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      rgba(var(--ais-primary-color-rgb), 0.85) 0%,
+      rgba(var(--ais-primary-color-rgb), 0.85) var(--ais-loader-progress, 0%),
+      rgba(var(--ais-muted-color-rgb), 0.2) var(--ais-loader-progress, 0%),
+      rgba(var(--ais-muted-color-rgb), 0.2) 100%
+    );
+    transition: background 280ms ease-out;
+    animation: none;
+  }
 }
 
 @keyframes ais-chat-loader-spinner {
@@ -91,5 +114,16 @@
   }
   to {
     background-position: 250% 0%;
+  }
+}
+
+@keyframes ais-chat-loader-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

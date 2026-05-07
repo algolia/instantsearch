@@ -8,6 +8,11 @@ import {
   isPartText,
   isPartTool,
 } from '../../lib/utils/chat';
+import {
+  getReasoningContext,
+  summarizeReasoning,
+  type ReasoningSummarizer,
+} from '../../lib/utils/reasoning';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -30,6 +35,7 @@ import type {
   ChatMessageClassNames,
   ChatMessageTranslations,
 } from './ChatMessage';
+import type { ChatMessageReasoningVisibility } from './ChatMessageReasoning';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
@@ -215,6 +221,21 @@ export type ChatMessagesProps<
    * Map of message IDs to their feedback state.
    */
   feedbackState?: Record<string, 'sending' | 0 | 1>;
+  /**
+   * Whether to render reasoning UI parts. Off by default.
+   * Forwarded to every {@link ChatMessageProps.showReasoning}, and also
+   * controls whether the loader caption is replaced with a live
+   * substitute label derived from the reasoning stream.
+   */
+  showReasoning?: boolean;
+  /**
+   * Visibility strategy for the reasoning panel. Default: `auto`.
+   */
+  reasoningVisibility?: ChatMessageReasoningVisibility;
+  /**
+   * Optional override for the reasoning summarizer.
+   */
+  reasoningSummarizer?: ReasoningSummarizer;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -243,6 +264,9 @@ function createDefaultMessageComponent<
     messageTranslations,
     translations,
     suggestionsElement,
+    showReasoning,
+    reasoningVisibility,
+    reasoningSummarizer,
   }: {
     key: string;
     message: TMessage;
@@ -261,6 +285,9 @@ function createDefaultMessageComponent<
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
     suggestionsElement?: VNode;
+    showReasoning?: boolean;
+    reasoningVisibility?: ChatMessageReasoningVisibility;
+    reasoningSummarizer?: ReasoningSummarizer;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -344,6 +371,9 @@ function createDefaultMessageComponent<
         classNames={classNames}
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
+        showReasoning={showReasoning}
+        reasoningVisibility={reasoningVisibility}
+        reasoningSummarizer={reasoningSummarizer}
         {...messageProps}
       />
     );
@@ -398,6 +428,9 @@ export function createChatMessagesComponent({
       suggestionsElement,
       onFeedback,
       feedbackState,
+      showReasoning = false,
+      reasoningVisibility = 'auto',
+      reasoningSummarizer,
       ...props
     } = userProps;
 
@@ -429,6 +462,28 @@ export function createChatMessagesComponent({
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     const showLoader = getShowLoader(status, lastPart, tools);
+
+    // Derive a live substitute label for the loader from the in-flight
+    // assistant message. Off when reasoning rendering is opted-out.
+    let reasoningPreview: string | undefined;
+    if (
+      showReasoning &&
+      lastMessage &&
+      lastMessage.role === 'assistant'
+    ) {
+      const summarizer = reasoningSummarizer || summarizeReasoning;
+      const ctx = getReasoningContext(lastMessage);
+      if (ctx.text || ctx.lastToolCall) {
+        const summary = summarizer(ctx.text, {
+          message: lastMessage,
+          lastToolCall: ctx.lastToolCall,
+          streaming: ctx.streaming,
+        });
+        if (!summary.redact) {
+          reasoningPreview = summary.label;
+        }
+      }
+    }
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -488,6 +543,9 @@ export function createChatMessagesComponent({
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
+                showReasoning={showReasoning}
+                reasoningVisibility={reasoningVisibility}
+                reasoningSummarizer={reasoningSummarizer}
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
@@ -501,6 +559,7 @@ export function createChatMessagesComponent({
             {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
+                reasoningPreview={reasoningPreview}
               />
             )}
 

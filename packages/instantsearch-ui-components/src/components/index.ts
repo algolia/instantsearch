@@ -7,6 +7,7 @@ export * from './chat/ChatInlineLayout';
 export * from './chat/ChatSidePanelLayout';
 export * from './chat/ChatHeader';
 export * from './chat/ChatMessage';
+export * from './chat/ChatMessageReasoning';
 export * from './chat/ChatMessages';
 export * from './chat/ChatMessageLoader';
 export * from './chat/ChatMessageError';

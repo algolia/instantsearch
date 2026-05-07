@@ -11,6 +11,7 @@
 @use 'chat/chat-messages';
 @use 'chat/chat-message';
 @use 'chat/chat-message-loader';
+@use 'chat/chat-message-reasoning';
 @use 'chat/chat-greeting';
 @use 'chat/chat-prompt';
 @use 'chat/chat-carousel';

@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>POC — Reasoning content rendering (InstantSearch chat)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ---------------------------------------------------------------------
+     * This is a standalone POC. It mirrors the *production* class names used
+     * in `instantsearch-ui-components` and `instantsearch.css`, so the same
+     * markup (and the same CSS) ships verbatim into the real components.
+     *
+     * The streaming logic is mocked: a hand-written script feeds reasoning
+     * deltas, tool calls and text deltas into the DOM the way the AI-SDK 5
+     * stream parser would in production.
+     * ------------------------------------------------------------------- */
+
+    :root {
+      --ais-spacing: 16px;
+      --ais-icon-size: 20px;
+      --ais-text-color-rgb: 17, 24, 39;
+      --ais-muted-color-rgb: 107, 114, 128;
+      --ais-muted-color-alpha: 0.7;
+      --ais-primary-color-rgb: 64, 115, 255;
+      --ais-primary-color-alpha: 1;
+      --ais-border-radius-sm: 4px;
+      --ais-border-radius-md: 8px;
+      --ais-font-weight-medium: 600;
+      --ais-transition-duration: 200ms;
+      --ais-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', sans-serif;
+      background: #f7f8fa;
+      color: rgb(var(--ais-text-color-rgb));
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 4px 0;
+      font-size: 22px;
+    }
+    .lede {
+      color: rgba(var(--ais-muted-color-rgb), 1);
+      margin: 0 0 24px 0;
+      font-size: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .toolbar button {
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 13px;
+    }
+    .toolbar button.primary {
+      background: rgb(var(--ais-primary-color-rgb));
+      color: white;
+      border-color: rgb(var(--ais-primary-color-rgb));
+    }
+    .toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .toolbar label {
+      font-size: 13px;
+      color: rgba(var(--ais-muted-color-rgb), 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chat {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      padding: 18px;
+      min-height: 420px;
+    }
+
+    /* === Production class names. Copied from instantsearch.css. === */
+
+    .ais-ChatMessage {
+      position: relative;
+      width: 100%;
+      color: rgba(var(--ais-text-color-rgb), 1);
+      margin-bottom: 12px;
+    }
+    .ais-ChatMessage-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .ais-ChatMessage[data-role='user'] .ais-ChatMessage-container { max-width: 70%; }
+    .ais-ChatMessage--right .ais-ChatMessage-container { margin-inline-start: auto; flex-direction: row-reverse; }
+    .ais-ChatMessage-leading { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ais-ChatMessage-content { display: flex; flex-direction: column; gap: 12px; min-width: 0; flex: 1; }
+    .ais-ChatMessage-message {
+      position: relative;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .ais-ChatMessage--neutral .ais-ChatMessage-message {
+      background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+      padding: 12px;
+      border-radius: var(--ais-border-radius-md);
+    }
+
+    /* --- ChatMessageReasoning: the new POC component --- */
+
+    .ais-ChatMessageReasoning {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+      border: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
+      border-radius: var(--ais-border-radius-md);
+      background-color: rgba(var(--ais-muted-color-rgb), 0.04);
+      font-size: 13px;
+      color: rgba(var(--ais-text-color-rgb), 0.85);
+      overflow: hidden;
+    }
+    .ais-ChatMessageReasoning-header {
+      all: unset;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: var(--ais-font-weight-medium);
+    }
+    .ais-ChatMessageReasoning-header:focus-visible {
+      outline: 2px solid rgba(var(--ais-primary-color-rgb), 0.5);
+      outline-offset: -2px;
+    }
+    .ais-ChatMessageReasoning-icon {
+      display: inline-flex;
+      width: 16px; height: 16px;
+      color: rgba(var(--ais-primary-color-rgb), 0.85);
+      flex-shrink: 0;
+    }
+    .ais-ChatMessageReasoning-icon svg { width: 100%; height: 100%; }
+    .ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-icon {
+      animation: ais-reasoning-pulse 1.6s ease-in-out infinite;
+    }
+    .ais-ChatMessageReasoning-label {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-label {
+      -webkit-text-fill-color: transparent;
+      background: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha))
+        linear-gradient(
+          to right,
+          rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 0%,
+          rgba(var(--ais-text-color-rgb), 0.9) 40%,
+          rgba(var(--ais-text-color-rgb), 0.9) 60%,
+          rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 100%
+        );
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-repeat: no-repeat;
+      background-size: 50% 200%;
+      background-position: -100% 0;
+      animation: ais-chat-loader-text 3s linear infinite;
+    }
+    .ais-ChatMessageReasoning-timer {
+      flex-shrink: 0;
+      color: rgba(var(--ais-muted-color-rgb), 0.9);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+    .ais-ChatMessageReasoning-chevron {
+      display: inline-flex;
+      width: 14px; height: 14px;
+      color: rgba(var(--ais-muted-color-rgb), 0.9);
+      transition: transform var(--ais-transition-duration) var(--ais-transition-timing-function);
+      flex-shrink: 0;
+    }
+    .ais-ChatMessageReasoning-chevron svg { width: 100%; height: 100%; }
+    .ais-ChatMessageReasoning--open .ais-ChatMessageReasoning-chevron { transform: rotate(180deg); }
+    .ais-ChatMessageReasoning-body {
+      padding: 0 12px 12px 12px;
+      border-block-start: 1px solid rgba(var(--ais-muted-color-rgb), 0.15);
+      color: rgba(var(--ais-text-color-rgb), 0.6);
+      line-height: 1.5;
+      font-style: italic;
+      max-height: 18rem;
+      overflow-y: auto;
+    }
+    .ais-ChatMessageReasoning-body p {
+      margin: 8px 0 0 0;
+      animation: ais-reasoning-line-in 320ms ease-out;
+    }
+    .ais-ChatMessageReasoning-body p:first-child { margin-top: 8px; }
+    .ais-ChatMessageReasoning[data-state='closed'] .ais-ChatMessageReasoning-body { display: none; }
+
+    /* --- ChatMessageLoader (extended) --- */
+
+    .ais-ChatMessageLoader-spinner {
+      width: 24px; height: 24px;
+      color: rgba(var(--ais-primary-color-rgb), 1);
+      animation: ais-chat-loader-spinner 1.4s linear infinite;
+    }
+    .ais-ChatMessageLoader-text {
+      -webkit-text-fill-color: transparent;
+      background: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha))
+        linear-gradient(
+          to right,
+          rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 0%,
+          rgba(255,255,255,0.75) 40%,
+          rgba(255,255,255,0.75) 60%,
+          rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 100%
+        );
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-repeat: no-repeat;
+      background-size: 50% 200%;
+      display: inline-block;
+      background-position: -100% 0;
+      font-weight: var(--ais-font-weight-medium);
+      animation: ais-chat-loader-text-in 280ms ease-out, ais-chat-loader-text 3s linear infinite;
+      animation-delay: 0s, 0.5s;
+    }
+    .ais-ChatMessageLoader-skeletonWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .ais-ChatMessageLoader-skeletonItem {
+      height: 12px;
+      background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+      border-radius: var(--ais-border-radius-sm);
+      animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .ais-ChatMessageLoader-skeletonItem:nth-child(2) { width: 40%; }
+    .ais-ChatMessageLoader--withPreview .ais-ChatMessageLoader-skeletonItem:nth-child(2) {
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        rgba(var(--ais-primary-color-rgb), 0.85) 0%,
+        rgba(var(--ais-primary-color-rgb), 0.85) var(--ais-loader-progress, 0%),
+        rgba(var(--ais-muted-color-rgb), 0.2) var(--ais-loader-progress, 0%),
+        rgba(var(--ais-muted-color-rgb), 0.2) 100%
+      );
+      transition: background 280ms ease-out;
+      animation: none;
+    }
+
+    /* --- Animations (copied from production stylesheet) --- */
+    @keyframes ais-chat-loader-spinner {
+      from { transform: rotate(0deg); stroke-dasharray: 1px, 200px; stroke-dashoffset: 0; }
+      50%  { stroke-dasharray: 100px, 200px; stroke-dashoffset: -15px; }
+      to   { transform: rotate(360deg); stroke-dasharray: 100px, 200px; stroke-dashoffset: -125px; }
+    }
+    @keyframes ais-chat-loader-skeleton { 50% { opacity: 0.5; } }
+    @keyframes ais-chat-loader-text     { from { background-position: -100% 0; } to { background-position: 250% 0; } }
+    @keyframes ais-chat-loader-text-in  { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes ais-reasoning-pulse      { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.9); } }
+    @keyframes ais-reasoning-line-in    { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ais-ChatMessageReasoning-icon,
+      .ais-ChatMessageReasoning-label,
+      .ais-ChatMessageReasoning-chevron,
+      .ais-ChatMessageReasoning-body p,
+      .ais-ChatMessageLoader-text,
+      .ais-ChatMessageLoader-spinner,
+      .ais-ChatMessageLoader-skeletonItem {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Keyboard hint */
+    .hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(var(--ais-muted-color-rgb), 1);
+    }
+    code {
+      background: rgba(var(--ais-muted-color-rgb), 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>RFC 0001 — Reasoning content rendering</h1>
+    <p class="lede">
+      Standalone POC. Click <strong>Run scenario</strong> to mock a streamed
+      assistant reply with reasoning, tool calls and final text. Toggle
+      <code>showReasoning</code> to see what the same stream looks like with
+      reasoning rendering off (today's behaviour).
+    </p>
+
+    <div class="toolbar">
+      <button id="run" class="primary">Run scenario</button>
+      <button id="reset">Reset</button>
+      <label>
+        <input type="checkbox" id="show-reasoning" checked />
+        showReasoning
+      </label>
+      <label>
+        Visibility:
+        <select id="visibility">
+          <option value="auto" selected>auto</option>
+          <option value="expanded">expanded</option>
+          <option value="collapsed">collapsed</option>
+          <option value="hidden">hidden</option>
+        </select>
+      </label>
+      <label>
+        Scenario:
+        <select id="scenario">
+          <option value="shoes" selected>Waterproof running shoes (size 9 EU)</option>
+          <option value="laptop">Compare gaming laptops under €1500</option>
+          <option value="raw">Raw chain-of-thought (DeepSeek-R1-style)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="chat" id="chat" aria-live="polite"></div>
+
+    <p class="hint">
+      The <em>label</em> in the loader and reasoning header is computed by
+      <code>summarizeReasoning()</code> — the exact same function that lives in
+      <code>packages/instantsearch-ui-components/src/lib/utils/reasoning.ts</code>.
+      Inlined here so you can tweak it live.
+    </p>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------------
+    // Inline copy of summarizeReasoning() / categorizeReasoning(). Kept
+    // 1-to-1 with the production TS file so the demo is faithful.
+    // -------------------------------------------------------------------
+
+    const PII_PATTERN = /\b(?:api[_-]?key|secret|bearer\s+[a-z0-9._-]+|sk-[a-z0-9]{20,}|ssn|passport|credit\s*card)\b/i;
+
+    const KEYWORD_RULES = [
+      { test: /\b(price|budget|cheap|expensive|cost|usd|eur)\b/i,                  category: 'pricing',     label: 'Looking at price ranges' },
+      { test: /\b(image|photo|picture|visual|thumbnail)\b/i,                       category: 'images',      label: 'Looking at product images' },
+      { test: /\b(filter|narrow|refin|facet|category)\b/i,                         category: 'filtering',   label: 'Narrowing down filters' },
+      { test: /\b(rank|sort|order|rerank|relevan(t|ce))\b/i,                       category: 'ranking',     label: 'Comparing top matches' },
+      { test: /\b(size|colou?r|brand|material|fabric|fit)\b/i,                     category: 'attributes',  label: 'Reading product attributes' },
+      { test: /\b(summari[sz]e|conclude|recommend|suggest|propose)\b/i,            category: 'summarising', label: 'Summarising the results' },
+      { test: /\b(search|look(?:ing)?\s+up|find(?:ing)?|query|catalog(?:ue)?)\b/i, category: 'searching',   label: 'Searching the catalogue' },
+      { test: /\b(plan|strategy|approach|let me think|i should|i'll|i will)\b/i,   category: 'planning',    label: 'Planning the next step' },
+    ];
+
+    function categorizeReasoning(text) {
+      const tail = text.length > 2048 ? text.slice(-2048) : text;
+      if (!tail.trim()) return { label: 'Thinking\u2026', category: 'thinking' };
+      const redact = PII_PATTERN.test(tail);
+      for (const r of KEYWORD_RULES) if (r.test.test(tail)) return { label: r.label, category: r.category, redact };
+      return { label: 'Thinking\u2026', category: 'thinking', redact };
+    }
+
+    function categorizeFromToolCall(part) {
+      const toolName = part.type.slice('tool-'.length);
+      if (toolName.startsWith('algolia_search_index')) {
+        const indexName = part.input && typeof part.input.indexName === 'string' ? part.input.indexName : null;
+        return { category: 'tool', label: indexName ? `Searching the ${indexName} index` : 'Searching the catalogue' };
+      }
+      if (toolName.startsWith('algolia_recommend')) return { category: 'tool', label: 'Looking at related products' };
+      if (toolName === 'apply_filters' || toolName.startsWith('apply_filters')) return { category: 'filtering', label: 'Narrowing down filters' };
+      if (toolName.startsWith('compare')) return { category: 'ranking', label: 'Comparing top matches' };
+      return { category: 'tool', label: 'Running ' + toolName.replace(/[_-]+/g, ' ') };
+    }
+
+    function summarizeReasoning(text, ctx) {
+      const trimmed = (text || '').trim();
+      if (trimmed && trimmed.length <= 280 && !ctx.streaming) {
+        const firstSentence = trimmed.split(/(?<=[.!?])\s+/, 1)[0];
+        return { label: firstSentence.length > 64 ? firstSentence.slice(0, 63) + '\u2026' : firstSentence,
+                 category: categorizeReasoning(firstSentence).category };
+      }
+      if (ctx.lastToolCall) {
+        const fromTool = categorizeFromToolCall(ctx.lastToolCall);
+        if (fromTool) return fromTool;
+      }
+      return categorizeReasoning(text);
+    }
+
+    function getReasoningContext(message) {
+      let text = '', streaming = false, lastToolCall;
+      for (const part of message.parts) {
+        if (part.type === 'reasoning') {
+          text += part.text;
+          if (part.state === 'streaming') streaming = true;
+        } else if (part.type.startsWith('tool-')) {
+          lastToolCall = part;
+        }
+      }
+      return { text, lastToolCall, streaming };
+    }
+
+    // -------------------------------------------------------------------
+    // Tiny render layer (vanilla; mirrors the JSX components 1:1)
+    // -------------------------------------------------------------------
+
+    const BRAIN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.5a2.5 2.5 0 0 0-2 2.45A2.5 2.5 0 0 0 4 9.95 2.5 2.5 0 0 0 4 14a2.5 2.5 0 0 0 1 2 2.5 2.5 0 0 0 2 2.5A2.5 2.5 0 0 0 9.5 21H10V2H9.5Z"/><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v.5a2.5 2.5 0 0 1 2 2.45A2.5 2.5 0 0 1 20 9.95 2.5 2.5 0 0 1 20 14a2.5 2.5 0 0 1-1 2 2.5 2.5 0 0 1-2 2.5A2.5 2.5 0 0 1 14.5 21H14V2h.5Z"/></svg>`;
+    const CHEVRON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+    const SPINNER = `<svg viewBox="12 12 24 24" role="status" aria-busy="true" aria-live="polite"><title>Loading</title><circle cx="24" cy="24" r="11" fill="none" stroke="currentColor"/></svg>`;
+
+    function escapeHtml(s) { return String(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+    function renderReasoning(message, opts) {
+      const { visibility } = opts;
+      const reasoningParts = message.parts.filter(p => p.type === 'reasoning');
+      if (visibility === 'hidden' || reasoningParts.length === 0) return '';
+
+      const ctx = getReasoningContext(message);
+      const summary = summarizeReasoning(ctx.text, { message, lastToolCall: ctx.lastToolCall, streaming: ctx.streaming });
+      const open = visibility === 'expanded' || (visibility === 'auto' && ctx.streaming);
+
+      const elapsed = message.elapsedMs;
+      return `
+        <section class="ais-ChatMessageReasoning ${ctx.streaming ? 'ais-ChatMessageReasoning--streaming' : ''} ${open ? 'ais-ChatMessageReasoning--open' : ''} ais-ChatMessageReasoning--${summary.category}"
+                 data-state="${open ? 'open' : 'closed'}">
+          <button type="button" class="ais-ChatMessageReasoning-header" aria-expanded="${open}" data-toggle>
+            <span class="ais-ChatMessageReasoning-icon" aria-hidden="true">${BRAIN}</span>
+            <span class="ais-ChatMessageReasoning-label">${escapeHtml(summary.label)}</span>
+            ${typeof elapsed === 'number' ? `<span class="ais-ChatMessageReasoning-timer">Thought for ${(elapsed/1000).toFixed(1)}s</span>` : ''}
+            <span class="ais-ChatMessageReasoning-chevron" aria-hidden="true">${CHEVRON}</span>
+          </button>
+          <div class="ais-ChatMessageReasoning-body" role="region" aria-live="polite" aria-busy="${ctx.streaming}" ${open ? '' : 'hidden'}>
+            ${summary.redact
+              ? `<p><em>(reasoning redacted for privacy)</em></p>`
+              : reasoningParts.map(p => `<p>${escapeHtml(p.text)}</p>`).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderToolCall(part) {
+      const toolName = part.type.slice('tool-'.length);
+      let body = '';
+      if (part.state === 'output-available' && Array.isArray(part.output && part.output.hits)) {
+        body = part.output.hits.map(h => `<li>${escapeHtml(h.name)} — €${h.price}</li>`).join('');
+        body = `<ul style="margin: 4px 0 0 18px; font-size: 13px;">${body}</ul>`;
+      } else if (part.state === 'input-streaming' || part.state === 'input-available') {
+        body = `<code style="font-size:11px;">${escapeHtml(JSON.stringify(part.input))}</code>`;
+      }
+      return `
+        <div style="border:1px solid rgba(var(--ais-muted-color-rgb),0.2); padding:8px 12px; border-radius:8px; background:#fafbff;">
+          <div style="font-size:12px; color:rgba(var(--ais-muted-color-rgb),1);">▶ ${escapeHtml(toolName)} <em>(${escapeHtml(part.state)})</em></div>
+          ${body}
+        </div>
+      `;
+    }
+
+    function renderMessage(message, opts) {
+      const isUser = message.role === 'user';
+      let inner = '';
+      let reasoningRendered = false;
+      for (const part of message.parts) {
+        if (part.type === 'reasoning') {
+          if (!opts.showReasoning) continue;
+          if (!reasoningRendered) { inner += renderReasoning(message, opts); reasoningRendered = true; }
+          continue;
+        }
+        if (part.type === 'text') {
+          inner += `<span>${escapeHtml(part.text)}</span>`;
+          continue;
+        }
+        if (part.type.startsWith('tool-')) {
+          inner += renderToolCall(part);
+          continue;
+        }
+      }
+      return `
+        <article class="ais-ChatMessage ${isUser ? 'ais-ChatMessage--right ais-ChatMessage--neutral' : 'ais-ChatMessage--left ais-ChatMessage--subtle'}" data-role="${message.role}">
+          <div class="ais-ChatMessage-container">
+            <div class="ais-ChatMessage-content">
+              <div class="ais-ChatMessage-message">${inner}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderLoader(state) {
+      const { reasoningPreview, elapsedMs, expectedMs = 8000 } = state;
+      const hasProgress = typeof elapsedMs === 'number' && elapsedMs > 0;
+      const progress = hasProgress ? Math.max(0, Math.min(1, elapsedMs / expectedMs)) : 0;
+      const caption = reasoningPreview || '';
+      return `
+        <article class="ais-ChatMessage ais-ChatMessage--left ais-ChatMessage--subtle ais-ChatMessageLoader ${reasoningPreview ? 'ais-ChatMessageLoader--withPreview' : ''}">
+          <div class="ais-ChatMessage-container">
+            <div class="ais-ChatMessage-leading">
+              <div class="ais-ChatMessageLoader-spinner">${SPINNER}</div>
+            </div>
+            <div class="ais-ChatMessage-content">
+              <div class="ais-ChatMessage-message">
+                ${caption ? `<div class="ais-ChatMessageLoader-text" key="${escapeHtml(caption)}" aria-live="polite">${escapeHtml(caption)}</div>` : ''}
+                <div class="ais-ChatMessageLoader-skeletonWrapper">
+                  <div class="ais-ChatMessageLoader-skeletonItem"></div>
+                  <div class="ais-ChatMessageLoader-skeletonItem" style="--ais-loader-progress: ${(progress*100).toFixed(0)}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function render() {
+      const opts = readOpts();
+      const html = state.messages.map(m => renderMessage(m, opts)).join('');
+      const last = state.messages[state.messages.length - 1];
+
+      let preview;
+      if (opts.showReasoning && last && last.role === 'assistant' && state.streaming) {
+        const ctx = getReasoningContext(last);
+        if (ctx.text || ctx.lastToolCall) {
+          const s = summarizeReasoning(ctx.text, { message: last, lastToolCall: ctx.lastToolCall, streaming: ctx.streaming });
+          if (!s.redact) preview = s.label;
+        }
+      }
+
+      const loader = state.streaming
+        ? renderLoader({
+            reasoningPreview: preview,
+            elapsedMs: Date.now() - state.streamStartedAt,
+            expectedMs: 8000,
+          })
+        : '';
+
+      document.getElementById('chat').innerHTML = html + loader;
+
+      // Wire up toggle clicks (uncontrolled - we mutate the data-state directly).
+      for (const header of document.querySelectorAll('[data-toggle]')) {
+        header.addEventListener('click', () => {
+          const root = header.closest('.ais-ChatMessageReasoning');
+          const open = root.getAttribute('data-state') === 'open';
+          root.setAttribute('data-state', open ? 'closed' : 'open');
+          root.classList.toggle('ais-ChatMessageReasoning--open', !open);
+          const body = root.querySelector('.ais-ChatMessageReasoning-body');
+          if (body) body.hidden = open;
+          header.setAttribute('aria-expanded', String(!open));
+        }, { once: false });
+      }
+    }
+
+    function readOpts() {
+      return {
+        showReasoning: document.getElementById('show-reasoning').checked,
+        visibility: document.getElementById('visibility').value,
+      };
+    }
+
+    // -------------------------------------------------------------------
+    // Mocked stream scenarios
+    // -------------------------------------------------------------------
+
+    const SCENARIOS = {
+      shoes: [
+        { wait: 200, op: 'user',           text: 'I need waterproof running shoes in size 9 EU under €120.' },
+        { wait: 400, op: 'message-start' },
+        { wait: 600, op: 'reasoning-start' },
+        { wait: 200, op: 'reasoning-delta', delta: 'The user is asking about waterproof running shoes.' },
+        { wait: 350, op: 'reasoning-delta', delta: " I'll plan: search the women's running shoes index," },
+        { wait: 350, op: 'reasoning-delta', delta: ' filter by size 9 EU and waterproof, then sort by price ascending.' },
+        { wait: 350, op: 'reasoning-delta', delta: " The user mentioned a budget of €120 so I'll narrow accordingly." },
+        { wait: 250, op: 'reasoning-end' },
+        { wait: 300, op: 'tool-call', toolName: 'algolia_search_index',
+          input: { indexName: 'running_shoes_women', query: 'waterproof', size: '9 EU', maxPrice: 120 } },
+        { wait: 800, op: 'tool-output', toolName: 'algolia_search_index',
+          output: { hits: [
+            { name: 'Salomon Speedcross 6 GTX', price: 119 },
+            { name: 'Brooks Cascadia 17 GTX',  price: 110 },
+            { name: 'Hoka Speedgoat 5 GTX',    price: 119 },
+          ] }
+        },
+        { wait: 200, op: 'text-start' },
+        { wait: 200, op: 'text-delta', delta: 'I found three pairs that match: ' },
+        { wait: 200, op: 'text-delta', delta: 'the Salomon Speedcross 6 GTX (€119), ' },
+        { wait: 200, op: 'text-delta', delta: 'the Brooks Cascadia 17 GTX (€110) and ' },
+        { wait: 200, op: 'text-delta', delta: 'the Hoka Speedgoat 5 GTX (€119). ' },
+        { wait: 200, op: 'text-delta', delta: 'The Brooks is the best value.' },
+        { wait: 100, op: 'finish' },
+      ],
+      laptop: [
+        { wait: 200, op: 'user',            text: 'Compare the best gaming laptops under €1500.' },
+        { wait: 400, op: 'message-start' },
+        { wait: 500, op: 'reasoning-start' },
+        { wait: 300, op: 'reasoning-delta', delta: 'Let me think about this.' },
+        { wait: 350, op: 'reasoning-delta', delta: " I'll search the laptops index, filter by gaming category and price below €1500." },
+        { wait: 350, op: 'reasoning-delta', delta: ' Then I should compare GPU, refresh rate, RAM, and re-rank by relevance.' },
+        { wait: 250, op: 'reasoning-end' },
+        { wait: 300, op: 'tool-call', toolName: 'algolia_search_index',
+          input: { indexName: 'laptops', filters: 'category:gaming AND price<1500' } },
+        { wait: 700, op: 'tool-output', toolName: 'algolia_search_index',
+          output: { hits: [
+            { name: 'Lenovo Legion 5 RTX 4060',    price: 1399 },
+            { name: 'ASUS TUF A15 RTX 4060',       price: 1299 },
+            { name: 'HP Victus 16 RTX 4060',       price: 1199 },
+          ] }
+        },
+        { wait: 200, op: 'text-start' },
+        { wait: 250, op: 'text-delta', delta: 'Three strong picks under €1500: ' },
+        { wait: 200, op: 'text-delta', delta: 'HP Victus 16 (€1199), ASUS TUF A15 (€1299) and Lenovo Legion 5 (€1399).' },
+        { wait: 100, op: 'finish' },
+      ],
+      raw: [
+        { wait: 200, op: 'user',            text: 'How can I get my API key working?' },
+        { wait: 400, op: 'message-start' },
+        { wait: 500, op: 'reasoning-start' },
+        { wait: 300, op: 'reasoning-delta', delta: "Hmm, the user mentioned API key sk-XXXX-leaked-secret-9999." },
+        { wait: 350, op: 'reasoning-delta', delta: ' I should be careful not to repeat it back. Let me redact and explain.' },
+        { wait: 250, op: 'reasoning-end' },
+        { wait: 200, op: 'text-start' },
+        { wait: 250, op: 'text-delta', delta: 'Please rotate that key immediately and use environment variables.' },
+        { wait: 100, op: 'finish' },
+      ],
+    };
+
+    // -------------------------------------------------------------------
+    // State
+    // -------------------------------------------------------------------
+
+    const state = {
+      messages: [],
+      streaming: false,
+      streamStartedAt: 0,
+    };
+
+    function reset() {
+      state.messages = [];
+      state.streaming = false;
+      render();
+    }
+
+    let timer = null;
+
+    function applyChunk(chunk, msg) {
+      switch (chunk.op) {
+        case 'user':
+          state.messages.push({ id: 'u-' + Date.now(), role: 'user', parts: [{ type: 'text', text: chunk.text }] });
+          break;
+        case 'message-start':
+          state.streaming = true;
+          state.streamStartedAt = Date.now();
+          state.messages.push({ id: 'a-' + Date.now(), role: 'assistant', parts: [], elapsedMs: 0 });
+          break;
+        case 'reasoning-start':
+          msg().parts.push({ type: 'reasoning', text: '', state: 'streaming' });
+          break;
+        case 'reasoning-delta': {
+          const part = [...msg().parts].reverse().find(p => p.type === 'reasoning' && p.state === 'streaming');
+          if (part) part.text += chunk.delta;
+          break;
+        }
+        case 'reasoning-end': {
+          const part = [...msg().parts].reverse().find(p => p.type === 'reasoning' && p.state === 'streaming');
+          if (part) part.state = 'done';
+          break;
+        }
+        case 'tool-call':
+          msg().parts.push({
+            type: `tool-${chunk.toolName}`,
+            toolCallId: 't-' + Date.now(),
+            state: 'input-available',
+            input: chunk.input,
+          });
+          break;
+        case 'tool-output': {
+          const part = [...msg().parts].reverse().find(p => p.type === `tool-${chunk.toolName}`);
+          if (part) {
+            part.state = 'output-available';
+            part.output = chunk.output;
+          }
+          break;
+        }
+        case 'text-start':
+          msg().parts.push({ type: 'text', text: '', state: 'streaming' });
+          break;
+        case 'text-delta': {
+          const part = [...msg().parts].reverse().find(p => p.type === 'text' && p.state === 'streaming');
+          if (part) part.text += chunk.delta;
+          break;
+        }
+        case 'finish': {
+          state.streaming = false;
+          const m = msg();
+          m.elapsedMs = Date.now() - state.streamStartedAt;
+          for (const p of m.parts) if (p.state === 'streaming') p.state = 'done';
+          break;
+        }
+      }
+    }
+
+    async function run() {
+      reset();
+      const scenario = SCENARIOS[document.getElementById('scenario').value];
+      const lastAssistant = () => state.messages[state.messages.length - 1];
+      document.getElementById('run').disabled = true;
+      try {
+        for (const chunk of scenario) {
+          await new Promise(r => setTimeout(r, chunk.wait));
+          applyChunk(chunk, lastAssistant);
+          render();
+        }
+        // small "after stream" pause then a final render to show timer.
+        await new Promise(r => setTimeout(r, 300));
+        render();
+      } finally {
+        document.getElementById('run').disabled = false;
+      }
+    }
+
+    document.getElementById('run').addEventListener('click', run);
+    document.getElementById('reset').addEventListener('click', reset);
+    document.getElementById('show-reasoning').addEventListener('change', render);
+    document.getElementById('visibility').addEventListener('change', render);
+    document.getElementById('scenario').addEventListener('change', reset);
+
+    reset();
+  </script>
+</body>
+</html>
