@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import type { ExperienceSchema, RootManifest } from '../manifest';
+import type { InputType } from '../types';
 import { readRootManifest } from '../manifest';
 import type { Prompter } from '../prompter';
 import { failure, type Report } from '../reporter';
@@ -23,6 +24,7 @@ export type AddOptions = {
   target?: string;
   indexName?: string;
   schema?: ExperienceSchema;
+  input?: InputType;
   prompter?: Prompter;
 };
 
@@ -35,16 +37,18 @@ export async function add(options: AddOptions): Promise<Report> {
 
   const template = COMPOSITE_FEATURES[item as keyof typeof COMPOSITE_FEATURES];
   if (template) {
+    const input = options.input ?? 'autocomplete';
     const report = await addExperience({
       projectDir,
       name: options.target ?? item,
       template,
       indexName: options.indexName,
       schema: options.schema,
+      input,
       prompter,
     });
 
-    if (report.ok && options.indexName && options.schema) {
+    if (report.ok && input === 'autocomplete' && options.indexName && options.schema) {
       const rootManifest = readRootManifest(projectDir);
       if (rootManifest) {
         const autocomplete = maybeGenerateAutocomplete({

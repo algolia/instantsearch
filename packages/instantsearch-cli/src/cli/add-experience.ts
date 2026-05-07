@@ -18,12 +18,15 @@ import { writeOrConflict } from '../utils/write-files';
 
 const COMMAND = 'add experience';
 
+import type { InputType } from '../types';
+
 export type AddExperienceOptions = {
   projectDir: string;
   name: string;
   template: string;
   indexName?: string;
   schema?: ExperienceSchema;
+  input?: InputType;
   prompter?: Prompter;
 };
 
@@ -47,6 +50,7 @@ export async function addExperience(
     template,
     indexName: options.indexName,
     schema: options.schema,
+    input: options.input,
     credentials: rootManifest.algolia,
     prompter,
     command: COMMAND,

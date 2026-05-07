@@ -76,20 +76,21 @@ Add a composite feature or a widget. The CLI determines what to generate based o
 
 **Composite features** (e.g., `add search`, `add search product-search`):
 
-Creates a feature folder with widgets wrapped in an `<Index>` component and a per-feature manifest (`instantsearch.config.json`). The second argument is an optional custom name (defaults to the item name).
+Creates a feature folder with widgets wrapped in an `<Index>` component. The second argument is an optional custom name (defaults to the item name).
 
 | Flag | Description |
 | --- | --- |
 | `--json` | Emit a single JSON object on stdout (implies `--yes`) |
 | `--yes` | Accept defaults without prompting |
 | `--index <index>` | Algolia index name |
+| `--input <type>` | Search input type: `autocomplete` (default) or `searchbox` |
 | `--hits-title <attr>` | Record attribute for Hits title |
 | `--hits-image <attr>` | Record attribute for Hits image |
 | `--hits-description <attr>` | Record attribute for Hits description |
 | `--refinement-list-attribute <attr>` | Facet attribute for RefinementList |
 | `--sort-by-replicas <list>` | Comma-separated replica index names for SortBy |
 
-The `search` template generates: Hits, RefinementList, SortBy, Pagination, ClearRefinements. Schema-driven widgets are automatically skipped when their required flags are not provided: omit `--refinement-list-attribute` to skip RefinementList, omit `--sort-by-replicas` to skip SortBy.
+The `search` template generates: Hits, RefinementList, SortBy, Pagination, ClearRefinements, and Configure (with `hitsPerPage`). By default, it also generates an Autocomplete component; pass `--input searchbox` to use a SearchBox widget instead. Schema-driven widgets are automatically skipped when their required flags are not provided: omit `--refinement-list-attribute` to skip RefinementList, omit `--sort-by-replicas` to skip SortBy.
 
 **Widgets** (e.g., `add refinement-list search`):
 

@@ -16,7 +16,7 @@ import {
   type SchemaFlagOptions,
 } from './schema-flags';
 import { failure } from '../reporter';
-import type { Flavor, Framework } from '../types';
+import type { Flavor, Framework, InputType } from '../types';
 
 const runtime = createCliRuntime();
 
@@ -86,13 +86,24 @@ type AddFlagOptions = SchemaFlagOptions & {
   json?: boolean;
   yes?: boolean;
   index?: string;
+  input?: string;
 };
+
+const VALID_INPUTS: readonly InputType[] = ['searchbox', 'autocomplete'];
 
 async function runAdd(
   item: string,
   target: string | undefined,
   cliOptions: AddFlagOptions
 ): Promise<void> {
+  if (cliOptions.input && !VALID_INPUTS.includes(cliOptions.input as InputType)) {
+    return runtime.emitAndExit(failure({
+      command: 'add',
+      code: 'invalid_flag',
+      message: `Invalid --input value '${cliOptions.input}'. Supported: ${VALID_INPUTS.join(', ')}.`,
+    }));
+  }
+
   const prompter = runtime.getPrompter();
   const schema = buildSchemaFromFlags(cliOptions);
 
@@ -102,6 +113,7 @@ async function runAdd(
     ...(target ? { target } : {}),
     ...(cliOptions.index ? { indexName: cliOptions.index } : {}),
     ...(Object.keys(schema).length > 0 ? { schema } : {}),
+    ...(cliOptions.input ? { input: cliOptions.input as InputType } : {}),
     prompter,
   });
 
@@ -117,6 +129,7 @@ program
   .option('--hits-title <attr>', 'Searchable record attribute to display as the hit title')
   .option('--hits-image <attr>', 'Record attribute containing an image URL')
   .option('--hits-description <attr>', 'Searchable record attribute to display as the hit description')
+  .option('--input <type>', 'Search input type: autocomplete (default) or searchbox')
   .option(
     '--refinement-list-attribute <attr>',
     'Attribute configured for faceting in your Algolia index'

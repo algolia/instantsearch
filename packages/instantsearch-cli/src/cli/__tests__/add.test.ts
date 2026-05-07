@@ -257,6 +257,42 @@ describe('add command', () => {
     expect(contentAfter).toBe(contentBefore);
   });
 
+  test('add search --input searchbox: includes SearchBox and skips autocomplete', async () => {
+    const projectDir = makeInitializedProject();
+
+    await add({
+      projectDir,
+      item: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+      input: 'searchbox',
+    });
+
+    const featureDir = path.join(projectDir, 'src/components/search');
+    expect(fs.existsSync(path.join(featureDir, 'SearchBox.tsx'))).toBe(true);
+    expect(
+      fs.existsSync(path.join(projectDir, 'src/components/autocomplete/Autocomplete.tsx'))
+    ).toBe(false);
+  });
+
+  test('add search --input autocomplete: generates autocomplete and no SearchBox', async () => {
+    const projectDir = makeInitializedProject();
+
+    await add({
+      projectDir,
+      item: 'search',
+      indexName: 'products',
+      schema: SEARCH_SCHEMA,
+      input: 'autocomplete',
+    });
+
+    const featureDir = path.join(projectDir, 'src/components/search');
+    expect(fs.existsSync(path.join(featureDir, 'SearchBox.tsx'))).toBe(false);
+    expect(
+      fs.existsSync(path.join(projectDir, 'src/components/autocomplete/Autocomplete.tsx'))
+    ).toBe(true);
+  });
+
   test('add bogus: fails with unknown_item', async () => {
     const projectDir = makeInitializedProject();
 

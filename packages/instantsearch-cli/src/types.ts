@@ -5,6 +5,8 @@ export type Flavor = 'react' | 'js';
 // with no framework wrapper.
 export type Framework = 'nextjs';
 
+export type InputType = 'searchbox' | 'autocomplete';
+
 export type AlgoliaCredentials = {
   appId: string;
   searchApiKey: string;

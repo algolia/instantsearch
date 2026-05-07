@@ -1,4 +1,5 @@
 import { type WidgetName } from '../generator';
+import type { InputType } from '../types';
 import { getSchemaStatus } from '../registry';
 import {
   introspectRecords,
@@ -324,6 +325,7 @@ export async function resolveExperienceInputs(params: {
   template: string;
   indexName: string | undefined;
   schema: ExperienceSchema | undefined;
+  input: InputType | undefined;
   credentials: AlgoliaCredentials;
   prompter: Prompter | undefined;
   command: string;
@@ -341,6 +343,9 @@ export async function resolveExperienceInputs(params: {
   }
 
   let widgets: WidgetName[] = [...templateWidgets];
+  if (params.input === 'searchbox') {
+    widgets = ['SearchBox', ...widgets];
+  }
   let schema: ExperienceSchema = { ...(params.schema ?? {}) };
 
   const indexResolution = await resolveIndexName({
