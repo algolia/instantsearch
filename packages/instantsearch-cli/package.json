@@ -14,7 +14,7 @@
   "author": "Algolia <support@algolia.com>",
   "main": "src/index.ts",
   "bin": {
-    "@instantsearch/cli": "bin/instantsearch.mjs"
+    "instantsearch": "bin/instantsearch.mjs"
   },
   "scripts": {
     "start": "tsx src/cli/index.ts",
