@@ -5,7 +5,12 @@ const { existsSync, readFileSync, writeFileSync } = require('fs');
 const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..', '..');
-const oxlintBin = path.join(repoRoot, 'node_modules', '.bin', 'oxlint');
+const oxlintBin = path.join(
+  repoRoot,
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint'
+);
 const skipListPath = path.join(__dirname, 'auto-fix-skip.json');
 
 const LINT_TARGETS = ['packages', 'scripts', 'tests', 'specs'];
@@ -76,7 +81,7 @@ function parseArgs(argv) {
   if (!args.rule) {
     throw new Error('--rule is required (use "auto" to pick highest-count rule)');
   }
-  if (!Number.isFinite(args.maxFiles) || args.maxFiles <= 0) {
+  if (!Number.isInteger(args.maxFiles) || args.maxFiles <= 0) {
     throw new Error(`--max-files must be a positive integer (got ${args.maxFiles})`);
   }
 
@@ -209,9 +214,19 @@ function main() {
   emit(output, args.out);
 }
 
-try {
-  main();
-} catch (error) {
-  process.stderr.write(`pick-rule: ${error.message}\n`);
-  process.exit(1);
+if (require.main === module) {
+  try {
+    main();
+  } catch (error) {
+    process.stderr.write(`pick-rule: ${error.message}\n`);
+    process.exit(1);
+  }
 }
+
+module.exports = {
+  parseArgs,
+  isSelectionExcluded,
+  groupByRule,
+  pickAuto,
+  buildOutput,
+};

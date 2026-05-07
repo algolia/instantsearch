@@ -119,6 +119,33 @@ jobs:
             exit 1
           fi
 
+      - name: Verify oxlint-disable comments include a reason
+        if: steps.pick.outputs.status == 'ok'
+        run: |
+          set -euo pipefail
+          # Collect lines added in this diff that introduce an oxlint-disable
+          # directive (any of: oxlint-disable, oxlint-disable-line,
+          # oxlint-disable-next-line — all share the substring `oxlint-disable`).
+          # The prompt contract requires every such comment to carry a `-- <reason>`.
+          ADDED=$(git diff --no-color --unified=0 \
+            | grep '^+' \
+            | grep -v '^+++' \
+            | grep -F 'oxlint-disable' \
+            || true)
+
+          if [ -z "$ADDED" ]; then
+            echo "No new oxlint-disable comments."
+            exit 0
+          fi
+
+          BAD=$(echo "$ADDED" | grep -v -- '--' || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::oxlint-disable comments must include a reason after \`--\`:"
+            echo "$BAD"
+            exit 1
+          fi
+          echo "All new oxlint-disable comments include a reason."
+
       - name: Verify diff size
         if: steps.pick.outputs.status == 'ok'
         env:
