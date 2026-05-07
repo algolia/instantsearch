@@ -3,7 +3,7 @@ import {
   getHighlightedParts,
   getPropertyByPath,
   unescape,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 
 import { createElement, Fragment } from '../util/pragma';
 

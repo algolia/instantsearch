@@ -1,1 +1,1 @@
-export { default as createInfiniteHitsSessionStorageCache } from './sessionStorage';
+export * from 'instantsearch-core';

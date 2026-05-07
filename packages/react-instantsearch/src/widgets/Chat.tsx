@@ -6,7 +6,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
-} from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
 import React, {
   createElement,
   Fragment,
@@ -42,8 +42,8 @@ import type {
   UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { IndexUiState } from 'instantsearch-core';
+import type { UIMessage } from 'instantsearch-core';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({

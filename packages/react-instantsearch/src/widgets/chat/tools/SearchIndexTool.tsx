@@ -7,7 +7,7 @@ import {
 import {
   addAbsolutePosition,
   addQueryID,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';

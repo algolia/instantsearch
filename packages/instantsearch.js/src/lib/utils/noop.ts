@@ -1,1 +1,1 @@
-export function noop(..._args: any[]): void {}
+export * from 'instantsearch-core';

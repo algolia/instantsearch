@@ -10,7 +10,8 @@
   ],
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "instantsearch.js": "4.96.2"
+    "instantsearch.js": "4.96.2",
+    "instantsearch-core": "0.1.0"
   },
   "devDependencies": {
     "@instantsearch/testutils": "1.90.1"

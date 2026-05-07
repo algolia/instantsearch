@@ -38,8 +38,8 @@ import {
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
-import type { Hit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { Hit } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;

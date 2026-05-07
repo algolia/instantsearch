@@ -6,7 +6,7 @@ import * as testSuites from '@instantsearch/tests/shared';
 import {
   connectMenu,
   connectPagination,
-} from 'instantsearch.js/es/connectors/index';
+} from 'instantsearch-core';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {

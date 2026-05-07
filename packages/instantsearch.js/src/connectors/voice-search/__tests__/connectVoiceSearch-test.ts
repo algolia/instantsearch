@@ -15,9 +15,9 @@ import connectVoiceSearch from '../connectVoiceSearch';
 import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,
-} from '../../../lib/voiceSearchHelper/types';
+} from '../../../../../instantsearch-core/src/lib/voiceSearchHelper/types';
 
-jest.mock('../../../lib/voiceSearchHelper', () => {
+jest.mock('../../../../../instantsearch-core/src/lib/voiceSearchHelper', () => {
   const createVoiceHelper = ({
     onStateChange,
     onQueryChange,

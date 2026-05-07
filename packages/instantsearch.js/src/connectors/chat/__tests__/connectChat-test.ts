@@ -17,9 +17,11 @@ import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
 
-jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
-  sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
-}));
+const fetchMock = jest.fn(() => Promise.resolve(new Response('{}')));
+Object.defineProperty(globalThis, 'fetch', {
+  value: fetchMock,
+  writable: true,
+});
 
 describe('connectChat', () => {
   const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
@@ -417,10 +419,7 @@ describe('connectChat', () => {
     });
 
     it('prevents double voting on the same message', () => {
-      const { sendChatMessageFeedback: mockedFn } = jest.requireMock(
-        '../../../lib/utils/sendChatMessageFeedback'
-      );
-      mockedFn.mockClear();
+      fetchMock.mockClear();
 
       const { getRenderState } = getInitializedWidget({
         agentId: 'agentId',
@@ -431,7 +430,7 @@ describe('connectChat', () => {
       renderState.sendChatMessageFeedback!('msg-1', 1);
       renderState.sendChatMessageFeedback!('msg-1', 0);
 
-      expect(mockedFn).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 

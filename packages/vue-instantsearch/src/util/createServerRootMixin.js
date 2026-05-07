@@ -2,7 +2,7 @@ import instantsearch from 'instantsearch.js/es';
 import {
   waitForResults,
   getInitialResults,
-} from 'instantsearch.js/es/lib/server';
+} from 'instantsearch-core';
 
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';

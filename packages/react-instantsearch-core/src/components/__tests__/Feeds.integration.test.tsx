@@ -13,7 +13,7 @@ import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
 import type { InstantSearchProps } from '../InstantSearch';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { IndexWidget } from 'instantsearch-core';
 
 function createInstantSearchMock() {
   const indexContextRef = createRef<IndexWidget>();

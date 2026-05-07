@@ -6,7 +6,7 @@ import type {
   LookingSimilarProps as LookingSimilarPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { Hit, BaseHit } from 'instantsearch-core';
 import type { UseLookingSimilarProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<

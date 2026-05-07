@@ -1,16 +1,12 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
-import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
+  createInsightsMiddleware,
   createMetadataMiddleware,
+  createRouterMiddleware,
   isMetadataEnabled,
-} from '../middlewares/createMetadataMiddleware';
-import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import index from '../widgets/index/index';
-
-import createHelpers from './createHelpers';
-import {
+  index as indexWidget,
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
@@ -20,15 +16,15 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
-} from './utils';
+} from 'instantsearch-core';
+
+import createHelpers from './createHelpers';
 import version from './version';
 
 import type {
   InsightsEvent,
   InsightsProps,
-} from '../middlewares/createInsightsMiddleware';
-import type { RouterProps } from '../middlewares/createRouterMiddleware';
-import type {
+  RouterProps,
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
@@ -40,7 +36,7 @@ import type {
   RenderState,
   InitialResults,
   CompositionClient,
-} from '../types';
+} from 'instantsearch-core';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -356,7 +352,7 @@ See documentation: ${createDocumentationLink({
     this.compositionID = compositionID;
     this.helper = null;
     this.mainHelper = null;
-    this.mainIndex = index({
+    this.mainIndex = indexWidget({
       // we use an index widget to render compositions
       // this only works because there's only one composition index allow for now
       indexName: this.compositionID || this.indexName,

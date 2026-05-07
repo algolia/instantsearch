@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/vue';
-import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch-core';
+import { simple } from 'instantsearch-core';
 
 import { MemoryRouter } from './MemoryRouter';
 import { previewWrapper } from './utils';

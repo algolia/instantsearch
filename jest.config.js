@@ -54,6 +54,9 @@ const config = {
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
     '^instantsearch.js/es(.*)$': '<rootDir>/packages/instantsearch.js/src$1',
     '^instantsearch.js/(.*)$': '<rootDir>/packages/instantsearch.js/$1',
+    '^instantsearch-core$': '<rootDir>/packages/instantsearch-core/src/',
+    '^instantsearch-core/dist/es(.*)$':
+      '<rootDir>/packages/instantsearch-core/src$1',
     '^instantsearch-ui-components$':
       '<rootDir>/packages/instantsearch-ui-components/src/',
     '^instantsearch-ui-components/(.*)$':

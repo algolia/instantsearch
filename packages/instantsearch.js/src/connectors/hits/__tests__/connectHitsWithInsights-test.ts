@@ -18,7 +18,7 @@ import connectHitsWithInsights from '../connectHitsWithInsights';
 
 import type { Hit } from '../../../types';
 
-jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+jest.mock('../../../../../instantsearch-core/src/lib/public/hits-absolute-position', () => ({
   addAbsolutePosition: (hits: Hit[]) => hits,
 }));
 

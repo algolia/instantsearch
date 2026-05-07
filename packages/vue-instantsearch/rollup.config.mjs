@@ -139,6 +139,7 @@ const external = id =>
   [
     'algoliasearch-helper',
     'instantsearch.js',
+    'instantsearch-core',
     'instantsearch-ui-components',
     'vue',
     'mitt',

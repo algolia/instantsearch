@@ -8,7 +8,7 @@ import type {
   ComponentProps,
   HitsClassNames,
 } from 'instantsearch-ui-components';
-import type { HitsConnectorParams } from 'instantsearch.js/es/connectors/hits/connectHits';
+import type { HitsConnectorParams } from 'instantsearch-core';
 
 export type BannerWidgetParams = {
   container: HTMLElement;

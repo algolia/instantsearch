@@ -39,7 +39,8 @@
     "@swc/helpers": "0.5.18",
     "instantsearch-ui-components": "0.26.1",
     "instantsearch.js": "4.96.2",
-    "mitt": "^2.1.0"
+    "mitt": "^2.1.0",
+    "instantsearch-core": "0.1.0"
   },
   "peerDependencies": {
     "@vue/server-renderer": "^3.1.2",

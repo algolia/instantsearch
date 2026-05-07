@@ -6,8 +6,8 @@ import type {
   HitsProps as HitsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { Hit, BaseHit } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { UseHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<

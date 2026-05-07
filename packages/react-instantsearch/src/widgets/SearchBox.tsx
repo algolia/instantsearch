@@ -4,7 +4,7 @@ import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 import type { UseSearchBoxProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<

@@ -29,7 +29,7 @@ import type {
   SearchResponse,
 } from '../../../types';
 
-jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+jest.mock('../../../../../instantsearch-core/src/lib/public/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
