@@ -34,13 +34,13 @@ Before running any CLI commands, you need:
 
 Always use `--json --yes` so you get structured output and no interactive prompts.
 
-**IMPORTANT: Always run `npx instantsearch <command> --help` before running a command for the first time.** Flag names differ between commands and may not match what you'd guess from Algolia docs. Do not assume flag names — check `--help` output first to avoid wasted attempts.
+**IMPORTANT: Always run `npx @instantsearch/cli <command> --help` before running a command for the first time.** Flag names differ between commands and may not match what you'd guess from Algolia docs. Do not assume flag names — check `--help` output first to avoid wasted attempts.
 
 Run the three commands in order (skip `init` if `instantsearch.json` already exists):
 
-1. **`npx instantsearch init --help`**, then **`npx instantsearch init`** — initializes the project, writes `instantsearch.json`, generates the shared search client and provider (`algolia-client.ts` and `algolia-provider.tsx`), installs packages.
-2. **`npx instantsearch introspect --help`**, then **`npx instantsearch introspect`** — discovers attributes, facets, and replicas for the target index.
-3. **`npx instantsearch add --help`**, then **`npx instantsearch add search`** — scaffolds the widget files for a search feature and an autocomplete component.
+1. **`npx @instantsearch/cli init --help`**, then **`npx @instantsearch/cli init`** — initializes the project, writes `instantsearch.json`, generates the shared search client and provider (`algolia-client.ts` and `algolia-provider.tsx`), installs packages.
+2. **`npx @instantsearch/cli introspect --help`**, then **`npx @instantsearch/cli introspect`** — discovers attributes, facets, and replicas for the target index.
+3. **`npx @instantsearch/cli add --help`**, then **`npx @instantsearch/cli add search`** — scaffolds the widget files for a search feature and an autocomplete component.
 
 Use the introspect output to understand what the index contains, then use your judgment to pick the best values for the `add search` flags.
 

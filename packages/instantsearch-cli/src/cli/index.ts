@@ -66,7 +66,7 @@ const program = new Command();
 program.exitOverride();
 
 program
-  .name('instantsearch')
+  .name('@instantsearch/cli')
   .description('Install and pre-configure InstantSearch widgets into an existing project.')
   .version('0.0.0');
 

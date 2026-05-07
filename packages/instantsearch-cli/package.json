@@ -1,5 +1,5 @@
 {
-  "name": "@algolia/instantsearch-cli",
+  "name": "@instantsearch/cli",
   "version": "0.0.0",
   "license": "MIT",
   "description": "Install and pre-configure InstantSearch widgets into an existing project",
@@ -14,7 +14,7 @@
   "author": "Algolia <support@algolia.com>",
   "main": "src/index.ts",
   "bin": {
-    "instantsearch": "bin/instantsearch.mjs"
+    "@instantsearch/cli": "bin/instantsearch.mjs"
   },
   "scripts": {
     "start": "tsx src/cli/index.ts",

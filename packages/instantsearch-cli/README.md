@@ -1,4 +1,4 @@
-# @algolia/instantsearch-cli
+# @instantsearch/cli
 
 A CLI that scaffolds InstantSearch widgets into your project. It detects your framework, introspects your Algolia index, and generates ready-to-mount components without the need for manual wiring.
 
@@ -6,15 +6,15 @@ A CLI that scaffolds InstantSearch widgets into your project. It detects your fr
 
 ```bash
 # Interactive
-npx instantsearch init
-npx instantsearch add search
+npx @instantsearch/cli init
+npx @instantsearch/cli add search
 
 # Non-interactive (for agents / CI)
-npx instantsearch init \
+npx @instantsearch/cli init \
   --yes --json \
   --flavor react --app-id YOUR_APP_ID --search-api-key YOUR_SEARCH_KEY
 
-npx instantsearch add search product-search \
+npx @instantsearch/cli add search product-search \
   --yes --json \
   --index products \
   --hits-title name --hits-image image_url \
@@ -22,7 +22,7 @@ npx instantsearch add search product-search \
   --sort-by-replicas products_price_asc,products_price_desc
 
 # Discover index schema before scaffolding
-npx instantsearch introspect --yes --json --index products
+npx @instantsearch/cli introspect --yes --json --index products
 ```
 
 ## Concepts
@@ -54,7 +54,7 @@ TypeScript output is emitted when `tsconfig.json` is present; plain JavaScript o
 
 ## Commands
 
-### `npx instantsearch init`
+### `npx @instantsearch/cli init`
 
 Initialize InstantSearch in the current project. Writes `instantsearch.json` (root manifest), `algolia-client.ts|js`, and `algolia-provider.tsx|jsx|ts|js` (shared provider with no `indexName`).
 
@@ -70,7 +70,7 @@ Initialize InstantSearch in the current project. Writes `instantsearch.json` (ro
 
 In `--yes` mode, `--app-id` and `--search-api-key` are required.
 
-### `npx instantsearch add <item> [name]`
+### `npx @instantsearch/cli add <item> [name]`
 
 Add a composite feature or a widget. The CLI determines what to generate based on the item name.
 
@@ -110,7 +110,7 @@ Adding the same widget twice auto-suffixes files by attribute (e.g., `Refinement
 
 If the feature doesn't exist yet, the CLI creates it inline — prompting for index and schema interactively, or requiring `--index` in `--yes` mode.
 
-### `npx instantsearch introspect`
+### `npx @instantsearch/cli introspect`
 
 Discover attributes, facets, and replicas of an Algolia index. Useful for understanding an index's schema before scaffolding a feature, or for agents that need to plan which flags to pass.
 
@@ -238,5 +238,5 @@ The CLI only writes new files — it never edits existing code. Mount the provid
 ## Running tests
 
 ```bash
-yarn workspace @algolia/instantsearch-cli test
+yarn workspace @instantsearch/cli test
 ```
