@@ -14,21 +14,18 @@ import { Carousel } from '../../../components';
 
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
-  ClientSideToolComponentProps,
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
+import type {
+  ClientSideToolComponentProps,
+  SearchToolInput,
+  UserClientSideTool,
+} from 'instantsearch-core';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,

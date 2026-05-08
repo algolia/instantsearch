@@ -36,12 +36,16 @@ import type {
   IndexRenderState,
 } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+
 import type {
   AddToolResultWithOutput,
-  UserClientSideTool,
-  ClientSideTools,
+  ApplyFiltersParams,
   ClientSideTool,
-} from 'instantsearch-ui-components';
+  ClientSideTools,
+  UserClientSideTool,
+} from './types';
+
+export type * from './types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -133,11 +137,6 @@ export type ChatTransport = {
     }
   | { agentId?: undefined; feedback?: never }
 );
-
-export type ApplyFiltersParams = {
-  query?: string;
-  facetFilters?: string[][];
-};
 
 export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;

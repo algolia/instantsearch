@@ -3,6 +3,7 @@ export type * from './autocomplete/connectAutocomplete';
 export { default as connectBreadcrumb } from './breadcrumb/connectBreadcrumb';
 export type * from './breadcrumb/connectBreadcrumb';
 export { default as connectChat } from './chat/connectChat';
+export type * from './chat/types';
 export type * from './chat/connectChat';
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export type * from './clear-refinements/connectClearRefinements';

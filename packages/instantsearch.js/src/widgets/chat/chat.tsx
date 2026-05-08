@@ -11,7 +11,6 @@ import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChat from '../../connectors/chat/connectChat';
 import {
   SearchIndexToolType,
   RecommendToolType,
@@ -33,11 +32,16 @@ import { carousel } from '../../templates';
 import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
+import { connectChat } from 'instantsearch-core';
 import type {
-  ChatRenderState,
   ChatConnectorParams,
+  ChatRenderState,
   ChatWidgetDescription,
-} from '../../connectors/chat/connectChat';
+  ClientSideToolComponentProps,
+  ClientSideTools,
+  SearchToolInput,
+  UserClientSideTool,
+} from 'instantsearch-core';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
@@ -66,11 +70,7 @@ import type {
   ChatPromptTranslations,
   ChatStatus,
   ChatToggleButtonProps,
-  ClientSideToolComponentProps,
-  ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 

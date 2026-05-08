@@ -17,7 +17,7 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,

@@ -13,10 +13,10 @@ import { carousel } from '../../templates';
 
 import type {
   ChatTemplates,
-  ClientSideToolTemplateData,
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
 import type { RecordWithObjectID } from 'instantsearch-ui-components';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 export function createDisplayResultsTool<
   THit extends RecordWithObjectID = RecordWithObjectID
@@ -31,7 +31,7 @@ export function createDisplayResultsTool<
   const Button = createButtonComponent({ createElement: h });
 
   function DisplayResultsLayoutComponent(
-    toolProps: ClientSideToolTemplateData
+    toolProps: ClientSideToolComponentProps
   ) {
     return (
       <DisplayResultsUIComponent

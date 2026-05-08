@@ -42,7 +42,7 @@ import type {
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+import type { ChatRenderState } from 'instantsearch-core';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,

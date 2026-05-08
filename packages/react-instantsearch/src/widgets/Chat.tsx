@@ -38,12 +38,14 @@ import type {
   ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
-  UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch-core';
-import type { UIMessage } from 'instantsearch-core';
+import type {
+  IndexUiState,
+  UIMessage,
+  UserClientSideTool,
+  UserClientSideTools,
+} from 'instantsearch-core';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({

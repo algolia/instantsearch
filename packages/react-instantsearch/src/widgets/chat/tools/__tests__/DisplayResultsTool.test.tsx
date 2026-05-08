@@ -7,7 +7,7 @@ import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 type TestResult = {
   objectID: string;
