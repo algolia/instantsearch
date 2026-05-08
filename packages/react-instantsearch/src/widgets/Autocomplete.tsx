@@ -12,10 +12,12 @@ import {
   createAutocompleteRecentSearchComponent,
   createAutocompleteStorage,
   cx,
+} from 'instantsearch-ui-components';
+import {
   getPromptSuggestionHits,
   isPromptSuggestion,
-} from 'instantsearch-ui-components';
-import { warn } from 'instantsearch-core';
+  warn,
+} from 'instantsearch-core';
 import React, {
   createElement,
   Fragment,

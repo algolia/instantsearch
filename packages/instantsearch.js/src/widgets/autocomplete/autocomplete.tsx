@@ -15,8 +15,6 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
@@ -42,7 +40,11 @@ import type {
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from 'instantsearch-core';
+import {
+  getPromptSuggestionHits,
+  isPromptSuggestion,
+  type ChatRenderState,
+} from 'instantsearch-core';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,

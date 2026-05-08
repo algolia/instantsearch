@@ -7,7 +7,7 @@ import {
   hasTextContent,
   isPartText,
   isPartTool,
-} from '../../lib/utils/chat';
+} from 'instantsearch-core';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';

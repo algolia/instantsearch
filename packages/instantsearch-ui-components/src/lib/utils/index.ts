@@ -1,3 +1,12 @@
-export * from './find';
-export * from './promptSuggestions';
-export * from './startsWith';
+export {
+  find,
+  findTool,
+  getPromptSuggestionHits,
+  getTextContent,
+  hasTextContent,
+  isPartText,
+  isPartTool,
+  isPromptSuggestion,
+  PROMPT_SUGGESTION_FLAG,
+  startsWith,
+} from 'instantsearch-core';

@@ -3,7 +3,7 @@ import type {
   ChatInit as ChatInitAi,
   UIMessage,
 } from '../../lib/chat';
-import type { SendEventForHits } from '../../lib/utils';
+import type { SendEventForHits } from '../../lib/public/createSendEventForHits';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 type ChatToolMessage = Extract<
