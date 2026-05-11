@@ -86,20 +86,18 @@ export function Feeds({ renderFeed, ...props }: FeedsProps) {
   }, [feedIDs, parentIndex]);
 
   useEffect(() => {
+    const containers = feedContainersRef.current;
+    const pendingRemovals = pendingRemovalsRef.current;
     return () => {
       if (removalTimerRef.current !== null) {
         clearTimeout(removalTimerRef.current);
         removalTimerRef.current = null;
       }
 
-      const containers = feedContainersRef.current;
       const toRemove = Array.from(
-        new Set([
-          ...containers.values(),
-          ...pendingRemovalsRef.current.values(),
-        ])
+        new Set([...containers.values(), ...pendingRemovals.values()])
       );
-      pendingRemovalsRef.current.clear();
+      pendingRemovals.clear();
       containers.clear();
       if (toRemove.length > 0) {
         parentIndex.removeWidgets(toRemove);
