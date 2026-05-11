@@ -23,7 +23,7 @@ import type {
   Renderer,
   RecommendResponse,
 } from '../../types';
-import type { TrendingFacetItem } from '../../types/recommend';
+import type { TrendingFacetItem } from 'instantsearch-core';
 import type {
   TrendingFacetsClassNames,
   TrendingFacetsProps as TrendingFacetsUiProps,

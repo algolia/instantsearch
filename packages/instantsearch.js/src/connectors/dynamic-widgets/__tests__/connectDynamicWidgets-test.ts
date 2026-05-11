@@ -24,7 +24,7 @@ import { index } from '../../../widgets';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
 
-import type { SearchResponse } from '../../../types/algoliasearch';
+import type { SearchResponse } from 'instantsearch-core';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);

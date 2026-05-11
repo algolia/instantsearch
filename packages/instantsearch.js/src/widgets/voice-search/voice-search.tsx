@@ -22,7 +22,7 @@ import type {
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
 } from '../../connectors/voice-search/connectVoiceSearch';
-import type { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
+import type { CreateVoiceSearchHelper } from 'instantsearch-core';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 

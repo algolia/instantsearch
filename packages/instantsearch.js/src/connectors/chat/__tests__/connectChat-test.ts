@@ -10,10 +10,10 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { Chat } from '../../../lib/chat';
+import { Chat } from 'instantsearch-core';
 import connectChat from '../connectChat';
 
-import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
+import type { UIMessage, ChatTransport } from 'instantsearch-core';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
 

@@ -20,7 +20,7 @@ import {
 import voiceSearch from '../voice-search';
 
 import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
-import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
+import type { VoiceSearchHelper } from 'instantsearch-core';
 import type { Widget } from '../../../types';
 import type { VoiceSearchWidgetParams } from '../voice-search';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';

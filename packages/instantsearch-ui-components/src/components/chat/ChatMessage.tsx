@@ -7,10 +7,9 @@ import { createButtonComponent } from '../Button';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
+import type { AddToolResultWithOutput, ChatStatus } from 'instantsearch-core';
 import type {
-  AddToolResultWithOutput,
   ChatMessageBase,
-  ChatStatus,
   ChatToolMessage,
   ClientSideTools,
 } from './types';
@@ -149,7 +148,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   translations?: Partial<ChatMessageTranslations>;
 };
 
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
+// Keep in sync with packages/instantsearch-core/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
 export function createChatMessageComponent({ createElement }: Renderer) {

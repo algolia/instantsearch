@@ -18,7 +18,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
-} from '../../lib/chat';
+} from 'instantsearch-core';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
@@ -36,6 +36,7 @@ import { connectChat } from 'instantsearch-core';
 import type {
   ChatConnectorParams,
   ChatRenderState,
+  ChatStatus,
   ChatWidgetDescription,
   ClientSideToolComponentProps,
   ClientSideTools,
@@ -68,7 +69,6 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ChatStatus,
   ChatToggleButtonProps,
   RecordWithObjectID,
 } from 'instantsearch-ui-components';

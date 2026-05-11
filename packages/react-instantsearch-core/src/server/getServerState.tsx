@@ -15,7 +15,7 @@ import { InstantSearchSSRProvider } from '../components/InstantSearchSSRProvider
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
 import type { InstantSearch, UiState } from 'instantsearch-core';
-import type { ReactNode } from 'react';
+import type { JSX, ReactNode } from 'react';
 
 type SearchRef = { current: InstantSearch | undefined };
 
