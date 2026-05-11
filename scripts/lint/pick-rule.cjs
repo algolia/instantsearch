@@ -14,7 +14,7 @@ const oxlintBin = path.join(
 const skipListPath = path.join(__dirname, 'auto-fix-skip.json');
 
 const LINT_TARGETS = ['packages', 'scripts', 'tests', 'specs'];
-const DEFAULT_MAX_FILES = 20;
+const DEFAULT_MAX_FILES = 10;
 
 // Files matching these patterns are off-limits to the auto-fix bot.
 // Keep in sync with the DENY_REGEX in .github/workflows/lint-fix.yml, which
