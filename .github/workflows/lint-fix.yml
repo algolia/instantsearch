@@ -292,9 +292,7 @@ jobs:
             --head "$BRANCH" \
             --draft \
             --title "$TITLE" \
-            --body-file "$BODY_FILE" \
-            --label "chore" \
-            --label "automated")
+            --body-file "$BODY_FILE")
           echo "Created PR: $PR_URL"
 
           # Team reviewer assignment requires org-read scope, which the default
