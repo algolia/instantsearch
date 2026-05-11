@@ -423,7 +423,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
-            'x-algolia-component': 'ais-chat',
           },
           prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
             return {

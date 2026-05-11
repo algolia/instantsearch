@@ -896,7 +896,7 @@ data: [DONE]`,
         };
       }
 
-      it('adds the x-algolia-component header on agent requests', async () => {
+      it('sends the standard Algolia headers on agent requests', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
         await widget.chatInstance.sendMessage({ text: 'hello' });
@@ -906,9 +906,9 @@ data: [DONE]`,
           expect.objectContaining({
             'x-algolia-application-id': 'appId',
             'x-algolia-api-key': 'apiKey',
-            'x-algolia-component': 'ais-chat',
           })
         );
+        expect(headers).toHaveProperty('x-algolia-agent');
       });
 
       it('forwards the x-algolia-referer header from sendMessage options', async () => {
@@ -922,7 +922,6 @@ data: [DONE]`,
         const { headers } = getRequestPayload();
         expect(headers).toMatchObject({
           'x-algolia-referer': 'prompt-suggestions',
-          'x-algolia-component': 'ais-chat',
         });
       });
 
@@ -949,9 +948,6 @@ data: [DONE]`,
           'prompt-suggestions'
         );
         expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
-        expect(secondHeaders).toMatchObject({
-          'x-algolia-component': 'ais-chat',
-        });
       });
 
       it('does not duplicate transport metadata in the request body', async () => {
