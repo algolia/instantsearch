@@ -19,7 +19,7 @@ File: `packages/react-instantsearch-core/src/connectors/use<Pascal>.ts`
 Choose the closest precedent before writing code:
 
 - Shared UI component wrapper: `Hits.tsx`, `RelatedProducts.tsx`, `TrendingItems.tsx`, `FilterSuggestions.tsx`
-- React-only presentational UI in `src/ui`: `SearchBox.tsx`, `RangeInput.tsx`, `RefinementList.tsx`, `Menu.tsx`, `MenuSelect.tsx`, `SortBy.tsx`
+- React-only presentational UI in `src/ui`: `SearchBox.tsx`, `RangeInput.tsx`, `RefinementList.tsx`, `Menu.tsx`, `SortBy.tsx`, `HitsPerPage.tsx`
 
 ### If the UI is shared via `instantsearch-ui-components`
 
