@@ -12,7 +12,7 @@ import type { Templates, HoganHelpers, TemplateParams } from '../../types';
 import type {
   BindEventForHits,
   SendEventForHits,
-} from '../utils/createSendEventForHits';
+} from 'instantsearch-core';
 import type { HoganOptions, Template } from 'hogan.js';
 
 type TransformedHoganHelpers = {

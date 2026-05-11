@@ -10,7 +10,7 @@ import {
 import { connectFeeds, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { getInitialResults, waitForResults } from '../server';
-import { hydrateSearchClient } from '../utils/hydrateSearchClient';
+import { hydrateSearchClient } from 'instantsearch-core';
 
 const compositionID = 'my-comp';
 
