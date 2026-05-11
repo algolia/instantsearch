@@ -23,13 +23,15 @@ After your edits, the file list in `inScopeFiles` must report **zero violations 
 
 ## How to verify
 
-Run oxlint scoped to one or more in-scope files and grep for the rule's `code` field:
+Run oxlint scoped to one or more in-scope files:
 
 ```bash
 node_modules/.bin/oxlint --type-aware -f json <file> [<file>...]
 ```
 
 Each diagnostic's `code` looks like `eslint(no-debugger)` or `typescript-eslint(consistent-type-imports)`. You succeed when no diagnostic for the targeted rule remains in any in-scope file.
+
+If the JSON output is too large to inline, Claude Code persists it to a path it shows you (e.g. `/home/runner/.claude/.../tool-results/<id>.txt`) — use the `Read` (or `Grep`) tool on that exact path. Do not try to redirect, pipe, or use other shell utilities; only `node_modules/.bin/oxlint` is on the allowlist.
 
 `yarn lint:fix` applies oxlint's autofixer (already run before you started; remaining violations are the ones the autofixer can't handle).
 
