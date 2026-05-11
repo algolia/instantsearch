@@ -8,7 +8,7 @@ import {
   deserializePayload,
 } from 'instantsearch-core';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 
 import type { EscapedHits } from '../../../types';
 

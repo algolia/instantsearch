@@ -4,7 +4,7 @@ import { createLookingSimilarComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectLookingSimilar from '../../connectors/looking-similar/connectLookingSimilar';
+import { connectLookingSimilar } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   LookingSimilarWidgetDescription,
   LookingSimilarConnectorParams,
   LookingSimilarRenderState,
-} from '../../connectors/looking-similar/connectLookingSimilar';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,

@@ -39,7 +39,7 @@ import type {
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors/autocomplete/connectAutocomplete';
+} from '../../connectors';
 import {
   getPromptSuggestionHits,
   isPromptSuggestion,

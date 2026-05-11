@@ -11,14 +11,14 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import InstantSearch from '../../../lib/InstantSearch';
-import connectSearchBox from '../connectSearchBox';
+import { connectSearchBox } from 'instantsearch-core';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {

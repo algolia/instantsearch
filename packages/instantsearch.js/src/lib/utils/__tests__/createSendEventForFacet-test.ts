@@ -10,7 +10,7 @@ import {
   isFacetRefined,
 } from 'instantsearch-core';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 
 import type { SearchClient } from '../../../types';
 

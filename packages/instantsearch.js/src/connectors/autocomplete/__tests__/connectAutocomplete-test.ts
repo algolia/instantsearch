@@ -17,13 +17,13 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import instantsearch from '../../../index.es';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import connectAutocomplete from '../connectAutocomplete';
+import { connectAutocomplete } from 'instantsearch-core';
 
 import type { SearchClient, SearchResponse } from '../../../types';
-import type { AutocompleteRenderState } from '../connectAutocomplete';
+import type { AutocompleteRenderState } from 'instantsearch-core';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {

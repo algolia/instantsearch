@@ -14,7 +14,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
 
 import { createInsightsMiddleware } from '..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../instantsearch-core/test/createInstantSearch';
 import { connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';

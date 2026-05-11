@@ -14,7 +14,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
-import { createRenderOptions, createWidget } from '../../../test/createWidget';
+import { createRenderOptions, createWidget } from '../../../../instantsearch-core/test/createWidget';
 import { connectSearchBox, connectPagination } from '../../connectors';
 import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
@@ -25,11 +25,11 @@ import version from '../version';
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
+} from '../../connectors';
 import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../connectors/search-box/connectSearchBox';
+} from '../../connectors';
 import type { UiState, Widget, IndexWidget } from '../../types';
 import type { RefObject } from 'preact';
 

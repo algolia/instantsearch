@@ -16,7 +16,7 @@ import { render as preactRender } from 'preact';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import voiceSearch from '../voice-search';
 
 import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';

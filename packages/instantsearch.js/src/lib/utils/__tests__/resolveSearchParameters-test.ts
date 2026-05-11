@@ -4,7 +4,7 @@
 
 import { resolveSearchParameters } from 'instantsearch-core';
 
-import { createIndexInitOptions } from '../../../../test/createWidget';
+import { createIndexInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { index } from '../../../widgets';
 
 describe('mergeSearchParameters', () => {

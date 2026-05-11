@@ -4,7 +4,7 @@ import { createTrendingFacetsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectTrendingFacets from '../../connectors/trending-facets/connectTrendingFacets';
+import { connectTrendingFacets } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   TrendingFacetsWidgetDescription,
   TrendingFacetsConnectorParams,
   TrendingFacetsRenderState,
-} from '../../connectors/trending-facets/connectTrendingFacets';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,

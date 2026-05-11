@@ -3,7 +3,7 @@
  */
 
 import { getWidgetAttribute } from '..';
-import { createInitOptions } from '../../../../test/createWidget';
+import { createInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import { connectRefinementList } from '../../../connectors';
 import {
   hierarchicalMenu,

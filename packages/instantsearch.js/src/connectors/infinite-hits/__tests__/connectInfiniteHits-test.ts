@@ -10,16 +10,16 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import instantsearch from '../../../index.es';
 import { createInfiniteHitsSessionStorageCache } from '../../../lib/infiniteHitsCache';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import connectInfiniteHits from '../connectInfiniteHits';
+import { connectInfiniteHits } from 'instantsearch-core';
 
 import type {
   SearchClient,

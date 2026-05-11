@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
-import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements';
+import { connectCurrentRefinements } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   CurrentRefinementsConnectorParams,
   CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
-} from '../../connectors/current-refinements/connectCurrentRefinements';
+} from '../../connectors';
 import type { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types';
 
 export type CurrentRefinementsCSSClasses = Partial<{

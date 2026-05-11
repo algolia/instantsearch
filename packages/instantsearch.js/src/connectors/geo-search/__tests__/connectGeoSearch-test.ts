@@ -13,14 +13,14 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import instantsearch from '../../../index.es';
-import connectGeoSearch from '../connectGeoSearch';
+import { connectGeoSearch } from 'instantsearch-core';
 
 import type { SearchResponse } from '../../../types';
 
