@@ -104,11 +104,11 @@ export function App() {
           <ColorModeSwitcher />
         </div>
 
-        {experiences.map((experience, index) => (
-          <div key={index} class={currentIndex !== index ? "hidden" : ""}>
-            <experience.view isActive={currentIndex === index} />
-          </div>
-        ))}
+        {experiences.map((experience, index) =>
+          currentIndex === index ? (
+            <experience.view key={index} isActive={true} />
+          ) : null
+        )}
       </div>
     </FlavorContext.Provider>
   );
