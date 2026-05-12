@@ -113,8 +113,17 @@ function Widget<TWidget extends SingleWidget>({
     case 'ToggleRefinement':
     case 'RangeInput':
     case 'RefinementList':
-    case 'Menu': {
+    case 'Menu':
+    case 'MenuSelect': {
       return <widget.Component attribute="brand" {...props} />;
+    }
+    case 'NumericMenu': {
+      return (
+        <widget.Component attribute="price" items={[{ label: 'All' }]} {...props} />
+      );
+    }
+    case 'RatingMenu': {
+      return <widget.Component attribute="rating" {...props} />;
     }
     case 'SearchBox': {
       return <widget.Component onSubmit={undefined} {...props} />;
