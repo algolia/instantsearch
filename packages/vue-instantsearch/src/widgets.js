@@ -23,6 +23,12 @@ export { default as AisQueryRuleCustomData } from './components/QueryRuleCustomD
 export { default as AisRangeInput } from './components/RangeInput.vue';
 export { default as AisRatingMenu } from './components/RatingMenu.vue';
 export { default as AisRefinementList } from './components/RefinementList.vue';
+export { default as AisRelatedProducts } from './components/RelatedProducts';
+export { default as AisTrendingItems } from './components/TrendingItems';
+export { default as AisTrendingFacets } from './components/TrendingFacets';
+export { default as AisLookingSimilar } from './components/LookingSimilar';
+export { default as AisFrequentlyBoughtTogether } from './components/FrequentlyBoughtTogether';
+export { default as AisFilterSuggestions } from './components/FilterSuggestions';
 export { default as AisStateResults } from './components/StateResults.vue';
 export { default as AisSearchBox } from './components/SearchBox.vue';
 export { default as AisSnippet } from './components/Snippet.vue';

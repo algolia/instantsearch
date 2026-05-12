@@ -119,6 +119,16 @@ describe('widgets', () => {
           "name": "Menu",
         },
         {
+          "$$type": "ais.menu",
+          "$$widgetType": "ais.menuSelect",
+          "name": "MenuSelect",
+        },
+        {
+          "$$type": "ais.numericMenu",
+          "$$widgetType": "ais.numericMenu",
+          "name": "NumericMenu",
+        },
+        {
           "$$type": "ais.pagination",
           "$$widgetType": "ais.pagination",
           "name": "Pagination",
@@ -127,6 +137,11 @@ describe('widgets', () => {
           "$$type": "ais.range",
           "$$widgetType": "ais.rangeInput",
           "name": "RangeInput",
+        },
+        {
+          "$$type": "ais.ratingMenu",
+          "$$widgetType": "ais.ratingMenu",
+          "name": "RatingMenu",
         },
         {
           "$$type": "ais.refinementList",

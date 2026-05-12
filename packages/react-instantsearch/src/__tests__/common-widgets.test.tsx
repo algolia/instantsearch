@@ -12,6 +12,8 @@ import {
   HierarchicalMenu,
   Breadcrumb,
   Menu,
+  MenuSelect,
+  NumericMenu,
   Pagination,
   InfiniteHits,
   SearchBox,
@@ -19,6 +21,7 @@ import {
   Hits,
   Index,
   RangeInput,
+  RatingMenu,
   HitsPerPage,
   ClearRefinements,
   CurrentRefinements,
@@ -282,11 +285,21 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </form>
     );
   },
-  createRatingMenuWidgetTests() {
-    throw new Error('RatingMenu is not supported in React InstantSearch');
+  createRatingMenuWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <RatingMenu {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
-  createNumericMenuWidgetTests() {
-    throw new Error('NumericMenu is not supported in React InstantSearch');
+  createNumericMenuWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <NumericMenu {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
   createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
@@ -382,8 +395,13 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       flavor: 'react-instantsearch',
     };
   },
-  createMenuSelectWidgetTests() {
-    throw new Error('MenuSelect is not supported in React InstantSearch');
+  createMenuSelectWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <MenuSelect {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
   createDynamicWidgetsWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
@@ -454,12 +472,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
-  createRatingMenuWidgetTests: {
-    act,
-    skippedTests: {
-      'RatingMenu widget common tests': true,
-    },
-  },
+  createRatingMenuWidgetTests: { act },
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },
@@ -468,24 +481,14 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createSearchBoxWidgetTests: { act },
   createSortByWidgetTests: { act },
   createStatsWidgetTests: { act },
-  createNumericMenuWidgetTests: {
-    act,
-    skippedTests: {
-      'NumericMenu widget common tests': true,
-    },
-  },
+  createNumericMenuWidgetTests: { act },
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherWidgetTests: { act },
   createTrendingItemsWidgetTests: { act },
   createTrendingFacetsWidgetTests: { act },
   createLookingSimilarWidgetTests: { act },
   createPoweredByWidgetTests: { act },
-  createMenuSelectWidgetTests: {
-    act,
-    skippedTests: {
-      'MenuSelect widget common tests': true,
-    },
-  },
+  createMenuSelectWidgetTests: { act },
   createDynamicWidgetsWidgetTests: { act },
   createChatWidgetTests: {
     act,

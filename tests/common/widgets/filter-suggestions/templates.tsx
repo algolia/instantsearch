@@ -2,6 +2,8 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import React from 'react';
 
+import { skippableDescribe } from '../../common';
+
 import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
@@ -10,9 +12,9 @@ const MIN_LOADING_DURATION_MS = 300;
 
 export function createTemplatesTests(
   setup: FilterSuggestionsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests = {} }: Required<TestOptions>
 ) {
-  describe('templates', () => {
+  skippableDescribe('templates', skippedTests, () => {
     test('renders with custom header template', async () => {
       const searchClient = createSearchClient({
         search: jest.fn(() =>
@@ -80,7 +82,7 @@ export function createTemplatesTests(
               <div className="custom-header">Custom Header</div>
             ),
           },
-          vue: {},
+          vue: { agentId: 'test-agent-id', debounceMs: 0 },
         },
       });
 
@@ -168,7 +170,7 @@ export function createTemplatesTests(
               <div className="custom-item">{suggestion.label}</div>
             ),
           },
-          vue: {},
+          vue: { agentId: 'test-agent-id', debounceMs: 0 },
         },
       });
 
@@ -227,7 +229,7 @@ export function createTemplatesTests(
               <div className="custom-empty">No suggestions</div>
             ),
           },
-          vue: {},
+          vue: { agentId: 'test-agent-id' },
         },
       });
 

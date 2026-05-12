@@ -80,6 +80,18 @@ function getAllComponents() {
         props.indexName = 'indexName';
       } else if (name === 'AisFeeds') {
         props.isolated = false;
+      } else if (
+        name === 'AisRelatedProducts' ||
+        name === 'AisFrequentlyBoughtTogether' ||
+        name === 'AisLookingSimilar'
+      ) {
+        props.objectIDs = ['1'];
+      } else if (name === 'AisTrendingFacets') {
+        props.facetName = 'brand';
+      } else if (name === 'AisTrendingItems') {
+        // no required props
+      } else if (name === 'AisFilterSuggestions') {
+        props.agentId = 'test-agent-id';
       } else {
         props.attribute = 'attr';
       }
