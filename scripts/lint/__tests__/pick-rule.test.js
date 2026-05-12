@@ -8,12 +8,12 @@ const {
 
 describe('parseArgs', () => {
   it('returns defaults when given no flags', () => {
-    expect(parseArgs([])).toEqual({ rule: 'auto', maxFiles: 20, out: null });
+    expect(parseArgs([])).toEqual({ rule: 'auto', maxFiles: 10, out: null });
   });
 
   it('parses --rule and --out as space-separated values', () => {
     expect(parseArgs(['--rule', 'eslint(no-debugger)', '--out', 'x.json']))
-      .toEqual({ rule: 'eslint(no-debugger)', maxFiles: 20, out: 'x.json' });
+      .toEqual({ rule: 'eslint(no-debugger)', maxFiles: 10, out: 'x.json' });
   });
 
   it('parses --flag=value form', () => {

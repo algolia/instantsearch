@@ -90,12 +90,13 @@ jobs:
       - name: Run Claude Code
         if: steps.pick.outputs.status == 'ok'
         timeout-minutes: 18
+        continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           claude -p "$(cat .github/prompts/lint-fix.md)" \
             --allowedTools "Read,Edit,Write,Glob,Grep,Bash(node_modules/.bin/oxlint *)" \
-            --max-turns 30 \
+            --max-turns 60 \
             --verbose \
             --output-format stream-json \
             < /dev/null
@@ -291,9 +292,7 @@ jobs:
             --head "$BRANCH" \
             --draft \
             --title "$TITLE" \
-            --body-file "$BODY_FILE" \
-            --label "chore" \
-            --label "automated")
+            --body-file "$BODY_FILE")
           echo "Created PR: $PR_URL"
 
           # Team reviewer assignment requires org-read scope, which the default
