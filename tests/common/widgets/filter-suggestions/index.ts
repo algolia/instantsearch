@@ -15,11 +15,12 @@ export type JSFilterSuggestionsWidgetParams = Omit<
 > &
   FilterSuggestionsConnectorParams;
 export type ReactFilterSuggestionsWidgetParams = FilterSuggestionsProps;
+export type VueFilterSuggestionsWidgetParams = FilterSuggestionsConnectorParams;
 
 type FilterSuggestionsWidgetParams = {
   javascript: JSFilterSuggestionsWidgetParams;
   react: ReactFilterSuggestionsWidgetParams;
-  vue: Record<string, never>;
+  vue: VueFilterSuggestionsWidgetParams;
 };
 
 declare module '../../common' {

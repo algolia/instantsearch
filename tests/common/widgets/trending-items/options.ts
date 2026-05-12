@@ -1,5 +1,5 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
-import { wait } from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
 import type { TrendingItemsWidgetSetup } from '.';
@@ -25,8 +25,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingItems')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingItems"
         >
@@ -103,8 +106,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingItems')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingItems"
         >
@@ -159,8 +165,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingItems'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingItems')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingItems ais-TrendingItems--empty"
         >
