@@ -17,11 +17,7 @@ const searchClient = algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76"
 
 const INDEX_NAME = "instant_search";
 
-interface Props {
-  isActive?: boolean;
-}
-
-export function AgenticView({ isActive = true }: Props) {
+export function AgenticView() {
   const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
   if (searchRef.current === null) {
     searchRef.current = instantsearch({
@@ -35,20 +31,18 @@ export function AgenticView({ isActive = true }: Props) {
   useEffect(() => {
     const search = searchRef.current!;
     search.start();
-    return () => search.dispose();
+    return () => {
+      // `ChatSidePanelLayout` mutates `document.body.style.marginRight` while
+      // open and only restores it when `open` flips to `false`. Close the chat
+      // before disposing so the restoration path runs and the margin doesn't
+      // leak into other tabs.
+      const chatState = search.renderState[INDEX_NAME]?.chat as
+        | Partial<ChatRenderState>
+        | undefined;
+      chatState?.setOpen?.(false);
+      search.dispose();
+    };
   }, []);
-
-  useEffect(() => {
-    // `ChatSidePanelLayout` mutates `document.body.style.marginRight` while
-    // open. Since tabs are toggled via `hidden` (not unmounted), we close the
-    // chat when this tab deactivates so the widget's own cleanup path restores
-    // the margin and prevents bleed into other tabs.
-    if (isActive) return;
-    const chatState = searchRef.current?.renderState[INDEX_NAME]?.chat as
-      | Partial<ChatRenderState>
-      | undefined;
-    chatState?.setOpen?.(false);
-  }, [isActive]);
 
   return (
     <SearchContext.Provider value={searchRef.current}>

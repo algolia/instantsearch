@@ -20,13 +20,11 @@ function getFlavorFromURL(): Flavor {
   return "js";
 }
 
-type ViewProps = { isActive: boolean };
-
 interface Experience {
   title: string;
   description: string;
   icon: LucideIcon;
-  view: ComponentType<ViewProps>;
+  view: ComponentType;
 }
 
 const experiences: Experience[] = [
@@ -105,9 +103,7 @@ export function App() {
         </div>
 
         {experiences.map((experience, index) =>
-          currentIndex === index ? (
-            <experience.view key={index} isActive={true} />
-          ) : null
+          currentIndex === index ? <experience.view key={index} /> : null
         )}
       </div>
     </FlavorContext.Provider>
