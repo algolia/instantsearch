@@ -1,4 +1,5 @@
-import { join } from 'path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import express from 'express';
 import React from 'react';
@@ -7,6 +8,9 @@ import { getServerState } from 'react-instantsearch';
 
 import App from './App';
 import { responsesCache } from './searchClient';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 

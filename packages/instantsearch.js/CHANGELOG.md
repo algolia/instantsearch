@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.97.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.96.2...instantsearch.js@4.97.0) (2026-05-12)
+
+
+### Features
+
+* **chat:** add `initialMessages` option ([#6978](https://github.com/algolia/instantsearch/issues/6978)) ([089c174](https://github.com/algolia/instantsearch/commit/089c17424518e1cd8b07ce7d89dde4acd1813040))
+
+
+
+
+
 ## [4.96.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.96.0...instantsearch.js@4.96.1) (2026-05-05)
 
 
