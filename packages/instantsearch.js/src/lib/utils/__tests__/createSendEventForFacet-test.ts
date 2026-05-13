@@ -14,7 +14,7 @@ import { createInstantSearch } from '../../../../../instantsearch-core/test/crea
 
 import type { SearchClient } from '../../../types';
 
-jest.mock('instantsearch-core/src/lib/public/isFacetRefined', () => ({
+jest.mock('instantsearch-core/src/lib/utils/isFacetRefined', () => ({
   isFacetRefined: jest.fn(),
 }));
 

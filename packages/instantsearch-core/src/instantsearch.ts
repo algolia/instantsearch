@@ -17,7 +17,7 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
-} from './lib/public';
+} from './lib/utils';
 import { index as indexWidget } from './widgets';
 
 import type {

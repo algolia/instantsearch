@@ -23,7 +23,7 @@ import type {
   Hit,
 } from '../../../types';
 
-jest.mock('../../../../../instantsearch-core/src/lib/public/hits-absolute-position', () => ({
+jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: (hits: Hit[]) => hits,
 }));
 

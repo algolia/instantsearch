@@ -60,7 +60,7 @@ export type {
   VoiceListeningState,
 } from './lib/voiceSearchHelper/types';
 export * from './lib/infiniteHitsCache';
-export * from './lib/public';
+export * from './lib/utils';
 export * from './lib/routers';
 export * from './lib/server';
 export * from './lib/stateMappings';
@@ -71,5 +71,5 @@ export type {
   FacetRefinement,
   NumericRefinement,
   Refinement,
-} from './lib/public';
+} from './lib/utils';
 export type { InsightsEvent } from './middlewares';

@@ -1,1 +1,1 @@
-export * from '../public/noop';
+export function noop(..._args: any[]): void {}
