@@ -29,11 +29,11 @@ export function openChat(
     return false;
   }
 
-  if (isChatBusy(chatRenderState)) {
+  if (isChatBusy(chatRenderState) || !chatRenderState.sendMessage) {
     return false;
   }
 
-  chatRenderState.sendMessage?.({ text: trimmed });
+  chatRenderState.sendMessage({ text: trimmed });
   return true;
 }
 

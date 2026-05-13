@@ -85,6 +85,15 @@ describe('openChat', () => {
   test('returns false when chatRenderState is undefined', () => {
     expect(openChat(undefined, { message: 'macbook' })).toBe(false);
   });
+
+  test('returns false when sendMessage is not provided on the render state', () => {
+    const chat = createChatRenderState({ sendMessage: undefined });
+
+    const sent = openChat(chat, { message: 'macbook' });
+
+    expect(sent).toBe(false);
+    expect(chat.setOpen).toHaveBeenCalledWith(true);
+  });
 });
 
 describe('isChatBusy', () => {
