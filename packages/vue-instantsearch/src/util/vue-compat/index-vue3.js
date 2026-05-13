@@ -4,14 +4,28 @@ const isVue2 = false;
 const isVue3 = true;
 const Vue2 = undefined;
 
-export { createApp, createSSRApp, h, version, nextTick } from 'vue';
+export { createApp, createSSRApp, h, version, nextTick, Fragment } from 'vue';
 export { Vue, Vue2, isVue2, isVue3 };
 
 export function renderCompat(fn) {
   function h(tag, props, ...childrenArray) {
     const children = childrenArray.length > 0 ? childrenArray : undefined;
+    // Components from `instantsearch-ui-components` are React-style functional
+    // components that read `children` from props. Vue 3 instead puts children
+    // in `slots.default`, which would leave `children` undefined and break
+    // components like `Button` that render `{children}`. Mirror the Vue 2
+    // augmented `h` and forward children as a prop for plain function tags
+    // (excluding Vue's own components/symbols like `Fragment`).
+    if (typeof tag === 'function') {
+      return Vue.h(
+        tag,
+        Object.assign({}, props || {}, { children }),
+        children
+      );
+    }
     if (
       typeof props === 'object' &&
+      props !== null &&
       (props.attrs || props.props || props.scopedSlots || props.on)
     ) {
       // In vue 3, we no longer wrap with `attrs` or `props` key.
