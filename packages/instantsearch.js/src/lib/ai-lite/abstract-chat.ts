@@ -2,6 +2,7 @@
 import { processStream } from './stream-parser';
 import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
 
+import type { MutableKeys } from '../../types';
 import type {
   ChatInit,
   ChatRequestOptions,
@@ -388,6 +389,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     if (this.state.status === 'error') {
       this.setStatus({ status: 'ready', error: undefined });
     }
+  };
+
+  /**
+   * Regenerate the chat id. Use this to start a fresh conversation on the
+   * server while keeping the same Chat instance and its registered listeners.
+   */
+  regenerateId = (): void => {
+    (this as MutableKeys<this, 'id'>).id = this.generateId();
   };
 
   /**
