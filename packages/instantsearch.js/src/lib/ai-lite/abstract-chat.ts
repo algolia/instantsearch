@@ -22,6 +22,7 @@ import type {
   ChatOnFinishCallback,
   ChatOnDataCallback,
 } from './types';
+import type { MutableKeys } from '../../types';
 
 type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
@@ -395,7 +396,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * server while keeping the same Chat instance and its registered listeners.
    */
   regenerateId = (): void => {
-    (this as Omit<this, 'id'> & { id: string }).id = this.generateId();
+    (this as MutableKeys<this, 'id'>).id = this.generateId();
   };
 
   /**
