@@ -5,12 +5,8 @@ import {
   safelyRunOnBrowser,
 } from '../lib/utils';
 
-import type {
-  InstantSearch,
-  InternalMiddleware,
-  Widget,
-  IndexWidget,
-} from '../types';
+import type InstantSearch from '../instantsearch';
+import type { InternalMiddleware, Widget, IndexWidget } from '../types';
 
 type WidgetMetadata =
   | {

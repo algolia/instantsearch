@@ -11,14 +11,14 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import instantsearch from '../../..';
-import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
+import InstantSearch from '../../../instantsearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../../instantsearch-core/test/createWidget';
-import { connectRange } from 'instantsearch-core';
+} from '../../../../test/createWidget';
+import connectRange from '../connectRange';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
@@ -2190,7 +2190,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
     it('passes the correct range set by initialUiState', () => {
       const searchClient = createSearchClient();
-      const search = instantsearch({
+      const search = new InstantSearch({
         indexName: 'test-index',
         searchClient,
         initialUiState: {

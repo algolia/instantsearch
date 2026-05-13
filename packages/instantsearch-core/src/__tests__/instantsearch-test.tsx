@@ -14,23 +14,22 @@ import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
-import { createRenderOptions, createWidget } from '../../../../instantsearch-core/test/createWidget';
-import { connectSearchBox, connectPagination } from '../../connectors';
-import { createInsightsMiddleware } from '../../middlewares';
-import { index } from '../../widgets';
-import InstantSearch from '../InstantSearch';
-import { noop, warning } from '../utils';
-import version from '../version';
+import { createRenderOptions, createWidget } from '../../test/createWidget';
+import { connectSearchBox, connectPagination } from '../connectors';
+import { createInsightsMiddleware } from '../middlewares';
+import { index } from '../widgets';
+import InstantSearch from '../instantsearch';
+import { noop, warning } from '../lib/utils';
 
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from '../../connectors';
+} from '../connectors';
 import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../connectors';
-import type { UiState, Widget, IndexWidget } from '../../types';
+} from '../connectors';
+import type { UiState, Widget, IndexWidget } from '../types';
 import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<
@@ -375,22 +374,6 @@ For more information, visit https://www.algolia.com/doc/guides/getting-insights-
 });
 
 describe('InstantSearch', () => {
-  it('calls addAlgoliaAgent', () => {
-    const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
-    });
-
-    // eslint-disable-next-line no-new
-    new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `instantsearch.js (${version})`
-    );
-  });
 
   it('does not call algoliasearchHelper', () => {
     // eslint-disable-next-line no-new

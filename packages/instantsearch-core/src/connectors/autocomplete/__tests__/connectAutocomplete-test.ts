@@ -17,13 +17,13 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../../instantsearch-core/test/createWidget';
-import instantsearch from '../../../index.es';
+} from '../../../../test/createWidget';
+import InstantSearch from '../../../instantsearch';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
-import { connectAutocomplete } from 'instantsearch-core';
+import connectAutocomplete from '../connectAutocomplete';
 
 import type { SearchClient, SearchResponse } from '../../../types';
-import type { AutocompleteRenderState } from 'instantsearch-core';
+import type { AutocompleteRenderState } from '../connectAutocomplete';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -887,7 +887,7 @@ search.addWidgets([
         },
       });
 
-      const instantSearchInstance = instantsearch({
+      const instantSearchInstance = new InstantSearch({
         searchClient,
         stalledSearchDelay: 1,
         indexName: 'indexName',

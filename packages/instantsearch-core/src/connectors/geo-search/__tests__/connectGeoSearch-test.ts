@@ -13,14 +13,14 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../../instantsearch-core/test/createWidget';
-import instantsearch from '../../../index.es';
-import { connectGeoSearch } from 'instantsearch-core';
+} from '../../../../test/createWidget';
+import InstantSearch from '../../../instantsearch';
+import connectGeoSearch from '../connectGeoSearch';
 
 import type { SearchResponse } from '../../../types';
 
@@ -1762,7 +1762,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      const instantSearchInstance = instantsearch({
+      const instantSearchInstance = new InstantSearch({
         searchClient,
         stalledSearchDelay: 1,
         indexName: 'indexName',

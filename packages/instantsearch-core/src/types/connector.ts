@@ -1,5 +1,5 @@
 import type { InsightsClient } from './insights';
-import type { InstantSearch } from './instantsearch';
+import type InstantSearch from '../instantsearch';
 import type { Hit } from './results';
 import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
 import type { SearchResults } from 'algoliasearch-helper';

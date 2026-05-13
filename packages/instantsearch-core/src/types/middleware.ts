@@ -1,4 +1,4 @@
-import type { InstantSearch } from './instantsearch';
+import type InstantSearch from '../instantsearch';
 import type { UiState } from './ui-state';
 import type { AtLeastOne } from './utils';
 

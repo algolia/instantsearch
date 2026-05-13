@@ -14,8 +14,8 @@ import {
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
+import type InstantSearch from '../../instantsearch';
 import type {
-  InstantSearch,
   UiState,
   IndexUiState,
   Widget,

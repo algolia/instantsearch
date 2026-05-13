@@ -1,4 +1,10 @@
 export { default as version } from './version';
+export { default as InstantSearch } from './instantsearch';
+export { INSTANTSEARCH_FUTURE_DEFAULTS } from './instantsearch';
+export type {
+  InstantSearchOptions,
+  InstantSearchStatus,
+} from './instantsearch';
 export * from './connectors';
 export { AbstractChat } from './lib/ai-lite';
 export { parseJsonEventStream, processStream } from './lib/ai-lite';

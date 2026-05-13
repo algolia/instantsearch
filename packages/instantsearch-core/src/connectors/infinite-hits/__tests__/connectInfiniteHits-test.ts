@@ -10,16 +10,16 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
-import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../../instantsearch-core/test/createWidget';
-import instantsearch from '../../../index.es';
+} from '../../../../test/createWidget';
+import InstantSearch from '../../../instantsearch';
 import { createInfiniteHitsSessionStorageCache } from '../../../lib/infiniteHitsCache';
 import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import { connectInfiniteHits } from 'instantsearch-core';
+import connectInfiniteHits from '../connectInfiniteHits';
 
 import type {
   SearchClient,
@@ -29,7 +29,7 @@ import type {
   SearchResponse,
 } from '../../../types';
 
-jest.mock('../../../../../instantsearch-core/src/lib/public/hits-absolute-position', () => ({
+jest.mock('../../../lib/public/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
   // especially with the __escaped mark, we thus make sure the mock also has the
   // same behavior regarding the array.
@@ -1807,7 +1807,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             },
           });
 
-          const instantSearchInstance = instantsearch({
+          const instantSearchInstance = new InstantSearch({
             searchClient,
             stalledSearchDelay: 1,
             indexName: 'indexName',
