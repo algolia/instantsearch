@@ -2,6 +2,7 @@
 import { processStream } from './stream-parser';
 import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
 
+import type { MutableKeys } from '../../types';
 import type {
   ChatInit,
   ChatRequestOptions,
@@ -22,7 +23,6 @@ import type {
   ChatOnFinishCallback,
   ChatOnDataCallback,
 } from './types';
-import type { MutableKeys } from '../../types';
 
 type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
