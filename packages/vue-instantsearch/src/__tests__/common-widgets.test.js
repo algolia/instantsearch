@@ -29,6 +29,11 @@ import {
   AisPoweredBy,
   AisMenuSelect,
   AisDynamicWidgets,
+  AisRelatedProducts,
+  AisTrendingItems,
+  AisTrendingFacets,
+  AisLookingSimilar,
+  AisFrequentlyBoughtTogether,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -509,22 +514,105 @@ const testSetups = {
 
     await nextTick();
   },
-  createRelatedProductsWidgetTests() {
-    throw new Error('RelatedProduct is not supported in Vue InstantSearch');
-  },
-  createFrequentlyBoughtTogetherWidgetTests() {
-    throw new Error(
-      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+  async createRelatedProductsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRelatedProducts, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
     );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
   },
-  createTrendingItemsWidgetTests() {
-    throw new Error('TrendingItems is not supported in Vue InstantSearch');
+  async createFrequentlyBoughtTogetherWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisFrequentlyBoughtTogether, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
   },
-  createTrendingFacetsWidgetTests() {
-    throw new Error('TrendingFacets is not supported in Vue InstantSearch');
+  async createTrendingItemsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingItems, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
   },
-  createLookingSimilarWidgetTests() {
-    throw new Error('LookingSimilar is not supported in Vue InstantSearch');
+  async createTrendingFacetsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingFacets, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
+  },
+  async createLookingSimilarWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisLookingSimilar, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
   },
   createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
@@ -619,23 +707,11 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
-  createRelatedProductsWidgetTests: {
-    skippedTests: {
-      'RelatedProducts widget common tests': true,
-    },
-  },
-  createFrequentlyBoughtTogetherWidgetTests: {
-    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
-  },
-  createTrendingItemsWidgetTests: {
-    skippedTests: { 'TrendingItems widget common tests': true },
-  },
-  createTrendingFacetsWidgetTests: {
-    skippedTests: { 'TrendingFacets widget common tests': true },
-  },
-  createLookingSimilarWidgetTests: {
-    skippedTests: { 'LookingSimilar widget common tests': true },
-  },
+  createRelatedProductsWidgetTests: undefined,
+  createFrequentlyBoughtTogetherWidgetTests: undefined,
+  createTrendingItemsWidgetTests: undefined,
+  createTrendingFacetsWidgetTests: undefined,
+  createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: {
