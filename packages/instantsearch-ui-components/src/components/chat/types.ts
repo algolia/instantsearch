@@ -431,6 +431,8 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
     body?: object;
   }) => Promise<void>;
 
+  resetConversationId: () => void;
+
   clearError: () => void;
 
   addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(params: {

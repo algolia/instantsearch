@@ -92,3 +92,79 @@ export function resolveValue<T>(
   }
   return Promise.resolve(value);
 }
+
+function messageFromErrorObject(o: Record<string, unknown>): string | undefined {
+  const direct =
+    (typeof o.error === 'string' && o.error.trim()) ||
+    (typeof o.message === 'string' && o.message.trim());
+  if (direct) {
+    return direct;
+  }
+  const nested = o.error;
+  if (nested && typeof nested === 'object') {
+    const ne = nested as Record<string, unknown>;
+    return (
+      (typeof ne.message === 'string' && ne.message.trim()) ||
+      (typeof ne.error === 'string' && ne.error.trim()) ||
+      undefined
+    );
+  }
+  return undefined;
+}
+
+function unwrapNestedJsonString(
+  value: unknown,
+  seenStrings: ReadonlySet<string> = new Set()
+): unknown {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  if (seenStrings.has(trimmed)) {
+    return trimmed;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed) as unknown;
+    if (typeof parsed === 'string') {
+      return unwrapNestedJsonString(parsed, new Set([...seenStrings, trimmed]));
+    }
+    return parsed;
+  } catch {
+    return trimmed;
+  }
+}
+
+/**
+ * Turns chat stream `error` chunk `errorText` into a short user-facing string.
+ * Handles plain text, single JSON objects (`error` / `message`), and
+ * double-encoded JSON strings returned by some APIs.
+ */
+export function getMessageFromStreamErrorText(errorText: string): string {
+  const trimmed = errorText.trim();
+  if (!trimmed) {
+    return 'Unknown error';
+  }
+
+  const remaining = unwrapNestedJsonString(trimmed);
+  if (remaining && typeof remaining === 'object' && !Array.isArray(remaining)) {
+    const o = remaining as Record<string, unknown>;
+    const msg = messageFromErrorObject(o);
+    if (msg) {
+      return msg;
+    }
+    if (typeof o.type === 'string' && o.type.trim()) {
+      return o.type.trim();
+    }
+  }
+
+  if (typeof remaining === 'string') {
+    return remaining.trim() || trimmed;
+  }
+  return trimmed;
+}

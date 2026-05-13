@@ -12,6 +12,7 @@ export { DefaultChatTransport, HttpChatTransport } from './transport';
 // Utilities
 export {
   generateId,
+  getMessageFromStreamErrorText,
   lastAssistantMessageIsCompleteWithToolCalls,
   SerialJobExecutor,
 } from './utils';

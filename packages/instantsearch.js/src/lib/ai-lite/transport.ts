@@ -16,6 +16,39 @@ import type {
 } from './types';
 
 /**
+ * Reads a human-readable message from a failed HTTP response body when the
+ * server returns JSON such as `{ "message": "..." }` (e.g. 403 domain blocks).
+ */
+function getHttpErrorMessage(response: Response): Promise<string> {
+  const fallback = `HTTP error: ${response.status} ${response.statusText}`;
+  return response
+    .text()
+    .then((text) => {
+      if (!text) {
+        return fallback;
+      }
+      try {
+        const parsed: unknown = JSON.parse(text);
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          'message' in parsed &&
+          typeof (parsed as { message: unknown }).message === 'string'
+        ) {
+          const message = (parsed as { message: string }).message.trim();
+          if (message) {
+            return message;
+          }
+        }
+      } catch {
+        // Non-JSON body or empty response — use fallback
+      }
+      return fallback;
+    })
+    .catch(() => fallback);
+}
+
+/**
  * Abstract base class for HTTP-based chat transports.
  */
 export abstract class HttpChatTransport<TUIMessage extends UIMessage>
@@ -130,9 +163,9 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
           credentials,
         }).then((response) => {
           if (!response.ok) {
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessage(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {
@@ -213,9 +246,9 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
             if (response.status === 404) {
               return null;
             }
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessage(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {

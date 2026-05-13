@@ -366,6 +366,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      _chatInstance.resetConversationId();
       feedbackState = {};
       setIsClearing(false);
     };

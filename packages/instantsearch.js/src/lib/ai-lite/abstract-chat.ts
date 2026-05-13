@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { processStream } from './stream-parser';
-import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
+import {
+  generateId as defaultGenerateId,
+  getMessageFromStreamErrorText,
+  SerialJobExecutor,
+} from './utils';
 
 import type {
   ChatInit,
@@ -122,8 +126,12 @@ const parseToolInputDelta = (
  * Abstract base class for chat implementations.
  */
 export abstract class AbstractChat<TUIMessage extends UIMessage> {
-  readonly id: string;
+  private conversationId: string;
   readonly generateId: IdGenerator;
+
+  get id(): string {
+    return this.conversationId;
+  }
   protected state: ChatState<TUIMessage>;
 
   private readonly transport?: ChatTransport<TUIMessage>;
@@ -155,7 +163,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
-    this.id = id;
+    this.conversationId = id;
     this.generateId = generateId;
     this.state = state;
     this.transport = transport;
@@ -194,6 +202,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   get error(): Error | undefined {
     return this.state.error;
+  }
+
+  /**
+   * Starts a new server-side conversation thread by rotating the id sent as
+   * `chatId` / `id` on the next request. The InstantSearch connector calls this
+   * after the user clears the transcript so completions are not tied to prior
+   * context.
+   */
+  resetConversationId(): void {
+    this.conversationId = this.generateId();
   }
 
   get messages(): TUIMessage[] {
@@ -1062,7 +1080,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'error': {
               isError = true;
-              throw new Error(chunk.errorText);
+              throw new Error(
+                getMessageFromStreamErrorText(chunk.errorText)
+              );
             }
 
             case 'abort': {
