@@ -395,7 +395,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * server while keeping the same Chat instance and its registered listeners.
    */
   regenerateId = (): void => {
-    (this as { id: string }).id = this.generateId();
+    (this as Omit<this, 'id'> & { id: string }).id = this.generateId();
   };
 
   /**
