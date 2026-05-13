@@ -15,6 +15,7 @@ import {
   getPromptSuggestionHits,
   isPromptSuggestion,
 } from 'instantsearch-ui-components';
+import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
 import { warn } from 'instantsearch.js/es/lib/utils';
 import React, {
   createElement,
@@ -742,14 +743,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       userOnSelect ??
       (({ item, query, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderStateWithFocus = chatRenderState as
-            | (Partial<ChatRenderState> & { focusInput?: () => void })
-            | undefined;
-
-          if (chatRenderStateWithFocus) {
-            chatRenderStateWithFocus.setOpen?.(true);
-            chatRenderStateWithFocus.focusInput?.();
-            chatRenderStateWithFocus.sendMessage?.({ text: item.prompt });
+          if (chatRenderState) {
+            if (openChat(chatRenderState, { message: item.prompt })) {
+              setQuery('');
+            }
             return;
           }
 
@@ -908,15 +905,14 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               if (isDetached) {
                 setIsModalOpen(false);
               }
-              if (chatRenderState) {
-                chatRenderState.setOpen?.(true);
-                if (resolvedQuery.trim()) {
-                  chatRenderState.sendMessage?.({ text: resolvedQuery });
-                }
+              if (openChat(chatRenderState, { message: resolvedQuery })) {
+                refineSearchBox('');
+                refineAutocomplete('');
               }
             }
           : undefined
       }
+      aiModeButtonDisabled={aiMode ? isChatBusy(chatRenderState) : undefined}
       classNames={classNames}
     />
   );

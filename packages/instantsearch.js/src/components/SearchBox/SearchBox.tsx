@@ -46,6 +46,7 @@ type SearchBoxProps = {
   onReset?: (event: Event) => void;
   inputProps?: Partial<ComponentProps<'input'>>;
   onAiModeClick?: (query: string) => void;
+  aiModeButtonDisabled?: boolean;
 };
 
 const defaultProps = {
@@ -195,6 +196,7 @@ class SearchBox extends Component<
       ariaLabel,
       inputProps,
       onAiModeClick,
+      aiModeButtonDisabled,
     } = this.props;
 
     return (
@@ -282,6 +284,7 @@ class SearchBox extends Component<
                 className: cssClasses.aiModeButton,
                 type: 'button',
                 title: 'AI Mode',
+                disabled: aiModeButtonDisabled,
                 onClick: this.onAiModeClick,
               }}
               templates={templates}
