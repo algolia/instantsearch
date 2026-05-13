@@ -34,6 +34,7 @@ import {
   AisTrendingFacets,
   AisLookingSimilar,
   AisFrequentlyBoughtTogether,
+  AisFilterSuggestions,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -678,8 +679,25 @@ const testSetups = {
   createAutocompleteWidgetTests() {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
   },
-  createFilterSuggestionsWidgetTests() {
-    throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
+  async createFilterSuggestionsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisFilterSuggestions, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextTick();
   },
 };
 
@@ -721,7 +739,20 @@ const testOptions = {
     skippedTests: { 'Autocomplete widget common tests': true },
   },
   createFilterSuggestionsWidgetTests: {
-    skippedTests: { 'FilterSuggestions widget common tests': true },
+    // Vue batches DOM updates asynchronously; the shared tests assert
+    // immediately after `wait(...)`, so flush Vue's queue inside `act`.
+    act: async (cb) => {
+      await cb();
+      await nextTick();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      await nextTick();
+    },
+    skippedTests: {
+      // React/JS pass UI factories that Vue cannot apply directly.
+      templates: true,
+      // Vue's `created` hook swallows the connector's synchronous throw.
+      'throws without agentId': true,
+    },
   },
 };
 

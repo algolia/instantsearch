@@ -90,6 +90,8 @@ function getAllComponents() {
         props.facetName = 'brand';
       } else if (name === 'AisTrendingItems') {
         // no required props
+      } else if (name === 'AisFilterSuggestions') {
+        props.agentId = 'test-agent-id';
       } else {
         props.attribute = 'attr';
       }
