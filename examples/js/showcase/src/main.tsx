@@ -19,14 +19,13 @@ if (window.parent && window.parent !== window) {
 
   const postHeight = () => {
     // Measure body, not documentElement: documentElement.scrollHeight floors
-    // to the viewport size and can't shrink. The +2 absorbs sub-pixel rounding.
-    const height =
-      Math.ceil(
-        Math.max(
-          document.body.scrollHeight,
-          document.body.getBoundingClientRect().bottom,
-        ),
-      ) + 2;
+    // to the viewport size and can't shrink.
+    const height = Math.ceil(
+      Math.max(
+        document.body.scrollHeight,
+        document.body.getBoundingClientRect().bottom,
+      ),
+    );
     if (!Number.isFinite(height) || height < 100 || height > 10000) return;
     postToParent({ type: "showcase-resize", height });
   };
