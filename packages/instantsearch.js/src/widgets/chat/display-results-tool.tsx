@@ -15,8 +15,8 @@ import type {
   ChatTemplates,
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
-import type { RecordWithObjectID } from 'instantsearch-ui-components';
 import type { ClientSideToolComponentProps } from 'instantsearch-core';
+import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
 export function createDisplayResultsTool<
   THit extends RecordWithObjectID = RecordWithObjectID

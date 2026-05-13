@@ -5,17 +5,17 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
+import { Chat } from 'instantsearch-core';
 
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { Chat } from 'instantsearch-core';
 import connectChat from '../connectChat';
 
-import type { UIMessage, ChatTransport } from 'instantsearch-core';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
+import type { UIMessage, ChatTransport } from 'instantsearch-core';
 
 const fetchMock = jest.fn(() => Promise.resolve(new Response('{}')));
 Object.defineProperty(globalThis, 'fetch', {

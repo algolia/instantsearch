@@ -1,6 +1,7 @@
+import { startsWith } from './startsWith';
+
 import type { UIMessage } from '../ai-lite';
 
-import { startsWith } from './startsWith';
 
 type ChatToolMessage = Extract<
   UIMessage['parts'][number],
@@ -29,12 +30,12 @@ export const isPartTool = (
   return startsWith(part.type, 'tool-');
 };
 
-export function findTool<V>(
+export function findTool<TTool>(
   partType: string,
-  tools: Record<string, V>
-): V | undefined {
+  tools: Record<string, TTool>
+): TTool | undefined {
   const toolName = partType.replace('tool-', '');
-  let tool: V | undefined = tools[toolName];
+  let tool: TTool | undefined = tools[toolName];
   if (!tool) {
     tool = Object.entries(tools).find(([key]) =>
       startsWith(toolName, `${key}_`)

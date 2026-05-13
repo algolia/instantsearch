@@ -7,12 +7,12 @@ import { createButtonComponent } from '../Button';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
-import type { AddToolResultWithOutput, ChatStatus } from 'instantsearch-core';
 import type {
   ChatMessageBase,
   ChatToolMessage,
   ClientSideTools,
 } from './types';
+import type { AddToolResultWithOutput, ChatStatus } from 'instantsearch-core';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';

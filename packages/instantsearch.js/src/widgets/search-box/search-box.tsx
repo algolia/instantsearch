@@ -17,13 +17,13 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
-import type { ChatRenderState } from 'instantsearch-core';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
 } from '../../connectors';
 import type { WidgetFactory, Template, RendererOptions } from '../../types';
+import type { ChatRenderState } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');

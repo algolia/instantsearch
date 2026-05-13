@@ -1,6 +1,11 @@
 /** @jsx h */
 
 import {
+  getPromptSuggestionHits,
+  isPromptSuggestion,
+  type ChatRenderState,
+} from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedOverlayComponent,
@@ -40,11 +45,6 @@ import type {
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
 } from '../../connectors';
-import {
-  getPromptSuggestionHits,
-  isPromptSuggestion,
-  type ChatRenderState,
-} from 'instantsearch-core';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,

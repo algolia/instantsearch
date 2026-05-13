@@ -1,7 +1,7 @@
 import { serializePayload } from './serializer';
 
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type InstantSearch from '../../instantsearch';
+import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { Hit, EscapedHits } from '../../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 

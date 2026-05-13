@@ -1,5 +1,5 @@
-import { cx } from 'instantsearch-ui-components';
 import { getHighlightedParts, unescape } from 'instantsearch-core';
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { Highlight } from './Highlight';

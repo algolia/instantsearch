@@ -11,13 +11,13 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import InstantSearch from '../../../instantsearch';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import InstantSearch from '../../../instantsearch';
 import connectRange from '../connectRange';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';

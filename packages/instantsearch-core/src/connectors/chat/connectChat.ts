@@ -35,8 +35,6 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
-
 import type {
   AddToolResultWithOutput,
   ApplyFiltersParams,
@@ -44,6 +42,8 @@ import type {
   ClientSideTools,
   UserClientSideTool,
 } from './types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+
 
 export type * from './types';
 

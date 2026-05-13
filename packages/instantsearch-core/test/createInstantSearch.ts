@@ -1,8 +1,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
-import { defer } from '../src/lib/utils';
 import { INSTANTSEARCH_FUTURE_DEFAULTS } from '../src/instantsearch';
+import { defer } from '../src/lib/utils';
 import { index } from '../src/widgets';
 
 import type InstantSearch from '../src/instantsearch';

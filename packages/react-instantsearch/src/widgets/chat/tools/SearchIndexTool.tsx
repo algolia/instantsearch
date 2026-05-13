@@ -1,28 +1,28 @@
 import {
+  addAbsolutePosition,
+  addQueryID,
+} from 'instantsearch-core';
+import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
-import {
-  addAbsolutePosition,
-  addQueryID,
-} from 'instantsearch-core';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
-  Pragma,
-  RecommendComponentProps,
-  RecordWithObjectID,
-} from 'instantsearch-ui-components';
-import type {
   ClientSideToolComponentProps,
   SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-core';
+import type {
+  Pragma,
+  RecommendComponentProps,
+  RecordWithObjectID,
+} from 'instantsearch-ui-components';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];

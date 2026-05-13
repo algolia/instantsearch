@@ -9,9 +9,9 @@ import algoliasearchV4 from 'algoliasearch-v4';
 import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
 
 import { createMetadataMiddleware } from '..';
+import { isMetadataEnabled } from '..';
 import instantsearch from '../..';
 import { configure, hits, index, pagination, searchBox } from '../../widgets';
-import { isMetadataEnabled } from '..';
 
 declare global {
   interface Navigator {

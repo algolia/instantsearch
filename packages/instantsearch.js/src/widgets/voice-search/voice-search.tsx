@@ -22,9 +22,9 @@ import type {
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
 } from '../../connectors';
-import type { CreateVoiceSearchHelper } from 'instantsearch-core';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { CreateVoiceSearchHelper } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');

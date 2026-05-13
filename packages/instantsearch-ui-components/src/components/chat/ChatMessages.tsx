@@ -1,6 +1,5 @@
 /** @jsx createElement */
 
-import { cx } from '../../lib';
 import {
   findTool,
   getTextContent,
@@ -8,6 +7,8 @@ import {
   isPartText,
   isPartTool,
 } from 'instantsearch-core';
+
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -32,8 +33,8 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatStatus } from 'instantsearch-core';
 import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ClientSideTools } from './types';
+import type { ChatStatus } from 'instantsearch-core';
 
 export type ChatMessagesTranslations = {
   /**

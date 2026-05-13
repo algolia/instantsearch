@@ -1,6 +1,15 @@
 /** @jsx h */
 
 import {
+  SearchIndexToolType,
+  RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  DisplayResultsToolType,
+} from 'instantsearch-core';
+import { connectChat } from 'instantsearch-core';
+import {
   ArrowRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -11,14 +20,6 @@ import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import {
-  SearchIndexToolType,
-  RecommendToolType,
-  MemorizeToolType,
-  MemorySearchToolType,
-  PonderToolType,
-  DisplayResultsToolType,
-} from 'instantsearch-core';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
@@ -32,17 +33,6 @@ import { carousel } from '../../templates';
 import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
-import { connectChat } from 'instantsearch-core';
-import type {
-  ChatConnectorParams,
-  ChatRenderState,
-  ChatStatus,
-  ChatWidgetDescription,
-  ClientSideToolComponentProps,
-  ClientSideTools,
-  SearchToolInput,
-  UserClientSideTool,
-} from 'instantsearch-core';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
@@ -55,6 +45,16 @@ import type {
   IndexWidget,
 } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
+import type {
+  ChatConnectorParams,
+  ChatRenderState,
+  ChatStatus,
+  ChatWidgetDescription,
+  ClientSideToolComponentProps,
+  ClientSideTools,
+  SearchToolInput,
+  UserClientSideTool,
+} from 'instantsearch-core';
 import type {
   ChatClassNames,
   ChatHeaderProps,

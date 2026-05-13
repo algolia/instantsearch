@@ -16,10 +16,10 @@ import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../test/createWidget';
 import { connectSearchBox, connectPagination } from '../connectors';
-import { createInsightsMiddleware } from '../middlewares';
-import { index } from '../widgets';
 import InstantSearch from '../instantsearch';
 import { noop, warning } from '../lib/utils';
+import { createInsightsMiddleware } from '../middlewares';
+import { index } from '../widgets';
 
 import type {
   PaginationConnectorParams,

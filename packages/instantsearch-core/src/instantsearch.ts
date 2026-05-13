@@ -2,12 +2,6 @@ import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
-  createInsightsMiddleware,
-  createMetadataMiddleware,
-  createRouterMiddleware,
-  isMetadataEnabled,
-} from './middlewares';
-import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
@@ -18,6 +12,12 @@ import {
   setIndexHelperState,
   isIndexWidget,
 } from './lib/utils';
+import {
+  createInsightsMiddleware,
+  createMetadataMiddleware,
+  createRouterMiddleware,
+  isMetadataEnabled,
+} from './middlewares';
 import version from './version';
 import { index as indexWidget } from './widgets';
 

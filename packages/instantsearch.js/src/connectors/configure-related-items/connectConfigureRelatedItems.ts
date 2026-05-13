@@ -1,4 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+import { connectConfigure } from 'instantsearch-core';
 
 import {
   createDocumentationMessageGenerator,
@@ -6,7 +7,6 @@ import {
   warning,
   getPropertyByPath,
 } from '../../lib/utils';
-import { connectConfigure } from 'instantsearch-core';
 
 import type {
   AlgoliaHit,

@@ -1,6 +1,6 @@
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-
 import { connectConfigure } from 'instantsearch-core';
+
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
 jest.mock('instantsearch-core', () => ({

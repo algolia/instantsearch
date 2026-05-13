@@ -9,14 +9,14 @@ import React, { createElement, Fragment } from 'react';
 import { Carousel } from '../../../components';
 
 import type {
+  ClientSideToolComponentProps,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
 } from 'instantsearch-ui-components';
-import type {
-  ClientSideToolComponentProps,
-  UserClientSideTool,
-} from 'instantsearch-core';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
