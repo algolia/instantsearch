@@ -1,6 +1,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 
+import { skippableTest } from '../../common';
+
 import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { SearchResponse } from 'instantsearch.js';
@@ -10,10 +12,10 @@ const MIN_LOADING_DURATION_MS = 300;
 
 export function createOptionsTests(
   setup: FilterSuggestionsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests = {} }: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('throws without agentId', () => {
+    skippableTest('throws without agentId', skippedTests, () => {
       const searchClient = createSearchClient({});
 
       expect(() =>
@@ -93,7 +95,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: 'test-agent-id', debounceMs: 0 },
           react: { agentId: 'test-agent-id', debounceMs: 0 },
-          vue: {},
+          vue: { agentId: 'test-agent-id', debounceMs: 0 },
         },
       });
 
@@ -144,7 +146,7 @@ export function createOptionsTests(
         widgetParams: {
           javascript: { agentId: 'test-agent-id' },
           react: { agentId: 'test-agent-id' },
-          vue: {},
+          vue: { agentId: 'test-agent-id' },
         },
       });
 
@@ -227,7 +229,11 @@ export function createOptionsTests(
             attributes: ['brand'],
             debounceMs: 0,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            attributes: ['brand'],
+            debounceMs: 0,
+          },
         },
       });
 
@@ -308,7 +314,11 @@ export function createOptionsTests(
             transformItems,
             debounceMs: 0,
           },
-          vue: {},
+          vue: {
+            agentId: 'test-agent-id',
+            transformItems,
+            debounceMs: 0,
+          },
         },
       });
 

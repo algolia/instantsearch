@@ -1,5 +1,5 @@
 import { createTrendingFacetsSearchClient } from '@instantsearch/mocks/fixtures';
-import { wait } from '@instantsearch/testutils';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
 import type { TrendingFacetsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -26,8 +26,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingFacets'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingFacets')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingFacets"
         >
@@ -81,8 +84,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingFacets'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingFacets')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingFacets"
         >
@@ -131,8 +137,11 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-TrendingFacets'))
-        .toMatchInlineSnapshot(`
+      expect(
+        document.querySelector('.ais-TrendingFacets')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
         <section
           class="ais-TrendingFacets ais-TrendingFacets--empty"
         >
