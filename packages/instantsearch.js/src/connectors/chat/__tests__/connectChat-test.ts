@@ -6,11 +6,13 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
 import { Chat } from '../../../lib/chat';
+import version from '../../../lib/version';
 import connectChat from '../connectChat';
 
 import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
@@ -909,6 +911,26 @@ data: [DONE]`,
           })
         );
         expect(headers).toHaveProperty('x-algolia-agent');
+      });
+
+      it('registers `chat` in the Algolia user-agent', () => {
+        const addAlgoliaAgent = jest.fn();
+        const client = Object.assign(createSearchClient(), {
+          addAlgoliaAgent,
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        expect(addAlgoliaAgent).toHaveBeenCalledWith(`chat (${version})`);
       });
 
       it('forwards the x-algolia-referer header from sendMessage options', async () => {
