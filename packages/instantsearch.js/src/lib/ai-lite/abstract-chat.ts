@@ -391,6 +391,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   };
 
   /**
+   * Regenerate the chat id. Use this to start a fresh conversation on the
+   * server while keeping the same Chat instance and its registered listeners.
+   */
+  regenerateId = (): void => {
+    (this as { id: string }).id = this.generateId();
+  };
+
+  /**
    * Add a tool result for a tool call.
    */
   addToolResult = <TTool extends keyof InferUIMessageTools<TUIMessage>>({
