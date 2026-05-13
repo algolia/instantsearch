@@ -1,31 +1,26 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import commonjs from 'vite-plugin-commonjs';
 
-export default defineConfig(({ isSsrBuild }) => {
-  const isSSR = Boolean(isSsrBuild);
-
-  return {
-    plugins: [commonjs(), react()],
-    build: isSSR
-      ? {
-          outDir: 'dist',
-          emptyOutDir: false,
-          rollupOptions: {
-            output: {
-              entryFileNames: 'server.js',
-              format: 'cjs',
-            },
-          },
-        }
-      : {
-          outDir: 'dist',
-          rollupOptions: {
-            input: 'src/browser.jsx',
-            output: {
-              entryFileNames: 'assets/bundle.js',
-            },
+export default defineConfig(({ isSsrBuild }) => ({
+  plugins: [react()],
+  build: isSsrBuild
+    ? {
+        outDir: 'dist',
+        emptyOutDir: false,
+        rollupOptions: {
+          output: {
+            entryFileNames: 'server.js',
+            format: 'esm',
           },
         },
-  };
-});
+      }
+    : {
+        outDir: 'dist',
+        rollupOptions: {
+          input: 'src/browser.jsx',
+          output: {
+            entryFileNames: 'assets/bundle.js',
+          },
+        },
+      },
+}));
