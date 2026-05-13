@@ -19,7 +19,7 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 const testSetups = {
   async createSharedTests({ instantSearchOptions, widgetParams }) {

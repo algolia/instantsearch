@@ -1,5 +1,4 @@
-import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
-import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch-core';
+import { InstantSearch, INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch-core';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -14,7 +13,6 @@ import { warn } from './warn';
 
 import type {
   CompositionClient,
-  InstantSearch as InstantSearchCore,
   InstantSearchOptions,
   SearchClient,
   UiState,
@@ -37,7 +35,7 @@ export type UseInstantSearchApiProps<
 export type InternalInstantSearch<
   TUiState extends UiState,
   TRouteState = TUiState
-> = InstantSearchCore<TUiState, TRouteState> & {
+> = InstantSearch<TUiState, TRouteState> & {
   /**
    * Schedule a function to be called on the next timer tick
    * @private
@@ -200,7 +198,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   }
 
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const store = useSyncExternalStore<InstantSearchCore<TUiState, TRouteState>>(
+  const store = useSyncExternalStore<InstantSearch<TUiState, TRouteState>>(
     useCallback(() => {
       const search = searchRef.current!;
 

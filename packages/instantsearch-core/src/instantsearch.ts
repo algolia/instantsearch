@@ -18,6 +18,7 @@ import {
   setIndexHelperState,
   isIndexWidget,
 } from './lib/utils';
+import version from './version';
 import { index as indexWidget } from './widgets';
 
 import type {
@@ -38,6 +39,7 @@ import type {
   InitialResults,
   CompositionClient,
 } from './types';
+import type { Expand } from './types/utils';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -303,6 +305,15 @@ Use \`InstantSearch.status === "stalled"\` instead.`
 
 See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
       );
+    }
+
+    if (
+      typeof (searchClient as { addAlgoliaAgent?: unknown })
+        .addAlgoliaAgent === 'function'
+    ) {
+      (
+        searchClient as { addAlgoliaAgent: (agent: string) => void }
+      ).addAlgoliaAgent(`instantsearch-core (${version})`);
     }
 
     warning(
@@ -899,3 +910,14 @@ See documentation: ${createDocumentationLink({
 }
 
 export default InstantSearch;
+
+type InstantSearchModule = {
+  <TUiState = Record<string, unknown>, TRouteState = TUiState>(
+    options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
+  ): InstantSearch<Expand<UiState & TUiState>, TRouteState>;
+  version: string;
+};
+
+export const instantsearch: InstantSearchModule = (options) =>
+  new InstantSearch(options);
+instantsearch.version = version;

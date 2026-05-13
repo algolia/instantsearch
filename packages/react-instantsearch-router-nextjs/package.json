@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "instantsearch.js": "4.96.2",
     "react-instantsearch-core": "7.32.2",
     "instantsearch-core": "0.1.0"
   },

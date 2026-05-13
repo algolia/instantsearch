@@ -1,5 +1,6 @@
 export { default as version } from './version';
 export { default as InstantSearch } from './instantsearch';
+export { instantsearch } from './instantsearch';
 export { INSTANTSEARCH_FUTURE_DEFAULTS } from './instantsearch';
 export type {
   InstantSearchOptions,

@@ -271,6 +271,7 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
         ]);
@@ -312,6 +313,7 @@ describe('createMetadataMiddleware', () => {
           expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
           expect.stringMatching(/Search \(5\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
           'test (cool)',
@@ -351,6 +353,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
         ]);
@@ -391,6 +394,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
           'test (cool)',
@@ -430,6 +434,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
         ]);
@@ -470,6 +475,7 @@ describe('createMetadataMiddleware', () => {
         ).toEqual([
           expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
           expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch-core \(.*\)/),
           expect.stringMatching(/instantsearch.js \(4\..*\)/),
           expect.stringMatching(/JS Helper \(3\..*\)/),
           'test (cool)',

@@ -19,7 +19,6 @@ describe('InstantSearch (IS.js subclass)', () => {
       searchClient,
     });
 
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `instantsearch.js (${version})`
     );

@@ -227,8 +227,8 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `react-instantsearch (${
           require('../../../react-instantsearch-core/package.json').version

@@ -1,5 +1,5 @@
-import instantsearch from 'instantsearch.js/es';
 import {
+  instantsearch,
   waitForResults,
   getInitialResults,
 } from 'instantsearch-core';
