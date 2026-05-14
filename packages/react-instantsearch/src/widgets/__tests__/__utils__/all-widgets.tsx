@@ -24,6 +24,7 @@ const NON_WIDGETS = [
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
+  'DisplayResultsToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
@@ -35,6 +36,7 @@ const NON_COMPONENTS = [
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
+  'DisplayResultsToolType',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
@@ -121,6 +123,9 @@ function Widget<TWidget extends SingleWidget>({
     case 'RelatedProducts':
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
+    }
+    case 'TrendingFacets': {
+      return <widget.Component facetName="brand" {...props} />;
     }
     case 'EXPERIMENTAL_Autocomplete': {
       // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>

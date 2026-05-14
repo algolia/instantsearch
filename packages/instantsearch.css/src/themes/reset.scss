@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+a[class^='ais-'] {
+  text-decoration: none;
+}
+
 // Reset all lists
 
 .ais-Breadcrumb-list,
@@ -45,6 +49,7 @@
 .ais-RangeInput-submit,
 .ais-RefinementList-showMore,
 .ais-AiModeButton,
+.ais-RelevantSort-button,
 .ais-SearchBox-submit,
 .ais-SearchBox-reset,
 .ais-VoiceSearch-button {
@@ -113,6 +118,11 @@
   display: block;
   width: 20px;
   height: 20px;
+}
+
+.ais-RefinementList-checkbox,
+.ais-ToggleRefinement-checkbox {
+  margin: 0;
 }
 
 .ais-SearchBox-input {

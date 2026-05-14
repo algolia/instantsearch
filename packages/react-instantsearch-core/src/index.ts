@@ -33,6 +33,7 @@ export * from './connectors/useSortBy';
 export * from './connectors/useStats';
 export * from './connectors/useToggleRefinement';
 export * from './connectors/useTrendingItems';
+export * from './connectors/useTrendingFacets';
 export * from './connectors/useLookingSimilar';
 export * from './connectors/useFilterSuggestions';
 export * from './hooks/useConnector';

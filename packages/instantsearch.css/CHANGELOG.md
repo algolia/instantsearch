@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.16.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.15.0...instantsearch.css@8.16.0) (2026-05-05)
+
+
+### Bug Fixes
+
+* **instantsearch.css:** move select reset from shared reset to Nova theme ([#7007](https://github.com/algolia/instantsearch/issues/7007)) ([b09ebc4](https://github.com/algolia/instantsearch/commit/b09ebc46ffdf29e5206532bc2f735a766a8dbd02)), closes [#7003](https://github.com/algolia/instantsearch/issues/7003)
+
+
+### Features
+
+* **chat:** add search display tool to chat ([#6987](https://github.com/algolia/instantsearch/issues/6987)) ([b8655df](https://github.com/algolia/instantsearch/commit/b8655dfa98baade5ce0177849bac44e7a36d9ab3))
+
+
+
+
+
+# [8.15.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.14.0...instantsearch.css@8.15.0) (2026-04-28)
+
+
+### Bug Fixes
+
+* **instantsearch.css:** skip hover styles on disabled items in Nova theme ([#6986](https://github.com/algolia/instantsearch/issues/6986)) ([a306fde](https://github.com/algolia/instantsearch/commit/a306fde67a0b816bdb5629f7d46cea6d7c710f41)), closes [#6984](https://github.com/algolia/instantsearch/issues/6984)
+
+
+### Features
+
+* **autocomplete:** replace "cancel" with a back button in detached mode ([#6942](https://github.com/algolia/instantsearch/issues/6942)) ([14f1ba7](https://github.com/algolia/instantsearch/commit/14f1ba7689194a133b4b3aa64f2b559736188d6d))
+* **instantsearch.css:** share `AiModeButton` styles across themes ([#6990](https://github.com/algolia/instantsearch/issues/6990)) ([8b1cb61](https://github.com/algolia/instantsearch/commit/8b1cb61d97cb2f9f87457fadf71fe9bb6ec9618f))
+
+
+
+
+
+# [8.14.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.13.0...instantsearch.css@8.14.0) (2026-04-21)
+
+
+### Features
+
+* **chat:** add greeting screen component ([#6965](https://github.com/algolia/instantsearch/issues/6965)) ([8797bad](https://github.com/algolia/instantsearch/commit/8797bad681f1cddb1f8e36cfbf0b78412957e7db))
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **instantsearch.css:** add experimental Nova theme ([#6949](https://github.com/algolia/instantsearch/issues/6949)) ([5289c69](https://github.com/algolia/instantsearch/commit/5289c69229fd63ead59b717bc9b8492a73bdc239))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+
+
+
+
+
 # [8.13.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.12.0...instantsearch.css@8.13.0) (2026-03-31)
 
 

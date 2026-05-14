@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.5](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.4...algolia-experiences@1.8.5) (2026-05-12)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.3](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.2...algolia-experiences@1.8.3) (2026-05-05)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.2](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.1...algolia-experiences@1.8.2) (2026-05-05)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.1](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.0...algolia-experiences@1.8.1) (2026-04-28)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+# [1.8.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.7.4...algolia-experiences@1.8.0) (2026-04-21)
+
+
+### Features
+
+* **widgets:** ensure all widgets are available from UMD ([#6960](https://github.com/algolia/instantsearch/issues/6960)) ([3c3dbad](https://github.com/algolia/instantsearch/commit/3c3dbad3c169b6330690b628e03531f0d57e60f0))
+
+
+
+
+
 ## [1.7.4](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.7.3...algolia-experiences@1.7.4) (2026-03-31)
 
 **Note:** Version bump only for package algolia-experiences

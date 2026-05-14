@@ -29,11 +29,9 @@
     cursor: not-allowed;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      color var(--ais-transition-duration) var(--ais-transition-timing-function);
-  }
+  transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    color var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 // Button sizes

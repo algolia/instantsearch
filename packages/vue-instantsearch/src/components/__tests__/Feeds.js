@@ -20,13 +20,13 @@ describe('AisFeeds', () => {
     const transformFeeds = feeds => feeds;
     const wrapper = mount(Feeds, {
       propsData: {
-        searchScope: 'global',
+        isolated: false,
         transformFeeds,
       },
     });
 
     expect(wrapper.vm.widgetParams).toEqual({
-      searchScope: 'global',
+      isolated: false,
       transformFeeds,
     });
   });
@@ -40,7 +40,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,
@@ -75,7 +75,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,
@@ -83,8 +83,8 @@ describe('AisFeeds', () => {
 
     const feedsComponent = wrapper.findComponent(Feeds).vm;
     feedsComponent.getParentIndex = () => parentIndex;
-    feedsComponent._pendingRemovals = [];
-    feedsComponent._removalTimer = null;
+    feedsComponent.pendingRemovals = new Map();
+    feedsComponent.removalTimer = null;
     feedsComponent.state = { feedIDs: ['products', 'articles'] };
     await nextTick();
 
@@ -98,6 +98,54 @@ describe('AisFeeds', () => {
     jest.runAllTimers();
     await nextTick();
     expect(parentIndex.removeWidgets).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
+
+  it('reuses a pending feed container when the feed reappears before deferred cleanup', async () => {
+    jest.useFakeTimers();
+    const parentIndex = {
+      addWidgets: jest.fn(),
+      removeWidgets: jest.fn(),
+    };
+
+    const wrapper = mount({
+      components: { Feeds },
+      template: `
+        <Feeds :isolated="false" v-slot="{ feedID }">
+          <div class="slot-feed">{{ feedID }}</div>
+        </Feeds>
+      `,
+    });
+
+    const feedsComponent = wrapper.findComponent(Feeds).vm;
+    feedsComponent.getParentIndex = () => parentIndex;
+    feedsComponent.state = { feedIDs: ['products'] };
+    await nextTick();
+
+    const [firstFeedContainer] = parentIndex.addWidgets.mock.calls[0][0];
+
+    feedsComponent.state = { feedIDs: [] };
+    await nextTick();
+
+    expect(wrapper.findAll('.slot-feed')).toHaveLength(0);
+    expect(parentIndex.removeWidgets).not.toHaveBeenCalled();
+
+    feedsComponent.state = { feedIDs: ['products'] };
+    await nextTick();
+
+    expect(parentIndex.addWidgets).toHaveBeenCalledTimes(1);
+    expect(feedsComponent.feedContainers.get('products')).toStrictEqual(
+      firstFeedContainer
+    );
+    expect(wrapper.findAll('.slot-feed')).toHaveLength(1);
+
+    jest.runAllTimers();
+    await nextTick();
+
+    expect(parentIndex.removeWidgets).not.toHaveBeenCalled();
+    expect(feedsComponent.feedContainers.get('products')).toStrictEqual(
+      firstFeedContainer
+    );
     jest.useRealTimers();
   });
 
@@ -122,7 +170,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds, ScopedFeed },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <ScopedFeed :feedid="feedID" />
         </Feeds>
       `,
@@ -148,7 +196,7 @@ describe('AisFeeds', () => {
     const wrapper = mount({
       components: { Feeds },
       template: `
-        <Feeds search-scope="global" v-slot="{ feedID }">
+        <Feeds :isolated="false" v-slot="{ feedID }">
           <div v-if="feedID === 'products'" class="slot-feed">{{ feedID }}</div>
         </Feeds>
       `,

@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.2...react-instantsearch-nextjs@1.2.3) (2026-05-12)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.0...react-instantsearch-nextjs@1.2.1) (2026-05-05)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+# [1.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.6...react-instantsearch-nextjs@1.2.0) (2026-05-05)
+
+
+### Bug Fixes
+
+* **react-instantsearch-nextjs:** preserve URL on mount with nested <Index> ([#6995](https://github.com/algolia/instantsearch/issues/6995)) ([986d9f4](https://github.com/algolia/instantsearch/commit/986d9f4169e85fb23e84e027e52540d55bcf1594))
+
+
+### Features
+
+* **composition:** add Feeds widget to support multifeed ([#7004](https://github.com/algolia/instantsearch/issues/7004)) ([ecc40d9](https://github.com/algolia/instantsearch/commit/ecc40d98dd19922b510dd3d769fc490519cede64)), closes [#6954](https://github.com/algolia/instantsearch/issues/6954)
+
+
+
+
+
+## [1.1.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.5...react-instantsearch-nextjs@1.1.6) (2026-04-28)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.1.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.4...react-instantsearch-nextjs@1.1.5) (2026-04-21)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
 ## [1.1.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.3...react-instantsearch-nextjs@1.1.4) (2026-03-31)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

@@ -211,6 +211,12 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'text') {
+        if (
+          part.text.startsWith('<context>') &&
+          part.text.endsWith('</context>')
+        ) {
+          return null;
+        }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
           disableParsingRawHTML: true,
@@ -226,6 +232,18 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           tool = tools[SearchIndexToolType];
         }
 
+        const displayResultsEnabled =
+          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
+            ?.displayResultsEnabled === true;
+
+        if (
+          displayResultsEnabled &&
+          tool &&
+          tool === tools[SearchIndexToolType]
+        ) {
+          return null;
+        }
+
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
@@ -236,6 +254,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               tool: part.type,
               toolCallId: toolMessage.toolCallId,
             });
+
+          if (
+            toolMessage.state === 'input-streaming' &&
+            !tool.streamInput
+          ) {
+            return null;
+          }
 
           if (!ToolLayoutComponent) {
             return null;

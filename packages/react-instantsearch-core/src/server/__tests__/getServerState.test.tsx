@@ -395,7 +395,7 @@ describe('getServerState', () => {
     const serverState = await getServerState(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
         <Feeds
-          searchScope="global"
+          isolated={false}
           renderFeed={() => <Hits hitComponent={Hit} />}
         />
       </InstantSearch>,

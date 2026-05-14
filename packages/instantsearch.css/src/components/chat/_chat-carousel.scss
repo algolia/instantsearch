@@ -2,7 +2,8 @@
 @use '../../shared/_common';
 
 .ais-ChatMessage-message {
-  .ais-ChatToolSearchIndexCarouselHeader {
+  .ais-ChatToolSearchIndexCarouselHeader,
+  .ais-ChatToolDisplayResultsCarouselHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -15,7 +16,8 @@
     gap: calc(var(--ais-spacing) * 0.5);
   }
 
-  .ais-ChatToolSearchIndexCarouselHeaderCount {
+  .ais-ChatToolSearchIndexCarouselHeaderCount,
+  .ais-ChatToolDisplayResultsCarouselHeaderCount {
     color: rgba(var(--ais-text-color-rgb), 0.8);
     font-weight: var(--ais-font-weight-semibold);
   }
@@ -26,7 +28,8 @@
     }
   }
 
-  .ais-ChatToolSearchIndexCarouselHeaderScrollButtons {
+  .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
+  .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
     display: flex;
     align-items: center;
     gap: calc(var(--ais-spacing) * 0.25);
@@ -34,6 +37,49 @@
     svg {
       width: calc(var(--ais-icon-size) * 0.8);
     }
+  }
+
+  .ais-ChatToolDisplayResults {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ais-spacing);
+  }
+
+  .ais-ChatToolDisplayResults-intro {
+    color: rgba(
+      var(--ais-text-color-rgb),
+      var(--ais-text-color-alpha)
+    );
+    line-height: 1.5;
+  }
+
+  .ais-ChatToolDisplayResults-group {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--ais-spacing) * 0.5);
+  }
+
+  .ais-ChatToolDisplayResults-groupTitle {
+    font-size: calc(var(--ais-spacing) * 1.05);
+    font-weight: var(--ais-font-weight-semibold);
+    color: rgba(
+      var(--ais-text-color-rgb),
+      var(--ais-text-color-alpha)
+    );
+    margin: 0;
+  }
+
+  .ais-ChatToolDisplayResults-groupWhy {
+    color: rgba(var(--ais-text-color-rgb), 0.7);
+    font-size: calc(var(--ais-spacing) * 0.85);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ais-ChatToolDisplayResults-streaming {
+    color: rgba(var(--ais-text-color-rgb), 0.6);
+    font-size: calc(var(--ais-spacing) * 0.85);
+    font-style: italic;
   }
 
   .ais-Carousel {
@@ -122,10 +168,8 @@
       z-index: -1;
       transform: scale(0.95);
 
-      @media (prefers-reduced-motion: no-preference) {
-        transition: all var(--ais-transition-duration)
-          var(--ais-transition-timing-function);
-      }
+      transition: all var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
     }
 
     @media (hover: hover) {
@@ -181,10 +225,8 @@
     overflow: hidden;
 
     img {
-      @media (prefers-reduced-motion: no-preference) {
-        transition: transform var(--ais-transition-duration)
-          var(--ais-transition-timing-function);
-      }
+      transition: transform var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
     }
   }
 
@@ -214,7 +256,8 @@
   }
 
   @media (max-width: variables.$ais-chat-breakpoint) {
-    .ais-ChatToolSearchIndexCarouselHeaderScrollButtons {
+    .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
+    .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
       display: none;
     }
   }

@@ -5,6 +5,7 @@ export * from './utils';
 // eslint-disable-next-line import/export
 export * from './algoliasearch';
 export * from './results';
+export * from './recommend';
 
 // component-related
 export * from './component';

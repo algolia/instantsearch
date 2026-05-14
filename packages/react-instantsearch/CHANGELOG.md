@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.32.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.2...react-instantsearch@7.32.3) (2026-05-12)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.32.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.0...react-instantsearch@7.32.1) (2026-05-05)
+
+
+### Features
+
+* **autocomplete:** add missing `classNames`/`cssClasses` support ([#7015](https://github.com/algolia/instantsearch/issues/7015)) ([c5a8fbe](https://github.com/algolia/instantsearch/commit/c5a8fbe6bcecf3a0a50d88f7fa5aa2feb1d98631))
+
+
+
+
+
+# [7.32.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.31.0...react-instantsearch@7.32.0) (2026-05-05)
+
+
+### Features
+
+* **chat:** add search display tool to chat ([#6987](https://github.com/algolia/instantsearch/issues/6987)) ([b8655df](https://github.com/algolia/instantsearch/commit/b8655dfa98baade5ce0177849bac44e7a36d9ab3))
+
+
+
+
+
+# [7.31.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.30.0...react-instantsearch@7.31.0) (2026-04-28)
+
+
+### Bug Fixes
+
+* **autocomplete:** close panel when clicking AI mode button ([#6989](https://github.com/algolia/instantsearch/issues/6989)) ([7d5e317](https://github.com/algolia/instantsearch/commit/7d5e317d62c77db4d1674ef013abfbf52c5c61e5))
+
+
+### Features
+
+* **autocomplete:** default insights events ([#6976](https://github.com/algolia/instantsearch/issues/6976)) ([aac9b5d](https://github.com/algolia/instantsearch/commit/aac9b5d9ac48f864c3411946409f23988561181c))
+* **autocomplete:** replace "cancel" with a back button in detached mode ([#6942](https://github.com/algolia/instantsearch/issues/6942)) ([14f1ba7](https://github.com/algolia/instantsearch/commit/14f1ba7689194a133b4b3aa64f2b559736188d6d))
+* **chat:** add tool input streaming support and chat loader component ([#6947](https://github.com/algolia/instantsearch/issues/6947)) ([6795d5f](https://github.com/algolia/instantsearch/commit/6795d5fd14999792ec14d7c0283bcbac9bdfc58c))
+
+
+
+
+
+# [7.30.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.29.0...react-instantsearch@7.30.0) (2026-04-21)
+
+
+### Features
+
+* **chat:** add greeting screen component ([#6965](https://github.com/algolia/instantsearch/issues/6965)) ([8797bad](https://github.com/algolia/instantsearch/commit/8797bad681f1cddb1f8e36cfbf0b78412957e7db))
+* **chat:** add sidepanel layout to chat widgets ([#6923](https://github.com/algolia/instantsearch/issues/6923)) ([c127355](https://github.com/algolia/instantsearch/commit/c1273551ae4c6cb1714d95273d80cb1b83b5e6a3))
+* **chat:** send events from hits in chat ([#6943](https://github.com/algolia/instantsearch/issues/6943)) ([7c9a6dd](https://github.com/algolia/instantsearch/commit/7c9a6dd20a14547ffdc805058378716ff99ab37a))
+* **recommend:** add Trending Facets widget ([#6957](https://github.com/algolia/instantsearch/issues/6957)) ([7a4b137](https://github.com/algolia/instantsearch/commit/7a4b137264b5814bc21d9011bab877e9661729c9))
+* **searchbox:** introduce AI Mode ([#6944](https://github.com/algolia/instantsearch/issues/6944)) ([e64c784](https://github.com/algolia/instantsearch/commit/e64c784b118d10f2606886a52f1b8dd9d6912d94))
+* **widgets:** ensure all widgets are available from UMD ([#6960](https://github.com/algolia/instantsearch/issues/6960)) ([3c3dbad](https://github.com/algolia/instantsearch/commit/3c3dbad3c169b6330690b628e03531f0d57e60f0))
+
+
+
+
+
 # [7.29.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.28.1...react-instantsearch@7.29.0) (2026-03-31)
 
 

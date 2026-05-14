@@ -495,6 +495,49 @@ describe('SearchBox', () => {
     });
   });
 
+  describe('AI mode button', () => {
+    test('renders the AI mode button when onAiModeClick is provided', () => {
+      const onAiModeClick = jest.fn();
+      const props = createProps({ onAiModeClick });
+
+      const { container } = render(<SearchBox {...props} />);
+      const aiButton = container.querySelector<HTMLButtonElement>(
+        '.ais-AiModeButton'
+      )!;
+
+      expect(aiButton).not.toBeNull();
+      expect(aiButton.disabled).toBe(false);
+
+      userEvent.click(aiButton);
+      expect(onAiModeClick).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not render the AI mode button without onAiModeClick', () => {
+      const props = createProps({});
+
+      const { container } = render(<SearchBox {...props} />);
+      expect(container.querySelector('.ais-AiModeButton')).toBeNull();
+    });
+
+    test('disables the button when aiModeButtonDisabled is true', () => {
+      const onAiModeClick = jest.fn();
+      const props = createProps({
+        onAiModeClick,
+        aiModeButtonDisabled: true,
+      });
+
+      const { container } = render(<SearchBox {...props} />);
+      const aiButton = container.querySelector<HTMLButtonElement>(
+        '.ais-AiModeButton'
+      )!;
+
+      expect(aiButton.disabled).toBe(true);
+
+      userEvent.click(aiButton);
+      expect(onAiModeClick).not.toHaveBeenCalled();
+    });
+  });
+
   test('accepts custom class names', () => {
     const props = createProps({
       className: 'MyCustomSearchBox',

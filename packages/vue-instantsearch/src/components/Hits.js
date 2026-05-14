@@ -1,5 +1,5 @@
 import { createHitsComponent } from 'instantsearch-ui-components';
-import { connectHitsWithInsights } from 'instantsearch.js/es/connectors/index.umd';
+import { connectHitsWithInsights } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

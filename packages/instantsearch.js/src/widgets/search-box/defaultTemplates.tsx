@@ -1,12 +1,12 @@
 /** @jsx h */
-import { h } from 'preact';
+import { h, Fragment } from 'preact';
 
 import type { SearchBoxComponentTemplates } from '../../components/SearchBox/SearchBox';
 
 const defaultTemplate: SearchBoxComponentTemplates = {
   aiMode({ cssClasses }) {
     return (
-      <span>
+      <Fragment>
         <svg
           className={cssClasses.aiModeIcon}
           xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ const defaultTemplate: SearchBoxComponentTemplates = {
           />
         </svg>
         <span className={cssClasses.aiModeLabel}>AI Mode</span>
-      </span>
+      </Fragment>
     );
   },
   reset({ cssClasses }) {

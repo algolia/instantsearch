@@ -5,6 +5,7 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, {
   createElement,
@@ -19,6 +20,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
+import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export {
@@ -27,6 +29,7 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 };
 
 import type {
@@ -63,6 +66,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
+    [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
@@ -140,11 +144,12 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
     headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
-    messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
     promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    loaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
@@ -184,7 +189,7 @@ function ChatInner<
     headerCloseIconComponent,
     headerMinimizeIconComponent,
     headerMaximizeIconComponent,
-    messagesLoaderComponent,
+    loaderComponent,
     messagesErrorComponent,
     promptComponent,
     promptHeaderComponent,
@@ -193,6 +198,7 @@ function ChatInner<
     assistantMessageFooterComponent,
     userMessageLeadingComponent,
     userMessageFooterComponent,
+    emptyComponent,
     actionsComponent,
     suggestionsComponent,
     classNames,
@@ -313,6 +319,8 @@ function ChatInner<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage: sendMessage as ChatUiProps['sendMessage'],
+        setInput,
         onFeedback,
         feedbackState,
         messages,
@@ -325,8 +333,9 @@ function ChatInner<
         scrollRef,
         contentRef,
         onScrollToBottom: scrollToBottom,
-        loaderComponent: messagesLoaderComponent,
+        loaderComponent,
         errorComponent: messagesErrorComponent,
+        emptyComponent: emptyComponent,
         actionsComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,

@@ -159,6 +159,37 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * @default 'chat'
    */
   type?: string;
+  /**
+   * Additional context to send with each user message (e.g. current page info).
+   * This context is included in the message parts sent to the API but is not
+   * displayed in the chat UI.
+   * Can be a static object or a function that returns the context at send time.
+   */
+  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  /**
+   * A message to send automatically when the chat is initialized.
+   *
+   * This message is only sent when the chat has no existing messages yet. If
+   * messages were restored or otherwise already exist when the widget starts,
+   * this message is not sent.
+   *
+   * When `resume` is enabled, this message is not sent.
+   */
+  initialUserMessage?: string;
+  /**
+   * Messages to pre-populate the chat with when it is initialized.
+   *
+   * These messages are set without triggering an AI response. They are only
+   * applied when the chat has no existing messages yet. If messages were
+   * restored or otherwise already exist when the widget starts, these messages
+   * are not applied.
+   *
+   * When `resume` is enabled, these messages are not applied.
+   *
+   * `initialUserMessage` is sent after `initialMessages` are applied, so an
+   * assistant welcome followed by a user prompt works.
+   */
+  initialMessages?: TUiMessage[];
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -260,6 +291,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
+      context,
+      initialUserMessage,
+      initialMessages,
       ...options
     } = widgetParams || {};
 
@@ -322,12 +356,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
         return;
       }
+      const status = _chatInstance.status;
+      if (status === 'submitted' || status === 'streaming') {
+        _chatInstance.stop();
+      }
       setIsClearing(true);
     };
 
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      _chatInstance.regenerateId();
       feedbackState = {};
       setIsClearing(false);
     };
@@ -420,6 +459,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         ...options,
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        shouldRepairToolInput(toolName) {
+          let tool = tools[toolName];
+          if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
+            tool = tools[SearchIndexToolType];
+          }
+          if (!tool) return true;
+          return Boolean(tool.streamInput);
+        },
         onToolCall({ toolCall }) {
           let tool = tools[toolCall.toolName];
 
@@ -461,7 +508,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           return Promise.resolve();
         },
-      });
+      } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
     return {
@@ -539,12 +586,24 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           };
         }
 
+        const hasExistingMessages = _chatInstance.messages.length > 0;
+
+        // Set initialMessages before registering callbacks to avoid
+        // triggering re-renders during init
+        if (initialMessages?.length && !resume && !hasExistingMessages) {
+          _chatInstance.messages = initialMessages;
+        }
+
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
 
         if (resume) {
           _chatInstance.resumeStream();
+        }
+
+        if (initialUserMessage && !resume && !hasExistingMessages) {
+          _chatInstance.sendMessage({ text: initialUserMessage });
         }
 
         renderFn(
@@ -607,6 +666,57 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
 
+        const sendMessageWithContext: typeof _chatInstance.sendMessage = (
+          message,
+          ...rest
+        ) => {
+          if (!context || !message) {
+            return _chatInstance.sendMessage(message, ...rest);
+          }
+
+          const resolvedContext =
+            typeof context === 'function' ? context() : context;
+
+          let serializedContext: string;
+          try {
+            serializedContext = JSON.stringify(resolvedContext);
+          } catch {
+            warning(
+              false,
+              'Could not serialize chat context. The message will be sent without context.'
+            );
+            return _chatInstance.sendMessage(message, ...rest);
+          }
+
+          const contextTextPart = {
+            type: 'text' as const,
+            text: '<context>'.concat(serializedContext).concat('</context>'),
+          };
+
+          if ('parts' in message && message.parts) {
+            return _chatInstance.sendMessage({
+              ...message,
+              parts: [contextTextPart, ...message.parts],
+              text: undefined,
+              files: undefined,
+            }, ...rest);
+          }
+
+          const textContent =
+            'text' in message && message.text ? message.text : '';
+
+          return _chatInstance.sendMessage({
+            parts: [
+              contextTextPart,
+              { type: 'text' as const, text: textContent },
+            ],
+            metadata: message.metadata,
+            messageId: message.messageId,
+            files: undefined,
+            text: undefined,
+          }, ...rest);
+        };
+
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
@@ -634,7 +744,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           messages: _chatInstance.messages,
           regenerate: _chatInstance.regenerate,
           resumeStream: _chatInstance.resumeStream,
-          sendMessage: _chatInstance.sendMessage,
+          sendMessage: sendMessageWithContext,
           status: _chatInstance.status,
           stop: _chatInstance.stop,
         };

@@ -24,11 +24,9 @@ import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 import TemplateComponent from '../../components/Template/Template';
 import connectFeeds from '../../connectors/feeds/connectFeeds';
 import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
-import {
-  connectAutocomplete,
-  connectSearchBox,
-} from '../../connectors/index.umd';
+import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
+import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -390,16 +388,15 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
   const targetIndexQuery = targetIndex?.getHelper()?.state.query;
 
-  // Local query state for immediate updates (especially for detached search button)
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery || targetIndexQuery || ''
+    searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery ?? ''
   );
 
-  // Sync local query with searchbox query when it changes externally
   useEffect(() => {
-    // If the isolated index has a query, use it (user typing).
-    // If not, fall back to the target index query (URL/main state).
-    const query = searchboxQuery || targetIndexQuery;
+    // When the isolated index has a defined query (including ''), use it.
+    // Only fall back to the target index query when not yet set (undefined).
+    const query =
+      searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery;
     if (query !== undefined) {
       setLocalQuery(query);
     }
@@ -611,6 +608,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const shouldHideEmptyPanel =
     allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
 
+  const getChatRenderState = () =>
+    instantSearchInstance.renderState[targetIndex!.getIndexId()]?.chat as
+      | Partial<ChatRenderState>
+      | undefined;
+
   const {
     getInputProps,
     getItemProps,
@@ -627,14 +629,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       userOnSelect ??
       (({ query, item, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderState = instantSearchInstance.renderState[
-            targetIndex!.getIndexId()
-          ]?.chat as Partial<ChatRenderState> | undefined;
+          const chatRenderState = getChatRenderState();
 
           if (chatRenderState) {
-            chatRenderState.setOpen?.(true);
-            chatRenderState.focusInput?.();
-            chatRenderState.sendMessage?.({ text: item.prompt });
+            if (openChat(chatRenderState, { message: item.prompt })) {
+              setQuery('');
+            }
             return;
           }
 
@@ -803,6 +803,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
+        sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
         classNames={currentIndexConfig.cssClasses}
       />
     );
@@ -813,6 +814,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     typeof rawInputProps === 'object' && rawInputProps !== null
       ? rawInputProps
       : {};
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsOpen(false);
+  };
 
   const searchBoxContent = (
     <AutocompleteSearchBox
@@ -829,27 +835,44 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         onRefine('');
       }}
       isSearchStalled={instantSearchInstance.status === 'stalled'}
+      onCancel={() => {
+        if (isDetached) {
+          handleCancel();
+        }
+      }}
+      isDetached={isDetached}
+      submitTitle={
+        isDetached ? translations.detachedCancelButtonText : undefined
+      }
       onAiModeClick={
         aiMode
           ? () => {
-              const indexId = targetIndex!.getIndexId();
-              const chatState = instantSearchInstance.renderState[indexId]
-                ?.chat as Partial<ChatRenderState> | undefined;
-
-              if (chatState) {
-                chatState.setOpen?.(true);
-                if (localQuery.trim()) {
-                  chatState.sendMessage?.({ text: localQuery });
-                }
+              setIsOpen(false);
+              if (isDetached) {
+                setIsModalOpen(false);
+              }
+              if (openChat(getChatRenderState(), { message: localQuery })) {
+                onRefine('');
               }
             }
           : undefined
       }
+      aiModeButtonDisabled={
+        aiMode ? isChatBusy(getChatRenderState()) : undefined
+      }
+      classNames={cssClasses}
     />
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      classNames={{
+        root: cssClasses?.panel,
+        open: cssClasses?.panelOpen,
+        layout: cssClasses?.panelLayout,
+      }}
+    >
       {templates.panel ? (
         <TemplateComponent
           {...renderState.templateProps}
@@ -892,21 +915,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         {isModalOpen && (
           <AutocompleteDetachedOverlay
             classNames={cssClasses}
-            onClose={() => {
-              setIsModalOpen(false);
-              setIsOpen(false);
-            }}
+            onClose={handleCancel}
           >
             <AutocompleteDetachedContainer
               classNames={detachedContainerCssClasses}
             >
               <AutocompleteDetachedFormContainer
                 classNames={cssClasses}
-                onCancel={() => {
-                  setIsModalOpen(false);
-                  setIsOpen(false);
-                }}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
@@ -1506,6 +1521,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         ...makeWidget({
           escapeHTML,
           transformItems: effectiveTransformItems,
+          future: { undefinedEmptyQuery: true },
         }),
         $$widgetType: 'ais.autocomplete',
       },

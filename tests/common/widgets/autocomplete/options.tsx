@@ -718,6 +718,138 @@ export function createOptionsTests(
       ]);
     });
 
+    test('only triggers one search when typing, not a duplicate on the parent', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      (searchClient.search as jest.Mock).mockClear();
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        await userEvent.click(input);
+        await userEvent.paste(input, 'hello');
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              query: 'hello',
+            }),
+          }),
+        ])
+      );
+    });
+
+    test('triggers a search on the parent index when submitting', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        await userEvent.click(input);
+        await userEvent.paste(input, 'hello');
+        await wait(0);
+      });
+
+      (searchClient.search as jest.Mock).mockClear();
+
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(
+        (searchClient.search as jest.Mock).mock.calls.length
+      ).toBeGreaterThanOrEqual(2);
+    });
+
     test('closes the panel then blurs the input when pressing enter', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
@@ -952,6 +1084,71 @@ export function createOptionsTests(
           }),
         },
       ]);
+    });
+
+    test('does not show the submitted query after clearing the input', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      // Type and submit a query
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'hello');
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      // Clear the input by typing
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.clear(input);
+        await wait(0);
+      });
+
+      expect(input).toHaveValue('');
     });
 
     test('refocuses the input after clearing the query', async () => {
@@ -1642,9 +1839,17 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        // Cancel is now a dedicated back button inside the search input
+        expect(
+          document.querySelector('.ais-AutocompleteBackButton')
+        ).toHaveAttribute('title', 'Annuler');
+        // Submit button is separate and remains a submit button
+        expect(
+          document.querySelector('.ais-AutocompleteSubmitButton')
+        ).toHaveAttribute('type', 'submit');
         expect(
           document.querySelector('.ais-AutocompleteDetachedCancelButton')
-        ).toHaveTextContent('Annuler');
+        ).toBeNull();
       });
 
       test('disables detached mode when detachedMediaQuery is empty', async () => {
@@ -2432,6 +2637,77 @@ export function createOptionsTests(
         expect(
           leftSection!.querySelector('.ais-AutocompleteSuggestions')
         ).toBeInTheDocument();
+      });
+    });
+
+    describe('aiMode', () => {
+      test('closes the panel when clicking the AI mode button', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+            },
+            react: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).toBeInTheDocument();
+
+        const aiModeButton =
+          document.querySelector<HTMLButtonElement>('.ais-AiModeButton');
+        expect(aiModeButton).toBeInTheDocument();
+
+        await act(async () => {
+          userEvent.click(aiModeButton!);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).not.toBeInTheDocument();
       });
     });
 

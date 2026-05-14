@@ -15,6 +15,7 @@ import {
   getPromptSuggestionHits,
   isPromptSuggestion,
 } from 'instantsearch-ui-components';
+import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
 import { warn } from 'instantsearch.js/es/lib/utils';
 import React, {
   createElement,
@@ -826,7 +827,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     currentRefinement,
   } = useAutocomplete({
     transformItems,
+    future: { undefinedEmptyQuery: true },
   });
+
+  const resolvedQuery =
+    currentRefinement !== undefined
+      ? currentRefinement
+      : indexUiState.query ?? '';
 
   const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } =
     useDetachedMode(detachedMediaQuery);
@@ -940,14 +947,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       userOnSelect ??
       (({ item, query, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderStateWithFocus = chatRenderState as
-            | (Partial<ChatRenderState> & { focusInput?: () => void })
-            | undefined;
-
-          if (chatRenderStateWithFocus) {
-            chatRenderStateWithFocus.setOpen?.(true);
-            chatRenderStateWithFocus.focusInput?.();
-            chatRenderStateWithFocus.sendMessage?.({ text: item.prompt });
+          if (chatRenderState) {
+            if (openChat(chatRenderState, { message: item.prompt })) {
+              setQuery('');
+            }
             return;
           }
 
@@ -1039,7 +1042,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   }
 
-  indicesForPanel.forEach(({ indexId, indexName, hits }) => {
+  indicesForPanel.forEach(({ indexId, indexName, hits, sendEvent }) => {
     let elementId = indexName;
     if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
@@ -1067,10 +1070,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
+        sendEvent={sendEvent}
         classNames={currentIndexConfig.classNames}
       />
     );
   });
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsOpen(false);
+  };
 
   const searchBoxContent = (
     <AutocompleteSearch
@@ -1082,28 +1091,41 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       onQueryChange={(query) => {
         refineAutocomplete(query);
       }}
-      query={currentRefinement || indexUiState.query || ''}
-      refine={refineSearchBox}
+      query={resolvedQuery}
       isSearchStalled={isSearchStalled}
+      onCancel={() => {
+        if (isDetached) {
+          handleCancel();
+        }
+      }}
+      isDetached={isDetached}
+      submitTitle={
+        isDetached ? translations.detachedCancelButtonText : undefined
+      }
       onAiModeClick={
         aiMode
           ? () => {
-              if (chatRenderState) {
-                chatRenderState.setOpen?.(true);
-                const query =
-                  currentRefinement || indexUiState.query || '';
-                if (query.trim()) {
-                  chatRenderState.sendMessage?.({ text: query });
-                }
+              setIsOpen(false);
+              if (isDetached) {
+                setIsModalOpen(false);
+              }
+              if (openChat(chatRenderState, { message: resolvedQuery })) {
+                refineSearchBox('');
+                refineAutocomplete('');
               }
             }
           : undefined
       }
+      aiModeButtonDisabled={aiMode ? isChatBusy(chatRenderState) : undefined}
+      classNames={classNames}
     />
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      classNames={{ root: classNames?.panel, open: classNames?.panelOpen, layout: classNames?.panelLayout }}
+    >
       {PanelComponent ? (
         <PanelComponent
           elements={elements}
@@ -1136,7 +1158,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         classNames={classNames}
       >
         <AutocompleteDetachedSearchButton
-          query={currentRefinement || indexUiState.query || ''}
+          query={resolvedQuery}
           placeholder={placeholder}
           classNames={classNames}
           onClick={() => {
@@ -1152,21 +1174,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         {isModalOpen && (
           <AutocompleteDetachedOverlay
             classNames={classNames}
-            onClose={() => {
-              setIsModalOpen(false);
-              setIsOpen(false);
-            }}
+            onClose={handleCancel}
           >
             <AutocompleteDetachedContainer
               classNames={detachedContainerClassNames}
             >
               <AutocompleteDetachedFormContainer
                 classNames={classNames}
-                onCancel={() => {
-                  setIsModalOpen(false);
-                  setIsOpen(false);
-                }}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>

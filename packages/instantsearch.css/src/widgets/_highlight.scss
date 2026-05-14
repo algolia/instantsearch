@@ -1,0 +1,9 @@
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted,
+// instantsearch.js renders plain <mark> without classes (e.g. RefinementList search)
+[class^='ais-'] mark {
+  background-color: rgba(var(--ais-primary-color-rgb), 0.2);
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  border-radius: 2px;
+  padding: calc(var(--ais-spacing) * 0.125);
+}

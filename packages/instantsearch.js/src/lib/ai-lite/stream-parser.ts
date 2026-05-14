@@ -11,13 +11,13 @@ import type { UIMessageChunk } from './types';
  * @param stream - The input stream of raw bytes
  * @returns A ReadableStream of parsed UIMessageChunk events
  */
-export function parseJsonEventStream(
-  stream: ReadableStream<Uint8Array>
-): ReadableStream<UIMessageChunk> {
+export function parseJsonEventStream<
+  TChunk extends UIMessageChunk = UIMessageChunk
+>(stream: ReadableStream<Uint8Array>): ReadableStream<TChunk> {
   const decoder = new TextDecoder();
   let buffer = '';
 
-  return new ReadableStream<UIMessageChunk>({
+  return new ReadableStream<TChunk>({
     start(controller) {
       const reader = stream.getReader();
 
@@ -30,7 +30,7 @@ export function parseJsonEventStream(
                 const jsonData = extractJsonFromLine(buffer.trim());
                 if (jsonData) {
                   try {
-                    const chunk = JSON.parse(jsonData) as UIMessageChunk;
+                    const chunk = JSON.parse(jsonData) as TChunk;
                     controller.enqueue(chunk);
                   } catch {
                     // Ignore parsing errors for incomplete data at end
@@ -60,7 +60,7 @@ export function parseJsonEventStream(
               if (!jsonData) continue;
 
               try {
-                const chunk = JSON.parse(jsonData) as UIMessageChunk;
+                const chunk = JSON.parse(jsonData) as TChunk;
                 controller.enqueue(chunk);
               } catch {
                 // Skip malformed lines

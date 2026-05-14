@@ -14,6 +14,7 @@
     "examples/js/autocomplete-multifeed",
     "examples/react/autocomplete-multifeed",
     "examples/js/e-commerce-umd/public/packages",
+    "examples/js/showcase",
     "packages/create-instantsearch-app/src/templates/**/*",
     "packages/algolia-experiences"
   ]

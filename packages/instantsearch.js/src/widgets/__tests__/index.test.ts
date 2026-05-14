@@ -3,7 +3,6 @@
  */
 /* global google */
 import * as widgets from '..';
-import * as widgetsUmd from '../index.umd';
 
 import type { UnknownWidgetFactory, Widget } from '../../types';
 import type { IndexWidget } from '../index/index';
@@ -182,12 +181,16 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'trendingFacets': {
+        const trendingFacets = widget as Widgets['trendingFacets'];
+        return trendingFacets({container, facetName: 'brand'});
+      }
       case 'feeds': {
         const feedsWidget = widget as Widgets['feeds'];
         return feedsWidget({
           container,
           widgets: () => [],
-          searchScope: 'global',
+          isolated: false,
         });
       }
       default: {
@@ -249,12 +252,6 @@ describe('widgets', () => {
           `ais.${name.replace('EXPERIMENTAL_', '')}`
         );
       });
-    });
-  });
-
-  describe('umd', () => {
-    test('has the same number of exports as the main entrypoint', () => {
-      expect(Object.keys(widgetsUmd)).toEqual(Object.keys(widgets));
     });
   });
 });

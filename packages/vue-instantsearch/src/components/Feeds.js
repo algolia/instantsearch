@@ -1,5 +1,5 @@
 import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
-import { connectFeeds } from 'instantsearch.js/es/connectors/index.umd';
+import { connectFeeds } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -38,8 +38,8 @@ export default {
     createSuitMixin({ name: 'Feeds' }),
   ],
   props: {
-    searchScope: {
-      type: String,
+    isolated: {
+      type: Boolean,
       required: true,
     },
     transformFeeds: {
@@ -50,8 +50,8 @@ export default {
   data() {
     return {
       feedContainers: new Map(),
-      _removalTimer: null,
-      _pendingRemovals: [],
+      removalTimer: null,
+      pendingRemovals: new Map(),
     };
   },
   watch: {
@@ -61,15 +61,18 @@ export default {
     },
   },
   [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
-    if (this._removalTimer !== null) {
-      clearTimeout(this._removalTimer);
-      this._removalTimer = null;
+    if (this.removalTimer !== null) {
+      clearTimeout(this.removalTimer);
+      this.removalTimer = null;
     }
 
     const toRemove = Array.from(
-      new Set([...this.feedContainers.values(), ...this._pendingRemovals])
+      new Set([
+        ...this.feedContainers.values(),
+        ...this.pendingRemovals.values(),
+      ])
     );
-    this._pendingRemovals = [];
+    this.pendingRemovals.clear();
     this.feedContainers.clear();
     if (toRemove.length > 0) {
       this.getParentIndex().removeWidgets(toRemove);
@@ -84,21 +87,23 @@ export default {
       const toRemove = [];
       this.feedContainers.forEach((container, id) => {
         if (!activeFeedIDs.has(id)) {
-          toRemove.push(container);
+          toRemove.push([id, container]);
           this.feedContainers.delete(id);
         }
       });
       if (toRemove.length > 0) {
-        this._pendingRemovals.push(...toRemove);
+        toRemove.forEach(([id, container]) => {
+          this.pendingRemovals.set(id, container);
+        });
 
-        if (this._removalTimer !== null) {
-          clearTimeout(this._removalTimer);
+        if (this.removalTimer !== null) {
+          clearTimeout(this.removalTimer);
         }
 
-        this._removalTimer = setTimeout(() => {
-          const widgetsToRemove = this._pendingRemovals;
-          this._pendingRemovals = [];
-          this._removalTimer = null;
+        this.removalTimer = setTimeout(() => {
+          const widgetsToRemove = Array.from(this.pendingRemovals.values());
+          this.pendingRemovals.clear();
+          this.removalTimer = null;
 
           if (widgetsToRemove.length > 0) {
             parentIndex.removeWidgets(widgetsToRemove);
@@ -110,6 +115,13 @@ export default {
       const toAdd = [];
       feedIDs.forEach(feedID => {
         if (!this.feedContainers.has(feedID)) {
+          const pendingContainer = this.pendingRemovals.get(feedID);
+          if (pendingContainer) {
+            this.pendingRemovals.delete(feedID);
+            this.feedContainers.set(feedID, pendingContainer);
+            return;
+          }
+
           const container = createFeedContainer(
             feedID,
             parentIndex,
@@ -160,7 +172,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        searchScope: this.searchScope,
+        isolated: this.isolated,
         transformFeeds: this.transformFeeds,
       };
     },

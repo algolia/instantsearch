@@ -39,7 +39,7 @@ describe('feeds()', () => {
           container: document.createElement('div'),
           // @ts-expect-error testing invalid input
           widgets: [],
-          searchScope: 'global',
+          isolated: false,
         })
       ).toThrowErrorMatchingInlineSnapshot(`
         "The \`widgets\` option expects a function.
@@ -53,7 +53,7 @@ describe('feeds()', () => {
         feeds({
           container: document.createElement('div'),
           widgets: () => [],
-          searchScope: 'global',
+          isolated: false,
         })
       ).not.toThrow();
     });
@@ -69,7 +69,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -89,7 +89,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -127,7 +127,7 @@ describe('feeds()', () => {
         if (feedID === 'articles') {
           return [];
         }
-        return undefined as any;
+        return undefined;
       });
       const instantSearchInstance = createInstantSearch({
         compositionID: 'my-comp',
@@ -136,7 +136,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -167,7 +167,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -206,7 +206,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: widgetFactory,
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -244,6 +244,73 @@ describe('feeds()', () => {
       jest.useRealTimers();
     });
 
+    it('reuses a pending feed container when the feed reappears before deferred removal', () => {
+      jest.useFakeTimers();
+      const userContainer = document.createElement('div');
+      const widgetFactory = jest.fn(() => [createWidget()]);
+      const instantSearchInstance = createInstantSearch({
+        compositionID: 'my-comp',
+      } as any);
+
+      const widget = feeds({
+        container: userContainer,
+        widgets: widgetFactory,
+        isolated: false,
+      });
+
+      const parent = createParentWithHelper(instantSearchInstance);
+      parent.addWidgets([widget]);
+
+      const state = instantSearchInstance.helper!.state;
+
+      widget.init!(createInitOptions({ instantSearchInstance, parent }));
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance,
+          parent,
+          results: createResultsWithFeeds(['products'], state),
+        })
+      );
+
+      const [firstFeedContainer] = parent
+        .getWidgets()
+        .filter((w) => w.$$type === 'ais.feedContainer');
+      const removeWidgetsSpy = jest.spyOn(parent, 'removeWidgets');
+
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance,
+          parent,
+          results: createResultsWithFeeds([], state),
+        })
+      );
+
+      expect(userContainer.querySelectorAll('.ais-Feeds-feed')).toHaveLength(0);
+
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance,
+          parent,
+          results: createResultsWithFeeds(['products'], state),
+        })
+      );
+
+      const feedContainers = parent
+        .getWidgets()
+        .filter((w) => w.$$type === 'ais.feedContainer');
+      expect(feedContainers).toEqual([firstFeedContainer]);
+      expect(userContainer.querySelectorAll('.ais-Feeds-feed')).toHaveLength(1);
+      expect(widgetFactory).toHaveBeenCalledTimes(1);
+
+      jest.runAllTimers();
+
+      expect(removeWidgetsSpy).not.toHaveBeenCalled();
+      expect(
+        parent.getWidgets().filter((w) => w.$$type === 'ais.feedContainer')
+      ).toEqual([firstFeedContainer]);
+      jest.useRealTimers();
+    });
+
     it('reorders DOM elements to match feedIDs order', () => {
       const userContainer = document.createElement('div');
       const instantSearchInstance = createInstantSearch({
@@ -258,7 +325,7 @@ describe('feeds()', () => {
           feedLabels.push(feedID);
           return [createWidget()];
         },
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -306,7 +373,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [createWidget()],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -341,7 +408,7 @@ describe('feeds()', () => {
       const widget = feeds({
         container: userContainer,
         widgets: () => [createWidget()],
-        searchScope: 'global',
+        isolated: false,
       });
 
       const parent = createParentWithHelper(instantSearchInstance);
@@ -395,7 +462,7 @@ describe('feeds()', () => {
               container: feedContainer,
             }),
           ],
-          searchScope: 'global',
+          isolated: false,
         }),
       ]);
 

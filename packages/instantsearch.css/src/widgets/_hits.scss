@@ -1,0 +1,43 @@
+.ais-Hits-list,
+.ais-InfiniteHits-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--ais-hit-min-width), 1fr)
+  );
+  gap: var(--ais-spacing);
+}
+
+.ais-Hits-item,
+.ais-InfiniteHits-item {
+  overflow: hidden;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border-radius: var(--ais-border-radius-sm);
+  box-shadow: var(--ais-shadow-xs);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
+  transition: box-shadow var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--ais-shadow-md);
+      background-color: rgba(var(--ais-primary-color-rgb), 0.05);
+    }
+  }
+}
+
+.ais-Hits-banner,
+.ais-InfiniteHits-banner {
+  margin-bottom: var(--ais-spacing);
+}
+
+.ais-Hits-banner-image,
+.ais-InfiniteHits-banner-image {
+  width: 100%;
+  border-radius: var(--ais-border-radius-sm);
+}

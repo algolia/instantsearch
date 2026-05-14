@@ -62,10 +62,10 @@ export type FeedsRenderState = {
 
 export type FeedsConnectorParams = {
   /**
-   * Explicit search scope. Currently only 'global' is supported
-   * (future-proofing for per-feed search parameters).
+   * Whether feeds are isolated from the global search scope.
+   * Currently only `false` is supported (future-proofing for per-feed search parameters).
    */
-  searchScope: 'global';
+  isolated: false;
 
   /**
    * Optional: transform/reorder/filter feed IDs before rendering.
@@ -93,11 +93,11 @@ const connectFeeds: FeedsConnector = function connectFeeds(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { searchScope, transformFeeds = (feeds) => feeds } = widgetParams;
+    const { isolated, transformFeeds = (feeds) => feeds } = widgetParams;
 
-    if (searchScope !== 'global') {
+    if (isolated !== false) {
       throw new Error(
-        withUsage('The `searchScope` option currently only supports "global".')
+        withUsage('The `isolated` option currently only supports `false`.')
       );
     }
 

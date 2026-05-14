@@ -28,6 +28,7 @@ import {
   RelatedProducts,
   FrequentlyBoughtTogether,
   TrendingItems,
+  TrendingFacets,
   LookingSimilar,
   PoweredBy,
   DynamicWidgets,
@@ -353,6 +354,14 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createTrendingFacetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <TrendingFacets {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
   createLookingSimilarWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -468,6 +477,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherWidgetTests: { act },
   createTrendingItemsWidgetTests: { act },
+  createTrendingFacetsWidgetTests: { act },
   createLookingSimilarWidgetTests: { act },
   createPoweredByWidgetTests: { act },
   createMenuSelectWidgetTests: {

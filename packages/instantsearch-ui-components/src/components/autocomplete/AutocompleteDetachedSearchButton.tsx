@@ -60,7 +60,10 @@ export function createAutocompleteDetachedSearchButtonComponent({
             classNames.detachedSearchButtonIcon
           )}
         >
-          <SearchIcon createElement={createElement} />
+          <SearchIcon
+            createElement={createElement}
+            className={classNames.detachedSearchButtonSearchIcon}
+          />
         </div>
         <div
           className={cx(
@@ -92,7 +95,10 @@ export function createAutocompleteDetachedSearchButtonComponent({
               onClear();
             }}
           >
-            <ClearIcon createElement={createElement} />
+            <ClearIcon
+              createElement={createElement}
+              className={classNames.detachedSearchButtonClearIcon}
+            />
           </button>
         )}
       </div>

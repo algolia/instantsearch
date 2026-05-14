@@ -1,7 +1,11 @@
 import { createAutocompleteSearchComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 
-import type { ComponentProps, Pragma } from 'instantsearch-ui-components';
+import type {
+  AutocompleteClassNames,
+  ComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
 const AutocompleteSearchComponent = createAutocompleteSearchComponent({
   createElement: createElement as Pragma,
@@ -13,9 +17,13 @@ export type AutocompleteSearchProps = {
   clearQuery: () => void;
   onQueryChange?: (query: string) => void;
   query: string;
-  refine: (query: string) => void;
   isSearchStalled: boolean;
+  onCancel?: () => void;
+  isDetached?: boolean;
+  submitTitle?: string;
   onAiModeClick?: () => void;
+  aiModeButtonDisabled?: boolean;
+  classNames?: Partial<AutocompleteClassNames>;
 };
 
 export function AutocompleteSearch({
@@ -23,9 +31,13 @@ export function AutocompleteSearch({
   clearQuery,
   onQueryChange,
   query,
-  refine,
   isSearchStalled,
+  onCancel,
+  isDetached,
+  submitTitle,
   onAiModeClick,
+  aiModeButtonDisabled,
+  classNames,
 }: AutocompleteSearchProps) {
   return (
     <AutocompleteSearchComponent
@@ -33,14 +45,18 @@ export function AutocompleteSearch({
         ...(inputProps as NonNullable<AutocompleteSearchProps['inputProps']>),
         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
           const value = event.currentTarget.value;
-          refine(value);
           onQueryChange?.(value);
         },
       }}
       onClear={clearQuery}
       query={query}
       isSearchStalled={isSearchStalled}
+      onCancel={onCancel}
+      isDetached={isDetached}
+      submitTitle={submitTitle}
       onAiModeClick={onAiModeClick}
+      aiModeButtonDisabled={aiModeButtonDisabled}
+      classNames={classNames}
     />
   );
 }

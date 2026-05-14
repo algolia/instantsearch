@@ -24,13 +24,20 @@ export function Feeds({ renderFeed, ...props }: FeedsProps) {
 
   const feedContainersRef = useRef(new Map<string, IndexWidget>());
   const removalTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendingRemovalsRef = useRef<IndexWidget[]>([]);
+  const pendingRemovalsRef = useRef(new Map<string, IndexWidget>());
 
   // Create and register new FeedContainers synchronously so SSR and the first
   // client render can provide the matching feed index context to children.
   const toAdd: IndexWidget[] = [];
   feedIDs.forEach((feedID) => {
     if (!feedContainersRef.current.has(feedID)) {
+      const pendingContainer = pendingRemovalsRef.current.get(feedID);
+      if (pendingContainer) {
+        pendingRemovalsRef.current.delete(feedID);
+        feedContainersRef.current.set(feedID, pendingContainer);
+        return;
+      }
+
       const container = createFeedContainer(
         feedID,
         parentIndex,
@@ -49,24 +56,27 @@ export function Feeds({ renderFeed, ...props }: FeedsProps) {
     const containers = feedContainersRef.current;
 
     const activeSet = new Set(feedIDs);
-    const toRemove: IndexWidget[] = [];
+    const toRemove: Array<[string, IndexWidget]> = [];
     containers.forEach((container, id) => {
       if (!activeSet.has(id)) {
-        toRemove.push(container);
+        toRemove.push([id, container]);
         containers.delete(id);
       }
     });
 
     if (toRemove.length > 0) {
-      pendingRemovalsRef.current.push(...toRemove);
+      toRemove.forEach(([id, container]) => {
+        pendingRemovalsRef.current.set(id, container);
+      });
 
       if (removalTimerRef.current !== null) {
         clearTimeout(removalTimerRef.current);
       }
 
       removalTimerRef.current = setTimeout(() => {
-        const widgetsToRemove = pendingRemovalsRef.current;
-        pendingRemovalsRef.current = [];
+
+        const widgetsToRemove = Array.from(pendingRemovalsRef.current.values());
+        pendingRemovalsRef.current.clear();
         removalTimerRef.current = null;
 
         if (widgetsToRemove.length > 0) {
@@ -85,9 +95,12 @@ export function Feeds({ renderFeed, ...props }: FeedsProps) {
 
       const containers = feedContainersRef.current;
       const toRemove = Array.from(
-        new Set([...containers.values(), ...pendingRemovalsRef.current])
+        new Set([
+          ...containers.values(),
+          ...pendingRemovalsRef.current.values(),
+        ])
       );
-      pendingRemovalsRef.current = [];
+      pendingRemovalsRef.current.clear();
       containers.clear();
       if (toRemove.length > 0) {
         parentIndex.removeWidgets(toRemove);

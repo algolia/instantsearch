@@ -24,3 +24,10 @@ export type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
  */
 export type PartialKeys<TObj, TKeys extends keyof TObj> = Omit<TObj, TKeys> &
   Partial<Pick<TObj, TKeys>>;
+
+/**
+ * Make certain keys of an object writable (strip the `readonly` modifier).
+ */
+export type MutableKeys<TObj, TKeys extends keyof TObj> = Omit<TObj, TKeys> & {
+  -readonly [P in TKeys]: TObj[P];
+};
