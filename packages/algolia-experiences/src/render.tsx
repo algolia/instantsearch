@@ -1,5 +1,5 @@
 /** @jsx h */
-import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+import { getPropertyByPath } from 'instantsearch-core';
 import { carousel } from 'instantsearch.js/es/templates';
 import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
@@ -17,7 +17,7 @@ import type {
   TemplateText,
   TemplateWidgetTypes,
 } from './types';
-import type { Widget } from 'instantsearch.js';
+import type { Widget } from 'instantsearch-core';
 import type { ComponentChildren, JSX } from 'preact';
 
 export function injectStyles() {

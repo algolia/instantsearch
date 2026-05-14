@@ -5,8 +5,8 @@ import { isModifierClick } from './lib/isModifierClick';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';
-import type { CreateURL } from 'instantsearch.js';
-import type { MenuItem } from 'instantsearch.js/es/connectors/menu/connectMenu';
+import type { CreateURL } from 'instantsearch-core';
+import type { MenuItem } from 'instantsearch-core';
 
 export type MenuProps = React.ComponentProps<'div'> & {
   items: MenuItem[];

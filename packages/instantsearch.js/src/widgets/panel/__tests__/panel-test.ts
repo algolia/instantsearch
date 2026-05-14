@@ -10,7 +10,7 @@ import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import panel from '../panel';
 
 import type { PanelProps } from '../../../components/Panel/Panel';

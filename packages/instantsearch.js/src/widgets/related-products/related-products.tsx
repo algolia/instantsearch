@@ -4,7 +4,7 @@ import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectRelatedProducts from '../../connectors/related-products/connectRelatedProducts';
+import { connectRelatedProducts } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   RelatedProductsWidgetDescription,
   RelatedProductsConnectorParams,
   RelatedProductsRenderState,
-} from '../../connectors/related-products/connectRelatedProducts';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,

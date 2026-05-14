@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
+import { connectQueryRules } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -19,7 +19,7 @@ import type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Template } from '../../types';
 

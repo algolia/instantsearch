@@ -1,4 +1,4 @@
-import { find } from '../../lib';
+import { find } from 'instantsearch-core';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 

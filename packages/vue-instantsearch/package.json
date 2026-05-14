@@ -38,16 +38,20 @@
   "dependencies": {
     "@swc/helpers": "0.5.18",
     "instantsearch-ui-components": "0.26.1",
-    "instantsearch.js": "4.97.0",
-    "mitt": "^2.1.0"
+    "mitt": "^2.1.0",
+    "instantsearch-core": "0.1.0"
   },
   "peerDependencies": {
     "@vue/server-renderer": "^3.1.2",
     "algoliasearch": ">= 3.32.0 < 6",
+    "instantsearch.js": ">= 4.96.2 < 5",
     "vue": "^2.6.0 || >=3.0.0-rc.0",
     "vue-server-renderer": "^2.6.11"
   },
   "peerDependenciesMeta": {
+    "instantsearch.js": {
+      "optional": true
+    },
     "vue-server-renderer": {
       "optional": true
     },

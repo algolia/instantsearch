@@ -14,7 +14,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
-} from 'instantsearch.js/es/connectors/index';
+} from 'instantsearch-core';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {
@@ -24,7 +24,7 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 const testSetups = {
   async createRefinementListConnectorTests({

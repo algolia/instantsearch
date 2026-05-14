@@ -1,4 +1,3 @@
-import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
@@ -6,7 +5,8 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
-} from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
+import { createChatComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
   Fragment,
@@ -33,17 +33,19 @@ export {
 };
 
 import type {
+  IndexUiState,
+  UIMessage,
+  UserClientSideTool,
+  UserClientSideTools,
+} from 'instantsearch-core';
+import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
-  UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({

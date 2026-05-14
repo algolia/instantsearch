@@ -7,7 +7,7 @@ import React from 'react';
 
 import { createCarouselTool } from '../SearchIndexTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 type TestHit = {
   objectID: string;

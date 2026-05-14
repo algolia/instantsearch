@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
+import { connectToggleRefinement } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -22,7 +22,7 @@ import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementRenderState,
-} from '../../connectors/toggle-refinement/connectToggleRefinement';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { RendererOptions, Template, WidgetFactory } from '../../types';
 

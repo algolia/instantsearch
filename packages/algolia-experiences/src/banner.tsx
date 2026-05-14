@@ -4,11 +4,11 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import type { Banner } from 'algoliasearch-helper';
+import type { HitsConnectorParams } from 'instantsearch-core';
 import type {
   ComponentProps,
   HitsClassNames,
 } from 'instantsearch-ui-components';
-import type { HitsConnectorParams } from 'instantsearch.js/es/connectors/hits/connectHits';
 
 export type BannerWidgetParams = {
   container: HTMLElement;

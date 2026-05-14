@@ -3,7 +3,7 @@
  */
 
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { createFeedContainer } from 'instantsearch.js/es/connectors/feeds/FeedContainer';
+import { createFeedContainer } from 'instantsearch-core';
 import React from 'react';
 
 import { IndexContext } from '../../lib/IndexContext';
@@ -11,7 +11,7 @@ import { InstantSearchContext } from '../../lib/InstantSearchContext';
 import { useIndexContext } from '../../lib/useIndexContext';
 import { Feeds } from '../Feeds';
 
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { IndexWidget } from 'instantsearch-core';
 
 let mockFeedIDs: string[] = [];
 
@@ -19,7 +19,7 @@ jest.mock('../../connectors/useFeeds', () => ({
   useFeeds: jest.fn(() => ({ feedIDs: mockFeedIDs })),
 }));
 
-jest.mock('instantsearch.js/es/connectors/feeds/FeedContainer', () => ({
+jest.mock('instantsearch-core', () => ({
   createFeedContainer: jest.fn(),
 }));
 

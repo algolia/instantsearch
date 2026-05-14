@@ -1,13 +1,14 @@
 /** @jsx createElement */
 
-import { cx } from '../../lib';
 import {
   findTool,
   getTextContent,
   hasTextContent,
   isPartText,
   isPartTool,
-} from '../../lib/utils/chat';
+} from 'instantsearch-core';
+
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -32,7 +33,8 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type { ChatEmptyProps, ChatLayoutOwnProps, ClientSideTools } from './types';
+import type { ChatStatus, UIMessage } from 'instantsearch-core';
 
 export type ChatMessagesTranslations = {
   /**
@@ -93,7 +95,7 @@ export type ChatMessagesClassNames = {
 };
 
 export type ChatMessagesProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends UIMessage = UIMessage
 > = ComponentProps<'div'> & {
   /**
    * Array of messages to display
@@ -217,12 +219,12 @@ export type ChatMessagesProps<
   feedbackState?: Record<string, 'sending' | 0 | 1>;
 };
 
-const copyToClipboard = (message: ChatMessageBase) => {
+const copyToClipboard = (message: UIMessage) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
 function createDefaultMessageComponent<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends UIMessage = UIMessage
 >({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
@@ -312,12 +314,12 @@ function createDefaultMessageComponent<
           {
             title: translations.thumbsUpLabel,
             icon: () => <ThumbsUpIcon createElement={createElement} />,
-            onClick: (m: ChatMessageBase) => onFeedback(m.id, 1),
+            onClick: (m: UIMessage) => onFeedback(m.id, 1),
           },
           {
             title: translations.thumbsDownLabel,
             icon: () => <ThumbsDownIcon createElement={createElement} />,
-            onClick: (m: ChatMessageBase) => onFeedback(m.id, 0),
+            onClick: (m: UIMessage) => onFeedback(m.id, 0),
           }
         );
       }
@@ -356,7 +358,7 @@ export function createChatMessagesComponent({
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
-    createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+    createDefaultMessageComponent<UIMessage>({ createElement, Fragment });
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
     createElement,
   });
@@ -365,7 +367,7 @@ export function createChatMessagesComponent({
   });
 
   return function ChatMessages<
-    TMessage extends ChatMessageBase = ChatMessageBase
+    TMessage extends UIMessage = UIMessage
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},
@@ -530,7 +532,7 @@ export function createChatMessagesComponent({
 
 const getShowLoader = (
   status: ChatStatus,
-  lastPart: ChatMessageBase['parts'][number] | undefined,
+  lastPart: UIMessage['parts'][number] | undefined,
   tools: ClientSideTools
 ): boolean => {
   if (status !== 'submitted' && status !== 'streaming') return false;

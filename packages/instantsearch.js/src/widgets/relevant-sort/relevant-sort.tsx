@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RelevantSort from '../../components/RelevantSort/RelevantSort';
-import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort';
+import { connectRelevantSort } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -21,7 +21,7 @@ import type {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
-} from '../../connectors/relevant-sort/connectRelevantSort';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Template } from '../../types';
 

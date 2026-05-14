@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
 import { mount, nextTick } from '../../../test/utils';
 import { createFakeClient } from '../../util/testutils/client';
@@ -11,7 +11,7 @@ import InstantSearchSsr from '../InstantSearchSsr';
 import SearchBox from '../SearchBox.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 it('requires an injected instantsearch instance ($_ais)', () => {
   expect(() => mount(InstantSearchSsr)).toThrowErrorMatchingInlineSnapshot(

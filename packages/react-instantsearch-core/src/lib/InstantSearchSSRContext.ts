@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
 import type { InternalInstantSearch } from './useInstantSearchApi';
-import type { UiState } from 'instantsearch.js';
+import type { UiState } from 'instantsearch-core';
 import type { MutableRefObject } from 'react';
 
 export type InstantSearchSSRContextApi<

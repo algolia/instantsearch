@@ -44,6 +44,7 @@
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
+    "instantsearch-core": "0.1.0",
     "@swc/helpers": "0.5.18",
     "markdown-to-jsx": "^7.7.15",
     "zod": "^3.25.76 || ^4",

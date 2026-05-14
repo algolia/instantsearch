@@ -6,11 +6,11 @@ import {
   createCompositionClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { hydrateSearchClient } from 'instantsearch-core';
 
 import { connectFeeds, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { getInitialResults, waitForResults } from '../server';
-import { hydrateSearchClient } from '../utils/hydrateSearchClient';
 
 const compositionID = 'my-comp';
 

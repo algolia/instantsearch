@@ -1,7 +1,7 @@
 /** @jsx createElement */
 
 import type { RecordWithObjectID, Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 export type DisplayResultsTranslations = {
   /**

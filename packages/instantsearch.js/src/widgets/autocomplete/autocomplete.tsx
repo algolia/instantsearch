@@ -1,6 +1,11 @@
 /** @jsx h */
 
 import {
+  getPromptSuggestionHits,
+  isPromptSuggestion,
+  type ChatRenderState,
+} from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedOverlayComponent,
@@ -15,8 +20,6 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
@@ -41,8 +44,7 @@ import type {
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
@@ -817,7 +819,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onInput: (event) => {
+        onInput: (event: any) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);

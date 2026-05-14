@@ -38,8 +38,8 @@ import {
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
-import type { Hit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { Hit } from 'instantsearch-core';
+import type { SendEventForHits } from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -227,8 +227,8 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `react-instantsearch (${
           require('../../../react-instantsearch-core/package.json').version

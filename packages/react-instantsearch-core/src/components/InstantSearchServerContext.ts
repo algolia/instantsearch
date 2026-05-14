@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import type { InstantSearch, UiState } from 'instantsearch.js';
+import type { InstantSearch, UiState } from 'instantsearch-core';
 
 export type InstantSearchServerContextApi<
   TUiState extends UiState,

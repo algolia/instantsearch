@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { connectRelevantSort } from 'instantsearch.js/es/connectors/index';
+import { connectRelevantSort } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

@@ -1,6 +1,15 @@
 /** @jsx h */
 
 import {
+  SearchIndexToolType,
+  RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+  DisplayResultsToolType,
+} from 'instantsearch-core';
+import { connectChat } from 'instantsearch-core';
+import {
   ArrowRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -11,15 +20,6 @@ import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChat from '../../connectors/chat/connectChat';
-import {
-  SearchIndexToolType,
-  RecommendToolType,
-  MemorizeToolType,
-  MemorySearchToolType,
-  PonderToolType,
-  DisplayResultsToolType,
-} from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
@@ -33,11 +33,6 @@ import { carousel } from '../../templates';
 import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
-import type {
-  ChatRenderState,
-  ChatConnectorParams,
-  ChatWidgetDescription,
-} from '../../connectors/chat/connectChat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
@@ -51,12 +46,22 @@ import type {
 } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
+  ChatConnectorParams,
+  ChatRenderState,
+  ChatStatus,
+  ChatWidgetDescription,
+  ClientSideToolComponentProps,
+  ClientSideTools,
+  SearchToolInput,
+  UIMessage,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   ChatClassNames,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
-  ChatMessageBase,
   ChatMessageErrorProps,
   ChatEmptyProps,
   ChatMessageLoaderProps,
@@ -64,13 +69,8 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ChatStatus,
   ChatToggleButtonProps,
-  ClientSideToolComponentProps,
-  ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 
@@ -290,7 +290,7 @@ type ChatWrapperProps = {
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
-  chatMessages: ChatMessageBase[];
+  chatMessages: UIMessage[];
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -1189,7 +1189,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     actions: Template<{
       actions: ChatMessageActionProps[];
-      message: ChatMessageBase;
+      message: UIMessage;
     }>;
 
     /**
