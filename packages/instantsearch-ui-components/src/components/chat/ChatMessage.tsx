@@ -1,7 +1,6 @@
 /** @jsx createElement */
-import { compiler } from 'markdown-to-jsx';
-
 import { startsWith } from 'instantsearch-core';
+import { compiler } from 'markdown-to-jsx';
 
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
