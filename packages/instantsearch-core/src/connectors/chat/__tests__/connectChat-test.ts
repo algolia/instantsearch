@@ -361,6 +361,62 @@ describe('connectChat', () => {
       expect(updatedRenderState.messages).toHaveLength(0);
     });
 
+    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+      const { getRenderState } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      const initialId = renderState.id;
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      const updatedRenderState = getRenderState();
+      expect(updatedRenderState.id).toEqual(expect.any(String));
+      expect(updatedRenderState.id).not.toBe(initialId);
+    });
+
+    it('regenerates the id even when the consumer owns the Chat instance', () => {
+      const chatInstance = new Chat<UIMessage>({
+        transport: {
+          sendMessages: jest.fn(),
+          reconnectToStream: jest.fn(),
+        },
+      });
+      const initialId = chatInstance.id;
+
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat: chatInstance,
+        transport: { api: 'http://unused' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper }));
+
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      expect(chatInstance.id).toEqual(expect.any(String));
+      expect(chatInstance.id).not.toBe(initialId);
+    });
+
     it('updates messages', () => {
       const { getRenderState } = getInitializedWidget();
 
