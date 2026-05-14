@@ -1,0 +1,349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator snapshot: React + TypeScript algolia-client.ts 1`] = `
+"import { algoliasearch } from 'algoliasearch';
+
+export const searchClient = algoliasearch(\\"APP_ID\\", \\"SEARCH_KEY\\");
+"
+`;
+
+exports[`generator snapshot: React + plain JS algolia-client.js 1`] = `
+"import { algoliasearch } from 'algoliasearch';
+
+export const searchClient = algoliasearch(\\"APP_ID\\", \\"SEARCH_KEY\\");
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: ClearRefinements.js 1`] = `
+"import { clearRefinements } from 'instantsearch.js/es/widgets';
+
+export function ClearRefinements(container) {
+  return clearRefinements({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: Pagination.js 1`] = `
+"import { pagination } from 'instantsearch.js/es/widgets';
+
+export function Pagination(container) {
+  return pagination({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: SearchBox.js 1`] = `
+"import { searchBox } from 'instantsearch.js/es/widgets';
+
+export function SearchBox(container) {
+  return searchBox({ container });
+}
+"
+`;
+
+exports[`generator: experience (JS flavor) snapshot: index.js 1`] = `
+"import { configure } from 'instantsearch.js/es/widgets';
+import { startProductSearch } from \\"./provider\\";
+import { SearchBox } from \\"./SearchBox\\";
+import { Pagination } from \\"./Pagination\\";
+import { ClearRefinements } from \\"./ClearRefinements\\";
+
+startProductSearch([
+  configure({ hitsPerPage: 20 }),
+  SearchBox(\\"#search-box\\"),
+  Pagination(\\"#pagination\\"),
+  ClearRefinements(\\"#clear-refinements\\"),
+]);
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: ClearRefinements.tsx 1`] = `
+"import { ClearRefinements as InstantSearchClearRefinements } from 'react-instantsearch';
+
+export function ClearRefinements() {
+  return <InstantSearchClearRefinements />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: Pagination.tsx 1`] = `
+"import { Pagination as InstantSearchPagination } from 'react-instantsearch';
+
+export function Pagination() {
+  return <InstantSearchPagination />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: SearchBox.tsx 1`] = `
+"import { SearchBox as InstantSearchSearchBox } from 'react-instantsearch';
+
+export function SearchBox() {
+  return <InstantSearchSearchBox />;
+}
+"
+`;
+
+exports[`generator: experience (React + TypeScript) snapshot: index.tsx 1`] = `
+"import { Configure, Index } from 'react-instantsearch';
+import { SearchBox } from \\"./SearchBox\\";
+import { Pagination } from \\"./Pagination\\";
+import { ClearRefinements } from \\"./ClearRefinements\\";
+
+export function ProductSearch() {
+  return (
+    <Index indexName={\\"products\\"}>
+      <Configure hitsPerPage={20} />
+      <SearchBox />
+      <Pagination />
+      <ClearRefinements />
+    </Index>
+  );
+}
+"
+`;
+
+exports[`generator: experience (React + plain JS) snapshot: ClearRefinements.jsx 1`] = `
+"import { ClearRefinements as InstantSearchClearRefinements } from 'react-instantsearch';
+
+export function ClearRefinements() {
+  return <InstantSearchClearRefinements />;
+}
+"
+`;
+
+exports[`generator: experience (React + plain JS) snapshot: Pagination.jsx 1`] = `
+"import { Pagination as InstantSearchPagination } from 'react-instantsearch';
+
+export function Pagination() {
+  return <InstantSearchPagination />;
+}
+"
+`;
+
+exports[`generator: experience (React + plain JS) snapshot: SearchBox.jsx 1`] = `
+"import { SearchBox as InstantSearchSearchBox } from 'react-instantsearch';
+
+export function SearchBox() {
+  return <InstantSearchSearchBox />;
+}
+"
+`;
+
+exports[`generator: experience (React + plain JS) snapshot: index.jsx 1`] = `
+"import { Configure, Index } from 'react-instantsearch';
+import { SearchBox } from \\"./SearchBox\\";
+import { Pagination } from \\"./Pagination\\";
+import { ClearRefinements } from \\"./ClearRefinements\\";
+
+export function ProductSearch() {
+  return (
+    <Index indexName={\\"products\\"}>
+      <Configure hitsPerPage={20} />
+      <SearchBox />
+      <Pagination />
+      <ClearRefinements />
+    </Index>
+  );
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: Hits.js 1`] = `
+"import { hits } from 'instantsearch.js/es/widgets';
+
+export function Hits(container) {
+  return hits({
+    container,
+    templates: {
+      item: (hit, { html }) => html\`
+        <article>
+          <img src=\\"\${hit.image_url}\\" alt=\\"\${hit.name}\\" />
+          <h3>\${hit.name}</h3>
+          <p>\${hit.description}</p>
+        </article>
+      \`,
+    },
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: Hits.js without image 1`] = `
+"import { hits } from 'instantsearch.js/es/widgets';
+
+export function Hits(container) {
+  return hits({
+    container,
+    templates: {
+      item: (hit, { html }) => html\`
+        <article>
+          <h3>\${hit.name}</h3>
+          <p>\${hit.description}</p>
+        </article>
+      \`,
+    },
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: RefinementList.js 1`] = `
+"import { refinementList } from 'instantsearch.js/es/widgets';
+
+export function RefinementList(container) {
+  return refinementList({
+    container,
+    attribute: \\"brand\\",
+  });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (JS flavor) snapshot: SortBy.js 1`] = `
+"import { sortBy } from 'instantsearch.js/es/widgets';
+
+const items = [
+  { value: \\"products\\", label: \\"Featured\\" },
+  { value: \\"products_price_asc\\", label: \\"price asc\\" },
+  { value: \\"products_price_desc\\", label: \\"price desc\\" },
+];
+
+export function SortBy(container) {
+  return sortBy({ container, items });
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: Hits.tsx 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+type HitRecord = {
+  name: string;
+  image_url: string;
+  description: string;
+};
+
+function Hit({ hit }: { hit: HitRecord }) {
+  return (
+    <article>
+      <img src={hit.image_url} alt={hit.name} />
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits<HitRecord> hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: Hits.tsx without image 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+type HitRecord = {
+  name: string;
+  description: string;
+};
+
+function Hit({ hit }: { hit: HitRecord }) {
+  return (
+    <article>
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits<HitRecord> hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: RefinementList.tsx 1`] = `
+"import { RefinementList as InstantSearchRefinementList } from 'react-instantsearch';
+
+export function RefinementList() {
+  return <InstantSearchRefinementList attribute={\\"brand\\"} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + TypeScript) snapshot: SortBy.tsx 1`] = `
+"import { SortBy as InstantSearchSortBy } from 'react-instantsearch';
+
+const items = [
+  { value: \\"products\\", label: \\"Featured\\" },
+  { value: \\"products_price_asc\\", label: \\"price asc\\" },
+  { value: \\"products_price_desc\\", label: \\"price desc\\" },
+];
+
+export function SortBy() {
+  return <InstantSearchSortBy items={items} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + plain JS) snapshot: Hits.jsx 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+function Hit({ hit }) {
+  return (
+    <article>
+      <img src={hit.image_url} alt={hit.name} />
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + plain JS) snapshot: Hits.jsx without image 1`] = `
+"import { Hits as InstantSearchHits } from 'react-instantsearch';
+
+function Hit({ hit }) {
+  return (
+    <article>
+      <h3>{hit.name}</h3>
+      <p>{hit.description}</p>
+    </article>
+  );
+}
+
+export function Hits() {
+  return <InstantSearchHits hitComponent={Hit} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + plain JS) snapshot: RefinementList.jsx 1`] = `
+"import { RefinementList as InstantSearchRefinementList } from 'react-instantsearch';
+
+export function RefinementList() {
+  return <InstantSearchRefinementList attribute={\\"brand\\"} />;
+}
+"
+`;
+
+exports[`generator: schema-driven widgets (React + plain JS) snapshot: SortBy.jsx 1`] = `
+"import { SortBy as InstantSearchSortBy } from 'react-instantsearch';
+
+const items = [
+  { value: \\"products\\", label: \\"Featured\\" },
+  { value: \\"products_price_asc\\", label: \\"price asc\\" },
+  { value: \\"products_price_desc\\", label: \\"price desc\\" },
+];
+
+export function SortBy() {
+  return <InstantSearchSortBy items={items} />;
+}
+"
+`;

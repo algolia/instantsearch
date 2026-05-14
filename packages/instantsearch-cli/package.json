@@ -1,0 +1,41 @@
+{
+  "name": "@instantsearch/cli",
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "Install and pre-configure InstantSearch widgets into an existing project",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "algolia",
+    "instantsearch",
+    "cli"
+  ],
+  "repository": "algolia/instantsearch",
+  "author": "Algolia <support@algolia.com>",
+  "main": "src/index.ts",
+  "bin": {
+    "@instantsearch/cli": "bin/instantsearch.mjs"
+  },
+  "scripts": {
+    "start": "tsx src/cli/index.ts",
+    "test": "jest --no-color src",
+    "type-check": "tsc --noEmit"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "engines": {
+    "node": ">= 16"
+  },
+  "dependencies": {
+    "algoliasearch": "5.1.1",
+    "commander": "4.1.1",
+    "inquirer": "8.2.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "8.2.0",
+    "@types/node": "^20.0.0",
+    "tsx": "4.20.6"
+  }
+}

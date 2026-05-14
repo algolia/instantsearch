@@ -1,0 +1,10 @@
+{
+  "name": "ambiguous-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-instantsearch": "^7.0.0",
+    "instantsearch.js": "^4.0.0"
+  }
+}

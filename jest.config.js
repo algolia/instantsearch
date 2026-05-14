@@ -20,6 +20,7 @@ const config = {
     '<rootDir>/examples/',
     '<rootDir>/packages/algoliasearch-helper',
     '<rootDir>/packages/create-instantsearch-app',
+    '<rootDir>/packages/instantsearch-cli',
     '<rootDir>/packages/react-instantsearch-router-nextjs/__tests__',
     '<rootDir>/packages/react-instantsearch-nextjs/__tests__',
     '/__utils__/',
