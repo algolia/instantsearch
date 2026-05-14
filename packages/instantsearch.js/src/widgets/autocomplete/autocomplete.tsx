@@ -626,7 +626,10 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           if (chatRenderState) {
             chatRenderState.setOpen?.(true);
             chatRenderState.focusInput?.();
-            chatRenderState.sendMessage?.({ text: item.prompt });
+            chatRenderState.sendMessage?.(
+              { text: item.prompt },
+              { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+            );
             return;
           }
 
@@ -850,7 +853,10 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               if (chatState) {
                 chatState.setOpen?.(true);
                 if (localQuery.trim()) {
-                  chatState.sendMessage?.({ text: localQuery });
+                  chatState.sendMessage?.(
+                    { text: localQuery },
+                    { headers: { 'x-algolia-referer': 'ai-mode' } }
+                  );
                 }
               }
             }

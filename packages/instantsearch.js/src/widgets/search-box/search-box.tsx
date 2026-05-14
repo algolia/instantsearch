@@ -201,7 +201,10 @@ const renderer =
           if (chatRenderState) {
             chatRenderState.setOpen?.(true);
             if (currentQuery.trim()) {
-              chatRenderState.sendMessage?.({ text: currentQuery });
+              chatRenderState.sendMessage?.(
+                { text: currentQuery },
+                { headers: { 'x-algolia-referer': 'ai-mode' } }
+              );
             }
           }
         }

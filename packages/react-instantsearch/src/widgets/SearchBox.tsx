@@ -119,7 +119,10 @@ export function SearchBox({
           if (chatRenderState) {
             chatRenderState.setOpen?.(true);
             if (inputValue.trim()) {
-              chatRenderState.sendMessage?.({ text: inputValue });
+              chatRenderState.sendMessage?.(
+                { text: inputValue },
+                { headers: { 'x-algolia-referer': 'ai-mode' } }
+              );
             }
           }
         }

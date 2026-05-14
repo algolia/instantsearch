@@ -749,7 +749,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           if (chatRenderStateWithFocus) {
             chatRenderStateWithFocus.setOpen?.(true);
             chatRenderStateWithFocus.focusInput?.();
-            chatRenderStateWithFocus.sendMessage?.({ text: item.prompt });
+            chatRenderStateWithFocus.sendMessage?.(
+              { text: item.prompt },
+              { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+            );
             return;
           }
 
@@ -911,7 +914,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               if (chatRenderState) {
                 chatRenderState.setOpen?.(true);
                 if (resolvedQuery.trim()) {
-                  chatRenderState.sendMessage?.({ text: resolvedQuery });
+                  chatRenderState.sendMessage?.(
+                    { text: resolvedQuery },
+                    { headers: { 'x-algolia-referer': 'ai-mode' } }
+                  );
                 }
               }
             }
