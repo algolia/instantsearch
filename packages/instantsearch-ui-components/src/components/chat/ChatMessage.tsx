@@ -1,18 +1,25 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
 
-import { cx, startsWith } from '../../lib';
+import { startsWith } from 'instantsearch-core';
+
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
+import type { ClientSideTools } from './types';
 import type {
-  ChatMessageBase,
-  ChatToolMessage,
-  ClientSideTools,
-} from './types';
-import type { AddToolResultWithOutput, ChatStatus } from 'instantsearch-core';
+  AddToolResultWithOutput,
+  ChatStatus,
+  UIMessage,
+} from 'instantsearch-core';
+
+type ChatToolMessage = Extract<
+  UIMessage['parts'][number],
+  { type: `tool-${string}` }
+>;
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -75,14 +82,14 @@ export type ChatMessageActionProps = {
   /**
    * Click handler for the action
    */
-  onClick?: (message: ChatMessageBase) => void;
+  onClick?: (message: UIMessage) => void;
 };
 
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
    */
-  message: ChatMessageBase;
+  message: UIMessage;
   /**
    * The status of the message (e.g. whether it's still streaming)
    */
@@ -112,7 +119,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   actionsComponent?: (props: {
     actions: ChatMessageActionProps[];
-    message: ChatMessageBase;
+    message: UIMessage;
   }) => JSX.Element | null;
   /**
    * Footer content
@@ -203,7 +210,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     function renderMessagePart(
-      part: ChatMessageBase['parts'][number],
+      part: UIMessage['parts'][number],
       index: number
     ) {
       if (part.type === 'step-start') {

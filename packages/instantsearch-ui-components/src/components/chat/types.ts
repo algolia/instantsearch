@@ -8,13 +8,6 @@ import type {
   UIMessage,
 } from 'instantsearch-core';
 
-export type ChatMessageBase = UIMessage;
-
-export type ChatToolMessage = Extract<
-  ChatMessageBase['parts'][number],
-  { type: `tool-${string}` }
->;
-
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
 ) => JSX.Element;
@@ -26,7 +19,7 @@ export type ClientSideTool = Omit<CoreClientSideTool, 'layoutComponent'> & {
 export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type ChatLayoutOwnProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends UIMessage = UIMessage
 > = {
   open: boolean;
   maximized: boolean;

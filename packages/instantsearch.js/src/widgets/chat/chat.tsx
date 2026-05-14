@@ -53,6 +53,7 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   SearchToolInput,
+  UIMessage,
   UserClientSideTool,
 } from 'instantsearch-core';
 import type {
@@ -61,7 +62,6 @@ import type {
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
-  ChatMessageBase,
   ChatMessageErrorProps,
   ChatEmptyProps,
   ChatMessageLoaderProps,
@@ -290,7 +290,7 @@ type ChatWrapperProps = {
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
-  chatMessages: ChatMessageBase[];
+  chatMessages: UIMessage[];
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -1189,7 +1189,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     actions: Template<{
       actions: ChatMessageActionProps[];
-      message: ChatMessageBase;
+      message: UIMessage;
     }>;
 
     /**
