@@ -24,6 +24,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 import TemplateComponent from '../../components/Template/Template';
 import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
+import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -603,6 +604,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const shouldHideEmptyPanel =
     allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
 
+  const getChatRenderState = () =>
+    instantSearchInstance.renderState[targetIndex!.getIndexId()]?.chat as
+      | Partial<ChatRenderState>
+      | undefined;
+
   const {
     getInputProps,
     getItemProps,
@@ -619,14 +625,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       userOnSelect ??
       (({ query, item, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderState = instantSearchInstance.renderState[
-            targetIndex!.getIndexId()
-          ]?.chat as Partial<ChatRenderState> | undefined;
+          const chatRenderState = getChatRenderState();
 
           if (chatRenderState) {
-            chatRenderState.setOpen?.(true);
-            chatRenderState.focusInput?.();
-            chatRenderState.sendMessage?.({ text: item.prompt });
+            if (openChat(chatRenderState, { message: item.prompt })) {
+              setQuery('');
+            }
             return;
           }
 
@@ -843,18 +847,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               if (isDetached) {
                 setIsModalOpen(false);
               }
-              const indexId = targetIndex!.getIndexId();
-              const chatState = instantSearchInstance.renderState[indexId]
-                ?.chat as Partial<ChatRenderState> | undefined;
-
-              if (chatState) {
-                chatState.setOpen?.(true);
-                if (localQuery.trim()) {
-                  chatState.sendMessage?.({ text: localQuery });
-                }
+              if (openChat(getChatRenderState(), { message: localQuery })) {
+                onRefine('');
               }
             }
           : undefined
+      }
+      aiModeButtonDisabled={
+        aiMode ? isChatBusy(getChatRenderState()) : undefined
       }
       classNames={cssClasses}
     />

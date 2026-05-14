@@ -183,6 +183,33 @@ describe('AutocompleteSearch', () => {
     );
   });
 
+  test('disables the AI mode button when aiModeButtonDisabled is true', () => {
+    const onAiModeClick = jest.fn();
+    const inputRef = createRef<HTMLInputElement>();
+    const { container } = render(
+      <AutocompleteSearch
+        inputProps={{
+          id: 'ai-disabled',
+          ref: inputRef,
+          onInput: jest.fn(),
+        }}
+        onClear={jest.fn()}
+        query="macbook"
+        isSearchStalled={false}
+        onAiModeClick={onAiModeClick}
+        aiModeButtonDisabled={true}
+      />
+    );
+
+    const aiButton =
+      container.querySelector<HTMLButtonElement>('.ais-AiModeButton')!;
+    expect(aiButton).not.toBeNull();
+    expect(aiButton.disabled).toBe(true);
+
+    userEvent.click(aiButton);
+    expect(onAiModeClick).not.toHaveBeenCalled();
+  });
+
   test('renders the submit button in non-detached mode', () => {
     const inputRef = createRef<HTMLInputElement>();
     const { container, getByTitle } = render(
