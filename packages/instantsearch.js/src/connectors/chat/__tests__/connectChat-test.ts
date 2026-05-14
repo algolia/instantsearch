@@ -12,7 +12,6 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import { Chat } from '../../../lib/chat';
-import version from '../../../lib/version';
 import connectChat from '../connectChat';
 
 import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
@@ -913,7 +912,33 @@ data: [DONE]`,
         expect(headers).toHaveProperty('x-algolia-agent');
       });
 
-      it('registers `chat` in the Algolia user-agent', () => {
+      it('appends `; chat` to the x-algolia-agent header on agent requests', async () => {
+        const client = Object.assign(createSearchClient(), {
+          appId: 'appId',
+          apiKey: 'apiKey',
+          transporter: { userAgent: { value: 'instantsearch.js (4.95.0)' } },
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-agent']).toBe(
+          'instantsearch.js (4.95.0); chat'
+        );
+      });
+
+      it('does not register `chat` on the search client user-agent', () => {
         const addAlgoliaAgent = jest.fn();
         const client = Object.assign(createSearchClient(), {
           addAlgoliaAgent,
@@ -930,7 +955,12 @@ data: [DONE]`,
           })
         );
 
-        expect(addAlgoliaAgent).toHaveBeenCalledWith(`chat (${version})`);
+        // The chat connector must not register `chat` on the shared search
+        // client — otherwise every subsequent search request would carry it
+        // in `x-algolia-agent`.
+        expect(addAlgoliaAgent).not.toHaveBeenCalledWith(
+          expect.stringContaining('chat')
+        );
       });
 
       it('forwards the x-algolia-referer header from sendMessage options', async () => {

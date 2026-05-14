@@ -17,7 +17,6 @@ import {
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
-import version from '../../lib/version';
 
 import type {
   AbstractChat,
@@ -361,18 +360,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
 
-      // Identify the chat connector in the Algolia user-agent so the agent
-      // backend can attribute traffic to the chat component. `addAlgoliaAgent`
-      // deduplicates, so calling it for every chat widget instance is safe.
-      if (
-        typeof (client as { addAlgoliaAgent?: (agent: string) => void })
-          .addAlgoliaAgent === 'function'
-      ) {
-        (client as { addAlgoliaAgent: (agent: string) => void }).addAlgoliaAgent(
-          `chat (${version})`
-        );
-      }
-
       // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
       const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
         messages.map((message) => ({
@@ -436,7 +423,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
-            'x-algolia-agent': getAlgoliaAgent(client),
+            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
           prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
             return {
