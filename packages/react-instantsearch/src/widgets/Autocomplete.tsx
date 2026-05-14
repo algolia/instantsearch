@@ -779,7 +779,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
         indexId={`ais-autocomplete-${instanceKey}`}
       >
         <Configure {...searchParameters} />
-        <Feeds searchScope="global" renderFeed={() => null} />
+        <Feeds isolated={false} renderFeed={() => null} />
         {innerAutocomplete}
       </Index>
     );

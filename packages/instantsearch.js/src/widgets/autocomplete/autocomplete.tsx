@@ -1480,7 +1480,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           configure(searchParameters),
           // Connector-only registration runs `hydrateFeedsFromInitialResultsIfNeeded`
           // at init for SSR, without triggering the extra search `feeds()` would.
-          connectFeeds(noop, noop)({ searchScope: 'global' }),
+          connectFeeds(noop, noop)({ isolated: false }),
           ...feedContainers,
           {
             ...makeWidget({

@@ -74,7 +74,6 @@ export function Feeds({ renderFeed, ...props }: FeedsProps) {
       }
 
       removalTimerRef.current = setTimeout(() => {
-
         const widgetsToRemove = Array.from(pendingRemovalsRef.current.values());
         pendingRemovalsRef.current.clear();
         removalTimerRef.current = null;
