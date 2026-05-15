@@ -2018,10 +2018,10 @@ export function createOptionsTests(
                   },
                 },
               ],
-              transformItems: (indices) =>
+              transformItems: (indices: any[]) =>
                 indices.map((index) => ({
                   ...index,
-                  hits: index.hits.map((item) => ({
+                  hits: index.hits.map((item: any) => ({
                     ...item,
                     name: item.name.toUpperCase(),
                   })),
@@ -2034,10 +2034,10 @@ export function createOptionsTests(
                   itemComponent: (props) => props.item.name,
                 },
               ],
-              transformItems: (indices) =>
+              transformItems: (indices: any[]) =>
                 indices.map((index) => ({
                   ...index,
-                  hits: index.hits.map((item) => ({
+                  hits: index.hits.map((item: any) => ({
                     ...item,
                     name: item.name.toUpperCase(),
                   })),
@@ -2099,7 +2099,7 @@ export function createOptionsTests(
                 },
               ],
               // reverse the order of appearance of suggestions and indices
-              transformItems: (indices) => {
+              transformItems: (indices: any[]) => {
                 const querySuggestions = indices.find(
                   (index) => index.indexName === 'query_suggestions'
                 );
@@ -2123,7 +2123,7 @@ export function createOptionsTests(
                   itemComponent: (props) => props.item.name,
                 },
               ],
-              transformItems: (indices) => {
+              transformItems: (indices: any[]) => {
                 const querySuggestions = indices.find(
                   (index) => index.indexName === 'query_suggestions'
                 );
@@ -2190,7 +2190,7 @@ export function createOptionsTests(
                   },
                 },
               ],
-              transformItems: (indices) => indices.slice().reverse(),
+              transformItems: (indices: any[]) => indices.slice().reverse(),
             },
             react: {
               indices: [
@@ -2203,7 +2203,7 @@ export function createOptionsTests(
                   itemComponent: (props) => props.item.name,
                 },
               ],
-              transformItems: (indices) => indices.slice().reverse(),
+              transformItems: (indices: any[]) => indices.slice().reverse(),
             },
             vue: {},
           },
@@ -2271,11 +2271,11 @@ export function createOptionsTests(
                   },
                 },
               ],
-              transformItems: (indices) => {
+              transformItems: (indices: any[]) => {
                 const reversed = indices.slice().reverse();
                 return reversed.map((index) => ({
                   ...index,
-                  hits: index.hits.filter((_, idx) => idx % 2 === 0),
+                  hits: index.hits.filter((_: any, idx: number) => idx % 2 === 0),
                 }));
               },
             },
@@ -2290,11 +2290,11 @@ export function createOptionsTests(
                   itemComponent: (props) => props.item.name,
                 },
               ],
-              transformItems: (indices) => {
+              transformItems: (indices: any[]) => {
                 const reversed = indices.slice().reverse();
                 return reversed.map((index) => ({
                   ...index,
-                  hits: index.hits.filter((_, idx) => idx % 2 === 0),
+                  hits: index.hits.filter((_: any, idx: number) => idx % 2 === 0),
                 }));
               },
             },
