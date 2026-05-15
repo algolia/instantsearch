@@ -87,3 +87,40 @@ body {
 [data-theme="dark"] .ais-CurrentRefinements--noRefinement::after {
   color: theme(--color-neutral-500);
 }
+
+/* When embedded, the floating chat trigger anchors to the iframe edge instead
+   of the user's viewport. Hide it; the chat tile renders an inline trigger. */
+.is-embedded .ais-Chat-toggleButtonWrapper {
+  display: none;
+}
+
+/* Inline "Open chat" trigger shown in the chat tile when embedded. Mirrors
+   the AIS primary button styling so it stays consistent with the rest of
+   the chat UI (and adapts to dark mode via the AIS theme variables). */
+.chat-inline-trigger {
+  background-color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  color: rgba(var(--ais-button-text-color-rgb), var(--ais-button-text-color-alpha));
+  border-radius: var(--ais-border-radius-sm);
+  box-shadow: var(--ais-shadow-xs);
+  transition: background-color var(--ais-transition-duration) var(--ais-transition-timing-function);
+}
+
+@media (hover: hover) {
+  .chat-inline-trigger:hover {
+    background-color: color-mix(
+      in srgb,
+      rgb(var(--ais-primary-color-rgb)),
+      rgb(var(--ais-background-color-rgb)) 20%
+    );
+  }
+}
+
+/* The chat's percentage-based sizing balloons when the iframe viewport equals
+   the full content height. Cap to an absolute size that fits in a typical
+   browser viewport, and anchor near the iframe's bottom so scroll-into-view
+   lands on the panel. */
+.is-embedded .ais-ChatOverlayLayout,
+.is-embedded .ais-ChatSidePanelLayout {
+  top: auto;
+  height: 600px;
+}
