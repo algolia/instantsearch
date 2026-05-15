@@ -263,13 +263,12 @@ class SearchBox extends Component<
             data={{ cssClasses }}
           />
 
-          {showLoadingIndicator && (
+          {showLoadingIndicator && isSearchStalled && (
             <Template
               templateKey="loadingIndicator"
               rootTagName="span"
               rootProps={{
                 className: cssClasses.loadingIndicator,
-                hidden: !isSearchStalled,
               }}
               templates={templates}
               data={{ cssClasses }}
