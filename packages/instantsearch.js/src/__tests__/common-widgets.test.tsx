@@ -17,6 +17,7 @@ import {
   hits,
   index,
   rangeInput,
+  rangeSlider,
   hitsPerPage,
   clearRefinements,
   currentRefinements,
@@ -277,6 +278,22 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     instantsearch(instantSearchOptions)
       .addWidgets([
         rangeInput({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createRangeSliderWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        rangeSlider({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -729,6 +746,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createRangeInputWidgetTests: undefined,
+  createRangeSliderWidgetTests: undefined,
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
