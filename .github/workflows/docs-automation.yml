@@ -23,16 +23,23 @@ on:
         type: number
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   update-docs:
     name: Update Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GIT_COMMITTER_NAME: algolia-bot
+      GIT_AUTHOR_NAME: algolia-bot
+      GIT_COMMITTER_EMAIL: noreply@algolia.com
+      GIT_AUTHOR_EMAIL: noreply@algolia.com
     # Only run on release commits (chore: release) or manual triggers
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
+      github.event_name == 'workflow_dispatch' || (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
+
 
     steps:
       - name: Checkout instantsearch
@@ -41,11 +48,10 @@ jobs:
           path: instantsearch
 
       - name: Clone docs-new repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.ALGOLIA_BOT_TOKEN }}
         run: |
-          git clone https://x-access-token:${{ secrets.DOCS_REPO_PAT }}@github.com/algolia/docs-new.git docs-new
-          cd docs-new
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          gh repo clone algolia/docs-new docs-new
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
@@ -143,7 +149,7 @@ jobs:
       - name: Create Pull Request
         if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
         env:
-          GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
+          GITHUB_TOKEN: ${{ secrets.ALGOLIA_BOT_TOKEN }}
         working-directory: docs-new
         run: |
           # Read the body from the file
