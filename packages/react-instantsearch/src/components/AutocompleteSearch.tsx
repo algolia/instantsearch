@@ -1,7 +1,11 @@
 import { createAutocompleteSearchComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 
-import type { ComponentProps, Pragma } from 'instantsearch-ui-components';
+import type {
+  AutocompleteClassNames,
+  ComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
 
 const AutocompleteSearchComponent = createAutocompleteSearchComponent({
   createElement: createElement as Pragma,
@@ -18,6 +22,8 @@ export type AutocompleteSearchProps = {
   isDetached?: boolean;
   submitTitle?: string;
   onAiModeClick?: () => void;
+  aiModeButtonDisabled?: boolean;
+  classNames?: Partial<AutocompleteClassNames>;
 };
 
 export function AutocompleteSearch({
@@ -30,6 +36,8 @@ export function AutocompleteSearch({
   isDetached,
   submitTitle,
   onAiModeClick,
+  aiModeButtonDisabled,
+  classNames,
 }: AutocompleteSearchProps) {
   return (
     <AutocompleteSearchComponent
@@ -47,6 +55,8 @@ export function AutocompleteSearch({
       isDetached={isDetached}
       submitTitle={submitTitle}
       onAiModeClick={onAiModeClick}
+      aiModeButtonDisabled={aiModeButtonDisabled}
+      classNames={classNames}
     />
   );
 }

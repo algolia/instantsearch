@@ -4,6 +4,9 @@ export { AbstractChat } from './chat';
 export { ChatState } from './chat';
 export { Chat } from './chat';
 
+export { openChat, isChatBusy } from './openChat';
+export type { OpenChatOptions } from './openChat';
+
 export const SearchIndexToolType = 'algolia_search_index';
 export const RecommendToolType = 'algolia_recommend';
 export const MemorizeToolType = 'algolia_memorize';

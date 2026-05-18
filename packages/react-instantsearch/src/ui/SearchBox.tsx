@@ -92,6 +92,7 @@ export type SearchBoxProps = Omit<
     loadingIconComponent?: React.JSXElementConstructor<IconProps>;
     aiModeIconComponent?: React.JSXElementConstructor<IconProps>;
     onAiModeClick?: () => void;
+    aiModeButtonDisabled?: boolean;
     classNames?: Partial<SearchBoxClassNames>;
     translations: SearchBoxTranslations;
   };
@@ -197,6 +198,7 @@ export function SearchBox({
   loadingIconComponent: LoadingIcon = DefaultLoadingIcon,
   aiModeIconComponent: AiModeIcon = DefaultAiModeIcon,
   onAiModeClick,
+  aiModeButtonDisabled = false,
   classNames = {},
   translations,
   ...props
@@ -283,6 +285,7 @@ export function SearchBox({
             )}
             type="button"
             title={translations.aiModeButtonTitle || 'AI Mode'}
+            disabled={aiModeButtonDisabled}
             onClick={(e) => {
               e.preventDefault();
               onAiModeClick();

@@ -29,6 +29,7 @@ export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
 export { default as currentRefinements } from './current-refinements/current-refinements';
+export { default as feeds } from './feeds/feeds';
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';

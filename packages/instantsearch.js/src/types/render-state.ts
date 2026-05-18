@@ -5,6 +5,7 @@ import type { ChatWidgetDescription } from '../connectors/chat/connectChat';
 import type { ClearRefinementsWidgetDescription } from '../connectors/clear-refinements/connectClearRefinements';
 import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
 import type { CurrentRefinementsWidgetDescription } from '../connectors/current-refinements/connectCurrentRefinements';
+import type { FeedsWidgetDescription } from '../connectors/feeds/connectFeeds';
 import type { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
 import type { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
 import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
@@ -34,6 +35,7 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   ClearRefinementsWidgetDescription['indexRenderState'] &
   ConfigureWidgetDescription['indexRenderState'] &
   CurrentRefinementsWidgetDescription['indexRenderState'] &
+  FeedsWidgetDescription['indexRenderState'] &
   GeoSearchWidgetDescription['indexRenderState'] &
   HierarchicalMenuWidgetDescription['indexRenderState'] &
   HitsWidgetDescription['indexRenderState'] &

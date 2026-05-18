@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.16.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.15.0...instantsearch.css@8.16.0) (2026-05-05)
+
+
+### Bug Fixes
+
+* **instantsearch.css:** move select reset from shared reset to Nova theme ([#7007](https://github.com/algolia/instantsearch/issues/7007)) ([b09ebc4](https://github.com/algolia/instantsearch/commit/b09ebc46ffdf29e5206532bc2f735a766a8dbd02)), closes [#7003](https://github.com/algolia/instantsearch/issues/7003)
+
+
+### Features
+
+* **chat:** add search display tool to chat ([#6987](https://github.com/algolia/instantsearch/issues/6987)) ([b8655df](https://github.com/algolia/instantsearch/commit/b8655dfa98baade5ce0177849bac44e7a36d9ab3))
+
+
+
+
+
 # [8.15.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.14.0...instantsearch.css@8.15.0) (2026-04-28)
 
 
