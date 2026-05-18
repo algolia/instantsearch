@@ -2,9 +2,11 @@
 
 import { cx } from '../../lib';
 import {
+  findTool,
   getTextContent,
   hasTextContent,
   isPartText,
+  isPartTool,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -426,15 +428,7 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    const isWaitingForResponse = status === 'submitted';
-    const isStreamingWithNoContent = status === 'streaming' && !lastPart;
-    const isStreamingNonTextContent =
-      status === 'streaming' && lastPart && !isPartText(lastPart);
-
-    const showLoader =
-      isWaitingForResponse ||
-      isStreamingWithNoContent ||
-      isStreamingNonTextContent;
+    const showLoader = getShowLoader(status, lastPart, tools);
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -533,3 +527,27 @@ export function createChatMessagesComponent({
     );
   };
 }
+
+const getShowLoader = (
+  status: ChatStatus,
+  lastPart: ChatMessageBase['parts'][number] | undefined,
+  tools: ClientSideTools
+): boolean => {
+  if (status !== 'submitted' && status !== 'streaming') return false;
+  if (status === 'submitted') return true;
+
+  if (!lastPart) return true;
+  if (isPartText(lastPart)) return false;
+
+  if (isPartTool(lastPart)) {
+    if (lastPart.state === 'output-available') return false;
+    if (lastPart.state === 'input-streaming') {
+      const tool = findTool(lastPart.type, tools);
+      return !tool?.streamInput;
+    }
+    return true;
+  }
+
+  return true;
+};
+

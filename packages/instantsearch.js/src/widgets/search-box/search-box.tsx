@@ -5,6 +5,7 @@ import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -192,19 +193,23 @@ const renderer =
     isSearchStalled,
     instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
+    const getChatRenderState = () => {
+      const indexId = instantSearchInstance.mainIndex.getIndexId();
+      return instantSearchInstance.renderState[indexId]?.chat as
+        | Partial<ChatRenderState>
+        | undefined;
+    };
+
     const onAiModeClick = aiMode
       ? (currentQuery: string) => {
-          const indexId = instantSearchInstance.mainIndex.getIndexId();
-          const chatRenderState = instantSearchInstance.renderState[indexId]
-            ?.chat as Partial<ChatRenderState> | undefined;
-
-          if (chatRenderState) {
-            chatRenderState.setOpen?.(true);
-            if (currentQuery.trim()) {
-              chatRenderState.sendMessage?.({ text: currentQuery });
-            }
+          if (openChat(getChatRenderState(), { message: currentQuery })) {
+            refine('');
           }
         }
+      : undefined;
+
+    const aiModeButtonDisabled = aiMode
+      ? isChatBusy(getChatRenderState())
       : undefined;
 
     render(
@@ -222,6 +227,7 @@ const renderer =
         isSearchStalled={isSearchStalled}
         cssClasses={cssClasses}
         onAiModeClick={onAiModeClick}
+        aiModeButtonDisabled={aiModeButtonDisabled}
       />,
       containerNode
     );

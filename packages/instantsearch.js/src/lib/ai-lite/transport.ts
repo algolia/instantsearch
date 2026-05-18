@@ -7,8 +7,8 @@ import { resolveValue } from './utils';
 import type {
   ChatTransport,
   HttpChatTransportInitOptions,
+  InferUIMessageChunk,
   UIMessage,
-  UIMessageChunk,
   FetchFunction,
   PrepareSendMessagesRequest,
   PrepareReconnectToStreamRequest,
@@ -57,7 +57,7 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
     headers: requestHeaders,
     body: requestBody,
   }: Parameters<ChatTransport<TUIMessage>['sendMessages']>[0]): Promise<
-    ReadableStream<UIMessageChunk>
+    ReadableStream<InferUIMessageChunk<TUIMessage>>
   > {
     const fetchFn = this.fetch ?? fetch;
 
@@ -151,7 +151,7 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
     body: requestBody,
   }: Parameters<
     ChatTransport<TUIMessage>['reconnectToStream']
-  >[0]): Promise<ReadableStream<UIMessageChunk> | null> {
+  >[0]): Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null> {
     const fetchFn = this.fetch ?? fetch;
 
     // Resolve configurable values
@@ -230,7 +230,7 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
 
   protected abstract processResponseStream(
     stream: ReadableStream<Uint8Array>
-  ): ReadableStream<UIMessageChunk>;
+  ): ReadableStream<InferUIMessageChunk<TUIMessage>>;
 }
 
 /**
@@ -245,7 +245,7 @@ export class DefaultChatTransport<
 
   protected processResponseStream(
     stream: ReadableStream<Uint8Array>
-  ): ReadableStream<UIMessageChunk> {
-    return parseJsonEventStream(stream);
+  ): ReadableStream<InferUIMessageChunk<TUIMessage>> {
+    return parseJsonEventStream<InferUIMessageChunk<TUIMessage>>(stream);
   }
 }

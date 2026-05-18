@@ -3,6 +3,7 @@
 @use '../shared/_common';
 @use '../components/chat';
 @use '../components/autocomplete';
+@use '../components/ai-mode-button';
 @use '../components/filter-suggestions';
 
 ////////////////
@@ -543,41 +544,6 @@ $break-medium: 767px;
 // Algolia magnifier glass.
 .ais-SearchBox-submit {
   display: none;
-}
-
-.ais-AiModeButton {
-  align-items: center;
-  background-color: $nebula100;
-  border: 1px solid $nebula200;
-  border-radius: 6px;
-  color: $nebula600;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  gap: 0.25rem;
-  height: 30px;
-  line-height: 1;
-  padding: 0 0.75rem 0 0.5rem;
-  white-space: nowrap;
-}
-
-.ais-AiModeButton:hover {
-  background-color: $nebula200;
-  border-color: $nebula600;
-}
-
-.ais-AiModeButton:focus {
-  border-color: $nebula600;
-  box-shadow: 0 0 0 1px $nebula600;
-  outline: 0;
-}
-
-.ais-AiModeButton svg {
-  flex-shrink: 0;
-  height: 16px;
-  width: 16px;
 }
 
 .ais-SearchBox-form .ais-AiModeButton {

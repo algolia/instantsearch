@@ -176,6 +176,20 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * When `resume` is enabled, this message is not sent.
    */
   initialUserMessage?: string;
+  /**
+   * Messages to pre-populate the chat with when it is initialized.
+   *
+   * These messages are set without triggering an AI response. They are only
+   * applied when the chat has no existing messages yet. If messages were
+   * restored or otherwise already exist when the widget starts, these messages
+   * are not applied.
+   *
+   * When `resume` is enabled, these messages are not applied.
+   *
+   * `initialUserMessage` is sent after `initialMessages` are applied, so an
+   * assistant welcome followed by a user prompt works.
+   */
+  initialMessages?: TUiMessage[];
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -279,6 +293,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       type = 'chat',
       context,
       initialUserMessage,
+      initialMessages,
       ...options
     } = widgetParams || {};
 
@@ -351,6 +366,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const onClearTransitionEnd = () => {
       setMessages([]);
       _chatInstance.clearError();
+      _chatInstance.regenerateId();
       feedbackState = {};
       setIsClearing(false);
     };
@@ -443,6 +459,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         ...options,
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        shouldRepairToolInput(toolName) {
+          let tool = tools[toolName];
+          if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
+            tool = tools[SearchIndexToolType];
+          }
+          if (!tool) return true;
+          return Boolean(tool.streamInput);
+        },
         onToolCall({ toolCall }) {
           let tool = tools[toolCall.toolName];
 
@@ -484,7 +508,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           return Promise.resolve();
         },
-      });
+      } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
     return {
@@ -562,6 +586,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           };
         }
 
+        const hasExistingMessages = _chatInstance.messages.length > 0;
+
+        // Set initialMessages before registering callbacks to avoid
+        // triggering re-renders during init
+        if (initialMessages?.length && !resume && !hasExistingMessages) {
+          _chatInstance.messages = initialMessages;
+        }
+
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
@@ -570,11 +602,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           _chatInstance.resumeStream();
         }
 
-        if (
-          initialUserMessage &&
-          !resume &&
-          _chatInstance.messages.length === 0
-        ) {
+        if (initialUserMessage && !resume && !hasExistingMessages) {
           _chatInstance.sendMessage({ text: initialUserMessage });
         }
 

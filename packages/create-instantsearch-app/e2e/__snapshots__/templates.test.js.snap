@@ -25,7 +25,7 @@ module.exports = {
   extends: ['algolia', 'algolia/react'],
   settings: {
     react: {
-      pragma: 'React',
+      pragma: 'h',
       version: 'preact',
     },
   },
@@ -99,8 +99,7 @@ Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates Autocomplete File content: app.js 1`] = `
-"/** @jsx h */
-import { autocomplete, getAlgoliaResults } from '@algolia/autocomplete-js';
+"import { autocomplete, getAlgoliaResults } from '@algolia/autocomplete-js';
 import algoliasearch from 'algoliasearch';
 import { h } from 'preact';
 
@@ -171,9 +170,19 @@ exports[`Templates Autocomplete File content: index.html 1`] = `
       <div id=\\"autocomplete\\"></div>
     </div>
 
-    <script src=\\"app.js\\"></script>
+    <script type=\\"module\\" src=\\"app.js\\"></script>
   </body>
 </html>"
+`;
+
+exports[`Templates Autocomplete File content: jsconfig.json 1`] = `
+"{
+  \\"compilerOptions\\": {
+    \\"jsx\\": \\"react\\",
+    \\"jsxFactory\\": \\"h\\",
+    \\"jsxFragmentFactory\\": \\"Fragment\\"
+  }
+}"
 `;
 
 exports[`Templates Autocomplete File content: manifest.webmanifest 1`] = `
@@ -249,6 +258,7 @@ Array [
   "app.js",
   "favicon.png",
   "index.html",
+  "jsconfig.json",
   "manifest.webmanifest",
   "package.json",
   "style.css",

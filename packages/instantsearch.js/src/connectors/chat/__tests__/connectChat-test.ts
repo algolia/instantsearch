@@ -359,6 +359,62 @@ describe('connectChat', () => {
       expect(updatedRenderState.messages).toHaveLength(0);
     });
 
+    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+      const { getRenderState } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      const initialId = renderState.id;
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      const updatedRenderState = getRenderState();
+      expect(updatedRenderState.id).toEqual(expect.any(String));
+      expect(updatedRenderState.id).not.toBe(initialId);
+    });
+
+    it('regenerates the id even when the consumer owns the Chat instance', () => {
+      const chatInstance = new Chat<UIMessage>({
+        transport: {
+          sendMessages: jest.fn(),
+          reconnectToStream: jest.fn(),
+        },
+      });
+      const initialId = chatInstance.id;
+
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat: chatInstance,
+        transport: { api: 'http://unused' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper }));
+
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      expect(chatInstance.id).toEqual(expect.any(String));
+      expect(chatInstance.id).not.toBe(initialId);
+    });
+
     it('updates messages', () => {
       const { getRenderState } = getInitializedWidget();
 
@@ -507,6 +563,338 @@ data: [DONE]`,
         );
       });
     });
+
+    it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "displayResults"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "displayResults", "inputTextDelta": "{}"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Show me product groups' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        expect(lastMessage?.role).toBe('assistant');
+
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-displayResults' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: Record<string, unknown>;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        expect(toolPart?.input).toEqual({});
+      });
+    });
+
+    it('skips JSON repair for tools without streamInput (default)', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          myTool: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "myTool"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "myTool", "inputTextDelta": "{\\"query\\": \\"sho"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'search' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-myTool' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: unknown;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        // Input is not repaired since streamInput is not set (default)
+        expect(toolPart?.input).toBeUndefined();
+        // Raw input is still accumulated
+        expect(toolPart?.rawInput).toBe('{"query": "sho');
+      });
+    });
+
+    it('repairs JSON for tools with streamInput set to true', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          myTool: {
+            streamInput: true,
+          },
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "myTool"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "myTool", "inputTextDelta": "{\\"query\\": \\"sho"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'search' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-myTool' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: unknown;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        // Input is repaired since streamInput is true
+        expect(toolPart?.input).toEqual({ query: 'sho' });
+        expect(toolPart?.rawInput).toBe('{"query": "sho');
+      });
+    });
+
+    it('accumulates data-tool-output-delta chunks into a parsed partial output', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        expect(toolPart?.preliminary).toBe(true);
+        expect(toolPart?.output).toEqual({
+          intro: 'curated',
+          groups: [{ title: 'Shoes' }],
+        });
+        expect(toolPart?.rawOutput).toBe(
+          '{"intro":"curated","groups":[{"title":"Shoes"}]}'
+        );
+      });
+    });
+
+    it('finalizes a streamed tool output with tool-output-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"cur"}, "transient": true}
+
+data: {"type": "tool-output-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "output": {"intro": "curated", "groups": []}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        // final output-available without a preliminary flag replaces the partial
+        expect(toolPart?.preliminary).toBeUndefined();
+        expect(toolPart?.output).toEqual({ intro: 'curated', groups: [] });
+        // bookkeeping for rawOutput is cleared once the final output arrives
+        expect(toolPart?.rawOutput).toBeUndefined();
+      });
+    });
   });
 
   describe('transport configuration', () => {
@@ -543,7 +931,11 @@ data: [DONE]`,
       return {
         sendMessages: jest.fn(() =>
           Promise.resolve(
-            new ReadableStream({ start(ctrl) { ctrl.close(); } })
+            new ReadableStream({
+              start(ctrl) {
+                ctrl.close();
+              },
+            })
           )
         ),
         reconnectToStream: jest.fn(() => Promise.resolve(null)),
