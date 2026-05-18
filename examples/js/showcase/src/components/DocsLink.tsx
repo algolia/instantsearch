@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-preact";
+import { ExternalLink } from "./icons";
 
 import { useFlavor, type Flavor } from "../context/flavor";
 

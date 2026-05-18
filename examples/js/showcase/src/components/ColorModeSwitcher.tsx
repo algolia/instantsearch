@@ -1,4 +1,4 @@
-import { Monitor, Sun, Moon } from "lucide-preact";
+import { Monitor, Sun, Moon } from "./icons";
 
 import { useColorMode, type ColorMode } from "../hooks/useColorMode";
 

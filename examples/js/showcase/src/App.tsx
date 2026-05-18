@@ -1,14 +1,21 @@
-import { MapPin, Search, Sparkles } from "lucide-preact";
+import { lazy, Suspense } from "preact/compat";
 import { useState } from "preact/hooks";
 
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
+import { MapPin, Search, Sparkles, type IconComponent } from "./components/icons";
 import { FlavorContext, type Flavor } from "./context/flavor";
-import { AgenticView } from "./views/AgenticView";
-import { GeoSearchView } from "./views/GeoSearchView";
-import { InstantSearchView } from "./views/InstantSearchView";
 
-import type { LucideIcon } from "lucide-preact";
 import type { ComponentType } from "preact";
+
+const InstantSearchView = lazy(() =>
+  import("./views/InstantSearchView").then((m) => ({ default: m.InstantSearchView }))
+);
+const AgenticView = lazy(() =>
+  import("./views/AgenticView").then((m) => ({ default: m.AgenticView }))
+);
+const GeoSearchView = lazy(() =>
+  import("./views/GeoSearchView").then((m) => ({ default: m.GeoSearchView }))
+);
 
 const VALID_FLAVORS: Flavor[] = ["js", "react", "vue"];
 
@@ -23,7 +30,7 @@ function getFlavorFromURL(): Flavor {
 interface Experience {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   view: ComponentType;
 }
 
@@ -102,9 +109,11 @@ export function App() {
           <ColorModeSwitcher />
         </div>
 
-        {experiences.map((experience, index) =>
-          currentIndex === index ? <experience.view key={index} /> : null
-        )}
+        <Suspense fallback={null}>
+          {experiences.map((experience, index) =>
+            currentIndex === index ? <experience.view key={index} /> : null
+          )}
+        </Suspense>
       </div>
     </FlavorContext.Provider>
   );

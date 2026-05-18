@@ -9,5 +9,13 @@ export default defineConfig({
     commonjsOptions: {
       requireReturnsDefault: 'preferred',
     },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          preact: ['preact', 'preact/hooks', 'preact/compat'],
+          algolia: ['algoliasearch', 'algoliasearch/lite', 'algoliasearch-helper', 'instantsearch.js'],
+        },
+      },
+    },
   },
 });

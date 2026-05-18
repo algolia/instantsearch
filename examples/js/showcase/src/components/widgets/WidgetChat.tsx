@@ -4,7 +4,7 @@ import {
   chatSidePanelLayout,
 } from "instantsearch.js/es/templates";
 import { chat } from "instantsearch.js/es/widgets";
-import { Sparkles } from "lucide-preact";
+import { Sparkles } from "../icons";
 import { useEffect, useRef } from "preact/hooks";
 
 import { useSearch } from "../../context/search";
