@@ -9,3 +9,18 @@
 
 [build.environment]
   YARN_VERSION = "1.13.0"
+
+# Allow the showcase HTML (and its hashed JS/CSS bundles) to be reused by
+# <link rel="prefetch"> on consumer pages without forcing a revalidation
+# round-trip. Hashed assets are content-addressed so a long max-age is safe;
+# the HTML itself uses a short max-age + stale-while-revalidate so deploys
+# propagate quickly.
+[[headers]]
+  for = "/examples/js/showcase/"
+  [headers.values]
+    Cache-Control = "public, max-age=60, stale-while-revalidate=300"
+
+[[headers]]
+  for = "/examples/js/showcase/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
