@@ -628,7 +628,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           const chatRenderState = getChatRenderState();
 
           if (chatRenderState) {
-            if (openChat(chatRenderState, { message: item.prompt })) {
+            if (
+              openChat(chatRenderState, {
+                message: item.prompt,
+                referer: 'prompt-suggestions',
+              })
+            ) {
               setQuery('');
             }
             return;
@@ -847,7 +852,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               if (isDetached) {
                 setIsModalOpen(false);
               }
-              if (openChat(getChatRenderState(), { message: localQuery })) {
+              if (
+                openChat(getChatRenderState(), {
+                  message: localQuery,
+                  referer: 'ai-mode',
+                })
+              ) {
                 onRefine('');
               }
             }

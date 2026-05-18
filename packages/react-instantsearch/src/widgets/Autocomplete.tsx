@@ -744,7 +744,12 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       (({ item, query, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
           if (chatRenderState) {
-            if (openChat(chatRenderState, { message: item.prompt })) {
+            if (
+              openChat(chatRenderState, {
+                message: item.prompt,
+                referer: 'prompt-suggestions',
+              })
+            ) {
               setQuery('');
             }
             return;
@@ -905,7 +910,12 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               if (isDetached) {
                 setIsModalOpen(false);
               }
-              if (openChat(chatRenderState, { message: resolvedQuery })) {
+              if (
+                openChat(chatRenderState, {
+                  message: resolvedQuery,
+                  referer: 'ai-mode',
+                })
+              ) {
                 refineSearchBox('');
                 refineAutocomplete('');
               }

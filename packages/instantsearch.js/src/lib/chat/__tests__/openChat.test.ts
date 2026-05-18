@@ -25,7 +25,29 @@ describe('openChat', () => {
 
     expect(sent).toBe(true);
     expect(chat.setOpen).toHaveBeenCalledWith(true);
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' });
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+  });
+
+  test.each(['prompt-suggestions', 'ai-mode'] as const)(
+    'forwards the `%s` referer as the x-algolia-referer header',
+    (referer) => {
+      const chat = createChatRenderState();
+
+      openChat(chat, { message: 'macbook', referer });
+
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        { text: 'macbook' },
+        { headers: { 'x-algolia-referer': referer } }
+      );
+    }
+  );
+
+  test('does not add the x-algolia-referer header when no referer is provided', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, { message: 'macbook' });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
   });
 
   test('trims whitespace before sending', () => {
@@ -33,7 +55,7 @@ describe('openChat', () => {
 
     openChat(chat, { message: '  macbook  ' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' });
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
   });
 
   test('opens the chat and focuses the composer when message is empty', () => {

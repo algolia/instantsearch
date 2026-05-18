@@ -6,6 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
@@ -923,6 +924,195 @@ data: [DONE]`,
           transport: customTransport,
         })
       );
+    });
+
+    describe('agent endpoint requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      function getRequestPayload() {
+        const [, init] = fetchMock.mock.calls[0];
+        return {
+          headers: init.headers as Record<string, string>,
+          body: JSON.parse(init.body as string),
+        };
+      }
+
+      it('sends the standard Algolia headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+          })
+        );
+        expect(headers).toHaveProperty('x-algolia-agent');
+      });
+
+      it('appends `; chat` to the x-algolia-agent header on agent requests', async () => {
+        const client = Object.assign(createSearchClient(), {
+          appId: 'appId',
+          apiKey: 'apiKey',
+          transporter: { userAgent: { value: 'instantsearch.js (4.95.0)' } },
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-agent']).toBe(
+          'instantsearch.js (4.95.0); chat'
+        );
+      });
+
+      it('does not register `chat` on the search client user-agent', () => {
+        const addAlgoliaAgent = jest.fn();
+        const client = Object.assign(createSearchClient(), {
+          addAlgoliaAgent,
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        // The chat connector must not register `chat` on the shared search
+        // client — otherwise every subsequent search request would carry it
+        // in `x-algolia-agent`.
+        expect(addAlgoliaAgent).not.toHaveBeenCalledWith(
+          expect.stringContaining('chat')
+        );
+      });
+
+      it('forwards the x-algolia-referer header from sendMessage options', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+
+        const { headers } = getRequestPayload();
+        expect(headers).toMatchObject({
+          'x-algolia-referer': 'prompt-suggestions',
+        });
+      });
+
+      it('does not carry over the x-algolia-referer to follow-up messages', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
+      });
+
+      it('does not duplicate transport metadata in the request body', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { body } = getRequestPayload();
+        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+        expect(body).not.toHaveProperty('body');
+        expect(body).not.toHaveProperty('requestMetadata');
+      });
+    });
+
+    describe('custom transport requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      it('does not leak transport metadata in the default body', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          transport: { api: 'https://custom.api' },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const [, init] = fetchMock.mock.calls[0];
+        const body = JSON.parse(init.body as string);
+
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+          'trigger',
+        ]);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+      });
     });
   });
 
