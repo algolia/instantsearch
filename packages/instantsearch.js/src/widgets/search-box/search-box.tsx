@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import { isChatBusy, openChat } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
@@ -192,19 +193,23 @@ const renderer =
     isSearchStalled,
     instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
+    const getChatRenderState = () => {
+      const indexId = instantSearchInstance.mainIndex.getIndexId();
+      return instantSearchInstance.renderState[indexId]?.chat as
+        | Partial<ChatRenderState>
+        | undefined;
+    };
+
     const onAiModeClick = aiMode
       ? (currentQuery: string) => {
-          const indexId = instantSearchInstance.mainIndex.getIndexId();
-          const chatRenderState = instantSearchInstance.renderState[indexId]
-            ?.chat as Partial<ChatRenderState> | undefined;
-
-          if (chatRenderState) {
-            chatRenderState.setOpen?.(true);
-            if (currentQuery.trim()) {
-              chatRenderState.sendMessage?.({ text: currentQuery });
-            }
+          if (openChat(getChatRenderState(), { message: currentQuery })) {
+            refine('');
           }
         }
+      : undefined;
+
+    const aiModeButtonDisabled = aiMode
+      ? isChatBusy(getChatRenderState())
       : undefined;
 
     render(
@@ -222,6 +227,7 @@ const renderer =
         isSearchStalled={isSearchStalled}
         cssClasses={cssClasses}
         onAiModeClick={onAiModeClick}
+        aiModeButtonDisabled={aiModeButtonDisabled}
       />,
       containerNode
     );

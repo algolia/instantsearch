@@ -52,7 +52,10 @@ export {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  openChat,
+  isChatBusy,
 } from './lib/chat';
+export type { OpenChatOptions } from './lib/chat';
 export { default as createVoiceSearchHelper } from './lib/voiceSearchHelper';
 export type {
   CreateVoiceSearchHelper,

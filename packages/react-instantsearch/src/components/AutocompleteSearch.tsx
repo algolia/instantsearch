@@ -22,6 +22,7 @@ export type AutocompleteSearchProps = {
   isDetached?: boolean;
   submitTitle?: string;
   onAiModeClick?: () => void;
+  aiModeButtonDisabled?: boolean;
   classNames?: Partial<AutocompleteClassNames>;
 };
 
@@ -35,6 +36,7 @@ export function AutocompleteSearch({
   isDetached,
   submitTitle,
   onAiModeClick,
+  aiModeButtonDisabled,
   classNames,
 }: AutocompleteSearchProps) {
   return (
@@ -53,6 +55,7 @@ export function AutocompleteSearch({
       isDetached={isDetached}
       submitTitle={submitTitle}
       onAiModeClick={onAiModeClick}
+      aiModeButtonDisabled={aiModeButtonDisabled}
       classNames={classNames}
     />
   );
