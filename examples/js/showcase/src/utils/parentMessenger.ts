@@ -7,7 +7,6 @@ const TARGET_ORIGINS = [
 ];
 
 export function postToParent(data: unknown): void {
-  if (typeof window === "undefined" || window.parent === window) return;
   for (const origin of TARGET_ORIGINS) {
     window.parent.postMessage(data, origin);
   }
