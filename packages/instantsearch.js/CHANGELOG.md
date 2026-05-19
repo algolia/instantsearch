@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.98.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.97.0...instantsearch.js@4.98.0) (2026-05-19)
+
+
+### Bug Fixes
+
+* **chat:** regenerate chat id on clearMessages ([#7035](https://github.com/algolia/instantsearch/issues/7035)) ([a622a61](https://github.com/algolia/instantsearch/commit/a622a6185f43f8312f6a4c094f1a8a96da805a1d))
+
+
+### Features
+
+* **chat:** centralize AI mode entry points behind openChat helper ([#7036](https://github.com/algolia/instantsearch/issues/7036)) ([fcb40dd](https://github.com/algolia/instantsearch/commit/fcb40dd1f7ee2e12abe99bb590a64bdcfdd29157))
+* **chat:** identify component and referer in agent requests ([#7002](https://github.com/algolia/instantsearch/issues/7002)) ([7701b0d](https://github.com/algolia/instantsearch/commit/7701b0de7ffd65d46afc9c98ccc81903ed3df556))
+
+
+
+
+
 # [4.97.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.96.2...instantsearch.js@4.97.0) (2026-05-12)
 
 

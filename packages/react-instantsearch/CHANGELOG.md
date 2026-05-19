@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.33.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.3...react-instantsearch@7.33.0) (2026-05-19)
+
+
+### Features
+
+* **chat:** centralize AI mode entry points behind openChat helper ([#7036](https://github.com/algolia/instantsearch/issues/7036)) ([fcb40dd](https://github.com/algolia/instantsearch/commit/fcb40dd1f7ee2e12abe99bb590a64bdcfdd29157))
+* **chat:** identify component and referer in agent requests ([#7002](https://github.com/algolia/instantsearch/issues/7002)) ([7701b0d](https://github.com/algolia/instantsearch/commit/7701b0de7ffd65d46afc9c98ccc81903ed3df556))
+
+
+
+
+
 ## [7.32.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.2...react-instantsearch@7.32.3) (2026-05-12)
 
 **Note:** Version bump only for package react-instantsearch
