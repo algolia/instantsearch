@@ -1,4 +1,3 @@
-/** @jsx h */
 import { autocomplete, getAlgoliaResults } from '@algolia/autocomplete-js';
 import algoliasearch from 'algoliasearch';
 import { h } from 'preact';

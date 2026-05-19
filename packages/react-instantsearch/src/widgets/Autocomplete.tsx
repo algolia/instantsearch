@@ -15,6 +15,7 @@ import {
   getPromptSuggestionHits,
   isPromptSuggestion,
 } from 'instantsearch-ui-components';
+import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
 import { warn } from 'instantsearch.js/es/lib/utils';
 import React, {
   createElement,
@@ -742,14 +743,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       userOnSelect ??
       (({ item, query, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderStateWithFocus = chatRenderState as
-            | (Partial<ChatRenderState> & { focusInput?: () => void })
-            | undefined;
-
-          if (chatRenderStateWithFocus) {
-            chatRenderStateWithFocus.setOpen?.(true);
-            chatRenderStateWithFocus.focusInput?.();
-            chatRenderStateWithFocus.sendMessage?.({ text: item.prompt });
+          if (chatRenderState) {
+            if (
+              openChat(chatRenderState, {
+                message: item.prompt,
+                referer: 'prompt-suggestions',
+              })
+            ) {
+              setQuery('');
+            }
             return;
           }
 
@@ -875,6 +877,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   });
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsOpen(false);
+  };
+
   const searchBoxContent = (
     <AutocompleteSearch
       inputProps={getInputProps()}
@@ -887,6 +894,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       }}
       query={resolvedQuery}
       isSearchStalled={isSearchStalled}
+      onCancel={() => {
+        if (isDetached) {
+          handleCancel();
+        }
+      }}
+      isDetached={isDetached}
+      submitTitle={
+        isDetached ? translations.detachedCancelButtonText : undefined
+      }
       onAiModeClick={
         aiMode
           ? () => {
@@ -894,20 +910,28 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               if (isDetached) {
                 setIsModalOpen(false);
               }
-              if (chatRenderState) {
-                chatRenderState.setOpen?.(true);
-                if (resolvedQuery.trim()) {
-                  chatRenderState.sendMessage?.({ text: resolvedQuery });
-                }
+              if (
+                openChat(chatRenderState, {
+                  message: resolvedQuery,
+                  referer: 'ai-mode',
+                })
+              ) {
+                refineSearchBox('');
+                refineAutocomplete('');
               }
             }
           : undefined
       }
+      aiModeButtonDisabled={aiMode ? isChatBusy(chatRenderState) : undefined}
+      classNames={classNames}
     />
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      classNames={{ root: classNames?.panel, open: classNames?.panelOpen, layout: classNames?.panelLayout }}
+    >
       {PanelComponent ? (
         <PanelComponent
           elements={elements}
@@ -956,21 +980,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         {isModalOpen && (
           <AutocompleteDetachedOverlay
             classNames={classNames}
-            onClose={() => {
-              setIsModalOpen(false);
-              setIsOpen(false);
-            }}
+            onClose={handleCancel}
           >
             <AutocompleteDetachedContainer
               classNames={detachedContainerClassNames}
             >
               <AutocompleteDetachedFormContainer
                 classNames={classNames}
-                onCancel={() => {
-                  setIsModalOpen(false);
-                  setIsOpen(false);
-                }}
-                translations={translations}
               >
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>

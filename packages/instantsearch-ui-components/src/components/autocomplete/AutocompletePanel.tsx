@@ -15,6 +15,10 @@ export type AutocompletePanelClassNames = {
    */
   root: string | string[];
   /**
+   * Class names to apply to the root element when the panel is open
+   */
+  open: string | string[];
+  /**
    * Class names to apply to the layout element
    */
   layout: string | string[];
@@ -32,6 +36,7 @@ export function createAutocompletePanelComponent({ createElement }: Renderer) {
           'ais-AutocompletePanel',
           !hidden && 'ais-AutocompletePanel--open',
           classNames.root,
+          !hidden && classNames.open,
           props.className
         )}
         onMouseDown={(event) => {

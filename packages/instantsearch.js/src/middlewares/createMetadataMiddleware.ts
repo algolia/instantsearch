@@ -1,6 +1,7 @@
 import {
   createInitArgs,
   getAlgoliaAgent,
+  isIndexWidget,
   safelyRunOnBrowser,
 } from '../lib/utils';
 
@@ -62,9 +63,9 @@ function extractWidgetPayload(
       params,
     });
 
-    if (widget.$$type === 'ais.index') {
+    if (isIndexWidget(widget)) {
       extractWidgetPayload(
-        (widget as IndexWidget).getWidgets(),
+        widget.getWidgets(),
         instantSearchInstance,
         payload
       );

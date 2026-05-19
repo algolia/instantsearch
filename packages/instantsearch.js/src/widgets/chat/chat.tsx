@@ -18,6 +18,7 @@ import {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  DisplayResultsToolType,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -28,6 +29,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { carousel } from '../../templates';
+
+import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type {
@@ -75,7 +78,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
-export { SearchIndexToolType, RecommendToolType };
+export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -99,7 +102,7 @@ function createCarouselTool<
     applyFilters,
     onClose,
     sendEvent,
-  }: ClientSideToolComponentProps) {
+  }: ClientSideToolTemplateData) {
     const input = message?.input as
       | {
           query: string;
@@ -275,6 +278,7 @@ function createDefaultTools<
       getSearchPageURL
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+    [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },
@@ -321,9 +325,7 @@ type ChatWrapperProps = {
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent:
-      | ((props: ChatEmptyProps) => JSX.Element)
-      | undefined;
+    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
@@ -507,6 +509,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const makeTemplateRef = (): TemplateRef => ({ current: undefined });
   const headerTemplateRef = makeTemplateRef();
   const messagesTemplateRef = makeTemplateRef();
+  const loaderTemplateRef = makeTemplateRef();
   const emptyTemplateRef = makeTemplateRef();
   const assistantMessageTemplateRef = makeTemplateRef();
   const userMessageTemplateRef = makeTemplateRef();
@@ -562,13 +565,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         headerTemplateRef,
         'titleIcon',
         'span'
-      )
-    : undefined;
-  const stableMessagesLoaderComponent = templates.messages?.loader
-    ? createStableTemplateComponent<ChatMessageLoaderProps>(
-        messagesTemplateRef,
-        'loader',
-        'div'
       )
     : undefined;
   const stableMessagesErrorComponent = templates.messages?.error
@@ -658,6 +654,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           rootTagName="div"
           data={actionsProps}
         />
+      )
+    : undefined;
+  const stableLoaderComponent = templates.loader
+    ? createStableTemplateComponent<ChatMessageLoaderProps>(
+        loaderTemplateRef,
+        'loader',
+        'div'
       )
     : undefined;
   const stableSuggestionsComponent = templates.suggestions
@@ -792,6 +795,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.messages,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    loaderTemplateRef.current = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'loader'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { loader: templates.loader },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
     emptyTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'empty'>>
@@ -802,7 +812,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
-        loaderText: templates.messages?.loaderText,
+        loaderText: templates.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
@@ -899,7 +909,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             translations: headerTranslations,
           }}
           messagesProps={{
-            loaderComponent: stableMessagesLoaderComponent,
+            loaderComponent: stableLoaderComponent,
             errorComponent: stableMessagesErrorComponent,
             emptyComponent: stableMessagesEmptyComponent,
             actionsComponent: stableActionsComponent,
@@ -950,8 +960,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
 };
 
+export type ClientSideToolTemplateData = ClientSideToolComponentProps;
+
 export type UserClientSideToolTemplates = Partial<{
-  layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
+  layout: TemplateWithBindEvent<ClientSideToolTemplateData>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<
@@ -996,6 +1008,16 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: TemplateWithBindEvent<Hit<THit>>;
+
+    /**
+     * Custom loader template for the chat widget.
+     */
+    loader: Template<ChatMessageLoaderProps>;
+
+    /**
+     * Text to display in the loader
+     */
+    loaderText: string;
 
     /**
      * Templates to use for the header.
@@ -1048,10 +1070,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     messages: Partial<{
       /**
-       * Template to use when loading messages
-       */
-      loader: Template<ChatMessageLoaderProps>;
-      /**
        * Template to use when there is an error loading messages
        */
       error: Template<ChatMessageErrorProps>;
@@ -1059,10 +1077,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the scroll to bottom button
        */
       scrollToBottomLabelText?: string;
-      /**
-       * Text to display in the loader
-       */
-      loaderText?: string;
       /**
        * Label for the copy to clipboard action
        */
