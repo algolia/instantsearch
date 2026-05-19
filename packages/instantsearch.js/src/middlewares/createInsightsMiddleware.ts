@@ -432,7 +432,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
           (insightsClientWithLocalCredentials as any)('sendEvents', [
             {
-              eventType: 'instantsearch_telemetry',
+              eventType: 'instantsearch',
               timestamp: Date.now(),
               session_id: telemetrySessionId,
               userToken: userToken ? String(userToken) : undefined,
