@@ -2,10 +2,6 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "ignorePatterns": [
     ".yarn/**",
-    "**/.eslintrc",
-    "**/.eslintrc.js",
-    "**/.eslintrc.cjs",
-    "**/eslint.config.js",
     "packages/create-instantsearch-app/src/templates/**",
     "packages/instantsearch-codemods/__testfixtures__/**"
   ],
@@ -152,8 +148,7 @@
         "patterns": ["instantsearch.js/cjs/*"]
       }
     ],
-    "instantsearch/no-default-props-assignment": "error",
-    "instantsearch/prefer-prettier-ignore-comment": "error"
+    "instantsearch/no-default-props-assignment": "error"
   },
   "overrides": [
     {
