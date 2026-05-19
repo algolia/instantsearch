@@ -173,7 +173,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
     const parameters = child.parameters as Parameters<
       (typeof widgets)['ais.hits']
     >[0];
-    const widget = widgets[child.type] as (typeof widgets)['ais.hits'];
+    const widget = widgets[child.type];
 
     return [
       widget({
@@ -289,9 +289,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
     } = child.parameters as Parameters<
       (typeof widgets)['ais.refinementList']
     >[0] & { header: string; collapsed: boolean };
-    const widget = widgets[
-      child.type
-    ] as (typeof widgets)['ais.refinementList'];
+    const widget = widgets[child.type];
     return [
       panel<(typeof widgets)['ais.refinementList']>({
         templates: {
@@ -316,7 +314,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
   const parameters = child.parameters as Parameters<
     (typeof widgets)['ais.pagination']
   >[0];
-  const widget = widgets[child.type] as (typeof widgets)['ais.pagination'];
+  const widget = widgets[child.type];
   return [
     widget({
       ...parameters,

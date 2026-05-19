@@ -2,6 +2,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import json from '@rollup/plugin-json';
+
+import vue2PluginModule from 'rollup-plugin-vue2';
+import vue3Plugin from 'rollup-plugin-vue3';
+import { extensionResolver } from '../../scripts/build/rollup-plugin-extension-resolver.mjs';
 import {
   createCommonjsPlugin,
   createPackageJsonPlugin,
@@ -11,9 +15,6 @@ import {
   createSwcPlugin,
   createTerserPlugin,
 } from '../../scripts/build/rollup.plugins.mjs';
-import { extensionResolver } from '../../scripts/build/rollup-plugin-extension-resolver.mjs';
-import vue2PluginModule from 'rollup-plugin-vue2';
-import vue3Plugin from 'rollup-plugin-vue3';
 
 const vue2Plugin = vue2PluginModule.default || vue2PluginModule;
 const packageRoot = path.dirname(fileURLToPath(import.meta.url));

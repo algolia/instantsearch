@@ -2,8 +2,8 @@
 
 import { cx } from '../../lib';
 
-import type { ComponentProps, Renderer } from '../../types';
 import type { ChatEmptyProps } from './types';
+import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatGreetingTranslations = {
   /**

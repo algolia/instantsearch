@@ -5,8 +5,8 @@ import { createButtonComponent } from '../Button';
 
 import { ArrowUpIcon, StopIcon } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatStatus } from './types';
+import type { ComponentProps, MutableRef, Renderer } from '../../types';
 
 export type ChatPromptTranslations = {
   /**

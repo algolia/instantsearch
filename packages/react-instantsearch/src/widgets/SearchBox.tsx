@@ -112,9 +112,7 @@ export function SearchBox({
     onSubmit,
     onAiModeClick: aiMode
       ? () => {
-          const chatRenderState = indexRenderState.chat as
-            | Partial<ChatRenderState>
-            | undefined;
+          const chatRenderState = indexRenderState.chat;
 
           if (chatRenderState) {
             chatRenderState.setOpen?.(true);

@@ -21,7 +21,6 @@ import {
   ThumbsDownIcon,
 } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -37,6 +36,7 @@ import type {
   ChatStatus,
   ClientSideTools,
 } from './types';
+import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
 
 export type ChatMessagesTranslations = {
   /**

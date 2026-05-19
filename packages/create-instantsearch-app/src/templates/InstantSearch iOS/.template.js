@@ -1,5 +1,5 @@
-const setup = require('../../tasks/ios/setup');
 const install = require('../../tasks/ios/install');
+const setup = require('../../tasks/ios/setup');
 const teardown = require('../../tasks/ios/teardown');
 
 module.exports = {

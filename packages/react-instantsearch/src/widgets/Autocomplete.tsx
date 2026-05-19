@@ -584,9 +584,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           detachedMediaQuery={detachedMediaQuery}
           translations={translations}
           showPromptSuggestions={showPromptSuggestions}
-          chatRenderState={
-            indexRenderState.chat as Partial<ChatRenderState> | undefined
-          }
+          chatRenderState={indexRenderState.chat}
         />
       </Index>
     </Fragment>
@@ -742,9 +740,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       userOnSelect ??
       (({ item, query, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
-          const chatRenderStateWithFocus = chatRenderState as
-            | (Partial<ChatRenderState> & { focusInput?: () => void })
-            | undefined;
+          const chatRenderStateWithFocus = chatRenderState;
 
           if (chatRenderStateWithFocus) {
             chatRenderStateWithFocus.setOpen?.(true);
@@ -904,12 +900,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   const panelContent = (
     <AutocompletePanel {...getPanelProps()}>
       {PanelComponent ? (
-        <PanelComponent
-          elements={elements}
-          indices={
-            indicesForPanel as ReturnType<typeof useAutocomplete>['indices']
-          }
-        />
+        <PanelComponent elements={elements} indices={indicesForPanel} />
       ) : (
         Object.keys(elements).map((elementId) => elements[elementId])
       )}

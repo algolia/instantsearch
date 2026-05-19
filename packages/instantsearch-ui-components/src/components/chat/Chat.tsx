@@ -8,7 +8,6 @@ import { createChatPromptComponent } from './ChatPrompt';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
@@ -18,6 +17,7 @@ import type {
   ChatToggleButtonProps,
 } from './ChatToggleButton';
 import type { ChatLayoutOwnProps } from './types';
+import type { Renderer, ComponentProps } from '../../types';
 
 export type ChatClassNames = {
   root?: string | string[];

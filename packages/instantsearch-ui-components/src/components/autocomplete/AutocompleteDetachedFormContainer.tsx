@@ -3,9 +3,9 @@
 import { cx } from '../../lib/cx';
 import { createButtonComponent } from '../Button';
 
-import type { ComponentChildren, Renderer } from '../../types';
 import type { AutocompleteClassNames } from './Autocomplete';
 import type { AutocompleteDetachedTranslations } from './AutocompleteDetachedSearchButton';
+import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteDetachedFormContainerProps = {
   children?: ComponentChildren;

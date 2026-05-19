@@ -1,8 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
 
-import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
+import type { Renderer } from '../../types';
 
 export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
   return function ChatOverlayLayout(userProps: ChatLayoutOwnProps) {

@@ -6,7 +6,6 @@ import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -14,6 +13,7 @@ import type {
   ChatToolMessage,
   ClientSideTools,
 } from './types';
+import type { ComponentProps, Renderer, VNode } from '../../types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
