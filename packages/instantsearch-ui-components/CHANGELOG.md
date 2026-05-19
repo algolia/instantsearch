@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.27.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.26.1...instantsearch-ui-components@0.27.0) (2026-05-19)
+
+
+### Features
+
+* **chat:** centralize AI mode entry points behind openChat helper ([#7036](https://github.com/algolia/instantsearch/issues/7036)) ([fcb40dd](https://github.com/algolia/instantsearch/commit/fcb40dd1f7ee2e12abe99bb590a64bdcfdd29157))
+
+
+
+
+
 # [0.26.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.25.0...instantsearch-ui-components@0.26.0) (2026-05-05)
 
 
