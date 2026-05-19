@@ -2,7 +2,11 @@ import {
   getInitialResults,
   waitForResults,
 } from 'instantsearch.js/es/lib/server';
-import { walkIndex, resetWidgetId } from 'instantsearch.js/es/lib/utils';
+import {
+  isTwoPassWidget,
+  walkIndex,
+  resetWidgetId,
+} from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
 import { InstantSearchServerContext } from '../components/InstantSearchServerContext';
@@ -61,14 +65,10 @@ export function getServerState(
   }).then((serverState) => {
     let shouldRefetch = false;
 
-    // <DynamicWidgets> requires another query to retrieve the dynamic widgets
-    // to render.
+    // Two-pass widgets require another query to discover and mount child widgets.
     walkIndex(searchRef.current!.mainIndex, (index) => {
       shouldRefetch =
-        shouldRefetch ||
-        index
-          .getWidgets()
-          .some((widget) => widget.$$type === 'ais.dynamicWidgets');
+        shouldRefetch || index.getWidgets().some(isTwoPassWidget);
     });
 
     if (shouldRefetch) {

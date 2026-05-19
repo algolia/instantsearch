@@ -102,3 +102,95 @@ test('_parseNumbers should convert nested numericRefinements values', function (
   expect(actual.numericRefinements.foo['>=']).toEqual([[4.8], 15.16]);
   expect(actual.numericRefinements.foo['=']).toEqual([23.42]);
 });
+
+test('_parseNumbers should convert string "Infinity" to null for number keys', function () {
+  var partialState = {
+    page: 'Infinity',
+    hitsPerPage: '-Infinity',
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.page).toBe(null);
+  expect(actual.hitsPerPage).toBe(null);
+});
+
+test('_parseNumbers should convert numeric Infinity to null for number keys', function () {
+  var partialState = {
+    page: Infinity,
+    hitsPerPage: -Infinity,
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.page).toBe(null);
+  expect(actual.hitsPerPage).toBe(null);
+});
+
+test('_parseNumbers should convert "Infinity" to null while keeping "all" as string', function () {
+  var partialState = {
+    aroundRadius: 'all',
+    page: 'Infinity',
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.aroundRadius).toBe('all');
+  expect(actual.page).toBe(null);
+});
+
+test('_parseNumbers should convert string "Infinity" to null in insideBoundingBox', function () {
+  var partialState = {
+    insideBoundingBox: [['Infinity', '9.66', '-Infinity', '-5.55']],
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.insideBoundingBox).toEqual([[null, 9.66, null, -5.55]]);
+});
+
+test('_parseNumbers should convert numeric Infinity to null in insideBoundingBox', function () {
+  var partialState = {
+    insideBoundingBox: [[Infinity, 9.66, -Infinity, -5.55]],
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.insideBoundingBox).toEqual([[null, 9.66, null, -5.55]]);
+});
+
+test('_parseNumbers should convert string "Infinity" to null in numericRefinements', function () {
+  var partialState = {
+    numericRefinements: {
+      price: {
+        '>=': ['Infinity', '-Infinity'],
+        '<=': [['Infinity']],
+      },
+    },
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.numericRefinements.price['>=']).toEqual([null, null]);
+  expect(actual.numericRefinements.price['<=']).toEqual([[null]]);
+});
+
+test('_parseNumbers should convert numeric Infinity to null in numericRefinements', function () {
+  var partialState = {
+    numericRefinements: {
+      price: {
+        '>=': [Infinity, -Infinity],
+        '<=': [[Infinity]],
+      },
+    },
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.numericRefinements.price['>=']).toEqual([null, null]);
+  expect(actual.numericRefinements.price['<=']).toEqual([[null]]);
+});
+
+test('_parseNumbers should convert numeric NaN to null for number keys', function () {
+  var partialState = {
+    page: NaN,
+    hitsPerPage: NaN,
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.page).toBe(null);
+  expect(actual.hitsPerPage).toBe(null);
+});

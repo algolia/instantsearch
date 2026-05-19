@@ -1839,9 +1839,17 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        // Cancel is now a dedicated back button inside the search input
+        expect(
+          document.querySelector('.ais-AutocompleteBackButton')
+        ).toHaveAttribute('title', 'Annuler');
+        // Submit button is separate and remains a submit button
+        expect(
+          document.querySelector('.ais-AutocompleteSubmitButton')
+        ).toHaveAttribute('type', 'submit');
         expect(
           document.querySelector('.ais-AutocompleteDetachedCancelButton')
-        ).toHaveTextContent('Annuler');
+        ).toBeNull();
       });
 
       test('disables detached mode when detachedMediaQuery is empty', async () => {
@@ -2629,6 +2637,77 @@ export function createOptionsTests(
         expect(
           leftSection!.querySelector('.ais-AutocompleteSuggestions')
         ).toBeInTheDocument();
+      });
+    });
+
+    describe('aiMode', () => {
+      test('closes the panel when clicking the AI mode button', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+            },
+            react: {
+              aiMode: true,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).toBeInTheDocument();
+
+        const aiModeButton =
+          document.querySelector<HTMLButtonElement>('.ais-AiModeButton');
+        expect(aiModeButton).toBeInTheDocument();
+
+        await act(async () => {
+          userEvent.click(aiModeButton!);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).not.toBeInTheDocument();
       });
     });
 

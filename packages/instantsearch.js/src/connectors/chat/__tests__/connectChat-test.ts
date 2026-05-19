@@ -6,6 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
@@ -359,6 +360,62 @@ describe('connectChat', () => {
       expect(updatedRenderState.messages).toHaveLength(0);
     });
 
+    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+      const { getRenderState } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      const initialId = renderState.id;
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      const updatedRenderState = getRenderState();
+      expect(updatedRenderState.id).toEqual(expect.any(String));
+      expect(updatedRenderState.id).not.toBe(initialId);
+    });
+
+    it('regenerates the id even when the consumer owns the Chat instance', () => {
+      const chatInstance = new Chat<UIMessage>({
+        transport: {
+          sendMessages: jest.fn(),
+          reconnectToStream: jest.fn(),
+        },
+      });
+      const initialId = chatInstance.id;
+
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat: chatInstance,
+        transport: { api: 'http://unused' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper }));
+
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+
+      renderState.setMessages([
+        {
+          id: '1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ]);
+      renderState.clearMessages();
+      renderState.onClearTransitionEnd();
+
+      expect(chatInstance.id).toEqual(expect.any(String));
+      expect(chatInstance.id).not.toBe(initialId);
+    });
+
     it('updates messages', () => {
       const { getRenderState } = getInitializedWidget();
 
@@ -507,6 +564,338 @@ data: [DONE]`,
         );
       });
     });
+
+    it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "displayResults"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "displayResults", "inputTextDelta": "{}"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Show me product groups' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        expect(lastMessage?.role).toBe('assistant');
+
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-displayResults' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: Record<string, unknown>;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        expect(toolPart?.input).toEqual({});
+      });
+    });
+
+    it('skips JSON repair for tools without streamInput (default)', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          myTool: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "myTool"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "myTool", "inputTextDelta": "{\\"query\\": \\"sho"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'search' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-myTool' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: unknown;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        // Input is not repaired since streamInput is not set (default)
+        expect(toolPart?.input).toBeUndefined();
+        // Raw input is still accumulated
+        expect(toolPart?.rawInput).toBe('{"query": "sho');
+      });
+    });
+
+    it('repairs JSON for tools with streamInput set to true', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          myTool: {
+            streamInput: true,
+          },
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "myTool"}
+
+data: {"type": "tool-input-delta", "toolCallId": "call_1", "toolName": "myTool", "inputTextDelta": "{\\"query\\": \\"sho"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'search' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-myTool' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              rawInput?: string;
+              input?: unknown;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('input-streaming');
+        // Input is repaired since streamInput is true
+        expect(toolPart?.input).toEqual({ query: 'sho' });
+        expect(toolPart?.rawInput).toBe('{"query": "sho');
+      });
+    });
+
+    it('accumulates data-tool-output-delta chunks into a parsed partial output', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        expect(toolPart?.preliminary).toBe(true);
+        expect(toolPart?.output).toEqual({
+          intro: 'curated',
+          groups: [{ title: 'Shoes' }],
+        });
+        expect(toolPart?.rawOutput).toBe(
+          '{"intro":"curated","groups":[{"title":"Shoes"}]}'
+        );
+      });
+    });
+
+    it('finalizes a streamed tool output with tool-output-available', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        tools: {
+          algolia_display_results: {},
+        },
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"cur"}, "transient": true}
+
+data: {"type": "tool-output-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "output": {"intro": "curated", "groups": []}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'display' }],
+      });
+
+      await waitFor(() => {
+        const lastMessage =
+          chatInstance.messages[chatInstance.messages.length - 1];
+        const toolPart = lastMessage?.parts.find(
+          (part) =>
+            'type' in part &&
+            part.type === 'tool-algolia_display_results' &&
+            'toolCallId' in part &&
+            part.toolCallId === 'call_1'
+        ) as
+          | {
+              state: string;
+              preliminary?: boolean;
+              output?: unknown;
+              rawOutput?: string;
+            }
+          | undefined;
+
+        expect(toolPart?.state).toBe('output-available');
+        // final output-available without a preliminary flag replaces the partial
+        expect(toolPart?.preliminary).toBeUndefined();
+        expect(toolPart?.output).toEqual({ intro: 'curated', groups: [] });
+        // bookkeeping for rawOutput is cleared once the final output arrives
+        expect(toolPart?.rawOutput).toBeUndefined();
+      });
+    });
   });
 
   describe('transport configuration', () => {
@@ -535,6 +924,195 @@ data: [DONE]`,
           transport: customTransport,
         })
       );
+    });
+
+    describe('agent endpoint requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      function getRequestPayload() {
+        const [, init] = fetchMock.mock.calls[0];
+        return {
+          headers: init.headers as Record<string, string>,
+          body: JSON.parse(init.body as string),
+        };
+      }
+
+      it('sends the standard Algolia headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+          })
+        );
+        expect(headers).toHaveProperty('x-algolia-agent');
+      });
+
+      it('appends `; chat` to the x-algolia-agent header on agent requests', async () => {
+        const client = Object.assign(createSearchClient(), {
+          appId: 'appId',
+          apiKey: 'apiKey',
+          transporter: { userAgent: { value: 'instantsearch.js (4.95.0)' } },
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-agent']).toBe(
+          'instantsearch.js (4.95.0); chat'
+        );
+      });
+
+      it('does not register `chat` on the search client user-agent', () => {
+        const addAlgoliaAgent = jest.fn();
+        const client = Object.assign(createSearchClient(), {
+          addAlgoliaAgent,
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        // The chat connector must not register `chat` on the shared search
+        // client — otherwise every subsequent search request would carry it
+        // in `x-algolia-agent`.
+        expect(addAlgoliaAgent).not.toHaveBeenCalledWith(
+          expect.stringContaining('chat')
+        );
+      });
+
+      it('forwards the x-algolia-referer header from sendMessage options', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+
+        const { headers } = getRequestPayload();
+        expect(headers).toMatchObject({
+          'x-algolia-referer': 'prompt-suggestions',
+        });
+      });
+
+      it('does not carry over the x-algolia-referer to follow-up messages', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
+      });
+
+      it('does not duplicate transport metadata in the request body', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { body } = getRequestPayload();
+        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+        expect(body).not.toHaveProperty('body');
+        expect(body).not.toHaveProperty('requestMetadata');
+      });
+    });
+
+    describe('custom transport requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      it('does not leak transport metadata in the default body', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          transport: { api: 'https://custom.api' },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const [, init] = fetchMock.mock.calls[0];
+        const body = JSON.parse(init.body as string);
+
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+          'trigger',
+        ]);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+      });
     });
   });
 

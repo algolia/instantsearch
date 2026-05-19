@@ -33,7 +33,7 @@
 }
 
 @media (hover: hover) {
-  .ais-RefinementList-label:hover {
+  .ais-RefinementList-label:not(:has(:disabled)):hover {
     background-color: rgba(var(--ais-muted-color-rgb), 0.1);
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
 
@@ -42,7 +42,8 @@
     }
   }
 
-  .ais-RefinementList-item--selected .ais-RefinementList-label:hover {
+  .ais-RefinementList-item--selected
+    .ais-RefinementList-label:not(:has(:disabled)):hover {
     background-color: rgba(var(--ais-muted-color-rgb), 0.2);
   }
 }
