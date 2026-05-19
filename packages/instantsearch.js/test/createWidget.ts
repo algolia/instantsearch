@@ -108,4 +108,4 @@ export const createWidget = (args: Partial<Widget> = {}): Widget =>
     render: jest.fn(),
     dispose: jest.fn(),
     ...args,
-  } as unknown as Widget);
+  }) as unknown as Widget;

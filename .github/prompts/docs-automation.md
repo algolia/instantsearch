@@ -14,21 +14,18 @@ You are running from the root directory where:
 ## Task
 
 1. Read the changelogs to understand what changed in the latest release:
-
    - instantsearch/packages/instantsearch.js/CHANGELOG.md
    - instantsearch/packages/react-instantsearch/CHANGELOG.md
    - instantsearch/packages/react-instantsearch-core/CHANGELOG.md
    - instantsearch/packages/vue-instantsearch/CHANGELOG.md (low priority - only update Vue docs if this changelog shows explicit feature additions)
 
 2. Find and read ONE existing doc as a format reference:
-
    - Use Glob to find InstantSearch widget docs: docs-new/**/instantsearch/**/\*.mdx
    - Read just ONE example file to understand the format (don't read many)
 
 3. Update documentation for any new features, modified components, or breaking changes.
 
 4. After making changes, run link check to catch broken links:
-
    - cd docs-new && npm run check:links Fix any broken links you introduced, but don't spend time on pre-existing issues.
 
 5. ## REQUIRED: Write a summary file at CHANGES_SUMMARY.md with this exact format:
@@ -36,7 +33,6 @@ You are running from the root directory where:
    First line: A short title describing the main change (e.g., 'Add useFrequentlyBoughtTogether hook documentation')
 
    Blank line, then a markdown list of what was changed:
-
    - Added docs for X widget/hook
    - Updated Y component with new Z prop
    - Fixed broken links in W page

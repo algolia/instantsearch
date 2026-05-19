@@ -208,7 +208,7 @@ type RendererParams<TItem extends BaseHit> = {
       | undefined;
     RecentSearchComponent: typeof AutocompleteRecentSearch;
     recentSearchHeaderComponent:
-      | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
+      | (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent']
       | undefined;
     hasWarnedMissingPromptSuggestionsChat: boolean;
   };
@@ -268,7 +268,7 @@ const createRenderer = <TItem extends BaseHit>(
           />
         </AutocompleteRecentSearch>
       );
-      let recentSearchHeaderComponent: typeof AutocompleteIndex['prototype']['props']['HeaderComponent'] =
+      let recentSearchHeaderComponent: (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent'] =
         undefined;
 
       if (showRecentObj && showRecentObj.templates) {
@@ -384,7 +384,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const targetIndexQuery = targetIndex?.getHelper()?.state.query;
 
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery ?? ''
+    searchboxQuery !== undefined ? searchboxQuery : (targetIndexQuery ?? '')
   );
 
   useEffect(() => {
@@ -1303,7 +1303,7 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
 
 function renderConditionalHighlight<
   TItem extends BaseHit,
-  TAttribute extends keyof TItem & string = keyof TItem & string
+  TAttribute extends keyof TItem & string = keyof TItem & string,
 >({ item, attribute }: { item: Hit<TItem>; attribute: TAttribute }) {
   if (
     !item._highlightResult?.[attribute] ||

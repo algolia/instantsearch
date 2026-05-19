@@ -14,8 +14,8 @@
   z-index: var(--ais-z-index-chat);
   pointer-events: none;
 
-  transition: width var(--ais-transition-duration)
-      var(--ais-transition-timing-function),
+  transition:
+    width var(--ais-transition-duration) var(--ais-transition-timing-function),
     height var(--ais-transition-duration) var(--ais-transition-timing-function);
 
   &--maximized {
@@ -29,7 +29,8 @@
     transform-origin: bottom right;
     transform: scale(0.95) translateY(var(--ais-spacing));
 
-    transition: opacity var(--ais-transition-duration)
+    transition:
+      opacity var(--ais-transition-duration)
         var(--ais-transition-timing-function),
       transform var(--ais-transition-duration)
         var(--ais-transition-timing-function);

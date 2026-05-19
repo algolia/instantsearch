@@ -187,7 +187,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 role: 'user',
                 parts: fileParts,
                 metadata: message.metadata,
-              } as TUIMessage)
+              }) as TUIMessage
           );
         } else {
           userMessagePromise = Promise.resolve(undefined);

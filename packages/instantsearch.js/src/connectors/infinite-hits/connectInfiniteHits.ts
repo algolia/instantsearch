@@ -56,7 +56,7 @@ export type InfiniteHitsCache<THit extends NonNullable<object> = BaseHit> = {
 };
 
 export type InfiniteHitsConnectorParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * Escapes HTML entities from hits string values.
@@ -87,7 +87,7 @@ export type InfiniteHitsConnectorParams<
 };
 
 export type InfiniteHitsRenderState<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * Loads the previous results.
@@ -152,7 +152,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type InfiniteHitsWidgetDescription<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   $$type: 'ais.infiniteHits';
   renderState: InfiniteHitsRenderState<THit>;
@@ -184,7 +184,7 @@ function normalizeState(state: PlainSearchParameters) {
 }
 
 function getInMemoryCache<
-  THit extends NonNullable<object>
+  THit extends NonNullable<object>,
 >(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
@@ -213,7 +213,7 @@ function extractHitsFromCachedHits<THit extends NonNullable<object>>(
 }
 
 export default (function connectInfiniteHits<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<InfiniteHitsRenderState, TWidgetParams>,
   unmountFn: Unmounter = noop

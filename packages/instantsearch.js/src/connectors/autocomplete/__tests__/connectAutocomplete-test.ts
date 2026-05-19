@@ -514,9 +514,8 @@ search.addWidgets([
       const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
       const autocomplete = createAutocomplete({});
 
-      const renderState1 = autocomplete.getWidgetRenderState(
-        createInitOptions()
-      );
+      const renderState1 =
+        autocomplete.getWidgetRenderState(createInitOptions());
 
       expect(renderState1).toEqual({
         currentRefinement: '',

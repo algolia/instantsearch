@@ -71,12 +71,11 @@ export function Hits<THit extends BaseHit = BaseHit>({
   const itemComponent: HitsUiComponentProps<Hit<THit>>['itemComponent'] =
     useMemo(
       () =>
-        ({ hit, index, ...itemProps }) =>
-          (
-            <li key={hit.objectID} {...itemProps}>
-              <HitComponent hit={hit} sendEvent={sendEvent} />
-            </li>
-          ),
+        ({ hit, index, ...itemProps }) => (
+          <li key={hit.objectID} {...itemProps}>
+            <HitComponent hit={hit} sendEvent={sendEvent} />
+          </li>
+        ),
       [HitComponent, sendEvent]
     );
 

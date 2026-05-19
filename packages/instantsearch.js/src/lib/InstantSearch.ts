@@ -61,7 +61,7 @@ type NoInfer<T> = T extends infer S ? S : never;
  */
 export type InstantSearchOptions<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = {
   /**
    * The name of the main index. If no indexName is provided, you have to manually add an index widget.
@@ -210,7 +210,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
  */
 class InstantSearch<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;

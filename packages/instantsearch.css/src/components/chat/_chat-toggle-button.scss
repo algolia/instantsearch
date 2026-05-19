@@ -12,7 +12,8 @@
     width: calc(var(--ais-icon-size) * 1.4);
   }
 
-  transition: transform var(--ais-transition-duration)
+  transition:
+    transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function);

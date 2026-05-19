@@ -22,9 +22,9 @@ function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   return initialMessages ? JSON.parse(initialMessages) : [];
 }
 
-export class ChatState<TUiMessage extends UIMessage>
-  implements BaseChatState<TUiMessage>
-{
+export class ChatState<
+  TUiMessage extends UIMessage,
+> implements BaseChatState<TUiMessage> {
   _messages: TUiMessage[];
   _status: ChatStatus = 'ready';
   _error: Error | undefined = undefined;
@@ -141,7 +141,7 @@ export class ChatState<TUiMessage extends UIMessage>
 }
 
 export class Chat<
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
 

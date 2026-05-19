@@ -83,7 +83,7 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
 }
 
 function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
@@ -262,7 +262,7 @@ function createCarouselTool<
 }
 
 function createDefaultTools<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
@@ -1277,7 +1277,7 @@ const defaultTemplates: ChatTemplates = {
 };
 
 export default (function chat<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,

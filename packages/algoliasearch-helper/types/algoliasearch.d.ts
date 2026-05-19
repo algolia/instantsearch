@@ -36,52 +36,53 @@ type SearchClientShape = {
 // @ts-ignore
 type ClientV3_4 = ReturnType<typeof algoliasearch>;
 
-type ClientLiteV5 = IsUnknown<
-  AnyToUnknown<typeof AlgoliaSearchLite>
-> extends true
-  ? unknown
-  : typeof AlgoliaSearchLite extends { liteClient: unknown }
-  ? AnyToUnknown<
-      // @ts-ignore
-      ReturnType<typeof AlgoliaSearchLite.liteClient>
-    >
-  : unknown;
-type ClientFullV5 = IsUnknown<AnyToUnknown<typeof AlgoliaSearch>> extends true
-  ? unknown
-  : typeof AlgoliaSearch extends { algoliasearch: unknown }
-  ? AnyToUnknown<
-      // @ts-ignore
-      ReturnType<typeof AlgoliaSearch.algoliasearch>
-    >
-  : unknown;
-type ClientSearchV5 = IsUnknown<AnyToUnknown<typeof ClientSearch>> extends true
-  ? unknown
-  : typeof ClientSearch extends { searchClient: unknown }
-  ? AnyToUnknown<
-      // @ts-ignore
-      ReturnType<typeof ClientSearch.searchClient>
-    >
-  : unknown;
+type ClientLiteV5 =
+  IsUnknown<AnyToUnknown<typeof AlgoliaSearchLite>> extends true
+    ? unknown
+    : typeof AlgoliaSearchLite extends { liteClient: unknown }
+      ? AnyToUnknown<
+          // @ts-ignore
+          ReturnType<typeof AlgoliaSearchLite.liteClient>
+        >
+      : unknown;
+type ClientFullV5 =
+  IsUnknown<AnyToUnknown<typeof AlgoliaSearch>> extends true
+    ? unknown
+    : typeof AlgoliaSearch extends { algoliasearch: unknown }
+      ? AnyToUnknown<
+          // @ts-ignore
+          ReturnType<typeof AlgoliaSearch.algoliasearch>
+        >
+      : unknown;
+type ClientSearchV5 =
+  IsUnknown<AnyToUnknown<typeof ClientSearch>> extends true
+    ? unknown
+    : typeof ClientSearch extends { searchClient: unknown }
+      ? AnyToUnknown<
+          // @ts-ignore
+          ReturnType<typeof ClientSearch.searchClient>
+        >
+      : unknown;
 type ClientV5 = ClientLiteV5 extends SearchClientShape
   ? ClientLiteV5
   : ClientSearchV5 extends SearchClientShape
-  ? ClientSearchV5
-  : ClientFullV5 extends SearchClientShape
-  ? ClientFullV5
-  : unknown;
+    ? ClientSearchV5
+    : ClientFullV5 extends SearchClientShape
+      ? ClientFullV5
+      : unknown;
 
 type PickForClient<
   T extends {
     v3: unknown;
     v4: unknown;
     v5: unknown;
-  }
+  },
 > = ClientV5 extends SearchClientShape
   ? T['v5']
   : // @ts-ignore
-  ClientV3_4 extends SearchClientV4Shape
-  ? T['v4']
-  : T['v3'];
+    ClientV3_4 extends SearchClientV4Shape
+    ? T['v4']
+    : T['v3'];
 
 type ClientVersion = PickForClient<{
   v3: '3';

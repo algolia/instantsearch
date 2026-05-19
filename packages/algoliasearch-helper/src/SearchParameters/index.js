@@ -262,16 +262,16 @@ SearchParameters._parseNumbers = function (partialState) {
   // there's two formats of insideBoundingBox, we need to parse
   // the one which is an array of float geo rectangles
   if (Array.isArray(partialState.insideBoundingBox)) {
-    numbers.insideBoundingBox = partialState.insideBoundingBox.map(function (
-      geoRect
-    ) {
-      if (Array.isArray(geoRect)) {
-        return geoRect.map(function (value) {
-          return parseFloat(value);
-        });
+    numbers.insideBoundingBox = partialState.insideBoundingBox.map(
+      function (geoRect) {
+        if (Array.isArray(geoRect)) {
+          return geoRect.map(function (value) {
+            return parseFloat(value);
+          });
+        }
+        return geoRect;
       }
-      return geoRect;
-    });
+    );
   }
 
   if (partialState.numericRefinements) {
@@ -639,26 +639,24 @@ SearchParameters.prototype = {
         return this;
       }
       return this.setQueryParameters({
-        numericRefinements: this._clearNumericRefinements(function (
-          value,
-          key
-        ) {
-          return (
-            key === attribute &&
-            value.op === operator &&
-            isEqualNumericRefinement(value.val, valToNumber(paramValue))
-          );
-        }),
+        numericRefinements: this._clearNumericRefinements(
+          function (value, key) {
+            return (
+              key === attribute &&
+              value.op === operator &&
+              isEqualNumericRefinement(value.val, valToNumber(paramValue))
+            );
+          }
+        ),
       });
     } else if (operator !== undefined) {
       if (!this.isNumericRefined(attribute, operator)) return this;
       return this.setQueryParameters({
-        numericRefinements: this._clearNumericRefinements(function (
-          value,
-          key
-        ) {
-          return key === attribute && value.op === operator;
-        }),
+        numericRefinements: this._clearNumericRefinements(
+          function (value, key) {
+            return key === attribute && value.op === operator;
+          }
+        ),
       });
     }
 
@@ -1572,8 +1570,7 @@ SearchParameters.prototype = {
       }
 
       return previous;
-    },
-    previousPlainObject);
+    }, previousPlainObject);
 
     return new this.constructor(nextPlainObject);
   },

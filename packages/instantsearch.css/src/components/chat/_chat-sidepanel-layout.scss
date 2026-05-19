@@ -25,7 +25,8 @@
     border-radius: 0;
     opacity: 0;
     transform: translateX(100%);
-    transition: opacity var(--ais-transition-duration)
+    transition:
+      opacity var(--ais-transition-duration)
         var(--ais-transition-timing-function),
       transform var(--ais-transition-duration)
         var(--ais-transition-timing-function);
@@ -42,8 +43,8 @@
     position: absolute;
     bottom: var(--ais-chat-margin);
     right: var(--ais-chat-margin);
-    transition: right var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
+    transition:
+      right var(--ais-transition-duration) var(--ais-transition-timing-function),
       transform var(--ais-transition-duration)
         var(--ais-transition-timing-function);
   }

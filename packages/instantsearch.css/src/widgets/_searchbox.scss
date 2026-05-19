@@ -12,7 +12,8 @@
   width: 100%;
   height: calc(var(--ais-spacing) * 2.75);
 
-  transition: border-color var(--ais-transition-duration)
+  transition:
+    border-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     box-shadow var(--ais-transition-duration)
       var(--ais-transition-timing-function),
@@ -21,7 +22,8 @@
 
   &:focus-within {
     border-color: rgba(var(--ais-primary-color-rgb), 1);
-    box-shadow: rgba(var(--ais-primary-color-rgb), 0.3) 0 0 0 2px,
+    box-shadow:
+      rgba(var(--ais-primary-color-rgb), 0.3) 0 0 0 2px,
       inset rgba(var(--ais-primary-color-rgb), 0.3) 0 0 0 2px;
     outline: currentColor none medium;
   }

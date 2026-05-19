@@ -6,7 +6,7 @@ import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
 export type WidgetFactory<
   TWidgetDescription extends WidgetDescription,
   TConnectorParams extends UnknownWidgetParams,
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 > = (
   /**
    * The params of the widget.

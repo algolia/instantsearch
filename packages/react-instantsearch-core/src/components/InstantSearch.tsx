@@ -15,14 +15,14 @@ import type {
 
 export type InstantSearchProps<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = UseInstantSearchApiProps<TUiState, TRouteState> & {
   children?: React.ReactNode;
 };
 
 export function InstantSearch<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >({ children, ...props }: InstantSearchProps<TUiState, TRouteState>) {
   const search = useInstantSearchApi<TUiState, TRouteState>(props);
 

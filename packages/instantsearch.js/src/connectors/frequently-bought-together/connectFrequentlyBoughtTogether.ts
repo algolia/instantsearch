@@ -29,7 +29,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type FrequentlyBoughtTogetherRenderState<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The matched recommendations from Algolia API.
@@ -43,7 +43,7 @@ export type FrequentlyBoughtTogetherRenderState<
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The objectIDs of the items to get the frequently bought together items for.
@@ -93,21 +93,21 @@ export type FrequentlyBoughtTogetherConnectorParams<
 };
 
 export type FrequentlyBoughtTogetherWidgetDescription<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   $$type: 'ais.frequentlyBoughtTogether';
   renderState: FrequentlyBoughtTogetherRenderState<THit>;
 };
 
 export type FrequentlyBoughtTogetherConnector<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Connector<
   FrequentlyBoughtTogetherWidgetDescription<THit>,
   FrequentlyBoughtTogetherConnectorParams<THit>
 >;
 
 export default (function connectFrequentlyBoughtTogether<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     FrequentlyBoughtTogetherRenderState,

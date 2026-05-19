@@ -23,8 +23,8 @@
   gap: calc(var(--ais-spacing) * 1.5);
   width: 100%;
 
-  transition: opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function),
+  transition:
+    opacity var(--ais-transition-duration) var(--ais-transition-timing-function),
     filter var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
@@ -42,7 +42,8 @@
   height: calc(var(--ais-spacing) * 1.5);
   border-radius: var(--ais-border-radius-full);
 
-  transition: background-color var(--ais-transition-duration)
+  transition:
+    background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),

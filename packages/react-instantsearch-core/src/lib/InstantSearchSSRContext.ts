@@ -7,7 +7,7 @@ import type { MutableRefObject } from 'react';
 
 export type InstantSearchSSRContextApi<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = InstantSearchServerState & {
   ssrSearchRef: MutableRefObject<InternalInstantSearch<
     TUiState,

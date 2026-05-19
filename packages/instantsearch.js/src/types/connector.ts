@@ -63,7 +63,7 @@ export type Unmounter = () => void;
  */
 export type Connector<
   TWidgetDescription extends WidgetDescription,
-  TConnectorParams extends UnknownWidgetParams
+  TConnectorParams extends UnknownWidgetParams,
 > = <TWidgetParams extends UnknownWidgetParams>(
   /**
    * The render function.

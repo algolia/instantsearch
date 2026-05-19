@@ -36,7 +36,8 @@
     position: relative;
     width: 100%;
 
-    transition: border-color var(--ais-transition-duration)
+    transition:
+      border-color var(--ais-transition-duration)
         var(--ais-transition-timing-function),
       box-shadow var(--ais-transition-duration)
         var(--ais-transition-timing-function),
@@ -45,7 +46,8 @@
 
     &:focus-within {
       border-color: rgba(var(--ais-primary-color-rgb), 1);
-      box-shadow: rgba(var(--ais-primary-color-rgb), 0.2) 0 0 0 2px,
+      box-shadow:
+        rgba(var(--ais-primary-color-rgb), 0.2) 0 0 0 2px,
         inset rgba(var(--ais-primary-color-rgb), 0.2) 0 0 0 2px;
       outline: currentColor none medium;
     }
@@ -200,8 +202,8 @@
   transform-origin: top center;
   transform: scale(0.95) translateY(calc(var(--ais-spacing) * -1));
 
-  transition: opacity var(--ais-transition-duration)
-      var(--ais-transition-timing-function),
+  transition:
+    opacity var(--ais-transition-duration) var(--ais-transition-timing-function),
     transform var(--ais-transition-duration)
       var(--ais-transition-timing-function);
 
@@ -553,7 +555,8 @@ body.ais-Autocomplete--detached {
   text-align: left;
   width: 100%;
 
-  transition: border-color var(--ais-transition-duration)
+  transition:
+    border-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     box-shadow var(--ais-transition-duration)
       var(--ais-transition-timing-function);

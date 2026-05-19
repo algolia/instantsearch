@@ -150,7 +150,7 @@ export type GeoSearchWidgetParams<THit extends GeoHit = GeoHit> = {
    * Reference to the global `window.google` object.
    * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
    */
-  googleReference: typeof window['google'];
+  googleReference: (typeof window)['google'];
 };
 
 export type GeoSearchWidget = WidgetFactory<

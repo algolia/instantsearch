@@ -5,7 +5,7 @@ import { cx } from '../../lib/cx';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type AutocompleteIndexProps<
-  T = { objectID: string; __indexName: string } & Record<string, unknown>
+  T = { objectID: string; __indexName: string } & Record<string, unknown>,
 > = {
   items: T[];
   HeaderComponent?: (props: { items: T[] }) => JSX.Element;

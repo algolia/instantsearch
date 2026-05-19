@@ -18,7 +18,8 @@
   border-radius: var(--ais-border-radius-sm);
   box-shadow: var(--ais-shadow-xs);
   border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
-  transition: box-shadow var(--ais-transition-duration)
+  transition:
+    box-shadow var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function);

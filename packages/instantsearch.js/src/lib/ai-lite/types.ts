@@ -154,7 +154,7 @@ export type DynamicToolUIPart = {
 
 export type UIMessagePart<
   DATA_TYPES extends UIDataTypes = UIDataTypes,
-  TOOLS extends UITools = UITools
+  TOOLS extends UITools = UITools,
 > =
   | TextUIPart
   | ReasoningUIPart
@@ -169,7 +169,7 @@ export type UIMessagePart<
 export interface UIMessage<
   METADATA = unknown,
   DATA_PARTS extends UIDataTypes = UIDataTypes,
-  TOOLS extends UITools = UITools
+  TOOLS extends UITools = UITools,
 > {
   id: string;
   role: 'system' | 'user' | 'assistant';
@@ -177,26 +177,14 @@ export interface UIMessage<
   parts: Array<UIMessagePart<DATA_PARTS, TOOLS>>;
 }
 
-export type InferUIMessageMetadata<T extends UIMessage> = T extends UIMessage<
-  infer METADATA
->
-  ? METADATA
-  : unknown;
+export type InferUIMessageMetadata<T extends UIMessage> =
+  T extends UIMessage<infer METADATA> ? METADATA : unknown;
 
-export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  infer DATA_TYPES
->
-  ? DATA_TYPES
-  : UIDataTypes;
+export type InferUIMessageData<T extends UIMessage> =
+  T extends UIMessage<unknown, infer DATA_TYPES> ? DATA_TYPES : UIDataTypes;
 
-export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  UIDataTypes,
-  infer TOOLS
->
-  ? TOOLS
-  : UITools;
+export type InferUIMessageTools<T extends UIMessage> =
+  T extends UIMessage<unknown, UIDataTypes, infer TOOLS> ? TOOLS : UITools;
 
 export type InferUIMessageToolCall<UI_MESSAGE extends UIMessage> =
   | ValueOf<{
@@ -229,7 +217,7 @@ type DataUIMessageChunk<DATA_TYPES extends UIDataTypes> = ValueOf<{
 
 export type UIMessageChunk<
   METADATA = unknown,
-  DATA_TYPES extends UIDataTypes = UIDataTypes
+  DATA_TYPES extends UIDataTypes = UIDataTypes,
 > =
   | { type: 'text-start'; id: string; providerMetadata?: ProviderMetadata }
   | {
