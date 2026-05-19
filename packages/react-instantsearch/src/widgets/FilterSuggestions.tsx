@@ -43,6 +43,9 @@ export type FilterSuggestionsProps = Omit<
     emptyComponent?: FilterSuggestionsUiComponentProps['emptyComponent'];
   };
 
+/**
+ * @deprecated Filter suggestions are deprecated and will be removed in a future major version.
+ */
 export function FilterSuggestions({
   agentId,
   attributes,
