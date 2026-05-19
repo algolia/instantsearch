@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "algoliasearch": "4",
-    "instantsearch.js": "4.97.0"
+    "instantsearch.js": "4.98.0"
   },
   "keywords": [
     "algolia",
