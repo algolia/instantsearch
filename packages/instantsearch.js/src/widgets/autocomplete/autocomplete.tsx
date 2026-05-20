@@ -1090,9 +1090,10 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   translations?: Partial<AutocompleteTranslations>;
 
   /**
-   * When true, renders an AI mode button inside the search input
-   * that opens the Chat widget and sends the current query.
-   * Requires a Chat widget on the same index.
+   * Whether to render the AI mode button inside the search input, which opens
+   * the Chat widget and sends the current query. Defaults to `true`; set to
+   * `false` to opt out. Requires a Chat widget on the same index to do
+   * anything when clicked.
    */
   aiMode?: boolean;
 };
@@ -1123,7 +1124,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     autofocus,
     detachedMediaQuery,
     translations: userTranslations = {},
-    aiMode,
+    aiMode = true,
   } = widgetParams || {};
 
   if (!container) {

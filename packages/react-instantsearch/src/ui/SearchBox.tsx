@@ -1,5 +1,5 @@
 import { cx } from 'instantsearch-ui-components';
-import React from 'react';
+import React, { useState } from 'react';
 
 export type IconProps = {
   classNames: Partial<SearchBoxClassNames>;
@@ -203,11 +203,17 @@ export function SearchBox({
   translations,
   ...props
 }: SearchBoxProps) {
+  const [aiModeActive, setAiModeActive] = useState(true);
+  const pillVisible = Boolean(onAiModeClick);
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (onSubmit) {
+    if (pillVisible && aiModeActive && onAiModeClick) {
+      // AI mode pill is active: route Enter to the chat instead of the search.
+      onAiModeClick();
+    } else if (onSubmit) {
       onSubmit(event);
     }
 
@@ -277,25 +283,53 @@ export function SearchBox({
         >
           <ResetIcon classNames={classNames} />
         </button>
-        {onAiModeClick && (
-          <button
+        {pillVisible && (
+          <span
             className={cx(
-              'ais-AiModeButton',
-              classNames.aiModeButton
+              'ais-AiModeButton-pill',
+              !aiModeActive && 'ais-AiModeButton-pill--disabled'
             )}
-            type="button"
-            title={translations.aiModeButtonTitle || 'AI Mode'}
-            disabled={aiModeButtonDisabled}
-            onClick={(e) => {
-              e.preventDefault();
-              onAiModeClick();
-            }}
           >
-            <AiModeIcon classNames={classNames} />
-            <span className="ais-AiModeButton-label">
-              {translations.aiModeButtonTitle || 'AI Mode'}
-            </span>
-          </button>
+            <button
+              className={cx('ais-AiModeButton', classNames.aiModeButton)}
+              type="button"
+              title={translations.aiModeButtonTitle || 'Ask AI'}
+              disabled={aiModeButtonDisabled}
+              onClick={(e) => {
+                e.preventDefault();
+                onAiModeClick?.();
+              }}
+            >
+              <AiModeIcon classNames={classNames} />
+              <span className="ais-AiModeButton-label">
+                {translations.aiModeButtonTitle || 'Ask AI'}
+              </span>
+              <span className="ais-AiModeButton-enterHint" aria-hidden="true">
+                ⏎
+              </span>
+            </button>
+            <button
+              className="ais-AiModeButton-dismiss"
+              type="button"
+              title={
+                aiModeActive
+                  ? 'Disable Enter shortcut for AI mode'
+                  : 'Re-enable Enter shortcut for AI mode'
+              }
+              aria-label={
+                aiModeActive
+                  ? 'Disable Enter shortcut for AI mode'
+                  : 'Re-enable Enter shortcut for AI mode'
+              }
+              aria-pressed={aiModeActive}
+              onClick={(e) => {
+                e.preventDefault();
+                setAiModeActive((prev) => !prev);
+              }}
+            >
+              {aiModeActive ? '×' : '⏎'}
+            </button>
+          </span>
         )}
         <span
           className={cx(

@@ -73,6 +73,7 @@ type SearchBoxPropsWithDefaultProps = SearchBoxProps &
 type SearchBoxState = {
   query: string;
   focused: boolean;
+  aiModeActive: boolean;
 };
 
 class SearchBox extends Component<
@@ -84,6 +85,7 @@ class SearchBox extends Component<
   public state = {
     query: this.props.query,
     focused: false,
+    aiModeActive: true,
   };
 
   private input = createRef<HTMLInputElement>();
@@ -133,7 +135,9 @@ class SearchBox extends Component<
   }
 
   private onSubmit = (event: Event) => {
-    const { searchAsYouType, refine, onSubmit } = this.props;
+    const { searchAsYouType, refine, onSubmit, onAiModeClick } = this.props;
+    const aiModeSubmitsToChat =
+      Boolean(onAiModeClick) && this.state.aiModeActive;
 
     event.preventDefault();
     event.stopPropagation();
@@ -141,13 +145,21 @@ class SearchBox extends Component<
       this.input.current.blur();
     }
 
-    if (!searchAsYouType) {
+    if (aiModeSubmitsToChat && onAiModeClick) {
+      // AI mode pill is active: route Enter to the chat instead of the search.
+      onAiModeClick(this.state.query);
+    } else if (!searchAsYouType) {
       refine(this.state.query);
     }
 
     onSubmit(event);
 
     return false;
+  };
+
+  private onAiModeToggleShortcut = (event: Event) => {
+    event.preventDefault();
+    this.setState((prev) => ({ aiModeActive: !prev.aiModeActive }));
   };
 
   private onReset = (event: Event) => {
@@ -180,6 +192,8 @@ class SearchBox extends Component<
 
   private onAiModeClick = (event: Event) => {
     event.preventDefault();
+    // Pill body always submits to chat. The Enter shortcut is what gets
+    // disabled via the side toggle.
     this.props.onAiModeClick?.(this.state.query);
   };
 
@@ -277,19 +291,46 @@ class SearchBox extends Component<
           )}
 
           {onAiModeClick && (
-            <Template
-              templateKey="aiMode"
-              rootTagName="button"
-              rootProps={{
-                className: cssClasses.aiModeButton,
-                type: 'button',
-                title: 'AI Mode',
-                disabled: aiModeButtonDisabled,
-                onClick: this.onAiModeClick,
-              }}
-              templates={templates}
-              data={{ cssClasses }}
-            />
+            <span
+              className={
+                'ais-AiModeButton-pill' +
+                (this.state.aiModeActive
+                  ? ''
+                  : ' ais-AiModeButton-pill--disabled')
+              }
+            >
+              <Template
+                templateKey="aiMode"
+                rootTagName="button"
+                rootProps={{
+                  className: cssClasses.aiModeButton,
+                  type: 'button',
+                  title: 'Ask AI',
+                  disabled: aiModeButtonDisabled,
+                  onClick: this.onAiModeClick,
+                }}
+                templates={templates}
+                data={{ cssClasses }}
+              />
+              <button
+                type="button"
+                className="ais-AiModeButton-dismiss"
+                title={
+                  this.state.aiModeActive
+                    ? 'Disable Enter shortcut for AI mode'
+                    : 'Re-enable Enter shortcut for AI mode'
+                }
+                aria-label={
+                  this.state.aiModeActive
+                    ? 'Disable Enter shortcut for AI mode'
+                    : 'Re-enable Enter shortcut for AI mode'
+                }
+                aria-pressed={this.state.aiModeActive}
+                onClick={this.onAiModeToggleShortcut}
+              >
+                {this.state.aiModeActive ? '×' : '⏎'}
+              </button>
+            </span>
           )}
         </form>
       </div>

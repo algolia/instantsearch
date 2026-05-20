@@ -29,7 +29,10 @@ const defaultTemplate: SearchBoxComponentTemplates = {
             clip-rule="evenodd"
           />
         </svg>
-        <span className={cssClasses.aiModeLabel}>AI Mode</span>
+        <span className={cssClasses.aiModeLabel}>Ask AI</span>
+        <span className="ais-AiModeButton-enterHint" aria-hidden="true">
+          ⏎
+        </span>
       </Fragment>
     );
   },

@@ -546,17 +546,86 @@ $break-medium: 767px;
   display: none;
 }
 
-.ais-SearchBox-form .ais-AiModeButton {
+.ais-SearchBox-form .ais-AiModeButton-pill {
   position: absolute;
   right: 0.375rem;
   top: 50%;
   transform: translateY(-50%);
+  display: inline-flex;
+  align-items: stretch;
 }
 
-.ais-SearchBox-form:has(.ais-AiModeButton) .ais-SearchBox-reset,
-.ais-SearchBox-form:has(.ais-AiModeButton)
+.ais-AiModeButton-pill .ais-AiModeButton {
+  border-bottom-right-radius: 0;
+  border-right: 0;
+  border-top-right-radius: 0;
+
+  transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    border-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    border-radius var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+}
+
+.ais-AiModeButton-enterHint {
+  font-size: calc(var(--ais-font-size) * 0.75);
+  opacity: 0.7;
+
+  transition: opacity var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+.ais-AiModeButton-pill--disabled .ais-AiModeButton,
+.ais-AiModeButton-pill--disabled .ais-AiModeButton-dismiss {
+  background-color: transparent;
+}
+
+.ais-AiModeButton-pill--disabled .ais-AiModeButton-enterHint {
+  display: none;
+}
+
+@media (hover: hover) {
+  .ais-AiModeButton-pill--disabled .ais-AiModeButton:hover,
+  .ais-AiModeButton-pill--disabled .ais-AiModeButton-dismiss:hover {
+    background-color: rgba(var(--ais-primary-color-rgb), 0.08);
+  }
+}
+
+.ais-AiModeButton-dismiss {
+  align-items: center;
+  background-color: rgba(var(--ais-primary-color-rgb), 0.08);
+  border: 1px solid rgba(var(--ais-primary-color-rgb), 0.3);
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-radius: 0 var(--ais-border-radius-sm) var(--ais-border-radius-sm) 0;
+  color: rgba(var(--ais-primary-color-rgb), 1);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 1rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 0.5rem;
+  transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    border-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(var(--ais-primary-color-rgb), 0.15);
+      border-color: rgba(var(--ais-primary-color-rgb), 1);
+    }
+  }
+}
+
+.ais-SearchBox-form:has(.ais-AiModeButton-pill) .ais-SearchBox-reset,
+.ais-SearchBox-form:has(.ais-AiModeButton-pill)
   .ais-SearchBox-loadingIndicator {
-  right: 7rem;
+  right: 8.5rem;
 }
 
 .ais-Menu-searchBox,
