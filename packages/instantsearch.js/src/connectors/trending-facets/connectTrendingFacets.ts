@@ -171,8 +171,8 @@ export default (function connectTrendingFacets<
       },
 
       getWidgetParameters(state) {
-        // v4 TrendingFacetsQuery doesn't include queryParameters or
-        // fallbackParameters, but the v5 API and the helper support them.
+        // v4 TrendingFacetsQuery doesn't include fallbackParameters,
+        // but the v5 API and the helper support it.
         return state.removeParams(this.$$id!).addTrendingFacets({
           facetName,
           maxRecommendations: limit,
