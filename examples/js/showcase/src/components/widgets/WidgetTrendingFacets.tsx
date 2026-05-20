@@ -1,6 +1,6 @@
-import { trendingFacets } from 'instantsearch.js/es/widgets';
+import { trendingFacets } from "instantsearch.js/es/widgets";
 
-import { useWidget } from '../../hooks/useWidget';
+import { useWidget } from "../../hooks/useWidget";
 
 interface Props {
   facetName: string;
@@ -15,7 +15,7 @@ export function WidgetTrendingFacets({ facetName }: Props) {
       templates: {
         item: (item, { html }) => html`<span>${item.facetValue}</span>`,
       },
-    })
+    }),
   );
   return <div ref={ref} />;
 }
