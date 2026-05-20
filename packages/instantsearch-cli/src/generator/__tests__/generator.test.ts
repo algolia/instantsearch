@@ -176,13 +176,14 @@ describe('generator: schema-driven widgets (React + TypeScript)', () => {
     },
   };
 
-  test('Hits.tsx renders a typed ProductHit with the schema-mapped attributes', () => {
+  test('Hits.tsx renders a typed ProductHit with Highlight and schema-mapped attributes', () => {
     const files = generateExperience(baseManifest);
     const hits = files.get('src/components/product-search/Hits.tsx')!;
     expect(hits).toMatch(/from ['"]react-instantsearch['"]/);
-    expect(hits).toMatch(/hit\.name/);
+    expect(hits).toMatch(/Highlight/);
+    expect(hits).toMatch(/attribute="name"/);
     expect(hits).toMatch(/hit\.image_url/);
-    expect(hits).toMatch(/hit\.description/);
+    expect(hits).toMatch(/attribute="description"/);
     expect(hits).toMatch(/export function Hits/);
   });
 
@@ -198,7 +199,7 @@ describe('generator: schema-driven widgets (React + TypeScript)', () => {
       },
     });
     const hits = files.get('src/components/product-search/Hits.tsx')!;
-    expect(hits).toMatch(/hit\.name/);
+    expect(hits).toMatch(/attribute="name"/);
     expect(hits).not.toMatch(/<img/);
     expect(hits).not.toMatch(/image_url/);
   });
@@ -344,9 +345,9 @@ describe('generator: escaped schema values', () => {
 
     const hits = files.get('src/components/product-search/Hits.tsx')!;
     expect(hits).toContain('"product-name": string;');
-    expect(hits).toContain('hit["product-name"]');
+    expect(hits).toContain('attribute="product-name"');
     expect(hits).toContain('hit["image.url"]');
-    expect(hits).toContain('hit["desc text"]');
+    expect(hits).toContain('attribute="desc text"');
 
     const refinement = files.get(
       'src/components/product-search/RefinementListCategoriesLvl0.tsx'
@@ -725,9 +726,9 @@ describe('generator: schema-driven widgets (React + plain JS)', () => {
     expect(hits).not.toMatch(/type HitRecord/);
     expect(hits).not.toMatch(/InstantSearchHits</);
     expect(hits).not.toMatch(/:\s*\{\s*hit:/);
-    expect(hits).toMatch(/hit\.name/);
+    expect(hits).toMatch(/attribute="name"/);
     expect(hits).toMatch(/hit\.image_url/);
-    expect(hits).toMatch(/hit\.description/);
+    expect(hits).toMatch(/attribute="description"/);
   });
 
   test('snapshot: Hits.jsx', () => {

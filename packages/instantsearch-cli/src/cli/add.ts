@@ -48,17 +48,20 @@ export async function add(options: AddOptions): Promise<Report> {
       prompter,
     });
 
-    if (report.ok && input === 'autocomplete' && options.indexName && options.schema) {
+    if (report.ok && input === 'autocomplete') {
       const rootManifest = readRootManifest(projectDir);
-      if (rootManifest) {
+      const payload = report as Record<string, unknown>;
+      const resolvedIndexName = payload.indexName as string | undefined;
+      const resolvedSchema = payload.schema as ExperienceSchema | undefined;
+
+      if (rootManifest && resolvedIndexName) {
         const autocomplete = maybeGenerateAutocomplete({
           projectDir,
           manifest: rootManifest,
-          indexName: options.indexName,
-          schema: options.schema,
+          indexName: resolvedIndexName,
+          schema: resolvedSchema ?? {},
         });
         if (autocomplete.created) {
-          const payload = report as Record<string, unknown>;
           const files = payload.filesCreated as string[] | undefined;
           if (files) {
             files.push(autocomplete.filePath);

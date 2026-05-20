@@ -22,15 +22,15 @@ type HitProps = {
   const itemParamAnnotation = typescript ? ': HitProps' : '';
 
   const imageElement = image
-    ? `<img src={item[${jsString(image)}]} alt={item[${jsString(title)}]} />\n      `
+    ? `<img src={item[${jsString(image)}]} alt={item[${jsString(title)}]} />\n        `
     : '';
 
-  return `import { EXPERIMENTAL_Autocomplete } from 'react-instantsearch';
+  return `import { EXPERIMENTAL_Autocomplete, Highlight } from 'react-instantsearch';
 ${typeAnnotation}
 function HitItem({ item }${itemParamAnnotation}) {
   return (
-    <a href="#">
-      ${imageElement}<span>{item[${jsString(title)}]}</span>
+    <a href={\`#\${item.objectID}\`}>
+      ${imageElement}<Highlight attribute=${jsString(title)} hit={item} />
     </a>
   );
 }
@@ -43,6 +43,9 @@ export function Autocomplete() {
         {
           indexName: ${jsString(indexName)},
           itemComponent: HitItem,
+          getURL({ item }) {
+            return \`#\${item.objectID}\`;
+          },
         },
       ]}
     />

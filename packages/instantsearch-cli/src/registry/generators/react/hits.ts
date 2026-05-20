@@ -1,5 +1,5 @@
 import type { GeneratorContext, GenerateResult } from '../../../shared-types';
-import { propertyAccess, propertyKey } from '../../../utils/codegen';
+import { jsString, propertyAccess, propertyKey } from '../../../utils/codegen';
 
 export function generate(ctx: GeneratorContext): GenerateResult {
   const title = ctx.introspection.title as string;
@@ -16,9 +16,9 @@ export function generate(ctx: GeneratorContext): GenerateResult {
       `      <img src={${propertyAccess('hit', image)}} alt={${propertyAccess('hit', title)}} />`
     );
   }
-  hitBodyLines.push(`      <h3>{${propertyAccess('hit', title)}}</h3>`);
+  hitBodyLines.push(`      <h3><Highlight attribute=${jsString(title)} hit={hit} /></h3>`);
   if (description) {
-    hitBodyLines.push(`      <p>{${propertyAccess('hit', description)}}</p>`);
+    hitBodyLines.push(`      <p><Highlight attribute=${jsString(description)} hit={hit} /></p>`);
   }
 
   const hitBody = hitBodyLines.join('\n');
@@ -29,7 +29,7 @@ export function generate(ctx: GeneratorContext): GenerateResult {
     const typeFields = fields.map((f) => `  ${propertyKey(f)}: string;`).join('\n');
 
     code =
-      `import { Hits as InstantSearchHits } from 'react-instantsearch';\n` +
+      `import { Highlight, Hits as InstantSearchHits } from 'react-instantsearch';\n` +
       `\n` +
       `type HitRecord = {\n` +
       `${typeFields}\n` +
@@ -48,7 +48,7 @@ export function generate(ctx: GeneratorContext): GenerateResult {
       `}\n`;
   } else {
     code =
-      `import { Hits as InstantSearchHits } from 'react-instantsearch';\n` +
+      `import { Highlight, Hits as InstantSearchHits } from 'react-instantsearch';\n` +
       `\n` +
       `function Hit({ hit }) {\n` +
       `  return (\n` +

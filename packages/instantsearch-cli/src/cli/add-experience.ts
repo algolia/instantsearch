@@ -83,6 +83,8 @@ export async function addExperience(
     command: COMMAND,
     payload: {
       experience: { name, path: experiencePath },
+      indexName: inputs.indexName,
+      schema: inputs.schema,
       filesCreated: outcome.filesCreated,
       manifestUpdated: ROOT_MANIFEST_FILENAME,
       nextSteps: buildExperienceNextSteps({
