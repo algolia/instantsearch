@@ -135,7 +135,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        queryParameters: { userToken: 'token' },
         escapeHTML: false,
       });
 
@@ -151,7 +150,6 @@ describe('connectTrendingFacets', () => {
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: { userToken: 'token' },
         } as any)
       );
     });
@@ -163,7 +161,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        queryParameters: { userToken: 'token' },
         escapeHTML: true,
         fallbackParameters: { query: 'query' },
       });
@@ -180,11 +177,6 @@ describe('connectTrendingFacets', () => {
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: {
-            userToken: 'token',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-          },
           fallbackParameters: {
             highlightPostTag: '__/ais-highlight__',
             highlightPreTag: '__ais-highlight__',
