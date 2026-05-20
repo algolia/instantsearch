@@ -135,7 +135,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        queryParameters: { userToken: 'token' },
         escapeHTML: false,
       });
 
@@ -145,13 +144,12 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
-        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
+        // v4 TrendingFacetsQuery lacks fallbackParameters
         new RecommendParameters().addTrendingFacets({
           $$id: (widget as any).$$id,
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: { userToken: 'token' },
         } as any)
       );
     });
@@ -163,7 +161,6 @@ describe('connectTrendingFacets', () => {
         facetName: 'brand',
         limit: 10,
         threshold: 95,
-        queryParameters: { userToken: 'token' },
         escapeHTML: true,
         fallbackParameters: { query: 'query' },
       });
@@ -174,17 +171,12 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
-        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
+        // v4 TrendingFacetsQuery lacks fallbackParameters
         new RecommendParameters().addTrendingFacets({
           $$id: (widget as any).$$id,
           facetName: 'brand',
           maxRecommendations: 10,
           threshold: 95,
-          queryParameters: {
-            userToken: 'token',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-          },
           fallbackParameters: {
             highlightPostTag: '__/ais-highlight__',
             highlightPreTag: '__ais-highlight__',
