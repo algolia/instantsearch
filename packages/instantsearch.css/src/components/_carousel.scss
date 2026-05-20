@@ -15,7 +15,7 @@
   @extend %ais-focus-outline;
 
   gap: 0;
-  grid-auto-columns: var(--ais-carousel-item-width) !important;
+  grid-auto-columns: var(--ais-carousel-item-width);
   outline: none;
 }
 
@@ -68,13 +68,6 @@
   }
 }
 
-.ais-Carousel-hit-title {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
 .ais-Carousel-hit-link {
   &::before {
     content: '';
@@ -108,6 +101,10 @@
 }
 
 .ais-Carousel-hit-title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   font-weight: normal;
 
   a {
