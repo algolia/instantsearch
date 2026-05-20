@@ -144,7 +144,7 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
-        // v4 TrendingFacetsQuery lacks fallbackParameters
+        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
         new RecommendParameters().addTrendingFacets({
           $$id: (widget as any).$$id,
           facetName: 'brand',
@@ -171,7 +171,7 @@ describe('connectTrendingFacets', () => {
       });
 
       expect(actual).toEqual(
-        // v4 TrendingFacetsQuery lacks fallbackParameters
+        // v4 TrendingFacetsQuery lacks queryParameters/fallbackParameters
         new RecommendParameters().addTrendingFacets({
           $$id: (widget as any).$$id,
           facetName: 'brand',
