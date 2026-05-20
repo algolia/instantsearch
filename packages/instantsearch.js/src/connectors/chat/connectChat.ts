@@ -85,36 +85,36 @@ function sanitizeTurnContext(
     if (firstReason === undefined) firstReason = reason;
   };
 
-  for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+  Object.entries(raw as Record<string, unknown>).forEach(([key, value]) => {
     if (Object.keys(sanitized).length >= TURN_CONTEXT_MAX_KEYS) {
       noteDrop('too_many_keys');
-      continue;
+      return;
     }
     if (!TURN_CONTEXT_KEY_PATTERN.test(key)) {
       noteDrop('invalid_key');
-      continue;
+      return;
     }
     if (typeof value !== 'string') {
       noteDrop('invalid_shape');
-      continue;
+      return;
     }
     if (!value.trim()) {
       noteDrop('empty_value');
-      continue;
+      return;
     }
     const valueBytes = utf8ByteLength(value);
     if (valueBytes > TURN_CONTEXT_MAX_VALUE_BYTES) {
       noteDrop('value_too_long');
-      continue;
+      return;
     }
     const keyBytes = utf8ByteLength(key);
     if (totalBytes + keyBytes + valueBytes > TURN_CONTEXT_MAX_BYTES) {
       noteDrop('oversize');
-      continue;
+      return;
     }
     sanitized[key] = value;
     totalBytes += keyBytes + valueBytes;
-  }
+  });
 
   if (dropped > 0) {
     warning(
