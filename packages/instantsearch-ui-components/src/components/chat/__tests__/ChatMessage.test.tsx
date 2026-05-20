@@ -206,7 +206,9 @@ describe('ChatMessage', () => {
     `);
   });
 
-  test('does not render context text parts', () => {
+  test('does not render turnContext from message metadata', () => {
+    // turnContext is an out-of-band server-grounding signal; it must never
+    // surface in the rendered transcript even if a message somehow carries it.
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
@@ -214,13 +216,13 @@ describe('ChatMessage', () => {
         message={{
           role: 'user',
           id: '1',
-          parts: [
-            {
-              type: 'text',
-              text: '<context>{"currentPage":"https://example.com/products","userLocale":"en-US"}</context>',
+          parts: [{ type: 'text', text: 'Hello' }],
+          metadata: {
+            turnContext: {
+              url: 'https://example.com/products',
+              locale: 'en-US',
             },
-            { type: 'text', text: 'Hello' },
-          ],
+          },
         }}
         status="ready"
         tools={{}}
@@ -230,7 +232,7 @@ describe('ChatMessage', () => {
 
     expect(container.textContent).toBe('Hello');
     expect(container.textContent).not.toContain('example.com');
-    expect(container.textContent).not.toContain('context');
+    expect(container.textContent).not.toContain('turnContext');
   });
 
   test('renders with tools', () => {

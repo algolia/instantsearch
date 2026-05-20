@@ -48,6 +48,107 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+// Mirrors `common/models/turn_context.py` on the server. Kept in lock-step so
+// the client never sends payloads the backend would 422 on. We diverge from the
+// server in one place only: invalid entries are dropped with a dev warning
+// instead of throwing, matching the server's kill-switch semantics
+// (`TURN_CONTEXT_ENABLED=false` silently drops). A misconfigured `context`
+// prop must never break the chat for end users.
+const TURN_CONTEXT_MAX_BYTES = 4 * 1024;
+const TURN_CONTEXT_MAX_KEYS = 32;
+const TURN_CONTEXT_MAX_VALUE_BYTES = 1024;
+const TURN_CONTEXT_KEY_PATTERN = /^[A-Za-z0-9_.-]{1,64}$/;
+
+const utf8ByteLength = (value: string): number => {
+  if (typeof TextEncoder !== 'undefined') {
+    return new TextEncoder().encode(value).length;
+  }
+  // Fallback for environments without TextEncoder (legacy SSR). Slight
+  // over-count is acceptable since we use it for an upper-bound cap check.
+  return unescape(encodeURIComponent(value)).length;
+};
+
+function sanitizeTurnContext(
+  raw: unknown
+): Record<string, string> | undefined {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return undefined;
+  }
+
+  const sanitized: Record<string, string> = {};
+  let totalBytes = 0;
+  let dropped = 0;
+  let firstReason: string | undefined;
+
+  const noteDrop = (reason: string) => {
+    dropped += 1;
+    if (firstReason === undefined) firstReason = reason;
+  };
+
+  for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (Object.keys(sanitized).length >= TURN_CONTEXT_MAX_KEYS) {
+      noteDrop('too_many_keys');
+      continue;
+    }
+    if (!TURN_CONTEXT_KEY_PATTERN.test(key)) {
+      noteDrop('invalid_key');
+      continue;
+    }
+    if (typeof value !== 'string') {
+      noteDrop('invalid_shape');
+      continue;
+    }
+    if (!value.trim()) {
+      noteDrop('empty_value');
+      continue;
+    }
+    const valueBytes = utf8ByteLength(value);
+    if (valueBytes > TURN_CONTEXT_MAX_VALUE_BYTES) {
+      noteDrop('value_too_long');
+      continue;
+    }
+    const keyBytes = utf8ByteLength(key);
+    if (totalBytes + keyBytes + valueBytes > TURN_CONTEXT_MAX_BYTES) {
+      noteDrop('oversize');
+      continue;
+    }
+    sanitized[key] = value;
+    totalBytes += keyBytes + valueBytes;
+  }
+
+  if (dropped > 0) {
+    warning(
+      false,
+      `Chat context: dropped ${dropped} entr${
+        dropped === 1 ? 'y' : 'ies'
+      } that did not meet the Agent Studio turn_context contract (first reason: ${firstReason}). See https://www.algolia.com/doc/guides/algolia-ai/agent-studio/.`
+    );
+  }
+
+  return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+}
+
+function stripTurnContextFromMessages<TUiMessage extends UIMessage>(
+  messages: TUiMessage[]
+): TUiMessage[] {
+  let mutated = false;
+  const stripped = messages.map((message) => {
+    const metadata = message.metadata as
+      | Record<string, unknown>
+      | undefined;
+    if (!metadata || !('turnContext' in metadata)) {
+      return message;
+    }
+    mutated = true;
+    const { turnContext: _ignored, ...rest } = metadata;
+    return {
+      ...message,
+      metadata: Object.keys(rest).length > 0 ? rest : undefined,
+    } as TUiMessage;
+  });
+  return mutated ? stripped : messages;
+}
+
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
   input: string;
@@ -160,12 +261,21 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    */
   type?: string;
   /**
-   * Additional context to send with each user message (e.g. current page info).
-   * This context is included in the message parts sent to the API but is not
-   * displayed in the chat UI.
-   * Can be a static object or a function that returns the context at send time.
+   * Ambient session facts to attach to the latest user turn (e.g. current page
+   * URL, locale, product id). Sent over the wire as
+   * `messages[last].metadata.turnContext` per the Agent Studio contract — never
+   * rendered as a chat bubble and never persisted on assistant turns.
+   *
+   * Server-side caps (HTTP 422 on violation): flat `Record<string, string>`,
+   * up to 32 keys, keys match `^[A-Za-z0-9_.-]{1,64}$`, values non-empty and
+   * ≤ 1024 UTF-8 bytes, total ≤ 4096 UTF-8 bytes. Offending entries are dropped
+   * client-side with a dev warning before the request is sent, so a misconfigured
+   * value never breaks the chat. Pass a function (sync or async) when the values
+   * change per-turn — it is invoked once per send.
    */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  context?:
+    | Record<string, string>
+    | (() => Record<string, string> | Promise<Record<string, string>>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -686,48 +796,62 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          const resolvedContext =
-            typeof context === 'function' ? context() : context;
+          // Resolve and sanitize the context at send time. The function form
+          // may be async (e.g. resolves the current page URL from a Next.js
+          // router) and may also throw synchronously, so we wrap the call in
+          // `Promise.resolve().then(...)` to funnel both error modes through
+          // the same rejection handler. We never throw on invalid entries —
+          // offending keys are dropped with a warning so a misconfigured
+          // `context` prop can't break the chat.
+          const resolvePromise = Promise.resolve()
+            .then(() => (typeof context === 'function' ? context() : context))
+            .then(sanitizeTurnContext, (error) => {
+              warning(
+                false,
+                `Could not resolve chat context. The message will be sent without context. (${
+                  error instanceof Error ? error.message : String(error)
+                })`
+              );
+              return undefined;
+            });
 
-          let serializedContext: string;
-          try {
-            serializedContext = JSON.stringify(resolvedContext);
-          } catch {
-            warning(
-              false,
-              'Could not serialize chat context. The message will be sent without context.'
+          return resolvePromise.then((turnContext) => {
+            if (!turnContext) {
+              return _chatInstance.sendMessage(message, ...rest);
+            }
+
+            const mergedMetadata = {
+              ...(message.metadata as Record<string, unknown> | undefined),
+              turnContext,
+            };
+
+            if ('parts' in message && message.parts) {
+              return _chatInstance.sendMessage(
+                {
+                  ...message,
+                  metadata: mergedMetadata,
+                } as Parameters<typeof _chatInstance.sendMessage>[0],
+                ...rest
+              );
+            }
+
+            return _chatInstance.sendMessage(
+              {
+                ...message,
+                metadata: mergedMetadata,
+              } as Parameters<typeof _chatInstance.sendMessage>[0],
+              ...rest
             );
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const contextTextPart = {
-            type: 'text' as const,
-            text: '<context>'.concat(serializedContext).concat('</context>'),
-          };
-
-          if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
-              ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
-          }
-
-          const textContent =
-            'text' in message && message.text ? message.text : '';
-
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
+          });
         };
+
+        // `turnContext` is a server-grounding signal — the contract is "invisible
+        // to the UI". Strip it from every message exposed to renderers so it
+        // never accidentally leaks into a chat bubble, even if a future
+        // history-GET path or restored sessionStorage cache carries it.
+        const visibleMessages = stripTurnContextFromMessages(
+          _chatInstance.messages
+        );
 
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
@@ -753,7 +877,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           clearError: _chatInstance.clearError,
           error: _chatInstance.error,
           id: _chatInstance.id,
-          messages: _chatInstance.messages,
+          messages: visibleMessages,
           regenerate: _chatInstance.regenerate,
           resumeStream: _chatInstance.resumeStream,
           sendMessage: sendMessageWithContext,
