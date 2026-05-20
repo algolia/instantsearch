@@ -1,6 +1,7 @@
 @use '../themes/reset';
 @use '../shared/_variables';
 @use '../shared/_common';
+@use 'carousel';
 @use 'button';
 @use 'chat/chat';
 @use 'chat/chat-overlay-layout';
