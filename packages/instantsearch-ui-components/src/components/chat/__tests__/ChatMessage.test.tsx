@@ -206,6 +206,36 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('does not render legacy `<context>` text parts (back-compat)', () => {
+    // Pre-migration sessions persisted a `<context>{...}</context>` text part.
+    // The shim in `ChatMessage` keeps those out of the rendered transcript
+    // until existing sessionStorage caches roll over.
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [
+            {
+              type: 'text',
+              text: '<context>{"currentPage":"https://example.com/products","userLocale":"en-US"}</context>',
+            },
+            { type: 'text', text: 'Hello' },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.textContent).toBe('Hello');
+    expect(container.textContent).not.toContain('example.com');
+    expect(container.textContent).not.toContain('context');
+  });
+
   test('does not render turnContext from message metadata', () => {
     // turnContext is an out-of-band server-grounding signal; it must never
     // surface in the rendered transcript even if a message somehow carries it.

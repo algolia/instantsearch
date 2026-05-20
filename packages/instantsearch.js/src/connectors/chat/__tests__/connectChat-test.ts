@@ -1358,39 +1358,6 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
 
-    it('strips turnContext from messages exposed in renderState', async () => {
-      const chatInstance = createTestChat();
-      // Seed the chat with a message that carries turnContext as if a stale
-      // sessionStorage cache or a future history-GET surfaced it.
-      chatInstance.messages = [
-        {
-          id: 'u1',
-          role: 'user',
-          parts: [{ type: 'text', text: 'Hello' }],
-          metadata: {
-            turnContext: { url: 'https://example.com' },
-            other: 'kept',
-          },
-        } as unknown as UIMessage,
-      ];
-
-      const { widget, renderFn } = createChatWidgetWithContext({
-        chat: chatInstance,
-        context: { url: 'https://example.com' },
-      });
-
-      const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init(createInitOptions({ helper, state: helper.state }));
-
-      const { messages } = renderFn.mock.calls[0][0];
-      expect(messages).toHaveLength(1);
-      expect((messages[0] as any).metadata).toEqual({ other: 'kept' });
-      // The underlying chat instance is left untouched.
-      expect(
-        (chatInstance.messages[0] as any).metadata.turnContext
-      ).toBeDefined();
-    });
-
     it('does not send context resolver errors as a fatal failure', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');

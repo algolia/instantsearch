@@ -128,27 +128,6 @@ function sanitizeTurnContext(
   return Object.keys(sanitized).length > 0 ? sanitized : undefined;
 }
 
-function stripTurnContextFromMessages<TUiMessage extends UIMessage>(
-  messages: TUiMessage[]
-): TUiMessage[] {
-  let mutated = false;
-  const stripped = messages.map((message) => {
-    const metadata = message.metadata as
-      | Record<string, unknown>
-      | undefined;
-    if (!metadata || !('turnContext' in metadata)) {
-      return message;
-    }
-    mutated = true;
-    const { turnContext: _ignored, ...rest } = metadata;
-    return {
-      ...message,
-      metadata: Object.keys(rest).length > 0 ? rest : undefined,
-    } as TUiMessage;
-  });
-  return mutated ? stripped : messages;
-}
-
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
   input: string;
@@ -796,16 +775,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          // Resolve and sanitize the context at send time. The function form
-          // may be async (e.g. resolves the current page URL from a Next.js
-          // router) and may also throw synchronously, so we wrap the call in
-          // `Promise.resolve().then(...)` to funnel both error modes through
-          // the same rejection handler. We never throw on invalid entries —
-          // offending keys are dropped with a warning so a misconfigured
-          // `context` prop can't break the chat.
+          // Resolve at send time; misconfigured `context` must never break the chat.
           const resolvePromise = Promise.resolve()
             .then(() => (typeof context === 'function' ? context() : context))
-            .then(sanitizeTurnContext, (error) => {
+            .then(sanitizeTurnContext)
+            .catch((error) => {
               warning(
                 false,
                 `Could not resolve chat context. The message will be sent without context. (${
@@ -845,14 +819,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         };
 
-        // `turnContext` is a server-grounding signal — the contract is "invisible
-        // to the UI". Strip it from every message exposed to renderers so it
-        // never accidentally leaks into a chat bubble, even if a future
-        // history-GET path or restored sessionStorage cache carries it.
-        const visibleMessages = stripTurnContextFromMessages(
-          _chatInstance.messages
-        );
-
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
@@ -877,7 +843,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           clearError: _chatInstance.clearError,
           error: _chatInstance.error,
           id: _chatInstance.id,
-          messages: visibleMessages,
+          messages: _chatInstance.messages,
           regenerate: _chatInstance.regenerate,
           resumeStream: _chatInstance.resumeStream,
           sendMessage: sendMessageWithContext,
