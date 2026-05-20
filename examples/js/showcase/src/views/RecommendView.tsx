@@ -33,10 +33,16 @@ export function RecommendView() {
     return () => search.dispose();
   }, []);
 
+  // Carousel hits draw their hover overlay against `--ais-background-color`
+  // (white). Drop the WidgetSwitcher's hover tint so the overlay stays readable.
+  const carouselWrapperClass =
+    'hover:bg-transparent! dark:hover:bg-transparent!';
+
   return (
     <SearchContext.Provider value={searchRef.current}>
       <div class="flex flex-col gap-2">
         <WidgetSwitcher
+          class={carouselWrapperClass}
           widgets={[
             {
               title: 'frequentlyBoughtTogether',
@@ -58,6 +64,7 @@ export function RecommendView() {
         />
 
         <WidgetSwitcher
+          class={carouselWrapperClass}
           widgets={[{ title: 'trendingItems', body: WidgetTrendingItems }]}
         />
 
