@@ -50,13 +50,6 @@ export type TrendingFacetsConnectorParams = {
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
-   * List of search parameters to send.
-   */
-  queryParameters?: Omit<
-    PlainSearchParameters,
-    'page' | 'hitsPerPage' | 'offset' | 'length'
-  >;
-  /**
    * Whether to escape HTML tags from items string values.
    *
    * @default true
@@ -98,7 +91,6 @@ export default (function connectTrendingFacets<
       limit,
       threshold,
       fallbackParameters,
-      queryParameters,
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
@@ -107,9 +99,7 @@ export default (function connectTrendingFacets<
     } = widgetParams || {};
 
     if (!facetName) {
-      throw new Error(
-        withUsage('The `facetName` option is required.')
-      );
+      throw new Error(withUsage('The `facetName` option is required.'));
     }
 
     return {
@@ -193,10 +183,6 @@ export default (function connectTrendingFacets<
                 ...(escapeHTML ? TAG_PLACEHOLDER : {}),
               }
             : undefined,
-          queryParameters: {
-            ...queryParameters,
-            ...(escapeHTML ? TAG_PLACEHOLDER : {}),
-          },
           $$id: this.$$id!,
         } as any);
       },

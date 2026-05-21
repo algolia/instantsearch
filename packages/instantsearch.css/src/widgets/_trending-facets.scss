@@ -1,0 +1,17 @@
+.ais-TrendingFacets-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) / 2);
+}
+
+.ais-TrendingFacets-item {
+  border-radius: var(--ais-border-radius-full);
+  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.75);
+  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.3);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  font-size: 0.875rem;
+}
