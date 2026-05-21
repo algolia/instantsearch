@@ -3,16 +3,16 @@ import { createUUID } from '../lib/utils/uuid';
 
 import type { InsightsClientMethod, InsightsClientPayload } from '../types';
 
-const TELEMETRY_SESSION_KEY = 'ais.telemetry.sessionId';
+const USAGE_SESSION_KEY = 'ais.usage.sessionId';
 
-export function getTelemetrySessionId(): string {
+export function getUsageSessionId(): string {
   try {
-    const existing = sessionStorage.getItem(TELEMETRY_SESSION_KEY);
+    const existing = sessionStorage.getItem(USAGE_SESSION_KEY);
     if (existing) {
       return existing;
     }
     const id = createUUID();
-    sessionStorage.setItem(TELEMETRY_SESSION_KEY, id);
+    sessionStorage.setItem(USAGE_SESSION_KEY, id);
     return id;
   } catch {
     // sessionStorage unavailable (SSR, privacy mode, etc.)

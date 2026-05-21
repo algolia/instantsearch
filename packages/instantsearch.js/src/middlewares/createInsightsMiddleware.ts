@@ -1,6 +1,6 @@
 import {
   getInsightsAnonymousUserTokenInternal,
-  getTelemetrySessionId,
+  getUsageSessionId,
 } from '../helpers';
 import {
   warning,
@@ -168,7 +168,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
-    let telemetryTimeout: ReturnType<typeof setTimeout> | null = null;
+    let usageTimeout: ReturnType<typeof setTimeout> | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -424,17 +424,17 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           }
         };
 
-        // telemetry
-        const telemetrySessionId = getTelemetrySessionId();
+        // usage tracking
+        const usageSessionId = getUsageSessionId();
 
-        function sendTelemetryEvent(event: any) {
+        function sendUsageEvent(event: any) {
           const userToken = helper.state?.userToken;
 
           (insightsClientWithLocalCredentials as any)('sendEvents', [
             {
               eventType: 'instantsearch',
               timestamp: Date.now(),
-              session_id: telemetrySessionId,
+              sessionID: usageSessionId,
               userToken: userToken ? String(userToken) : undefined,
               ...event,
             },
@@ -445,20 +445,16 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         // fully returns (started() is called from within start()), and so
         // widgets added asynchronously in the same tick (e.g. Vue) are
         // included in the tree.
-        telemetryTimeout = setTimeout(() => {
-          telemetryTimeout = null;
+        usageTimeout = setTimeout(() => {
+          usageTimeout = null;
           try {
-            sendTelemetryEvent({
+            sendUsageEvent({
               eventName: '__start__',
-              algolia_agent: getAlgoliaAgent(instantSearchInstance.client),
+              algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
               version,
-              user_agent: safelyRunOnBrowser(
-                ({ window }) => window.navigator.userAgent,
-                { fallback: () => undefined }
-              ),
-              application_id: appId,
+              applicationId: appId,
               performance: {
-                bootstrap_ms: Math.round(
+                bootstrapMs: Math.round(
                   (typeof performance !== 'undefined'
                     ? performance.now()
                     : Date.now()) - instantSearchInstance._createdAt
@@ -476,14 +472,14 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
               ],
             });
           } catch {
-            // telemetry must never crash the host app
+            // usage tracking must never crash the host app
           }
         }, 0);
       },
       unsubscribe() {
-        if (telemetryTimeout) {
-          clearTimeout(telemetryTimeout);
-          telemetryTimeout = null;
+        if (usageTimeout) {
+          clearTimeout(usageTimeout);
+          usageTimeout = null;
         }
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;

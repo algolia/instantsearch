@@ -1315,7 +1315,7 @@ describe('insights', () => {
         } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
-      // onEvent also receives telemetry events (bootstrap)
+      // onEvent also receives usage events (bootstrap)
       expect(onEvent).toHaveBeenCalledWith(
         {
           insightsMethod: 'viewedObjectIDs',

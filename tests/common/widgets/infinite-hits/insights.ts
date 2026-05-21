@@ -79,7 +79,7 @@ export function createInsightsTests(
         ).toHaveLength(hitsPerPage);
       }
 
-      // View event called for each index once (+ telemetry events)
+      // View event called for each index once (+ usage events)
       {
         expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(2);
         expect(window.aa).toHaveBeenCalledWith(
@@ -191,7 +191,7 @@ export function createInsightsTests(
         ).toHaveLength(hitsPerPage);
       }
 
-      // View event called for each index, batched in chunks of 20 (+ telemetry events)
+      // View event called for each index, batched in chunks of 20 (+ usage events)
       {
         expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(4);
         expect(window.aa).toHaveBeenCalledWith(

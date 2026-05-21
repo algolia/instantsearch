@@ -2,21 +2,21 @@ import { createInitArgs } from './render-args';
 
 import type { InstantSearch, Widget, IndexWidget } from '../../types';
 
-export type TelemetryWidgetParam = {
+export type WidgetTreeParam = {
   name: string;
   value?: string;
   type?: string;
 };
 
-export type TelemetryWidgetNode = {
+export type WidgetTreeNode = {
   type: string;
-  params: TelemetryWidgetParam[];
-  children: TelemetryWidgetNode[];
+  params: WidgetTreeParam[];
+  children: WidgetTreeNode[];
 };
 
 function serializeParamValue(
   value: unknown
-): Pick<TelemetryWidgetParam, 'value' | 'type'> | null {
+): Pick<WidgetTreeParam, 'value' | 'type'> | null {
   if (value === undefined || value === null) {
     return null;
   }
@@ -50,7 +50,7 @@ function serializeParamValue(
 export function buildWidgetTree(
   widgets: Array<Widget | IndexWidget>,
   instantSearchInstance: InstantSearch
-): TelemetryWidgetNode[] {
+): WidgetTreeNode[] {
   const initOptions = createInitArgs(
     instantSearchInstance,
     instantSearchInstance.mainIndex,
@@ -67,7 +67,7 @@ export function buildWidgetTree(
       }
     }
 
-    const params: TelemetryWidgetParam[] = [];
+    const params: WidgetTreeParam[] = [];
 
     Object.keys(widgetParams).forEach((key) => {
       const raw = widgetParams[key];
