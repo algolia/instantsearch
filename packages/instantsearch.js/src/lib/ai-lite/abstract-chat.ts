@@ -2,8 +2,8 @@
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
-  getMessageFromStreamErrorText,
   SerialJobExecutor,
+  tryParseErrorMessage,
 } from './utils';
 
 import type {
@@ -1080,8 +1080,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'error': {
               isError = true;
+              const text = chunk.errorText.trim();
               throw new Error(
-                getMessageFromStreamErrorText(chunk.errorText)
+                tryParseErrorMessage(text) || text || 'Unknown error'
               );
             }
 

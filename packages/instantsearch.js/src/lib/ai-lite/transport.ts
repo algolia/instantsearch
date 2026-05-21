@@ -2,7 +2,7 @@
  * HTTP transport implementation for chat.
  */
 import { parseJsonEventStream } from './stream-parser';
-import { resolveValue } from './utils';
+import { resolveValue, tryParseErrorMessage } from './utils';
 
 import type {
   ChatTransport,
@@ -17,34 +17,15 @@ import type {
 
 /**
  * Reads a human-readable message from a failed HTTP response body when the
- * server returns JSON such as `{ "message": "..." }` (e.g. 403 domain blocks).
+ * server returns JSON such as `{ "message": "..." }` (the shared
+ * `ErrorResponse` shape used by every status code), falling back to the HTTP
+ * status line when the body is empty or not parseable.
  */
 function getHttpErrorMessage(response: Response): Promise<string> {
   const fallback = `HTTP error: ${response.status} ${response.statusText}`;
   return response
     .text()
-    .then((text) => {
-      if (!text) {
-        return fallback;
-      }
-      try {
-        const parsed: unknown = JSON.parse(text);
-        if (
-          parsed &&
-          typeof parsed === 'object' &&
-          'message' in parsed &&
-          typeof (parsed as { message: unknown }).message === 'string'
-        ) {
-          const message = (parsed as { message: string }).message.trim();
-          if (message) {
-            return message;
-          }
-        }
-      } catch {
-        // Non-JSON body or empty response — use fallback
-      }
-      return fallback;
-    })
+    .then((text) => tryParseErrorMessage(text) ?? fallback)
     .catch(() => fallback);
 }
 
