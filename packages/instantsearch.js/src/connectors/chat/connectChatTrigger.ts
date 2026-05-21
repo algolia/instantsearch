@@ -6,11 +6,8 @@ import {
 
 import type {
   Connector,
-  IndexRenderState,
-  IndexWidget,
   InitOptions,
   RenderOptions,
-  RenderState,
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from './connectChat';
@@ -60,26 +57,15 @@ export type ChatTriggerConnector = Connector<
   ChatTriggerConnectorParams
 >;
 
-function getChatStateFromOptions(
-  options: InitOptions | RenderOptions | null
-): Partial<ChatRenderState> | undefined {
-  if (!options) return undefined;
-
-  const parent: IndexWidget | undefined = options.parent;
-  const indexId = parent?.getIndexId();
+// Reads the sibling chat widget's render state from the live cross-index
+// `instantSearchInstance.renderState` map. We resolve at call time so that
+// `toggleOpen` always sees the latest `open`/`setOpen` values.
+function getChatRenderState(
+  options: InitOptions | RenderOptions
+): ChatRenderState | undefined {
+  const indexId = options.parent?.getIndexId();
   if (!indexId) return undefined;
-
-  // Despite the `SharedRenderOptions.renderState: IndexRenderState` type,
-  // `widget.render`/`widget.init` actually receive
-  // `instantSearchInstance.renderState`, which is the cross-index `RenderState`
-  // (`{ [indexId]: IndexRenderState }`). We cast to access the right shape.
-  const globalRenderState = options.renderState as unknown as
-    | RenderState
-    | undefined;
-
-  return globalRenderState?.[indexId]?.chat as
-    | Partial<ChatRenderState>
-    | undefined;
+  return options.instantSearchInstance.renderState[indexId]?.chat;
 }
 
 const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
@@ -90,34 +76,12 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
 
   return (widgetParams) => {
     const params = widgetParams ?? ({} as ChatTriggerConnectorParams);
-    // Keep a reference to the latest render options so that `toggleOpen`
-    // always reads the most current chat state when invoked (e.g. on click).
-    // We rely on `instantSearchInstance` (whose `.renderState` is a live
-    // mutable reference) to always resolve the *current* chat state at
-    // click time, rather than the (frozen) `renderState` captured at the
-    // moment of `init`/`render`.
-    let lastInstantSearchInstance: InitOptions['instantSearchInstance'] | null =
-      null;
-    let lastParent: IndexWidget | null = null;
-
-    function getCurrentChatState():
-      | Partial<ChatRenderState>
-      | undefined {
-      const indexId = lastParent?.getIndexId();
-      if (!indexId || !lastInstantSearchInstance) return undefined;
-
-      const globalRenderState = lastInstantSearchInstance.renderState as
-        | RenderState
-        | undefined;
-
-      return globalRenderState?.[indexId]?.chat as
-        | Partial<ChatRenderState>
-        | undefined;
-    }
+    let lastOptions: InitOptions | RenderOptions | null = null;
 
     function toggleOpen() {
-      const chatState = getCurrentChatState();
-      chatState?.setOpen?.(!chatState?.open);
+      if (!lastOptions) return;
+      const chatState = getChatRenderState(lastOptions);
+      chatState?.setOpen?.(!chatState.open);
     }
 
     return {
@@ -125,8 +89,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
       opensChat: true as const,
 
       init(initOptions) {
-        lastInstantSearchInstance = initOptions.instantSearchInstance;
-        lastParent = initOptions.parent ?? null;
+        lastOptions = initOptions;
         renderFn(
           {
             ...this.getWidgetRenderState!(initOptions),
@@ -137,8 +100,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
       },
 
       render(renderOptions) {
-        lastInstantSearchInstance = renderOptions.instantSearchInstance;
-        lastParent = renderOptions.parent ?? null;
+        lastOptions = renderOptions;
         renderFn(
           {
             ...this.getWidgetRenderState!(renderOptions),
@@ -153,8 +115,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
       },
 
       getWidgetRenderState(renderOptions) {
-        const chatState = getChatStateFromOptions(renderOptions);
-
+        const chatState = getChatRenderState(renderOptions);
         return {
           open: chatState?.open ?? false,
           toggleOpen,
@@ -162,11 +123,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         };
       },
 
-      getRenderState(
-        renderState: IndexRenderState &
-          Partial<ChatTriggerWidgetDescription['indexRenderState']>,
-        renderOptions
-      ): IndexRenderState & ChatTriggerWidgetDescription['indexRenderState'] {
+      getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
           chatTrigger: this.getWidgetRenderState!(renderOptions),

@@ -667,18 +667,17 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       );
     }
 
-    const chatWidget = chat({
-      container: document.body.appendChild(document.createElement('div')),
-      ...chatWidgetParams,
-    });
-
-    const chatTriggerWidget = chatTrigger({
-      container: document.body.appendChild(document.createElement('div')),
-    });
-
-    const search = instantsearch(instantSearchOptions);
-    search
-      .addWidgets([...refinementsWidgets, chatTriggerWidget, chatWidget])
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        ...refinementsWidgets,
+        chatTrigger({
+          container: document.body.appendChild(document.createElement('div')),
+        }),
+        chat({
+          container: document.body.appendChild(document.createElement('div')),
+          ...chatWidgetParams,
+        }),
+      ])
       .on('error', () => {
         /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
