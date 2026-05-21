@@ -1999,7 +1999,7 @@ export function createOptionsTests(
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
                     ${props.templates.header()}
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                   </div>`,
               },
             },
@@ -2008,7 +2008,7 @@ export function createOptionsTests(
               layoutComponent: (props) => (
                 <div className="custom-layout">
                   <span className="custom-layout-title">My Custom Chat</span>
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                 </div>
               ),
             },
@@ -2049,7 +2049,7 @@ export function createOptionsTests(
               templates: {
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                     <button
                       class="custom-send"
                       onclick="${() =>
@@ -2064,7 +2064,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               layoutComponent: (props) => (
                 <div className="custom-layout">
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                   <button
                     className="custom-send"
                     onClick={() =>
@@ -2109,7 +2109,7 @@ export function createOptionsTests(
               templates: {
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                     <span class="custom-status">${props.status}</span>
                   </div>`,
               },
@@ -2118,7 +2118,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               layoutComponent: (props) => (
                 <div className="custom-layout">
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                   <span className="custom-status">{props.status}</span>
                 </div>
               ),
@@ -2214,9 +2214,6 @@ export function createOptionsTests(
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-Chat-container--open')
-        ).toBeInTheDocument();
-        expect(
-          document.querySelector('.ais-Chat-toggleButtonWrapper')
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-ChatOverlayLayout')

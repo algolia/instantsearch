@@ -403,13 +403,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         }
       });
 
-      if (!hasEntryPoint) {
-        throw new Error(
-          withUsage(
-            'The `chat` widget requires a way to open the chat. Add a `chatTrigger` widget or enable AI mode on an input widget. Use `disableTriggerValidation: true` to opt out.'
-          )
-        );
-      }
+      warning(
+        hasEntryPoint,
+        'The `chat` widget has no way to be opened. Add a `chatTrigger` widget, enable `aiMode` on a `searchBox`/`autocomplete`, or use the inline layout. Set `disableTriggerValidation: true` to silence this warning.'
+      );
 
       hasValidatedEntryPoints = true;
     };

@@ -212,9 +212,6 @@ describe('Chat', () => {
               </div>
             </form>
           </div>
-          <div
-            class="ais-Chat-toggleButtonWrapper"
-          />
         </div>
       </div>
     `);

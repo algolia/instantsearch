@@ -18,7 +18,6 @@ import React, {
 } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { ChatInlineLayout } from '../components/ChatInlineLayout';
 import { useStickToBottom } from '../lib/useStickToBottom';
 
 import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
@@ -158,7 +157,6 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
 
 export type ChatHandle = {
   setOpen: (open: boolean) => void;
-  getOpen?: () => boolean;
   sendMessage: (params: { text: string }) => void;
   setInput: (input: string) => void;
 };
@@ -225,9 +223,14 @@ function ChatInner<
     return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
-  // Inline layout doesn't need a trigger — auto-exempt from validation.
+  // Inline layouts are always visible, so they don't require a `<ChatTrigger />`
+  // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker
+  // set on the layout component, which is consistent across flavors.
+  const isInlineLayoutComponent =
+    typeof layoutComponent === 'function' &&
+    (layoutComponent as { $$inlineLayout?: true }).$$inlineLayout === true;
   const effectiveDisableTriggerValidation =
-    disableTriggerValidation || layoutComponent === ChatInlineLayout;
+    disableTriggerValidation || isInlineLayoutComponent;
 
   const chatState = useChat<TUiMessage>({
     ...props,
@@ -257,7 +260,6 @@ function ChatInner<
 
   useImperativeHandle(ref, () => ({
     setOpen,
-    getOpen: () => open,
     sendMessage: (params: { text: string }) => sendMessage(params),
     setInput,
   }));

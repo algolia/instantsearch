@@ -34,6 +34,7 @@ import {
   menuSelect,
   dynamicWidgets,
   chat,
+  chatTrigger,
   EXPERIMENTAL_autocomplete,
   filterSuggestions,
 } from '../widgets';
@@ -668,13 +669,16 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     const chatWidget = chat({
       container: document.body.appendChild(document.createElement('div')),
-      disableTriggerValidation: true,
       ...chatWidgetParams,
+    });
+
+    const chatTriggerWidget = chatTrigger({
+      container: document.body.appendChild(document.createElement('div')),
     });
 
     const search = instantsearch(instantSearchOptions);
     search
-      .addWidgets([...refinementsWidgets, chatWidget])
+      .addWidgets([...refinementsWidgets, chatTriggerWidget, chatWidget])
       .on('error', () => {
         /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
@@ -682,12 +686,6 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
          */
       })
       .start();
-
-    // Get setOpen from the chat render state after start
-    const chatState = Object.values(search.renderState)
-      .map((s) => s.chat)
-      .find(Boolean) as { setOpen?: (open: boolean) => void } | undefined;
-    globalThis.__chatTestSetOpen = chatState?.setOpen ?? null;
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)

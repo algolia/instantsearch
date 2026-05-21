@@ -19,7 +19,6 @@ describe('ChatInlineLayout', () => {
     headerComponent: <div className="header">Header</div>,
     messagesComponent: <div className="messages">Messages</div>,
     promptComponent: <div className="prompt">Prompt</div>,
-    toggleButtonComponent: <button className="toggle">Toggle</button>,
     messages: [],
     status: 'ready' as const,
     isClearing: false,
@@ -63,9 +62,8 @@ describe('ChatInlineLayout', () => {
     `);
   });
 
-  test('does not render toggle button', () => {
+  test('does not render the legacy toggle button wrapper', () => {
     const { container } = render(<ChatInlineLayout {...defaultProps} />);
-    expect(container.querySelector('.toggle')).not.toBeInTheDocument();
     expect(
       container.querySelector('.ais-Chat-toggleButtonWrapper')
     ).not.toBeInTheDocument();

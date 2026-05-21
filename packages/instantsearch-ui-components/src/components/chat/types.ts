@@ -466,7 +466,6 @@ export type ChatLayoutOwnProps<
   headerComponent: JSX.Element;
   messagesComponent: JSX.Element;
   promptComponent: JSX.Element;
-  toggleButtonComponent?: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
   isClearing?: boolean;
   clearMessages?: () => void;

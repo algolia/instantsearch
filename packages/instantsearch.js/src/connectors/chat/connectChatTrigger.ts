@@ -5,10 +5,12 @@ import {
 } from '../../lib/utils';
 
 import type {
-  Renderer,
-  Unmounter,
-  UnknownWidgetParams,
+  Connector,
   IndexRenderState,
+  IndexWidget,
+  InitOptions,
+  RenderOptions,
+  RenderState,
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from './connectChat';
@@ -25,8 +27,8 @@ const withUsage = createDocumentationMessageGenerator({
  * `open` (whether the chat is open) and `toggleOpen` (to toggle it).
  * It also acts as a presence marker in the widget tree
  * (`$$type: 'ais.chatTrigger'`, `opensChat: true`). The `connectChat`
- * connector's `validateEntryPoints` check looks for widgets with `opensChat`
- * to confirm that a trigger is mounted before allowing the chat to render.
+ * connector's entry-point validation looks for widgets with `opensChat`
+ * to confirm that a trigger is mounted, and warns otherwise.
  */
 export type ChatTriggerConnectorParams = Record<string, never>;
 
@@ -53,34 +55,68 @@ export type ChatTriggerWidgetDescription = {
   };
 };
 
-export default function connectChatTrigger<
-  TWidgetParams extends UnknownWidgetParams
->(
-  renderFn: Renderer<
-    ChatTriggerRenderState,
-    TWidgetParams & ChatTriggerConnectorParams
-  >,
-  unmountFn: Unmounter = noop
+export type ChatTriggerConnector = Connector<
+  ChatTriggerWidgetDescription,
+  ChatTriggerConnectorParams
+>;
+
+function getChatStateFromOptions(
+  options: InitOptions | RenderOptions | null
+): Partial<ChatRenderState> | undefined {
+  if (!options) return undefined;
+
+  const parent: IndexWidget | undefined = options.parent;
+  const indexId = parent?.getIndexId();
+  if (!indexId) return undefined;
+
+  // Despite the `SharedRenderOptions.renderState: IndexRenderState` type,
+  // `widget.render`/`widget.init` actually receive
+  // `instantSearchInstance.renderState`, which is the cross-index `RenderState`
+  // (`{ [indexId]: IndexRenderState }`). We cast to access the right shape.
+  const globalRenderState = options.renderState as unknown as
+    | RenderState
+    | undefined;
+
+  return globalRenderState?.[indexId]?.chat as
+    | Partial<ChatRenderState>
+    | undefined;
+}
+
+const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
+  renderFn,
+  unmountFn = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return (
-    widgetParams: TWidgetParams &
-      ChatTriggerConnectorParams = {} as TWidgetParams &
-      ChatTriggerConnectorParams
-  ) => {
+  return (widgetParams) => {
+    const params = widgetParams ?? ({} as ChatTriggerConnectorParams);
     // Keep a reference to the latest render options so that `toggleOpen`
     // always reads the most current chat state when invoked (e.g. on click).
-    let lastRenderOptions: { renderState?: IndexRenderState } | null = null;
+    // We rely on `instantSearchInstance` (whose `.renderState` is a live
+    // mutable reference) to always resolve the *current* chat state at
+    // click time, rather than the (frozen) `renderState` captured at the
+    // moment of `init`/`render`.
+    let lastInstantSearchInstance: InitOptions['instantSearchInstance'] | null =
+      null;
+    let lastParent: IndexWidget | null = null;
 
-    function getChatState(): Partial<ChatRenderState> | undefined {
-      return lastRenderOptions?.renderState?.chat as
+    function getCurrentChatState():
+      | Partial<ChatRenderState>
+      | undefined {
+      const indexId = lastParent?.getIndexId();
+      if (!indexId || !lastInstantSearchInstance) return undefined;
+
+      const globalRenderState = lastInstantSearchInstance.renderState as
+        | RenderState
+        | undefined;
+
+      return globalRenderState?.[indexId]?.chat as
         | Partial<ChatRenderState>
         | undefined;
     }
 
     function toggleOpen() {
-      const chatState = getChatState();
+      const chatState = getCurrentChatState();
       chatState?.setOpen?.(!chatState?.open);
     }
 
@@ -88,22 +124,24 @@ export default function connectChatTrigger<
       $$type: 'ais.chatTrigger',
       opensChat: true as const,
 
-      init(initOptions: any) {
-        lastRenderOptions = initOptions;
+      init(initOptions) {
+        lastInstantSearchInstance = initOptions.instantSearchInstance;
+        lastParent = initOptions.parent ?? null;
         renderFn(
           {
-            ...this.getWidgetRenderState(initOptions),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
         );
       },
 
-      render(renderOptions: any) {
-        lastRenderOptions = renderOptions;
+      render(renderOptions) {
+        lastInstantSearchInstance = renderOptions.instantSearchInstance;
+        lastParent = renderOptions.parent ?? null;
         renderFn(
           {
-            ...this.getWidgetRenderState(renderOptions),
+            ...this.getWidgetRenderState!(renderOptions),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
@@ -114,30 +152,28 @@ export default function connectChatTrigger<
         unmountFn();
       },
 
-      getWidgetRenderState(renderOptions: {
-        renderState?: IndexRenderState;
-      }): ChatTriggerRenderState {
-        const chatState = renderOptions.renderState?.chat as
-          | Partial<ChatRenderState>
-          | undefined;
+      getWidgetRenderState(renderOptions) {
+        const chatState = getChatStateFromOptions(renderOptions);
 
         return {
           open: chatState?.open ?? false,
           toggleOpen,
-          widgetParams,
+          widgetParams: params,
         };
       },
 
       getRenderState(
         renderState: IndexRenderState &
           Partial<ChatTriggerWidgetDescription['indexRenderState']>,
-        renderOptions: any
+        renderOptions
       ): IndexRenderState & ChatTriggerWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
-          chatTrigger: this.getWidgetRenderState(renderOptions),
+          chatTrigger: this.getWidgetRenderState!(renderOptions),
         };
       },
     };
   };
-}
+};
+
+export default connectChatTrigger;
