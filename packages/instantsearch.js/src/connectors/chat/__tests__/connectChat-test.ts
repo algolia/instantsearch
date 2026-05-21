@@ -1305,60 +1305,39 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
 
-    it('drops invalid keys and values with a dev warning instead of throwing', async () => {
+    it('forwards values verbatim and leaves payload validation to the server', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
       const longValue = 'x'.repeat(1025);
       const { widget, renderFn } = createChatWidgetWithContext({
         chat: chatInstance,
+        // Intentionally non-conforming entries: backend (HTTP 422) owns
+        // validation; the client must not silently mutate this payload.
         context: {
-          'bad key!': 'dropped (invalid key)',
-          empty: '   ',
+          'bad key!': 'kept as-is',
           tooBig: longValue,
-          nested: { x: 1 } as unknown as string,
+          ok: 'kept',
+        } as Record<string, string>,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'hi' });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
           ok: 'kept',
         },
       });
-
-      const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init(createInitOptions({ helper, state: helper.state }));
-
-      const { sendMessage } = renderFn.mock.calls[0][0];
-
-      // The client must NEVER throw on misconfigured `context` — it should
-      // sanitize, warn, and send what's left (or nothing).
-      await expect(
-        (async () => {
-          await sendMessage({ text: 'hi' });
-        })()
-      ).resolves.toBeUndefined();
-
-      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.metadata).toEqual({ turnContext: { ok: 'kept' } });
     });
 
-    it('sends without metadata when every entry is invalid', async () => {
-      const chatInstance = createTestChat();
-      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
-
-      const { widget, renderFn } = createChatWidgetWithContext({
-        chat: chatInstance,
-        context: { '!!': 'invalid', empty: '' },
-      });
-
-      const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init(createInitOptions({ helper, state: helper.state }));
-
-      const { sendMessage } = renderFn.mock.calls[0][0];
-      await sendMessage({ text: 'Hello' });
-
-      // No `metadata.turnContext` and no leftover empty `metadata: {}`.
-      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
-    });
-
-    it('does not send context resolver errors as a fatal failure', async () => {
+    it('propagates errors from a throwing context resolver', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1373,10 +1352,11 @@ data: [DONE]`,
       widget.init(createInitOptions({ helper, state: helper.state }));
 
       const { sendMessage } = renderFn.mock.calls[0][0];
-      await expect(sendMessage({ text: 'Hello' })).resolves.toBeUndefined();
 
-      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+      // A throwing `context` is a developer bug — surface it loudly instead
+      // of silently sending the message without context.
+      await expect(sendMessage({ text: 'Hello' })).rejects.toThrow('boom');
+      expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });
 });
