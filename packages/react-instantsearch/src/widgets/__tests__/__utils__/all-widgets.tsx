@@ -37,6 +37,7 @@ const NON_COMPONENTS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  'ChatTrigger',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
