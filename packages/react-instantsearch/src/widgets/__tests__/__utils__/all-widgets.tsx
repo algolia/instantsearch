@@ -18,6 +18,7 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  'ChatPageSuggestions',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -30,6 +31,7 @@ type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
 // Non-components that should be excluded from SingleWidget type
 const NON_COMPONENTS = [
+  'ChatPageSuggestions',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',

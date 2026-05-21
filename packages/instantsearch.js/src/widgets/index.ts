@@ -62,4 +62,5 @@ export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
+export { default as chatPageSuggestions } from './chat-page-suggestions/chat-page-suggestions';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';

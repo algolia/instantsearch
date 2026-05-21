@@ -53,19 +53,29 @@ export function waitForResults(
   return new Promise((resolve, reject) => {
     let searchResultsReceived = !search._hasSearchWidget;
     let recommendResultsReceived = !search._hasRecommendWidget || skipRecommend;
+
+    const tryResolve = () => {
+      if (!searchResultsReceived || !recommendResultsReceived) {
+        return;
+      }
+      // Await any promises that widgets registered during SSR init (e.g. the
+      // chat-page-suggestions widget races its agent request against a
+      // timeout). `allSettled` so a widget rejecting (e.g. abort) doesn't
+      // crash SSR.
+      Promise.allSettled(search.consumeServerWaitPromises()).then(() =>
+        resolve(requestParamsList!)
+      );
+    };
+
     // All derived helpers resolve in the same tick so we're safe only relying
     // on the first one.
     helper.derivedHelpers[0].on('result', () => {
       searchResultsReceived = true;
-      if (recommendResultsReceived) {
-        resolve(requestParamsList!);
-      }
+      tryResolve();
     });
     helper.derivedHelpers[0].on('recommend:result', () => {
       recommendResultsReceived = true;
-      if (searchResultsReceived) {
-        resolve(requestParamsList!);
-      }
+      tryResolve();
     });
 
     // However, we listen to errors that can happen on any derived helper because

@@ -3,12 +3,13 @@ import {
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
 import { Chat, SearchIndexToolType } from '../../lib/chat';
+import { createAgentTransport } from '../../lib/chat/createAgentTransport';
+import { createSendMessageWithContext } from '../../lib/chat/sendMessageWithContext';
 import {
   checkRendering,
   clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
-  getAlgoliaAgent,
   getAppIdAndApiKey,
   getRefinements,
   noop,
@@ -372,99 +373,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
-      let transport;
-      const { client } = instantSearchInstance;
-      const [appId, apiKey] = getAppIdAndApiKey(client);
-
-      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
-      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
-        messages.map((message) => ({
-          ...message,
-          parts: message.parts?.filter(
-            (part) => !('type' in part && part.type.startsWith('data-'))
-          ),
-        }));
-
-      if ('transport' in options && options.transport) {
-        const originalPrepare = options.transport.prepareSendMessagesRequest;
-        transport = new DefaultChatTransport({
-          ...options.transport,
-          prepareSendMessagesRequest: (params) => {
-            // Call the original prepareSendMessagesRequest if it exists,
-            // otherwise construct a minimal default body containing only the
-            // request payload — without leaking transport metadata such as
-            // resolved headers, api URL, credentials, or `requestMetadata`.
-            const preparedOrPromise = originalPrepare
-              ? originalPrepare(params)
-              : {
-                  body: {
-                    id: params.id,
-                    messageId: params.messageId,
-                    trigger: params.trigger,
-                    messages: params.messages,
-                    ...params.body,
-                  },
-                };
-            // Then filter out data-* parts
-            const applyFilter = (prepared: { body: object }) => ({
-              ...prepared,
-              body: {
-                ...prepared.body,
-                messages: filterDataParts(
-                  (prepared.body as { messages: UIMessage[] }).messages
-                ),
-              },
-            });
-
-            // Handle both sync and async cases
-            if (preparedOrPromise && 'then' in preparedOrPromise) {
-              return preparedOrPromise.then(applyFilter);
-            }
-            return applyFilter(preparedOrPromise);
-          },
-        });
+      if ('chat' in options) {
+        return options.chat;
       }
-      if ('agentId' in options && options.agentId) {
-        if (!appId || !apiKey) {
-          throw new Error(
-            withUsage(
-              'Could not extract Algolia credentials from the search client.'
-            )
-          );
-        }
 
-        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
-        transport = new DefaultChatTransport({
-          api: baseApi,
-          headers: {
-            'x-algolia-application-id': appId,
-            'x-algolia-api-key': apiKey,
-            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
-          },
-          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
-            return {
-              // Bypass cache when regenerating to ensure fresh responses
-              api:
-                trigger === 'regenerate-message'
-                  ? `${baseApi}&cache=false`
-                  : baseApi,
-              body: {
-                id,
-                messageId,
-                messages: filterDataParts(messages),
-              },
-            };
-          },
-        });
-      }
+      const transport = createAgentTransport<TUiMessage>({
+        client: instantSearchInstance.client,
+        agentId: 'agentId' in options ? options.agentId : undefined,
+        transport: 'transport' in options ? options.transport : undefined,
+        algoliaAgentSuffix: 'chat',
+      });
+
       if (!transport) {
         throw new Error(
           withUsage('You need to provide either an `agentId` or a `transport`.')
         );
-      }
-
-      if ('chat' in options) {
-        return options.chat;
       }
 
       return new Chat({
@@ -565,8 +488,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        const feedback =
-          'feedback' in options ? options.feedback : undefined;
+        const feedback = 'feedback' in options ? options.feedback : undefined;
         if (agentId && feedback) {
           const [appId, apiKey] = getAppIdAndApiKey(
             initOptions.instantSearchInstance.client
@@ -678,56 +600,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
 
-        const sendMessageWithContext: typeof _chatInstance.sendMessage = (
-          message,
-          ...rest
-        ) => {
-          if (!context || !message) {
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const resolvedContext =
-            typeof context === 'function' ? context() : context;
-
-          let serializedContext: string;
-          try {
-            serializedContext = JSON.stringify(resolvedContext);
-          } catch {
-            warning(
-              false,
-              'Could not serialize chat context. The message will be sent without context.'
-            );
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const contextTextPart = {
-            type: 'text' as const,
-            text: '<context>'.concat(serializedContext).concat('</context>'),
-          };
-
-          if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
-              ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
-          }
-
-          const textContent =
-            'text' in message && message.text ? message.text : '';
-
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
-        };
+        const sendMessageWithContext = createSendMessageWithContext(
+          _chatInstance,
+          context
+        );
 
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],

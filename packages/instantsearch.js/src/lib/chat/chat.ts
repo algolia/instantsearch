@@ -16,10 +16,17 @@ export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
-  const initialMessages = sessionStorage.getItem(
-    CACHE_KEY + (id ? `-${id}` : '')
-  );
-  return initialMessages ? JSON.parse(initialMessages) : [];
+  if (typeof sessionStorage === 'undefined') {
+    return [];
+  }
+  try {
+    const initialMessages = sessionStorage.getItem(
+      CACHE_KEY + (id ? `-${id}` : '')
+    );
+    return initialMessages ? JSON.parse(initialMessages) : [];
+  } catch (e) {
+    return [];
+  }
 }
 
 export class ChatState<TUiMessage extends UIMessage>
@@ -35,11 +42,17 @@ export class ChatState<TUiMessage extends UIMessage>
 
   constructor(
     id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages?: TUiMessage[],
+    persist: boolean = true
   ) {
-    this._messages = initialMessages;
+    this._messages =
+      initialMessages ??
+      (persist ? getDefaultInitialMessages<TUiMessage>(id) : []);
+    if (!persist) {
+      return;
+    }
     const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready') {
+      if (this.status === 'ready' && typeof sessionStorage !== 'undefined') {
         try {
           sessionStorage.setItem(
             CACHE_KEY + (id ? `-${id}` : ''),
@@ -148,9 +161,10 @@ export class Chat<
   constructor({
     messages,
     agentId,
+    persist,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
+  }: ChatInit<TUiMessage> & { agentId?: string; persist?: boolean }) {
+    const state = new ChatState(agentId, messages, persist);
     super({ ...init, state });
     this._state = state;
   }

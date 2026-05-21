@@ -1,6 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { Hit } from 'instantsearch.js';
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Configure,
   Highlight,
@@ -12,11 +11,15 @@ import {
   TrendingItems,
   Carousel,
   Chat,
+  ChatPageSuggestions,
   FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
+import { useInstantSearch } from 'react-instantsearch-core';
 
 import { Panel } from './Panel';
+
+import type { Hit } from 'instantsearch.js';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -76,6 +79,9 @@ export function App() {
                   headerComponent={false}
                 />
               </Panel>
+              <Panel header="Page suggestion (POC)">
+                <PageSuggestions />
+              </Panel>
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
@@ -107,6 +113,54 @@ type HitType = Hit<{
   name: string;
   description: string;
 }>;
+
+function PageSuggestions() {
+  const { uiState } = useInstantSearch();
+  const query = uiState.instant_search?.query || '';
+
+  // Latest uiState lives in a ref so the context getter (and the prompt) keep
+  // stable references across renders. Passing fresh function/string refs would
+  // make `useStableValue` in `useConnector` consider the widget props changed
+  // every time InstantSearch emits a `render` event, which would tear down and
+  // re-instantiate the widget — including its underlying Chat instance — on
+  // every render. When the main chat fires a tool call after the handoff, that
+  // would loop forever and freeze the page.
+  const latestRef = useRef({ query, refinements: {} as Record<string, any> });
+  latestRef.current = {
+    query,
+    refinements: uiState.instant_search?.refinementList || {},
+  };
+
+  const stableContextRef = useRef(() => ({
+    query: latestRef.current.query,
+    refinements: latestRef.current.refinements,
+  }));
+
+  const stablePromptRef = useRef(
+    'In one short sentence, suggest a popular product category to explore.'
+  );
+
+  return (
+    <div
+      style={{
+        border: '1px dashed #888',
+        padding: 12,
+        borderRadius: 4,
+        background: '#fafafa',
+      }}
+    >
+      <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>
+        Current query: <strong>{query || '(none)'}</strong>
+      </div>
+      <ChatPageSuggestions
+        agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+        initialUserMessage={stablePromptRef.current}
+        context={stableContextRef.current}
+        ctaLabel="Continue in chat"
+      />
+    </div>
+  );
+}
 
 function HitComponent({ hit }: { hit: HitType }) {
   return (

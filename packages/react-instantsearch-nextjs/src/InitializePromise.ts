@@ -66,17 +66,24 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     new Promise<void>((resolve) => {
       let searchReceived = false;
       let recommendReceived = false;
+      const tryResolve = () => {
+        if (search._hasSearchWidget && !searchReceived) return;
+        if (search._hasRecommendWidget && !recommendReceived) return;
+        // Await any promises that widgets registered during SSR init (e.g. the
+        // chat-page-suggestions widget races its agent request against a
+        // timeout). `allSettled` so a widget rejecting (e.g. abort) doesn't
+        // crash SSR.
+        Promise.allSettled(search.consumeServerWaitPromises()).then(() =>
+          resolve()
+        );
+      };
       search.mainHelper!.derivedHelpers[0].once('result', () => {
         searchReceived = true;
-        if (!search._hasRecommendWidget || recommendReceived) {
-          resolve();
-        }
+        tryResolve();
       });
       search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
         recommendReceived = true;
-        if (!search._hasSearchWidget || searchReceived) {
-          resolve();
-        }
+        tryResolve();
       });
     });
 

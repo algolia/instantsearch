@@ -236,6 +236,13 @@ class InstantSearch<
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
+  /**
+   * Promises that widgets registered during SSR init that `waitForResults`
+   * must await before resolving. Cleared once the wait resolves so subsequent
+   * SSR passes start fresh.
+   * @internal
+   */
+  private _serverWaitPromises: Array<Promise<unknown>> = [];
   public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
@@ -264,6 +271,27 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     );
 
     return this.status === 'stalled';
+  }
+
+  /**
+   * Registers a promise that `waitForResults()` must await before resolving
+   * during server-side rendering. Used by widgets that need to do async work
+   * (e.g. AI completions) outside of the search/recommend lifecycle.
+   * @internal
+   */
+  public registerServerWait(promise: Promise<unknown>): void {
+    this._serverWaitPromises.push(promise);
+  }
+
+  /**
+   * Returns the promises registered with `registerServerWait` and clears the
+   * internal list. Consumed by `waitForResults()` during SSR.
+   * @internal
+   */
+  public consumeServerWaitPromises(): Array<Promise<unknown>> {
+    const promises = this._serverWaitPromises;
+    this._serverWaitPromises = [];
+    return promises;
   }
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {

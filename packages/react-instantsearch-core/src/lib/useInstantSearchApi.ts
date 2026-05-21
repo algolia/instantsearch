@@ -53,6 +53,18 @@ export type InternalInstantSearch<
    * @private
    */
   _preventWidgetCleanup?: boolean;
+  /**
+   * Registers a promise that `waitForResults()` must await before resolving
+   * during SSR. Stripped from public `.d.ts` so it's re-declared here.
+   * @private
+   */
+  registerServerWait(promise: Promise<unknown>): void;
+  /**
+   * Returns and clears the promises registered with `registerServerWait`.
+   * Stripped from public `.d.ts` so it's re-declared here.
+   * @private
+   */
+  consumeServerWaitPromises(): Array<Promise<unknown>>;
 };
 
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(

@@ -173,6 +173,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'chatPageSuggestions': {
+        const chatPageSuggestions = widget as Widgets['chatPageSuggestions'];
+        return chatPageSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          initialUserMessage: 'help',
+        });
+      }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({
