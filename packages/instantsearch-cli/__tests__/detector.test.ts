@@ -1,0 +1,109 @@
+import path from 'path';
+
+import { detect } from '../src/detector';
+
+const FIXTURES_ROOT = path.join(__dirname, 'fixtures', 'detector');
+
+function fixture(name: string): string {
+  return path.join(FIXTURES_ROOT, name);
+}
+
+describe('detect()', () => {
+  describe('successful detection', () => {
+    it('identifies a React + Vite project', () => {
+      const result = detect(fixture('react-vite'), { command: 'init' });
+
+      expect(result).toEqual({
+        ok: true,
+        flavor: 'react',
+        framework: 'vite',
+        typescript: false,
+        aliases: {},
+      });
+    });
+
+    it('identifies a Next.js App Router project', () => {
+      const result = detect(fixture('next-app'), { command: 'init' });
+
+      expect(result).toEqual({
+        ok: true,
+        flavor: 'next',
+        framework: 'next-app',
+        typescript: false,
+        aliases: {},
+      });
+    });
+
+    it('flips typescript: true when tsconfig.json exists', () => {
+      const result = detect(fixture('react-vite-ts'), { command: 'init' });
+
+      expect(result).toMatchObject({
+        ok: true,
+        typescript: true,
+      });
+    });
+
+    it('populates aliases from tsconfig compilerOptions.paths', () => {
+      const result = detect(fixture('react-vite-ts'), { command: 'init' });
+
+      expect(result).toMatchObject({
+        ok: true,
+        aliases: {
+          '@/*': ['./src/*'],
+          '@components/*': ['./src/components/*'],
+        },
+      });
+    });
+  });
+
+  describe('refusals', () => {
+    it('refuses Next.js Pages Router-only projects', () => {
+      const result = detect(fixture('next-pages'), { command: 'init' });
+
+      expect(result).toEqual({
+        ok: false,
+        command: 'init',
+        apiVersion: 1,
+        code: 'unsupported_framework',
+        message: expect.any(String),
+      });
+    });
+
+    it('refuses Next.js projects with both app/ and pages/', () => {
+      const result = detect(fixture('next-ambiguous'), { command: 'init' });
+
+      expect(result).toEqual({
+        ok: false,
+        command: 'init',
+        apiVersion: 1,
+        code: 'ambiguous_framework',
+        message: expect.any(String),
+      });
+    });
+
+    it.each(['vanilla', 'vue'])(
+      'refuses %s projects with unsupported_flavor',
+      (name) => {
+        const result = detect(fixture(name), { command: 'init' });
+
+        expect(result).toEqual({
+          ok: false,
+          command: 'init',
+          apiVersion: 1,
+          code: 'unsupported_flavor',
+          message: expect.any(String),
+        });
+      }
+    );
+
+    it('threads the caller-supplied command name into the envelope', () => {
+      const result = detect(fixture('next-pages'), { command: 'add' });
+
+      expect(result).toMatchObject({
+        ok: false,
+        command: 'add',
+        code: 'unsupported_framework',
+      });
+    });
+  });
+});

@@ -1,0 +1,152 @@
+import fs from 'fs';
+import path from 'path';
+
+import { failureEnvelope } from './envelope';
+
+type Flavor = 'react' | 'next';
+type Framework = 'vite' | 'next-app';
+
+type RefusalCode =
+  | 'unsupported_flavor'
+  | 'unsupported_framework'
+  | 'ambiguous_framework';
+
+type DetectionSuccess = {
+  ok: true;
+  flavor: Flavor;
+  framework: Framework;
+  typescript: boolean;
+  aliases: Record<string, string[]>;
+};
+
+type DetectionFailure = ReturnType<typeof failureEnvelope>;
+
+export type DetectionResult = DetectionSuccess | DetectionFailure;
+
+function refuse(
+  command: string,
+  code: RefusalCode,
+  message: string
+): DetectionFailure {
+  return failureEnvelope(command, code, message);
+}
+
+type PackageJson = {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+};
+
+type TsConfig = {
+  compilerOptions?: {
+    paths?: Record<string, string[]>;
+  };
+};
+
+export function detect(
+  projectRoot: string,
+  options: { command: string }
+): DetectionResult {
+  const { command } = options;
+
+  const pkg = readJsonFile<PackageJson>(path.join(projectRoot, 'package.json'));
+  if (!pkg) {
+    return refuse(
+      command,
+      'unsupported_flavor',
+      'Could not read package.json at the project root.'
+    );
+  }
+
+  const deps: Record<string, string> = {
+    ...(pkg.dependencies ?? {}),
+    ...(pkg.devDependencies ?? {}),
+  };
+
+  const flavor = detectFlavor(deps);
+  if (!flavor) {
+    return refuse(
+      command,
+      'unsupported_flavor',
+      'Host framework is not supported yet. Only React and Next.js (App Router) are supported.'
+    );
+  }
+
+  const frameworkResult = detectFramework(projectRoot, flavor, deps, command);
+  if (!frameworkResult.ok) {
+    return frameworkResult;
+  }
+
+  const tsconfig = readJsonFile<TsConfig>(
+    path.join(projectRoot, 'tsconfig.json')
+  );
+
+  return {
+    ok: true,
+    flavor,
+    framework: frameworkResult.framework,
+    typescript: tsconfig !== null,
+    aliases: tsconfig?.compilerOptions?.paths ?? {},
+  };
+}
+
+function detectFlavor(deps: Record<string, string>): Flavor | null {
+  if ('next' in deps) return 'next';
+  if ('react' in deps) return 'react';
+  return null;
+}
+
+type FrameworkOk = { ok: true; framework: Framework };
+
+function detectFramework(
+  projectRoot: string,
+  flavor: Flavor,
+  deps: Record<string, string>,
+  command: string
+): FrameworkOk | DetectionFailure {
+  if (flavor === 'next') {
+    const hasAppDir = isDirectory(path.join(projectRoot, 'app'));
+    const hasPagesDir = isDirectory(path.join(projectRoot, 'pages'));
+
+    if (hasAppDir && hasPagesDir) {
+      return refuse(
+        command,
+        'ambiguous_framework',
+        'Next.js project contains both app/ and pages/ directories. Pass --framework to disambiguate.'
+      );
+    }
+    if (hasAppDir) {
+      return { ok: true, framework: 'next-app' };
+    }
+    return refuse(
+      command,
+      'unsupported_framework',
+      'Next.js Pages Router is not supported yet. Only the App Router (app/ directory) is supported.'
+    );
+  }
+
+  if ('vite' in deps) {
+    return { ok: true, framework: 'vite' };
+  }
+  return refuse(
+    command,
+    'unsupported_framework',
+    'Could not identify a supported React framework. InstantSearch CLI currently supports Vite-based React projects.'
+  );
+}
+
+function readJsonFile<T>(filePath: string): T | null {
+  try {
+    const contents = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(contents) as T;
+  } catch {
+    return null;
+  }
+}
+
+function isDirectory(dirPath: string): boolean {
+  try {
+    return fs.statSync(dirPath).isDirectory();
+  } catch {
+    return false;
+  }
+}
