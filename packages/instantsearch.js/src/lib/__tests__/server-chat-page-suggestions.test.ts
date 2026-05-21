@@ -223,18 +223,14 @@ describe('connectChatPageSuggestions — SSR race', () => {
       helper,
       state: helper.state,
       instantSearchInstance: search,
-      // @ts-ignore - test helper, IndexWidget shape
       parent: search.mainIndex,
       uiState: {},
       // eslint-disable-next-line no-undef-init
       results: undefined,
-      // @ts-ignore - test helper
       templatesConfig: search.templatesConfig,
-      // @ts-ignore - test helper
       renderState: {},
-      // @ts-ignore - test helper
       createURL: () => '',
-    });
+    } as unknown as Parameters<NonNullable<typeof widget.init>>[0]);
 
     // The transport must NOT be hit a second time — the in-flight request is
     // reused (idempotency flag on the chat instance).

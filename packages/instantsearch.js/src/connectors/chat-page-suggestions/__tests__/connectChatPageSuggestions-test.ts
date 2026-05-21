@@ -135,12 +135,10 @@ describe('connectChatPageSuggestions', () => {
   ) {
     const renderFn = jest.fn();
     const widget = connectChatPageSuggestions(renderFn)({
-      ...({
-        chat: chatInstance,
-      } as unknown as ChatPageSuggestionsConnectorParams<UIMessage>),
+      chat: chatInstance,
       initialUserMessage: baseInitialMessage,
       ...params,
-    });
+    } as unknown as ChatPageSuggestionsConnectorParams<UIMessage>);
     const helper = algoliasearchHelper(createSearchClient(), '');
     const initOptions = createInitOptions({ helper });
     widget.init(initOptions);
@@ -292,7 +290,7 @@ describe('connectChatPageSuggestions', () => {
             status: 'ready',
           },
         },
-      } as InstantSearch['renderState'];
+      } as unknown as InstantSearch['renderState'];
 
       const { widget, initOptions } = initWidget({}, { instantSearchInstance });
       const renderState = widget.getWidgetRenderState(initOptions);
@@ -329,7 +327,7 @@ describe('connectChatPageSuggestions', () => {
             status: 'streaming',
           },
         },
-      } as InstantSearch['renderState'];
+      } as unknown as InstantSearch['renderState'];
 
       const { widget, initOptions } = initWidget({}, { instantSearchInstance });
       const renderState = widget.getWidgetRenderState(initOptions);
@@ -433,9 +431,9 @@ describe('connectChatPageSuggestions', () => {
         widget.chatInstance as unknown as { _state: { status: string } }
       )._state.status = 'streaming';
 
-      widget.dispose!({
+      (widget.dispose as unknown as (opts?: unknown) => void)({
         helper: algoliasearchHelper(createSearchClient(), ''),
-      } as Parameters<NonNullable<typeof widget.dispose>>[0]);
+      });
 
       expect(stopSpy).toHaveBeenCalled();
     });

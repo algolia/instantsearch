@@ -242,7 +242,7 @@ class InstantSearch<
    * SSR passes start fresh.
    * @internal
    */
-  private _serverWaitPromises: Array<Promise<unknown>> = [];
+  public _serverWaitPromises: Array<Promise<unknown>> = [];
   public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
