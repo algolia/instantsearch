@@ -71,6 +71,11 @@ select[class^='ais-']:focus-visible {
   font-size: 0.75em;
 }
 
+select[class^='ais-'] {
+  appearance: none;
+  background: none;
+}
+
 // Custom select (MenuSelect, HitsPerPage, SortBy)
 .ais-MenuSelect,
 .ais-HitsPerPage,

@@ -1,0 +1,143 @@
+@use '../../shared/_variables';
+
+.ais-ChatMessage-message {
+  .ais-ChatToolSearchIndexCarouselHeader,
+  .ais-ChatToolDisplayResultsCarouselHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: calc(var(--ais-spacing) * 0.5);
+  }
+
+  .ais-ChatToolSearchIndexCarouselHeaderResults {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--ais-spacing) * 0.5);
+  }
+
+  .ais-ChatToolSearchIndexCarouselHeaderCount,
+  .ais-ChatToolDisplayResultsCarouselHeaderCount {
+    color: rgba(var(--ais-text-color-rgb), 0.8);
+    font-weight: var(--ais-font-weight-semibold);
+  }
+
+  .ais-ChatToolSearchIndexCarouselHeaderViewAll {
+    svg {
+      width: calc(var(--ais-icon-size) * 0.8);
+    }
+  }
+
+  .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
+  .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--ais-spacing) * 0.25);
+
+    svg {
+      width: calc(var(--ais-icon-size) * 0.8);
+    }
+  }
+
+  .ais-ChatToolDisplayResults {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ais-spacing);
+  }
+
+  .ais-ChatToolDisplayResults-intro {
+    color: rgba(
+      var(--ais-text-color-rgb),
+      var(--ais-text-color-alpha)
+    );
+    line-height: 1.5;
+  }
+
+  .ais-ChatToolDisplayResults-group {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--ais-spacing) * 0.5);
+  }
+
+  .ais-ChatToolDisplayResults-groupTitle {
+    font-size: calc(var(--ais-spacing) * 1.05);
+    font-weight: var(--ais-font-weight-semibold);
+    color: rgba(
+      var(--ais-text-color-rgb),
+      var(--ais-text-color-alpha)
+    );
+    margin: 0;
+  }
+
+  .ais-ChatToolDisplayResults-groupWhy {
+    color: rgba(var(--ais-text-color-rgb), 0.7);
+    font-size: calc(var(--ais-spacing) * 0.85);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ais-ChatToolDisplayResults-streaming {
+    color: rgba(var(--ais-text-color-rgb), 0.6);
+    font-size: calc(var(--ais-spacing) * 0.85);
+    font-style: italic;
+  }
+
+  // Chat-only carousel overrides on top of `components/_carousel.scss`
+  .ais-Carousel {
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: var(--ais-spacing);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &::before {
+      left: calc(-1 * var(--ais-spacing));
+      background: linear-gradient(
+        to right,
+        rgba(
+          var(--ais-background-color-rgb),
+          var(--ais-background-color-alpha)
+        ),
+        transparent
+      );
+    }
+
+    &::after {
+      right: calc(-1 * var(--ais-spacing));
+      background: linear-gradient(
+        to left,
+        rgba(
+          var(--ais-background-color-rgb),
+          var(--ais-background-color-alpha)
+        ),
+        transparent
+      );
+    }
+  }
+
+  .ais-Carousel-list {
+    margin-left: calc(-1 * var(--ais-spacing));
+    margin-right: calc(-1 * var(--ais-spacing));
+    padding-left: calc(var(--ais-spacing) * 0.5);
+    padding-right: calc(var(--ais-spacing) * 0.5);
+    scroll-padding-left: calc(var(--ais-spacing) * 0.5);
+    scroll-padding-right: calc(var(--ais-spacing) * 0.5);
+
+    &:has(.ais-Carousel-item:only-child) {
+      grid-auto-columns: calc(
+        var(--ais-carousel-item-width) * 1.5
+      ) !important;
+    }
+  }
+
+  @media (max-width: variables.$ais-chat-breakpoint) {
+    .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
+    .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
+      display: none;
+    }
+  }
+}

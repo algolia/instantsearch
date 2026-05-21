@@ -24,6 +24,7 @@ const NON_WIDGETS = [
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
+  'DisplayResultsToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
@@ -35,6 +36,7 @@ const NON_COMPONENTS = [
   'MemorizeToolType',
   'MemorySearchToolType',
   'PonderToolType',
+  'DisplayResultsToolType',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 

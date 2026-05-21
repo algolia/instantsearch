@@ -1,6 +1,8 @@
 import {
+  createCompositionClient,
   createControlledSearchClient,
   createSearchClient,
+  createSingleSearchResponse,
 } from '@instantsearch/mocks';
 
 import {
@@ -471,5 +473,55 @@ describe('getInitialResults', () => {
 
     expect(indexRequestParams.userToken).toEqual(requestParams[0].userToken);
     expect(indexState.userToken).toEqual(indexRequestParams.userToken);
+  });
+
+  test('includes compositionFeedsResults for multifeed composition results', async () => {
+    const compositionID = 'my-comp';
+    const searchClient = createCompositionClient({
+      search: jest.fn(() =>
+        Promise.resolve({
+          results: [
+            createSingleSearchResponse({
+              feedID: 'products',
+              hits: [{ objectID: 'p1' }],
+            } as any),
+            createSingleSearchResponse({
+              feedID: 'articles',
+              hits: [{ objectID: 'a1' }],
+            } as any),
+          ],
+        })
+      ),
+    });
+
+    const search = instantsearch({
+      compositionID,
+      searchClient,
+    }).addWidgets([connectSearchBox(() => {})({})]);
+
+    search.start();
+
+    await waitForResults(search);
+
+    const initial = getInitialResults(search.mainIndex);
+    const entry = initial[compositionID];
+
+    expect(entry?.results).toHaveLength(1);
+    expect(entry?.compositionFeedsResults).toEqual([
+      expect.objectContaining({
+        feedID: 'products',
+        hits: [expect.objectContaining({ objectID: 'p1' })],
+      }),
+      expect.objectContaining({
+        feedID: 'articles',
+        hits: [expect.objectContaining({ objectID: 'a1' })],
+      }),
+    ]);
+
+    const roundTrip = JSON.parse(JSON.stringify(initial)) as typeof initial;
+    expect(roundTrip[compositionID]?.compositionFeedsResults).toHaveLength(2);
+    expect(roundTrip[compositionID]?.results?.[0]).toMatchObject({
+      feedID: 'products',
+    });
   });
 });

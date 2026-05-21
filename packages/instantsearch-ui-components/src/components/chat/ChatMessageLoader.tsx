@@ -24,7 +24,7 @@ export function createChatMessageLoaderComponent({
   return function ChatMessageLoader(userProps: ChatMessageLoaderProps) {
     const { translations: userTranslations, ...props } = userProps;
     const translations: Required<ChatMessageLoaderTranslations> = {
-      loaderText: 'Thinking...',
+      loaderText: '',
       ...userTranslations,
     };
 
