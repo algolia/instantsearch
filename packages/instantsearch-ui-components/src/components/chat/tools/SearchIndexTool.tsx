@@ -26,7 +26,7 @@ type HeaderProps = {
   scrollRight: () => void;
   nbHits?: number;
   input?: SearchToolInput;
-  hitsPerPage?: number;
+  nbItems: number;
   applyFilters: ClientSideToolComponentProps['applyFilters'];
   getSearchPageURL?: (params: SearchParameters) => string;
   onClose: () => void;
@@ -56,12 +56,12 @@ function createHeaderComponent({ createElement }: Renderer) {
     scrollRight,
     nbHits,
     input,
-    hitsPerPage,
+    nbItems,
     applyFilters,
     getSearchPageURL,
     onClose,
   }: HeaderProps) {
-    if ((hitsPerPage ?? 0) < 1) {
+    if (nbItems < 1) {
       return null;
     }
 
@@ -70,7 +70,7 @@ function createHeaderComponent({ createElement }: Renderer) {
         <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
           {nbHits && (
             <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
+              {nbItems} of {nbHits.toLocaleString()} result
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
@@ -104,7 +104,7 @@ function createHeaderComponent({ createElement }: Renderer) {
           )}
         </div>
 
-        {(hitsPerPage ?? 0) > 2 && (
+        {nbItems > 2 && (
           <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
             <Button
               variant="outline"
@@ -167,13 +167,12 @@ export function createSearchIndexToolComponent<
         }
       | undefined;
 
-    const hitsPerPage =
-      (input?.number_of_results ?? output?.hits?.length) || 5;
     const items = (output?.hits || []).map((hit, idx) => ({
       ...hit,
       __position: idx + 1,
       ...(output?.queryID ? { __queryID: output.queryID } : {}),
     }));
+    const nbItems = items.length;
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -206,7 +205,7 @@ export function createSearchIndexToolComponent<
             showViewAll={showViewAll}
             nbHits={output?.nbHits}
             input={input}
-            hitsPerPage={hitsPerPage}
+            nbItems={nbItems}
             applyFilters={applyFilters}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
@@ -220,7 +219,7 @@ export function createSearchIndexToolComponent<
           showViewAll={showViewAll}
           nbHits={output?.nbHits}
           input={input}
-          hitsPerPage={hitsPerPage}
+          nbItems={nbItems}
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
@@ -232,7 +231,7 @@ export function createSearchIndexToolComponent<
       HeaderComponent,
       output?.nbHits,
       input,
-      hitsPerPage,
+      nbItems,
       applyFilters,
       getSearchPageURL,
       onClose,
