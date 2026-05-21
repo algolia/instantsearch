@@ -20,9 +20,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import { createCarouselTool } from './search-index-tool';
-
 import { createDisplayResultsTool } from './display-results-tool';
+import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type {
