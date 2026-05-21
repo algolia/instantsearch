@@ -102,6 +102,12 @@
     }
   }
 
+  .ais-AiModeButton {
+    align-self: center;
+    margin-right: calc(var(--ais-spacing) * 0.25);
+    order: 4;
+  }
+
   .ais-SearchBox-reset {
     align-items: center;
     background: none;

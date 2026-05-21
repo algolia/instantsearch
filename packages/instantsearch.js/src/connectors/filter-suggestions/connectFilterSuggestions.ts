@@ -5,6 +5,7 @@ import {
   getAppIdAndApiKey,
   getRefinements,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -125,11 +126,19 @@ export type FilterSuggestionsConnector = Connector<
   FilterSuggestionsConnectorParams
 >;
 
+/**
+ * @deprecated Filter suggestions are deprecated and will be removed in a future major version.
+ */
 const connectFilterSuggestions: FilterSuggestionsConnector =
   function connectFilterSuggestions(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
+      warning(
+        false,
+        'Filter suggestions are deprecated and will be removed in a future major version.'
+      );
+
       const {
         agentId,
         attributes,

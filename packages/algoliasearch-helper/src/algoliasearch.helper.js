@@ -1695,7 +1695,6 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
 
     states.push({
       state: derivedState,
-      queriesCount: derivedStateQueries.length,
       helper: derivedHelper,
     });
 
@@ -1874,7 +1873,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
     var state = s.state;
     var queriesCount = s.queriesCount;
     var helper = s.helper;
-    var specificResults = results.splice(0, queriesCount);
+    var specificResults = queriesCount !== undefined
+      ? results.splice(0, queriesCount)
+      : results;
 
     if (!state.index) {
       helper.emit('result', {
@@ -1884,12 +1885,28 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       return;
     }
 
-    helper.lastResults = new SearchResults(
-      state,
-      specificResults,
-      self._searchResultsOptions
-    );
-    if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+    // Multifeed composition: build ordered SearchResults array on lastResults
+    if (specificResults.length > 0 && specificResults[0].feedID) {
+      var feeds = specificResults.map(function (r) {
+        var sr = new SearchResults(state, [r], self._searchResultsOptions);
+        if (rawContent !== undefined) sr._rawContent = rawContent;
+        return sr;
+      });
+      helper.lastResults = new SearchResults(
+        state,
+        [specificResults[0]],
+        self._searchResultsOptions
+      );
+      helper.lastResults.feeds = feeds;
+      if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+    } else {
+      helper.lastResults = new SearchResults(
+        state,
+        specificResults,
+        self._searchResultsOptions
+      );
+      if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
+    }
 
     helper.emit('result', {
       results: helper.lastResults,

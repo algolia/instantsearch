@@ -1,8 +1,9 @@
-import { Search, MapPin } from "lucide-preact";
+import { MapPin, Search, Sparkles } from "lucide-preact";
 import { useState } from "preact/hooks";
 
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
 import { FlavorContext, type Flavor } from "./context/flavor";
+import { AgenticView } from "./views/AgenticView";
 import { GeoSearchView } from "./views/GeoSearchView";
 import { InstantSearchView } from "./views/InstantSearchView";
 
@@ -34,6 +35,12 @@ const experiences: Experience[] = [
     view: InstantSearchView,
   },
   {
+    title: "Agentic",
+    description: "AI-powered search and chat",
+    icon: Sparkles,
+    view: AgenticView,
+  },
+  {
     title: "GeoSearch",
     description: "Search through locations",
     icon: MapPin,
@@ -48,8 +55,8 @@ export function App() {
   return (
     <FlavorContext.Provider value={flavor}>
       <div class="p-4">
-        <div class="mb-6 flex items-start justify-between gap-3">
-          <div class="grid auto-cols-[minmax(140px,1fr)] grid-flow-col gap-3">
+        <div class="@container mb-6 flex flex-wrap items-start justify-between gap-3">
+          <div class="grid min-w-0 flex-1 grid-cols-1 gap-3 @xl:flex-none @xl:auto-cols-fr @xl:grid-cols-none @xl:grid-flow-col">
             {experiences.map((experience, index) => (
               <button
                 key={index}
@@ -95,11 +102,9 @@ export function App() {
           <ColorModeSwitcher />
         </div>
 
-        {experiences.map((experience, index) => (
-          <div key={index} class={currentIndex !== index ? "hidden" : ""}>
-            <experience.view />
-          </div>
-        ))}
+        {experiences.map((experience, index) =>
+          currentIndex === index ? <experience.view key={index} /> : null
+        )}
       </div>
     </FlavorContext.Provider>
   );

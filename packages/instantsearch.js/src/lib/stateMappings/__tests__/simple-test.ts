@@ -120,6 +120,23 @@ describe('simpleStateMapping', () => {
       });
     });
 
+    it('ignores non-object top-level params (e.g. UTM params)', () => {
+      const stateMapping = simpleStateMapping();
+      const actual = stateMapping.routeToState({
+        // @ts-expect-error simulating qs.parse() output with flat string params
+        utm_medium: 'test',
+        indexName: {
+          query: 'zamboni',
+        },
+      });
+
+      expect(actual).toEqual({
+        indexName: {
+          query: 'zamboni',
+        },
+      });
+    });
+
     it('passes non-UiState through', () => {
       const stateMapping = simpleStateMapping<{
         [indexId in string]: UiState[indexId] & { spy: string[] };

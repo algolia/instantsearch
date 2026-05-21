@@ -200,12 +200,17 @@ search.addWidgets([
     expect(secondRenderOptions.indices).toHaveLength(2);
     expect(secondRenderOptions.indices[0].indexId).toEqual('indexId0');
     expect(secondRenderOptions.indices[0].indexName).toEqual('indexName0');
-    expect(secondRenderOptions.indices[0].hits).toEqual(firstIndexHits);
+    expect(secondRenderOptions.indices[0].hits).toEqual([
+      { ...firstIndexHits[0], __position: 1 },
+    ]);
     expect(secondRenderOptions.indices[0].results.index).toEqual('indexName0');
     expect(secondRenderOptions.indices[0].results.hits).toEqual(firstIndexHits);
     expect(secondRenderOptions.indices[1].indexId).toEqual('indexId1');
     expect(secondRenderOptions.indices[1].indexName).toEqual('indexName1');
-    expect(secondRenderOptions.indices[1].hits).toEqual(secondIndexHits);
+    expect(secondRenderOptions.indices[1].hits).toEqual([
+      { ...secondIndexHits[0], __position: 1 },
+      { ...secondIndexHits[1], __position: 2 },
+    ]);
     expect(secondRenderOptions.indices[1].results.index).toEqual('indexName1');
     expect(secondRenderOptions.indices[1].results.hits).toEqual(
       secondIndexHits
@@ -268,6 +273,20 @@ search.addWidgets([
       { __escaped: true }
     );
 
+    const enrichedEscapedHits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            matchLevel: 'full',
+            matchedWords: ['foobar'],
+          },
+        },
+        objectID: '1',
+        __position: 1,
+      },
+    ];
+
     widget.init!(createInitOptions({ helper }));
 
     widget.render!(
@@ -290,7 +309,7 @@ search.addWidgets([
 
     const rendering = render.mock.calls[1][0];
 
-    expect(rendering.indices[0].hits).toEqual(escapedHits);
+    expect(rendering.indices[0].hits).toEqual(enrichedEscapedHits);
     expect(rendering.indices[0].results.hits).toEqual(escapedHits);
   });
 
@@ -337,7 +356,12 @@ search.addWidgets([
 
     const rendering = render.mock.calls[1][0];
 
-    expect(rendering.indices[0].hits).toEqual(hits);
+    expect(rendering.indices[0].hits).toEqual(
+      hits.map((hit, index) => ({
+        ...hit,
+        __position: index + 1,
+      }))
+    );
     expect(rendering.indices[0].results.hits).toEqual(hits);
   });
 
@@ -728,22 +752,16 @@ search.addWidgets([
         {
           name: 'Hit 1-1',
           objectID: '1-1',
-          __queryID: 'test-query-id',
-          __position: 0,
         },
       ];
       const secondIndexHits = [
         {
           name: 'Hit 2-1',
           objectID: '2-1',
-          __queryID: 'test-query-id',
-          __position: 0,
         },
         {
           name: 'Hit 2-2',
           objectID: '2-2',
-          __queryID: 'test-query-id',
-          __position: 1,
         },
       ];
 
@@ -754,6 +772,7 @@ search.addWidgets([
             createSingleSearchResponse({
               index: 'indexName0',
               hits: firstIndexHits,
+              queryID: 'test-query-id',
             }),
           ]),
           helper: algoliasearchHelper(searchClient, 'indexName0'),
@@ -764,6 +783,7 @@ search.addWidgets([
             createSingleSearchResponse({
               index: 'indexName1',
               hits: secondIndexHits,
+              queryID: 'test-query-id',
             }),
           ]),
           helper: algoliasearchHelper(searchClient, 'indexName1'),
@@ -794,7 +814,7 @@ search.addWidgets([
         eventModifier: 'internal',
         hits: [
           {
-            __position: 0,
+            __position: 1,
             __queryID: 'test-query-id',
             name: 'Hit 1-1',
             objectID: '1-1',
@@ -813,13 +833,13 @@ search.addWidgets([
         eventModifier: 'internal',
         hits: [
           {
-            __position: 0,
+            __position: 1,
             __queryID: 'test-query-id',
             name: 'Hit 2-1',
             objectID: '2-1',
           },
           {
-            __position: 1,
+            __position: 2,
             __queryID: 'test-query-id',
             name: 'Hit 2-2',
             objectID: '2-2',
@@ -894,18 +914,17 @@ search.addWidgets([
     });
 
     it('sends click event', () => {
-      const { sendEventToInsights, render, secondIndexHits } =
-        createRenderedWidget();
+      const { sendEventToInsights, render } = createRenderedWidget();
       expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
-      indices[1].sendEvent('click', secondIndexHits[0], 'Product Added');
+      indices[1].sendEvent('click', indices[1].hits[0], 'Product Added');
       expect(sendEventToInsights).toHaveBeenCalledTimes(3);
       expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'click',
         hits: [
           {
-            __position: 0,
+            __position: 1,
             __queryID: 'test-query-id',
             name: 'Hit 2-1',
             objectID: '2-1',
@@ -916,7 +935,7 @@ search.addWidgets([
           eventName: 'Product Added',
           index: 'indexName1',
           objectIDs: ['2-1'],
-          positions: [0],
+          positions: [1],
           queryID: 'test-query-id',
         },
         widgetType: 'ais.autocomplete',
@@ -924,18 +943,17 @@ search.addWidgets([
     });
 
     it('sends conversion event', () => {
-      const { sendEventToInsights, render, firstIndexHits } =
-        createRenderedWidget();
+      const { sendEventToInsights, render } = createRenderedWidget();
       expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
-      indices[0].sendEvent('conversion', firstIndexHits[0], 'Product Ordered');
+      indices[0].sendEvent('conversion', indices[0].hits[0], 'Product Ordered');
       expect(sendEventToInsights).toHaveBeenCalledTimes(3);
       expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'conversion',
         hits: [
           {
-            __position: 0,
+            __position: 1,
             __queryID: 'test-query-id',
             name: 'Hit 1-1',
             objectID: '1-1',

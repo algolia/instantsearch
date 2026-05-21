@@ -4,7 +4,7 @@ module.exports = {
   extends: ['algolia', 'algolia/react'],
   settings: {
     react: {
-      pragma: 'React',
+      pragma: 'h',
       version: 'preact',
     },
   },
