@@ -1202,26 +1202,6 @@ data: [DONE]`,
       });
     });
 
-    it('awaits an async context resolver before sending', async () => {
-      const chatInstance = createTestChat();
-      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
-
-      const { widget, renderFn } = createChatWidgetWithContext({
-        chat: chatInstance,
-        context: () => Promise.resolve({ url: 'https://example.com/a' }),
-      });
-
-      const helper = algoliasearchHelper(createSearchClient(), '');
-      widget.init(createInitOptions({ helper, state: helper.state }));
-
-      const { sendMessage } = renderFn.mock.calls[0][0];
-      await sendMessage({ text: 'hi' });
-
-      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
-        turnContext: { url: 'https://example.com/a' },
-      });
-    });
-
     it('preserves caller-supplied metadata and namespaces turnContext under it', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
@@ -1337,7 +1317,7 @@ data: [DONE]`,
       });
     });
 
-    it('propagates errors from a throwing context resolver', async () => {
+    it('propagates errors from a throwing context resolver', () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1355,7 +1335,7 @@ data: [DONE]`,
 
       // A throwing `context` is a developer bug — surface it loudly instead
       // of silently sending the message without context.
-      await expect(sendMessage({ text: 'Hello' })).rejects.toThrow('boom');
+      expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
       expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });

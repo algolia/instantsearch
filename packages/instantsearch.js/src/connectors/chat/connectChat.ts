@@ -166,12 +166,11 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * rendered as a chat bubble and never persisted on assistant turns.
    *
    * The server validates the payload (flat `Record<string, string>`, key/value
-   * length and shape) and rejects malformed contexts. Pass a function (sync or
-   * async) when the values change per-turn — it is invoked once per send.
+   * length and shape) and rejects malformed contexts. Pass a function when the
+   * values change per-turn — it is invoked once per send. If the source is
+   * async, resolve it upstream and close over the value.
    */
-  context?:
-    | Record<string, string>
-    | (() => Record<string, string> | Promise<Record<string, string>>);
+  context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -693,23 +692,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           // Resolve once per send; let the server validate the payload and
-          // surface any contract violations. Wrapping in `Promise.resolve()`
-          // normalises sync throws from `context()` into rejections so callers
-          // can `await sendMessage(...).catch(...)` uniformly.
-          return Promise.resolve()
-            .then(() => (typeof context === 'function' ? context() : context))
-            .then((turnContext) =>
-              _chatInstance.sendMessage(
-                {
-                  ...message,
-                  metadata: {
-                    ...(message.metadata as Record<string, unknown> | undefined),
-                    turnContext,
-                  },
-                } as Parameters<typeof _chatInstance.sendMessage>[0],
-                ...rest
-              )
-            );
+          // surface any contract violations.
+          const turnContext =
+            typeof context === 'function' ? context() : context;
+
+          return _chatInstance.sendMessage(
+            {
+              ...message,
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                turnContext,
+              },
+            } as Parameters<typeof _chatInstance.sendMessage>[0],
+            ...rest
+          );
         };
 
         return {
