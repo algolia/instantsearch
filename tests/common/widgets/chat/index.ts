@@ -40,6 +40,7 @@ export function createChatWidgetTests(
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
+    sessionStorage.clear();
   });
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {

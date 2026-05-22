@@ -1150,7 +1150,7 @@ data: [DONE]`,
       return { widget, renderFn };
     }
 
-    it('prepends context text part when context is a static object', async () => {
+    it('attaches turnContext to metadata when context is a static object', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1167,13 +1167,12 @@ data: [DONE]`,
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
-        },
-        { type: 'text', text: 'Hello' },
-      ]);
+      expect(call.text).toBe('Hello');
+      expect(call.metadata).toEqual({
+        turnContext: { currentPage: '/products', locale: 'en-US' },
+      });
+      // The legacy `<context>{...}</context>` text part must not be present.
+      expect(call.parts).toBeUndefined();
     });
 
     it('evaluates context function at send time', async () => {
@@ -1192,23 +1191,39 @@ data: [DONE]`,
       const { sendMessage } = renderFn.mock.calls[0][0];
 
       await sendMessage({ text: 'first' });
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-1"}</context>',
-        },
-        { type: 'text', text: 'first' },
-      ]);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-1' },
+      });
 
       pageUrl = '/page-2';
       await sendMessage({ text: 'second' });
-      expect((sendMessageSpy.mock.calls[1][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-2"}</context>',
-        },
-        { type: 'text', text: 'second' },
-      ]);
+      expect((sendMessageSpy.mock.calls[1][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-2' },
+      });
+    });
+
+    it('preserves caller-supplied metadata and namespaces turnContext under it', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/about' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'hi',
+        metadata: { custom: 'value' } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        custom: 'value',
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through without modification when no context is set', async () => {
@@ -1228,7 +1243,7 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
 
-    it('prepends context when called with parts', async () => {
+    it('attaches turnContext to metadata when called with parts', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1245,13 +1260,11 @@ data: [DONE]`,
         parts: [{ type: 'text', text: 'Hi from parts' }],
       });
 
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"page":"/about"}</context>',
-        },
-        { type: 'text', text: 'Hi from parts' },
-      ]);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([{ type: 'text', text: 'Hi from parts' }]);
+      expect(call.metadata).toEqual({
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through when called with no message', async () => {
@@ -1272,16 +1285,47 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
 
-    it('sends message without context when context is not serializable', async () => {
+    it('forwards values verbatim and leaves payload validation to the server', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
-      const circular: Record<string, unknown> = {};
-      circular.self = circular;
+      const longValue = 'x'.repeat(1025);
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        // Intentionally non-conforming entries: backend (HTTP 422) owns
+        // validation; the client must not silently mutate this payload.
+        context: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        } as Record<string, string>,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'hi' });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        },
+      });
+    });
+
+    it('propagates errors from a throwing context resolver', () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
       const { widget, renderFn } = createChatWidgetWithContext({
         chat: chatInstance,
-        context: circular,
+        context: () => {
+          throw new Error('boom');
+        },
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -1289,12 +1333,10 @@ data: [DONE]`,
 
       const { sendMessage } = renderFn.mock.calls[0][0];
 
-      expect(() => sendMessage({ text: 'Hello' })).toWarnDev(
-        '[InstantSearch.js]: Could not serialize chat context. The message will be sent without context.'
-      );
-
-      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+      // A throwing `context` is a developer bug — surface it loudly instead
+      // of silently sending the message without context.
+      expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
+      expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });
 });

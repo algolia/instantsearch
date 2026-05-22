@@ -160,12 +160,17 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    */
   type?: string;
   /**
-   * Additional context to send with each user message (e.g. current page info).
-   * This context is included in the message parts sent to the API but is not
-   * displayed in the chat UI.
-   * Can be a static object or a function that returns the context at send time.
+   * Ambient session facts to attach to the latest user turn (e.g. current page
+   * URL, locale, product id). Sent over the wire as
+   * `messages[last].metadata.turnContext` per the Agent Studio contract — never
+   * rendered as a chat bubble and never persisted on assistant turns.
+   *
+   * The server validates the payload (flat `Record<string, string>`, key/value
+   * length and shape) and rejects malformed contexts. Pass a function when the
+   * values change per-turn — it is invoked once per send. If the source is
+   * async, resolve it upstream and close over the value.
    */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -686,47 +691,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          const resolvedContext =
+          // Resolve once per send; let the server validate the payload and
+          // surface any contract violations.
+          const turnContext =
             typeof context === 'function' ? context() : context;
 
-          let serializedContext: string;
-          try {
-            serializedContext = JSON.stringify(resolvedContext);
-          } catch {
-            warning(
-              false,
-              'Could not serialize chat context. The message will be sent without context.'
-            );
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const contextTextPart = {
-            type: 'text' as const,
-            text: '<context>'.concat(serializedContext).concat('</context>'),
-          };
-
-          if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
+          return _chatInstance.sendMessage(
+            {
               ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
-          }
-
-          const textContent =
-            'text' in message && message.text ? message.text : '';
-
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                turnContext,
+              },
+            } as Parameters<typeof _chatInstance.sendMessage>[0],
+            ...rest
+          );
         };
 
         return {
