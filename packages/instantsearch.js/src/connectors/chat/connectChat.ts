@@ -1,7 +1,4 @@
-import {
-  DefaultChatTransport,
-  lastAssistantMessageIsCompleteWithToolCalls,
-} from '../../lib/ai-lite';
+import { lastAssistantMessageIsCompleteWithToolCalls } from '../../lib/ai-lite';
 import { Chat, SearchIndexToolType } from '../../lib/chat';
 import { createAgentTransport } from '../../lib/chat/createAgentTransport';
 import { createSendMessageWithContext } from '../../lib/chat/sendMessageWithContext';
@@ -19,6 +16,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
+import type { DefaultChatTransport } from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,

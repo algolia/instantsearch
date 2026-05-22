@@ -21,9 +21,13 @@ import type {
 } from 'react-instantsearch-core';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
+const InstantSearchInitialChatStates = Symbol.for(
+  'InstantSearchInitialChatStates'
+);
 declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
+    [InstantSearchInitialChatStates]?: Record<string, unknown[]>;
   }
 }
 
@@ -106,6 +110,9 @@ function ServerOrHydrationProvider({
   const initialResults = safelyRunOnBrowser(
     () => window[InstantSearchInitialResults]
   );
+  const initialChatStates = safelyRunOnBrowser(
+    () => window[InstantSearchInitialChatStates]
+  );
 
   return (
     <InstantSearchRSCContext.Provider
@@ -118,6 +125,7 @@ function ServerOrHydrationProvider({
       <InstantSearchSSRContext.Provider
         value={{
           initialResults,
+          initialChatStates,
           ssrSearchRef: isServer ? undefined : instance,
         }}
       >

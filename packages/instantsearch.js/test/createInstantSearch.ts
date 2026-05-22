@@ -45,6 +45,7 @@ export const createInstantSearch = (
     _searchStalledTimer: null,
     _initialUiState: {},
     _initialResults: null,
+    _initialChatStates: null,
     _createURL: jest.fn(() => '#'),
     _insights: undefined,
     _hasRecommendWidget: false,

@@ -131,14 +131,8 @@ function PageSuggestions() {
     refinements: uiState.instant_search?.refinementList || {},
   };
 
-  const stableContextRef = useRef(() => ({
-    query: latestRef.current.query,
-    refinements: latestRef.current.refinements,
-  }));
-
-  const stablePromptRef = useRef(
-    'In one short sentence, suggest a popular product category to explore.'
-  );
+  const stableContextRef = useRef(() => ({}));
+  const stablePromptRef = useRef('give me some tvs');
 
   return (
     <div
@@ -157,6 +151,14 @@ function PageSuggestions() {
         initialUserMessage={stablePromptRef.current}
         context={stableContextRef.current}
         ctaLabel="Continue in chat"
+        itemComponent={({ item }) => (
+          <article className="ais-Carousel-hit">
+            <div className="ais-Carousel-hit-image">
+              <img src={(item as any).image} alt={(item as any).name} />
+            </div>
+            <h2 className="ais-Carousel-hit-title">{(item as any).name}</h2>
+          </article>
+        )}
       />
     </div>
   );

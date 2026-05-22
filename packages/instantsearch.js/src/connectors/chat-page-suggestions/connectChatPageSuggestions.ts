@@ -1,4 +1,3 @@
-import { DefaultChatTransport } from '../../lib/ai-lite';
 import { Chat, isChatBusy, openChat } from '../../lib/chat';
 import { createAgentTransport } from '../../lib/chat/createAgentTransport';
 import { createSendMessageWithContext } from '../../lib/chat/sendMessageWithContext';
@@ -6,20 +5,18 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
+  safelyRunOnBrowser,
   warning,
 } from '../../lib/utils';
 
-import type {
-  ChatRenderState,
-  ChatTransport as ChatTransportOption,
-} from '../chat/connectChat';
-import type { ChatContext } from '../../lib/chat/sendMessageWithContext';
+import type { DefaultChatTransport } from '../../lib/ai-lite';
 import type { ChatStatus } from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
   UIMessage,
 } from '../../lib/chat';
+import type { ChatContext } from '../../lib/chat/sendMessageWithContext';
 import type {
   Connector,
   IndexRenderState,
@@ -29,6 +26,10 @@ import type {
   UnknownWidgetParams,
   WidgetRenderState,
 } from '../../types';
+import type {
+  ChatRenderState,
+  ChatTransport as ChatTransportOption,
+} from '../chat/connectChat';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat-page-suggestions',
@@ -136,10 +137,71 @@ export type ChatPageSuggestionsConnector<
 type ChatInstanceWithServerWait<TUiMessage extends UIMessage> =
   Chat<TUiMessage> & {
     __chatPageSuggestionsServerWait?: Promise<void>;
+    __chatPageSuggestionsRequested?: boolean;
   };
 
+type InstantSearchWithChatStates = InstantSearch & {
+  _initialChatStates: Record<string, unknown[]> | null;
+};
+
 function isServerRendering(): boolean {
-  return typeof window === 'undefined';
+  return safelyRunOnBrowser(() => false, { fallback: () => true });
+}
+
+// Stash chat instances per (InstantSearch, id) so that connector closures
+// recreated by React (e.g. when `useStableValue` invalidates `useMemo` due to
+// an inline function prop) share the same underlying `Chat`. Without this,
+// each new closure constructs a fresh `Chat` whose idempotency flag is
+// unset, and the initial agent request fires once per closure recreation.
+// WeakMap on the InstantSearch instance means entries are reclaimed when the
+// search instance itself is GC'd; no explicit cleanup is required.
+const chatInstanceRegistry = new WeakMap<
+  InstantSearch,
+  Map<string, Chat<UIMessage>>
+>();
+
+// Client-only secondary registry keyed by chat id alone. Next.js App Router
+// can produce multiple `<InstantSearch>` instances during hydration (one
+// during the initial render, another after some upstream context settles).
+// Each instance gets its own `WeakMap` entry above, so without this fallback
+// each one would construct a fresh `Chat` and fire its own initial request.
+//
+// Scoped to the client bundle by the `typeof window` check so that concurrent
+// SSR requests in a Node process never share Chat state across users.
+const clientGlobalChatRegistry: Map<string, Chat<UIMessage>> | null =
+  safelyRunOnBrowser(() => new Map<string, Chat<UIMessage>>(), {
+    fallback: () => null,
+  });
+
+function getOrCreateChatInstance<TUiMessage extends UIMessage>(
+  instantSearchInstance: InstantSearch,
+  id: string,
+  factory: () => Chat<TUiMessage>
+): Chat<TUiMessage> {
+  let perSearch = chatInstanceRegistry.get(instantSearchInstance);
+  if (!perSearch) {
+    perSearch = new Map();
+    chatInstanceRegistry.set(instantSearchInstance, perSearch);
+  }
+  const existing = perSearch.get(id) as Chat<TUiMessage> | undefined;
+  if (existing) {
+    return existing;
+  }
+  if (clientGlobalChatRegistry) {
+    const fromGlobal = clientGlobalChatRegistry.get(id) as
+      | Chat<TUiMessage>
+      | undefined;
+    if (fromGlobal) {
+      perSearch.set(id, fromGlobal as unknown as Chat<UIMessage>);
+      return fromGlobal;
+    }
+  }
+  const created = factory();
+  perSearch.set(id, created as unknown as Chat<UIMessage>);
+  if (clientGlobalChatRegistry) {
+    clientGlobalChatRegistry.set(id, created as unknown as Chat<UIMessage>);
+  }
+  return created;
 }
 
 function getLastAssistantMessage<TUiMessage extends UIMessage>(
@@ -190,6 +252,9 @@ export default (function connectChatPageSuggestions<
 
     let _chatInstance: ChatInstanceWithServerWait<TUiMessage>;
     let _sendMessageWithContext: typeof _chatInstance.sendMessage;
+    let unsubscribeError: (() => void) | undefined;
+    let unsubscribeMessages: (() => void) | undefined;
+    let unsubscribeStatus: (() => void) | undefined;
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       if ('chat' in options && options.chat) {
@@ -223,15 +288,33 @@ export default (function connectChatPageSuggestions<
       // would be restored on hydration and prevent the fresh request from
       // firing (the existing user message makes `shouldSendInitialRequest`
       // false).
-      return new Chat<TUiMessage>({
-        ...chatInit,
-        id: chatInit.id ?? `instantsearch-${type}`,
-        transport,
-        persist: false,
-      });
+      const resolvedId = chatInit.id ?? `instantsearch-${type}`;
+      return getOrCreateChatInstance<TUiMessage>(
+        instantSearchInstance,
+        resolvedId,
+        () =>
+          new Chat<TUiMessage>({
+            ...chatInit,
+            id: resolvedId,
+            transport,
+            persist: false,
+          })
+      );
     };
 
     const runRequest = () => {
+      // Defensive idempotency at the call site. The `init()` guard alone is
+      // not enough: when React recreates the connector closure (e.g. unstable
+      // function props invalidating `useStableValue`), each new closure's
+      // `init()` runs with `isFirstInit = true` and *can* race the
+      // flag-on-instance check before the shared `Chat`'s flag has settled.
+      // Anchoring the guard here — directly around the only `sendMessage`
+      // call site — ensures one logical agent request per chat session
+      // regardless of how many init() calls fire.
+      if (_chatInstance.__chatPageSuggestionsRequested) {
+        return;
+      }
+      _chatInstance.__chatPageSuggestionsRequested = true;
       _sendMessageWithContext({ text: initialUserMessage } as Parameters<
         AbstractChat<TUiMessage>['sendMessage']
       >[0]);
@@ -244,6 +327,8 @@ export default (function connectChatPageSuggestions<
       }
       _chatInstance.messages = [];
       _chatInstance.clearError();
+      // Re-arm the runRequest gate so the user-triggered regeneration fires.
+      _chatInstance.__chatPageSuggestionsRequested = false;
       runRequest();
     };
 
@@ -288,36 +373,36 @@ export default (function connectChatPageSuggestions<
 
         if (isFirstInit) {
           const hasExistingMessages = _chatInstance.messages.length > 0;
-          if (initialMessages?.length && !hasExistingMessages) {
+
+          // Hydrate from the SSR snapshot if one was produced during server
+          // rendering. We mark the request as already-fired so the initial
+          // send below is skipped — the server already did the work and the
+          // client doesn't need to refire it.
+          const ssrSnapshots = (
+            instantSearchInstance as InstantSearchWithChatStates
+          )._initialChatStates;
+          const ssrSnapshot =
+            ssrSnapshots && ssrSnapshots[_chatInstance.id]
+              ? (ssrSnapshots[_chatInstance.id] as TUiMessage[])
+              : undefined;
+          if (ssrSnapshot && ssrSnapshot.length && !hasExistingMessages) {
+            _chatInstance.messages = ssrSnapshot;
+            _chatInstance.__chatPageSuggestionsRequested = true;
+          } else if (initialMessages?.length && !hasExistingMessages) {
             _chatInstance.messages = initialMessages;
           }
 
-          _chatInstance['~registerErrorCallback'](render);
-          _chatInstance['~registerMessagesCallback'](render);
-          _chatInstance['~registerStatusCallback'](render);
+          unsubscribeError = _chatInstance['~registerErrorCallback'](render);
+          unsubscribeMessages =
+            _chatInstance['~registerMessagesCallback'](render);
+          unsubscribeStatus = _chatInstance['~registerStatusCallback'](render);
         }
 
-        const shouldSendInitialRequest =
-          isFirstInit &&
-          _chatInstance.messages.filter((m) => m.role === 'user').length ===
-            0 &&
-          // Idempotency across init() re-invocations. `sendMessage` is async
-          // (the user message lands in `messages` after a microtask), so a
-          // second init that runs synchronously after the first would
-          // re-fire the request before the message is observable. The flag
-          // is stored on the chat instance so it survives two-pass SSR.
-          !(
-            _chatInstance as ChatInstanceWithServerWait<TUiMessage> & {
-              __chatPageSuggestionsRequested?: boolean;
-            }
-          ).__chatPageSuggestionsRequested;
-
-        if (shouldSendInitialRequest) {
-          (
-            _chatInstance as ChatInstanceWithServerWait<TUiMessage> & {
-              __chatPageSuggestionsRequested?: boolean;
-            }
-          ).__chatPageSuggestionsRequested = true;
+        // Only the first init per closure attempts a send. `runRequest`
+        // itself enforces idempotency across the shared chat instance, so
+        // any extra init() calls (two-pass SSR, closure recreations) are
+        // safe — they no-op inside runRequest if the flag is already set.
+        if (isFirstInit) {
           runRequest();
         }
 
@@ -371,6 +456,20 @@ export default (function connectChatPageSuggestions<
                       if (!hasLeftReadyState) return;
                       clearTimeout(timer);
                       unsubscribe();
+                      // Snapshot messages into the InstantSearch instance so
+                      // they ride through the SSR boundary alongside
+                      // `_initialResults`. Only snapshot on success — on error
+                      // we want the client to retry rather than hydrate into
+                      // a broken state.
+                      if (_chatInstance.status === 'ready') {
+                        const target =
+                          instantSearchInstance as InstantSearchWithChatStates;
+                        if (!target._initialChatStates) {
+                          target._initialChatStates = {};
+                        }
+                        target._initialChatStates[_chatInstance.id] =
+                          _chatInstance.messages;
+                      }
                       const elapsed = Date.now() - startedAt;
                       // eslint-disable-next-line no-console
                       console.log(
@@ -429,14 +528,25 @@ export default (function connectChatPageSuggestions<
         }
 
         const indexId = parent.getIndexId();
-        const indexChatRenderState = instantSearchInstance.renderState[indexId]
-          ? (instantSearchInstance.renderState[indexId][chatType as 'chat'] as
-              | Partial<ChatRenderState>
-              | undefined)
-          : undefined;
+        const readIndexChatRenderState = ():
+          | Partial<ChatRenderState>
+          | undefined =>
+          instantSearchInstance.renderState[indexId]
+            ? (instantSearchInstance.renderState[indexId][
+                chatType as 'chat'
+              ] as Partial<ChatRenderState> | undefined)
+            : undefined;
+        const indexChatRenderState = readIndexChatRenderState();
 
+        // Read lazily at click time. The chat-page-suggestions widget's
+        // `getWidgetRenderState` may run before the main chat widget has
+        // populated `renderState[indexId][chatType]` (e.g. on SSR-hydrated
+        // first render, when no chat streaming event later triggers a
+        // re-render). Looking up `setOpen`/`sendMessage` at click time
+        // guarantees we see them once both widgets have mounted.
         const handoff = () => {
-          if (!indexChatRenderState) {
+          const currentChatRenderState = readIndexChatRenderState();
+          if (!currentChatRenderState) {
             if (__DEV__) {
               warning(
                 false,
@@ -445,17 +555,20 @@ export default (function connectChatPageSuggestions<
             }
             return;
           }
-          openChat(indexChatRenderState, {
+          openChat(currentChatRenderState, {
             message: initialUserMessage,
             referer: 'page-suggestions',
           });
         };
 
-        const canHandoff = Boolean(
-          indexChatRenderState &&
-            indexChatRenderState.sendMessage &&
+        // Optimistic when the main chat widget hasn't been observed yet —
+        // by click time it should be mounted, and `handoff()` reads fresh
+        // state then. We only flip to `false` when we can see the chat and
+        // know it's busy.
+        const canHandoff = indexChatRenderState
+          ? Boolean(indexChatRenderState.sendMessage) &&
             !isChatBusy(indexChatRenderState)
-        );
+          : true;
 
         return {
           message: getLastAssistantMessage(_chatInstance.messages),
@@ -474,12 +587,20 @@ export default (function connectChatPageSuggestions<
       },
 
       dispose() {
-        if (_chatInstance) {
-          const status = _chatInstance.status;
-          if (status === 'submitted' || status === 'streaming') {
-            _chatInstance.stop();
-          }
-        }
+        // Unsubscribe THIS closure's render callbacks from the (potentially
+        // shared) chat instance. We deliberately do NOT call
+        // `_chatInstance.stop()` here: when React recreates the connector
+        // closure (e.g. unstable function props invalidating `useStableValue`),
+        // the prior closure is disposed but the new closure is mounted on the
+        // same chat instance. Stopping would abort the request the new closure
+        // is observing. Real teardown happens when `<InstantSearch>` itself
+        // unmounts and the registry's WeakMap entry is reclaimed.
+        unsubscribeError?.();
+        unsubscribeMessages?.();
+        unsubscribeStatus?.();
+        unsubscribeError = undefined;
+        unsubscribeMessages = undefined;
+        unsubscribeStatus = undefined;
         unmountFn();
       },
 

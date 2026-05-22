@@ -219,7 +219,7 @@ describe('connectChatPageSuggestions — SSR race', () => {
     search.consumeServerWaitPromises();
 
     const helper = search.helper!;
-    widget.init!({
+    widget.init({
       helper,
       state: helper.state,
       instantSearchInstance: search,

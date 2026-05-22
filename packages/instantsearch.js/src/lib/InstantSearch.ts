@@ -229,6 +229,13 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  /**
+   * Snapshot of chat-widget messages produced during SSR, keyed by chat
+   * instance id. Hydrated on the client so chat widgets can skip re-firing
+   * their initial agent request after server rendering succeeded.
+   * @internal
+   */
+  public _initialChatStates: Record<string, unknown[]> | null;
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
@@ -403,6 +410,7 @@ See documentation: ${createDocumentationLink({
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
+    this._initialChatStates = null;
 
     this._insights = insights;
 

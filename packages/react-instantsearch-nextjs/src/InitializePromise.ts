@@ -90,7 +90,15 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   const injectInitialResults = () => {
     const options = { inserted: false };
     const results = getInitialResults(search.mainIndex, requestParamsList);
-    insertHTML(createInsertHTML({ options, results, nonce }));
+    const chatStates =
+      (
+        search as typeof search & {
+          _initialChatStates?: Record<string, unknown[]> | null;
+        }
+      )._initialChatStates ?? undefined;
+    insertHTML(
+      createInsertHTML({ options, results, chatStates, nonce })
+    );
   };
 
   if (waitForResultsRef?.current === null) {

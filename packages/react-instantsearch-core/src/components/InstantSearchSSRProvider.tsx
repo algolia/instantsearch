@@ -8,6 +8,12 @@ import type { ReactNode } from 'react';
 
 export type InstantSearchServerState = {
   initialResults: InitialResults;
+  /**
+   * Per-chat-id snapshots produced by chat widgets during SSR. Hydrated on
+   * the client so the widget can render the assistant response without
+   * refiring the agent request.
+   */
+  initialChatStates?: Record<string, unknown[]>;
 };
 
 export type InstantSearchSSRProviderProps =

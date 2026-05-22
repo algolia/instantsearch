@@ -53,10 +53,7 @@ export default function Search() {
         Other page
       </Link>
 
-      <Chat
-        agentId="eedef238-5468-470d-bc37-f99fa741bd25"
-        feedback={true}
-      />
+      <Chat agentId="eedef238-5468-470d-bc37-f99fa741bd25" feedback={true} />
     </InstantSearchNext>
   );
 }
@@ -85,29 +82,28 @@ function PageSuggestionsPanel() {
       agentId="eedef238-5468-470d-bc37-f99fa741bd25"
       initialUserMessage={stablePromptRef.current}
       context={stableContextRef.current}
-      ssrTimeoutMs={1500}
+      ssrTimeoutMs={200}
       ctaLabel="Continue in chat"
-      itemComponent={({ item }) => (
-        <article className="ais-Carousel-hit">
-          <div className="ais-Carousel-hit-image">
-            <img src={(item as any).image} alt={(item as any).name} />
-          </div>
-          <h2 className="ais-Carousel-hit-title">{(item as any).name}</h2>
-        </article>
-      )}
-      loaderComponent={() => {
-        if (isServer) {
-          console.log(`${PHASE} ChatPageSuggestions loader rendered`);
-        }
-        return (
-          <div data-testid="page-suggestion-loader">Generating suggestion…</div>
-        );
-      }}
-      errorComponent={({ error }) => {
-        console.log(`${PHASE} ChatPageSuggestions error: ${error.message}`);
-        return <div role="alert">{error.message}</div>;
-      }}
+      // itemComponent={({ item }) => (
+      //   <article className="ais-Carousel-hit">
+      //     <div className="ais-Carousel-hit-image">
+      //       <img src={(item as any).image} alt={(item as any).name} />
+      //     </div>
+      //     <h2 className="ais-Carousel-hit-title">{(item as any).name}</h2>
+      //   </article>
+      // )}
+      // loaderComponent={() => {
+      //   if (isServer) {
+      //     console.log(`${PHASE} ChatPageSuggestions loader rendered`);
+      //   }
+      //   return (
+      //     <div data-testid="page-suggestion-loader">Generating suggestion…</div>
+      //   );
+      // }}
+      // errorComponent={({ error }) => {
+      //   console.log(`${PHASE} ChatPageSuggestions error: ${error.message}`);
+      //   return <div role="alert">{error.message}</div>;
+      // }}
     />
   );
 }
-
