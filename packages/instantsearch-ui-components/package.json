@@ -45,8 +45,6 @@
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",
-    "markdown-to-jsx": "^7.7.15",
-    "zod": "^3.25.76 || ^4",
-    "zod-to-json-schema": "3.24.6"
+    "markdown-to-jsx": "^7.7.15"
   }
 }
