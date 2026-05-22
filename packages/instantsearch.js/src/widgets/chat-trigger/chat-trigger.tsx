@@ -11,8 +11,11 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import type { ChatTriggerRenderState } from '../../connectors/chat/connectChatTrigger';
-import type { Template } from '../../types';
+import type {
+  ChatTriggerConnectorParams,
+  ChatTriggerRenderState,
+} from '../../connectors/chat/connectChatTrigger';
+import type { RendererOptions, Template } from '../../types';
 import type {
   ChatToggleButtonProps,
   Pragma,
@@ -94,43 +97,42 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
     ...userTemplates,
   };
 
-  const defaultTemplateProps = prepareTemplateProps({
-    defaultTemplates: {} as unknown as ChatTriggerTemplates,
-    templatesConfig: {},
-    templates,
-  });
+  function renderTrigger(
+    renderState: ChatTriggerRenderState &
+      RendererOptions<ChatTriggerConnectorParams>,
+    _isFirstRender: boolean
+  ) {
+    const { open, toggleOpen, instantSearchInstance } = renderState;
 
-  const LayoutComponent = templates.layout
-    ? (props: ChatToggleButtonProps) => {
-        return (
+    // Resolve template props at render time so user-provided helpers and
+    // compile options from `instantSearchInstance.templatesConfig` apply.
+    const templateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as ChatTriggerTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+
+    const LayoutComponent = templates.layout
+      ? (props: ChatToggleButtonProps) => (
           <TemplateComponent
-            {...defaultTemplateProps}
+            {...templateProps}
             templateKey="layout"
             rootTagName="fragment"
             data={props}
           />
-        );
-      }
-    : undefined;
+        )
+      : undefined;
 
-  const iconComponent = templates.icon
-    ? ({ isOpen }: { isOpen: boolean }) => {
-        return (
+    const iconComponent = templates.icon
+      ? ({ isOpen }: { isOpen: boolean }) => (
           <TemplateComponent
-            {...defaultTemplateProps}
+            {...templateProps}
             templateKey="icon"
             rootTagName="span"
             data={{ isOpen }}
           />
-        );
-      }
-    : undefined;
-
-  function renderTrigger(
-    renderState: ChatTriggerRenderState,
-    _isFirstRender: boolean
-  ) {
-    const { open, toggleOpen } = renderState;
+        )
+      : undefined;
 
     if (LayoutComponent) {
       render(

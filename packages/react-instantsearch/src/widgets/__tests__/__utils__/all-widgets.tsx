@@ -37,6 +37,10 @@ const NON_COMPONENTS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  // `ChatTrigger`'s permissive `ComponentProps<'button'>` base widens the
+  // `SingleWidget` union enough that TS can't narrow `widget.Component` in
+  // the switch below, breaking other cases. Covered by a dedicated test in
+  // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
