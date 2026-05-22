@@ -652,6 +652,49 @@ describe('RefinementList', () => {
       expect(container).toMatchSnapshot();
     });
 
+    it('restores focus on the toggled item when its value contains multiple double quotes', () => {
+      const value = '7-1/2" - 9-1/2"';
+      const toggleRefinement = jest.fn();
+      const baseProps: RefinementListProps<TestDefaultTemplates> = {
+        ...defaultProps,
+        facetValues: [
+          { value, label: value, count: 1, isRefined: false },
+          { value: 'other', label: 'other', count: 2, isRefined: false },
+        ],
+        templateProps: {
+          ...defaultProps.templateProps,
+          templates: defaultTemplates as RefinementListTemplates,
+        },
+        toggleRefinement,
+      };
+
+      const { container, rerender } = render(
+        <RefinementList {...baseProps} />
+      );
+
+      const checkbox = Array.from(
+        container.querySelectorAll<HTMLInputElement>(
+          '.ais-RefinementList-checkbox'
+        )
+      ).find((input) => input.value === value)!;
+      expect(checkbox).not.toBeUndefined();
+
+      fireEvent.click(checkbox);
+      expect(toggleRefinement).toHaveBeenCalledWith(value);
+
+      expect(() =>
+        rerender(
+          <RefinementList
+            {...baseProps}
+            facetValues={[
+              { value, label: value, count: 1, isRefined: true },
+              { value: 'other', label: 'other', count: 2, isRefined: false },
+            ]}
+          />
+        )
+      ).not.toThrow();
+    });
+
     it('should not refine on click on already refined items', () => {
       const toggleRefinement = jest.fn();
 
