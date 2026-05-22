@@ -41,6 +41,12 @@ body:has(.ais-ChatSidePanelLayout) {
   }
 }
 
+body:has(.ais-ChatSidePanelLayout .ais-Chat-container--open) {
+  .ais-ChatToggleButton--floating {
+    right: calc(var(--ais-chat-width) + var(--ais-chat-margin));
+  }
+}
+
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-ChatSidePanelLayout {
     inset: 0;

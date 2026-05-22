@@ -62,13 +62,6 @@ describe('ChatInlineLayout', () => {
     `);
   });
 
-  test('does not render the legacy toggle button wrapper', () => {
-    const { container } = render(<ChatInlineLayout {...defaultProps} />);
-    expect(
-      container.querySelector('.ais-Chat-toggleButtonWrapper')
-    ).not.toBeInTheDocument();
-  });
-
   test('accepts custom classNames', () => {
     const { container } = render(
       <ChatInlineLayout

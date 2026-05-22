@@ -43,6 +43,10 @@
   }
 }
 
+body:has(.ais-ChatToggleButton--floating) .ais-ChatOverlayLayout {
+  bottom: calc(var(--ais-chat-margin) + var(--ais-spacing) * 4);
+}
+
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-ChatOverlayLayout {
     inset: 0;

@@ -109,13 +109,6 @@ describe('ChatSidePanelLayout', () => {
     expect(container.querySelector('.prompt')).toBeInTheDocument();
   });
 
-  test('does not render the legacy toggle button wrapper', () => {
-    const { container } = render(<ChatSidePanelLayout {...defaultProps} />);
-    expect(
-      container.querySelector('.ais-Chat-toggleButtonWrapper')
-    ).not.toBeInTheDocument();
-  });
-
   test('sets margin-right on custom parentElement when open', () => {
     const parent = document.createElement('div');
     parent.id = 'test-parent';

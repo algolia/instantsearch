@@ -31,12 +31,21 @@ export type ChatTriggerProps = Omit<
    * Callback when the trigger is clicked.
    */
   onClick?: () => void;
+
+  /**
+   * Whether the button is positioned as a floating action button at the
+   * bottom-right of the viewport. Set to `false` to render an inline button
+   * that flows with surrounding content.
+   * @default true
+   */
+  floating?: boolean;
 };
 
 export function ChatTrigger({
   classNames,
   toggleIconComponent,
   onClick,
+  floating = true,
   ...props
 }: ChatTriggerProps) {
   const { open, toggleOpen } = useChatTrigger(
@@ -49,11 +58,18 @@ export function ChatTrigger({
     onClick?.();
   };
 
+  const rootClassName = [
+    floating && 'ais-ChatToggleButton--floating',
+    classNames?.root,
+  ]
+    .filter(Boolean)
+    .flat() as string[];
+
   return (
     <ChatToggleButton
       open={open}
       onClick={handleClick}
-      classNames={classNames}
+      classNames={{ ...classNames, root: rootClassName }}
       toggleIconComponent={toggleIconComponent}
       {...props}
     />

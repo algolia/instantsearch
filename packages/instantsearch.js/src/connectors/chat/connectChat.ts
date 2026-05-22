@@ -586,6 +586,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         setOpen = (o) => {
           open = o;
           render();
+          // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
+          // shared `renderState`. Schedule a full re-render so they pick up
+          // the new value instead of staying frozen on their initial state.
+          initOptions.instantSearchInstance.scheduleRender();
         };
 
         focusInput = () => {

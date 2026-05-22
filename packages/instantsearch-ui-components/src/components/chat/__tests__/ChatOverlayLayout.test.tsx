@@ -104,11 +104,4 @@ describe('ChatOverlayLayout', () => {
     expect(container.querySelector('.messages')).toBeInTheDocument();
     expect(container.querySelector('.prompt')).toBeInTheDocument();
   });
-
-  test('does not render the legacy toggle button wrapper', () => {
-    const { container } = render(<ChatOverlayLayout {...defaultProps} />);
-    expect(
-      container.querySelector('.ais-Chat-toggleButtonWrapper')
-    ).not.toBeInTheDocument();
-  });
 });

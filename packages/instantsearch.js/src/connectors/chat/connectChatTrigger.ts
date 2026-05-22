@@ -1,3 +1,4 @@
+import { openChat } from '../../lib/chat/openChat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -81,7 +82,12 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
     function toggleOpen() {
       if (!lastOptions) return;
       const chatState = getChatRenderState(lastOptions);
-      chatState?.setOpen?.(!chatState.open);
+      if (!chatState) return;
+      if (chatState.open) {
+        chatState.setOpen?.(false);
+      } else {
+        openChat(chatState);
+      }
     }
 
     return {

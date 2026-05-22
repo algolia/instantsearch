@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from "preact/hooks";
 import { ChatLayoutSwitcher } from "../components/ChatLayoutSwitcher";
 import { WidgetAiAutocomplete } from "../components/widgets/WidgetAiAutocomplete";
 import { WidgetChat, type ChatLayout } from "../components/widgets/WidgetChat";
+import { WidgetChatTrigger } from "../components/widgets/WidgetChatTrigger";
 // TODO: re-enable once the `filterSuggestions` widget works properly.
 // import { WidgetFilterSuggestions } from "../components/widgets/WidgetFilterSuggestions";
 import { WidgetHits } from "../components/widgets/WidgetHits";
@@ -54,16 +55,16 @@ export function AgenticView() {
           ]}
         />
 
-        {/* Row 2: Filter suggestions | Chat (hosts the layout switcher; the
+        {/* Row 2: ChatTrigger | Chat (hosts the layout switcher; the
             chat renders inline inside this tile, or floats/docks to the
             viewport for overlay/sidePanel).
             `min-w-0` lets the chat's grid-based carousel scroll horizontally
             inside its tile instead of forcing the flex row to overflow. */}
         <div class="flex flex-col gap-2 sm:flex-row">
-          {/* <WidgetSwitcher
+          <WidgetSwitcher
             class="min-w-0 flex-1"
-            widgets={[{ title: "filterSuggestions", body: WidgetFilterSuggestions }]}
-          /> */}
+            widgets={[{ title: "chatTrigger", body: WidgetChatTrigger }]}
+          />
           <ChatLayoutSwitcher
             class="min-w-0 flex-1"
             layout={chatLayout}

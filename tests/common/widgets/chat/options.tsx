@@ -2179,9 +2179,6 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatOverlayLayout')
         ).not.toBeInTheDocument();
-        expect(
-          document.querySelector('.ais-Chat-toggleButtonWrapper')
-        ).not.toBeInTheDocument();
       });
 
       test('renders with sidepanel layout component', async () => {

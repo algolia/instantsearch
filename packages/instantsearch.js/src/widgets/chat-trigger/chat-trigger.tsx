@@ -55,6 +55,14 @@ export type ChatTriggerWidgetParams = {
    * CSS classes to add.
    */
   cssClasses?: ChatTriggerCSSClasses;
+
+  /**
+   * Whether the button is positioned as a floating action button at the
+   * bottom-right of the viewport. Set to `false` to render an inline button
+   * that flows with surrounding content.
+   * @default true
+   */
+  floating?: boolean;
 };
 
 const ChatToggleButton = createChatToggleButtonComponent({
@@ -67,7 +75,14 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
     container,
     templates: userTemplates = {},
     cssClasses: userCssClasses = {},
+    floating = true,
   } = widgetParams || {};
+
+  const rootClassName: string | string[] | undefined = floating
+    ? ['ais-ChatToggleButton--floating' as string].concat(
+        userCssClasses.button ?? []
+      )
+    : userCssClasses.button;
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -132,7 +147,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
           open={open}
           onClick={toggleOpen}
           toggleIconComponent={iconComponent}
-          classNames={{ root: userCssClasses.button }}
+          classNames={{ root: rootClassName }}
         />,
         containerNode
       );
