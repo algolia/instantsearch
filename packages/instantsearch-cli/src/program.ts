@@ -3,6 +3,7 @@ import { Command, Option } from 'commander';
 import { formatEnvelope, successEnvelope } from './envelope';
 import { HandledFailure } from './handled-failure';
 import { runInit } from './init';
+import { runIntrospect } from './introspect';
 import { defaultIO, type IO } from './io';
 import version from './version';
 
@@ -24,21 +25,12 @@ const STUBS = [
       "Run 'instantsearch add --help' once the add command is implemented.",
     ],
   },
-  {
-    name: 'introspect',
-    description:
-      'Inspect an Algolia index and report its searchable structure.',
-    humanSummary:
-      'introspect: stub command — no Algolia calls are made in this slice.',
-    nextSteps: [
-      "Run 'instantsearch introspect --help' once introspection lands.",
-    ],
-  },
 ] as const satisfies readonly StubDescriptor[];
 
 export const PROGRAM_NAME = 'instantsearch';
 export const KNOWN_COMMANDS: ReadonlyArray<string> = [
   'init',
+  'introspect',
   ...STUBS.map((s) => s.name),
 ];
 
@@ -48,6 +40,12 @@ type InitFlagOptions = {
   appId?: string;
   searchApiKey?: string;
   framework?: 'next-app';
+};
+
+type IntrospectFlagOptions = {
+  index?: string;
+  appId?: string;
+  searchApiKey?: string;
 };
 
 export function createProgram(io: IO = defaultIO()): Command {
@@ -109,6 +107,28 @@ export function createProgram(io: IO = defaultIO()): Command {
         io
       );
       if (exitCode !== 0) throw new HandledFailure(exitCode);
+    });
+
+  program
+    .command('introspect')
+    .description(
+      'Inspect an Algolia index and report its searchable structure.'
+    )
+    .option('--index <name>', 'Algolia index name to inspect')
+    .option('--app-id <appId>', 'Algolia Application ID')
+    .option('--search-api-key <key>', 'Algolia Search-Only API Key')
+    .action(async (flags: IntrospectFlagOptions, cmd: Command) => {
+      const { json } = cmd.optsWithGlobals<{ json: boolean }>();
+      await runIntrospect(
+        {
+          cwd: process.cwd(),
+          json: Boolean(json),
+          index: flags.index,
+          appId: flags.appId,
+          searchApiKey: flags.searchApiKey,
+        },
+        io
+      );
     });
 
   for (const stub of STUBS) {

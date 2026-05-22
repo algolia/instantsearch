@@ -3,6 +3,7 @@ type SuccessEnvelope = {
   command: string;
   filesCreated: string[];
   nextSteps: string[];
+  data?: Record<string, unknown>;
 };
 
 type FailureEnvelope = {
@@ -16,13 +17,18 @@ type Envelope = SuccessEnvelope | FailureEnvelope;
 
 export function successEnvelope(
   command: string,
-  details: { filesCreated?: string[]; nextSteps?: string[] } = {}
+  details: {
+    filesCreated?: string[];
+    nextSteps?: string[];
+    data?: Record<string, unknown>;
+  } = {}
 ): SuccessEnvelope {
   return {
     ok: true,
     command,
     filesCreated: details.filesCreated ?? [],
     nextSteps: details.nextSteps ?? [],
+    ...(details.data !== undefined && { data: details.data }),
   };
 }
 

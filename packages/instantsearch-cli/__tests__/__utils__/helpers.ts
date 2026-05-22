@@ -13,3 +13,26 @@ export async function runCapturing(
 
   return { exitCode, stdout: stdout.join(''), stderr: stderr.join('') };
 }
+
+type CapturedIO = {
+  stdout: string[];
+  stderr: string[];
+  io: { stdout: (chunk: string) => void; stderr: (chunk: string) => void };
+};
+
+export function captureIO(): CapturedIO {
+  const stdout: string[] = [];
+  const stderr: string[] = [];
+  return {
+    stdout,
+    stderr,
+    io: {
+      stdout: (chunk: string) => stdout.push(chunk),
+      stderr: (chunk: string) => stderr.push(chunk),
+    },
+  };
+}
+
+export function readEnvelope(stdout: string[]): Record<string, unknown> {
+  return JSON.parse(stdout.join(''));
+}
