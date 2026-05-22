@@ -34,6 +34,18 @@ describe('detect()', () => {
       });
     });
 
+    it('identifies a Next.js App Router project with src/app layout', () => {
+      const result = detect(fixture('next-app-src'), { command: 'init' });
+
+      expect(result).toEqual({
+        ok: true,
+        flavor: 'next',
+        framework: 'next-app',
+        typescript: false,
+        aliases: {},
+      });
+    });
+
     it('flips typescript: true when tsconfig.json exists', () => {
       const result = detect(fixture('react-vite-ts'), { command: 'init' });
 
@@ -80,29 +92,35 @@ describe('detect()', () => {
   });
 
   describe('refusals', () => {
-    it('refuses Next.js Pages Router-only projects', () => {
-      const result = detect(fixture('next-pages'), { command: 'init' });
+    it.each(['next-pages', 'next-pages-src'])(
+      'refuses Next.js Pages Router-only projects (%s)',
+      (name) => {
+        const result = detect(fixture(name), { command: 'init' });
 
-      expect(result).toEqual({
-        ok: false,
-        command: 'init',
-        apiVersion: 1,
-        code: 'unsupported_framework',
-        message: expect.any(String),
-      });
-    });
+        expect(result).toEqual({
+          ok: false,
+          command: 'init',
+          apiVersion: 1,
+          code: 'unsupported_framework',
+          message: expect.any(String),
+        });
+      }
+    );
 
-    it('refuses Next.js projects with both app/ and pages/', () => {
-      const result = detect(fixture('next-ambiguous'), { command: 'init' });
+    it.each(['next-ambiguous', 'next-ambiguous-src', 'next-ambiguous-src-app'])(
+      'refuses Next.js projects with both App Router and Pages Router as ambiguous (%s)',
+      (name) => {
+        const result = detect(fixture(name), { command: 'init' });
 
-      expect(result).toEqual({
-        ok: false,
-        command: 'init',
-        apiVersion: 1,
-        code: 'ambiguous_framework',
-        message: expect.any(String),
-      });
-    });
+        expect(result).toEqual({
+          ok: false,
+          command: 'init',
+          apiVersion: 1,
+          code: 'ambiguous_framework',
+          message: expect.any(String),
+        });
+      }
+    );
 
     it.each(['vanilla', 'vue'])(
       'refuses %s projects with unsupported_flavor',

@@ -106,14 +106,18 @@ function detectFramework(
   command: string
 ): FrameworkOk | DetectionFailure {
   if (flavor === 'next') {
-    const hasAppDir = isDirectory(path.join(projectRoot, 'app'));
-    const hasPagesDir = isDirectory(path.join(projectRoot, 'pages'));
+    const hasAppDir =
+      isDirectory(path.join(projectRoot, 'app')) ||
+      isDirectory(path.join(projectRoot, 'src', 'app'));
+    const hasPagesDir =
+      isDirectory(path.join(projectRoot, 'pages')) ||
+      isDirectory(path.join(projectRoot, 'src', 'pages'));
 
     if (hasAppDir && hasPagesDir) {
       return refuse(
         command,
         'ambiguous_framework',
-        'Next.js project contains both app/ and pages/ directories. Pass --framework to disambiguate.'
+        'Next.js project contains both App Router and Pages Router directories. Pass --framework to disambiguate.'
       );
     }
     if (hasAppDir) {
@@ -122,7 +126,7 @@ function detectFramework(
     return refuse(
       command,
       'unsupported_framework',
-      'Next.js Pages Router is not supported yet. Only the App Router (app/ directory) is supported.'
+      'Next.js Pages Router is not supported yet. Only the App Router is supported.'
     );
   }
 
