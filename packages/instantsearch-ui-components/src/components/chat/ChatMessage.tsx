@@ -255,10 +255,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
-          if (
-            toolMessage.state === 'input-streaming' &&
-            !tool.streamInput
-          ) {
+          if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;
           }
 

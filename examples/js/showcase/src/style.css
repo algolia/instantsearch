@@ -108,11 +108,18 @@ body {
    the AIS primary button styling so it stays consistent with the rest of
    the chat UI (and adapts to dark mode via the AIS theme variables). */
 .chat-inline-trigger {
-  background-color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
-  color: rgba(var(--ais-button-text-color-rgb), var(--ais-button-text-color-alpha));
+  background-color: rgba(
+    var(--ais-primary-color-rgb),
+    var(--ais-primary-color-alpha)
+  );
+  color: rgba(
+    var(--ais-button-text-color-rgb),
+    var(--ais-button-text-color-alpha)
+  );
   border-radius: var(--ais-border-radius-sm);
   box-shadow: var(--ais-shadow-xs);
-  transition: background-color var(--ais-transition-duration) var(--ais-transition-timing-function);
+  transition: background-color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 }
 
 @media (hover: hover) {

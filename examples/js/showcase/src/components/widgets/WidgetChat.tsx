@@ -2,27 +2,26 @@ import {
   chatInlineLayout,
   chatOverlayLayout,
   chatSidePanelLayout,
-} from "instantsearch.js/es/templates";
-import { chat } from "instantsearch.js/es/widgets";
-import { Sparkles } from "lucide-preact";
-import { useEffect, useRef } from "preact/hooks";
+} from 'instantsearch.js/es/templates';
+import { chat } from 'instantsearch.js/es/widgets';
+import { Sparkles } from 'lucide-preact';
+import { useEffect, useRef } from 'preact/hooks';
 
-import { useSearch } from "../../context/search";
-import { postToParent } from "../../utils/parentMessenger";
+import { useSearch } from '../../context/search';
+import { postToParent } from '../../utils/parentMessenger';
 
-import { renderCarouselHit } from "./ProductCard";
+import { renderCarouselHit } from './ProductCard';
 
-import type { ChatRenderState } from "instantsearch.js/es/connectors/chat/connectChat";
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
-export type ChatLayout = "inline" | "overlay" | "sidePanel";
+export type ChatLayout = 'inline' | 'overlay' | 'sidePanel';
 
-const CHAT_AGENT_ID = "eedef238-5468-470d-bc37-f99fa741bd25";
+const CHAT_AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
 
 // The chat's overlay/sidePanel layouts use `position: fixed`, which anchors to
 // the iframe rather than the user's viewport when the showcase is embedded.
 // We hide the floating trigger via CSS and render this inline one instead.
-const IS_EMBEDDED =
-  typeof window !== "undefined" && window.parent !== window;
+const IS_EMBEDDED = typeof window !== 'undefined' && window.parent !== window;
 
 type Props = {
   layout: ChatLayout;
@@ -42,7 +41,7 @@ export function WidgetChat({ layout, indexName }: Props) {
     chatState?.setOpen?.(true);
     // The opened panel anchors to the iframe edge; ask the docs to scroll us
     // into view so the panel doesn't appear far below the user's viewport.
-    postToParent({ type: "showcase-scroll-into-view" });
+    postToParent({ type: 'showcase-scroll-into-view' });
   };
 
   useEffect(() => {
@@ -78,7 +77,7 @@ export function WidgetChat({ layout, indexName }: Props) {
 
   return (
     <>
-      {IS_EMBEDDED && layout !== "inline" && (
+      {IS_EMBEDDED && layout !== 'inline' && (
         <button
           type="button"
           onClick={openChat}

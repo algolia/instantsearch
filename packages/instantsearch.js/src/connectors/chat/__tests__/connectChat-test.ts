@@ -1064,7 +1064,11 @@ data: [DONE]`,
         await widget.chatInstance.sendMessage({ text: 'hello' });
 
         const { body } = getRequestPayload();
-        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+        ]);
         expect(body).not.toHaveProperty('headers');
         expect(body).not.toHaveProperty('api');
         expect(body).not.toHaveProperty('credentials');

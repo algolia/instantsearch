@@ -1591,7 +1591,7 @@ export function createOptionsTests(
                 ...(preliminary ? { preliminary: true } : {}),
               },
             ],
-          } as any);
+          }) as any;
 
         test('renders the default layout', async () => {
           const searchClient = createSearchClient();
@@ -1688,9 +1688,7 @@ export function createOptionsTests(
               displayResultsMessage(
                 {
                   intro: 'Curating',
-                  groups: [
-                    { title: 'Runners', results: [{ objectID: '1' }] },
-                  ],
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
                 { preliminary: true }
               ),
@@ -1866,9 +1864,7 @@ export function createOptionsTests(
           const chat = new Chat({
             messages: [
               displayResultsMessage({
-                groups: [
-                  { title: 'Runners', results: [{ objectID: '1' }] },
-                ],
+                groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
               }),
             ],
             id: 'chat-id',
@@ -1885,8 +1881,7 @@ export function createOptionsTests(
                 tools: {
                   [DisplayResultsToolType]: {
                     templates: {
-                      layout:
-                        '<div id="custom-display">custom display</div>',
+                      layout: '<div id="custom-display">custom display</div>',
                     },
                   },
                 },
@@ -1907,9 +1902,9 @@ export function createOptionsTests(
 
           await openChat(act);
 
-          expect(
-            document.querySelector('#custom-display')!.textContent
-          ).toBe('custom display');
+          expect(document.querySelector('#custom-display')!.textContent).toBe(
+            'custom display'
+          );
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();

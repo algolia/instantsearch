@@ -18,7 +18,7 @@ const AisFeedProvider = {
       $_ais_getParentIndex: () => this.feedContainer,
     };
   },
-  render: renderCompat(function(h) {
+  render: renderCompat(function (h) {
     const defaultSlot = getScopedSlot(this, 'default');
     return h('div', {}, defaultSlot ? defaultSlot() : []);
   }),
@@ -113,7 +113,7 @@ export default {
 
       // Create new FeedContainers (synchronous — must be registered before render)
       const toAdd = [];
-      feedIDs.forEach(feedID => {
+      feedIDs.forEach((feedID) => {
         if (!this.feedContainers.has(feedID)) {
           const pendingContainer = this.pendingRemovals.get(feedID);
           if (pendingContainer) {
@@ -136,7 +136,7 @@ export default {
       }
     },
   },
-  render: renderCompat(function(h) {
+  render: renderCompat(function (h) {
     if (!this.state) {
       return h('div', { class: [this.suit()] });
     }
@@ -144,7 +144,7 @@ export default {
     const feedIDs = this.state.feedIDs || [];
     const defaultSlot = getScopedSlot(this, 'default');
 
-    const children = feedIDs.map(feedID => {
+    const children = feedIDs.map((feedID) => {
       const container = this.feedContainers.get(feedID);
       if (!container || !defaultSlot) {
         return null;

@@ -441,7 +441,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             'x-algolia-api-key': apiKey,
             'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
-          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
+          prepareSendMessagesRequest: ({
+            id,
+            messages,
+            trigger,
+            messageId,
+          }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:

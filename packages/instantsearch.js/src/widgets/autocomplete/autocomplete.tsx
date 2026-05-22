@@ -926,9 +926,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             <AutocompleteDetachedContainer
               classNames={detachedContainerCssClasses}
             >
-              <AutocompleteDetachedFormContainer
-                classNames={cssClasses}
-              >
+              <AutocompleteDetachedFormContainer classNames={cssClasses}>
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
               {panelContent}

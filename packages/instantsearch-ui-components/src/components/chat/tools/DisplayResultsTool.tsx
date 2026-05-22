@@ -46,7 +46,7 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
 };
 
 export function createDisplayResultsToolComponent<
-  TObject extends RecordWithObjectID
+  TObject extends RecordWithObjectID,
   // oxlint-disable-next-line no-unused-vars
 >({ createElement, Fragment }: Renderer) {
   return function DisplayResultsTool(

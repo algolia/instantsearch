@@ -82,9 +82,7 @@ describe('createDisplayResultsTool', () => {
             input: {},
             output: {
               intro: 'Curating',
-              groups: [
-                { title: 'Runners', results: [{ objectID: '1' }] },
-              ],
+              groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
             },
             preliminary: true,
           } as ClientSideToolComponentProps['message']

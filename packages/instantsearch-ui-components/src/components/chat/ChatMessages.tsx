@@ -556,4 +556,3 @@ const getShowLoader = (
 
   return true;
 };
-

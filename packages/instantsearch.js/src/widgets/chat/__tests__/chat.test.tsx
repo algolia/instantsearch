@@ -176,9 +176,7 @@ describe('chat', () => {
       fireEvent.input(textareaBefore!, { target: { value: 'hel' } });
       await wait(0);
 
-      const textareaAfter = container.querySelector(
-        '.ais-ChatPrompt-textarea'
-      );
+      const textareaAfter = container.querySelector('.ais-ChatPrompt-textarea');
 
       expect(textareaAfter).toBe(textareaBefore);
       expect(document.activeElement).toBe(textareaAfter);

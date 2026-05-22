@@ -64,11 +64,7 @@ function extractWidgetPayload(
     });
 
     if (isIndexWidget(widget)) {
-      extractWidgetPayload(
-        widget.getWidgets(),
-        instantSearchInstance,
-        payload
-      );
+      extractWidgetPayload(widget.getWidgets(), instantSearchInstance, payload);
     }
   });
 }
