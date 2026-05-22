@@ -5,7 +5,6 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { render } from '@testing-library/react';
 import React from 'react';
-
 import { InstantSearch } from 'react-instantsearch-core';
 
 import { ChatTrigger } from '../ChatTrigger';
