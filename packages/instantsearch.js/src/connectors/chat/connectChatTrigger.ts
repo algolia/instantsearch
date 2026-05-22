@@ -92,7 +92,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         lastOptions = initOptions;
         renderFn(
           {
-            ...this.getWidgetRenderState!(initOptions),
+            ...this.getWidgetRenderState(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -103,7 +103,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         lastOptions = renderOptions;
         renderFn(
           {
-            ...this.getWidgetRenderState!(renderOptions),
+            ...this.getWidgetRenderState(renderOptions),
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
@@ -126,7 +126,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          chatTrigger: this.getWidgetRenderState!(renderOptions),
+          chatTrigger: this.getWidgetRenderState(renderOptions),
         };
       },
     };
