@@ -17,7 +17,8 @@
     "version": "./scripts/version.cjs"
   },
   "dependencies": {
-    "commander": "11.1.0"
+    "commander": "11.1.0",
+    "jsonc-parser": "3.3.1"
   },
   "devDependencies": {
     "@types/jest": "27.4.0",

@@ -54,6 +54,29 @@ describe('detect()', () => {
         },
       });
     });
+
+    it('parses tsconfig.json with JSONC syntax (comments, trailing commas)', () => {
+      const result = detect(fixture('react-vite-ts-jsonc'), { command: 'init' });
+
+      expect(result).toMatchObject({
+        ok: true,
+        typescript: true,
+        aliases: {
+          '@/*': ['./src/*'],
+          '@components/*': ['./src/components/*'],
+        },
+      });
+    });
+
+    it('keeps typescript: true with empty aliases when tsconfig.json is unparseable', () => {
+      const result = detect(fixture('react-vite-ts-broken'), { command: 'init' });
+
+      expect(result).toMatchObject({
+        ok: true,
+        typescript: true,
+        aliases: {},
+      });
+    });
   });
 
   describe('refusals', () => {

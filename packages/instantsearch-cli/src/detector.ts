@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import * as jsonc from 'jsonc-parser';
+
 import { failureEnvelope } from './envelope';
 
 type Flavor = 'react' | 'next';
@@ -76,15 +78,15 @@ export function detect(
     return frameworkResult;
   }
 
-  const tsconfig = readJsonFile<TsConfig>(
-    path.join(projectRoot, 'tsconfig.json')
-  );
+  const tsconfigPath = path.join(projectRoot, 'tsconfig.json');
+  const typescript = fs.existsSync(tsconfigPath);
+  const tsconfig = typescript ? readJsoncFile<TsConfig>(tsconfigPath) : null;
 
   return {
     ok: true,
     flavor,
     framework: frameworkResult.framework,
-    typescript: tsconfig !== null,
+    typescript,
     aliases: tsconfig?.compilerOptions?.paths ?? {},
   };
 }
@@ -138,6 +140,21 @@ function readJsonFile<T>(filePath: string): T | null {
   try {
     const contents = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(contents) as T;
+  } catch {
+    return null;
+  }
+}
+
+function readJsoncFile<T>(filePath: string): T | null {
+  try {
+    const contents = fs.readFileSync(filePath, 'utf8');
+    const value = jsonc.parse(contents, undefined, {
+      allowTrailingComma: true,
+    }) as T | undefined;
+    if (value === undefined) {
+      return null;
+    }
+    return value;
   } catch {
     return null;
   }
