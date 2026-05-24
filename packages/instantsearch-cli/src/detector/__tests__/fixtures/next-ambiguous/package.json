@@ -1,0 +1,12 @@
+{
+  "name": "next-ambiguous-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-instantsearch": "^7.0.0",
+    "react-instantsearch-nextjs": "^0.3.0"
+  }
+}

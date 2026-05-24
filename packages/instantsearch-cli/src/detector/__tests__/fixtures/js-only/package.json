@@ -1,0 +1,8 @@
+{
+  "name": "js-only-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "instantsearch.js": "^4.0.0"
+  }
+}
