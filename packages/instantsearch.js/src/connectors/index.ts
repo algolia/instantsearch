@@ -50,6 +50,7 @@ export { default as connectGeoSearch } from './geo-search/connectGeoSearch';
 export { default as connectPoweredBy } from './powered-by/connectPoweredBy';
 export { default as connectConfigure } from './configure/connectConfigure';
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
+export type { AutocompleteSource } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
 export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';

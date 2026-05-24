@@ -124,6 +124,7 @@ search.addWidgets([
     expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: '',
+        sources: [],
         indices: [],
         refine: expect.any(Function),
         instantSearchInstance: expect.any(Object),
@@ -138,6 +139,7 @@ search.addWidgets([
     expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: '',
+        sources: expect.any(Array),
         indices: expect.any(Array),
         refine: expect.any(Function),
         instantSearchInstance: expect.any(Object),
@@ -486,6 +488,7 @@ search.addWidgets([
 
       expect(renderState1.autocomplete).toEqual({
         currentRefinement: '',
+        sources: [],
         indices: [],
         refine: expect.any(Function),
         widgetParams: {},
@@ -500,6 +503,7 @@ search.addWidgets([
 
       expect(renderState2.autocomplete).toEqual({
         currentRefinement: '',
+        sources: expect.any(Array),
         indices: expect.any(Array),
         refine: expect.any(Function),
         widgetParams: {},
@@ -524,6 +528,7 @@ search.addWidgets([
 
       expect(renderState.autocomplete).toEqual({
         currentRefinement: 'query',
+        sources: expect.any(Array),
         indices: expect.any(Array),
         refine: expect.any(Function),
         widgetParams: {},
@@ -544,6 +549,7 @@ search.addWidgets([
 
       expect(renderState1).toEqual({
         currentRefinement: '',
+        sources: [],
         indices: [],
         refine: expect.any(Function),
         widgetParams: {},
@@ -557,6 +563,7 @@ search.addWidgets([
 
       expect(renderState2).toEqual({
         currentRefinement: '',
+        sources: expect.any(Array),
         indices: expect.any(Array),
         refine: expect.any(Function),
         widgetParams: {},
@@ -582,6 +589,15 @@ search.addWidgets([
 
       expect(renderState).toEqual({
         currentRefinement: 'query',
+        sources: [
+          expect.objectContaining({
+            sourceType: 'index',
+            results: expect.objectContaining({
+              hits,
+            }),
+            sendEvent: expect.any(Function),
+          }),
+        ],
         indices: [
           expect.objectContaining({
             results: expect.objectContaining({

@@ -47,7 +47,7 @@ import type {
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
 import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
-import type { TransformItemsIndicesConfig } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
+import type { AutocompleteSource } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ComponentProps } from 'react';
 
@@ -339,9 +339,7 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
-  transformItems?: (
-    indices: TransformItemsIndicesConfig[]
-  ) => TransformItemsIndicesConfig[];
+  transformItems?: (sources: AutocompleteSource[]) => AutocompleteSource[];
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];

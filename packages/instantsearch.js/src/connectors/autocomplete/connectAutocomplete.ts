@@ -19,6 +19,39 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type AutocompleteSource = {
+  /**
+   * Whether this source comes from a search index or a Recommend model.
+   */
+  sourceType: 'index' | 'recommend';
+
+  /**
+   * The name of the index (search) or the index used for recommendations.
+   */
+  indexName: string;
+
+  /**
+   * The id of the source (indexId for search, sourceId/model for recommend).
+   */
+  indexId: string;
+
+  /**
+   * The resolved hits from this source.
+   */
+  hits: Hit[];
+
+  /**
+   * The full results object from the Algolia API.
+   */
+  results: SearchResults | Record<string, never>;
+
+  /**
+   * Send event to insights middleware.
+   */
+  sendEvent: SendEventForHits;
+};
+
+/** @deprecated Use `AutocompleteSource` instead. */
 export type TransformItemsIndicesConfig = {
   indexName: string;
   indexId: string;
@@ -34,11 +67,11 @@ export type AutocompleteConnectorParams = {
    */
   escapeHTML?: boolean;
   /**
-   * Transforms the items of all indices.
+   * Transforms the items of all sources.
    */
   transformItems?: (
-    indices: TransformItemsIndicesConfig[]
-  ) => TransformItemsIndicesConfig[];
+    sources: AutocompleteSource[]
+  ) => AutocompleteSource[];
   /**
    * Enable usage of future Autocomplete behavior.
    */
@@ -63,32 +96,19 @@ export type AutocompleteRenderState = {
   currentRefinement: string | undefined;
 
   /**
-   * The indices this widget has access to.
+   * The sources this widget has access to — both search indices and
+   * Recommend-powered sources. Use `sourceType` to distinguish them.
+   */
+  sources: AutocompleteSource[];
+
+  /**
+   * @deprecated Use `sources` instead.
    */
   indices: Array<{
-    /**
-     * The name of the index
-     */
     indexName: string;
-
-    /**
-     * The id of the index
-     */
     indexId: string;
-
-    /**
-     * The resolved hits from the index matching the query.
-     */
     hits: Hit[];
-
-    /**
-     * The full results object from the Algolia API.
-     */
     results: SearchResults;
-
-    /**
-     * Send event to insights middleware
-     */
     sendEvent: SendEventForHits;
   }>;
 
@@ -125,11 +145,17 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
-      transformItems = ((indices) => indices) as NonNullable<
+      transformItems = ((sources) => sources) as NonNullable<
         AutocompleteConnectorParams['transformItems']
       >,
       future: { undefinedEmptyQuery = false } = {},
     } = widgetParams || {};
+
+    // Private params set by EXPERIMENTAL_autocomplete — not part of the public API.
+    const {
+      _recommendSources,
+      _sourcesOrder,
+    } = (widgetParams as any) || {};
 
     warning(
       !(widgetParams as any).indices,
@@ -182,7 +208,7 @@ search.addWidgets([
 
         const renderState = this.getWidgetRenderState(renderOptions);
 
-        renderState.indices.forEach(({ sendEvent, hits }) => {
+        renderState.sources.forEach(({ sendEvent, hits }) => {
           sendEvent('view:internal', hits);
         });
 
@@ -214,14 +240,17 @@ search.addWidgets([
           };
         }
 
+        // sendEvent is keyed by indexId/sourceId to survive transformItems reordering.
         const sendEventMap: Record<string, SendEventForHits> = {};
-        const indices = scopedResults.map((scopedResult) => {
-          // We need to escape the hits because highlighting
-          // exposes HTML tags to the end-user.
-          if (scopedResult.results) {
-            scopedResult.results.hits = escapeHTML
-              ? escapeHits(scopedResult.results.hits)
-              : scopedResult.results.hits;
+
+        // Build search sources from scopedResults.
+        const searchSourceMap = new Map<string, AutocompleteSource>();
+        scopedResults.forEach((scopedResult) => {
+          const results = scopedResult.results;
+          if (results) {
+            results.hits = escapeHTML
+              ? escapeHits(results.hits)
+              : results.hits;
           }
 
           sendEventMap[scopedResult.indexId] = createSendEventForHits({
@@ -230,33 +259,95 @@ search.addWidgets([
             widgetType: this.$$type,
           });
 
-          const hits = scopedResult.results
+          const hits = results
             ? addQueryID(
                 addAbsolutePosition(
-                  scopedResult.results.hits,
-                  scopedResult.results.page,
-                  scopedResult.results.hitsPerPage
+                  results.hits,
+                  results.page,
+                  results.hitsPerPage
                 ),
-                scopedResult.results.queryID
+                results.queryID
               )
             : [];
 
-          return {
+          searchSourceMap.set(scopedResult.indexId, {
+            sourceType: 'index',
             indexId: scopedResult.indexId,
-            indexName: scopedResult.results?.index || '',
+            indexName: results?.index || '',
             hits,
-            results: scopedResult.results || ({} as unknown as SearchResults),
-          };
+            results: results || ({} as Record<string, never>),
+            sendEvent: sendEventMap[scopedResult.indexId],
+          });
         });
+
+        // Build recommend sources from the shared map written by recommend widgets.
+        const recommendSourceMap = new Map<string, AutocompleteSource>();
+        if (_recommendSources) {
+          (_recommendSources as Map<string, { hits: Hit[]; sendEvent: SendEventForHits; indexName: string }>).forEach(
+            ({ hits: rawHits, sendEvent, indexName }, sourceId) => {
+              // Hits from recommend connectors already have __position and __queryID set.
+              const escapedHits = escapeHTML ? escapeHits(rawHits) : rawHits;
+              sendEventMap[sourceId] = sendEvent;
+              recommendSourceMap.set(sourceId, {
+                sourceType: 'recommend',
+                indexId: sourceId,
+                indexName,
+                hits: escapedHits,
+                results: {},
+                sendEvent,
+              });
+            }
+          );
+        }
+
+        // Merge sources in the order requested by EXPERIMENTAL_autocomplete.
+        // Fall back to search-first if no order is provided (plain connectAutocomplete usage).
+        let sources: AutocompleteSource[];
+        if (_sourcesOrder) {
+          const order = _sourcesOrder as Array<{ sourceId: string; sourceType: 'index' | 'recommend' }>;
+          sources = [];
+          order.forEach(({ sourceId, sourceType }) => {
+            const source =
+              sourceType === 'recommend'
+                ? recommendSourceMap.get(sourceId)
+                : searchSourceMap.get(sourceId);
+            if (source) sources.push(source);
+          });
+          // Safety net: include any search sources not in the order list.
+          searchSourceMap.forEach((source, indexId) => {
+            if (!order.some((o) => o.sourceId === indexId)) {
+              sources.push(source);
+            }
+          });
+        } else {
+          sources = [
+            ...searchSourceMap.values(),
+            ...recommendSourceMap.values(),
+          ];
+        }
+
+        const transformedSources = transformItems(sources).map(
+          (transformedSource) => ({
+            ...transformedSource,
+            sendEvent: sendEventMap[transformedSource.indexId],
+          })
+        );
 
         return {
           currentRefinement: undefinedEmptyQuery
             ? state.query
             : state.query || '',
-          indices: transformItems(indices).map((transformedIndex) => ({
-            ...transformedIndex,
-            sendEvent: sendEventMap[transformedIndex.indexId],
-          })),
+          sources: transformedSources,
+          // @deprecated
+          indices: transformedSources
+            .filter((s) => s.sourceType === 'index')
+            .map((s) => ({
+              indexName: s.indexName,
+              indexId: s.indexId,
+              hits: s.hits,
+              results: s.results as SearchResults,
+              sendEvent: s.sendEvent,
+            })),
           refine: connectorState.refine,
           widgetParams,
         };
