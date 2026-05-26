@@ -10,13 +10,12 @@ function fixture(name: string): string {
 
 describe('detect()', () => {
   describe('successful detection', () => {
-    it('identifies a React + Vite project', () => {
+    it('identifies a React + Vite project (no framework field — plain React)', () => {
       const result = detect(fixture('react-vite'), { command: 'init' });
 
       expect(result).toEqual({
         ok: true,
         flavor: 'react',
-        framework: 'vite',
         typescript: false,
         aliases: {},
       });

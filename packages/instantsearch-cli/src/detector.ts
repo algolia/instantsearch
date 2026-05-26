@@ -6,7 +6,7 @@ import * as jsonc from 'jsonc-parser';
 import { failureEnvelope } from './envelope';
 
 type Flavor = 'react' | 'js';
-type Framework = 'vite' | 'next-app';
+type Framework = 'next-app';
 
 type RefusalCode =
   | 'unsupported_flavor'
@@ -16,7 +16,7 @@ type RefusalCode =
 type DetectionSuccess = {
   ok: true;
   flavor: Flavor;
-  framework: Framework;
+  framework?: Framework;
   typescript: boolean;
   aliases: Record<string, string[]>;
 };
@@ -85,7 +85,9 @@ export function detect(
   return {
     ok: true,
     flavor,
-    framework: frameworkResult.framework,
+    ...(frameworkResult.framework !== undefined && {
+      framework: frameworkResult.framework,
+    }),
     typescript,
     aliases: tsconfig?.compilerOptions?.paths ?? {},
   };
@@ -96,7 +98,7 @@ function detectFlavor(deps: Record<string, string>): Flavor | null {
   return null;
 }
 
-type FrameworkOk = { ok: true; framework: Framework };
+type FrameworkOk = { ok: true; framework?: Framework };
 
 function detectFramework(
   projectRoot: string,
@@ -128,14 +130,7 @@ function detectFramework(
     );
   }
 
-  if ('vite' in deps) {
-    return { ok: true, framework: 'vite' };
-  }
-  return refuse(
-    command,
-    'unsupported_framework',
-    'Could not identify a supported React framework. InstantSearch CLI currently supports Vite-based React projects.'
-  );
+  return { ok: true };
 }
 
 function readJsonFile<T>(filePath: string): T | null {
