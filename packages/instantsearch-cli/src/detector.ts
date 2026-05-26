@@ -69,7 +69,7 @@ export function detect(
     return refuse(
       command,
       'unsupported_flavor',
-      'Host framework is not supported yet. Only React and Next.js (App Router) are supported.'
+      'Only React projects are supported yet.'
     );
   }
 
