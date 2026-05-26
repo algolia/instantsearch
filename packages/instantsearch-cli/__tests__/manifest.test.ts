@@ -66,7 +66,6 @@ describe('manifest', () => {
       expect(result).toEqual({
         ok: false,
         command: 'add',
-        apiVersion: 1,
         code: 'invalid_manifest',
         message: expect.stringContaining('not valid JSON'),
       });
@@ -80,7 +79,6 @@ describe('manifest', () => {
       expect(result).toEqual({
         ok: false,
         command: 'add',
-        apiVersion: 1,
         code: 'not_found',
         message: expect.stringContaining(filePath),
       });
@@ -131,7 +129,6 @@ describe('manifest', () => {
       expect(result).toEqual({
         ok: false,
         command: 'init',
-        apiVersion: 1,
         code: 'manifest_exists',
         message: expect.stringContaining(filePath),
       });
@@ -164,7 +161,6 @@ describe('manifest', () => {
       expect(result).toMatchObject({
         ok: false,
         command: 'init',
-        apiVersion: 1,
         code: 'invalid_manifest',
       });
     });
