@@ -10,6 +10,7 @@ import { WidgetChatTrigger } from "../components/widgets/WidgetChatTrigger";
 // import { WidgetFilterSuggestions } from "../components/widgets/WidgetFilterSuggestions";
 import { WidgetHits } from "../components/widgets/WidgetHits";
 import { WidgetSwitcher } from "../components/WidgetSwitcher";
+import { ChatLayoutContext } from "../context/chatLayout";
 import { SearchContext } from "../context/search";
 
 import type { ChatRenderState } from "instantsearch.js/es/connectors/chat/connectChat";
@@ -47,36 +48,38 @@ export function AgenticView() {
 
   return (
     <SearchContext.Provider value={searchRef.current}>
-      <div class="flex flex-col gap-2">
-        {/* Row 1: AI autocomplete */}
-        <WidgetSwitcher
-          widgets={[
-            { title: "autocomplete (showPromptSuggestions + aiMode)", body: WidgetAiAutocomplete, docs: ["autocomplete"] },
-          ]}
-        />
-
-        {/* Row 2: ChatTrigger | Chat (hosts the layout switcher; the
-            chat renders inline inside this tile, or floats/docks to the
-            viewport for overlay/sidePanel).
-            `min-w-0` lets the chat's grid-based carousel scroll horizontally
-            inside its tile instead of forcing the flex row to overflow. */}
-        <div class="flex flex-col gap-2 sm:flex-row">
+      <ChatLayoutContext.Provider value={chatLayout}>
+        <div class="flex flex-col gap-2">
+          {/* Row 1: AI autocomplete */}
           <WidgetSwitcher
-            class="min-w-0 flex-1"
-            widgets={[{ title: "chatTrigger", body: WidgetChatTrigger }]}
+            widgets={[
+              { title: "autocomplete (showPromptSuggestions + aiMode)", body: WidgetAiAutocomplete, docs: ["autocomplete"] },
+            ]}
           />
-          <ChatLayoutSwitcher
-            class="min-w-0 flex-1"
-            layout={chatLayout}
-            onLayoutChange={setChatLayout}
-          >
-            <WidgetChat layout={chatLayout} indexName={INDEX_NAME} />
-          </ChatLayoutSwitcher>
-        </div>
 
-        {/* Row 3: Hits */}
-        <WidgetSwitcher widgets={[{ title: "hits", body: WidgetHits }]} />
-      </div>
+          {/* Row 2: ChatTrigger | Chat (hosts the layout switcher; the
+              chat renders inline inside this tile, or floats/docks to the
+              viewport for overlay/sidePanel).
+              `min-w-0` lets the chat's grid-based carousel scroll horizontally
+              inside its tile instead of forcing the flex row to overflow. */}
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <WidgetSwitcher
+              class="min-w-0 flex-1"
+              widgets={[{ title: "chatTrigger", body: WidgetChatTrigger }]}
+            />
+            <ChatLayoutSwitcher
+              class="min-w-0 flex-1"
+              layout={chatLayout}
+              onLayoutChange={setChatLayout}
+            >
+              <WidgetChat layout={chatLayout} indexName={INDEX_NAME} />
+            </ChatLayoutSwitcher>
+          </div>
+
+          {/* Row 3: Hits */}
+          <WidgetSwitcher widgets={[{ title: "hits", body: WidgetHits }]} />
+        </div>
+      </ChatLayoutContext.Provider>
     </SearchContext.Provider>
   );
 }
