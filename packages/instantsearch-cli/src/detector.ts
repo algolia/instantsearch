@@ -5,10 +5,11 @@ import * as jsonc from 'jsonc-parser';
 
 import { failureEnvelope } from './envelope';
 
-type Flavor = 'react' | 'js';
+type Flavor = 'react';
 type Framework = 'next-app';
 
 type RefusalCode =
+  | 'package_json_not_found'
   | 'unsupported_flavor'
   | 'unsupported_framework'
   | 'ambiguous_framework';
@@ -54,7 +55,7 @@ export function detect(
   if (!pkg) {
     return refuse(
       command,
-      'unsupported_flavor',
+      'package_json_not_found',
       'Could not read package.json at the project root.'
     );
   }

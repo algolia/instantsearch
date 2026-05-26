@@ -133,6 +133,19 @@ describe('detect()', () => {
       }
     );
 
+    it('refuses with package_json_not_found when package.json is missing', () => {
+      const result = detect(path.join(__dirname, '__nonexistent_dir__'), {
+        command: 'init',
+      });
+
+      expect(result).toEqual({
+        ok: false,
+        command: 'init',
+        code: 'package_json_not_found',
+        message: expect.any(String),
+      });
+    });
+
     it('threads the caller-supplied command name into the envelope', () => {
       const result = detect(fixture('next-pages'), { command: 'add' });
 
