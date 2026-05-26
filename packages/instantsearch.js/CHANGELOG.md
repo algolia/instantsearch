@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.99.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.98.0...instantsearch.js@4.99.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+* **recommend:** remove unsupported queryParameters from trending-facets ([#7043](https://github.com/algolia/instantsearch/issues/7043)) ([d5dd4bf](https://github.com/algolia/instantsearch/commit/d5dd4bf5c4fbd88ef68e84cb1b94a4a1644bf3ed))
+
+
+### Features
+
+* **chat:** send hidden context via message metadata.turnContext ([#7042](https://github.com/algolia/instantsearch/issues/7042)) ([4b64e1f](https://github.com/algolia/instantsearch/commit/4b64e1f6ac69f690dc5cad997ce5319672f8aa3c))
+
+
+
+
+
+# [4.98.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.97.0...instantsearch.js@4.98.0) (2026-05-19)
+
+
+### Bug Fixes
+
+* **chat:** regenerate chat id on clearMessages ([#7035](https://github.com/algolia/instantsearch/issues/7035)) ([a622a61](https://github.com/algolia/instantsearch/commit/a622a6185f43f8312f6a4c094f1a8a96da805a1d))
+
+
+### Features
+
+* **chat:** centralize AI mode entry points behind openChat helper ([#7036](https://github.com/algolia/instantsearch/issues/7036)) ([fcb40dd](https://github.com/algolia/instantsearch/commit/fcb40dd1f7ee2e12abe99bb590a64bdcfdd29157))
+* **chat:** identify component and referer in agent requests ([#7002](https://github.com/algolia/instantsearch/issues/7002)) ([7701b0d](https://github.com/algolia/instantsearch/commit/7701b0de7ffd65d46afc9c98ccc81903ed3df556))
+* **filter-suggestions:** deprecate filter suggestions ([#7040](https://github.com/algolia/instantsearch/issues/7040)) ([3b2c8ff](https://github.com/algolia/instantsearch/commit/3b2c8ff5e547186aa07be29dfac4f07c7bc07b98))
+
+
+
+
+
 # [4.97.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.96.2...instantsearch.js@4.97.0) (2026-05-12)
 
 

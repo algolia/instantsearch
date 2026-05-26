@@ -160,12 +160,17 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    */
   type?: string;
   /**
-   * Additional context to send with each user message (e.g. current page info).
-   * This context is included in the message parts sent to the API but is not
-   * displayed in the chat UI.
-   * Can be a static object or a function that returns the context at send time.
+   * Ambient session facts to attach to the latest user turn (e.g. current page
+   * URL, locale, product id). Sent over the wire as
+   * `messages[last].metadata.turnContext` per the Agent Studio contract — never
+   * rendered as a chat bubble and never persisted on assistant turns.
+   *
+   * The server validates the payload (flat `Record<string, string>`, key/value
+   * length and shape) and rejects malformed contexts. Pass a function when the
+   * values change per-turn — it is invoked once per send. If the source is
+   * async, resolve it upstream and close over the value.
    */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -373,7 +378,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       let transport;
-      const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+      const { client } = instantSearchInstance;
+      const [appId, apiKey] = getAppIdAndApiKey(client);
 
       // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
       const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
@@ -390,10 +396,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           ...options.transport,
           prepareSendMessagesRequest: (params) => {
             // Call the original prepareSendMessagesRequest if it exists,
-            // otherwise construct the default body
+            // otherwise construct a minimal default body containing only the
+            // request payload — without leaking transport metadata such as
+            // resolved headers, api URL, credentials, or `requestMetadata`.
             const preparedOrPromise = originalPrepare
               ? originalPrepare(params)
-              : { body: { ...params } };
+              : {
+                  body: {
+                    id: params.id,
+                    messageId: params.messageId,
+                    trigger: params.trigger,
+                    messages: params.messages,
+                    ...params.body,
+                  },
+                };
             // Then filter out data-* parts
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
@@ -427,10 +443,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
-            'x-algolia-api-Key': apiKey,
-            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+            'x-algolia-api-key': apiKey,
+            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
-          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:
@@ -438,7 +454,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                   ? `${baseApi}&cache=false`
                   : baseApi,
               body: {
-                ...rest,
+                id,
+                messageId,
                 messages: filterDataParts(messages),
               },
             };
@@ -674,47 +691,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          const resolvedContext =
+          // Resolve once per send; let the server validate the payload and
+          // surface any contract violations.
+          const turnContext =
             typeof context === 'function' ? context() : context;
 
-          let serializedContext: string;
-          try {
-            serializedContext = JSON.stringify(resolvedContext);
-          } catch {
-            warning(
-              false,
-              'Could not serialize chat context. The message will be sent without context.'
-            );
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const contextTextPart = {
-            type: 'text' as const,
-            text: '<context>'.concat(serializedContext).concat('</context>'),
-          };
-
-          if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
+          return _chatInstance.sendMessage(
+            {
               ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
-          }
-
-          const textContent =
-            'text' in message && message.text ? message.text : '';
-
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                turnContext,
+              },
+            } as Parameters<typeof _chatInstance.sendMessage>[0],
+            ...rest
+          );
         };
 
         return {

@@ -1,6 +1,6 @@
 {
   "name": "example-algolia-experiences",
-  "version": "1.48.0",
+  "version": "1.50.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -10,11 +10,11 @@
     "website:examples": "vite build --outDir ../../../website/examples/js/algolia-experiences --base /examples/js/algolia-experiences"
   },
   "dependencies": {
-    "algolia-experiences": "1.8.5",
+    "algolia-experiences": "1.8.7",
     "algoliasearch-helper": "3.29.1",
-    "instantsearch-ui-components": "0.26.1",
-    "instantsearch.css": "8.16.1",
-    "instantsearch.js": "4.97.0"
+    "instantsearch-ui-components": "0.28.0",
+    "instantsearch.css": "8.16.2",
+    "instantsearch.js": "4.99.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

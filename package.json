@@ -133,7 +133,6 @@
     "css-loader": "4.3.0",
     "webpack": "4.47.0",
     "babel-loader": "8.2.2",
-    "zod": "3.25.76",
     "qs": "6.9.7",
     "baseline-browser-mapping": "2.9.19",
     "express": "4.22.1"

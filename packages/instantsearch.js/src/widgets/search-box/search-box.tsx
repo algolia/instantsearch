@@ -202,7 +202,12 @@ const renderer =
 
     const onAiModeClick = aiMode
       ? (currentQuery: string) => {
-          if (openChat(getChatRenderState(), { message: currentQuery })) {
+          if (
+            openChat(getChatRenderState(), {
+              message: currentQuery,
+              referer: 'ai-mode',
+            })
+          ) {
             refine('');
           }
         }

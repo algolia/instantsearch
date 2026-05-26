@@ -6,6 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
@@ -924,6 +925,195 @@ data: [DONE]`,
         })
       );
     });
+
+    describe('agent endpoint requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      function getRequestPayload() {
+        const [, init] = fetchMock.mock.calls[0];
+        return {
+          headers: init.headers as Record<string, string>,
+          body: JSON.parse(init.body as string),
+        };
+      }
+
+      it('sends the standard Algolia headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+          })
+        );
+        expect(headers).toHaveProperty('x-algolia-agent');
+      });
+
+      it('appends `; chat` to the x-algolia-agent header on agent requests', async () => {
+        const client = Object.assign(createSearchClient(), {
+          appId: 'appId',
+          apiKey: 'apiKey',
+          transporter: { userAgent: { value: 'instantsearch.js (4.95.0)' } },
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-agent']).toBe(
+          'instantsearch.js (4.95.0); chat'
+        );
+      });
+
+      it('does not register `chat` on the search client user-agent', () => {
+        const addAlgoliaAgent = jest.fn();
+        const client = Object.assign(createSearchClient(), {
+          addAlgoliaAgent,
+        });
+        const instantSearchInstance = createInstantSearch({ client });
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        // The chat connector must not register `chat` on the shared search
+        // client — otherwise every subsequent search request would carry it
+        // in `x-algolia-agent`.
+        expect(addAlgoliaAgent).not.toHaveBeenCalledWith(
+          expect.stringContaining('chat')
+        );
+      });
+
+      it('forwards the x-algolia-referer header from sendMessage options', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+
+        const { headers } = getRequestPayload();
+        expect(headers).toMatchObject({
+          'x-algolia-referer': 'prompt-suggestions',
+        });
+      });
+
+      it('does not carry over the x-algolia-referer to follow-up messages', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
+      });
+
+      it('does not duplicate transport metadata in the request body', async () => {
+        const { widget } = getInitializedWidget({ agentId: 'agentId' });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { body } = getRequestPayload();
+        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+        expect(body).not.toHaveProperty('body');
+        expect(body).not.toHaveProperty('requestMetadata');
+      });
+    });
+
+    describe('custom transport requests', () => {
+      const originalFetch = global.fetch;
+      let fetchMock: jest.Mock;
+
+      beforeEach(() => {
+        fetchMock = jest.fn(() =>
+          Promise.resolve(
+            new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+              headers: { 'Content-Type': 'text/event-stream' },
+            })
+          )
+        );
+        global.fetch = fetchMock as unknown as typeof fetch;
+      });
+
+      afterEach(() => {
+        global.fetch = originalFetch;
+      });
+
+      it('does not leak transport metadata in the default body', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          transport: { api: 'https://custom.api' },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const [, init] = fetchMock.mock.calls[0];
+        const body = JSON.parse(init.body as string);
+
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+          'trigger',
+        ]);
+        expect(body).not.toHaveProperty('headers');
+        expect(body).not.toHaveProperty('api');
+        expect(body).not.toHaveProperty('credentials');
+      });
+    });
   });
 
   describe('context', () => {
@@ -960,7 +1150,7 @@ data: [DONE]`,
       return { widget, renderFn };
     }
 
-    it('prepends context text part when context is a static object', async () => {
+    it('attaches turnContext to metadata when context is a static object', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -977,13 +1167,12 @@ data: [DONE]`,
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
-        },
-        { type: 'text', text: 'Hello' },
-      ]);
+      expect(call.text).toBe('Hello');
+      expect(call.metadata).toEqual({
+        turnContext: { currentPage: '/products', locale: 'en-US' },
+      });
+      // The legacy `<context>{...}</context>` text part must not be present.
+      expect(call.parts).toBeUndefined();
     });
 
     it('evaluates context function at send time', async () => {
@@ -1002,23 +1191,39 @@ data: [DONE]`,
       const { sendMessage } = renderFn.mock.calls[0][0];
 
       await sendMessage({ text: 'first' });
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-1"}</context>',
-        },
-        { type: 'text', text: 'first' },
-      ]);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-1' },
+      });
 
       pageUrl = '/page-2';
       await sendMessage({ text: 'second' });
-      expect((sendMessageSpy.mock.calls[1][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-2"}</context>',
-        },
-        { type: 'text', text: 'second' },
-      ]);
+      expect((sendMessageSpy.mock.calls[1][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-2' },
+      });
+    });
+
+    it('preserves caller-supplied metadata and namespaces turnContext under it', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/about' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'hi',
+        metadata: { custom: 'value' } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        custom: 'value',
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through without modification when no context is set', async () => {
@@ -1038,7 +1243,7 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
 
-    it('prepends context when called with parts', async () => {
+    it('attaches turnContext to metadata when called with parts', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1055,13 +1260,11 @@ data: [DONE]`,
         parts: [{ type: 'text', text: 'Hi from parts' }],
       });
 
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"page":"/about"}</context>',
-        },
-        { type: 'text', text: 'Hi from parts' },
-      ]);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([{ type: 'text', text: 'Hi from parts' }]);
+      expect(call.metadata).toEqual({
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through when called with no message', async () => {
@@ -1082,16 +1285,47 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
 
-    it('sends message without context when context is not serializable', async () => {
+    it('forwards values verbatim and leaves payload validation to the server', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
-      const circular: Record<string, unknown> = {};
-      circular.self = circular;
+      const longValue = 'x'.repeat(1025);
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        // Intentionally non-conforming entries: backend (HTTP 422) owns
+        // validation; the client must not silently mutate this payload.
+        context: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        } as Record<string, string>,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'hi' });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        },
+      });
+    });
+
+    it('propagates errors from a throwing context resolver', () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
       const { widget, renderFn } = createChatWidgetWithContext({
         chat: chatInstance,
-        context: circular,
+        context: () => {
+          throw new Error('boom');
+        },
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -1099,12 +1333,10 @@ data: [DONE]`,
 
       const { sendMessage } = renderFn.mock.calls[0][0];
 
-      expect(() => sendMessage({ text: 'Hello' })).toWarnDev(
-        '[InstantSearch.js]: Could not serialize chat context. The message will be sent without context.'
-      );
-
-      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+      // A throwing `context` is a developer bug — surface it loudly instead
+      // of silently sending the message without context.
+      expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
+      expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });
 });
