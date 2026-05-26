@@ -119,7 +119,7 @@ export function createProgram(io: IO = defaultIO()): Command {
     .option('--search-api-key <key>', 'Algolia Search-Only API Key')
     .action(async (flags: IntrospectFlagOptions, cmd: Command) => {
       const { json } = cmd.optsWithGlobals<{ json: boolean }>();
-      await runIntrospect(
+      const exitCode = await runIntrospect(
         {
           cwd: process.cwd(),
           json: Boolean(json),
@@ -129,6 +129,7 @@ export function createProgram(io: IO = defaultIO()): Command {
         },
         io
       );
+      if (exitCode !== 0) throw new HandledFailure(exitCode);
     });
 
   for (const stub of STUBS) {
