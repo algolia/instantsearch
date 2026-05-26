@@ -1,6 +1,7 @@
 export * from './Autocomplete';
 export * from './Breadcrumb';
 export * from './Chat';
+export * from './ChatTrigger';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
 export * from './FrequentlyBoughtTogether';

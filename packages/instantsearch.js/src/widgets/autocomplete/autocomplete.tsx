@@ -826,7 +826,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onInput: (event) => {
+        onInput: (event: { currentTarget: HTMLInputElement }) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
@@ -1309,6 +1309,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           future: { undefinedEmptyQuery: true },
         }),
         $$widgetType: 'ais.autocomplete',
+        ...(aiMode ? { opensChat: true as const } : {}),
       },
     ]),
   ];

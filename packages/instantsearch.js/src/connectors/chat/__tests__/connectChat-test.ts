@@ -28,6 +28,7 @@ describe('connectChat', () => {
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
+      disableTriggerValidation: true,
       ...widgetParams,
     });
 
@@ -239,7 +240,9 @@ describe('connectChat', () => {
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { agentId: 'agentId' } }),
+      expect.objectContaining({
+        widgetParams: expect.objectContaining({ agentId: 'agentId' }),
+      }),
       true
     );
 
@@ -248,7 +251,9 @@ describe('connectChat', () => {
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { agentId: 'agentId' } }),
+      expect.objectContaining({
+        widgetParams: expect.objectContaining({ agentId: 'agentId' }),
+      }),
       false
     );
   });
@@ -257,7 +262,10 @@ describe('connectChat', () => {
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
       const makeWidget = connectChat(() => {}, unmountFn);
-      const widget = makeWidget({ agentId: 'agentId' });
+      const widget = makeWidget({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
 
@@ -902,7 +910,7 @@ data: [DONE]`,
     it('throws error when neither agentId nor transport is provided', () => {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
-      const widget = makeWidget({});
+      const widget = makeWidget({ disableTriggerValidation: true });
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
 

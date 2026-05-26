@@ -12,7 +12,6 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
       headerComponent,
       messagesComponent,
       promptComponent,
-      toggleButtonComponent,
       classNames = {},
       className,
       // Chat state props (destructured to avoid spreading on div)
@@ -52,10 +51,6 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
           {headerComponent}
           {messagesComponent}
           {promptComponent}
-        </div>
-
-        <div className="ais-Chat-toggleButtonWrapper">
-          {toggleButtonComponent}
         </div>
       </div>
     );

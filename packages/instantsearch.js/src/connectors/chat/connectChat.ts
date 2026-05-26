@@ -14,6 +14,7 @@ import {
   noop,
   sendChatMessageFeedback,
   uniq,
+  walkIndex,
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
@@ -146,6 +147,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   | { chat: Chat<TUiMessage> }
   | ChatInit<TUiMessage>
 ) & {
+  /**
+   * Disable validation that requires either a dedicated trigger or AI mode.
+   */
+  disableTriggerValidation?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
    */
@@ -299,6 +304,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       context,
       initialUserMessage,
       initialMessages,
+      disableTriggerValidation = false,
       ...options
     } = widgetParams || {};
 
@@ -312,6 +318,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
     let setIsClearing: (value: boolean) => void;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
+    let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
@@ -374,6 +381,34 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       _chatInstance.regenerateId();
       feedbackState = {};
       setIsClearing(false);
+    };
+
+    const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
+      if (disableTriggerValidation || hasValidatedEntryPoints) {
+        return;
+      }
+
+      // warning only relevant once mounted
+      if (!instantSearchInstance.mainIndex) {
+        return;
+      }
+
+      let hasEntryPoint = false;
+      walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
+        const widgets = indexWidget.getWidgets() as Array<{
+          opensChat?: boolean;
+        }>;
+        if (widgets.some((w) => w.opensChat === true)) {
+          hasEntryPoint = true;
+        }
+      });
+
+      warning(
+        hasEntryPoint,
+        'The `chat` widget has no way to be opened. Add a `chatTrigger` widget, enable `aiMode` on a `searchBox`/`autocomplete`, or use the inline layout. Set `disableTriggerValidation: true` to silence this warning.'
+      );
+
+      hasValidatedEntryPoints = true;
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -534,6 +569,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
+        validateEntryPoints(instantSearchInstance);
+
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -549,6 +586,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         setOpen = (o) => {
           open = o;
           render();
+          // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
+          // shared `renderState`. Schedule a full re-render so they pick up
+          // the new value instead of staying frozen on their initial state.
+          initOptions.instantSearchInstance.scheduleRender();
         };
 
         focusInput = () => {
@@ -570,8 +611,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        const feedback =
-          'feedback' in options ? options.feedback : undefined;
+        const feedback = 'feedback' in options ? options.feedback : undefined;
         if (agentId && feedback) {
           const [appId, apiKey] = getAppIdAndApiKey(
             initOptions.instantSearchInstance.client
@@ -633,6 +673,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       render(renderOptions) {
+        validateEntryPoints(renderOptions.instantSearchInstance);
+
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
