@@ -145,7 +145,6 @@ describe('manifest', () => {
 
     it.each([
       'flavor',
-      'framework',
       'typescript',
       'componentsPath',
       'libPath',
@@ -161,6 +160,24 @@ describe('manifest', () => {
       expect(result).toMatchObject({
         ok: false,
         command: 'init',
+        code: 'invalid_manifest',
+      });
+    });
+
+    it('accepts a manifest without a framework field', () => {
+      const manifest = validManifest();
+      delete (manifest as Record<string, unknown>).framework;
+
+      const result = validateManifest(manifest, { command: 'init' });
+      expect(result).toMatchObject({ ok: true });
+    });
+
+    it('rejects an empty-string framework value', () => {
+      const manifest = validManifest({ framework: '' as unknown as string });
+
+      const result = validateManifest(manifest, { command: 'init' });
+      expect(result).toMatchObject({
+        ok: false,
         code: 'invalid_manifest',
       });
     });

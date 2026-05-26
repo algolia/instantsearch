@@ -7,7 +7,7 @@ export const MANIFEST_API_VERSION = 1;
 export type Manifest = {
   apiVersion: typeof MANIFEST_API_VERSION;
   flavor: string;
-  framework: string;
+  framework?: string;
   typescript: boolean;
   componentsPath: string;
   libPath: string;
@@ -124,11 +124,18 @@ function checkManifest(value: unknown): string | null {
     return `Manifest "apiVersion" must equal ${MANIFEST_API_VERSION}.`;
   }
 
-  for (const key of ['flavor', 'framework', 'componentsPath', 'libPath']) {
+  for (const key of ['flavor', 'componentsPath', 'libPath']) {
     const entry = value[key];
     if (typeof entry !== 'string' || entry.length === 0) {
       return `Manifest "${key}" must be a non-empty string.`;
     }
+  }
+
+  if (
+    value.framework !== undefined &&
+    (typeof value.framework !== 'string' || value.framework.length === 0)
+  ) {
+    return 'Manifest "framework" must be a non-empty string when present.';
   }
 
   if (typeof value.typescript !== 'boolean') {
