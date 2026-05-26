@@ -631,6 +631,52 @@ export function createOptionsTests(
       expect(document.activeElement).toEqual(updatedTargetItem);
     });
 
+    test('keeps focus on toggled input between re-renders (multiple values that should be escaped)', async () => {
+      const searchClient = createMockedSearchClient(
+        {},
+        {
+          Apple: 100,
+          '7-1/2" - 9-1/2"': 200,
+          Samsung: 300,
+        }
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: { attribute: 'brand' },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const initialTargetItem = document.querySelector(
+        '.ais-RefinementList-checkbox[value="7-1/2\\" - 9-1/2\\""]'
+      )!;
+
+      // Single click: the item's `isRefined` flips, which is part of the
+      // Preact key, so the old <input> unmounts and a fresh one mounts.
+      // The click-focused element is gone; only the post-render focus
+      // restoration in `componentDidUpdate` can put focus on the new input.
+      // If the restoration logic builds a CSS selector with values that
+      // contain `"` but only escapes the first one, `querySelector` throws
+      // and focus drops to body.
+      await act(async () => {
+        userEvent.click(initialTargetItem);
+        await wait(0);
+      });
+
+      const updatedTargetItem = document.querySelector(
+        '.ais-RefinementList-checkbox[value="7-1/2\\" - 9-1/2\\""]'
+      )!;
+
+      expect(updatedTargetItem).toBeChecked();
+      expect(document.activeElement).toEqual(updatedTargetItem);
+    });
+
     test('does not display facets that should be hidden based on the renderingContent', async () => {
       const searchClient = createMockedSearchClient(undefined, undefined, {
         facetOrdering: {
