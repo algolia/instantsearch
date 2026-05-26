@@ -157,7 +157,6 @@ describe('introspect', () => {
     expect(readEnvelope(capture.stdout)).toEqual({
       ok: true,
       command: 'introspect',
-      apiVersion: 1,
       filesCreated: [],
       nextSteps: [],
       data: {
@@ -232,7 +231,6 @@ describe('introspect', () => {
     expect(readEnvelope(capture.stdout)).toMatchObject({
       ok: false,
       command: 'introspect',
-      apiVersion: 1,
       code: 'missing_required_flag',
       message: expect.stringContaining('--app-id'),
     });
@@ -376,7 +374,6 @@ describe('introspect', () => {
     expect(readEnvelope(capture.stdout)).toEqual({
       ok: true,
       command: 'introspect',
-      apiVersion: 1,
       filesCreated: [],
       nextSteps: [],
       data: {
