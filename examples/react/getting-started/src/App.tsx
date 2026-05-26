@@ -80,15 +80,15 @@ export function App() {
                   headerComponent={false}
                 />
               </Panel>
-              {/* <Panel header="Page suggestion (POC)">
+              <Panel header="Page suggestion (POC)">
                 <PageSuggestions />
-              </Panel> */}
-              <Panel header="Prompt pills (POC)">
+              </Panel>
+              {/* <Panel header="Prompt pills (POC)">
                 <ChatPageSuggestions
                   maxSuggestions={4}
                   transport={{ api: '/api/chat-page-suggestions?delay=3000' }}
                 />
-              </Panel>
+              </Panel> */}
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">

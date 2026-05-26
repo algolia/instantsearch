@@ -43,9 +43,9 @@ export default function Search() {
         </div>
         <div>
           <SearchBox />
-          <Panel header="Page summary (SSR test)">
+          {/* <Panel header="Page summary (SSR test)">
             <PageSuggestionsPanel />
-          </Panel>
+          </Panel> */}
           <Panel header="Prompt pills (SSR test)">
             {/*
               Demo wiring:
@@ -60,7 +60,7 @@ export default function Search() {
             */}
             <ChatPageSuggestions
               maxSuggestions={4}
-              ssrTimeoutMs={1500}
+              ssrTimeoutMs={200}
               transport={{ api: '/api/chat-page-suggestions?delay=500' }}
             />
           </Panel>

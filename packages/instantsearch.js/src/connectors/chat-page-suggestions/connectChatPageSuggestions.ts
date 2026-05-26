@@ -1,5 +1,10 @@
 import { isChatBusy, openChat } from '../../lib/chat';
 import {
+  buildEndpoint,
+  buildPayload,
+  parseSuggestions,
+} from '../../lib/standalone/chat-page-suggestions';
+import {
   checkRendering,
   createDocumentationMessageGenerator,
   getAlgoliaAgent,
@@ -19,6 +24,8 @@ import type {
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
+// Re-exported below so the symbol stays at its original public path.
+import type { ChatPageSuggestionsTransport } from '../../lib/standalone/chat-page-suggestions';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -26,22 +33,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type ChatPageSuggestionsTransport = {
-  /**
-   * The custom API endpoint URL.
-   */
-  api: string;
-  /**
-   * Custom headers to send with the request.
-   */
-  headers?: Record<string, string>;
-  /**
-   * Function to prepare the request body before sending.
-   */
-  prepareSendMessagesRequest?: (body: Record<string, unknown>) => {
-    body: Record<string, unknown>;
-  };
-};
+export type { ChatPageSuggestionsTransport };
 
 export type ChatPageSuggestionsRenderState = {
   /**
@@ -241,58 +233,23 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           });
         };
 
-      const buildPayload = (
-        results: SearchResults
-      ): Record<string, unknown> => {
-        const resolvedContext =
-          typeof context === 'function' ? context() : context;
-
-        const messageText = JSON.stringify({
-          query: results.query || '',
-          hitsSample: results.hits.slice(0, hitsToSample),
-          context: resolvedContext,
-          maxSuggestions,
-        });
-
-        const payload: Record<string, unknown> = {
-          messages: [
-            {
-              id: `sr-${Date.now()}`,
-              createdAt: new Date().toISOString(),
-              role: 'user',
-              parts: [{ type: 'text', text: messageText }],
-            },
-          ],
-        };
-
-        return transport?.prepareSendMessagesRequest
-          ? transport.prepareSendMessagesRequest(payload).body
-          : payload;
-      };
-
-      const parseSuggestions = (data: unknown): string[] => {
-        try {
-          const parts = (data as { parts?: Array<{ text?: string }> })?.parts;
-          if (!parts || !parts[1]?.text) {
-            return [];
-          }
-          const parsed = JSON.parse(parts[1].text);
-          return (Array.isArray(parsed) ? parsed : [])
-            .filter(
-              (s: unknown): s is string =>
-                typeof s === 'string' && s.trim().length > 0
-            )
-            .slice(0, maxSuggestions);
-        } catch (e) {
-          return [];
-        }
-      };
-
       const doFetch = (
         results: SearchResults,
         signal?: AbortSignal
       ): Promise<string[]> => {
-        const finalPayload = buildPayload(results);
+        const resolvedContext =
+          typeof context === 'function' ? context() : context;
+        const finalPayload = buildPayload(
+          {
+            query: results.query || '',
+            hitsSample: results.hits.slice(0, hitsToSample),
+            context: resolvedContext,
+          },
+          {
+            maxSuggestions,
+            prepareSendMessagesRequest: transport?.prepareSendMessagesRequest,
+          }
+        );
         return fetch(endpoint, {
           method: 'POST',
           headers: { ...headers, 'Content-Type': 'application/json' },
@@ -305,7 +262,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             }
             return response.json();
           })
-          .then(parseSuggestions);
+          .then((data) => parseSuggestions(data, maxSuggestions));
       };
 
       const getWidgetRenderState = (
@@ -476,7 +433,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
               );
             }
 
-            endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&stream=false`;
+            endpoint = buildEndpoint({ appId, agentId: agentId as string });
             headers = {
               'x-algolia-application-id': appId,
               'x-algolia-api-key': apiKey,
