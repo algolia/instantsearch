@@ -27,7 +27,7 @@ describe('detect()', () => {
 
       expect(result).toEqual({
         ok: true,
-        flavor: 'next',
+        flavor: 'react',
         framework: 'next-app',
         typescript: false,
         aliases: {},
@@ -39,7 +39,7 @@ describe('detect()', () => {
 
       expect(result).toEqual({
         ok: true,
-        flavor: 'next',
+        flavor: 'react',
         framework: 'next-app',
         typescript: false,
         aliases: {},
@@ -100,7 +100,6 @@ describe('detect()', () => {
         expect(result).toEqual({
           ok: false,
           command: 'init',
-          apiVersion: 1,
           code: 'unsupported_framework',
           message: expect.any(String),
         });
@@ -115,7 +114,6 @@ describe('detect()', () => {
         expect(result).toEqual({
           ok: false,
           command: 'init',
-          apiVersion: 1,
           code: 'ambiguous_framework',
           message: expect.any(String),
         });
@@ -130,7 +128,6 @@ describe('detect()', () => {
         expect(result).toEqual({
           ok: false,
           command: 'init',
-          apiVersion: 1,
           code: 'unsupported_flavor',
           message: expect.any(String),
         });

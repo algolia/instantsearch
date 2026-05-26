@@ -5,7 +5,7 @@ import * as jsonc from 'jsonc-parser';
 
 import { failureEnvelope } from './envelope';
 
-type Flavor = 'react' | 'next';
+type Flavor = 'react' | 'js';
 type Framework = 'vite' | 'next-app';
 
 type RefusalCode =
@@ -73,7 +73,7 @@ export function detect(
     );
   }
 
-  const frameworkResult = detectFramework(projectRoot, flavor, deps, command);
+  const frameworkResult = detectFramework(projectRoot, deps, command);
   if (!frameworkResult.ok) {
     return frameworkResult;
   }
@@ -92,7 +92,6 @@ export function detect(
 }
 
 function detectFlavor(deps: Record<string, string>): Flavor | null {
-  if ('next' in deps) return 'next';
   if ('react' in deps) return 'react';
   return null;
 }
@@ -101,11 +100,10 @@ type FrameworkOk = { ok: true; framework: Framework };
 
 function detectFramework(
   projectRoot: string,
-  flavor: Flavor,
   deps: Record<string, string>,
   command: string
 ): FrameworkOk | DetectionFailure {
-  if (flavor === 'next') {
+  if ('next' in deps) {
     const hasAppDir =
       isDirectory(path.join(projectRoot, 'app')) ||
       isDirectory(path.join(projectRoot, 'src', 'app'));
