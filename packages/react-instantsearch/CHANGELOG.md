@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.33.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.33.0...react-instantsearch@7.33.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* **recommend:** remove unsupported queryParameters from trending-facets ([#7043](https://github.com/algolia/instantsearch/issues/7043)) ([d5dd4bf](https://github.com/algolia/instantsearch/commit/d5dd4bf5c4fbd88ef68e84cb1b94a4a1644bf3ed))
+
+
+
+
+
 # [7.33.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.32.3...react-instantsearch@7.33.0) (2026-05-19)
 
 

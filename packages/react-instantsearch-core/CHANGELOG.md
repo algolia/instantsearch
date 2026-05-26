@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.33.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.33.0...react-instantsearch-core@7.33.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+
+
+
+
+
 # [7.33.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.3...react-instantsearch-core@7.33.0) (2026-05-19)
 
 
