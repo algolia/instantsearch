@@ -24,7 +24,7 @@ console.log(
   `${PHASE} Search.tsx module evaluated at ${new Date().toISOString()}`
 );
 
-export default function Search() {
+export default function Search({ baseUrl }: { baseUrl: string }) {
   return (
     <InstantSearchNext
       searchClient={client}
@@ -60,8 +60,10 @@ export default function Search() {
             */}
             <ChatPageSuggestions
               maxSuggestions={4}
-              ssrTimeoutMs={200}
-              transport={{ api: '/api/chat-page-suggestions?delay=500' }}
+              ssrTimeoutMs={1500}
+              transport={{
+                api: `${baseUrl}/api/chat-page-suggestions?delay=500`,
+              }}
             />
           </Panel>
           <Hits hitComponent={Hit} />

@@ -196,9 +196,28 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       let searchHelper: InitOptions['helper'] | null = null;
       let latestRenderOptions: RenderOptions | null = null;
       // Skips the first post-hydration fetch when SSR seeded `suggestions`.
-      // Set on init from `_initialChatStates`; consumed on the first
+      // Set when `_initialChatStates` is consumed; cleared on the first
       // `render()` that observes results.
       let hydratedFromSnapshot = false;
+      let hydrationAttempted = false;
+
+      const hydrateFromSnapshot = (
+        instantSearchInstance: InstantSearch
+      ): void => {
+        if (hydrationAttempted) return;
+        hydrationAttempted = true;
+        const ssrSnapshots = (
+          instantSearchInstance as InstantSearchWithChatStates
+        )._initialChatStates;
+        const snapshot =
+          ssrSnapshots && ssrSnapshots[id]
+            ? (ssrSnapshots[id] as ChatPageSuggestionsSnapshot)
+            : undefined;
+        if (snapshot && Array.isArray(snapshot.suggestions)) {
+          suggestions = snapshot.suggestions;
+          hydratedFromSnapshot = true;
+        }
+      };
 
       const getStateSignature = (results: SearchResults): string => {
         const query = results.query || '';
@@ -268,11 +287,17 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       const getWidgetRenderState = (
         renderOptions: InitOptions | RenderOptions
       ) => {
+        const { instantSearchInstance, parent } = renderOptions;
+
+        // React's `useConnector` calls this before `init()` runs (via its
+        // `useState` initializer). Hydrate the SSR snapshot here so the
+        // first React render already shows the seeded suggestions.
+        hydrateFromSnapshot(instantSearchInstance);
+
         const results =
           'results' in renderOptions ? renderOptions.results : undefined;
         const transformed = transformItems(suggestions, { results });
 
-        const { instantSearchInstance, parent } = renderOptions;
         const indexId = parent ? parent.getIndexId() : '';
 
         const chatRenderState =
@@ -346,7 +371,6 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       };
 
       const buildServerWait = (
-        helper: InitOptions['helper'],
         instantSearchInstance: InstantSearch
       ): Promise<void> => {
         return new Promise<void>((resolve) => {
@@ -374,11 +398,22 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             settle();
           }, ssrTimeoutMs);
 
+          // The helper passed to `init` is the per-index state helper, which
+          // has no `derivedHelpers` — only the main helper does. The first
+          // derived helper is the one that actually emits `result` events.
+          const derivedHelper =
+            instantSearchInstance.mainHelper?.derivedHelpers?.[0];
+          if (!derivedHelper) {
+            clearTimeout(timer);
+            settle();
+            return;
+          }
+
           // Wait for the first result event from the derived helper, then
           // fire the fetch. The promise resolves on either the fetch
           // settling or the SSR timeout firing — whichever comes first.
           const onResult = (event: { results?: SearchResults }) => {
-            helper.derivedHelpers[0].removeListener('result', onResult);
+            derivedHelper.removeListener('result', onResult);
             const results = event?.results;
             if (!results || !results.hits?.length) {
               clearTimeout(timer);
@@ -406,7 +441,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
                 settle();
               });
           };
-          helper.derivedHelpers[0].on('result', onResult);
+          derivedHelper.on('result', onResult);
         });
       };
 
@@ -442,18 +477,10 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           }
 
           // Client-side: hydrate from SSR snapshot if present so first paint
-          // matches server HTML and we don't refire the request.
-          const ssrSnapshots = (
-            instantSearchInstance as InstantSearchWithChatStates
-          )._initialChatStates;
-          const snapshot =
-            ssrSnapshots && ssrSnapshots[id]
-              ? (ssrSnapshots[id] as ChatPageSuggestionsSnapshot)
-              : undefined;
-          if (snapshot && Array.isArray(snapshot.suggestions)) {
-            suggestions = snapshot.suggestions;
-            hydratedFromSnapshot = true;
-          }
+          // matches server HTML and we don't refire the request. Idempotent
+          // — `getWidgetRenderState()` may have already done this for React's
+          // pre-init `useState` initializer.
+          hydrateFromSnapshot(instantSearchInstance);
 
           if (isServerRendering()) {
             let perSearch = serverWaitRegistry.get(instantSearchInstance);
@@ -467,7 +494,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
               console.log(
                 `[chat-page-suggestions][SSR] wait started (timeout=${ssrTimeoutMs}ms)`
               );
-              wait = buildServerWait(helper, instantSearchInstance);
+              wait = buildServerWait(instantSearchInstance);
               perSearch.set(id, wait);
             }
             instantSearchInstance.registerServerWait(wait);
