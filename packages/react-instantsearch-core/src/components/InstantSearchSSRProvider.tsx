@@ -13,7 +13,7 @@ export type InstantSearchServerState = {
    * the client so the widget can render the assistant response without
    * refiring the agent request.
    */
-  initialChatStates?: Record<string, unknown[]>;
+  initialChatStates?: Record<string, unknown>;
 };
 
 export type InstantSearchSSRProviderProps =

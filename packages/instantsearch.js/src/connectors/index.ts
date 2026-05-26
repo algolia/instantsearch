@@ -57,5 +57,6 @@ export { default as connectFrequentlyBoughtTogether } from './frequently-bought-
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 export { default as connectChat } from './chat/connectChat';
 export { default as connectChatPageSummary } from './chat-page-summary/connectChatPageSummary';
+export { default as connectChatPageSuggestions } from './chat-page-suggestions/connectChatPageSuggestions';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

@@ -70,7 +70,7 @@ export type InternalInstantSearch<
    * here because it's stripped from the public `.d.ts`.
    * @private
    */
-  _initialChatStates: Record<string, unknown[]> | null;
+  _initialChatStates: Record<string, unknown> | null;
 };
 
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(

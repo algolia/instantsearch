@@ -141,7 +141,7 @@ type ChatInstanceWithServerWait<TUiMessage extends UIMessage> =
   };
 
 type InstantSearchWithChatStates = InstantSearch & {
-  _initialChatStates: Record<string, unknown[]> | null;
+  _initialChatStates: Record<string, unknown> | null;
 };
 
 function isServerRendering(): boolean {

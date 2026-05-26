@@ -230,12 +230,14 @@ class InstantSearch<
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
   /**
-   * Snapshot of chat-widget messages produced during SSR, keyed by chat
-   * instance id. Hydrated on the client so chat widgets can skip re-firing
-   * their initial agent request after server rendering succeeded.
+   * Snapshot of chat-related widget state produced during SSR, keyed by a
+   * widget-specific id. Value shape is widget-specific (e.g. an array of
+   * `UIMessage`s for chat-page-summary, or `{ suggestions: string[] }` for
+   * chat-page-suggestions). Hydrated on the client so widgets can skip
+   * re-firing their initial agent request after server rendering succeeded.
    * @internal
    */
-  public _initialChatStates: Record<string, unknown[]> | null;
+  public _initialChatStates: Record<string, unknown> | null;
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;

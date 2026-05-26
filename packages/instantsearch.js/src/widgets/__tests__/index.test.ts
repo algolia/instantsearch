@@ -181,6 +181,13 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           initialUserMessage: 'help',
         });
       }
+      case 'chatPageSuggestions': {
+        const chatPageSuggestions = widget as Widgets['chatPageSuggestions'];
+        return chatPageSuggestions({
+          container,
+          agentId: 'test-agent-id',
+        });
+      }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({

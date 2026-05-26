@@ -137,7 +137,7 @@ function execute({
     })
     .then((requestParamsList) => {
       const search = searchRef.current! as InstantSearch & {
-        _initialChatStates?: Record<string, unknown[]> | null;
+        _initialChatStates?: Record<string, unknown> | null;
       };
       const initialChatStates = search._initialChatStates ?? undefined;
       return {

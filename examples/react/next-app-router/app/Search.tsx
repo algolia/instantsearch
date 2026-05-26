@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 import {
   Chat,
+  ChatPageSuggestions,
   ChatPageSummary,
   Hits,
   SearchBox,
@@ -42,8 +43,26 @@ export default function Search() {
         </div>
         <div>
           <SearchBox />
-          <Panel header="Page suggestion (SSR test)">
+          <Panel header="Page summary (SSR test)">
             <PageSuggestionsPanel />
+          </Panel>
+          <Panel header="Prompt pills (SSR test)">
+            {/*
+              Demo wiring:
+              - `?delay=500` on the dummy endpoint
+              - `ssrTimeoutMs={1500}` → SSR wins the race and bakes pills into
+                server HTML (curl the page and grep for one).
+              - On client refinement changes, the 500ms delay makes the
+                skeleton visible during the refetch.
+              Flip `delay` higher than `ssrTimeoutMs` to test the SSR-timeout
+              path (server HTML has no pills; client renders the skeleton
+              then the pills after hydration).
+            */}
+            <ChatPageSuggestions
+              maxSuggestions={4}
+              ssrTimeoutMs={1500}
+              transport={{ api: '/api/chat-page-suggestions?delay=500' }}
+            />
           </Panel>
           <Hits hitComponent={Hit} />
         </div>

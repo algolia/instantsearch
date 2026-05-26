@@ -93,7 +93,7 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     const chatStates =
       (
         search as typeof search & {
-          _initialChatStates?: Record<string, unknown[]> | null;
+          _initialChatStates?: Record<string, unknown> | null;
         }
       )._initialChatStates ?? undefined;
     insertHTML(

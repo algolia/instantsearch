@@ -27,7 +27,7 @@ const InstantSearchInitialChatStates = Symbol.for(
 declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
-    [InstantSearchInitialChatStates]?: Record<string, unknown[]>;
+    [InstantSearchInitialChatStates]?: Record<string, unknown>;
   }
 }
 

@@ -12,6 +12,7 @@ import {
   Carousel,
   Chat,
   ChatPageSuggestions,
+  ChatPageSummary,
   FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
@@ -79,8 +80,14 @@ export function App() {
                   headerComponent={false}
                 />
               </Panel>
-              <Panel header="Page suggestion (POC)">
+              {/* <Panel header="Page suggestion (POC)">
                 <PageSuggestions />
+              </Panel> */}
+              <Panel header="Prompt pills (POC)">
+                <ChatPageSuggestions
+                  maxSuggestions={4}
+                  transport={{ api: '/api/chat-page-suggestions?delay=3000' }}
+                />
               </Panel>
               <Hits hitComponent={HitComponent} />
 
@@ -146,7 +153,7 @@ function PageSuggestions() {
       <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>
         Current query: <strong>{query || '(none)'}</strong>
       </div>
-      <ChatPageSuggestions
+      <ChatPageSummary
         agentId="eedef238-5468-470d-bc37-f99fa741bd25"
         initialUserMessage={stablePromptRef.current}
         context={stableContextRef.current}
