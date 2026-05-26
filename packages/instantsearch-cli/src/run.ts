@@ -69,7 +69,7 @@ export function classifyError(error: unknown): {
   const detail = error instanceof Error ? error.message : String(error);
   return {
     code: 'internal_error',
-    message: `${detail}\nThis is a bug. Please file a report at ${BUG_REPORT_URL}.`,
+    message: `${detail}. This is a bug. Please file a report at ${BUG_REPORT_URL}.`,
   };
 }
 
