@@ -12,6 +12,7 @@ import {
   Carousel,
   Chat,
   ChatPageSuggestions,
+  ChatTrigger,
   FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
@@ -104,6 +105,7 @@ export function App() {
             feedback={true}
             itemComponent={ItemComponent}
           />
+          <ChatTrigger />
         </InstantSearch>
       </div>
     </div>

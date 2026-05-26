@@ -33,6 +33,7 @@ import {
   PoweredBy,
   DynamicWidgets,
   Chat,
+  ChatTrigger,
   EXPERIMENTAL_Autocomplete,
   FilterSuggestions,
 } from '..';
@@ -422,6 +423,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
             />
           </>
         )}
+        <ChatTrigger />
         <Chat {...chatWidgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>

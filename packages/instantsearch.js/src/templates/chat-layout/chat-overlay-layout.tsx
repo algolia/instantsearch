@@ -19,7 +19,6 @@ export function chatOverlayLayout() {
         headerComponent={templates.header()}
         messagesComponent={templates.messages()}
         promptComponent={templates.prompt()}
-        toggleButtonComponent={templates.toggleButton()}
       />
     );
   };

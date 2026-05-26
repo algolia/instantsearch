@@ -262,7 +262,7 @@ export function createOptionsTests(
       expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
     });
 
-    test('sends messages with context when context is provided', async () => {
+    test('sends messages with context attached as metadata.turnContext', async () => {
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
@@ -298,16 +298,14 @@ export function createOptionsTests(
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
-        },
-        { type: 'text', text: 'Hello, world!' },
-      ]);
+      expect(call.text).toBe('Hello, world!');
+      expect(call.metadata).toEqual({
+        turnContext: { currentPage: '/products', locale: 'en-US' },
+      });
+      expect(call.parts).toBeUndefined();
     });
 
-    test('sends messages with dynamic context from function', async () => {
+    test('sends messages with dynamic context resolved from a function', async () => {
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
@@ -343,25 +341,27 @@ export function createOptionsTests(
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/dynamic-page"}</context>',
-        },
-        { type: 'text', text: 'Hello!' },
-      ]);
+      expect(call.text).toBe('Hello!');
+      expect(call.metadata).toEqual({
+        turnContext: { currentPage: '/dynamic-page' },
+      });
+      expect(call.parts).toBeUndefined();
     });
 
-    test('does not render context parts in the UI', async () => {
+    test('does not render context as a visible message part', async () => {
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
       jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
+        const text = (message as any).text;
         chat.messages = [
           {
             id: '1',
             role: 'user',
-            parts: (message as any).parts,
+            parts: text
+              ? [{ type: 'text', text }]
+              : (message as any).parts ?? [],
+            metadata: (message as any).metadata,
           },
         ] as any;
       });
@@ -393,10 +393,10 @@ export function createOptionsTests(
       });
 
       const messagesContainer = document.querySelector('.ais-ChatMessages');
-      if (messagesContainer) {
-        expect(messagesContainer.textContent).not.toContain('<context>');
-        expect(messagesContainer.textContent).not.toContain('/products');
-      }
+      expect(messagesContainer).toBeInTheDocument();
+      expect(messagesContainer!.textContent).not.toContain('<context>');
+      expect(messagesContainer!.textContent).not.toContain('turnContext');
+      expect(messagesContainer!.textContent).not.toContain('/products');
     });
 
     test('closes chat when close button is clicked', async () => {
@@ -1999,7 +1999,7 @@ export function createOptionsTests(
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
                     ${props.templates.header()}
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                   </div>`,
               },
             },
@@ -2008,7 +2008,7 @@ export function createOptionsTests(
               layoutComponent: (props) => (
                 <div className="custom-layout">
                   <span className="custom-layout-title">My Custom Chat</span>
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                 </div>
               ),
             },
@@ -2049,7 +2049,7 @@ export function createOptionsTests(
               templates: {
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                     <button
                       class="custom-send"
                       onclick="${() =>
@@ -2064,7 +2064,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               layoutComponent: (props) => (
                 <div className="custom-layout">
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                   <button
                     className="custom-send"
                     onClick={() =>
@@ -2109,7 +2109,7 @@ export function createOptionsTests(
               templates: {
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
-                    ${props.templates.toggleButton()}
+                    ${props.templates.prompt()}
                     <span class="custom-status">${props.status}</span>
                   </div>`,
               },
@@ -2118,7 +2118,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               layoutComponent: (props) => (
                 <div className="custom-layout">
-                  {props.toggleButtonComponent}
+                  {props.promptComponent}
                   <span className="custom-status">{props.status}</span>
                 </div>
               ),
@@ -2179,9 +2179,6 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatOverlayLayout')
         ).not.toBeInTheDocument();
-        expect(
-          document.querySelector('.ais-Chat-toggleButtonWrapper')
-        ).not.toBeInTheDocument();
       });
 
       test('renders with sidepanel layout component', async () => {
@@ -2214,9 +2211,6 @@ export function createOptionsTests(
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-Chat-container--open')
-        ).toBeInTheDocument();
-        expect(
-          document.querySelector('.ais-Chat-toggleButtonWrapper')
         ).toBeInTheDocument();
         expect(
           document.querySelector('.ais-ChatOverlayLayout')

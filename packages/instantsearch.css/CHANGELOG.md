@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.16.2](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.16.1...instantsearch.css@8.16.2) (2026-05-26)
+
+
+### Bug Fixes
+
+* **chat:** collapse empty tool wrapper to prevent extra spacing ([#7051](https://github.com/algolia/instantsearch/issues/7051)) ([ded937f](https://github.com/algolia/instantsearch/commit/ded937fae53d6338bcccc873c3eb0ffc2f7e84f3))
+
+
+
+
+
 # [8.16.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.15.0...instantsearch.css@8.16.0) (2026-05-05)
 
 

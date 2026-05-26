@@ -211,6 +211,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'text') {
+        // Back-compat shim for sessions started before the move from a
+        // `<context>{...}</context>` text part to `metadata.turnContext`.
+        // Safe to remove once existing sessionStorage transcripts have
+        // rolled over (~2 weeks after release).
         if (
           part.text.startsWith('<context>') &&
           part.text.endsWith('</context>')

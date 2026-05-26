@@ -5,6 +5,7 @@ import {
   configure,
   EXPERIMENTAL_autocomplete,
   chat,
+  chatTrigger,
   hits,
   pagination,
   panel,
@@ -174,6 +175,9 @@ search.addWidgets([
         </article>
       `,
     },
+  }),
+  chatTrigger({
+    container: '#chat-trigger',
   }),
 ]);
 

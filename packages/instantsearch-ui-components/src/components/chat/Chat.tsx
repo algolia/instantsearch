@@ -6,17 +6,12 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
-import { createChatToggleButtonComponent } from './ChatToggleButton';
 
 import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
-import type {
-  ChatToggleButtonOwnProps,
-  ChatToggleButtonProps,
-} from './ChatToggleButton';
 import type { ChatLayoutOwnProps } from './types';
 
 export type ChatClassNames = {
@@ -26,7 +21,6 @@ export type ChatClassNames = {
   messages?: ChatMessagesProps['classNames'];
   message?: ChatMessagesProps['messageClassNames'];
   prompt?: ChatPromptProps['classNames'];
-  toggleButton?: ChatToggleButtonProps['classNames'];
   suggestions?: ChatPromptSuggestionsOwnProps['classNames'];
 };
 
@@ -43,10 +37,6 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    * Props for the ChatHeader component.
    */
   headerProps: ChatHeaderProps;
-  /*
-   * Props for the ChatToggleButton component.
-   */
-  toggleButtonProps: ChatToggleButtonProps;
   /*
    * Props for the ChatMessages component.
    */
@@ -76,10 +66,6 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    */
   promptComponent?: (props: ChatPromptOwnProps) => JSX.Element;
   /**
-   * Optional toggle button component for the chat
-   */
-  toggleButtonComponent?: (props: ChatToggleButtonOwnProps) => JSX.Element;
-  /**
    * Optional suggestions component for the chat
    */
   suggestionsComponent?: (props: ChatPromptSuggestionsOwnProps) => JSX.Element;
@@ -107,10 +93,6 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
-  const ChatToggleButton = createChatToggleButtonComponent({
-    createElement,
-    Fragment,
-  });
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
@@ -128,13 +110,11 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       open,
       maximized = false,
       headerProps,
-      toggleButtonProps,
       messagesProps,
       suggestionsProps,
       promptProps = {},
       headerComponent: HeaderComponent,
       promptComponent: PromptComponent,
-      toggleButtonComponent: ToggleButtonComponent,
       suggestionsComponent: SuggestionsComponent,
       layoutComponent: LayoutComponent = OverlayLayout,
       classNames = {},
@@ -172,20 +152,6 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       classNames: classNames.prompt,
     });
 
-    const toggleButtonComponent = createElement(
-      ToggleButtonComponent || ChatToggleButton,
-      {
-        ...toggleButtonProps,
-        classNames: classNames.toggleButton,
-        onClick: () => {
-          toggleButtonProps.onClick?.();
-          if (!open) {
-            promptProps.promptRef?.current?.focus();
-          }
-        },
-      }
-    );
-
     return (
       <LayoutComponent
         {...props}
@@ -194,7 +160,6 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         headerComponent={headerComponent}
         messagesComponent={messagesComponent}
         promptComponent={promptComponent}
-        toggleButtonComponent={toggleButtonComponent}
         classNames={{ root: classNames.root, container: classNames.container }}
         className={className}
         messages={messagesProps.messages}
