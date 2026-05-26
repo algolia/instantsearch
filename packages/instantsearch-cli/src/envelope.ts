@@ -1,9 +1,6 @@
-const API_VERSION = 1;
-
 type SuccessEnvelope = {
   ok: true;
   command: string;
-  apiVersion: typeof API_VERSION;
   filesCreated: string[];
   nextSteps: string[];
 };
@@ -11,7 +8,6 @@ type SuccessEnvelope = {
 type FailureEnvelope = {
   ok: false;
   command: string;
-  apiVersion: typeof API_VERSION;
   code: string;
   message: string;
 };
@@ -25,7 +21,6 @@ export function successEnvelope(
   return {
     ok: true,
     command,
-    apiVersion: API_VERSION,
     filesCreated: details.filesCreated ?? [],
     nextSteps: details.nextSteps ?? [],
   };
@@ -36,7 +31,7 @@ export function failureEnvelope(
   code: string,
   message: string
 ): FailureEnvelope {
-  return { ok: false, command, apiVersion: API_VERSION, code, message };
+  return { ok: false, command, code, message };
 }
 
 export function formatEnvelope(envelope: Envelope): string {

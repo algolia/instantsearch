@@ -14,7 +14,6 @@ describe.each(['init', 'add', 'introspect'])(
       expect(JSON.parse(stdout)).toEqual({
         ok: true,
         command,
-        apiVersion: 1,
         filesCreated: expect.any(Array),
         nextSteps: expect.any(Array),
       });

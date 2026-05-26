@@ -15,7 +15,6 @@ describe('unknown flag', () => {
     expect(JSON.parse(stdout)).toEqual({
       ok: false,
       command: 'init',
-      apiVersion: 1,
       code: 'unknown_flag',
       message: expect.stringContaining('--bogus-flag'),
     });
@@ -32,7 +31,6 @@ describe('unknown flag', () => {
     expect(JSON.parse(stdout)).toEqual({
       ok: false,
       command: PROGRAM_NAME,
-      apiVersion: 1,
       code: 'unknown_flag',
       message: expect.stringContaining('--bogus-flag'),
     });

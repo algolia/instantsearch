@@ -19,7 +19,6 @@ describe('internal_error', () => {
     expect(JSON.parse(stdout.join(''))).toEqual({
       ok: false,
       command: expect.any(String),
-      apiVersion: 1,
       code: 'internal_error',
       message: expect.stringMatching(
         /disk full.*github\.com\/algolia\/instantsearch\/issues/is

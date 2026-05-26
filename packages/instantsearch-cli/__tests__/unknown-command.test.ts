@@ -14,7 +14,6 @@ describe('unknown command', () => {
     expect(JSON.parse(stdout)).toEqual({
       ok: false,
       command: PROGRAM_NAME,
-      apiVersion: 1,
       code: 'unknown_command',
       message: expect.stringContaining('bogus-command'),
     });
