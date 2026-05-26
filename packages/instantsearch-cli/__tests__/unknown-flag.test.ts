@@ -50,15 +50,4 @@ describe('unknown flag', () => {
     expect(stderr).not.toContain('error: unknown option');
     expect(stderr.trim().split('\n')).toHaveLength(1);
   });
-
-  it('does not produce an unknown_flag envelope for an unknown command', async () => {
-    const { exitCode, stdout, stderr } = await runCapturing([
-      'bogus-command',
-      '--json',
-    ]);
-
-    expect(exitCode).not.toBe(0);
-    expect(stdout).toBe('');
-    expect(stderr).toContain('bogus-command');
-  });
 });

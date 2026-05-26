@@ -4,6 +4,14 @@ import { failureEnvelope, formatEnvelope } from './envelope';
 import { defaultIO, type IO } from './io';
 import { createProgram, KNOWN_COMMANDS, PROGRAM_NAME } from './program';
 
+const BUG_REPORT_URL = 'https://github.com/algolia/instantsearch/issues/new';
+
+type ParserFailureCode =
+  | 'unknown_flag'
+  | 'invalid_flag'
+  | 'unknown_command'
+  | 'internal_error';
+
 export async function run(
   argv: string[],
   options: Partial<IO> = {}
@@ -19,49 +27,50 @@ export async function run(
     await program.parseAsync(argv, { from: 'user' });
     return 0;
   } catch (error) {
-    if (!(error instanceof CommanderError)) {
-      flush(errBuffer, io);
-      throw error;
-    }
     if (
-      error.code === 'commander.helpDisplayed' ||
-      error.code === 'commander.version'
+      error instanceof CommanderError &&
+      (error.code === 'commander.helpDisplayed' ||
+        error.code === 'commander.version')
     ) {
-      flush(errBuffer, io);
+      io.stderr(errBuffer.join(''));
       return 0;
     }
-    if (error.code === 'commander.unknownOption') {
-      emitUnknownFlagEnvelope(argv, error, io);
-      return error.exitCode;
+
+    const { code, message } = classifyError(error);
+    const envelope = failureEnvelope(detectCommand(argv), code, message);
+    if (argv.includes('--json')) {
+      io.stdout(formatEnvelope(envelope));
+    } else {
+      io.stderr(`${envelope.message}\n`);
     }
-    flush(errBuffer, io);
-    return error.exitCode;
+    return error instanceof CommanderError ? error.exitCode : 1;
   }
 }
 
-function flush(buffer: string[], io: IO): void {
-  if (buffer.length === 0) return;
-  io.stderr(buffer.join(''));
-  buffer.length = 0;
-}
-
-function emitUnknownFlagEnvelope(
-  argv: string[],
-  error: CommanderError,
-  io: IO
-): void {
-  const badFlag = extractBadFlag(error.message);
-  const envelope = failureEnvelope(
-    detectCommand(argv),
-    'unknown_flag',
-    badFlag ? `Unknown flag: ${badFlag}` : error.message
-  );
-
-  if (argv.includes('--json')) {
-    io.stdout(formatEnvelope(envelope));
-  } else {
-    io.stderr(`${envelope.message}\n`);
+export function classifyError(error: unknown): {
+  code: ParserFailureCode;
+  message: string;
+} {
+  if (error instanceof CommanderError) {
+    const message = error.message.replace(/^error:\s*/i, '');
+    switch (error.code) {
+      case 'commander.unknownOption':
+        return { code: 'unknown_flag', message };
+      case 'commander.unknownCommand':
+        return { code: 'unknown_command', message };
+      case 'commander.invalidArgument':
+      case 'commander.invalidOptionArgument':
+        return { code: 'invalid_flag', message };
+      default:
+        return { code: 'internal_error', message };
+    }
   }
+
+  const detail = error instanceof Error ? error.message : String(error);
+  return {
+    code: 'internal_error',
+    message: `${detail}\nThis is a bug. Please file a report at ${BUG_REPORT_URL}.`,
+  };
 }
 
 function detectCommand(argv: string[]): string {
@@ -70,9 +79,4 @@ function detectCommand(argv: string[]): string {
     if (KNOWN_COMMANDS.includes(token)) return token;
   }
   return PROGRAM_NAME;
-}
-
-function extractBadFlag(message: string): string | null {
-  const match = message.match(/'([^']+)'/);
-  return match ? match[1] : null;
 }

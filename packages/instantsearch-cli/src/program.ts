@@ -54,8 +54,17 @@ export function createProgram(io: IO = defaultIO()): Command {
     .name(PROGRAM_NAME)
     .description('CLI for scaffolding and integrating InstantSearch projects.')
     .version(version)
+    .showSuggestionAfterError(false)
     .addOption(
-      new Option('--json', 'emit machine-readable JSON envelopes').default(false)
+      new Option('--json', 'emit machine-readable JSON envelopes')
+        .default(false)
+        .implies({ yes: true })
+    )
+    .addOption(
+      new Option(
+        '--yes',
+        'run non-interactively; fail if required inputs are missing'
+      ).default(false)
     )
     .exitOverride()
     .configureOutput({
