@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   Chat,
   ChatPageSuggestions,
-  ChatPageSummary,
   Hits,
   SearchBox,
   RefinementList,
@@ -43,9 +42,6 @@ export default function Search({ baseUrl }: { baseUrl: string }) {
         </div>
         <div>
           <SearchBox />
-          {/* <Panel header="Page summary (SSR test)">
-            <PageSuggestionsPanel />
-          </Panel> */}
           <Panel header="Prompt pills (SSR test)">
             {/*
               Demo wiring:
@@ -76,55 +72,5 @@ export default function Search({ baseUrl }: { baseUrl: string }) {
 
       <Chat agentId="eedef238-5468-470d-bc37-f99fa741bd25" feedback={true} />
     </InstantSearchNext>
-  );
-}
-
-function PageSuggestionsPanel() {
-  // Keep both context + prompt stable across renders. Fresh function/string
-  // refs would make `useStableValue` in `useConnector` consider the widget
-  // props changed on every InstantSearch `render` event, which would tear
-  // down and re-init the widget (and its Chat instance) on every render.
-  const stableContextRef = useRef(() => ({}));
-  const stablePromptRef = useRef('give me some tvs');
-
-  useEffect(() => {
-    console.log(
-      `${PHASE} PageSuggestionsPanel mounted (client hydration) at ${new Date().toISOString()}`
-    );
-  }, []);
-
-  // Logged on both server and client renders.
-  console.log(
-    `${PHASE} PageSuggestionsPanel rendering at ${new Date().toISOString()}`
-  );
-
-  return (
-    <ChatPageSummary
-      agentId="eedef238-5468-470d-bc37-f99fa741bd25"
-      initialUserMessage={stablePromptRef.current}
-      context={stableContextRef.current}
-      ssrTimeoutMs={200}
-      ctaLabel="Continue in chat"
-      // itemComponent={({ item }) => (
-      //   <article className="ais-Carousel-hit">
-      //     <div className="ais-Carousel-hit-image">
-      //       <img src={(item as any).image} alt={(item as any).name} />
-      //     </div>
-      //     <h2 className="ais-Carousel-hit-title">{(item as any).name}</h2>
-      //   </article>
-      // )}
-      // loaderComponent={() => {
-      //   if (isServer) {
-      //     console.log(`${PHASE} ChatPageSummary loader rendered`);
-      //   }
-      //   return (
-      //     <div data-testid="page-suggestion-loader">Generating suggestion…</div>
-      //   );
-      // }}
-      // errorComponent={({ error }) => {
-      //   console.log(`${PHASE} ChatPageSummary error: ${error.message}`);
-      //   return <div role="alert">{error.message}</div>;
-      // }}
-    />
   );
 }
