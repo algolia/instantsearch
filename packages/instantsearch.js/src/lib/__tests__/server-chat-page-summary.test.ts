@@ -8,7 +8,7 @@ import {
 } from '@instantsearch/mocks';
 
 import { connectSearchBox } from '../../connectors';
-import connectChatPageSuggestions from '../../connectors/chat-page-suggestions/connectChatPageSuggestions';
+import connectChatPageSummary from '../../connectors/chat-page-summary/connectChatPageSummary';
 import instantsearch from '../../index.es';
 import { Chat } from '../chat';
 import { waitForResults } from '../server';
@@ -100,7 +100,7 @@ describe('waitForResults — server-wait promises', () => {
   });
 });
 
-describe('connectChatPageSuggestions — SSR race', () => {
+describe('connectChatPageSummary — SSR race', () => {
   // The connector branches on `typeof window === 'undefined'`. jsdom defines
   // `window`, so monkey-patch the typeof check by deleting `globalThis.window`
   // for the duration of each test.
@@ -142,7 +142,7 @@ describe('connectChatPageSuggestions — SSR race', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
-    const widget = connectChatPageSuggestions(() => {})({
+    const widget = connectChatPageSummary(() => {})({
       chat: chatInstance,
       initialUserMessage: 'help',
       ssrTimeoutMs: 30,
@@ -163,7 +163,7 @@ describe('connectChatPageSuggestions — SSR race', () => {
     // Let the SSR pipeline settle. The chat promise resolves at ssrTimeoutMs,
     // and we resolve the search soon after to let waitForResults complete.
     await new Promise((r) => setTimeout(r, 50));
-    // Stop the chat-page-suggestions race promise: it should already be
+    // Stop the chat-page-summary race promise: it should already be
     // resolved by the timeout. Verify chat.stop was called.
     expect(stopSpy).toHaveBeenCalled();
     expect(capturedSignal).toBeDefined();
@@ -188,7 +188,7 @@ describe('connectChatPageSuggestions — SSR race', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
-    const widget = connectChatPageSuggestions(() => {})({
+    const widget = connectChatPageSummary(() => {})({
       chat: chatInstance,
       initialUserMessage: 'help',
       ssrTimeoutMs: 50,
@@ -240,7 +240,7 @@ describe('connectChatPageSuggestions — SSR race', () => {
     expect(chatInstance.messages.length).toBe(messagesAfterFirstInit);
 
     // And the SAME race promise must be re-registered (object-identity
-    // check confirms it came from the cached `__chatPageSuggestionsServerWait`
+    // check confirms it came from the cached `__chatPageSummaryServerWait`
     // on the chat instance, not a fresh one).
     const promisesAfter = (
       search as unknown as {

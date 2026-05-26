@@ -59,7 +59,7 @@ export function waitForResults(
         return;
       }
       // Await any promises that widgets registered during SSR init (e.g. the
-      // chat-page-suggestions widget races its agent request against a
+      // chat-page-summary widget races its agent request against a
       // timeout). `allSettled` so a widget rejecting (e.g. abort) doesn't
       // crash SSR.
       Promise.allSettled(search.consumeServerWaitPromises()).then(() =>

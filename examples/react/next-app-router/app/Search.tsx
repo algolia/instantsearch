@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 import {
   Chat,
-  ChatPageSuggestions,
+  ChatPageSummary,
   Hits,
   SearchBox,
   RefinementList,
@@ -78,7 +78,7 @@ function PageSuggestionsPanel() {
   );
 
   return (
-    <ChatPageSuggestions
+    <ChatPageSummary
       agentId="eedef238-5468-470d-bc37-f99fa741bd25"
       initialUserMessage={stablePromptRef.current}
       context={stableContextRef.current}
@@ -94,14 +94,14 @@ function PageSuggestionsPanel() {
       // )}
       // loaderComponent={() => {
       //   if (isServer) {
-      //     console.log(`${PHASE} ChatPageSuggestions loader rendered`);
+      //     console.log(`${PHASE} ChatPageSummary loader rendered`);
       //   }
       //   return (
       //     <div data-testid="page-suggestion-loader">Generating suggestion…</div>
       //   );
       // }}
       // errorComponent={({ error }) => {
-      //   console.log(`${PHASE} ChatPageSuggestions error: ${error.message}`);
+      //   console.log(`${PHASE} ChatPageSummary error: ${error.message}`);
       //   return <div role="alert">{error.message}</div>;
       // }}
     />

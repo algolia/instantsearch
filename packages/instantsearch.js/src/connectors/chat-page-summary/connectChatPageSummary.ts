@@ -32,7 +32,7 @@ import type {
 } from '../chat/connectChat';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'chat-page-suggestions',
+  name: 'chat-page-summary',
   connector: true,
 });
 
@@ -41,7 +41,7 @@ type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   'transport'
 >;
 
-export type ChatPageSuggestionsRenderState<
+export type ChatPageSummaryRenderState<
   TUiMessage extends UIMessage = UIMessage
 > = {
   /** The latest assistant message being streamed, or `undefined` until one arrives. */
@@ -50,7 +50,7 @@ export type ChatPageSuggestionsRenderState<
   status: ChatStatus;
   /** The last error from the agent, if any. */
   error: Error | undefined;
-  /** The prompt that drives this suggestion (echo of `initialUserMessage`). */
+  /** The prompt that drives this summary (echo of `initialUserMessage`). */
   prompt: string;
   /** Re-runs the agent request with the same prompt + context. */
   regenerate: () => void;
@@ -59,7 +59,7 @@ export type ChatPageSuggestionsRenderState<
    */
   stop: () => void;
   /**
-   * Opens the page's main chat widget with the suggestion's prompt as the
+   * Opens the page's main chat widget with the summary's prompt as the
    * initial message. Requires a `connectChat` widget to be mounted with
    * matching `type` (default `'chat'`). No-ops with a `__DEV__` warning when
    * the chat render-state slot is missing.
@@ -72,14 +72,14 @@ export type ChatPageSuggestionsRenderState<
   canHandoff: boolean;
 } & Pick<AbstractChat<TUiMessage>, 'id' | 'messages' | 'addToolResult'>;
 
-export type ChatPageSuggestionsConnectorParams<
+export type ChatPageSummaryConnectorParams<
   TUiMessage extends UIMessage = UIMessage
 > = (
   | { chat: Chat<TUiMessage> }
   | (ChatInitWithoutTransport<TUiMessage> & ChatTransportOption)
 ) & {
   /**
-   * Prompt that drives the suggestion (e.g. "Summarize this product page").
+   * Prompt that drives the summary (e.g. "Summarize this product page").
    * Sent once when the widget mounts.
    */
   initialUserMessage: string;
@@ -102,7 +102,7 @@ export type ChatPageSuggestionsConnectorParams<
   chatType?: string;
   /**
    * Identifier of this connector type. Used as the render-state key.
-   * @default 'chatPageSuggestions'
+   * @default 'chatPageSummary'
    */
   type?: string;
   /**
@@ -114,30 +114,30 @@ export type ChatPageSuggestionsConnectorParams<
   ssrTimeoutMs?: number;
 };
 
-export type ChatPageSuggestionsWidgetDescription<
+export type ChatPageSummaryWidgetDescription<
   TUiMessage extends UIMessage = UIMessage
 > = {
-  $$type: 'ais.chatPageSuggestions';
-  renderState: ChatPageSuggestionsRenderState<TUiMessage>;
+  $$type: 'ais.chatPageSummary';
+  renderState: ChatPageSummaryRenderState<TUiMessage>;
   indexRenderState: {
-    chatPageSuggestions: WidgetRenderState<
-      ChatPageSuggestionsRenderState<TUiMessage>,
-      ChatPageSuggestionsConnectorParams<TUiMessage>
+    chatPageSummary: WidgetRenderState<
+      ChatPageSummaryRenderState<TUiMessage>,
+      ChatPageSummaryConnectorParams<TUiMessage>
     >;
   };
 };
 
-export type ChatPageSuggestionsConnector<
+export type ChatPageSummaryConnector<
   TUiMessage extends UIMessage = UIMessage
 > = Connector<
-  ChatPageSuggestionsWidgetDescription<TUiMessage>,
-  ChatPageSuggestionsConnectorParams<TUiMessage>
+  ChatPageSummaryWidgetDescription<TUiMessage>,
+  ChatPageSummaryConnectorParams<TUiMessage>
 >;
 
 type ChatInstanceWithServerWait<TUiMessage extends UIMessage> =
   Chat<TUiMessage> & {
-    __chatPageSuggestionsServerWait?: Promise<void>;
-    __chatPageSuggestionsRequested?: boolean;
+    __chatPageSummaryServerWait?: Promise<void>;
+    __chatPageSummaryRequested?: boolean;
   };
 
 type InstantSearchWithChatStates = InstantSearch & {
@@ -215,23 +215,23 @@ function getLastAssistantMessage<TUiMessage extends UIMessage>(
   return undefined;
 }
 
-export default (function connectChatPageSuggestions<
+export default (function connectChatPageSummary<
   TWidgetParams extends UnknownWidgetParams
 >(
   renderFn: Renderer<
-    ChatPageSuggestionsRenderState,
-    TWidgetParams & ChatPageSuggestionsConnectorParams
+    ChatPageSummaryRenderState,
+    TWidgetParams & ChatPageSummaryConnectorParams
   >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
   return <TUiMessage extends UIMessage = UIMessage>(
-    widgetParams: TWidgetParams & ChatPageSuggestionsConnectorParams<TUiMessage>
+    widgetParams: TWidgetParams & ChatPageSummaryConnectorParams<TUiMessage>
   ) => {
     warning(
       false,
-      'ChatPageSuggestions is not yet stable and will change in the future.'
+      'ChatPageSummary is not yet stable and will change in the future.'
     );
 
     const {
@@ -239,7 +239,7 @@ export default (function connectChatPageSuggestions<
       initialMessages,
       context,
       chatType = 'chat',
-      type = 'chatPageSuggestions',
+      type = 'chatPageSummary',
       ssrTimeoutMs = 150,
       ...options
     } = widgetParams || {};
@@ -265,7 +265,7 @@ export default (function connectChatPageSuggestions<
         client: instantSearchInstance.client,
         agentId: 'agentId' in options ? options.agentId : undefined,
         transport: 'transport' in options ? options.transport : undefined,
-        algoliaAgentSuffix: 'chat-page-suggestions',
+        algoliaAgentSuffix: 'chat-page-summary',
       });
 
       if (!transport) {
@@ -283,7 +283,7 @@ export default (function connectChatPageSuggestions<
         transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
       } & ChatInitWithoutTransport<TUiMessage>;
 
-      // Page suggestions are ephemeral by design: never persist messages to
+      // Page summary is ephemeral by design: never persist messages to
       // sessionStorage. Otherwise a cached response from a previous prompt
       // would be restored on hydration and prevent the fresh request from
       // firing (the existing user message makes `shouldSendInitialRequest`
@@ -311,10 +311,10 @@ export default (function connectChatPageSuggestions<
       // Anchoring the guard here — directly around the only `sendMessage`
       // call site — ensures one logical agent request per chat session
       // regardless of how many init() calls fire.
-      if (_chatInstance.__chatPageSuggestionsRequested) {
+      if (_chatInstance.__chatPageSummaryRequested) {
         return;
       }
-      _chatInstance.__chatPageSuggestionsRequested = true;
+      _chatInstance.__chatPageSummaryRequested = true;
       _sendMessageWithContext({ text: initialUserMessage } as Parameters<
         AbstractChat<TUiMessage>['sendMessage']
       >[0]);
@@ -328,7 +328,7 @@ export default (function connectChatPageSuggestions<
       _chatInstance.messages = [];
       _chatInstance.clearError();
       // Re-arm the runRequest gate so the user-triggered regeneration fires.
-      _chatInstance.__chatPageSuggestionsRequested = false;
+      _chatInstance.__chatPageSummaryRequested = false;
       runRequest();
     };
 
@@ -337,7 +337,7 @@ export default (function connectChatPageSuggestions<
     };
 
     return {
-      $$type: 'ais.chatPageSuggestions',
+      $$type: 'ais.chatPageSummary',
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -387,7 +387,7 @@ export default (function connectChatPageSuggestions<
               : undefined;
           if (ssrSnapshot && ssrSnapshot.length && !hasExistingMessages) {
             _chatInstance.messages = ssrSnapshot;
-            _chatInstance.__chatPageSuggestionsRequested = true;
+            _chatInstance.__chatPageSummaryRequested = true;
           } else if (initialMessages?.length && !hasExistingMessages) {
             _chatInstance.messages = initialMessages;
           }
@@ -412,13 +412,13 @@ export default (function connectChatPageSuggestions<
         // The promise is stored on the chat instance so two-pass SSR renders
         // reuse the same in-flight request rather than refiring.
         if (isServerRendering()) {
-          if (!_chatInstance.__chatPageSuggestionsServerWait) {
+          if (!_chatInstance.__chatPageSummaryServerWait) {
             const startedAt = Date.now();
             // eslint-disable-next-line no-console
             console.log(
-              `[chat-page-suggestions][SSR] wait started (timeout=${ssrTimeoutMs}ms)`
+              `[chat-page-summary][SSR] wait started (timeout=${ssrTimeoutMs}ms)`
             );
-            _chatInstance.__chatPageSuggestionsServerWait = new Promise<void>(
+            _chatInstance.__chatPageSummaryServerWait = new Promise<void>(
               (resolve) => {
                 // Don't treat the synchronous status === 'ready' as settled:
                 // sendMessage's status transition is async (a microtask), so
@@ -441,7 +441,7 @@ export default (function connectChatPageSuggestions<
                   }
                   // eslint-disable-next-line no-console
                   console.log(
-                    `[chat-page-suggestions][SSR] wait resolved via TIMEOUT in ${elapsed}ms (status=${_chatInstance.status})`
+                    `[chat-page-summary][SSR] wait resolved via TIMEOUT in ${elapsed}ms (status=${_chatInstance.status})`
                   );
                   resolve();
                 }, ssrTimeoutMs);
@@ -473,7 +473,7 @@ export default (function connectChatPageSuggestions<
                       const elapsed = Date.now() - startedAt;
                       // eslint-disable-next-line no-console
                       console.log(
-                        `[chat-page-suggestions][SSR] wait resolved via TERMINAL status=${_chatInstance.status} in ${elapsed}ms`
+                        `[chat-page-summary][SSR] wait resolved via TERMINAL status=${_chatInstance.status} in ${elapsed}ms`
                       );
                       resolve();
                     } else {
@@ -486,7 +486,7 @@ export default (function connectChatPageSuggestions<
             );
           }
           instantSearchInstance.registerServerWait(
-            _chatInstance.__chatPageSuggestionsServerWait
+            _chatInstance.__chatPageSummaryServerWait
           );
         }
 
@@ -513,10 +513,10 @@ export default (function connectChatPageSuggestions<
         renderState,
         renderOptions
       ): IndexRenderState &
-        ChatPageSuggestionsWidgetDescription['indexRenderState'] {
+        ChatPageSummaryWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
-          [type as 'chatPageSuggestions']:
+          [type as 'chatPageSummary']:
             this.getWidgetRenderState(renderOptions),
         };
       },
@@ -538,7 +538,7 @@ export default (function connectChatPageSuggestions<
             : undefined;
         const indexChatRenderState = readIndexChatRenderState();
 
-        // Read lazily at click time. The chat-page-suggestions widget's
+        // Read lazily at click time. The chat-page-summary widget's
         // `getWidgetRenderState` may run before the main chat widget has
         // populated `renderState[indexId][chatType]` (e.g. on SSR-hydrated
         // first render, when no chat streaming event later triggers a
@@ -557,7 +557,7 @@ export default (function connectChatPageSuggestions<
           }
           openChat(currentChatRenderState, {
             message: initialUserMessage,
-            referer: 'page-suggestions',
+            referer: 'page-summary',
           });
         };
 
@@ -613,7 +613,7 @@ export default (function connectChatPageSuggestions<
       },
     };
   };
-} satisfies ChatPageSuggestionsConnector);
+} satisfies ChatPageSummaryConnector);
 
 // Re-export so consumers can build typed wrappers without reaching into
 // `lib/chat`.

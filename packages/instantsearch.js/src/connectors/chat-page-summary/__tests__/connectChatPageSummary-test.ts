@@ -9,11 +9,11 @@ import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createInitOptions } from '../../../../test/createWidget';
 import { Chat } from '../../../lib/chat';
 import connectChat from '../../chat/connectChat';
-import connectChatPageSuggestions from '../connectChatPageSuggestions';
+import connectChatPageSummary from '../connectChatPageSummary';
 
 import type { ChatTransport, UIMessage } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
-import type { ChatPageSuggestionsConnectorParams } from '../connectChatPageSuggestions';
+import type { ChatPageSummaryConnectorParams } from '../connectChatPageSummary';
 
 function createMockTransport(): ChatTransport<UIMessage> {
   return {
@@ -33,11 +33,11 @@ function createMockTransport(): ChatTransport<UIMessage> {
 const baseInitialMessage = 'Suggest something useful';
 
 function initWidget(
-  overrides: Partial<ChatPageSuggestionsConnectorParams<UIMessage>> = {},
+  overrides: Partial<ChatPageSummaryConnectorParams<UIMessage>> = {},
   { instantSearchInstance }: { instantSearchInstance?: InstantSearch } = {}
 ) {
   const renderFn = jest.fn();
-  const makeWidget = connectChatPageSuggestions(renderFn);
+  const makeWidget = connectChatPageSummary(renderFn);
   const widget = makeWidget({
     agentId: 'agentId',
     initialUserMessage: baseInitialMessage,
@@ -56,7 +56,7 @@ function initWidget(
   return { widget, helper, renderFn, initOptions };
 }
 
-describe('connectChatPageSuggestions', () => {
+describe('connectChatPageSummary', () => {
   // The connector sends a request on init via the agent transport, which
   // hits global fetch. jsdom doesn't provide fetch by default — mock it so
   // every test starts from a clean baseline.
@@ -82,7 +82,7 @@ describe('connectChatPageSuggestions', () => {
     it('throws without a render function', () => {
       expect(() => {
         // @ts-expect-error
-        connectChatPageSuggestions()({
+        connectChatPageSummary()({
           agentId: 'a',
           initialUserMessage: 'b',
         });
@@ -90,20 +90,20 @@ describe('connectChatPageSuggestions', () => {
     });
 
     it('throws when initialUserMessage is missing', () => {
-      const makeWidget = connectChatPageSuggestions(jest.fn());
+      const makeWidget = connectChatPageSummary(jest.fn());
       expect(() =>
         makeWidget({
           agentId: 'agentId',
-        } as ChatPageSuggestionsConnectorParams<UIMessage>)
+        } as ChatPageSummaryConnectorParams<UIMessage>)
       ).toThrowError(/initialUserMessage/);
     });
 
     it('throws when neither agentId nor transport is provided', () => {
       const renderFn = jest.fn();
-      const makeWidget = connectChatPageSuggestions(renderFn);
+      const makeWidget = connectChatPageSummary(renderFn);
       const widget = makeWidget({
         initialUserMessage: baseInitialMessage,
-      } as ChatPageSuggestionsConnectorParams<UIMessage>);
+      } as ChatPageSummaryConnectorParams<UIMessage>);
 
       const helper = algoliasearchHelper(createSearchClient(), '');
       expect(() => widget.init(createInitOptions({ helper }))).toThrowError(
@@ -112,13 +112,13 @@ describe('connectChatPageSuggestions', () => {
     });
 
     it('returns a widget descriptor', () => {
-      const widget = connectChatPageSuggestions(jest.fn())({
+      const widget = connectChatPageSummary(jest.fn())({
         agentId: 'agentId',
         initialUserMessage: baseInitialMessage,
       });
       expect(widget).toEqual(
         expect.objectContaining({
-          $$type: 'ais.chatPageSuggestions',
+          $$type: 'ais.chatPageSummary',
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
@@ -131,14 +131,14 @@ describe('connectChatPageSuggestions', () => {
   // can spy on `sendMessage` BEFORE init runs.
   function mountWithChat(
     chatInstance: Chat<UIMessage>,
-    params: Partial<ChatPageSuggestionsConnectorParams<UIMessage>> = {}
+    params: Partial<ChatPageSummaryConnectorParams<UIMessage>> = {}
   ) {
     const renderFn = jest.fn();
-    const widget = connectChatPageSuggestions(renderFn)({
+    const widget = connectChatPageSummary(renderFn)({
       chat: chatInstance,
       initialUserMessage: baseInitialMessage,
       ...params,
-    } as unknown as ChatPageSuggestionsConnectorParams<UIMessage>);
+    } as unknown as ChatPageSummaryConnectorParams<UIMessage>);
     const helper = algoliasearchHelper(createSearchClient(), '');
     const initOptions = createInitOptions({ helper });
     widget.init(initOptions);
@@ -276,7 +276,7 @@ describe('connectChatPageSuggestions', () => {
   });
 
   describe('openChat handoff', () => {
-    it('calls the index chat setOpen + sendMessage with the page-suggestions referer', () => {
+    it('calls the index chat setOpen + sendMessage with the page-summary referer', () => {
       const setOpen = jest.fn();
       const indexChatSendMessage = jest.fn();
       const instantSearchInstance = createInstantSearch();
@@ -301,7 +301,7 @@ describe('connectChatPageSuggestions', () => {
       expect(setOpen).toHaveBeenCalledWith(true);
       expect(indexChatSendMessage).toHaveBeenCalledWith(
         { text: baseInitialMessage },
-        { headers: { 'x-algolia-referer': 'page-suggestions' } }
+        { headers: { 'x-algolia-referer': 'page-summary' } }
       );
     });
 
@@ -362,7 +362,7 @@ describe('connectChatPageSuggestions', () => {
   });
 
   describe('integrates with the main connectChat widget', () => {
-    it('forwards the suggestion prompt through openChat to a real chat connector', async () => {
+    it('forwards the summary prompt through openChat to a real chat connector', async () => {
       const chatRenderFn = jest.fn();
       const chatWidget = connectChat(chatRenderFn)({
         agentId: 'agentId',
@@ -402,11 +402,11 @@ describe('connectChatPageSuggestions', () => {
         },
       } as unknown as InstantSearch['renderState'];
 
-      const { widget: suggestionsWidget } = initWidget(
+      const { widget: summaryWidget } = initWidget(
         {},
         { instantSearchInstance }
       );
-      const suggestionsRenderState = suggestionsWidget.getWidgetRenderState(
+      const summaryRenderState = summaryWidget.getWidgetRenderState(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -414,7 +414,7 @@ describe('connectChatPageSuggestions', () => {
         })
       );
 
-      suggestionsRenderState.openChat();
+      summaryRenderState.openChat();
 
       expect(setOpenSpy).toHaveBeenCalledWith(true);
       expect(chatSendMessageSpy).toHaveBeenCalled();

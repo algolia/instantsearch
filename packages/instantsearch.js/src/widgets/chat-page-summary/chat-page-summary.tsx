@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChatPageSuggestions from '../../connectors/chat-page-suggestions/connectChatPageSuggestions';
+import connectChatPageSummary from '../../connectors/chat-page-summary/connectChatPageSummary';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -12,20 +12,20 @@ import {
 } from '../../lib/utils';
 
 import type {
-  ChatPageSuggestionsRenderState,
-  ChatPageSuggestionsConnectorParams,
-  ChatPageSuggestionsWidgetDescription,
-} from '../../connectors/chat-page-suggestions/connectChatPageSuggestions';
+  ChatPageSummaryRenderState,
+  ChatPageSummaryConnectorParams,
+  ChatPageSummaryWidgetDescription,
+} from '../../connectors/chat-page-summary/connectChatPageSummary';
 import type { UIMessage } from '../../lib/chat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type { Fragment } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'chat-page-suggestions',
+  name: 'chat-page-summary',
 });
 
-export type ChatPageSuggestionsCSSClasses = Partial<{
+export type ChatPageSummaryCSSClasses = Partial<{
   root: string;
   message: string;
   loader: string;
@@ -33,20 +33,20 @@ export type ChatPageSuggestionsCSSClasses = Partial<{
   cta: string;
 }>;
 
-export type ChatPageSuggestionsAssistantTemplateData = {
+export type ChatPageSummaryAssistantTemplateData = {
   /** The latest assistant message, if any. */
   message?: UIMessage;
   /** Concatenated text content extracted from the message parts. */
   text: string;
   /** The chat status driving the streaming UI. */
-  status: ChatPageSuggestionsRenderState['status'];
+  status: ChatPageSummaryRenderState['status'];
 };
 
-export type ChatPageSuggestionsErrorTemplateData = {
+export type ChatPageSummaryErrorTemplateData = {
   error: Error;
 };
 
-export type ChatPageSuggestionsCtaTemplateData = {
+export type ChatPageSummaryCtaTemplateData = {
   /** The prompt being sent — usually echoed inside the CTA label. */
   prompt: string;
   /** Whether the CTA can fire. */
@@ -55,34 +55,34 @@ export type ChatPageSuggestionsCtaTemplateData = {
   onClick: () => void;
 };
 
-export type ChatPageSuggestionsTemplates = Partial<{
+export type ChatPageSummaryTemplates = Partial<{
   /** Renders the streaming assistant message. */
-  assistantMessage: Template<ChatPageSuggestionsAssistantTemplateData>;
+  assistantMessage: Template<ChatPageSummaryAssistantTemplateData>;
   /** Renders the loading state while the agent is generating. */
   loading: Template;
   /** Renders an error returned by the agent. */
-  error: Template<ChatPageSuggestionsErrorTemplateData>;
+  error: Template<ChatPageSummaryErrorTemplateData>;
   /** Renders the "open chat" CTA button. */
-  cta: Template<ChatPageSuggestionsCtaTemplateData>;
+  cta: Template<ChatPageSummaryCtaTemplateData>;
 }>;
 
-type ChatPageSuggestionsWidgetParams = {
+type ChatPageSummaryWidgetParams = {
   /** CSS Selector or HTMLElement to insert the widget. */
   container: string | HTMLElement;
   /** Templates to use for the widget. */
-  templates?: ChatPageSuggestionsTemplates;
+  templates?: ChatPageSummaryTemplates;
   /** Label shown on the default CTA button. */
   ctaLabel?: string;
   /** CSS classes to add. */
-  cssClasses?: ChatPageSuggestionsCSSClasses;
+  cssClasses?: ChatPageSummaryCSSClasses;
 };
 
-export type ChatPageSuggestionsWidget = WidgetFactory<
-  ChatPageSuggestionsWidgetDescription & {
-    $$widgetType: 'ais.chatPageSuggestions';
+export type ChatPageSummaryWidget = WidgetFactory<
+  ChatPageSummaryWidgetDescription & {
+    $$widgetType: 'ais.chatPageSummary';
   },
-  ChatPageSuggestionsConnectorParams,
-  ChatPageSuggestionsWidgetParams
+  ChatPageSummaryConnectorParams,
+  ChatPageSummaryWidgetParams
 >;
 
 function getTextContent(message: UIMessage | undefined): string {
@@ -101,15 +101,15 @@ const createRenderer =
     ctaLabel,
   }: {
     containerNode: HTMLElement;
-    cssClasses: ChatPageSuggestionsCSSClasses;
+    cssClasses: ChatPageSummaryCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<ChatPageSuggestionsTemplates>;
+      templateProps?: PreparedTemplateProps<ChatPageSummaryTemplates>;
     };
-    templates: ChatPageSuggestionsTemplates;
+    templates: ChatPageSummaryTemplates;
     ctaLabel: string;
   }): Renderer<
-    ChatPageSuggestionsRenderState,
-    Partial<ChatPageSuggestionsWidgetParams>
+    ChatPageSummaryRenderState,
+    Partial<ChatPageSummaryWidgetParams>
   > =>
   (props, isFirstRendering) => {
     const {
@@ -124,7 +124,7 @@ const createRenderer =
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: {} as unknown as ChatPageSuggestionsTemplates,
+        defaultTemplates: {} as unknown as ChatPageSummaryTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -136,7 +136,7 @@ const createRenderer =
     const showLoader = isStreaming && !text;
 
     render(
-      <div className={cx('ais-ChatPageSuggestions', cssClasses.root)}>
+      <div className={cx('ais-ChatPageSummary', cssClasses.root)}>
         {error ? (
           templates.error ? (
             <TemplateComponent
@@ -147,7 +147,7 @@ const createRenderer =
             />
           ) : (
             <div
-              className={cx('ais-ChatPageSuggestions-error', cssClasses.error)}
+              className={cx('ais-ChatPageSummary-error', cssClasses.error)}
               role="alert"
             >
               {error.message}
@@ -165,13 +165,10 @@ const createRenderer =
             />
           ) : (
             <div
-              className={cx(
-                'ais-ChatPageSuggestions-loader',
-                cssClasses.loader
-              )}
+              className={cx('ais-ChatPageSummary-loader', cssClasses.loader)}
               aria-busy="true"
             >
-              Generating suggestion…
+              Generating summary…
             </div>
           )
         ) : null}
@@ -186,10 +183,7 @@ const createRenderer =
             />
           ) : (
             <div
-              className={cx(
-                'ais-ChatPageSuggestions-message',
-                cssClasses.message
-              )}
+              className={cx('ais-ChatPageSummary-message', cssClasses.message)}
             >
               {text}
             </div>
@@ -206,7 +200,7 @@ const createRenderer =
         ) : (
           <button
             type="button"
-            className={cx('ais-ChatPageSuggestions-cta', cssClasses.cta)}
+            className={cx('ais-ChatPageSummary-cta', cssClasses.cta)}
             onClick={openChat}
             disabled={!canHandoff}
           >
@@ -218,9 +212,8 @@ const createRenderer =
     );
   };
 
-export default (function chatPageSuggestions(
-  widgetParams: ChatPageSuggestionsWidgetParams &
-    ChatPageSuggestionsConnectorParams
+export default (function chatPageSummary(
+  widgetParams: ChatPageSummaryWidgetParams & ChatPageSummaryConnectorParams
 ) {
   const {
     container,
@@ -244,15 +237,15 @@ export default (function chatPageSuggestions(
     ctaLabel,
   });
 
-  const makeWidget = connectChatPageSuggestions(specializedRenderer, () =>
+  const makeWidget = connectChatPageSummary(specializedRenderer, () =>
     render(null, containerNode)
   );
 
   return {
     ...makeWidget(connectorParams),
-    $$widgetType: 'ais.chatPageSuggestions',
+    $$widgetType: 'ais.chatPageSummary',
   };
-} satisfies ChatPageSuggestionsWidget);
+} satisfies ChatPageSummaryWidget);
 
 // Keep Fragment imported so JSX fragments (if added later) compile.
 export type { Fragment };

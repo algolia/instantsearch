@@ -1,10 +1,7 @@
-import {
-  createChatMessageComponent,
-  cx,
-} from 'instantsearch-ui-components';
+import { createChatMessageComponent, cx } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import {
-  useChatPageSuggestions,
+  useChatPageSummary,
   useInstantSearch,
 } from 'react-instantsearch-core';
 
@@ -23,9 +20,9 @@ import type {
 import type { IndexUiState } from 'instantsearch.js';
 import type { ChatStatus } from 'instantsearch.js/es/lib/ai-lite';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { UseChatPageSuggestionsProps } from 'react-instantsearch-core';
+import type { UseChatPageSummaryProps } from 'react-instantsearch-core';
 
-export type ChatPageSuggestionsClassNames = Partial<{
+export type ChatPageSummaryClassNames = Partial<{
   root: string;
   message: string;
   loader: string;
@@ -35,11 +32,11 @@ export type ChatPageSuggestionsClassNames = Partial<{
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
-export type ChatPageSuggestionsProps<
+export type ChatPageSummaryProps<
   TObject extends RecordWithObjectID = RecordWithObjectID,
   TUiMessage extends UIMessage = UIMessage
-> = UseChatPageSuggestionsProps<TUiMessage> & {
-  classNames?: ChatPageSuggestionsClassNames;
+> = UseChatPageSummaryProps<TUiMessage> & {
+  classNames?: ChatPageSummaryClassNames;
   /** Label displayed on the default CTA. Defaults to "Continue in chat". */
   ctaLabel?: string;
   /** Tool renderers; merged on top of the same defaults as `<Chat>`. */
@@ -85,7 +82,7 @@ const ChatMessageUi = createChatMessageComponent({
   Fragment,
 });
 
-export function ChatPageSuggestions<
+export function ChatPageSummary<
   TObject extends RecordWithObjectID = RecordWithObjectID,
   TUiMessage extends UIMessage = UIMessage
 >({
@@ -99,7 +96,7 @@ export function ChatPageSuggestions<
   itemComponent,
   getSearchPageURL,
   ...connectorProps
-}: ChatPageSuggestionsProps<TObject, TUiMessage>) {
+}: ChatPageSummaryProps<TObject, TUiMessage>) {
   const {
     message,
     status,
@@ -108,7 +105,7 @@ export function ChatPageSuggestions<
     canHandoff,
     prompt,
     addToolResult,
-  } = useChatPageSuggestions<TUiMessage>(connectorProps);
+  } = useChatPageSummary<TUiMessage>(connectorProps);
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
@@ -133,13 +130,13 @@ export function ChatPageSuggestions<
   const showLoader = isStreaming && !text && !message?.parts?.length;
 
   return (
-    <div className={cx('ais-ChatPageSuggestions', classNames.root)}>
+    <div className={cx('ais-ChatPageSummary', classNames.root)}>
       {error ? (
         ErrorComponent ? (
           <ErrorComponent error={error} />
         ) : (
           <div
-            className={cx('ais-ChatPageSuggestions-error', classNames.error)}
+            className={cx('ais-ChatPageSummary-error', classNames.error)}
             role="alert"
           >
             {error.message}
@@ -152,10 +149,10 @@ export function ChatPageSuggestions<
           <LoaderComponent />
         ) : (
           <div
-            className={cx('ais-ChatPageSuggestions-loader', classNames.loader)}
+            className={cx('ais-ChatPageSummary-loader', classNames.loader)}
             aria-busy="true"
           >
-            Generating suggestion…
+            Generating summary…
           </div>
         )
       ) : null}
@@ -165,10 +162,7 @@ export function ChatPageSuggestions<
           <MessageComponent message={message} text={text} status={status} />
         ) : (
           <div
-            className={cx(
-              'ais-ChatPageSuggestions-message',
-              classNames.message
-            )}
+            className={cx('ais-ChatPageSummary-message', classNames.message)}
           >
             <ChatMessageUi
               message={message as ChatMessageProps['message']}
@@ -191,7 +185,7 @@ export function ChatPageSuggestions<
       ) : (
         <button
           type="button"
-          className={cx('ais-ChatPageSuggestions-cta', classNames.cta)}
+          className={cx('ais-ChatPageSummary-cta', classNames.cta)}
           onClick={openChat}
           disabled={!canHandoff}
         >
