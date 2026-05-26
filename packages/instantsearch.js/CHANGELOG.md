@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.99.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.98.0...instantsearch.js@4.99.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+* **recommend:** remove unsupported queryParameters from trending-facets ([#7043](https://github.com/algolia/instantsearch/issues/7043)) ([d5dd4bf](https://github.com/algolia/instantsearch/commit/d5dd4bf5c4fbd88ef68e84cb1b94a4a1644bf3ed))
+
+
+### Features
+
+* **chat:** send hidden context via message metadata.turnContext ([#7042](https://github.com/algolia/instantsearch/issues/7042)) ([4b64e1f](https://github.com/algolia/instantsearch/commit/4b64e1f6ac69f690dc5cad997ce5319672f8aa3c))
+
+
+
+
+
 # [4.98.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.97.0...instantsearch.js@4.98.0) (2026-05-19)
 
 
