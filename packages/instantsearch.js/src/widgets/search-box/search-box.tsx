@@ -154,9 +154,10 @@ export type SearchBoxWidgetParams = {
    */
   queryHook?: (query: string, hook: (value: string) => void) => void;
   /**
-   * When true, renders an AI mode button inside the search box
-   * that opens the Chat widget and sends the current query.
-   * Requires a Chat widget on the same index.
+   * Whether to render the AI mode button inside the search box, which opens
+   * the Chat widget and sends the current query. Defaults to `true`; set to
+   * `false` to opt out. Requires a Chat widget on the same index to do
+   * anything when clicked.
    */
   aiMode?: boolean;
 };
@@ -265,7 +266,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showLoadingIndicator = true,
     queryHook,
     templates: userTemplates = {},
-    aiMode,
+    aiMode = true,
   } = widgetParams || {};
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

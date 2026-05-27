@@ -39,9 +39,10 @@ export type SearchBoxProps = Omit<
      */
     ignoreCompositionEvents?: boolean;
     /**
-     * When true, renders an AI mode button inside the search box
-     * that opens the Chat widget and sends the current query.
-     * Requires a Chat widget on the same index.
+     * Whether the AI mode pill is active. When `true` (the default), submitting
+     * the search box (e.g. pressing Enter) opens the Chat widget and sends the
+     * current query instead of running a search. Set to `false` to opt out.
+     * Requires a Chat widget on the same index to do anything when submitted.
      */
     aiMode?: boolean;
     translations?: Partial<UiProps['translations']>;
@@ -51,7 +52,7 @@ export function SearchBox({
   queryHook,
   searchAsYouType = true,
   ignoreCompositionEvents = false,
-  aiMode,
+  aiMode = true,
   translations,
   ...props
 }: SearchBoxProps) {
@@ -136,7 +137,7 @@ export function SearchBox({
     translations: {
       submitButtonTitle: 'Submit the search query',
       resetButtonTitle: 'Clear the search query',
-      aiModeButtonTitle: 'AI Mode',
+      aiModeButtonTitle: 'Ask AI',
       ...translations,
     },
   };
