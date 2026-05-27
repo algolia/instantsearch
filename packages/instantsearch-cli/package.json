@@ -1,0 +1,28 @@
+{
+  "name": "@instantsearch/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CLI for scaffolding and integrating InstantSearch projects.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch"
+  },
+  "author": "Algolia <support@algolia.com>",
+  "bin": {
+    "instantsearch": "src/cli.ts"
+  },
+  "scripts": {
+    "test": "jest",
+    "version": "./scripts/version.cjs"
+  },
+  "dependencies": {
+    "commander": "11.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "27.4.0",
+    "@types/node": "18.11.13",
+    "@types/semver": "7.5.8",
+    "semver": "7.7.3"
+  }
+}

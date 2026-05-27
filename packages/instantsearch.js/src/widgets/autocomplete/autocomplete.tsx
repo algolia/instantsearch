@@ -1534,6 +1534,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           future: { undefinedEmptyQuery: true },
         }),
         $$widgetType: 'ais.autocomplete',
+        ...(aiMode ? { opensChat: true as const } : {}),
       },
     ]),
   ];

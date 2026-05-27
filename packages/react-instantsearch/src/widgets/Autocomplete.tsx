@@ -469,7 +469,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   const { compositionID } = useInstantSearchContext();
   const { refine } = useSearchBox(
     {},
-    { $$type: 'ais.autocomplete', $$widgetType: 'ais.autocomplete' }
+    {
+      $$type: 'ais.autocomplete',
+      $$widgetType: 'ais.autocomplete',
+      ...(props.aiMode ? { opensChat: true } : {}),
+    }
   );
   // In feeds-mode, indexId disambiguates multiple Autocomplete instances
   // sharing the same compositionID. Mirrors the fallback at line 111 for React <18.

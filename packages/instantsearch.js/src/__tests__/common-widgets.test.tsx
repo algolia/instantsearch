@@ -34,6 +34,7 @@ import {
   menuSelect,
   dynamicWidgets,
   chat,
+  chatTrigger,
   EXPERIMENTAL_autocomplete,
   filterSuggestions,
 } from '../widgets';
@@ -669,6 +670,9 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     instantsearch(instantSearchOptions)
       .addWidgets([
         ...refinementsWidgets,
+        chatTrigger({
+          container: document.body.appendChild(document.createElement('div')),
+        }),
         chat({
           container: document.body.appendChild(document.createElement('div')),
           ...chatWidgetParams,
