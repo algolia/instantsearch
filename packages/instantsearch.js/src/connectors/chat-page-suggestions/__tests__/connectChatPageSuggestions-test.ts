@@ -338,6 +338,9 @@ describe('connectChatPageSuggestions', () => {
 
     it('writes the snapshot when the fetch finishes before the timeout', async () => {
       const search = createInstantSearch();
+      // The connector listens on `mainHelper.derivedHelpers[0]` for `result`
+      // events. Create a derived helper so the listener can attach.
+      search.mainHelper!.derive((state) => state);
       const widget = connectChatPageSuggestions(jest.fn())({
         agentId: 'a',
         ssrTimeoutMs: 500,
@@ -351,7 +354,7 @@ describe('connectChatPageSuggestions', () => {
 
       // Fire the helper's result event with hits so the SSR wait promise
       // dispatches its fetch.
-      search.helper!.derivedHelpers[0]?.emit('result', {
+      search.mainHelper!.derivedHelpers[0].emit('result', {
         results: makeResults(),
       });
 

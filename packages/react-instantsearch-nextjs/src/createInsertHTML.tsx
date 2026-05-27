@@ -13,7 +13,7 @@ export const createInsertHTML =
   }: {
     options: { inserted: boolean };
     results: InitialResults;
-    chatStates?: Record<string, unknown[]>;
+    chatStates?: Record<string, unknown>;
     nonce?: string;
   }) =>
   () => {
@@ -21,26 +21,30 @@ export const createInsertHTML =
       return <></>;
     }
     options.inserted = true;
+    const resultsScript = (
+      <script
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
+            JSON.stringify(results)
+          )}`,
+        }}
+      />
+    );
+    if (!chatStates) {
+      return resultsScript;
+    }
     return (
       <>
+        {resultsScript}
         <script
           nonce={nonce}
           dangerouslySetInnerHTML={{
-            __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
-              JSON.stringify(results)
+            __html: `window[Symbol.for("InstantSearchInitialChatStates")] = ${htmlEscapeJsonString(
+              JSON.stringify(chatStates)
             )}`,
           }}
         />
-        {chatStates ? (
-          <script
-            nonce={nonce}
-            dangerouslySetInnerHTML={{
-              __html: `window[Symbol.for("InstantSearchInitialChatStates")] = ${htmlEscapeJsonString(
-                JSON.stringify(chatStates)
-              )}`,
-            }}
-          />
-        ) : null}
       </>
     );
   };

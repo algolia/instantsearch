@@ -42,6 +42,10 @@ const NON_COMPONENTS = [
   // the switch below, breaking other cases. Covered by a dedicated test in
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
+  // `ChatPageSuggestions` renders `null` until it has suggestions to show, so
+  // the generic "every widget renders a root element with the given class"
+  // tests don't apply. Covered by dedicated tests.
+  'ChatPageSuggestions',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 

@@ -374,7 +374,6 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         instantSearchInstance: InstantSearch
       ): Promise<void> => {
         return new Promise<void>((resolve) => {
-          const startedAt = Date.now();
           const abortCtrl =
             typeof AbortController !== 'undefined'
               ? new AbortController()
@@ -384,12 +383,6 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           const settle = () => {
             if (settled) return;
             settled = true;
-            // eslint-disable-next-line no-console
-            console.log(
-              `[chat-page-suggestions][SSR] wait resolved in ${
-                Date.now() - startedAt
-              }ms (suggestions=${suggestions.length})`
-            );
             resolve();
           };
 
@@ -490,10 +483,6 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             }
             let wait = perSearch.get(id);
             if (!wait) {
-              // eslint-disable-next-line no-console
-              console.log(
-                `[chat-page-suggestions][SSR] wait started (timeout=${ssrTimeoutMs}ms)`
-              );
               wait = buildServerWait(instantSearchInstance);
               perSearch.set(id, wait);
             }
