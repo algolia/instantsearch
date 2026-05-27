@@ -112,12 +112,22 @@ export function PriceSlider({
     return null;
   }
 
+  // Clamp start values to the range limits to prevent overflow
+  const clampedStart: [number, number] = [
+    start[0] === -Infinity
+      ? range.min!
+      : Math.max(range.min!, Math.min(range.max!, start[0]!)),
+    start[1] === Infinity
+      ? range.max!
+      : Math.max(range.min!, Math.min(range.max!, start[1]!)),
+  ];
+
   return (
     <Slider
       mode={2}
       step={1}
       domain={[range.min!, range.max!]}
-      values={start as number[]}
+      values={clampedStart}
       disabled={!canRefine}
       onChange={onChange}
       onUpdate={onUpdate}
