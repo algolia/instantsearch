@@ -298,11 +298,41 @@ describe('introspect', () => {
     });
   });
 
-  it('surfaces algolia_error for non-404 API errors', async () => {
+  it.each([401, 403])(
+    'surfaces credentials_invalid when Algolia returns %i',
+    async (status) => {
+      mockSearch('instant_search', {
+        kind: 'status',
+        status,
+        body: { message: 'Invalid Application-ID or API key' },
+      });
+      const capture = captureIO();
+
+      const exitCode = await runIntrospect(
+        {
+          cwd: tempDir(),
+          json: true,
+          index: 'instant_search',
+          appId: 'FLAG_APP',
+          searchApiKey: 'FLAG_KEY',
+        },
+        capture.io
+      );
+
+      expect(exitCode).not.toBe(0);
+      expect(readEnvelope(capture.stdout)).toMatchObject({
+        ok: false,
+        command: 'introspect',
+        code: 'credentials_invalid',
+      });
+    }
+  );
+
+  it('surfaces algolia_error for other non-404 API errors', async () => {
     mockSearch('instant_search', {
       kind: 'status',
-      status: 403,
-      body: { message: 'Invalid Application-ID or API key' },
+      status: 500,
+      body: { message: 'Internal server error' },
     });
     const capture = captureIO();
 

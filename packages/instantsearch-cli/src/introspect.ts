@@ -66,10 +66,12 @@ export async function runIntrospect(
     emitSuccess(io, options.json, options.index, toIntrospectData(response));
     return 0;
   } catch (error) {
-    const code = isIndexNotFound(error) ? 'index_not_found' : 'algolia_error';
+    const code = classifyAlgoliaError(error);
     const message =
       code === 'index_not_found'
         ? `Index "${options.index}" was not found.`
+        : code === 'credentials_invalid'
+        ? 'Algolia rejected the credentials. Check --app-id and --search-api-key.'
         : describeError(error);
     emitFailure(io, options.json, failureEnvelope(COMMAND, code, message));
     return 1;
@@ -90,9 +92,19 @@ function toIntrospectData(response: SearchResponse): IntrospectData {
   };
 }
 
-function isIndexNotFound(error: unknown): boolean {
-  if (typeof error !== 'object' || error === null) return false;
-  return (error as { status?: unknown }).status === 404;
+function classifyAlgoliaError(
+  error: unknown
+): 'index_not_found' | 'credentials_invalid' | 'algolia_error' {
+  const status = getStatus(error);
+  if (status === 404) return 'index_not_found';
+  if (status === 401 || status === 403) return 'credentials_invalid';
+  return 'algolia_error';
+}
+
+function getStatus(error: unknown): number | undefined {
+  if (typeof error !== 'object' || error === null) return undefined;
+  const status = (error as { status?: unknown }).status;
+  return typeof status === 'number' ? status : undefined;
 }
 
 type ResolvedCredentials =
