@@ -12,6 +12,12 @@ type ParserFailureCode =
   | 'unknown_command'
   | 'internal_error';
 
+export class HandledFailure extends Error {
+  constructor(public readonly exitCode: number) {
+    super(`command failed with exit code ${exitCode}`);
+  }
+}
+
 export async function run(
   argv: string[],
   options: Partial<IO> = {}
@@ -34,6 +40,10 @@ export async function run(
     ) {
       io.stderr(errBuffer.join(''));
       return 0;
+    }
+
+    if (error instanceof HandledFailure) {
+      return error.exitCode;
     }
 
     const { code, message } = classifyError(error);

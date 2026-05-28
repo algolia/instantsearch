@@ -1,7 +1,9 @@
 import { Command, Option } from 'commander';
 
 import { formatEnvelope, successEnvelope } from './envelope';
+import { runInit } from './init';
 import { defaultIO, type IO } from './io';
+import { HandledFailure } from './run';
 import version from './version';
 
 type StubDescriptor = {
@@ -12,16 +14,6 @@ type StubDescriptor = {
 };
 
 const STUBS = [
-  {
-    name: 'init',
-    description:
-      'Scaffold a new InstantSearch project in the current directory.',
-    humanSummary:
-      'init: stub command — no files were created in this slice.',
-    nextSteps: [
-      "Run 'instantsearch init --help' once project scaffolding lands.",
-    ],
-  },
   {
     name: 'add',
     description:
@@ -45,7 +37,18 @@ const STUBS = [
 ] as const satisfies readonly StubDescriptor[];
 
 export const PROGRAM_NAME = 'instantsearch';
-export const KNOWN_COMMANDS: ReadonlyArray<string> = STUBS.map((s) => s.name);
+export const KNOWN_COMMANDS: ReadonlyArray<string> = [
+  'init',
+  ...STUBS.map((s) => s.name),
+];
+
+type InitFlagOptions = {
+  componentsPath?: string;
+  libPath?: string;
+  appId?: string;
+  searchApiKey?: string;
+  framework?: 'next-app';
+};
 
 export function createProgram(io: IO = defaultIO()): Command {
   const program = new Command();
@@ -70,6 +73,42 @@ export function createProgram(io: IO = defaultIO()): Command {
     .configureOutput({
       writeOut: (str) => io.stdout(str),
       writeErr: (str) => io.stderr(str),
+    });
+
+  program
+    .command('init')
+    .description(
+      'Scaffold a new InstantSearch project in the current directory.'
+    )
+    .option('--components-path <path>', 'directory for generated components')
+    .option('--lib-path <path>', 'directory for generated library files')
+    .option('--app-id <appId>', 'Algolia Application ID')
+    .option('--search-api-key <key>', 'Algolia Search-Only API Key')
+    .addOption(
+      new Option(
+        '--framework <name>',
+        'override the auto-detected host framework'
+      ).choices(['next-app'])
+    )
+    .action(async (flags: InitFlagOptions, cmd: Command) => {
+      const { json, yes } = cmd.optsWithGlobals<{
+        json: boolean;
+        yes: boolean;
+      }>();
+      const exitCode = await runInit(
+        {
+          cwd: process.cwd(),
+          json: Boolean(json),
+          yes: Boolean(yes),
+          componentsPath: flags.componentsPath,
+          libPath: flags.libPath,
+          appId: flags.appId,
+          searchApiKey: flags.searchApiKey,
+          framework: flags.framework,
+        },
+        io
+      );
+      if (exitCode !== 0) throw new HandledFailure(exitCode);
     });
 
   for (const stub of STUBS) {
