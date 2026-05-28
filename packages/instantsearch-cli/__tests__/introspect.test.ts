@@ -5,11 +5,7 @@ import path from 'path';
 import nock from 'nock';
 
 import { runIntrospect } from '../src/introspect';
-import {
-  MANIFEST_API_VERSION,
-  serializeManifest,
-  type Manifest,
-} from '../src/manifest';
+import { serializeManifest, type Manifest } from '../src/manifest';
 
 import { captureIO, readEnvelope } from './__utils__/helpers';
 
@@ -18,7 +14,6 @@ function manifestFixture(overrides: {
   searchApiKey?: string;
 } = {}): Manifest {
   return {
-    apiVersion: MANIFEST_API_VERSION,
     flavor: 'react',
     framework: 'vite',
     typescript: true,
