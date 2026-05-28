@@ -132,6 +132,19 @@ describe('manifest', () => {
       });
     });
 
+    it('returns write_failed when the parent directory does not exist', () => {
+      const filePath = path.join(tempDir, 'nonexistent', 'instantsearch.json');
+
+      const result = writeManifest(filePath, validManifest(), {
+        command: 'init',
+      });
+
+      expect(result).toMatchObject({
+        ok: false,
+        command: 'init',
+        code: 'write_failed',
+      });
+    });
   });
 
   describe('validateManifest', () => {
@@ -210,5 +223,21 @@ describe('manifest', () => {
       });
     });
 
+    it.each(['appId', 'searchApiKey'])(
+      'rejects empty-string algolia.%s',
+      (field) => {
+        const manifest = validManifest({
+          algolia: { appId: 'APP', searchApiKey: 'KEY', [field]: '' },
+        });
+
+        const result = validateManifest(manifest, { command: 'init' });
+
+        expect(result).toMatchObject({
+          ok: false,
+          code: 'invalid_manifest',
+          message: expect.stringContaining(`algolia.${field}`),
+        });
+      }
+    );
   });
 });

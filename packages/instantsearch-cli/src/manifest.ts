@@ -20,7 +20,11 @@ export type Manifest = {
   }>;
 };
 
-type RefusalCode = 'invalid_manifest' | 'not_found' | 'manifest_exists';
+type RefusalCode =
+  | 'invalid_manifest'
+  | 'not_found'
+  | 'manifest_exists'
+  | 'write_failed';
 
 type ManifestFailure = ReturnType<typeof failureEnvelope>;
 
@@ -92,7 +96,13 @@ export function writeManifest(
         `A manifest already exists at ${filePath}.`
       );
     }
-    throw error;
+    return refuse(
+      command,
+      'write_failed',
+      `Could not write manifest to ${filePath}: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
   return { ok: true, path: filePath };
 }
@@ -164,8 +174,9 @@ function checkAlgolia(value: unknown): string | null {
     return 'Manifest "algolia" must be an object.';
   }
   for (const key of ['appId', 'searchApiKey']) {
-    if (typeof value[key] !== 'string') {
-      return `Manifest "algolia.${key}" must be a string.`;
+    const entry = value[key];
+    if (typeof entry !== 'string' || entry.length === 0) {
+      return `Manifest "algolia.${key}" must be a non-empty string.`;
     }
   }
   return null;
