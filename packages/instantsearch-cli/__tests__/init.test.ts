@@ -157,8 +157,7 @@ describe('init', () => {
     );
     expect(providerSource).toContain("from 'react-instantsearch'");
     expect(providerSource).not.toContain("'use client'");
-    expect(providerSource).not.toContain('indexName=""');
-    expect(providerSource).toMatch(/indexName="[^"]+"/);
+    expect(providerSource).not.toMatch(/indexName=/);
 
     const importHint = (envelope as { nextSteps: string[] }).nextSteps.join('\n');
     expect(importHint).toContain('./src/lib/algolia-provider');

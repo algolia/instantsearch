@@ -414,7 +414,7 @@ function emitSuccess(
     filesCreated,
     nextSteps: [
       `Import { AlgoliaProvider } from '${providerImport}' to wrap your app's search UI.`,
-      `Set the indexName in '${providerImport}' to your Algolia index.`,
+      `Add an <Index indexName="..."> wrapper around each feature that targets a specific Algolia index.`,
     ],
   });
   if (json) {
@@ -462,7 +462,7 @@ import { searchClient } from './algolia-client';
 
 export function AlgoliaProvider({ children }${typedChildren}) {
   return (
-    <${componentName} searchClient={searchClient} indexName="YOUR_INDEX_NAME">
+    <${componentName} searchClient={searchClient}>
       {children}
     </${componentName}>
   );
