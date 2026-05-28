@@ -2,8 +2,6 @@
 
 import { createButtonComponent } from '../Button';
 
-import { ReloadIcon } from './icons';
-
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageErrorTranslations = {
@@ -14,9 +12,9 @@ export type ChatMessageErrorTranslations = {
     | string
     | ((params: { errorMessage?: string }) => string);
   /**
-   * Retry button text
+   * New conversation button text
    */
-  retryText: string;
+  newConversationText: string;
 };
 
 export type ChatMessageErrorProps = ComponentProps<'article'> & {
@@ -25,11 +23,21 @@ export type ChatMessageErrorProps = ComponentProps<'article'> & {
    */
   errorMessage?: string;
   /**
-   * Callback for reload action
+   * Callback for reload action. Kept for backwards compatibility — does not
+   * render a default button anymore. Pass it explicitly via `actions` if you
+   * still want to expose a retry control.
    */
   onReload?: () => void;
   /**
-   * Custom action buttons
+   * Callback that clears the current conversation and starts a new one. When
+   * provided (and no custom `actions` are passed), the component renders a
+   * default "New conversation" button. This is the recommended action for
+   * guardrails-style errors where retrying the same request will fail again.
+   */
+  onNewConversation?: () => void;
+  /**
+   * Custom action buttons. When provided, takes precedence over the default
+   * `onNewConversation` button.
    */
   actions?: Array<ComponentProps<'button'>>;
   /**
@@ -46,20 +54,25 @@ export function createChatMessageErrorComponent({
   return function ChatMessageError(userProps: ChatMessageErrorProps) {
     const {
       errorMessage,
-      onReload,
+      onReload: _onReload,
+      onNewConversation,
       actions,
       translations: userTranslations,
       ...props
     } = userProps;
     const defaultErrorMessage =
-      'Sorry, we are not able to generate a response at the moment. Please retry or contact support.';
-    const defaultRetryText = 'Retry';
+      'Sorry, we are not able to generate a response at the moment. Please contact support.';
+    const defaultNewConversationText = 'Start a new conversation';
     const errorMessageTranslation = userTranslations?.errorMessage;
     const resolvedErrorMessage =
       typeof errorMessageTranslation === 'function'
         ? errorMessageTranslation({ errorMessage })
         : errorMessageTranslation ?? defaultErrorMessage;
-    const retryText = userTranslations?.retryText ?? defaultRetryText;
+    const newConversationText =
+      userTranslations?.newConversationText ?? defaultNewConversationText;
+
+    const hasDefaultAction = !actions && Boolean(onNewConversation);
+    const hasActions = Boolean(actions) || hasDefaultAction;
 
     return (
       <article
@@ -71,7 +84,7 @@ export function createChatMessageErrorComponent({
             <div className="ais-ChatMessage-message">
               {resolvedErrorMessage}
             </div>
-            {(actions || onReload) && (
+            {hasActions && (
               <div className="ais-ChatMessage-actions">
                 {actions ? (
                   actions.map((action, index) => (
@@ -89,10 +102,9 @@ export function createChatMessageErrorComponent({
                     variant="primary"
                     size="md"
                     className="ais-ChatMessage-errorAction"
-                    onClick={() => onReload?.()}
+                    onClick={() => onNewConversation?.()}
                   >
-                    <ReloadIcon createElement={createElement} />
-                    {retryText}
+                    {newConversationText}
                   </Button>
                 )}
               </div>

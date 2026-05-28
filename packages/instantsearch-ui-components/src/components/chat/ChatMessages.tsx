@@ -150,6 +150,14 @@ export type ChatMessagesProps<
    */
   onReload: (messageId?: string) => void;
   /**
+   * Callback to start a new conversation from the default error component.
+   * When provided (and no custom `errorComponent`/`actions` override it),
+   * the error renders a "New conversation" button that clears the messages
+   * and rotates the chat id. When omitted, the error renders with no action
+   * button (recommended default for guardrails-style errors).
+   */
+  onNewConversation?: () => void;
+  /**
    * Function to close the chat
    */
   onClose: () => void;
@@ -390,6 +398,7 @@ export function createChatMessagesComponent({
       error,
       hideScrollToBottom = false,
       onReload,
+      onNewConversation,
       onClose,
       sendMessage,
       setInput,
@@ -513,8 +522,21 @@ export function createChatMessagesComponent({
 
             {status === 'error' && (
               <DefaultError
-                onReload={onReload}
+                onNewConversation={onNewConversation}
                 errorMessage={error?.message}
+                translations={
+                  // Guardrail violations come with a service-authored
+                  // `fallbackResponse` that's safe to display verbatim; for
+                  // every other error we keep hiding the raw `error.message`
+                  // behind the friendly default. Detection is by `error.name`
+                  // to avoid coupling this package to `instantsearch.js`.
+                  error?.name === 'GuardrailViolationError'
+                    ? {
+                        errorMessage: ({ errorMessage: rawMessage }) =>
+                          rawMessage ?? '',
+                      }
+                    : undefined
+                }
               />
             )}
           </div>

@@ -276,12 +276,90 @@ describe('ChatMessages', () => {
 
     expect(
       screen.getByText(
-        'Sorry, we are not able to generate a response at the moment. Please retry or contact support.'
+        'Sorry, we are not able to generate a response at the moment. Please contact support.'
       )
     ).toBeInTheDocument();
     expect(
       screen.queryByText('Request blocked for this domain')
     ).not.toBeInTheDocument();
+  });
+
+  test('renders the raw error message verbatim for guardrail violations', () => {
+    const fallbackResponse =
+      "I'm sorry I couldn't respond to that, please try again with another message.";
+    const guardrailError = new Error(fallbackResponse);
+    guardrailError.name = 'GuardrailViolationError';
+
+    render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={guardrailError}
+      />
+    );
+
+    expect(screen.getByText(fallbackResponse)).toBeInTheDocument();
+    // Friendly default should NOT be shown — guardrail messages are
+    // service-authored copy meant for end users, so we trust them.
+    expect(
+      screen.queryByText(
+        'Sorry, we are not able to generate a response at the moment. Please contact support.'
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  test('does not render an action button by default in error state', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        status="error"
+        error={new Error('Request blocked for this domain')}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageError .ais-ChatMessage-actions')
+    ).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: 'Start a new conversation' })
+    ).toBeNull();
+  });
+
+  test('renders a "Start a new conversation" button when onNewConversation is provided', () => {
+    const onNewConversation = jest.fn();
+
+    render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        onNewConversation={onNewConversation}
+        status="error"
+        error={new Error('Request blocked for this domain')}
+      />
+    );
+
+    const button = screen.getByRole('button', {
+      name: 'Start a new conversation',
+    });
+    expect(button).toBeInTheDocument();
+
+    button.click();
+    expect(onNewConversation).toHaveBeenCalledTimes(1);
   });
 
   test('passes raw error message to custom error component', () => {

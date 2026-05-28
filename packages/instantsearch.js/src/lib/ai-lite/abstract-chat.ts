@@ -2,6 +2,7 @@
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
+  GuardrailViolationError,
   SerialJobExecutor,
   tryParseErrorMessage,
 } from './utils';
@@ -1103,8 +1104,36 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             }
 
             default: {
-              // Handle data parts (data-*)
               const chunkType = (chunk as any).type as string;
+
+              // Surface guardrail violations through the error state, but
+              // distinct from generic cost-control / 4xx errors: throw a
+              // `GuardrailViolationError` so the UI can render the
+              // service-provided `fallbackResponse` verbatim (it's authored
+              // for end-user display) instead of the friendly default used
+              // for opaque transport errors. Also discard any in-progress
+              // assistant message so no partial text lingers above the
+              // fallback.
+              if (chunkType === 'data-guardrail-violation') {
+                isError = true;
+                const violationData = (chunk as any).data as
+                  | { fallbackResponse?: string }
+                  | undefined;
+
+                if (currentMessageIndex >= 0) {
+                  this.state.messages = this.state.messages.slice(
+                    0,
+                    currentMessageIndex
+                  );
+                }
+
+                throw new GuardrailViolationError(
+                  violationData?.fallbackResponse ||
+                    'Sorry, we are not able to generate a response at the moment.'
+                );
+              }
+
+              // Handle generic data parts (data-*)
               if (chunkType?.startsWith('data-') && currentMessage) {
                 const dataPart = {
                   type: chunkType,

@@ -899,6 +899,109 @@ data: [DONE]`,
         expect(toolPart?.rawOutput).toBeUndefined();
       });
     });
+
+    it('surfaces a guardrail-violation fallbackResponse via the error state', async () => {
+      const fallbackResponse =
+        "I'm sorry I couldn't respond to that, please try again with another message.";
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "text-start", "id": "msg-1"}
+
+data: {"type": "text-delta", "id": "msg-1", "delta": "If you need help"}
+
+data: {"type": "text-end", "id": "msg-1"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "product_returns", "guardrailType": "input", "fallbackResponse": ${JSON.stringify(
+                  fallbackResponse
+                )}}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+      const messagesBeforeSend = chatInstance.messages.length;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'how do I return a product?' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('error');
+        expect(chatInstance.error?.message).toBe(fallbackResponse);
+        // Tagged so the UI can branch on it and render the fallback verbatim
+        // instead of the generic friendly default used for cost-control
+        // errors.
+        expect(chatInstance.error?.name).toBe('GuardrailViolationError');
+        // The in-progress assistant message produced for this request is
+        // stripped so only the user message added by `sendMessage` remains
+        // beyond what was already there. This matches cost-control errors
+        // where no assistant message is appended on failure.
+        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 1);
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1].role
+        ).toBe('user');
+      });
+    });
+
+    it('falls back to a generic message when fallbackResponse is missing', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "x", "guardrailType": "input"}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'blocked input' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('error');
+        expect(chatInstance.error?.message).toBe(
+          'Sorry, we are not able to generate a response at the moment.'
+        );
+      });
+    });
   });
 
   describe('transport configuration', () => {
