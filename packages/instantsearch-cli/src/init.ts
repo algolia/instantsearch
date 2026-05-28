@@ -60,15 +60,6 @@ export async function runInit(
     yes: rawOptions.yes || rawOptions.json,
   };
 
-  const detection = detect(options.cwd, {
-    command: COMMAND,
-    frameworkOverride: options.framework,
-  });
-  if (!detection.ok) {
-    emitFailure(io, options.json, detection);
-    return 1;
-  }
-
   const manifestPath = path.join(options.cwd, MANIFEST_FILENAME);
   if (fs.existsSync(manifestPath)) {
     emitFailure(
@@ -80,6 +71,15 @@ export async function runInit(
         `A manifest already exists at ${manifestPath}. Edit it directly to update settings.`
       )
     );
+    return 1;
+  }
+
+  const detection = detect(options.cwd, {
+    command: COMMAND,
+    frameworkOverride: options.framework,
+  });
+  if (!detection.ok) {
+    emitFailure(io, options.json, detection);
     return 1;
   }
 
@@ -181,14 +181,17 @@ export async function runInit(
 
   try {
     fs.mkdirSync(libDir, { recursive: true });
-    fs.writeFileSync(clientPath, renderClient(appId, searchApiKey), 'utf8');
+    fs.writeFileSync(clientPath, renderClient(appId, searchApiKey), {
+      encoding: 'utf8',
+      flag: 'wx',
+    });
     fs.writeFileSync(
       providerPath,
       renderProvider({
         framework: detection.framework,
         typescript: detection.typescript,
       }),
-      'utf8'
+      { encoding: 'utf8', flag: 'wx' }
     );
   } catch (error) {
     emitFailure(
@@ -378,7 +381,11 @@ const defaultInstaller: Installer = async (packages, { cwd, manager }) => {
       : ['add', ...packages];
 
   await new Promise<void>((resolve, reject) => {
-    const child = spawn(manager, args, { cwd, stdio: 'inherit' });
+    // Pipe child stdout to our stderr so install logs don't contaminate the JSON envelope on stdout.
+    const child = spawn(manager, args, {
+      cwd,
+      stdio: ['ignore', process.stderr, process.stderr],
+    });
     child.on('error', reject);
     child.on('exit', (code) => {
       if (code === 0) resolve();

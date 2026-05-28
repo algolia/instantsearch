@@ -498,6 +498,25 @@ describe('init', () => {
     });
   });
 
+  it('prefers manifest_exists over a detection failure on re-runs', async () => {
+    const cwd = fixture('vanilla'); // detector would refuse this with unsupported_flavor
+    fs.writeFileSync(
+      path.join(cwd, 'instantsearch.json'),
+      '{"flavor":"react","typescript":true,"componentsPath":"src/components","libPath":"src/lib","aliases":{},"algolia":{"appId":"X","searchApiKey":"Y"},"features":[]}',
+      'utf8'
+    );
+    const capture = captureIO();
+
+    const exitCode = await runInit(baseOptions({ cwd }), capture.io);
+
+    expect(exitCode).not.toBe(0);
+    expect(readEnvelope(capture.stdout)).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'manifest_exists',
+    });
+  });
+
   it('refuses with missing_required_flag when --yes mode lacks --app-id', async () => {
     const cwd = fixture('react-vite-ts');
     const capture = captureIO();
@@ -601,6 +620,30 @@ describe('init', () => {
         },
       },
     });
+  });
+
+  it('refuses to overwrite an existing algolia-client file', async () => {
+    const cwd = fixture('react-vite-ts');
+    fs.mkdirSync(path.join(cwd, 'src', 'lib'), { recursive: true });
+    fs.writeFileSync(
+      path.join(cwd, 'src', 'lib', 'algolia-client.ts'),
+      '// pre-existing\n',
+      'utf8'
+    );
+    const capture = captureIO();
+
+    const exitCode = await runInit(baseOptions({ cwd }), capture.io);
+
+    expect(exitCode).not.toBe(0);
+    expect(readEnvelope(capture.stdout)).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'write_failed',
+    });
+    // Original file content preserved.
+    expect(
+      fs.readFileSync(path.join(cwd, 'src', 'lib', 'algolia-client.ts'), 'utf8')
+    ).toBe('// pre-existing\n');
   });
 
   it('surfaces write_failed when scaffolding fails on a filesystem error', async () => {
