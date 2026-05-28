@@ -3,7 +3,6 @@ import os from 'os';
 import path from 'path';
 
 import {
-  MANIFEST_API_VERSION,
   readManifest,
   serializeManifest,
   validateManifest,
@@ -17,7 +16,6 @@ function makeTempDir(): string {
 
 function validManifest(overrides: Partial<Manifest> = {}): Manifest {
   return {
-    apiVersion: MANIFEST_API_VERSION,
     flavor: 'react',
     framework: 'vite',
     typescript: true,
@@ -86,7 +84,7 @@ describe('manifest', () => {
 
     it('returns invalid_manifest when the schema is violated', () => {
       const filePath = path.join(tempDir, 'instantsearch.json');
-      const bad = { ...validManifest(), apiVersion: 2 };
+      const bad = { ...validManifest(), flavor: undefined };
       fs.writeFileSync(filePath, JSON.stringify(bad), 'utf8');
 
       const result = readManifest(filePath, { command: 'introspect' });
@@ -212,15 +210,5 @@ describe('manifest', () => {
       });
     });
 
-    it('rejects an apiVersion that does not equal 1', () => {
-      const manifest = { ...validManifest(), apiVersion: 2 as unknown as 1 };
-      const result = validateManifest(manifest, { command: 'init' });
-
-      expect(result).toMatchObject({
-        ok: false,
-        code: 'invalid_manifest',
-        message: expect.stringContaining('apiVersion'),
-      });
-    });
   });
 });

@@ -2,10 +2,7 @@ import fs from 'fs';
 
 import { failureEnvelope } from './envelope';
 
-export const MANIFEST_API_VERSION = 1;
-
 export type Manifest = {
-  apiVersion: typeof MANIFEST_API_VERSION;
   flavor: string;
   framework?: string;
   typescript: boolean;
@@ -118,10 +115,6 @@ export function serializeManifest(manifest: Manifest): string {
 function checkManifest(value: unknown): string | null {
   if (!isPlainObject(value)) {
     return 'Manifest must be a JSON object.';
-  }
-
-  if (value.apiVersion !== MANIFEST_API_VERSION) {
-    return `Manifest "apiVersion" must equal ${MANIFEST_API_VERSION}.`;
   }
 
   for (const key of ['flavor', 'componentsPath', 'libPath']) {
