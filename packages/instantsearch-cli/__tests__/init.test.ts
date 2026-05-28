@@ -157,6 +157,13 @@ describe('init', () => {
     );
     expect(providerSource).toContain("from 'react-instantsearch'");
     expect(providerSource).not.toContain("'use client'");
+    expect(providerSource).not.toContain('indexName=""');
+    expect(providerSource).toMatch(/indexName="[^"]+"/);
+
+    const importHint = (envelope as { nextSteps: string[] }).nextSteps.join('\n');
+    expect(importHint).toContain('./src/lib/algolia-provider');
+    expect(importHint).not.toContain(cwd);
+    expect(importHint).not.toMatch(/\.(tsx|jsx|ts|js)['"`]/);
   });
 
   it('renders a Next App Router provider with InstantSearchNext and the "use client" directive', async () => {
@@ -213,11 +220,17 @@ describe('init', () => {
     );
 
     expect(reactInstaller.calls).toEqual([
-      expect.objectContaining({ packages: ['react-instantsearch'] }),
+      expect.objectContaining({
+        packages: ['algoliasearch', 'react-instantsearch'],
+      }),
     ]);
     expect(nextInstaller.calls).toEqual([
       expect.objectContaining({
-        packages: ['react-instantsearch', 'react-instantsearch-nextjs'],
+        packages: [
+          'algoliasearch',
+          'react-instantsearch',
+          'react-instantsearch-nextjs',
+        ],
       }),
     ]);
   });
@@ -589,5 +602,47 @@ describe('init', () => {
         },
       },
     });
+  });
+
+  it('surfaces write_failed when scaffolding fails on a filesystem error', async () => {
+    const cwd = fixture('react-vite-ts');
+    // Block mkdirSync by placing a regular file where the libDir should go.
+    fs.mkdirSync(path.join(cwd, 'src'), { recursive: true });
+    fs.writeFileSync(path.join(cwd, 'src', 'lib'), 'blocker', 'utf8');
+    const capture = captureIO();
+
+    const exitCode = await runInit(baseOptions({ cwd }), capture.io);
+
+    expect(exitCode).not.toBe(0);
+    expect(readEnvelope(capture.stdout)).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'write_failed',
+    });
+  });
+
+  it('treats a cancelled credentials prompt as cancelled, not missing_required_flag', async () => {
+    const cwd = fixture('react-vite-ts');
+    const capture = captureIO();
+
+    // prompts() returns {} on Ctrl-C
+    const prompt: PromptFn = async () => ({});
+
+    const exitCode = await runInit(
+      {
+        cwd,
+        json: false,
+        yes: false,
+        prompt,
+        installer: noopInstaller(),
+      },
+      capture.io
+    );
+
+    expect(exitCode).not.toBe(0);
+    expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
+    const stderr = capture.stderr.join('');
+    expect(stderr).not.toMatch(/--app-id/);
+    expect(stderr).toMatch(/cancel/i);
   });
 });

@@ -23,4 +23,25 @@ describe('init exit code', () => {
       process.chdir(originalCwd);
     }
   });
+
+  it('surfaces the human-mode failure message on stderr', async () => {
+    const originalCwd = process.cwd();
+    process.chdir(path.join(FIXTURES_ROOT, 'vanilla'));
+    try {
+      const { exitCode, stdout, stderr } = await runCapturing([
+        'init',
+        '--yes',
+        '--app-id',
+        'X',
+        '--search-api-key',
+        'Y',
+      ]);
+
+      expect(exitCode).not.toBe(0);
+      expect(stdout).toBe('');
+      expect(stderr).toMatch(/react/i);
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
 });

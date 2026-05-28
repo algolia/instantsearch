@@ -93,7 +93,7 @@ export async function runInit(
     libPath,
   } = credentialsResult.value;
 
-  const packages = ['react-instantsearch'];
+  const packages = ['algoliasearch', 'react-instantsearch'];
   if (detection.framework === 'next-app') {
     packages.push('react-instantsearch-nextjs');
   }
@@ -170,8 +170,6 @@ export async function runInit(
   }
 
   const libDir = path.join(options.cwd, libPath);
-  fs.mkdirSync(libDir, { recursive: true });
-
   const clientPath = path.join(
     libDir,
     `algolia-client.${detection.typescript ? 'ts' : 'js'}`
@@ -181,19 +179,40 @@ export async function runInit(
     `algolia-provider.${detection.typescript ? 'tsx' : 'jsx'}`
   );
 
-  fs.writeFileSync(clientPath, renderClient(appId, searchApiKey), 'utf8');
-  fs.writeFileSync(
-    providerPath,
-    renderProvider({
-      framework: detection.framework,
-      typescript: detection.typescript,
-    }),
-    'utf8'
-  );
+  try {
+    fs.mkdirSync(libDir, { recursive: true });
+    fs.writeFileSync(clientPath, renderClient(appId, searchApiKey), 'utf8');
+    fs.writeFileSync(
+      providerPath,
+      renderProvider({
+        framework: detection.framework,
+        typescript: detection.typescript,
+      }),
+      'utf8'
+    );
+  } catch (error) {
+    emitFailure(
+      io,
+      options.json,
+      failureEnvelope(
+        COMMAND,
+        'write_failed',
+        `Could not write scaffolded files under ${libDir}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      )
+    );
+    return 1;
+  }
 
   const filesCreated = [manifestPath, clientPath, providerPath];
 
-  emitSuccess(io, options.json, filesCreated, providerPath);
+  const providerImport = `./${path.posix.join(
+    libPath.replace(/\\/g, '/'),
+    'algolia-provider'
+  )}`;
+
+  emitSuccess(io, options.json, filesCreated, providerImport);
   return 0;
 }
 
@@ -216,7 +235,7 @@ async function resolveInputs(
         failureEnvelope(
           COMMAND,
           'missing_required_flag',
-          '--app-id is required when running with --yes.'
+          '--app-id is required in non-interactive mode (--yes or --json).'
         )
       );
       return { ok: false };
@@ -228,7 +247,7 @@ async function resolveInputs(
         failureEnvelope(
           COMMAND,
           'missing_required_flag',
-          '--search-api-key is required when running with --yes.'
+          '--search-api-key is required in non-interactive mode (--yes or --json).'
         )
       );
       return { ok: false };
@@ -286,6 +305,18 @@ async function resolveInputs(
   }
 
   const answers = questions.length > 0 ? await promptFn(questions) : {};
+
+  if (
+    questions.length > 0 &&
+    questions.some((q) => !(q.name in answers))
+  ) {
+    emitFailure(
+      io,
+      options.json,
+      failureEnvelope(COMMAND, 'cancelled', 'Cancelled by user.')
+    );
+    return { ok: false };
+  }
 
   const appId = options.appId ?? answers.appId;
   const searchApiKey = options.searchApiKey ?? answers.searchApiKey;
@@ -377,12 +408,13 @@ function emitSuccess(
   io: IO,
   json: boolean,
   filesCreated: string[],
-  providerPath: string
+  providerImport: string
 ): void {
   const envelope = successEnvelope(COMMAND, {
     filesCreated,
     nextSteps: [
-      `Import { AlgoliaProvider } from '${providerPath}' to wrap your app's search UI.`,
+      `Import { AlgoliaProvider } from '${providerImport}' to wrap your app's search UI.`,
+      `Set the indexName in '${providerImport}' to your Algolia index.`,
     ],
   });
   if (json) {
@@ -430,7 +462,7 @@ import { searchClient } from './algolia-client';
 
 export function AlgoliaProvider({ children }${typedChildren}) {
   return (
-    <${componentName} searchClient={searchClient} indexName="">
+    <${componentName} searchClient={searchClient} indexName="YOUR_INDEX_NAME">
       {children}
     </${componentName}>
   );

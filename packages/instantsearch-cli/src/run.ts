@@ -43,6 +43,7 @@ export async function run(
     }
 
     if (error instanceof HandledFailure) {
+      io.stderr(errBuffer.join(''));
       return error.exitCode;
     }
 
