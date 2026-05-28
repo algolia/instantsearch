@@ -1,0 +1,14 @@
+{
+  // Compiler options for the JSONC fixture.
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    /* Path aliases used by the app. */
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+    },
+  },
+  "include": ["src"],
+}
