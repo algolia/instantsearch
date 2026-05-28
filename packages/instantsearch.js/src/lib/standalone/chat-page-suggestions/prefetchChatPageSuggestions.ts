@@ -28,16 +28,20 @@ export type PrefetchChatPageSuggestionsParams = {
    */
   maxSuggestions?: number;
   /**
-   * The current search query, forwarded to the agent as context.
+   * The current search query, sent to the agent. Used only when `context` is
+   * not provided (default PLP behavior).
    */
   query?: string;
   /**
-   * Hits sampled from the current search results, forwarded to the agent as
-   * context. Trim to the size you want to send; the helper does not slice.
+   * Hits sampled from the current search results, sent to the agent. Trim to
+   * the size you want to send; the helper does not slice. Used only when
+   * `context` is not provided.
    */
   hitsSample?: unknown[];
   /**
-   * Additional page-level context (e.g. product info on a PDP).
+   * Page context sent to the agent. When provided, replaces auto-extraction
+   * (`query`, `hitsSample` are ignored) — use for PDPs or any non-search
+   * page where the search state isn't the right signal.
    */
   context?: Record<string, unknown>;
   /**

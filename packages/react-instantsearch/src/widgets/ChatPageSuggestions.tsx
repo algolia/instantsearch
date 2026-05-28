@@ -13,50 +13,69 @@ const ChatPromptSuggestionsUi = createChatPromptSuggestionsComponent({
   Fragment,
 });
 
+/**
+ * Props passed to a custom `layoutComponent`. Mirrors the connector render
+ * state so a layout component owns the full markup.
+ */
+export type ChatPageSuggestionsLayoutComponentProps = {
+  suggestions: string[];
+  isLoading: boolean;
+  onSuggestionClick: (prompt: string) => void;
+  isChatBusy: boolean;
+};
+
+export type ChatPageSuggestionsOnSuggestionClick = (
+  prompt: string,
+  helpers: { sendToChat: (prompt: string) => boolean }
+) => void;
+
 export type ChatPageSuggestionsProps = UseChatPageSuggestionsProps & {
   classNames?: Partial<ChatPromptSuggestionsClassNames>;
   /**
-   * Number of skeleton placeholder pills shown while loading.
-   * @default maxSuggestions
+   * Replaces the default pills layout. Receives the full render state — the
+   * component is responsible for rendering the list, the loading state, and
+   * the click handlers.
    */
-  skeletonCount?: number;
+  layoutComponent?: (
+    props: ChatPageSuggestionsLayoutComponentProps
+  ) => JSX.Element | null;
   /**
-   * Optional custom pill renderer. Receives the prompt text, the click
-   * handler, and whether the pill is disabled (mid-stream chat).
+   * Override the default click behavior (handoff to the chat widget). Receives
+   * the prompt and a `sendToChat` callback you can call to fall through to the
+   * default handoff after running custom logic (analytics, routing, fallback
+   * to a non-InstantSearch chat).
    */
-  pillComponent?: (props: {
-    prompt: string;
-    onClick: () => void;
-    disabled: boolean;
-  }) => JSX.Element;
+  onSuggestionClick?: ChatPageSuggestionsOnSuggestionClick;
 };
 
 export function ChatPageSuggestions({
   classNames = {},
-  skeletonCount,
-  pillComponent: PillComponent,
+  layoutComponent: LayoutComponent,
+  onSuggestionClick: onSuggestionClickOverride,
   ...connectorProps
 }: ChatPageSuggestionsProps) {
-  const { suggestions, isLoading, onSuggestionClick, canHandoff } =
-    useChatPageSuggestions(connectorProps, {
-      $$widgetType: 'ais.chatPageSuggestions',
-    });
+  const {
+    suggestions,
+    isLoading,
+    onSuggestionClick,
+    isChatBusy,
+    sendToChat,
+  } = useChatPageSuggestions(connectorProps, {
+    $$widgetType: 'ais.chatPageSuggestions',
+  });
 
-  if (PillComponent) {
-    if (suggestions.length === 0) {
-      return null;
-    }
+  const handleClick = onSuggestionClickOverride
+    ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
+    : onSuggestionClick;
+
+  if (LayoutComponent) {
     return (
-      <div className="ais-ChatPromptSuggestions">
-        {suggestions.map((prompt, index) => (
-          <PillComponent
-            key={index}
-            prompt={prompt}
-            onClick={() => onSuggestionClick(prompt)}
-            disabled={!canHandoff}
-          />
-        ))}
-      </div>
+      <LayoutComponent
+        suggestions={suggestions}
+        isLoading={isLoading}
+        onSuggestionClick={handleClick}
+        isChatBusy={isChatBusy}
+      />
     );
   }
 
@@ -65,9 +84,9 @@ export function ChatPageSuggestions({
       classNames={classNames}
       suggestions={suggestions}
       isLoading={isLoading}
-      onSuggestionClick={onSuggestionClick}
-      skeletonCount={skeletonCount ?? connectorProps.maxSuggestions}
-      disabled={!canHandoff}
+      onSuggestionClick={handleClick}
+      skeletonCount={connectorProps.maxSuggestions}
+      disabled={isChatBusy}
     />
   );
 }

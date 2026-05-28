@@ -1,4 +1,4 @@
-import { isChatBusy, openChat } from '../../lib/chat';
+import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
 import {
   buildEndpoint,
   buildPayload,
@@ -14,18 +14,17 @@ import {
   warning,
 } from '../../lib/utils';
 
+import type { ChatPageSuggestionsTransport } from '../../lib/standalone/chat-page-suggestions';
 import type {
   Connector,
+  Hit,
   IndexRenderState,
   InitOptions,
   InstantSearch,
   RenderOptions,
-  TransformItems,
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
-// Re-exported below so the symbol stays at its original public path.
-import type { ChatPageSuggestionsTransport } from '../../lib/standalone/chat-page-suggestions';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -33,7 +32,51 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const RENDER_STATE_KEY = 'chatPageSuggestions' as const;
+const CHAT_RENDER_STATE_KEY = 'chat' as const;
+const DEBOUNCE_MS = 300;
+const DEFAULT_SSR_TIMEOUT_MS = 150;
+
+type InstantSearchWithChatStates = InstantSearch & {
+  _initialChatStates: Record<string, unknown> | null;
+};
+
+type ChatPageSuggestionsSnapshot = {
+  suggestions: string[];
+};
+
+function isServerRendering(): boolean {
+  return safelyRunOnBrowser(() => false, { fallback: () => true });
+}
+
+// Per-InstantSearch SSR wait promise cache. Two-pass SSR (e.g. React) renders
+// the tree twice on the server; reuse the in-flight fetch across passes
+// rather than firing it twice.
+const serverWaitRegistry = new WeakMap<InstantSearch, Promise<void>>();
+
 export type { ChatPageSuggestionsTransport };
+
+/**
+ * Metadata passed to `transformItems`.
+ */
+export type ChatPageSuggestionsTransformItemsMetadata = {
+  query: string;
+  results: SearchResults | null;
+};
+
+/**
+ * Custom `transformItems` signature for `connectChatPageSuggestions`.
+ */
+export type ChatPageSuggestionsTransformItems = (
+  items: string[],
+  metadata: ChatPageSuggestionsTransformItemsMetadata
+) => string[];
+
+/**
+ * Hit transformer — receives every hit from the current results and returns
+ * the subset (or reshaped objects) to forward to the agent as context.
+ */
+export type ChatPageSuggestionsTransformHits = (hits: Hit[]) => unknown[];
 
 export type ChatPageSuggestionsRenderState = {
   /**
@@ -45,73 +88,90 @@ export type ChatPageSuggestionsRenderState = {
    */
   isLoading: boolean;
   /**
-   * Click handler that opens the main chat widget with the given prompt
-   * already sent. No-ops when no `connectChat` widget is mounted with a
-   * matching `chatType`.
+   * Default click handler. Calls `sendToChat(prompt)`. Override at the widget
+   * level via the `onSuggestionClick` prop if you need analytics, custom
+   * routing, or a fallback when no chat widget is mounted.
    */
   onSuggestionClick: (prompt: string) => void;
   /**
-   * Whether `onSuggestionClick` can submit. `false` when the main chat
-   * widget is mid-stream or has no `sendMessage` exposed.
+   * Attempts to hand off the prompt to the `connectChat` widget on the same
+   * index. Returns `true` if a chat widget was found and the message was
+   * dispatched, `false` otherwise — useful for fall-through to a
+   * non-InstantSearch chat.
    */
-  canHandoff: boolean;
+  sendToChat: (prompt: string) => boolean;
+  /**
+   * Imperative refetch that bypasses the debounce. No-op while there are no
+   * results or while another fetch is in-flight.
+   */
+  refresh: () => void;
+  /**
+   * Whether the chat widget is currently busy (mid-stream) or absent. Surface
+   * as `disabled` on your pills UI so callers don't queue clicks while the
+   * chat is answering. Optimistically `false` before the chat widget has
+   * mounted, so pills aren't disabled on first paint.
+   */
+  isChatBusy: boolean;
 };
 
-export type ChatPageSuggestionsConnectorParams = {
-  /**
-   * The ID of the agent configured in the Algolia dashboard. Required unless
-   * a custom `transport` is provided.
-   */
-  agentId?: string;
+/**
+ * Either `agentId` or a custom `transport` is required.
+ */
+export type ChatPageSuggestionsSource =
+  | {
+      /**
+       * The ID of the agent configured in the Algolia dashboard.
+       */
+      agentId: string;
+      transport?: never;
+    }
+  | {
+      /**
+       * Custom transport configuration. When provided, `agentId` and the
+       * Algolia client credentials are ignored.
+       */
+      transport: ChatPageSuggestionsTransport;
+      agentId?: never;
+    };
+
+export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
   /**
    * Maximum number of prompt pills to render.
    * @default 4
    */
   maxSuggestions?: number;
   /**
-   * Debounce delay (in ms) before refetching on search-state changes.
-   * @default 300
+   * Transform the current results' hits before they're forwarded to the agent
+   * as context. Useful for trimming payload size (drop big fields) or
+   * stripping sensitive data. Defaults to the first 5 hits unmodified.
+   *
+   * Ignored when `context` is provided — in that mode the widget sends only
+   * the context object and skips auto-extraction entirely.
    */
-  debounceMs?: number;
+  transformHits?: ChatPageSuggestionsTransformHits;
   /**
-   * Number of hits sampled and sent to the agent as context.
-   * @default 5
-   */
-  hitsToSample?: number;
-  /**
-   * Additional page-level context to send alongside the search state. Either
-   * an object or a function returning one (called per fetch).
+   * Page context sent to the agent. When provided, the widget skips
+   * auto-extracting `{ query, hitsSample }` from the current search results
+   * and sends *only* the context object — use this for PDPs, marketing
+   * pages, or anywhere the search state isn't the right signal. Either an
+   * object or a function returning one (called per fetch).
+   *
+   * When omitted, the widget defaults to PLP behavior and auto-sends
+   * `{ query, hitsSample }` derived from the InstantSearch results.
    */
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /**
-   * Transform the parsed list before exposing it.
+   * Transform the parsed list before exposing it. Receives the parsed
+   * suggestions and `{ query, results }` from the current search.
    */
-  transformItems?: TransformItems<string>;
+  transformItems?: ChatPageSuggestionsTransformItems;
   /**
-   * Custom transport configuration for the API requests.
-   */
-  transport?: ChatPageSuggestionsTransport;
-  /**
-   * Maximum time (in ms) the SSR pipeline waits for the agent response
-   * before aborting and resolving so the page can be flushed.
+   * Maximum time (in ms) the InstantSearch SSR pipeline waits for the agent
+   * response before flushing the page. On timeout the server resolves
+   * without seeding suggestions and the client refetches after hydration.
    * @default 150
    */
-  ssrTimeoutMs?: number;
-  /**
-   * Render-state key of the main chat widget to hand off to.
-   * @default 'chat'
-   */
-  chatType?: string;
-  /**
-   * Identifier of this connector type. Used as the render-state key.
-   * @default 'chatPageSuggestions'
-   */
-  type?: string;
-  /**
-   * Stable id for SSR snapshot hydration. When omitted, defaults to
-   * `instantsearch-${type}`. Must match between server and client renders.
-   */
-  id?: string;
+  ssrTimeout?: number;
 };
 
 export type ChatPageSuggestionsWidgetDescription = {
@@ -130,26 +190,10 @@ export type ChatPageSuggestionsConnector = Connector<
   ChatPageSuggestionsConnectorParams
 >;
 
-type InstantSearchWithChatStates = InstantSearch & {
-  _initialChatStates: Record<string, unknown> | null;
-};
+const DEFAULT_TRANSFORM_HITS: ChatPageSuggestionsTransformHits = (hits) =>
+  hits.slice(0, 5);
 
-type ChatPageSuggestionsSnapshot = {
-  suggestions: string[];
-};
-
-// Per-InstantSearch, per-widget-id cache of the in-flight SSR wait promise.
-// Two-pass SSR (e.g. React renders the tree twice) shares the same Chat
-// pattern from chat-page-summary; reuse the in-flight fetch across passes
-// rather than refiring.
-const serverWaitRegistry = new WeakMap<
-  InstantSearch,
-  Map<string, Promise<void>>
->();
-
-function isServerRendering(): boolean {
-  return safelyRunOnBrowser(() => false, { fallback: () => true });
-}
+const IDENTITY_TRANSFORM: ChatPageSuggestionsTransformItems = (items) => items;
 
 const connectChatPageSuggestions: ChatPageSuggestionsConnector =
   function connectChatPageSuggestions(renderFn, unmountFn = noop) {
@@ -164,17 +208,11 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       const {
         agentId,
         maxSuggestions = 4,
-        debounceMs = 300,
-        hitsToSample = 5,
+        transformHits = DEFAULT_TRANSFORM_HITS,
         context,
-        transformItems = ((items) => items) as NonNullable<
-          ChatPageSuggestionsConnectorParams['transformItems']
-        >,
+        transformItems = IDENTITY_TRANSFORM,
         transport,
-        ssrTimeoutMs = 150,
-        chatType = 'chat',
-        type = 'chatPageSuggestions',
-        id: idParam,
+        ssrTimeout = DEFAULT_SSR_TIMEOUT_MS,
       } = widgetParams;
 
       if (!agentId && !transport) {
@@ -185,19 +223,18 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         );
       }
 
-      const id = idParam ?? `instantsearch-${type}`;
-
       let endpoint: string;
       let headers: Record<string, string>;
       let suggestions: string[] = [];
       let isLoading = false;
+      let inFlight = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
       let searchHelper: InitOptions['helper'] | null = null;
       let latestRenderOptions: RenderOptions | null = null;
-      // Skips the first post-hydration fetch when SSR seeded `suggestions`.
-      // Set when `_initialChatStates` is consumed; cleared on the first
-      // `render()` that observes results.
+      // Set when SSR seeded suggestions; first post-hydration `render()` skips
+      // its fetch (it just seeds the state signature) so the client doesn't
+      // immediately overwrite the server snapshot.
       let hydratedFromSnapshot = false;
       let hydrationAttempted = false;
 
@@ -206,13 +243,11 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       ): void => {
         if (hydrationAttempted) return;
         hydrationAttempted = true;
-        const ssrSnapshots = (
-          instantSearchInstance as InstantSearchWithChatStates
-        )._initialChatStates;
-        const snapshot =
-          ssrSnapshots && ssrSnapshots[id]
-            ? (ssrSnapshots[id] as ChatPageSuggestionsSnapshot)
-            : undefined;
+        const states = (instantSearchInstance as InstantSearchWithChatStates)
+          ._initialChatStates;
+        const snapshot = states?.[RENDER_STATE_KEY] as
+          | ChatPageSuggestionsSnapshot
+          | undefined;
         if (snapshot && Array.isArray(snapshot.suggestions)) {
           suggestions = snapshot.suggestions;
           hydratedFromSnapshot = true;
@@ -229,51 +264,58 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         return `${query}|${refinements}`;
       };
 
-      const getOnSuggestionClick =
-        (instantSearchInstance: InstantSearch, indexId: string) =>
-        (prompt: string) => {
-          const chatRenderState = instantSearchInstance.renderState?.[indexId]
-            ? (instantSearchInstance.renderState[indexId][
-                chatType as 'chat'
-              ] as Partial<ChatRenderState> | undefined)
-            : undefined;
-          if (!chatRenderState) {
+      const getChatRenderState = (
+        renderOptions: InitOptions | RenderOptions
+      ): Partial<ChatRenderState> | undefined => {
+        const { instantSearchInstance, parent } = renderOptions;
+        const indexId = parent ? parent.getIndexId() : '';
+        if (!indexId || !instantSearchInstance.renderState?.[indexId]) {
+          return undefined;
+        }
+        return instantSearchInstance.renderState[indexId][
+          CHAT_RENDER_STATE_KEY
+        ] as Partial<ChatRenderState> | undefined;
+      };
+
+      const sendToChat =
+        (renderOptions: InitOptions | RenderOptions) =>
+        (prompt: string): boolean => {
+          const chatRenderState = getChatRenderState(renderOptions);
+          if (!chatRenderState || !chatRenderState.sendMessage) {
             if (__DEV__) {
               warning(
                 false,
-                `No chat widget found in render state for type "${chatType}". Make sure a \`connectChat\` widget with matching \`type\` is mounted on the same index.`
+                `No chat widget found in render state. Make sure a \`connectChat\` widget is mounted on the same index, or pass an \`onSuggestionClick\` prop to handle the click yourself.`
               );
             }
-            return;
+            return false;
           }
           openChat(chatRenderState, {
             message: prompt,
             referer: 'page-suggestions',
           });
+          return true;
         };
 
-      const doFetch = (
-        results: SearchResults,
-        signal?: AbortSignal
-      ): Promise<string[]> => {
+      const doFetch = (results: SearchResults): Promise<string[]> => {
         const resolvedContext =
           typeof context === 'function' ? context() : context;
-        const finalPayload = buildPayload(
-          {
-            query: results.query || '',
-            hitsSample: results.hits.slice(0, hitsToSample),
-            context: resolvedContext,
-          },
-          {
-            maxSuggestions,
-            prepareSendMessagesRequest: transport?.prepareSendMessagesRequest,
-          }
-        );
+        // PDP mode: caller-supplied context replaces auto-extraction.
+        // PLP mode (default): build from the current search state.
+        const input = resolvedContext
+          ? { context: resolvedContext }
+          : {
+              query: results.query || '',
+              hitsSample: transformHits(results.hits as Hit[]),
+            };
+        const finalPayload = buildPayload(input, {
+          maxSuggestions,
+          prepareSendMessagesRequest: transport?.prepareSendMessagesRequest,
+        });
         return fetch(endpoint, {
           method: 'POST',
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify(finalPayload),
-          signal,
         })
           .then((response) => {
             if (!response.ok) {
@@ -284,54 +326,18 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           .then((data) => parseSuggestions(data, maxSuggestions));
       };
 
-      const getWidgetRenderState = (
-        renderOptions: InitOptions | RenderOptions
-      ) => {
-        const { instantSearchInstance, parent } = renderOptions;
-
-        // React's `useConnector` calls this before `init()` runs (via its
-        // `useState` initializer). Hydrate the SSR snapshot here so the
-        // first React render already shows the seeded suggestions.
-        hydrateFromSnapshot(instantSearchInstance);
-
-        const results =
-          'results' in renderOptions ? renderOptions.results : undefined;
-        const transformed = transformItems(suggestions, { results });
-
-        const indexId = parent ? parent.getIndexId() : '';
-
-        const chatRenderState =
-          indexId && instantSearchInstance.renderState?.[indexId]
-            ? (instantSearchInstance.renderState[indexId][
-                chatType as 'chat'
-              ] as Partial<ChatRenderState> | undefined)
-            : undefined;
-
-        // Optimistic when the main chat widget hasn't been observed yet —
-        // by click time it should be mounted and click reads fresh state.
-        const canHandoff = chatRenderState
-          ? Boolean(chatRenderState.sendMessage) && !isChatBusy(chatRenderState)
-          : true;
-
-        return {
-          suggestions: transformed,
-          isLoading,
-          onSuggestionClick: getOnSuggestionClick(
-            instantSearchInstance,
-            indexId
-          ),
-          canHandoff,
-          widgetParams,
-        };
-      };
-
       const fetchAndRender = (
         results: SearchResults,
         renderOptions: RenderOptions
       ) => {
-        if (!results?.hits?.length) {
+        // In PLP mode (no caller context) we need hits to send the agent any
+        // useful signal. In PDP mode (context provided) the context itself
+        // is the signal, so we proceed even with empty hits.
+        const hasContext = context !== undefined;
+        if (!hasContext && !results?.hits?.length) {
           suggestions = [];
           isLoading = false;
+          inFlight = false;
           renderFn(
             {
               ...getWidgetRenderState(renderOptions),
@@ -343,6 +349,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         }
 
         isLoading = true;
+        inFlight = true;
         renderFn(
           {
             ...getWidgetRenderState(renderOptions),
@@ -360,6 +367,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           })
           .finally(() => {
             isLoading = false;
+            inFlight = false;
             renderFn(
               {
                 ...getWidgetRenderState(renderOptions),
@@ -370,15 +378,19 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           });
       };
 
+      const refresh = () => {
+        if (inFlight) return;
+        const results = latestRenderOptions?.results;
+        if (!results || !latestRenderOptions) return;
+        clearTimeout(debounceTimer);
+        lastStateSignature = getStateSignature(results);
+        fetchAndRender(results, latestRenderOptions);
+      };
+
       const buildServerWait = (
         instantSearchInstance: InstantSearch
       ): Promise<void> => {
         return new Promise<void>((resolve) => {
-          const abortCtrl =
-            typeof AbortController !== 'undefined'
-              ? new AbortController()
-              : undefined;
-
           let settled = false;
           const settle = () => {
             if (settled) return;
@@ -386,14 +398,10 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             resolve();
           };
 
-          const timer = setTimeout(() => {
-            abortCtrl?.abort();
-            settle();
-          }, ssrTimeoutMs);
+          const timer = setTimeout(settle, ssrTimeout);
 
-          // The helper passed to `init` is the per-index state helper, which
-          // has no `derivedHelpers` — only the main helper does. The first
-          // derived helper is the one that actually emits `result` events.
+          // `mainHelper.derivedHelpers[0]` is the helper that emits `result`
+          // — the per-index helper passed to `init` doesn't.
           const derivedHelper =
             instantSearchInstance.mainHelper?.derivedHelpers?.[0];
           if (!derivedHelper) {
@@ -402,18 +410,17 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             return;
           }
 
-          // Wait for the first result event from the derived helper, then
-          // fire the fetch. The promise resolves on either the fetch
-          // settling or the SSR timeout firing — whichever comes first.
           const onResult = (event: { results?: SearchResults }) => {
             derivedHelper.removeListener('result', onResult);
             const results = event?.results;
-            if (!results || !results.hits?.length) {
+            const hasContext = context !== undefined;
+            // PLP mode without hits → nothing useful to ask the agent.
+            if (!results || (!hasContext && !results.hits?.length)) {
               clearTimeout(timer);
               settle();
               return;
             }
-            doFetch(results, abortCtrl?.signal)
+            doFetch(results)
               .then((next) => {
                 if (settled) return;
                 suggestions = next;
@@ -422,12 +429,13 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
                 if (!target._initialChatStates) {
                   target._initialChatStates = {};
                 }
-                target._initialChatStates[id] = {
+                target._initialChatStates[RENDER_STATE_KEY] = {
                   suggestions: next,
                 } satisfies ChatPageSuggestionsSnapshot;
               })
               .catch(() => {
-                // Swallow — client will refetch on hydration if needed.
+                // Swallow — the client will refetch on hydration if the
+                // server fetch failed.
               })
               .finally(() => {
                 clearTimeout(timer);
@@ -436,6 +444,44 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           };
           derivedHelper.on('result', onResult);
         });
+      };
+
+      const getWidgetRenderState = (
+        renderOptions: InitOptions | RenderOptions
+      ): Omit<ChatPageSuggestionsRenderState, never> & {
+        widgetParams: ChatPageSuggestionsConnectorParams;
+      } => {
+        // React's `useConnector` calls this before `init()` runs (via its
+        // `useState` initializer). Hydrate the SSR snapshot here so the
+        // first React render already shows the seeded suggestions.
+        hydrateFromSnapshot(renderOptions.instantSearchInstance);
+
+        const results =
+          'results' in renderOptions ? renderOptions.results : undefined;
+        const transformed = transformItems(suggestions, {
+          query: results?.query || '',
+          results: results || null,
+        });
+
+        const chatRenderState = getChatRenderState(renderOptions);
+
+        // Optimistic when the chat widget hasn't been observed yet — by click
+        // time it should be mounted and the click reads fresh state.
+        const isChatBusy = chatRenderState
+          ? !chatRenderState.sendMessage || isChatStreaming(chatRenderState)
+          : false;
+
+        const send = sendToChat(renderOptions);
+
+        return {
+          suggestions: transformed,
+          isLoading,
+          onSuggestionClick: send,
+          sendToChat: send,
+          refresh,
+          isChatBusy,
+          widgetParams,
+        };
       };
 
       return {
@@ -469,22 +515,15 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             };
           }
 
-          // Client-side: hydrate from SSR snapshot if present so first paint
-          // matches server HTML and we don't refire the request. Idempotent
-          // — `getWidgetRenderState()` may have already done this for React's
-          // pre-init `useState` initializer.
+          // Idempotent — `getWidgetRenderState()` may have already hydrated
+          // from a pre-init `useState` initializer in React.
           hydrateFromSnapshot(instantSearchInstance);
 
           if (isServerRendering()) {
-            let perSearch = serverWaitRegistry.get(instantSearchInstance);
-            if (!perSearch) {
-              perSearch = new Map<string, Promise<void>>();
-              serverWaitRegistry.set(instantSearchInstance, perSearch);
-            }
-            let wait = perSearch.get(id);
+            let wait = serverWaitRegistry.get(instantSearchInstance);
             if (!wait) {
               wait = buildServerWait(instantSearchInstance);
-              perSearch.set(id, wait);
+              serverWaitRegistry.set(instantSearchInstance, wait);
             }
             instantSearchInstance.registerServerWait(wait);
           }
@@ -516,7 +555,9 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
 
           const stateSignature = getStateSignature(results);
 
-          // First render after hydration: seed signature without fetching.
+          // First post-hydration render: seed the signature so future state
+          // changes still trigger a refetch, but skip the immediate one so we
+          // don't overwrite the server-seeded suggestions.
           if (hydratedFromSnapshot) {
             hydratedFromSnapshot = false;
             lastStateSignature = stateSignature;
@@ -540,7 +581,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
                   latestRenderOptions
                 );
               }
-            }, debounceMs);
+            }, DEBOUNCE_MS);
           }
 
           renderFn(
@@ -564,8 +605,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           ChatPageSuggestionsWidgetDescription['indexRenderState'] {
           return {
             ...renderState,
-            [type as 'chatPageSuggestions']:
-              this.getWidgetRenderState(renderOptions),
+            [RENDER_STATE_KEY]: this.getWidgetRenderState(renderOptions),
           };
         },
 

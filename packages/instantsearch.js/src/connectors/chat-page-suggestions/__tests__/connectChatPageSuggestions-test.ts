@@ -8,6 +8,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../../../tests/mocks/createAPIResponse';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
@@ -15,6 +16,10 @@ import connectChatPageSuggestions from '../connectChatPageSuggestions';
 
 import type { ChatPageSuggestionsConnectorParams } from '../connectChatPageSuggestions';
 import type { SearchResults } from 'algoliasearch-helper';
+
+// Matches the connector's internal DEBOUNCE_MS constant. Tests wait this long
+// (plus a small buffer) for the debounced fetch to fire.
+const DEBOUNCE_WAIT = 320;
 
 function makeResults(
   overrides: {
@@ -98,7 +103,6 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -112,7 +116,7 @@ describe('connectChatPageSuggestions', () => {
       // Debounce hasn't fired yet — no fetch.
       expect(global.fetch).not.toHaveBeenCalled();
 
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
       await flush(0);
 
@@ -126,7 +130,6 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -134,7 +137,7 @@ describe('connectChatPageSuggestions', () => {
         createRenderOptions({ helper, results: makeResults({ hits: [] }) })
       );
 
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).not.toHaveBeenCalled();
       const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(lastCall.suggestions).toEqual([]);
@@ -145,19 +148,18 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
       const results = makeResults({ query: 'shoes' });
       widget.render!(createRenderOptions({ helper, results }));
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
 
       // Second render with identical signature → no refetch.
       widget.render!(createRenderOptions({ helper, results }));
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
@@ -165,7 +167,6 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -173,31 +174,142 @@ describe('connectChatPageSuggestions', () => {
       widget.render!(
         createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
       );
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
 
       widget.render!(
         createRenderOptions({ helper, results: makeResults({ query: 'b' }) })
       );
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
-    it('applies transformItems to the parsed list', async () => {
+    it('applies transformItems to the parsed list with query+results metadata', async () => {
       const renderFn = jest.fn();
+      const transform = jest.fn<
+        string[],
+        [string[], { query: string; results: unknown }]
+      >((items) => items.map((s) => `! ${s}`));
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
-        transformItems: (items) => items.map((s) => `! ${s}`),
+        transformItems: transform,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ helper, results: makeResults() }));
-      await flush(20);
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
       await flush(0);
 
       const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(lastCall.suggestions).toEqual(['! a', '! b', '! c']);
+      // Last call to transform should have been with the post-fetch results.
+      const [items, meta] =
+        transform.mock.calls[transform.mock.calls.length - 1];
+      expect(items).toEqual(['a', 'b', 'c']);
+      expect(meta).toEqual(
+        expect.objectContaining({
+          query: 'shoes',
+          results: expect.objectContaining({ query: 'shoes' }),
+        })
+      );
+    });
+
+    it('forwards `transformHits(hits)` output to the agent as context', async () => {
+      const transformHits = jest.fn(
+        (hits: Array<Record<string, unknown>>) =>
+          hits.slice(0, 1).map((h) => ({ id: h.objectID }))
+      );
+      const widget = connectChatPageSuggestions(jest.fn())({
+        agentId: 'a',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        transformHits: transformHits as any,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+          }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(transformHits).toHaveBeenCalledTimes(1);
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      const messageText = JSON.parse(parsed.messages[0].parts[0].text);
+      expect(messageText.hitsSample).toEqual([{ id: '1' }]);
+    });
+
+    it('when `context` is provided, sends only the context object and skips auto-extraction', async () => {
+      const transformHits = jest.fn();
+      const widget = connectChatPageSuggestions(jest.fn())({
+        agentId: 'a',
+        context: { pageType: 'pdp', focalProduct: { id: '42' } },
+        transformHits,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({
+            query: 'should-be-ignored',
+            hits: [{ objectID: 'h1' }],
+          }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(transformHits).not.toHaveBeenCalled();
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      const messageText = JSON.parse(parsed.messages[0].parts[0].text);
+      expect(messageText).not.toHaveProperty('query');
+      expect(messageText).not.toHaveProperty('hitsSample');
+      expect(messageText.pageType).toBe('pdp');
+      expect(messageText.focalProduct).toEqual({ id: '42' });
+      expect(messageText.maxSuggestions).toBe(4);
+    });
+
+    it('still fetches when `context` is provided and there are no hits', async () => {
+      const widget = connectChatPageSuggestions(jest.fn())({
+        agentId: 'a',
+        context: { pageType: 'pdp' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ hits: [] }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('exposes `refresh()` which bypasses the debounce and refetches', async () => {
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({
+        agentId: 'a',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      // Without refresh(), the debounce would block any fetch right now.
+      expect(global.fetch).not.toHaveBeenCalled();
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     it('lets transport.prepareSendMessagesRequest mutate the body', async () => {
@@ -205,7 +317,6 @@ describe('connectChatPageSuggestions', () => {
         body: { ...body, injected: true },
       }));
       const widget = connectChatPageSuggestions(jest.fn())({
-        debounceMs: 5,
         transport: {
           api: 'https://example.test/agents',
           headers: { 'x-foo': 'bar' },
@@ -215,7 +326,7 @@ describe('connectChatPageSuggestions', () => {
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
 
       expect(prepare).toHaveBeenCalledTimes(1);
       const [[url, init]] = (global.fetch as jest.Mock).mock.calls;
@@ -245,7 +356,6 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       widget.init!(
         createInitOptions({
@@ -260,7 +370,7 @@ describe('connectChatPageSuggestions', () => {
           results: makeResults(),
         })
       );
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       await flush(0);
 
       const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
@@ -273,7 +383,54 @@ describe('connectChatPageSuggestions', () => {
       );
     });
 
-    it('canHandoff is false while the chat is mid-stream', async () => {
+    it('sendToChat returns true when a chat widget is mounted', async () => {
+      const sendMessage = jest.fn();
+      const setOpen = jest.fn();
+      const search = createInstantSearch();
+      search.renderState = {
+        [search.helper!.state.index]: {
+          chat: { sendMessage, setOpen, status: 'ready' },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({
+        agentId: 'a',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+      const initCall = renderFn.mock.calls[0][0];
+      expect(initCall.sendToChat('hello')).toBe(true);
+      expect(sendMessage).toHaveBeenCalled();
+    });
+
+    it('sendToChat returns false when no chat widget is in render state', async () => {
+      const search = createInstantSearch();
+      // No chat in renderState.
+      search.renderState = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({
+        agentId: 'a',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+      const initCall = renderFn.mock.calls[0][0];
+      expect(initCall.sendToChat('hello')).toBe(false);
+    });
+
+    it('isChatBusy is true while the chat is mid-stream', async () => {
       const search = createInstantSearch();
       search.renderState = {
         [search.helper!.state.index]: {
@@ -288,7 +445,6 @@ describe('connectChatPageSuggestions', () => {
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       widget.init!(
         createInitOptions({
@@ -305,7 +461,10 @@ describe('connectChatPageSuggestions', () => {
       );
 
       const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-      expect(lastCall.canHandoff).toBe(false);
+      expect(lastCall.isChatBusy).toBe(true);
+      // dispose() to clear the debounce timer scheduled by render() so it
+      // doesn't fire during the next test and pollute fetch call counts.
+      widget.dispose!(createDisposeOptions({ helper: search.helper! }));
     });
   });
 
@@ -325,7 +484,7 @@ describe('connectChatPageSuggestions', () => {
       const registerSpy = jest.spyOn(search, 'registerServerWait');
       const widget = connectChatPageSuggestions(jest.fn())({
         agentId: 'a',
-        ssrTimeoutMs: 30,
+        ssrTimeout: 30,
       });
       widget.init!(
         createInitOptions({
@@ -338,12 +497,10 @@ describe('connectChatPageSuggestions', () => {
 
     it('writes the snapshot when the fetch finishes before the timeout', async () => {
       const search = createInstantSearch();
-      // The connector listens on `mainHelper.derivedHelpers[0]` for `result`
-      // events. Create a derived helper so the listener can attach.
       search.mainHelper!.derive((state) => state);
       const widget = connectChatPageSuggestions(jest.fn())({
         agentId: 'a',
-        ssrTimeoutMs: 500,
+        ssrTimeout: 500,
       });
       widget.init!(
         createInitOptions({
@@ -352,31 +509,28 @@ describe('connectChatPageSuggestions', () => {
         })
       );
 
-      // Fire the helper's result event with hits so the SSR wait promise
-      // dispatches its fetch.
       search.mainHelper!.derivedHelpers[0].emit('result', {
         results: makeResults(),
       });
-
-      // The serverWait waits for fetch to settle; allow microtasks to flush.
       await flush(20);
 
       expect(search._initialChatStates).not.toBeNull();
       expect(
-        (search._initialChatStates as Record<string, unknown>)[
-          'instantsearch-chatPageSuggestions'
-        ]
+        (search._initialChatStates as Record<string, unknown>)
+          .chatPageSuggestions
       ).toEqual({ suggestions: ['a', 'b', 'c'] });
     });
 
     it('resolves on the SSR timeout and does not write a snapshot', async () => {
-      // Slow fetch that never settles within the timeout.
-      global.fetch = jest.fn(() => new Promise(() => {})) as unknown as typeof fetch;
+      global.fetch = jest.fn(
+        () => new Promise(() => {})
+      ) as unknown as typeof fetch;
 
       const search = createInstantSearch();
+      search.mainHelper!.derive((state) => state);
       const widget = connectChatPageSuggestions(jest.fn())({
         agentId: 'a',
-        ssrTimeoutMs: 20,
+        ssrTimeout: 20,
       });
       widget.init!(
         createInitOptions({
@@ -385,28 +539,25 @@ describe('connectChatPageSuggestions', () => {
         })
       );
 
-      search.helper!.derivedHelpers[0]?.emit('result', {
+      search.mainHelper!.derivedHelpers[0].emit('result', {
         results: makeResults(),
       });
-
       await flush(50);
 
       expect(search._initialChatStates).toBeNull();
     });
 
     it('hydrates from _initialChatStates on client init and skips the first refetch', async () => {
-      // Put the window back — this is the client-side path.
       (globalThis as { window?: Window }).window = originalWindow;
 
       const search = createInstantSearch();
       search._initialChatStates = {
-        'instantsearch-chatPageSuggestions': { suggestions: ['x', 'y'] },
+        chatPageSuggestions: { suggestions: ['x', 'y'] },
       };
 
       const renderFn = jest.fn();
       const widget = connectChatPageSuggestions(renderFn)({
         agentId: 'a',
-        debounceMs: 5,
       });
       widget.init!(
         createInitOptions({
@@ -415,12 +566,9 @@ describe('connectChatPageSuggestions', () => {
         })
       );
 
-      // Initial render after init sees the seeded suggestions.
       const initCall = renderFn.mock.calls[0][0];
       expect(initCall.suggestions).toEqual(['x', 'y']);
 
-      // First render with results: should set lastStateSignature but NOT
-      // fetch (hydratedFromSnapshot flag).
       widget.render!(
         createRenderOptions({
           instantSearchInstance: search,
@@ -428,10 +576,10 @@ describe('connectChatPageSuggestions', () => {
           results: makeResults({ query: '' }),
         })
       );
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).not.toHaveBeenCalled();
 
-      // Changing the state signature now triggers a refetch.
+      // A real state change after hydration still triggers a refetch.
       widget.render!(
         createRenderOptions({
           instantSearchInstance: search,
@@ -439,7 +587,7 @@ describe('connectChatPageSuggestions', () => {
           results: makeResults({ query: 'new' }),
         })
       );
-      await flush(20);
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
   });

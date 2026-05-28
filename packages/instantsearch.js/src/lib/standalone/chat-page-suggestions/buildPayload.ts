@@ -17,12 +17,18 @@ export function buildPayload(
   input: BuildPayloadInput,
   { maxSuggestions, prepareSendMessagesRequest }: BuildPayloadOptions
 ): Record<string, unknown> {
-  const messageText = JSON.stringify({
-    query: input.query || '',
-    hitsSample: input.hitsSample || [],
-    context: input.context,
-    maxSuggestions,
-  });
+  // When `context` is provided, it IS the message body — the caller has
+  // opted out of auto-extraction from `query`/`hitsSample`. Otherwise we
+  // auto-shape from the search state (default PLP behavior).
+  const body = input.context
+    ? { ...input.context, maxSuggestions }
+    : {
+        query: input.query || '',
+        hitsSample: input.hitsSample || [],
+        maxSuggestions,
+      };
+
+  const messageText = JSON.stringify(body);
 
   const payload: Record<string, unknown> = {
     messages: [
