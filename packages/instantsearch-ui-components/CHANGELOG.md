@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.27.0...instantsearch-ui-components@0.28.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+
+
+### Features
+
+* **chat:** send hidden context via message metadata.turnContext ([#7042](https://github.com/algolia/instantsearch/issues/7042)) ([4b64e1f](https://github.com/algolia/instantsearch/commit/4b64e1f6ac69f690dc5cad997ce5319672f8aa3c))
+
+
+
+
+
 # [0.27.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.26.1...instantsearch-ui-components@0.27.0) (2026-05-19)
 
 

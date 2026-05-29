@@ -23,7 +23,6 @@ export function chatSidePanelLayout(
         headerComponent={templates.header()}
         messagesComponent={templates.messages()}
         promptComponent={templates.prompt()}
-        toggleButtonComponent={templates.toggleButton()}
       />
     );
   };

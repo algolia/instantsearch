@@ -1,0 +1,123 @@
+@use '../shared/_common';
+
+.ais-Carousel {
+  position: relative;
+  margin-bottom: var(--ais-spacing);
+
+  a {
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    text-decoration: none;
+  }
+}
+
+.ais-Carousel-list {
+  @extend .ais-Scrollbar;
+  @extend %ais-focus-outline;
+
+  gap: 0;
+  grid-auto-columns: var(--ais-carousel-item-width);
+  outline: none;
+}
+
+.ais-Carousel-hit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+  border-radius: var(--ais-border-radius-md);
+  padding: calc(var(--ais-spacing) * 0.5);
+  height: 100%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--ais-border-radius-md);
+    background-color: rgba(var(--ais-muted-color-rgb), 0);
+    pointer-events: none;
+    z-index: -1;
+    transform: scale(0.95);
+
+    transition: all var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      &::before {
+        background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+        transform: scale(1);
+      }
+
+      .ais-Carousel-hit-image img {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  &:active:not(:disabled) {
+    &::before {
+      background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+    }
+  }
+
+  &:has(:focus-visible) {
+    outline: 2px solid
+      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+    outline-offset: 2px;
+  }
+}
+
+.ais-Carousel-hit-link {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.ais-Carousel-hit-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-radius: var(--ais-border-radius-md);
+  overflow: hidden;
+
+  img {
+    transition: transform var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+  }
+}
+
+.ais-Carousel-hit-favorite {
+  position: absolute;
+  top: calc(var(--ais-spacing) * 0.5);
+  right: calc(var(--ais-spacing) * 0.5);
+  z-index: 1;
+}
+
+.ais-Carousel-hit-title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-weight: normal;
+
+  a {
+    font-size: var(--ais-spacing);
+  }
+}
+
+.ais-Carousel-hit-title,
+.ais-Carousel-hit-price {
+  margin: 0;
+}
+
+.ais-Carousel-hit-price {
+  font-weight: var(--ais-font-weight-semibold);
+  margin-top: auto;
+}

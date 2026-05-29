@@ -113,6 +113,18 @@ select[class^='ais-'] {
   }
 }
 
+// Recommend widgets
+.ais-FrequentlyBoughtTogether-title,
+.ais-LookingSimilar-title,
+.ais-RelatedProducts-title,
+.ais-TrendingFacets-title,
+.ais-TrendingItems-title {
+  margin: 0 0 calc(var(--ais-spacing) / 2);
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  font-size: 0.875rem;
+  font-weight: var(--ais-font-weight-semibold);
+}
+
 // Checked checkbox
 input[class^='ais-'][type='checkbox']:checked {
   background-image: var(--ais-check-icon);
