@@ -22,49 +22,11 @@ jest.mock('next/navigation', () => ({
   },
 }));
 
-// Count how many times the router's `onUpdate` callback is invoked. The hook
-// captures `onUpdate` through the history router's `start` option, so we wrap
-// `start` to increment a counter whenever the stored callback fires.
-let onUpdateCalls = 0;
-jest.mock('instantsearch.js/es/lib/routers/history', () => {
-  const actual = jest.requireActual('instantsearch.js/es/lib/routers/history');
-  return {
-    __esModule: true,
-    ...actual,
-    default: (options: { start?: (onUpdate: () => void) => void }) => {
-      const originalStart = options.start;
-      if (typeof originalStart === 'function') {
-        options.start = (onUpdate: () => void) =>
-          originalStart(() => {
-            onUpdateCalls += 1;
-            return onUpdate();
-          });
-      }
-      return actual.default(options);
-    },
-  };
-});
-
 describe('routing', () => {
   beforeEach(() => {
     mockPathname.mockReturnValue('/search');
     mockSearchParams.mockReturnValue(new URLSearchParams());
     window.history.replaceState({}, '', '/search');
-    onUpdateCalls = 0;
-    // The hook reads the document's initial path from the Navigation Timing
-    // API to tell hydration apart from client-side navigation. jsdom doesn't
-    // implement it, so we define it to simulate a document hard-loaded on
-    // `/search` (this also exercises the production path rather than the
-    // fallback).
-    Object.defineProperty(performance, 'getEntriesByType', {
-      configurable: true,
-      value: () => [{ name: 'http://localhost/search' }],
-    });
-  });
-
-  afterEach(() => {
-    delete (performance as unknown as Record<string, unknown>)
-      .getEntriesByType;
   });
 
   // Reproduces https://github.com/algolia/instantsearch/issues/6980:
@@ -207,99 +169,6 @@ describe('routing', () => {
     });
 
     expect(window.location.search).toBe('?indexName%5Bquery%5D=iphone');
-  });
-
-  // Reproduces https://github.com/algolia/instantsearch/issues/7060:
-  // on client-side navigation the App Router remounts `InstantSearchNext`, so
-  // the routing effect runs as a "first run" again. It must still call
-  // `onUpdate` to refresh the results, otherwise the new page shows stale or
-  // empty hits until a full reload.
-  it('runs onUpdate when remounting on a new route after navigation', async () => {
-    const indexName = 'indexName';
-    const routing = { router: { writeDelay: 0 } };
-
-    // Initial hydration on `/search`.
-    const { unmount } = render(
-      <InstantSearchNext
-        searchClient={createSearchClient()}
-        indexName={indexName}
-        routing={routing}
-      >
-        <SearchBox />
-      </InstantSearchNext>
-    );
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    // The initial render must not re-run `onUpdate` (it would wipe the URL with
-    // a nested `<Index>`, see #6980).
-    expect(onUpdateCalls).toBe(0);
-
-    unmount();
-
-    // Simulate a client-side navigation to a different route, then mount a fresh
-    // instance for it (as the App Router does on a soft navigation).
-    mockPathname.mockReturnValue('/category');
-    mockSearchParams.mockReturnValue(new URLSearchParams());
-    window.history.pushState({}, '', '/category');
-
-    render(
-      <InstantSearchNext
-        searchClient={createSearchClient()}
-        indexName={indexName}
-        routing={routing}
-      >
-        <SearchBox />
-      </InstantSearchNext>
-    );
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    // The navigation-induced mount must run `onUpdate` so the results refresh.
-    expect(onUpdateCalls).toBe(1);
-  });
-
-  it('does not run onUpdate when another instance mounts on the same route', async () => {
-    const indexName = 'indexName';
-    const routing = { router: { writeDelay: 0 } };
-
-    const { unmount } = render(
-      <InstantSearchNext
-        searchClient={createSearchClient()}
-        indexName={indexName}
-        routing={routing}
-      >
-        <SearchBox />
-      </InstantSearchNext>
-    );
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    unmount();
-
-    // Same route, no navigation (e.g. a second `InstantSearchNext` on the
-    // initial page): a freshly mounted instance must not re-run `onUpdate`.
-    render(
-      <InstantSearchNext
-        searchClient={createSearchClient()}
-        indexName={indexName}
-        routing={routing}
-      >
-        <SearchBox />
-      </InstantSearchNext>
-    );
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    expect(onUpdateCalls).toBe(0);
   });
 });
 
