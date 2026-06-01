@@ -52,71 +52,82 @@ const isSearchToolPart = (part: ChatToolMessage) =>
   // Compatibility shim with Algolia MCP Server search tool
   startsWith(part.type, `tool-${SearchIndexToolType}_`);
 
-// Memoize the map per `messages` array reference. The chat connector hands out
-// a new array only when the conversation actually changes, so this rebuilds on
-// real updates (e.g. streaming) and returns the cached map on every unrelated
-// re-render — the display tool can call this freely without recomputing.
-const hitsByObjectIDCache = new WeakMap<
-  object,
-  Record<string, RecordWithObjectID>
->();
+const collectHitsFromPart = (
+  part: ChatToolMessage,
+  hitsByObjectID: Record<string, RecordWithObjectID>
+) => {
+  const output =
+    part.state === 'output-available'
+      ? (part.output as { hits?: RecordWithObjectID[] } | undefined)
+      : undefined;
+  const hits = output?.hits;
+
+  if (!Array.isArray(hits)) {
+    return;
+  }
+
+  hits.forEach((hit) => {
+    if (!hit) {
+      return;
+    }
+
+    if (typeof hit.objectID === 'string' && hit.objectID !== '') {
+      hitsByObjectID[hit.objectID] = hit;
+    }
+
+    // The display results tool references records by their bare `id` (the
+    // backend strips the prefix from `objectID`, e.g. it sends `"84254"`
+    // for a hit whose `objectID` is `"media-sample-data-84254"`),
+    // so index by `id` as well to hydrate those too.
+    const id = (hit as { id?: string | number }).id;
+    if (id !== undefined && id !== null && id !== '') {
+      hitsByObjectID[String(id)] = hit;
+    }
+  });
+};
 
 /**
- * Builds a map of `objectID` -> full record by collecting the hits from every
- * search tool output across the conversation.
+ * Builds a map of `objectID` -> full record by collecting the hits from search
+ * tool outputs across the conversation.
  *
  * The display results tool only receives object IDs from the backend, so it
  * relies on this map to hydrate each result with the full record that the
  * preceding search tool already fetched.
+ *
+ * Pass `untilToolCallId` (the display tool's own `toolCallId`) to scope
+ * collection to the turn that produced it: hits are only gathered up to and
+ * including the message that contains that tool call. This prevents a later
+ * turn's search from overwriting an earlier display tool's records (and their
+ * per-query metadata like `__queryID`).
  */
 export const getHitsByObjectID = (
-  messages: ChatMessageBase[]
+  messages: ChatMessageBase[],
+  untilToolCallId?: string
 ): Record<string, RecordWithObjectID> => {
-  const cached = hitsByObjectIDCache.get(messages);
-  if (cached) {
-    return cached;
-  }
-
   const hitsByObjectID: Record<string, RecordWithObjectID> = {};
 
-  messages.forEach((message) => {
+  for (const message of messages) {
+    let reachedBoundary = false;
+
     message.parts.forEach((part) => {
-      if (!isPartTool(part) || !isSearchToolPart(part)) {
+      if (!isPartTool(part)) {
         return;
       }
-
-      const output =
-        part.state === 'output-available'
-          ? (part.output as { hits?: RecordWithObjectID[] } | undefined)
-          : undefined;
-      const hits = output?.hits;
-
-      if (!Array.isArray(hits)) {
-        return;
+      // Note the boundary but keep processing the rest of this message's parts:
+      // the search tool that fed this display tool lives in the same message,
+      // so its hits must still be collected before we stop.
+      if (untilToolCallId && part.toolCallId === untilToolCallId) {
+        reachedBoundary = true;
       }
-
-      hits.forEach((hit) => {
-        if (!hit) {
-          return;
-        }
-
-        if (typeof hit.objectID === 'string' && hit.objectID !== '') {
-          hitsByObjectID[hit.objectID] = hit;
-        }
-
-        // The display results tool references records by their bare `id` (the
-        // backend strips the prefix from `objectID`, e.g. it sends `"84254"`
-        // for a hit whose `objectID` is `"media-sample-data-84254"`),
-        // so index by `id` as well to hydrate those too.
-        const id = (hit as { id?: string | number }).id;
-        if (id !== undefined && id !== null && id !== '') {
-          hitsByObjectID[String(id)] = hit;
-        }
-      });
+      if (isSearchToolPart(part)) {
+        collectHitsFromPart(part, hitsByObjectID);
+      }
     });
-  });
 
-  hitsByObjectIDCache.set(messages, hitsByObjectID);
+    if (reachedBoundary) {
+      break;
+    }
+  }
 
   return hitsByObjectID;
 };

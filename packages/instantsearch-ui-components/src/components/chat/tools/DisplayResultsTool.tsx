@@ -47,10 +47,15 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
   streamingLabel: 'Curating results…',
 };
 
+export type UseMemo = <TValue>(
+  factory: () => TValue,
+  deps: readonly unknown[]
+) => TValue;
+
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment }: Renderer) {
+>({ createElement, Fragment, useMemo }: Renderer & { useMemo: UseMemo }) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
@@ -66,7 +71,11 @@ export function createDisplayResultsToolComponent<
       ...userTranslations,
     };
 
-    const hitsByObjectID = messages ? getHitsByObjectID(messages) : undefined;
+    const toolCallId = message?.toolCallId;
+    const hitsByObjectID = useMemo(
+      () => (messages ? getHitsByObjectID(messages, toolCallId) : undefined),
+      [messages, toolCallId]
+    );
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;

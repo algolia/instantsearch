@@ -169,6 +169,85 @@ describe('getHitsByObjectID', () => {
     expect(map['84254']).toBe(map['media-sample-data-84254']);
   });
 
+  test('scopes collection to the turn containing `untilToolCallId`, ignoring later searches', () => {
+    const messages: ChatMessageBase[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-1',
+            state: 'output-available',
+            input: { query: 'shoes' },
+            output: { hits: [{ objectID: '1', name: 'Runner', __queryID: 'q1' }] },
+          },
+          {
+            type: 'tool-algolia_display_results',
+            toolCallId: 'display-1',
+            state: 'output-available',
+            input: {},
+            output: { groups: [{ results: [{ objectID: '1' }] }] },
+          },
+        ],
+      },
+      {
+        id: '2',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-2',
+            state: 'output-available',
+            input: { query: 'running shoes' },
+            output: {
+              hits: [{ objectID: '1', name: 'Runner Pro', __queryID: 'q2' }],
+            },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    // Scoped to the first turn: the later search (with `q2`) must not leak in.
+    expect(getHitsByObjectID(messages, 'display-1')).toEqual({
+      1: { objectID: '1', name: 'Runner', __queryID: 'q1' },
+    });
+
+    // Without a boundary, last write across the whole conversation wins.
+    expect(getHitsByObjectID(messages)).toEqual({
+      1: { objectID: '1', name: 'Runner Pro', __queryID: 'q2' },
+    });
+  });
+
+  test('includes the search in the same message as `untilToolCallId`', () => {
+    const messages: ChatMessageBase[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: { query: 'shoes' },
+            output: { hits: [{ objectID: '1', name: 'Runner' }] },
+          },
+          {
+            type: 'tool-algolia_display_results',
+            toolCallId: 'display',
+            state: 'output-available',
+            input: {},
+            output: { groups: [{ results: [{ objectID: '1' }] }] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    expect(getHitsByObjectID(messages, 'display')).toEqual({
+      1: { objectID: '1', name: 'Runner' },
+    });
+  });
+
   test('returns an empty map when there are no search outputs', () => {
     expect(getHitsByObjectID([])).toEqual({});
   });
