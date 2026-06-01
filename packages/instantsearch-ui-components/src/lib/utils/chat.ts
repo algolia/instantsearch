@@ -105,8 +105,8 @@ export const getHitsByObjectID = (
         }
 
         // The display results tool references records by their bare `id` (the
-        // backend strips the index prefix from `objectID`, e.g. it sends
-        // `"84254"` for a hit whose `objectID` is `"media-sample-data-84254"`),
+        // backend strips the prefix from `objectID`, e.g. it sends `"84254"`
+        // for a hit whose `objectID` is `"media-sample-data-84254"`),
         // so index by `id` as well to hydrate those too.
         const id = (hit as { id?: string | number }).id;
         if (id !== undefined && id !== null && id !== '') {

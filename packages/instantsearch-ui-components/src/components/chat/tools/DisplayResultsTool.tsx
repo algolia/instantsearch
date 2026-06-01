@@ -66,10 +66,6 @@ export function createDisplayResultsToolComponent<
       ...userTranslations,
     };
 
-    // The backend only sends object IDs for display results, so we rebuild the
-    // full records from the hits the preceding search tool already fetched.
-    // `getHitsByObjectID` is memoized on the `messages` reference, so this is
-    // not recomputed on unrelated re-renders.
     const hitsByObjectID = messages ? getHitsByObjectID(messages) : undefined;
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
