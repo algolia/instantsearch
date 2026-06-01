@@ -231,6 +231,30 @@ describe('introspect', () => {
     });
   });
 
+  it('refuses with missing_required_flag when only one credential flag is passed even if a manifest exists', async () => {
+    const cwd = tempDir();
+    writeManifestFile(cwd, manifestFixture());
+    const capture = captureIO();
+
+    const exitCode = await runIntrospect(
+      {
+        cwd,
+        json: true,
+        index: 'instant_search',
+        appId: 'FLAG_APP',
+        // searchApiKey deliberately omitted — should not silently fall back to manifest
+      },
+      capture.io
+    );
+
+    expect(exitCode).not.toBe(0);
+    expect(readEnvelope(capture.stdout)).toMatchObject({
+      ok: false,
+      code: 'missing_required_flag',
+      message: expect.stringContaining('--search-api-key'),
+    });
+  });
+
   it('refuses with missing_required_flag when only --app-id is passed (no --search-api-key, no manifest)', async () => {
     const capture = captureIO();
     const exitCode = await runIntrospect(

@@ -112,7 +112,29 @@ type ResolvedCredentials =
   | { ok: false; envelope: ReturnType<typeof failureEnvelope> };
 
 function resolveCredentials(options: IntrospectOptions): ResolvedCredentials {
-  if (options.appId && options.searchApiKey) {
+  // If either flag is set, require both. Don't silently fall back to the manifest
+  // when the user has expressed partial intent.
+  if (options.appId || options.searchApiKey) {
+    if (!options.appId) {
+      return {
+        ok: false,
+        envelope: failureEnvelope(
+          COMMAND,
+          'missing_required_flag',
+          '--app-id is required when --search-api-key is passed.'
+        ),
+      };
+    }
+    if (!options.searchApiKey) {
+      return {
+        ok: false,
+        envelope: failureEnvelope(
+          COMMAND,
+          'missing_required_flag',
+          '--search-api-key is required when --app-id is passed.'
+        ),
+      };
+    }
     return {
       ok: true,
       appId: options.appId,
