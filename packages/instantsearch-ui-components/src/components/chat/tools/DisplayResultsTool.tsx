@@ -1,5 +1,7 @@
 /** @jsx createElement */
 
+import { getHitsByObjectID } from '../../../lib/utils/chat';
+
 import type { RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
@@ -54,15 +56,21 @@ export function createDisplayResultsToolComponent<
   ) {
     const {
       toolProps,
-      groupCarouselComponent: GroupCarousel,
+      groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, sendEvent } = toolProps;
+    const { message, messages, sendEvent } = toolProps;
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
       ...userTranslations,
     };
+
+    // The backend only sends object IDs for display results, so we rebuild the
+    // full records from the hits the preceding search tool already fetched.
+    // `getHitsByObjectID` is memoized on the `messages` reference, so this is
+    // not recomputed on unrelated re-renders.
+    const hitsByObjectID = messages ? getHitsByObjectID(messages) : undefined;
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
@@ -94,10 +102,21 @@ export function createDisplayResultsToolComponent<
 
           if (results.length === 0) return null;
 
-          const items = results.map((result, idx) => ({
-            ...result,
-            __position: idx + 1,
-          })) as Array<RecordWithObjectID<TObject>>;
+          const items = results.map((result, idx) => {
+            const hydrated = hitsByObjectID?.[result.objectID] as
+              | RecordWithObjectID<TObject>
+              | undefined;
+
+            return {
+              ...hydrated,
+              ...result,
+              // When hydrated, keep the record's real `objectID` (the
+              // display tool references it by a stripped `id`), so click events
+              // and Insights report the correct objectID.
+              ...(hydrated ? { objectID: hydrated.objectID } : {}),
+              __position: idx + 1,
+            };
+          }) as Array<RecordWithObjectID<TObject>>;
 
           return (
             <div key={groupIndex} className="ais-ChatToolDisplayResults-group">
@@ -111,7 +130,7 @@ export function createDisplayResultsToolComponent<
                   {group.why}
                 </div>
               )}
-              <GroupCarousel items={items} sendEvent={sendEvent} />
+              {renderGroupCarousel({ items, sendEvent })}
             </div>
           );
         })}
