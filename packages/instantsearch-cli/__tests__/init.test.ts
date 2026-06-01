@@ -683,6 +683,30 @@ describe('init', () => {
   });
 
   it.each([
+    ['/tmp/absolute/components', 'absolute'],
+    ['../escape/components', 'traversal'],
+  ])(
+    'refuses an %s componentsPath (%s) with invalid_components_path',
+    async (componentsPath) => {
+      const cwd = fixture('react-vite-ts');
+      const capture = captureIO();
+
+      const exitCode = await runInit(
+        baseOptions({ cwd, componentsPath }),
+        capture.io
+      );
+
+      expect(exitCode).not.toBe(0);
+      expect(readEnvelope(capture.stdout)).toMatchObject({
+        ok: false,
+        command: 'init',
+        code: 'invalid_components_path',
+      });
+      expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
+    }
+  );
+
+  it.each([
     ['/tmp/absolute/lib', 'absolute'],
     ['../escape/lib', 'traversal'],
   ])('refuses an %s libPath (%s) with invalid_lib_path', async (libPath) => {

@@ -93,6 +93,18 @@ export async function runInit(
     libPath,
   } = credentialsResult.value;
 
+  if (!isSafeRelativePath(componentsPath)) {
+    emitFailure(
+      io,
+      options.json,
+      failureEnvelope(
+        COMMAND,
+        'invalid_components_path',
+        `--components-path must be a relative path inside the project (got "${componentsPath}").`
+      )
+    );
+    return 1;
+  }
   if (!isSafeRelativePath(libPath)) {
     emitFailure(
       io,
