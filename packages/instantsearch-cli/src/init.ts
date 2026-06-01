@@ -402,12 +402,16 @@ const defaultInstaller: Installer = async (packages, { cwd, manager }) => {
       : ['add', ...packages];
 
   await new Promise<void>((resolve, reject) => {
+    // npm/yarn/pnpm install on Windows as .cmd shims; spawn auto-resolves .exe only.
+    // bun ships as bun.exe, so it doesn't need the suffix.
+    const command =
+      process.platform === 'win32' && manager !== 'bun'
+        ? `${manager}.cmd`
+        : manager;
     // Pipe child stdout to our stderr so install logs don't contaminate the JSON envelope on stdout.
-    // shell: true on Windows so npm/yarn/pnpm/bun .cmd shims resolve via PATHEXT.
-    const child = spawn(manager, args, {
+    const child = spawn(command, args, {
       cwd,
       stdio: ['ignore', process.stderr, process.stderr],
-      shell: process.platform === 'win32',
     });
     child.on('error', reject);
     child.on('exit', (code) => {
