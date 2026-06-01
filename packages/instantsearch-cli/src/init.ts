@@ -93,6 +93,19 @@ export async function runInit(
     libPath,
   } = credentialsResult.value;
 
+  if (!isSafeRelativePath(libPath)) {
+    emitFailure(
+      io,
+      options.json,
+      failureEnvelope(
+        COMMAND,
+        'invalid_lib_path',
+        `--lib-path must be a relative path inside the project (got "${libPath}").`
+      )
+    );
+    return 1;
+  }
+
   const packages = ['algoliasearch', 'react-instantsearch'];
   if (detection.framework === 'next-app') {
     packages.push('react-instantsearch-nextjs');
@@ -315,7 +328,11 @@ async function resolveInputs(
 
   if (
     questions.length > 0 &&
-    questions.some((q) => !(q.name in answers))
+    questions.some((q) => {
+      const value = (answers as Record<string, unknown>)[q.name];
+      // prompts returns {} on Ctrl-C (key absent) and '' on empty submit — both mean the user gave up.
+      return value === undefined || value === null || value === '';
+    })
   ) {
     emitFailure(
       io,
@@ -386,9 +403,11 @@ const defaultInstaller: Installer = async (packages, { cwd, manager }) => {
 
   await new Promise<void>((resolve, reject) => {
     // Pipe child stdout to our stderr so install logs don't contaminate the JSON envelope on stdout.
+    // shell: true on Windows so npm/yarn/pnpm/bun .cmd shims resolve via PATHEXT.
     const child = spawn(manager, args, {
       cwd,
       stdio: ['ignore', process.stderr, process.stderr],
+      shell: process.platform === 'win32',
     });
     child.on('error', reject);
     child.on('exit', (code) => {
@@ -402,6 +421,12 @@ const defaultPrompt: PromptFn = async (questions) => {
   const { default: prompts } = await import('prompts');
   return prompts(questions) as Promise<PromptAnswers>;
 };
+
+function isSafeRelativePath(input: string): boolean {
+  if (path.isAbsolute(input)) return false;
+  const segments = input.split(/[/\\]/);
+  return !segments.includes('..');
+}
 
 function rollback(paths: string[]): void {
   // Best-effort: delete in reverse order, swallow any IO error so the original failure stays the headline.

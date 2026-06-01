@@ -682,6 +682,49 @@ describe('init', () => {
     });
   });
 
+  it.each([
+    ['/tmp/absolute/lib', 'absolute'],
+    ['../escape/lib', 'traversal'],
+  ])('refuses an %s libPath (%s) with invalid_lib_path', async (libPath) => {
+    const cwd = fixture('react-vite-ts');
+    const capture = captureIO();
+
+    const exitCode = await runInit(
+      baseOptions({ cwd, libPath }),
+      capture.io
+    );
+
+    expect(exitCode).not.toBe(0);
+    expect(readEnvelope(capture.stdout)).toMatchObject({
+      ok: false,
+      command: 'init',
+      code: 'invalid_lib_path',
+    });
+    expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
+  });
+
+  it('treats empty-string prompt submissions as cancelled, not missing_required_flag', async () => {
+    const cwd = fixture('react-vite-ts');
+    const capture = captureIO();
+
+    // User presses Enter at every prompt without typing.
+    const prompt: PromptFn = async (questions) => {
+      const answers: Record<string, unknown> = {};
+      for (const q of questions) answers[q.name] = '';
+      return answers;
+    };
+
+    const exitCode = await runInit(
+      { cwd, json: false, yes: false, prompt, installer: noopInstaller() },
+      capture.io
+    );
+
+    expect(exitCode).not.toBe(0);
+    expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
+    expect(capture.stderr.join('')).toMatch(/cancel/i);
+    expect(capture.stderr.join('')).not.toMatch(/required/i);
+  });
+
   it('treats a cancelled credentials prompt as cancelled, not missing_required_flag', async () => {
     const cwd = fixture('react-vite-ts');
     const capture = captureIO();
