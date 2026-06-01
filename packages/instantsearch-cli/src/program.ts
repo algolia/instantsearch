@@ -1,9 +1,9 @@
 import { Command, Option } from 'commander';
 
 import { formatEnvelope, successEnvelope } from './envelope';
+import { HandledFailure } from './handled-failure';
 import { runInit } from './init';
 import { defaultIO, type IO } from './io';
-import { HandledFailure } from './run';
 import version from './version';
 
 type StubDescriptor = {

@@ -1,6 +1,7 @@
 import { CommanderError } from 'commander';
 
 import { failureEnvelope, formatEnvelope } from './envelope';
+import { HandledFailure } from './handled-failure';
 import { defaultIO, type IO } from './io';
 import { createProgram, KNOWN_COMMANDS, PROGRAM_NAME } from './program';
 
@@ -12,11 +13,6 @@ type ParserFailureCode =
   | 'unknown_command'
   | 'internal_error';
 
-export class HandledFailure extends Error {
-  constructor(public readonly exitCode: number) {
-    super(`command failed with exit code ${exitCode}`);
-  }
-}
 
 export async function run(
   argv: string[],
