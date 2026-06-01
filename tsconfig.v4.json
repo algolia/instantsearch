@@ -13,6 +13,7 @@
     "examples/js/e-commerce-umd/public/packages",
     "examples/js/showcase",
     "packages/create-instantsearch-app/src/templates/**/*",
-    "packages/algolia-experiences"
+    "packages/algolia-experiences",
+    "packages/instantsearch-cli"
   ]
 }

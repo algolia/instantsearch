@@ -24,6 +24,7 @@ const config = {
     '<rootDir>/packages/react-instantsearch-nextjs/__tests__',
     '/__utils__/',
     algoliaSearchMajor !== '5' && '<rootDir>/packages/algolia-experiences',
+    algoliaSearchMajor !== '5' && '<rootDir>/packages/instantsearch-cli',
   ].filter((x) => x !== false),
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',
