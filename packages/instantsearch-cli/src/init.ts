@@ -179,12 +179,14 @@ export async function runInit(
     `algolia-provider.${detection.typescript ? 'tsx' : 'jsx'}`
   );
 
+  const createdByThisRun: string[] = [manifestPath];
   try {
     fs.mkdirSync(libDir, { recursive: true });
     fs.writeFileSync(clientPath, renderClient(appId, searchApiKey), {
       encoding: 'utf8',
       flag: 'wx',
     });
+    createdByThisRun.push(clientPath);
     fs.writeFileSync(
       providerPath,
       renderProvider({
@@ -193,7 +195,9 @@ export async function runInit(
       }),
       { encoding: 'utf8', flag: 'wx' }
     );
+    createdByThisRun.push(providerPath);
   } catch (error) {
+    rollback(createdByThisRun);
     emitFailure(
       io,
       options.json,
@@ -398,6 +402,17 @@ const defaultPrompt: PromptFn = async (questions) => {
   const { default: prompts } = await import('prompts');
   return prompts(questions) as Promise<PromptAnswers>;
 };
+
+function rollback(paths: string[]): void {
+  // Best-effort: delete in reverse order, swallow any IO error so the original failure stays the headline.
+  for (let i = paths.length - 1; i >= 0; i -= 1) {
+    try {
+      fs.unlinkSync(paths[i]);
+    } catch {
+      // ignore
+    }
+  }
+}
 
 function emitFailure(
   io: IO,

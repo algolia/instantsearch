@@ -644,6 +644,25 @@ describe('init', () => {
     expect(
       fs.readFileSync(path.join(cwd, 'src', 'lib', 'algolia-client.ts'), 'utf8')
     ).toBe('// pre-existing\n');
+    // Rollback: manifest and provider that this run might have created are gone.
+    expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
+    expect(
+      fs.existsSync(path.join(cwd, 'src', 'lib', 'algolia-provider.tsx'))
+    ).toBe(false);
+  });
+
+  it('rolls back the manifest when the filesystem step fails', async () => {
+    const cwd = fixture('react-vite-ts');
+    // Block mkdirSync by placing a regular file where the libDir should go.
+    fs.mkdirSync(path.join(cwd, 'src'), { recursive: true });
+    fs.writeFileSync(path.join(cwd, 'src', 'lib'), 'blocker', 'utf8');
+    const capture = captureIO();
+
+    const exitCode = await runInit(baseOptions({ cwd }), capture.io);
+
+    expect(exitCode).not.toBe(0);
+    // Manifest got rolled back so the user can retry after fixing the issue.
+    expect(fs.existsSync(path.join(cwd, 'instantsearch.json'))).toBe(false);
   });
 
   it('surfaces write_failed when scaffolding fails on a filesystem error', async () => {
