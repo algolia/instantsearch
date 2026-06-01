@@ -12,12 +12,16 @@ import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
 type TestResult = {
   objectID: string;
   why?: string;
+  name?: string;
   __position: number;
 };
 
 const mockItemComponent = ({ item }: { item: TestResult }) => (
   <div data-testid={`item-${item.objectID}`}>
     <span>{item.objectID}</span>
+    {item.name && (
+      <strong data-testid={`name-${item.objectID}`}>{item.name}</strong>
+    )}
     {item.why && <small data-testid={`why-${item.objectID}`}>{item.why}</small>}
   </div>
 );
@@ -68,6 +72,195 @@ describe('createDisplayResultsTool', () => {
     expect(screen.getByTestId('why-2')).toHaveTextContent('everyday classic');
   });
 
+  test('hydrates results from the preceding search tool, keeping display fields', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {},
+      output: {
+        groups: [
+          {
+            title: 'Runners',
+            // Backend only sends the objectID (and an optional `why`).
+            results: [{ objectID: '1', why: 'iconic' }, { objectID: '2' }],
+          },
+        ],
+      },
+    };
+
+    // The preceding search tool (same assistant message) carries the full
+    // records; the display tool hydrates from them.
+    const messages: ClientSideToolComponentProps['messages'] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: {
+              hits: [
+                { objectID: '1', name: 'Air Runner', why: 'from search' },
+                { objectID: '2', name: 'Trail Runner' },
+              ],
+            },
+          },
+          message,
+        ],
+      },
+    ] as ClientSideToolComponentProps['messages'];
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={messages}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    // Full record fields are hydrated from the search hits…
+    expect(screen.getByTestId('name-1')).toHaveTextContent('Air Runner');
+    expect(screen.getByTestId('name-2')).toHaveTextContent('Trail Runner');
+    // …while display-provided fields take precedence over the hydrated record.
+    expect(screen.getByTestId('why-1')).toHaveTextContent('iconic');
+  });
+
+  test('hydrates by bare `id` and keeps the real Algolia objectID', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {},
+      output: {
+        groups: [
+          {
+            title: 'Mystery',
+            // Backend references the record by its stripped id, not the
+            // prefixed Algolia objectID.
+            results: [{ objectID: '84254', why: 'iconic' }],
+          },
+        ],
+      },
+    };
+
+    const messages: ClientSideToolComponentProps['messages'] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: {
+              hits: [
+                {
+                  objectID: 'media-sample-data-84254',
+                  id: 84254,
+                  name: 'Hound',
+                  why: 'from search',
+                },
+              ],
+            },
+          },
+          message,
+        ],
+      },
+    ] as ClientSideToolComponentProps['messages'];
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={messages}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    // The full record is hydrated from the search hit it matched by `id`…
+    expect(
+      screen.getByTestId('name-media-sample-data-84254')
+    ).toHaveTextContent('Hound');
+    // …the real Algolia objectID replaces the stripped one (for Insights)…
+    expect(
+      screen.getByTestId('item-media-sample-data-84254')
+    ).toBeInTheDocument();
+    // …and display-provided fields still win over hydrated ones.
+    expect(screen.getByTestId('why-media-sample-data-84254')).toHaveTextContent(
+      'iconic'
+    );
+  });
+
+  test('renders results untouched when no matching hit is available', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {},
+      output: {
+        groups: [
+          { title: 'Runners', results: [{ objectID: '1', why: 'iconic' }] },
+        ],
+      },
+    };
+
+    const messages: ClientSideToolComponentProps['messages'] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: { hits: [{ objectID: '99', name: 'Unrelated' }] },
+          },
+          message,
+        ],
+      },
+    ] as ClientSideToolComponentProps['messages'];
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={messages}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.getByTestId('item-1')).toBeInTheDocument();
+    expect(screen.getByTestId('why-1')).toHaveTextContent('iconic');
+    expect(screen.queryByTestId('name-1')).not.toBeInTheDocument();
+  });
+
   test('shows streaming caption while preliminary flag is true', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
@@ -82,9 +275,7 @@ describe('createDisplayResultsTool', () => {
             input: {},
             output: {
               intro: 'Curating',
-              groups: [
-                { title: 'Runners', results: [{ objectID: '1' }] },
-              ],
+              groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
             },
             preliminary: true,
           } as ClientSideToolComponentProps['message']
