@@ -32,7 +32,13 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type {
+  ChatEmptyProps,
+  ChatLayoutOwnProps,
+  ChatMessageBase,
+  ChatStatus,
+  ClientSideTools,
+} from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -539,15 +545,10 @@ const getShowLoader = (
   if (!lastPart) return true;
   if (isPartText(lastPart)) return false;
 
-  if (isPartTool(lastPart)) {
-    if (lastPart.state === 'output-available') return false;
-    if (lastPart.state === 'input-streaming') {
-      const tool = findTool(lastPart.type, tools);
-      return !tool?.streamInput;
-    }
-    return true;
+  if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
+    const tool = findTool(lastPart.type, tools);
+    return !tool?.streamInput;
   }
 
   return true;
 };
-
