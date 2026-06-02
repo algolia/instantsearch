@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.34.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.33.1...react-instantsearch-core@7.34.0) (2026-06-02)
+
+
+### Features
+
+* **chat:** split chat trigger widget ([#6966](https://github.com/algolia/instantsearch/issues/6966)) ([379084c](https://github.com/algolia/instantsearch/commit/379084cd459a0d8b0f4f2a55b0dae336cf331008))
+
+
+
+
+
 ## [7.33.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.33.0...react-instantsearch-core@7.33.1) (2026-05-26)
 
 
