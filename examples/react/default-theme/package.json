@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-default-theme",
-  "version": "94.0.0",
+  "version": "95.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,13 +12,13 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.29.1",
-    "instantsearch-ui-components": "0.28.0",
-    "instantsearch.css": "8.16.2",
-    "instantsearch.js": "4.99.0",
+    "instantsearch-ui-components": "0.29.0",
+    "instantsearch.css": "8.17.0",
+    "instantsearch.js": "4.100.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.33.1",
-    "react-instantsearch-core": "7.33.1"
+    "react-instantsearch": "7.34.0",
+    "react-instantsearch-core": "7.34.0"
   },
   "devDependencies": {
     "@types/react": "19.0.3",
