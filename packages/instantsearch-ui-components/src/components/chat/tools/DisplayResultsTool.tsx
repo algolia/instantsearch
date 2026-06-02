@@ -24,6 +24,17 @@ type DisplayResultsOutput<THit> = {
   groups?: Array<DisplayResultsGroup<THit>>;
 };
 
+/**
+ * An item handed to a group's carousel: the record (hydrated from the search
+ * tool) augmented with the display tool's own result object under a separate
+ * `__displayToolResult` namespace, so the tool's curation fields (e.g. `why`)
+ * can never collide with record fields in either direction.
+ */
+export type DisplayResultsItem<THit extends RecordWithObjectID> =
+  RecordWithObjectID<THit> & {
+    __displayToolResult: RecordWithObjectID<THit>;
+  };
+
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
     items: Array<RecordWithObjectID<THit>>;
@@ -107,21 +118,20 @@ export function createDisplayResultsToolComponent<
 
           if (results.length === 0) return null;
 
-          const items = results.map((result, idx) => {
-            const hydrated = hitsByObjectID?.[result.objectID] as
-              | RecordWithObjectID<TObject>
-              | undefined;
+          const items: Array<DisplayResultsItem<TObject>> = results.map(
+            (result, idx) => {
+              const hydrated = hitsByObjectID?.[result.objectID] as
+                | RecordWithObjectID<TObject>
+                | undefined;
 
-            return {
-              ...hydrated,
-              ...result,
-              // When hydrated, keep the record's real `objectID` (the
-              // display tool references it by a stripped `id`), so click events
-              // and Insights report the correct objectID.
-              ...(hydrated ? { objectID: hydrated.objectID } : {}),
-              __position: idx + 1,
-            };
-          }) as Array<RecordWithObjectID<TObject>>;
+              return {
+                ...(hydrated as RecordWithObjectID<TObject>),
+                objectID: result.objectID,
+                __position: idx + 1,
+                __displayToolResult: result,
+              };
+            }
+          );
 
           return (
             <div key={groupIndex} className="ais-ChatToolDisplayResults-group">

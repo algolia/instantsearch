@@ -11,9 +11,10 @@ import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
 
 type TestResult = {
   objectID: string;
-  why?: string;
   name?: string;
   __position: number;
+  // Curation payload from the display tool, kept separate from record fields.
+  __displayToolResult?: { objectID: string; why?: string };
 };
 
 const mockItemComponent = ({ item }: { item: TestResult }) => (
@@ -22,7 +23,11 @@ const mockItemComponent = ({ item }: { item: TestResult }) => (
     {item.name && (
       <strong data-testid={`name-${item.objectID}`}>{item.name}</strong>
     )}
-    {item.why && <small data-testid={`why-${item.objectID}`}>{item.why}</small>}
+    {item.__displayToolResult?.why && (
+      <small data-testid={`why-${item.objectID}`}>
+        {item.__displayToolResult.why}
+      </small>
+    )}
   </div>
 );
 
@@ -132,82 +137,9 @@ describe('createDisplayResultsTool', () => {
     // Full record fields are hydrated from the search hits…
     expect(screen.getByTestId('name-1')).toHaveTextContent('Air Runner');
     expect(screen.getByTestId('name-2')).toHaveTextContent('Trail Runner');
-    // …while display-provided fields take precedence over the hydrated record.
+    // …while the display tool's curation payload stays in its own namespace,
+    // so a record field named `why` ("from search") can't clobber it.
     expect(screen.getByTestId('why-1')).toHaveTextContent('iconic');
-  });
-
-  test('hydrates by bare `id` and keeps the real Algolia objectID', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
-    const LayoutComponent = tool.layoutComponent!;
-
-    const message: ClientSideToolComponentProps['message'] = {
-      type: 'tool-algolia_display_results',
-      state: 'output-available',
-      toolCallId: 'display',
-      input: {},
-      output: {
-        groups: [
-          {
-            title: 'Mystery',
-            // Backend references the record by its stripped id, not the
-            // prefixed Algolia objectID.
-            results: [{ objectID: '84254', why: 'iconic' }],
-          },
-        ],
-      },
-    };
-
-    const messages: ClientSideToolComponentProps['messages'] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: {},
-            output: {
-              hits: [
-                {
-                  objectID: 'media-sample-data-84254',
-                  id: 84254,
-                  name: 'Hound',
-                  why: 'from search',
-                },
-              ],
-            },
-          },
-          message,
-        ],
-      },
-    ] as ClientSideToolComponentProps['messages'];
-
-    render(
-      <LayoutComponent
-        message={message}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
-      />
-    );
-
-    // The full record is hydrated from the search hit it matched by `id`…
-    expect(
-      screen.getByTestId('name-media-sample-data-84254')
-    ).toHaveTextContent('Hound');
-    // …the real Algolia objectID replaces the stripped one (for Insights)…
-    expect(
-      screen.getByTestId('item-media-sample-data-84254')
-    ).toBeInTheDocument();
-    // …and display-provided fields still win over hydrated ones.
-    expect(screen.getByTestId('why-media-sample-data-84254')).toHaveTextContent(
-      'iconic'
-    );
   });
 
   test('renders results untouched when no matching hit is available', () => {

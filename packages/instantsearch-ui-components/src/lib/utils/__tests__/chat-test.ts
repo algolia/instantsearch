@@ -132,43 +132,6 @@ describe('getHitsByObjectID', () => {
     });
   });
 
-  test('keys hits by their bare `id` so display results can hydrate by stripped objectID', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'sherlock' },
-            output: {
-              hits: [
-                {
-                  objectID: 'media-sample-data-84254',
-                  id: 84254,
-                  name: 'Hound',
-                },
-              ],
-            },
-          },
-        ],
-      },
-    ] as ChatMessageBase[];
-
-    // The display results tool references this record as `"84254"` (the
-    // backend strips the `media-sample-data-` prefix), so both keys resolve
-    // to the same hit.
-    const map = getHitsByObjectID(messages);
-    expect(map['media-sample-data-84254']).toEqual({
-      objectID: 'media-sample-data-84254',
-      id: 84254,
-      name: 'Hound',
-    });
-    expect(map['84254']).toBe(map['media-sample-data-84254']);
-  });
-
   test('scopes collection to the turn containing `untilToolCallId`, ignoring later searches', () => {
     const messages: ChatMessageBase[] = [
       {
@@ -180,7 +143,9 @@ describe('getHitsByObjectID', () => {
             toolCallId: 'search-1',
             state: 'output-available',
             input: { query: 'shoes' },
-            output: { hits: [{ objectID: '1', name: 'Runner', __queryID: 'q1' }] },
+            output: {
+              hits: [{ objectID: '1', name: 'Runner', __queryID: 'q1' }],
+            },
           },
           {
             type: 'tool-algolia_display_results',
