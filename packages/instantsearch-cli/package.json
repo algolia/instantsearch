@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "commander": "11.1.0",
-    "jsonc-parser": "3.3.1"
+    "jsonc-parser": "3.3.1",
+    "prompts": "2.4.2"
   },
   "devDependencies": {
     "@types/jest": "27.4.0",
