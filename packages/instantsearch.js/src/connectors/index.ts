@@ -59,3 +59,4 @@ export { default as connectChat } from './chat/connectChat';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectChatTrigger } from './chat/connectChatTrigger';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
+export { default as connectStructuredOutput } from './structured-output/connectStructuredOutput';
