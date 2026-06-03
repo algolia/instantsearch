@@ -47,9 +47,9 @@ type TsConfig = {
 
 export function detect(
   projectRoot: string,
-  options: { command: string }
+  options: { command: string; frameworkOverride?: Framework }
 ): DetectionResult {
-  const { command } = options;
+  const { command, frameworkOverride } = options;
 
   const pkg = readJsonFile<PackageJson>(path.join(projectRoot, 'package.json'));
   if (!pkg) {
@@ -74,7 +74,12 @@ export function detect(
     );
   }
 
-  const frameworkResult = detectFramework(projectRoot, deps, command);
+  const frameworkResult = detectFramework(
+    projectRoot,
+    deps,
+    command,
+    frameworkOverride
+  );
   if (!frameworkResult.ok) {
     return frameworkResult;
   }
@@ -104,8 +109,13 @@ type FrameworkOk = { ok: true; framework?: Framework };
 function detectFramework(
   projectRoot: string,
   deps: Record<string, string>,
-  command: string
+  command: string,
+  override?: Framework
 ): FrameworkOk | DetectionFailure {
+  if (override === 'next-app') {
+    return { ok: true, framework: 'next-app' };
+  }
+
   if ('next' in deps) {
     const hasAppDir =
       isDirectory(path.join(projectRoot, 'app')) ||
