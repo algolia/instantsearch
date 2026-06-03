@@ -1124,8 +1124,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 currentMessageIndex = -1;
               }
 
+              // `chunk.data` widens to `unknown` here: the chunk union also
+              // carries a generic `data-${string}` member, and the literal
+              // matches both, so narrowing can't pick the specific shape.
+              const { fallbackResponse } = chunk.data as {
+                fallbackResponse?: string;
+              };
               throw new GuardrailViolationError(
-                chunk.data.fallbackResponse ||
+                fallbackResponse ||
                   'Sorry, we are not able to generate a response at the moment.'
               );
             }
