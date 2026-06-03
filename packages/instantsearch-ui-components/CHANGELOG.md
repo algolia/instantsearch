@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.30.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.29.0...instantsearch-ui-components@0.30.0) (2026-06-03)
+
+
+### Features
+
+* **chat:** generic error handling ([#6997](https://github.com/algolia/instantsearch/issues/6997)) ([c307370](https://github.com/algolia/instantsearch/commit/c307370479f5764430160e4d3d007463ecd5e361))
+
+
+
+
+
 # [0.29.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.28.0...instantsearch-ui-components@0.29.0) (2026-06-02)
 
 
