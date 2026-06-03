@@ -142,6 +142,12 @@ export type ChatMessagesProps<
    */
   status?: ChatStatus;
   /**
+   * Error from the last failed request, if any. When set, its `message` is
+   * available to custom error components or translation functions (for example
+   * API `message` fields on 403 responses).
+   */
+  error?: Error;
+  /**
    * Whether to hide the scroll to bottom button
    */
   hideScrollToBottom?: boolean;
@@ -149,6 +155,14 @@ export type ChatMessagesProps<
    * Callback for reload action
    */
   onReload: (messageId?: string) => void;
+  /**
+   * Callback to start a new conversation from the default error component.
+   * When provided (and no custom `errorComponent`/`actions` override it),
+   * the error renders a "New conversation" button that clears the messages
+   * and rotates the chat id. When omitted, the error renders with no action
+   * button (recommended default for guardrails-style errors).
+   */
+  onNewConversation?: () => void;
   /**
    * Function to close the chat
    */
@@ -387,8 +401,10 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      error,
       hideScrollToBottom = false,
       onReload,
+      onNewConversation,
       onClose,
       sendMessage,
       setInput,
@@ -510,7 +526,25 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {status === 'error' && <DefaultError onReload={onReload} />}
+            {status === 'error' && (
+              <DefaultError
+                onNewConversation={onNewConversation}
+                errorMessage={error?.message}
+                translations={
+                  // Guardrail violations come with a service-authored
+                  // `fallbackResponse` that's safe to display verbatim; for
+                  // every other error we keep hiding the raw `error.message`
+                  // behind the friendly default. Detection is by `error.name`
+                  // to avoid coupling this package to `instantsearch.js`.
+                  error?.name === 'GuardrailViolationError'
+                    ? {
+                        errorMessage: ({ errorMessage: rawMessage }) =>
+                          rawMessage ?? '',
+                      }
+                    : undefined
+                }
+              />
+            )}
           </div>
         </div>
 

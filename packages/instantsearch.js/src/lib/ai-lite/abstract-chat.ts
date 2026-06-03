@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { processStream } from './stream-parser';
-import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
+import {
+  generateId as defaultGenerateId,
+  GuardrailViolationError,
+  SerialJobExecutor,
+  tryParseErrorMessage,
+} from './utils';
 
-import type { MutableKeys } from '../../types';
 import type {
   ChatInit,
   ChatRequestOptions,
@@ -123,8 +127,12 @@ const parseToolInputDelta = (
  * Abstract base class for chat implementations.
  */
 export abstract class AbstractChat<TUIMessage extends UIMessage> {
-  readonly id: string;
+  private conversationId: string;
   readonly generateId: IdGenerator;
+
+  get id(): string {
+    return this.conversationId;
+  }
   protected state: ChatState<TUIMessage>;
 
   private readonly transport?: ChatTransport<TUIMessage>;
@@ -156,7 +164,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
-    this.id = id;
+    this.conversationId = id;
     this.generateId = generateId;
     this.state = state;
     this.transport = transport;
@@ -195,6 +203,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   get error(): Error | undefined {
     return this.state.error;
+  }
+
+  /**
+   * Starts a new server-side conversation thread by rotating the id sent as
+   * `chatId` / `id` on the next request. The InstantSearch connector calls this
+   * after the user clears the transcript so completions are not tied to prior
+   * context.
+   */
+  resetConversationId(): void {
+    this.conversationId = this.generateId();
   }
 
   get messages(): TUIMessage[] {
@@ -389,14 +407,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     if (this.state.status === 'error') {
       this.setStatus({ status: 'ready', error: undefined });
     }
-  };
-
-  /**
-   * Regenerate the chat id. Use this to start a fresh conversation on the
-   * server while keeping the same Chat instance and its registered listeners.
-   */
-  regenerateId = (): void => {
-    (this as MutableKeys<this, 'id'>).id = this.generateId();
   };
 
   /**
@@ -1071,7 +1081,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'error': {
               isError = true;
-              throw new Error(chunk.errorText);
+              const text = chunk.errorText.trim();
+              throw new Error(
+                tryParseErrorMessage(text) || text || 'Unknown error'
+              );
             }
 
             case 'abort': {
@@ -1090,8 +1103,41 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
+            // Surface guardrail violations through the error state, but
+            // distinct from generic cost-control / 4xx errors: throw a
+            // `GuardrailViolationError` so the UI can render the
+            // service-provided `fallbackResponse` verbatim (it's authored for
+            // end-user display) instead of the friendly default used for
+            // opaque transport errors. Also discard any in-progress assistant
+            // message so no partial text lingers above the fallback, and
+            // clear the local cursor so the `onFinish` callback doesn't
+            // receive a `currentMessage` that no longer exists in state.
+            case 'data-guardrail-violation': {
+              isError = true;
+
+              if (currentMessageIndex >= 0) {
+                this.state.messages = this.state.messages.slice(
+                  0,
+                  currentMessageIndex
+                );
+                currentMessage = undefined;
+                currentMessageIndex = -1;
+              }
+
+              // `chunk.data` widens to `unknown` here: the chunk union also
+              // carries a generic `data-${string}` member, and the literal
+              // matches both, so narrowing can't pick the specific shape.
+              const { fallbackResponse } = chunk.data as {
+                fallbackResponse?: string;
+              };
+              throw new GuardrailViolationError(
+                fallbackResponse ||
+                  'Sorry, we are not able to generate a response at the moment.'
+              );
+            }
+
             default: {
-              // Handle data parts (data-*)
+              // Handle generic data parts (data-*)
               const chunkType = (chunk as any).type as string;
               if (chunkType?.startsWith('data-') && currentMessage) {
                 const dataPart = {
