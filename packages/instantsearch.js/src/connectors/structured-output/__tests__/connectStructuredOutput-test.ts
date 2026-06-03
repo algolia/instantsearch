@@ -150,13 +150,16 @@ describe('connectStructuredOutput', () => {
   });
 
   describe('submit (streaming)', () => {
-    it('replaces output with each NDJSON snapshot', async () => {
+    it('replaces output with each AI SDK structured-output data part', async () => {
       global.fetch = jest.fn(() =>
         Promise.resolve({
           ok: true,
           body: createMockStream([
-            '{"suggestions":["a"]}\n',
-            '{"suggestions":["a","b"]}\n',
+            'data: {"type":"start","messageId":"message-id"}\n\n',
+            'data: {"type":"data-structured-output","id":"on_page_suggestions","data":{"suggestions":["a"]}}\n\n',
+            'data: {"type":"data-structured-output","id":"on_page_suggestions","data":{"suggestions":["a","b"]}}\n\n',
+            'data: {"type":"finish"}\n\n',
+            'data: [DONE]\n\n',
           ]),
         })
       ) as jest.Mock;
@@ -174,6 +177,30 @@ describe('connectStructuredOutput', () => {
       await flush();
 
       expect(getRenderState().output).toEqual({ suggestions: ['a', 'b'] });
+      expect(getRenderState().isLoading).toBe(false);
+    });
+
+    it('exposes AI SDK stream errors', async () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          body: createMockStream([
+            'data: {"type":"start","messageId":"message-id"}\n\n',
+            'data: {"type":"error","errorText":"Structured generation failed"}\n\n',
+            'data: [DONE]\n\n',
+          ]),
+        })
+      ) as jest.Mock;
+
+      const { getRenderState } = getInitializedWidget({ stream: true });
+      getRenderState().submit({});
+
+      await flush();
+
+      expect(getRenderState().output).toBeNull();
+      expect(getRenderState().error).toEqual(
+        new Error('Structured generation failed')
+      );
       expect(getRenderState().isLoading).toBe(false);
     });
   });
@@ -217,7 +244,7 @@ describe('connectStructuredOutput', () => {
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const { widget, unmountFn } = getInitializedWidget();
-      widget.dispose!();
+      widget.dispose();
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
   });

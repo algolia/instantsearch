@@ -7,6 +7,7 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type { UIMessageChunk } from '../../lib/ai-lite';
 import type {
   Connector,
   IndexRenderState,
@@ -72,8 +73,8 @@ export type StructuredOutputConnectorParams = {
    */
   task: string;
   /**
-   * Whether to stream the output as NDJSON snapshots instead of waiting for the
-   * full object.
+   * Whether to stream the output as AI SDK structured-output data parts instead
+   * of waiting for the full object.
    * @default false
    */
   stream?: boolean;
@@ -160,18 +161,19 @@ export default (function connectStructuredOutput<
         return Promise.reject(new Error('The streaming response has no body.'));
       }
 
-      // Each NDJSON line is a complete snapshot of the output object, so we
-      // simply replace the current output on every chunk.
-      const snapshots = parseJsonEventStream(
-        response.body
-      ) as unknown as ReadableStream<TOutput>;
+      const chunks = parseJsonEventStream(response.body);
 
       return new Promise<void>((resolve, reject) => {
-        processStream<TOutput>(
-          snapshots,
-          (snapshot) => {
-            output = snapshot;
-            render();
+        processStream<UIMessageChunk>(
+          chunks,
+          (chunk) => {
+            if (chunk.type === 'data-structured-output') {
+              output = chunk.data as TOutput;
+              render();
+            }
+            if (chunk.type === 'error') {
+              reject(new Error(chunk.errorText));
+            }
           },
           resolve,
           reject
