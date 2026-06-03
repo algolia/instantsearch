@@ -1103,37 +1103,36 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
-            default: {
-              const chunkType = (chunk as any).type as string;
+            // Surface guardrail violations through the error state, but
+            // distinct from generic cost-control / 4xx errors: throw a
+            // `GuardrailViolationError` so the UI can render the
+            // service-provided `fallbackResponse` verbatim (it's authored for
+            // end-user display) instead of the friendly default used for
+            // opaque transport errors. Also discard any in-progress assistant
+            // message so no partial text lingers above the fallback, and
+            // clear the local cursor so the `onFinish` callback doesn't
+            // receive a `currentMessage` that no longer exists in state.
+            case 'data-guardrail-violation': {
+              isError = true;
 
-              // Surface guardrail violations through the error state, but
-              // distinct from generic cost-control / 4xx errors: throw a
-              // `GuardrailViolationError` so the UI can render the
-              // service-provided `fallbackResponse` verbatim (it's authored
-              // for end-user display) instead of the friendly default used
-              // for opaque transport errors. Also discard any in-progress
-              // assistant message so no partial text lingers above the
-              // fallback.
-              if (chunkType === 'data-guardrail-violation') {
-                isError = true;
-                const violationData = (chunk as any).data as
-                  | { fallbackResponse?: string }
-                  | undefined;
-
-                if (currentMessageIndex >= 0) {
-                  this.state.messages = this.state.messages.slice(
-                    0,
-                    currentMessageIndex
-                  );
-                }
-
-                throw new GuardrailViolationError(
-                  violationData?.fallbackResponse ||
-                    'Sorry, we are not able to generate a response at the moment.'
+              if (currentMessageIndex >= 0) {
+                this.state.messages = this.state.messages.slice(
+                  0,
+                  currentMessageIndex
                 );
+                currentMessage = undefined;
+                currentMessageIndex = -1;
               }
 
+              throw new GuardrailViolationError(
+                chunk.data.fallbackResponse ||
+                  'Sorry, we are not able to generate a response at the moment.'
+              );
+            }
+
+            default: {
               // Handle generic data parts (data-*)
+              const chunkType = (chunk as any).type as string;
               if (chunkType?.startsWith('data-') && currentMessage) {
                 const dataPart = {
                   type: chunkType,

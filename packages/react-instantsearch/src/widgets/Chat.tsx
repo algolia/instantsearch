@@ -310,6 +310,7 @@ function ChatInner<
       messagesProps={{
         status,
         onReload: (messageId) => regenerate({ messageId }),
+        onNewConversation: clearMessages,
         onClose: () => setOpen(false),
         sendMessage: sendMessage as ChatUiProps['sendMessage'],
         setInput,
