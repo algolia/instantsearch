@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.17.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.16.2...instantsearch.css@8.17.0) (2026-06-02)
+
+
+### Features
+
+* **chat:** split chat trigger widget ([#6966](https://github.com/algolia/instantsearch/issues/6966)) ([379084c](https://github.com/algolia/instantsearch/commit/379084cd459a0d8b0f4f2a55b0dae336cf331008))
+
+
+
+
+
 ## [8.16.2](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.16.1...instantsearch.css@8.16.2) (2026-05-26)
 
 

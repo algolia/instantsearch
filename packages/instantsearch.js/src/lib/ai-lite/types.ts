@@ -352,6 +352,19 @@ export type UIMessageChunk<
       };
       transient?: boolean;
     }
+  | {
+      // Emitted by the agent when a guardrail intercepts the request or the
+      // response. The `fallbackResponse` is authored for end-user display and
+      // is surfaced verbatim by the chat error UI (see
+      // `GuardrailViolationError`).
+      type: 'data-guardrail-violation';
+      data: {
+        fallbackResponse?: string;
+        category?: string;
+        guardrailType?: 'input' | 'output' | string;
+      };
+      transient?: boolean;
+    }
   | { type: 'source-url'; sourceId: string; url: string; title?: string }
   | {
       type: 'source-document';

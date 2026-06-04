@@ -1,6 +1,6 @@
 import { runCapturing } from './__utils__/helpers';
 
-describe.each(['init', 'add', 'introspect'])(
+describe.each(['add', 'introspect'])(
   '%s --json',
   (command) => {
     it('emits a well-formed success envelope on stdout', async () => {

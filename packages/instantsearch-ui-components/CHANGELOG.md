@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.30.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.29.0...instantsearch-ui-components@0.30.0) (2026-06-03)
+
+
+### Features
+
+* **chat:** generic error handling ([#6997](https://github.com/algolia/instantsearch/issues/6997)) ([c307370](https://github.com/algolia/instantsearch/commit/c307370479f5764430160e4d3d007463ecd5e361))
+
+
+
+
+
+# [0.29.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.28.0...instantsearch-ui-components@0.29.0) (2026-06-02)
+
+
+### Bug Fixes
+
+* **chat:** show loader during gap in tool calls ([#7062](https://github.com/algolia/instantsearch/issues/7062)) ([dab5756](https://github.com/algolia/instantsearch/commit/dab57560188de233440ce8f653f21f746be0b927))
+
+
+### Features
+
+* **chat:** split chat trigger widget ([#6966](https://github.com/algolia/instantsearch/issues/6966)) ([379084c](https://github.com/algolia/instantsearch/commit/379084cd459a0d8b0f4f2a55b0dae336cf331008))
+
+
+
+
+
 # [0.28.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.27.0...instantsearch-ui-components@0.28.0) (2026-05-26)
 
 
