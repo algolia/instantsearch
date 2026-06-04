@@ -453,6 +453,7 @@ export type SearchToolInput = {
   query: string;
   number_of_results?: number;
   facet_filters?: string[][];
+  [facetKey: `facet_${string}`]: string[] | string[][] | undefined;
 };
 
 export type ApplyFiltersParams = {
@@ -536,4 +537,3 @@ export type ChatEmptyProps = {
    */
   setInput?: (input: string) => void;
 };
-
