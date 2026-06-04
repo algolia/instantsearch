@@ -254,6 +254,7 @@ function createDefaultMessageComponent<
     tools,
     indexUiState,
     setIndexUiState,
+    messages,
     onReload,
     onClose,
     onFeedback,
@@ -271,6 +272,7 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
+    messages?: ChatMessageBase[];
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
@@ -357,6 +359,7 @@ function createDefaultMessageComponent<
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        messages={messages}
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
@@ -502,6 +505,7 @@ export function createChatMessagesComponent({
                 tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                messages={messages}
                 onReload={onReload}
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}
