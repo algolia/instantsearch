@@ -1,5 +1,7 @@
 /** @jsx createElement */
 
+import { getHitsByObjectID } from '../../../lib/utils/chat';
+
 import type { RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
@@ -21,6 +23,17 @@ type DisplayResultsOutput<THit> = {
   intro?: string;
   groups?: Array<DisplayResultsGroup<THit>>;
 };
+
+/**
+ * An item handed to a group's carousel: the record (hydrated from the search
+ * tool) augmented with the display tool's own result object under a separate
+ * `__displayToolResult` namespace, so the tool's curation fields (e.g. `why`)
+ * can never collide with record fields in either direction.
+ */
+export type DisplayResultsItem<THit extends RecordWithObjectID> =
+  RecordWithObjectID<THit> & {
+    __displayToolResult: RecordWithObjectID<THit>;
+  };
 
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
@@ -45,24 +58,35 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
   streamingLabel: 'Curating results…',
 };
 
+export type UseMemo = <TValue>(
+  factory: () => TValue,
+  deps: readonly unknown[]
+) => TValue;
+
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment }: Renderer) {
+>({ createElement, Fragment, useMemo }: Renderer & { useMemo: UseMemo }) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
     const {
       toolProps,
-      groupCarouselComponent: GroupCarousel,
+      groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, sendEvent } = toolProps;
+    const { message, messages, sendEvent } = toolProps;
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
       ...userTranslations,
     };
+
+    const toolCallId = message?.toolCallId;
+    const hitsByObjectID = useMemo(
+      () => (messages ? getHitsByObjectID(messages, toolCallId) : undefined),
+      [messages, toolCallId]
+    );
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
@@ -94,10 +118,20 @@ export function createDisplayResultsToolComponent<
 
           if (results.length === 0) return null;
 
-          const items = results.map((result, idx) => ({
-            ...result,
-            __position: idx + 1,
-          })) as Array<RecordWithObjectID<TObject>>;
+          const items: Array<DisplayResultsItem<TObject>> = results.map(
+            (result, idx) => {
+              const hydrated = hitsByObjectID?.[result.objectID] as
+                | RecordWithObjectID<TObject>
+                | undefined;
+
+              return {
+                ...(hydrated as RecordWithObjectID<TObject>),
+                objectID: result.objectID,
+                __position: idx + 1,
+                __displayToolResult: result,
+              };
+            }
+          );
 
           return (
             <div key={groupIndex} className="ais-ChatToolDisplayResults-group">
@@ -111,7 +145,7 @@ export function createDisplayResultsToolComponent<
                   {group.why}
                 </div>
               )}
-              <GroupCarousel items={items} sendEvent={sendEvent} />
+              {renderGroupCarousel({ items, sendEvent })}
             </div>
           );
         })}

@@ -484,6 +484,7 @@ export type ChatLayoutOwnProps<
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
+  messages?: ChatMessageBase[];
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
@@ -536,4 +537,3 @@ export type ChatEmptyProps = {
    */
   setInput?: (input: string) => void;
 };
-

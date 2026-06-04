@@ -128,6 +128,12 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
+   * The full conversation. Forwarded to tool components so those that only
+   * receive object IDs (e.g. display results) can hydrate records from a
+   * preceding search tool's hits.
+   */
+  messages?: ChatMessageBase[];
+  /**
    * Close the chat
    */
   onClose: () => void;
@@ -170,6 +176,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       tools = {},
       indexUiState,
       setIndexUiState,
+      messages,
       onClose,
       translations: userTranslations,
       suggestionsElement,
@@ -259,10 +266,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
-          if (
-            toolMessage.state === 'input-streaming' &&
-            !tool.streamInput
-          ) {
+          if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;
           }
 
@@ -279,6 +283,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={tool.sendEvent || (() => {})}
