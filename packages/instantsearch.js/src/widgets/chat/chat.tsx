@@ -7,7 +7,7 @@ import {
   createButtonComponent,
   createChatComponent,
 } from 'instantsearch-ui-components';
-import { Fragment, h, render } from 'preact';
+import { Component, Fragment, h, render } from 'preact';
 import { useEffect, useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
@@ -75,7 +75,28 @@ import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-const Chat = createChatComponent({ createElement: h, Fragment });
+// Lightweight `memo` for the Preact flavor. `preact/compat` is intentionally
+// avoided across this package (it bloats the bundle and patches Preact
+// globally); a class component with `shouldComponentUpdate` is all the chat
+// message memoization needs.
+const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
+  FunctionComponent,
+  propsAreEqual
+) => {
+  class Memoized extends Component<Record<string, unknown>> {
+    shouldComponentUpdate(nextProps: Record<string, unknown>) {
+      return propsAreEqual
+        ? !propsAreEqual(this.props as never, nextProps as never)
+        : true;
+    }
+    render() {
+      return h(FunctionComponent as never, this.props);
+    }
+  }
+  return (props) => h(Memoized, props as Record<string, unknown>);
+};
+
+const Chat = createChatComponent({ createElement: h, Fragment, memo });
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 

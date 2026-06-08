@@ -1,6 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { Chat } from 'instantsearch.js/es/lib/chat';
+import React from 'react';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -28,6 +29,30 @@ const carouselMessage = () => ({
     },
   ],
 });
+
+const streamingTextMessage = (text: string) => ({
+  id: 'm2',
+  role: 'assistant' as const,
+  parts: [{ type: 'text' as const, text }],
+});
+
+// Drive a streaming-style delta on a trailing text message while keeping the
+// earlier (completed) message's reference stable — the real streaming path only
+// clones the message being updated. Reusing `chat.messages[0]` guarantees the
+// completed message keeps the identity the widget last rendered with.
+async function streamTrailingDelta(
+  chat: Chat<any>,
+  act: Required<TestOptions>['act']
+) {
+  await act(async () => {
+    const [completed] = chat.messages;
+    chat.messages = [
+      completed,
+      streamingTextMessage('a'.repeat(chat.messages.length + 2)),
+    ];
+    await wait(0);
+  });
+}
 
 export function createStreamingTests(
   setup: ChatWidgetSetup,
@@ -79,6 +104,55 @@ export function createStreamingTests(
       // Same DOM node across re-renders → native scroll position survives.
       expect(listAfter).toBe(listBefore);
       expect(listAfter!.scrollLeft).toBe(240);
+    });
+
+    test('does not re-render a completed message on every streaming delta', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({
+        messages: [carouselMessage(), streamingTextMessage('a')],
+      } as any);
+
+      // The carousel's item renderer runs once per item per render of its
+      // message — counting its calls is a flavor-agnostic proxy for "how many
+      // times did the completed message re-render".
+      let itemRenders = 0;
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            templates: {
+              item: (hit) => {
+                itemRenders++;
+                return `<div>${(hit as { name?: string }).name ?? ''}</div>`;
+              },
+            },
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            itemComponent: ({ item }) => {
+              itemRenders++;
+              return <div>{(item as { name?: string }).name}</div>;
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      const baseline = itemRenders;
+      expect(baseline).toBeGreaterThan(0);
+
+      for (let i = 0; i < 5; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        await streamTrailingDelta(chat, act);
+      }
+
+      // The completed message must NOT have re-rendered during the deltas.
+      // Without memoization this grows by one carousel render per delta.
+      expect(itemRenders - baseline).toBe(0);
     });
   });
 }

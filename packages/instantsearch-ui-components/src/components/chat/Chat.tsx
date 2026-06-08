@@ -9,7 +9,7 @@ import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 
 import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
-import type { ChatMessagesProps } from './ChatMessages';
+import type { ChatMessagesProps, Memo } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
 import type { ChatLayoutOwnProps } from './types';
@@ -92,9 +92,17 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
-export function createChatComponent({ createElement, Fragment }: Renderer) {
+export function createChatComponent({
+  createElement,
+  Fragment,
+  memo,
+}: Renderer & { memo?: Memo }) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
-  const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
+  const ChatMessages = createChatMessagesComponent({
+    createElement,
+    Fragment,
+    memo,
+  });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
     createElement,
