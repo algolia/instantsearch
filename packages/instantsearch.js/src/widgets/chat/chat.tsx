@@ -8,7 +8,7 @@ import {
   createChatComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -383,6 +383,18 @@ function ChatWrapper({
       resize: 'smooth',
     });
 
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [chatMessages, chatStatus, scrollToBottom]);
+
   state.init();
 
   const [maximized, setMaximized] = state.use(false);
@@ -516,6 +528,35 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         data={props as unknown as Record<string, unknown>}
       />
     );
+  }
+
+  // Tool layout components are rendered as component types downstream, exactly
+  // like the chat templates above. Recreating them each render makes Preact see
+  // a new component type and remount the whole tool subtree on every streaming
+  // delta — which re-mounts e.g. a carousel's `<ol>` and resets its scroll
+  // position. `tools` is created once per widget, so cache one stable component
+  // per tool key and reuse it across renders.
+  const toolLayoutComponentCache = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+  function getStableToolLayoutComponent(
+    key: string,
+    widgetTool: NonNullable<(typeof tools)[string]>
+  ): (props: ClientSideToolComponentProps) => JSX.Element {
+    let component = toolLayoutComponentCache.get(key);
+    if (!component) {
+      component = (layoutComponentProps: ClientSideToolComponentProps) => (
+        <TemplateComponent
+          templates={widgetTool.templates}
+          rootTagName="fragment"
+          templateKey="layout"
+          data={layoutComponentProps}
+        />
+      );
+      toolLayoutComponentCache.set(key, component);
+    }
+    return component;
   }
 
   const stableHeaderLayoutComponent = templates.header?.layout
@@ -726,18 +767,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       toolsForUi[key] = {
         ...connectorTool,
         ...(widgetTool?.templates?.layout && {
-          layoutComponent: (
-            layoutComponentProps: ClientSideToolComponentProps
-          ) => {
-            return (
-              <TemplateComponent
-                templates={widgetTool.templates}
-                rootTagName="fragment"
-                templateKey="layout"
-                data={layoutComponentProps}
-              />
-            );
-          },
+          layoutComponent: getStableToolLayoutComponent(key, widgetTool),
         }),
       };
     });

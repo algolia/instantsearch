@@ -277,6 +277,18 @@ function ChatInner<
     wasOpenRef.current = open;
   }, [open]);
 
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (status === 'streaming' || status === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [messages, status, scrollToBottom]);
+
   if (__DEV__ && error) {
     throw error;
   }
