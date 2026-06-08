@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
+  getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
@@ -102,12 +103,7 @@ function createCarouselTool<
     onClose,
     sendEvent,
   }: ClientSideToolTemplateData) {
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -210,7 +206,7 @@ function createCarouselTool<
                 if (!input || !applyFilters) return;
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (

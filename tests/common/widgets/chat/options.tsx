@@ -1293,6 +1293,93 @@ export function createOptionsTests(
         );
       });
 
+      test('applies filters from the MCP search tool `facet_<name>` view all button', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    facet_category: ['Laptops', 'Tablets'],
+                    facet_color: [],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                refinementList: {
+                  brand: ['Samsung', 'Apple'],
+                  category: ['Laptops'],
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [
+                  ['brand:Apple'],
+                  ['category:Laptops', 'category:Tablets'],
+                ],
+              }),
+            }),
+          ])
+        );
+      });
+
       test('applies filters for custom tools', async () => {
         const searchClient = createSearchClient();
 
