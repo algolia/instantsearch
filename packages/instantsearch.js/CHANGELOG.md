@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.101.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.101.0...instantsearch.js@4.101.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **chat:** hydrate full objects in display results tool ([#7064](https://github.com/algolia/instantsearch/issues/7064)) ([5362808](https://github.com/algolia/instantsearch/commit/536280866f3a5b6eaf398fb5b1b4db145f89d6f6))
+* **chat:** update carousel view all button handler for mcp search tool ([#7068](https://github.com/algolia/instantsearch/issues/7068)) ([031afd0](https://github.com/algolia/instantsearch/commit/031afd0f0c72a628c5c01cdd8b13f3bab4626569))
+
+
+
+
+
 # [4.101.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.100.0...instantsearch.js@4.101.0) (2026-06-03)
 
 
