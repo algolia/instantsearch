@@ -313,6 +313,9 @@ const testSetups = {
 
     await nextTick();
   },
+  createRangeSliderWidgetTests() {
+    throw new Error('RangeSlider is not supported in Vue InstantSearch');
+  },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     mountApp(
       {
@@ -613,6 +616,9 @@ const testOptions = {
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
+  createRangeSliderWidgetTests: {
+    skippedTests: { 'RangeSlider widget common tests': true },
+  },
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
