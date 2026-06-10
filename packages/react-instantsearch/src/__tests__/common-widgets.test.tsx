@@ -219,6 +219,9 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createRangeSliderWidgetTests() {
+    throw new Error('RangeSlider is not supported in React InstantSearch');
+  },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -456,6 +459,11 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
+  createRangeSliderWidgetTests: {
+    skippedTests: {
+      'RangeSlider widget common tests': true,
+    },
+  },
   createRatingMenuWidgetTests: {
     act,
     skippedTests: {
