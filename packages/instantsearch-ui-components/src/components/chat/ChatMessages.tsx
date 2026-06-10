@@ -23,7 +23,13 @@ import {
   ThumbsDownIcon,
 } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Hooks,
+  MutableRef,
+  Renderer,
+  VNode,
+} from '../../types';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -242,20 +248,6 @@ const copyToClipboard = (message: ChatMessageBase) => {
 };
 
 /**
- * Memoization higher-order component (`React.memo` / `preact/compat`'s `memo`),
- * supplied by the flavor wrapper. Passed alongside the renderer the same way
- * hooks like `useMemo` are (see `createDisplayResultsToolComponent`), rather
- * than living on the shared `Renderer` type.
- */
-export type Memo = <TProps>(
-  component: (props: TProps) => JSX.Element,
-  propsAreEqual?: (
-    prevProps: Readonly<TProps>,
-    nextProps: Readonly<TProps>
-  ) => boolean
-) => (props: TProps) => JSX.Element;
-
-/**
  * Memoization comparator for a message row. `replaceMessage` only clones the
  * message being updated, so completed messages keep a stable reference across
  * streaming deltas. We compare just what affects a row's render — `message`,
@@ -419,7 +411,7 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
   memo,
-}: Renderer & { memo?: Memo }) {
+}: Renderer & Partial<Pick<Hooks, 'memo'>>) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });

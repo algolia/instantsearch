@@ -2,7 +2,7 @@
 
 import { getHitsByObjectID } from '../../../lib/utils/chat';
 
-import type { RecordWithObjectID, Renderer } from '../../../types';
+import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
 export type DisplayResultsTranslations = {
@@ -58,15 +58,10 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
   streamingLabel: 'Curating results…',
 };
 
-export type UseMemo = <TValue>(
-  factory: () => TValue,
-  deps: readonly unknown[]
-) => TValue;
-
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment, useMemo }: Renderer & { useMemo: UseMemo }) {
+>({ createElement, Fragment, useMemo }: Renderer & Pick<Hooks, 'useMemo'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
