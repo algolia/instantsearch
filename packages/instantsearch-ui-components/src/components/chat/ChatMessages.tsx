@@ -23,7 +23,13 @@ import {
   ThumbsDownIcon,
 } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Hooks,
+  MutableRef,
+  Renderer,
+  VNode,
+} from '../../types';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -241,6 +247,34 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+/**
+ * Memoization comparator for a message row. `replaceMessage` only clones the
+ * message being updated, so completed messages keep a stable reference across
+ * streaming deltas. We compare just what affects a row's render — `message`,
+ * `status`, `suggestionsElement`, and this message's feedback — and ignore the
+ * props that get a fresh reference every render but don't change the output
+ * (`tools`, `messages`, callbacks, `indexUiState`). `indexUiState` in
+ * particular can't be compared: `getUiState()` returns a new object each render
+ * and would defeat the memo. Trade-off: a completed row keeps the callbacks/
+ * `indexUiState` it last rendered with until its next genuine render.
+ */
+function areMessagePropsEqual(
+  prev: { message: ChatMessageBase; [key: string]: unknown },
+  next: { message: ChatMessageBase; [key: string]: unknown }
+): boolean {
+  return (
+    prev.message === next.message &&
+    prev.status === next.status &&
+    prev.suggestionsElement === next.suggestionsElement &&
+    (prev.feedbackState as Record<string, unknown> | undefined)?.[
+      prev.message.id
+    ] ===
+      (next.feedbackState as Record<string, unknown> | undefined)?.[
+        next.message.id
+      ]
+  );
+}
+
 function createDefaultMessageComponent<
   TMessage extends ChatMessageBase = ChatMessageBase
 >({ createElement, Fragment }: Renderer) {
@@ -376,10 +410,17 @@ function createDefaultMessageComponent<
 export function createChatMessagesComponent({
   createElement,
   Fragment,
-}: Renderer) {
+  memo,
+}: Renderer & Partial<Pick<Hooks, 'memo'>>) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+  // Skip re-rendering (and re-compiling the markdown of) completed messages on
+  // every streaming delta. Falls back to the plain component when the host
+  // renderer doesn't provide a `memo` HOC.
+  const MemoizedDefaultMessage = memo
+    ? memo(DefaultMessageComponent, areMessagePropsEqual)
+    : DefaultMessageComponent;
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
     createElement,
   });
@@ -458,7 +499,7 @@ export function createChatMessagesComponent({
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
 
-    const DefaultMessage = MessageComponent || DefaultMessageComponent;
+    const DefaultMessage = MessageComponent || MemoizedDefaultMessage;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
 
