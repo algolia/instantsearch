@@ -1,6 +1,6 @@
 import { find } from '../../lib';
 
-import type { ComponentProps, MutableRef } from '../../types';
+import type { ComponentProps, Hooks, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
 
@@ -41,15 +41,10 @@ type GetPanelProps = () => {
 
 type GetRootProps = () => { ref?: MutableRef<HTMLDivElement | null> };
 
-type CreateAutocompletePropGettersParams = {
-  useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;
-  useId: () => string;
-  useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
-  useRef: <TType>(initialValue: TType | null) => { current: TType | null };
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => unknown];
-};
+type CreateAutocompletePropGettersParams = Pick<
+  Hooks,
+  'useEffect' | 'useId' | 'useMemo' | 'useRef' | 'useState'
+>;
 
 export type UsePropGetters<TItem extends BaseHit> = (params: {
   indices: Array<{
@@ -122,8 +117,8 @@ export function createAutocompletePropGetters({
     autoFocus = false,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
-    const inputRef = useRef<HTMLInputElement>(null);
-    const rootRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const rootRef = useRef<HTMLDivElement | null>(null);
     const [isOpen, setIsOpen] = useState(autoFocus);
     const [activeDescendant, setActiveDescendant] = useState<
       string | undefined

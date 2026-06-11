@@ -303,7 +303,10 @@ class Rheostat extends Component<Props, State> {
     const { handlePos, values } = this.state;
     const { max, min, snapPoints } = this.props as Required<Props>;
 
-    const shouldSnap = this.props.snap;
+    // Only snap by key when there are actual snap points to snap between.
+    // Otherwise the snap branch below leaves `proposedValue` untouched and the
+    // handle never moves with the keyboard, so fall back to the percentage path.
+    const shouldSnap = Boolean(this.props.snap && snapPoints.length);
 
     let proposedValue = values[idx];
     let proposedPercentage = handlePos[idx];
