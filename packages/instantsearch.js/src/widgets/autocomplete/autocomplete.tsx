@@ -1496,8 +1496,10 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             ...makeWidget({
               escapeHTML,
               transformItems: effectiveTransformItems,
+              future: { undefinedEmptyQuery: true },
             }),
             $$widgetType: 'ais.autocomplete',
+            ...(aiMode ? { opensChat: true as const } : {}),
           },
         ]);
         parent?.addWidgets([bootstrappedTree]);
