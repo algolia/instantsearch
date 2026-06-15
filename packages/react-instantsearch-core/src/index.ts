@@ -44,4 +44,7 @@ export * from './lib/useInstantSearchContext';
 export * from './lib/useRSCContext';
 export * from './lib/InstantSearchRSCContext';
 export * from './lib/InstantSearchSSRContext';
+export {
+  createServerSearchExecution as __internal_createServerSearchExecution,
+} from './lib/serverSearchExecution';
 export * from './server';

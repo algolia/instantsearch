@@ -11,6 +11,7 @@ import * as utils from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import { SearchBox, TrendingItems } from 'react-instantsearch';
+import * as ReactInstantSearchCore from 'react-instantsearch-core';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -26,6 +27,17 @@ jest.mock('instantsearch.js/es/lib/utils', () => ({
   ...jest.requireActual('instantsearch.js/es/lib/utils'),
   resetWidgetId: jest.fn(),
 }));
+
+jest.mock('react-instantsearch-core', () => {
+  const actual = jest.requireActual('react-instantsearch-core');
+
+  return {
+    ...actual,
+    __internal_createServerSearchExecution: jest.fn(
+      actual.__internal_createServerSearchExecution
+    ),
+  };
+});
 
 const renderComponent = async ({
   children,
@@ -132,6 +144,51 @@ test('it waits for search only if there are only search widgets', async () => {
     expect.objectContaining({ indexName: 'indexName' }),
   ]);
   expect(client.getRecommendations).not.toHaveBeenCalled();
+});
+
+test('it prepares a second pass for two-pass widgets', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+  const execution = {
+    resetWidgetIds: jest.fn(),
+    prepare: jest
+      .fn()
+      .mockResolvedValueOnce([{ query: 'first-pass' }])
+      .mockResolvedValueOnce([{ query: 'second-pass' }]),
+    trigger: jest.fn(),
+    hasSearchOrRecommendWidgets: jest.fn(() => true),
+    hasTwoPassWidgets: jest.fn(() => true),
+    resetScheduleSearch: jest.fn(),
+    getInitialResults: jest.fn(() => ({})),
+  };
+  const createServerSearchExecution =
+    ReactInstantSearchCore.__internal_createServerSearchExecution as jest.Mock;
+  const originalImplementation =
+    createServerSearchExecution.getMockImplementation();
+  createServerSearchExecution.mockReturnValue(execution);
+
+  try {
+    await renderComponent({
+      ref,
+      children: <SearchBox />,
+      insertedHTML,
+    });
+
+    if (ref.current?.status === 'pending') {
+      await act(async () => {
+        await ref.current;
+      });
+    }
+
+    expect(execution.prepare).toHaveBeenCalledTimes(2);
+    expect(execution.resetScheduleSearch).toHaveBeenCalledTimes(1);
+    expect(execution.getInitialResults).toHaveBeenCalledWith([
+      { query: 'second-pass' },
+    ]);
+    expect(insertedHTML).toHaveBeenCalledTimes(1);
+  } finally {
+    createServerSearchExecution.mockImplementation(originalImplementation);
+  }
 });
 
 test('it waits for recommend only if there are only recommend widgets', async () => {

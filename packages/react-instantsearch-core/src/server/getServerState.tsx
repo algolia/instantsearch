@@ -1,16 +1,11 @@
-import {
-  getInitialResults,
-  waitForResults,
-} from 'instantsearch.js/es/lib/server';
-import {
-  isTwoPassWidget,
-  walkIndex,
-  resetWidgetId,
-} from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
 import { InstantSearchServerContext } from '../components/InstantSearchServerContext';
 import { InstantSearchSSRProvider } from '../components/InstantSearchSSRProvider';
+import {
+  createServerSearchExecution,
+  resetServerSearchWidgetIds,
+} from '../lib/serverSearchExecution';
 
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
@@ -36,7 +31,7 @@ export function getServerState(
     current: undefined,
   };
 
-  resetWidgetId();
+  resetServerSearchWidgetIds();
 
   const createNotifyServer = () => {
     let hasBeenNotified = false;
@@ -63,16 +58,11 @@ export function getServerState(
     searchRef,
     notifyServer: createNotifyServer(),
   }).then((serverState) => {
-    let shouldRefetch = false;
-
-    // Two-pass widgets require another query to discover and mount child widgets.
-    walkIndex(searchRef.current!.mainIndex, (index) => {
-      shouldRefetch =
-        shouldRefetch || index.getWidgets().some(isTwoPassWidget);
-    });
+    const execution = createServerSearchExecution(searchRef.current!);
+    const shouldRefetch = execution.hasTwoPassWidgets();
 
     if (shouldRefetch) {
-      resetWidgetId();
+      resetServerSearchWidgetIds();
 
       return execute({
         children: (
@@ -133,14 +123,19 @@ function execute({
         );
       }
 
-      return waitForResults(searchRef.current, skipRecommend);
+      const execution = createServerSearchExecution(searchRef.current);
+      const requestParamsList = execution.prepare({ skipRecommend });
+
+      execution.trigger({ skipRecommend });
+
+      return requestParamsList.then((paramsList) => ({
+        execution,
+        paramsList,
+      }));
     })
-    .then((requestParamsList) => {
+    .then(({ execution, paramsList }) => {
       return {
-        initialResults: getInitialResults(
-          searchRef.current!.mainIndex,
-          requestParamsList
-        ),
+        initialResults: execution.getInitialResults(paramsList),
       };
     });
 }

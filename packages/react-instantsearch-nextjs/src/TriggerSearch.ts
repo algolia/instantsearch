@@ -1,6 +1,7 @@
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import { useContext } from 'react';
 import {
+  __internal_createServerSearchExecution,
   useInstantSearchContext,
   useRSCContext,
 } from 'react-instantsearch-core';
@@ -17,17 +18,12 @@ export function TriggerSearch({ nonce }: { nonce?: string }) {
     });
 
   if (waitForResultsRef?.current?.status === 'pending') {
-    if (instantsearch._hasSearchWidget) {
-      if (instantsearch.compositionID) {
-        instantsearch.mainHelper?.searchWithComposition();
-      } else {
-        instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
-      }
-    }
-    instantsearch._hasRecommendWidget && instantsearch.mainHelper?.recommend();
+    const execution = __internal_createServerSearchExecution(instantsearch);
+
+    execution.trigger();
 
     // If there are no widgets, we inject empty initial results instantly
-    if (!instantsearch._hasSearchWidget && !instantsearch._hasRecommendWidget) {
+    if (!execution.hasSearchOrRecommendWidgets()) {
       const options = { inserted: false };
       insertHTML(createInsertHTML({ options, results: {}, nonce }));
     }
