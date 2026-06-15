@@ -1,6 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
+  collectWidgetSearchParameters,
   createInitArgs,
   createRenderArgs,
   storeRenderState,
@@ -288,13 +289,11 @@ export function createFeedContainer(
       searchParameters: SearchParameters,
       { uiState }: { uiState: IndexUiState }
     ) {
-      return localWidgets.reduce(
-        (params, widget) =>
-          widget.getWidgetSearchParameters
-            ? widget.getWidgetSearchParameters(params, { uiState })
-            : params,
-        searchParameters
-      );
+      return collectWidgetSearchParameters(localWidgets, {
+        uiState,
+        initialSearchParameters: searchParameters,
+        useWidgetParameters: false,
+      });
     },
 
     refreshUiState() {

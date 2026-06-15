@@ -2,6 +2,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
   checkIndexUiState,
+  collectWidgetSearchParameters,
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
@@ -96,9 +97,6 @@ export type IndexRenderOptions = {
 type WidgetSearchParametersOptions = Parameters<
   NonNullable<Widget['getWidgetSearchParameters']>
 >[1];
-type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
-  initialSearchParameters: SearchParameters;
-};
 type LocalWidgetRecommendParametersOptions = WidgetSearchParametersOptions & {
   initialRecommendParameters: RecommendParameters;
 };
@@ -238,25 +236,6 @@ function getLocalWidgetsUiState(
 
     return widget.getWidgetState!(uiState, widgetStateOptions);
   }, initialUiState);
-}
-
-function getLocalWidgetsSearchParameters(
-  widgets: Array<Widget | IndexWidget>,
-  widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
-): SearchParameters {
-  const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
-
-  return widgets.reduce<SearchParameters>((state, widget) => {
-    if (!widget.getWidgetSearchParameters || isIndexWidget(widget)) {
-      return state;
-    }
-
-    if (widget.dependsOn === 'search' && widget.getWidgetParameters) {
-      return widget.getWidgetParameters(state, rest);
-    }
-
-    return widget.getWidgetSearchParameters(state, rest);
-  }, initialSearchParameters);
 }
 
 function getLocalWidgetsRecommendParameters(
@@ -489,9 +468,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets = localWidgets.concat(flatWidgets);
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
-          state: getLocalWidgetsSearchParameters(localWidgets, {
+          state: collectWidgetSearchParameters(localWidgets, {
             uiState: localUiState,
             initialSearchParameters: helper!.state,
+            skipWidget: isIndexWidget,
           }),
           recommendState: getLocalWidgetsRecommendParameters(localWidgets, {
             uiState: localUiState,
@@ -610,20 +590,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         const newState = localInstantSearchInstance.future
           .preserveSharedStateOnUnmount
-          ? getLocalWidgetsSearchParameters(localWidgets, {
+          ? collectWidgetSearchParameters(localWidgets, {
               uiState: localUiState,
               initialSearchParameters: new algoliasearchHelper.SearchParameters(
                 {
                   index: this.getIndexName(),
                 }
               ),
+              skipWidget: isIndexWidget,
             })
-          : getLocalWidgetsSearchParameters(localWidgets, {
+          : collectWidgetSearchParameters(localWidgets, {
               uiState: getLocalWidgetsUiState(localWidgets, {
                 searchParameters: cleanedSearchState,
                 helper: helper!,
               }),
               initialSearchParameters: cleanedSearchState,
+              skipWidget: isIndexWidget,
             });
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
@@ -661,11 +643,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
-      const parameters = getLocalWidgetsSearchParameters(localWidgets, {
+      const parameters = collectWidgetSearchParameters(localWidgets, {
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
           index: indexName,
         }),
+        skipWidget: isIndexWidget,
       });
       const recommendParameters = getLocalWidgetsRecommendParameters(
         localWidgets,
@@ -1025,9 +1008,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
-      return getLocalWidgetsSearchParameters(localWidgets, {
+      return collectWidgetSearchParameters(localWidgets, {
         uiState,
         initialSearchParameters: searchParameters,
+        skipWidget: isIndexWidget,
       });
     },
 

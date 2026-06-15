@@ -3,6 +3,7 @@ export * from './capitalize';
 export * from './checkIndexUiState';
 export * from './checkRendering';
 export * from './clearRefinements';
+export * from './collectWidgetSearchParameters';
 export * from './concatHighlightedParts';
 export * from './createConcurrentSafePromise';
 export * from './createSendEventForFacet';

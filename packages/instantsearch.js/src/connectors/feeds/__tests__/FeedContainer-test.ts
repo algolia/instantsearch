@@ -300,10 +300,11 @@ describe('FeedContainer', () => {
         instantSearchInstance
       );
 
-      const cleanedState = instantSearchInstance.helper!.state.setQueryParameter(
-        'disjunctiveFacets',
-        []
-      );
+      const cleanedState =
+        instantSearchInstance.helper!.state.setQueryParameter(
+          'disjunctiveFacets',
+          []
+        );
       const widget = createWidget({
         dispose: jest.fn(() => cleanedState),
       });
@@ -343,6 +344,36 @@ describe('FeedContainer', () => {
       const widget2 = createWidget();
       container.addWidgets([widget2]);
       expect(widget2.init).toHaveBeenCalled();
+    });
+
+    it('addWidgets after init applies child search parameters to the parent helper', () => {
+      const instantSearchInstance = createInstantSearch({
+        started: true,
+      } as any);
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+      const container = createFeedContainer(
+        'products',
+        parent,
+        instantSearchInstance
+      );
+      const initialState = instantSearchInstance.helper!.state;
+      const expectedState = initialState.addDisjunctiveFacet('brand');
+      const widget = createWidget({
+        getWidgetSearchParameters: jest.fn((searchParameters) =>
+          searchParameters.addDisjunctiveFacet('brand')
+        ),
+      });
+      const setStateSpy = jest.spyOn(instantSearchInstance.helper!, 'setState');
+
+      container.init({} as any);
+      container.addWidgets([widget]);
+
+      expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
+        initialState,
+        { uiState: {} }
+      );
+      expect(setStateSpy).toHaveBeenCalledWith(expectedState);
     });
 
     it('addWidgets flattens nested widget arrays', () => {
