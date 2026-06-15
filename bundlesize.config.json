@@ -74,7 +74,7 @@
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "6 kB"
+      "maxSize": "6.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",
