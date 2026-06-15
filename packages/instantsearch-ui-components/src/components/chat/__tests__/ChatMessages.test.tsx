@@ -143,6 +143,91 @@ describe('ChatMessages', () => {
     `);
   });
 
+  describe('parseMarkdown', () => {
+    test('parses user message text as markdown by default', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'a *b* c' }],
+            },
+          ]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('em')).not.toBeNull();
+      expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
+    });
+
+    test('renders user message text as plain text via userMessageProps', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'a *b* c\nsecond line' }],
+            },
+          ]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          userMessageProps={{ parseMarkdown: false }}
+        />
+      );
+
+      const text = container.querySelector('.ais-ChatMessage-text');
+      expect(text).not.toBeNull();
+      // No markdown transformation, and the newline is preserved.
+      expect(text!.textContent).toBe('a *b* c\nsecond line');
+      expect(container.querySelector('em')).toBeNull();
+    });
+
+    test('only affects the targeted role', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'user *text*' }],
+            },
+            {
+              role: 'assistant',
+              id: '2',
+              parts: [{ type: 'text', text: 'assistant *text*' }],
+            },
+          ]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+          userMessageProps={{ parseMarkdown: false }}
+        />
+      );
+
+      const messages = container.querySelectorAll('.ais-ChatMessage-message');
+      // User message: plain text, no emphasis.
+      expect(
+        messages[0].querySelector('.ais-ChatMessage-text')
+      ).not.toBeNull();
+      expect(messages[0].querySelector('em')).toBeNull();
+      // Assistant message: still parsed as markdown.
+      expect(messages[1].querySelector('em')).not.toBeNull();
+      expect(messages[1].querySelector('.ais-ChatMessage-text')).toBeNull();
+    });
+  });
+
   describe('feedback', () => {
     const assistantMessage = {
       role: 'assistant' as const,
