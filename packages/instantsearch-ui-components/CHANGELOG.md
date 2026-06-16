@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.31.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.30.1...instantsearch-ui-components@0.31.0) (2026-06-16)
+
+
+### Bug Fixes
+
+* **chat:** stop carousel remount, transcript re-render, and lost auto-scroll while streaming ([#7069](https://github.com/algolia/instantsearch/issues/7069)) ([bbba058](https://github.com/algolia/instantsearch/commit/bbba058991ae6ab518bc0de4b68c9059cb6abfe6))
+
+
+### Features
+
+* **chat:** add parseMarkdown opt-out to render message text as plain… ([#7073](https://github.com/algolia/instantsearch/issues/7073)) ([d9add3a](https://github.com/algolia/instantsearch/commit/d9add3a8000e3163f3206fce5e077766f378fcb3))
+
+
+
+
+
 ## [0.30.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.30.0...instantsearch-ui-components@0.30.1) (2026-06-09)
 
 

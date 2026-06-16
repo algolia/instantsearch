@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.26.9](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.8...vue-instantsearch@4.26.9) (2026-06-16)
+
+
+### Bug Fixes
+
+* **range-slider:** make handles keyboard-movable without snap points ([#7071](https://github.com/algolia/instantsearch/issues/7071)) ([55bd627](https://github.com/algolia/instantsearch/commit/55bd627dbacabd538b92aa1c8654ec3631e59ece))
+
+
+
+
+
 ## [4.26.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.7...vue-instantsearch@4.26.8) (2026-06-09)
 
 **Note:** Version bump only for package vue-instantsearch
