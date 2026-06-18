@@ -236,6 +236,39 @@ describe('EXPERIMENTAL_Autocomplete', () => {
       expect(autocompleteRequest?.params.query).toBe('macbook');
     });
 
+    test('pre-activation shell input reflects the parent query', async () => {
+      const searchClient = createSearchClient({});
+
+      const { container } = render(
+        <InstantSearchTestWrapper
+          searchClient={searchClient}
+          indexName="indexName"
+          initialUiState={{
+            indexName: { query: 'macbook' },
+          }}
+        >
+          <EXPERIMENTAL_Autocomplete
+            indices={[
+              {
+                indexName: 'my-index',
+                itemComponent: ({ item }) =>
+                  React.createElement('div', null, String(item.objectID)),
+              },
+            ]}
+          />
+        </InstantSearchTestWrapper>
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = container.querySelector<HTMLInputElement>(
+        'input[type="search"]'
+      )!;
+      expect(input.value).toBe('macbook');
+    });
+
     test('eager-activates when autoFocus is set', async () => {
       const searchClient = createSearchClient({});
 

@@ -773,7 +773,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
             onFocus: () => setActivated(true),
           }}
           clearQuery={() => {}}
-          query=""
+          query={indexUiState.query ?? ''}
           isSearchStalled={false}
           classNames={classNames}
         />

@@ -741,6 +741,40 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       expect(autocompleteRequests[0].params.query).toBe('macbook');
     });
 
+    it('pre-activation shell input reflects the parent query', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+        initialUiState: {
+          indexName: { query: 'macbook' },
+        },
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+
+      const input = container.querySelector<HTMLInputElement>(
+        'input[type="search"]'
+      )!;
+      expect(input.value).toBe('macbook');
+    });
+
     it('attaches the isolated tree only once across repeated focuses', async () => {
       const container = document.body.appendChild(
         document.createElement('div')
