@@ -53,6 +53,7 @@ import type {
   Hit,
   IndexUiState,
   IndexWidget,
+  InstantSearch,
   Renderer,
   RendererOptions,
   Template,
@@ -201,6 +202,7 @@ function getMediaQueryList(mediaQuery: string) {
 type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
   containerNode: HTMLElement;
+  activate: () => void;
   indicesConfig: Array<IndexConfig<TItem>>;
   renderState: {
     indexTemplateProps: Array<
@@ -333,8 +335,6 @@ const createRenderer = <TItem extends BaseHit>(
         hasWarnedMissingPromptSuggestionsChat: false,
       };
 
-      connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
-      return;
     }
 
     render(
@@ -347,6 +347,7 @@ const createRenderer = <TItem extends BaseHit>(
 type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   RendererParams<TItem>,
   | 'indicesConfig'
+  | 'activate'
   | 'getSearchPageURL'
   | 'onSelect'
   | 'cssClasses'
@@ -367,6 +368,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
 function AutocompleteWrapper<TItem extends BaseHit>({
   indicesConfig,
   indices,
+  activate,
   getSearchPageURL,
   onSelect: userOnSelect,
   refine: refineAutocomplete,
@@ -830,6 +832,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
+        onFocus: (event) => {
+          activate();
+          (inputProps as { onFocus?: (event: unknown) => void }).onFocus?.(
+            event
+          );
+        },
         onInput: (event: { currentTarget: HTMLInputElement }) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
@@ -1400,9 +1408,27 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     ...userTranslations,
   };
 
+  let isolatedTree: IndexWidget | null = null;
+  let parentRef: IndexWidget | null | undefined;
+  let activated = false;
+
+  const activate = () => {
+    if (activated || !parentRef || !isolatedTree) return;
+    activated = true;
+    parentRef.addWidgets([isolatedTree]);
+    const parentQuery = parentRef.getHelper()?.state.query;
+    if (parentQuery) {
+      isolatedTree.getHelper()?.setQuery(parentQuery);
+    }
+    // Adding an isolated index to a non-isolated parent schedules main's search,
+    // not the isolated derived helper's. Trigger it explicitly.
+    isolatedTree.scheduleLocalSearch();
+  };
+
   const specializedRenderer = createRenderer({
     instanceId,
     containerNode,
+    activate,
     indicesConfig,
     getSearchPageURL,
     onSelect,
@@ -1466,11 +1492,9 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       }
     }
 
-    let bootstrappedTree: IndexWidget | null = null;
-    const bootstrap: Widget = {
-      $$type: 'ais.autocomplete',
-      $$widgetType: 'ais.autocomplete',
-      init({ instantSearchInstance, parent }) {
+    return [
+      connectSearchBox(() => null)({}),
+      createBootstrap((instantSearchInstance) => {
         if (!instantSearchInstance.compositionID) {
           throw new Error(
             withUsage(
@@ -1478,15 +1502,15 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             )
           );
         }
-        bootstrappedTree = index({
+        const tree = index({
           indexName: instantSearchInstance.compositionID,
           indexId: `ais-autocomplete-${instanceId}`,
           EXPERIMENTAL_isolated: true,
         });
         const feedContainers = feedIDs.map((feedID) =>
-          createFeedContainer(feedID, bootstrappedTree!, instantSearchInstance)
+          createFeedContainer(feedID, tree, instantSearchInstance)
         );
-        bootstrappedTree.addWidgets([
+        tree.addWidgets([
           configure(searchParameters),
           // Connector-only registration runs `hydrateFeedsFromInitialResultsIfNeeded`
           // at init for SSR, without triggering the extra search `feeds()` would.
@@ -1502,44 +1526,82 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             ...(aiMode ? { opensChat: true as const } : {}),
           },
         ]);
-        parent?.addWidgets([bootstrappedTree]);
-      },
-      render() {},
-      dispose({ parent }) {
-        if (bootstrappedTree) {
-          parent?.removeWidgets([bootstrappedTree]);
-          bootstrappedTree = null;
-        }
-        return undefined;
-      },
-    };
-    return [connectSearchBox(() => null)({}), bootstrap];
+        return tree;
+      }),
+    ];
   }
 
   return [
     connectSearchBox(() => null)({}),
-    index({
-      indexId: `ais-autocomplete-${instanceId}`,
-      EXPERIMENTAL_isolated: true,
-    }).addWidgets([
-      configure(searchParameters),
-      ...indicesConfig.map(
-        ({ indexName, searchParameters: indexSearchParameters }) =>
-          index({ indexName, indexId: indexName }).addWidgets([
-            configure(indexSearchParameters || {}),
-          ])
-      ),
-      {
-        ...makeWidget({
-          escapeHTML,
-          transformItems: effectiveTransformItems,
-          future: { undefinedEmptyQuery: true },
-        }),
-        $$widgetType: 'ais.autocomplete',
-        ...(aiMode ? { opensChat: true as const } : {}),
-      },
-    ]),
+    createBootstrap(() =>
+      index({
+        indexId: `ais-autocomplete-${instanceId}`,
+        EXPERIMENTAL_isolated: true,
+      }).addWidgets([
+        configure(searchParameters),
+        ...indicesConfig.map(
+          ({ indexName, searchParameters: indexSearchParameters }) =>
+            index({ indexName, indexId: indexName }).addWidgets([
+              configure(indexSearchParameters || {}),
+            ])
+        ),
+        {
+          ...makeWidget({
+            escapeHTML,
+            transformItems: effectiveTransformItems,
+            future: { undefinedEmptyQuery: true },
+          }),
+          $$widgetType: 'ais.autocomplete',
+          ...(aiMode ? { opensChat: true as const } : {}),
+        },
+      ])
+    ),
   ];
+
+  function createBootstrap(
+    buildTree: (instantSearchInstance: InstantSearch) => IndexWidget
+  ): Widget {
+    return {
+      $$type: 'ais.autocomplete',
+      $$widgetType: 'ais.autocomplete',
+      init({ instantSearchInstance, parent }) {
+        parentRef = parent;
+        isolatedTree = buildTree(instantSearchInstance);
+        renderShell(specializedRenderer, instantSearchInstance);
+      },
+      render() {},
+      dispose({ parent }) {
+        if (activated && isolatedTree) {
+          parent?.removeWidgets([isolatedTree]);
+        }
+        render(null, containerNode);
+        isolatedTree = null;
+        parentRef = undefined;
+        activated = false;
+        return undefined;
+      },
+    };
+  }
+}
+
+function renderShell<TItem extends BaseHit>(
+  renderer: Renderer<
+    AutocompleteRenderState,
+    Partial<AutocompleteWidgetParams<TItem>>
+  >,
+  instantSearchInstance: InstantSearch
+) {
+  renderer(
+    {
+      instantSearchInstance,
+      indices: [],
+      refine: noop,
+      currentRefinement: '',
+      widgetParams: {},
+    } as AutocompleteRenderState &
+      RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>,
+    true
+  );
 }
 
 function ConditionalReverseHighlight<TItem extends { query: string }>({

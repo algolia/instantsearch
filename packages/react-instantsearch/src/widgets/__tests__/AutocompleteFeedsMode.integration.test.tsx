@@ -289,7 +289,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
       ),
     });
 
-    render(
+    const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
         <Configure hitsPerPage={8} />
         <EXPERIMENTAL_Autocomplete
@@ -304,6 +304,9 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
         />
       </InstantSearch>
     );
+
+    const input = container.querySelector('input[type="search"]')!;
+    fireEvent.focus(input);
 
     await waitFor(() => {
       expect(transformItems).toHaveBeenCalled();

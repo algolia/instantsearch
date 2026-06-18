@@ -108,9 +108,12 @@ const AutocompleteDetachedSearchButton =
   });
 
 let id = 0;
-const useAutocompleteInstanceId: () => string = React.useId
-  ? () => React.useId().replace(/:/g, '')
-  : () => React.useState(() => `a${id++}`)[0];
+// Colons (`:r0:`) preserved so concatenations like `autocomplete:r0:input`
+// have a recognisable boundary; callers that need a colon-free variant for
+// InstantSearch's `indexId` strip them at the use site.
+const useAutocompleteId: () => string = React.useId
+  ? () => React.useId()
+  : () => React.useState(() => `:a${id++}:`)[0];
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId: React.useId || (() => React.useState(() => (id++).toString())),
@@ -443,6 +446,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
     itemComponent: typeof AutocompleteRecentSearch;
     classNames: Partial<AutocompleteIndexClassNames>;
   };
+  instanceKey: string;
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
@@ -461,6 +465,14 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     transformItems,
     ...restProps
   } = props;
+  const { autoFocus, placeholder, classNames } = restProps as {
+    autoFocus?: boolean;
+    placeholder?: string;
+    classNames?: Partial<AutocompleteClassNames>;
+  };
+  // Eager-mount only when `autoFocus` is set — otherwise wait for first focus
+  // before registering the autocomplete subtree in the search graph.
+  const [activated, setActivated] = useState(autoFocus === true);
   const translations: AutocompleteTranslations = {
     ...DEFAULT_TRANSLATIONS,
     ...userTranslations,
@@ -475,9 +487,8 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
       ...(props.aiMode ? { opensChat: true } : {}),
     }
   );
-  // In feeds-mode, indexId disambiguates multiple Autocomplete instances
-  // sharing the same compositionID. Mirrors the fallback at line 111 for React <18.
-  const instanceKey = useAutocompleteInstanceId();
+  const domId = useAutocompleteId();
+  const instanceKey = domId.replace(/:/g, '');
 
   if (isFeedsMode && indices !== undefined) {
     throw new Error(
@@ -743,6 +754,33 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     ...forwardedProps
   } = restProps as Record<string, unknown>;
 
+  if (!activated) {
+    const {
+      indices: _shellUnusedIndices,
+      feeds: _shellUnusedFeeds,
+      ...shellRootProps
+    } = restProps as Record<string, unknown>;
+    return (
+      <Autocomplete
+        {...(shellRootProps as React.HTMLAttributes<HTMLDivElement>)}
+        classNames={classNames}
+      >
+        <AutocompleteSearch
+          inputProps={{
+            id: `autocomplete${domId}input`,
+            role: 'combobox',
+            placeholder,
+            onFocus: () => setActivated(true),
+          }}
+          clearQuery={() => {}}
+          query=""
+          isSearchStalled={false}
+          classNames={classNames}
+        />
+      </Autocomplete>
+    );
+  }
+
   const innerAutocomplete = (
     <InnerAutocomplete
       {...(forwardedProps as Omit<
@@ -757,6 +795,8 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
         | 'translations'
         | 'transformItems'
       >)}
+      autoFocus
+      instanceKey={domId}
       indicesConfig={indicesConfig}
       refineSearchBox={refine}
       isSearchStalled={isSearchStalled}
@@ -823,6 +863,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   translations,
   classNames,
   aiMode,
+  instanceKey,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -833,6 +874,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     transformItems,
     future: { undefinedEmptyQuery: true },
   });
+
+  // Mirror the parent's query onto the isolated helper so URL-routed and
+  // initialUiState queries reach the autocomplete on first activation.
+  useEffect(() => {
+    if (indexUiState.query && currentRefinement === undefined) {
+      refineAutocomplete(indexUiState.query);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const resolvedQuery =
     currentRefinement !== undefined
@@ -937,6 +987,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     setIsOpen,
     focusInput,
   } = usePropGetters<TItem>({
+    id: instanceKey,
     indices: indicesForPropGettersWithPromptSuggestions,
     indicesConfig: indicesConfigForPropGetters,
     onRefine: (query) => {

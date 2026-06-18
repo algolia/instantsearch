@@ -104,6 +104,12 @@ export function createTemplatesTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
       const headers = [
         ...document.querySelectorAll('.ais-AutocompleteIndexHeader'),
       ];
