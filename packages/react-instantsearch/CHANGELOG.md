@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.36.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.35.1...react-instantsearch@7.36.0) (2026-06-19)
+
+
+### Bug Fixes
+
+* **chat:** stop carousel remount, transcript re-render, and lost auto-scroll while streaming ([#7069](https://github.com/algolia/instantsearch/issues/7069)) ([bbba058](https://github.com/algolia/instantsearch/commit/bbba058991ae6ab518bc0de4b68c9059cb6abfe6))
+* **range-slider:** make handles keyboard-movable without snap points ([#7071](https://github.com/algolia/instantsearch/issues/7071)) ([55bd627](https://github.com/algolia/instantsearch/commit/55bd627dbacabd538b92aa1c8654ec3631e59ece))
+
+
+### Features
+
+* **composition:** add multifeed support to Autocomplete ([#7061](https://github.com/algolia/instantsearch/issues/7061)) ([b2ba68d](https://github.com/algolia/instantsearch/commit/b2ba68d57c079a2f1faab28ef763de56f79f28fc)), closes [#6993](https://github.com/algolia/instantsearch/issues/6993)
+
+
+
+
+
 ## [7.35.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.35.0...react-instantsearch@7.35.1) (2026-06-09)
 
 
