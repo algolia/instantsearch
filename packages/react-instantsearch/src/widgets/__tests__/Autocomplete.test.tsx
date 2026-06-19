@@ -2,8 +2,13 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createCompositionClient, createSearchClient } from '@instantsearch/mocks';
+import {
+  createCompositionClient,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchSSRProvider } from 'react-instantsearch-core';
 import { wait } from '@instantsearch/testutils/wait';
 import { act, fireEvent, render } from '@testing-library/react';
 import React from 'react';
@@ -265,6 +270,70 @@ describe('EXPERIMENTAL_Autocomplete', () => {
         'input[type="search"]'
       )!;
       expect(input.value).toBe('macbook');
+    });
+
+    test('autocomplete child does not inherit SSR results from same-named parent index', async () => {
+      // Never-resolving search lets us observe the panel before the
+      // autocomplete's own request comes back.
+      const searchClient = {
+        search: jest.fn(() => new Promise(() => {})),
+      };
+
+      const initialResults = {
+        instant_search: {
+          state: {
+            index: 'instant_search',
+            query: '',
+            hitsPerPage: 8,
+          },
+          results: [
+            createSingleSearchResponse({
+              index: 'instant_search',
+              hits: [{ objectID: 'parent-hit', name: 'Parent SSR Hit' }],
+            }),
+          ],
+        },
+      } as Parameters<typeof InstantSearchSSRProvider>[0]['initialResults'];
+
+      const { container } = render(
+        <InstantSearchSSRProvider initialResults={initialResults}>
+          <InstantSearchTestWrapper
+            searchClient={searchClient as never}
+            indexName="instant_search"
+          >
+            <EXPERIMENTAL_Autocomplete
+              indices={[
+                {
+                  indexName: 'instant_search',
+                  itemComponent: ({ item }) =>
+                    React.createElement(
+                      'div',
+                      { 'data-testid': 'ac-item' },
+                      String((item as { name: string }).name)
+                    ),
+                },
+              ]}
+            />
+          </InstantSearchTestWrapper>
+        </InstantSearchSSRProvider>
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = container.querySelector<HTMLInputElement>(
+        'input[type="search"]'
+      )!;
+      await act(async () => {
+        fireEvent.focus(input);
+        await wait(0);
+      });
+
+      const renderedItems = container.querySelectorAll(
+        '[data-testid="ac-item"]'
+      );
+      expect(renderedItems).toHaveLength(0);
     });
 
     test('eager-activates when autoFocus is set', async () => {

@@ -10,6 +10,7 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 
 import instantsearch from '../../..';
+import { walkIndex } from '../../../lib/utils';
 import { EXPERIMENTAL_autocomplete } from '../autocomplete';
 
 describe('EXPERIMENTAL_autocomplete()', () => {
@@ -773,6 +774,43 @@ describe('EXPERIMENTAL_autocomplete()', () => {
         'input[type="search"]'
       )!;
       expect(input.value).toBe('macbook');
+    });
+
+    it('uses a namespaced indexId for child indices to avoid collisions with same-named parent indices', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'instant_search',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'instant_search',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      focusSearchInput(container);
+      await flush();
+
+      const indexIds: string[] = [];
+      walkIndex(search.mainIndex, (widget) => indexIds.push(widget.getIndexId()));
+
+      const parentMatches = indexIds.filter((id) => id === 'instant_search');
+      expect(parentMatches).toHaveLength(1);
+      expect(
+        indexIds.some((id) => id.startsWith('ais-autocomplete-') && id.endsWith('-instant_search'))
+      ).toBe(true);
     });
 
     it('attaches the isolated tree only once across repeated focuses', async () => {

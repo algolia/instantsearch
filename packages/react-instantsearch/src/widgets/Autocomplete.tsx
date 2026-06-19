@@ -858,7 +858,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     >
       <Configure {...searchParameters} />
       {indicesConfig.map((index) => (
-        <Index key={index.indexName} indexName={index.indexName}>
+        <Index
+          key={index.indexName}
+          indexName={index.indexName}
+          indexId={`ais-autocomplete-${instanceKey}-${index.indexName}`}
+        >
           <Configure {...index.searchParameters} />
         </Index>
       ))}
@@ -1143,7 +1147,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         NoResultsComponent={currentIndexConfig.noResultsComponent}
         items={hits.map((item) => ({
           ...item,
-          __indexName: indexId,
+          __indexName: indexName,
         }))}
         getItemProps={getItemProps}
         sendEvent={sendEvent}

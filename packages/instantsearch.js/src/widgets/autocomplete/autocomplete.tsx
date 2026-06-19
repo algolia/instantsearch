@@ -807,7 +807,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         NoResultsComponent={noResultsComponent}
         items={hits.map((item) => ({
           ...item,
-          __indexName: indexId,
+          __indexName: indexName,
         }))}
         getItemProps={getItemProps}
         sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
@@ -1541,9 +1541,10 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         configure(searchParameters),
         ...indicesConfig.map(
           ({ indexName, searchParameters: indexSearchParameters }) =>
-            index({ indexName, indexId: indexName }).addWidgets([
-              configure(indexSearchParameters || {}),
-            ])
+            index({
+              indexName,
+              indexId: `ais-autocomplete-${instanceId}-${indexName}`,
+            }).addWidgets([configure(indexSearchParameters || {})])
         ),
         {
           ...makeWidget({
