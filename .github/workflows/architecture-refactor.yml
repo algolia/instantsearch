@@ -1,0 +1,380 @@
+name: Architecture Refactor
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: Stage to run
+        default: scout
+        type: choice
+        options:
+          - scout
+          - implement
+      issue_number:
+        description: Tracking issue number for implement
+        required: false
+        type: string
+      candidate_id:
+        description: Candidate id, for example candidate-1
+        required: false
+        type: string
+      max_turns:
+        description: Max Claude turns. Leave blank for the stage default.
+        required: false
+        type: number
+
+  issue_comment:
+    types:
+      - created
+
+permissions:
+  contents: read
+
+jobs:
+  architecture-refactor:
+    name: Run Architecture Refactor
+    if: >-
+      github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request == null &&
+        startsWith(github.event.comment.body, '/implement ')
+      )
+
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve request
+        id: request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          EVENT_NAME: ${{ github.event_name }}
+          COMMENT_BODY: ${{ github.event.comment.body || '' }}
+          EVENT_ISSUE_NUMBER: ${{ github.event.issue.number || '' }}
+          INPUT_STAGE: ${{ inputs.stage || '' }}
+          INPUT_ISSUE_NUMBER: ${{ inputs.issue_number || '' }}
+          INPUT_CANDIDATE_ID: ${{ inputs.candidate_id || '' }}
+          INPUT_MAX_TURNS: ${{ inputs.max_turns || '' }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" != "schedule" ]]; then
+            permission="$(gh api "repos/${REPO}/collaborators/${ACTOR}/permission" --jq '.permission')"
+            case "$permission" in
+              admin|maintain|write) ;;
+              *)
+                echo "::error::${ACTOR} cannot run architecture refactor actions (${permission})."
+                exit 1
+                ;;
+            esac
+          fi
+
+          stage="$INPUT_STAGE"
+          issue_number="$INPUT_ISSUE_NUMBER"
+          candidate_id="$INPUT_CANDIDATE_ID"
+          max_turns="$INPUT_MAX_TURNS"
+
+          if [[ "$EVENT_NAME" == "schedule" ]]; then
+            stage="scout"
+            issue_number=""
+            candidate_id=""
+            max_turns="50"
+          fi
+
+          if [[ "$EVENT_NAME" == "issue_comment" ]]; then
+            read -r command candidate extra <<< "$COMMENT_BODY"
+
+            if [[ "$command" != "/implement" ]]; then
+              echo "::error::Unsupported command: ${command}"
+              exit 1
+            fi
+
+            if [[ -n "${extra:-}" ]]; then
+              echo "::error::Unexpected extra command text. Use: /implement candidate-1"
+              exit 1
+            fi
+
+            stage="implement"
+            issue_number="$EVENT_ISSUE_NUMBER"
+            candidate_id="${candidate:-}"
+          fi
+
+          case "$stage" in
+            scout|implement) ;;
+            *)
+              echo "::error::stage must be scout or implement."
+              exit 1
+              ;;
+          esac
+
+          if [[ -z "$max_turns" ]]; then
+            case "$stage" in
+              scout) max_turns="50" ;;
+              implement) max_turns="80" ;;
+            esac
+          fi
+
+          if [[ ! "$max_turns" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::max_turns must be a positive integer."
+            exit 1
+          fi
+
+          if [[ "$stage" == "implement" ]]; then
+            if [[ ! "$issue_number" =~ ^[0-9]+$ ]]; then
+              echo "::error::issue_number is required for implement."
+              exit 1
+            fi
+
+            if [[ ! "$candidate_id" =~ ^candidate-[0-9]+$ ]]; then
+              echo "::error::candidate_id must look like candidate-1."
+              exit 1
+            fi
+
+          fi
+
+          echo "stage=${stage}" >> "$GITHUB_OUTPUT"
+          echo "issue_number=${issue_number}" >> "$GITHUB_OUTPUT"
+          echo "candidate_id=${candidate_id}" >> "$GITHUB_OUTPUT"
+          echo "max_turns=${max_turns}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+
+      - name: Install automation tools
+        run: npm install -g yarn@1.22.22 @anthropic-ai/claude-code
+
+      - name: Run scout
+        id: scout
+        if: steps.request.outputs.stage == 'scout'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RUN_ID: github-${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          node .github/scripts/architecture-refactor.cjs scout \
+            --run "$RUN_ID" \
+            --max-turns "${{ steps.request.outputs.max_turns }}"
+
+          report=".claude/refactors/runs/${RUN_ID}/scout.md"
+
+          echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
+          echo "report=${report}" >> "$GITHUB_OUTPUT"
+
+      - name: Create tracking issue
+        id: scout_issue
+        if: steps.request.outputs.stage == 'scout'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ steps.scout.outputs.run_id }}
+          REPORT: ${{ steps.scout.outputs.report }}
+        run: |
+          set -euo pipefail
+
+          issue_body="$(mktemp)"
+          {
+            echo "<!-- architecture-refactor-scout run=${RUN_ID} -->"
+            echo ""
+            cat "$REPORT"
+          } > "$issue_body"
+
+          issue_url="$(
+            gh issue create \
+              --title "Architecture refactor scout: ${RUN_ID}" \
+              --body-file "$issue_body"
+          )"
+
+          echo "issue_url=${issue_url}" >> "$GITHUB_OUTPUT"
+          echo "Created ${issue_url}"
+
+      - name: Comment implementation started
+        if: steps.request.outputs.stage == 'implement'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
+        run: |
+          set -euo pipefail
+
+          body="$(mktemp)"
+          cat > "$body" <<EOF
+          Working on \`${CANDIDATE_ID}\`.
+
+          Workflow run: https://github.com/${GH_REPO}/actions/runs/${GITHUB_RUN_ID}
+
+          I'll open a draft PR here if the implementation produces changes.
+          EOF
+
+          gh issue comment "$ISSUE_NUMBER" --body-file "$body"
+
+      - name: Run implementation
+        id: implement
+        if: steps.request.outputs.stage == 'implement'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: github-${{ github.run_id }}
+          ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          run_dir=".claude/refactors/runs/${RUN_ID}"
+          mkdir -p "$run_dir"
+
+          issue_json="$run_dir/tracking-issue.json"
+          gh issue view "$ISSUE_NUMBER" \
+            --json author,title,body \
+            --jq '{author: .author.login, title, body}' \
+            > "$issue_json"
+
+          author="$(jq -r '.author' "$issue_json")"
+          title="$(jq -r '.title' "$issue_json")"
+          expected_prefix="Architecture refactor scout: "
+
+          if [[ "$author" != "github-actions[bot]" ]]; then
+            echo "::error::Tracking issue must be created by github-actions[bot]."
+            exit 1
+          fi
+
+          if [[ "$title" != "$expected_prefix"* ]]; then
+            echo "::error::Tracking issue title must start with '${expected_prefix}'."
+            exit 1
+          fi
+
+          scout_run_id="${title#"$expected_prefix"}"
+          if [[ ! "$scout_run_id" =~ ^github-[0-9]+$ ]]; then
+            echo "::error::Tracking issue title must include a github run id."
+            exit 1
+          fi
+
+          marker="<!-- architecture-refactor-scout run=${scout_run_id} -->"
+          if ! jq -e --arg marker "$marker" '.body | contains($marker)' "$issue_json" >/dev/null; then
+            echo "::error::Tracking issue is missing the expected scout provenance marker."
+            exit 1
+          fi
+
+          jq -r '.body' "$issue_json" > "$run_dir/scout-from-issue.md"
+
+          node .github/scripts/architecture-refactor.cjs implement "$CANDIDATE_ID" \
+            --run "$RUN_ID" \
+            --scout-report "$run_dir/scout-from-issue.md" \
+            --max-turns "${{ steps.request.outputs.max_turns }}"
+
+          branch="$(git branch --show-current)"
+          report="$run_dir/implementation-${CANDIDATE_ID}.md"
+
+          echo "branch=${branch}" >> "$GITHUB_OUTPUT"
+          echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
+          echo "report=${report}" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft pull request
+        id: pull_request
+        if: steps.request.outputs.stage == 'implement'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
+          BRANCH: ${{ steps.implement.outputs.branch }}
+          REPORT: ${{ steps.implement.outputs.report }}
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet && \
+             git diff --staged --quiet && \
+             [[ -z "$(git ls-files --others --exclude-standard)" ]]; then
+            gh issue comment "$ISSUE_NUMBER" --body "No changes were produced for ${CANDIDATE_ID}."
+            exit 0
+          fi
+
+          if [[ ! -f "$REPORT" ]]; then
+            echo "::error::Implementation report was not created: ${REPORT}"
+            exit 1
+          fi
+
+          git add -A
+          git \
+            -c user.name="github-actions[bot]" \
+            -c user.email="github-actions[bot]@users.noreply.github.com" \
+            commit -m "refactor: ${CANDIDATE_ID}"
+
+          git push -u origin "$BRANCH"
+
+          pr_body="$(mktemp)"
+          {
+            echo "## Summary"
+            echo ""
+            cat "$REPORT"
+            echo ""
+            echo "## Source"
+            echo ""
+            echo "- Tracking issue: #${ISSUE_NUMBER}"
+            echo "- Workflow run: https://github.com/${GH_REPO}/actions/runs/${GITHUB_RUN_ID}"
+          } > "$pr_body"
+
+          pr_url="$(
+            gh pr create \
+              --draft \
+              --title "refactor: ${CANDIDATE_ID}" \
+              --body-file "$pr_body"
+          )"
+
+          gh issue comment "$ISSUE_NUMBER" --body "Draft PR created: ${pr_url}"
+          echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
+
+      - name: Comment architecture refactor failed
+        if: failure() && steps.request.outputs.stage == 'implement'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
+          CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
+        run: |
+          set -euo pipefail
+
+          body="$(mktemp)"
+          cat > "$body" <<EOF
+          Architecture refactor workflow failed while working on \`${CANDIDATE_ID}\`.
+
+          Workflow run: https://github.com/${GH_REPO}/actions/runs/${GITHUB_RUN_ID}
+          EOF
+
+          gh issue comment "$ISSUE_NUMBER" --body-file "$body"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Architecture Refactor" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Stage: \`${{ steps.request.outputs.stage }}\`" >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ -n "${{ steps.request.outputs.issue_number }}" ]]; then
+            echo "- Issue: #${{ steps.request.outputs.issue_number }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [[ -n "${{ steps.scout_issue.outputs.issue_url }}" ]]; then
+            echo "- Created issue: ${{ steps.scout_issue.outputs.issue_url }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [[ -n "${{ steps.pull_request.outputs.pr_url }}" ]]; then
+            echo "- Created PR: ${{ steps.pull_request.outputs.pr_url }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
