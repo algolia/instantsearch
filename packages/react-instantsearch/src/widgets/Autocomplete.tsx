@@ -754,6 +754,8 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     ...forwardedProps
   } = restProps as Record<string, unknown>;
 
+  const instance = useInstantSearchContext();
+
   if (!activated) {
     const {
       indices: _shellUnusedIndices,
@@ -770,7 +772,27 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
             id: `autocomplete${domId}input`,
             role: 'combobox',
             placeholder,
-            onFocus: () => setActivated(true),
+            onFocus: () => {
+              // Routing only fills the parent index's UI state, not the
+              // autocomplete's isolated one, so without this, the autocomplete
+              // would activate with an empty query and fire a useless search.
+              // We copy the parent's query into the autocomplete's slot of
+              // `_initialUiState` right before flipping `activated`: that's the
+              // moment the isolated `<Index>` is about to mount and read it.
+              // Doing this later would mean firing a second search to correct
+              // the first.
+              if (indexUiState.query) {
+                const isoIndexId = `ais-autocomplete-${instanceKey}`;
+                const initial = (
+                  instance as { _initialUiState: Record<string, IndexUiState> }
+                )._initialUiState;
+                initial[isoIndexId] = {
+                  ...initial[isoIndexId],
+                  query: indexUiState.query,
+                };
+              }
+              setActivated(true);
+            },
           }}
           clearQuery={() => {}}
           query={indexUiState.query ?? ''}
@@ -830,7 +852,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   return (
-    <Index EXPERIMENTAL_isolated>
+    <Index
+      EXPERIMENTAL_isolated
+      indexId={`ais-autocomplete-${instanceKey}`}
+    >
       <Configure {...searchParameters} />
       {indicesConfig.map((index) => (
         <Index key={index.indexName} indexName={index.indexName}>
@@ -874,15 +899,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     transformItems,
     future: { undefinedEmptyQuery: true },
   });
-
-  // Mirror the parent's query onto the isolated helper so URL-routed and
-  // initialUiState queries reach the autocomplete on first activation.
-  useEffect(() => {
-    if (indexUiState.query && currentRefinement === undefined) {
-      refineAutocomplete(indexUiState.query);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const resolvedQuery =
     currentRefinement !== undefined

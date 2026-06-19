@@ -218,7 +218,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
         await wait(0);
       });
 
-      const autocompleteRequest = (
+      const autocompleteRequests = (
         searchClient.search as jest.Mock
       ).mock.calls
         .flatMap(
@@ -228,12 +228,10 @@ describe('EXPERIMENTAL_Autocomplete', () => {
               params: { query?: string };
             }>
         )
-        .find(
-          (request) =>
-            request.indexName === 'my-index' && request.params.query
-        );
+        .filter((request) => request.indexName === 'my-index');
 
-      expect(autocompleteRequest?.params.query).toBe('macbook');
+      expect(autocompleteRequests).toHaveLength(1);
+      expect(autocompleteRequests[0].params.query).toBe('macbook');
     });
 
     test('pre-activation shell input reflects the parent query', async () => {
