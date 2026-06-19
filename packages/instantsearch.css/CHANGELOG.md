@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.18.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.17.0...instantsearch.css@8.18.0) (2026-06-19)
+
+
+### Features
+
+* **chat:** add parseMarkdown opt-out to render message text as plain… ([#7073](https://github.com/algolia/instantsearch/issues/7073)) ([d9add3a](https://github.com/algolia/instantsearch/commit/d9add3a8000e3163f3206fce5e077766f378fcb3))
+
+
+
+
+
 # [8.17.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.16.2...instantsearch.css@8.17.0) (2026-06-02)
 
 
