@@ -8,10 +8,10 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
-import { InstantSearchSSRProvider } from 'react-instantsearch-core';
 import { wait } from '@instantsearch/testutils/wait';
 import { act, fireEvent, render } from '@testing-library/react';
 import React from 'react';
+import { InstantSearchSSRProvider } from 'react-instantsearch-core';
 
 import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
 
