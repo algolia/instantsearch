@@ -321,10 +321,6 @@ function runClaude(stage, prompt, maxTurns, allowedTools) {
   process.stdout.write(`\n${stage} complete.\n`);
 }
 
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 function slugify(value) {
   const slug = value
     .toLowerCase()
@@ -335,16 +331,48 @@ function slugify(value) {
   return slug || 'architecture';
 }
 
-function candidateTitle(candidateId, scoutReport) {
+function candidateManifest(scoutReport) {
   const match = scoutReport.match(
-    new RegExp(`^###+\\s+${escapeRegExp(candidateId)}\\s*[:\\-]\\s*(.+)$`, 'im')
+    /<!--\s*architecture-refactor-candidates\s*\n([\s\S]*?)\n-->/m
   );
 
   if (!match) {
-    fail(`Candidate not found in scout report: ${candidateId}`);
+    fail('Scout report is missing the hidden candidate manifest.');
   }
 
-  return match[1].trim();
+  try {
+    const manifest = JSON.parse(match[1]);
+
+    if (!Array.isArray(manifest.candidates)) {
+      fail('Hidden candidate manifest must include a candidates array.');
+    }
+
+    return manifest;
+  } catch (error) {
+    fail(`Hidden candidate manifest is not valid JSON: ${error.message}`);
+  }
+}
+
+function candidateTitle(candidateId, scoutReport) {
+  const candidate = candidateManifest(scoutReport).candidates.find(
+    (item) => item && item.id === candidateId
+  );
+
+  if (!candidate) {
+    fail(`Candidate not found in hidden candidate manifest: ${candidateId}`);
+  }
+
+  if (!candidate.title || typeof candidate.title !== 'string') {
+    fail(`Hidden candidate manifest entry is missing a title: ${candidateId}`);
+  }
+
+  const title = candidate.title.trim();
+
+  if (!title) {
+    fail(`Hidden candidate manifest entry is missing a title: ${candidateId}`);
+  }
+
+  return title;
 }
 
 function branchExists(branchName) {

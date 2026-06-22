@@ -2,7 +2,7 @@
 
 You are running the architecture-refactor scout for InstantSearch.
 
-First read `.claude/prompts/architecture-refactor/rubric.md`. Use that vocabulary and rubric exactly. Produce markdown only; do not create HTML.
+First read `.claude/prompts/architecture-refactor/rubric.md`. Use that vocabulary and rubric exactly. Produce markdown only, except for the required hidden candidate manifest comment. Do not create other HTML.
 
 ## Task
 
@@ -41,6 +41,21 @@ Run: `{{RUN_ID}}`
 ## Summary
 
 One short paragraph explaining what you inspected and the overall architecture friction you found.
+
+Before the human-readable shortlist, include this hidden machine-readable manifest:
+
+<!-- architecture-refactor-candidates
+{
+  "candidates": [
+    {
+      "id": "candidate-1",
+      "title": "Short Title"
+    }
+  ]
+}
+-->
+
+List every candidate from the shortlist in the manifest, in the same order. Keep each `id` stable and each `title` identical to the corresponding shortlist heading.
 
 ## Candidate Shortlist
 
