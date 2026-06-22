@@ -47,6 +47,7 @@ function printUsage() {
   node .github/scripts/architecture-refactor.cjs resolve-request
   node .github/scripts/architecture-refactor.cjs scout --run <run-id> [--max-turns <n>]
   node .github/scripts/architecture-refactor.cjs implement <candidate-id> --run <run-id> --scout-report <path> [--max-turns <n>]
+  node .github/scripts/architecture-refactor.cjs validate-implementation --report <path>
 `);
 }
 
@@ -218,6 +219,22 @@ function run(command, args, options = {}) {
   }
 
   return result;
+}
+
+function outputLines(result) {
+  return result.stdout.split('\n').filter(Boolean);
+}
+
+function gitChangedFiles() {
+  return Array.from(
+    new Set([
+      ...outputLines(run('git', ['diff', '--name-only'])),
+      ...outputLines(run('git', ['diff', '--staged', '--name-only'])),
+      ...outputLines(
+        run('git', ['ls-files', '--others', '--exclude-standard'])
+      ),
+    ])
+  ).sort();
 }
 
 function ensureRunId(options) {
@@ -497,6 +514,31 @@ function runImplement(candidateId, options) {
   );
 }
 
+function validateImplementation(options) {
+  if (!options.report || options.report === true) {
+    fail('Missing required option: --report <path>');
+  }
+
+  const reportPath = resolveInputPath(options.report);
+
+  if (!existsSync(reportPath)) {
+    fail(`Implementation report was not created: ${reportPath}`);
+  }
+
+  const changedFiles = gitChangedFiles();
+
+  process.stdout.write('Changed files selected for the draft PR:\n');
+
+  if (changedFiles.length === 0) {
+    process.stdout.write('- <none>\n');
+    return;
+  }
+
+  for (const file of changedFiles) {
+    process.stdout.write(`- ${file}\n`);
+  }
+}
+
 function main() {
   const { command, options, positionals } = parseArgs(process.argv.slice(2));
 
@@ -517,6 +559,11 @@ function main() {
 
   if (command === 'implement') {
     runImplement(positionals[0], options);
+    return;
+  }
+
+  if (command === 'validate-implementation') {
+    validateImplementation(options);
     return;
   }
 

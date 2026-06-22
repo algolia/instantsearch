@@ -228,10 +228,8 @@ jobs:
             exit 0
           fi
 
-          if [[ ! -f "$REPORT" ]]; then
-            echo "::error::Implementation report was not created: ${REPORT}"
-            exit 1
-          fi
+          node .github/scripts/architecture-refactor.cjs validate-implementation \
+            --report "$REPORT"
 
           git add -A
           git \
