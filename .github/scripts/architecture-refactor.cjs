@@ -345,7 +345,6 @@ function runImplement(candidateId, options) {
     BRANCH_NAME: branchName,
     SCOUT_REPORT_PATH: scoutReportPath,
     IMPLEMENTATION_REPORT_PATH: implementationReportPath,
-    SCOUT_REPORT: scoutReport,
   });
 
   writePrompt(runDir, `implement-${candidateId}`, prompt);

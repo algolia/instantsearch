@@ -21,11 +21,7 @@ The harness has already checked out the branch. Leave changes uncommitted. Do no
 - Scout report path: `{{SCOUT_REPORT_PATH}}`
 - Implementation report path: `{{IMPLEMENTATION_REPORT_PATH}}`
 
-Scout report:
-
-```markdown
-{{SCOUT_REPORT}}
-```
+Read the scout report at `{{SCOUT_REPORT_PATH}}` and use the selected candidate from that report as implementation context.
 
 ## Required Approach Selection
 
