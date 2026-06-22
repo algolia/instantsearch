@@ -446,7 +446,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
     itemComponent: typeof AutocompleteRecentSearch;
     classNames: Partial<AutocompleteIndexClassNames>;
   };
-  instanceKey: string;
+  domId: string;
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
@@ -818,7 +818,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
         | 'transformItems'
       >)}
       autoFocus
-      instanceKey={domId}
+      domId={domId}
       indicesConfig={indicesConfig}
       refineSearchBox={refine}
       isSearchStalled={isSearchStalled}
@@ -892,7 +892,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   translations,
   classNames,
   aiMode,
-  instanceKey,
+  domId,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -1007,7 +1007,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     setIsOpen,
     focusInput,
   } = usePropGetters<TItem>({
-    id: instanceKey,
+    id: domId,
     indices: indicesForPropGettersWithPromptSuggestions,
     indicesConfig: indicesConfigForPropGetters,
     onRefine: (query) => {
