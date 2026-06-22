@@ -44,6 +44,7 @@ const stageConfig = {
 
 function printUsage() {
   process.stderr.write(`Usage:
+  node .github/scripts/architecture-refactor.cjs resolve-request
   node .github/scripts/architecture-refactor.cjs scout --run <run-id> [--max-turns <n>]
   node .github/scripts/architecture-refactor.cjs implement <candidate-id> --run <run-id> --scout-report <path> [--max-turns <n>]
 `);
@@ -89,13 +90,115 @@ function optionNumber(options, name, defaultValue) {
     return defaultValue;
   }
 
+  return positiveInteger(value, `--${name}`);
+}
+
+function positiveInteger(value, label) {
   const number = Number(value);
 
   if (!Number.isInteger(number) || number < 1) {
-    fail(`--${name} must be a positive integer.`);
+    fail(`${label} must be a positive integer.`);
   }
 
   return number;
+}
+
+function envValue(name) {
+  return process.env[name] || '';
+}
+
+function ensureActorCanRun() {
+  const eventName = envValue('EVENT_NAME');
+
+  if (eventName === 'schedule') {
+    return;
+  }
+
+  const repo = envValue('REPO');
+  const actor = envValue('ACTOR');
+
+  if (!repo || !actor) {
+    fail('Missing REPO or ACTOR for permission check.');
+  }
+
+  const permission = run(
+    'gh',
+    [
+      'api',
+      `repos/${repo}/collaborators/${actor}/permission`,
+      '--jq',
+      '.permission',
+    ],
+    { allowFailure: true }
+  ).stdout.trim();
+
+  if (!['admin', 'maintain', 'write'].includes(permission)) {
+    fail(
+      `${actor} cannot run architecture refactor actions (${
+        permission || 'none'
+      }).`
+    );
+  }
+}
+
+function parseCommentCommand(commentBody) {
+  const [command, candidateId, ...extra] = commentBody.trim().split(/\s+/);
+
+  if (command !== '/implement') {
+    fail(`Unsupported command: ${command || '<empty>'}`);
+  }
+
+  if (extra.length > 0) {
+    fail('Unexpected extra command text. Use: /implement candidate-1');
+  }
+
+  return candidateId || '';
+}
+
+function resolveRequest() {
+  ensureActorCanRun();
+
+  const eventName = envValue('EVENT_NAME');
+  let stage = envValue('INPUT_STAGE');
+  let issueNumber = envValue('INPUT_ISSUE_NUMBER');
+  let candidateId = envValue('INPUT_CANDIDATE_ID');
+  let maxTurns = envValue('INPUT_MAX_TURNS');
+
+  if (eventName === 'schedule') {
+    stage = 'scout';
+    issueNumber = '';
+    candidateId = '';
+    maxTurns = '';
+  }
+
+  if (eventName === 'issue_comment') {
+    stage = 'implement';
+    issueNumber = envValue('EVENT_ISSUE_NUMBER');
+    candidateId = parseCommentCommand(envValue('COMMENT_BODY'));
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(stageConfig, stage)) {
+    fail('stage must be scout or implement.');
+  }
+
+  maxTurns = maxTurns
+    ? positiveInteger(maxTurns, 'max_turns')
+    : stageConfig[stage].maxTurns;
+
+  if (stage === 'implement') {
+    if (!/^[0-9]+$/.test(issueNumber)) {
+      fail('issue_number is required for implement.');
+    }
+
+    if (!/^candidate-[0-9]+$/.test(candidateId)) {
+      fail('candidate_id must look like candidate-1.');
+    }
+  }
+
+  process.stdout.write(`stage=${stage}\n`);
+  process.stdout.write(`issue_number=${issueNumber}\n`);
+  process.stdout.write(`candidate_id=${candidateId}\n`);
+  process.stdout.write(`max_turns=${maxTurns}\n`);
 }
 
 function run(command, args, options = {}) {
@@ -371,6 +474,11 @@ function main() {
 
   if (!command || command === '--help' || command === 'help') {
     printUsage();
+    return;
+  }
+
+  if (command === 'resolve-request') {
+    resolveRequest();
     return;
   }
 
