@@ -21,6 +21,7 @@ import React, {
   createElement,
   Fragment,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -755,6 +756,21 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   } = restProps as Record<string, unknown>;
 
   const instance = useInstantSearchContext();
+  // Lazy activation only: when `activated` flips from false to true, the
+  // newly-mounted isolated `<Index>` schedules the parent's search even
+  // though the parent's state hasn't changed. Cancel it so only the
+  // autocomplete's own search fires on activation. Skip when `autoFocus`
+  // mounts the inner eagerly — the parent's legitimate initial search
+  // shares the same defer slot and must not be cancelled.
+  const initialActivatedRef = useRef(activated);
+  useLayoutEffect(() => {
+    if (activated && !initialActivatedRef.current) {
+      initialActivatedRef.current = true;
+      (
+        instance as unknown as { scheduleSearch: { cancel: () => void } }
+      ).scheduleSearch.cancel();
+    }
+  }, [activated, instance]);
 
   if (!activated) {
     const {
