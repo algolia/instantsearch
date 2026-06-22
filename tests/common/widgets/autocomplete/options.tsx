@@ -152,7 +152,9 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      // 1 initial call for the root index, 1 call when focusing the input
+      // (the autocomplete's own search; the parent search is cancelled).
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, [
         {
           indexName: 'query_suggestions',
@@ -1626,9 +1628,10 @@ export function createOptionsTests(
         })
       ).toHaveValue('hello');
 
-      // 1 initial call for the root index, 2 calls when focusing the input
-      // (root + suggestions), then 1 for the suggestions index after clicking apply
-      expect(searchClient.search).toHaveBeenCalledTimes(4);
+      // 1 initial call for the root index, 1 call when focusing the input
+      // (only the suggestions; the parent search is cancelled), then 1 for
+      // the suggestions index after clicking apply
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
       expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
