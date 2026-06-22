@@ -11,7 +11,10 @@ const promptDir = path.join(
   'prompts',
   'architecture-refactor'
 );
-const runsDir = path.join(repoRoot, '.claude', 'refactors', 'runs');
+const runsDir = path.resolve(
+  repoRoot,
+  process.env.ARCHITECTURE_REFACTOR_RUNS_DIR || 'architecture-refactor-runs'
+);
 
 const stageConfig = {
   scout: {
@@ -466,6 +469,12 @@ function runScout(options) {
     optionNumber(options, 'max-turns', stageConfig.scout.maxTurns),
     stageConfig.scout.allowedTools
   );
+
+  if (!existsSync(reportPath)) {
+    fail(`Scout report was not created: ${reportPath}`);
+  }
+
+  candidateManifest(readFileSync(reportPath, 'utf8'));
 
   process.stdout.write(
     `Scout report: ${path.relative(repoRoot, reportPath)}\n`

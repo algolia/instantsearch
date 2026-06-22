@@ -43,7 +43,7 @@ Only after choosing an approach should you edit files. Record the chosen approac
 - Preserve shipped public behavior and stable public interfaces unless the chosen approach explicitly requires a migration.
 - Add or update focused tests when the refactor changes behavior or moves validation to a better interface.
 - Remove only imports, variables, or helpers made unused by this change.
-- Leave generated run artifacts in `.claude/refactors/`; they are ignored by git.
+- Leave generated run artifacts in `architecture-refactor-runs/`; they are ignored by git.
 
 ## Validation
 

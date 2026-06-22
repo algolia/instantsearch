@@ -93,7 +93,7 @@ jobs:
             --run "$RUN_ID" \
             --max-turns "${{ steps.request.outputs.max_turns }}"
 
-          report=".claude/refactors/runs/${RUN_ID}/scout.md"
+          report="architecture-refactor-runs/${RUN_ID}/scout.md"
 
           echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
           echo "report=${report}" >> "$GITHUB_OUTPUT"
@@ -159,7 +159,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          run_dir=".claude/refactors/runs/${RUN_ID}"
+          run_dir="architecture-refactor-runs/${RUN_ID}"
           mkdir -p "$run_dir"
 
           issue_json="$run_dir/tracking-issue.json"

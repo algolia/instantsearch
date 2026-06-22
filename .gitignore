@@ -17,6 +17,7 @@ build/
 
 # Generated files
 /.claude/refactors/
+/architecture-refactor-runs/
 /docs
 /website/algoliasearch-helper-js/*
 /website/examples/*
