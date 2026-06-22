@@ -175,8 +175,8 @@ jobs:
           title="$(jq -r '.title' "$issue_json")"
           expected_prefix="Architecture refactor scout: "
 
-          if [[ "$author" != "github-actions[bot]" ]]; then
-            echo "::error::Tracking issue must be created by github-actions[bot]."
+          if [[ "$author" != "app/github-actions" ]]; then
+            echo "::error::Tracking issue must be created by GitHub Actions."
             exit 1
           fi
 
