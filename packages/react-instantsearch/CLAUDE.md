@@ -20,4 +20,4 @@ yarn jest packages/react-instantsearch/src/widgets/<Pascal>   # from repo root
 
 - Uses React 19 / `@testing-library/react` for tests, co-located in `__tests__/`.
 - Cross-flavor behavior lives in `tests/common/widgets/<name>/`; register it in this package's `common-widgets.test.*`.
-- Prefer shared UI from `instantsearch-ui-components` (consume `create<Name>Component` with React's `createElement`) over new local `ui/` components. **Creating or changing a shared component is the `instantsearch-ui-components` package's job** (`instantsearch-ui-components-engineer`) — do that there, then consume it here. Add a local `src/ui/` component only when the markup truly isn't shareable.
+- Prefer shared UI from `instantsearch-ui-components` (consume `create<Name>Component` with React's `createElement`) over new local `ui/` components. **Creating or changing a shared component is the `instantsearch-ui-components` package's job** — do that there, then consume it here. Add a local `src/ui/` component only when the markup truly isn't shareable.

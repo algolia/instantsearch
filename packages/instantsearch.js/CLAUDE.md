@@ -6,7 +6,7 @@ The core package. **Every connector lives here and is consumed by all flavors** 
 
 - `src/connectors/<name>/connect<Pascal>.ts` — framework-agnostic logic. Signature: `connect<Widget>(renderFn, unmountFn)` returns a widget factory. Owns state, lifecycle, and search-param mutations. Exported from `src/connectors/index.ts`.
 - `src/widgets/<name>/<name>.tsx` — vanilla JS widget = connector + default template/rendering. Exported from `src/widgets/index.ts`.
-- `src/components/` — the **JS flavor's Preact components** (the widgets' markup). This is the *legacy* home for widget layout; newer widgets pull their layout from the shared `instantsearch-ui-components` package instead, and some components here are now thin wrappers that import from it. Add **new shared** markup to `instantsearch-ui-components` (the `instantsearch-ui-components-engineer` owns it), not here.
+- `src/components/` — the **JS flavor's Preact components** (the widgets' markup). This is the *legacy* home for widget layout; newer widgets pull their layout from the shared `instantsearch-ui-components` package instead, and some components here are now thin wrappers that import from it. Add **new shared** markup to `instantsearch-ui-components`, not here.
 - `src/lib/` — the InstantSearch runtime: lifecycle orchestration, routing, helper integration.
 - `src/types/` — public type definitions.
 

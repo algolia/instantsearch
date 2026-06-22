@@ -27,4 +27,4 @@ Report a short checklist:
 
 For any ❌, show the failing output and the smallest fix. Don't run the full `yarn test` or `yarn build` unless asked — this is the fast pre-push loop.
 
-Run the checks directly (don't spawn an agent just to run them). If a failure needs non-trivial fixing, *then* delegate it to the owning flavor agent — `instantsearch-core-engineer`, `react-instantsearch-engineer`, `vue-instantsearch-engineer`, or `instantsearch-ui-components-engineer` — based on which package the failing file is in.
+Run the checks directly. If a check fails, fix it in the package that owns the failing file before re-running.

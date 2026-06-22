@@ -18,22 +18,20 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 
 Architecture in one line: **connector (logic, in instantsearch.js) → flavor wrapper (JS widget / React hook+component / Vue component) → shared UI components**. Change behavior in the connector; change markup in the UI layer.
 
-## Delegate to the specialist agents
+## Where work goes (per layer)
 
-This repo ships subagents (`.claude/agents/`) scoped to each layer. **Prefer dispatching the matching agent over doing package-specific work inline** — they carry the package's conventions and keep flavors consistent. When a change spans flavors, dispatch the wrappers in parallel after the connector is settled.
+Because behavior lives in the connector and the flavors only wrap it, most changes have a natural home — and the per-package `CLAUDE.md` files carry each layer's conventions:
 
-| Work in… | Agent |
+| Work in… | Package |
 |---|---|
-| `packages/instantsearch.js` — connectors, JS widgets, runtime (`src/lib`), legacy Preact components (`src/components`), types | `instantsearch-core-engineer` |
-| `packages/instantsearch-ui-components` — shared framework-agnostic markup/`ais-*` classes | `instantsearch-ui-components-engineer` |
-| `react-instantsearch` / `react-instantsearch-core` / Next.js packages | `react-instantsearch-engineer` |
-| `vue-instantsearch` (Vue 2 **and** 3) | `vue-instantsearch-engineer` |
+| Connectors, JS widgets, runtime (`src/lib`), legacy Preact components (`src/components`), types | `packages/instantsearch.js` |
+| Shared framework-agnostic markup / `ais-*` classes | `packages/instantsearch-ui-components` |
+| React widgets/hooks + Next.js integrations | `react-instantsearch` / `react-instantsearch-core` / `*-nextjs` |
+| Vue components (Vue 2 **and** 3) | `vue-instantsearch` |
 
-Because behavior lives in the connector and flavors only wrap it, the usual flow for a cross-flavor change is: **`instantsearch-core-engineer` first (the contract), then `react-` and `vue-` engineers in parallel.** If the change is to **shared markup/layout** (not behavior), `instantsearch-ui-components-engineer` owns it and the flavors consume the result — a class/structure change there ripples to all flavors and `instantsearch.css` at once.
+For a **cross-flavor change**, settle the contract in the connector first, then update the React and Vue wrappers, then the common tests. If the change is to **shared markup/layout** (not behavior), it lives in `instantsearch-ui-components` and the flavors consume the result — a class/structure change there ripples to all flavors and `instantsearch.css` at once.
 
-Commands that orchestrate this: **`/expose-option <connector> <option>`** (threads a new option through all flavors + common tests via the agents) and **`/preflight`** (pre-push lint/types/tests/commit check). The `/port-widget` skill adds a brand-new widget across flavors.
-
-**Adding or surfacing a connector option is always cross-flavor work** — whether the user invokes `/expose-option` explicitly or it's an inferred part of a larger task, follow that command's recipe: settle the contract in the connector first (`instantsearch-core-engineer`), then fan out React + Vue in parallel, then common tests. Don't wire one flavor and stop.
+**Adding or surfacing a connector option is always cross-flavor work** — settle the contract in the connector first, then thread it through React **and** Vue, then add/extend common tests. Don't wire one flavor and stop. The **`/expose-option <connector> <option>`** command walks this recipe; **`/preflight`** runs the pre-push lint/types/tests/commit check; the `/port-widget` skill adds a brand-new widget across flavors.
 
 ## Commands
 
@@ -69,7 +67,7 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 
 ## Keep these docs alive
 
-If you discover something durable and non-obvious while working — a gotcha that cost you a debugging detour, a convention, a non-obvious file location, a cross-flavor constraint — **propose** adding it to the right doc (package `CLAUDE.md` if package-specific, this file if repo-wide, `.claude/rules/e2e.md` for e2e). Surface the proposed edit for the user to approve rather than editing silently. Bar: it must generalize beyond the current task (same bar as a good code comment) and not already be documented. Subagents return a **Docs proposal:** in their final message; relay those to the user the same way.
+If you discover something durable and non-obvious while working — a gotcha that cost you a debugging detour, a convention, a non-obvious file location, a cross-flavor constraint — **propose** adding it to the right doc (package `CLAUDE.md` if package-specific, this file if repo-wide, `.claude/rules/e2e.md` for e2e). Surface the proposed edit for the user to approve rather than editing silently. Bar: it must generalize beyond the current task (same bar as a good code comment) and not already be documented.
 
 ## Reference docs (read before relevant work — don't duplicate here)
 
