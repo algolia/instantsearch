@@ -72,7 +72,7 @@ jobs:
           set -euo pipefail
 
           if [[ "$EVENT_NAME" != "schedule" ]]; then
-            permission="$(gh api "repos/${REPO}/collaborators/${ACTOR}/permission" --jq '.permission')"
+            permission="$(gh api "repos/${REPO}/collaborators/${ACTOR}/permission" --jq '.permission' 2>/dev/null || echo "none")"
             case "$permission" in
               admin|maintain|write) ;;
               *)
@@ -153,10 +153,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.19.0
+          node-version-file: '.nvmrc'
 
       - name: Install automation tools
-        run: npm install -g yarn@1.22.22 @anthropic-ai/claude-code
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Run scout
         id: scout
