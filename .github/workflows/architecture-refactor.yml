@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Resolve request
         id: request
@@ -73,7 +73,7 @@ jobs:
           node .github/scripts/architecture-refactor.cjs resolve-request >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
@@ -106,12 +106,15 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RUN_ID: ${{ steps.scout.outputs.run_id }}
           REPORT: ${{ steps.scout.outputs.report }}
+          VISIBILITY_MENTION: '@algolia/frontend-experiences-web'
         run: |
           set -euo pipefail
 
           issue_body="$(mktemp)"
           {
             echo "<!-- architecture-refactor-scout run=${RUN_ID} -->"
+            echo ""
+            echo "cc ${VISIBILITY_MENTION}"
             echo ""
             cat "$REPORT"
           } > "$issue_body"

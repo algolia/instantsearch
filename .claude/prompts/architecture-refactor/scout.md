@@ -2,7 +2,7 @@
 
 You are running the architecture-refactor scout for InstantSearch.
 
-First read `.claude/prompts/architecture-refactor/rubric.md`. Use that vocabulary and rubric exactly. Produce markdown only, except for the required hidden candidate manifest comment. Do not create other HTML.
+First read `.claude/prompts/architecture-refactor/rubric.md`. Use that vocabulary and rubric exactly. Produce markdown only, except for the required hidden candidate manifest comment and the `<details>`/`<summary>` tags around each candidate. Do not create other HTML.
 
 ## Task
 
@@ -59,7 +59,8 @@ List every candidate from the shortlist in the manifest, in the same order. Keep
 
 ## Candidate Shortlist
 
-### candidate-1: Short Title
+<details>
+<summary><strong>candidate-1: Short Title</strong></summary>
 
 - Recommendation strength: `Strong`, `Worth exploring`, or `Speculative`
 - Files: bullet list of involved files/modules
@@ -85,11 +86,21 @@ flowchart LR
   Deep --> Detail[Hidden detail]
 ```
 
-Repeat the same shape for `candidate-2` through at most `candidate-5`.
+</details>
+
+Repeat the same collapsible `<details>` shape for `candidate-2` through at most `candidate-5`. Keep each summary text in the exact form `candidate-N: Short Title`, and keep the title identical to the corresponding hidden manifest entry.
 
 ## Top Recommendation
 
 Name the single candidate you would implement first and explain why in terms of depth, locality, leverage, and likely PR size.
+
+## Next Step
+
+Tell maintainers how to trigger implementation of a selected candidate. Use this exact command shape:
+
+`/implement candidate-1`
+
+Explain that they should replace `candidate-1` with the candidate id they want to implement.
 
 ## Non-Candidates
 
