@@ -760,6 +760,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     const {
       indices: _shellUnusedIndices,
       feeds: _shellUnusedFeeds,
+      autoFocus: _shellUnusedAutoFocus,
+      placeholder: _shellUnusedPlaceholder,
+      classNames: _shellUnusedClassNames,
+      aiMode: _shellUnusedAiMode,
+      recentSearchConfig: _shellUnusedRecentSearchConfig,
       ...shellRootProps
     } = restProps as Record<string, unknown>;
     return (
