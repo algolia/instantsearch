@@ -1410,18 +1410,21 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   let isolatedTree: IndexWidget | null = null;
   let parentRef: IndexWidget | null | undefined;
+  let instanceRef: InstantSearch | null = null;
   let activated = false;
 
   const activate = () => {
-    if (activated || !parentRef || !isolatedTree) return;
+    if (activated || !parentRef || !isolatedTree || !instanceRef) return;
     activated = true;
     parentRef.addWidgets([isolatedTree]);
+    // `parentRef.addWidgets` schedules the parent's search even though the
+    // parent's own state hasn't changed; cancel it so only the isolated tree
+    // searches on activation.
+    instanceRef.scheduleSearch.cancel();
     const parentQuery = parentRef.getHelper()?.state.query;
     if (parentQuery) {
       isolatedTree.getHelper()?.setQuery(parentQuery);
     }
-    // Adding an isolated index to a non-isolated parent schedules main's search,
-    // not the isolated derived helper's. Trigger it explicitly.
     isolatedTree.scheduleLocalSearch();
   };
 
@@ -1567,6 +1570,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       $$widgetType: 'ais.autocomplete',
       init({ instantSearchInstance, parent }) {
         parentRef = parent;
+        instanceRef = instantSearchInstance;
         isolatedTree = buildTree(instantSearchInstance);
         renderShell(specializedRenderer, instantSearchInstance);
       },
@@ -1578,6 +1582,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         render(null, containerNode);
         isolatedTree = null;
         parentRef = undefined;
+        instanceRef = null;
         activated = false;
         return undefined;
       },

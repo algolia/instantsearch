@@ -894,10 +894,11 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       await flush();
       const callsAfterFocus = searchMock.mock.calls.length;
 
-      // Mount triggers only the parent composition search; the autocomplete's
-      // own search waits for focus.
+      // Mount triggers only the parent composition search; focus triggers
+      // exactly one additional search (the isolated autocomplete's), without
+      // re-running the parent.
       expect(callsBeforeFocus).toBe(1);
-      expect(callsAfterFocus).toBeGreaterThan(callsBeforeFocus);
+      expect(callsAfterFocus).toBe(2);
     });
   });
 });
