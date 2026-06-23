@@ -448,6 +448,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
     classNames: Partial<AutocompleteIndexClassNames>;
   };
   domId: string;
+  detached: ReturnType<typeof useDetachedMode>;
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
@@ -756,6 +757,8 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   } = restProps as Record<string, unknown>;
 
   const instance = useInstantSearchContext();
+  const detached = useDetachedMode(detachedMediaQuery);
+  const { isDetached, setIsModalOpen } = detached;
   // Lazy activation only: when `activated` flips from false to true, the
   // newly-mounted isolated `<Index>` schedules the parent's search even
   // though the parent's state hasn't changed. Cancel it so only the
@@ -780,46 +783,62 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
       placeholder: _shellUnusedPlaceholder,
       classNames: _shellUnusedClassNames,
       aiMode: _shellUnusedAiMode,
-      recentSearchConfig: _shellUnusedRecentSearchConfig,
+      panelComponent: _shellUnusedPanelComponent,
+      getSearchPageURL: _shellUnusedGetSearchPageURL,
+      onSelect: _shellUnusedOnSelect,
       ...shellRootProps
     } = restProps as Record<string, unknown>;
+    const activateWithQueryMirror = () => {
+      // Routing only fills the parent index's UI state, not the
+      // autocomplete's isolated one, so without this, the autocomplete
+      // would activate with an empty query and fire a useless search.
+      // We copy the parent's query into the autocomplete's slot of
+      // `_initialUiState` right before flipping `activated`: that's the
+      // moment the isolated `<Index>` is about to mount and read it.
+      // Doing this later would mean firing a second search to correct
+      // the first.
+      if (indexUiState.query) {
+        const isoIndexId = `ais-autocomplete-${instanceKey}`;
+        const initial = (
+          instance as { _initialUiState: Record<string, IndexUiState> }
+        )._initialUiState;
+        initial[isoIndexId] = {
+          ...initial[isoIndexId],
+          query: indexUiState.query,
+        };
+      }
+      setActivated(true);
+    };
     return (
       <Autocomplete
         {...(shellRootProps as React.HTMLAttributes<HTMLDivElement>)}
         classNames={classNames}
       >
-        <AutocompleteSearch
-          inputProps={{
-            id: `autocomplete${domId}input`,
-            role: 'combobox',
-            placeholder,
-            onFocus: () => {
-              // Routing only fills the parent index's UI state, not the
-              // autocomplete's isolated one, so without this, the autocomplete
-              // would activate with an empty query and fire a useless search.
-              // We copy the parent's query into the autocomplete's slot of
-              // `_initialUiState` right before flipping `activated`: that's the
-              // moment the isolated `<Index>` is about to mount and read it.
-              // Doing this later would mean firing a second search to correct
-              // the first.
-              if (indexUiState.query) {
-                const isoIndexId = `ais-autocomplete-${instanceKey}`;
-                const initial = (
-                  instance as { _initialUiState: Record<string, IndexUiState> }
-                )._initialUiState;
-                initial[isoIndexId] = {
-                  ...initial[isoIndexId],
-                  query: indexUiState.query,
-                };
-              }
-              setActivated(true);
-            },
-          }}
-          clearQuery={() => {}}
-          query={indexUiState.query ?? ''}
-          isSearchStalled={false}
-          classNames={classNames}
-        />
+        {isDetached ? (
+          <AutocompleteDetachedSearchButton
+            query={indexUiState.query ?? ''}
+            placeholder={placeholder}
+            classNames={classNames}
+            translations={translations}
+            onClick={() => {
+              setIsModalOpen(true);
+              activateWithQueryMirror();
+            }}
+          />
+        ) : (
+          <AutocompleteSearch
+            inputProps={{
+              id: `autocomplete${domId}input`,
+              role: 'combobox',
+              placeholder,
+              onFocus: activateWithQueryMirror,
+            }}
+            clearQuery={() => {}}
+            query={indexUiState.query ?? ''}
+            isSearchStalled={false}
+            classNames={classNames}
+          />
+        )}
       </Autocomplete>
     );
   }
@@ -840,6 +859,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
       >)}
       autoFocus
       domId={domId}
+      detached={detached}
       indicesConfig={indicesConfig}
       refineSearchBox={refine}
       isSearchStalled={isSearchStalled}
@@ -848,7 +868,6 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
       showRecent={showRecent}
       recentSearchConfig={recentSearchConfig}
       showQuerySuggestions={normalizedShowQuerySuggestions}
-      detachedMediaQuery={detachedMediaQuery}
       translations={translations}
       showPromptSuggestions={normalizedShowPromptSuggestions}
       transformItems={effectiveTransformItems}
@@ -909,11 +928,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   transformItems,
   placeholder,
   autoFocus,
-  detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
   aiMode,
   domId,
+  detached,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -930,8 +949,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       ? currentRefinement
       : indexUiState.query ?? '';
 
-  const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } =
-    useDetachedMode(detachedMediaQuery);
+  const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } = detached;
   const previousIsDetachedRef = useRef(isDetached);
 
   const {

@@ -407,5 +407,58 @@ describe('EXPERIMENTAL_Autocomplete', () => {
 
       expect(realInputId).toBe(shellInputId);
     });
+
+    test('renders the detached search button in the shell when the detached media query matches, and clicking it opens the detached panel', async () => {
+      const detachedMediaQuery = '(max-width: 9999px)';
+      (window.matchMedia as jest.Mock).mockImplementation((query: string) => ({
+        matches: query === detachedMediaQuery,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }));
+
+      const searchClient = createSearchClient({});
+
+      const { container } = render(
+        <InstantSearchTestWrapper
+          searchClient={searchClient}
+          indexName="indexName"
+        >
+          <EXPERIMENTAL_Autocomplete
+            detachedMediaQuery={detachedMediaQuery}
+            indices={[
+              {
+                indexName: 'my-index',
+                itemComponent: ({ item }) =>
+                  React.createElement('div', null, String(item.objectID)),
+              },
+            ]}
+          />
+        </InstantSearchTestWrapper>
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const detachedButton = container.querySelector(
+        '.ais-AutocompleteDetachedSearchButton'
+      );
+      expect(detachedButton).not.toBeNull();
+      expect(container.querySelector('input[type="search"]')).toBeNull();
+
+      await act(async () => {
+        fireEvent.click(detachedButton!);
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-AutocompleteDetachedOverlay')
+      ).not.toBeNull();
+    });
   });
 });
