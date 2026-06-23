@@ -10,6 +10,7 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 
 import instantsearch from '../../..';
+import { walkIndex } from '../../../lib/utils';
 import { EXPERIMENTAL_autocomplete } from '../autocomplete';
 
 describe('EXPERIMENTAL_autocomplete()', () => {
@@ -123,6 +124,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
     it('normalizes transformItems indices to feed IDs in feeds-mode', async () => {
       const transformItems = jest.fn((items) => items);
+      const container = document.body.appendChild(document.createElement('div'));
       const compositionClient = createCompositionClient({
         search: jest.fn(() =>
           Promise.resolve({
@@ -142,7 +144,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
       search.addWidgets([
         EXPERIMENTAL_autocomplete({
-          container: document.body.appendChild(document.createElement('div')),
+          container,
           feeds: [
             {
               feedID: 'products',
@@ -154,6 +156,8 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       ]);
 
       search.start();
+      await wait(0);
+      container.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
       await wait(0);
       await wait(0);
 
@@ -174,6 +178,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
     it('keeps feedID normalization for declared feeds with mixed feed responses', async () => {
       const transformItems = jest.fn((items) => items);
+      const container = document.body.appendChild(document.createElement('div'));
       const compositionClient = createCompositionClient({
         search: jest.fn(() =>
           Promise.resolve({
@@ -197,7 +202,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
       search.addWidgets([
         EXPERIMENTAL_autocomplete({
-          container: document.body.appendChild(document.createElement('div')),
+          container,
           feeds: [
             {
               feedID: 'products',
@@ -213,6 +218,8 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       ]);
 
       search.start();
+      await wait(0);
+      container.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
       await wait(0);
       await wait(0);
 
@@ -608,6 +615,290 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       expect(container.querySelectorAll('.ais-AutocompleteIndex')).toHaveLength(
         0
       );
+    });
+  });
+
+  describe('lazy activation', () => {
+    function focusSearchInput(container: HTMLElement) {
+      const input = container.querySelector<HTMLInputElement>(
+        'input[type="search"]'
+      );
+      if (!input) {
+        return;
+      }
+      input.focus();
+      input.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+    }
+
+    async function flush() {
+      await wait(0);
+      await wait(0);
+      await wait(0);
+    }
+
+    it('does not search on mount in indices-mode', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+
+      const requestedIndices = (searchClient.search as jest.Mock).mock.calls
+        .flatMap((call) => call[0] as Array<{ indexName: string }>)
+        .map((request) => request.indexName);
+
+      expect(requestedIndices).not.toContain('my-index');
+    });
+
+    it('searches the autocomplete index on first focus in indices-mode', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      focusSearchInput(container);
+      await flush();
+
+      const requestedIndices = (searchClient.search as jest.Mock).mock.calls
+        .flatMap((call) => call[0] as Array<{ indexName: string }>)
+        .map((request) => request.indexName);
+
+      expect(requestedIndices).toContain('my-index');
+    });
+
+    it('propagates the initial query from the parent into the autocomplete search on first focus', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+        initialUiState: {
+          indexName: { query: 'macbook' },
+        },
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      focusSearchInput(container);
+      await flush();
+
+      const autocompleteRequests = (
+        searchClient.search as jest.Mock
+      ).mock.calls
+        .flatMap((call) => call[0] as Array<{ indexName: string; params: { query?: string } }>)
+        .filter((request) => request.indexName === 'my-index');
+
+      expect(autocompleteRequests).toHaveLength(1);
+      expect(autocompleteRequests[0].params.query).toBe('macbook');
+    });
+
+    it('pre-activation shell input reflects the parent query', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+        initialUiState: {
+          indexName: { query: 'macbook' },
+        },
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+
+      const input = container.querySelector<HTMLInputElement>(
+        'input[type="search"]'
+      )!;
+      expect(input.value).toBe('macbook');
+    });
+
+    it('uses a namespaced indexId for child indices to avoid collisions with same-named parent indices', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'instant_search',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'instant_search',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      focusSearchInput(container);
+      await flush();
+
+      const indexIds: string[] = [];
+      walkIndex(search.mainIndex, (widget) => indexIds.push(widget.getIndexId()));
+
+      const parentMatches = indexIds.filter((id) => id === 'instant_search');
+      expect(parentMatches).toHaveLength(1);
+      expect(
+        indexIds.some((id) => id.startsWith('ais-autocomplete-') && id.endsWith('-instant_search'))
+      ).toBe(true);
+    });
+
+    it('attaches the isolated tree only once across repeated focuses', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchClient = createSearchClient({});
+      const search = instantsearch({
+        searchClient,
+        indexName: 'indexName',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          indices: [
+            {
+              indexName: 'my-index',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      focusSearchInput(container);
+      await flush();
+      const callsAfterFirstFocus = (searchClient.search as jest.Mock).mock.calls
+        .flatMap((call) => call[0] as Array<{ indexName: string }>)
+        .filter((request) => request.indexName === 'my-index').length;
+
+      focusSearchInput(container);
+      await flush();
+      const callsAfterSecondFocus = (
+        searchClient.search as jest.Mock
+      ).mock.calls
+        .flatMap((call) => call[0] as Array<{ indexName: string }>)
+        .filter((request) => request.indexName === 'my-index').length;
+
+      expect(callsAfterSecondFocus).toBe(callsAfterFirstFocus);
+    });
+
+    it('only the parent composition search fires before focus in feeds-mode; focus adds another', async () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+      const searchMock = jest.fn(() =>
+        Promise.resolve({
+          results: [
+            createSingleSearchResponse({
+              feedID: 'products',
+              hits: [{ objectID: 'p1' }],
+            } as any),
+          ],
+        })
+      );
+      const compositionClient = createCompositionClient({ search: searchMock });
+      const search = instantsearch({
+        searchClient: compositionClient,
+        compositionID: 'my-comp',
+      });
+
+      search.addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container,
+          feeds: [
+            {
+              feedID: 'products',
+              templates: { item: ({ item }) => String(item.objectID) },
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await flush();
+      const callsBeforeFocus = searchMock.mock.calls.length;
+
+      focusSearchInput(container);
+      await flush();
+      const callsAfterFocus = searchMock.mock.calls.length;
+
+      // Mount triggers only the parent composition search; focus triggers
+      // exactly one additional search (the isolated autocomplete's), without
+      // re-running the parent.
+      expect(callsBeforeFocus).toBe(1);
+      expect(callsAfterFocus).toBe(2);
     });
   });
 });

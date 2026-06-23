@@ -78,6 +78,14 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    * Whether the input should be focused and the panel open initially.
    */
   autoFocus?: boolean;
+  /**
+   * Externally-supplied id used to prefix every DOM id this hook generates.
+   * Use this when the autocomplete renders across multiple component trees
+   * (e.g., a placeholder shell + a fully-wired version) that must produce
+   * matching ids for `htmlFor`/`aria-*` to stay stable across the swap.
+   * Falls back to an internal `useId()` when omitted.
+   */
+  id?: string;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -115,8 +123,10 @@ export function createAutocompletePropGetters({
     isDetached = false,
     shouldHidePanel = false,
     autoFocus = false,
+    id,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
-    const getElementId = createGetElementId(useId());
+    const internalId = useId();
+    const getElementId = createGetElementId(id ?? internalId);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const rootRef = useRef<HTMLDivElement | null>(null);
     const [isOpen, setIsOpen] = useState(autoFocus);
