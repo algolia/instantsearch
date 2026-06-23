@@ -124,9 +124,16 @@ jobs:
               --title "Architecture refactor scout: ${RUN_ID}" \
               --body-file "$issue_body"
           )"
+          issue_number="${issue_url##*/}"
+
+          gh api \
+            --method PUT \
+            "repos/${GH_REPO}/issues/${issue_number}/lock" \
+            -f lock_reason=resolved \
+            >/dev/null
 
           echo "issue_url=${issue_url}" >> "$GITHUB_OUTPUT"
-          echo "Created ${issue_url}"
+          echo "Created and locked ${issue_url}"
 
       - name: Comment implementation started
         if: steps.request.outputs.stage == 'implement'
