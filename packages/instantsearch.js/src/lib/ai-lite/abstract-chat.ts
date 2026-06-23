@@ -964,39 +964,96 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
-            case 'tool-error': {
+            case 'tool-input-error': {
+              if (!currentMessage) break;
+              delete toolRawInputByCallId[chunk.toolCallId];
+              delete toolRawOutputByCallId[chunk.toolCallId];
+
+              const toolIndex = currentMessage.parts.findIndex(
+                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
+              );
+              const existingPart =
+                toolIndex >= 0
+                  ? (currentMessage.parts[toolIndex] as any)
+                  : null;
+
+              const {
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                output: _ignoredOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                rawOutput: _ignoredRawOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                preliminary: _ignoredPreliminary,
+                ...carryOver
+              } = existingPart ?? {};
+
+              const nextToolPart = {
+                ...carryOver,
+                type: `tool-${chunk.toolName}` as const,
+                toolCallId: chunk.toolCallId,
+                state: 'output-error' as const,
+                input: undefined,
+                rawInput: chunk.input ?? carryOver.rawInput,
+                errorText: chunk.errorText,
+                providerExecuted:
+                  chunk.providerExecuted ?? carryOver.providerExecuted,
+                callProviderMetadata:
+                  chunk.providerMetadata ?? carryOver.callProviderMetadata,
+              };
+
+              if (toolIndex >= 0) {
+                const updatedParts = [...currentMessage.parts];
+                updatedParts[toolIndex] = nextToolPart;
+                currentMessage = {
+                  ...currentMessage,
+                  parts: updatedParts,
+                } as TUIMessage;
+              } else {
+                currentMessage = {
+                  ...currentMessage,
+                  parts: [...currentMessage.parts, nextToolPart],
+                } as TUIMessage;
+              }
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              break;
+            }
+
+            case 'tool-output-error': {
               if (!currentMessage) break;
 
               const toolIndex = currentMessage.parts.findIndex(
                 (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
               );
+              if (toolIndex < 0) break;
 
-              if (toolIndex >= 0) {
-                delete toolRawInputByCallId[chunk.toolCallId];
-                delete toolRawOutputByCallId[chunk.toolCallId];
+              delete toolRawInputByCallId[chunk.toolCallId];
+              delete toolRawOutputByCallId[chunk.toolCallId];
 
-                const updatedParts = [...currentMessage.parts];
-                const existingPart = updatedParts[toolIndex] as any;
-                const {
-                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-                  rawOutput: _ignoredRawOutput,
-                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-                  preliminary: _ignoredPreliminary,
-                  ...rest
-                } = existingPart;
-                updatedParts[toolIndex] = {
-                  ...rest,
-                  state: 'output-error',
-                  errorText: chunk.errorText,
-                  input: chunk.input ?? existingPart.input,
-                  callProviderMetadata: chunk.callProviderMetadata,
-                };
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
-              }
+              const updatedParts = [...currentMessage.parts];
+              const existingPart = updatedParts[toolIndex] as any;
+              const {
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                rawOutput: _ignoredRawOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                preliminary: _ignoredPreliminary,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                output: _ignoredOutput,
+                ...rest
+              } = existingPart;
+              updatedParts[toolIndex] = {
+                ...rest,
+                state: 'output-error',
+                errorText: chunk.errorText,
+                providerExecuted:
+                  chunk.providerExecuted ?? rest.providerExecuted,
+                callProviderMetadata:
+                  chunk.providerMetadata ?? rest.callProviderMetadata,
+              };
+              currentMessage = {
+                ...currentMessage,
+                parts: updatedParts,
+              } as TUIMessage;
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
               break;
             }
 
