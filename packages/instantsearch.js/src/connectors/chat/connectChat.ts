@@ -122,18 +122,41 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   'transport'
 >;
 
-export type ChatTransport = {
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
-} & (
+export type ChatAgentRequestOptions = {
+  queryParameters?: Record<string, string | number | boolean>;
+  headers?: Record<string, string> | Headers;
+};
+
+export type ChatTransport =
   | {
       agentId: string;
+      transport?: never;
+      requestOptions?: ChatAgentRequestOptions;
       /**
        * Whether to enable feedback (thumbs up/down) on assistant messages.
        */
       feedback?: boolean;
     }
-  | { agentId?: undefined; feedback?: never }
-);
+  | {
+      agentId: string;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: boolean;
+      requestOptions?: never;
+    }
+  | {
+      agentId?: undefined;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: never;
+      requestOptions?: never;
+    };
+
+export type ChatCustomInstance<TUiMessage extends UIMessage> = {
+  chat: Chat<TUiMessage>;
+  agentId?: undefined;
+  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  feedback?: never;
+  requestOptions?: never;
+};
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -144,7 +167,7 @@ export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
 export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
-  | { chat: Chat<TUiMessage> }
+  | ChatCustomInstance<TUiMessage>
   | ChatInit<TUiMessage>
 ) & {
   /**
@@ -473,20 +496,43 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
 
-        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
+        const createApi = ({ bypassCache = false } = {}) => {
+          const api = new URL(
+            `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
+          );
+          api.searchParams.set('compatibilityMode', 'ai-sdk-5');
+          Object.entries(options.requestOptions?.queryParameters || {}).forEach(
+            ([key, value]) => {
+              api.searchParams.set(key, String(value));
+            }
+          );
+          if (bypassCache) {
+            api.searchParams.set('cache', 'false');
+          }
+          return api.toString();
+        };
+        const baseApi = createApi();
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
             'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
+            ...(options.requestOptions?.headers instanceof Headers
+              ? Object.fromEntries(options.requestOptions.headers.entries())
+              : options.requestOptions?.headers),
           },
-          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
+          prepareSendMessagesRequest: ({
+            id,
+            messages,
+            trigger,
+            messageId,
+          }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:
                 trigger === 'regenerate-message'
-                  ? `${baseApi}&cache=false`
+                  ? createApi({ bypassCache: true })
                   : baseApi,
               body: {
                 id,

@@ -30,7 +30,7 @@ describe('connectChat', () => {
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
       disableTriggerValidation: true,
       ...widgetParams,
-    });
+    } as ChatConnectorParams);
 
     const helper = algoliasearchHelper(createSearchClient(), '');
 
@@ -69,6 +69,52 @@ describe('connectChat', () => {
           dispose: expect.any(Function),
         })
       );
+    });
+
+    it('types requestOptions as agentId-only', () => {
+      const assertChatConnectorParams = (_params: ChatConnectorParams) =>
+        undefined;
+      const customChat = undefined as unknown as Chat<UIMessage>;
+
+      assertChatConnectorParams({
+        agentId: 'agentId',
+        requestOptions: {
+          queryParameters: { cache: false },
+          headers: { 'x-algolia-referer': 'chat-widget' },
+        },
+      });
+
+      assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+      });
+
+      // @ts-expect-error requestOptions is only valid with agentId
+      assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      // @ts-expect-error requestOptions is not valid when a custom transport is provided
+      assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      assertChatConnectorParams({
+        // @ts-expect-error requestOptions is not valid with a custom chat instance
+        chat: customChat,
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      expect(true).toBe(true);
     });
   });
 
@@ -1060,8 +1106,9 @@ data: [DONE]`,
       });
 
       function getRequestPayload() {
-        const [, init] = fetchMock.mock.calls[0];
+        const [url, init] = fetchMock.mock.calls[0];
         return {
+          url: String(url),
           headers: init.headers as Record<string, string>,
           body: JSON.parse(init.body as string),
         };
@@ -1108,6 +1155,78 @@ data: [DONE]`,
         );
       });
 
+      it('sends persistent query parameters on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: false,
+              hitsPerPage: 4,
+              explain: true,
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('cache')).toBe('false');
+        expect(searchParams.get('hitsPerPage')).toBe('4');
+        expect(searchParams.get('explain')).toBe('true');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
+      it('sends persistent headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
+      it('sends persistent Headers instance on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: new Headers({
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            }),
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
       it('does not register `chat` on the search client user-agent', () => {
         const addAlgoliaAgent = jest.fn();
         const client = Object.assign(createSearchClient(), {
@@ -1147,6 +1266,41 @@ data: [DONE]`,
         });
       });
 
+      it('lets per-call headers override persistent headers for one request', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'chat-widget'
+        );
+      });
+
       it('does not carry over the x-algolia-referer to follow-up messages', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
@@ -1172,13 +1326,33 @@ data: [DONE]`,
         expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
       });
 
+      it('forces cache=false when regenerating with persistent cache query parameter', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: true,
+            },
+          },
+        });
+
+        await widget.chatInstance.regenerate();
+
+        const { url } = getRequestPayload();
+        expect(new URL(url).searchParams.get('cache')).toBe('false');
+      });
+
       it('does not duplicate transport metadata in the request body', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
         await widget.chatInstance.sendMessage({ text: 'hello' });
 
         const { body } = getRequestPayload();
-        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+        ]);
         expect(body).not.toHaveProperty('headers');
         expect(body).not.toHaveProperty('api');
         expect(body).not.toHaveProperty('credentials');
@@ -1260,7 +1434,7 @@ data: [DONE]`,
       const widget = makeWidget({
         ...params,
         transport: { api: 'http://unused' },
-      });
+      } as ChatConnectorParams<UIMessage>);
       return { widget, renderFn };
     }
 
