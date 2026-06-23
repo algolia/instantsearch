@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Resolve request
         id: request
@@ -73,7 +73,7 @@ jobs:
           node .github/scripts/architecture-refactor.cjs resolve-request >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
 
@@ -93,7 +93,7 @@ jobs:
             --run "$RUN_ID" \
             --max-turns "${{ steps.request.outputs.max_turns }}"
 
-          report=".claude/refactors/runs/${RUN_ID}/scout.md"
+          report="architecture-refactor-runs/${RUN_ID}/scout.md"
 
           echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
           echo "report=${report}" >> "$GITHUB_OUTPUT"
@@ -106,12 +106,15 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RUN_ID: ${{ steps.scout.outputs.run_id }}
           REPORT: ${{ steps.scout.outputs.report }}
+          VISIBILITY_MENTION: '@algolia/frontend-experiences-web'
         run: |
           set -euo pipefail
 
           issue_body="$(mktemp)"
           {
             echo "<!-- architecture-refactor-scout run=${RUN_ID} -->"
+            echo ""
+            echo "cc ${VISIBILITY_MENTION}"
             echo ""
             cat "$REPORT"
           } > "$issue_body"
@@ -159,7 +162,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          run_dir=".claude/refactors/runs/${RUN_ID}"
+          run_dir="architecture-refactor-runs/${RUN_ID}"
           mkdir -p "$run_dir"
 
           issue_json="$run_dir/tracking-issue.json"
@@ -172,8 +175,8 @@ jobs:
           title="$(jq -r '.title' "$issue_json")"
           expected_prefix="Architecture refactor scout: "
 
-          if [[ "$author" != "github-actions[bot]" ]]; then
-            echo "::error::Tracking issue must be created by github-actions[bot]."
+          if [[ "$author" != "app/github-actions" ]]; then
+            echo "::error::Tracking issue must be created by GitHub Actions."
             exit 1
           fi
 
