@@ -206,10 +206,15 @@ jobs:
 
           branch="$(git branch --show-current)"
           report="$run_dir/implementation-${CANDIDATE_ID}.md"
+          candidate_title="$(
+            node .github/scripts/architecture-refactor.cjs candidate-title "$CANDIDATE_ID" \
+              --scout-report "$run_dir/scout-from-issue.md"
+          )"
 
           echo "branch=${branch}" >> "$GITHUB_OUTPUT"
           echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
           echo "report=${report}" >> "$GITHUB_OUTPUT"
+          echo "pr_title=refactor: ${candidate_title}" >> "$GITHUB_OUTPUT"
 
       - name: Create draft pull request
         id: pull_request
@@ -220,7 +225,9 @@ jobs:
           ISSUE_NUMBER: ${{ steps.request.outputs.issue_number }}
           CANDIDATE_ID: ${{ steps.request.outputs.candidate_id }}
           BRANCH: ${{ steps.implement.outputs.branch }}
+          PR_TITLE: ${{ steps.implement.outputs.pr_title }}
           REPORT: ${{ steps.implement.outputs.report }}
+          REVIEWER_TEAM_SLUG: frontend-experiences-web
         run: |
           set -euo pipefail
 
@@ -257,9 +264,17 @@ jobs:
           pr_url="$(
             gh pr create \
               --draft \
-              --title "refactor: ${CANDIDATE_ID}" \
+              --title "$PR_TITLE" \
               --body-file "$pr_body"
           )"
+          pr_number="${pr_url##*/}"
+
+          gh api \
+            --method POST \
+            "repos/${GH_REPO}/pulls/${pr_number}/requested_reviewers" \
+            -f "team_reviewers[]=${REVIEWER_TEAM_SLUG}" \
+            >/dev/null \
+            || echo "::warning::Could not assign ${REVIEWER_TEAM_SLUG} as a team reviewer; please add it manually."
 
           gh issue comment "$ISSUE_NUMBER" --body "Draft PR created: ${pr_url}"
           echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
