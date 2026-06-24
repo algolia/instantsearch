@@ -44,7 +44,7 @@ yarn workspace <pkg> build      # single package, e.g. yarn workspace instantsea
 
 # Unit tests (Jest, jsdom)
 yarn jest <path-or-pattern>     # fastest loop: run one file/pattern at root
-yarn workspace <pkg> test       # one package's suite
+yarn jest packages/<pkg>        # one package's suite (flavor pkgs have no `test` script — scope jest by path)
 yarn test                       # everything (slow)
 
 # Lint (oxlint) + format (prettier) + types
