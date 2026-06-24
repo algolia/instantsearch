@@ -15,7 +15,7 @@ So adding/changing a React widget often touches `react-instantsearch-core` (hook
 ```bash
 yarn workspace react-instantsearch build
 yarn workspace react-instantsearch-core build
-yarn jest packages/react-instantsearch/src/widgets/<Pascal>   # from repo root
+yarn jest packages/react-instantsearch/src/widgets/__tests__/<Pascal>   # from repo root
 ```
 
 - Uses React 19 / `@testing-library/react` for tests, co-located in `__tests__/`.

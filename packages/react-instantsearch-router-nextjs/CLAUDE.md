@@ -4,7 +4,7 @@ A **thin routing adapter** for the **Pages Router** — not a full SSR layer. It
 
 ## Public surface
 
-- `createInstantSearchNextRouter({ singletonRouter, serverUrl?, ... })` (`src/index.ts`) — returns a `Router` you pass to `<InstantSearch routing={{ router }}>`. Tagged `$$type: 'ais.nextjs'`.
+- `createInstantSearchRouterNext({ singletonRouter, serverUrl?, ... })` (`src/index.ts`) — returns a `Router` you pass to `<InstantSearch routing={{ router }}>`. Tagged `$$type: 'ais.nextjs'`.
 
 ## What it actually does (and why)
 
