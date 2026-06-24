@@ -237,6 +237,15 @@ class InstantSearch<
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
   public _insights: InstantSearchOptions['insights'];
+  /**
+   * The options the instance was created with, kept verbatim so consumers
+   * (e.g. usage events) can introspect the configuration without the class
+   * having to enumerate every option by hand. Typed without the class generics
+   * on purpose: referencing `TUiState`/`TRouteState` here (they sit in
+   * contravariant positions inside `InstantSearchOptions`) would break the
+   * assignability of `InstantSearch<SpecificUiState>` to `InstantSearch`.
+   */
+  public _initialOptions: InstantSearchOptions;
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
@@ -351,6 +360,7 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
+    this._initialOptions = options as unknown as InstantSearchOptions;
     this.client = searchClient;
     this.future = future;
     this.insightsClient = insightsClient;

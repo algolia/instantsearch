@@ -6,9 +6,11 @@ import {
   warning,
   noop,
   buildWidgetTree,
+  serializeWidgetParams,
   getAlgoliaAgent,
   getAppIdAndApiKey,
   find,
+  omit,
   safelyRunOnBrowser,
 } from '../lib/utils';
 import { createUUID } from '../lib/utils/uuid';
@@ -50,6 +52,14 @@ export type InsightsProps<
 
 const ALGOLIA_INSIGHTS_VERSION = '2.17.2';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
+
+// InstantSearch options that must never be sent in usage events because
+// they carry credentials or end-user data. Everything else is reported as-is.
+const SENSITIVE_OPTIONS = [
+  'searchClient',
+  'insightsClient',
+  'initialUiState',
+] as const;
 
 export type InsightsClientWithGlobals = InsightsClient & {
   shouldAddScript?: boolean;
@@ -463,7 +473,16 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
               widgets: [
                 {
                   type: 'ais.instantSearch',
-                  params: [],
+                  // The options the instance was created with, serialized the
+                  // same way every widget's params are. Derived dynamically from
+                  // `_initialOptions` so new options are reported automatically,
+                  // minus the keys that carry credentials or user data. Functions
+                  // (`onStateChange`, `searchFunction`) serialize to name-only.
+                  params: serializeWidgetParams(
+                    omit(instantSearchInstance._initialOptions, [
+                      ...SENSITIVE_OPTIONS,
+                    ]) as Record<string, unknown>
+                  ),
                   children: buildWidgetTree(
                     instantSearchInstance.mainIndex.getWidgets(),
                     instantSearchInstance

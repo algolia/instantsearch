@@ -47,6 +47,32 @@ function serializeParamValue(
   return null;
 }
 
+/**
+ * Turns a `widgetParams`-style record into the serialized `WidgetTreeParam[]`
+ * shape used throughout the usage events. Shared between the widget tree and
+ * the root `ais.instantSearch` node so every node reports params identically.
+ */
+export function serializeWidgetParams(
+  widgetParams: Record<string, unknown>
+): WidgetTreeParam[] {
+  const params: WidgetTreeParam[] = [];
+
+  Object.keys(widgetParams).forEach((key) => {
+    const raw = widgetParams[key];
+    if (raw === undefined) {
+      return;
+    }
+    const serialized = serializeParamValue(raw);
+    if (serialized) {
+      params.push({ name: key, ...serialized });
+    } else {
+      params.push({ name: key });
+    }
+  });
+
+  return params;
+}
+
 export function buildWidgetTree(
   widgets: Array<Widget | IndexWidget>,
   instantSearchInstance: InstantSearch
@@ -67,20 +93,7 @@ export function buildWidgetTree(
       }
     }
 
-    const params: WidgetTreeParam[] = [];
-
-    Object.keys(widgetParams).forEach((key) => {
-      const raw = widgetParams[key];
-      if (raw === undefined) {
-        return;
-      }
-      const serialized = serializeParamValue(raw);
-      if (serialized) {
-        params.push({ name: key, ...serialized });
-      } else {
-        params.push({ name: key });
-      }
-    });
+    const params = serializeWidgetParams(widgetParams);
 
     const children =
       widget.$$type === 'ais.index'
