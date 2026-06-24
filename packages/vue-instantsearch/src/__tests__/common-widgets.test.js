@@ -313,6 +313,9 @@ const testSetups = {
 
     await nextTick();
   },
+  createRangeSliderWidgetTests() {
+    throw new Error('RangeSlider is not supported in Vue InstantSearch');
+  },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     mountApp(
       {
@@ -599,6 +602,11 @@ const testOptions = {
   createRefinementListWidgetTests: {
     skippedTests: {
       'selects first item on submitting the search (with searchableSelectOnSubmit: true)': true,
+      // Vue does not have the JS flavor's `componentDidUpdate` focus
+      // restoration; Vue 3 resets `activeElement` to body across re-renders,
+      // so the focus assertion is unreliable there. The bug this test
+      // catches is in the Preact RefinementList component.
+      'keeps focus on toggled input between re-renders (multiple values that should be escaped)': true,
     },
   },
   createHierarchicalMenuWidgetTests: undefined,
@@ -608,6 +616,9 @@ const testOptions = {
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
+  createRangeSliderWidgetTests: {
+    skippedTests: { 'RangeSlider widget common tests': true },
+  },
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,

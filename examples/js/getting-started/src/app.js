@@ -10,6 +10,7 @@ import {
   searchBox,
   trendingItems,
   chat,
+  chatTrigger,
   filterSuggestions,
   currentRefinements,
 } from 'instantsearch.js/es/widgets';
@@ -112,6 +113,9 @@ search.addWidgets([
     templates: {
       item: productItemTemplate,
     },
+  }),
+  chatTrigger({
+    container: '#chat-trigger',
   }),
 ]);
 

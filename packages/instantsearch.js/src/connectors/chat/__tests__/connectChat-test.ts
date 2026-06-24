@@ -28,6 +28,7 @@ describe('connectChat', () => {
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
+      disableTriggerValidation: true,
       ...widgetParams,
     });
 
@@ -239,7 +240,9 @@ describe('connectChat', () => {
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { agentId: 'agentId' } }),
+      expect.objectContaining({
+        widgetParams: expect.objectContaining({ agentId: 'agentId' }),
+      }),
       true
     );
 
@@ -248,7 +251,9 @@ describe('connectChat', () => {
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { agentId: 'agentId' } }),
+      expect.objectContaining({
+        widgetParams: expect.objectContaining({ agentId: 'agentId' }),
+      }),
       false
     );
   });
@@ -257,7 +262,10 @@ describe('connectChat', () => {
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
       const makeWidget = connectChat(() => {}, unmountFn);
-      const widget = makeWidget({ agentId: 'agentId' });
+      const widget = makeWidget({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
 
@@ -341,6 +349,7 @@ describe('connectChat', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
+      const conversationIdBeforeClear = renderState.id;
 
       const message: UIMessage = {
         id: '1',
@@ -352,12 +361,14 @@ describe('connectChat', () => {
 
       let updatedRenderState = getRenderState();
       expect(updatedRenderState.isClearing).toBe(true);
+      expect(updatedRenderState.id).toBe(conversationIdBeforeClear);
 
       renderState.onClearTransitionEnd();
 
       updatedRenderState = getRenderState();
       expect(updatedRenderState.isClearing).toBe(false);
       expect(updatedRenderState.messages).toHaveLength(0);
+      expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
     it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
@@ -896,13 +907,116 @@ data: [DONE]`,
         expect(toolPart?.rawOutput).toBeUndefined();
       });
     });
+
+    it('surfaces a guardrail-violation fallbackResponse via the error state', async () => {
+      const fallbackResponse =
+        "I'm sorry I couldn't respond to that, please try again with another message.";
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "text-start", "id": "msg-1"}
+
+data: {"type": "text-delta", "id": "msg-1", "delta": "If you need help"}
+
+data: {"type": "text-end", "id": "msg-1"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "product_returns", "guardrailType": "input", "fallbackResponse": ${JSON.stringify(
+                  fallbackResponse
+                )}}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+      const messagesBeforeSend = chatInstance.messages.length;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'how do I return a product?' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('error');
+        expect(chatInstance.error?.message).toBe(fallbackResponse);
+        // Tagged so the UI can branch on it and render the fallback verbatim
+        // instead of the generic friendly default used for cost-control
+        // errors.
+        expect(chatInstance.error?.name).toBe('GuardrailViolationError');
+        // The in-progress assistant message produced for this request is
+        // stripped so only the user message added by `sendMessage` remains
+        // beyond what was already there. This matches cost-control errors
+        // where no assistant message is appended on failure.
+        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 1);
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1].role
+        ).toBe('user');
+      });
+    });
+
+    it('falls back to a generic message when fallbackResponse is missing', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "x", "guardrailType": "input"}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'blocked input' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('error');
+        expect(chatInstance.error?.message).toBe(
+          'Sorry, we are not able to generate a response at the moment.'
+        );
+      });
+    });
   });
 
   describe('transport configuration', () => {
     it('throws error when neither agentId nor transport is provided', () => {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
-      const widget = makeWidget({});
+      const widget = makeWidget({ disableTriggerValidation: true });
 
       const helper = algoliasearchHelper(createSearchClient(), '', {});
 
@@ -1150,7 +1264,7 @@ data: [DONE]`,
       return { widget, renderFn };
     }
 
-    it('prepends context text part when context is a static object', async () => {
+    it('attaches turnContext to metadata when context is a static object', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1167,13 +1281,12 @@ data: [DONE]`,
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       const call = sendMessageSpy.mock.calls[0][0] as any;
-      expect(call.parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/products","locale":"en-US"}</context>',
-        },
-        { type: 'text', text: 'Hello' },
-      ]);
+      expect(call.text).toBe('Hello');
+      expect(call.metadata).toEqual({
+        turnContext: { currentPage: '/products', locale: 'en-US' },
+      });
+      // The legacy `<context>{...}</context>` text part must not be present.
+      expect(call.parts).toBeUndefined();
     });
 
     it('evaluates context function at send time', async () => {
@@ -1192,23 +1305,39 @@ data: [DONE]`,
       const { sendMessage } = renderFn.mock.calls[0][0];
 
       await sendMessage({ text: 'first' });
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-1"}</context>',
-        },
-        { type: 'text', text: 'first' },
-      ]);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-1' },
+      });
 
       pageUrl = '/page-2';
       await sendMessage({ text: 'second' });
-      expect((sendMessageSpy.mock.calls[1][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"currentPage":"/page-2"}</context>',
-        },
-        { type: 'text', text: 'second' },
-      ]);
+      expect((sendMessageSpy.mock.calls[1][0] as any).metadata).toEqual({
+        turnContext: { currentPage: '/page-2' },
+      });
+    });
+
+    it('preserves caller-supplied metadata and namespaces turnContext under it', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/about' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'hi',
+        metadata: { custom: 'value' } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        custom: 'value',
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through without modification when no context is set', async () => {
@@ -1228,7 +1357,7 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
     });
 
-    it('prepends context when called with parts', async () => {
+    it('attaches turnContext to metadata when called with parts', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
@@ -1245,13 +1374,11 @@ data: [DONE]`,
         parts: [{ type: 'text', text: 'Hi from parts' }],
       });
 
-      expect((sendMessageSpy.mock.calls[0][0] as any).parts).toEqual([
-        {
-          type: 'text',
-          text: '<context>{"page":"/about"}</context>',
-        },
-        { type: 'text', text: 'Hi from parts' },
-      ]);
+      const call = sendMessageSpy.mock.calls[0][0] as any;
+      expect(call.parts).toEqual([{ type: 'text', text: 'Hi from parts' }]);
+      expect(call.metadata).toEqual({
+        turnContext: { page: '/about' },
+      });
     });
 
     it('passes through when called with no message', async () => {
@@ -1272,16 +1399,47 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
 
-    it('sends message without context when context is not serializable', async () => {
+    it('forwards values verbatim and leaves payload validation to the server', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
-      const circular: Record<string, unknown> = {};
-      circular.self = circular;
+      const longValue = 'x'.repeat(1025);
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        // Intentionally non-conforming entries: backend (HTTP 422) owns
+        // validation; the client must not silently mutate this payload.
+        context: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        } as Record<string, string>,
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({ text: 'hi' });
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          'bad key!': 'kept as-is',
+          tooBig: longValue,
+          ok: 'kept',
+        },
+      });
+    });
+
+    it('propagates errors from a throwing context resolver', () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
       const { widget, renderFn } = createChatWidgetWithContext({
         chat: chatInstance,
-        context: circular,
+        context: () => {
+          throw new Error('boom');
+        },
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -1289,12 +1447,10 @@ data: [DONE]`,
 
       const { sendMessage } = renderFn.mock.calls[0][0];
 
-      expect(() => sendMessage({ text: 'Hello' })).toWarnDev(
-        '[InstantSearch.js]: Could not serialize chat context. The message will be sent without context.'
-      );
-
-      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      expect(sendMessageSpy.mock.calls[0][0]).toEqual({ text: 'Hello' });
+      // A throwing `context` is a developer bug — surface it loudly instead
+      // of silently sending the message without context.
+      expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
+      expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });
 });

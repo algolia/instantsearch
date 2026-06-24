@@ -188,4 +188,31 @@ describe('stream-parser', () => {
       });
     });
   });
+
+  describe('processStream', () => {
+    it('routes synchronous throws from onChunk to onError', () => {
+      const stream = new ReadableStream<number>({
+        start(controller) {
+          controller.enqueue(1);
+          controller.close();
+        },
+      });
+
+      return new Promise<void>((resolve, reject) => {
+        processStream(
+          stream,
+          (value) => {
+            if (value === 1) {
+              throw new Error('stream chunk error');
+            }
+          },
+          () => reject(new Error('expected onError, not onDone')),
+          (error) => {
+            expect(error.message).toBe('stream chunk error');
+            resolve();
+          }
+        );
+      });
+    });
+  });
 });

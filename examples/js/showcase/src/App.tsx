@@ -1,4 +1,4 @@
-import { MapPin, Search, Sparkles } from "lucide-preact";
+import { MapPin, Search, Sparkles, Wand2 } from "lucide-preact";
 import { useState } from "preact/hooks";
 
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
@@ -6,6 +6,7 @@ import { FlavorContext, type Flavor } from "./context/flavor";
 import { AgenticView } from "./views/AgenticView";
 import { GeoSearchView } from "./views/GeoSearchView";
 import { InstantSearchView } from "./views/InstantSearchView";
+import { RecommendView } from "./views/RecommendView";
 
 import type { LucideIcon } from "lucide-preact";
 import type { ComponentType } from "preact";
@@ -45,6 +46,12 @@ const experiences: Experience[] = [
     description: "Search through locations",
     icon: MapPin,
     view: GeoSearchView,
+  },
+  {
+    title: "Recommend",
+    description: "Personalized recommendations",
+    icon: Wand2,
+    view: RecommendView,
   },
 ];
 

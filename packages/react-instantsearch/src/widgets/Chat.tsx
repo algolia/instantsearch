@@ -10,6 +10,7 @@ import {
 import React, {
   createElement,
   Fragment,
+  memo,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -49,6 +50,7 @@ import type { UseChatProps } from 'react-instantsearch-core';
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
+  memo: memo as Parameters<typeof createChatComponent>[0]['memo'],
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -79,7 +81,6 @@ type UiProps = Pick<
   ChatUiProps,
   | 'open'
   | 'headerProps'
-  | 'toggleButtonProps'
   | 'messagesProps'
   | 'promptProps'
   | 'suggestionsProps'
@@ -91,11 +92,6 @@ type UiProps = Pick<
   | 'regenerate'
   | 'stop'
   | 'error'
->;
-
-type UserToggleButtonProps = Omit<
-  ChatUiProps['toggleButtonProps'],
-  'open' | 'onClick'
 >;
 
 type UserHeaderProps = Omit<ChatUiProps['headerProps'], 'onClose'>;
@@ -132,13 +128,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     itemComponent?: ItemComponent<TObject>;
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
-    toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
     layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
-    toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
-    toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
     headerComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
@@ -176,14 +169,11 @@ function ChatInner<
 >(
   {
     tools: userTools,
-    toggleButtonProps,
     headerProps,
     messagesProps,
     promptProps,
     itemComponent,
     layoutComponent,
-    toggleButtonComponent,
-    toggleButtonIconComponent,
     headerComponent,
     headerTitleIconComponent,
     headerCloseIconComponent,
@@ -205,6 +195,7 @@ function ChatInner<
     translations = {},
     title,
     getSearchPageURL,
+    disableTriggerValidation = false,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -234,9 +225,19 @@ function ChatInner<
     return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
+  // Inline layouts are always visible, so they don't require a `<ChatTrigger />`
+  // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker
+  // set on the layout component, which is consistent across flavors.
+  const isInlineLayoutComponent =
+    typeof layoutComponent === 'function' &&
+    (layoutComponent as { $$inlineLayout?: true }).$$inlineLayout === true;
+  const effectiveDisableTriggerValidation =
+    disableTriggerValidation || isInlineLayoutComponent;
+
   const chatState = useChat<TUiMessage>({
     ...props,
     tools,
+    disableTriggerValidation: effectiveDisableTriggerValidation,
   });
 
   const {
@@ -278,6 +279,18 @@ function ChatInner<
     wasOpenRef.current = open;
   }, [open]);
 
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (status === 'streaming' || status === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [messages, status, scrollToBottom]);
+
   if (__DEV__ && error) {
     throw error;
   }
@@ -294,14 +307,7 @@ function ChatInner<
       layoutComponent={layoutComponent}
       headerComponent={headerComponent}
       promptComponent={promptComponent}
-      toggleButtonComponent={toggleButtonComponent}
       suggestionsComponent={suggestionsComponent}
-      toggleButtonProps={{
-        open,
-        onClick: () => setOpen(!open),
-        toggleIconComponent: toggleButtonIconComponent,
-        ...toggleButtonProps,
-      }}
       headerProps={{
         onClose: () => setOpen(false),
         maximized,
@@ -318,6 +324,7 @@ function ChatInner<
       messagesProps={{
         status,
         onReload: (messageId) => regenerate({ messageId }),
+        onNewConversation: clearMessages,
         onClose: () => setOpen(false),
         sendMessage: sendMessage as ChatUiProps['sendMessage'],
         setInput,
@@ -350,6 +357,7 @@ function ChatInner<
         translations: messagesTranslations,
         messageTranslations,
         ...messagesProps,
+        error,
       }}
       promptProps={{
         promptRef,

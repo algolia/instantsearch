@@ -33,6 +33,7 @@ import {
   PoweredBy,
   DynamicWidgets,
   Chat,
+  ChatTrigger,
   EXPERIMENTAL_Autocomplete,
   FilterSuggestions,
 } from '..';
@@ -217,6 +218,9 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
         <GlobalErrorSwallower />
       </InstantSearch>
     );
+  },
+  createRangeSliderWidgetTests() {
+    throw new Error('RangeSlider is not supported in React InstantSearch');
   },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     render(
@@ -422,6 +426,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
             />
           </>
         )}
+        <ChatTrigger />
         <Chat {...chatWidgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
@@ -454,6 +459,11 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
+  createRangeSliderWidgetTests: {
+    skippedTests: {
+      'RangeSlider widget common tests': true,
+    },
+  },
   createRatingMenuWidgetTests: {
     act,
     skippedTests: {
