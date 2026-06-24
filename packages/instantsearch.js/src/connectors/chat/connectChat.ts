@@ -505,19 +505,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
 
-        const createApi = ({ bypassCache = false } = {}) => {
+        const createApi = (bypassCache = false) => {
           const api = new URL(
             `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
           );
-          Object.entries(options.requestOptions?.queryParameters || {}).forEach(
-            ([key, value]) => {
-              api.searchParams.set(key, String(value));
-            }
-          );
-          api.searchParams.set('compatibilityMode', 'ai-sdk-5');
-          if (bypassCache) {
-            api.searchParams.set('cache', 'false');
-          }
+          api.search = new URLSearchParams(
+            Object.entries({
+              ...options.requestOptions?.queryParameters,
+              compatibilityMode: 'ai-sdk-5',
+              ...(bypassCache ? { cache: false } : {}),
+            }).map(([key, value]) => [key, String(value)])
+          ).toString();
           return api.toString();
         };
         const baseApi = createApi();
@@ -541,10 +539,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
-              api:
-                trigger === 'regenerate-message'
-                  ? createApi({ bypassCache: true })
-                  : baseApi,
+              api: trigger === 'regenerate-message' ? createApi(true) : baseApi,
               body: {
                 id,
                 messageId,

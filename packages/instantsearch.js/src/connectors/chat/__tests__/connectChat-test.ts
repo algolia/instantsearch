@@ -72,11 +72,12 @@ describe('connectChat', () => {
     });
 
     it('types requestOptions as agentId-only', () => {
-      const assertChatConnectorParams = (_params: ChatConnectorParams) =>
-        undefined;
+      const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
+        params: TParams
+      ) => params;
       const customChat = undefined as unknown as Chat<UIMessage>;
 
-      assertChatConnectorParams({
+      const agentParams = assertChatConnectorParams({
         agentId: 'agentId',
         requestOptions: {
           queryParameters: { cache: false },
@@ -114,7 +115,12 @@ describe('connectChat', () => {
         },
       });
 
-      expect(true).toBe(true);
+      expect(agentParams.requestOptions?.queryParameters).toEqual({
+        cache: false,
+      });
+      expect(agentParams.requestOptions?.headers).toEqual({
+        'x-algolia-referer': 'chat-widget',
+      });
     });
   });
 
@@ -1466,17 +1472,16 @@ data: [DONE]`,
       return new Chat<UIMessage>({ transport: createMockTransport() });
     }
 
-    function createChatWidgetWithContext(
-      params: Omit<ChatConnectorParams<UIMessage>, 'transport' | 'agentId'> & {
-        chat: Chat<UIMessage>;
-      }
-    ) {
+    function createChatWidgetWithContext(params: {
+      chat: Chat<UIMessage>;
+      context?: ChatConnectorParams<UIMessage>['context'];
+    }) {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
       const widget = makeWidget({
         ...params,
         transport: { api: 'http://unused' },
-      } as ChatConnectorParams<UIMessage>);
+      });
       return { widget, renderFn };
     }
 
