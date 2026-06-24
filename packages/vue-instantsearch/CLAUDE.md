@@ -6,7 +6,7 @@ Vue 2 **and** Vue 3 bindings (single source, built for both). Components wrap th
 
 - `src/components/<Pascal>.vue` (SFC) or `.js` (render function) — the component wrapping a connector. Exported from `src/widgets.js`.
 - `src/mixins/` — shared connector-wiring logic reused across components.
-- When reusing shared markup from `instantsearch-ui-components`, render it via the **`renderCompat`** helper (Preact → Vue interop) rather than importing directly. **Creating or changing a shared component is the `instantsearch-ui-components` package's job** — do that there, then wire it in here via `renderCompat`.
+- To reuse shared markup, import the `create<Name>Component` factory from `instantsearch-ui-components` and render it inside a **`renderCompat`** render function, passing Vue's `h` as `createElement` — e.g. `render: renderCompat((h) => h(createHitsComponent({ createElement: h }), { … }))` (see `src/components/Hits.js`). `renderCompat` (`src/util/vue-compat/`) is the Vue 2/3 render-fn shim. **Creating or changing the shared component itself is the `instantsearch-ui-components` package's job** — do that there, then consume the factory here.
 
 ## Working here
 

@@ -61,7 +61,7 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ## Conventions
 
 - **TypeScript strict.** No implicit any; unused vars/params error. Avoid `for-in`/`for-of` and `async` in library code (oxlint enforces).
-- **Tests** co-locate in `__tests__/` next to source, named `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
+- **Tests** co-locate in `__tests__/` next to source — Jest picks up *any* file under `__tests__/` (the default `testMatch`), so some legacy tests are plain `*.js`; name new ones `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
 - **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. Run with `yarn jest common-widgets` (all three flavors) and scope to one widget via `-t "<Widget> widget common tests"`. This is the primary test surface for newer widgets like Autocomplete and Chat. See `tests/common/README.md`.
 - **Commits: Conventional Commits** — `type(scope): description`, scope = widget/connector or topic (`deps`, `ci`). e.g. `fix(searchbox): increase magnifying glass size`, `feat(hits): add custom rendering`. Reference issues with `fix #1234` in the body.
 - **Branches:** target `master`; `vX` branches are critical-fix-only. Branch names: `fix/<issue>`, `feat/<name>`.
