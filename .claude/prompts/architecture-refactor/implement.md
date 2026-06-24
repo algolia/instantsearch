@@ -47,7 +47,17 @@ Only after choosing an approach should you edit files. Record the chosen approac
 
 ## Validation
 
-Do not run lint, tests, or type-checks in this workflow. The draft PR's normal validation is the source of truth. In the implementation report, list the targeted checks and PR validation you expect reviewers to rely on.
+After editing, run a bounded generic validation loop before writing the final report:
+
+- If dependencies are unavailable, run `yarn install --frozen-lockfile` once.
+- Run `yarn lint:changed`.
+- For changed JavaScript, TypeScript, TSX, JSX, CJS, or Vue source files, run `yarn jest --findRelatedTests <changed source files> --ci --runInBand --passWithNoTests`.
+- Run `yarn type-check` only when the candidate changes shared TypeScript contracts, generated declarations, public exports, or cross-package APIs. Otherwise, leave full type-checking to PR CI and say so in the report.
+- If a check fails because of your implementation, fix the issue and rerun the same check.
+- Do not run the full CI suite (`yarn test:ci`, `yarn test:ci:v4`, package builds, bundle-size checks, examples, or e2e tests) unless the selected candidate specifically requires one of them.
+- If a check cannot run in this workflow, explain why in the implementation report instead of guessing.
+
+In the implementation report, list the exact commands you ran and their outcomes. Also list any important PR validation that still needs to run in CI.
 
 ## Required Final Artifact
 

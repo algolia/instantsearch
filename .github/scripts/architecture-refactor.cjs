@@ -41,6 +41,10 @@ const stageConfig = {
       'Write',
       'Bash(git status *)',
       'Bash(git diff *)',
+      'Bash(yarn install --frozen-lockfile)',
+      'Bash(yarn lint:changed)',
+      'Bash(yarn type-check)',
+      'Bash(yarn jest --findRelatedTests *)',
     ],
   },
 };
@@ -50,6 +54,7 @@ function printUsage() {
   node .github/scripts/architecture-refactor.cjs resolve-request
   node .github/scripts/architecture-refactor.cjs scout --run <run-id> [--max-turns <n>]
   node .github/scripts/architecture-refactor.cjs implement <candidate-id> --run <run-id> --scout-report <path> [--max-turns <n>]
+  node .github/scripts/architecture-refactor.cjs candidate-title <candidate-id> --scout-report <path>
   node .github/scripts/architecture-refactor.cjs validate-implementation --report <path>
 `);
 }
@@ -523,6 +528,27 @@ function runImplement(candidateId, options) {
   );
 }
 
+function printCandidateTitle(candidateId, options) {
+  if (!candidateId) {
+    printUsage();
+    process.exit(1);
+  }
+
+  if (!options['scout-report'] || options['scout-report'] === true) {
+    fail('Missing required option: --scout-report <path>');
+  }
+
+  const scoutReportPath = resolveInputPath(options['scout-report']);
+
+  if (!existsSync(scoutReportPath)) {
+    fail(`Scout report does not exist: ${scoutReportPath}`);
+  }
+
+  process.stdout.write(
+    `${candidateTitle(candidateId, readFileSync(scoutReportPath, 'utf8'))}\n`
+  );
+}
+
 function validateImplementation(options) {
   if (!options.report || options.report === true) {
     fail('Missing required option: --report <path>');
@@ -568,6 +594,11 @@ function main() {
 
   if (command === 'implement') {
     runImplement(positionals[0], options);
+    return;
+  }
+
+  if (command === 'candidate-title') {
+    printCandidateTitle(positionals[0], options);
     return;
   }
 
