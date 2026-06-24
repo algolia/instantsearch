@@ -178,7 +178,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
-    let usageTimeout: ReturnType<typeof setTimeout> | null = null;
+    let removeStartEventListener: (() => void) | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -451,12 +451,21 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           ]);
         }
 
-        // Defer by a tick so the measurement is taken after `start()`
-        // fully returns (started() is called from within start()), and so
-        // widgets added asynchronously in the same tick (e.g. Vue) are
-        // included in the tree.
-        usageTimeout = setTimeout(() => {
-          usageTimeout = null;
+        // Measure the bootstrap timing now (`started()` is called from
+        // within `start()`), but defer *sending* until the first `render`
+        // event, by which point every flavor has registered its widgets.
+        // A blind `setTimeout(0)` raced React's bootstrap: React renders the
+        // widgets in a second render scheduled via its MessageChannel-based
+        // scheduler, whose ordering relative to a timer macrotask is
+        // browser-dependent, so the widget tree came out empty in Chrome but
+        // populated in Firefox.
+        const bootstrapMs = Math.round(
+          (typeof performance !== 'undefined'
+            ? performance.now()
+            : Date.now()) - instantSearchInstance._createdAt
+        );
+
+        const sendStartEvent = () => {
           try {
             sendUsageEvent({
               eventName: '__start__',
@@ -464,11 +473,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
               version,
               applicationId: appId,
               performance: {
-                bootstrapMs: Math.round(
-                  (typeof performance !== 'undefined'
-                    ? performance.now()
-                    : Date.now()) - instantSearchInstance._createdAt
-                ),
+                bootstrapMs,
               },
               widgets: [
                 {
@@ -493,12 +498,17 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           } catch {
             // usage tracking must never crash the host app
           }
-        }, 0);
+        };
+
+        instantSearchInstance.once('render', sendStartEvent);
+        removeStartEventListener = () => {
+          instantSearchInstance.removeListener('render', sendStartEvent);
+          removeStartEventListener = null;
+        };
       },
       unsubscribe() {
-        if (usageTimeout) {
-          clearTimeout(usageTimeout);
-          usageTimeout = null;
+        if (removeStartEventListener) {
+          removeStartEventListener();
         }
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
