@@ -123,7 +123,13 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
 >;
 
 export type ChatAgentRequestOptions = {
+  /**
+   * Query parameters to send with built-in Agent Studio completion requests.
+   */
   queryParameters?: Record<string, string | number | boolean>;
+  /**
+   * Headers to send with built-in Agent Studio completion requests.
+   */
   headers?: Record<string, string> | Headers;
 };
 
@@ -131,6 +137,9 @@ export type ChatTransport =
   | {
       agentId: string;
       transport?: never;
+      /**
+       * Request options to send with built-in Agent Studio completion requests.
+       */
       requestOptions?: ChatAgentRequestOptions;
       /**
        * Whether to enable feedback (thumbs up/down) on assistant messages.
@@ -500,12 +509,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           const api = new URL(
             `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
           );
-          api.searchParams.set('compatibilityMode', 'ai-sdk-5');
           Object.entries(options.requestOptions?.queryParameters || {}).forEach(
             ([key, value]) => {
               api.searchParams.set(key, String(value));
             }
           );
+          api.searchParams.set('compatibilityMode', 'ai-sdk-5');
           if (bypassCache) {
             api.searchParams.set('cache', 'false');
           }
@@ -515,12 +524,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
-            'x-algolia-application-id': appId,
-            'x-algolia-api-key': apiKey,
-            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
             ...(options.requestOptions?.headers instanceof Headers
               ? Object.fromEntries(options.requestOptions.headers.entries())
               : options.requestOptions?.headers),
+            // Preserve the required Algolia identity headers and chat agent
+            // marker, even when requestOptions.headers contains the same keys.
+            'x-algolia-application-id': appId,
+            'x-algolia-api-key': apiKey,
+            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
           prepareSendMessagesRequest: ({
             id,

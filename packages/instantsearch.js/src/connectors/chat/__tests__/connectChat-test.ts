@@ -1179,6 +1179,25 @@ data: [DONE]`,
         expect(searchParams.get('userToken')).toBe('user-1');
       });
 
+      it('keeps the built-in compatibility mode on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              compatibilityMode: 'custom',
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
       it('sends persistent headers on agent requests', async () => {
         const { widget } = getInitializedWidget({
           agentId: 'agentId',
@@ -1225,6 +1244,29 @@ data: [DONE]`,
             'x-session-id': 'session-1',
           })
         );
+      });
+
+      it('keeps the x-algolia-agent chat marker even when requestOptions tries to override it', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-application-id': 'spoofed-app',
+              'x-algolia-api-key': 'spoofed-key',
+              'x-algolia-agent': 'spoofed-agent',
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-application-id']).toBe('appId');
+        expect(headers['x-algolia-api-key']).toBe('apiKey');
+        expect(headers['x-algolia-agent']).toContain('; chat');
+        expect(headers['x-algolia-agent']).not.toBe('spoofed-agent');
+        expect(headers['x-algolia-referer']).toBe('chat-widget');
       });
 
       it('does not register `chat` on the search client user-agent', () => {
