@@ -45,6 +45,8 @@ yarn workspace <pkg> build      # single package, e.g. yarn workspace instantsea
 # Unit tests (Jest, jsdom)
 yarn jest <path-or-pattern>     # fastest loop: run one file/pattern at root
 yarn jest packages/<pkg>        # one package's suite (flavor pkgs have no `test` script — scope jest by path)
+yarn jest common-widgets        # shared cross-flavor widget suites (JS+React+Vue); -connectors for connectors
+yarn jest common-widgets -t "Chat widget common tests"   # scope to one widget (label = "<Widget> widget common tests")
 yarn test                       # everything (slow)
 
 # Lint (oxlint) + format (prettier) + types
@@ -60,7 +62,7 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 
 - **TypeScript strict.** No implicit any; unused vars/params error. Avoid `for-in`/`for-of` and `async` in library code (oxlint enforces).
 - **Tests** co-locate in `__tests__/` next to source, named `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
-- **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. See `tests/common/README.md`.
+- **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. Run with `yarn jest common-widgets` (all three flavors) and scope to one widget via `-t "<Widget> widget common tests"`. This is the primary test surface for newer widgets like Autocomplete and Chat. See `tests/common/README.md`.
 - **Commits: Conventional Commits** — `type(scope): description`, scope = widget/connector or topic (`deps`, `ci`). e.g. `fix(searchbox): increase magnifying glass size`, `feat(hits): add custom rendering`. Reference issues with `fix #1234` in the body.
 - **Branches:** target `master`; `vX` branches are critical-fix-only. Branch names: `fix/<issue>`, `feat/<name>`.
 - **Releases** are automated via Ship.js (`yarn release`); changelogs are generated from commits — don't hand-edit them.
