@@ -1,20 +1,3 @@
-import { unescape } from './escape-html';
-
-import type { HighlightedParts } from '../../types';
-
-const hasAlphanumeric = new RegExp(/\w/i);
-
-export function getHighlightFromSiblings(parts: HighlightedParts[], i: number) {
-  const current = parts[i];
-  const isNextHighlighted = parts[i + 1]?.isHighlighted || true;
-  const isPreviousHighlighted = parts[i - 1]?.isHighlighted || true;
-
-  if (
-    !hasAlphanumeric.test(unescape(current.value)) &&
-    isPreviousHighlighted === isNextHighlighted
-  ) {
-    return isPreviousHighlighted;
-  }
-
-  return current.isHighlighted;
-}
+// Backward-compatible re-export. The implementation now lives in the unified
+// `highlight-parts` module alongside its inverse and reverse operations.
+export { getHighlightFromSiblings } from './highlight-parts';

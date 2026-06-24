@@ -1,15 +1,3 @@
-import { TAG_REPLACEMENT } from './escape-highlight';
-
-import type { HighlightedParts } from '../../types';
-
-export function concatHighlightedParts(parts: HighlightedParts[]) {
-  const { highlightPreTag, highlightPostTag } = TAG_REPLACEMENT;
-
-  return parts
-    .map((part) =>
-      part.isHighlighted
-        ? highlightPreTag + part.value + highlightPostTag
-        : part.value
-    )
-    .join('');
-}
+// Backward-compatible re-export. The implementation now lives in the unified
+// `highlight-parts` module alongside its inverse and reverse operations.
+export { concatHighlightedParts } from './highlight-parts';

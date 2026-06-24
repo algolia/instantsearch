@@ -1,14 +1,3 @@
-import { getHighlightFromSiblings } from './getHighlightFromSiblings';
-
-import type { HighlightedParts } from '../../types';
-
-export function reverseHighlightedParts(parts: HighlightedParts[]) {
-  if (!parts.some((part) => part.isHighlighted)) {
-    return parts.map((part) => ({ ...part, isHighlighted: false }));
-  }
-
-  return parts.map((part, i) => ({
-    ...part,
-    isHighlighted: !getHighlightFromSiblings(parts, i),
-  }));
-}
+// Backward-compatible re-export. The implementation now lives in the unified
+// `highlight-parts` module alongside its inverse and reverse operations.
+export { reverseHighlightedParts } from './highlight-parts';

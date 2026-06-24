@@ -38,7 +38,12 @@ describe('reverseHighlightedParts', () => {
         value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-',
       },
       { isHighlighted: true, value: 'Fi' },
-      { isHighlighted: false, value: ' - ' },
+      // The ` - ` separator sits between two siblings that share the same
+      // (reversed) highlight state, so it adopts that state to keep the
+      // highlight contiguous. This previously stayed `false` because of a
+      // `|| true` sibling default that collapsed any `false` neighbor to
+      // `true`; see `getHighlightFromSiblings`.
+      { isHighlighted: true, value: ' - ' },
       { isHighlighted: true, value: 'Black' },
     ]);
   });
