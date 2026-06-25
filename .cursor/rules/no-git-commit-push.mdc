@@ -1,0 +1,14 @@
+---
+description: Never run git commit or git push commands. Print the message instead.
+alwaysApply: true
+---
+
+# No Git Commit or Push
+
+NEVER execute `git commit` or `git push` commands. Instead:
+
+1. Stage files with `git add` as normal
+2. Print the proposed commit message and description directly in the chat
+3. Let the user commit and push manually
+
+This applies to all situations, even when the user asks you to "create a commit" or "commit the changes".
