@@ -509,12 +509,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           const api = new URL(
             `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
           );
+          const queryParameters: Record<string, string | number | boolean> = {
+            ...options.requestOptions?.queryParameters,
+            compatibilityMode: 'ai-sdk-5',
+            ...(bypassCache ? { cache: false } : {}),
+          };
+
           api.search = new URLSearchParams(
-            Object.entries({
-              ...options.requestOptions?.queryParameters,
-              compatibilityMode: 'ai-sdk-5',
-              ...(bypassCache ? { cache: false } : {}),
-            }).map(([key, value]) => [key, String(value)])
+            queryParameters as Record<string, string>
           ).toString();
           return api.toString();
         };
