@@ -85,7 +85,7 @@ describe('connectChat', () => {
         },
       });
 
-      assertChatConnectorParams({
+      const legacyAgentWithTransportParams = assertChatConnectorParams({
         agentId: 'agentId',
         transport: { api: 'https://custom.api' },
       });
@@ -120,6 +120,10 @@ describe('connectChat', () => {
       });
       expect(agentParams.requestOptions?.headers).toEqual({
         'x-algolia-referer': 'chat-widget',
+      });
+      expect(legacyAgentWithTransportParams).toEqual({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
       });
     });
   });
