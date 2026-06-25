@@ -92,9 +92,8 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
-// Fallback used when the flavor wrapper doesn't supply a `useState` hook. It
-// returns a static value and a no-op setter, so the clearing animation is
-// skipped and the clear is committed immediately (see `startClear`).
+// Fallback when the flavor supplies no `useState`: a static value and a no-op
+// setter, so the clear commits immediately without animating.
 function noopUseState<TState>(
   initialState: TState
 ): [TState, (value: TState | ((prev: TState) => TState)) => void] {
@@ -131,9 +130,8 @@ export function createChatComponent({
     Fragment,
   });
 
-  // Resolve the state hook once, at factory time, so it's a stable reference
-  // called unconditionally on every render (Rules of Hooks). Whether a real
-  // hook was supplied also decides if the clear can animate at all.
+  // Resolve once so the hook is a stable reference called unconditionally every
+  // render (Rules of Hooks).
   const hasStateHook = Boolean(useState);
   const useClearingState = useState || noopUseState;
 
@@ -158,13 +156,6 @@ export function createChatComponent({
       ...props
     } = userProps;
 
-    // The clear flow owns a fade-out animation: `isClearing` adds the CSS class
-    // that fades the messages out, and the messages are only committed once the
-    // opacity transition ends. This lifecycle is a view concern, so it lives
-    // here rather than in the connector — the connector exposes a single
-    // synchronous `clearMessages` commit (surfaced as `headerProps.onClear` /
-    // `messagesProps.onNewConversation`), and this component decides when to
-    // call it.
     const [isClearing, setIsClearing] = useClearingState(false);
 
     const commitClear = headerProps.onClear || messagesProps.onNewConversation;
@@ -173,17 +164,13 @@ export function createChatComponent({
       if (!commitClear) {
         return;
       }
-      // Without a state hook there's no way to drive the animation, and when the
-      // user prefers reduced motion the transition is disabled (`transition:
-      // none`), so `transitionend` never fires. Commit immediately in both
-      // cases; otherwise fade out and let `finishClear` commit on transition end.
+      // Reduced motion disables the transition, so `transitionend` never fires;
+      // with no state hook there's nothing to animate. Commit immediately.
       if (!hasStateHook || prefersReducedMotion()) {
         commitClear();
         return;
       }
-      // Stop any in-flight stream now so the assistant stops responding
-      // immediately rather than after the fade-out; the messages are then
-      // removed once the transition ends (`finishClear` → `commitClear`).
+      // Stop streaming now so the assistant stops immediately, not after the fade.
       if (
         messagesProps.status === 'submitted' ||
         messagesProps.status === 'streaming'

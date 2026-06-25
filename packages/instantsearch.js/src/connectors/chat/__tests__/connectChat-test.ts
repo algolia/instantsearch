@@ -307,10 +307,6 @@ describe('connectChat', () => {
     });
 
     it('clears messages and resets the conversation when clearMessages is called', () => {
-      // The connector commits the clear synchronously; any fade-out animation
-      // before this point is owned by the view layer (see the Chat UI
-      // component), so the connector no longer exposes `isClearing` /
-      // `onClearTransitionEnd`.
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -330,12 +326,28 @@ describe('connectChat', () => {
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
+    it('renders the rotated conversation id when clearing', () => {
+      const { getRenderState, renderFn } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      renderState.setMessages([
+        { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+      ]);
+      const idBeforeClear = getRenderState().id;
+
+      renderFn.mockClear();
+      renderState.clearMessages();
+
+      // The render emitted while clearing must observe the rotated id, not the
+      // stale one (state that doesn't emit a callback is reset first).
+      const lastRenderState =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastRenderState.id).not.toBe(idBeforeClear);
+    });
+
     it('exits the error state and resets the conversation even with no messages', () => {
-      // The clear is unconditional — it also stops an in-flight stream and
-      // resets the error status/conversation id, which can be set even with no
-      // messages (e.g. a failed resume/reconnect). So it doesn't shortcut out
-      // when the message list is empty. (`clearError` resets the status, which
-      // is what hides the error UI — gated on `status === 'error'`.)
+      // An error/stream can be set with no messages (e.g. a failed resume), so
+      // clearing must not shortcut out on an empty message list.
       const { getRenderState, widget } = getInitializedWidget();
 
       let renderState = getRenderState();

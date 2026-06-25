@@ -360,15 +360,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
       }
-      // Synchronously commit the clear. Any fade-out animation is owned by the
-      // view layer, which calls this once it's ready to remove the messages.
-      // We don't guard on empty messages: clearing also stops an in-flight
-      // stream and resets the error/conversation id, which can be set even with
-      // no messages (e.g. a failed resume/reconnect).
+      // Reset the non-reactive state first: `setMessages` and `clearError` emit
+      // ChatState callbacks that synchronously re-render, so they must run last
+      // for that render to see the cleared feedback and rotated conversation id.
+      feedbackState = {};
+      _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
-      _chatInstance.resetConversationId();
-      feedbackState = {};
     };
 
     const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
