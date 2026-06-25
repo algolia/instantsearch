@@ -21,6 +21,7 @@ export type AutocompleteSearchProps = {
   isDetached?: boolean;
   submitTitle?: string;
   onAiModeClick?: () => void;
+  aiModeButtonDisabled?: boolean;
   classNames?: Partial<AutocompleteClassNames>;
 };
 
@@ -35,6 +36,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
       isDetached,
       submitTitle,
       onAiModeClick,
+      aiModeButtonDisabled = false,
       classNames = {},
     } = userProps;
 
@@ -160,6 +162,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               className={cx('ais-AiModeButton', classNames.aiModeButton)}
               type="button"
               title="AI Mode"
+              disabled={aiModeButtonDisabled}
               onClick={(e) => {
                 e.preventDefault();
                 onAiModeClick();

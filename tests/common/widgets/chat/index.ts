@@ -1,6 +1,7 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
+import { createStreamingTests } from './streaming';
 import { createTemplatesTests } from './templates';
 import { createTranslationsTests } from './translations';
 
@@ -44,6 +45,7 @@ export function createChatWidgetTests(
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {
     createOptionsTests(setup, { act, skippedTests, flavor });
+    createStreamingTests(setup, { act, skippedTests, flavor });
     createTemplatesTests(setup, { act, skippedTests, flavor });
     createTranslationsTests(setup, { act, skippedTests, flavor });
   });

@@ -206,7 +206,152 @@ describe('ChatMessage', () => {
     `);
   });
 
-  test('does not render context text parts', () => {
+  test('parses text parts as markdown by default', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'a *b* c' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    // markdown-to-jsx turns `*b*` into an <em>, so the literal asterisks are
+    // gone from the output.
+    expect(container.querySelector('em')).not.toBeNull();
+    expect(container.querySelector('em')!.textContent).toBe('b');
+    expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
+  });
+
+  test('renders text parts as plain text when parseMarkdown is false', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'a *b* c' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        parseMarkdown={false}
+      />
+    );
+
+    const text = container.querySelector('.ais-ChatMessage-text');
+    expect(text).not.toBeNull();
+    // The literal asterisks survive: no markdown transformation happened.
+    expect(text!.textContent).toBe('a *b* c');
+    expect(container.querySelector('em')).toBeNull();
+  });
+
+  test('plain-text mode renders the expected DOM structure', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'Use * and _ literally' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        parseMarkdown={false}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <article
+          aria-label="Message"
+          class="ais-ChatMessage ais-ChatMessage--left ais-ChatMessage--subtle"
+        >
+          <div
+            class="ais-ChatMessage-container"
+          >
+            <div
+              class="ais-ChatMessage-content"
+            >
+              <div
+                class="ais-ChatMessage-message"
+              >
+                <p
+                  class="ais-ChatMessage-text"
+                >
+                  Use * and _ literally
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    `);
+  });
+
+  test('preserves newlines in plain-text mode', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'line one\nline two' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        parseMarkdown={false}
+      />
+    );
+
+    expect(container.querySelector('.ais-ChatMessage-text')!.textContent).toBe(
+      'line one\nline two'
+    );
+  });
+
+  test('still hides legacy `<context>` parts when parseMarkdown is false', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [
+            {
+              type: 'text',
+              text: '<context>{"currentPage":"https://example.com/products"}</context>',
+            },
+            { type: 'text', text: 'Hello' },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        parseMarkdown={false}
+      />
+    );
+
+    expect(container.textContent).toBe('Hello');
+    expect(container.textContent).not.toContain('example.com');
+    expect(container.textContent).not.toContain('context');
+  });
+
+  test('does not render legacy `<context>` text parts (back-compat)', () => {
+    // Pre-migration sessions persisted a `<context>{...}</context>` text part.
+    // The shim in `ChatMessage` keeps those out of the rendered transcript
+    // until existing sessionStorage caches roll over.
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
@@ -231,6 +376,35 @@ describe('ChatMessage', () => {
     expect(container.textContent).toBe('Hello');
     expect(container.textContent).not.toContain('example.com');
     expect(container.textContent).not.toContain('context');
+  });
+
+  test('does not render turnContext from message metadata', () => {
+    // turnContext is an out-of-band server-grounding signal; it must never
+    // surface in the rendered transcript even if a message somehow carries it.
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'Hello' }],
+          metadata: {
+            turnContext: {
+              url: 'https://example.com/products',
+              locale: 'en-US',
+            },
+          },
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.textContent).toBe('Hello');
+    expect(container.textContent).not.toContain('example.com');
+    expect(container.textContent).not.toContain('turnContext');
   });
 
   test('renders with tools', () => {

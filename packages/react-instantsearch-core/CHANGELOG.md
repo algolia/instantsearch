@@ -3,6 +3,83 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.36.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.35.2...react-instantsearch-core@7.36.0) (2026-06-19)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.35.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.35.1...react-instantsearch-core@7.35.2) (2026-06-19)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.35.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.35.0...react-instantsearch-core@7.35.1) (2026-06-09)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.35.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.34.1...react-instantsearch-core@7.35.0) (2026-06-03)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.34.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.34.0...react-instantsearch-core@7.34.1) (2026-06-03)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+# [7.34.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.33.1...react-instantsearch-core@7.34.0) (2026-06-02)
+
+
+### Features
+
+* **chat:** split chat trigger widget ([#6966](https://github.com/algolia/instantsearch/issues/6966)) ([379084c](https://github.com/algolia/instantsearch/commit/379084cd459a0d8b0f4f2a55b0dae336cf331008))
+
+
+
+
+
+## [7.33.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.33.0...react-instantsearch-core@7.33.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+
+
+
+
+
+# [7.33.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.3...react-instantsearch-core@7.33.0) (2026-05-19)
+
+
+### Features
+
+* **filter-suggestions:** deprecate filter suggestions ([#7040](https://github.com/algolia/instantsearch/issues/7040)) ([3b2c8ff](https://github.com/algolia/instantsearch/commit/3b2c8ff5e547186aa07be29dfac4f07c7bc07b98))
+
+
+
+
+
+## [7.32.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.2...react-instantsearch-core@7.32.3) (2026-05-12)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
 ## [7.32.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.0...react-instantsearch-core@7.32.1) (2026-05-05)
 
 
