@@ -13,6 +13,7 @@ import type { ChatProps } from '../Chat';
 const Chat = createChatComponent({
   createElement,
   Fragment,
+  memo: (component) => component,
   useState,
 });
 

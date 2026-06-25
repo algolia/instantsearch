@@ -105,7 +105,7 @@ export function createChatComponent({
   Fragment,
   memo,
   useState,
-}: Renderer & Pick<Hooks, 'useState'> & Partial<Pick<Hooks, 'memo'>>) {
+}: Renderer & Pick<Hooks, 'memo' | 'useState'>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({
     createElement,

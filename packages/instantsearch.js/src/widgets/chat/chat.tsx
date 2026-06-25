@@ -80,7 +80,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 // avoided across this package (it bloats the bundle and patches Preact
 // globally); a class component with `shouldComponentUpdate` is all the chat
 // message memoization needs.
-const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
+const memo: Parameters<typeof createChatComponent>[0]['memo'] = (
   FunctionComponent,
   propsAreEqual
 ) => {
