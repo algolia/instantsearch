@@ -101,13 +101,11 @@ describe('connectChat', () => {
         expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -166,12 +164,10 @@ describe('connectChat', () => {
         chat: expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -310,10 +306,15 @@ describe('connectChat', () => {
       expect(updatedRenderState.open).toBe(true);
     });
 
-    it('updates clearing state when clearMessages is called', () => {
+    it('clears messages and resets the conversation when clearMessages is called', () => {
+      // The connector commits the clear synchronously; any fade-out animation
+      // before this point is owned by the view layer (see the Chat UI
+      // component), so the connector no longer exposes `isClearing` /
+      // `onClearTransitionEnd`.
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
+      const conversationIdBeforeClear = renderState.id;
 
       const message: UIMessage = {
         id: '1',
@@ -322,12 +323,11 @@ describe('connectChat', () => {
       };
       renderState.setMessages([message]);
 
-      expect(renderState.isClearing).toBe(false);
-
       renderState.clearMessages();
 
       const updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
+      expect(updatedRenderState.messages).toHaveLength(0);
+      expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
     it('does not change state when clearing empty messages', () => {
@@ -345,33 +345,7 @@ describe('connectChat', () => {
       expect(renderFn.mock.calls.length).toBe(callCountBeforeClear);
     });
 
-    it('clears messages and resets state on transition end', () => {
-      const { getRenderState } = getInitializedWidget();
-
-      const renderState = getRenderState();
-      const conversationIdBeforeClear = renderState.id;
-
-      const message: UIMessage = {
-        id: '1',
-        role: 'user',
-        parts: [{ type: 'text', text: 'Hello' }],
-      };
-      renderState.setMessages([message]);
-      renderState.clearMessages();
-
-      let updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
-      expect(updatedRenderState.id).toBe(conversationIdBeforeClear);
-
-      renderState.onClearTransitionEnd();
-
-      updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(false);
-      expect(updatedRenderState.messages).toHaveLength(0);
-      expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
-    });
-
-    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+    it('regenerates the chat id on clear so the server starts a fresh conversation', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -385,7 +359,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.id).toEqual(expect.any(String));
@@ -421,7 +394,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       expect(chatInstance.id).toEqual(expect.any(String));
       expect(chatInstance.id).not.toBe(initialId);

@@ -51,6 +51,7 @@ const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
   memo: memo as Parameters<typeof createChatComponent>[0]['memo'],
+  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -251,9 +252,7 @@ function ChatInner<
     setInput,
     open,
     setOpen,
-    isClearing,
     clearMessages,
-    onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
     sendChatMessageFeedback: onFeedback,
@@ -313,7 +312,7 @@ function ChatInner<
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(messages?.length) && !isClearing,
+        canClear: Boolean(messages?.length),
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
         minimizeIconComponent: headerMinimizeIconComponent,
@@ -334,8 +333,6 @@ function ChatInner<
         tools: toolsFromConnector,
         indexUiState,
         setIndexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
