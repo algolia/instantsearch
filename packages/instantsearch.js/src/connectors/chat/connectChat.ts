@@ -122,18 +122,50 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   'transport'
 >;
 
-export type ChatTransport = {
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
-} & (
+export type ChatAgentRequestOptions = {
+  /**
+   * Query parameters to send with built-in Agent Studio completion requests.
+   */
+  queryParameters?: Record<string, string | number | boolean>;
+  /**
+   * Headers to send with built-in Agent Studio completion requests.
+   */
+  headers?: Record<string, string> | Headers;
+};
+
+export type ChatTransport =
   | {
       agentId: string;
+      transport?: never;
+      /**
+       * Request options to send with built-in Agent Studio completion requests.
+       */
+      requestOptions?: ChatAgentRequestOptions;
       /**
        * Whether to enable feedback (thumbs up/down) on assistant messages.
        */
       feedback?: boolean;
     }
-  | { agentId?: undefined; feedback?: never }
-);
+  | {
+      agentId: string;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: boolean;
+      requestOptions?: never;
+    }
+  | {
+      agentId?: undefined;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: never;
+      requestOptions?: never;
+    };
+
+export type ChatCustomInstance<TUiMessage extends UIMessage> = {
+  chat: Chat<TUiMessage>;
+  agentId?: undefined;
+  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  feedback?: never;
+  requestOptions?: never;
+};
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -144,7 +176,7 @@ export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
 export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
-  | { chat: Chat<TUiMessage> }
+  | ChatCustomInstance<TUiMessage>
   | ChatInit<TUiMessage>
 ) & {
   /**
@@ -473,21 +505,43 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
 
-        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
+        const createApi = (bypassCache = false) => {
+          const api = new URL(
+            `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
+          );
+          const queryParameters: Record<string, string | number | boolean> = {
+            ...options.requestOptions?.queryParameters,
+            compatibilityMode: 'ai-sdk-5',
+            ...(bypassCache ? { cache: false } : {}),
+          };
+
+          api.search = new URLSearchParams(
+            queryParameters as Record<string, string>
+          ).toString();
+          return api.toString();
+        };
+        const baseApi = createApi();
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
+            ...(options.requestOptions?.headers instanceof Headers
+              ? Object.fromEntries(options.requestOptions.headers.entries())
+              : options.requestOptions?.headers),
+            // Preserve the required Algolia identity headers and chat agent
+            // marker, even when requestOptions.headers contains the same keys.
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
             'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
-          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
+          prepareSendMessagesRequest: ({
+            id,
+            messages,
+            trigger,
+            messageId,
+          }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
-              api:
-                trigger === 'regenerate-message'
-                  ? `${baseApi}&cache=false`
-                  : baseApi,
+              api: trigger === 'regenerate-message' ? createApi(true) : baseApi,
               body: {
                 id,
                 messageId,
