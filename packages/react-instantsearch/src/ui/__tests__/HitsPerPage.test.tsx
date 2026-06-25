@@ -37,6 +37,7 @@ describe('HitsPerPage', () => {
           class="ais-HitsPerPage"
         >
           <select
+            aria-label="Items per page"
             class="ais-HitsPerPage-select"
           >
             <option
@@ -112,6 +113,7 @@ describe('HitsPerPage', () => {
           class="ais-HitsPerPage ROOT MyCustomHitsPerPage"
         >
           <select
+            aria-label="Items per page"
             class="ais-HitsPerPage-select SELECT"
           >
             <option
