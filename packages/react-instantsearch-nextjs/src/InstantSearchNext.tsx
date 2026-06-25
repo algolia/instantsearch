@@ -7,7 +7,6 @@ import {
 } from 'react-instantsearch-core';
 
 import { InitializePromise } from './InitializePromise';
-import { RefreshOnClientNavigation } from './RefreshOnClientNavigation';
 import { TriggerSearch } from './TriggerSearch';
 import { useDynamicRouteWarning } from './useDynamicRouteWarning';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
@@ -86,7 +85,6 @@ export function InstantSearchNext<
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
         {isServer && <TriggerSearch nonce={nonce} />}
-        {!isServer && <RefreshOnClientNavigation />}
       </InstantSearch>
     </ServerOrHydrationProvider>
   );
