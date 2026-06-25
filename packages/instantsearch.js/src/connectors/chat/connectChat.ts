@@ -356,15 +356,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
-        return;
-      }
       const status = _chatInstance.status;
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
       }
       // Synchronously commit the clear. Any fade-out animation is owned by the
       // view layer, which calls this once it's ready to remove the messages.
+      // We don't guard on empty messages: clearing also stops an in-flight
+      // stream and resets the error/conversation id, which can be set even with
+      // no messages (e.g. a failed resume/reconnect).
       setMessages([]);
       _chatInstance.clearError();
       _chatInstance.resetConversationId();

@@ -319,6 +319,38 @@ describe('Chat', () => {
       expect(onClear).toHaveBeenCalledTimes(1);
     });
 
+    test('stops an in-flight stream immediately, then commits on transition end', () => {
+      mockReducedMotion(false);
+      const onClear = jest.fn();
+      const stop = jest.fn();
+      const props = baseProps(onClear);
+      const { container } = render(
+        <StatefulChat
+          {...props}
+          stop={stop as any}
+          messagesProps={{ ...props.messagesProps, status: 'streaming' }}
+        />
+      );
+
+      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
+
+      // Streaming is stopped right away so the assistant stops responding; the
+      // messages keep fading until the transition ends.
+      expect(stop).toHaveBeenCalledTimes(1);
+      expect(onClear).not.toHaveBeenCalled();
+      const content = container.querySelector('.ais-ChatMessages-content')!;
+      expect(
+        content.classList.contains('ais-ChatMessages-content--clearing')
+      ).toBe(true);
+
+      const transitionEndEvent = new Event('transitionend', { bubbles: true });
+      Object.defineProperty(transitionEndEvent, 'propertyName', {
+        value: 'opacity',
+      });
+      fireEvent(content, transitionEndEvent);
+      expect(onClear).toHaveBeenCalledTimes(1);
+    });
+
     test('commits immediately when the user prefers reduced motion', () => {
       mockReducedMotion(true);
       const onClear = jest.fn();

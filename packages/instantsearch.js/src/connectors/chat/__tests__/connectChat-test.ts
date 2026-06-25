@@ -330,19 +330,27 @@ describe('connectChat', () => {
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
-    it('does not change state when clearing empty messages', () => {
-      const { getRenderState, renderFn } = getInitializedWidget();
+    it('exits the error state and resets the conversation even with no messages', () => {
+      // The clear is unconditional — it also stops an in-flight stream and
+      // resets the error status/conversation id, which can be set even with no
+      // messages (e.g. a failed resume/reconnect). So it doesn't shortcut out
+      // when the message list is empty. (`clearError` resets the status, which
+      // is what hides the error UI — gated on `status === 'error'`.)
+      const { getRenderState, widget } = getInitializedWidget();
 
-      const renderState = getRenderState();
+      let renderState = getRenderState();
+      renderState.setMessages([]);
+      // Simulate an error state with no messages (e.g. a failed resume).
+      widget.chatInstance._state.status = 'error';
+      widget.chatInstance._state.error = new Error('boom');
+      const idBeforeClear = getRenderState().id;
 
-      if (renderState.messages.length > 0) {
-        renderState.setMessages([]);
-      }
-
-      const callCountBeforeClear = renderFn.mock.calls.length;
       renderState.clearMessages();
 
-      expect(renderFn.mock.calls.length).toBe(callCountBeforeClear);
+      renderState = getRenderState();
+      expect(renderState.messages).toHaveLength(0);
+      expect(renderState.status).toBe('ready');
+      expect(renderState.id).not.toBe(idBeforeClear);
     });
 
     it('regenerates the chat id on clear so the server starts a fresh conversation', () => {

@@ -181,6 +181,15 @@ export function createChatComponent({
         commitClear();
         return;
       }
+      // Stop any in-flight stream now so the assistant stops responding
+      // immediately rather than after the fade-out; the messages are then
+      // removed once the transition ends (`finishClear` → `commitClear`).
+      if (
+        messagesProps.status === 'submitted' ||
+        messagesProps.status === 'streaming'
+      ) {
+        stop();
+      }
       setIsClearing(true);
     };
 
