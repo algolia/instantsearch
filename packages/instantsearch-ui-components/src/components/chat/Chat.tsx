@@ -92,14 +92,6 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
-// Fallback when the flavor supplies no `useState`: a static value and a no-op
-// setter, so the clear commits immediately without animating.
-function noopUseState<TState>(
-  initialState: TState
-): [TState, (value: TState | ((prev: TState) => TState)) => void] {
-  return [initialState, () => {}];
-}
-
 function prefersReducedMotion(): boolean {
   return (
     typeof window !== 'undefined' &&
@@ -113,7 +105,7 @@ export function createChatComponent({
   Fragment,
   memo,
   useState,
-}: Renderer & Partial<Pick<Hooks, 'memo' | 'useState'>>) {
+}: Renderer & Pick<Hooks, 'useState'> & Partial<Pick<Hooks, 'memo'>>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({
     createElement,
@@ -129,11 +121,6 @@ export function createChatComponent({
     createElement,
     Fragment,
   });
-
-  // Resolve once so the hook is a stable reference called unconditionally every
-  // render (Rules of Hooks).
-  const hasStateHook = Boolean(useState);
-  const useClearingState = useState || noopUseState;
 
   return function Chat(userProps: ChatProps) {
     const {
@@ -156,7 +143,7 @@ export function createChatComponent({
       ...props
     } = userProps;
 
-    const [isClearing, setIsClearing] = useClearingState(false);
+    const [isClearing, setIsClearing] = useState(false);
 
     const commitClear = headerProps.onClear || messagesProps.onNewConversation;
 
@@ -165,8 +152,8 @@ export function createChatComponent({
         return;
       }
       // Reduced motion disables the transition, so `transitionend` never fires;
-      // with no state hook there's nothing to animate. Commit immediately.
-      if (!hasStateHook || prefersReducedMotion()) {
+      // commit immediately instead of waiting for it.
+      if (prefersReducedMotion()) {
         commitClear();
         return;
       }

@@ -13,6 +13,7 @@ import type { ChatProps } from '../Chat';
 const Chat = createChatComponent({
   createElement,
   Fragment,
+  useState,
 });
 
 describe('Chat', () => {
@@ -221,14 +222,6 @@ describe('Chat', () => {
   });
 
   describe('clearing', () => {
-    // A flavor that supplies a real state hook, mirroring how the React and JS
-    // wrappers wire `useState` into the component.
-    const StatefulChat = createChatComponent({
-      createElement,
-      Fragment,
-      useState,
-    });
-
     const baseProps = (
       onClear: () => void
     ): Omit<ChatProps, 'headerProps' | 'messagesProps'> & {
@@ -297,7 +290,7 @@ describe('Chat', () => {
     test('fades out, then commits the clear when the opacity transition ends', () => {
       mockReducedMotion(false);
       const onClear = jest.fn();
-      const { container } = render(<StatefulChat {...baseProps(onClear)} />);
+      const { container } = render(<Chat {...baseProps(onClear)} />);
 
       fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
 
@@ -325,7 +318,7 @@ describe('Chat', () => {
       const stop = jest.fn();
       const props = baseProps(onClear);
       const { container } = render(
-        <StatefulChat
+        <Chat
           {...props}
           stop={stop as any}
           messagesProps={{ ...props.messagesProps, status: 'streaming' }}
@@ -354,7 +347,7 @@ describe('Chat', () => {
     test('commits immediately when the user prefers reduced motion', () => {
       mockReducedMotion(true);
       const onClear = jest.fn();
-      const { container } = render(<StatefulChat {...baseProps(onClear)} />);
+      const { container } = render(<Chat {...baseProps(onClear)} />);
 
       fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
 
@@ -364,17 +357,6 @@ describe('Chat', () => {
       expect(
         content.classList.contains('ais-ChatMessages-content--clearing')
       ).toBe(false);
-    });
-
-    test('commits immediately when no state hook is provided', () => {
-      mockReducedMotion(false);
-      const onClear = jest.fn();
-      // `Chat` is created without a `useState` hook (graceful degradation).
-      const { container } = render(<Chat {...baseProps(onClear)} />);
-
-      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
-
-      expect(onClear).toHaveBeenCalledTimes(1);
     });
   });
 });
