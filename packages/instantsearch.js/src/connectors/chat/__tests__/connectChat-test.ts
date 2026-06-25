@@ -157,13 +157,11 @@ describe('connectChat', () => {
         expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -222,12 +220,10 @@ describe('connectChat', () => {
         chat: expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -366,42 +362,7 @@ describe('connectChat', () => {
       expect(updatedRenderState.open).toBe(true);
     });
 
-    it('updates clearing state when clearMessages is called', () => {
-      const { getRenderState } = getInitializedWidget();
-
-      const renderState = getRenderState();
-
-      const message: UIMessage = {
-        id: '1',
-        role: 'user',
-        parts: [{ type: 'text', text: 'Hello' }],
-      };
-      renderState.setMessages([message]);
-
-      expect(renderState.isClearing).toBe(false);
-
-      renderState.clearMessages();
-
-      const updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
-    });
-
-    it('does not change state when clearing empty messages', () => {
-      const { getRenderState, renderFn } = getInitializedWidget();
-
-      const renderState = getRenderState();
-
-      if (renderState.messages.length > 0) {
-        renderState.setMessages([]);
-      }
-
-      const callCountBeforeClear = renderFn.mock.calls.length;
-      renderState.clearMessages();
-
-      expect(renderFn.mock.calls.length).toBe(callCountBeforeClear);
-    });
-
-    it('clears messages and resets state on transition end', () => {
+    it('clears messages and resets the conversation when clearMessages is called', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -413,21 +374,54 @@ describe('connectChat', () => {
         parts: [{ type: 'text', text: 'Hello' }],
       };
       renderState.setMessages([message]);
+
       renderState.clearMessages();
 
-      let updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
-      expect(updatedRenderState.id).toBe(conversationIdBeforeClear);
-
-      renderState.onClearTransitionEnd();
-
-      updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(false);
+      const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toHaveLength(0);
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
-    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+    it('renders the rotated conversation id when clearing', () => {
+      const { getRenderState, renderFn } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      renderState.setMessages([
+        { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+      ]);
+      const idBeforeClear = getRenderState().id;
+
+      renderFn.mockClear();
+      renderState.clearMessages();
+
+      // The render emitted while clearing must observe the rotated id, not the
+      // stale one (state that doesn't emit a callback is reset first).
+      const lastRenderState =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastRenderState.id).not.toBe(idBeforeClear);
+    });
+
+    it('exits the error state and resets the conversation even with no messages', () => {
+      // An error/stream can be set with no messages (e.g. a failed resume), so
+      // clearing must not shortcut out on an empty message list.
+      const { getRenderState, widget } = getInitializedWidget();
+
+      let renderState = getRenderState();
+      renderState.setMessages([]);
+      // Simulate an error state with no messages (e.g. a failed resume).
+      widget.chatInstance._state.status = 'error';
+      widget.chatInstance._state.error = new Error('boom');
+      const idBeforeClear = getRenderState().id;
+
+      renderState.clearMessages();
+
+      renderState = getRenderState();
+      expect(renderState.messages).toHaveLength(0);
+      expect(renderState.status).toBe('ready');
+      expect(renderState.id).not.toBe(idBeforeClear);
+    });
+
+    it('regenerates the chat id on clear so the server starts a fresh conversation', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -441,7 +435,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.id).toEqual(expect.any(String));
@@ -477,7 +470,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       expect(chatInstance.id).toEqual(expect.any(String));
       expect(chatInstance.id).not.toBe(initialId);

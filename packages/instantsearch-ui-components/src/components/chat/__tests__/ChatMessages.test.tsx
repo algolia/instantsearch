@@ -13,6 +13,7 @@ import type { ChatMessageErrorProps } from '../ChatMessageError';
 const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
+  memo: (component) => component,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 

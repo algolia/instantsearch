@@ -411,16 +411,16 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
   memo,
-}: Renderer & Partial<Pick<Hooks, 'memo'>>) {
+}: Renderer & Pick<Hooks, 'memo'>) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
   // Skip re-rendering (and re-compiling the markdown of) completed messages on
-  // every streaming delta. Falls back to the plain component when the host
-  // renderer doesn't provide a `memo` HOC.
-  const MemoizedDefaultMessage = memo
-    ? memo(DefaultMessageComponent, areMessagePropsEqual)
-    : DefaultMessageComponent;
+  // every streaming delta.
+  const MemoizedDefaultMessage = memo(
+    DefaultMessageComponent,
+    areMessagePropsEqual
+  );
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
     createElement,
   });
