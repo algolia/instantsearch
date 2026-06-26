@@ -14,6 +14,7 @@ import {
   noop,
   sendChatMessageFeedback,
   uniq,
+  walkIndex,
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
@@ -72,17 +73,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
   /**
-   * Whether the chat is in the process of clearing messages.
-   */
-  isClearing: boolean;
-  /**
-   * Clear all messages.
+   * Clear all messages. This is a synchronous, immediate commit; any fade-out
+   * animation before clearing is handled by the view layer.
    */
   clearMessages: () => void;
-  /**
-   * Callback to be called when the clear transition ends.
-   */
-  onClearTransitionEnd: () => void;
   /**
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
@@ -121,18 +115,50 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   'transport'
 >;
 
-export type ChatTransport = {
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
-} & (
+export type ChatAgentRequestOptions = {
+  /**
+   * Query parameters to send with built-in Agent Studio completion requests.
+   */
+  queryParameters?: Record<string, string | number | boolean>;
+  /**
+   * Headers to send with built-in Agent Studio completion requests.
+   */
+  headers?: Record<string, string> | Headers;
+};
+
+export type ChatTransport =
   | {
       agentId: string;
+      transport?: never;
+      /**
+       * Request options to send with built-in Agent Studio completion requests.
+       */
+      requestOptions?: ChatAgentRequestOptions;
       /**
        * Whether to enable feedback (thumbs up/down) on assistant messages.
        */
       feedback?: boolean;
     }
-  | { agentId?: undefined; feedback?: never }
-);
+  | {
+      agentId: string;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: boolean;
+      requestOptions?: never;
+    }
+  | {
+      agentId?: undefined;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: never;
+      requestOptions?: never;
+    };
+
+export type ChatCustomInstance<TUiMessage extends UIMessage> = {
+  chat: Chat<TUiMessage>;
+  agentId?: undefined;
+  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  feedback?: never;
+  requestOptions?: never;
+};
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -143,9 +169,13 @@ export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
 export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
-  | { chat: Chat<TUiMessage> }
+  | ChatCustomInstance<TUiMessage>
   | ChatInit<TUiMessage>
 ) & {
+  /**
+   * Disable validation that requires either a dedicated trigger or AI mode.
+   */
+  disableTriggerValidation?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
    */
@@ -160,12 +190,17 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    */
   type?: string;
   /**
-   * Additional context to send with each user message (e.g. current page info).
-   * This context is included in the message parts sent to the API but is not
-   * displayed in the chat UI.
-   * Can be a static object or a function that returns the context at send time.
+   * Ambient session facts to attach to the latest user turn (e.g. current page
+   * URL, locale, product id). Sent over the wire as
+   * `messages[last].metadata.turnContext` per the Agent Studio contract — never
+   * rendered as a chat bubble and never persisted on assistant turns.
+   *
+   * The server validates the payload (flat `Record<string, string>`, key/value
+   * length and shape) and rejects malformed contexts. Pass a function when the
+   * values change per-turn — it is invoked once per send. If the source is
+   * async, resolve it upstream and close over the value.
    */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -294,19 +329,19 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       context,
       initialUserMessage,
       initialMessages,
+      disableTriggerValidation = false,
       ...options
     } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
-    let isClearing = false;
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
-    let setIsClearing: (value: boolean) => void;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
+    let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
@@ -353,22 +388,45 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
-        return;
-      }
       const status = _chatInstance.status;
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
       }
-      setIsClearing(true);
-    };
-
-    const onClearTransitionEnd = () => {
+      // Reset the non-reactive state first: `setMessages` and `clearError` emit
+      // ChatState callbacks that synchronously re-render, so they must run last
+      // for that render to see the cleared feedback and rotated conversation id.
+      feedbackState = {};
+      _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
-      _chatInstance.regenerateId();
-      feedbackState = {};
-      setIsClearing(false);
+    };
+
+    const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
+      if (disableTriggerValidation || hasValidatedEntryPoints) {
+        return;
+      }
+
+      // warning only relevant once mounted
+      if (!instantSearchInstance.mainIndex) {
+        return;
+      }
+
+      let hasEntryPoint = false;
+      walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
+        const widgets = indexWidget.getWidgets() as Array<{
+          opensChat?: boolean;
+        }>;
+        if (widgets.some((w) => w.opensChat === true)) {
+          hasEntryPoint = true;
+        }
+      });
+
+      warning(
+        hasEntryPoint,
+        'The `chat` widget has no way to be opened. Add a `chatTrigger` widget, enable `aiMode` on a `searchBox`/`autocomplete`, or use the inline layout. Set `disableTriggerValidation: true` to silence this warning.'
+      );
+
+      hasValidatedEntryPoints = true;
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -433,21 +491,43 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
 
-        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
+        const createApi = (bypassCache = false) => {
+          const api = new URL(
+            `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
+          );
+          const queryParameters: Record<string, string | number | boolean> = {
+            ...options.requestOptions?.queryParameters,
+            compatibilityMode: 'ai-sdk-5',
+            ...(bypassCache ? { cache: false } : {}),
+          };
+
+          api.search = new URLSearchParams(
+            queryParameters as Record<string, string>
+          ).toString();
+          return api.toString();
+        };
+        const baseApi = createApi();
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
+            ...(options.requestOptions?.headers instanceof Headers
+              ? Object.fromEntries(options.requestOptions.headers.entries())
+              : options.requestOptions?.headers),
+            // Preserve the required Algolia identity headers and chat agent
+            // marker, even when requestOptions.headers contains the same keys.
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
             'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
-          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
+          prepareSendMessagesRequest: ({
+            id,
+            messages,
+            trigger,
+            messageId,
+          }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
-              api:
-                trigger === 'regenerate-message'
-                  ? `${baseApi}&cache=false`
-                  : baseApi,
+              api: trigger === 'regenerate-message' ? createApi(true) : baseApi,
               body: {
                 id,
                 messageId,
@@ -529,6 +609,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
+        validateEntryPoints(instantSearchInstance);
+
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -544,6 +626,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         setOpen = (o) => {
           open = o;
           render();
+          // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
+          // shared `renderState`. Schedule a full re-render so they pick up
+          // the new value instead of staying frozen on their initial state.
+          initOptions.instantSearchInstance.scheduleRender();
         };
 
         focusInput = () => {
@@ -555,18 +641,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        setIsClearing = (value) => {
-          isClearing = value;
-          render();
-        };
-
         setFeedbackState = (messageId, state) => {
           feedbackState = { ...feedbackState, [messageId]: state };
           render();
         };
 
-        const feedback =
-          'feedback' in options ? options.feedback : undefined;
+        const feedback = 'feedback' in options ? options.feedback : undefined;
         if (agentId && feedback) {
           const [appId, apiKey] = getAppIdAndApiKey(
             initOptions.instantSearchInstance.client
@@ -628,6 +708,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       render(renderOptions) {
+        validateEntryPoints(renderOptions.instantSearchInstance);
+
         renderFn(
           {
             ...this.getWidgetRenderState(renderOptions),
@@ -686,47 +768,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          const resolvedContext =
+          // Resolve once per send; let the server validate the payload and
+          // surface any contract violations.
+          const turnContext =
             typeof context === 'function' ? context() : context;
 
-          let serializedContext: string;
-          try {
-            serializedContext = JSON.stringify(resolvedContext);
-          } catch {
-            warning(
-              false,
-              'Could not serialize chat context. The message will be sent without context.'
-            );
-            return _chatInstance.sendMessage(message, ...rest);
-          }
-
-          const contextTextPart = {
-            type: 'text' as const,
-            text: '<context>'.concat(serializedContext).concat('</context>'),
-          };
-
-          if ('parts' in message && message.parts) {
-            return _chatInstance.sendMessage({
+          return _chatInstance.sendMessage(
+            {
               ...message,
-              parts: [contextTextPart, ...message.parts],
-              text: undefined,
-              files: undefined,
-            }, ...rest);
-          }
-
-          const textContent =
-            'text' in message && message.text ? message.text : '';
-
-          return _chatInstance.sendMessage({
-            parts: [
-              contextTextPart,
-              { type: 'text' as const, text: textContent },
-            ],
-            metadata: message.metadata,
-            messageId: message.messageId,
-            files: undefined,
-            text: undefined,
-          }, ...rest);
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                turnContext,
+              },
+            } as Parameters<typeof _chatInstance.sendMessage>[0],
+            ...rest
+          );
         };
 
         return {
@@ -740,9 +796,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           focusInput,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
-          isClearing,
           clearMessages,
-          onClearTransitionEnd,
           tools: toolsWithAddToolResult,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,

@@ -23,7 +23,13 @@ import {
   ThumbsDownIcon,
 } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Hooks,
+  MutableRef,
+  Renderer,
+  VNode,
+} from '../../types';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -32,7 +38,13 @@ import type {
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatEmptyProps, ChatLayoutOwnProps, ChatMessageBase, ChatStatus, ClientSideTools } from './types';
+import type {
+  ChatEmptyProps,
+  ChatLayoutOwnProps,
+  ChatMessageBase,
+  ChatStatus,
+  ClientSideTools,
+} from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -136,6 +148,12 @@ export type ChatMessagesProps<
    */
   status?: ChatStatus;
   /**
+   * Error from the last failed request, if any. When set, its `message` is
+   * available to custom error components or translation functions (for example
+   * API `message` fields on 403 responses).
+   */
+  error?: Error;
+  /**
    * Whether to hide the scroll to bottom button
    */
   hideScrollToBottom?: boolean;
@@ -143,6 +161,14 @@ export type ChatMessagesProps<
    * Callback for reload action
    */
   onReload: (messageId?: string) => void;
+  /**
+   * Callback to start a new conversation from the default error component.
+   * When provided (and no custom `errorComponent`/`actions` override it),
+   * the error renders a "New conversation" button that clears the messages
+   * and rotates the chat id. When omitted, the error renders with no action
+   * button (recommended default for guardrails-style errors).
+   */
+  onNewConversation?: () => void;
   /**
    * Function to close the chat
    */
@@ -221,6 +247,34 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+/**
+ * Memoization comparator for a message row. `replaceMessage` only clones the
+ * message being updated, so completed messages keep a stable reference across
+ * streaming deltas. We compare just what affects a row's render — `message`,
+ * `status`, `suggestionsElement`, and this message's feedback — and ignore the
+ * props that get a fresh reference every render but don't change the output
+ * (`tools`, `messages`, callbacks, `indexUiState`). `indexUiState` in
+ * particular can't be compared: `getUiState()` returns a new object each render
+ * and would defeat the memo. Trade-off: a completed row keeps the callbacks/
+ * `indexUiState` it last rendered with until its next genuine render.
+ */
+function areMessagePropsEqual(
+  prev: { message: ChatMessageBase; [key: string]: unknown },
+  next: { message: ChatMessageBase; [key: string]: unknown }
+): boolean {
+  return (
+    prev.message === next.message &&
+    prev.status === next.status &&
+    prev.suggestionsElement === next.suggestionsElement &&
+    (prev.feedbackState as Record<string, unknown> | undefined)?.[
+      prev.message.id
+    ] ===
+      (next.feedbackState as Record<string, unknown> | undefined)?.[
+        next.message.id
+      ]
+  );
+}
+
 function createDefaultMessageComponent<
   TMessage extends ChatMessageBase = ChatMessageBase
 >({ createElement, Fragment }: Renderer) {
@@ -234,6 +288,7 @@ function createDefaultMessageComponent<
     tools,
     indexUiState,
     setIndexUiState,
+    messages,
     onReload,
     onClose,
     onFeedback,
@@ -251,6 +306,7 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
+    messages?: ChatMessageBase[];
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
@@ -337,6 +393,7 @@ function createDefaultMessageComponent<
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        messages={messages}
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
@@ -353,10 +410,17 @@ function createDefaultMessageComponent<
 export function createChatMessagesComponent({
   createElement,
   Fragment,
-}: Renderer) {
+  memo,
+}: Renderer & Pick<Hooks, 'memo'>) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+  // Skip re-rendering (and re-compiling the markdown of) completed messages on
+  // every streaming delta.
+  const MemoizedDefaultMessage = memo(
+    DefaultMessageComponent,
+    areMessagePropsEqual
+  );
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
     createElement,
   });
@@ -381,8 +445,10 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      error,
       hideScrollToBottom = false,
       onReload,
+      onNewConversation,
       onClose,
       sendMessage,
       setInput,
@@ -433,7 +499,7 @@ export function createChatMessagesComponent({
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
 
-    const DefaultMessage = MessageComponent || DefaultMessageComponent;
+    const DefaultMessage = MessageComponent || MemoizedDefaultMessage;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
 
@@ -480,6 +546,7 @@ export function createChatMessagesComponent({
                 tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                messages={messages}
                 onReload={onReload}
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}
@@ -504,7 +571,25 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {status === 'error' && <DefaultError onReload={onReload} />}
+            {status === 'error' && (
+              <DefaultError
+                onNewConversation={onNewConversation}
+                errorMessage={error?.message}
+                translations={
+                  // Guardrail violations come with a service-authored
+                  // `fallbackResponse` that's safe to display verbatim; for
+                  // every other error we keep hiding the raw `error.message`
+                  // behind the friendly default. Detection is by `error.name`
+                  // to avoid coupling this package to `instantsearch.js`.
+                  error?.name === 'GuardrailViolationError'
+                    ? {
+                        errorMessage: ({ errorMessage: rawMessage }) =>
+                          rawMessage ?? '',
+                      }
+                    : undefined
+                }
+              />
+            )}
           </div>
         </div>
 
@@ -539,15 +624,10 @@ const getShowLoader = (
   if (!lastPart) return true;
   if (isPartText(lastPart)) return false;
 
-  if (isPartTool(lastPart)) {
-    if (lastPart.state === 'output-available') return false;
-    if (lastPart.state === 'input-streaming') {
-      const tool = findTool(lastPart.type, tools);
-      return !tool?.streamInput;
-    }
-    return true;
+  if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
+    const tool = findTool(lastPart.type, tools);
+    return !tool?.streamInput;
   }
 
   return true;
 };
-

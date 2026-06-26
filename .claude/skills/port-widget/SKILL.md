@@ -64,7 +64,15 @@ Known variants: `menuSelect` → `connectMenu`/`useMenu`.
 - Keep `$$widgetType` aligned across flavors.
 - Do not invent new Vue patterns; match `createWidgetMixin`, `createSuitMixin`, scoped slots, and `renderCompat`.
 - Do not add memoization hooks in React unless an adjacent widget uses them for the same reason.
-- `chat` is now available in UMD; no special exclusions apply.
+
+### Cross-package API migration checks
+
+- Update all affected layers in one pass when moving or splitting behavior: wrapper APIs, shared UI components, layout/type contracts, exports, and tests. Wrapper-only edits create cross-package type drift.
+- If you remove a required prop or render path, either delete it end-to-end or make downstream contracts optional in the same change; partial migrations often fail during declaration builds.
+- Before finishing, grep for legacy names (old props, options, class names, template keys, translations keys) to catch leftovers across flavors.
+- Keep control contracts explicit and consistent when behavior is externally controlled (e.g., imperative handles or widget methods), so external integrations do not depend on internal layout details.
+- Do not add ad-hoc top-level markdown change logs unless requested; keep source of truth in code, tests, and existing docs.
+- Always run monorepo build validation (`yarn build --ignore='example*'`) after cross-package API changes; it catches declaration and export drift that local tests may miss.
 
 ## References
 

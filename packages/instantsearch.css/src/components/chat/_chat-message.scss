@@ -49,8 +49,19 @@
   }
 }
 
+.ais-ChatMessage-text {
+  margin: 0;
+  // Preserve the author's newlines when markdown parsing is disabled
+  // (`parseMarkdown: false`); markdown would otherwise collapse them.
+  white-space: pre-wrap;
+}
+
 .ais-ChatMessage-code {
   overflow-x: auto;
+}
+
+.ais-ChatMessage-tool:empty {
+  display: none;
 }
 
 .ais-ChatMessage--neutral .ais-ChatMessage-message {

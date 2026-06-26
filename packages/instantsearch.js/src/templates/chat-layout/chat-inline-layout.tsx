@@ -11,7 +11,7 @@ const ChatInlineLayout = createChatInlineLayoutComponent({
 });
 
 export function chatInlineLayout() {
-  return function ChatInlineLayoutTemplate(props: ChatLayoutTemplateData) {
+  function ChatInlineLayoutTemplate(props: ChatLayoutTemplateData) {
     const { templates, ...rest } = props;
     return (
       <ChatInlineLayout
@@ -19,8 +19,11 @@ export function chatInlineLayout() {
         headerComponent={templates.header()}
         messagesComponent={templates.messages()}
         promptComponent={templates.prompt()}
-        toggleButtonComponent={templates.toggleButton()}
       />
     );
-  };
+  }
+  // Marker used by `chat` to auto-exempt inline layouts from the entry-point
+  // validation, since inline chats are always visible (no trigger needed).
+  ChatInlineLayoutTemplate.$$inlineLayout = true as const;
+  return ChatInlineLayoutTemplate;
 }
