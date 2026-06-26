@@ -1,6 +1,6 @@
 import { find } from 'instantsearch-core';
 
-import type { ComponentProps, MutableRef } from '../../types';
+import type { ComponentProps, Hooks, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
 
@@ -41,15 +41,10 @@ type GetPanelProps = () => {
 
 type GetRootProps = () => { ref?: MutableRef<HTMLDivElement | null> };
 
-type CreateAutocompletePropGettersParams = {
-  useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;
-  useId: () => string;
-  useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
-  useRef: <TType>(initialValue: TType | null) => { current: TType | null };
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => unknown];
-};
+type CreateAutocompletePropGettersParams = Pick<
+  Hooks,
+  'useEffect' | 'useId' | 'useMemo' | 'useRef' | 'useState'
+>;
 
 export type UsePropGetters<TItem extends BaseHit> = (params: {
   indices: Array<{
@@ -83,6 +78,14 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    * Whether the input should be focused and the panel open initially.
    */
   autoFocus?: boolean;
+  /**
+   * Externally-supplied id used to prefix every DOM id this hook generates.
+   * Use this when the autocomplete renders across multiple component trees
+   * (e.g., a placeholder shell + a fully-wired version) that must produce
+   * matching ids for `htmlFor`/`aria-*` to stay stable across the swap.
+   * Falls back to an internal `useId()` when omitted.
+   */
+  id?: string;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -120,10 +123,12 @@ export function createAutocompletePropGetters({
     isDetached = false,
     shouldHidePanel = false,
     autoFocus = false,
+    id,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
-    const getElementId = createGetElementId(useId());
-    const inputRef = useRef<HTMLInputElement>(null);
-    const rootRef = useRef<HTMLDivElement>(null);
+    const internalId = useId();
+    const getElementId = createGetElementId(id ?? internalId);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const rootRef = useRef<HTMLDivElement | null>(null);
     const [isOpen, setIsOpen] = useState(autoFocus);
     const [activeDescendant, setActiveDescendant] = useState<
       string | undefined

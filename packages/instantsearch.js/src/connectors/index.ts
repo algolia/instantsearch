@@ -26,6 +26,7 @@ export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
 export { connectAutocomplete } from 'instantsearch-core';
 export { connectBreadcrumb } from 'instantsearch-core';
 export { connectChat } from 'instantsearch-core';
+export { connectChatTrigger } from 'instantsearch-core';
 export { connectClearRefinements } from 'instantsearch-core';
 export { connectConfigure } from 'instantsearch-core';
 export { connectCurrentRefinements } from 'instantsearch-core';
@@ -78,6 +79,12 @@ export type {
   ChatInitWithoutTransport,
   ChatRenderState,
   ChatTransport
+} from 'instantsearch-core';
+export type {
+  ChatTriggerConnector,
+  ChatTriggerConnectorParams,
+  ChatTriggerRenderState,
+  ChatTriggerWidgetDescription
 } from 'instantsearch-core';
 export type {
   ChatWidgetDescription,

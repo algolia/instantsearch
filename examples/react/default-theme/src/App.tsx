@@ -22,6 +22,7 @@ import {
   SortBy,
   ToggleRefinement,
   Chat,
+  ChatTrigger,
 } from 'react-instantsearch';
 
 import {
@@ -203,6 +204,7 @@ export function App() {
         feedback={true}
         itemComponent={ItemComponent}
       />
+      <ChatTrigger />
     </InstantSearch>
   );
 }

@@ -281,11 +281,13 @@ class RefinementList<TTemplates extends Templates> extends Component<
    * @see https://github.com/preactjs/preact/issues/3242
    */
   public componentDidUpdate() {
-    this.listRef.current
-      ?.querySelector<HTMLInputElement>(
-        `input[value="${this.lastRefinedValue?.replace('"', '\\"')}"]`
-      )
-      ?.focus();
+    const inputs = this.listRef.current?.getElementsByTagName('input') || [];
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].value === this.lastRefinedValue) {
+        inputs[i].focus();
+        break;
+      }
+    }
     this.lastRefinedValue = undefined;
   }
 

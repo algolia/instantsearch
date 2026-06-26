@@ -7,6 +7,7 @@ import {
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
+  getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
 
@@ -42,13 +43,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     onClose,
     sendEvent,
   }: ClientSideToolComponentProps) {
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-          facet_filters?: string[][];
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -143,7 +138,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                 if (!input || !applyFilters) return;
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (

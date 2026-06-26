@@ -4,7 +4,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { fireEvent } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -88,6 +88,13 @@ export function createInsightsTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(margin + delay);
+        await wait(0);
+      });
+
       window.aa.mockClear();
 
       const items = document.querySelectorAll('.ais-AutocompleteIndexItem');
@@ -152,6 +159,13 @@ export function createInsightsTests(
 
       // Wait for initial results
       await act(async () => {
+        await wait(margin + delay);
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
         await wait(margin + delay);
         await wait(0);
       });
@@ -237,6 +251,13 @@ export function createInsightsTests(
 
       // Wait for initial results
       await act(async () => {
+        await wait(margin + delay);
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
         await wait(margin + delay);
         await wait(0);
       });

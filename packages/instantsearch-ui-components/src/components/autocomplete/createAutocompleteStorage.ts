@@ -1,14 +1,12 @@
 import { find } from 'instantsearch-core';
 
+import type { Hooks } from '../../types';
 import type { UsePropGetters } from './createAutocompletePropGetters';
 
-type CreateAutocompleteStorageParams = {
-  useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;
-  useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => unknown];
-};
+type CreateAutocompleteStorageParams = Pick<
+  Hooks,
+  'useEffect' | 'useMemo' | 'useState'
+>;
 
 type UseStorageParams<TItem extends Record<string, unknown>> = {
   showRecent?: boolean | { storageKey?: string };
