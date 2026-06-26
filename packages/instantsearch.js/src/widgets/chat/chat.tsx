@@ -2,6 +2,7 @@
 
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
+import { useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -65,7 +66,12 @@ import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-const Chat = createChatComponent({ createElement: h, Fragment });
+const Chat = createChatComponent({
+  createElement: h,
+  Fragment,
+  useMemo,
+  useState,
+});
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
@@ -326,6 +332,19 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const toggleButtonTemplateRef = makeTemplateRef();
   const layoutTemplateRef = makeTemplateRef();
 
+  // Per-tool layout components must be stable across renders or Preact will
+  // remount each tool subtree on every streaming update (e.g. resetting
+  // carousel scroll). One component per tool key reads its latest templates
+  // from a mutable ref refreshed on each render.
+  const toolTemplatesByKey = new Map<
+    string,
+    { current: UserClientSideToolWithTemplate['templates'] }
+  >();
+  const toolLayoutComponentByKey = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+
   function createStableTemplateComponent<TProps>(
     templateRef: TemplateRef,
     templateKey: string,
@@ -562,22 +581,38 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         widgetTool = tools[SearchIndexToolType];
       }
 
+      let layoutComponent:
+        | ((props: ClientSideToolComponentProps) => JSX.Element)
+        | undefined;
+      if (widgetTool?.templates?.layout) {
+        let templatesRef = toolTemplatesByKey.get(key);
+        if (!templatesRef) {
+          templatesRef = { current: widgetTool.templates };
+          toolTemplatesByKey.set(key, templatesRef);
+        } else {
+          templatesRef.current = widgetTool.templates;
+        }
+
+        layoutComponent = toolLayoutComponentByKey.get(key);
+        if (!layoutComponent) {
+          const ref = templatesRef;
+          layoutComponent = (
+            layoutComponentProps: ClientSideToolComponentProps
+          ) => (
+            <TemplateComponent
+              templates={ref.current}
+              rootTagName="fragment"
+              templateKey="layout"
+              data={layoutComponentProps}
+            />
+          );
+          toolLayoutComponentByKey.set(key, layoutComponent);
+        }
+      }
+
       toolsForUi[key] = {
         ...connectorTool,
-        ...(widgetTool?.templates?.layout && {
-          layoutComponent: (
-            layoutComponentProps: ClientSideToolComponentProps
-          ) => {
-            return (
-              <TemplateComponent
-                templates={widgetTool.templates}
-                rootTagName="fragment"
-                templateKey="layout"
-                data={layoutComponentProps}
-              />
-            );
-          },
-        }),
+        ...(layoutComponent && { layoutComponent }),
       };
     });
 

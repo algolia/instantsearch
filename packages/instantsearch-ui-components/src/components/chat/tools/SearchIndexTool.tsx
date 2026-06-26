@@ -1,5 +1,6 @@
 /** @jsx createElement */
 
+import { getFacetFiltersFromToolInput } from '../../../lib/utils/chat';
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
 import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons';
@@ -9,14 +10,11 @@ import type {
   CarouselProps,
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
-import type { ClientSideToolComponentProps } from '../types';
+import type {
+  ClientSideToolComponentProps,
+  SearchToolInput,
+} from '../types';
 import type { SearchParameters } from 'algoliasearch-helper';
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
 
 type HeaderProps = {
   showViewAll: boolean;
@@ -83,7 +81,7 @@ function createHeaderComponent({ createElement }: Renderer) {
 
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (
@@ -151,13 +149,7 @@ export function createSearchIndexToolComponent<
       headerProps: { showViewAll },
     } = userProps;
 
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-          facet_filters?: string[][];
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -177,6 +169,11 @@ export function createSearchIndexToolComponent<
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
+    const carouselIdRef = useRef('');
+    if (!carouselIdRef.current) {
+      carouselIdRef.current = generateCarouselId();
+    }
+
     const carouselRefs: Pick<
       CarouselProps<TObject>,
       | 'listRef'
@@ -191,7 +188,7 @@ export function createSearchIndexToolComponent<
       listRef: useRef(null),
       nextButtonRef: useRef(null),
       previousButtonRef: useRef(null),
-      carouselIdRef: useRef(generateCarouselId()),
+      carouselIdRef,
       canScrollLeft,
       canScrollRight,
       setCanScrollLeft,
