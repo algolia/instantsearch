@@ -118,7 +118,12 @@ export function SearchBox({
     onSubmit,
     onAiModeClick: aiMode
       ? () => {
-          if (openChat(chatRenderState, { message: inputValue })) {
+          if (
+            openChat(chatRenderState, {
+              message: inputValue,
+              referer: 'ai-mode',
+            })
+          ) {
             onReset();
           }
         }

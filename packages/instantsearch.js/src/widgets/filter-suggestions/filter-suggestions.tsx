@@ -193,6 +193,9 @@ export type FilterSuggestionsWidget = WidgetFactory<
   FilterSuggestionsWidgetParams
 >;
 
+/**
+ * @deprecated Filter suggestions are deprecated and will be removed in a future major version.
+ */
 export default (function filterSuggestions(
   widgetParams: FilterSuggestionsWidgetParams & FilterSuggestionsConnectorParams
 ) {

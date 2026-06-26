@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.33.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.3...react-instantsearch-core@7.33.0) (2026-05-19)
+
+
+### Features
+
+* **filter-suggestions:** deprecate filter suggestions ([#7040](https://github.com/algolia/instantsearch/issues/7040)) ([3b2c8ff](https://github.com/algolia/instantsearch/commit/3b2c8ff5e547186aa07be29dfac4f07c7bc07b98))
+
+
+
+
+
 ## [7.32.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.32.2...react-instantsearch-core@7.32.3) (2026-05-12)
 
 **Note:** Version bump only for package react-instantsearch-core

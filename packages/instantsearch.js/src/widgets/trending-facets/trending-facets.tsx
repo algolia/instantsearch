@@ -185,7 +185,6 @@ export default (function trendingFacets(
     container,
     facetName,
     limit,
-    queryParameters,
     fallbackParameters,
     threshold,
     escapeHTML,
@@ -215,7 +214,6 @@ export default (function trendingFacets(
     ...makeWidget({
       facetName,
       limit,
-      queryParameters,
       fallbackParameters,
       threshold,
       escapeHTML,

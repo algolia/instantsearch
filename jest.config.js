@@ -38,7 +38,7 @@ const config = {
     'jest-watch-typeahead/testname',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(search-insights|algoliasearch|zod)/)',
+    'node_modules/(?!(search-insights|algoliasearch)/)',
   ],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',

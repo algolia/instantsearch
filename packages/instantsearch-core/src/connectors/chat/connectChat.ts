@@ -372,7 +372,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       let transport;
-      const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+      const { client } = instantSearchInstance;
+      const [appId, apiKey] = getAppIdAndApiKey(client);
 
       // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
       const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
@@ -389,10 +390,20 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           ...options.transport,
           prepareSendMessagesRequest: (params) => {
             // Call the original prepareSendMessagesRequest if it exists,
-            // otherwise construct the default body
+            // otherwise construct a minimal default body containing only the
+            // request payload — without leaking transport metadata such as
+            // resolved headers, api URL, credentials, or `requestMetadata`.
             const preparedOrPromise = originalPrepare
               ? originalPrepare(params)
-              : { body: { ...params } };
+              : {
+                  body: {
+                    id: params.id,
+                    messageId: params.messageId,
+                    trigger: params.trigger,
+                    messages: params.messages,
+                    ...params.body,
+                  },
+                };
             // Then filter out data-* parts
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
@@ -426,10 +437,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
-            'x-algolia-api-Key': apiKey,
-            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+            'x-algolia-api-key': apiKey,
+            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
           },
-          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+          prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:
@@ -437,7 +448,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                   ? `${baseApi}&cache=false`
                   : baseApi,
               body: {
-                ...rest,
+                id,
+                messageId,
                 messages: filterDataParts(messages),
               },
             };

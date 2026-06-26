@@ -53,6 +53,10 @@
   overflow-x: auto;
 }
 
+.ais-ChatMessage-tool:empty {
+  display: none;
+}
+
 .ais-ChatMessage--neutral .ais-ChatMessage-message {
   background-color: rgba(var(--ais-muted-color-rgb), 0.1);
   padding: calc(var(--ais-spacing) * 0.75);
