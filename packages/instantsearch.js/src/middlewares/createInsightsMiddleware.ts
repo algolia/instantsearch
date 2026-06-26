@@ -451,22 +451,19 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           ]);
         }
 
-        // Measure the bootstrap timing now (`started()` is called from
-        // within `start()`), but defer *sending* until the first `render`
-        // event, by which point every flavor has registered its widgets.
-        // A blind `setTimeout(0)` raced React's bootstrap: React renders the
-        // widgets in a second render scheduled via its MessageChannel-based
-        // scheduler, whose ordering relative to a timer macrotask is
-        // browser-dependent, so the widget tree came out empty in Chrome but
-        // populated in Firefox.
-        const bootstrapMs = Math.round(
-          (typeof performance !== 'undefined'
-            ? performance.now()
-            : Date.now()) - instantSearchInstance._createdAt
-        );
-
+        // Send the start event on the first `render`, by which point every
+        // flavor has registered its widgets. `bootstrapMs` then measures the
+        // time between the constructor running and that point, so for flavors
+        // that register widgets right at start (e.g. React) it captures the
+        // cost of adding them.
         const sendStartEvent = () => {
           try {
+            const bootstrapMs = Math.round(
+              (typeof performance !== 'undefined'
+                ? performance.now()
+                : Date.now()) - instantSearchInstance._createdAt
+            );
+
             sendUsageEvent({
               eventName: '__start__',
               algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
