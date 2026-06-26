@@ -43,6 +43,8 @@
     "tests/e2e/playwright/**",
     "**/rollup.config.mjs",
     "packages/algoliasearch-helper/documentation-src/partials/**/*.hbs",
+    ".github/prompts/**",
+    "packages/create-instantsearch-app/docs/custom-templates.md",
     "packages/instantsearch.css/components/**",
     "packages/instantsearch.css/themes/**",
     "specs/public/themes/**"
