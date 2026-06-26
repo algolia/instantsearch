@@ -37,31 +37,18 @@
     opacity: 1;
     transform: translateX(0);
   }
-
-  .ais-Chat-toggleButtonWrapper {
-    pointer-events: auto;
-    position: absolute;
-    bottom: var(--ais-chat-margin);
-    right: var(--ais-chat-margin);
-    transition:
-      right var(--ais-transition-duration) var(--ais-transition-timing-function),
-      transform var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
-  }
-
-  .ais-Chat-container--open ~ .ais-Chat-toggleButtonWrapper {
-    right: calc(var(--ais-chat-width) + var(--ais-chat-margin));
-
-    .ais-ChatToggleButton svg {
-      transform: rotate(-90deg);
-    }
-  }
 }
 
 body:has(.ais-ChatSidePanelLayout) {
   @media (prefers-reduced-motion: no-preference) {
     transition: margin-right var(--ais-transition-duration)
       var(--ais-transition-timing-function);
+  }
+}
+
+body:has(.ais-ChatSidePanelLayout .ais-Chat-container--open) {
+  .ais-ChatToggleButton--floating {
+    right: calc(var(--ais-chat-width) + var(--ais-chat-margin));
   }
 }
 

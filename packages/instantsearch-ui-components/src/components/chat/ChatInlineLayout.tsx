@@ -14,7 +14,6 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
       className,
       open: _open,
       maximized: _maximized,
-      toggleButtonComponent: _toggleButtonElement,
       // Chat state props (destructured to avoid spreading on div)
       messages: _messages,
       status: _status,

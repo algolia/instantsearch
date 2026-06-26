@@ -124,17 +124,22 @@ export function processStream<T>(
           return;
         }
 
-        const result = onChunk(value);
-        if (result && typeof result.then === 'function') {
-          result.then(
-            () => read(),
-            (error) => {
-              reader.releaseLock();
-              onError(error as Error);
-            }
-          );
-        } else {
-          read();
+        try {
+          const result = onChunk(value);
+          if (result && typeof result.then === 'function') {
+            result.then(
+              () => read(),
+              (error) => {
+                reader.releaseLock();
+                onError(error as Error);
+              }
+            );
+          } else {
+            read();
+          }
+        } catch (error) {
+          reader.releaseLock();
+          onError(error as Error);
         }
       },
       (error) => {

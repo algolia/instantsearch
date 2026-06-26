@@ -22,6 +22,8 @@ import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
+import connectFeeds from '../../connectors/feeds/connectFeeds';
+import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
 import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { isChatBusy, openChat } from '../../lib/chat';
@@ -31,6 +33,7 @@ import {
   createDocumentationMessageGenerator,
   find,
   getContainerNode,
+  noop,
   warn,
   walkIndex,
 } from '../../lib/utils';
@@ -50,9 +53,11 @@ import type {
   Hit,
   IndexUiState,
   IndexWidget,
+  InstantSearch,
   Renderer,
   RendererOptions,
   Template,
+  Widget,
   WidgetFactory,
 } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
@@ -197,6 +202,7 @@ function getMediaQueryList(mediaQuery: string) {
 type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
   containerNode: HTMLElement;
+  activate: () => void;
   indicesConfig: Array<IndexConfig<TItem>>;
   renderState: {
     indexTemplateProps: Array<
@@ -216,7 +222,7 @@ type RendererParams<TItem extends BaseHit> = {
   detachedMediaQuery: string | undefined;
   translations: AutocompleteTranslations;
 } & Pick<
-  AutocompleteWidgetParams<TItem>,
+  IndicesAutocompleteWidgetParams<TItem>,
   | 'getSearchPageURL'
   | 'onSelect'
   | 'showQuerySuggestions'
@@ -226,10 +232,10 @@ type RendererParams<TItem extends BaseHit> = {
   | 'aiMode'
 > & {
     showRecent:
-      | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
+      | Exclude<IndicesAutocompleteWidgetParams<TItem>['showRecent'], boolean>
       | undefined;
   } & Required<
-    Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>
+    Pick<IndicesAutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>
   >;
 
 const createRenderer = <TItem extends BaseHit>(
@@ -328,9 +334,6 @@ const createRenderer = <TItem extends BaseHit>(
         recentSearchHeaderComponent,
         hasWarnedMissingPromptSuggestionsChat: false,
       };
-
-      connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
-      return;
     }
 
     render(
@@ -343,6 +346,7 @@ const createRenderer = <TItem extends BaseHit>(
 type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   RendererParams<TItem>,
   | 'indicesConfig'
+  | 'activate'
   | 'getSearchPageURL'
   | 'onSelect'
   | 'cssClasses'
@@ -363,6 +367,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
 function AutocompleteWrapper<TItem extends BaseHit>({
   indicesConfig,
   indices,
+  activate,
   getSearchPageURL,
   onSelect: userOnSelect,
   refine: refineAutocomplete,
@@ -801,7 +806,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         NoResultsComponent={noResultsComponent}
         items={hits.map((item) => ({
           ...item,
-          __indexName: indexId,
+          __indexName: indexName,
         }))}
         getItemProps={getItemProps}
         sendEvent={find(indices, (idx) => idx.indexId === indexId)?.sendEvent}
@@ -826,7 +831,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onInput: (event) => {
+        onFocus: (event) => {
+          activate();
+          (inputProps as { onFocus?: (event: unknown) => void }).onFocus?.(
+            event
+          );
+        },
+        onInput: (event: { currentTarget: HTMLInputElement }) => {
           const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
@@ -989,32 +1000,54 @@ type PanelElements = Partial<
   Record<'recent' | 'suggestions' | (string & {}), preact.JSX.Element>
 >;
 
-type AutocompleteWidgetParams<TItem extends BaseHit> = {
+export type FeedConfig<TItem extends BaseHit> = {
+  /**
+   * ID of the feed in the composition response.
+   */
+  feedID: string;
+  templates?: Partial<{
+    header: Template<{ items: TItem[] }>;
+    item: Template<{ item: TItem; onSelect: () => void }>;
+    noResults: Template<Record<string, never>>;
+  }>;
+  cssClasses?: Partial<AutocompleteIndexClassNames>;
+  getURL?: AutocompleteIndexConfig<TItem>['getURL'];
+  getQuery?: AutocompleteIndexConfig<TItem>['getQuery'];
+};
+
+type IndicesShowQuerySuggestionsWidgetParams = Partial<
+  Pick<
+    IndexConfig<{ query: string }>,
+    'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
+  >
+>;
+
+type FeedsShowQuerySuggestionsWidgetParams = {
+  feedID: string;
+  getURL?: IndexConfig<{ query: string }>['getURL'];
+  templates?: IndexConfig<{ query: string }>['templates'];
+  cssClasses?: Partial<AutocompleteIndexClassNames>;
+};
+
+type IndicesShowPromptSuggestionsWidgetParams = Partial<
+  Pick<
+    IndexConfig<{ query: string; label?: string }>,
+    'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
+  >
+>;
+
+type FeedsShowPromptSuggestionsWidgetParams = {
+  feedID: string;
+  getURL?: IndexConfig<{ query: string; label?: string }>['getURL'];
+  templates?: IndexConfig<{ query: string; label?: string }>['templates'];
+  cssClasses?: Partial<AutocompleteIndexClassNames>;
+};
+
+type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
   container: string | HTMLElement;
-
-  /**
-   * Indices to use in the Autocomplete.
-   */
-  indices?: Array<IndexConfig<TItem>>;
-
-  /**
-   * Index to use for retrieving and showing query suggestions.
-   */
-  showQuerySuggestions?: Partial<
-    Pick<
-      IndexConfig<{ query: string }>,
-      'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
-    >
-  >;
-  showPromptSuggestions?: Partial<
-    Pick<
-      IndexConfig<{ query: string; label?: string }>,
-      'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
-    >
-  >;
 
   showRecent?:
     | boolean
@@ -1095,6 +1128,40 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   aiMode?: boolean;
 };
 
+export type IndicesAutocompleteWidgetParams<TItem extends BaseHit> =
+  BaseAutocompleteWidgetParams<TItem> & {
+    /**
+     * Indices to use in the Autocomplete.
+     */
+    indices?: Array<IndexConfig<TItem>>;
+    feeds?: never;
+    /**
+     * Index to use for retrieving and showing query suggestions.
+     */
+    showQuerySuggestions?: IndicesShowQuerySuggestionsWidgetParams;
+    showPromptSuggestions?: IndicesShowPromptSuggestionsWidgetParams;
+  };
+
+export type FeedsAutocompleteWidgetParams<TItem extends BaseHit> =
+  BaseAutocompleteWidgetParams<TItem> & {
+    /**
+     * Feeds to use in the Autocomplete. Drives the panel from a single
+     * composition multifeed response. Requires the outer <InstantSearch>
+     * to be composition-based (compositionID must be set).
+     */
+    feeds: Array<FeedConfig<TItem>>;
+    indices?: never;
+    /**
+     * Feed to use for showing query suggestions.
+     */
+    showQuerySuggestions?: FeedsShowQuerySuggestionsWidgetParams;
+    showPromptSuggestions?: FeedsShowPromptSuggestionsWidgetParams;
+  };
+
+type AutocompleteWidgetParams<TItem extends BaseHit> =
+  | IndicesAutocompleteWidgetParams<TItem>
+  | FeedsAutocompleteWidgetParams<TItem>;
+
 export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
   AutocompleteWidgetDescription & { $$widgetType: 'ais.autocomplete' },
   AutocompleteConnectorParams,
@@ -1104,10 +1171,16 @@ export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
 export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   widgetParams: AutocompleteWidgetParams<TItem> & AutocompleteConnectorParams
 ) {
+  const safeWidgetParams =
+    widgetParams || ({} as AutocompleteWidgetParams<TItem>);
+  const indices =
+    'indices' in safeWidgetParams ? safeWidgetParams.indices : undefined;
+  const feeds =
+    'feeds' in safeWidgetParams ? safeWidgetParams.feeds : undefined;
+  const isFeedsMode = feeds !== undefined;
   const {
     container,
     escapeHTML,
-    indices = [],
     showQuerySuggestions,
     showPromptSuggestions,
     showRecent,
@@ -1122,8 +1195,13 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     aiMode,
-  } = widgetParams || {};
+  } = safeWidgetParams;
 
+  if (isFeedsMode && indices !== undefined) {
+    throw new Error(
+      withUsage('The `feeds` and `indices` options are mutually exclusive.')
+    );
+  }
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -1139,10 +1217,51 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     root: cx(suit(), userCssClasses.root),
   } satisfies AutocompleteCSSClasses;
 
-  const indicesConfig = [...indices];
-  if (showQuerySuggestions?.indexName) {
+  // In feeds-mode `indexName` carries the feedID so downstream matching
+  // (section building, dedupe in createAutocompleteStorage) treats feeds
+  // like indices without changes to the renderer / storage.
+  const querySuggestionsKey = isFeedsMode
+    ? (
+        showQuerySuggestions as
+          | FeedsShowQuerySuggestionsWidgetParams
+          | undefined
+      )?.feedID
+    : (
+        showQuerySuggestions as
+          | IndicesShowQuerySuggestionsWidgetParams
+          | undefined
+      )?.indexName;
+  const promptSuggestionsKey = isFeedsMode
+    ? (
+        showPromptSuggestions as
+          | FeedsShowPromptSuggestionsWidgetParams
+          | undefined
+      )?.feedID
+    : (
+        showPromptSuggestions as
+          | IndicesShowPromptSuggestionsWidgetParams
+          | undefined
+      )?.indexName;
+
+  const indicesConfig: Array<IndexConfig<TItem>> = isFeedsMode
+    ? feeds.map((feed) => ({
+        indexName: feed.feedID,
+        templates: feed.templates as IndexConfig<TItem>['templates'],
+        cssClasses: feed.cssClasses,
+        getURL: feed.getURL,
+        getQuery: feed.getQuery,
+      }))
+    : [...(indices ?? [])];
+  if (querySuggestionsKey) {
+    const querySuggestionsSearchParameters = isFeedsMode
+      ? undefined
+      : {
+          hitsPerPage: 3,
+          ...(showQuerySuggestions as IndicesShowQuerySuggestionsWidgetParams)
+            .searchParameters,
+        };
     indicesConfig.unshift({
-      indexName: showQuerySuggestions.indexName,
+      indexName: querySuggestionsKey,
       templates: {
         // @ts-expect-error
         item: ({
@@ -1165,38 +1284,42 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             />
           </AutocompleteSuggestion>
         ),
-        ...showQuerySuggestions.templates,
+        ...showQuerySuggestions!.templates,
       },
       cssClasses: {
         root: cx(
           'ais-AutocompleteSuggestions',
-          showQuerySuggestions.cssClasses?.root
+          showQuerySuggestions?.cssClasses?.root
         ),
         list: cx(
           'ais-AutocompleteSuggestionsList',
-          showQuerySuggestions.cssClasses?.list
+          showQuerySuggestions?.cssClasses?.list
         ),
         header: cx(
           'ais-AutocompleteSuggestionsHeader',
-          showQuerySuggestions.cssClasses?.header
+          showQuerySuggestions?.cssClasses?.header
         ),
         item: cx(
           'ais-AutocompleteSuggestionsItem',
-          showQuerySuggestions.cssClasses?.item
+          showQuerySuggestions?.cssClasses?.item
         ),
       },
-      searchParameters: {
-        hitsPerPage: 3,
-        ...showQuerySuggestions.searchParameters,
-      },
+      searchParameters: querySuggestionsSearchParameters,
       getQuery: (item) => item.query,
-      getURL:
-        showQuerySuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showQuerySuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
-  if (showPromptSuggestions?.indexName) {
+  if (promptSuggestionsKey) {
+    const promptSuggestionsSearchParameters = isFeedsMode
+      ? undefined
+      : {
+          hitsPerPage: 3,
+          ...(showPromptSuggestions as IndicesShowPromptSuggestionsWidgetParams)
+            .searchParameters,
+        };
     indicesConfig.push({
-      indexName: showPromptSuggestions.indexName,
+      indexName: promptSuggestionsKey,
       templates: {
         // @ts-expect-error
         item: ({
@@ -1216,35 +1339,64 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             })}
           </AutocompletePromptSuggestion>
         ),
-        ...showPromptSuggestions.templates,
+        ...showPromptSuggestions!.templates,
       },
       cssClasses: {
         root: cx(
           'ais-AutocompletePromptSuggestions',
-          showPromptSuggestions.cssClasses?.root
+          showPromptSuggestions?.cssClasses?.root
         ),
         list: cx(
           'ais-AutocompletePromptSuggestionsList',
-          showPromptSuggestions.cssClasses?.list
+          showPromptSuggestions?.cssClasses?.list
         ),
         header: cx(
           'ais-AutocompletePromptSuggestionsHeader',
-          showPromptSuggestions.cssClasses?.header
+          showPromptSuggestions?.cssClasses?.header
         ),
         item: cx(
           'ais-AutocompletePromptSuggestionsItem',
-          showPromptSuggestions.cssClasses?.item
+          showPromptSuggestions?.cssClasses?.item
         ),
       },
-      searchParameters: {
-        hitsPerPage: 3,
-        ...showPromptSuggestions.searchParameters,
-      },
+      searchParameters: promptSuggestionsSearchParameters,
       getQuery: (item) => item.prompt,
-      getURL:
-        showPromptSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showPromptSuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
+
+  // Normalize `show*` for downstream dedupe/section-matching: in feeds-mode
+  // re-expose `indexName` carrying the feedID so the existing code path
+  // (suggestionsIndexName === index.indexName in createAutocompleteStorage) works.
+  const normalizedShowQuerySuggestions:
+    | IndicesShowQuerySuggestionsWidgetParams
+    | undefined = showQuerySuggestions
+    ? isFeedsMode
+      ? { ...showQuerySuggestions, indexName: querySuggestionsKey }
+      : (showQuerySuggestions as IndicesShowQuerySuggestionsWidgetParams)
+    : undefined;
+  const normalizedShowPromptSuggestions:
+    | IndicesShowPromptSuggestionsWidgetParams
+    | undefined = showPromptSuggestions
+    ? isFeedsMode
+      ? { ...showPromptSuggestions, indexName: promptSuggestionsKey }
+      : (showPromptSuggestions as IndicesShowPromptSuggestionsWidgetParams)
+    : undefined;
+
+  // connectAutocomplete sets `indices[i].indexName = scopedResult.results.index`,
+  // which isn't a feedID for FeedContainer-derived results. In feeds-mode we
+  // rewrite `indexName := indexId` (indexId comes from FeedContainer.getIndexId
+  // and equals the feedID) before the user's transformItems runs.
+  const effectiveTransformItems: typeof transformItems = isFeedsMode
+    ? (items) => {
+        const remapped = items.map((item) => ({
+          ...item,
+          indexName: item.indexId,
+        }));
+        return transformItems ? transformItems(remapped) : remapped;
+      }
+    : transformItems;
 
   const instanceId = ++autocompleteInstanceId;
   const shouldShowRecent = showRecent || undefined;
@@ -1256,16 +1408,37 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     ...userTranslations,
   };
 
+  let isolatedTree: IndexWidget | null = null;
+  let parentRef: IndexWidget | null | undefined;
+  let instanceRef: InstantSearch | null = null;
+  let activated = false;
+
+  const activate = () => {
+    if (activated || !parentRef || !isolatedTree || !instanceRef) return;
+    activated = true;
+    parentRef.addWidgets([isolatedTree]);
+    // `parentRef.addWidgets` schedules the parent's search even though the
+    // parent's own state hasn't changed; cancel it so only the isolated tree
+    // searches on activation.
+    instanceRef.scheduleSearch.cancel();
+    const parentQuery = parentRef.getHelper()?.state.query;
+    if (parentQuery) {
+      isolatedTree.getHelper()?.setQuery(parentQuery);
+    }
+    isolatedTree.scheduleLocalSearch();
+  };
+
   const specializedRenderer = createRenderer({
     instanceId,
     containerNode,
+    activate,
     indicesConfig,
     getSearchPageURL,
     onSelect,
     cssClasses,
     showRecent: showRecentOptions,
-    showQuerySuggestions,
-    showPromptSuggestions,
+    showQuerySuggestions: normalizedShowQuerySuggestions,
+    showPromptSuggestions: normalizedShowPromptSuggestions,
     placeholder,
     autofocus,
     detachedMediaQuery,
@@ -1287,29 +1460,154 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     render(null, containerNode)
   );
 
+  if (isFeedsMode) {
+    // Defer tree construction to `init`: we need `compositionID` from the
+    // InstantSearch instance, which isn't available at factory time.
+    // Pre-register FeedContainers (rather than letting `feeds()` create them
+    // lazily on render) to avoid a redundant composition search when the
+    // containers are added after the first results land.
+    const feedIDs: string[] = [
+      ...(querySuggestionsKey ? [querySuggestionsKey] : []),
+      ...feeds.map((feed) => feed.feedID),
+      ...(promptSuggestionsKey ? [promptSuggestionsKey] : []),
+    ];
+
+    if (__DEV__) {
+      const seen = new Set<string>();
+      const duplicates = new Set<string>();
+      feedIDs.forEach((id) => {
+        if (seen.has(id)) {
+          duplicates.add(id);
+        } else {
+          seen.add(id);
+        }
+      });
+      if (duplicates.size > 0) {
+        warn(
+          `Duplicate feedID(s) detected in autocomplete configuration: ${[
+            ...duplicates,
+          ]
+            .map((d) => `"${d}"`)
+            .join(
+              ', '
+            )}. Each \`feeds[]\` entry, \`showQuerySuggestions\`, and \`showPromptSuggestions\` must use a unique feedID.`
+        );
+      }
+    }
+
+    return [
+      connectSearchBox(() => null)({}),
+      createBootstrap((instantSearchInstance) => {
+        if (!instantSearchInstance.compositionID) {
+          throw new Error(
+            withUsage(
+              'feeds-mode requires a composition-based InstantSearch instance (compositionID must be set).'
+            )
+          );
+        }
+        const tree = index({
+          indexName: instantSearchInstance.compositionID,
+          indexId: `ais-autocomplete-${instanceId}`,
+          EXPERIMENTAL_isolated: true,
+        });
+        const feedContainers = feedIDs.map((feedID) =>
+          createFeedContainer(feedID, tree, instantSearchInstance)
+        );
+        tree.addWidgets([
+          configure(searchParameters),
+          // Connector-only registration runs `hydrateFeedsFromInitialResultsIfNeeded`
+          // at init for SSR, without triggering the extra search `feeds()` would.
+          connectFeeds(noop, noop)({ isolated: false }),
+          ...feedContainers,
+          {
+            ...makeWidget({
+              escapeHTML,
+              transformItems: effectiveTransformItems,
+              future: { undefinedEmptyQuery: true },
+            }),
+            $$widgetType: 'ais.autocomplete',
+            ...(aiMode ? { opensChat: true as const } : {}),
+          },
+        ]);
+        return tree;
+      }),
+    ];
+  }
+
   return [
     connectSearchBox(() => null)({}),
-    index({
-      indexId: `ais-autocomplete-${instanceId}`,
-      EXPERIMENTAL_isolated: true,
-    }).addWidgets([
-      configure(searchParameters),
-      ...indicesConfig.map(
-        ({ indexName, searchParameters: indexSearchParameters }) =>
-          index({ indexName, indexId: indexName }).addWidgets([
-            configure(indexSearchParameters || {}),
-          ])
-      ),
-      {
-        ...makeWidget({
-          escapeHTML,
-          transformItems,
-          future: { undefinedEmptyQuery: true },
-        }),
-        $$widgetType: 'ais.autocomplete',
-      },
-    ]),
+    createBootstrap(() =>
+      index({
+        indexId: `ais-autocomplete-${instanceId}`,
+        EXPERIMENTAL_isolated: true,
+      }).addWidgets([
+        configure(searchParameters),
+        ...indicesConfig.map(
+          ({ indexName, searchParameters: indexSearchParameters }) =>
+            index({
+              indexName,
+              indexId: `ais-autocomplete-${instanceId}-${indexName}`,
+            }).addWidgets([configure(indexSearchParameters || {})])
+        ),
+        {
+          ...makeWidget({
+            escapeHTML,
+            transformItems: effectiveTransformItems,
+            future: { undefinedEmptyQuery: true },
+          }),
+          $$widgetType: 'ais.autocomplete',
+          ...(aiMode ? { opensChat: true as const } : {}),
+        },
+      ])
+    ),
   ];
+
+  function createBootstrap(
+    buildTree: (instantSearchInstance: InstantSearch) => IndexWidget
+  ): Widget {
+    return {
+      $$type: 'ais.autocomplete',
+      $$widgetType: 'ais.autocomplete',
+      init({ instantSearchInstance, parent }) {
+        parentRef = parent;
+        instanceRef = instantSearchInstance;
+        isolatedTree = buildTree(instantSearchInstance);
+        renderShell(specializedRenderer, instantSearchInstance);
+      },
+      render() {},
+      dispose({ parent }) {
+        if (activated && isolatedTree) {
+          parent?.removeWidgets([isolatedTree]);
+        }
+        render(null, containerNode);
+        isolatedTree = null;
+        parentRef = undefined;
+        instanceRef = null;
+        activated = false;
+        return undefined;
+      },
+    };
+  }
+}
+
+function renderShell<TItem extends BaseHit>(
+  renderer: Renderer<
+    AutocompleteRenderState,
+    Partial<AutocompleteWidgetParams<TItem>>
+  >,
+  instantSearchInstance: InstantSearch
+) {
+  renderer(
+    {
+      instantSearchInstance,
+      indices: [],
+      refine: noop,
+      currentRefinement: '',
+      widgetParams: {},
+    } as AutocompleteRenderState &
+      RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>,
+    true
+  );
 }
 
 function ConditionalReverseHighlight<TItem extends { query: string }>({

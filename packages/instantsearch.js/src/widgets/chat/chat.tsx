@@ -6,9 +6,10 @@ import {
   ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
+  getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
-import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { Component, Fragment, h, render } from 'preact';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -65,7 +66,6 @@ import type {
   ChatPromptProps,
   ChatPromptTranslations,
   ChatStatus,
-  ChatToggleButtonProps,
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
@@ -76,7 +76,33 @@ import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-const Chat = createChatComponent({ createElement: h, Fragment });
+// Lightweight `memo` for the Preact flavor. `preact/compat` is intentionally
+// avoided across this package (it bloats the bundle and patches Preact
+// globally); a class component with `shouldComponentUpdate` is all the chat
+// message memoization needs.
+const memo: Parameters<typeof createChatComponent>[0]['memo'] = (
+  FunctionComponent,
+  propsAreEqual
+) => {
+  class Memoized extends Component<Record<string, unknown>> {
+    shouldComponentUpdate(nextProps: Record<string, unknown>) {
+      return propsAreEqual
+        ? !propsAreEqual(this.props as never, nextProps as never)
+        : true;
+    }
+    render() {
+      return h(FunctionComponent as never, this.props);
+    }
+  }
+  return (props) => h(Memoized, props as Record<string, unknown>);
+};
+
+const Chat = createChatComponent({
+  createElement: h,
+  Fragment,
+  memo,
+  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+});
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
@@ -103,12 +129,7 @@ function createCarouselTool<
     onClose,
     sendEvent,
   }: ClientSideToolTemplateData) {
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -211,7 +232,7 @@ function createCarouselTool<
                 if (!input || !applyFilters) return;
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (
@@ -300,18 +321,10 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
-  isClearing: boolean;
   clearMessages: () => void;
-  onClearTransitionEnd: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
-  toggleButtonProps: {
-    layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
-    iconComponent: ComponentProps<
-      typeof Chat
-    >['toggleButtonProps']['toggleIconComponent'];
-  };
   headerProps: {
     layoutComponent: ComponentProps<typeof Chat>['headerComponent'];
     closeIconComponent: ChatHeaderProps['closeIconComponent'];
@@ -372,13 +385,10 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
-  isClearing,
   clearMessages,
-  onClearTransitionEnd,
   onFeedback,
   feedbackState,
   toolsForUi,
-  toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
@@ -390,6 +400,18 @@ function ChatWrapper({
       initial: 'smooth',
       resize: 'smooth',
     });
+
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [chatMessages, chatStatus, scrollToBottom]);
 
   state.init();
 
@@ -405,12 +427,6 @@ function ChatWrapper({
       regenerate={regenerate}
       stop={stop}
       error={error}
-      toggleButtonComponent={toggleButtonProps.layoutComponent}
-      toggleButtonProps={{
-        open: chatOpen,
-        onClick: () => setChatOpen(!chatOpen),
-        toggleIconComponent: toggleButtonProps.iconComponent,
-      }}
       headerComponent={headerProps.layoutComponent}
       promptComponent={promptProps.layoutComponent}
       suggestionsComponent={suggestionsProps.suggestionsComponent}
@@ -419,7 +435,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        canClear: Boolean(chatMessages?.length),
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -428,14 +444,14 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
+        error,
         onReload: (messageId) => regenerate({ messageId }),
+        onNewConversation: clearMessages,
         onClose: () => setChatOpen(false),
         onFeedback,
         feedbackState,
         messages: chatMessages,
         indexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -513,7 +529,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const assistantMessageTemplateRef = makeTemplateRef();
   const userMessageTemplateRef = makeTemplateRef();
   const promptTemplateRef = makeTemplateRef();
-  const toggleButtonTemplateRef = makeTemplateRef();
   const layoutTemplateRef = makeTemplateRef();
 
   function createStableTemplateComponent<TProps>(
@@ -529,6 +544,35 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         data={props as unknown as Record<string, unknown>}
       />
     );
+  }
+
+  // Tool layout components are rendered as component types downstream, exactly
+  // like the chat templates above. Recreating them each render makes Preact see
+  // a new component type and remount the whole tool subtree on every streaming
+  // delta — which re-mounts e.g. a carousel's `<ol>` and resets its scroll
+  // position. `tools` is created once per widget, so cache one stable component
+  // per tool key and reuse it across renders.
+  const toolLayoutComponentCache = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+  function getStableToolLayoutComponent(
+    key: string,
+    widgetTool: NonNullable<(typeof tools)[string]>
+  ): (props: ClientSideToolComponentProps) => JSX.Element {
+    let component = toolLayoutComponentCache.get(key);
+    if (!component) {
+      component = (layoutComponentProps: ClientSideToolComponentProps) => (
+        <TemplateComponent
+          templates={widgetTool.templates}
+          rootTagName="fragment"
+          templateKey="layout"
+          data={layoutComponentProps}
+        />
+      );
+      toolLayoutComponentCache.set(key, component);
+    }
+    return component;
   }
 
   const stableHeaderLayoutComponent = templates.header?.layout
@@ -631,20 +675,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         'fragment'
       )
     : undefined;
-  const stableToggleButtonLayoutComponent = templates.toggleButton?.layout
-    ? createStableTemplateComponent<ChatToggleButtonProps>(
-        toggleButtonTemplateRef,
-        'layout',
-        'button'
-      )
-    : undefined;
-  const stableToggleButtonIconComponent = templates.toggleButton?.icon
-    ? createStableTemplateComponent<{ isOpen: boolean }>(
-        toggleButtonTemplateRef,
-        'icon',
-        'span'
-      )
-    : undefined;
   const stableActionsComponent = templates.actions
     ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
         <TemplateComponent
@@ -681,7 +711,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           headerComponent,
           messagesComponent,
           promptComponent,
-          toggleButtonComponent,
           ...restLayoutProps
         } = layoutProps;
         return (
@@ -697,7 +726,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
                 header: () => headerComponent,
                 messages: () => messagesComponent,
                 prompt: () => promptComponent,
-                toggleButton: () => toggleButtonComponent,
               },
             }}
           />
@@ -721,9 +749,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       error,
       regenerate,
       stop,
-      isClearing,
       clearMessages,
-      onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
       sendChatMessageFeedback: onFeedback,
@@ -755,18 +781,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       toolsForUi[key] = {
         ...connectorTool,
         ...(widgetTool?.templates?.layout && {
-          layoutComponent: (
-            layoutComponentProps: ClientSideToolComponentProps
-          ) => {
-            return (
-              <TemplateComponent
-                templates={widgetTool.templates}
-                rootTagName="fragment"
-                templateKey="layout"
-                data={layoutComponentProps}
-              />
-            );
-          },
+          layoutComponent: getStableToolLayoutComponent(key, widgetTool),
         }),
       };
     });
@@ -854,14 +869,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
-    toggleButtonTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['toggleButton']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.toggleButton,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-
     layoutTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'layout'>>
@@ -889,16 +896,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
-          isClearing={isClearing}
           clearMessages={clearMessages}
-          onClearTransitionEnd={onClearTransitionEnd}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}
-          toggleButtonProps={{
-            layoutComponent: stableToggleButtonLayoutComponent,
-            iconComponent: stableToggleButtonIconComponent,
-          }}
           headerProps={{
             layoutComponent: stableHeaderLayoutComponent,
             closeIconComponent: stableHeaderCloseIconComponent,
@@ -983,16 +984,12 @@ export type ChatCSSClasses = Partial<ChatClassNames>;
 
 export type ChatLayoutTemplateData = Omit<
   ChatLayoutOwnProps,
-  | 'headerComponent'
-  | 'messagesComponent'
-  | 'promptComponent'
-  | 'toggleButtonComponent'
+  'headerComponent' | 'messagesComponent' | 'promptComponent'
 > & {
   templates: {
     header: () => JSX.Element;
     messages: () => JSX.Element;
     prompt: () => JSX.Element;
-    toggleButton: () => JSX.Element;
   };
 };
 
@@ -1171,20 +1168,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
 
     /**
-     * Templates to use for the toggle button.
-     */
-    toggleButton: Partial<{
-      /**
-       * Template to use for the toggle button layout.
-       */
-      layout: Template<ChatToggleButtonProps>;
-      /**
-       * Template to use for the toggle button icon.
-       */
-      icon: Template<{ isOpen: boolean }>;
-    }>;
-
-    /**
      * Template to use for the message actions.
      */
     actions: Template<{
@@ -1234,6 +1217,11 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * CSS classes to add.
    */
   cssClasses?: ChatCSSClasses;
+
+  /**
+   * Disable validation that requires either `chatTrigger` or AI mode.
+   */
+  disableTriggerValidation?: boolean;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1258,6 +1246,7 @@ export default (function chat<
     resume = false,
     tools: userTools,
     getSearchPageURL,
+    disableTriggerValidation = false,
     ...options
   } = widgetParams || {};
 
@@ -1276,6 +1265,16 @@ export default (function chat<
 
   const tools = { ...defaultTools, ...userTools };
 
+  // Inline layouts are always visible, so they don't require a `chatTrigger`
+  // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker
+  // set on the template function returned by `chatInlineLayout()`.
+  const isInlineLayoutTemplate =
+    typeof templates.layout === 'function' &&
+    (templates.layout as { $$inlineLayout?: true }).$$inlineLayout === true;
+
+  const effectiveDisableTriggerValidation =
+    disableTriggerValidation || isInlineLayoutTemplate;
+
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
@@ -1292,9 +1291,10 @@ export default (function chat<
     ...makeWidget({
       resume,
       tools,
+      disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),
-    $$widgetType: 'ais.chat',
+    $$widgetType: 'ais.chat' as const,
   };
 } satisfies ChatWidget);
 

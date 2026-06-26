@@ -10,6 +10,7 @@ import {
   RefinementList,
   EXPERIMENTAL_Autocomplete,
   Chat,
+  ChatTrigger,
 } from 'react-instantsearch';
 
 import { ClearFiltersMobile } from './components/ClearFiltersMobile';
@@ -181,6 +182,7 @@ export function App() {
             feedback={true}
             itemComponent={ItemComponent}
           />
+          <ChatTrigger />
         </InstantSearch>
       </div>
     </div>

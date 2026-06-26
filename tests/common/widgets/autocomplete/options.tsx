@@ -22,7 +22,7 @@ function createMockedSearchClient(
 
 export function createOptionsTests(
   setup: AutocompleteWidgetSetup,
-  { act, flavor }: Required<TestOptions>
+  { act }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default options', async () => {
@@ -79,6 +79,12 @@ export function createOptionsTests(
       });
 
       await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
         await wait(0);
       });
 
@@ -140,6 +146,14 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
+      // 1 initial call for the root index, 1 call when focusing the input
+      // (the autocomplete's own search; the parent search is cancelled).
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, [
         {
@@ -214,15 +228,12 @@ export function createOptionsTests(
       await act(async () => {
         await wait(0);
 
-        // JS currently doesn't refine on focus
-        if (flavor === 'javascript') {
-          const input = screen.getByRole('combobox', {
-            name: /submit/i,
-          });
-          userEvent.click(input);
-          userEvent.type(input, 'a');
-          userEvent.clear(input);
-        }
+        const input = screen.getByRole('combobox', {
+          name: /submit/i,
+        });
+        userEvent.click(input);
+        userEvent.type(input, 'a');
+        userEvent.clear(input);
 
         await wait(0);
       });
@@ -324,6 +335,12 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
       // No recent searches yet, so the header should not be rendered
       expect(
         document.querySelector('.ais-AutocompleteRecentSearchesHeader')
@@ -406,6 +423,12 @@ export function createOptionsTests(
       });
 
       await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
         await wait(0);
       });
 
@@ -494,6 +517,12 @@ export function createOptionsTests(
       });
 
       await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
         await wait(0);
       });
 
@@ -587,12 +616,16 @@ export function createOptionsTests(
         0
       );
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
         await wait(0);
+      });
 
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         userEvent.keyboard('{ArrowDown}');
         await wait(0);
       });
@@ -697,10 +730,16 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         await userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         await userEvent.paste(input, 'Item 3');
         await wait(0);
       });
@@ -763,12 +802,17 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      const focusInput = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(focusInput);
+        await wait(0);
+      });
+
       (searchClient.search as jest.Mock).mockClear();
 
       const input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
-        await userEvent.click(input);
         await userEvent.paste(input, 'hello');
         await wait(0);
       });
@@ -895,10 +939,16 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         userEvent.keyboard('{ArrowDown}');
         await wait(0);
       });
@@ -972,10 +1022,16 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         userEvent.keyboard('{ArrowDown}');
         await wait(0);
       });
@@ -1056,10 +1112,16 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         userEvent.type(input, 'Item 3');
         userEvent.keyboard('{Enter}');
         await wait(0);
@@ -1131,11 +1193,17 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
 
       // Type and submit a query
       await act(async () => {
-        userEvent.click(input);
         userEvent.type(input, 'hello');
         userEvent.keyboard('{Enter}');
         await wait(0);
@@ -1196,10 +1264,16 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
+        await wait(0);
+      });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
         userEvent.type(input, 'Item 3');
         userEvent.keyboard('{Enter}');
         await wait(0);
@@ -1278,7 +1352,9 @@ export function createOptionsTests(
       await act(async () => {
         userEvent.click(input);
         await wait(0);
+      });
 
+      await act(async () => {
         userEvent.keyboard('{ArrowUp}');
         await wait(0);
       });
@@ -1350,6 +1426,12 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
       expect(
         document.querySelector('.ais-ReverseHighlight-nonHighlighted')
       ).toHaveTextContent('hell');
@@ -1405,12 +1487,14 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const input = screen.getByRole('combobox', { name: /submit/i });
+      let input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
         userEvent.click(input);
         await wait(0);
       });
+
+      input = screen.getByRole('combobox', { name: /submit/i });
 
       expect(input).toHaveFocus();
 
@@ -1521,6 +1605,12 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
       const applyButton = screen.getByRole('button', {
         name: /apply hello as search/i,
         hidden: true,
@@ -1538,7 +1628,9 @@ export function createOptionsTests(
         })
       ).toHaveValue('hello');
 
-      // 2 initial calls for the root index + suggestions index, then 1 for the suggestions index only
+      // 1 initial call for the root index, 1 call when focusing the input
+      // (only the suggestions; the parent search is cancelled), then 1 for
+      // the suggestions index after clicking apply
       expect(searchClient.search).toHaveBeenCalledTimes(3);
       expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
@@ -1687,6 +1779,18 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        // For lazy-activation flavors (React), the detached UI only renders
+        // after the input is focused.
+        const preActivationInput = screen.queryByRole('combobox', {
+          name: /submit/i,
+        });
+        if (preActivationInput) {
+          await act(async () => {
+            userEvent.click(preActivationInput);
+            await wait(0);
+          });
+        }
+
         expect(
           document.querySelector('.ais-AutocompleteDetachedSearchButton')
         ).toBeInTheDocument();
@@ -1827,6 +1931,18 @@ export function createOptionsTests(
         await act(async () => {
           await wait(0);
         });
+
+        // For lazy-activation flavors (React), the detached UI only renders
+        // after the input is focused.
+        const preActivationInput = screen.queryByRole('combobox', {
+          name: /submit/i,
+        });
+        if (preActivationInput) {
+          await act(async () => {
+            userEvent.click(preActivationInput);
+            await wait(0);
+          });
+        }
 
         expect(
           document.querySelector('.ais-AutocompleteDetachedSearchButton')
@@ -2051,6 +2167,12 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
         const indicesItems = document.querySelectorAll(
           '.ais-AutocompleteIndexItem'
         );
@@ -2145,6 +2267,12 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
         const indicesItems = document.querySelectorAll(
           '.ais-AutocompleteIndexItem'
         );
@@ -2218,7 +2346,9 @@ export function createOptionsTests(
         await act(async () => {
           userEvent.click(input);
           await wait(0);
+        });
 
+        await act(async () => {
           userEvent.keyboard('{ArrowDown}');
           await wait(0);
         });
@@ -2311,7 +2441,9 @@ export function createOptionsTests(
         await act(async () => {
           userEvent.click(input);
           await wait(0);
+        });
 
+        await act(async () => {
           userEvent.keyboard('{ArrowDown}');
           await wait(0);
         });
@@ -2373,6 +2505,12 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
         expect(
           document.querySelector('.ais-AutocompletePromptSuggestions')
         ).toBeInTheDocument();
@@ -2422,6 +2560,12 @@ export function createOptionsTests(
         });
 
         await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
           await wait(0);
         });
 
@@ -2488,6 +2632,12 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
         // Query suggestions should be rendered
         const querySuggestionItems = document.querySelectorAll(
           '.ais-AutocompleteSuggestionsItem'
@@ -2542,6 +2692,12 @@ export function createOptionsTests(
         });
 
         await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
           await wait(0);
         });
 
@@ -2618,6 +2774,12 @@ export function createOptionsTests(
         });
 
         await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
           await wait(0);
         });
 
@@ -2756,6 +2918,12 @@ export function createOptionsTests(
           await wait(0);
         });
 
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
         expect(
           document.querySelector('.ais-AutocompleteIndexNoResults')
         ).toBeInTheDocument();
@@ -2808,6 +2976,12 @@ export function createOptionsTests(
         });
 
         await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
           await wait(0);
         });
 

@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import type { Hooks } from '../types';
+
 export interface StickToBottomState {
   scrollTop: number;
   lastScrollTop?: number;
@@ -148,19 +150,10 @@ export interface StickToBottomInstance {
   state: StickToBottomState;
 }
 
-type CreateStickToBottomParams = {
-  useCallback: <T extends (...args: any[]) => any>(
-    callback: T,
-    deps: readonly unknown[]
-  ) => T;
-  useEffect: (
-    effect: () => void | (() => void),
-    deps?: readonly unknown[]
-  ) => void;
-  useMemo: <TType>(factory: () => TType, deps: readonly unknown[]) => TType;
-  useRef: <TType>(initialValue: TType) => { current: TType };
-  useState: <TType>(initialState: TType) => [TType, (newState: TType) => void];
-};
+type CreateStickToBottomParams = Pick<
+  Hooks,
+  'useCallback' | 'useEffect' | 'useMemo' | 'useRef' | 'useState'
+>;
 
 export function createStickToBottom({
   useCallback,

@@ -6,3 +6,8 @@ engines:
   semgrep:
     exclude_paths:
       - '**/rollup.config.mjs'
+
+# CLI detector tests walk fixture directories colocated with the test file,
+# never any external input.
+exclude_paths:
+  - 'packages/instantsearch-cli/__tests__/**'

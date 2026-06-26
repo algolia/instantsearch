@@ -20,7 +20,6 @@ export function createChatSidePanelLayoutComponent({
       headerComponent,
       messagesComponent,
       promptComponent,
-      toggleButtonComponent,
       classNames = {},
       className,
       parentElement,
@@ -89,10 +88,6 @@ export function createChatSidePanelLayoutComponent({
           {headerComponent}
           {messagesComponent}
           {promptComponent}
-        </div>
-
-        <div className="ais-Chat-toggleButtonWrapper">
-          {toggleButtonComponent}
         </div>
       </div>
     );

@@ -148,6 +148,7 @@ export type DynamicToolUIPart = {
   | {
       state: 'output-error';
       input: unknown;
+      rawInput?: unknown;
       output?: never;
       errorText: string;
       callProviderMetadata?: ProviderMetadata;
@@ -257,14 +258,25 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
     }>
   | ValueOf<{
       [NAME in keyof TOOLS & string]: {
-        type: 'tool-error';
+        type: 'tool-input-error';
         toolName: NAME;
         toolCallId: string;
+        input?: unknown;
         errorText: string;
-        input?: TOOLS[NAME]['input'];
-        callProviderMetadata?: ProviderMetadata;
+        providerExecuted?: boolean;
+        // Wire field is `providerMetadata` (mapped onto the part's
+        // `callProviderMetadata`), matching the AI SDK 5/6 chunk schema.
+        providerMetadata?: ProviderMetadata;
       };
     }>
+  | {
+      type: 'tool-output-error';
+      toolCallId: string;
+      errorText: string;
+      providerExecuted?: boolean;
+      providerMetadata?: ProviderMetadata;
+      dynamic?: boolean;
+    }
   | {
       type: 'tool-input-available';
       toolName: string;
@@ -299,12 +311,13 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
       dynamic: true;
     }
   | {
-      type: 'tool-error';
+      type: 'tool-input-error';
       toolName: string;
       toolCallId: string;
-      errorText: string;
       input?: unknown;
-      callProviderMetadata?: ProviderMetadata;
+      errorText: string;
+      providerExecuted?: boolean;
+      providerMetadata?: ProviderMetadata;
       dynamic: true;
     };
 
@@ -337,6 +350,19 @@ export type UIMessageChunk<
         toolCallId: string;
         toolName: string;
         delta: string;
+      };
+      transient?: boolean;
+    }
+  | {
+      // Emitted by the agent when a guardrail intercepts the request or the
+      // response. The `fallbackResponse` is authored for end-user display and
+      // is surfaced verbatim by the chat error UI (see
+      // `GuardrailViolationError`).
+      type: 'data-guardrail-violation';
+      data: {
+        fallbackResponse?: string;
+        category?: string;
+        guardrailType?: 'input' | 'output' | string;
       };
       transient?: boolean;
     }

@@ -615,6 +615,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .addWidgets([
         customChat({
           container: document.body.appendChild(document.createElement('div')),
+          disableTriggerValidation: true,
           ...widgetParams,
         }),
       ])

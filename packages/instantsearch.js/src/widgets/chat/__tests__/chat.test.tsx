@@ -7,10 +7,19 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
+import { warning } from '../../../lib/utils';
 import { chatInlineLayout } from '../../../templates';
+import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';
 
 describe('chat', () => {
+  beforeEach(() => {
+    // The `warning` utility dedupes messages process-wide via this cache,
+    // which would prevent the dev-only chat trigger warning from being
+    // re-emitted in subsequent tests. We reset it for test isolation.
+    warning.cache = {};
+  });
+
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
@@ -30,6 +39,99 @@ describe('chat', () => {
         See documentation: https://www.algolia.com/doc/api-reference/widgets/chat/js/"
       `);
     });
+
+    test('warns (does not throw) when no trigger or AI mode is present', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+        }),
+      ]);
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('The `chat` widget has no way to be opened.')
+      );
+
+      warnSpy.mockRestore();
+    });
+
+    test('does not warn when a `chatTrigger` widget is present', () => {
+      const chatContainer = document.createElement('div');
+      document.body.appendChild(chatContainer);
+      const triggerContainer = document.createElement('div');
+      document.body.appendChild(triggerContainer);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container: chatContainer,
+          agentId: 'test-agent-id',
+        }),
+        chatTrigger({
+          container: triggerContainer,
+        }),
+      ]);
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('The `chat` widget has no way to be opened.')
+      );
+
+      warnSpy.mockRestore();
+    });
+
+    test('does not warn when `disableTriggerValidation` is true', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+        }),
+      ]);
+
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      expect(() => {
+        search.start();
+      }).not.toThrow();
+
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('The `chat` widget has no way to be opened.')
+      );
+
+      warnSpy.mockRestore();
+    });
   });
 
   describe('search tool compatibility', () => {
@@ -46,6 +148,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {
@@ -91,6 +194,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
+          disableTriggerValidation: true,
           templates: { item: (hit) => `<div>${hit.name}</div>` },
           messages: [
             {
