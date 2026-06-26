@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.103.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.102.0...instantsearch.js@4.103.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* **chat:** handle tool-input-error and tool-output-error stream chunks ([#7081](https://github.com/algolia/instantsearch/issues/7081)) ([80ce90f](https://github.com/algolia/instantsearch/commit/80ce90f3f3b68539dfef12ff52c25be0684f4b45))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
 # [4.102.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.101.1...instantsearch.js@4.102.0) (2026-06-19)
 
 

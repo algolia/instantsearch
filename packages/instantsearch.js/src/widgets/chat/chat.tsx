@@ -9,7 +9,7 @@ import {
   getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
 import { Component, Fragment, h, render } from 'preact';
-import { useEffect, useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -80,7 +80,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 // avoided across this package (it bloats the bundle and patches Preact
 // globally); a class component with `shouldComponentUpdate` is all the chat
 // message memoization needs.
-const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
+const memo: Parameters<typeof createChatComponent>[0]['memo'] = (
   FunctionComponent,
   propsAreEqual
 ) => {
@@ -97,7 +97,12 @@ const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
   return (props) => h(Memoized, props as Record<string, unknown>);
 };
 
-const Chat = createChatComponent({ createElement: h, Fragment, memo });
+const Chat = createChatComponent({
+  createElement: h,
+  Fragment,
+  memo,
+  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+});
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
@@ -316,9 +321,7 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
-  isClearing: boolean;
   clearMessages: () => void;
-  onClearTransitionEnd: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
@@ -382,9 +385,7 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
-  isClearing,
   clearMessages,
-  onClearTransitionEnd,
   onFeedback,
   feedbackState,
   toolsForUi,
@@ -434,7 +435,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        canClear: Boolean(chatMessages?.length),
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -451,8 +452,6 @@ function ChatWrapper({
         feedbackState,
         messages: chatMessages,
         indexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -750,9 +749,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       error,
       regenerate,
       stop,
-      isClearing,
       clearMessages,
-      onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
       sendChatMessageFeedback: onFeedback,
@@ -899,9 +896,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
-          isClearing={isClearing}
           clearMessages={clearMessages}
-          onClearTransitionEnd={onClearTransitionEnd}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}

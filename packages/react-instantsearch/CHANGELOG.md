@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.37.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.36.0...react-instantsearch@7.37.0) (2026-06-25)
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
 # [7.36.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.35.1...react-instantsearch@7.36.0) (2026-06-19)
 
 
