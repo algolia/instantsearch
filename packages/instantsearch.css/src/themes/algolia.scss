@@ -384,7 +384,8 @@ a[class^='ais-'] {
   justify-content: center;
 }
 
-.ais-Hits-banner-image .ais-InfiniteHits-banner-image {
+.ais-Hits-banner-image,
+.ais-InfiniteHits-banner-image {
   max-width: 100%;
 }
 
