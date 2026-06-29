@@ -79,9 +79,12 @@ export function createInsightsTests(
         ).toHaveLength(hitsPerPage);
       }
 
-      // View event called for each index once (+ usage events)
+      // View event called for each index once (usage events are sent via
+      // `sendEvents`, so we count only `viewedObjectIDs` calls).
       {
-        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(2);
+        expect(
+          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+        ).toHaveLength(2);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {
@@ -130,7 +133,9 @@ export function createInsightsTests(
           await wait(0);
         });
 
-        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(2);
+        expect(
+          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+        ).toHaveLength(2);
       }
     });
 
@@ -191,9 +196,12 @@ export function createInsightsTests(
         ).toHaveLength(hitsPerPage);
       }
 
-      // View event called for each index, batched in chunks of 20 (+ usage events)
+      // View event called for each index, batched in chunks of 20 (usage
+      // events are sent via `sendEvents`, so we count only `viewedObjectIDs`).
       {
-        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(4);
+        expect(
+          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+        ).toHaveLength(4);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {

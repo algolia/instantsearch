@@ -1315,7 +1315,9 @@ describe('insights', () => {
         } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
-      // onEvent also receives usage events (bootstrap)
+      // The `__start__` usage event is sent directly via `sendEvents`, not
+      // through `sendEventToInsights`, so `onEvent` is only called once here.
+      expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent).toHaveBeenCalledWith(
         {
           insightsMethod: 'viewedObjectIDs',
