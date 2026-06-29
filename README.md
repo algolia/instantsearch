@@ -20,6 +20,8 @@ It is part of the InstantSearch family which is designed for different platforms
 
 **InstantSearch** | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
+
+
 <details>
   <summary><strong>Table of contents</strong></summary>
 
