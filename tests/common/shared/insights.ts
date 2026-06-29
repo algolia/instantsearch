@@ -157,9 +157,12 @@ export function createInsightsTests(
 
         await setup(options);
 
-        // initial calls because the middleware is attached
-        // 4 base calls (usage __start__ is deferred to the next tick)
-        expect(window.aa.mock.calls.length).toBeGreaterThanOrEqual(4);
+        // initial calls because the middleware is attached. The usage
+        // `__start__` event is sent via `sendEvents` on the next tick; we
+        // filter it out so the base-call count stays deterministic.
+        expect(
+          window.aa.mock.calls.filter(([method]) => method !== 'sendEvents')
+        ).toHaveLength(4);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
