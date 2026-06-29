@@ -3,7 +3,7 @@ import React from 'react';
 
 import { isModifierClick } from './lib/isModifierClick';
 
-import type { CreateURL } from 'instantsearch.js';
+import type { CreateURL } from 'instantsearch-core';
 
 export type PageItemTextOptions = {
   /**

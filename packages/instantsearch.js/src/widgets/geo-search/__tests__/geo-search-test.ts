@@ -11,12 +11,12 @@ import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { render as preactRender } from 'preact';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import createHTMLMarker from '../createHTMLMarker';
 import geoSearch from '../geo-search';
 import originalRenderer from '../GeoSearchRenderer';

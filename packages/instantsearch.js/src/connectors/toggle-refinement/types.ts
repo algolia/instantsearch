@@ -1,6 +1,6 @@
 export type {
-  /** @deprecated import from connectToggleRefinement directly */
+  /** @deprecated import from instantsearch-core directly */
   ToggleRefinementConnector,
-  /** @deprecated import from connectToggleRefinement directly */
+  /** @deprecated import from instantsearch-core directly */
   ToggleRefinementWidgetDescription,
-} from './connectToggleRefinement';
+} from 'instantsearch-core';

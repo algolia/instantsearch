@@ -6,7 +6,7 @@ import { mount } from '../../../test/utils';
 import Snippet from '../Snippet.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 test('renders proper HTML', () => {
   const hit = {

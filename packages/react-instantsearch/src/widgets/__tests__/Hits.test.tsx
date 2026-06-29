@@ -14,7 +14,7 @@ import React from 'react';
 import { Hits } from '../Hits';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { AlgoliaHit } from 'instantsearch.js';
+import type { AlgoliaHit } from 'instantsearch-core';
 
 type CustomRecord = {
   somethingSpecial: string;

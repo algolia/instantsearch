@@ -8,7 +8,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 
-import { createInitOptions } from '../../../../test/createWidget';
+import { createInitOptions } from '../../../../../instantsearch-core/test/createWidget';
 import instantsearch from '../../../index.es';
 import searchBox from '../../search-box/search-box';
 import answers from '../answers';

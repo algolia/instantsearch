@@ -1,21 +1,21 @@
 /** @jsx h */
 
+import { connectChatTrigger } from 'instantsearch-core';
 import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChatTrigger from '../../connectors/chat/connectChatTrigger';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
+import type { RendererOptions, Template } from '../../types';
 import type {
   ChatTriggerConnectorParams,
   ChatTriggerRenderState,
-} from '../../connectors/chat/connectChatTrigger';
-import type { RendererOptions, Template } from '../../types';
+} from 'instantsearch-core';
 import type {
   ChatToggleButtonProps,
   Pragma,

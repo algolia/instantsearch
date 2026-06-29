@@ -5,7 +5,7 @@ import { h } from 'preact';
 import { readDataAttributes } from '../../helpers/insights';
 import { deserializePayload, warning } from '../utils';
 
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import type { InsightsEvent } from '../../middlewares';
 import type { InsightsClient } from '../../types';
 
 export type InsightsEventHandlerOptions = {

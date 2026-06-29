@@ -12,7 +12,7 @@ import { render } from 'preact';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import relevantSort from '../relevant-sort';
 
 import type { RelevantSortTemplates } from '../relevant-sort';

@@ -1,4 +1,4 @@
-import connectFeeds from '../../connectors/feeds/connectFeeds';
+import { connectFeeds } from '../../connectors';
 import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
 import { component } from '../../lib/suit';
 import {
@@ -9,7 +9,7 @@ import {
 import type {
   FeedsConnectorParams,
   FeedsWidgetDescription,
-} from '../../connectors/feeds/connectFeeds';
+} from '../../connectors';
 import type {
   IndexWidget,
   RenderOptions,

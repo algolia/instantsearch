@@ -1,10 +1,10 @@
-import connectConfigure from '../../connectors/configure/connectConfigure';
+import { connectConfigure } from '../../connectors';
 import { noop } from '../../lib/utils';
 
 import type {
   ConfigureConnectorParams,
   ConfigureWidgetDescription,
-} from '../../connectors/configure/connectConfigure';
+} from '../../connectors';
 import type { Widget } from '../../types';
 
 /**

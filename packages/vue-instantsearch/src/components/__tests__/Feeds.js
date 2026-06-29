@@ -7,7 +7,7 @@ import { __setState } from '../../mixins/widget';
 import Feeds from '../Feeds';
 
 jest.mock('../../mixins/widget');
-jest.mock('instantsearch.js/es/connectors/feeds/FeedContainer', () => ({
+jest.mock('instantsearch-core', () => ({
   createFeedContainer: jest.fn(feedID => ({ __feedID: feedID })),
 }));
 

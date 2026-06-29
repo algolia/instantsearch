@@ -1,3 +1,3 @@
+export * from './chat';
 export * from './cx';
 export * from './stickToBottom';
-export * from './utils';

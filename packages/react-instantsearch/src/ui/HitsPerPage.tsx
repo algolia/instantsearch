@@ -1,7 +1,7 @@
 import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
-import type { HitsPerPageConnectorParamsItem as HitsPerPageItem } from 'instantsearch.js/es/connectors/hits-per-page/connectHitsPerPage';
+import type { HitsPerPageConnectorParamsItem as HitsPerPageItem } from 'instantsearch-core';
 
 export type HitsPerPageProps = Omit<React.ComponentProps<'div'>, 'onChange'> & {
   items: HitsPerPageItem[];

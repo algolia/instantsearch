@@ -1,19 +1,24 @@
 /** @jsx createElement */
+import { startsWith } from 'instantsearch-core';
 import { compiler } from 'markdown-to-jsx';
 
-import { cx, startsWith } from '../../lib';
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
+import type { ClientSideTools } from './types';
 import type {
   AddToolResultWithOutput,
-  ChatMessageBase,
   ChatStatus,
-  ChatToolMessage,
-  ClientSideTools,
-} from './types';
+  UIMessage,
+} from 'instantsearch-core';
+
+type ChatToolMessage = Extract<
+  UIMessage['parts'][number],
+  { type: `tool-${string}` }
+>;
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -76,14 +81,14 @@ export type ChatMessageActionProps = {
   /**
    * Click handler for the action
    */
-  onClick?: (message: ChatMessageBase) => void;
+  onClick?: (message: UIMessage) => void;
 };
 
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
    */
-  message: ChatMessageBase;
+  message: UIMessage;
   /**
    * The status of the message (e.g. whether it's still streaming)
    */
@@ -113,7 +118,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   actionsComponent?: (props: {
     actions: ChatMessageActionProps[];
-    message: ChatMessageBase;
+    message: UIMessage;
   }) => JSX.Element | null;
   /**
    * Footer content
@@ -132,7 +137,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * receive object IDs (e.g. display results) can hydrate records from a
    * preceding search tool's hits.
    */
-  messages?: ChatMessageBase[];
+  messages?: UIMessage[];
   /**
    * Close the chat
    */
@@ -166,7 +171,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   parseMarkdown?: boolean;
 };
 
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
+// Keep in sync with packages/instantsearch-core/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
 export function createChatMessageComponent({ createElement }: Renderer) {
@@ -223,7 +228,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     function renderMessagePart(
-      part: ChatMessageBase['parts'][number],
+      part: UIMessage['parts'][number],
       index: number
     ) {
       if (part.type === 'step-start') {

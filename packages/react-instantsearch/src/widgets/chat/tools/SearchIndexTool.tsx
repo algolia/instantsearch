@@ -1,11 +1,14 @@
 import {
+  addAbsolutePosition,
+  addQueryID,
+} from 'instantsearch-core';
+import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
   getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
-import { addAbsolutePosition, addQueryID } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
@@ -13,11 +16,13 @@ import { Carousel } from '../../../components';
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
+  SearchToolInput,
+  UserClientSideTool,
+} from 'instantsearch-core';
+import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
-  SearchToolInput,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'react';
 

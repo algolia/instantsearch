@@ -6,7 +6,7 @@ import {
   Chat,
   DisplayResultsToolType,
   SearchIndexToolType,
-} from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
 import {
   chatInlineLayout,
   chatSidePanelLayout,

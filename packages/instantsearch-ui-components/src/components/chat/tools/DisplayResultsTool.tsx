@@ -1,9 +1,9 @@
 /** @jsx createElement */
 
-import { getHitsByObjectID } from '../../../lib/utils/chat';
+import { getHitsByObjectID } from '../../../lib/chat';
 
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
-import type { ClientSideToolComponentProps } from '../types';
+import type { ClientSideToolComponentProps } from 'instantsearch-core';
 
 export type DisplayResultsTranslations = {
   /**

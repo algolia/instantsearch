@@ -7,7 +7,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { render, act } from '@testing-library/react';
-import * as utils from 'instantsearch.js/es/lib/utils';
+import * as utils from 'instantsearch-core';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import { SearchBox, TrendingItems } from 'react-instantsearch';
@@ -22,8 +22,8 @@ import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
 
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
+jest.mock('instantsearch-core', () => ({
+  ...jest.requireActual('instantsearch-core'),
   resetWidgetId: jest.fn(),
 }));
 

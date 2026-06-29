@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
 
-import type { InstantSearch, UiState, IndexWidget } from 'instantsearch.js';
+import type { InstantSearch, UiState, IndexWidget } from 'instantsearch-core';
 
 export type SearchStateApi<TUiState extends UiState> = {
   uiState: TUiState;

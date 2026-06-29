@@ -1,11 +1,11 @@
 /** @jsx h */
 
+import { isChatBusy, openChat } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import { isChatBusy, openChat } from '../../lib/chat';
+import { connectSearchBox } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -18,13 +18,13 @@ import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../../components/SearchBox/SearchBox';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors/search-box/connectSearchBox';
+} from '../../connectors';
 import type { WidgetFactory, Template, RendererOptions } from '../../types';
+import type { ChatRenderState } from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');

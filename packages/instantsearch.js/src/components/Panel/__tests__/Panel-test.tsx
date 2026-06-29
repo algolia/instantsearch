@@ -6,7 +6,7 @@
 import { render, fireEvent } from '@testing-library/preact';
 import { h } from 'preact';
 
-import { createRenderOptions } from '../../../../test/createWidget';
+import { createRenderOptions } from '../../../../../instantsearch-core/test/createWidget';
 import Panel from '../Panel';
 
 import type { PanelProps } from '../Panel';

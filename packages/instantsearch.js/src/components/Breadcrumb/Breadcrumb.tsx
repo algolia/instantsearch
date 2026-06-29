@@ -6,7 +6,7 @@ import { h } from 'preact';
 import { isSpecialClick } from '../../lib/utils';
 import Template from '../Template/Template';
 
-import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
+import type { BreadcrumbConnectorParamsItem } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {

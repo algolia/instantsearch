@@ -7,7 +7,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import qs from 'qs';
 
 import instantsearch from '../..';
-import { createWidget } from '../../../test/createWidget';
+import { createWidget } from '../../../../instantsearch-core/test/createWidget';
 import { connectHitsPerPage, connectSearchBox } from '../../connectors';
 import historyRouter from '../routers/history';
 

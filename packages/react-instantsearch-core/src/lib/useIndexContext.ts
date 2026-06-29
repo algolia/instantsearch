@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { IndexContext } from './IndexContext';
 import { invariant } from './invariant';
 
-import type { IndexWidget, UiState } from 'instantsearch.js';
+import type { IndexWidget, UiState } from 'instantsearch-core';
 import type { Context } from 'react';
 
 export function useIndexContext<TUiState extends UiState = UiState>() {

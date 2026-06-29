@@ -17,12 +17,12 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 
 import { castToJestMock } from '../../../../../../tests/utils';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from '../../../../../instantsearch-core/test/createInstantSearch';
 import {
   createWidget,
   createIndexInitOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from '../../../../../instantsearch-core/test/createWidget';
 import {
   connectHits,
   connectPagination,

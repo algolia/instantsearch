@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { connectPagination } from 'instantsearch.js/es/connectors/index';
+import { connectPagination } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

@@ -1,6 +1,6 @@
 import { createSearchResults } from './createSearchResults';
 
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { IndexWidget } from 'instantsearch-core';
 
 export function getIndexSearchResults(indexWidget: IndexWidget) {
   const helper = indexWidget.getHelper()!;

@@ -1,4 +1,11 @@
 import {
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  openChat,
+  warn,
+} from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedOverlayComponent,
@@ -12,11 +19,7 @@ import {
   createAutocompleteRecentSearchComponent,
   createAutocompleteStorage,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
-import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
-import { warn } from 'instantsearch.js/es/lib/utils';
 import React, {
   createElement,
   Fragment,
@@ -42,6 +45,9 @@ import { Highlight } from './Highlight';
 import { ReverseHighlight } from './ReverseHighlight';
 
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { BaseHit, Hit, IndexUiState } from 'instantsearch-core';
+import type { TransformItemsIndicesConfig } from 'instantsearch-core';
+import type { ChatRenderState } from 'instantsearch-core';
 import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
@@ -49,9 +55,6 @@ import type {
   AutocompleteClassNames,
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
-import type { TransformItemsIndicesConfig } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({

@@ -6,7 +6,7 @@ import { createButtonComponent } from '../Button';
 import { ArrowUpIcon, StopIcon } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatStatus } from './types';
+import type { ChatStatus } from 'instantsearch-core';
 
 export type ChatPromptTranslations = {
   /**

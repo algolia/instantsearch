@@ -4,7 +4,7 @@ import { createFilterSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFilterSuggestions from '../../connectors/filter-suggestions/connectFilterSuggestions';
+import { connectFilterSuggestions } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   FilterSuggestionsRenderState,
   FilterSuggestionsConnectorParams,
   FilterSuggestionsWidgetDescription,
-} from '../../connectors/filter-suggestions/connectFilterSuggestions';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {

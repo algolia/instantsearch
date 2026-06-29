@@ -1,4 +1,4 @@
-import { getAppIdAndApiKey } from 'instantsearch.js/es/lib/utils';
+import { getAppIdAndApiKey } from 'instantsearch-core';
 
 import { useInstantSearchContext } from './useInstantSearchContext';
 

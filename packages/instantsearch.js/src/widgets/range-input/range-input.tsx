@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RangeInput from '../../components/RangeInput/RangeInput';
-import connectRange from '../../connectors/range/connectRange';
+import { connectRange } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -20,7 +20,7 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 

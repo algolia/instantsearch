@@ -9,7 +9,7 @@ import { configToIndex, injectStyles } from './render';
 import { error } from './util';
 
 import type { Settings } from './get-information';
-import type { IndexWidget } from 'instantsearch.js';
+import type { IndexWidget } from 'instantsearch-core';
 
 declare global {
   interface Window {

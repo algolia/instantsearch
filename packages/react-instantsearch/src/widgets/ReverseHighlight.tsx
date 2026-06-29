@@ -2,14 +2,14 @@ import {
   getHighlightedParts,
   getPropertyByPath,
   unescape,
-} from 'instantsearch.js/es/lib/utils';
+} from 'instantsearch-core';
 import React from 'react';
 
 import { ReverseHighlight as ReverseHighlightUiComponent } from '../ui/ReverseHighlight';
 
 import type { PartialKeys } from '../types';
 import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../ui/ReverseHighlight';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 
 export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

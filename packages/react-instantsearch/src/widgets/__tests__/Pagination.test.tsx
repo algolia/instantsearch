@@ -15,7 +15,7 @@ import React from 'react';
 import { Pagination } from '../Pagination';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { SearchClient } from 'instantsearch.js';
+import type { SearchClient } from 'instantsearch-core';
 
 function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
   return createAlgoliaSearchClient({

@@ -1,4 +1,4 @@
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
+import { connectQueryRules } from '../../connectors';
 import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 
 import type {
@@ -6,7 +6,7 @@ import type {
   ParamTransformRuleContexts,
   QueryRulesConnectorParams,
   QueryRulesWidgetDescription,
-} from '../../connectors/query-rules/connectQueryRules';
+} from '../../connectors';
 import type { WidgetFactory } from '../../types';
 
 export type QueryRuleContextWidgetParams = {

@@ -1,6 +1,13 @@
 /** @jsx h */
 
 import {
+  getPromptSuggestionHits,
+  isChatBusy,
+  isPromptSuggestion,
+  openChat,
+  type ChatRenderState,
+} from 'instantsearch-core';
+import {
   createAutocompleteComponent,
   createAutocompleteDetachedContainerComponent,
   createAutocompleteDetachedOverlayComponent,
@@ -15,18 +22,18 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
-  getPromptSuggestionHits,
-  isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFeeds from '../../connectors/feeds/connectFeeds';
 import { createFeedContainer } from '../../connectors/feeds/FeedContainer';
-import { connectAutocomplete, connectSearchBox } from '../../connectors/index';
+import {
+  connectAutocomplete,
+  connectFeeds,
+  connectSearchBox,
+} from '../../connectors/index';
 import { Highlight, ReverseHighlight } from '../../helpers/components';
-import { isChatBusy, openChat } from '../../lib/chat';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -45,8 +52,7 @@ import type {
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
-} from '../../connectors/autocomplete/connectAutocomplete';
-import type { ChatRenderState } from '../../connectors/chat/connectChat';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
@@ -832,7 +838,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onFocus: (event) => {
+        onFocus: (event: unknown) => {
           activate();
           (inputProps as { onFocus?: (event: unknown) => void }).onFocus?.(
             event

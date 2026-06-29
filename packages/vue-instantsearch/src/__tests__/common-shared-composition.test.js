@@ -7,7 +7,7 @@ import * as testSuites from '@instantsearch/tests/shared-composition';
 import { nextTick, mountApp } from '../../test/utils';
 import { AisInstantSearch, AisRefinementList } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
-jest.unmock('instantsearch.js/es');
+jest.unmock('instantsearch-core');
 
 const testSetups = {
   async createSharedCompositionTests({ instantSearchOptions, widgetParams }) {

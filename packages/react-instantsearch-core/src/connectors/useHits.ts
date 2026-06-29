@@ -1,14 +1,14 @@
-import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
+import { connectHits as connectHits } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
+import type { BaseHit } from 'instantsearch-core';
 import type {
   HitsConnectorParams,
   HitsWidgetDescription,
   HitsConnector,
-} from 'instantsearch.js/es/connectors/hits/connectHits';
+} from 'instantsearch-core';
 
 export type UseHitsProps<THit extends BaseHit = BaseHit> =
   HitsConnectorParams<THit>;

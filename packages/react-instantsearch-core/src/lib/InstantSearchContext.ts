@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import type { InstantSearch } from 'instantsearch.js';
+import type { InstantSearch } from 'instantsearch-core';
 
 export const InstantSearchContext = createContext<InstantSearch | null>(null);
 
