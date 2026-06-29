@@ -1,3 +1,4 @@
+import { isIndexWidget } from './isIndexWidget';
 import { createInitArgs } from './render-args';
 
 import type { InstantSearch, Widget, IndexWidget } from '../../types';
@@ -48,9 +49,9 @@ export function extractWidgetPayload(
       params,
     });
 
-    if (widget.$$type === 'ais.index') {
+    if (isIndexWidget(widget)) {
       extractWidgetPayload(
-        (widget as IndexWidget).getWidgets(),
+        widget.getWidgets(),
         instantSearchInstance,
         payload
       );

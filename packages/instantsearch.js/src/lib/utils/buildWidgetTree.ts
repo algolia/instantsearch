@@ -1,3 +1,4 @@
+import { isIndexWidget } from './isIndexWidget';
 import { createInitArgs } from './render-args';
 
 import type { InstantSearch, Widget, IndexWidget } from '../../types';
@@ -95,13 +96,9 @@ export function buildWidgetTree(
 
     const params = serializeWidgetParams(widgetParams);
 
-    const children =
-      widget.$$type === 'ais.index'
-        ? buildWidgetTree(
-            (widget as IndexWidget).getWidgets(),
-            instantSearchInstance
-          )
-        : [];
+    const children = isIndexWidget(widget)
+      ? buildWidgetTree(widget.getWidgets(), instantSearchInstance)
+      : [];
 
     return {
       type: widget.$$widgetType || widget.$$type || 'unknown',
