@@ -30,7 +30,7 @@ const createFile = (fileName, content) => ({
   },
 });
 
-const aliasVueCompat = vueVersion => ({
+const aliasVueCompat = (vueVersion) => ({
   name: 'alias-vue-compat',
   resolveId(source, importer) {
     // Only intercept imports that:
@@ -87,7 +87,8 @@ const fixVue3SfcExports = () => ({
       if (chunk.type !== 'chunk') continue;
 
       if (chunk.fileName.endsWith('.vue.js')) {
-        const bridgePattern = /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
+        const bridgePattern =
+          /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
 
         const match = chunk.code.match(bridgePattern);
 
@@ -136,7 +137,7 @@ const fixVue3SfcExports = () => ({
   },
 });
 
-const external = id =>
+const external = (id) =>
   [
     'algoliasearch-helper',
     'instantsearch.js',
@@ -144,7 +145,7 @@ const external = id =>
     'vue',
     'mitt',
     '@swc/helpers',
-  ].some(dep => id === dep || id.startsWith(`${dep}/`));
+  ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
 function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vue3Plugin : vue2Plugin;
