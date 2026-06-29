@@ -2,7 +2,7 @@
 
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -116,18 +116,10 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
-  isClearing: boolean;
   clearMessages: () => void;
-  onClearTransitionEnd: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
-  toggleButtonProps: {
-    layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
-    iconComponent: ComponentProps<
-      typeof Chat
-    >['toggleButtonProps']['toggleIconComponent'];
-  };
   headerProps: {
     layoutComponent: ComponentProps<typeof Chat>['headerComponent'];
     closeIconComponent: ChatHeaderProps['closeIconComponent'];
@@ -188,13 +180,10 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
-  isClearing,
   clearMessages,
-  onClearTransitionEnd,
   onFeedback,
   feedbackState,
   toolsForUi,
-  toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
@@ -206,6 +195,18 @@ function ChatWrapper({
       initial: 'smooth',
       resize: 'smooth',
     });
+
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [chatMessages, chatStatus, scrollToBottom]);
 
   state.init();
 
@@ -221,12 +222,6 @@ function ChatWrapper({
       regenerate={regenerate}
       stop={stop}
       error={error}
-      toggleButtonComponent={toggleButtonProps.layoutComponent}
-      toggleButtonProps={{
-        open: chatOpen,
-        onClick: () => setChatOpen(!chatOpen),
-        toggleIconComponent: toggleButtonProps.iconComponent,
-      }}
       headerComponent={headerProps.layoutComponent}
       promptComponent={promptProps.layoutComponent}
       suggestionsComponent={suggestionsProps.suggestionsComponent}
@@ -235,7 +230,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        canClear: Boolean(chatMessages?.length),
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -250,8 +245,6 @@ function ChatWrapper({
         feedbackState,
         messages: chatMessages,
         indexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -460,20 +453,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         'fragment'
       )
     : undefined;
-  const stableToggleButtonLayoutComponent = templates.toggleButton?.layout
-    ? createStableTemplateComponent<ChatToggleButtonProps>(
-        toggleButtonTemplateRef,
-        'layout',
-        'button'
-      )
-    : undefined;
-  const stableToggleButtonIconComponent = templates.toggleButton?.icon
-    ? createStableTemplateComponent<{ isOpen: boolean }>(
-        toggleButtonTemplateRef,
-        'icon',
-        'span'
-      )
-    : undefined;
   const stableActionsComponent = templates.actions
     ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
         <TemplateComponent
@@ -510,7 +489,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           headerComponent,
           messagesComponent,
           promptComponent,
-          toggleButtonComponent,
           ...restLayoutProps
         } = layoutProps;
         return (
@@ -526,7 +504,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
                 header: () => headerComponent,
                 messages: () => messagesComponent,
                 prompt: () => promptComponent,
-                toggleButton: () => toggleButtonComponent,
               },
             }}
           />
@@ -550,9 +527,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       error,
       regenerate,
       stop,
-      isClearing,
       clearMessages,
-      onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
       sendChatMessageFeedback: onFeedback,
@@ -734,16 +709,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
-          isClearing={isClearing}
           clearMessages={clearMessages}
-          onClearTransitionEnd={onClearTransitionEnd}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}
-          toggleButtonProps={{
-            layoutComponent: stableToggleButtonLayoutComponent,
-            iconComponent: stableToggleButtonIconComponent,
-          }}
           headerProps={{
             layoutComponent: stableHeaderLayoutComponent,
             closeIconComponent: stableHeaderCloseIconComponent,
