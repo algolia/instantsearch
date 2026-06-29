@@ -1,7 +1,7 @@
 import { isPartTool, startsWith } from 'instantsearch-core';
 
-import type { SearchToolInput, UIMessage } from 'instantsearch-core';
 import type { RecordWithObjectID } from '../types';
+import type { SearchToolInput, UIMessage } from 'instantsearch-core';
 
 type ChatToolMessage = Extract<
   UIMessage['parts'][number],
