@@ -1,4 +1,4 @@
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
+import { Hit as AlgoliaHit } from 'instantsearch.js';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;
