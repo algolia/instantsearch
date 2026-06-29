@@ -434,74 +434,76 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           }
         };
 
-        // usage tracking
-        const usageSessionId = getUsageSessionId();
+        // usage tracking (browser-only)
+        safelyRunOnBrowser(() => {
+          const usageSessionId = getUsageSessionId();
 
-        function sendUsageEvent(event: any) {
-          const userToken = helper.state?.userToken;
+          function sendUsageEvent(event: any) {
+            const userToken = helper.state?.userToken;
 
-          (insightsClientWithLocalCredentials as any)('sendEvents', [
-            {
-              eventType: 'instantsearch',
-              timestamp: Date.now(),
-              sessionID: usageSessionId,
-              userToken: userToken ? String(userToken) : undefined,
-              ...event,
-            },
-          ]);
-        }
-
-        // Send the start event on the first `render`, by which point every
-        // flavor has registered its widgets. `bootstrapMs` then measures the
-        // time between the constructor running and that point, so for flavors
-        // that register widgets right at start (e.g. React) it captures the
-        // cost of adding them.
-        const sendStartEvent = () => {
-          try {
-            const bootstrapMs = Math.round(
-              (typeof performance !== 'undefined'
-                ? performance.now()
-                : Date.now()) - instantSearchInstance._createdAt
-            );
-
-            sendUsageEvent({
-              eventName: '__start__',
-              algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
-              version,
-              applicationId: appId,
-              performance: {
-                bootstrapMs,
+            (insightsClientWithLocalCredentials as any)('sendEvents', [
+              {
+                eventType: 'instantsearch',
+                timestamp: Date.now(),
+                sessionID: usageSessionId,
+                userToken: userToken ? String(userToken) : undefined,
+                ...event,
               },
-              widgets: [
-                {
-                  type: 'ais.instantSearch',
-                  // The options the instance was created with, serialized the
-                  // same way every widget's params are. Derived dynamically from
-                  // `_initialOptions` so new options are reported automatically,
-                  // minus the keys that carry credentials or user data. Functions
-                  // (`onStateChange`, `searchFunction`) serialize to name-only.
-                  params: serializeWidgetParams(
-                    omit(instantSearchInstance._initialOptions, [
-                      ...SENSITIVE_OPTIONS,
-                    ]) as Record<string, unknown>
-                  ),
-                  children: buildWidgetTree(
-                    instantSearchInstance.mainIndex.getWidgets(),
-                    instantSearchInstance
-                  ),
-                },
-              ],
-            });
-          } catch {
-            // usage tracking must never crash the host app
+            ]);
           }
-        };
 
-        instantSearchInstance.once('render', sendStartEvent);
-        removeStartEventListener = () => {
-          instantSearchInstance.removeListener('render', sendStartEvent);
-          removeStartEventListener = null;
-        };
+          // Send the start event on the first `render`, by which point every
+          // flavor has registered its widgets. `bootstrapMs` then measures the
+          // time between the constructor running and that point, so for flavors
+          // that register widgets right at start (e.g. React) it captures the
+          // cost of adding them.
+          const sendStartEvent = () => {
+            try {
+              const bootstrapMs = Math.round(
+                (typeof performance !== 'undefined'
+                  ? performance.now()
+                  : Date.now()) - instantSearchInstance._createdAt
+              );
+
+              sendUsageEvent({
+                eventName: '__start__',
+                algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
+                version,
+                applicationId: appId,
+                performance: {
+                  bootstrapMs,
+                },
+                widgets: [
+                  {
+                    type: 'ais.instantSearch',
+                    // The options the instance was created with, serialized the
+                    // same way every widget's params are. Derived dynamically from
+                    // `_initialOptions` so new options are reported automatically,
+                    // minus the keys that carry credentials or user data. Functions
+                    // (`onStateChange`, `searchFunction`) serialize to name-only.
+                    params: serializeWidgetParams(
+                      omit(instantSearchInstance._initialOptions, [
+                        ...SENSITIVE_OPTIONS,
+                      ]) as Record<string, unknown>
+                    ),
+                    children: buildWidgetTree(
+                      instantSearchInstance.mainIndex.getWidgets(),
+                      instantSearchInstance
+                    ),
+                  },
+                ],
+              });
+            } catch {
+              // usage tracking must never crash the host app
+            }
+          };
+
+          instantSearchInstance.once('render', sendStartEvent);
+          removeStartEventListener = () => {
+            instantSearchInstance.removeListener('render', sendStartEvent);
+            removeStartEventListener = null;
+          };
+        });
       },
       unsubscribe() {
         if (removeStartEventListener) {
