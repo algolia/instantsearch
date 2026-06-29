@@ -64,3 +64,4 @@ export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
 export { default as chatTrigger } from './chat-trigger/chat-trigger';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
+export { default as onPageSuggestions } from './on-page-suggestions/on-page-suggestions';
