@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.104.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.102.0...instantsearch.js@4.104.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **chat:** handle tool-input-error and tool-output-error stream chunks ([#7081](https://github.com/algolia/instantsearch/issues/7081)) ([80ce90f](https://github.com/algolia/instantsearch/commit/80ce90f3f3b68539dfef12ff52c25be0684f4b45))
+* **chat:** move clear-animation lifecycle to the view layer ([#7092](https://github.com/algolia/instantsearch/issues/7092)) ([bf5857e](https://github.com/algolia/instantsearch/commit/bf5857e28d19e084b6ef283d9dc7ddebd588ebf4))
+* **highlight:** keep separator state when reverse-highlight siblings disagree ([#7079](https://github.com/algolia/instantsearch/issues/7079)) ([b7a0f60](https://github.com/algolia/instantsearch/commit/b7a0f60c7eb407a0145eb4186c72306965c735be))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+* **chat:** add request options to agent requests ([#7088](https://github.com/algolia/instantsearch/issues/7088)) ([d3ad7ca](https://github.com/algolia/instantsearch/commit/d3ad7ca04e5d17e77a8c7f2548b7fbdf8b3ee9d7))
+
+
+
+
+
 # [4.103.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.102.0...instantsearch.js@4.103.0) (2026-06-25)
 
 
