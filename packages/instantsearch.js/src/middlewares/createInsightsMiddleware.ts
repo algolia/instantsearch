@@ -481,11 +481,13 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
                     // minus the keys that carry credentials or user data. Functions
                     // (`onStateChange`, `searchFunction`) report their `fn.name`
                     // when present, tagged `type: 'function'`.
-                    params: serializeWidgetParams(
-                      omit(instantSearchInstance._initialOptions ?? {}, [
-                        ...SENSITIVE_OPTIONS,
-                      ]) as Record<string, unknown>
-                    ),
+                    params: instantSearchInstance._initialOptions
+                      ? serializeWidgetParams(
+                          omit(instantSearchInstance._initialOptions, [
+                            ...SENSITIVE_OPTIONS,
+                          ]) as Record<string, unknown>
+                        )
+                      : [],
                     children: buildWidgetTree(
                       instantSearchInstance.mainIndex.getWidgets(),
                       instantSearchInstance
