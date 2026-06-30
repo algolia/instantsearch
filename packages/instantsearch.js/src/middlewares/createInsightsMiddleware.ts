@@ -482,7 +482,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
                     // minus the keys that carry credentials or user data. Functions
                     // (`onStateChange`, `searchFunction`) serialize to name-only.
                     params: serializeWidgetParams(
-                      omit(instantSearchInstance._initialOptions, [
+                      omit(instantSearchInstance._initialOptions ?? {}, [
                         ...SENSITIVE_OPTIONS,
                       ]) as Record<string, unknown>
                     ),

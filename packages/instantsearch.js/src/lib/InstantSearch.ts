@@ -245,7 +245,7 @@ class InstantSearch<
    * contravariant positions inside `InstantSearchOptions`) would break the
    * assignability of `InstantSearch<SpecificUiState>` to `InstantSearch`.
    */
-  public _initialOptions: InstantSearchOptions;
+  public _initialOptions: InstantSearchOptions | null;
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
@@ -790,6 +790,10 @@ See documentation: ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.unsubscribe();
     });
+
+    // Cleared after unsubscribe so in-flight readers (e.g. the insights
+    // start-event listener) have detached before the reference goes away.
+    this._initialOptions = null;
   }
 
   public scheduleSearch = defer(() => {
