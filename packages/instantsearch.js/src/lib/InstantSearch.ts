@@ -17,6 +17,7 @@ import {
   hydrateRecommendCache,
   hydrateSearchClient,
   noop,
+  now,
   warning,
   setIndexHelperState,
   isIndexWidget,
@@ -251,8 +252,7 @@ class InstantSearch<
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
-  public _createdAt: number =
-    typeof performance !== 'undefined' ? performance.now() : Date.now();
+  public _createdAt: number = now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */

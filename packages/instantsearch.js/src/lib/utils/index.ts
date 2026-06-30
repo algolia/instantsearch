@@ -46,6 +46,7 @@ export * from './omit';
 export * from './buildWidgetTree';
 export * from './extractWidgetPayload';
 export * from './noop';
+export * from './now';
 export * from './range';
 export * from './render-args';
 export * from './resolveSearchParameters';

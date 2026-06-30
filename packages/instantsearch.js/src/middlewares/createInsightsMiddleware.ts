@@ -10,6 +10,7 @@ import {
   getAlgoliaAgent,
   getAppIdAndApiKey,
   find,
+  now,
   omit,
   safelyRunOnBrowser,
 } from '../lib/utils';
@@ -460,9 +461,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           const sendStartEvent = () => {
             try {
               const bootstrapMs = Math.round(
-                (typeof performance !== 'undefined'
-                  ? performance.now()
-                  : Date.now()) - instantSearchInstance._createdAt
+                now() - instantSearchInstance._createdAt
               );
 
               sendUsageEvent({
