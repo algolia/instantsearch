@@ -44,7 +44,11 @@ function serializeParamValue(
     }
   }
 
-  // functions, symbols, DOM elements — name only
+  if (t === 'function') {
+    return { value: (value as Function).name, type: 'function' };
+  }
+
+  // symbols, DOM elements: name only
   return null;
 }
 
