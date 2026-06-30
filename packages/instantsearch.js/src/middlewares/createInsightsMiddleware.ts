@@ -501,10 +501,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           };
 
           instantSearchInstance.once('render', sendStartEvent);
-          removeStartEventListener = () => {
+          removeStartEventListener = () =>
             instantSearchInstance.removeListener('render', sendStartEvent);
-            removeStartEventListener = null;
-          };
         });
       },
       unsubscribe() {

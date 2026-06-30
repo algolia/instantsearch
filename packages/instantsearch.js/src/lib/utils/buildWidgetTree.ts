@@ -28,19 +28,12 @@ function serializeParamValue(
     return { value: String(value), type: t };
   }
 
-  if (Array.isArray(value)) {
+  if (Array.isArray(value) || t === 'object') {
+    const type = Array.isArray(value) ? 'array' : 'object';
     try {
-      return { value: JSON.stringify(value), type: 'array' };
+      return { value: JSON.stringify(value), type };
     } catch {
-      return { type: 'array' };
-    }
-  }
-
-  if (t === 'object') {
-    try {
-      return { value: JSON.stringify(value), type: 'object' };
-    } catch {
-      return { type: 'object' };
+      return { type };
     }
   }
 
