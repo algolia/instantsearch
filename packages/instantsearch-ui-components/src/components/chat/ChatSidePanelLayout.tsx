@@ -1,8 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
 
-import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './types';
+import type { Renderer } from '../../types';
 
 export type ChatSidePanelLayoutProps = ChatLayoutOwnProps & {
   parentElement?: string;

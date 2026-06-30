@@ -16,9 +16,10 @@ const algoliasearch = ((AlgoliaSearch as any).algoliasearch ||
   apiKey: string
 ) => SearchClient;
 
-type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
-  ? TTarget
-  : Omit<TTarget, keyof TOptions> & TOptions;
+type OverrideKeys<TTarget, TOptions> =
+  TOptions extends Record<string, never>
+    ? TTarget
+    : Omit<TTarget, keyof TOptions> & TOptions;
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
@@ -31,7 +32,7 @@ export type MockSearchClient = OverrideKeys<
 >;
 
 export function createAlgoliaSearchClient<
-  TOptions extends Partial<SearchClient>
+  TOptions extends Partial<SearchClient>,
 >(options: TOptions): OverrideKeys<MockSearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
 
@@ -42,7 +43,7 @@ export function createAlgoliaSearchClient<
 
   if (version.startsWith('5.')) {
     // @ts-ignore (v4)
-    type Host = typeof ClientCommon['Host'];
+    type Host = (typeof ClientCommon)['Host'];
     options = {
       transporter: (ClientCommon as any).createTransporter({
         timeouts: {

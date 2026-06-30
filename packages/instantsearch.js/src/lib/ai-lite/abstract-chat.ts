@@ -303,7 +303,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 role: 'user',
                 parts: fileParts,
                 metadata: message.metadata,
-              } as TUIMessage)
+              }) as TUIMessage
           );
         } else {
           userMessagePromise = Promise.resolve(undefined);
@@ -745,8 +745,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 typeof chunk.input === 'string'
                   ? chunk.input
                   : chunk.input !== undefined
-                  ? JSON.stringify(chunk.input)
-                  : '';
+                    ? JSON.stringify(chunk.input)
+                    : '';
 
               toolRawInputByCallId[chunk.toolCallId] = initialRawInput;
 
@@ -788,7 +788,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const toolName =
                 chunk.toolName ?? existingPart?.type?.replace('tool-', '');
               const shouldRepair = toolName
-                ? this.shouldRepairToolInput?.(toolName) ?? true
+                ? (this.shouldRepairToolInput?.(toolName) ?? true)
                 : true;
               const parsedInput = shouldRepair
                 ? parseToolInputDelta(nextRawInput, existingPart?.input)

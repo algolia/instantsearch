@@ -21,7 +21,7 @@ export type InstantSearchSSRProviderProps =
  */
 export function InstantSearchSSRProvider<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >({ children, ...props }: InstantSearchSSRProviderProps) {
   // This is used in `useInstantSearchApi()` to avoid creating and starting multiple instances of
   // `InstantSearch` on mount.

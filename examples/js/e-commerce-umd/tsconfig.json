@@ -5,10 +5,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": true
   },
-  "include": [
-    "src",
-    "src/global.d.ts"
-  ]
+  "include": ["src", "src/global.d.ts"]
 }

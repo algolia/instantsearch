@@ -90,9 +90,9 @@ describe('AutocompleteSearch', () => {
     expect(
       container.querySelector('.ais-AutocompleteSubmitButton')
     ).toHaveClass('custom-submit');
-    expect(
-      container.querySelector('.ais-AutocompleteClearButton')
-    ).toHaveClass('custom-clear');
+    expect(container.querySelector('.ais-AutocompleteClearButton')).toHaveClass(
+      'custom-clear'
+    );
   });
 
   test('applies classNames to all elements including detached and AI mode', () => {
@@ -150,15 +150,15 @@ describe('AutocompleteSearch', () => {
     expect(
       container.querySelector('.ais-AutocompleteSubmitButton')
     ).toHaveClass('c-submit');
-    expect(
-      container.querySelector('.ais-AutocompleteSubmitIcon')
-    ).toHaveClass('c-submit-icon');
+    expect(container.querySelector('.ais-AutocompleteSubmitIcon')).toHaveClass(
+      'c-submit-icon'
+    );
     expect(
       container.querySelector('.ais-AutocompleteLoadingIndicator')
     ).toHaveClass('c-loading');
-    expect(
-      container.querySelector('.ais-AutocompleteLoadingIcon')
-    ).toHaveClass('c-loading-icon');
+    expect(container.querySelector('.ais-AutocompleteLoadingIcon')).toHaveClass(
+      'c-loading-icon'
+    );
     expect(
       container.querySelector('.ais-AutocompleteInputWrapper')
     ).toHaveClass('c-input-wrapper');
@@ -168,12 +168,12 @@ describe('AutocompleteSearch', () => {
     expect(
       container.querySelector('.ais-AutocompleteInputWrapperSuffix')
     ).toHaveClass('c-suffix');
-    expect(
-      container.querySelector('.ais-AutocompleteClearButton')
-    ).toHaveClass('c-clear');
-    expect(
-      container.querySelector('.ais-AutocompleteClearIcon')
-    ).toHaveClass('c-clear-icon');
+    expect(container.querySelector('.ais-AutocompleteClearButton')).toHaveClass(
+      'c-clear'
+    );
+    expect(container.querySelector('.ais-AutocompleteClearIcon')).toHaveClass(
+      'c-clear-icon'
+    );
     expect(container.querySelector('.ais-AiModeButton')).toHaveClass('c-ai');
     expect(container.querySelector('.ais-AiModeButton-icon')).toHaveClass(
       'c-ai-icon'
@@ -256,9 +256,9 @@ describe('AutocompletePanel', () => {
     expect(container.querySelector('.ais-AutocompletePanel')).toHaveClass(
       'custom-panel'
     );
-    expect(
-      container.querySelector('.ais-AutocompletePanelLayout')
-    ).toHaveClass('custom-layout');
+    expect(container.querySelector('.ais-AutocompletePanelLayout')).toHaveClass(
+      'custom-layout'
+    );
   });
 
   test('applies open classNames when panel is visible', () => {
@@ -292,9 +292,9 @@ describe('AutocompletePanel', () => {
       </AutocompletePanel>
     );
 
-    expect(
-      container.querySelector('.ais-AutocompletePanel')
-    ).not.toHaveClass('custom-open');
+    expect(container.querySelector('.ais-AutocompletePanel')).not.toHaveClass(
+      'custom-open'
+    );
   });
 });
 
@@ -326,9 +326,9 @@ describe('AutocompleteDetachedSearchButton', () => {
     expect(
       container.querySelector('.ais-AutocompleteDetachedSearchIcon')
     ).toHaveClass('custom-search-icon');
-    expect(
-      container.querySelector('.ais-AutocompleteClearIcon')
-    ).toHaveClass('custom-clear-icon');
+    expect(container.querySelector('.ais-AutocompleteClearIcon')).toHaveClass(
+      'custom-clear-icon'
+    );
   });
 });
 

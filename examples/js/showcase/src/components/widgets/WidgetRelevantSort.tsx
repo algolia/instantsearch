@@ -1,6 +1,6 @@
-import { relevantSort } from "instantsearch.js/es/widgets";
+import { relevantSort } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetRelevantSort() {
   const ref = useWidget((el) =>
@@ -9,14 +9,14 @@ export function WidgetRelevantSort() {
       templates: {
         text({ isRelevantSorted }) {
           return isRelevantSorted
-            ? "We removed some search results to show you the most relevant ones"
-            : "Currently showing all results";
+            ? 'We removed some search results to show you the most relevant ones'
+            : 'Currently showing all results';
         },
         button({ isRelevantSorted }) {
-          return isRelevantSorted ? "See all results" : "See relevant results";
+          return isRelevantSorted ? 'See all results' : 'See relevant results';
         },
       },
-    }),
+    })
   );
 
   return (

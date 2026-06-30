@@ -215,7 +215,7 @@ type RendererParams<TItem extends BaseHit> = {
       | undefined;
     RecentSearchComponent: typeof AutocompleteRecentSearch;
     recentSearchHeaderComponent:
-      | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
+      | (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent']
       | undefined;
     hasWarnedMissingPromptSuggestionsChat: boolean;
   };
@@ -275,7 +275,7 @@ const createRenderer = <TItem extends BaseHit>(
           />
         </AutocompleteRecentSearch>
       );
-      let recentSearchHeaderComponent: typeof AutocompleteIndex['prototype']['props']['HeaderComponent'] =
+      let recentSearchHeaderComponent: (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent'] =
         undefined;
 
       if (showRecentObj && showRecentObj.templates) {
@@ -334,7 +334,6 @@ const createRenderer = <TItem extends BaseHit>(
         recentSearchHeaderComponent,
         hasWarnedMissingPromptSuggestionsChat: false,
       };
-
     }
 
     render(
@@ -391,7 +390,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const targetIndexQuery = targetIndex?.getHelper()?.state.query;
 
   const [localQuery, setLocalQuery] = useState(
-    searchboxQuery !== undefined ? searchboxQuery : targetIndexQuery ?? ''
+    searchboxQuery !== undefined ? searchboxQuery : (targetIndexQuery ?? '')
   );
 
   useEffect(() => {
@@ -938,9 +937,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             <AutocompleteDetachedContainer
               classNames={detachedContainerCssClasses}
             >
-              <AutocompleteDetachedFormContainer
-                classNames={cssClasses}
-              >
+              <AutocompleteDetachedFormContainer classNames={cssClasses}>
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
               {panelContent}
@@ -1202,9 +1199,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   if (isFeedsMode && indices !== undefined) {
     throw new Error(
-      withUsage(
-        'The `feeds` and `indices` options are mutually exclusive.'
-      )
+      withUsage('The `feeds` and `indices` options are mutually exclusive.')
     );
   }
   if (!container) {
@@ -1226,8 +1221,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   // (section building, dedupe in createAutocompleteStorage) treats feeds
   // like indices without changes to the renderer / storage.
   const querySuggestionsKey = isFeedsMode
-    ? (showQuerySuggestions as FeedsShowQuerySuggestionsWidgetParams | undefined)
-        ?.feedID
+    ? (
+        showQuerySuggestions as
+          | FeedsShowQuerySuggestionsWidgetParams
+          | undefined
+      )?.feedID
     : (
         showQuerySuggestions as
           | IndicesShowQuerySuggestionsWidgetParams
@@ -1235,7 +1233,9 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       )?.indexName;
   const promptSuggestionsKey = isFeedsMode
     ? (
-        showPromptSuggestions as FeedsShowPromptSuggestionsWidgetParams | undefined
+        showPromptSuggestions as
+          | FeedsShowPromptSuggestionsWidgetParams
+          | undefined
       )?.feedID
     : (
         showPromptSuggestions as
@@ -1306,8 +1306,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       },
       searchParameters: querySuggestionsSearchParameters,
       getQuery: (item) => item.query,
-      getURL:
-        showQuerySuggestions!.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showQuerySuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
   if (promptSuggestionsKey) {
@@ -1361,8 +1361,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       },
       searchParameters: promptSuggestionsSearchParameters,
       getQuery: (item) => item.prompt,
-      getURL:
-        showPromptSuggestions!.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showPromptSuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
 
@@ -1628,7 +1628,7 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
 
 function renderConditionalHighlight<
   TItem extends BaseHit,
-  TAttribute extends keyof TItem & string = keyof TItem & string
+  TAttribute extends keyof TItem & string = keyof TItem & string,
 >({ item, attribute }: { item: Hit<TItem>; attribute: TAttribute }) {
   if (
     !item._highlightResult?.[attribute] ||

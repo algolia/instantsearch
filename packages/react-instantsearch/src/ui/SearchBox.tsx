@@ -279,10 +279,7 @@ export function SearchBox({
         </button>
         {onAiModeClick && (
           <button
-            className={cx(
-              'ais-AiModeButton',
-              classNames.aiModeButton
-            )}
+            className={cx('ais-AiModeButton', classNames.aiModeButton)}
             type="button"
             title={translations.aiModeButtonTitle || 'AI Mode'}
             disabled={aiModeButtonDisabled}

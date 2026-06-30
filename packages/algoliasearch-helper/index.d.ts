@@ -594,7 +594,7 @@ declare namespace algoliasearchHelper {
       'disjunctiveFacetsRefinements',
       'numericRefinements',
       'tagRefinements',
-      'hierarchicalFacetsRefinements'
+      'hierarchicalFacetsRefinements',
     ];
 
     constructor(newParameters?: PlainSearchParameters);
@@ -1614,7 +1614,7 @@ declare namespace algoliasearchHelper {
   export type PlainRecommendParameters = ClientPlainRecommendParameters;
 
   export type RecommendParametersWithId<
-    T extends PlainRecommendParameters = PlainRecommendParameters
+    T extends PlainRecommendParameters = PlainRecommendParameters,
   > = T & {
     $$id: number;
   };

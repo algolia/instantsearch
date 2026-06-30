@@ -51,10 +51,7 @@
       var(--ais-button-text-color-rgb),
       var(--ais-button-text-color-alpha)
     );
-    background-color: rgba(
-      var(--ais-button-text-color-rgb),
-      0.2
-    );
+    background-color: rgba(var(--ais-button-text-color-rgb), 0.2);
   }
 }
 

@@ -12,7 +12,8 @@
     width: calc(var(--ais-icon-size) * 1.4);
   }
 
-  transition: transform var(--ais-transition-duration)
+  transition:
+    transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function);
@@ -23,12 +24,12 @@
   right: var(--ais-chat-margin);
   bottom: var(--ais-chat-margin);
   z-index: var(--ais-z-index-chat);
-  transition: transform var(--ais-transition-duration)
+  transition:
+    transform var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
-    right var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+    right var(--ais-transition-duration) var(--ais-transition-timing-function);
 }
 
 .ais-ChatToggleButton--open {

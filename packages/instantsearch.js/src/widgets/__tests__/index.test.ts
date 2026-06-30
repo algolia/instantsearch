@@ -189,7 +189,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       }
       case 'trendingFacets': {
         const trendingFacets = widget as Widgets['trendingFacets'];
-        return trendingFacets({container, facetName: 'brand'});
+        return trendingFacets({ container, facetName: 'brand' });
       }
       case 'feeds': {
         const feedsWidget = widget as Widgets['feeds'];

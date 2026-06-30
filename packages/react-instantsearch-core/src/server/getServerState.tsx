@@ -67,8 +67,7 @@ export function getServerState(
 
     // Two-pass widgets require another query to discover and mount child widgets.
     walkIndex(searchRef.current!.mainIndex, (index) => {
-      shouldRefetch =
-        shouldRefetch || index.getWidgets().some(isTwoPassWidget);
+      shouldRefetch = shouldRefetch || index.getWidgets().some(isTwoPassWidget);
     });
 
     if (shouldRefetch) {

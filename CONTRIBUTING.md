@@ -400,11 +400,12 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript and TypeScript files are formatted with [Prettier](https://github.com/prettier/prettier) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/).
+JavaScript and TypeScript files are formatted with [oxfmt](https://oxc.rs/) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/). Formatting settings live in `.oxfmtrc.json`; lint rules live in `.oxlintrc.json`. Markdown, JSON, and YAML files are no longer auto-formatted.
 
 Useful lint commands:
 
-- `yarn lint` runs the full repo lint flow.
+- `yarn lint` runs Oxlint across the repo and workspace examples.
+- `yarn format` rewrites files with oxfmt; `yarn format:check` only reports violations. CI runs it separately from `yarn lint`.
 - `yarn lint:ox <paths...>` lints only the paths you pass.
 - `yarn lint:changed` lints files changed since the branch point with `origin/master`.
 - `yarn lint:staged` lints staged JavaScript, TypeScript, and Vue files.

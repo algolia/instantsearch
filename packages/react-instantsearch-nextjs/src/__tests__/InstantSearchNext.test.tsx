@@ -79,7 +79,7 @@ describe('SPA navigation hydration', () => {
     expect(client.search).toHaveBeenCalled();
   });
 
-  it('does not reuse a previous mount\'s initialResults', async () => {
+  it("does not reuse a previous mount's initialResults", async () => {
     window[InstantSearchInitialResults] = {};
     const { unmount } = render(<Component />);
 

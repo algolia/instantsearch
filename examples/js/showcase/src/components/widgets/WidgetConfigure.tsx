@@ -1,11 +1,11 @@
-import { configure } from "instantsearch.js/es/widgets";
-import { useEffect } from "preact/hooks";
+import { configure } from 'instantsearch.js/es/widgets';
+import { useEffect } from 'preact/hooks';
 
-import { useSearch } from "../../context/search";
+import { useSearch } from '../../context/search';
 
 const searchParameters = {
-  attributesToSnippet: ["description:10"],
-  snippetEllipsisText: "[…]",
+  attributesToSnippet: ['description:10'],
+  snippetEllipsisText: '[…]',
 };
 
 export function WidgetConfigure() {

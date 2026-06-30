@@ -2,11 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { detect } from './detector';
-import {
-  failureEnvelope,
-  formatEnvelope,
-  successEnvelope,
-} from './envelope';
+import { failureEnvelope, formatEnvelope, successEnvelope } from './envelope';
 import { writeManifest, type Manifest } from './manifest';
 
 import type { IO } from './io';
@@ -86,12 +82,8 @@ export async function runInit(
   const credentialsResult = await resolveInputs(options, io);
   if (!credentialsResult.ok) return 1;
 
-  const {
-    appId,
-    searchApiKey,
-    componentsPath,
-    libPath,
-  } = credentialsResult.value;
+  const { appId, searchApiKey, componentsPath, libPath } =
+    credentialsResult.value;
 
   if (!isSafeRelativePath(componentsPath)) {
     emitFailure(
@@ -301,8 +293,7 @@ async function resolveInputs(
 
   const promptFn = options.prompt ?? defaultPrompt;
   const componentsDefault = options.componentsPath ?? 'src/components';
-  const libDefault =
-    options.libPath ?? deriveLibPath(componentsDefault);
+  const libDefault = options.libPath ?? deriveLibPath(componentsDefault);
 
   const questions: PromptQuestion[] = [];
   if (!options.appId) {
@@ -386,7 +377,10 @@ export function deriveLibPath(componentsPath: string): string {
 }
 
 function findMissingPackages(cwd: string, packages: string[]): string[] {
-  let pkg: { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+  let pkg: {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
   try {
     pkg = JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf8'));
   } catch {
@@ -409,9 +403,7 @@ function detectPackageManager(cwd: string): PackageManager {
 const defaultInstaller: Installer = async (packages, { cwd, manager }) => {
   const { spawn } = await import('child_process');
   const args =
-    manager === 'npm'
-      ? ['install', ...packages]
-      : ['add', ...packages];
+    manager === 'npm' ? ['install', ...packages] : ['add', ...packages];
 
   await new Promise<void>((resolve, reject) => {
     // npm/yarn/pnpm install on Windows as .cmd shims; spawn auto-resolves .exe only.
@@ -428,7 +420,10 @@ const defaultInstaller: Installer = async (packages, { cwd, manager }) => {
     child.on('error', reject);
     child.on('exit', (code) => {
       if (code === 0) resolve();
-      else reject(new Error(`${manager} ${args.join(' ')} exited with code ${code}.`));
+      else
+        reject(
+          new Error(`${manager} ${args.join(' ')} exited with code ${code}.`)
+        );
     });
   });
 };
@@ -515,9 +510,7 @@ function renderProvider(detection: {
   const reactImport = detection.typescript
     ? "import type { ReactNode } from 'react';\n"
     : '';
-  const typedChildren = detection.typescript
-    ? ': { children: ReactNode }'
-    : '';
+  const typedChildren = detection.typescript ? ': { children: ReactNode }' : '';
 
   return `${useClient}${reactImport}${importLine}
 

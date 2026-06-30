@@ -13,7 +13,6 @@ type ParserFailureCode =
   | 'unknown_command'
   | 'internal_error';
 
-
 export async function run(
   argv: string[],
   options: Partial<IO> = {}

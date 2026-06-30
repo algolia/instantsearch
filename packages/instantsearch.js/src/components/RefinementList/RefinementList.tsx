@@ -177,8 +177,8 @@ class RefinementList<TTemplates extends Templates> extends Component<
       !facetValue.count && this.props.cssClasses.disabledItem,
       Boolean(
         isHierarchicalMenuItem(facetValue) &&
-          Array.isArray(facetValue.data) &&
-          facetValue.data.length > 0
+        Array.isArray(facetValue.data) &&
+        facetValue.data.length > 0
       ) && this.props.cssClasses.parentItem!
     );
 

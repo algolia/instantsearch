@@ -29,7 +29,8 @@
     cursor: not-allowed;
   }
 
-  transition: background-color var(--ais-transition-duration)
+  transition:
+    background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     color var(--ais-transition-duration) var(--ais-transition-timing-function);
 }

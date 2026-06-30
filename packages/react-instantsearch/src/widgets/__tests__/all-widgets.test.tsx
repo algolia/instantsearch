@@ -4,7 +4,7 @@ describe('widgets', () => {
   const widgets = getAllInstantSearchWidgets();
 
   const customExpectedLength: Partial<
-    Record<typeof widgets[0]['name'], number>
+    Record<(typeof widgets)[0]['name'], number>
   > = {
     // searchbox only (the isolated index attaches lazily on first focus)
     EXPERIMENTAL_Autocomplete: 1,

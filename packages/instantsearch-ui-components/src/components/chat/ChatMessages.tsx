@@ -105,7 +105,7 @@ export type ChatMessagesClassNames = {
 };
 
 export type ChatMessagesProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'div'> & {
   /**
    * Array of messages to display
@@ -276,7 +276,7 @@ function areMessagePropsEqual(
 }
 
 function createDefaultMessageComponent<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 >({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
@@ -429,7 +429,7 @@ export function createChatMessagesComponent({
   });
 
   return function ChatMessages<
-    TMessage extends ChatMessageBase = ChatMessageBase
+    TMessage extends ChatMessageBase = ChatMessageBase,
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},

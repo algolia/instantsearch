@@ -124,7 +124,9 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
     it('normalizes transformItems indices to feed IDs in feeds-mode', async () => {
       const transformItems = jest.fn((items) => items);
-      const container = document.body.appendChild(document.createElement('div'));
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
       const compositionClient = createCompositionClient({
         search: jest.fn(() =>
           Promise.resolve({
@@ -157,7 +159,9 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
       search.start();
       await wait(0);
-      container.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
+      container
+        .querySelector<HTMLInputElement>('input[type="search"]')
+        ?.focus();
       await wait(0);
       await wait(0);
 
@@ -178,7 +182,9 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
     it('keeps feedID normalization for declared feeds with mixed feed responses', async () => {
       const transformItems = jest.fn((items) => items);
-      const container = document.body.appendChild(document.createElement('div'));
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
       const compositionClient = createCompositionClient({
         search: jest.fn(() =>
           Promise.resolve({
@@ -219,7 +225,9 @@ describe('EXPERIMENTAL_autocomplete()', () => {
 
       search.start();
       await wait(0);
-      container.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
+      container
+        .querySelector<HTMLInputElement>('input[type="search"]')
+        ?.focus();
       await wait(0);
       await wait(0);
 
@@ -228,8 +236,9 @@ describe('EXPERIMENTAL_autocomplete()', () => {
         .filter((items) => items.length > 0)
         .pop();
       const indexNameById = new Map(
-        ((lastCallItems ?? []) as Array<{ indexId: string; indexName: string }>)
-          .map((item) => [item.indexId, item.indexName])
+        (
+          (lastCallItems ?? []) as Array<{ indexId: string; indexName: string }>
+        ).map((item) => [item.indexId, item.indexName])
       );
 
       expect(indexNameById.get('products')).toBe('products');
@@ -732,10 +741,11 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       focusSearchInput(container);
       await flush();
 
-      const autocompleteRequests = (
-        searchClient.search as jest.Mock
-      ).mock.calls
-        .flatMap((call) => call[0] as Array<{ indexName: string; params: { query?: string } }>)
+      const autocompleteRequests = (searchClient.search as jest.Mock).mock.calls
+        .flatMap(
+          (call) =>
+            call[0] as Array<{ indexName: string; params: { query?: string } }>
+        )
         .filter((request) => request.indexName === 'my-index');
 
       expect(autocompleteRequests).toHaveLength(1);
@@ -804,12 +814,17 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       await flush();
 
       const indexIds: string[] = [];
-      walkIndex(search.mainIndex, (widget) => indexIds.push(widget.getIndexId()));
+      walkIndex(search.mainIndex, (widget) =>
+        indexIds.push(widget.getIndexId())
+      );
 
       const parentMatches = indexIds.filter((id) => id === 'instant_search');
       expect(parentMatches).toHaveLength(1);
       expect(
-        indexIds.some((id) => id.startsWith('ais-autocomplete-') && id.endsWith('-instant_search'))
+        indexIds.some(
+          (id) =>
+            id.startsWith('ais-autocomplete-') && id.endsWith('-instant_search')
+        )
       ).toBe(true);
     });
 

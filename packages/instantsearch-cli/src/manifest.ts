@@ -42,10 +42,7 @@ function refuse(
   return failureEnvelope(command, code, message);
 }
 
-export function readManifest(
-  filePath: string,
-  options: Options
-): ReadResult {
+export function readManifest(filePath: string, options: Options): ReadResult {
   const { command } = options;
 
   let contents: string;
@@ -162,7 +159,10 @@ function checkAliases(value: unknown): string | null {
     return 'Manifest "aliases" must be an object mapping aliases to string arrays.';
   }
   for (const [key, entries] of Object.entries(value)) {
-    if (!Array.isArray(entries) || !entries.every((e) => typeof e === 'string')) {
+    if (
+      !Array.isArray(entries) ||
+      !entries.every((e) => typeof e === 'string')
+    ) {
       return `Manifest "aliases.${key}" must be an array of strings.`;
     }
   }

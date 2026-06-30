@@ -26,7 +26,7 @@ const NON_WIDGETS = [
   'PonderToolType',
   'DisplayResultsToolType',
 ] as const;
-type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
+type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
 
 // Non-components that should be excluded from SingleWidget type
 const NON_COMPONENTS = [
@@ -43,7 +43,7 @@ const NON_COMPONENTS = [
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
 ] as const;
-type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
+type ComponentWidgets = Omit<typeof widgets, (typeof NON_COMPONENTS)[number]>;
 
 export type SingleWidget = {
   [name in keyof ComponentWidgets]: {
@@ -162,7 +162,7 @@ export function getAllInstantSearchWidgets() {
         regularWidget
       ): regularWidget is [
         keyof RegularWidgets,
-        RegularWidgets[keyof RegularWidgets]
+        RegularWidgets[keyof RegularWidgets],
       ] =>
         (NON_WIDGETS as readonly string[]).includes(regularWidget[0]) === false
     )

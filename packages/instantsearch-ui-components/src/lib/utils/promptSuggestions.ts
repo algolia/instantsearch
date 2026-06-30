@@ -19,7 +19,7 @@ export function isPromptSuggestion(item: unknown): item is {
 } {
   return Boolean(
     item &&
-      typeof item === 'object' &&
-      (item as Record<string, unknown>)[PROMPT_SUGGESTION_FLAG]
+    typeof item === 'object' &&
+    (item as Record<string, unknown>)[PROMPT_SUGGESTION_FLAG]
   );
 }

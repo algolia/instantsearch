@@ -176,7 +176,7 @@ type RecommendRenderOptions = SharedRenderOptions & {
 };
 
 type RecommendWidget<
-  TWidgetDescription extends WidgetDescription & WidgetParams
+  TWidgetDescription extends WidgetDescription & WidgetParams,
 > = {
   dependsOn: 'recommend';
   $$id?: number;
@@ -308,7 +308,7 @@ type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
     : Partial<RequiredUiStateLifeCycle<TWidgetDescription>>;
 
 type RequiredRenderStateLifeCycle<
-  TWidgetDescription extends WidgetDescription & WidgetParams
+  TWidgetDescription extends WidgetDescription & WidgetParams,
 > = {
   /**
    * Returns the render state of the current widget to pass to the render function.
@@ -334,7 +334,7 @@ type RequiredRenderStateLifeCycle<
 };
 
 type RenderStateLifeCycle<
-  TWidgetDescription extends WidgetDescription & WidgetParams
+  TWidgetDescription extends WidgetDescription & WidgetParams,
 > = TWidgetDescription extends RequiredKeys<
   WidgetDescription,
   'renderState' | 'indexRenderState'
@@ -346,7 +346,7 @@ type RenderStateLifeCycle<
 export type Widget<
   TWidgetDescription extends WidgetDescription & WidgetParams = {
     $$type: string;
-  }
+  },
 > = Expand<
   Parent &
     RequiredWidgetLifeCycle<TWidgetDescription> &

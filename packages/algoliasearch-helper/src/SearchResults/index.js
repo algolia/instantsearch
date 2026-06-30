@@ -541,19 +541,19 @@ function SearchResults(state, results, options) {
         );
 
         if (state.disjunctiveFacetsRefinements[dfacet]) {
-          state.disjunctiveFacetsRefinements[dfacet].forEach(function (
-            refinementValue
-          ) {
-            // add the disjunctive refinements if it is no more retrieved
-            if (
-              !self.disjunctiveFacets[position].data[refinementValue] &&
-              state.disjunctiveFacetsRefinements[dfacet].indexOf(
-                unescapeFacetValue(refinementValue)
-              ) > -1
-            ) {
-              self.disjunctiveFacets[position].data[refinementValue] = 0;
+          state.disjunctiveFacetsRefinements[dfacet].forEach(
+            function (refinementValue) {
+              // add the disjunctive refinements if it is no more retrieved
+              if (
+                !self.disjunctiveFacets[position].data[refinementValue] &&
+                state.disjunctiveFacetsRefinements[dfacet].indexOf(
+                  unescapeFacetValue(refinementValue)
+                ) > -1
+              ) {
+                self.disjunctiveFacets[position].data[refinementValue] = 0;
+              }
             }
-          });
+          );
         }
       }
     });
@@ -1055,36 +1055,40 @@ SearchResults.prototype.getRefinements = function () {
     });
   });
 
-  Object.keys(state.disjunctiveFacetsRefinements).forEach(function (
-    attributeName
-  ) {
-    state.disjunctiveFacetsRefinements[attributeName].forEach(function (name) {
-      res.push(
-        getRefinement(
-          state,
-          'disjunctive',
-          attributeName,
-          name,
-          results.disjunctiveFacets
-        )
+  Object.keys(state.disjunctiveFacetsRefinements).forEach(
+    function (attributeName) {
+      state.disjunctiveFacetsRefinements[attributeName].forEach(
+        function (name) {
+          res.push(
+            getRefinement(
+              state,
+              'disjunctive',
+              attributeName,
+              name,
+              results.disjunctiveFacets
+            )
+          );
+        }
       );
-    });
-  });
+    }
+  );
 
-  Object.keys(state.hierarchicalFacetsRefinements).forEach(function (
-    attributeName
-  ) {
-    state.hierarchicalFacetsRefinements[attributeName].forEach(function (name) {
-      res.push(
-        getHierarchicalRefinement(
-          state,
-          attributeName,
-          name,
-          results.hierarchicalFacets
-        )
+  Object.keys(state.hierarchicalFacetsRefinements).forEach(
+    function (attributeName) {
+      state.hierarchicalFacetsRefinements[attributeName].forEach(
+        function (name) {
+          res.push(
+            getHierarchicalRefinement(
+              state,
+              attributeName,
+              name,
+              results.hierarchicalFacets
+            )
+          );
+        }
       );
-    });
-  });
+    }
+  );
 
   Object.keys(state.numericRefinements).forEach(function (attributeName) {
     var operators = state.numericRefinements[attributeName];

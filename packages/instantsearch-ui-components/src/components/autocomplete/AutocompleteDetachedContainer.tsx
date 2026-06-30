@@ -2,8 +2,8 @@
 
 import { cx } from '../../lib/cx';
 
-import type { ComponentChildren, Renderer } from '../../types';
 import type { AutocompleteClassNames } from './Autocomplete';
+import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteDetachedContainerProps = {
   children?: ComponentChildren;

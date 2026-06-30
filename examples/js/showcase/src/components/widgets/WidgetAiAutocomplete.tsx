@@ -1,31 +1,35 @@
-import { EXPERIMENTAL_autocomplete } from "instantsearch.js/es/widgets";
+import { EXPERIMENTAL_autocomplete } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetAiAutocomplete() {
   const ref = useWidget((el) =>
     EXPERIMENTAL_autocomplete({
       container: el,
-      placeholder: "Ask AI or search for products...",
+      placeholder: 'Ask AI or search for products...',
       aiMode: true,
       showPromptSuggestions: {
-        indexName: "instant_search_prompt_suggestions",
+        indexName: 'instant_search_prompt_suggestions',
         searchParameters: { hitsPerPage: 3 },
         templates: {
           header(_, { html }) {
-            return html`<span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
+            return html`<span class="ais-AutocompleteIndexHeaderTitle"
+                >Ask AI</span
+              >
               <span class="ais-AutocompleteIndexHeaderLine" />`;
           },
         },
       },
       indices: [
         {
-          indexName: "instant_search",
+          indexName: 'instant_search',
           searchParameters: { hitsPerPage: 5 },
           templates: {
             header({ items }, { html }) {
               if (items.length === 0) return null;
-              return html`<span class="ais-AutocompleteIndexHeaderTitle">Products</span>
+              return html`<span class="ais-AutocompleteIndexHeaderTitle"
+                  >Products</span
+                >
                 <span class="ais-AutocompleteIndexHeaderLine" />`;
             },
             noResults(_, { html }) {
@@ -48,7 +52,9 @@ export function WidgetAiAutocomplete() {
                     />
                   </div>
                   <div class="min-w-0 flex-1">
-                    <h5 class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                    <h5
+                      class="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+                    >
                       <${components.Highlight} hit=${item} attribute="name" />
                     </h5>
                     <p class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -61,7 +67,7 @@ export function WidgetAiAutocomplete() {
           },
         },
       ],
-    }),
+    })
   );
   return <div ref={ref} />;
 }

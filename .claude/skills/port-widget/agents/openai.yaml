@@ -1,7 +1,7 @@
 interface:
-  display_name: "Port InstantSearch Widget"
-  short_description: "Port widgets across InstantSearch flavors"
-  default_prompt: "Use $port-widget to port a widget or connector-driven feature across the InstantSearch JavaScript, React, and Vue packages in this repo."
+  display_name: 'Port InstantSearch Widget'
+  short_description: 'Port widgets across InstantSearch flavors'
+  default_prompt: 'Use $port-widget to port a widget or connector-driven feature across the InstantSearch JavaScript, React, and Vue packages in this repo.'
 
 policy:
   allow_implicit_invocation: true

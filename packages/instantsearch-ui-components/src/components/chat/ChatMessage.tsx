@@ -6,7 +6,6 @@ import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -14,6 +13,7 @@ import type {
   ChatToolMessage,
   ClientSideTools,
 } from './types';
+import type { ComponentProps, Renderer, VNode } from '../../types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -248,10 +248,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           // Wrapped in a `<p>` to keep some structure for screen readers
           // (markdown produces semantic elements; a bare text node would not).
           return (
-            <p
-              key={`${message.id}-${index}`}
-              className="ais-ChatMessage-text"
-            >
+            <p key={`${message.id}-${index}`} className="ais-ChatMessage-text">
               {part.text}
             </p>
           );

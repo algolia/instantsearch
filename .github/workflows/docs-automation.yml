@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     # Only run on release commits (chore: release) or manual triggers
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
+      github.event_name == 'workflow_dispatch' || (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
+
 
     steps:
       - name: Checkout instantsearch

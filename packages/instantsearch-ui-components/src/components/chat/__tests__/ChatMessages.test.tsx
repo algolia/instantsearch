@@ -219,9 +219,7 @@ describe('ChatMessages', () => {
 
       const messages = container.querySelectorAll('.ais-ChatMessage-message');
       // User message: plain text, no emphasis.
-      expect(
-        messages[0].querySelector('.ais-ChatMessage-text')
-      ).not.toBeNull();
+      expect(messages[0].querySelector('.ais-ChatMessage-text')).not.toBeNull();
       expect(messages[0].querySelector('em')).toBeNull();
       // Assistant message: still parsed as markdown.
       expect(messages[1].querySelector('em')).not.toBeNull();
@@ -251,7 +249,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -269,7 +269,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -291,7 +293,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -341,7 +345,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });

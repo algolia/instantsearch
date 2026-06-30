@@ -198,7 +198,7 @@ export type DynamicToolUIPart = {
  */
 export type UIMessagePart<
   TDataTypes extends UIDataTypes = UIDataTypes,
-  TTools extends UITools = UITools
+  TTools extends UITools = UITools,
 > =
   | TextUIPart
   | ReasoningUIPart
@@ -216,7 +216,7 @@ export type UIMessagePart<
 export interface UIMessage<
   TMetadata = unknown,
   TDataParts extends UIDataTypes = UIDataTypes,
-  TTools extends UITools = UITools
+  TTools extends UITools = UITools,
 > {
   /** A unique identifier for the message. */
   id: string;
@@ -239,32 +239,20 @@ export type ChatToolType = ChatToolMessage['type'];
 /**
  * Infer metadata type from UIMessage.
  */
-export type InferUIMessageMetadata<T extends UIMessage> = T extends UIMessage<
-  infer TMetadata
->
-  ? TMetadata
-  : unknown;
+export type InferUIMessageMetadata<T extends UIMessage> =
+  T extends UIMessage<infer TMetadata> ? TMetadata : unknown;
 
 /**
  * Infer data types from UIMessage.
  */
-export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  infer TDataTypes
->
-  ? TDataTypes
-  : UIDataTypes;
+export type InferUIMessageData<T extends UIMessage> =
+  T extends UIMessage<unknown, infer TDataTypes> ? TDataTypes : UIDataTypes;
 
 /**
  * Infer tools from UIMessage.
  */
-export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  UIDataTypes,
-  infer TTools
->
-  ? TTools
-  : UITools;
+export type InferUIMessageTools<T extends UIMessage> =
+  T extends UIMessage<unknown, UIDataTypes, infer TTools> ? TTools : UITools;
 
 /**
  * Chat state interface.
@@ -471,7 +459,7 @@ export type ApplyFiltersParams = {
 };
 
 export type ChatLayoutOwnProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = {
   open: boolean;
   maximized: boolean;

@@ -35,11 +35,14 @@ $ais-chat-breakpoint: 680px;
 
   /* Shadows */
   --ais-shadow-xs: 0px 1px 2px 0px rgba(var(--ais-shadow-color-rgb), 0.15);
-  --ais-shadow-sm: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
+  --ais-shadow-sm:
+    0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0px 1px 3px 0px rgba(var(--ais-shadow-color-rgb), 0.25);
-  --ais-shadow-md: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
+  --ais-shadow-md:
+    0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0px 4px 8px -2px rgba(var(--ais-shadow-color-rgb), 0.25);
-  --ais-shadow-lg: 0 0 0 1px rgba(var(--ais-shadow-color-rgb), 0.05),
+  --ais-shadow-lg:
+    0 0 0 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0 6px 16px -4px rgba(var(--ais-shadow-color-rgb), 0.15);
 
   /* Border radius */

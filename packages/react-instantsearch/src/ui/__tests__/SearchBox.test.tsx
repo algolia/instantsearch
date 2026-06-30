@@ -501,9 +501,8 @@ describe('SearchBox', () => {
       const props = createProps({ onAiModeClick });
 
       const { container } = render(<SearchBox {...props} />);
-      const aiButton = container.querySelector<HTMLButtonElement>(
-        '.ais-AiModeButton'
-      )!;
+      const aiButton =
+        container.querySelector<HTMLButtonElement>('.ais-AiModeButton')!;
 
       expect(aiButton).not.toBeNull();
       expect(aiButton.disabled).toBe(false);
@@ -527,9 +526,8 @@ describe('SearchBox', () => {
       });
 
       const { container } = render(<SearchBox {...props} />);
-      const aiButton = container.querySelector<HTMLButtonElement>(
-        '.ais-AiModeButton'
-      )!;
+      const aiButton =
+        container.querySelector<HTMLButtonElement>('.ais-AiModeButton')!;
 
       expect(aiButton.disabled).toBe(true);
 

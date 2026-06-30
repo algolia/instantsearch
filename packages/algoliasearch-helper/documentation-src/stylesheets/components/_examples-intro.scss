@@ -77,7 +77,9 @@ $square-map: (
         height: 120px;
         border-radius: 16px;
         box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
-        transition: box-shadow 0.3s ease, transform 0.1s ease;
+        transition:
+          box-shadow 0.3s ease,
+          transform 0.1s ease;
 
         @each $class, $degrees, $color-a, $color-b in $square-map {
           &.#{$class} {
@@ -107,7 +109,11 @@ $square-map: (
       }
 
       .name {
-        font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
+        font-family:
+          'Open Sans',
+          Helvetica Neue,
+          helvetica,
+          sans-serif;
         opacity: 0.8;
         font-size: 16px;
         font-weight: 300;

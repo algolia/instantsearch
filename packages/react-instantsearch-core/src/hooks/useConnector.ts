@@ -24,7 +24,7 @@ export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>> & {
 
 export function useConnector<
   TProps extends Record<string, unknown>,
-  TDescription extends WidgetDescription
+  TDescription extends WidgetDescription,
 >(
   connector: Connector<TDescription, TProps>,
   props: TProps = {} as TProps,

@@ -8,8 +8,8 @@ import type { CurrentRefinementsWidgetDescription } from '../connectors/current-
 import type { FeedsWidgetDescription } from '../connectors/feeds/connectFeeds';
 import type { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
 import type { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
-import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
 import type { HitsWidgetDescription } from '../connectors/hits/connectHits';
+import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
 import type { InfiniteHitsWidgetDescription } from '../connectors/infinite-hits/connectInfiniteHits';
 import type { MenuWidgetDescription } from '../connectors/menu/connectMenu';
 import type { NumericMenuWidgetDescription } from '../connectors/numeric-menu/connectNumericMenu';

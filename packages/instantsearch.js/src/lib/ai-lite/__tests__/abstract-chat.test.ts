@@ -397,7 +397,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         errorText: 'unbounded whitespace',
       });
     });
-
   });
 
   describe('tool-output-error', () => {

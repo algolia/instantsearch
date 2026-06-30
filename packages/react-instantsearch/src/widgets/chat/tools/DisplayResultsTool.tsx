@@ -27,7 +27,9 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
     useMemo,
   });
 
-  const Button = createButtonComponent({ createElement: createElement as Pragma });
+  const Button = createButtonComponent({
+    createElement: createElement as Pragma,
+  });
 
   const DisplayResultsLayoutComponent = (
     toolProps: ClientSideToolComponentProps
@@ -70,9 +72,7 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
                     disabled={!canScrollRight}
                     className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
                   >
-                    <ChevronRightIcon
-                      createElement={createElement as Pragma}
-                    />
+                    <ChevronRightIcon createElement={createElement as Pragma} />
                   </Button>
                 </div>
               </div>

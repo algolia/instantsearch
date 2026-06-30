@@ -83,8 +83,8 @@ function parseArgs(argv) {
       inlineValue !== undefined
         ? inlineValue
         : next && !next.startsWith('--')
-        ? (index++, next)
-        : true;
+          ? (index++, next)
+          : true;
 
     options[name] = value;
   }

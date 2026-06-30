@@ -1,6 +1,6 @@
-import { clearRefinements } from "instantsearch.js/es/widgets";
+import { clearRefinements } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetClearRefinements() {
   const ref = useWidget((el) => clearRefinements({ container: el }));

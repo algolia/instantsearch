@@ -29,7 +29,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type RelatedProductsRenderState<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The matched recommendations from the Algolia API.
@@ -43,7 +43,7 @@ export type RelatedProductsRenderState<
 };
 
 export type RelatedProductsConnectorParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The `objectIDs` of the items to get related products from.
@@ -87,21 +87,21 @@ export type RelatedProductsConnectorParams<
 };
 
 export type RelatedProductsWidgetDescription<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   $$type: 'ais.relatedProducts';
   renderState: RelatedProductsRenderState<THit>;
 };
 
 export type RelatedProductsConnector<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Connector<
   RelatedProductsWidgetDescription<THit>,
   RelatedProductsConnectorParams<THit>
 >;
 
 export default (function connectRelatedProducts<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     RelatedProductsRenderState,

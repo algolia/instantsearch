@@ -180,7 +180,7 @@ const renderer =
 
 type AugmentedWidget<
   TWidgetFactory extends AnyWidgetFactory,
-  TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose'
+  TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose',
 > = Omit<
   ReturnType<TWidgetFactory>,
   TOverriddenKeys | 'dependsOn' | 'getWidgetParameters'

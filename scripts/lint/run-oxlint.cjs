@@ -44,9 +44,7 @@ function toPosix(filePath) {
 }
 
 function isInside(basePath, targetPath) {
-  return (
-    targetPath === basePath || targetPath.startsWith(`${basePath}/`)
-  );
+  return targetPath === basePath || targetPath.startsWith(`${basePath}/`);
 }
 
 function relativeToRoot(targetPath) {
@@ -150,7 +148,13 @@ function isTopLevelTarget(target) {
   return !target.includes('/');
 }
 
-function runOxlint({ cwd, extraArgs, paths, noIgnore = false, typeAware = false }) {
+function runOxlint({
+  cwd,
+  extraArgs,
+  paths,
+  noIgnore = false,
+  typeAware = false,
+}) {
   const commandArgs = [...extraArgs];
 
   if (typeAware && !extraArgs.includes('--type-aware')) {

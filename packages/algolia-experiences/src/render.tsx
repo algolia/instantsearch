@@ -171,9 +171,9 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
   if (isTemplateWidget(child)) {
     // type cast is needed here because the spread adding `container` and `templates` loses the type discriminant
     const parameters = child.parameters as Parameters<
-      typeof widgets['ais.hits']
+      (typeof widgets)['ais.hits']
     >[0];
-    const widget = widgets[child.type] as typeof widgets['ais.hits'];
+    const widget = widgets[child.type];
 
     return [
       widget({
@@ -226,11 +226,11 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
   if (isLayoutWidget(child)) {
     // type cast is needed here because the spread adding `container` and `templates` loses the type discriminant
     const parameters = child.parameters as Parameters<
-      typeof widgets['ais.trendingItems']
+      (typeof widgets)['ais.trendingItems']
     >[0];
     const widget = widgets[
       child.type
-    ] as unknown as typeof widgets['ais.trendingItems'];
+    ] as unknown as (typeof widgets)['ais.trendingItems'];
 
     return [
       widget({
@@ -287,11 +287,11 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
       collapsed: defaultCollapsed,
       ...parameters
     } = child.parameters as Parameters<
-      typeof widgets['ais.refinementList']
+      (typeof widgets)['ais.refinementList']
     >[0] & { header: string; collapsed: boolean };
-    const widget = widgets[child.type] as typeof widgets['ais.refinementList'];
+    const widget = widgets[child.type];
     return [
-      panel<typeof widgets['ais.refinementList']>({
+      panel<(typeof widgets)['ais.refinementList']>({
         templates: {
           header,
           collapseButtonText: ({ collapsed }) => (
@@ -312,9 +312,9 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
 
   // type cast is needed here because the spread adding `container` loses the type discriminant
   const parameters = child.parameters as Parameters<
-    typeof widgets['ais.pagination']
+    (typeof widgets)['ais.pagination']
   >[0];
-  const widget = widgets[child.type] as typeof widgets['ais.pagination'];
+  const widget = widgets[child.type];
   return [
     widget({
       ...parameters,

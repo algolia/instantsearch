@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+
 const install = require('../../tasks/node/install');
 const teardown = require('../../tasks/node/teardown');
 
