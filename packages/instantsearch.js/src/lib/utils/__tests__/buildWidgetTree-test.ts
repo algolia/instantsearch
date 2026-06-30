@@ -9,6 +9,8 @@ import { createFeedContainer } from '../../../connectors/feeds/FeedContainer';
 import { hits, index, searchBox } from '../../../widgets';
 import { buildWidgetTree } from '../buildWidgetTree';
 
+import type { Widget } from '../../../types';
+
 describe('buildWidgetTree', () => {
   it('recurses into ais.index widgets', () => {
     const search = instantsearch({
@@ -77,5 +79,35 @@ describe('buildWidgetTree', () => {
         ],
       },
     ]);
+  });
+
+  it("calls a nested widget's getWidgetRenderState with its actual parent index", () => {
+    const search = instantsearch({
+      searchClient: createSearchClient(),
+      indexName: 'main',
+    });
+
+    const seenParentIndexNames: string[] = [];
+    const spyWidget: Widget = {
+      $$type: 'ais.spy',
+      $$widgetType: 'ais.spy',
+      init() {},
+      render() {},
+      dispose() {},
+      getWidgetRenderState({ parent }) {
+        seenParentIndexNames.push(parent.getIndexName());
+        return { widgetParams: {} };
+      },
+    };
+
+    search.addWidgets([
+      index({ indexName: 'nested' }).addWidgets([spyWidget]),
+    ]);
+
+    search.start();
+
+    buildWidgetTree(search.mainIndex.getWidgets(), search);
+
+    expect(seenParentIndexNames).toEqual(['nested']);
   });
 });

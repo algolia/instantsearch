@@ -76,11 +76,12 @@ export function serializeWidgetParams(
 
 export function buildWidgetTree(
   widgets: Array<Widget | IndexWidget>,
-  instantSearchInstance: InstantSearch
+  instantSearchInstance: InstantSearch,
+  parent: IndexWidget = instantSearchInstance.mainIndex
 ): WidgetTreeNode[] {
   const initOptions = createInitArgs(
     instantSearchInstance,
-    instantSearchInstance.mainIndex,
+    parent,
     instantSearchInstance._initialUiState
   );
 
@@ -97,7 +98,7 @@ export function buildWidgetTree(
     const params = serializeWidgetParams(widgetParams);
 
     const children = isIndexWidget(widget)
-      ? buildWidgetTree(widget.getWidgets(), instantSearchInstance)
+      ? buildWidgetTree(widget.getWidgets(), instantSearchInstance, widget)
       : [];
 
     return {

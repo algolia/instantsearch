@@ -10,6 +10,7 @@ import { hits, index, searchBox } from '../../../widgets';
 import { extractWidgetPayload } from '../extractWidgetPayload';
 
 import type { WidgetMetadata } from '../extractWidgetPayload';
+import type { Widget } from '../../../types';
 
 describe('extractWidgetPayload', () => {
   it('recurses into ais.index widgets', () => {
@@ -69,5 +70,36 @@ describe('extractWidgetPayload', () => {
       },
       { type: 'ais.hits', widgetType: 'ais.hits', params: [] },
     ]);
+  });
+
+  it("calls a nested widget's getWidgetRenderState with its actual parent index", () => {
+    const search = instantsearch({
+      searchClient: createSearchClient(),
+      indexName: 'main',
+    });
+
+    const seenParentIndexNames: string[] = [];
+    const spyWidget: Widget = {
+      $$type: 'ais.spy',
+      $$widgetType: 'ais.spy',
+      init() {},
+      render() {},
+      dispose() {},
+      getWidgetRenderState({ parent }) {
+        seenParentIndexNames.push(parent.getIndexName());
+        return { widgetParams: {} };
+      },
+    };
+
+    search.addWidgets([
+      index({ indexName: 'nested' }).addWidgets([spyWidget]),
+    ]);
+
+    search.start();
+
+    const payload: { widgets: WidgetMetadata[] } = { widgets: [] };
+    extractWidgetPayload(search.mainIndex.getWidgets(), search, payload);
+
+    expect(seenParentIndexNames).toEqual(['nested']);
   });
 });

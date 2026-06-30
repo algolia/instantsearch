@@ -18,11 +18,12 @@ export type WidgetMetadata =
 export function extractWidgetPayload(
   widgets: Array<Widget | IndexWidget>,
   instantSearchInstance: InstantSearch,
-  payload: { widgets: WidgetMetadata[] }
+  payload: { widgets: WidgetMetadata[] },
+  parent: IndexWidget = instantSearchInstance.mainIndex
 ) {
   const initOptions = createInitArgs(
     instantSearchInstance,
-    instantSearchInstance.mainIndex,
+    parent,
     instantSearchInstance._initialUiState
   );
 
@@ -53,7 +54,8 @@ export function extractWidgetPayload(
       extractWidgetPayload(
         widget.getWidgets(),
         instantSearchInstance,
-        payload
+        payload,
+        widget
       );
     }
   });
