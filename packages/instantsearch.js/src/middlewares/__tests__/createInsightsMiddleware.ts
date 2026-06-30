@@ -1315,6 +1315,8 @@ describe('insights', () => {
         } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
+      // The `__start__` usage event is sent directly via `sendEvents`, not
+      // through `sendEventToInsights`, so `onEvent` is only called once here.
       expect(onEvent).toHaveBeenCalledTimes(1);
       expect(onEvent).toHaveBeenCalledWith(
         {
@@ -1656,5 +1658,71 @@ describe('insights', () => {
         params: expect.objectContaining({ userToken }),
       }),
     ]);
+  });
+
+  describe('usage __start__ event', () => {
+    it('sends a __start__ event with the expected shape and strips sensitive options', async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.addWidgets([
+        refinementList({
+          container: document.createElement('div'),
+          attribute: 'brand',
+          limit: 5,
+        }),
+      ]);
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient })
+      );
+
+      instantSearchInstance.start();
+      await wait(0);
+
+      const sendEventsCalls = castToJestMock(insightsClient).mock.calls.filter(
+        ([method]) => method === 'sendEvents'
+      );
+      expect(sendEventsCalls).toHaveLength(1);
+
+      const [, payload] = sendEventsCalls[0];
+      const [event] = payload as Array<{
+        widgets: Array<{
+          type: string;
+          params: Array<{ name: string }>;
+          children: Array<{ type: string }>;
+        }>;
+      }>;
+
+      expect(event).toEqual(
+        expect.objectContaining({
+          eventType: 'instantsearch',
+          eventName: '__start__',
+          timestamp: expect.any(Number),
+          sessionID: expect.any(String),
+          version: expect.any(String),
+          applicationId: 'myAppId',
+          performance: { bootstrapMs: expect.any(Number) },
+          widgets: [
+            expect.objectContaining({
+              type: 'ais.instantSearch',
+              params: expect.any(Array),
+              children: expect.any(Array),
+            }),
+          ],
+        })
+      );
+
+      const root = event.widgets[0];
+      expect(root.children.map((c) => c.type)).toEqual(
+        expect.arrayContaining(['ais.refinementList'])
+      );
+
+      const rootParamNames = root.params.map((p) => p.name);
+      expect(rootParamNames).not.toContain('searchClient');
+      expect(rootParamNames).not.toContain('insightsClient');
+      expect(rootParamNames).not.toContain('initialUiState');
+    });
   });
 });
