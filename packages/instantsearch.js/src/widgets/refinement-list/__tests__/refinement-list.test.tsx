@@ -140,6 +140,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit SEARCHABLE-SUBMIT"
                     title="Submit the search query"
                     type="submit"
@@ -157,6 +158,7 @@ describe('refinementList', () => {
                     </svg>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset SEARCHABLE-RESET"
                     hidden=""
                     title="Clear the search query"
@@ -389,6 +391,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -406,6 +409,7 @@ describe('refinementList', () => {
                     </svg>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     hidden=""
                     title="Clear the search query"
@@ -576,6 +580,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -593,6 +598,7 @@ describe('refinementList', () => {
                     </svg>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     title="Clear the search query"
                     type="reset"
@@ -751,6 +757,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -760,6 +767,7 @@ describe('refinementList', () => {
                     </span>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     hidden=""
                     title="Clear the search query"
@@ -872,6 +880,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -881,6 +890,7 @@ describe('refinementList', () => {
                     </span>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     title="Clear the search query"
                     type="reset"
@@ -1000,6 +1010,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -1009,6 +1020,7 @@ describe('refinementList', () => {
                     </span>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     hidden=""
                     title="Clear the search query"
@@ -1121,6 +1133,7 @@ describe('refinementList', () => {
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -1130,6 +1143,7 @@ describe('refinementList', () => {
                     </span>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     title="Clear the search query"
                     type="reset"

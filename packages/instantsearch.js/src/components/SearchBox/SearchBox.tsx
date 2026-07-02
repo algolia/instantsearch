@@ -240,6 +240,7 @@ class SearchBox extends Component<
               className: cssClasses.submit,
               type: 'submit',
               title: 'Submit the search query',
+              'aria-label': 'Submit the search query',
               hidden: !showSubmit,
             }}
             templates={templates}
@@ -253,6 +254,7 @@ class SearchBox extends Component<
               className: cssClasses.reset,
               type: 'reset',
               title: 'Clear the search query',
+              'aria-label': 'Clear the search query',
               hidden: !(
                 showReset &&
                 this.state.query.trim() &&

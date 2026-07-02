@@ -109,6 +109,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
             type="search"
           />
           <button
+            aria-label="Submit the search query"
             class="submit"
             title="Submit the search query"
             type="submit"
@@ -116,6 +117,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
             submit
           </button>
           <button
+            aria-label="Clear the search query"
             class="reset"
             hidden=""
             title="Clear the search query"
@@ -187,6 +189,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
             type="search"
           />
           <button
+            aria-label="Submit the search query"
             class="submit"
             title="Submit the search query"
             type="submit"
@@ -194,6 +197,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
             submit
           </button>
           <button
+            aria-label="Clear the search query"
             class="reset"
             hidden=""
             title="Clear the search query"

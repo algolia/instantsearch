@@ -30,6 +30,7 @@
     <button
       type="submit"
       :title="submitTitle"
+      :aria-label="submitTitle"
       :class="suit('submit')"
       :hidden="showLoadingIndicator && shouldShowLoadingIndicator"
     >
@@ -50,6 +51,7 @@
     <button
       type="reset"
       :title="resetTitle"
+      :aria-label="resetTitle"
       :class="suit('reset')"
       :hidden="
         (!value && !modelValue) ||
