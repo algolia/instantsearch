@@ -91,7 +91,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"
@@ -111,7 +113,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"
@@ -160,7 +164,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"
@@ -191,7 +197,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"
@@ -244,7 +252,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"
@@ -275,7 +285,9 @@ describe('stats', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
+            aria-live="polite"
             class="ais-Stats"
+            role="status"
           >
             <span
               class="ais-Stats-text"

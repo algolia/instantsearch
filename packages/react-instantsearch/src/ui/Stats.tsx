@@ -44,6 +44,8 @@ export function Stats({
 
   return (
     <div
+      role="status"
+      aria-live="polite"
       {...props}
       className={cx('ais-Stats', classNames.root, props.className)}
     >

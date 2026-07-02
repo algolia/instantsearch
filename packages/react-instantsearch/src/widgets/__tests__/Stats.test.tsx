@@ -28,15 +28,17 @@ describe('Stats', () => {
 
     await waitFor(() => {
       expect(container.querySelector('.ais-Stats')).toMatchInlineSnapshot(`
-      <div
-        class="ais-Stats"
-      >
-        <span
-          class="ais-Stats-text"
+        <div
+          aria-live="polite"
+          class="ais-Stats"
+          role="status"
         >
-          Nice stats
-        </span>
-      </div>
+          <span
+            class="ais-Stats-text"
+          >
+            Nice stats
+          </span>
+        </div>
       `);
     });
   });

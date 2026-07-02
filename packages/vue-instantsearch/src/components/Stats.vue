@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state" :class="suit()">
+  <div v-if="state" :class="suit()" role="status" aria-live="polite">
     <slot
       v-bind="state"
       :results="state.instantSearchInstance.helper.lastResults"

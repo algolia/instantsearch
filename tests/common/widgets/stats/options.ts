@@ -78,7 +78,9 @@ export function createOptionsTests(
         normalizeSnapshot,
         `
         <div
+          aria-live="polite"
           class="ais-Stats"
+          role="status"
         >
           <span
             class="ais-Stats-text"
