@@ -135,69 +135,70 @@ describe('RefinementList', () => {
       const { container } = render(<RefinementList {...props} />);
 
       expect(container).toMatchInlineSnapshot(`
-              <div>
-                <div
-                  class="ais-RefinementList"
+        <div>
+          <div
+            class="ais-RefinementList"
+          >
+            <ul
+              class="ais-RefinementList-list"
+            >
+              <li
+                class="ais-RefinementList-item ais-RefinementList-item--selected"
+              >
+                <label
+                  class="ais-RefinementList-label"
                 >
-                  <ul
-                    class="ais-RefinementList-list"
+                  <input
+                    checked=""
+                    class="ais-RefinementList-checkbox"
+                    type="checkbox"
+                    value="Insignia™"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText"
                   >
-                    <li
-                      class="ais-RefinementList-item ais-RefinementList-item--selected"
-                    >
-                      <label
-                        class="ais-RefinementList-label"
-                      >
-                        <input
-                          checked=""
-                          class="ais-RefinementList-checkbox"
-                          type="checkbox"
-                          value="Insignia™"
-                        />
-                        <span
-                          class="ais-RefinementList-labelText"
-                        >
-                          Insignia™
-                        </span>
-                        <span
-                          class="ais-RefinementList-count"
-                        >
-                          746
-                        </span>
-                      </label>
-                    </li>
-                    <li
-                      class="ais-RefinementList-item"
-                    >
-                      <label
-                        class="ais-RefinementList-label"
-                      >
-                        <input
-                          class="ais-RefinementList-checkbox"
-                          type="checkbox"
-                          value="Samsung"
-                        />
-                        <span
-                          class="ais-RefinementList-labelText"
-                        >
-                          Samsung
-                        </span>
-                        <span
-                          class="ais-RefinementList-count"
-                        >
-                          633
-                        </span>
-                      </label>
-                    </li>
-                  </ul>
-                  <button
-                    class="ais-RefinementList-showMore"
+                    Insignia™
+                  </span>
+                  <span
+                    class="ais-RefinementList-count"
                   >
-                    Show more
-                  </button>
-                </div>
-              </div>
-          `);
+                    746
+                  </span>
+                </label>
+              </li>
+              <li
+                class="ais-RefinementList-item"
+              >
+                <label
+                  class="ais-RefinementList-label"
+                >
+                  <input
+                    class="ais-RefinementList-checkbox"
+                    type="checkbox"
+                    value="Samsung"
+                  />
+                  <span
+                    class="ais-RefinementList-labelText"
+                  >
+                    Samsung
+                  </span>
+                  <span
+                    class="ais-RefinementList-count"
+                  >
+                    633
+                  </span>
+                </label>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-RefinementList-showMore"
+            >
+              Show more
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     test('calls onToggleShowMore', () => {
@@ -612,6 +613,7 @@ describe('RefinementList', () => {
             </li>
           </ul>
           <button
+            aria-expanded="false"
             class="ais-RefinementList-showMore SHOWMORE ais-RefinementList-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >

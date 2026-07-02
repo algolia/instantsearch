@@ -25,7 +25,7 @@ export function ShowMoreButton({
   ...props
 }: ShowMoreButtonProps) {
   return (
-    <button {...props}>
+    <button {...props} aria-expanded={isShowingMore}>
       {translations.showMoreButtonText({ isShowingMore })}
     </button>
   );
