@@ -92,6 +92,9 @@
               :class="suit('link')"
               :href="state.createURL(page)"
               :aria-label="`Page ${page + 1}`"
+              :aria-current="
+                state.currentRefinement === page ? 'page' : undefined
+              "
               @click.exact.left.prevent="refine(page)"
               >{{ page + 1 }}</a
             >
