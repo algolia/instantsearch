@@ -36,17 +36,19 @@ describe('Stats', () => {
     const { container } = render(<Stats {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
-    <div>
-      <div
-        class="ais-Stats"
-      >
-        <span
-          class="ais-Stats-text"
+      <div>
+        <div
+          aria-live="polite"
+          class="ais-Stats"
+          role="status"
         >
-          100 results found in 10ms
-        </span>
+          <span
+            class="ais-Stats-text"
+          >
+            100 results found in 10ms
+          </span>
+        </div>
       </div>
-    </div>
     `);
   });
 
@@ -61,17 +63,19 @@ describe('Stats', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-    <div>
-      <div
-        class="ais-Stats ROOT MyCustomStats"
-      >
-        <span
-          class="ais-Stats-text"
+      <div>
+        <div
+          aria-live="polite"
+          class="ais-Stats ROOT MyCustomStats"
+          role="status"
         >
-          100 results found in 10ms
-        </span>
+          <span
+            class="ais-Stats-text"
+          >
+            100 results found in 10ms
+          </span>
+        </div>
       </div>
-    </div>
     `);
   });
 
@@ -82,17 +86,19 @@ describe('Stats', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-    <div>
-      <div
-        class="ais-Stats MyCustomStats"
-      >
-        <span
-          class="ais-Stats-text"
+      <div>
+        <div
+          aria-live="polite"
+          class="ais-Stats MyCustomStats"
+          role="status"
         >
-          100 results found in 10ms
-        </span>
+          <span
+            class="ais-Stats-text"
+          >
+            100 results found in 10ms
+          </span>
+        </div>
       </div>
-    </div>
     `);
   });
 
@@ -101,17 +107,19 @@ describe('Stats', () => {
     const { container } = render(<Stats {...props} />);
 
     expect(container).toMatchInlineSnapshot(`
-    <div>
-      <div
-        class="ais-Stats"
-      >
-        <span
-          class="ais-Stats-text"
+      <div>
+        <div
+          aria-live="polite"
+          class="ais-Stats"
+          role="status"
         >
-          50 relevant results sorted out of 100 found in 10ms
-        </span>
+          <span
+            class="ais-Stats-text"
+          >
+            50 relevant results sorted out of 100 found in 10ms
+          </span>
+        </div>
       </div>
-    </div>
     `);
   });
 
@@ -128,7 +136,9 @@ describe('Stats', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
+          aria-live="polite"
           class="ais-Stats MyCustomStats"
+          role="status"
         >
           <span
             class="ais-Stats-text"

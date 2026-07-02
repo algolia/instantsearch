@@ -32,7 +32,9 @@ describe('Stats', () => {
     expect(wrapper.find('Template').props().data).toMatchObject(defaultProps);
     expect(wrapper).toMatchInlineSnapshot(`
       <div
+        aria-live="polite"
         className="root"
+        role="status"
       >
         <span
           className="text"

@@ -38,7 +38,7 @@ const Stats = ({
   templateProps,
   ...rest
 }: StatsProps) => (
-  <div className={cx(cssClasses.root)}>
+  <div className={cx(cssClasses.root)} role="status" aria-live="polite">
     <Template
       {...templateProps}
       templateKey="text"
