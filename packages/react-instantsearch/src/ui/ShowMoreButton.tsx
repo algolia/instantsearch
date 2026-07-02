@@ -17,6 +17,10 @@ export type ShowMoreButtonTranslations = {
    * Alternative text for the "Show more" button.
    */
   showMoreButtonText: (options: ShowMoreButtonTextOptions) => string;
+  /**
+   * Accessible name (aria-label) for the show more button.
+   */
+  showMoreButtonLabel?: string;
 };
 
 export function ShowMoreButton({
@@ -25,7 +29,7 @@ export function ShowMoreButton({
   ...props
 }: ShowMoreButtonProps) {
   return (
-    <button {...props}>
+    <button aria-label={translations.showMoreButtonLabel} {...props}>
       {translations.showMoreButtonText({ isShowingMore })}
     </button>
   );
