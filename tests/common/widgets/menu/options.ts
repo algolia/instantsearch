@@ -528,6 +528,7 @@ export function createOptionsTests(
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-Menu-showMore"
             >
               Show more

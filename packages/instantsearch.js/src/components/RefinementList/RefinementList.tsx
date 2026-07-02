@@ -319,6 +319,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
           className: showMoreButtonClassName,
           disabled: !this.props.canToggleShowMore,
           onClick: this.props.toggleShowMore,
+          'aria-expanded': Boolean(this.props.isShowingMore),
         }}
         data={{
           isShowingMore: this.props.isShowingMore,
