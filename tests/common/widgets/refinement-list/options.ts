@@ -1483,6 +1483,7 @@ export function createOptionsTests(
         ) as HTMLButtonElement;
 
         expect(showMoreButton).toHaveTextContent('Show more');
+        expect(showMoreButton).toHaveAttribute('aria-expanded', 'false');
 
         expect(
           document.querySelector('.ais-RefinementList')
@@ -1727,6 +1728,7 @@ export function createOptionsTests(
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore"
             >
               Show more
@@ -1742,6 +1744,7 @@ export function createOptionsTests(
         });
 
         expect(showMoreButton).toHaveTextContent('Show less');
+        expect(showMoreButton).toHaveAttribute('aria-expanded', 'true');
         expect(
           document.querySelectorAll('.ais-RefinementList-item')
         ).toHaveLength(20);
