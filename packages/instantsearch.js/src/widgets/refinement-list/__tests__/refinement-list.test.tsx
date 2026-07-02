@@ -1165,6 +1165,37 @@ describe('refinementList', () => {
       `);
     });
   });
+
+  describe('showMoreButtonLabel', () => {
+    test('sets the aria-label on the show more button', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        refinementList({
+          container,
+          attribute: 'brand',
+          showMore: true,
+          showMoreButtonLabel: 'Show more brands',
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(
+        container
+          .querySelector('.ais-RefinementList-showMore')
+          ?.getAttribute('aria-label')
+      ).toEqual('Show more brands');
+    });
+  });
 });
 
 function createMockedSearchClient() {

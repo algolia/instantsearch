@@ -66,6 +66,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   templateProps: PreparedTemplateProps<TTemplates>;
   toggleRefinement: (value: string) => void;
   showMore?: boolean;
+  showMoreButtonLabel?: string;
   toggleShowMore?: () => void;
   isShowingMore?: boolean;
   hasExhaustiveItems?: boolean;
@@ -320,6 +321,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
           disabled: !this.props.canToggleShowMore,
           onClick: this.props.toggleShowMore,
           'aria-expanded': Boolean(this.props.isShowingMore),
+          'aria-label': this.props.showMoreButtonLabel,
         }}
         data={{
           isShowingMore: this.props.isShowingMore,
