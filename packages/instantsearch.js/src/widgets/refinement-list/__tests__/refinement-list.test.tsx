@@ -301,6 +301,7 @@ describe('refinementList', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore SHOW-MORE ais-RefinementList-showMore--disabled DISABLED-SHOW-MORE"
               disabled=""
             >
@@ -525,6 +526,7 @@ describe('refinementList', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore"
             >
               Show more
@@ -819,6 +821,7 @@ describe('refinementList', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore"
             >
               <span>
@@ -1068,6 +1071,7 @@ describe('refinementList', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore"
             >
               <span>
