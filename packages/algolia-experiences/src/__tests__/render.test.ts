@@ -578,6 +578,7 @@ describe('configToIndex', () => {
               <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
                 <a class="ais-Pagination-link"
                    aria-label="Page 1"
+                   aria-current="page"
                    href="#"
                 >
                   1
