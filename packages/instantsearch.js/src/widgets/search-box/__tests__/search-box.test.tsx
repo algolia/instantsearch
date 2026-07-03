@@ -79,6 +79,33 @@ describe('searchBox', () => {
         'SUBMIT_ICON'
       );
     });
+
+    test('customizes the submit and reset button titles', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({
+          container,
+          submitTitle: 'Rechercher',
+          resetTitle: 'Effacer',
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      const submit = container.querySelector('.ais-SearchBox-submit');
+      expect(submit).toHaveAttribute('title', 'Rechercher');
+      expect(submit).toHaveAttribute('aria-label', 'Rechercher');
+
+      const reset = container.querySelector('.ais-SearchBox-reset');
+      expect(reset).toHaveAttribute('title', 'Effacer');
+      expect(reset).toHaveAttribute('aria-label', 'Effacer');
+    });
   });
 
   describe('templates', () => {
