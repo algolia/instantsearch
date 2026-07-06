@@ -265,6 +265,7 @@ describe('RefinementList', () => {
                   value=""
                 />
                 <button
+                  aria-label="Submit the search query."
                   class="ais-SearchBox-submit"
                   title="Submit the search query."
                   type="submit"
@@ -282,6 +283,7 @@ describe('RefinementList', () => {
                   </svg>
                 </button>
                 <button
+                  aria-label="Clear the search query."
                   class="ais-SearchBox-reset"
                   hidden=""
                   title="Clear the search query."

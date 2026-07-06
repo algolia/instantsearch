@@ -142,6 +142,16 @@ export type SearchBoxWidgetParams = {
    * CSS classes to add
    */
   cssClasses?: SearchBoxCSSClasses;
+  /**
+   * The accessible name and tooltip (`title`) of the submit button.
+   * @default 'Submit the search query'
+   */
+  submitTitle?: string;
+  /**
+   * The accessible name and tooltip (`title`) of the reset button.
+   * @default 'Clear the search query'
+   */
+  resetTitle?: string;
 
   /**
    * Templates used for customizing the rendering of the searchbox
@@ -173,6 +183,8 @@ const renderer =
     showReset,
     showSubmit,
     showLoadingIndicator,
+    submitTitle,
+    resetTitle,
     aiMode,
   }: {
     containerNode: HTMLElement;
@@ -185,6 +197,8 @@ const renderer =
     showReset: boolean;
     showSubmit: boolean;
     showLoadingIndicator: boolean;
+    submitTitle: string;
+    resetTitle: string;
     aiMode?: boolean;
   }) =>
   ({
@@ -229,6 +243,8 @@ const renderer =
         showSubmit={showSubmit}
         showReset={showReset}
         showLoadingIndicator={showLoadingIndicator}
+        submitTitle={submitTitle}
+        resetTitle={resetTitle}
         isSearchStalled={isSearchStalled}
         cssClasses={cssClasses}
         onAiModeClick={onAiModeClick}
@@ -263,6 +279,8 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showReset = true,
     showSubmit = true,
     showLoadingIndicator = true,
+    submitTitle = 'Submit the search query',
+    resetTitle = 'Clear the search query',
     queryHook,
     templates: userTemplates = {},
     aiMode,
@@ -321,6 +339,8 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showReset,
     showSubmit,
     showLoadingIndicator,
+    submitTitle,
+    resetTitle,
     aiMode,
   });
 

@@ -41,6 +41,8 @@ type SearchBoxProps = {
   isSearchStalled?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
+  submitTitle?: string;
+  resetTitle?: string;
   onChange?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
@@ -60,6 +62,8 @@ const defaultProps = {
   isSearchStalled: false,
   disabled: false,
   ariaLabel: 'Search',
+  submitTitle: 'Submit the search query',
+  resetTitle: 'Clear the search query',
   onChange: noop,
   onSubmit: noop,
   onReset: noop,
@@ -239,7 +243,8 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.submit,
               type: 'submit',
-              title: 'Submit the search query',
+              title: this.props.submitTitle,
+              'aria-label': this.props.submitTitle,
               hidden: !showSubmit,
             }}
             templates={templates}
@@ -252,7 +257,8 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.reset,
               type: 'reset',
-              title: 'Clear the search query',
+              title: this.props.resetTitle,
+              'aria-label': this.props.resetTitle,
               hidden: !(
                 showReset &&
                 this.state.query.trim() &&
