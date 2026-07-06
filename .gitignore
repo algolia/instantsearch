@@ -1,3 +1,6 @@
+# Local planning notes (Ralph-loop trackers, etc.)
+plans/
+
 # Dependencies
 node_modules/
 
@@ -13,6 +16,7 @@ build/
 !scripts/build/**
 
 # Generated files
+/architecture-refactor-runs/
 /docs
 /website/algoliasearch-helper-js/*
 /website/examples/*

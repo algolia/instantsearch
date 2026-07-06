@@ -70,6 +70,7 @@
         @click="toggleShowMore"
         v-if="showMore"
         :disabled="!state.canToggleShowMore"
+        :aria-expanded="state.isShowingMore ? 'true' : 'false'"
       >
         <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
           Show {{ state.isShowingMore ? 'less' : 'more' }}

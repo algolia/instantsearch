@@ -23,7 +23,6 @@ describe('ChatSidePanelLayout', () => {
     headerComponent: <div className="header">Header</div>,
     messagesComponent: <div className="messages">Messages</div>,
     promptComponent: <div className="prompt">Prompt</div>,
-    toggleButtonComponent: <button className="toggle">Toggle</button>,
     messages: [],
     status: 'ready' as const,
     isClearing: false,
@@ -61,15 +60,6 @@ describe('ChatSidePanelLayout', () => {
             >
               Prompt
             </div>
-          </div>
-          <div
-            class="ais-Chat-toggleButtonWrapper"
-          >
-            <button
-              class="toggle"
-            >
-              Toggle
-            </button>
           </div>
         </div>
       </div>
@@ -117,10 +107,6 @@ describe('ChatSidePanelLayout', () => {
     expect(container.querySelector('.header')).toBeInTheDocument();
     expect(container.querySelector('.messages')).toBeInTheDocument();
     expect(container.querySelector('.prompt')).toBeInTheDocument();
-    expect(container.querySelector('.toggle')).toBeInTheDocument();
-    expect(
-      container.querySelector('.ais-Chat-toggleButtonWrapper')
-    ).toBeInTheDocument();
   });
 
   test('sets margin-right on custom parentElement when open', () => {

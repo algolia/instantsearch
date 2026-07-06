@@ -1,4 +1,4 @@
-import { MapPin, Search, Sparkles } from "lucide-preact";
+import { MapPin, Search, Sparkles, Wand2 } from "lucide-preact";
 import { useState } from "preact/hooks";
 
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher";
@@ -6,6 +6,7 @@ import { FlavorContext, type Flavor } from "./context/flavor";
 import { AgenticView } from "./views/AgenticView";
 import { GeoSearchView } from "./views/GeoSearchView";
 import { InstantSearchView } from "./views/InstantSearchView";
+import { RecommendView } from "./views/RecommendView";
 
 import type { LucideIcon } from "lucide-preact";
 import type { ComponentType } from "preact";
@@ -20,13 +21,11 @@ function getFlavorFromURL(): Flavor {
   return "js";
 }
 
-type ViewProps = { isActive: boolean };
-
 interface Experience {
   title: string;
   description: string;
   icon: LucideIcon;
-  view: ComponentType<ViewProps>;
+  view: ComponentType;
 }
 
 const experiences: Experience[] = [
@@ -47,6 +46,12 @@ const experiences: Experience[] = [
     description: "Search through locations",
     icon: MapPin,
     view: GeoSearchView,
+  },
+  {
+    title: "Recommend",
+    description: "Personalized recommendations",
+    icon: Wand2,
+    view: RecommendView,
   },
 ];
 
@@ -104,11 +109,9 @@ export function App() {
           <ColorModeSwitcher />
         </div>
 
-        {experiences.map((experience, index) => (
-          <div key={index} class={currentIndex !== index ? "hidden" : ""}>
-            <experience.view isActive={currentIndex === index} />
-          </div>
-        ))}
+        {experiences.map((experience, index) =>
+          currentIndex === index ? <experience.view key={index} /> : null
+        )}
       </div>
     </FlavorContext.Provider>
   );

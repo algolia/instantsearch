@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.57](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.55...create-instantsearch-app@7.5.57) (2026-06-30)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.56](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.55...create-instantsearch-app@7.5.56) (2026-06-25)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.55](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.54...create-instantsearch-app@7.5.55) (2026-06-19)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.54](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.53...create-instantsearch-app@7.5.54) (2026-06-09)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.53](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.52...create-instantsearch-app@7.5.53) (2026-06-03)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.52](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.51...create-instantsearch-app@7.5.52) (2026-06-02)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.51](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.50...create-instantsearch-app@7.5.51) (2026-05-26)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.50](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.49...create-instantsearch-app@7.5.50) (2026-05-19)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
 ## [7.5.48](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.47...create-instantsearch-app@7.5.48) (2026-05-05)
 
 

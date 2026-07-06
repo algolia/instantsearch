@@ -75,7 +75,6 @@ function formatElapsed(ms: number): string {
 
 export function createChatMessageReasoningComponent({
   createElement,
-  Fragment,
 }: Renderer) {
   return function ChatMessageReasoning(userProps: ChatMessageReasoningProps) {
     const {

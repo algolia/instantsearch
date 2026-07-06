@@ -10,6 +10,9 @@ import type {
 
 export type UseFilterSuggestionsProps = FilterSuggestionsConnectorParams;
 
+/**
+ * @deprecated Filter suggestions are deprecated and will be removed in a future major version.
+ */
 export function useFilterSuggestions(
   props: UseFilterSuggestionsProps,
   additionalWidgetProperties?: AdditionalWidgetProperties

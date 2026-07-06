@@ -3,6 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.33.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.31.0...instantsearch-ui-components@0.33.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **chat:** move clear-animation lifecycle to the view layer ([#7092](https://github.com/algolia/instantsearch/issues/7092)) ([bf5857e](https://github.com/algolia/instantsearch/commit/bf5857e28d19e084b6ef283d9dc7ddebd588ebf4))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
+# [0.32.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.31.0...instantsearch-ui-components@0.32.0) (2026-06-25)
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
+# [0.31.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.30.1...instantsearch-ui-components@0.31.0) (2026-06-19)
+
+
+### Bug Fixes
+
+* **chat:** stop carousel remount, transcript re-render, and lost auto-scroll while streaming ([#7069](https://github.com/algolia/instantsearch/issues/7069)) ([bbba058](https://github.com/algolia/instantsearch/commit/bbba058991ae6ab518bc0de4b68c9059cb6abfe6))
+
+
+### Features
+
+* **chat:** add parseMarkdown opt-out to render message text as plain… ([#7073](https://github.com/algolia/instantsearch/issues/7073)) ([d9add3a](https://github.com/algolia/instantsearch/commit/d9add3a8000e3163f3206fce5e077766f378fcb3))
+
+
+
+
+
+## [0.30.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.30.0...instantsearch-ui-components@0.30.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **chat:** hydrate full objects in display results tool ([#7064](https://github.com/algolia/instantsearch/issues/7064)) ([5362808](https://github.com/algolia/instantsearch/commit/536280866f3a5b6eaf398fb5b1b4db145f89d6f6))
+* **chat:** update carousel view all button handler for mcp search tool ([#7068](https://github.com/algolia/instantsearch/issues/7068)) ([031afd0](https://github.com/algolia/instantsearch/commit/031afd0f0c72a628c5c01cdd8b13f3bab4626569))
+
+
+
+
+
+# [0.30.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.29.0...instantsearch-ui-components@0.30.0) (2026-06-03)
+
+
+### Features
+
+* **chat:** generic error handling ([#6997](https://github.com/algolia/instantsearch/issues/6997)) ([c307370](https://github.com/algolia/instantsearch/commit/c307370479f5764430160e4d3d007463ecd5e361))
+
+
+
+
+
+# [0.29.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.28.0...instantsearch-ui-components@0.29.0) (2026-06-02)
+
+
+### Bug Fixes
+
+* **chat:** show loader during gap in tool calls ([#7062](https://github.com/algolia/instantsearch/issues/7062)) ([dab5756](https://github.com/algolia/instantsearch/commit/dab57560188de233440ce8f653f21f746be0b927))
+
+
+### Features
+
+* **chat:** split chat trigger widget ([#6966](https://github.com/algolia/instantsearch/issues/6966)) ([379084c](https://github.com/algolia/instantsearch/commit/379084cd459a0d8b0f4f2a55b0dae336cf331008))
+
+
+
+
+
+# [0.28.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.27.0...instantsearch-ui-components@0.28.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** remove unused zod dependency ([#6996](https://github.com/algolia/instantsearch/issues/6996)) ([6903aa5](https://github.com/algolia/instantsearch/commit/6903aa565befdbd451f551389382cfc8a99a04bf)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880)
+
+
+### Features
+
+* **chat:** send hidden context via message metadata.turnContext ([#7042](https://github.com/algolia/instantsearch/issues/7042)) ([4b64e1f](https://github.com/algolia/instantsearch/commit/4b64e1f6ac69f690dc5cad997ce5319672f8aa3c))
+
+
+
+
+
+# [0.27.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.26.1...instantsearch-ui-components@0.27.0) (2026-05-19)
+
+
+### Features
+
+* **chat:** centralize AI mode entry points behind openChat helper ([#7036](https://github.com/algolia/instantsearch/issues/7036)) ([fcb40dd](https://github.com/algolia/instantsearch/commit/fcb40dd1f7ee2e12abe99bb590a64bdcfdd29157))
+
+
+
+
+
 # [0.26.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.25.0...instantsearch-ui-components@0.26.0) (2026-05-05)
 
 

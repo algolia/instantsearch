@@ -20,6 +20,15 @@ You are running from the root directory where:
    - instantsearch/packages/react-instantsearch-core/CHANGELOG.md
    - instantsearch/packages/vue-instantsearch/CHANGELOG.md (low priority - only update Vue docs if this changelog shows explicit feature additions)
 
+   IMPORTANT - changelogs UNDER-REPORT shared changes: changelogs are generated per package
+   from the files each commit touched (Lerna independent versioning). A feature added to a
+   shared connector or core package (e.g. a `feat(chat)` that only edits
+   `packages/instantsearch.js/src/connectors/...`) appears in ONLY that package's changelog,
+   even though React and Vue wrap the same connector and expose the same option. So a feature
+   listed only in the instantsearch.js (or instantsearch-core) changelog is NOT evidence it is
+   JS-only. Treat every connector/core feature as potentially cross-flavor and verify in source
+   (see CROSS-FLAVOR CONSISTENCY below) instead of trusting the per-package changelog.
+
 2. Find and read ONE existing doc as a format reference:
    - Use Glob to find InstantSearch widget docs: docs-new/**/instantsearch/**/*.mdx
    - Read just ONE example file to understand the format (don't read many)
@@ -57,9 +66,24 @@ Each package has its own documentation flavor:
 - Match the existing documentation format and style exactly
 - Only modify documentation files in docs-new/
 - Don't add placeholder content - only document what actually exists
-- CROSS-FLAVOR CONSISTENCY: When updating a widget/hook that exists in multiple flavors (JS, React, Vue),
-  check if the same prop/feature exists in the other flavors and update ALL relevant docs.
-  Many features are shared via instantsearch-ui-components. Read the source for each flavor to verify.
+- CROSS-FLAVOR CONSISTENCY: A feature usually appears in only ONE package's changelog (often
+  instantsearch.js or instantsearch-core) even when it reaches every flavor. Changelog absence in
+  react-instantsearch / vue-instantsearch does NOT mean the feature is JS-only - connectors and their
+  options are shared. When you document a new prop/option, you MUST check and update ALL flavors that
+  expose it.
+
+  How shared options propagate (verify in SOURCE, never infer from the changelog alone):
+  - Connector options: the params type (e.g. `ChatConnectorParams`) is defined in instantsearch.js /
+    instantsearch-core and IMPORTED by the matching react-instantsearch-core `use*` hook - e.g.
+    `useChat` imports `ChatConnectorParams` from `instantsearch.js/es/connectors/chat/connectChat`.
+    The React widget component then spreads `...props` into that hook, so the option works in React
+    even though it is never re-declared or changelogged there. Vue wraps the same connectors similarly.
+  - UI / rendering features are shared via instantsearch-ui-components.
+
+  To decide whether React/Vue support a new option, TRACE THE TYPE: does the flavor's `use*` hook
+  import the connector params, and does the component spread `...props`? If yes, the option is
+  supported and must be documented for that flavor. Do NOT conclude a flavor lacks an option just
+  because the flavor's own source never names it.
 
 ## Source Code Reference
 

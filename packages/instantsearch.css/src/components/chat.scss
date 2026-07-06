@@ -1,6 +1,7 @@
 @use '../themes/reset';
 @use '../shared/_variables';
 @use '../shared/_common';
+@use 'carousel';
 @use 'button';
 @use 'chat/chat';
 @use 'chat/chat-overlay-layout';
@@ -14,5 +15,5 @@
 @use 'chat/chat-message-reasoning';
 @use 'chat/chat-greeting';
 @use 'chat/chat-prompt';
-@use 'chat/chat-carousel';
+@use 'chat/chat-tool-results';
 @use 'chat/chat-suggestions';

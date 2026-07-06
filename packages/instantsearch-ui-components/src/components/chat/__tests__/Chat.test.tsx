@@ -2,14 +2,19 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { fireEvent, render } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
+import { useState } from 'preact/hooks';
 
 import { createChatComponent } from '../Chat';
+
+import type { ChatProps } from '../Chat';
 
 const Chat = createChatComponent({
   createElement,
   Fragment,
+  memo: (component) => component,
+  useState,
 });
 
 describe('Chat', () => {
@@ -31,7 +36,6 @@ describe('Chat', () => {
           onClose: jest.fn(),
         }}
         promptProps={{}}
-        toggleButtonProps={{ open: true, onClick: jest.fn() }}
         suggestionsProps={{ onSuggestionClick: jest.fn() }}
       />
     );
@@ -213,29 +217,147 @@ describe('Chat', () => {
               </div>
             </form>
           </div>
-          <div
-            class="ais-Chat-toggleButtonWrapper"
-          >
-            <button
-              class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
-              type="button"
-            >
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m18 15-6-6-6 6"
-                />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     `);
+  });
+
+  describe('clearing', () => {
+    const baseProps = (
+      onClear: () => void
+    ): Omit<ChatProps, 'headerProps' | 'messagesProps'> & {
+      headerProps: ChatProps['headerProps'];
+      messagesProps: ChatProps['messagesProps'];
+    } => ({
+      open: true,
+      sendMessage: jest.fn() as any,
+      regenerate: jest.fn() as any,
+      stop: jest.fn() as any,
+      error: undefined,
+      headerProps: { onClose: jest.fn(), onClear, canClear: true },
+      messagesProps: {
+        messages: [
+          { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+        ],
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      },
+      promptProps: {},
+      suggestionsProps: { onSuggestionClick: jest.fn() },
+    });
+
+    const originalMatchMedia = window.matchMedia;
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+    });
+
+    // Preact only normalizes an `onX` prop to a lowercase `x` event listener
+    // when `onx` exists on the element (always true in real browsers). jsdom
+    // omits `ontransitionend`, so without this preact would listen for a
+    // `TransitionEnd` event that our dispatched `transitionend` never matches.
+    let hadOnTransitionEnd: boolean;
+    beforeAll(() => {
+      hadOnTransitionEnd = 'ontransitionend' in window.HTMLElement.prototype;
+      if (!hadOnTransitionEnd) {
+        Object.defineProperty(window.HTMLElement.prototype, 'ontransitionend', {
+          value: null,
+          writable: true,
+          configurable: true,
+        });
+      }
+    });
+    afterAll(() => {
+      if (!hadOnTransitionEnd) {
+        delete (window.HTMLElement.prototype as any).ontransitionend;
+      }
+    });
+
+    const mockReducedMotion = (matches: boolean) => {
+      window.matchMedia = jest.fn().mockImplementation((query: string) => ({
+        matches: query === '(prefers-reduced-motion: reduce)' && matches,
+        media: query,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        onchange: null,
+        dispatchEvent: jest.fn(),
+      }));
+    };
+
+    test('fades out, then commits the clear when the opacity transition ends', () => {
+      mockReducedMotion(false);
+      const onClear = jest.fn();
+      const { container } = render(<Chat {...baseProps(onClear)} />);
+
+      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
+
+      // Fade-out has started but the messages are not committed yet.
+      const content = container.querySelector('.ais-ChatMessages-content')!;
+      expect(
+        content.classList.contains('ais-ChatMessages-content--clearing')
+      ).toBe(true);
+      expect(onClear).not.toHaveBeenCalled();
+
+      // The opacity transition ending commits the clear. jsdom lacks
+      // `TransitionEvent`, so build a native `transitionend` event and set
+      // `propertyName` on it explicitly.
+      const transitionEndEvent = new Event('transitionend', { bubbles: true });
+      Object.defineProperty(transitionEndEvent, 'propertyName', {
+        value: 'opacity',
+      });
+      fireEvent(content, transitionEndEvent);
+      expect(onClear).toHaveBeenCalledTimes(1);
+    });
+
+    test('stops an in-flight stream immediately, then commits on transition end', () => {
+      mockReducedMotion(false);
+      const onClear = jest.fn();
+      const stop = jest.fn();
+      const props = baseProps(onClear);
+      const { container } = render(
+        <Chat
+          {...props}
+          stop={stop as any}
+          messagesProps={{ ...props.messagesProps, status: 'streaming' }}
+        />
+      );
+
+      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
+
+      // Streaming is stopped right away so the assistant stops responding; the
+      // messages keep fading until the transition ends.
+      expect(stop).toHaveBeenCalledTimes(1);
+      expect(onClear).not.toHaveBeenCalled();
+      const content = container.querySelector('.ais-ChatMessages-content')!;
+      expect(
+        content.classList.contains('ais-ChatMessages-content--clearing')
+      ).toBe(true);
+
+      const transitionEndEvent = new Event('transitionend', { bubbles: true });
+      Object.defineProperty(transitionEndEvent, 'propertyName', {
+        value: 'opacity',
+      });
+      fireEvent(content, transitionEndEvent);
+      expect(onClear).toHaveBeenCalledTimes(1);
+    });
+
+    test('commits immediately when the user prefers reduced motion', () => {
+      mockReducedMotion(true);
+      const onClear = jest.fn();
+      const { container } = render(<Chat {...baseProps(onClear)} />);
+
+      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
+
+      // No fade-out, no waiting for a transition that would never fire.
+      expect(onClear).toHaveBeenCalledTimes(1);
+      const content = container.querySelector('.ais-ChatMessages-content')!;
+      expect(
+        content.classList.contains('ais-ChatMessages-content--clearing')
+      ).toBe(false);
+    });
   });
 });

@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.26.11](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.9...vue-instantsearch@4.26.11) (2026-06-30)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.10](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.9...vue-instantsearch@4.26.10) (2026-06-25)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.9](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.8...vue-instantsearch@4.26.9) (2026-06-19)
+
+
+### Bug Fixes
+
+* **range-slider:** make handles keyboard-movable without snap points ([#7071](https://github.com/algolia/instantsearch/issues/7071)) ([55bd627](https://github.com/algolia/instantsearch/commit/55bd627dbacabd538b92aa1c8654ec3631e59ece))
+
+
+
+
+
+## [4.26.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.7...vue-instantsearch@4.26.8) (2026-06-09)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.7](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.6...vue-instantsearch@4.26.7) (2026-06-03)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.6](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.5...vue-instantsearch@4.26.6) (2026-06-02)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.5](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.4...vue-instantsearch@4.26.5) (2026-05-26)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.4](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.3...vue-instantsearch@4.26.4) (2026-05-19)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.26.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.2...vue-instantsearch@4.26.3) (2026-05-12)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
 ## [4.26.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.0...vue-instantsearch@4.26.1) (2026-05-05)
 
 

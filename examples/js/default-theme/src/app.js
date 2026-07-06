@@ -22,6 +22,7 @@ import {
   toggleRefinement,
   queryRuleCustomData,
   chat,
+  chatTrigger,
 } from 'instantsearch.js/es/widgets';
 
 import { createTabsWidget, createRefreshButton } from './helpers';
@@ -238,6 +239,9 @@ search.addWidgets([
     templates: {
       item: itemTemplate,
     },
+  }),
+  chatTrigger({
+    container: '#chat-trigger',
   }),
 ]);
 

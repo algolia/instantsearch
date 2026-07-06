@@ -1,5 +1,5 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -103,14 +103,31 @@ function ServerOrHydrationProvider({
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
   const countRef = useRef(0);
-  const initialResults = safelyRunOnBrowser(
-    () => window[InstantSearchInitialResults]
+  // Capture once on first render. Side-effect-free read keeps hydration
+  // deterministic across StrictMode double-invocation and React 19 / Next.js
+  // metadata streaming re-renders.
+  const [initialResults] = useState<InitialResults | undefined>(() =>
+    safelyRunOnBrowser(({ window }) => window[InstantSearchInitialResults])
   );
+  // After commit, clear the global so a later <InstantSearchNext> mount —
+  // typically the destination of an App Router <Link> click — does not
+  // recycle this mount's serialized state.
+  useEffect(() => {
+    safelyRunOnBrowser(({ window }) => {
+      if (window[InstantSearchInitialResults] !== undefined) {
+        window[InstantSearchInitialResults] = undefined;
+      }
+    });
+  }, []);
+  // `useInstantSearchApi` reads a truthy `waitForResultsRef` as "SSR results
+  // are arriving" and skips the initial search. On client mounts without
+  // results (typical for SPA navigation) we must let it fall through.
+  const rscWaitRef = !isServer && !initialResults ? null : promiseRef;
 
   return (
     <InstantSearchRSCContext.Provider
       value={{
-        waitForResultsRef: promiseRef,
+        waitForResultsRef: rscWaitRef,
         countRef,
         ignoreMultipleHooksWarning,
       }}

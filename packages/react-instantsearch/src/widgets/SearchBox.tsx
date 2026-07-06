@@ -1,3 +1,4 @@
+import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
 import React, { useRef, useState } from 'react';
 import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 
@@ -15,6 +16,7 @@ type UiProps = Pick<
   | 'onReset'
   | 'onSubmit'
   | 'onAiModeClick'
+  | 'aiModeButtonDisabled'
   | 'value'
   | 'autoFocus'
   | 'translations'
@@ -55,7 +57,10 @@ export function SearchBox({
 }: SearchBoxProps) {
   const { query, refine, isSearchStalled } = useSearchBox(
     { queryHook },
-    { $$widgetType: 'ais.searchBox' }
+    {
+      $$widgetType: 'ais.searchBox',
+      ...(aiMode ? { opensChat: true } : {}),
+    }
   );
   const { indexRenderState } = useInstantSearch();
   const [inputValue, setInputValue] = useState(query);
@@ -104,6 +109,10 @@ export function SearchBox({
     setInputValue(query);
   }
 
+  const chatRenderState = indexRenderState.chat as
+    | Partial<ChatRenderState>
+    | undefined;
+
   const uiProps: UiProps = {
     inputRef,
     isSearchStalled,
@@ -112,18 +121,17 @@ export function SearchBox({
     onSubmit,
     onAiModeClick: aiMode
       ? () => {
-          const chatRenderState = indexRenderState.chat as
-            | Partial<ChatRenderState>
-            | undefined;
-
-          if (chatRenderState) {
-            chatRenderState.setOpen?.(true);
-            if (inputValue.trim()) {
-              chatRenderState.sendMessage?.({ text: inputValue });
-            }
+          if (
+            openChat(chatRenderState, {
+              message: inputValue,
+              referer: 'ai-mode',
+            })
+          ) {
+            onReset();
           }
         }
       : undefined,
+    aiModeButtonDisabled: aiMode ? isChatBusy(chatRenderState) : undefined,
     value: inputValue,
     translations: {
       submitButtonTitle: 'Submit the search query',

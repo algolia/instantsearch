@@ -2,7 +2,7 @@
  * HTTP transport implementation for chat.
  */
 import { parseJsonEventStream } from './stream-parser';
-import { resolveValue } from './utils';
+import { resolveValue, tryParseErrorMessage } from './utils';
 
 import type {
   ChatTransport,
@@ -14,6 +14,20 @@ import type {
   PrepareReconnectToStreamRequest,
   Resolvable,
 } from './types';
+
+/**
+ * Reads a human-readable message from a failed HTTP response body when the
+ * server returns JSON such as `{ "message": "..." }` (the shared
+ * `ErrorResponse` shape used by every status code), falling back to the HTTP
+ * status line when the body is empty or not parseable.
+ */
+function getHttpErrorMessage(response: Response): Promise<string> {
+  const fallback = `HTTP error: ${response.status} ${response.statusText}`;
+  return response
+    .text()
+    .then((text) => tryParseErrorMessage(text) ?? fallback)
+    .catch(() => fallback);
+}
 
 /**
  * Abstract base class for HTTP-based chat transports.
@@ -130,9 +144,9 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
           credentials,
         }).then((response) => {
           if (!response.ok) {
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessage(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {
@@ -213,9 +227,9 @@ export abstract class HttpChatTransport<TUIMessage extends UIMessage>
             if (response.status === 404) {
               return null;
             }
-            throw new Error(
-              `HTTP error: ${response.status} ${response.statusText}`
-            );
+            return getHttpErrorMessage(response).then((message) => {
+              throw new Error(message);
+            });
           }
 
           if (!response.body) {
