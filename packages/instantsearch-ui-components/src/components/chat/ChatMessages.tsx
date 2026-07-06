@@ -41,9 +41,13 @@ import type {
   ChatMessageClassNames,
   ChatMessageTranslations,
 } from './ChatMessage';
-import type { ChatMessageReasoningVisibility } from './ChatMessageReasoning';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
+import type {
+  ChatMessageReasoningClassNames,
+  ChatMessageReasoningTranslations,
+  ChatMessageReasoningVisibility,
+} from './ChatMessageReasoning';
 import type {
   ChatEmptyProps,
   ChatLayoutOwnProps,
@@ -262,6 +266,16 @@ export type ChatMessagesProps<
    * Optional override for the reasoning summarizer.
    */
   reasoningSummarizer?: ReasoningSummarizer;
+  /**
+   * Injectable strings for the reasoning panel. Forwarded to every message's
+   * `<ChatMessageReasoning>`.
+   */
+  reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
+  /**
+   * Optional class names for the reasoning panel. Forwarded to every message's
+   * `<ChatMessageReasoning>`.
+   */
+  reasoningClassNames?: Partial<ChatMessageReasoningClassNames>;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -322,6 +336,8 @@ function createDefaultMessageComponent<
     showReasoning,
     reasoningVisibility,
     reasoningSummarizer,
+    reasoningTranslations,
+    reasoningClassNames,
   }: {
     key: string;
     message: TMessage;
@@ -344,6 +360,8 @@ function createDefaultMessageComponent<
     showReasoning?: boolean;
     reasoningVisibility?: ChatMessageReasoningVisibility;
     reasoningSummarizer?: ReasoningSummarizer;
+    reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
+    reasoningClassNames?: Partial<ChatMessageReasoningClassNames>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -431,6 +449,8 @@ function createDefaultMessageComponent<
         showReasoning={showReasoning}
         reasoningVisibility={reasoningVisibility}
         reasoningSummarizer={reasoningSummarizer}
+        reasoningTranslations={reasoningTranslations}
+        reasoningClassNames={reasoningClassNames}
         {...messageProps}
       />
     );
@@ -497,6 +517,8 @@ export function createChatMessagesComponent({
       showReasoning = false,
       reasoningVisibility = 'auto',
       reasoningSummarizer,
+      reasoningTranslations,
+      reasoningClassNames,
       ...props
     } = userProps;
 
@@ -613,6 +635,8 @@ export function createChatMessagesComponent({
                 showReasoning={showReasoning}
                 reasoningVisibility={reasoningVisibility}
                 reasoningSummarizer={reasoningSummarizer}
+                reasoningTranslations={reasoningTranslations}
+                reasoningClassNames={reasoningClassNames}
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&

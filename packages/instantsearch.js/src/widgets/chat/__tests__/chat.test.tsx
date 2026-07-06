@@ -294,4 +294,110 @@ describe('chat', () => {
       expect(document.activeElement).toBe(textareaAfter);
     });
   });
+
+  describe('reasoning', () => {
+    const reasoningMessages = [
+      {
+        id: 'assistant-message-id',
+        role: 'assistant' as const,
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Looking at product images and comparing them.',
+          },
+          { type: 'text' as const, text: 'Here are some options.' },
+        ],
+      },
+    ];
+
+    test('does not render the reasoning panel by default', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          messages: reasoningMessages,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(
+        container.querySelector('.ais-ChatMessageReasoning')
+      ).not.toBeInTheDocument();
+    });
+
+    test('renders the reasoning panel when `showReasoning` is enabled', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          showReasoning: true,
+          reasoningVisibility: 'expanded',
+          messages: reasoningMessages,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(
+        container.querySelector('.ais-ChatMessageReasoning')
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector('.ais-ChatMessageReasoning-text')
+      ).toHaveTextContent('Looking at product images and comparing them.');
+    });
+
+    test('forwards injectable reasoning label strings from templates', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          showReasoning: true,
+          reasoningVisibility: 'expanded',
+          messages: reasoningMessages,
+          templates: {
+            messages: {
+              reasoningToggleLabelText: 'Basculer le raisonnement',
+            },
+          },
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(
+        screen.getByRole('button', { name: 'Basculer le raisonnement' })
+      ).toBeInTheDocument();
+    });
+  });
 });

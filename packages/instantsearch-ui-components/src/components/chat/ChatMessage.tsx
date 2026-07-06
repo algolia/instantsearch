@@ -2,15 +2,17 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import type { ReasoningSummarizer } from '../../lib/utils/reasoning';
 import { createButtonComponent } from '../Button';
 
 import {
   createChatMessageReasoningComponent,
+  type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningTranslations,
   type ChatMessageReasoningVisibility,
 } from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
+import type { ReasoningSummarizer } from '../../lib/utils/reasoning';
 import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -170,6 +172,16 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   reasoningSummarizer?: ReasoningSummarizer;
   /**
+   * Injectable strings for the reasoning panel (header labels, toggle label,
+   * elapsed time prefix/suffix). Forwarded to `<ChatMessageReasoning>`.
+   */
+  reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
+  /**
+   * Optional class names for the reasoning panel. Forwarded to
+   * `<ChatMessageReasoning>`.
+   */
+  reasoningClassNames?: Partial<ChatMessageReasoningClassNames>;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -225,6 +237,8 @@ export function createChatMessageComponent({
       showReasoning = false,
       reasoningVisibility = 'auto',
       reasoningSummarizer,
+      reasoningTranslations,
+      reasoningClassNames,
       parseMarkdown = true,
       ...props
     } = userProps;
@@ -278,6 +292,8 @@ export function createChatMessageComponent({
             message={message}
             visibility={reasoningVisibility}
             summarizer={reasoningSummarizer}
+            translations={reasoningTranslations}
+            classNames={reasoningClassNames}
           />
         );
       }

@@ -164,7 +164,7 @@ export function createChatMessageReasoningComponent({
           {showTimer && (
             <span className={cx(cssClasses.timer)}>
               {translations.elapsedPrefix}{' '}
-              {formatElapsed(elapsedMs as number)}
+              {formatElapsed(elapsedMs)}
               {translations.elapsedSuffix}
             </span>
           )}

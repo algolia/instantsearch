@@ -55,7 +55,7 @@ export function createChatMessageLoaderComponent({
     const caption = reasoningPreview || translations.loaderText;
     const hasProgress = typeof elapsedMs === 'number' && elapsedMs > 0;
     const progress = hasProgress
-      ? Math.max(0, Math.min(1, (elapsedMs as number) / expectedMs))
+      ? Math.max(0, Math.min(1, (elapsedMs) / expectedMs))
       : 0;
 
     return (
