@@ -259,7 +259,7 @@ export type ChatMessagesProps<
    */
   showReasoning?: boolean;
   /**
-   * Visibility strategy for the reasoning panel. Default: `auto`.
+   * Visibility strategy for the reasoning panel. Default: `collapsed`.
    */
   reasoningVisibility?: ChatMessageReasoningVisibility;
   /**

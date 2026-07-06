@@ -152,7 +152,10 @@ export function summarizeReasoning(
   // Tier 1: short server-side summary - use the first sentence verbatim.
   const trimmed = reasoningText.trim();
   if (trimmed && trimmed.length <= threshold && !ctx.streaming) {
-    const firstSentence = trimmed.split(/(?<=[.!?])\s+/, 1)[0];
+    // Grab up to the first sentence terminator. Avoids lookbehind so the
+    // utility stays compatible with older JS engines.
+    const sentenceMatch = trimmed.match(/^[\s\S]*?[.!?](?:\s|$)/);
+    const firstSentence = (sentenceMatch ? sentenceMatch[0] : trimmed).trim();
     return {
       label: truncate(firstSentence, 64),
       category: inferCategoryFromText(firstSentence),

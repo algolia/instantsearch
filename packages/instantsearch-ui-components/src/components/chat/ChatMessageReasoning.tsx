@@ -104,7 +104,10 @@ export function createChatMessageReasoningComponent({
       <details
         {...props}
         className={cx(cssClasses.root, props.className)}
-        open={forceOpen || undefined}
+        // Force `open` only for `expanded` (and `auto` while streaming);
+        // otherwise leave the element uncontrolled so the user can toggle it —
+        // and any caller-supplied `open` in `props` still passes through.
+        {...(forceOpen ? { open: true } : {})}
       >
         <summary
           className={cx(cssClasses.header)}
