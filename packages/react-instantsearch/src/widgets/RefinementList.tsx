@@ -123,7 +123,9 @@ export function RefinementList({
     }
   }
 
-  const mergedTranslations: Required<RefinementListProps['translations']> = {
+  const mergedTranslations: Required<
+    Omit<NonNullable<RefinementListProps['translations']>, 'showMoreButtonLabel'>
+  > = {
     resetButtonTitle: 'Clear the search query',
     submitButtonTitle: 'Submit the search query',
     noResultsText: 'No results.',
@@ -163,6 +165,7 @@ export function RefinementList({
     isShowingMore,
     translations: {
       showMoreButtonText: mergedTranslations.showMoreButtonText,
+      showMoreButtonLabel: translations?.showMoreButtonLabel,
     },
   };
 
