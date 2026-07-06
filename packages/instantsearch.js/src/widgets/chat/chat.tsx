@@ -59,6 +59,8 @@ import type {
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
+  ChatMessageReasoningTranslations,
+  ChatMessageReasoningVisibility,
   ChatEmptyProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
@@ -69,6 +71,7 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
+  ReasoningSummarizer,
   SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
@@ -352,6 +355,10 @@ type ChatWrapperProps = {
     };
     translations: Partial<ChatMessagesTranslations>;
     messageTranslations: Partial<ChatMessageProps['translations']>;
+    reasoningTranslations: Partial<ChatMessageReasoningTranslations>;
+    showReasoning: boolean;
+    reasoningVisibility?: ChatMessageReasoningVisibility;
+    reasoningSummarizer?: ReasoningSummarizer;
     sendMessage: ChatLayoutOwnProps['sendMessage'];
     setInput: (input: string) => void;
   };
@@ -466,6 +473,10 @@ function ChatWrapper({
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
+        reasoningTranslations: messagesProps.reasoningTranslations,
+        showReasoning: messagesProps.showReasoning,
+        reasoningVisibility: messagesProps.reasoningVisibility,
+        reasoningSummarizer: messagesProps.reasoningSummarizer,
         sendMessage: messagesProps.sendMessage,
         setInput: messagesProps.setInput,
       }}
@@ -501,6 +512,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode,
   templates,
   tools,
+  showReasoning,
+  reasoningVisibility,
+  reasoningSummarizer,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -509,6 +523,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
+  showReasoning: boolean;
+  reasoningVisibility?: ChatMessageReasoningVisibility;
+  reasoningSummarizer?: ReasoningSummarizer;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
@@ -831,6 +848,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
 
+    const reasoningTranslations: Partial<ChatMessageReasoningTranslations> =
+      getDefinedProperties({
+        title: templates.messages?.reasoningTitleText,
+        toggleLabel: templates.messages?.reasoningToggleLabelText,
+      });
+
     assistantMessageTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['assistantMessage']>
@@ -923,6 +946,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             },
             translations: messagesTranslations,
             messageTranslations,
+            reasoningTranslations,
+            showReasoning,
+            reasoningVisibility,
+            reasoningSummarizer,
             sendMessage,
             setInput,
           }}
@@ -1081,6 +1108,14 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+      /**
+       * Header label for the reasoning panel. Defaults to "Reasoning".
+       */
+      reasoningTitleText?: string;
+      /**
+       * Accessible label for the reasoning panel disclosure toggle.
+       */
+      reasoningToggleLabelText?: string;
     }>;
 
     /**
@@ -1222,6 +1257,29 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * Disable validation that requires either `chatTrigger` or AI mode.
    */
   disableTriggerValidation?: boolean;
+
+  /**
+   * Render `reasoning` message parts (extended thinking / server-side
+   * reasoning summaries) via the reasoning panel. Off by default — enable it
+   * when the backend emits reasoning parts and you want to surface them.
+   */
+  showReasoning?: boolean;
+
+  /**
+   * Visibility strategy for the reasoning panel.
+   * - `collapsed` (default): closed, user can expand.
+   * - `expanded`: always open.
+   * - `auto`: open while streaming, collapsible afterwards.
+   * - `hidden`: never render reasoning even if parts exist.
+   */
+  reasoningVisibility?: ChatMessageReasoningVisibility;
+
+  /**
+   * Override the substitute-label computation for the live loader caption
+   * (the "Searching the catalogue…" text shown while the model thinks).
+   * Defaults to the built-in heuristic summarizer.
+   */
+  reasoningSummarizer?: ReasoningSummarizer;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1247,6 +1305,9 @@ export default (function chat<
     tools: userTools,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning = false,
+    reasoningVisibility,
+    reasoningSummarizer,
     ...options
   } = widgetParams || {};
 
@@ -1281,6 +1342,9 @@ export default (function chat<
     renderState: {},
     templates,
     tools,
+    showReasoning,
+    reasoningVisibility,
+    reasoningSummarizer,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>

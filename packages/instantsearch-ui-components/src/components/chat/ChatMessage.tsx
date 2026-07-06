@@ -4,6 +4,12 @@ import { compiler } from 'markdown-to-jsx';
 import { cx, startsWith } from '../../lib';
 import { createButtonComponent } from '../Button';
 
+import {
+  createChatMessageReasoningComponent,
+  type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningTranslations,
+  type ChatMessageReasoningVisibility,
+} from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
@@ -146,6 +152,30 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   suggestionsElement?: VNode;
   /**
+   * Whether to render `reasoning` UI parts via `<ChatMessageReasoning>`.
+   * Off by default - enable explicitly when the backend emits reasoning
+   * summaries / extended thinking and you want to surface them.
+   */
+  showReasoning?: boolean;
+  /**
+   * Visibility strategy for the reasoning panel.
+   * - `collapsed` (default): closed, user can expand.
+   * - `expanded`: always open.
+   * - `auto`: open while streaming, collapsible afterwards.
+   * - `hidden`: do not render reasoning even if parts exist.
+   */
+  reasoningVisibility?: ChatMessageReasoningVisibility;
+  /**
+   * Injectable strings for the reasoning panel (title, toggle label).
+   * Forwarded to `<ChatMessageReasoning>`.
+   */
+  reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
+  /**
+   * Optional class names for the reasoning panel. Forwarded to
+   * `<ChatMessageReasoning>`.
+   */
+  reasoningClassNames?: Partial<ChatMessageReasoningClassNames>;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -169,8 +199,15 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
-export function createChatMessageComponent({ createElement }: Renderer) {
+export function createChatMessageComponent({
+  createElement,
+  Fragment,
+}: Renderer) {
   const Button = createButtonComponent({ createElement });
+  const ChatMessageReasoning = createChatMessageReasoningComponent({
+    createElement,
+    Fragment,
+  });
 
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
@@ -191,6 +228,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       onClose,
       translations: userTranslations,
       suggestionsElement,
+      showReasoning = false,
+      reasoningVisibility = 'collapsed',
+      reasoningTranslations,
+      reasoningClassNames,
       parseMarkdown = true,
       ...props
     } = userProps;
@@ -222,12 +263,31 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       footer: cx('ais-ChatMessage-footer', classNames.footer),
     };
 
+    const firstReasoningIndex = showReasoning
+      ? message.parts.findIndex((p) => p.type === 'reasoning')
+      : -1;
+
     function renderMessagePart(
       part: ChatMessageBase['parts'][number],
       index: number
     ) {
       if (part.type === 'step-start') {
         return null;
+      }
+      if (part.type === 'reasoning') {
+        if (!showReasoning) return null;
+        // Render one reasoning panel total, anchored at the first reasoning
+        // part. Subsequent reasoning parts are absorbed by that panel.
+        if (index !== firstReasoningIndex) return null;
+        return (
+          <ChatMessageReasoning
+            key={`${message.id}-reasoning`}
+            message={message}
+            visibility={reasoningVisibility}
+            translations={reasoningTranslations}
+            classNames={reasoningClassNames}
+          />
+        );
       }
       if (part.type === 'text') {
         // Back-compat shim for sessions started before the move from a

@@ -37,6 +37,8 @@ import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
+  ChatMessageReasoningVisibility,
+  ReasoningSummarizer,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -150,11 +152,26 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
+    /**
+     * Render `reasoning` message parts (extended thinking / server-side
+     * reasoning summaries) via the reasoning panel. Off by default.
+     */
+    showReasoning?: boolean;
+    /**
+     * Visibility strategy for the reasoning panel. Default: `collapsed`.
+     */
+    reasoningVisibility?: ChatMessageReasoningVisibility;
+    /**
+     * Override the substitute-label computation for the live loader caption
+     * (the "Searching the catalogue…" text shown while the model thinks).
+     */
+    reasoningSummarizer?: ReasoningSummarizer;
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
       message: ChatUiProps['messagesProps']['messageTranslations'];
       messages: ChatUiProps['messagesProps']['translations'];
+      reasoning: ChatUiProps['messagesProps']['reasoningTranslations'];
     }>;
   };
 
@@ -197,6 +214,9 @@ function ChatInner<
     title,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning,
+    reasoningVisibility,
+    reasoningSummarizer,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -206,6 +226,7 @@ function ChatInner<
     header: headerTranslations,
     message: messageTranslations,
     messages: messagesTranslations,
+    reasoning: reasoningTranslations,
   } = translations;
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
@@ -353,6 +374,10 @@ function ChatInner<
         },
         translations: messagesTranslations,
         messageTranslations,
+        reasoningTranslations,
+        showReasoning,
+        reasoningVisibility,
+        reasoningSummarizer,
         ...messagesProps,
         error,
       }}
