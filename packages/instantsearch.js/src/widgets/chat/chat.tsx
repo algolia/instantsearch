@@ -850,10 +850,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const reasoningTranslations: Partial<ChatMessageReasoningTranslations> =
       getDefinedProperties({
-        thinkingLabel: templates.messages?.reasoningThinkingLabelText,
+        title: templates.messages?.reasoningTitleText,
         toggleLabel: templates.messages?.reasoningToggleLabelText,
-        elapsedPrefix: templates.messages?.reasoningElapsedPrefixText,
-        elapsedSuffix: templates.messages?.reasoningElapsedSuffixText,
       });
 
     assistantMessageTemplateRef.current = prepareTemplateProps({
@@ -1111,22 +1109,13 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        */
       regenerateLabelText?: string;
       /**
-       * Fallback header label for the reasoning panel, shown when the
-       * summarizer produces no substitute label. Defaults to "Thinking…".
+       * Header label for the reasoning panel. Defaults to "Reasoning".
        */
-      reasoningThinkingLabelText?: string;
+      reasoningTitleText?: string;
       /**
-       * Accessible label for the reasoning panel toggle button.
+       * Accessible label for the reasoning panel disclosure toggle.
        */
       reasoningToggleLabelText?: string;
-      /**
-       * Prefix shown before the reasoning elapsed time, e.g. "Thought for".
-       */
-      reasoningElapsedPrefixText?: string;
-      /**
-       * Suffix shown after the reasoning elapsed time, e.g. "s".
-       */
-      reasoningElapsedSuffixText?: string;
     }>;
 
     /**

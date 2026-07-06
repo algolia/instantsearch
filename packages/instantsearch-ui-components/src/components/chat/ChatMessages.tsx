@@ -335,7 +335,6 @@ function createDefaultMessageComponent<
     suggestionsElement,
     showReasoning,
     reasoningVisibility,
-    reasoningSummarizer,
     reasoningTranslations,
     reasoningClassNames,
   }: {
@@ -359,7 +358,6 @@ function createDefaultMessageComponent<
     suggestionsElement?: VNode;
     showReasoning?: boolean;
     reasoningVisibility?: ChatMessageReasoningVisibility;
-    reasoningSummarizer?: ReasoningSummarizer;
     reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
     reasoningClassNames?: Partial<ChatMessageReasoningClassNames>;
   }) {
@@ -448,7 +446,6 @@ function createDefaultMessageComponent<
         suggestionsElement={suggestionsElement}
         showReasoning={showReasoning}
         reasoningVisibility={reasoningVisibility}
-        reasoningSummarizer={reasoningSummarizer}
         reasoningTranslations={reasoningTranslations}
         reasoningClassNames={reasoningClassNames}
         {...messageProps}
@@ -515,7 +512,7 @@ export function createChatMessagesComponent({
       onFeedback,
       feedbackState,
       showReasoning = false,
-      reasoningVisibility = 'auto',
+      reasoningVisibility = 'collapsed',
       reasoningSummarizer,
       reasoningTranslations,
       reasoningClassNames,
@@ -634,7 +631,6 @@ export function createChatMessagesComponent({
                 messageTranslations={messageTranslations}
                 showReasoning={showReasoning}
                 reasoningVisibility={reasoningVisibility}
-                reasoningSummarizer={reasoningSummarizer}
                 reasoningTranslations={reasoningTranslations}
                 reasoningClassNames={reasoningClassNames}
                 suggestionsElement={

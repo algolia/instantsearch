@@ -39,13 +39,31 @@ describe('ChatMessageReasoning', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test('renders the reasoning body text', () => {
+  test('renders a collapsible disclosure with the default "Reasoning" title', () => {
+    const { container } = render(
+      <ChatMessageReasoning
+        message={messageWith([{ type: 'reasoning', text: 'comparing options' }])}
+      />
+    );
+    const details = container.querySelector('details.ais-ChatMessageReasoning');
+    expect(details).toBeInTheDocument();
+    // Collapsed by default.
+    expect(details).not.toHaveAttribute('open');
+    expect(
+      container.querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent('Reasoning');
+    // Brain icon is present.
+    expect(
+      container.querySelector('.ais-ChatMessageReasoning-icon svg')
+    ).toBeInTheDocument();
+  });
+
+  test('renders the raw reasoning body text', () => {
     const { container } = render(
       <ChatMessageReasoning
         message={messageWith([
           { type: 'reasoning', text: 'comparing the options' },
         ])}
-        visibility="expanded"
       />
     );
     expect(
@@ -53,77 +71,56 @@ describe('ChatMessageReasoning', () => {
     ).toHaveTextContent('comparing the options');
   });
 
-  test('accepts an injectable toggle label and elapsed time strings', () => {
-    const { getByRole, getByText } = render(
+  test('is open when visibility is expanded', () => {
+    const { container } = render(
+      <ChatMessageReasoning
+        message={messageWith([{ type: 'reasoning', text: 'hello' }])}
+        visibility="expanded"
+      />
+    );
+    expect(
+      container.querySelector('.ais-ChatMessageReasoning')
+    ).toHaveAttribute('open');
+  });
+
+  test('is open while streaming under the auto strategy', () => {
+    const { container } = render(
+      <ChatMessageReasoning
+        message={messageWith([
+          { type: 'reasoning', text: 'hello', state: 'streaming' },
+        ])}
+        visibility="auto"
+      />
+    );
+    const details = container.querySelector('.ais-ChatMessageReasoning');
+    expect(details).toHaveAttribute('open');
+    expect(details).toHaveClass('ais-ChatMessageReasoning--streaming');
+  });
+
+  test('accepts injectable title and toggle label', () => {
+    const { container, getByLabelText } = render(
       <ChatMessageReasoning
         message={messageWith([{ type: 'reasoning', text: 'thinking' }])}
-        elapsedMs={2500}
         translations={{
+          title: 'Raisonnement',
           toggleLabel: 'Basculer le raisonnement',
-          elapsedPrefix: 'Réflexion pendant',
-          elapsedSuffix: 'secondes',
         }}
       />
     );
     expect(
-      getByRole('button', { name: 'Basculer le raisonnement' })
-    ).toBeInTheDocument();
-    expect(getByText(/Réflexion pendant/)).toBeInTheDocument();
-    expect(getByText(/secondes/)).toBeInTheDocument();
-  });
-
-  test('falls back to the injectable thinking label when the summarizer returns no label', () => {
-    const { getByText } = render(
-      <ChatMessageReasoning
-        message={messageWith([{ type: 'reasoning', text: 'thinking' }])}
-        summarizer={() => ({ label: '', category: 'thinking' })}
-        translations={{ thinkingLabel: 'Réflexion en cours' }}
-      />
-    );
-    expect(getByText('Réflexion en cours')).toBeInTheDocument();
+      container.querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent('Raisonnement');
+    expect(getByLabelText('Basculer le raisonnement')).toBeInTheDocument();
   });
 
   test('applies injectable class names', () => {
     const { container } = render(
       <ChatMessageReasoning
         message={messageWith([{ type: 'reasoning', text: 'hello' }])}
-        visibility="expanded"
         classNames={{ root: 'my-root', text: 'my-text' }}
       />
     );
     expect(container.querySelector('.my-root')).toBeInTheDocument();
     expect(container.querySelector('.my-text')).toBeInTheDocument();
-  });
-
-  test('redacts the body when the summarizer flags it', () => {
-    const { getByText, queryByText } = render(
-      <ChatMessageReasoning
-        message={messageWith([
-          {
-            type: 'reasoning',
-            text: 'the api_key is sk-01234567890123456789',
-            state: 'streaming',
-          },
-        ])}
-        visibility="expanded"
-      />
-    );
-    expect(getByText('(reasoning redacted for privacy)')).toBeInTheDocument();
-    expect(queryByText(/sk-01234567890123456789/)).not.toBeInTheDocument();
-  });
-
-  test('uses a custom summarizer when provided', () => {
-    const summarizer = jest.fn(() => ({
-      label: 'Custom label',
-      category: 'thinking' as const,
-    }));
-    const { getByText } = render(
-      <ChatMessageReasoning
-        message={messageWith([{ type: 'reasoning', text: 'anything' }])}
-        summarizer={summarizer}
-      />
-    );
-    expect(summarizer).toHaveBeenCalled();
-    expect(getByText('Custom label')).toBeInTheDocument();
   });
 });

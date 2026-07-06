@@ -1,26 +1,37 @@
+// Reasoning disclosure — visually aligned with the Agent Studio dashboard
+// (Satellite `ChatContextAccordion`): a bordered, collapsible panel with a
+// brain icon, a static "Reasoning" caption that pulses while streaming, a
+// chevron that rotates on open, and a muted body holding the raw reasoning.
 .ais-ChatMessageReasoning {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--ais-spacing) * 0.25);
   margin-block-end: calc(var(--ais-spacing) * 0.5);
-  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
+  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.25);
   border-radius: var(--ais-border-radius-md);
-  background-color: rgba(var(--ais-muted-color-rgb), 0.04);
-  font-size: calc(var(--ais-spacing) * 0.8125);
-  color: rgba(var(--ais-text-color-rgb), 0.85);
+  background-color: var(--ais-background-color);
   overflow: hidden;
 }
 
 .ais-ChatMessageReasoning-header {
-  all: unset;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: calc(var(--ais-spacing) * 0.5);
+  gap: calc(var(--ais-spacing) * 0.375);
   width: 100%;
-  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 0.75);
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) * 0.5);
   cursor: pointer;
-  font-weight: var(--ais-font-weight-medium);
+  list-style: none;
+  user-select: none;
+
+  // Remove the native disclosure triangle across engines.
+  &::-webkit-details-marker {
+    display: none;
+  }
+  &::marker {
+    content: '';
+  }
+
+  &:hover {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.06);
+  }
 
   &:focus-visible {
     outline: 2px solid rgba(var(--ais-primary-color-rgb), 0.5);
@@ -30,9 +41,9 @@
 
 .ais-ChatMessageReasoning-icon {
   display: inline-flex;
-  width: calc(var(--ais-icon-size) * 0.85);
-  height: calc(var(--ais-icon-size) * 0.85);
-  color: rgba(var(--ais-primary-color-rgb), 0.85);
+  width: calc(var(--ais-icon-size) * 0.8);
+  height: calc(var(--ais-icon-size) * 0.8);
+  color: rgba(var(--ais-muted-color-rgb), 0.9);
   flex-shrink: 0;
 
   svg {
@@ -41,20 +52,18 @@
   }
 }
 
-.ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-icon {
-  animation: ais-reasoning-pulse 1.6s ease-in-out infinite;
-}
-
 .ais-ChatMessageReasoning-label {
   flex: 1;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: rgba(var(--ais-muted-color-rgb), 0.95);
+  font-size: calc(var(--ais-spacing) * 0.8125);
 }
 
-// Reuse the loader's text shimmer while streaming - it tells the user the
-// label is "live" and not a stale title.
+// While the model is still emitting this reasoning, run the same shimmer the
+// loader caption uses so the label reads as "live".
 .ais-ChatMessageReasoning--streaming .ais-ChatMessageReasoning-label {
   text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
@@ -75,17 +84,10 @@
   animation: ais-chat-loader-text 3s linear infinite;
 }
 
-.ais-ChatMessageReasoning-timer {
-  flex-shrink: 0;
-  color: rgba(var(--ais-muted-color-rgb), 0.9);
-  font-variant-numeric: tabular-nums;
-  font-size: calc(var(--ais-spacing) * 0.75);
-}
-
 .ais-ChatMessageReasoning-chevron {
   display: inline-flex;
-  width: calc(var(--ais-icon-size) * 0.7);
-  height: calc(var(--ais-icon-size) * 0.7);
+  width: calc(var(--ais-icon-size) * 0.85);
+  height: calc(var(--ais-icon-size) * 0.85);
   color: rgba(var(--ais-muted-color-rgb), 0.9);
   transition: transform var(--ais-transition-duration)
     var(--ais-transition-timing-function);
@@ -97,50 +99,36 @@
   }
 }
 
-.ais-ChatMessageReasoning--open .ais-ChatMessageReasoning-chevron {
+// `<details>` reflects the open state natively, so the chevron rotates on user
+// toggle with no JS involved.
+.ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-chevron {
   transform: rotate(180deg);
 }
 
 .ais-ChatMessageReasoning-body {
-  padding: 0 calc(var(--ais-spacing) * 0.75)
-    calc(var(--ais-spacing) * 0.75) calc(var(--ais-spacing) * 0.75);
-  border-block-start: 1px solid rgba(var(--ais-muted-color-rgb), 0.15);
-  color: rgba(var(--ais-text-color-rgb), 0.6);
+  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 0.75);
+  border-block-start: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.06);
+  color: rgba(var(--ais-text-color-rgb), 0.7);
+  font-size: calc(var(--ais-spacing) * 0.8125);
   line-height: 1.5;
-  font-style: italic;
-  max-height: 18rem;
+  max-height: 9rem;
   overflow-y: auto;
+}
 
-  p {
-    margin: calc(var(--ais-spacing) * 0.5) 0 0 0;
+.ais-ChatMessageReasoning-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 
-    &:first-child {
-      margin-block-start: calc(var(--ais-spacing) * 0.5);
-    }
-
-    animation: ais-reasoning-line-in 320ms ease-out;
+  & + & {
+    margin-block-start: calc(var(--ais-spacing) * 0.5);
   }
 }
 
-.ais-ChatMessageReasoning[data-state='closed'] .ais-ChatMessageReasoning-body {
-  display: none;
-}
-
-@keyframes ais-reasoning-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.55; transform: scale(0.9); }
-}
-
-@keyframes ais-reasoning-line-in {
-  from { opacity: 0; transform: translateY(2px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .ais-ChatMessageReasoning-icon,
   .ais-ChatMessageReasoning-label,
-  .ais-ChatMessageReasoning-chevron,
-  .ais-ChatMessageReasoning-body p {
+  .ais-ChatMessageReasoning-chevron {
     animation: none !important;
     transition: none !important;
   }

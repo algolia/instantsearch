@@ -386,6 +386,7 @@ describe('chat', () => {
           messages: reasoningMessages,
           templates: {
             messages: {
+              reasoningTitleText: 'Raisonnement',
               reasoningToggleLabelText: 'Basculer le raisonnement',
             },
           },
@@ -396,8 +397,11 @@ describe('chat', () => {
       await wait(0);
 
       expect(
-        screen.getByRole('button', { name: 'Basculer le raisonnement' })
-      ).toBeInTheDocument();
+        container.querySelector('.ais-ChatMessageReasoning-label')
+      ).toHaveTextContent('Raisonnement');
+      expect(
+        container.querySelector('.ais-ChatMessageReasoning-header')
+      ).toHaveAttribute('aria-label', 'Basculer le raisonnement');
     });
   });
 });

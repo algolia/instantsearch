@@ -12,7 +12,6 @@ import {
 } from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
-import type { ReasoningSummarizer } from '../../lib/utils/reasoning';
 import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -160,20 +159,15 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   showReasoning?: boolean;
   /**
    * Visibility strategy for the reasoning panel.
-   * - `auto` (default): open while streaming, collapse when done.
+   * - `collapsed` (default): closed, user can expand.
    * - `expanded`: always open.
-   * - `collapsed`: always closed.
+   * - `auto`: open while streaming, collapsible afterwards.
    * - `hidden`: do not render reasoning even if parts exist.
    */
   reasoningVisibility?: ChatMessageReasoningVisibility;
   /**
-   * Optional override for the substitute label computation.
-   * @see {@link summarizeReasoning} for the default 3-tier strategy.
-   */
-  reasoningSummarizer?: ReasoningSummarizer;
-  /**
-   * Injectable strings for the reasoning panel (header labels, toggle label,
-   * elapsed time prefix/suffix). Forwarded to `<ChatMessageReasoning>`.
+   * Injectable strings for the reasoning panel (title, toggle label).
+   * Forwarded to `<ChatMessageReasoning>`.
    */
   reasoningTranslations?: Partial<ChatMessageReasoningTranslations>;
   /**
@@ -235,8 +229,7 @@ export function createChatMessageComponent({
       translations: userTranslations,
       suggestionsElement,
       showReasoning = false,
-      reasoningVisibility = 'auto',
-      reasoningSummarizer,
+      reasoningVisibility = 'collapsed',
       reasoningTranslations,
       reasoningClassNames,
       parseMarkdown = true,
@@ -291,7 +284,6 @@ export function createChatMessageComponent({
             key={`${message.id}-reasoning`}
             message={message}
             visibility={reasoningVisibility}
-            summarizer={reasoningSummarizer}
             translations={reasoningTranslations}
             classNames={reasoningClassNames}
           />
