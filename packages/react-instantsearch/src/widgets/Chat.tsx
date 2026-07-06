@@ -158,12 +158,12 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
      */
     showReasoning?: boolean;
     /**
-     * Visibility strategy for the reasoning panel. Default: `auto`.
+     * Visibility strategy for the reasoning panel. Default: `collapsed`.
      */
     reasoningVisibility?: ChatMessageReasoningVisibility;
     /**
-     * Override the substitute-label computation for the reasoning panel and
-     * the live loader caption.
+     * Override the substitute-label computation for the live loader caption
+     * (the "Searching the catalogue…" text shown while the model thinks).
      */
     reasoningSummarizer?: ReasoningSummarizer;
     translations?: Partial<{

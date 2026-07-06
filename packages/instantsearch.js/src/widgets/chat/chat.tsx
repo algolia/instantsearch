@@ -1267,16 +1267,17 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
 
   /**
    * Visibility strategy for the reasoning panel.
-   * - `auto` (default): open while streaming, collapse when done.
+   * - `collapsed` (default): closed, user can expand.
    * - `expanded`: always open.
-   * - `collapsed`: always closed.
+   * - `auto`: open while streaming, collapsible afterwards.
    * - `hidden`: never render reasoning even if parts exist.
    */
   reasoningVisibility?: ChatMessageReasoningVisibility;
 
   /**
-   * Override the substitute-label computation for the reasoning panel and the
-   * live loader caption. Defaults to the built-in heuristic summarizer.
+   * Override the substitute-label computation for the live loader caption
+   * (the "Searching the catalogue…" text shown while the model thinks).
+   * Defaults to the built-in heuristic summarizer.
    */
   reasoningSummarizer?: ReasoningSummarizer;
 };
