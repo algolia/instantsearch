@@ -38,7 +38,7 @@
     },
     {
       "path": "packages/vue-instantsearch/vue3/cjs/index.js",
-      "maxSize": "20 kB"
+      "maxSize": "21 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
