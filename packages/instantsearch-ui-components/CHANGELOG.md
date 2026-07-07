@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.33.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.0...instantsearch-ui-components@0.33.1) (2026-07-07)
+
+**Note:** Version bump only for package instantsearch-ui-components
+
+
+
+
+
 # [0.33.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.31.0...instantsearch-ui-components@0.33.0) (2026-06-30)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-getting-started",
-  "version": "1.70.0",
+  "version": "1.71.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.29.1",
-    "instantsearch-ui-components": "0.33.0",
+    "algoliasearch-helper": "3.29.2",
+    "instantsearch-ui-components": "0.33.1",
     "instantsearch.css": "8.18.0",
-    "instantsearch.js": "4.104.0",
+    "instantsearch.js": "4.105.0",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.26.11"
+    "vue-instantsearch": "4.27.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "2.3.1",
