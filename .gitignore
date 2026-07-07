@@ -16,6 +16,7 @@ build/
 !scripts/build/**
 
 # Generated files
+/architecture-refactor-runs/
 /docs
 /website/algoliasearch-helper-js/*
 /website/examples/*

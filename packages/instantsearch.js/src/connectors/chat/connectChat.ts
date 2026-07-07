@@ -72,17 +72,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
   /**
-   * Whether the chat is in the process of clearing messages.
-   */
-  isClearing: boolean;
-  /**
-   * Clear all messages.
+   * Clear all messages. This is a synchronous, immediate commit; any fade-out
+   * animation before clearing is handled by the view layer.
    */
   clearMessages: () => void;
-  /**
-   * Callback to be called when the clear transition ends.
-   */
-  onClearTransitionEnd: () => void;
   /**
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
@@ -121,18 +114,50 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   'transport'
 >;
 
-export type ChatTransport = {
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
-} & (
+export type ChatAgentRequestOptions = {
+  /**
+   * Query parameters to send with built-in Agent Studio completion requests.
+   */
+  queryParameters?: Record<string, string | number | boolean>;
+  /**
+   * Headers to send with built-in Agent Studio completion requests.
+   */
+  headers?: Record<string, string> | Headers;
+};
+
+export type ChatTransport =
   | {
       agentId: string;
+      transport?: never;
+      /**
+       * Request options to send with built-in Agent Studio completion requests.
+       */
+      requestOptions?: ChatAgentRequestOptions;
       /**
        * Whether to enable feedback (thumbs up/down) on assistant messages.
        */
       feedback?: boolean;
     }
-  | { agentId?: undefined; feedback?: never }
-);
+  | {
+      agentId: string;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: boolean;
+      requestOptions?: never;
+    }
+  | {
+      agentId?: undefined;
+      transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+      feedback?: never;
+      requestOptions?: never;
+    };
+
+export type ChatCustomInstance<TUiMessage extends UIMessage> = {
+  chat: Chat<TUiMessage>;
+  agentId?: undefined;
+  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  feedback?: never;
+  requestOptions?: never;
+};
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -143,7 +168,7 @@ export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
 export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
-  | { chat: Chat<TUiMessage> }
+  | ChatCustomInstance<TUiMessage>
   | ChatInit<TUiMessage>
 ) & {
   /**
@@ -310,12 +335,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
-    let isClearing = false;
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
-    let setIsClearing: (value: boolean) => void;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
     let hasValidatedEntryPoints = false;
 
@@ -364,22 +387,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
-        return;
-      }
       const status = _chatInstance.status;
       if (status === 'submitted' || status === 'streaming') {
         _chatInstance.stop();
       }
-      setIsClearing(true);
-    };
-
-    const onClearTransitionEnd = () => {
+      // Reset the non-reactive state first: `setMessages` and `clearError` emit
+      // ChatState callbacks that synchronously re-render, so they must run last
+      // for that render to see the cleared feedback and rotated conversation id.
+      feedbackState = {};
+      _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
-      _chatInstance.regenerateId();
-      feedbackState = {};
-      setIsClearing(false);
     };
 
     const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
@@ -522,11 +540,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
-        setIsClearing = (value) => {
-          isClearing = value;
-          render();
-        };
-
         setFeedbackState = (messageId, state) => {
           feedbackState = { ...feedbackState, [messageId]: state };
           render();
@@ -662,9 +675,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           focusInput,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
-          isClearing,
           clearMessages,
-          onClearTransitionEnd,
           tools: toolsWithAddToolResult,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,

@@ -137,64 +137,65 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-HierarchicalMenu"
-  >
-    <ul
-      class="ais-HierarchicalMenu-list"
-    >
-      <li
-        class="ais-HierarchicalMenu-item"
-      >
         <div>
-          <a
-            class="ais-HierarchicalMenu-link"
-            href="#"
+          <div
+            class="ais-HierarchicalMenu"
           >
-            <span
-              class="ais-HierarchicalMenu-label"
+            <ul
+              class="ais-HierarchicalMenu-list"
             >
-              Cameras & Camcorders
-            </span>
-            <span
-              class="ais-HierarchicalMenu-count"
+              <li
+                class="ais-HierarchicalMenu-item"
+              >
+                <div>
+                  <a
+                    class="ais-HierarchicalMenu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-HierarchicalMenu-label"
+                    >
+                      Cameras & Camcorders
+                    </span>
+                    <span
+                      class="ais-HierarchicalMenu-count"
+                    >
+                      1,369
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li
+                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+              >
+                <div>
+                  <a
+                    class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+                    href="#"
+                  >
+                    <span
+                      class="ais-HierarchicalMenu-label"
+                    >
+                      Video Games
+                    </span>
+                    <span
+                      class="ais-HierarchicalMenu-count"
+                    >
+                      505
+                    </span>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-HierarchicalMenu-showMore"
             >
-              1,369
-            </span>
-          </a>
+              Show more
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
-      >
-        <div>
-          <a
-            class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
-            href="#"
-          >
-            <span
-              class="ais-HierarchicalMenu-label"
-            >
-              Video Games
-            </span>
-            <span
-              class="ais-HierarchicalMenu-count"
-            >
-              505
-            </span>
-          </a>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-HierarchicalMenu-showMore"
-    >
-      Show more
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const showMoreButton = within(container).getByRole('button');
 
@@ -246,56 +247,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-HierarchicalMenu"
-  >
-    <ul
-      class="ais-HierarchicalMenu-list"
-    >
-      <li
-        class="ais-HierarchicalMenu-item"
-      >
         <div>
-          <a
-            href="#"
-            style="font-weight: normal;"
+          <div
+            class="ais-HierarchicalMenu"
           >
-            <span>
-              Cameras & Camcorders
-               (
-              1369
-              )
-            </span>
-          </a>
+            <ul
+              class="ais-HierarchicalMenu-list"
+            >
+              <li
+                class="ais-HierarchicalMenu-item"
+              >
+                <div>
+                  <a
+                    href="#"
+                    style="font-weight: normal;"
+                  >
+                    <span>
+                      Cameras & Camcorders
+                       (
+                      1369
+                      )
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li
+                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+              >
+                <div>
+                  <a
+                    href="#"
+                    style="font-weight: bold;"
+                  >
+                    <span>
+                      Video Games
+                       (
+                      505
+                      )
+                    </span>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-HierarchicalMenu-showMore"
+            >
+              Show more
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
-      >
-        <div>
-          <a
-            href="#"
-            style="font-weight: bold;"
-          >
-            <span>
-              Video Games
-               (
-              505
-              )
-            </span>
-          </a>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-HierarchicalMenu-showMore"
-    >
-      Show more
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const showMoreButton = within(container).getByRole('button');
 
@@ -351,56 +353,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-HierarchicalMenu"
-  >
-    <ul
-      class="ais-HierarchicalMenu-list"
-    >
-      <li
-        class="ais-HierarchicalMenu-item"
-      >
         <div>
-          <a
-            href="#"
-            style="font-weight: normal;"
+          <div
+            class="ais-HierarchicalMenu"
           >
-            <span>
-              Cameras & Camcorders
-               (
-              1369
-              )
-            </span>
-          </a>
+            <ul
+              class="ais-HierarchicalMenu-list"
+            >
+              <li
+                class="ais-HierarchicalMenu-item"
+              >
+                <div>
+                  <a
+                    href="#"
+                    style="font-weight: normal;"
+                  >
+                    <span>
+                      Cameras & Camcorders
+                       (
+                      1369
+                      )
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li
+                class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
+              >
+                <div>
+                  <a
+                    href="#"
+                    style="font-weight: bold;"
+                  >
+                    <span>
+                      Video Games
+                       (
+                      505
+                      )
+                    </span>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-HierarchicalMenu-showMore"
+            >
+              Show more
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected"
-      >
-        <div>
-          <a
-            href="#"
-            style="font-weight: bold;"
-          >
-            <span>
-              Video Games
-               (
-              505
-              )
-            </span>
-          </a>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-HierarchicalMenu-showMore"
-    >
-      Show more
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const showMoreButton = within(container).getByRole('button');
 

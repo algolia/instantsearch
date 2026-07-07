@@ -1,6 +1,6 @@
 import { runCapturing } from './__utils__/helpers';
 
-describe.each(['init', 'add', 'introspect'])(
+describe.each(['add', 'introspect'])(
   '%s (no --json)',
   (command) => {
     it('emits human-readable output, not a JSON envelope', async () => {

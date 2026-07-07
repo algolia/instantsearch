@@ -859,7 +859,7 @@ export function createOptionsTests(
         ).toBeInTheDocument();
       });
 
-      test('does not show loader during streaming when last part is a tool with output', async () => {
+      test('shows loader during streaming when last part is a tool with output (between tool calls or before text)', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -887,6 +887,9 @@ export function createOptionsTests(
             {
               id: '2',
               role: 'assistant',
+              // Status is still streaming so more events are coming after this
+              // tool resolves (another tool call or text); the loader must
+              // bridge the gap between this finish-step and the next start-step.
               parts: [
                 { type: 'text', text: 'Let me search for that.' },
                 {
@@ -895,6 +898,73 @@ export function createOptionsTests(
                   state: 'output-available',
                   input: {},
                   output: { hits: [] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
+      test('does not show loader during streaming when last part is a tool with streaming input and streamInput is true', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  templates: {
+                    layout: '<div id="tool-content">streaming...</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  layoutComponent: () => (
+                    <div id="tool-content">streaming...</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
                 },
               ],
             },
@@ -1217,6 +1287,93 @@ export function createOptionsTests(
               params: expect.objectContaining({
                 query: 'test',
                 facetFilters: [['brand:Apple'], ['category:Laptops']],
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('applies filters from the MCP search tool `facet_<name>` view all button', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    facet_category: ['Laptops', 'Tablets'],
+                    facet_color: [],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                refinementList: {
+                  brand: ['Samsung', 'Apple'],
+                  category: ['Laptops'],
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [
+                  ['brand:Apple'],
+                  ['category:Laptops', 'category:Tablets'],
+                ],
               }),
             }),
           ])

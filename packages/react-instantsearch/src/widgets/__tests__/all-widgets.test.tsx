@@ -6,8 +6,8 @@ describe('widgets', () => {
   const customExpectedLength: Partial<
     Record<typeof widgets[0]['name'], number>
   > = {
-    // searchbox + isolated index
-    EXPERIMENTAL_Autocomplete: 2,
+    // searchbox only (the isolated index attaches lazily on first focus)
+    EXPERIMENTAL_Autocomplete: 1,
   };
 
   test('renders one widget', () => {

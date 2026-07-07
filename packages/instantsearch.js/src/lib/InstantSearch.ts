@@ -17,6 +17,7 @@ import {
   hydrateRecommendCache,
   hydrateSearchClient,
   noop,
+  now,
   warning,
   setIndexHelperState,
   isIndexWidget,
@@ -253,11 +254,21 @@ class InstantSearch<
    */
   public _serverWaitPromises: Array<Promise<unknown>> = [];
   public _insights: InstantSearchOptions['insights'];
+  /**
+   * The options the instance was created with, kept verbatim so consumers
+   * (e.g. usage events) can introspect the configuration without the class
+   * having to enumerate every option by hand. Typed without the class generics
+   * on purpose: referencing `TUiState`/`TRouteState` here (they sit in
+   * contravariant positions inside `InstantSearchOptions`) would break the
+   * assignability of `InstantSearch<SpecificUiState>` to `InstantSearch`.
+   */
+  public _initialOptions: InstantSearchOptions | null;
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
+  public _createdAt: number = now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */
@@ -386,6 +397,7 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
+    this._initialOptions = options as unknown as InstantSearchOptions;
     this.client = searchClient;
     this.future = future;
     this.insightsClient = insightsClient;
@@ -816,6 +828,10 @@ See documentation: ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.unsubscribe();
     });
+
+    // Cleared after unsubscribe so in-flight readers (e.g. the insights
+    // start-event listener) have detached before the reference goes away.
+    this._initialOptions = null;
   }
 
   public scheduleSearch = defer(() => {
