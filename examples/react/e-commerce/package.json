@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-e-commerce",
-  "version": "100.0.0",
+  "version": "101.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.29.1",
-    "instantsearch-ui-components": "0.33.0",
+    "algoliasearch-helper": "3.29.2",
+    "instantsearch-ui-components": "0.33.1",
     "instantsearch.css": "8.18.0",
-    "instantsearch.js": "4.104.0",
+    "instantsearch.js": "4.105.0",
     "react": "19.0.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.38.0",
-    "react-instantsearch-core": "7.38.0"
+    "react-instantsearch": "7.39.0",
+    "react-instantsearch-core": "7.39.0"
   },
   "devDependencies": {
     "@types/react": "19.0.3",
