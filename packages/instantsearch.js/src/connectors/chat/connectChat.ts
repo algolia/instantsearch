@@ -112,17 +112,8 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
 
 export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   ChatInitAi<TUiMessage>,
-  'transport' | 'persistence'
+  'transport'
 >;
-
-export type ChatPersistence = {
-  /**
-   * Whether to persist and restore messages from sessionStorage.
-   *
-   * @default true
-   */
-  persistence?: boolean;
-};
 
 export type ChatAgentRequestOptions = {
   /**
@@ -176,7 +167,7 @@ export type ApplyFiltersParams = {
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
-  ChatInitWithoutTransport<TUiMessage> & ChatTransport & ChatPersistence;
+  ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
 export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   | ChatCustomInstance<TUiMessage>
