@@ -158,6 +158,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   feedback?: never;
   requestOptions?: never;
+  persistence?: never;
 };
 
 export type ApplyFiltersParams = {

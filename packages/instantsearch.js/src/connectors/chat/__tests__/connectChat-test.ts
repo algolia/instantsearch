@@ -16,7 +16,7 @@ import connectChat from '../connectChat';
 
 import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
-import type { ChatConnectorParams } from '../connectChat';
+import type { ChatConnectorParams, ChatCustomInstance } from '../connectChat';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
@@ -75,6 +75,9 @@ describe('connectChat', () => {
       const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
         params: TParams
       ) => params;
+      const assertChatCustomInstanceParams = (
+        params: ChatCustomInstance<UIMessage>
+      ) => params;
       const customChat = undefined as unknown as Chat<UIMessage>;
 
       const agentParams = assertChatConnectorParams({
@@ -88,6 +91,14 @@ describe('connectChat', () => {
       const legacyAgentWithTransportParams = assertChatConnectorParams({
         agentId: 'agentId',
         transport: { api: 'https://custom.api' },
+      });
+      const agentPersistenceParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const transportPersistenceParams = assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        persistence: false,
       });
 
       // @ts-expect-error requestOptions is only valid with agentId
@@ -115,6 +126,12 @@ describe('connectChat', () => {
         },
       });
 
+      assertChatCustomInstanceParams({
+        chat: customChat,
+        // @ts-expect-error persistence is owned by custom chat instances
+        persistence: false,
+      });
+
       expect(agentParams.requestOptions?.queryParameters).toEqual({
         cache: false,
       });
@@ -125,6 +142,8 @@ describe('connectChat', () => {
         agentId: 'agentId',
         transport: { api: 'https://custom.api' },
       });
+      expect(agentPersistenceParams.persistence).toBe(false);
+      expect(transportPersistenceParams.persistence).toBe(false);
     });
   });
 
@@ -574,6 +593,92 @@ describe('connectChat', () => {
   });
 
   describe('default chat instance', () => {
+    const cacheKey = 'instantsearch-chat-initial-messages';
+
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    it('does not restore messages from sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+
+      expect(getRenderState().messages).toEqual([]);
+    });
+
+    it('does not save messages to sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const storageKey = `${cacheKey}-agentId`;
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const nextMessages: UIMessage[] = [
+        {
+          id: 'next',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Next message' }],
+        },
+      ];
+
+      getRenderState().setMessages(nextMessages);
+
+      expect(sessionStorage.getItem(storageKey)).toBe(
+        JSON.stringify(previousMessages)
+      );
+    });
+
+    it('applies initialMessages when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const initialMessages: UIMessage[] = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+        initialMessages,
+      });
+
+      expect(getRenderState().messages).toEqual(initialMessages);
+    });
+
     it('adds a compatibility layer for Algolia MCP Server search tool', async () => {
       const onSearchToolCall = jest.fn();
 
