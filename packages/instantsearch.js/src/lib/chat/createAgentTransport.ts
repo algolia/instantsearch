@@ -4,6 +4,22 @@ import { getAlgoliaAgent, getAppIdAndApiKey } from '../utils';
 import type { SearchClient, CompositionClient } from '../../types';
 import type { UIMessage } from '../ai-lite';
 
+/**
+ * Request options applied to built-in Agola agent-studio requests (ignored
+ * when a custom `transport` is provided).
+ */
+export type AgentRequestOptions = {
+  /**
+   * Query parameters merged into the completion request URL.
+   */
+  queryParameters?: Record<string, string | number | boolean>;
+  /**
+   * Headers merged into the completion request. The Algolia identity headers
+   * and the `x-algolia-agent` marker always win over same-named keys here.
+   */
+  headers?: Record<string, string> | Headers;
+};
+
 export type CreateAgentTransportOptions = {
   /** The Algolia search client (for credentials extraction). */
   client: SearchClient | CompositionClient;
@@ -22,6 +38,11 @@ export type CreateAgentTransportOptions = {
    * `'page-suggestions'`).
    */
   algoliaAgentSuffix?: string;
+  /**
+   * Persistent query parameters and headers applied to built-in agent-studio
+   * requests (ignored when `transport` is provided).
+   */
+  requestOptions?: AgentRequestOptions;
 };
 
 /**
@@ -49,6 +70,7 @@ export function createAgentTransport<TUIMessage extends UIMessage>({
   agentId,
   transport,
   algoliaAgentSuffix = 'chat',
+  requestOptions,
 }: CreateAgentTransportOptions): DefaultChatTransport<TUIMessage> {
   if (transport) {
     const originalPrepare = transport.prepareSendMessagesRequest;
@@ -100,11 +122,31 @@ export function createAgentTransport<TUIMessage extends UIMessage>({
     );
   }
 
-  const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
+  const createApi = (bypassCache = false) => {
+    const api = new URL(
+      `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions`
+    );
+    const queryParameters: Record<string, string | number | boolean> = {
+      ...requestOptions?.queryParameters,
+      compatibilityMode: 'ai-sdk-5',
+      ...(bypassCache ? { cache: false } : {}),
+    };
+
+    api.search = new URLSearchParams(
+      queryParameters as Record<string, string>
+    ).toString();
+    return api.toString();
+  };
+  const baseApi = createApi();
 
   return new DefaultChatTransport<TUIMessage>({
     api: baseApi,
     headers: {
+      ...(requestOptions?.headers instanceof Headers
+        ? Object.fromEntries(requestOptions.headers.entries())
+        : requestOptions?.headers),
+      // Preserve the required Algolia identity headers and agent marker, even
+      // when requestOptions.headers contains the same keys.
       'x-algolia-application-id': appId,
       'x-algolia-api-key': apiKey,
       'x-algolia-agent': `${getAlgoliaAgent(client)}; ${algoliaAgentSuffix}`,
@@ -112,8 +154,7 @@ export function createAgentTransport<TUIMessage extends UIMessage>({
     prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
       return {
         // Bypass cache when regenerating to ensure fresh responses
-        api:
-          trigger === 'regenerate-message' ? `${baseApi}&cache=false` : baseApi,
+        api: trigger === 'regenerate-message' ? createApi(true) : baseApi,
         body: {
           id,
           messageId,

@@ -157,6 +157,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   feedback?: never;
   requestOptions?: never;
+  persistence?: never;
 };
 
 export type ApplyFiltersParams = {
@@ -438,6 +439,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         agentId: 'agentId' in options ? options.agentId : undefined,
         transport: 'transport' in options ? options.transport : undefined,
         algoliaAgentSuffix: 'chat',
+        requestOptions:
+          'requestOptions' in options ? options.requestOptions : undefined,
       });
 
       if (!transport) {
