@@ -71,7 +71,7 @@ export function createAgentTransport<TUIMessage extends UIMessage>({
   transport,
   algoliaAgentSuffix = 'chat',
   requestOptions,
-}: CreateAgentTransportOptions): DefaultChatTransport<TUIMessage> {
+}: CreateAgentTransportOptions): DefaultChatTransport<TUIMessage> | undefined {
   if (transport) {
     const originalPrepare = transport.prepareSendMessagesRequest;
     return new DefaultChatTransport<TUIMessage>({
@@ -112,7 +112,7 @@ export function createAgentTransport<TUIMessage extends UIMessage>({
   }
 
   if (!agentId) {
-    return undefined as unknown as DefaultChatTransport<TUIMessage>;
+    return undefined;
   }
 
   const [appId, apiKey] = getAppIdAndApiKey(client);

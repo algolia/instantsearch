@@ -64,7 +64,7 @@ export function createChatPromptSuggestionsComponent({
 
     return (
       <div className={cx('ais-ChatPromptSuggestions', classNames.root)}>
-        {isLoading ? (
+        {isLoading && suggestions.length === 0 ? (
           <div
             className={cx(
               'ais-ChatPromptSuggestions-skeleton',
