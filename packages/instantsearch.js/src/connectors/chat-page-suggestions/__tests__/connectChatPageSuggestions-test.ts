@@ -55,10 +55,7 @@ describe('connectChatPageSuggestions', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve(
         jsonResponse({
-          parts: [
-            { type: 'reasoning', text: '' },
-            { type: 'text', text: JSON.stringify(['a', 'b', 'c']) },
-          ],
+          output: { suggestions: ['a', 'b', 'c'] },
         })
       )
     ) as unknown as typeof fetch;
@@ -244,8 +241,9 @@ describe('connectChatPageSuggestions', () => {
       expect(transformHits).toHaveBeenCalledTimes(1);
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;
       const parsed = JSON.parse((init as RequestInit).body as string);
-      const messageText = JSON.parse(parsed.messages[0].parts[0].text);
-      expect(messageText.hitsSample).toEqual([{ id: '1' }]);
+      expect(parsed.task).toBe('algolia_on_page_suggestions');
+      expect(parsed.input.pageType).toBe('plp');
+      expect(parsed.input.hitsSample).toEqual([{ id: '1' }]);
     });
 
     it('when `context` is provided, sends only the context object and skips auto-extraction', async () => {
@@ -272,12 +270,10 @@ describe('connectChatPageSuggestions', () => {
       expect(transformHits).not.toHaveBeenCalled();
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;
       const parsed = JSON.parse((init as RequestInit).body as string);
-      const messageText = JSON.parse(parsed.messages[0].parts[0].text);
-      expect(messageText).not.toHaveProperty('query');
-      expect(messageText).not.toHaveProperty('hitsSample');
-      expect(messageText.pageType).toBe('pdp');
-      expect(messageText.focalProduct).toEqual({ id: '42' });
-      expect(messageText.maxSuggestions).toBe(4);
+      expect(parsed.input).not.toHaveProperty('query');
+      expect(parsed.input).not.toHaveProperty('hitsSample');
+      expect(parsed.input.pageType).toBe('pdp');
+      expect(parsed.input.focalProduct).toEqual({ id: '42' });
     });
 
     it('still fetches when `context` is provided and there are no hits', async () => {
