@@ -279,6 +279,62 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
+    test('defaults the task name to `algolia_on_page_suggestions`', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { agentId: 'test-agent-id' },
+          react: { agentId: 'test-agent-id' },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(fetchMock).toHaveBeenCalled();
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(body.task).toBe('algolia_on_page_suggestions');
+    });
+
+    test('forwards a custom task name to the request payload', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { agentId: 'test-agent-id', task: 'my_custom_task' },
+          react: { agentId: 'test-agent-id', task: 'my_custom_task' },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(fetchMock).toHaveBeenCalled();
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(body.task).toBe('my_custom_task');
+    });
+
     test('applies transformItems to the rendered suggestions', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
