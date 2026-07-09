@@ -194,6 +194,7 @@ export function createChatComponent({
         suggestionsElement={
           suggestionsProps.suggestions?.length || suggestionsProps.isLoading
             ? createElement(SuggestionsComponent || ChatPromptSuggestions, {
+                headerComponent: false,
                 ...suggestionsProps,
                 classNames: classNames.suggestions,
               })

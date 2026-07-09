@@ -7,9 +7,25 @@ import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatPromptSuggestionsClassNames = {
   root?: string | string[];
+  header?: string | string[];
+  headerTitle?: string | string[];
   suggestion?: string | string[];
   skeleton?: string | string[];
   skeletonItem?: string | string[];
+};
+
+export type ChatPromptSuggestionsTranslations = {
+  /**
+   * The title displayed in the header.
+   */
+  headerTitle: string;
+};
+
+export type ChatPromptSuggestionsHeaderComponentProps = {
+  classNames: Partial<
+    Pick<ChatPromptSuggestionsClassNames, 'header' | 'headerTitle'>
+  >;
+  translations: ChatPromptSuggestionsTranslations;
 };
 
 export type ChatPromptSuggestionsOwnProps = ComponentProps<'div'> & {
@@ -36,6 +52,16 @@ export type ChatPromptSuggestionsOwnProps = ComponentProps<'div'> & {
    */
   disabled?: boolean;
   /**
+   * Component to render the header. Set to `false` to disable the header.
+   */
+  headerComponent?:
+    | ((props: ChatPromptSuggestionsHeaderComponentProps) => JSX.Element)
+    | false;
+  /**
+   * Optional translations for the component.
+   */
+  translations?: Partial<ChatPromptSuggestionsTranslations>;
+  /**
    * Optional class names for elements
    */
   classNames?: Partial<ChatPromptSuggestionsClassNames>;
@@ -46,6 +72,26 @@ export function createChatPromptSuggestionsComponent({
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
+  function DefaultHeader({
+    classNames,
+    translations,
+  }: ChatPromptSuggestionsHeaderComponentProps) {
+    return (
+      <div
+        className={cx('ais-ChatPromptSuggestions-header', classNames.header)}
+      >
+        <span
+          className={cx(
+            'ais-ChatPromptSuggestions-headerTitle',
+            classNames.headerTitle
+          )}
+        >
+          {translations.headerTitle}
+        </span>
+      </div>
+    );
+  }
+
   return function ChatPromptSuggestions(
     userProps: ChatPromptSuggestionsOwnProps
   ) {
@@ -55,9 +101,21 @@ export function createChatPromptSuggestionsComponent({
       isLoading = false,
       skeletonCount = 3,
       disabled = false,
+      headerComponent,
+      translations: userTranslations,
       classNames = {},
       ...props
     } = userProps;
+
+    const translations: ChatPromptSuggestionsTranslations = {
+      headerTitle: 'Suggestions',
+      ...userTranslations,
+    };
+
+    const HeaderComponent =
+      headerComponent === false ? null : headerComponent ?? DefaultHeader;
+
+    const hasContent = suggestions.length > 0 || isLoading;
 
     return (
       <div
@@ -68,6 +126,15 @@ export function createChatPromptSuggestionsComponent({
           props.className
         )}
       >
+        {HeaderComponent && hasContent && (
+          <HeaderComponent
+            classNames={{
+              header: classNames.header,
+              headerTitle: classNames.headerTitle,
+            }}
+            translations={translations}
+          />
+        )}
         {isLoading && suggestions.length === 0 ? (
           <div
             className={cx(

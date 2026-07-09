@@ -43,6 +43,93 @@ describe('ChatPromptSuggestions', () => {
     expect(root.title).toBe('hello');
   });
 
+  test('renders the default header when there are suggestions', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={['A', 'B']}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    const header = container.querySelector('.ais-ChatPromptSuggestions-header');
+    expect(header).toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+    ).toHaveTextContent('Suggestions');
+  });
+
+  test('translates the header title', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={['A']}
+        translations={{ headerTitle: 'Ideas' }}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+    ).toHaveTextContent('Ideas');
+  });
+
+  test('renders the default header while loading', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={[]}
+        isLoading={true}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-header')
+    ).toBeInTheDocument();
+  });
+
+  test('does not render the header when empty and not loading', () => {
+    const { container } = render(
+      <ChatPromptSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-header')
+    ).not.toBeInTheDocument();
+  });
+
+  test('disables the header when headerComponent is false', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={['A']}
+        headerComponent={false}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-header')
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+    ).toHaveLength(1);
+  });
+
+  test('renders a custom header component', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={['A']}
+        headerComponent={() => <div className="custom-header">Custom</div>}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatPromptSuggestions-header')
+    ).not.toBeInTheDocument();
+    const custom = container.querySelector('.custom-header');
+    expect(custom).toBeInTheDocument();
+    expect(custom).toHaveTextContent('Custom');
+  });
+
   test('renders the suggestion pills', () => {
     const { container } = render(
       <ChatPromptSuggestions

@@ -98,6 +98,14 @@ export function createOptionsTests(
         document.querySelector('.ais-ChatPromptSuggestions')
       ).toBeInTheDocument();
 
+      // The default header renders above the pills.
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-header')
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+      ).toHaveTextContent('Suggestions');
+
       const pills = document.querySelectorAll(
         '.ais-ChatPromptSuggestions-suggestion'
       );

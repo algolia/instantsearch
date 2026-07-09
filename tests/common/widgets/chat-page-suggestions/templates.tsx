@@ -87,5 +87,99 @@ export function createTemplatesTests(
         'Custom layout: Suggestion A, Suggestion B, Suggestion C'
       );
     });
+
+    test('replaces the default header with a custom one', async () => {
+      const searchClient = createResultsClient();
+      mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            templates: {
+              header: () => 'Ask me anything',
+            },
+          },
+          react: {
+            agentId: 'test-agent-id',
+            headerComponent: () => <div>Ask me anything</div>,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      // The default header is replaced, but the pills still render.
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-header')
+      ).toBeNull();
+      expect(document.body.textContent).toContain('Ask me anything');
+      expect(
+        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      ).toHaveLength(SUGGESTIONS.length);
+    });
+
+    test('translates the header title', async () => {
+      const searchClient = createResultsClient();
+      mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            translations: { headerTitle: 'Ideas' },
+          },
+          react: {
+            agentId: 'test-agent-id',
+            translations: { headerTitle: 'Ideas' },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+      ).toHaveTextContent('Ideas');
+    });
+
+    test('disables the header', async () => {
+      const searchClient = createResultsClient();
+      mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            templates: { header: false },
+          },
+          react: {
+            agentId: 'test-agent-id',
+            headerComponent: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-header')
+      ).toBeNull();
+      expect(
+        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      ).toHaveLength(SUGGESTIONS.length);
+    });
   });
 }

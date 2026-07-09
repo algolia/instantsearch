@@ -7,6 +7,18 @@
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
+.ais-ChatPromptSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ChatPromptSuggestions-headerTitle {
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
 .ais-ChatPromptSuggestions-suggestion {
   font-size: revert;
   line-height: var(--ais-spacing);

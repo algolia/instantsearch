@@ -15,7 +15,11 @@ import type {
   ChatPageSuggestionsWidgetDescription,
 } from '../../connectors/chat-page-suggestions/connectChatPageSuggestions';
 import type { WidgetFactory, Renderer } from '../../types';
-import type { ChatPromptSuggestionsClassNames } from 'instantsearch-ui-components';
+import type {
+  ChatPromptSuggestionsClassNames,
+  ChatPromptSuggestionsHeaderComponentProps,
+  ChatPromptSuggestionsTranslations,
+} from 'instantsearch-ui-components';
 import type { ComponentChildren } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -50,6 +54,12 @@ export type ChatPageSuggestionsTemplates = {
   layout?: (
     props: ChatPageSuggestionsLayoutTemplateProps
   ) => ComponentChildren;
+  /**
+   * Replaces the default header. Set to `false` to disable the header.
+   */
+  header?:
+    | ((props: ChatPromptSuggestionsHeaderComponentProps) => ComponentChildren)
+    | false;
 };
 
 type ChatPageSuggestionsWidgetParams = {
@@ -59,6 +69,8 @@ type ChatPageSuggestionsWidgetParams = {
   cssClasses?: ChatPageSuggestionsCSSClasses;
   /** Custom templates. */
   templates?: ChatPageSuggestionsTemplates;
+  /** Translations for the widget. */
+  translations?: Partial<ChatPromptSuggestionsTranslations>;
   /**
    * Override the default click behavior (handoff to the chat widget). Receives
    * the prompt and a `sendToChat` callback you can use to fall through to the
@@ -83,11 +95,13 @@ const createRenderer =
     containerNode,
     cssClasses,
     templates,
+    translations,
     onSuggestionClickOverride,
   }: {
     containerNode: HTMLElement;
     cssClasses: ChatPageSuggestionsCSSClasses;
     templates?: ChatPageSuggestionsTemplates;
+    translations?: Partial<ChatPromptSuggestionsTranslations>;
     onSuggestionClickOverride?: ChatPageSuggestionsWidgetParams['onSuggestionClick'];
   }): Renderer<
     ChatPageSuggestionsRenderState,
@@ -121,6 +135,16 @@ const createRenderer =
       return;
     }
 
+    let headerComponent;
+    if (templates?.header === false) {
+      headerComponent = false as const;
+    } else if (templates?.header) {
+      const headerTemplate = templates.header;
+      headerComponent = (headerProps: ChatPromptSuggestionsHeaderComponentProps) => (
+        <Fragment>{headerTemplate(headerProps)}</Fragment>
+      );
+    }
+
     render(
       <ChatPromptSuggestions
         classNames={cssClasses}
@@ -128,6 +152,8 @@ const createRenderer =
         isLoading={isLoading}
         onSuggestionClick={handleClick}
         disabled={isChatBusy}
+        headerComponent={headerComponent}
+        translations={translations}
       />,
       containerNode
     );
@@ -141,6 +167,7 @@ export default (function chatPageSuggestions(
     container,
     cssClasses = {},
     templates,
+    translations,
     onSuggestionClick: onSuggestionClickOverride,
     ...connectorParams
   } = widgetParams || {};
@@ -155,6 +182,7 @@ export default (function chatPageSuggestions(
     containerNode,
     cssClasses,
     templates,
+    translations,
     onSuggestionClickOverride,
   });
 
