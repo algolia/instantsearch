@@ -1,4 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { Hit } from 'instantsearch.js';
 import React from 'react';
 import {
   Configure,
@@ -11,15 +12,12 @@ import {
   TrendingItems,
   Carousel,
   Chat,
-  ChatPageSuggestions,
   ChatTrigger,
   FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
-
-import type { Hit } from 'instantsearch.js';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -77,12 +75,6 @@ export function App() {
                   agentId="3123062d-d611-4d4f-8ab2-4fa39302dc64"
                   attributes={['brand', 'categories']}
                   headerComponent={false}
-                />
-              </Panel>
-              <Panel header="Prompt pills (POC)">
-                <ChatPageSuggestions
-                  maxSuggestions={4}
-                  transport={{ api: '/api/chat-page-suggestions?delay=3000' }}
                 />
               </Panel>
               <Hits hitComponent={HitComponent} />
