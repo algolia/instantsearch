@@ -85,7 +85,6 @@ export function ChatPageSuggestions({
       suggestions={suggestions}
       isLoading={isLoading}
       onSuggestionClick={handleClick}
-      skeletonCount={connectorProps.maxSuggestions}
       disabled={isChatBusy}
     />
   );

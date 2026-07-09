@@ -1,9 +1,5 @@
 import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
-import {
-  buildEndpoint,
-  buildPayload,
-  parseSuggestions,
-} from '../../lib/standalone/chat-page-suggestions';
+import { buildTaskPayload, resolveEndpoint } from '../../lib/tasks';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -14,7 +10,7 @@ import {
   warning,
 } from '../../lib/utils';
 
-import type { ChatPageSuggestionsTransport } from '../../lib/standalone/chat-page-suggestions';
+import type { TaskTransport } from '../../lib/tasks';
 import type {
   Connector,
   Hit,
@@ -37,6 +33,40 @@ const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
 const DEFAULT_SSR_TIMEOUT_MS = 150;
 
+/**
+ * The default Algolia-owned task ID for on-page prompt suggestions. Server
+ * config (agent `config.tasks[<id>]`) owns the instructions, input schema, and
+ * output schema; the client only selects the task and supplies `input`.
+ */
+const DEFAULT_TASK_ID = 'algolia_on_page_suggestions';
+
+/**
+ * Page-type discriminator forwarded to the task as `input.pageType`. `'pdp'` /
+ * `'plp'` are the documented cases; any string is accepted since the task's
+ * input schema is server-owned.
+ */
+export type ChatPageSuggestionsPageType = 'pdp' | 'plp' | (string & {});
+
+/**
+ * Extracts the suggestion strings from an Agent Studio `tasks` response.
+ * Expected shape: `{ output: { suggestions: string[] } }`. The server caps the
+ * count via the task's output schema, so we only filter to non-empty strings;
+ * any malformed response yields `[]`.
+ */
+function parseSuggestions(data: unknown): string[] {
+  const suggestions = (
+    data as { output?: { suggestions?: unknown[] } } | null | undefined
+  )?.output?.suggestions;
+
+  if (!Array.isArray(suggestions)) {
+    return [];
+  }
+
+  return suggestions.filter(
+    (s: unknown): s is string => typeof s === 'string' && s.trim().length > 0
+  );
+}
+
 type InstantSearchWithChatStates = InstantSearch & {
   _initialChatStates: Record<string, unknown> | null;
 };
@@ -54,7 +84,11 @@ function isServerRendering(): boolean {
 // rather than firing it twice.
 const serverWaitRegistry = new WeakMap<InstantSearch, Promise<void>>();
 
-export type { ChatPageSuggestionsTransport };
+/**
+ * Custom transport for the page-suggestions task request. Alias of the generic
+ * `TaskTransport` — kept under this name for API stability.
+ */
+export type ChatPageSuggestionsTransport = TaskTransport;
 
 /**
  * Metadata passed to `transformItems`.
@@ -136,10 +170,17 @@ export type ChatPageSuggestionsSource =
 
 export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
   /**
-   * Maximum number of prompt pills to render.
-   * @default 4
+   * The server-owned Agent Studio task to invoke. The task's instructions,
+   * input schema, and output schema live in the agent config, not here.
+   * @default 'algolia_on_page_suggestions'
    */
-  maxSuggestions?: number;
+  task?: string;
+  /**
+   * Page type forwarded to the task as `input.pageType`. Defaults to `'pdp'`
+   * when `context` is provided, otherwise `'plp'`. Override to label the page
+   * explicitly (the backend uses it to pick the right prompt).
+   */
+  pageType?: ChatPageSuggestionsPageType;
   /**
    * Transform the current results' hits before they're forwarded to the agent
    * as context. Useful for trimming payload size (drop big fields) or
@@ -207,7 +248,8 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
 
       const {
         agentId,
-        maxSuggestions = 4,
+        task,
+        pageType,
         transformHits = DEFAULT_TRANSFORM_HITS,
         context,
         transformItems = IDENTITY_TRANSFORM,
@@ -300,17 +342,21 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       const doFetch = (results: SearchResults): Promise<string[]> => {
         const resolvedContext =
           typeof context === 'function' ? context() : context;
+        const resolvedPageType =
+          pageType ?? (resolvedContext ? 'pdp' : 'plp');
         // PDP mode: caller-supplied context replaces auto-extraction.
-        // PLP mode (default): build from the current search state.
-        const input = resolvedContext
-          ? { context: resolvedContext }
+        // PLP mode (default): build the input from the current search state.
+        const input: Record<string, unknown> = resolvedContext
+          ? { pageType: resolvedPageType, ...resolvedContext }
           : {
+              pageType: resolvedPageType,
               query: results.query || '',
               hitsSample: transformHits(results.hits as Hit[]),
             };
-        const finalPayload = buildPayload(input, {
-          maxSuggestions,
-          prepareSendMessagesRequest: transport?.prepareSendMessagesRequest,
+        const finalPayload = buildTaskPayload({
+          task: task ?? DEFAULT_TASK_ID,
+          input,
+          prepareRequest: transport?.prepareSendMessagesRequest,
         });
         return fetch(endpoint, {
           method: 'POST',
@@ -323,7 +369,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
             }
             return response.json();
           })
-          .then((data) => parseSuggestions(data, maxSuggestions));
+          .then((data) => parseSuggestions(data));
       };
 
       const fetchAndRender = (
@@ -492,8 +538,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           searchHelper = helper;
 
           if (transport) {
-            endpoint = transport.api;
-            headers = transport.headers || {};
+            ({ endpoint, headers } = resolveEndpoint({ transport }));
           } else {
             const [appId, apiKey] = getAppIdAndApiKey(
               instantSearchInstance.client
@@ -507,12 +552,12 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
               );
             }
 
-            endpoint = buildEndpoint({ appId, agentId: agentId as string });
-            headers = {
-              'x-algolia-application-id': appId,
-              'x-algolia-api-key': apiKey,
-              'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
-            };
+            ({ endpoint, headers } = resolveEndpoint({
+              appId,
+              apiKey,
+              agentId,
+              algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
+            }));
           }
 
           // Idempotent — `getWidgetRenderState()` may have already hydrated

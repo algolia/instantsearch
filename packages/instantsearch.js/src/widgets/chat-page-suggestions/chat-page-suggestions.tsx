@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { createChatPromptSuggestionsComponent } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { Fragment, h, render } from 'preact';
 
 import connectChatPageSuggestions from '../../connectors/chat-page-suggestions/connectChatPageSuggestions';
 import {
@@ -82,13 +82,11 @@ const createRenderer =
   ({
     containerNode,
     cssClasses,
-    maxSuggestions,
     templates,
     onSuggestionClickOverride,
   }: {
     containerNode: HTMLElement;
     cssClasses: ChatPageSuggestionsCSSClasses;
-    maxSuggestions?: number;
     templates?: ChatPageSuggestionsTemplates;
     onSuggestionClickOverride?: ChatPageSuggestionsWidgetParams['onSuggestionClick'];
   }): Renderer<
@@ -110,14 +108,14 @@ const createRenderer =
 
     if (templates?.layout) {
       render(
-        <fragment>
+        <Fragment>
           {templates.layout({
             suggestions,
             isLoading,
             onSuggestionClick: handleClick,
             isChatBusy,
           })}
-        </fragment>,
+        </Fragment>,
         containerNode
       );
       return;
@@ -129,7 +127,6 @@ const createRenderer =
         suggestions={suggestions}
         isLoading={isLoading}
         onSuggestionClick={handleClick}
-        skeletonCount={maxSuggestions}
         disabled={isChatBusy}
       />,
       containerNode
@@ -157,7 +154,6 @@ export default (function chatPageSuggestions(
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
-    maxSuggestions: connectorParams.maxSuggestions,
     templates,
     onSuggestionClickOverride,
   });

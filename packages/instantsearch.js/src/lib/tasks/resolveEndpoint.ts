@@ -1,18 +1,23 @@
 import { buildEndpoint } from './buildEndpoint';
 
-import type { ChatPageSuggestionsTransport } from './types';
+import type { TaskTransport } from './types';
 
 export type ResolvedEndpoint = {
   endpoint: string;
   headers: Record<string, string>;
-  prepareSendMessagesRequest?: ChatPageSuggestionsTransport['prepareSendMessagesRequest'];
+  prepareSendMessagesRequest?: TaskTransport['prepareSendMessagesRequest'];
 };
 
 export function resolveEndpoint(params: {
-  transport?: ChatPageSuggestionsTransport;
+  transport?: TaskTransport;
   appId?: string;
   apiKey?: string;
   agentId?: string;
+  /**
+   * Optional `x-algolia-agent` identity header. Passed by the in-IS connector
+   * (derived from the search client).
+   */
+  algoliaAgent?: string;
 }): ResolvedEndpoint {
   if (params.transport) {
     return {
@@ -24,15 +29,20 @@ export function resolveEndpoint(params: {
 
   if (!params.appId || !params.apiKey || !params.agentId) {
     throw new Error(
-      '[chat-page-suggestions] Either `transport` or `{ appId, apiKey, agentId }` is required.'
+      '[tasks] Either `transport` or `{ appId, apiKey, agentId }` is required.'
     );
+  }
+
+  const headers: Record<string, string> = {
+    'x-algolia-application-id': params.appId,
+    'x-algolia-api-key': params.apiKey,
+  };
+  if (params.algoliaAgent) {
+    headers['x-algolia-agent'] = params.algoliaAgent;
   }
 
   return {
     endpoint: buildEndpoint({ appId: params.appId, agentId: params.agentId }),
-    headers: {
-      'x-algolia-application-id': params.appId,
-      'x-algolia-api-key': params.apiKey,
-    },
+    headers,
   };
 }
