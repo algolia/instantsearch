@@ -191,13 +191,14 @@ export function createChatComponent({
         error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
-        suggestionsElement={createElement(
-          SuggestionsComponent || ChatPromptSuggestions,
-          {
-            ...suggestionsProps,
-            classNames: classNames.suggestions,
-          }
-        )}
+        suggestionsElement={
+          suggestionsProps.suggestions?.length || suggestionsProps.isLoading
+            ? createElement(SuggestionsComponent || ChatPromptSuggestions, {
+                ...suggestionsProps,
+                classNames: classNames.suggestions,
+              })
+            : undefined
+        }
       />
     );
 

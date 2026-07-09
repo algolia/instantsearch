@@ -232,10 +232,10 @@ class InstantSearch<
   public _initialResults: InitialResults | null;
   /**
    * Snapshot of chat-related widget state produced during SSR, keyed by a
-   * widget-specific id. Value shape is widget-specific (e.g. an array of
-   * `UIMessage`s for chat-page-summary, or `{ suggestions: string[] }` for
-   * chat-page-suggestions). Hydrated on the client so widgets can skip
-   * re-firing their initial agent request after server rendering succeeded.
+   * widget-specific id. Value shape is widget-specific (e.g.
+   * `{ suggestions: string[] }` for chat-page-suggestions). Hydrated on the
+   * client so widgets can skip re-firing their initial agent request after
+   * server rendering succeeded.
    * @internal
    */
   public _initialChatStates: Record<string, unknown> | null;

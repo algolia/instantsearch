@@ -163,7 +163,7 @@ export function createOptionsTests(
       ).toBeNull();
     });
 
-    test('renders nothing when the agent returns no suggestions', async () => {
+    test('renders an empty root when the agent returns no suggestions', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -182,10 +182,15 @@ export function createOptionsTests(
         await wait(DEBOUNCE_MS + 50);
       });
 
-      // The UI component returns `null` when there are no suggestions and it
-      // isn't loading, so no root element is rendered.
+      // The UI component keeps a stable (empty) root element when there are no
+      // suggestions and it isn't loading — no pills, no skeleton.
+      const root = document.querySelector('.ais-ChatPromptSuggestions');
+      expect(root).not.toBeNull();
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions')
+        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      ).toHaveLength(0);
+      expect(
+        document.querySelector('.ais-ChatPromptSuggestions-skeleton')
       ).toBeNull();
     });
 
@@ -207,9 +212,12 @@ export function createOptionsTests(
       });
 
       expect(fetchMock).not.toHaveBeenCalled();
+      // No request fires, but the widget still renders its stable empty root.
+      const root = document.querySelector('.ais-ChatPromptSuggestions');
+      expect(root).not.toBeNull();
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions')
-      ).toBeNull();
+        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      ).toHaveLength(0);
     });
 
     test('sends requests through a custom transport', async () => {

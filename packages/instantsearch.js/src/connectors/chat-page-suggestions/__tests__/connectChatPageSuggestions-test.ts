@@ -266,6 +266,36 @@ describe('connectChatPageSuggestions', () => {
       expect(afterSecond.suggestions).toEqual(['x', 'y']);
     });
 
+    it('does not render after dispose when an in-flight fetch resolves late', async () => {
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      // Hold the fetch open so it resolves only after we dispose.
+      let resolveFetch: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFetch = resolve;
+          })
+      );
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.dispose!(createDisposeOptions({ helper }));
+      const callsAfterDispose = renderFn.mock.calls.length;
+
+      // The late resolution must not trigger a render into the torn-down tree.
+      resolveFetch(jsonResponse({ output: { suggestions: ['x', 'y'] } }));
+      await flush(0);
+      expect(renderFn).toHaveBeenCalledTimes(callsAfterDispose);
+    });
+
     it('applies transformItems to the parsed list with query+results metadata', async () => {
       const renderFn = jest.fn();
       const transform = jest.fn<

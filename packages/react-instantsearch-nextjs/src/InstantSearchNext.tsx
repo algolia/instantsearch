@@ -113,16 +113,20 @@ function ServerOrHydrationProvider({
   const [initialResults] = useState<InitialResults | undefined>(() =>
     safelyRunOnBrowser(({ window }) => window[InstantSearchInitialResults])
   );
-  const initialChatStates = safelyRunOnBrowser(
-    () => window[InstantSearchInitialChatStates]
+  const [initialChatStates] = useState<Record<string, unknown> | undefined>(
+    () =>
+      safelyRunOnBrowser(({ window }) => window[InstantSearchInitialChatStates])
   );
-  // After commit, clear the global so a later <InstantSearchNext> mount —
+  // After commit, clear the globals so a later <InstantSearchNext> mount —
   // typically the destination of an App Router <Link> click — does not
   // recycle this mount's serialized state.
   useEffect(() => {
     safelyRunOnBrowser(({ window }) => {
       if (window[InstantSearchInitialResults] !== undefined) {
         window[InstantSearchInitialResults] = undefined;
+      }
+      if (window[InstantSearchInitialChatStates] !== undefined) {
+        window[InstantSearchInitialChatStates] = undefined;
       }
     });
   }, []);

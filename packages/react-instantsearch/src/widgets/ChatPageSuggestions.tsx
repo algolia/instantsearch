@@ -3,7 +3,7 @@ import React, { createElement, Fragment } from 'react';
 import { useChatPageSuggestions } from 'react-instantsearch-core';
 
 import type {
-  ChatPromptSuggestionsClassNames,
+  ChatPromptSuggestionsOwnProps,
   Pragma,
 } from 'instantsearch-ui-components';
 import type { UseChatPageSuggestionsProps } from 'react-instantsearch-core';
@@ -29,40 +29,55 @@ export type ChatPageSuggestionsOnSuggestionClick = (
   helpers: { sendToChat: (prompt: string) => boolean }
 ) => void;
 
-export type ChatPageSuggestionsProps = UseChatPageSuggestionsProps & {
-  classNames?: Partial<ChatPromptSuggestionsClassNames>;
-  /**
-   * Replaces the default pills layout. Receives the full render state — the
-   * component is responsible for rendering the list, the loading state, and
-   * the click handlers.
-   */
-  layoutComponent?: (
-    props: ChatPageSuggestionsLayoutComponentProps
-  ) => JSX.Element | null;
-  /**
-   * Override the default click behavior (handoff to the chat widget). Receives
-   * the prompt and a `sendToChat` callback you can call to fall through to the
-   * default handoff after running custom logic (analytics, routing, fallback
-   * to a non-InstantSearch chat).
-   */
-  onSuggestionClick?: ChatPageSuggestionsOnSuggestionClick;
-};
+type OwnedUiProps =
+  | 'suggestions'
+  | 'isLoading'
+  | 'onSuggestionClick'
+  | 'disabled';
+
+export type ChatPageSuggestionsProps = Omit<
+  ChatPromptSuggestionsOwnProps,
+  OwnedUiProps
+> &
+  UseChatPageSuggestionsProps & {
+    layoutComponent?: (
+      props: ChatPageSuggestionsLayoutComponentProps
+    ) => JSX.Element | null;
+    onSuggestionClick?: ChatPageSuggestionsOnSuggestionClick;
+  };
 
 export function ChatPageSuggestions({
   classNames = {},
+  skeletonCount,
   layoutComponent: LayoutComponent,
   onSuggestionClick: onSuggestionClickOverride,
-  ...connectorProps
+  // Connector params — forwarded to the hook, not the UI root.
+  agentId,
+  transport,
+  task,
+  pageType,
+  transformHits,
+  context,
+  transformItems,
+  ssrTimeout,
+  ...props
 }: ChatPageSuggestionsProps) {
-  const {
-    suggestions,
-    isLoading,
-    onSuggestionClick,
-    isChatBusy,
-    sendToChat,
-  } = useChatPageSuggestions(connectorProps, {
-    $$widgetType: 'ais.chatPageSuggestions',
-  });
+  const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
+    useChatPageSuggestions(
+      {
+        agentId,
+        transport,
+        task,
+        pageType,
+        transformHits,
+        context,
+        transformItems,
+        ssrTimeout,
+      } as UseChatPageSuggestionsProps,
+      {
+        $$widgetType: 'ais.chatPageSuggestions',
+      }
+    );
 
   const handleClick = onSuggestionClickOverride
     ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
@@ -81,7 +96,9 @@ export function ChatPageSuggestions({
 
   return (
     <ChatPromptSuggestionsUi
+      {...props}
       classNames={classNames}
+      skeletonCount={skeletonCount}
       suggestions={suggestions}
       isLoading={isLoading}
       onSuggestionClick={handleClick}

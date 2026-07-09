@@ -3,7 +3,7 @@
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
-import type { Renderer } from '../../types';
+import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatPromptSuggestionsClassNames = {
   root?: string | string[];
@@ -12,7 +12,7 @@ export type ChatPromptSuggestionsClassNames = {
   skeletonItem?: string | string[];
 };
 
-export type ChatPromptSuggestionsOwnProps = {
+export type ChatPromptSuggestionsOwnProps = ComponentProps<'div'> & {
   /*
    * List of prompt suggestions.
    */
@@ -56,14 +56,18 @@ export function createChatPromptSuggestionsComponent({
       skeletonCount = 3,
       disabled = false,
       classNames = {},
+      ...props
     } = userProps;
 
-    if (suggestions.length === 0 && !isLoading) {
-      return null;
-    }
-
     return (
-      <div className={cx('ais-ChatPromptSuggestions', classNames.root)}>
+      <div
+        {...props}
+        className={cx(
+          'ais-ChatPromptSuggestions',
+          classNames.root,
+          props.className
+        )}
+      >
         {isLoading && suggestions.length === 0 ? (
           <div
             className={cx(

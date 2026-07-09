@@ -278,6 +278,10 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       // immediately overwrite the server snapshot.
       let hydratedFromSnapshot = false;
       let hydrationAttempted = false;
+      // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
+      // the widget is unmounted; this guard stops those late callbacks from
+      // calling `renderFn` into a torn-down container.
+      let disposed = false;
 
       const hydrateFromSnapshot = (
         instantSearchInstance: InstantSearch
@@ -379,6 +383,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         results: SearchResults,
         renderOptions: RenderOptions
       ) => {
+        if (disposed) return;
         // In PLP mode (no caller context) we need hits to send the agent any
         // useful signal. In PDP mode (context provided) the context itself
         // is the signal, so we proceed even with empty hits.
@@ -423,6 +428,9 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           .finally(() => {
             isLoading = false;
             inFlight = false;
+            // The fetch may resolve after the widget was disposed; don't render
+            // into a torn-down container.
+            if (disposed) return;
             renderFn(
               {
                 ...getWidgetRenderState(renderOptions),
@@ -647,6 +655,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         },
 
         dispose() {
+          disposed = true;
           clearTimeout(debounceTimer);
           unmountFn();
         },

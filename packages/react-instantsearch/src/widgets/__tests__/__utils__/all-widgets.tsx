@@ -42,10 +42,6 @@ const NON_COMPONENTS = [
   // the switch below, breaking other cases. Covered by a dedicated test in
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
-  // `ChatPageSuggestions` renders `null` until it has suggestions to show, so
-  // the generic "every widget renders a root element with the given class"
-  // tests don't apply. Covered by dedicated tests.
-  'ChatPageSuggestions',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
@@ -80,6 +76,10 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
+    case 'ChatPageSuggestions': {
+      // The connector requires `agentId` unless a custom `transport` is given.
+      return <widget.Component agentId="test-agent-id" {...props} />;
+    }
     case 'Breadcrumb': {
       return <widget.Component attributes={['']} {...props} />;
     }

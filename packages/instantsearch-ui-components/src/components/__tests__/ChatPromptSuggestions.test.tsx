@@ -13,14 +13,34 @@ describe('ChatPromptSuggestions', () => {
     Fragment,
   });
 
-  test('renders nothing when there are no suggestions and not loading', () => {
+  test('renders an empty root when there are no suggestions and not loading', () => {
     const { container } = render(
       <ChatPromptSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
     );
 
+    const root = container.querySelector('.ais-ChatPromptSuggestions');
+    expect(root).toBeInTheDocument();
+    expect(root).toBeEmptyDOMElement();
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions')
+      container.querySelector('.ais-ChatPromptSuggestions-skeleton')
     ).not.toBeInTheDocument();
+  });
+
+  test('forwards HTML attributes and merges className onto the root', () => {
+    const { container } = render(
+      <ChatPromptSuggestions
+        suggestions={[]}
+        onSuggestionClick={jest.fn()}
+        className="CUSTOM"
+        title="hello"
+      />
+    );
+
+    const root = container.querySelector<HTMLDivElement>(
+      '.ais-ChatPromptSuggestions'
+    )!;
+    expect(root.classList.contains('CUSTOM')).toBe(true);
+    expect(root.title).toBe('hello');
   });
 
   test('renders the suggestion pills', () => {
