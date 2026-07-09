@@ -181,6 +181,91 @@ describe('connectChatPageSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
+    it('refetches when a facet refinement changes even if the query does not', async () => {
+      // Regression: the state signature must be derived from the results' own
+      // state, not a helper captured at init. In React the captured helper's
+      // state does not track live refinements, so reading it made facet
+      // changes (query unchanged) invisible — the pills never refreshed.
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        disjunctiveFacets: ['brand'],
+      });
+      widget.init!(createInitOptions({ helper }));
+
+      const unrefined = new algoliasearchHelper.SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: [{ objectID: '1' }] as any, query: '' }),
+      ]);
+      widget.render!(createRenderOptions({ helper, results: unrefined }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // Same query (''), but the results now carry a facet refinement — this is
+      // what a real search produces after a RefinementList click.
+      const refined = new algoliasearchHelper.SearchResults(
+        helper.state.addDisjunctiveFacetRefinement('brand', 'Apple'),
+        [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }] as any,
+            query: '',
+          }),
+        ]
+      );
+      widget.render!(createRenderOptions({ helper, results: refined }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('clears stale pills and exposes the loading state on every refetch', async () => {
+      // Regression: on a refetch (query/refinement change) the previous pills
+      // must be cleared so the UI's `isLoading && suggestions.length === 0`
+      // skeleton fires. Without clearing, stale pills stay on screen and the
+      // new ones swap in silently — no loading state ever shows after the
+      // first fetch.
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      // First fetch resolves immediately with pills.
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(0);
+      const afterFirst =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterFirst.suggestions).toEqual(['a', 'b', 'c']);
+      expect(afterFirst.isLoading).toBe(false);
+
+      // Hold the second fetch open so we can observe the in-flight render.
+      let resolveSecond: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveSecond = resolve;
+          })
+      );
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'b' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      // Mid-refetch: stale pills gone, skeleton state exposed.
+      const midFlight =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(midFlight.isLoading).toBe(true);
+      expect(midFlight.suggestions).toEqual([]);
+
+      resolveSecond(jsonResponse({ output: { suggestions: ['x', 'y'] } }));
+      await flush(0);
+      const afterSecond =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterSecond.isLoading).toBe(false);
+      expect(afterSecond.suggestions).toEqual(['x', 'y']);
+    });
+
     it('applies transformItems to the parsed list with query+results metadata', async () => {
       const renderFn = jest.fn();
       const transform = jest.fn<

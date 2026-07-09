@@ -272,7 +272,6 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       let inFlight = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
-      let searchHelper: InitOptions['helper'] | null = null;
       let latestRenderOptions: RenderOptions | null = null;
       // Set when SSR seeded suggestions; first post-hydration `render()` skips
       // its fetch (it just seeds the state signature) so the client doesn't
@@ -298,10 +297,14 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
 
       const getStateSignature = (results: SearchResults): string => {
         const query = results.query || '';
-        const refinements = searchHelper
-          ? JSON.stringify(searchHelper.state.facetsRefinements) +
-            JSON.stringify(searchHelper.state.disjunctiveFacetsRefinements) +
-            JSON.stringify(searchHelper.state.hierarchicalFacetsRefinements)
+        // Read refinements from the state that produced *these* results, not a
+        // helper captured at init — in React the captured helper's state does
+        // not track live refinements, so facet changes would be invisible.
+        const state = results._state;
+        const refinements = state
+          ? JSON.stringify(state.facetsRefinements) +
+            JSON.stringify(state.disjunctiveFacetsRefinements) +
+            JSON.stringify(state.hierarchicalFacetsRefinements)
           : '';
         return `${query}|${refinements}`;
       };
@@ -394,6 +397,12 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           return;
         }
 
+        // Clear stale pills so the loading skeleton shows on every refetch
+        // (query/refinement change), not only the initial fetch. The UI
+        // component renders the skeleton when `isLoading && suggestions` is
+        // empty; without this it would keep the previous pills on screen and
+        // swap them silently, so a refetch would never surface a loading state.
+        suggestions = [];
         isLoading = true;
         inFlight = true;
         renderFn(
@@ -534,8 +543,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         $$type: 'ais.chatPageSuggestions',
 
         init(initOptions) {
-          const { instantSearchInstance, helper } = initOptions;
-          searchHelper = helper;
+          const { instantSearchInstance } = initOptions;
 
           if (transport) {
             ({ endpoint, headers } = resolveEndpoint({ transport }));
