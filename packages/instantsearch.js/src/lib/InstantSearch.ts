@@ -233,7 +233,7 @@ class InstantSearch<
   /**
    * Snapshot of chat-related widget state produced during SSR, keyed by a
    * widget-specific id. Value shape is widget-specific (e.g.
-   * `{ suggestions: string[] }` for chat-page-suggestions). Hydrated on the
+   * `{ suggestions: string[] }` for on-page-suggestions). Hydrated on the
    * client so widgets can skip re-firing their initial agent request after
    * server rendering succeeded.
    * @internal

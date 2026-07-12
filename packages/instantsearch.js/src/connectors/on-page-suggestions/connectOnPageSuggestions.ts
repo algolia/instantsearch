@@ -24,28 +24,29 @@ import type { ChatRenderState } from '../chat/connectChat';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'chat-page-suggestions',
+  name: 'on-page-suggestions',
   connector: true,
 });
 
-const RENDER_STATE_KEY = 'chatPageSuggestions' as const;
+const RENDER_STATE_KEY = 'onPageSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
 const DEFAULT_SSR_TIMEOUT_MS = 150;
 
 /**
- * The default Algolia-owned task ID for on-page prompt suggestions. Server
+ * The default Algolia-owned configuration ID for on-page suggestions. Server
  * config (agent `config.tasks[<id>]`) owns the instructions, input schema, and
- * output schema; the client only selects the task and supplies `input`.
+ * output schema; the client only selects the configuration and supplies
+ * `input`. Sent to the backend as the `task` field.
  */
-const DEFAULT_TASK_ID = 'algolia_on_page_suggestions';
+const DEFAULT_CONFIGURATION_ID = 'algolia_on_page_suggestions';
 
 /**
  * Page-type discriminator forwarded to the task as `input.pageType`. `'pdp'` /
  * `'plp'` are the documented cases; any string is accepted since the task's
  * input schema is server-owned.
  */
-export type ChatPageSuggestionsPageType = 'pdp' | 'plp' | (string & {});
+export type OnPageSuggestionsPageType = 'pdp' | 'plp' | (string & {});
 
 /**
  * Extracts the suggestion strings from an Agent Studio `tasks` response.
@@ -71,7 +72,7 @@ type InstantSearchWithChatStates = InstantSearch & {
   _initialChatStates: Record<string, unknown> | null;
 };
 
-type ChatPageSuggestionsSnapshot = {
+type OnPageSuggestionsSnapshot = {
   suggestions: string[];
 };
 
@@ -88,31 +89,31 @@ const serverWaitRegistry = new WeakMap<InstantSearch, Promise<void>>();
  * Custom transport for the page-suggestions task request. Alias of the generic
  * `TaskTransport` — kept under this name for API stability.
  */
-export type ChatPageSuggestionsTransport = TaskTransport;
+export type OnPageSuggestionsTransport = TaskTransport;
 
 /**
  * Metadata passed to `transformItems`.
  */
-export type ChatPageSuggestionsTransformItemsMetadata = {
+export type OnPageSuggestionsTransformItemsMetadata = {
   query: string;
   results: SearchResults | null;
 };
 
 /**
- * Custom `transformItems` signature for `connectChatPageSuggestions`.
+ * Custom `transformItems` signature for `connectOnPageSuggestions`.
  */
-export type ChatPageSuggestionsTransformItems = (
+export type OnPageSuggestionsTransformItems = (
   items: string[],
-  metadata: ChatPageSuggestionsTransformItemsMetadata
+  metadata: OnPageSuggestionsTransformItemsMetadata
 ) => string[];
 
 /**
  * Hit transformer — receives every hit from the current results and returns
  * the subset (or reshaped objects) to forward to the agent as context.
  */
-export type ChatPageSuggestionsTransformHits = (hits: Hit[]) => unknown[];
+export type OnPageSuggestionsTransformHits = (hits: Hit[]) => unknown[];
 
-export type ChatPageSuggestionsRenderState = {
+export type OnPageSuggestionsRenderState = {
   /**
    * Backend-generated prompt strings rendered as clickable pills.
    */
@@ -151,7 +152,7 @@ export type ChatPageSuggestionsRenderState = {
 /**
  * Either `agentId` or a custom `transport` is required.
  */
-export type ChatPageSuggestionsSource =
+export type OnPageSuggestionsSource =
   | {
       /**
        * The ID of the agent configured in the Algolia dashboard.
@@ -164,23 +165,25 @@ export type ChatPageSuggestionsSource =
        * Custom transport configuration. When provided, `agentId` and the
        * Algolia client credentials are ignored.
        */
-      transport: ChatPageSuggestionsTransport;
+      transport: OnPageSuggestionsTransport;
       agentId?: never;
     };
 
-export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
+export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
   /**
-   * The server-owned Agent Studio task to invoke. The task's instructions,
-   * input schema, and output schema live in the agent config, not here.
+   * The server-owned Agent Studio configuration to invoke (displayed as a
+   * configuration in the Dashboard). Its instructions, input schema, and
+   * output schema live in the agent config, not here. Sent to the backend as
+   * the `task` field.
    * @default 'algolia_on_page_suggestions'
    */
-  task?: string;
+  configurationId?: string;
   /**
    * Page type forwarded to the task as `input.pageType`. Defaults to `'pdp'`
    * when `context` is provided, otherwise `'plp'`. Override to label the page
    * explicitly (the backend uses it to pick the right prompt).
    */
-  pageType?: ChatPageSuggestionsPageType;
+  pageType?: OnPageSuggestionsPageType;
   /**
    * Transform the current results' hits before they're forwarded to the agent
    * as context. Useful for trimming payload size (drop big fields) or
@@ -189,7 +192,7 @@ export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
    * Ignored when `context` is provided — in that mode the widget sends only
    * the context object and skips auto-extraction entirely.
    */
-  transformHits?: ChatPageSuggestionsTransformHits;
+  transformHits?: OnPageSuggestionsTransformHits;
   /**
    * Page context sent to the agent. When provided, the widget skips
    * auto-extracting `{ query, hitsSample }` from the current search results
@@ -205,7 +208,7 @@ export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
    * Transform the parsed list before exposing it. Receives the parsed
    * suggestions and `{ query, results }` from the current search.
    */
-  transformItems?: ChatPageSuggestionsTransformItems;
+  transformItems?: OnPageSuggestionsTransformItems;
   /**
    * Maximum time (in ms) the InstantSearch SSR pipeline waits for the agent
    * response before flushing the page. On timeout the server resolves
@@ -215,40 +218,40 @@ export type ChatPageSuggestionsConnectorParams = ChatPageSuggestionsSource & {
   ssrTimeout?: number;
 };
 
-export type ChatPageSuggestionsWidgetDescription = {
-  $$type: 'ais.chatPageSuggestions';
-  renderState: ChatPageSuggestionsRenderState;
+export type OnPageSuggestionsWidgetDescription = {
+  $$type: 'ais.onPageSuggestions';
+  renderState: OnPageSuggestionsRenderState;
   indexRenderState: {
-    chatPageSuggestions: WidgetRenderState<
-      ChatPageSuggestionsRenderState,
-      ChatPageSuggestionsConnectorParams
+    onPageSuggestions: WidgetRenderState<
+      OnPageSuggestionsRenderState,
+      OnPageSuggestionsConnectorParams
     >;
   };
 };
 
-export type ChatPageSuggestionsConnector = Connector<
-  ChatPageSuggestionsWidgetDescription,
-  ChatPageSuggestionsConnectorParams
+export type OnPageSuggestionsConnector = Connector<
+  OnPageSuggestionsWidgetDescription,
+  OnPageSuggestionsConnectorParams
 >;
 
-const DEFAULT_TRANSFORM_HITS: ChatPageSuggestionsTransformHits = (hits) =>
+const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5);
 
-const IDENTITY_TRANSFORM: ChatPageSuggestionsTransformItems = (items) => items;
+const IDENTITY_TRANSFORM: OnPageSuggestionsTransformItems = (items) => items;
 
-const connectChatPageSuggestions: ChatPageSuggestionsConnector =
-  function connectChatPageSuggestions(renderFn, unmountFn = noop) {
+const connectOnPageSuggestions: OnPageSuggestionsConnector =
+  function connectOnPageSuggestions(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
       warning(
         false,
-        'ChatPageSuggestions is not yet stable and will change in the future.'
+        'OnPageSuggestions is not yet stable and will change in the future.'
       );
 
       const {
         agentId,
-        task,
+        configurationId,
         pageType,
         transformHits = DEFAULT_TRANSFORM_HITS,
         context,
@@ -291,7 +294,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
         const states = (instantSearchInstance as InstantSearchWithChatStates)
           ._initialChatStates;
         const snapshot = states?.[RENDER_STATE_KEY] as
-          | ChatPageSuggestionsSnapshot
+          | OnPageSuggestionsSnapshot
           | undefined;
         if (snapshot && Array.isArray(snapshot.suggestions)) {
           suggestions = snapshot.suggestions;
@@ -341,7 +344,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           }
           openChat(chatRenderState, {
             message: prompt,
-            referer: 'page-suggestions',
+            referer: 'on-page-suggestions',
           });
           return true;
         };
@@ -363,7 +366,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
               hitsSample: transformHits(results.hits as Hit[]),
             };
         const finalPayload = buildTaskPayload({
-          task: task ?? DEFAULT_TASK_ID,
+          task: configurationId ?? DEFAULT_CONFIGURATION_ID,
           input,
           prepareRequest: transport?.prepareSendMessagesRequest,
         });
@@ -504,7 +507,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
                 }
                 target._initialChatStates[RENDER_STATE_KEY] = {
                   suggestions: next,
-                } satisfies ChatPageSuggestionsSnapshot;
+                } satisfies OnPageSuggestionsSnapshot;
               })
               .catch(() => {
                 // Swallow — the client will refetch on hydration if the
@@ -521,8 +524,8 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
 
       const getWidgetRenderState = (
         renderOptions: InitOptions | RenderOptions
-      ): Omit<ChatPageSuggestionsRenderState, never> & {
-        widgetParams: ChatPageSuggestionsConnectorParams;
+      ): Omit<OnPageSuggestionsRenderState, never> & {
+        widgetParams: OnPageSuggestionsConnectorParams;
       } => {
         // React's `useConnector` calls this before `init()` runs (via its
         // `useState` initializer). Hydrate the SSR snapshot here so the
@@ -558,7 +561,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
       };
 
       return {
-        $$type: 'ais.chatPageSuggestions',
+        $$type: 'ais.onPageSuggestions',
 
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
@@ -674,7 +677,7 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           renderState,
           renderOptions
         ): IndexRenderState &
-          ChatPageSuggestionsWidgetDescription['indexRenderState'] {
+          OnPageSuggestionsWidgetDescription['indexRenderState'] {
           return {
             ...renderState,
             [RENDER_STATE_KEY]: this.getWidgetRenderState(renderOptions),
@@ -688,4 +691,4 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
     };
   };
 
-export default connectChatPageSuggestions;
+export default connectOnPageSuggestions;

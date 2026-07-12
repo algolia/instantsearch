@@ -5,30 +5,30 @@
 import { render } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
 
-import { createChatPromptSuggestionsComponent } from '../chat/ChatPromptSuggestions';
+import { createOnPageSuggestionsComponent } from '../chat/OnPageSuggestions';
 
-describe('ChatPromptSuggestions', () => {
-  const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
+describe('OnPageSuggestions', () => {
+  const OnPageSuggestions = createOnPageSuggestionsComponent({
     createElement,
     Fragment,
   });
 
   test('renders an empty root when there are no suggestions and not loading', () => {
     const { container } = render(
-      <ChatPromptSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
+      <OnPageSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
     );
 
-    const root = container.querySelector('.ais-ChatPromptSuggestions');
+    const root = container.querySelector('.ais-OnPageSuggestions');
     expect(root).toBeInTheDocument();
     expect(root).toBeEmptyDOMElement();
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-skeleton')
+      container.querySelector('.ais-OnPageSuggestions-skeleton')
     ).not.toBeInTheDocument();
   });
 
   test('forwards HTML attributes and merges className onto the root', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={[]}
         onSuggestionClick={jest.fn()}
         className="CUSTOM"
@@ -37,7 +37,7 @@ describe('ChatPromptSuggestions', () => {
     );
 
     const root = container.querySelector<HTMLDivElement>(
-      '.ais-ChatPromptSuggestions'
+      '.ais-OnPageSuggestions'
     )!;
     expect(root.classList.contains('CUSTOM')).toBe(true);
     expect(root.title).toBe('hello');
@@ -45,22 +45,22 @@ describe('ChatPromptSuggestions', () => {
 
   test('renders the default header when there are suggestions', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A', 'B']}
         onSuggestionClick={jest.fn()}
       />
     );
 
-    const header = container.querySelector('.ais-ChatPromptSuggestions-header');
+    const header = container.querySelector('.ais-OnPageSuggestions-header');
     expect(header).toBeInTheDocument();
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+      container.querySelector('.ais-OnPageSuggestions-headerTitle')
     ).toHaveTextContent('Suggestions');
   });
 
   test('translates the header title', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A']}
         translations={{ headerTitle: 'Ideas' }}
         onSuggestionClick={jest.fn()}
@@ -68,13 +68,13 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+      container.querySelector('.ais-OnPageSuggestions-headerTitle')
     ).toHaveTextContent('Ideas');
   });
 
   test('renders the default header while loading', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={[]}
         isLoading={true}
         onSuggestionClick={jest.fn()}
@@ -82,23 +82,23 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-header')
+      container.querySelector('.ais-OnPageSuggestions-header')
     ).toBeInTheDocument();
   });
 
   test('does not render the header when empty and not loading', () => {
     const { container } = render(
-      <ChatPromptSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
+      <OnPageSuggestions suggestions={[]} onSuggestionClick={jest.fn()} />
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-header')
+      container.querySelector('.ais-OnPageSuggestions-header')
     ).not.toBeInTheDocument();
   });
 
   test('disables the header when headerComponent is false', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A']}
         headerComponent={false}
         onSuggestionClick={jest.fn()}
@@ -106,16 +106,16 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-header')
+      container.querySelector('.ais-OnPageSuggestions-header')
     ).not.toBeInTheDocument();
     expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      container.querySelectorAll('.ais-OnPageSuggestions-suggestion')
     ).toHaveLength(1);
   });
 
   test('renders a custom header component', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A']}
         headerComponent={() => <div className="custom-header">Custom</div>}
         onSuggestionClick={jest.fn()}
@@ -123,7 +123,7 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-header')
+      container.querySelector('.ais-OnPageSuggestions-header')
     ).not.toBeInTheDocument();
     const custom = container.querySelector('.custom-header');
     expect(custom).toBeInTheDocument();
@@ -132,23 +132,23 @@ describe('ChatPromptSuggestions', () => {
 
   test('renders the suggestion pills', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A', 'B']}
         onSuggestionClick={jest.fn()}
       />
     );
 
     expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      container.querySelectorAll('.ais-OnPageSuggestions-suggestion')
     ).toHaveLength(2);
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-skeleton')
+      container.querySelector('.ais-OnPageSuggestions-skeleton')
     ).not.toBeInTheDocument();
   });
 
   test('renders skeletons while loading with no suggestions yet', () => {
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={[]}
         isLoading={true}
         onSuggestionClick={jest.fn()}
@@ -156,10 +156,10 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-skeleton')
+      container.querySelector('.ais-OnPageSuggestions-skeleton')
     ).toBeInTheDocument();
     expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-skeletonItem')
+      container.querySelectorAll('.ais-OnPageSuggestions-skeletonItem')
     ).toHaveLength(3);
   });
 
@@ -167,7 +167,7 @@ describe('ChatPromptSuggestions', () => {
     // Loading with suggestions already present must not swap the pills for
     // skeletons — that would make existing suggestions disappear mid-refetch.
     const { container } = render(
-      <ChatPromptSuggestions
+      <OnPageSuggestions
         suggestions={['A', 'B']}
         isLoading={true}
         onSuggestionClick={jest.fn()}
@@ -175,10 +175,10 @@ describe('ChatPromptSuggestions', () => {
     );
 
     expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+      container.querySelectorAll('.ais-OnPageSuggestions-suggestion')
     ).toHaveLength(2);
     expect(
-      container.querySelector('.ais-ChatPromptSuggestions-skeleton')
+      container.querySelector('.ais-OnPageSuggestions-skeleton')
     ).not.toBeInTheDocument();
   });
 });

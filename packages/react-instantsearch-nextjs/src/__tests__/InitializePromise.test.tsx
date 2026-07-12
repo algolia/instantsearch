@@ -25,7 +25,7 @@ import type { PromiseWithState } from 'react-instantsearch-core';
 
 /**
  * Seeds `search._initialChatStates` during render — before the async search
- * result fires — mimicking what the chat-page-suggestions connector does on
+ * result fires — mimicking what the on-page-suggestions connector does on
  * the server, so `InitializePromise` has a value to inject at hydration time.
  */
 function SeedChatStates({ value }: { value: Record<string, unknown> }) {
@@ -183,7 +183,7 @@ test('it injects the chat states registered during SSR', async () => {
       <>
         <SearchBox />
         <SeedChatStates
-          value={{ 'chat-page-suggestions': { suggestions: ['A'] } }}
+          value={{ 'on-page-suggestions': { suggestions: ['A'] } }}
         />
       </>
     ),

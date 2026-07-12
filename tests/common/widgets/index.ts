@@ -28,4 +28,4 @@ export * from './menu-select';
 export * from './chat';
 export * from './autocomplete';
 export * from './filter-suggestions';
-export * from './chat-page-suggestions';
+export * from './on-page-suggestions';

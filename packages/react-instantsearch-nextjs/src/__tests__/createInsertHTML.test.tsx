@@ -51,7 +51,7 @@ describe('createInsertHTML', () => {
     const element = createInsertHTML({
       options: { inserted: false },
       results,
-      chatStates: { 'chat-page-suggestions': { suggestions: ['A', 'B'] } },
+      chatStates: { 'on-page-suggestions': { suggestions: ['A', 'B'] } },
     })();
 
     expect(element.type).toBe(React.Fragment);
@@ -84,7 +84,7 @@ describe('createInsertHTML', () => {
     const element = createInsertHTML({
       options: { inserted: false },
       results,
-      chatStates: { 'chat-page-suggestions': {} },
+      chatStates: { 'on-page-suggestions': {} },
       nonce: 'csp-nonce',
     })();
 

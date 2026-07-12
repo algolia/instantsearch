@@ -5,7 +5,7 @@ import { createButtonComponent } from '../Button';
 
 import type { ComponentProps, Renderer } from '../../types';
 
-export type ChatPromptSuggestionsClassNames = {
+export type OnPageSuggestionsClassNames = {
   root?: string | string[];
   header?: string | string[];
   headerTitle?: string | string[];
@@ -14,21 +14,21 @@ export type ChatPromptSuggestionsClassNames = {
   skeletonItem?: string | string[];
 };
 
-export type ChatPromptSuggestionsTranslations = {
+export type OnPageSuggestionsTranslations = {
   /**
    * The title displayed in the header.
    */
   headerTitle: string;
 };
 
-export type ChatPromptSuggestionsHeaderComponentProps = {
+export type OnPageSuggestionsHeaderComponentProps = {
   classNames: Partial<
-    Pick<ChatPromptSuggestionsClassNames, 'header' | 'headerTitle'>
+    Pick<OnPageSuggestionsClassNames, 'header' | 'headerTitle'>
   >;
-  translations: ChatPromptSuggestionsTranslations;
+  translations: OnPageSuggestionsTranslations;
 };
 
-export type ChatPromptSuggestionsOwnProps = ComponentProps<'div'> & {
+export type OnPageSuggestionsOwnProps = ComponentProps<'div'> & {
   /*
    * List of prompt suggestions.
    */
@@ -55,19 +55,19 @@ export type ChatPromptSuggestionsOwnProps = ComponentProps<'div'> & {
    * Component to render the header. Set to `false` to disable the header.
    */
   headerComponent?:
-    | ((props: ChatPromptSuggestionsHeaderComponentProps) => JSX.Element)
+    | ((props: OnPageSuggestionsHeaderComponentProps) => JSX.Element)
     | false;
   /**
    * Optional translations for the component.
    */
-  translations?: Partial<ChatPromptSuggestionsTranslations>;
+  translations?: Partial<OnPageSuggestionsTranslations>;
   /**
    * Optional class names for elements
    */
-  classNames?: Partial<ChatPromptSuggestionsClassNames>;
+  classNames?: Partial<OnPageSuggestionsClassNames>;
 };
 
-export function createChatPromptSuggestionsComponent({
+export function createOnPageSuggestionsComponent({
   createElement,
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
@@ -75,14 +75,14 @@ export function createChatPromptSuggestionsComponent({
   function DefaultHeader({
     classNames,
     translations,
-  }: ChatPromptSuggestionsHeaderComponentProps) {
+  }: OnPageSuggestionsHeaderComponentProps) {
     return (
       <div
-        className={cx('ais-ChatPromptSuggestions-header', classNames.header)}
+        className={cx('ais-OnPageSuggestions-header', classNames.header)}
       >
         <span
           className={cx(
-            'ais-ChatPromptSuggestions-headerTitle',
+            'ais-OnPageSuggestions-headerTitle',
             classNames.headerTitle
           )}
         >
@@ -92,8 +92,8 @@ export function createChatPromptSuggestionsComponent({
     );
   }
 
-  return function ChatPromptSuggestions(
-    userProps: ChatPromptSuggestionsOwnProps
+  return function OnPageSuggestions(
+    userProps: OnPageSuggestionsOwnProps
   ) {
     const {
       suggestions = [],
@@ -107,7 +107,7 @@ export function createChatPromptSuggestionsComponent({
       ...props
     } = userProps;
 
-    const translations: ChatPromptSuggestionsTranslations = {
+    const translations: OnPageSuggestionsTranslations = {
       headerTitle: 'Suggestions',
       ...userTranslations,
     };
@@ -121,7 +121,7 @@ export function createChatPromptSuggestionsComponent({
       <div
         {...props}
         className={cx(
-          'ais-ChatPromptSuggestions',
+          'ais-OnPageSuggestions',
           classNames.root,
           props.className
         )}
@@ -138,7 +138,7 @@ export function createChatPromptSuggestionsComponent({
         {isLoading && suggestions.length === 0 ? (
           <div
             className={cx(
-              'ais-ChatPromptSuggestions-skeleton',
+              'ais-OnPageSuggestions-skeleton',
               classNames.skeleton
             )}
           >
@@ -146,7 +146,7 @@ export function createChatPromptSuggestionsComponent({
               <div
                 key={i}
                 className={cx(
-                  'ais-ChatPromptSuggestions-skeletonItem',
+                  'ais-OnPageSuggestions-skeletonItem',
                   classNames.skeletonItem
                 )}
               />
@@ -159,7 +159,7 @@ export function createChatPromptSuggestionsComponent({
               size="sm"
               variant="primary"
               className={cx(
-                'ais-ChatPromptSuggestions-suggestion',
+                'ais-OnPageSuggestions-suggestion',
                 classNames.suggestion
               )}
               onClick={() => onSuggestionClick(suggestion)}

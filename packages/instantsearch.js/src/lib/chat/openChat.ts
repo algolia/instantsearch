@@ -8,7 +8,7 @@ import type { ChatRenderState } from '../../connectors/chat/connectChat';
 export type ChatReferer =
   | 'prompt-suggestions'
   | 'ai-mode'
-  | 'page-suggestions'
+  | 'on-page-suggestions'
   | 'page-summary';
 
 export type OpenChatOptions = {

@@ -76,7 +76,7 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
-    case 'ChatPageSuggestions': {
+    case 'OnPageSuggestions': {
       // The connector requires `agentId` unless a custom `transport` is given.
       return <widget.Component agentId="test-agent-id" {...props} />;
     }

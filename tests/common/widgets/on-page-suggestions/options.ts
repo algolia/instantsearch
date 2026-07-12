@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
-import type { ChatPageSuggestionsWidgetSetup } from '.';
+import type { OnPageSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchResponse } from 'instantsearch.js';
@@ -50,7 +50,7 @@ function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
 }
 
 export function createOptionsTests(
-  setup: ChatPageSuggestionsWidgetSetup,
+  setup: OnPageSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
@@ -95,19 +95,19 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions')
+        document.querySelector('.ais-OnPageSuggestions')
       ).toBeInTheDocument();
 
       // The default header renders above the pills.
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-header')
+        document.querySelector('.ais-OnPageSuggestions-header')
       ).toBeInTheDocument();
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-headerTitle')
+        document.querySelector('.ais-OnPageSuggestions-headerTitle')
       ).toHaveTextContent('Suggestions');
 
       const pills = document.querySelectorAll(
-        '.ais-ChatPromptSuggestions-suggestion'
+        '.ais-OnPageSuggestions-suggestion'
       );
       expect(pills).toHaveLength(SUGGESTIONS.length);
       expect(document.body.textContent).toContain('Suggestion A');
@@ -148,14 +148,14 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-skeleton')
+        document.querySelector('.ais-OnPageSuggestions-skeleton')
       ).toBeInTheDocument();
       expect(
-        document.querySelectorAll('.ais-ChatPromptSuggestions-skeletonItem')
+        document.querySelectorAll('.ais-OnPageSuggestions-skeletonItem')
           .length
       ).toBeGreaterThan(0);
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-suggestion')
+        document.querySelector('.ais-OnPageSuggestions-suggestion')
       ).toBeNull();
 
       await act(async () => {
@@ -164,10 +164,10 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
       ).toHaveLength(SUGGESTIONS.length);
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-skeleton')
+        document.querySelector('.ais-OnPageSuggestions-skeleton')
       ).toBeNull();
     });
 
@@ -192,13 +192,13 @@ export function createOptionsTests(
 
       // The UI component keeps a stable (empty) root element when there are no
       // suggestions and it isn't loading — no pills, no skeleton.
-      const root = document.querySelector('.ais-ChatPromptSuggestions');
+      const root = document.querySelector('.ais-OnPageSuggestions');
       expect(root).not.toBeNull();
       expect(
-        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
       ).toHaveLength(0);
       expect(
-        document.querySelector('.ais-ChatPromptSuggestions-skeleton')
+        document.querySelector('.ais-OnPageSuggestions-skeleton')
       ).toBeNull();
     });
 
@@ -221,10 +221,10 @@ export function createOptionsTests(
 
       expect(fetchMock).not.toHaveBeenCalled();
       // No request fires, but the widget still renders its stable empty root.
-      const root = document.querySelector('.ais-ChatPromptSuggestions');
+      const root = document.querySelector('.ais-OnPageSuggestions');
       expect(root).not.toBeNull();
       expect(
-        document.querySelectorAll('.ais-ChatPromptSuggestions-suggestion')
+        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
       ).toHaveLength(0);
     });
 
@@ -295,7 +295,7 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('defaults the task name to `algolia_on_page_suggestions`', async () => {
+    test('defaults the configurationId to `algolia_on_page_suggestions`', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -320,10 +320,11 @@ export function createOptionsTests(
         RequestInit
       ];
       const body = JSON.parse(init.body as string);
+      // `configurationId` is sent to the backend as the `task` field.
       expect(body.task).toBe('algolia_on_page_suggestions');
     });
 
-    test('forwards a custom task name to the request payload', async () => {
+    test('forwards a custom configurationId to the request payload', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -332,8 +333,8 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id', task: 'my_custom_task' },
-          react: { agentId: 'test-agent-id', task: 'my_custom_task' },
+          javascript: { agentId: 'test-agent-id', configurationId: 'my_custom_task' },
+          react: { agentId: 'test-agent-id', configurationId: 'my_custom_task' },
           vue: {},
         },
       });
@@ -402,7 +403,7 @@ export function createOptionsTests(
 
       await act(async () => {
         userEvent.click(
-          document.querySelector('.ais-ChatPromptSuggestions-suggestion')!
+          document.querySelector('.ais-OnPageSuggestions-suggestion')!
         );
         await wait(0);
       });

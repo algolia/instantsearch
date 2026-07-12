@@ -5,7 +5,7 @@ import type { SearchClient, CompositionClient } from '../../types';
 import type { UIMessage } from '../ai-lite';
 
 /**
- * Request options applied to built-in Agola agent-studio requests (ignored
+ * Request options applied to built-in Algolia agent-studio requests (ignored
  * when a custom `transport` is provided).
  */
 export type AgentRequestOptions = {
@@ -35,7 +35,7 @@ export type CreateAgentTransportOptions = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   /**
    * Optional algolia-agent suffix appended to the user agent (e.g. `'chat'`,
-   * `'page-suggestions'`).
+   * `'on-page-suggestions'`).
    */
   algoliaAgentSuffix?: string;
   /**

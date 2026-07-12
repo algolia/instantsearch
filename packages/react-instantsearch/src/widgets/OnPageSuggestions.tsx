@@ -1,14 +1,14 @@
-import { createChatPromptSuggestionsComponent } from 'instantsearch-ui-components';
+import { createOnPageSuggestionsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useChatPageSuggestions } from 'react-instantsearch-core';
+import { useOnPageSuggestions } from 'react-instantsearch-core';
 
 import type {
-  ChatPromptSuggestionsOwnProps,
+  OnPageSuggestionsOwnProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { UseChatPageSuggestionsProps } from 'react-instantsearch-core';
+import type { UseOnPageSuggestionsProps } from 'react-instantsearch-core';
 
-const ChatPromptSuggestionsUi = createChatPromptSuggestionsComponent({
+const OnPageSuggestionsUi = createOnPageSuggestionsComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
@@ -17,14 +17,14 @@ const ChatPromptSuggestionsUi = createChatPromptSuggestionsComponent({
  * Props passed to a custom `layoutComponent`. Mirrors the connector render
  * state so a layout component owns the full markup.
  */
-export type ChatPageSuggestionsLayoutComponentProps = {
+export type OnPageSuggestionsLayoutComponentProps = {
   suggestions: string[];
   isLoading: boolean;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
 };
 
-export type ChatPageSuggestionsOnSuggestionClick = (
+export type OnPageSuggestionsOnSuggestionClick = (
   prompt: string,
   helpers: { sendToChat: (prompt: string) => boolean }
 ) => void;
@@ -35,18 +35,18 @@ type OwnedUiProps =
   | 'onSuggestionClick'
   | 'disabled';
 
-export type ChatPageSuggestionsProps = Omit<
-  ChatPromptSuggestionsOwnProps,
+export type OnPageSuggestionsProps = Omit<
+  OnPageSuggestionsOwnProps,
   OwnedUiProps
 > &
-  UseChatPageSuggestionsProps & {
+  UseOnPageSuggestionsProps & {
     layoutComponent?: (
-      props: ChatPageSuggestionsLayoutComponentProps
+      props: OnPageSuggestionsLayoutComponentProps
     ) => JSX.Element | null;
-    onSuggestionClick?: ChatPageSuggestionsOnSuggestionClick;
+    onSuggestionClick?: OnPageSuggestionsOnSuggestionClick;
   };
 
-export function ChatPageSuggestions({
+export function OnPageSuggestions({
   classNames = {},
   skeletonCount,
   layoutComponent: LayoutComponent,
@@ -54,28 +54,28 @@ export function ChatPageSuggestions({
   // Connector params — forwarded to the hook, not the UI root.
   agentId,
   transport,
-  task,
+  configurationId,
   pageType,
   transformHits,
   context,
   transformItems,
   ssrTimeout,
   ...props
-}: ChatPageSuggestionsProps) {
+}: OnPageSuggestionsProps) {
   const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
-    useChatPageSuggestions(
+    useOnPageSuggestions(
       {
         agentId,
         transport,
-        task,
+        configurationId,
         pageType,
         transformHits,
         context,
         transformItems,
         ssrTimeout,
-      } as UseChatPageSuggestionsProps,
+      } as UseOnPageSuggestionsProps,
       {
-        $$widgetType: 'ais.chatPageSuggestions',
+        $$widgetType: 'ais.onPageSuggestions',
       }
     );
 
@@ -95,7 +95,7 @@ export function ChatPageSuggestions({
   }
 
   return (
-    <ChatPromptSuggestionsUi
+    <OnPageSuggestionsUi
       {...props}
       classNames={classNames}
       skeletonCount={skeletonCount}
