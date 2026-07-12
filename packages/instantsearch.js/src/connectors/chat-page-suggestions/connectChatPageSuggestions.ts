@@ -1,5 +1,5 @@
 import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
-import { buildTaskPayload, resolveEndpoint } from '../../lib/tasks';
+import { buildTaskPayload, fetchTask, resolveEndpoint } from '../../lib/tasks';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -346,11 +346,13 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           return true;
         };
 
-      const doFetch = (results: SearchResults): Promise<string[]> => {
+      const doFetch = (
+        results: SearchResults,
+        onProgress?: (suggestions: string[]) => void
+      ): Promise<string[]> => {
         const resolvedContext =
           typeof context === 'function' ? context() : context;
-        const resolvedPageType =
-          pageType ?? (resolvedContext ? 'pdp' : 'plp');
+        const resolvedPageType = pageType ?? (resolvedContext ? 'pdp' : 'plp');
         // PDP mode: caller-supplied context replaces auto-extraction.
         // PLP mode (default): build the input from the current search state.
         const input: Record<string, unknown> = resolvedContext
@@ -365,18 +367,14 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           input,
           prepareRequest: transport?.prepareSendMessagesRequest,
         });
-        return fetch(endpoint, {
-          method: 'POST',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalPayload),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => parseSuggestions(data));
+        return fetchTask({
+          endpoint,
+          headers,
+          payload: finalPayload,
+          onData: onProgress
+            ? (data) => onProgress(parseSuggestions(data))
+            : undefined,
+        }).then((data) => parseSuggestions(data));
       };
 
       const fetchAndRender = (
@@ -418,7 +416,19 @@ const connectChatPageSuggestions: ChatPageSuggestionsConnector =
           false
         );
 
-        doFetch(results)
+        const onProgress = (partial: string[]) => {
+          if (disposed) return;
+          suggestions = partial;
+          renderFn(
+            {
+              ...getWidgetRenderState(renderOptions),
+              instantSearchInstance: renderOptions.instantSearchInstance,
+            },
+            false
+          );
+        };
+
+        doFetch(results, onProgress)
           .then((next) => {
             suggestions = next;
           })

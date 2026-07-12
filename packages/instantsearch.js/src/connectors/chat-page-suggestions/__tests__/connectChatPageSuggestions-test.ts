@@ -44,6 +44,37 @@ function jsonResponse(body: unknown): Response {
   });
 }
 
+// Builds a fake `text/event-stream` response whose body replays `events` as
+// SSE `data:` lines. Kept as a plain object (not a real `Response`) so the test
+// doesn't depend on `Response.body` support in the jsdom environment.
+function sseResponse(events: string[]): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream<Uint8Array>({
+    start(controller) {
+      events.forEach((event) => {
+        controller.enqueue(encoder.encode(`data: ${event}\n\n`));
+      });
+      controller.close();
+    },
+  });
+  return {
+    ok: true,
+    status: 200,
+    headers: {
+      get: (name: string) =>
+        name.toLowerCase() === 'content-type' ? 'text/event-stream' : null,
+    },
+    body,
+  } as unknown as Response;
+}
+
+function taskOutputEvent(suggestions: string[]): string {
+  return JSON.stringify({
+    type: 'data-task-output',
+    data: { output: { suggestions } },
+  });
+}
+
 function flush(ms = 0) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -441,10 +472,117 @@ describe('connectChatPageSuggestions', () => {
 
       expect(prepare).toHaveBeenCalledTimes(1);
       const [[url, init]] = (global.fetch as jest.Mock).mock.calls;
-      expect(url).toBe('https://example.test/agents');
+      expect(url).toBe('https://example.test/agents?stream=true');
       const parsed = JSON.parse((init as RequestInit).body as string);
       expect(parsed.injected).toBe(true);
       expect((init as RequestInit).headers).toMatchObject({ 'x-foo': 'bar' });
+    });
+  });
+
+  describe('streaming', () => {
+    it('requests the streaming endpoint with `stream=true`', async () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve(sseResponse([taskOutputEvent(['a', 'b'])]))
+      ) as unknown as typeof fetch;
+
+      const widget = connectChatPageSuggestions(jest.fn())({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+
+      const [[url]] = (global.fetch as jest.Mock).mock.calls;
+      expect(url).toContain('stream=true');
+    });
+
+    it('renders each accumulated snapshot and resolves with the final list', async () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve(
+          sseResponse([
+            JSON.stringify({ type: 'start' }),
+            // First snapshot is an empty string — filtered out, still loading.
+            taskOutputEvent(['']),
+            taskOutputEvent(['What']),
+            taskOutputEvent(['What phones?']),
+            taskOutputEvent(['What phones?', 'Any deals?']),
+            JSON.stringify({ type: 'finish' }),
+            '[DONE]',
+          ])
+        )
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+
+      // An intermediate render observed the growing (partial) list.
+      const snapshots = renderFn.mock.calls.map((c) => c[0].suggestions);
+      expect(snapshots).toContainEqual(['What']);
+      expect(snapshots).toContainEqual(['What phones?']);
+
+      // The final render carries the complete list and is no longer loading.
+      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(last.suggestions).toEqual(['What phones?', 'Any deals?']);
+      expect(last.isLoading).toBe(false);
+    });
+
+    it('repairs a raw partial-JSON output payload while streaming', async () => {
+      // Here `data` is the raw (still-incomplete) JSON text the model emits,
+      // not a pre-parsed object — exercising the shared repair logic.
+      global.fetch = jest.fn(() =>
+        Promise.resolve(
+          sseResponse([
+            JSON.stringify({
+              type: 'data-task-output',
+              data: '{"output":{"suggestions":["Wh',
+            }),
+            JSON.stringify({
+              type: 'data-task-output',
+              data: '{"output":{"suggestions":["What?"]}}',
+            }),
+            '[DONE]',
+          ])
+        )
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+
+      const snapshots = renderFn.mock.calls.map((c) => c[0].suggestions);
+      // The unterminated first payload is repaired into a usable partial.
+      expect(snapshots).toContainEqual(['Wh']);
+      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(last.suggestions).toEqual(['What?']);
+    });
+
+    it('falls back to a buffered JSON body when the response is not a stream', async () => {
+      // A custom transport / non-streaming backend ignores `stream=true` and
+      // returns a plain JSON body; the connector must still parse it.
+      global.fetch = jest.fn(() =>
+        Promise.resolve(jsonResponse({ output: { suggestions: ['a', 'b'] } }))
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectChatPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+
+      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(last.suggestions).toEqual(['a', 'b']);
+      expect(last.isLoading).toBe(false);
     });
   });
 

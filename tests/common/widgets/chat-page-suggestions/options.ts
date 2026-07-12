@@ -252,7 +252,7 @@ export function createOptionsTests(
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        transport.api,
+        `${transport.api}?stream=true`,
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
