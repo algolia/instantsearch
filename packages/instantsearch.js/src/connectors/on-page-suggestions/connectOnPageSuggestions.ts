@@ -1,18 +1,17 @@
 import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
-import { buildTaskPayload, fetchTask, resolveEndpoint } from '../../lib/tasks';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  getAlgoliaAgent,
-  getAppIdAndApiKey,
   noop,
   safelyRunOnBrowser,
   warning,
 } from '../../lib/utils';
+import connectStructuredOutput from '../structured-output/connectStructuredOutput';
 
 import type { TaskTransport } from '../../lib/tasks';
 import type {
   Connector,
+  DisposeOptions,
   Hit,
   IndexRenderState,
   InitOptions,
@@ -21,6 +20,10 @@ import type {
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
+import type {
+  StructuredOutputConnectorParams,
+  StructuredOutputRenderState,
+} from '../structured-output/connectStructuredOutput';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -49,15 +52,15 @@ const DEFAULT_CONFIGURATION_ID = 'algolia_on_page_suggestions';
 export type OnPageSuggestionsPageType = 'pdp' | 'plp' | (string & {});
 
 /**
- * Extracts the suggestion strings from an Agent Studio `tasks` response.
- * Expected shape: `{ output: { suggestions: string[] } }`. The server caps the
- * count via the task's output schema, so we only filter to non-empty strings;
- * any malformed response yields `[]`.
+ * Extracts the suggestion strings from a task's (envelope-unwrapped) output.
+ * Expected shape: `{ suggestions: string[] }` — `connectStructuredOutput`
+ * already strips the `{ output }` envelope. The server caps the count via the
+ * task's output schema, so we only filter to non-empty strings; any malformed
+ * output yields `[]`.
  */
 function parseSuggestions(data: unknown): string[] {
-  const suggestions = (
-    data as { output?: { suggestions?: unknown[] } } | null | undefined
-  )?.output?.suggestions;
+  const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
+    ?.suggestions;
 
   if (!Array.isArray(suggestions)) {
     return [];
@@ -268,11 +271,9 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         );
       }
 
-      let endpoint: string;
-      let headers: Record<string, string>;
+      let soState: StructuredOutputRenderState | undefined;
       let suggestions: string[] = [];
       let isLoading = false;
-      let inFlight = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
       let latestRenderOptions: RenderOptions | null = null;
@@ -349,68 +350,23 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           return true;
         };
 
-      const doFetch = (
-        results: SearchResults,
-        onProgress?: (suggestions: string[]) => void
-      ): Promise<string[]> => {
+      const buildInput = (results: SearchResults): Record<string, unknown> => {
         const resolvedContext =
           typeof context === 'function' ? context() : context;
         const resolvedPageType = pageType ?? (resolvedContext ? 'pdp' : 'plp');
         // PDP mode: caller-supplied context replaces auto-extraction.
         // PLP mode (default): build the input from the current search state.
-        const input: Record<string, unknown> = resolvedContext
+        return resolvedContext
           ? { pageType: resolvedPageType, ...resolvedContext }
           : {
               pageType: resolvedPageType,
               query: results.query || '',
               hitsSample: transformHits(results.hits as Hit[]),
             };
-        const finalPayload = buildTaskPayload({
-          task: configurationId ?? DEFAULT_CONFIGURATION_ID,
-          input,
-          prepareRequest: transport?.prepareSendMessagesRequest,
-        });
-        return fetchTask({
-          endpoint,
-          headers,
-          payload: finalPayload,
-          onData: onProgress
-            ? (data) => onProgress(parseSuggestions(data))
-            : undefined,
-        }).then((data) => parseSuggestions(data));
       };
 
-      const fetchAndRender = (
-        results: SearchResults,
-        renderOptions: RenderOptions
-      ) => {
+      const renderOutward = (renderOptions: InitOptions | RenderOptions) => {
         if (disposed) return;
-        // In PLP mode (no caller context) we need hits to send the agent any
-        // useful signal. In PDP mode (context provided) the context itself
-        // is the signal, so we proceed even with empty hits.
-        const hasContext = context !== undefined;
-        if (!hasContext && !results?.hits?.length) {
-          suggestions = [];
-          isLoading = false;
-          inFlight = false;
-          renderFn(
-            {
-              ...getWidgetRenderState(renderOptions),
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-          return;
-        }
-
-        // Clear stale pills so the loading skeleton shows on every refetch
-        // (query/refinement change), not only the initial fetch. The UI
-        // component renders the skeleton when `isLoading && suggestions` is
-        // empty; without this it would keep the previous pills on screen and
-        // swap them silently, so a refetch would never surface a loading state.
-        suggestions = [];
-        isLoading = true;
-        inFlight = true;
         renderFn(
           {
             ...getWidgetRenderState(renderOptions),
@@ -418,44 +374,34 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           },
           false
         );
+      };
 
-        const onProgress = (partial: string[]) => {
-          if (disposed) return;
-          suggestions = partial;
-          renderFn(
-            {
-              ...getWidgetRenderState(renderOptions),
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-        };
+      const fetchAndRender = (
+        results: SearchResults,
+        renderOptions: RenderOptions
+      ) => {
+        if (disposed || !soState) return;
+        // In PLP mode (no caller context) we need hits to send the agent any
+        // useful signal. In PDP mode (context provided) the context itself
+        // is the signal, so we proceed even with empty hits.
+        const hasContext = context !== undefined;
+        if (!hasContext && !results?.hits?.length) {
+          suggestions = [];
+          isLoading = false;
+          renderOutward(renderOptions);
+          return;
+        }
 
-        doFetch(results, onProgress)
-          .then((next) => {
-            suggestions = next;
-          })
-          .catch(() => {
-            suggestions = [];
-          })
-          .finally(() => {
-            isLoading = false;
-            inFlight = false;
-            // The fetch may resolve after the widget was disposed; don't render
-            // into a torn-down container.
-            if (disposed) return;
-            renderFn(
-              {
-                ...getWidgetRenderState(renderOptions),
-                instantSearchInstance: renderOptions.instantSearchInstance,
-              },
-              false
-            );
-          });
+        // Delegating to the inner connector's `submit` drives the request:
+        // it clears the previous output (so the loading skeleton shows on every
+        // refetch, not just the first), streams partials, and resolves — each
+        // transition flows back through `handleInnerRender`, which mirrors the
+        // state here and re-renders. So there's nothing to render directly here.
+        soState.submit(buildInput(results));
       };
 
       const refresh = () => {
-        if (inFlight) return;
+        if (isLoading) return;
         const results = latestRenderOptions?.results;
         if (!results || !latestRenderOptions) return;
         clearTimeout(debounceTimer);
@@ -488,6 +434,9 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
           const onResult = (event: { results?: SearchResults }) => {
             derivedHelper.removeListener('result', onResult);
+            // The SSR timeout may have already resolved this wait; a late
+            // `result` event must not fire another agent request.
+            if (settled || !soState) return;
             const results = event?.results;
             const hasContext = context !== undefined;
             // PLP mode without hits → nothing useful to ask the agent.
@@ -496,22 +445,20 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
               settle();
               return;
             }
-            doFetch(results)
-              .then((next) => {
-                if (settled) return;
-                suggestions = next;
+            soState
+              .submit(buildInput(results))
+              .then((output) => {
+                // Skip seeding on error so the client refetches on hydration
+                // instead of hydrating an empty snapshot that suppresses it.
+                if (settled || soState?.error) return;
                 const target =
                   instantSearchInstance as InstantSearchWithChatStates;
                 if (!target._initialChatStates) {
                   target._initialChatStates = {};
                 }
                 target._initialChatStates[RENDER_STATE_KEY] = {
-                  suggestions: next,
+                  suggestions: parseSuggestions(output),
                 } satisfies OnPageSuggestionsSnapshot;
-              })
-              .catch(() => {
-                // Swallow — the client will refetch on hydration if the
-                // server fetch failed.
               })
               .finally(() => {
                 clearTimeout(timer);
@@ -560,34 +507,40 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         };
       };
 
+      // Mirrors each inner render (submit start → skeleton, stream partials,
+      // resolve/error) into this widget's state and re-renders on the client.
+      // SSR seeds via the awaited `submit` in `buildServerWait`, so outward
+      // renders are skipped there.
+      const handleInnerRender = (renderState: StructuredOutputRenderState) => {
+        soState = renderState;
+        // Preserve SSR-hydrated pills until the first generation begins: only
+        // adopt the inner output once a request is loading or has produced one.
+        if (renderState.isLoading || renderState.output !== undefined) {
+          suggestions = parseSuggestions(renderState.output);
+        }
+        isLoading = renderState.isLoading;
+        if (isServerRendering() || !latestRenderOptions) return;
+        renderOutward(latestRenderOptions);
+      };
+
+      const structuredOutputWidget = connectStructuredOutput(
+        handleInnerRender,
+        noop
+      )({
+        ...(transport ? { transport } : { agentId }),
+        task: configurationId ?? DEFAULT_CONFIGURATION_ID,
+        stream: true,
+      } as StructuredOutputConnectorParams);
+
       return {
         $$type: 'ais.onPageSuggestions',
 
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
 
-          if (transport) {
-            ({ endpoint, headers } = resolveEndpoint({ transport }));
-          } else {
-            const [appId, apiKey] = getAppIdAndApiKey(
-              instantSearchInstance.client
-            );
-
-            if (!appId || !apiKey) {
-              throw new Error(
-                withUsage(
-                  'Could not extract Algolia credentials from the search client.'
-                )
-              );
-            }
-
-            ({ endpoint, headers } = resolveEndpoint({
-              appId,
-              apiKey,
-              agentId,
-              algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
-            }));
-          }
+          // Delegates endpoint/credential resolution and sets up `submit`; its
+          // first render populates `soState` via `handleInnerRender`.
+          structuredOutputWidget.init!(initOptions);
 
           // Idempotent — `getWidgetRenderState()` may have already hydrated
           // from a pre-init `useState` initializer in React.
@@ -667,9 +620,10 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           );
         },
 
-        dispose() {
+        dispose(disposeOptions: DisposeOptions) {
           disposed = true;
           clearTimeout(debounceTimer);
+          structuredOutputWidget.dispose!(disposeOptions);
           unmountFn();
         },
 

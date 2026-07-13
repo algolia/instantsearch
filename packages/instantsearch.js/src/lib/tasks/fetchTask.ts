@@ -48,6 +48,7 @@ export type FetchTaskOptions = {
   headers: Record<string, string>;
   payload: Record<string, unknown>;
   onData?: (data: unknown) => void;
+  stream?: boolean;
 };
 
 export function fetchTask({
@@ -55,8 +56,9 @@ export function fetchTask({
   headers,
   payload,
   onData,
+  stream = true,
 }: FetchTaskOptions): Promise<unknown> {
-  return fetch(withStreamParam(endpoint), {
+  return fetch(stream ? withStreamParam(endpoint) : endpoint, {
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -65,7 +67,7 @@ export function fetchTask({
       throw new Error(`HTTP error ${response.status}`);
     }
     const contentType = response.headers?.get?.('content-type') || '';
-    if (response.body && contentType.includes('text/event-stream')) {
+    if (stream && response.body && contentType.includes('text/event-stream')) {
       return consumeTaskStream(response.body, onData);
     }
     return response.json();

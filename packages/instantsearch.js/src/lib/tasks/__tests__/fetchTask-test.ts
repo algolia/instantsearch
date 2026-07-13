@@ -150,6 +150,36 @@ describe('fetchTask', () => {
     expect(result).toEqual({ output: { suggestions: ['What?'] } });
   });
 
+  it('omits `stream=true` and reads JSON when `stream` is false', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
+    ) as unknown as typeof fetch;
+
+    const onData = jest.fn();
+    const result = await fetchTask({ ...OPTIONS, stream: false, onData });
+
+    const [[url]] = (global.fetch as jest.Mock).mock.calls;
+    expect(url).toBe('https://example.test/agents/xyz/tasks');
+    expect(result).toEqual({ output: { suggestions: ['a'] } });
+    expect(onData).not.toHaveBeenCalled();
+  });
+
+  it('reads JSON even from an event-stream body when `stream` is false', async () => {
+    // A caller that opted out of streaming should never consume the SSE body,
+    // even if the server responds with one.
+    global.fetch = jest.fn(() =>
+      Promise.resolve(sseResponse([outputEvent({ suggestions: ['x'] })]))
+    ) as unknown as typeof fetch;
+
+    const onData = jest.fn();
+    // `sseResponse` has no `.json()`, so reaching the JSON branch would throw —
+    // asserting the rejection is enough to prove we didn't take the stream path.
+    await expect(
+      fetchTask({ ...OPTIONS, stream: false, onData })
+    ).rejects.toThrow();
+    expect(onData).not.toHaveBeenCalled();
+  });
+
   it('rejects on a non-ok response', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve(new Response('nope', { status: 500 }))
