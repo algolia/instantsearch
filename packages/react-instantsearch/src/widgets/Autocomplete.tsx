@@ -341,8 +341,14 @@ type IndicesShowPromptSuggestionsConfig = Partial<
 type FeedsShowPromptSuggestionsConfig = {
   feedID: string;
   getURL?: IndexConfig<{ query: string; label?: string }>['getURL'];
-  headerComponent?: IndexConfig<{ query: string; label?: string }>['headerComponent'];
-  itemComponent?: IndexConfig<{ query: string; label?: string }>['itemComponent'];
+  headerComponent?: IndexConfig<{
+    query: string;
+    label?: string;
+  }>['headerComponent'];
+  itemComponent?: IndexConfig<{
+    query: string;
+    label?: string;
+  }>['itemComponent'];
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -378,6 +384,12 @@ type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   transformItems?: (
     indices: TransformItemsIndicesConfig[]
   ) => TransformItemsIndicesConfig[];
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];
@@ -465,6 +477,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     transformItems,
+    requiresSearch = true,
     ...restProps
   } = props;
   const { autoFocus, placeholder, classNames } = restProps as {
@@ -481,11 +494,13 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   };
   const { indexUiState, indexRenderState, status } = useInstantSearch();
   const { compositionID } = useInstantSearchContext();
+  const dependsOn = requiresSearch ? ('search' as const) : ('none' as const);
   const { refine } = useSearchBox(
     {},
     {
       $$type: 'ais.autocomplete',
       $$widgetType: 'ais.autocomplete',
+      dependsOn,
       ...(props.aiMode ? { opensChat: true } : {}),
     }
   );
@@ -892,10 +907,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   return (
-    <Index
-      EXPERIMENTAL_isolated
-      indexId={`ais-autocomplete-${instanceKey}`}
-    >
+    <Index EXPERIMENTAL_isolated indexId={`ais-autocomplete-${instanceKey}`}>
       <Configure {...searchParameters} />
       {indicesConfig.map((index) => (
         <Index
@@ -1248,7 +1260,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   const panelContent = (
     <AutocompletePanel
       {...getPanelProps()}
-      classNames={{ root: classNames?.panel, open: classNames?.panelOpen, layout: classNames?.panelLayout }}
+      classNames={{
+        root: classNames?.panel,
+        open: classNames?.panelOpen,
+        layout: classNames?.panelLayout,
+      }}
     >
       {PanelComponent ? (
         <PanelComponent
@@ -1303,9 +1319,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             <AutocompleteDetachedContainer
               classNames={detachedContainerClassNames}
             >
-              <AutocompleteDetachedFormContainer
-                classNames={classNames}
-              >
+              <AutocompleteDetachedFormContainer classNames={classNames}>
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
               {panelContent}

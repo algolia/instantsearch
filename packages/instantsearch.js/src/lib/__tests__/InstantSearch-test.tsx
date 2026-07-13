@@ -15,7 +15,11 @@ import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../../test/createWidget';
-import { connectSearchBox, connectPagination } from '../../connectors';
+import {
+  connectAutocomplete,
+  connectSearchBox,
+  connectPagination,
+} from '../../connectors';
 import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
 import InstantSearch from '../InstantSearch';
@@ -70,6 +74,7 @@ jest.mock('algoliasearch-helper', () => {
 });
 
 const virtualSearchBox = connectSearchBox(() => {});
+const virtualAutocomplete = connectAutocomplete(() => {});
 
 beforeEach(() => {
   algoliasearchHelper.mockClear();
@@ -266,6 +271,21 @@ describe('Usage', () => {
 
       See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
     `);
+  });
+
+  it('recomputes search widget flags when widgets are removed before start', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+    const searchBox = virtualSearchBox({});
+
+    search.addWidgets([searchBox]);
+    search.removeWidgets([searchBox]);
+    search.start();
+
+    expect(search.mainIndex.getWidgets()).toHaveLength(0);
+    expect(search._hasSearchWidget).toBe(false);
   });
 
   it('throws if createURL is called before start', () => {
@@ -522,6 +542,47 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       await wait(0);
 
       expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('does not add automatic insights when no widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('keeps automatic insights when another widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([
+        virtualAutocomplete({ requiresSearch: false }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(mapMiddlewares(search.middleware)).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+          $$automatic: true,
+        },
+      ]);
     });
 
     test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {

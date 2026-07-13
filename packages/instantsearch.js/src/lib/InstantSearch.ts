@@ -595,7 +595,9 @@ See documentation: ${createDocumentationLink({
     }
 
     mainHelper.search = () => {
-      this.status = 'loading';
+      if (this._hasSearchWidget || this._hasRecommendWidget) {
+        this.status = 'loading';
+      }
       this.scheduleRender(false);
 
       warning(

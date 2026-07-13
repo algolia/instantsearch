@@ -3934,6 +3934,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       search.start();
 
       await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
       expect(search.client.search).toHaveBeenCalledTimes(0);
     });
 
@@ -4010,7 +4012,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(search.client.search).toHaveBeenCalledTimes(1);
     });
 
-    it('triggers composition when root has a compositionId', async () => {
+    it('does not trigger the root composition for an isolated index', async () => {
       const search = instantsearch({
         searchClient: createCompositionClient(),
         compositionID: 'composition-id',
@@ -4022,13 +4024,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       search.start();
 
       await wait(0);
-      // Now called for the root, as a compositionId is set
-      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(search.client.search).not.toHaveBeenCalled();
 
       search.renderState.a.searchBox?.refine('please search now');
 
-      expect(search.client.search).toHaveBeenCalledTimes(2);
-      expect(castToJestMock(search.client.search).mock.calls[1][0])
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
         .toMatchInlineSnapshot(`
         {
           "compositionID": "a",
@@ -4039,6 +4040,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         }
       `);
+    });
+
+    it('does not trigger composition for an empty isolated index', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([index({ EXPERIMENTAL_isolated: true })]);
+      search.start();
+
+      await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
+      expect(search.client.search).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger composition when a root widget requires no request', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([
+        createWidget({ dependsOn: 'none' }),
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).not.toHaveBeenCalled();
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
     });
   });
 
