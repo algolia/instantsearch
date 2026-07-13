@@ -36,28 +36,6 @@ const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
 const DEFAULT_SSR_TIMEOUT_MS = 150;
 
-/**
- * The default Algolia-owned configuration ID for on-page suggestions. Server
- * config (agent `config.tasks[<id>]`) owns the instructions, input schema, and
- * output schema; the client only selects the configuration and supplies
- * `input`. Sent to the backend as the `task` field.
- */
-const DEFAULT_CONFIGURATION_ID = 'algolia_on_page_suggestions';
-
-/**
- * Page-type discriminator forwarded to the task as `input.pageType`. `'pdp'` /
- * `'plp'` are the documented cases; any string is accepted since the task's
- * input schema is server-owned.
- */
-export type OnPageSuggestionsPageType = 'pdp' | 'plp' | (string & {});
-
-/**
- * Extracts the suggestion strings from a task's (envelope-unwrapped) output.
- * Expected shape: `{ suggestions: string[] }` — `connectStructuredOutput`
- * already strips the `{ output }` envelope. The server caps the count via the
- * task's output schema, so we only filter to non-empty strings; any malformed
- * output yields `[]`.
- */
 function parseSuggestions(data: unknown): string[] {
   const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
     ?.suggestions;
@@ -69,6 +47,10 @@ function parseSuggestions(data: unknown): string[] {
   return suggestions.filter(
     (s: unknown): s is string => typeof s === 'string' && s.trim().length > 0
   );
+}
+
+function buildSuggestionMessage(suggestion: string): string {
+  return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
 }
 
 type InstantSearchWithChatStates = InstantSearch & {
@@ -157,65 +139,42 @@ export type OnPageSuggestionsRenderState = {
  */
 export type OnPageSuggestionsSource =
   | {
-      /**
-       * The ID of the agent configured in the Algolia dashboard.
-       */
+      /** ID of the agent configured in the Algolia dashboard. */
       agentId: string;
       transport?: never;
     }
   | {
-      /**
-       * Custom transport configuration. When provided, `agentId` and the
-       * Algolia client credentials are ignored.
-       */
+      /** Custom transport. When set, `agentId` and client credentials are ignored. */
       transport: OnPageSuggestionsTransport;
       agentId?: never;
     };
 
 export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
   /**
-   * The server-owned Agent Studio configuration to invoke (displayed as a
-   * configuration in the Dashboard). Its instructions, input schema, and
-   * output schema live in the agent config, not here. Sent to the backend as
-   * the `task` field.
-   * @default 'algolia_on_page_suggestions'
+   * Agent Studio configuration to invoke, sent to the backend as the `task` field.
+   * @default 'on_page_suggestions'
    */
   configurationId?: string;
   /**
-   * Page type forwarded to the task as `input.pageType`. Defaults to `'pdp'`
-   * when `context` is provided, otherwise `'plp'`. Override to label the page
-   * explicitly (the backend uses it to pick the right prompt).
-   */
-  pageType?: OnPageSuggestionsPageType;
-  /**
-   * Transform the current results' hits before they're forwarded to the agent
-   * as context. Useful for trimming payload size (drop big fields) or
-   * stripping sensitive data. Defaults to the first 5 hits unmodified.
-   *
-   * Ignored when `context` is provided — in that mode the widget sends only
-   * the context object and skips auto-extraction entirely.
+   * Transforms the current hits before they're sent to the agent as context.
+   * Defaults to the first 5 hits with InstantSearch metadata removed. Ignored
+   * when `context` is provided.
    */
   transformHits?: OnPageSuggestionsTransformHits;
   /**
-   * Page context sent to the agent. When provided, the widget skips
-   * auto-extracting `{ query, hitsSample }` from the current search results
-   * and sends *only* the context object — use this for PDPs, marketing
-   * pages, or anywhere the search state isn't the right signal. Either an
-   * object or a function returning one (called per fetch).
-   *
-   * When omitted, the widget defaults to PLP behavior and auto-sends
-   * `{ query, hitsSample }` derived from the InstantSearch results.
+   * Explicit context sent to the agent, replacing the auto-extracted
+   * `{ query, hitsSample }`. Use it when the search state isn't the right
+   * signal (e.g. a product detail page). Object or a function called per fetch.
    */
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /**
-   * Transform the parsed list before exposing it. Receives the parsed
-   * suggestions and `{ query, results }` from the current search.
+   * Transforms the parsed suggestions before exposing them. Receives
+   * `{ query, results }` from the current search.
    */
   transformItems?: OnPageSuggestionsTransformItems;
   /**
-   * Maximum time (in ms) the InstantSearch SSR pipeline waits for the agent
-   * response before flushing the page. On timeout the server resolves
-   * without seeding suggestions and the client refetches after hydration.
+   * Max time (ms) the SSR pipeline waits for the agent before flushing the
+   * page; on timeout the client refetches after hydration.
    * @default 150
    */
   ssrTimeout?: number;
@@ -237,10 +196,25 @@ export type OnPageSuggestionsConnector = Connector<
   OnPageSuggestionsConnectorParams
 >;
 
-const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
-  hits.slice(0, 5);
+const INTERNAL_HIT_KEYS = [
+  '_highlightResult',
+  '_snippetResult',
+  '_rankingInfo',
+  '_distinctSeqID',
+  '__position',
+  '__queryID',
+] as const;
 
-const IDENTITY_TRANSFORM: OnPageSuggestionsTransformItems = (items) => items;
+function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
+  const clean: Record<string, unknown> = { ...hit };
+  INTERNAL_HIT_KEYS.forEach((key) => {
+    delete clean[key];
+  });
+  return clean;
+}
+
+const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
+  hits.slice(0, 5).map(stripInternalHitMetadata);
 
 const connectOnPageSuggestions: OnPageSuggestionsConnector =
   function connectOnPageSuggestions(renderFn, unmountFn = noop) {
@@ -255,10 +229,9 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
       const {
         agentId,
         configurationId,
-        pageType,
         transformHits = DEFAULT_TRANSFORM_HITS,
         context,
-        transformItems = IDENTITY_TRANSFORM,
+        transformItems = (items) => items,
         transport,
         ssrTimeout = DEFAULT_SSR_TIMEOUT_MS,
       } = widgetParams;
@@ -305,9 +278,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
       const getStateSignature = (results: SearchResults): string => {
         const query = results.query || '';
-        // Read refinements from the state that produced *these* results, not a
-        // helper captured at init — in React the captured helper's state does
-        // not track live refinements, so facet changes would be invisible.
         const state = results._state;
         const refinements = state
           ? JSON.stringify(state.facetsRefinements) +
@@ -343,26 +313,57 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
             }
             return false;
           }
+          const results =
+            latestRenderOptions?.results ??
+            ('results' in renderOptions ? renderOptions.results : null) ??
+            null;
           openChat(chatRenderState, {
-            message: prompt,
+            message: buildSuggestionMessage(prompt),
             referer: 'on-page-suggestions',
+            turnContext: buildTurnContext(results),
           });
           return true;
         };
 
-      const buildInput = (results: SearchResults): Record<string, unknown> => {
+      const resolvePageContext = (
+        results: SearchResults | null
+      ): Record<string, unknown> | undefined => {
         const resolvedContext =
           typeof context === 'function' ? context() : context;
-        const resolvedPageType = pageType ?? (resolvedContext ? 'pdp' : 'plp');
-        // PDP mode: caller-supplied context replaces auto-extraction.
-        // PLP mode (default): build the input from the current search state.
-        return resolvedContext
-          ? { pageType: resolvedPageType, ...resolvedContext }
-          : {
-              pageType: resolvedPageType,
-              query: results.query || '',
-              hitsSample: transformHits(results.hits as Hit[]),
-            };
+        // Explicit context replaces auto-extraction; otherwise derive it from
+        // the current search state. The task's server-owned instructions decide
+        // how to interpret the shape — the client doesn't label it.
+        if (resolvedContext) {
+          return { ...resolvedContext };
+        }
+        if (!results) {
+          return undefined;
+        }
+        return {
+          query: results.query || '',
+          hitsSample: transformHits(results.hits as Hit[]),
+        };
+      };
+
+      const buildInput = (results: SearchResults): Record<string, unknown> =>
+        resolvePageContext(results) ?? {};
+
+      // The same page context, flattened for the chat handoff: `turnContext` is
+      // a flat `Record<string, string>` per the Agent Studio contract, so
+      // non-string values (e.g. `hitsSample`) are serialized.
+      const buildTurnContext = (
+        results: SearchResults | null
+      ): Record<string, string> | undefined => {
+        const pageContext = resolvePageContext(results);
+        if (!pageContext) {
+          return undefined;
+        }
+        return Object.fromEntries(
+          Object.entries(pageContext).map(([key, value]) => [
+            key,
+            typeof value === 'string' ? value : JSON.stringify(value),
+          ])
+        );
       };
 
       const renderOutward = (renderOptions: InitOptions | RenderOptions) => {
@@ -381,9 +382,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         renderOptions: RenderOptions
       ) => {
         if (disposed || !soState) return;
-        // In PLP mode (no caller context) we need hits to send the agent any
-        // useful signal. In PDP mode (context provided) the context itself
-        // is the signal, so we proceed even with empty hits.
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
           suggestions = [];
@@ -392,11 +390,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           return;
         }
 
-        // Delegating to the inner connector's `submit` drives the request:
-        // it clears the previous output (so the loading skeleton shows on every
-        // refetch, not just the first), streams partials, and resolves — each
-        // transition flows back through `handleInnerRender`, which mirrors the
-        // state here and re-renders. So there's nothing to render directly here.
         soState.submit(buildInput(results));
       };
 
@@ -422,8 +415,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
           const timer = setTimeout(settle, ssrTimeout);
 
-          // `mainHelper.derivedHelpers[0]` is the helper that emits `result`
-          // — the per-index helper passed to `init` doesn't.
           const derivedHelper =
             instantSearchInstance.mainHelper?.derivedHelpers?.[0];
           if (!derivedHelper) {
@@ -439,7 +430,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
             if (settled || !soState) return;
             const results = event?.results;
             const hasContext = context !== undefined;
-            // PLP mode without hits → nothing useful to ask the agent.
             if (!results || (!hasContext && !results.hits?.length)) {
               clearTimeout(timer);
               settle();
@@ -474,9 +464,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
       ): Omit<OnPageSuggestionsRenderState, never> & {
         widgetParams: OnPageSuggestionsConnectorParams;
       } => {
-        // React's `useConnector` calls this before `init()` runs (via its
-        // `useState` initializer). Hydrate the SSR snapshot here so the
-        // first React render already shows the seeded suggestions.
         hydrateFromSnapshot(renderOptions.instantSearchInstance);
 
         const results =
@@ -488,8 +475,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
         const chatRenderState = getChatRenderState(renderOptions);
 
-        // Optimistic when the chat widget hasn't been observed yet — by click
-        // time it should be mounted and the click reads fresh state.
         const isChatBusy = chatRenderState
           ? !chatRenderState.sendMessage || isChatStreaming(chatRenderState)
           : false;
@@ -528,7 +513,7 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         noop
       )({
         ...(transport ? { transport } : { agentId }),
-        task: configurationId ?? DEFAULT_CONFIGURATION_ID,
+        task: configurationId ?? 'on_page_suggestions',
         stream: true,
       } as StructuredOutputConnectorParams);
 
@@ -538,12 +523,8 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
 
-          // Delegates endpoint/credential resolution and sets up `submit`; its
-          // first render populates `soState` via `handleInnerRender`.
           structuredOutputWidget.init!(initOptions);
 
-          // Idempotent — `getWidgetRenderState()` may have already hydrated
-          // from a pre-init `useState` initializer in React.
           hydrateFromSnapshot(instantSearchInstance);
 
           if (isServerRendering()) {

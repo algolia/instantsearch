@@ -202,7 +202,7 @@ export function createOptionsTests(
       ).toBeNull();
     });
 
-    test('does not request suggestions in PLP mode when there are no hits', async () => {
+    test('does not request suggestions without context when there are no hits', async () => {
       const searchClient = createResultsClient([]);
       const fetchMock = mockAgentFetch();
 
@@ -262,7 +262,7 @@ export function createOptionsTests(
       );
     });
 
-    test('sends the page context in PDP mode', async () => {
+    test('sends only the provided context and skips auto-extraction', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -288,14 +288,15 @@ export function createOptionsTests(
         RequestInit
       ];
       const body = JSON.parse(init.body as string);
-      // PDP mode forwards only the context (no auto-extracted hitsSample).
-      expect(body.input.pageType).toBe('pdp');
+      // Explicit context forwards only that object (no auto-extracted
+      // hitsSample, and no client-injected page-type discriminator).
+      expect(body.input).not.toHaveProperty('pageType');
       expect(body.input.title).toBe('A product');
       expect(body.input.brand).toBe('A brand');
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('defaults the configurationId to `algolia_on_page_suggestions`', async () => {
+    test('defaults the configurationId to `on_page_suggestions`', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -321,7 +322,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       // `configurationId` is sent to the backend as the `task` field.
-      expect(body.task).toBe('algolia_on_page_suggestions');
+      expect(body.task).toBe('on_page_suggestions');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {

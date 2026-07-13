@@ -92,9 +92,12 @@ const connectStructuredOutput: StructuredOutputConnector =
       let error: Error | undefined;
       let disposed = false;
       let triggerRender: () => void = noop;
+      let requestId = 0;
 
       const submit = (variables: Record<string, unknown>): Promise<unknown> => {
         if (disposed) return Promise.resolve(undefined);
+        const currentRequestId = (requestId += 1);
+        const isStale = () => disposed || currentRequestId !== requestId;
         // Clear the previous output so consumers can show a loading state
         // rather than stale data while the new request is in flight.
         output = undefined;
@@ -106,22 +109,24 @@ const connectStructuredOutput: StructuredOutputConnector =
           .submit(variables, {
             onData: stream
               ? (partial) => {
-                  if (disposed) return;
+                  if (isStale()) return;
                   output = partial;
                   triggerRender();
                 }
               : undefined,
           })
           .then((next) => {
+            if (isStale()) return;
             output = next;
           })
           .catch((err) => {
+            if (isStale()) return;
             output = undefined;
             error = err instanceof Error ? err : new Error(String(err));
           })
           .finally(() => {
+            if (isStale()) return;
             isLoading = false;
-            if (disposed) return;
             triggerRender();
           })
           .then(() => output);
@@ -203,13 +208,6 @@ const connectStructuredOutput: StructuredOutputConnector =
           disposed = true;
           unmountFn();
         },
-
-        // No `getRenderState`/`getWidgetRenderState`: this connector is generic
-        // and can be instantiated multiple times per index, but there's no
-        // natural per-instance key (unlike `attribute` on refinement widgets),
-        // so contributing to the shared index render state under a fixed key
-        // would make instances clobber one another. State is surfaced through
-        // the render function instead — the only way it's consumed.
       };
     };
   };

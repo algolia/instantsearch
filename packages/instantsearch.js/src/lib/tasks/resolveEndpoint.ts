@@ -13,10 +13,6 @@ export function resolveEndpoint(params: {
   appId?: string;
   apiKey?: string;
   agentId?: string;
-  /**
-   * Optional `x-algolia-agent` identity header. Passed by the in-IS connector
-   * (derived from the search client).
-   */
   algoliaAgent?: string;
 }): ResolvedEndpoint {
   if (params.transport) {

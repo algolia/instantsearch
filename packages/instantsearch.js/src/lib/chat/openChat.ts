@@ -23,6 +23,15 @@ export type OpenChatOptions = {
    * the backend can attribute the traffic to the originating entry point.
    */
   referer?: ChatReferer;
+  /**
+   * Ambient page context attached to the outgoing user message as
+   * `metadata.turnContext` — the same Agent Studio grounding channel the chat
+   * widget's own `context` uses. Lets an entry point ground the agent's answer
+   * in the page it was triggered from. Flat `Record<string, string>` per the
+   * backend contract. Ignored when the chat widget already attaches its own
+   * `context` (that one takes precedence for the turn).
+   */
+  turnContext?: Record<string, string>;
 };
 
 // Centralizes the "open the chat from an entry point" behavior shared by the
@@ -32,7 +41,7 @@ export type OpenChatOptions = {
 // Returns true when a message was submitted, so callers can clear their input.
 export function openChat(
   chatRenderState: Partial<ChatRenderState> | undefined,
-  { message, referer }: OpenChatOptions = {}
+  { message, referer, turnContext }: OpenChatOptions = {}
 ): boolean {
   if (!chatRenderState) {
     return false;
@@ -51,7 +60,10 @@ export function openChat(
   }
 
   chatRenderState.sendMessage(
-    { text: trimmed },
+    {
+      text: trimmed,
+      ...(turnContext ? { metadata: { turnContext } } : {}),
+    } as Parameters<NonNullable<typeof chatRenderState.sendMessage>>[0],
     referer ? { headers: { 'x-algolia-referer': referer } } : undefined
   );
   return true;

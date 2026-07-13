@@ -387,16 +387,47 @@ describe('connectOnPageSuggestions', () => {
       expect(transformHits).toHaveBeenCalledTimes(1);
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;
       const parsed = JSON.parse((init as RequestInit).body as string);
-      expect(parsed.task).toBe('algolia_on_page_suggestions');
-      expect(parsed.input.pageType).toBe('plp');
+      expect(parsed.task).toBe('on_page_suggestions');
+      expect(parsed.input).not.toHaveProperty('pageType');
       expect(parsed.input.hitsSample).toEqual([{ id: '1' }]);
+    });
+
+    it('strips InstantSearch hit metadata from the default context', async () => {
+      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({
+            hits: [
+              {
+                objectID: '1',
+                name: 'Product 1',
+                _highlightResult: { name: { value: 'Product 1' } },
+                _snippetResult: { name: { value: 'Product 1' } },
+                _rankingInfo: { nbTypos: 0 },
+                __position: 1,
+                __queryID: 'q1',
+              },
+            ] as any,
+          }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      expect(parsed.input.hitsSample).toEqual([
+        { objectID: '1', name: 'Product 1' },
+      ]);
     });
 
     it('when `context` is provided, sends only the context object and skips auto-extraction', async () => {
       const transformHits = jest.fn();
       const widget = connectOnPageSuggestions(jest.fn())({
         agentId: 'a',
-        context: { pageType: 'pdp', focalProduct: { id: '42' } },
+        context: { focalProduct: { id: '42' } },
         transformHits,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -418,14 +449,14 @@ describe('connectOnPageSuggestions', () => {
       const parsed = JSON.parse((init as RequestInit).body as string);
       expect(parsed.input).not.toHaveProperty('query');
       expect(parsed.input).not.toHaveProperty('hitsSample');
-      expect(parsed.input.pageType).toBe('pdp');
+      expect(parsed.input).not.toHaveProperty('pageType');
       expect(parsed.input.focalProduct).toEqual({ id: '42' });
     });
 
     it('still fetches when `context` is provided and there are no hits', async () => {
       const widget = connectOnPageSuggestions(jest.fn())({
         agentId: 'a',
-        context: { pageType: 'pdp' },
+        context: { focalProduct: { id: '42' } },
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -626,8 +657,21 @@ describe('connectOnPageSuggestions', () => {
       lastCall.onSuggestionClick('try this');
 
       expect(setOpen).toHaveBeenCalledWith(true);
+      // The raw suggestion is wrapped in a grounding prompt, and the page
+      // context is attached as a flat `turnContext` (hitsSample serialized).
       expect(sendMessage).toHaveBeenCalledWith(
-        { text: 'try this' },
+        {
+          text: expect.stringContaining('Suggestion: try this'),
+          metadata: {
+            turnContext: {
+              query: 'q',
+              hitsSample: JSON.stringify([
+                { objectID: '1' },
+                { objectID: '2' },
+              ]),
+            },
+          },
+        },
         { headers: { 'x-algolia-referer': 'on-page-suggestions' } }
       );
     });

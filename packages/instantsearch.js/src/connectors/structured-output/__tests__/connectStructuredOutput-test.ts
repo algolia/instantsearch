@@ -228,6 +228,34 @@ describe('connectStructuredOutput', () => {
     });
   });
 
+  describe('request sequencing', () => {
+    it('ignores a stale response when a newer submit is in flight', async () => {
+      const resolvers: Array<(value: Response) => void> = [];
+      global.fetch = jest.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolvers.push(resolve);
+          })
+      ) as unknown as typeof fetch;
+
+      const { lastState } = init({ agentId: 'a', task: 't' });
+
+      // Fire two overlapping submits; the first one resolves *last*.
+      lastState().submit({ n: 1 });
+      lastState().submit({ n: 2 });
+
+      // Resolve the newer request (2) first, then the stale one (1).
+      resolvers[1](jsonResponse({ output: { winner: 2 } }));
+      await flush(0);
+      resolvers[0](jsonResponse({ output: { winner: 1 } }));
+      await flush(0);
+
+      // The stale (first) response must not overwrite the latest output.
+      expect(lastState().output).toEqual({ winner: 2 });
+      expect(lastState().isLoading).toBe(false);
+    });
+  });
+
   describe('dispose', () => {
     it('does not render after dispose when a late submit resolves', async () => {
       let resolveFetch: (value: Response) => void = () => {};
