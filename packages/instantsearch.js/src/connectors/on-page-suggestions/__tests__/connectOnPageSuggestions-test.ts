@@ -423,6 +423,69 @@ describe('connectOnPageSuggestions', () => {
       ]);
     });
 
+    it('sends the active filters alongside the query and hitsSample', async () => {
+      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        disjunctiveFacets: ['brand'],
+      });
+      helper.addDisjunctiveFacetRefinement('brand', 'Apple');
+      helper.addNumericRefinement('price', '<=', 500);
+      const results = new algoliasearchHelper.SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [{ objectID: '1' }] as unknown as SearchResults['hits'],
+          query: 'laptop',
+        }),
+      ]);
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results }));
+      await flush(DEBOUNCE_WAIT);
+
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      expect(parsed.input.query).toBe('laptop');
+      expect(parsed.input.filters).toEqual([['brand:Apple'], ['price<=500']]);
+    });
+
+    it('OR-groups multiple values on the same disjunctive facet', async () => {
+      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '', {
+        disjunctiveFacets: ['brand'],
+      });
+      helper.addDisjunctiveFacetRefinement('brand', 'Apple');
+      helper.addDisjunctiveFacetRefinement('brand', 'Samsung');
+      helper.addNumericRefinement('price', '<=', 500);
+      const results = new algoliasearchHelper.SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [{ objectID: '1' }] as unknown as SearchResults['hits'],
+          query: 'phone',
+        }),
+      ]);
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results }));
+      await flush(DEBOUNCE_WAIT);
+
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      expect(parsed.input.filters).toEqual([
+        ['brand:Apple', 'brand:Samsung'],
+        ['price<=500'],
+      ]);
+    });
+
+    it('omits filters when no refinements are active', async () => {
+      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults() })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      const [[, init]] = (global.fetch as jest.Mock).mock.calls;
+      const parsed = JSON.parse((init as RequestInit).body as string);
+      expect(parsed.input).not.toHaveProperty('filters');
+    });
+
     it('when `context` is provided, sends only the context object and skips auto-extraction', async () => {
       const transformHits = jest.fn();
       const widget = connectOnPageSuggestions(jest.fn())({

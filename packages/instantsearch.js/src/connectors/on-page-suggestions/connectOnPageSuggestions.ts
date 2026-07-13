@@ -2,6 +2,7 @@ import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  getRefinements,
   noop,
   safelyRunOnBrowser,
   warning,
@@ -163,8 +164,9 @@ export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
   transformHits?: OnPageSuggestionsTransformHits;
   /**
    * Explicit context sent to the agent, replacing the auto-extracted
-   * `{ query, hitsSample }`. Use it when the search state isn't the right
-   * signal (e.g. a product detail page). Object or a function called per fetch.
+   * `{ query, filters, hitsSample }`. Use it when the search state isn't the
+   * right signal (e.g. a product detail page). Object or a function called per
+   * fetch.
    */
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /**
@@ -215,6 +217,54 @@ function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
 
 const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5).map(stripInternalHitMetadata);
+
+// Consolidates the current search state's refinements into Algolia
+// `facetFilters`-style nested arrays via the shared `getRefinements` helper:
+// values in the same inner array are OR-ed (multiple picks in one refinement
+// list / disjunctive facet), and the outer arrays are AND-ed
+// (`[['brand:Apple', 'brand:Samsung'], ['price<=500']]`). Returns `undefined`
+// when nothing is refined.
+function buildFilters(results: SearchResults): string[][] | undefined {
+  const state = results._state;
+  if (!state) {
+    return undefined;
+  }
+
+  // `groups` preserves first-occurrence order; disjunctive values on the same
+  // attribute accumulate into a single OR group tracked by `disjunctiveGroups`.
+  const groups: string[][] = [];
+  const disjunctiveGroups: Record<string, string[]> = {};
+
+  getRefinements(results, state).forEach((refinement) => {
+    if (refinement.type === 'numeric') {
+      groups.push([
+        `${refinement.attribute}${refinement.operator}${refinement.numericValue}`,
+      ]);
+      return;
+    }
+
+    const value =
+      refinement.type === 'exclude'
+        ? `${refinement.attribute}:-${refinement.name}`
+        : `${refinement.attribute}:${refinement.name}`;
+
+    if (refinement.type === 'disjunctive') {
+      const group = disjunctiveGroups[refinement.attribute];
+      if (group) {
+        group.push(value);
+      } else {
+        const newGroup = [value];
+        disjunctiveGroups[refinement.attribute] = newGroup;
+        groups.push(newGroup);
+      }
+      return;
+    }
+
+    groups.push([value]);
+  });
+
+  return groups.length > 0 ? groups : undefined;
+}
 
 const connectOnPageSuggestions: OnPageSuggestionsConnector =
   function connectOnPageSuggestions(renderFn, unmountFn = noop) {
@@ -339,8 +389,10 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         if (!results) {
           return undefined;
         }
+        const filters = buildFilters(results);
         return {
           query: results.query || '',
+          ...(filters ? { filters } : {}),
           hitsSample: transformHits(results.hits as Hit[]),
         };
       };
