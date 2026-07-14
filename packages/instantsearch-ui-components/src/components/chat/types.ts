@@ -507,11 +507,17 @@ export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
 ) => JSX.Element;
 
+export type ChatInsightsEventContext = {
+  eventAttribution: 'search' | 'agent';
+  agentId?: string;
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
   sendEvent?: SendEventForHits;
+  insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>

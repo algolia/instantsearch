@@ -96,6 +96,12 @@ describe('connectChat', () => {
         agentId: 'agentId',
         persistence: false,
       });
+      const agentInsightsParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        insights: {
+          eventAttribution: 'agent',
+        },
+      });
       const transportPersistenceParams = assertChatConnectorParams({
         transport: { api: 'https://custom.api' },
         persistence: false,
@@ -143,6 +149,7 @@ describe('connectChat', () => {
         transport: { api: 'https://custom.api' },
       });
       expect(agentPersistenceParams.persistence).toBe(false);
+      expect(agentInsightsParams.insights?.eventAttribution).toBe('agent');
       expect(transportPersistenceParams.persistence).toBe(false);
     });
   });
@@ -587,7 +594,29 @@ describe('connectChat', () => {
           addToolResult: expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
+          insightsEventContext: {
+            agentId: 'agentId',
+            eventAttribution: 'agent',
+          },
         },
+      });
+    });
+
+    it('passes search attribution to tools when configured', () => {
+      const { getRenderState } = getInitializedWidget({
+        insights: {
+          eventAttribution: 'search',
+        },
+        tools: {
+          testTool: {},
+        },
+      });
+
+      expect(
+        getRenderState().tools.testTool.insightsEventContext
+      ).toStrictEqual({
+        agentId: 'agentId',
+        eventAttribution: 'search',
       });
     });
   });

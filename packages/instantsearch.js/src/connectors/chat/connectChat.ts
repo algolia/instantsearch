@@ -42,6 +42,7 @@ import type {
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
+  ChatInsightsEventContext,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -166,6 +167,18 @@ export type ApplyFiltersParams = {
   facetFilters?: string[][];
 };
 
+export type ChatInsightsOptions = {
+  /**
+   * Controls which query ID is used for events sent from Chat tool results.
+   *
+   * - `search`: use the query ID from the search that returned the hit.
+   * - `agent`: use the assistant message ID that displayed the hit.
+   *
+   * @default 'agent'
+   */
+  eventAttribution?: ChatInsightsEventContext['eventAttribution'];
+};
+
 export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
@@ -185,6 +198,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Configuration for client-side tools.
    */
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
+  /**
+   * Insights options for events sent from Chat tool results.
+   */
+  insights?: ChatInsightsOptions;
   /**
    * Identifier of this type of chat widget. This is used for the key in renderState.
    * @default 'chat'
@@ -331,6 +348,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      insights = {},
       ...options
     } = widgetParams || {};
 
@@ -345,6 +363,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
+    const insightsEventContext: ChatInsightsEventContext = {
+      agentId,
+      eventAttribution: insights.eventAttribution ?? 'agent',
+    };
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
@@ -757,6 +779,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             addToolResult: _chatInstance.addToolResult,
             applyFilters,
             sendEvent,
+            insightsEventContext,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
