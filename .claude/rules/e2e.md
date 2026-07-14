@@ -1,11 +1,14 @@
 # E2E Testing Guide
 
+**Playwright is the only e2e framework.** The WebdriverIO + Sauce Labs stack was removed
+along with IE11 support — don't reintroduce WDIO, `internet explorer` capabilities, or a
+`test:e2e:ie11` job.
+
 ## Test Locations and Frameworks
 
 | Location | Framework | Purpose |
 |----------|-----------|---------|
 | `tests/e2e/playwright/` | Playwright | Main e2e suite for all InstantSearch flavors |
-| `tests/e2e/` (wdio files) | WebdriverIO | IE11 tests only (via Sauce Labs) |
 | `packages/react-instantsearch-nextjs/__tests__/e2e/` | Playwright | App Router Next.js e2e tests |
 | `packages/react-instantsearch-router-nextjs/__tests__/e2e/` | Playwright | Pages Router Next.js e2e tests |
 
@@ -47,16 +50,6 @@ yarn workspace react-instantsearch-router-nextjs test:e2e
 # Run with list reporter (outputs to terminal instead of opening browser)
 yarn workspace react-instantsearch-nextjs test:e2e --reporter=list
 yarn workspace react-instantsearch-router-nextjs test:e2e --reporter=list
-```
-
-### IE11 Tests (Requires Sauce Labs credentials)
-
-```bash
-# Set environment variables first
-export SAUCE_USERNAME=your_username
-export SAUCE_ACCESS_KEY=your_access_key
-
-yarn test:e2e:ie11
 ```
 
 ## Writing Playwright Tests
@@ -160,13 +153,6 @@ To run a single flavor:
 E2E_FLAVOR=react yarn test:e2e
 ```
 
-## IE11 Considerations
-
-IE11 tests are kept in WebdriverIO because Playwright doesn't support IE11. These tests:
-- Only run `js` and `js-umd` flavors
-- Require Sauce Labs for remote IE11 browser
-- Use the same test specs in `tests/e2e/specs/` and helpers in `tests/e2e/helpers/`
-
 ## Debugging
 
 ### Playwright
@@ -241,35 +227,7 @@ The fixtures account for this with combined selectors like:
 
 If you add new selectors, ensure they work across all flavors.
 
-## Migration Notes: WebDriverIO to Playwright
-
-When migrating tests from WebDriverIO to Playwright, be aware of these differences:
-
-### URL Waiting
-
-- **WebDriverIO**: Used custom `waitForUrl()` that polls `browser.getUrl()` until match
-- **Playwright**: Use `await expect(page).toHaveURL(url)` which has built-in retrying
-
-### Element Selection
-
-- **WebDriverIO**: `$('.ais-Hits-item')` returns first match, clicking works on container elements
-- **Playwright**: `page.locator('.ais-Hits-item').first()` - clicking on container may not hit child link elements. Use `.locator('a')` to target links explicitly:
-  ```typescript
-  // WebDriverIO
-  const link = await $('.ais-Hits-item');
-  await link.click();
-
-  // Playwright - click the link inside the hit
-  const link = page.locator('.ais-Hits-item a').first();
-  await link.click();
-  ```
-
-### Browser Back Navigation
-
-- **WebDriverIO**: `browser.back()` worked reliably for SPA navigation
-- **Playwright**: `page.goBack()` works but may require `slowMo` in headless mode for Next.js App Router dynamic routes
-
-### Headless Mode Timing Issues
+## Headless Mode Timing Issues
 
 Playwright's headless mode runs faster than headed mode, which can cause timing issues with SPA navigation and state updates. For Next.js App Router tests involving browser back/forward navigation with dynamic routes, add `slowMo` at the test file level (not globally, to avoid slowing down all tests):
 
@@ -290,7 +248,6 @@ This gives the browser enough time to process JavaScript events like popstate ha
 
 Tests run in CircleCI:
 - **e2e tests playwright** - Main suite with Chromium + Firefox
-- **e2e tests ie11** - IE11 via Sauce Labs
 - **e2e tests router nextjs** - Pages Router Next.js tests
 - **e2e tests app router nextjs** - App Router Next.js tests
 

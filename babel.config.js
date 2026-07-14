@@ -19,10 +19,7 @@ module.exports = (api) => {
         isStorybook
           ? {
               modules: false,
-              // Ensure optional chaining/nullish coalescing are transformed
-              targets: {
-                ie: 11,
-              },
+              targets: 'defaults',
             }
           : {
               modules: 'commonjs',

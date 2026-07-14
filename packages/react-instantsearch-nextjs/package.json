@@ -43,7 +43,6 @@
     "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && yarn build:types",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:e2e": "playwright test",
-    "test:e2e:saucelabs": "playwright test",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },

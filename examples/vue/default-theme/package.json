@@ -23,5 +23,5 @@
     "vite-plugin-commonjs": "0.10.0",
     "vue-template-compiler": "2.7.14"
   },
-  "browserslist": "Firefox 127, Chrome 125, IE 11"
+  "browserslist": "Firefox 127, Chrome 125"
 }

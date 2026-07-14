@@ -18,7 +18,7 @@
     "plugin/no-unsupported-browser-features": [
       true,
       {
-        "browsers": ["defaults", "ie 11"],
+        "browsers": ["defaults"],
         "severity": "warning"
       }
     ]

@@ -317,7 +317,9 @@ export default function historyRouter<TRouteState = UiState>({
     const queryString = qsModule.stringify(routeState);
     const portWithPrefix = port === '' ? '' : `:${port}`;
 
-    // IE <= 11 has no proper `location.origin` so we cannot rely on it.
+    // We rebuild the origin from its parts rather than reading `location.origin`
+    // because a custom `getLocation` (e.g. for SSR) may return a partial location
+    // object that does not include `origin`.
     if (!queryString) {
       return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
     }
