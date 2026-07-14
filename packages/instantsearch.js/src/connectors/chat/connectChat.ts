@@ -174,6 +174,18 @@ export type ChatInsightsOptions = {
    * - `search`: use the query ID from the search that returned the hit.
    * - `agent`: use the assistant message ID that displayed the hit.
    *
+   * This applies to events sent through the tool result `sendEvent` function.
+   * It does not enable Insights by itself; add the Insights middleware or set
+   * `insights: true` on InstantSearch to send events.
+   *
+   * @example
+   * ```js
+   * chat({
+   *   // ...
+   *   insights: { eventAttribution: 'agent' },
+   * });
+   * ```
+   *
    * @default 'agent'
    */
   eventAttribution?: ChatInsightsEventContext['eventAttribution'];
@@ -200,6 +212,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
   /**
    * Insights options for events sent from Chat tool results.
+   *
+   * By default, events from tool result cards are attributed to the assistant
+   * message that displayed them. Set `eventAttribution` to `search` to keep the
+   * query ID from the search that returned the hit.
    */
   insights?: ChatInsightsOptions;
   /**
