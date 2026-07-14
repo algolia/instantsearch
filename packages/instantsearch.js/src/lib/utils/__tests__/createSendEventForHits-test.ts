@@ -664,7 +664,7 @@ describe('createSendEventForHits', () => {
 describe('createBindEventForHits', () => {
   function parsePayload(payload: string): Record<string, unknown> {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
-    return deserializePayload(payload.substr('data-insights-event='.length));
+    return deserializePayload(payload.slice('data-insights-event='.length));
   }
 
   it('returns a payload for view event', () => {

@@ -353,15 +353,15 @@ export function createOptionsTests(
 
       const chat = new Chat({});
       jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
-        const text = (message as any).text;
+        const text = message.text;
         chat.messages = [
           {
             id: '1',
             role: 'user',
             parts: text
               ? [{ type: 'text', text }]
-              : (message as any).parts ?? [],
-            metadata: (message as any).metadata,
+              : message.parts ?? [],
+            metadata: message.metadata,
           },
         ] as any;
       });
