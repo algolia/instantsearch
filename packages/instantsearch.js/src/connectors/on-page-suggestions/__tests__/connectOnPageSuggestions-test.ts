@@ -247,6 +247,35 @@ describe('connectOnPageSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
+    it('refetches when a numeric refinement changes even if the query does not', async () => {
+      // The state signature must also track numeric (and tag) refinements, so a
+      // range-filter change refreshes the pills like a facet change does.
+      const renderFn = jest.fn();
+      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '', {});
+      widget.init!(createInitOptions({ helper }));
+
+      const unrefined = new algoliasearchHelper.SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: [{ objectID: '1' }] as any, query: '' }),
+      ]);
+      widget.render!(createRenderOptions({ helper, results: unrefined }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      const refined = new algoliasearchHelper.SearchResults(
+        helper.state.addNumericRefinement('price', '<=', 500),
+        [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }] as any,
+            query: '',
+          }),
+        ]
+      );
+      widget.render!(createRenderOptions({ helper, results: refined }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
     it('clears stale pills and exposes the loading state on every refetch', async () => {
       // Regression: on a refetch (query/refinement change) the previous pills
       // must be cleared so the UI's `isLoading && suggestions.length === 0`

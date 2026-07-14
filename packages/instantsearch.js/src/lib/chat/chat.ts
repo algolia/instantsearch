@@ -34,7 +34,7 @@ function getDefaultInitialMessages<TUIMessage extends UIMessage>(
       CACHE_KEY + (id ? `-${id}` : '')
     );
     return initialMessages ? JSON.parse(initialMessages) : [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }

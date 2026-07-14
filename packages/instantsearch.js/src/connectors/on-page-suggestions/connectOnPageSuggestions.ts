@@ -66,78 +66,47 @@ function isServerRendering(): boolean {
   return safelyRunOnBrowser(() => false, { fallback: () => true });
 }
 
-// Per-InstantSearch SSR wait promise cache. Two-pass SSR (e.g. React) renders
-// the tree twice on the server; reuse the in-flight fetch across passes
-// rather than firing it twice.
+// Per-InstantSearch SSR wait cache: two-pass SSR (e.g. React) renders twice on
+// the server, so reuse the in-flight fetch across passes instead of firing twice.
 const serverWaitRegistry = new WeakMap<InstantSearch, Promise<void>>();
 
-/**
- * Custom transport for the page-suggestions task request. Alias of the generic
- * `TaskTransport` — kept under this name for API stability.
- */
+/** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
 export type OnPageSuggestionsTransport = TaskTransport;
 
-/**
- * Metadata passed to `transformItems`.
- */
+/** Metadata passed to `transformItems`. */
 export type OnPageSuggestionsTransformItemsMetadata = {
   query: string;
   results: SearchResults | null;
 };
 
-/**
- * Custom `transformItems` signature for `connectOnPageSuggestions`.
- */
+/** Custom `transformItems` signature for `connectOnPageSuggestions`. */
 export type OnPageSuggestionsTransformItems = (
   items: string[],
   metadata: OnPageSuggestionsTransformItemsMetadata
 ) => string[];
 
-/**
- * Hit transformer — receives every hit from the current results and returns
- * the subset (or reshaped objects) to forward to the agent as context.
- */
+/** Receives every hit and returns the subset (or reshaped objects) forwarded to the agent as context. */
 export type OnPageSuggestionsTransformHits = (hits: Hit[]) => unknown[];
 
 export type OnPageSuggestionsRenderState = {
-  /**
-   * Backend-generated prompt strings rendered as clickable pills.
-   */
+  /** Backend-generated prompt strings rendered as clickable pills. */
   suggestions: string[];
-  /**
-   * Whether suggestions are currently being fetched.
-   */
+  /** Whether suggestions are currently being fetched. */
   isLoading: boolean;
-  /**
-   * Default click handler. Calls `sendToChat(prompt)`. Override at the widget
-   * level via the `onSuggestionClick` prop if you need analytics, custom
-   * routing, or a fallback when no chat widget is mounted.
-   */
+  /** Default click handler, calling `sendToChat(prompt)`. Override via the `onSuggestionClick` prop. */
   onSuggestionClick: (prompt: string) => void;
-  /**
-   * Attempts to hand off the prompt to the `connectChat` widget on the same
-   * index. Returns `true` if a chat widget was found and the message was
-   * dispatched, `false` otherwise — useful for fall-through to a
-   * non-InstantSearch chat.
-   */
+  /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
   sendToChat: (prompt: string) => boolean;
-  /**
-   * Imperative refetch that bypasses the debounce. No-op while there are no
-   * results or while another fetch is in-flight.
-   */
+  /** Imperative refetch that bypasses the debounce. No-op with no results or a fetch in-flight. */
   refresh: () => void;
   /**
-   * Whether the chat widget is currently busy (mid-stream) or absent. Surface
-   * as `disabled` on your pills UI so callers don't queue clicks while the
-   * chat is answering. Optimistically `false` before the chat widget has
-   * mounted, so pills aren't disabled on first paint.
+   * Whether the chat widget is currently busy (mid-stream) — surface as `disabled` on the pills.
+   * Optimistically `false` before the chat mounts and when no chat is present.
    */
   isChatBusy: boolean;
 };
 
-/**
- * Either `agentId` or a custom `transport` is required.
- */
+/** Either `agentId` or a custom `transport` is required. */
 export type OnPageSuggestionsSource =
   | {
       /** ID of the agent configured in the Algolia dashboard. */
@@ -152,31 +121,18 @@ export type OnPageSuggestionsSource =
 
 export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
   /**
-   * Agent Studio configuration to invoke, sent to the backend as the `task` field.
+   * Agent Studio configuration to invoke, sent as the `task` field.
    * @default 'on_page_suggestions'
    */
   configurationId?: string;
-  /**
-   * Transforms the current hits before they're sent to the agent as context.
-   * Defaults to the first 5 hits with InstantSearch metadata removed. Ignored
-   * when `context` is provided.
-   */
+  /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: OnPageSuggestionsTransformHits;
-  /**
-   * Explicit context sent to the agent, replacing the auto-extracted
-   * `{ query, filters, hitsSample }`. Use it when the search state isn't the
-   * right signal (e.g. a product detail page). Object or a function called per
-   * fetch.
-   */
+  /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
   context?: Record<string, unknown> | (() => Record<string, unknown>);
-  /**
-   * Transforms the parsed suggestions before exposing them. Receives
-   * `{ query, results }` from the current search.
-   */
+  /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: OnPageSuggestionsTransformItems;
   /**
-   * Max time (ms) the SSR pipeline waits for the agent before flushing the
-   * page; on timeout the client refetches after hydration.
+   * Max ms SSR waits for the agent before flushing; on timeout the client refetches after hydration.
    * @default 150
    */
   ssrTimeout?: number;
@@ -218,20 +174,12 @@ function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
 const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5).map(stripInternalHitMetadata);
 
-// Consolidates the current search state's refinements into Algolia
-// `facetFilters`-style nested arrays via the shared `getRefinements` helper:
-// values in the same inner array are OR-ed (multiple picks in one refinement
-// list / disjunctive facet), and the outer arrays are AND-ed
-// (`[['brand:Apple', 'brand:Samsung'], ['price<=500']]`). Returns `undefined`
-// when nothing is refined.
 function buildFilters(results: SearchResults): string[][] | undefined {
   const state = results._state;
   if (!state) {
     return undefined;
   }
 
-  // `groups` preserves first-occurrence order; disjunctive values on the same
-  // attribute accumulate into a single OR group tracked by `disjunctiveGroups`.
   const groups: string[][] = [];
   const disjunctiveGroups: Record<string, string[]> = {};
 
@@ -332,7 +280,9 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         const refinements = state
           ? JSON.stringify(state.facetsRefinements) +
             JSON.stringify(state.disjunctiveFacetsRefinements) +
-            JSON.stringify(state.hierarchicalFacetsRefinements)
+            JSON.stringify(state.hierarchicalFacetsRefinements) +
+            JSON.stringify(state.numericRefinements) +
+            JSON.stringify(state.tagRefinements)
           : '';
         return `${query}|${refinements}`;
       };
