@@ -5,6 +5,8 @@ import { AbstractChat } from '../abstract-chat';
 import { parseJsonEventStream } from '../stream-parser';
 
 import type {
+  ChatOnErrorCallback,
+  ChatOnFinishCallback,
   ChatState,
   ChatTransport,
   UIMessage,
@@ -94,10 +96,14 @@ function createTestSetup(
     chunks,
     sse,
     onToolCall,
+    onFinish,
+    onError,
   }: {
     chunks?: UIMessageChunk[];
     sse?: string;
     onToolCall?: (options: { toolCall: any }) => void | Promise<void>;
+    onFinish?: ChatOnFinishCallback<UIMessage>;
+    onError?: ChatOnErrorCallback;
   } = { chunks: [] }
 ) {
   const makeStream = (): ReadableStream<UIMessageChunk> =>
@@ -122,6 +128,8 @@ function createTestSetup(
       // eslint-disable-next-line no-plusplus
       return () => `gen-${++i}`;
     })(),
+    onError,
+    onFinish,
     onToolCall,
   });
 
@@ -140,6 +148,106 @@ function assistantPart(state: InMemoryChatState): any {
 }
 
 describe('AbstractChat.processStreamWithCallbacks', () => {
+  describe('guardrail violations', () => {
+    it('replaces partial assistant content with the fallback and finishes ready', async () => {
+      const fallbackResponse =
+        "I can't help with that request, but I can help with product questions.";
+      const onFinish = jest.fn();
+      const onError = jest.fn();
+      const { chat, state } = createTestSetup({
+        chunks: [
+          startChunk(),
+          { type: 'text-start', id: 'text-1' },
+          {
+            type: 'text-delta',
+            id: 'text-1',
+            delta: 'Unsafe partial content',
+          },
+          {
+            type: 'data-guardrail-violation',
+            data: {
+              category: 'blocked',
+              guardrailType: 'output',
+              fallbackResponse,
+            },
+          },
+          finishChunk(),
+        ],
+        onError,
+        onFinish,
+      });
+
+      await chat.sendMessage({ text: 'blocked request' });
+
+      const assistant = state.messages.find((m) => m.role === 'assistant')!;
+
+      expect(state.status).toBe('ready');
+      expect(state.error).toBeUndefined();
+      expect(onError).not.toHaveBeenCalled();
+      expect(assistant).toMatchObject({
+        id: 'msg-1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+      });
+      expect(JSON.stringify(assistant.parts)).not.toContain(
+        'Unsafe partial content'
+      );
+      expect(onFinish).toHaveBeenCalledWith({
+        message: assistant,
+        messages: state.messages,
+        isAbort: false,
+        isDisconnect: false,
+        isError: false,
+      });
+    });
+
+    it('creates a fallback assistant message when violation arrives before an assistant message starts', async () => {
+      const onFinish = jest.fn();
+      const onError = jest.fn();
+      const { chat, state } = createTestSetup({
+        chunks: [
+          {
+            type: 'data-guardrail-violation',
+            data: {
+              category: 'blocked',
+              guardrailType: 'input',
+              fallbackResponse: 'I cannot process this request.',
+            },
+          },
+          finishChunk(),
+        ],
+        onError,
+        onFinish,
+      });
+
+      await chat.sendMessage({ text: 'blocked request' });
+
+      const assistant = state.messages.find((m) => m.role === 'assistant')!;
+
+      expect(state.status).toBe('ready');
+      expect(state.error).toBeUndefined();
+      expect(onError).not.toHaveBeenCalled();
+      expect(assistant).toMatchObject({
+        id: 'gen-2',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'text',
+            text: 'I cannot process this request.',
+            state: 'done',
+          },
+        ],
+      });
+      expect(onFinish).toHaveBeenCalledWith({
+        message: assistant,
+        messages: state.messages,
+        isAbort: false,
+        isDisconnect: false,
+        isError: false,
+      });
+    });
+  });
+
   describe('tool-input lifecycle (existing chunks)', () => {
     it('tool-input-start, tool-input-delta and tool-input-available drive a part through input-streaming to input-available, repairing partial JSON and triggering onToolCall', async () => {
       const onToolCall = jest.fn();
@@ -397,7 +505,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         errorText: 'unbounded whitespace',
       });
     });
-
   });
 
   describe('tool-output-error', () => {

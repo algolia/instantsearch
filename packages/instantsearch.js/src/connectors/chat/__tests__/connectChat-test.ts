@@ -1061,16 +1061,16 @@ data: [DONE]`,
       });
     });
 
-    it('surfaces a guardrail-violation fallbackResponse via the error state', async () => {
+    it('renders a guardrail-violation fallbackResponse as assistant history', async () => {
       const fallbackResponse =
         "I'm sorry I couldn't respond to that, please try again with another message.";
-      const { widget } = getInitializedWidget({
-        agentId: undefined,
-        transport: {
-          fetch: () =>
-            Promise.resolve(
-              new Response(
-                `data: {"type": "start", "messageId": "test-id"}
+      const onError = jest.fn();
+      const onFinish = jest.fn();
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(
+            `data: {"type": "start", "messageId": "test-id"}
 
 data: {"type": "start-step"}
 
@@ -1083,18 +1083,29 @@ data: {"type": "text-end", "id": "msg-1"}
 data: {"type": "finish-step"}
 
 data: {"type": "data-guardrail-violation", "data": {"category": "product_returns", "guardrailType": "input", "fallbackResponse": ${JSON.stringify(
-                  fallbackResponse
-                )}}}
+              fallbackResponse
+            )}}}
 
 data: {"type": "finish"}
 
 data: [DONE]`,
-                {
-                  headers: { 'Content-Type': 'text/event-stream' },
-                }
-              )
-            ),
+            {
+              headers: { 'Content-Type': 'text/event-stream' },
+            }
+          )
+        )
+        .mockResolvedValueOnce(
+          new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+            headers: { 'Content-Type': 'text/event-stream' },
+          })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: fetchMock,
         },
+        onError,
+        onFinish,
       });
 
       const { chatInstance } = widget;
@@ -1107,24 +1118,58 @@ data: [DONE]`,
       });
 
       await waitFor(() => {
-        expect(chatInstance.status).toBe('error');
-        expect(chatInstance.error?.message).toBe(fallbackResponse);
-        // Tagged so the UI can branch on it and render the fallback verbatim
-        // instead of the generic friendly default used for cost-control
-        // errors.
-        expect(chatInstance.error?.name).toBe('GuardrailViolationError');
-        // The in-progress assistant message produced for this request is
-        // stripped so only the user message added by `sendMessage` remains
-        // beyond what was already there. This matches cost-control errors
-        // where no assistant message is appended on failure.
-        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 1);
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(onError).not.toHaveBeenCalled();
+        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 2);
         expect(
-          chatInstance.messages[chatInstance.messages.length - 1].role
-        ).toBe('user');
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+        });
+        expect(JSON.stringify(chatInstance.messages)).not.toContain(
+          'If you need help'
+        );
       });
+
+      const assistant = chatInstance.messages[chatInstance.messages.length - 1];
+
+      expect(onFinish).toHaveBeenCalledWith({
+        message: assistant,
+        messages: chatInstance.messages,
+        isAbort: false,
+        isDisconnect: false,
+        isError: false,
+      });
+
+      await chatInstance.sendMessage({
+        id: 'follow-up-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'what can you help with?' }],
+      });
+
+      await waitFor(() => {
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+      });
+
+      const [, secondRequest] = fetchMock.mock.calls[1];
+      const secondRequestBody = JSON.parse(
+        (secondRequest as RequestInit).body as string
+      );
+      expect(secondRequestBody.messages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'test-id',
+            role: 'assistant',
+            parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+          }),
+        ])
+      );
     });
 
-    it('falls back to a generic message when fallbackResponse is missing', async () => {
+    it('renders a generic assistant message when fallbackResponse is missing', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
         transport: {
@@ -1157,10 +1202,21 @@ data: [DONE]`,
       });
 
       await waitFor(() => {
-        expect(chatInstance.status).toBe('error');
-        expect(chatInstance.error?.message).toBe(
-          'Sorry, we are not able to generate a response at the moment.'
-        );
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'text',
+              text: 'Sorry, we are not able to generate a response at the moment.',
+              state: 'done',
+            },
+          ],
+        });
       });
     });
   });

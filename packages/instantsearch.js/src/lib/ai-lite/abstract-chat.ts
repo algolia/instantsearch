@@ -3,7 +3,6 @@ import { parsePartialJson } from './parse-partial-json';
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
-  GuardrailViolationError,
   SerialJobExecutor,
   tryParseErrorMessage,
 } from './utils';
@@ -33,6 +32,9 @@ type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
   stream?: ReadableStream<TChunk>;
 };
+
+const defaultGuardrailFallbackResponse =
+  'Sorry, we are not able to generate a response at the moment.';
 
 /**
  * Abstract base class for chat implementations.
@@ -1071,37 +1073,42 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
-            // Surface guardrail violations through the error state, but
-            // distinct from generic cost-control / 4xx errors: throw a
-            // `GuardrailViolationError` so the UI can render the
-            // service-provided `fallbackResponse` verbatim (it's authored for
-            // end-user display) instead of the friendly default used for
-            // opaque transport errors. Also discard any in-progress assistant
-            // message so no partial text lingers above the fallback, and
-            // clear the local cursor so the `onFinish` callback doesn't
-            // receive a `currentMessage` that no longer exists in state.
             case 'data-guardrail-violation': {
-              isError = true;
-
-              if (currentMessageIndex >= 0) {
-                this.state.messages = this.state.messages.slice(
-                  0,
-                  currentMessageIndex
-                );
-                currentMessage = undefined;
-                currentMessageIndex = -1;
-              }
-
               // `chunk.data` widens to `unknown` here: the chunk union also
               // carries a generic `data-${string}` member, and the literal
               // matches both, so narrowing can't pick the specific shape.
               const { fallbackResponse } = chunk.data as {
                 fallbackResponse?: string;
               };
-              throw new GuardrailViolationError(
-                fallbackResponse ||
-                  'Sorry, we are not able to generate a response at the moment.'
-              );
+              const fallbackText =
+                fallbackResponse || defaultGuardrailFallbackResponse;
+
+              // The stream closes after a guardrail violation; keep the
+              // fallback as the current message so the normal finish path runs.
+              currentMessage = {
+                id: currentMessage?.id || currentMessageId || this.generateId(),
+                role: 'assistant',
+                metadata: currentMessage?.metadata,
+                parts: [
+                  {
+                    type: 'text',
+                    text: fallbackText,
+                    state: 'done',
+                  },
+                ],
+              } as unknown as TUIMessage;
+
+              if (currentMessageIndex >= 0) {
+                this.state.replaceMessage(currentMessageIndex, currentMessage);
+              } else {
+                this.state.pushMessage(currentMessage);
+                currentMessageIndex = this.state.messages.length - 1;
+              }
+
+              currentMessageId = currentMessage.id;
+              currentTextPartId = undefined;
+              currentReasoningPartId = undefined;
+              break;
             }
 
             default: {
