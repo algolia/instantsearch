@@ -8,6 +8,7 @@ import { fireEvent, screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
 import { warning } from '../../../lib/utils';
+import { createInsightsMiddleware } from '../../../middlewares';
 import { chatInlineLayout } from '../../../templates';
 import chatTrigger from '../../chat-trigger/chat-trigger';
 import chat from '../chat';
@@ -239,6 +240,114 @@ describe('chat', () => {
 
       expect(screen.getByText('MCP Product 1')).toBeInTheDocument();
       expect(screen.getByText('MCP Product 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('insights', () => {
+    const createInsightsMiddlewareWithOnEvent = () => {
+      const onEvent = jest.fn();
+
+      const insights = createInsightsMiddleware({
+        insightsClient: null,
+        onEvent,
+      });
+
+      return { insights, onEvent };
+    };
+
+    test('attributes displayed result clicks to the assistant message by default', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.use(insights);
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          templates: { item: (hit) => `<div>${hit.name}</div>` },
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              metadata: { displayResultsEnabled: true },
+              parts: [
+                {
+                  type: 'tool-algolia_search_index',
+                  toolCallId: 'search-call-id',
+                  state: 'output-available',
+                  input: { query: 'products' },
+                  output: {
+                    hits: [
+                      {
+                        objectID: '1',
+                        name: 'Product 1',
+                        __position: 1,
+                        __queryID: 'search-query-id',
+                      },
+                    ],
+                    nbHits: 1,
+                  },
+                },
+                {
+                  type: 'tool-algolia_display_results',
+                  toolCallId: 'display-call-id',
+                  state: 'output-available',
+                  input: {},
+                  output: {
+                    groups: [{ results: [{ objectID: '1' }] }],
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      fireEvent.click(
+        container.querySelector<HTMLElement>(
+          '.ais-ChatToolDisplayResults .ais-Carousel-item'
+        )!
+      );
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'click',
+          eventModifier: 'internal',
+          hits: [
+            {
+              objectID: '1',
+              name: 'Product 1',
+              __position: 1,
+              __queryID: 'search-query-id',
+              __displayToolResult: { objectID: '1' },
+            },
+          ],
+          insightsMethod: 'clickedObjectIDsAfterSearch',
+          payload: {
+            eventName: 'Item Clicked',
+            index: 'indexName',
+            objectIDs: ['1'],
+            positions: [1],
+            queryID: 'message_assistant-message-id',
+            agentID: 'test-agent-id',
+            toolCallID: 'display-call-id',
+          },
+          widgetType: 'ais.chat',
+        },
+        expect.any(Function)
+      );
     });
   });
 
