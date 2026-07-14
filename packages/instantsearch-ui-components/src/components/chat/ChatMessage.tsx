@@ -6,7 +6,12 @@ import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Renderer,
+  SendEventForHits,
+  VNode,
+} from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -169,6 +174,39 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
+function createAgentAwareSendEvent({
+  sendEvent,
+  message,
+  toolMessage,
+  eventAttribution,
+  agentId,
+}: {
+  sendEvent: SendEventForHits;
+  message: ChatMessageBase;
+  toolMessage: ChatToolMessage;
+  eventAttribution?: 'search' | 'agent';
+  agentId?: string;
+}): SendEventForHits {
+  if (eventAttribution !== 'agent') {
+    return sendEvent;
+  }
+
+  return ((...args: any[]) => {
+    if (args.length === 1) {
+      return sendEvent(args[0]);
+    }
+
+    const [eventType, hits, eventName, additionalData] = args;
+
+    return sendEvent(eventType, hits, eventName, {
+      ...(additionalData || {}),
+      queryID: `message_${message.id}`,
+      ...(agentId ? { agentID: agentId } : {}),
+      toolCallID: toolMessage.toolCallId,
+    });
+  }) as SendEventForHits;
+}
+
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
@@ -302,6 +340,14 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             return null;
           }
 
+          const sendEvent = createAgentAwareSendEvent({
+            sendEvent: tool.sendEvent || (() => {}),
+            message,
+            toolMessage,
+            eventAttribution: tool.insightsEventContext?.eventAttribution,
+            agentId: tool.insightsEventContext?.agentId,
+          });
+
           return (
             <div
               key={`${message.id}-${index}`}
@@ -314,7 +360,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
-                sendEvent={tool.sendEvent || (() => {})}
+                sendEvent={sendEvent}
                 onClose={onClose}
               />
             </div>
