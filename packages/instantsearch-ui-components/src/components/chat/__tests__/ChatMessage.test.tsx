@@ -523,8 +523,8 @@ describe('ChatMessage', () => {
     expect(sendEvent).toHaveBeenCalledWith('click', hit, 'Product Clicked', {
       customField: 'custom value',
       queryID: 'message_assistant-message-id',
-      agentID: 'agent-id',
-      toolCallID: 'tool-call-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
     });
   });
 

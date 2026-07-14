@@ -371,8 +371,8 @@ describe('createSendEventForHits', () => {
 
     sendEvent('click', hits[0], 'Product Clicked', {
       queryID: 'message_assistant-message-id',
-      agentID: 'agent-id',
-      toolCallID: 'tool-call-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
     });
 
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -391,8 +391,8 @@ describe('createSendEventForHits', () => {
         objectIDs: ['obj0'],
         positions: [0],
         queryID: 'message_assistant-message-id',
-        agentID: 'agent-id',
-        toolCallID: 'tool-call-id',
+        agentId: 'agent-id',
+        toolCallId: 'tool-call-id',
       },
       widgetType: 'ais.testWidget',
     });
@@ -496,8 +496,8 @@ describe('createSendEventForHits', () => {
 
     sendEvent('conversion', hits[0], 'Product Added To Cart', {
       queryID: 'message_assistant-message-id',
-      agentID: 'agent-id',
-      toolCallID: 'tool-call-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
     });
 
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -515,8 +515,8 @@ describe('createSendEventForHits', () => {
         index: 'testIndex',
         objectIDs: ['obj0'],
         queryID: 'message_assistant-message-id',
-        agentID: 'agent-id',
-        toolCallID: 'tool-call-id',
+        agentId: 'agent-id',
+        toolCallId: 'tool-call-id',
       },
       widgetType: 'ais.testWidget',
     });

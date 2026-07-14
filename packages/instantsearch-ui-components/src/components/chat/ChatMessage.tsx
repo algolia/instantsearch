@@ -201,8 +201,8 @@ function createAgentAwareSendEvent({
     return sendEvent(eventType, hits, eventName, {
       ...(additionalData || {}),
       queryID: `message_${message.id}`,
-      ...(agentId ? { agentID: agentId } : {}),
-      toolCallID: toolMessage.toolCallId,
+      ...(agentId ? { agentId } : {}),
+      toolCallId: toolMessage.toolCallId,
     });
   }) as SendEventForHits;
 }
