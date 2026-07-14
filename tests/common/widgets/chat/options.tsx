@@ -2137,6 +2137,97 @@ export function createOptionsTests(
           })
         );
       });
+
+      test('attributes displayed result clicks to the assistant message by default', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              metadata: { displayResultsEnabled: true },
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: 'search-call-id',
+                  input: { query: 'test', number_of_results: 1 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                        name: 'Product 123',
+                        __position: 1,
+                        __queryID: 'search-query-id',
+                      },
+                    ],
+                    nbHits: 1,
+                  },
+                },
+                {
+                  type: `tool-${DisplayResultsToolType}`,
+                  toolCallId: 'display-call-id',
+                  input: {},
+                  state: 'output-available',
+                  output: {
+                    groups: [{ results: [{ objectID: '123' }] }],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        (window as any).aa.mockClear();
+
+        const carouselItem = document.querySelector(
+          '.ais-ChatToolDisplayResults .ais-Carousel-item'
+        );
+        expect(carouselItem).toBeInTheDocument();
+
+        userEvent.click(carouselItem!);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          expect.objectContaining({
+            eventName: 'Item Clicked',
+            objectIDs: ['123'],
+            positions: [1],
+            queryID: 'message_assistant-message-id',
+            agentId: 'agentId',
+            toolCallId: 'display-call-id',
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
     });
 
     describe('layoutComponent', () => {
