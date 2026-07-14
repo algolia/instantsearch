@@ -278,7 +278,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -321,7 +324,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextFn,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextFn },
           vue: {},
         },
@@ -352,19 +358,27 @@ export function createOptionsTests(
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
-      jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
-        const text = message.text;
-        chat.messages = [
-          {
-            id: '1',
-            role: 'user',
-            parts: text
-              ? [{ type: 'text', text }]
-              : message.parts ?? [],
-            metadata: message.metadata,
-          },
-        ] as any;
-      });
+      type MockSendMessageInput =
+        | {
+            text?: string;
+            parts?: Array<{ type: string } & Record<string, unknown>>;
+            metadata?: unknown;
+          }
+        | undefined;
+
+      jest
+        .spyOn(chat, 'sendMessage')
+        .mockImplementation(async (message: MockSendMessageInput) => {
+          const text = message && 'text' in message ? message.text : undefined;
+          chat.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: text ? [{ type: 'text', text }] : message?.parts ?? [],
+              metadata: message?.metadata,
+            },
+          ] as any;
+        });
 
       const contextValue = { currentPage: '/products' };
 
@@ -374,7 +388,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -1836,9 +1853,7 @@ export function createOptionsTests(
               displayResultsMessage(
                 {
                   intro: 'Curating',
-                  groups: [
-                    { title: 'Runners', results: [{ objectID: '1' }] },
-                  ],
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
                 { preliminary: true }
               ),
@@ -2014,9 +2029,7 @@ export function createOptionsTests(
           const chat = new Chat({
             messages: [
               displayResultsMessage({
-                groups: [
-                  { title: 'Runners', results: [{ objectID: '1' }] },
-                ],
+                groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
               }),
             ],
             id: 'chat-id',
@@ -2033,8 +2046,7 @@ export function createOptionsTests(
                 tools: {
                   [DisplayResultsToolType]: {
                     templates: {
-                      layout:
-                        '<div id="custom-display">custom display</div>',
+                      layout: '<div id="custom-display">custom display</div>',
                     },
                   },
                 },
@@ -2055,9 +2067,9 @@ export function createOptionsTests(
 
           await openChat(act);
 
-          expect(
-            document.querySelector('#custom-display')!.textContent
-          ).toBe('custom display');
+          expect(document.querySelector('#custom-display')!.textContent).toBe(
+            'custom display'
+          );
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();
@@ -2246,8 +2258,7 @@ export function createOptionsTests(
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
-                    ${props.templates.header()}
-                    ${props.templates.prompt()}
+                    ${props.templates.header()} ${props.templates.prompt()}
                   </div>`,
               },
             },
@@ -2301,7 +2312,7 @@ export function createOptionsTests(
                     <button
                       class="custom-send"
                       onclick="${() =>
-                      props.sendMessage({ text: 'hello from layout' })}"
+                        props.sendMessage({ text: 'hello from layout' })}"
                     >
                       Send
                     </button>
@@ -2377,18 +2388,18 @@ export function createOptionsTests(
 
         await openChat(act);
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('ready');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'ready'
+        );
 
         await act(async () => {
           chat._state.status = 'submitted';
           await wait(0);
         });
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('submitted');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'submitted'
+        );
       });
 
       test('renders with inline layout component', async () => {
