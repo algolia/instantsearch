@@ -549,9 +549,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       }
 
       return new Chat({
+        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         ...options,
         transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         shouldRepairToolInput(toolName) {
           let tool = tools[toolName];
           if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
