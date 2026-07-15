@@ -35,7 +35,7 @@ Some general guidelines:
 - Prefer Playwright's auto-waiting assertions (`await expect(locator).toHaveText(...)`) over manual waits.
 - Use the `helpers` fixture whenever possible — if a widget changes, only its helper needs updating.
 - Only assert what should be visible after an action (Is the checkbox selected? Is the result list correct?).
-- Avoid hardcoded index data; assert on behavior (results changed, count > 0, URL updated) rather than exact product names.
+- Prefer behavior-based assertions (results changed, count > 0, URL updated) over hardcoded index data where practical — some specs do assert exact product names, but that's more fragile if the index changes.
 
 The full guide — available helpers, best practices, debugging, and CI integration — is in
 [`.claude/rules/e2e.md`](../../.claude/rules/e2e.md).
