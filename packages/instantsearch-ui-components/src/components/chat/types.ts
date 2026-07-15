@@ -508,7 +508,6 @@ export type ClientSideToolComponent = (
 ) => JSX.Element;
 
 export type ChatInsightsEventContext = {
-  eventAttribution: 'search' | 'agent';
   agentId?: string;
 };
 

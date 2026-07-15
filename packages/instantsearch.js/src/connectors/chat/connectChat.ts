@@ -167,30 +167,6 @@ export type ApplyFiltersParams = {
   facetFilters?: string[][];
 };
 
-export type ChatInsightsOptions = {
-  /**
-   * Controls which query ID is used for events sent from Chat tool results.
-   *
-   * - `search`: use the query ID from the search that returned the hit.
-   * - `agent`: use the assistant message ID that displayed the hit.
-   *
-   * This applies to events sent through the tool result `sendEvent` function.
-   * It does not enable Insights by itself; add the Insights middleware or set
-   * `insights: true` on InstantSearch to send events.
-   *
-   * @example
-   * ```js
-   * chat({
-   *   // ...
-   *   insights: { eventAttribution: 'agent' },
-   * });
-   * ```
-   *
-   * @default 'agent'
-   */
-  eventAttribution?: ChatInsightsEventContext['eventAttribution'];
-};
-
 export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
@@ -210,14 +186,6 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Configuration for client-side tools.
    */
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
-  /**
-   * Insights options for events sent from Chat tool results.
-   *
-   * By default, events from tool result cards are attributed to the assistant
-   * message that displayed them. Set `eventAttribution` to `search` to keep the
-   * query ID from the search that returned the hit.
-   */
-  insights?: ChatInsightsOptions;
   /**
    * Identifier of this type of chat widget. This is used for the key in renderState.
    * @default 'chat'
@@ -364,7 +332,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
-      insights = {},
       ...options
     } = widgetParams || {};
 
@@ -381,7 +348,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const agentId = 'agentId' in options ? options.agentId : undefined;
     const insightsEventContext: ChatInsightsEventContext = {
       agentId,
-      eventAttribution: insights.eventAttribution ?? 'agent',
     };
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];

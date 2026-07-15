@@ -178,19 +178,13 @@ function createAgentAwareSendEvent({
   sendEvent,
   message,
   toolMessage,
-  eventAttribution,
   agentId,
 }: {
   sendEvent: SendEventForHits;
   message: ChatMessageBase;
   toolMessage: ChatToolMessage;
-  eventAttribution?: 'search' | 'agent';
   agentId?: string;
 }): SendEventForHits {
-  if (eventAttribution !== 'agent') {
-    return sendEvent;
-  }
-
   return ((...args: any[]) => {
     if (args.length === 1) {
       return sendEvent(args[0]);
@@ -344,7 +338,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             sendEvent: tool.sendEvent || (() => {}),
             message,
             toolMessage,
-            eventAttribution: tool.insightsEventContext?.eventAttribution,
             agentId: tool.insightsEventContext?.agentId,
           });
 
