@@ -56,7 +56,7 @@ export type DisposeOptions = {
 };
 
 export const indexWidgetTypes = ['ais.index', 'ais.feedContainer'] as const;
-export type IndexWidgetType = (typeof indexWidgetTypes)[number];
+export type IndexWidgetType = typeof indexWidgetTypes[number];
 
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
@@ -160,7 +160,7 @@ export type WidgetDescription = {
 };
 
 type SearchWidget<TWidgetDescription extends WidgetDescription> = {
-  dependsOn?: 'search';
+  dependsOn?: 'search' | 'none';
   getWidgetParameters?: (
     state: SearchParameters,
     widgetParametersOptions: {

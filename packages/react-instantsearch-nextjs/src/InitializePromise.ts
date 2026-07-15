@@ -15,6 +15,7 @@ import {
 import { createInsertHTML } from './createInsertHTML';
 
 import type {
+  IndexWidget,
   SearchOptions,
   CompositionClient,
   SearchClient,
@@ -29,9 +30,22 @@ type InitializePromiseProps = {
   nonce?: string;
 };
 
+function isWithinIsolatedIndex(index: IndexWidget): boolean {
+  let current: IndexWidget | null = index;
+
+  while (current) {
+    if (current._isolated) {
+      return true;
+    }
+    current = current.getParent();
+  }
+
+  return false;
+}
+
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
-  const { waitForResultsRef } = useRSCContext();
+  const { waitForResultsRef, resolveWaitForResultsRef } = useRSCContext();
   const insertHTML =
     useContext(ServerInsertedHTMLContext) ||
     (() => {
@@ -66,23 +80,49 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     new Promise<void>((resolve) => {
       let searchReceived = false;
       let recommendReceived = false;
-      search.mainHelper!.derivedHelpers[0].once('result', () => {
+      let settled = false;
+      const derivedHelper = search.mainHelper!.derivedHelpers[0];
+      const settle = () => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        if (resolveWaitForResultsRef) {
+          resolveWaitForResultsRef.current = null;
+        }
+        resolve();
+      };
+      const onResult = () => {
         searchReceived = true;
         if (!search._hasRecommendWidget || recommendReceived) {
-          resolve();
+          settle();
         }
-      });
-      search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
+      };
+      const onRecommendResult = () => {
         recommendReceived = true;
         if (!search._hasSearchWidget || searchReceived) {
-          resolve();
+          settle();
         }
-      });
+      };
+
+      if (resolveWaitForResultsRef) {
+        resolveWaitForResultsRef.current = () => {
+          derivedHelper.removeListener('result', onResult);
+          derivedHelper.removeListener('recommend:result', onRecommendResult);
+          settle();
+        };
+      }
+
+      derivedHelper.once('result', onResult);
+      derivedHelper.once('recommend:result', onRecommendResult);
     });
 
   const injectInitialResults = () => {
     const options = { inserted: false };
-    const results = getInitialResults(search.mainIndex, requestParamsList);
+    const results = getInitialResults(
+      search.mainIndex,
+      search._hasSearchWidget ? requestParamsList || [] : []
+    );
     insertHTML(createInsertHTML({ options, results, nonce }));
   };
 
@@ -92,6 +132,9 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         .then(() => {
           let shouldRefetch = false;
           walkIndex(search.mainIndex, (index) => {
+            if (isWithinIsolatedIndex(index)) {
+              return;
+            }
             shouldRefetch =
               shouldRefetch || index.getWidgets().some(isTwoPassWidget);
           });
