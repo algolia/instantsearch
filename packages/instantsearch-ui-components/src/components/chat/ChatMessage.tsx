@@ -174,33 +174,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
-function createAgentAwareSendEvent({
-  sendEvent,
-  message,
-  toolMessage,
-  agentId,
-}: {
-  sendEvent: SendEventForHits;
-  message: ChatMessageBase;
-  toolMessage: ChatToolMessage;
-  agentId?: string;
-}): SendEventForHits {
-  return ((...args: any[]) => {
-    if (args.length === 1) {
-      return sendEvent(args[0]);
-    }
-
-    const [eventType, hits, eventName, additionalData] = args;
-
-    return sendEvent(eventType, hits, eventName, {
-      ...(additionalData || {}),
-      queryID: `message_${message.id}`,
-      ...(agentId ? { agentId } : {}),
-      toolCallId: toolMessage.toolCallId,
-    });
-  }) as SendEventForHits;
-}
-
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
@@ -334,12 +307,29 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             return null;
           }
 
-          const sendEvent = createAgentAwareSendEvent({
-            sendEvent: tool.sendEvent || (() => {}),
-            message,
-            toolMessage,
-            agentId: tool.insightsEventContext?.agentId,
-          });
+          const toolSendEvent = tool.sendEvent || (() => {});
+          const agentId = tool.insightsEventContext?.agentId;
+          const sendEvent = ((
+            eventType: any,
+            hits?: any,
+            eventName?: any,
+            additionalData?: any
+          ) => {
+            if (
+              hits === undefined &&
+              eventName === undefined &&
+              additionalData === undefined
+            ) {
+              return toolSendEvent(eventType);
+            }
+
+            return toolSendEvent(eventType, hits, eventName, {
+              ...(additionalData || {}),
+              queryID: 'message_' + message.id,
+              ...(agentId ? { agentId } : {}),
+              toolCallId: toolMessage.toolCallId,
+            });
+          }) as SendEventForHits;
 
           return (
             <div
