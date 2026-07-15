@@ -19,7 +19,11 @@ module.exports = (api) => {
         isStorybook
           ? {
               modules: false,
-              targets: 'defaults',
+              // Storybook 5 runs on webpack 4, whose parser can't handle modern
+              // syntax (optional chaining, nullish coalescing). With no browser
+              // targets, preset-env down-levels everything so webpack 4 can parse
+              // it — including workspace deps built by SWC (see the storybook
+              // webpack.config.js babel-loader rules).
             }
           : {
               modules: 'commonjs',
