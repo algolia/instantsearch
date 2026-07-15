@@ -151,6 +151,20 @@ describe('Usage', () => {
       );
     });
 
+    it('does not warn if no widget requires a search or recommend request', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+
+        search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
     it('does not warn if index widget is provided', async () => {
       await expect(async () => {
         const search = new InstantSearch({
@@ -1261,6 +1275,67 @@ describe('start', () => {
       expect(event.error).toEqual(new Error('SERVER_ERROR'));
       done();
     });
+  });
+
+  it('clears a search error when the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('clears a late search error after the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
   });
 
   it('does not trigger a search with initial results', async () => {
