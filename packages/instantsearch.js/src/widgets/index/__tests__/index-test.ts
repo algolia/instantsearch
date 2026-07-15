@@ -500,6 +500,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(instance.getWidgets()).toEqual([searchBox]);
     });
 
+    it('clears the parent only on removed widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox, pagination]);
+      instance.removeWidgets([pagination]);
+
+      expect(searchBox.parent).toBe(instance);
+      expect(pagination.parent).toBeUndefined();
+    });
+
+    it('preserves the parent of a widget owned by another index', () => {
+      const instance = index({ indexName: 'indexName' });
+      const otherInstance = index({ indexName: 'otherIndexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox]);
+      otherInstance.addWidgets([pagination]);
+      instance.removeWidgets([pagination]);
+
+      expect(searchBox.parent).toBe(instance);
+      expect(pagination.parent).toBe(otherInstance);
+    });
+
     it('removes given widgets from the instance', () => {
       const instance = index({ indexName: 'indexName' });
       const searchBox = virtualSearchBox({});
