@@ -98,6 +98,64 @@ export function createOptionsTests(
       expect(searchClient.search).not.toHaveBeenCalled();
     });
 
+    test('does not trigger the main search with only a chat trigger', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(),
+            renderChat: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(),
+            renderChat: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
+
+    test('triggers the main search when another widget requires it', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(),
+            renderRefinements: true,
+            requiresSearch: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(),
+            renderRefinements: true,
+            requiresSearch: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
     test('sends initialUserMessage on init', async () => {
       const searchClient = createSearchClient();
 

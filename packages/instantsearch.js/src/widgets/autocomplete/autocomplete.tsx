@@ -1079,6 +1079,7 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
 
   /**
    * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
    *
    * @default true
    */
