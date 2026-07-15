@@ -48,6 +48,114 @@ export function createOptionsTests(
       expect(document.querySelector('.ais-ChatPrompt')).toBeInTheDocument();
     });
 
+    test('triggers the main search by default', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(),
+          react: createDefaultWidgetParams(),
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not trigger the main search when requiresSearch is false', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(),
+            requiresSearch: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(),
+            requiresSearch: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
+
+    test('does not trigger the main search with only a chat trigger', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(),
+            renderChat: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(),
+            renderChat: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
+
+    test('triggers the main search when another widget requires it', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(),
+            renderRefinements: true,
+            requiresSearch: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(),
+            renderRefinements: true,
+            requiresSearch: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
     test('sends initialUserMessage on init', async () => {
       const searchClient = createSearchClient();
 

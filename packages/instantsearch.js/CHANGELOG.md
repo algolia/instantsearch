@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.106.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.105.0...instantsearch.js@4.106.0) (2026-07-14)
+
+
+### Features
+
+* **chat:** add persistence opt-out ([#7107](https://github.com/algolia/instantsearch/issues/7107)) ([ad04f65](https://github.com/algolia/instantsearch/commit/ad04f65c4ddfbebc58cf35f0b8cc483821b61458))
+* **chat:** render guardrail fallback as assistant message ([#7108](https://github.com/algolia/instantsearch/issues/7108)) ([f0f4e41](https://github.com/algolia/instantsearch/commit/f0f4e416b5cff94981a6e01885ba1e224d0f0e0b))
+
+
+
+
+
 # [4.105.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.104.0...instantsearch.js@4.105.0) (2026-07-07)
 
 
