@@ -633,11 +633,17 @@ See documentation: ${createDocumentationLink({
     }
 
     mainHelper.search = () => {
-      this.status = 'loading';
-      this.scheduleRender(false);
+      const hasSearchOrRecommendWidget =
+        this._hasSearchWidget || this._hasRecommendWidget;
+
+      if (hasSearchOrRecommendWidget) {
+        this.status = 'loading';
+      }
+      this.scheduleRender(!hasSearchOrRecommendWidget);
 
       warning(
-        Boolean(this.indexName) ||
+        !hasSearchOrRecommendWidget ||
+          Boolean(this.indexName) ||
           Boolean(this.compositionID) ||
           this.mainIndex.getWidgets().some(isIndexWidget),
         'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
@@ -710,7 +716,7 @@ See documentation: ${createDocumentationLink({
       (error as any).error = error;
       this.error = error;
       this.status = 'error';
-      this.scheduleRender(false);
+      this.scheduleRender(!this._hasSearchWidget && !this._hasRecommendWidget);
 
       // This needs to execute last because it throws the error.
       this.emit('error', error);

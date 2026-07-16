@@ -88,7 +88,7 @@ export function InstantSearchNext<
       <InstantSearch {...instantSearchProps} routing={routing!}>
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
-        {isServer && <TriggerSearch nonce={nonce} />}
+        {isServer && <TriggerSearch />}
       </InstantSearch>
     </ServerOrHydrationProvider>
   );
@@ -106,6 +106,7 @@ function ServerOrHydrationProvider({
   ignoreMultipleHooksWarning: boolean;
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
+  const resolvePromiseRef = useRef<(() => void) | null>(null);
   const countRef = useRef(0);
   // Capture once on first render. Side-effect-free read keeps hydration
   // deterministic across StrictMode double-invocation and React 19 / Next.js
@@ -139,6 +140,7 @@ function ServerOrHydrationProvider({
     <InstantSearchRSCContext.Provider
       value={{
         waitForResultsRef: rscWaitRef,
+        resolveWaitForResultsRef: resolvePromiseRef,
         countRef,
         ignoreMultipleHooksWarning,
       }}

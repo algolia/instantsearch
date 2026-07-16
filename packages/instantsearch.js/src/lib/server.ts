@@ -23,6 +23,9 @@ export function waitForResults(
   // later during hydration.
   let requestParamsList: SearchOptions[];
   const client = helper.getClient();
+  const waitsForSearch = search._hasSearchWidget;
+  const waitsForRecommend = !skipRecommend && search._hasRecommendWidget;
+
   if (search.compositionID) {
     helper.setClient({
       ...client,
@@ -41,18 +44,24 @@ export function waitForResults(
     } as SearchClient);
   }
 
-  if (search._hasSearchWidget) {
+  if (waitsForSearch) {
     if (search.compositionID) {
       helper.searchWithComposition();
     } else {
       helper.searchOnlyWithDerivedHelpers();
     }
   }
-  !skipRecommend && search._hasRecommendWidget && helper.recommend();
+  if (waitsForRecommend) {
+    helper.recommend();
+  }
 
-  return new Promise((resolve, reject) => {
-    let searchResultsReceived = !search._hasSearchWidget;
-    let recommendResultsReceived = !search._hasRecommendWidget || skipRecommend;
+  if (!waitsForSearch && !waitsForRecommend) {
+    return Promise.resolve([]);
+  }
+
+  return new Promise<SearchOptions[]>((resolve, reject) => {
+    let searchResultsReceived = !waitsForSearch;
+    let recommendResultsReceived = !waitsForRecommend;
 
     const tryResolve = () => {
       if (!searchResultsReceived || !recommendResultsReceived) {
@@ -109,6 +118,14 @@ export function getInitialResults(
 
   let requestParamsIndex = 0;
   walkIndex(rootIndex, (widget) => {
+    let currentIndex: IndexWidget | null = widget;
+    while (currentIndex) {
+      if (currentIndex._isolated) {
+        return;
+      }
+      currentIndex = currentIndex.getParent();
+    }
+
     const searchResults = widget.getResults();
     const recommendResults = widget.getHelper()?.lastRecommendResults;
     if (searchResults || recommendResults) {
@@ -150,7 +167,10 @@ export function getInitialResults(
     }
   });
 
-  if (Object.keys(initialResults).length === 0) {
+  if (
+    Object.keys(initialResults).length === 0 &&
+    requestParamsList?.length !== 0
+  ) {
     throw new Error(
       'The root index does not have any results. Make sure you have at least one widget that provides results.'
     );

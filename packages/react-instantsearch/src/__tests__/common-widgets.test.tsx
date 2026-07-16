@@ -410,7 +410,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -428,7 +432,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           </>
         )}
         <ChatTrigger />
-        <Chat {...chatWidgetParams} />
+        {renderChat && <Chat {...chatWidgetParams} />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );

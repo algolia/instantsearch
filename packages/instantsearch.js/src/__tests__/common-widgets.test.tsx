@@ -657,7 +657,11 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
 
     const refinementsWidgets = [];
     if (renderRefinements) {
@@ -691,10 +695,16 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
-        chat({
-          container: document.body.appendChild(document.createElement('div')),
-          ...chatWidgetParams,
-        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                ...chatWidgetParams,
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*

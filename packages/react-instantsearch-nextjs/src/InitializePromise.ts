@@ -15,6 +15,7 @@ import {
 import { createInsertHTML } from './createInsertHTML';
 
 import type {
+  IndexWidget,
   SearchOptions,
   CompositionClient,
   SearchClient,
@@ -29,9 +30,22 @@ type InitializePromiseProps = {
   nonce?: string;
 };
 
+function isWithinIsolatedIndex(index: IndexWidget): boolean {
+  let current: IndexWidget | null = index;
+
+  while (current) {
+    if (current._isolated) {
+      return true;
+    }
+    current = current.getParent();
+  }
+
+  return false;
+}
+
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
-  const { waitForResultsRef } = useRSCContext();
+  const { waitForResultsRef, resolveWaitForResultsRef } = useRSCContext();
   const insertHTML =
     useContext(ServerInsertedHTMLContext) ||
     (() => {
@@ -66,9 +80,16 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     new Promise<void>((resolve) => {
       let searchReceived = false;
       let recommendReceived = false;
-      const tryResolve = () => {
-        if (search._hasSearchWidget && !searchReceived) return;
-        if (search._hasRecommendWidget && !recommendReceived) return;
+      let settled = false;
+      const derivedHelper = search.mainHelper!.derivedHelpers[0];
+      const settle = () => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        if (resolveWaitForResultsRef) {
+          resolveWaitForResultsRef.current = null;
+        }
         // Await any promises that widgets registered during SSR init (e.g. the
         // on-page-suggestions widget races its agent request against a
         // timeout). `allSettled` so a widget rejecting (e.g. abort) doesn't
@@ -77,28 +98,44 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
           resolve()
         );
       };
-      search.mainHelper!.derivedHelpers[0].once('result', () => {
+      const onResult = () => {
         searchReceived = true;
-        tryResolve();
-      });
-      search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
+        if (!search._hasRecommendWidget || recommendReceived) {
+          settle();
+        }
+      };
+      const onRecommendResult = () => {
         recommendReceived = true;
-        tryResolve();
-      });
+        if (!search._hasSearchWidget || searchReceived) {
+          settle();
+        }
+      };
+
+      if (resolveWaitForResultsRef) {
+        resolveWaitForResultsRef.current = () => {
+          derivedHelper.removeListener('result', onResult);
+          derivedHelper.removeListener('recommend:result', onRecommendResult);
+          settle();
+        };
+      }
+
+      derivedHelper.once('result', onResult);
+      derivedHelper.once('recommend:result', onRecommendResult);
     });
 
   const injectInitialResults = () => {
     const options = { inserted: false };
-    const results = getInitialResults(search.mainIndex, requestParamsList);
+    const results = getInitialResults(
+      search.mainIndex,
+      search._hasSearchWidget ? requestParamsList || [] : []
+    );
     const chatStates =
       (
         search as typeof search & {
           _initialChatStates?: Record<string, unknown> | null;
         }
       )._initialChatStates ?? undefined;
-    insertHTML(
-      createInsertHTML({ options, results, chatStates, nonce })
-    );
+    insertHTML(createInsertHTML({ options, results, chatStates, nonce }));
   };
 
   if (waitForResultsRef?.current === null) {
@@ -107,6 +144,9 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         .then(() => {
           let shouldRefetch = false;
           walkIndex(search.mainIndex, (index) => {
+            if (isWithinIsolatedIndex(index)) {
+              return;
+            }
             shouldRefetch =
               shouldRefetch || index.getWidgets().some(isTwoPassWidget);
           });

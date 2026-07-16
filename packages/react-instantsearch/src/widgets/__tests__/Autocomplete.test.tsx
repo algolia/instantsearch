@@ -120,6 +120,49 @@ describe('EXPERIMENTAL_Autocomplete', () => {
   });
 
   describe('lazy activation', () => {
+    test('updates its main search dependency when requiresSearch changes', async () => {
+      const searchClient = createSearchClient({});
+      const indices = [
+        {
+          indexName: 'my-index',
+          itemComponent: ({ item }: { item: { objectID: string } }) =>
+            React.createElement('div', null, String(item.objectID)),
+        },
+      ];
+
+      function App({ requiresSearch }: { requiresSearch: boolean }) {
+        return (
+          <InstantSearchTestWrapper
+            searchClient={searchClient}
+            indexName="indexName"
+          >
+            <EXPERIMENTAL_Autocomplete
+              indices={indices}
+              requiresSearch={requiresSearch}
+            />
+          </InstantSearchTestWrapper>
+        );
+      }
+
+      const { rerender } = render(<App requiresSearch />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+      rerender(<App requiresSearch={false} />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+      rerender(<App requiresSearch />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
+
     test('does not search on mount in indices-mode', async () => {
       const searchClient = createSearchClient({});
 
