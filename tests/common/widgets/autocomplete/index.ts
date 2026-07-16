@@ -17,7 +17,7 @@ export type ReactAutocompleteWidgetParams = AutocompleteProps<any>;
 type AutocompleteWidgetParams = {
   javascript: JSAutocompleteWidgetParams;
   react: ReactAutocompleteWidgetParams;
-  vue: Record<string, never>;
+  vue: { requiresSearch?: boolean };
 };
 
 declare module '../../common' {

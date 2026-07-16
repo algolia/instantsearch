@@ -4,6 +4,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { SearchParameters } from 'algoliasearch-helper';
 
 import {
   connectConfigure,
@@ -15,6 +16,26 @@ import { index } from '../../widgets';
 import { getInitialResults, waitForResults } from '../server';
 
 describe('waitForResults', () => {
+  test('resolves when no search or recommend request is pending', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    search.addWidgets([
+      {
+        $$type: 'ais.noop',
+        dependsOn: 'none',
+        init() {},
+        render() {},
+        dispose() {},
+      },
+    ]);
+    search.start();
+
+    await expect(waitForResults(search)).resolves.toEqual([]);
+  });
+
   test('waits for the results from the search instance', async () => {
     const { searchClient, searches } = createControlledSearchClient();
     const search = instantsearch({
@@ -88,6 +109,50 @@ describe('waitForResults', () => {
 });
 
 describe('getInitialResults', () => {
+  test('returns empty results when no requests were made', () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    expect(getInitialResults(search.mainIndex, [])).toEqual({});
+  });
+
+  test('excludes isolated index trees without consuming request params', () => {
+    const search = instantsearch({
+      indexName: 'root',
+      searchClient: createSearchClient(),
+    });
+    search._initialResults = Object.fromEntries(
+      ['root', 'suggestions', 'nested'].map((indexName) => [
+        indexName,
+        {
+          state: new SearchParameters({ index: indexName }),
+          results: [createSingleSearchResponse()],
+        },
+      ])
+    );
+    search.addWidgets([
+      index({ EXPERIMENTAL_isolated: true, indexId: 'isolated' }).addWidgets([
+        index({ indexName: 'suggestions' }),
+      ]),
+      index({ indexName: 'nested' }),
+    ]);
+    search.start();
+
+    const rootParams = { hitsPerPage: 3 };
+    const nestedParams = { hitsPerPage: 7 };
+    const initialResults = getInitialResults(search.mainIndex, [
+      rootParams,
+      nestedParams,
+    ]);
+
+    expect(initialResults).not.toHaveProperty('isolated');
+    expect(initialResults).not.toHaveProperty('suggestions');
+    expect(initialResults.root?.requestParams).toEqual([rootParams]);
+    expect(initialResults.nested?.requestParams).toEqual([nestedParams]);
+  });
+
   test('errors if results are not available', () => {
     const search = instantsearch({
       indexName: 'indexName',

@@ -71,6 +71,27 @@ describe('connectChat', () => {
       );
     });
 
+    it('depends on search by default', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
+
+      expect(widget.dependsOn).toBe('search');
+    });
+
+    it('can be configured to depend on no backend request', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        requiresSearch: false,
+      });
+
+      expect(widget.dependsOn).toBe('none');
+    });
+
     it('types requestOptions as agentId-only', () => {
       const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
         params: TParams

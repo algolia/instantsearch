@@ -33,6 +33,8 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  InitOptions,
+  RenderOptions,
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
@@ -159,6 +161,11 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   feedback?: never;
   requestOptions?: never;
   persistence?: never;
+  // A custom `chat` instance already configures its own auto-continuation
+  // predicate, so this option doesn't apply here. Declaring it `never` (like
+  // `feedback`/`requestOptions`/`persistence` above) forbids passing it
+  // alongside a custom instance and keeps it a common key across the union so
+  // the connector can destructure it with a default.
   sendAutomaticallyWhen?: never;
 };
 
@@ -182,6 +189,13 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   /**
    * Configuration for client-side tools.
    */
@@ -333,6 +347,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialMessages,
       disableTriggerValidation = false,
       sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
+      requiresSearch = true,
       ...options
     } = widgetParams || {};
 
@@ -608,6 +623,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     return {
       $$type: 'ais.chat',
+      dependsOn: requiresSearch ? ('search' as const) : ('none' as const),
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -723,8 +739,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       getRenderState(
-        renderState,
-        renderOptions
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
         // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
       ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
@@ -734,7 +750,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState(renderOptions: InitOptions | RenderOptions) {
         const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
