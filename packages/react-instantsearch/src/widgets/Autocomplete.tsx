@@ -928,7 +928,7 @@ export function Autocomplete<TItem extends BaseHit = BaseHit>(
 export const EXPERIMENTAL_Autocomplete = deprecate(
   Autocomplete,
   'EXPERIMENTAL_Autocomplete is no longer experimental. Please use Autocomplete instead.'
-) as typeof Autocomplete;
+);
 
 function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   indicesConfig,
