@@ -9,7 +9,7 @@ import {
   getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
 import { Component, Fragment, h, render } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -144,6 +144,28 @@ function createCarouselTool<
       (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
     );
     const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
+    const viewedItemsSignature = items
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = useRef<string | undefined>(undefined);
+
+    useEffect(() => {
+      if (
+        items.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', items, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [items, sendEvent, viewedItemsSignature]);
 
     const MemoedHeaderComponent = useMemo(() => {
       return (

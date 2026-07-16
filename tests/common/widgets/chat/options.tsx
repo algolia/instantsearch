@@ -2258,6 +2258,84 @@ export function createOptionsTests(
         );
       });
 
+      test('sends an items_shown view event when fallback search results render', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: 'search-call-id',
+                  input: { query: 'test', number_of_results: 1 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                        name: 'Product 123',
+                        __position: 1,
+                        __queryID: 'search-query-id',
+                      },
+                    ],
+                    nbHits: 1,
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        (window as any).aa.mockClear();
+
+        await openChat(act);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const viewEvents = (window as any).aa.mock.calls.filter(
+          ([method]: [string]) => method === 'viewedObjectIDs'
+        );
+
+        expect(viewEvents).toHaveLength(1);
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          expect.objectContaining({
+            eventName: 'items_shown',
+            objectIDs: ['123'],
+            queryID: 'message_assistant-message-id',
+            agentId: 'agentId',
+            toolCallId: 'search-call-id',
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
+
       test('attributes displayed result clicks to the assistant message by default', async () => {
         const searchClient = createSearchClient();
 
@@ -2434,6 +2512,103 @@ export function createOptionsTests(
               'X-Algolia-Application-Id': 'appId',
             }),
           })
+        );
+      });
+
+      test('sends one displayed result view event per assistant message', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const createDisplayedResultMessage = (id: string) => ({
+          id,
+          role: 'assistant' as const,
+          metadata: { displayResultsEnabled: true },
+          parts: [
+            {
+              type: `tool-${SearchIndexToolType}` as const,
+              toolCallId: `search-call-id-${id}`,
+              input: { query: 'test', number_of_results: 1 },
+              state: 'output-available' as const,
+              output: {
+                hits: [
+                  {
+                    objectID: '123',
+                    name: 'Product 123',
+                    __position: 1,
+                    __queryID: 'search-query-id',
+                  },
+                ],
+                nbHits: 1,
+              },
+            },
+            {
+              type: `tool-${DisplayResultsToolType}` as const,
+              toolCallId: `display-call-id-${id}`,
+              input: {},
+              state: 'output-available' as const,
+              output: {
+                groups: [{ results: [{ objectID: '123' }] }],
+              },
+            },
+          ],
+        });
+
+        const chat = new Chat({
+          messages: [
+            createDisplayedResultMessage('assistant-message-id-1'),
+            createDisplayedResultMessage('assistant-message-id-2'),
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        (window as any).aa.mockClear();
+
+        await openChat(act);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const viewEvents = (window as any).aa.mock.calls.filter(
+          ([method]: [string]) => method === 'viewedObjectIDs'
+        );
+
+        expect(viewEvents).toHaveLength(2);
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          expect.objectContaining({
+            eventName: 'items_shown',
+            objectIDs: ['123'],
+            queryID: 'message_assistant-message-id-1',
+            agentId: 'agentId',
+            toolCallId: 'display-call-id-assistant-message-id-1',
+          }),
+          expect.any(Object)
+        );
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          expect.objectContaining({
+            eventName: 'items_shown',
+            objectIDs: ['123'],
+            queryID: 'message_assistant-message-id-2',
+            agentId: 'agentId',
+            toolCallId: 'display-call-id-assistant-message-id-2',
+          }),
+          expect.any(Object)
         );
       });
     });
