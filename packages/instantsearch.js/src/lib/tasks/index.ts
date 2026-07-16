@@ -1,18 +1,21 @@
-export { buildEndpoint } from './buildEndpoint';
-export { buildTaskPayload } from './buildTaskPayload';
-export { createStructuredOutputRunner } from './createStructuredOutputRunner';
-export { fetchTask } from './fetchTask';
-export { resolveEndpoint } from './resolveEndpoint';
+export { resolveEndpoint } from './endpoint';
+export {
+  buildTaskPayload,
+  createStructuredOutputRunner,
+  fetchTask,
+} from './fetchTask';
 
 export type {
-  BuildTaskPayloadOptions,
+  ResolvedEndpoint,
   TaskPrepareRequest,
-} from './buildTaskPayload';
+  TaskTransport,
+  TaskCredentials,
+  TaskEndpoint,
+} from './endpoint';
 export type {
+  BuildTaskPayloadOptions,
+  FetchTaskOptions,
   StructuredOutputRunner,
   StructuredOutputRunnerOptions,
   StructuredOutputSubmitOptions,
-} from './createStructuredOutputRunner';
-export type { FetchTaskOptions } from './fetchTask';
-export type { ResolvedEndpoint } from './resolveEndpoint';
-export type { TaskTransport, TaskCredentials, TaskEndpoint } from './types';
+} from './fetchTask';

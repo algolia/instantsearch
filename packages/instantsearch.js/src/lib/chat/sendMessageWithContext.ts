@@ -18,7 +18,7 @@ export function createSendMessageWithContext<TUiMessage extends UIMessage>(
   chat: AbstractChat<TUiMessage>,
   context: ChatContext | undefined
 ): typeof chat.sendMessage {
-  const sendMessage: typeof chat.sendMessage = (message, ...rest) => {
+  return (message, ...rest) => {
     if (!context || !message) {
       return chat.sendMessage(message, ...rest);
     }
@@ -36,6 +36,4 @@ export function createSendMessageWithContext<TUiMessage extends UIMessage>(
       ...rest
     );
   };
-
-  return sendMessage;
 }

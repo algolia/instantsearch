@@ -1,12 +1,38 @@
-import { buildEndpoint } from './buildEndpoint';
+export type TaskPrepareRequest = (body: Record<string, unknown>) => {
+  body: Record<string, unknown>;
+};
 
-import type { TaskTransport } from './types';
+export type TaskTransport = {
+  api: string;
+  headers?: Record<string, string>;
+  prepareSendMessagesRequest?: TaskPrepareRequest;
+};
+
+export type TaskCredentials = {
+  appId: string;
+  apiKey: string;
+  agentId: string;
+};
+
+export type TaskEndpoint =
+  | { transport: TaskTransport; credentials?: never }
+  | { transport?: never; credentials: TaskCredentials };
 
 export type ResolvedEndpoint = {
   endpoint: string;
   headers: Record<string, string>;
   prepareSendMessagesRequest?: TaskTransport['prepareSendMessagesRequest'];
 };
+
+function buildEndpoint({
+  appId,
+  agentId,
+}: {
+  appId: string;
+  agentId: string;
+}): string {
+  return `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/tasks`;
+}
 
 export function resolveEndpoint(params: {
   transport?: TaskTransport;
