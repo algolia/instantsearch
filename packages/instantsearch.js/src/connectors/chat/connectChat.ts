@@ -161,11 +161,6 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   feedback?: never;
   requestOptions?: never;
   persistence?: never;
-  // A custom `chat` instance already configures its own auto-continuation
-  // predicate, so this option doesn't apply here. Declaring it `never` (like
-  // `feedback`/`requestOptions`/`persistence` above) forbids passing it
-  // alongside a custom instance and keeps it a common key across the union so
-  // the connector can destructure it with a default.
   sendAutomaticallyWhen?: never;
 };
 
