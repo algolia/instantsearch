@@ -136,7 +136,7 @@ describe('Autocomplete', () => {
             searchClient={searchClient}
             indexName="indexName"
           >
-            <EXPERIMENTAL_Autocomplete
+            <Autocomplete
               indices={indices}
               requiresSearch={requiresSearch}
             />
