@@ -55,6 +55,10 @@ export type IndexWidgetParams =
        *
        * @default false
        */
+      isolated?: false;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated?: false;
     }
   | {
@@ -62,16 +66,31 @@ export type IndexWidgetParams =
        * If `true`, the index will not be merged with the main helper's state.
        * This means that the index will not be part of the main search request.
        *
-       * This option is EXPERIMENTAL, and implementation details may change in the future.
-       * Things that could change are:
-       * - which widgets get rendered when a change happens
-       * - whether the index searches automatically
-       * - whether the index is included in the URL / UiState
-       * - whether the index is included in server-side rendering
+       * When `isolated` is `true`:
+       * - the index searches on its own instead of within the main search request;
+       * - the index is not included in the URL / UiState;
+       * - the index is not included in server-side rendering.
        *
        * @default false
        */
+      isolated: true;
+      EXPERIMENTAL_isolated?: never;
+      /**
+       * The index or composition id to target.
+       */
+      indexName?: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+    }
+  | {
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated: true;
+      isolated?: never;
       /**
        * The index or composition id to target.
        */
@@ -374,9 +393,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
     (widgetParams.indexName === undefined &&
+      !widgetParams.isolated &&
       !widgetParams.EXPERIMENTAL_isolated)
   ) {
     throw new Error(withUsage('The `indexName` option is required.'));
+  }
+
+  if (__DEV__ && widgetParams.EXPERIMENTAL_isolated !== undefined) {
+    warning(
+      false,
+      'The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
+    );
   }
 
   // When isolated=true, we use an empty string as the default indexName.
@@ -384,7 +411,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   const {
     indexName = '',
     indexId = indexName,
-    EXPERIMENTAL_isolated: isolated = false,
+    isolated = widgetParams.EXPERIMENTAL_isolated ?? false,
   } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];

@@ -11,9 +11,9 @@ import { wait } from '@instantsearch/testutils/wait';
 
 import instantsearch from '../../..';
 import { walkIndex } from '../../../lib/utils';
-import { EXPERIMENTAL_autocomplete } from '../autocomplete';
+import { autocomplete } from '../autocomplete';
 
-describe('EXPERIMENTAL_autocomplete()', () => {
+describe('autocomplete()', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
 
@@ -36,14 +36,14 @@ describe('EXPERIMENTAL_autocomplete()', () => {
     it('requires container', () => {
       expect(() =>
         // @ts-expect-error testing invalid input
-        EXPERIMENTAL_autocomplete({})
+        autocomplete({})
       ).toThrow(/container/);
     });
 
     it('throws when both `feeds` and `indices` are provided', () => {
       expect(() =>
         // @ts-expect-error — mutual exclusion is enforced at compile time
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.createElement('div'),
           feeds: [
             {
@@ -65,7 +65,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           feeds: [
             {
@@ -86,7 +86,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           indices: [
             {
@@ -108,7 +108,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           feeds: [
             {
@@ -143,7 +143,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -201,7 +201,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -285,7 +285,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -340,7 +340,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -396,7 +396,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -452,7 +452,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -497,7 +497,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -552,7 +552,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -596,7 +596,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {
@@ -647,7 +647,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -679,7 +679,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -716,7 +716,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -756,7 +756,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -787,7 +787,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -824,7 +824,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           indices: [
             {
@@ -875,7 +875,7 @@ describe('EXPERIMENTAL_autocomplete()', () => {
       });
 
       search.addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container,
           feeds: [
             {

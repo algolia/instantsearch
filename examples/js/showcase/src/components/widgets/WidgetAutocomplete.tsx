@@ -1,10 +1,10 @@
-import { EXPERIMENTAL_autocomplete } from "instantsearch.js/es/widgets";
+import { autocomplete } from "instantsearch.js/es/widgets";
 
 import { useWidget } from "../../hooks/useWidget";
 
 export function WidgetAutocomplete() {
   const ref = useWidget((el) =>
-    EXPERIMENTAL_autocomplete({
+    autocomplete({
       container: el,
       placeholder: "Search for products...",
       showRecent: {
