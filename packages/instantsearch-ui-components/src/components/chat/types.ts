@@ -530,7 +530,7 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent'
+  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
 
