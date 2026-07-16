@@ -2348,6 +2348,94 @@ export function createOptionsTests(
           })
         );
       });
+
+      test('sends an items_shown view event when displayed assistant results render', async () => {
+        const searchClient = createSearchClient();
+
+        (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              metadata: { displayResultsEnabled: true },
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: 'search-call-id',
+                  input: { query: 'test', number_of_results: 1 },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                        name: 'Product 123',
+                        __position: 1,
+                        __queryID: 'search-query-id',
+                      },
+                    ],
+                    nbHits: 1,
+                  },
+                },
+                {
+                  type: `tool-${DisplayResultsToolType}`,
+                  toolCallId: 'display-call-id',
+                  input: {},
+                  state: 'output-available',
+                  output: {
+                    groups: [{ results: [{ objectID: '123' }] }],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            insights: true,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        (window as any).aa.mockClear();
+
+        await openChat(act);
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const viewEvents = (window as any).aa.mock.calls.filter(
+          ([method]: [string]) => method === 'viewedObjectIDs'
+        );
+
+        expect(viewEvents).toHaveLength(1);
+        expect((window as any).aa).toHaveBeenCalledWith(
+          'viewedObjectIDs',
+          expect.objectContaining({
+            eventName: 'items_shown',
+            objectIDs: ['123'],
+            queryID: 'message_assistant-message-id',
+            agentId: 'agentId',
+            toolCallId: 'display-call-id',
+          }),
+          expect.objectContaining({
+            headers: expect.objectContaining({
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            }),
+          })
+        );
+      });
     });
 
     describe('layoutComponent', () => {

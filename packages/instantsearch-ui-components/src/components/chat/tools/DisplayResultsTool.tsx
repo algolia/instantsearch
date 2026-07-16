@@ -37,7 +37,7 @@ export type DisplayResultsItem<THit extends RecordWithObjectID> =
 
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
-    items: Array<RecordWithObjectID<THit>>;
+    items: Array<DisplayResultsItem<THit>>;
     sendEvent: ClientSideToolComponentProps['sendEvent'];
   };
 
@@ -61,7 +61,13 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment, useMemo }: Renderer & Pick<Hooks, 'useMemo'>) {
+>({
+  createElement,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
@@ -87,6 +93,78 @@ export function createDisplayResultsToolComponent<
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
     const groups = Array.isArray(output?.groups) ? output.groups : [];
 
+    const displayedGroups = useMemo(
+      () =>
+        groups
+          .map((group) => {
+            const results = Array.isArray(group.results)
+              ? group.results.filter(
+                  (r): r is RecordWithObjectID<TObject> =>
+                    Boolean(r) &&
+                    typeof r.objectID === 'string' &&
+                    r.objectID !== ''
+                )
+              : [];
+
+            if (results.length === 0) {
+              return null;
+            }
+
+            const items: Array<DisplayResultsItem<TObject>> = results.map(
+              (result, idx) => {
+                const hydrated = hitsByObjectID?.[result.objectID] as
+                  | RecordWithObjectID<TObject>
+                  | undefined;
+
+                return {
+                  ...(hydrated as RecordWithObjectID<TObject>),
+                  objectID: result.objectID,
+                  __position: idx + 1,
+                  __displayToolResult: result,
+                };
+              }
+            );
+
+            return {
+              group,
+              items,
+            };
+          })
+          .filter(
+            (
+              group
+            ): group is {
+              group: DisplayResultsGroup<TObject>;
+              items: Array<DisplayResultsItem<TObject>>;
+            } => group !== null
+          ),
+      [groups, hitsByObjectID]
+    );
+
+    const viewedItems = displayedGroups.flatMap(({ items }) => items);
+    const viewedItemsSignature = viewedItems
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = useRef<string | undefined>(undefined);
+
+    useEffect(() => {
+      if (
+        viewedItems.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', viewedItems, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [sendEvent, viewedItems, viewedItemsSignature]);
+
     const isStreaming =
       message?.state === 'output-available' &&
       (message as { preliminary?: boolean }).preliminary === true;
@@ -101,33 +179,7 @@ export function createDisplayResultsToolComponent<
           <div className="ais-ChatToolDisplayResults-intro">{intro}</div>
         )}
 
-        {groups.map((group, groupIndex) => {
-          const results = Array.isArray(group.results)
-            ? group.results.filter(
-                (r): r is RecordWithObjectID<TObject> =>
-                  Boolean(r) &&
-                  typeof r.objectID === 'string' &&
-                  r.objectID !== ''
-              )
-            : [];
-
-          if (results.length === 0) return null;
-
-          const items: Array<DisplayResultsItem<TObject>> = results.map(
-            (result, idx) => {
-              const hydrated = hitsByObjectID?.[result.objectID] as
-                | RecordWithObjectID<TObject>
-                | undefined;
-
-              return {
-                ...(hydrated as RecordWithObjectID<TObject>),
-                objectID: result.objectID,
-                __position: idx + 1,
-                __displayToolResult: result,
-              };
-            }
-          );
-
+        {displayedGroups.map(({ group, items }, groupIndex) => {
           return (
             <div key={groupIndex} className="ais-ChatToolDisplayResults-group">
               {group.title && (

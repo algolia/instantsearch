@@ -7,7 +7,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useRef } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import { carousel } from '../../templates';
@@ -27,7 +27,9 @@ export function createDisplayResultsTool<
   >({
     createElement: h,
     Fragment,
+    useEffect,
     useMemo,
+    useRef,
   });
 
   const Button = createButtonComponent({ createElement: h });
