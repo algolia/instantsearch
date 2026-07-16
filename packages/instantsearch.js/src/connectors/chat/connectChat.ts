@@ -161,6 +161,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   feedback?: never;
   requestOptions?: never;
   persistence?: never;
+  sendAutomaticallyWhen?: never;
 };
 
 export type ApplyFiltersParams = {
@@ -340,6 +341,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
       requiresSearch = true,
       ...options
     } = widgetParams || {};
@@ -560,8 +562,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
+        sendAutomaticallyWhen,
         transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         shouldRepairToolInput(toolName) {
           let tool = tools[toolName];
           if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
