@@ -615,9 +615,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       flatWidgets.forEach((widget) => {
-        if (widget.parent === this) {
-          widget.parent = undefined;
-        }
+        widget.parent = undefined;
       });
       recomputeLocalRequestDependencies();
 
