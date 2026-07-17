@@ -90,7 +90,13 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         if (resolveWaitForResultsRef) {
           resolveWaitForResultsRef.current = null;
         }
-        resolve();
+        // Await any promises that widgets registered during SSR init (e.g. the
+        // on-page-suggestions widget races its agent request against a
+        // timeout). `allSettled` so a widget rejecting (e.g. abort) doesn't
+        // crash SSR.
+        Promise.allSettled(search.consumeServerWaitPromises()).then(() =>
+          resolve()
+        );
       };
       const onResult = () => {
         searchReceived = true;
@@ -123,7 +129,13 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
       search.mainIndex,
       search._hasSearchWidget ? requestParamsList || [] : []
     );
-    insertHTML(createInsertHTML({ options, results, nonce }));
+    const chatStates =
+      (
+        search as typeof search & {
+          _initialChatStates?: Record<string, unknown> | null;
+        }
+      )._initialChatStates ?? undefined;
+    insertHTML(createInsertHTML({ options, results, chatStates, nonce }));
   };
 
   if (waitForResultsRef?.current === null) {

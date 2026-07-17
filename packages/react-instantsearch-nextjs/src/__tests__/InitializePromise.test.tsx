@@ -22,12 +22,21 @@ import {
   InstantSearchRSCContext,
   InstantSearchSSRProvider,
   useConnector,
+  useInstantSearchContext,
 } from 'react-instantsearch-core';
 
 import { InitializePromise } from '../InitializePromise';
 import { TriggerSearch } from '../TriggerSearch';
 
 import type { PromiseWithState } from 'react-instantsearch-core';
+
+function SeedChatStates({ value }: { value: Record<string, unknown> }) {
+  const search = useInstantSearchContext() as ReturnType<
+    typeof useInstantSearchContext
+  > & { _initialChatStates?: Record<string, unknown> | null };
+  search._initialChatStates = value;
+  return null;
+}
 
 jest.mock('instantsearch.js/es/lib/utils', () => ({
   ...jest.requireActual('instantsearch.js/es/lib/utils'),
@@ -200,6 +209,46 @@ test('it waits for recommend only if there are only recommend widgets', async ()
   expect(ref.current!.status).toBe('fulfilled');
   expect(client.search).not.toHaveBeenCalled();
   expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+});
+
+test('it injects only the results script when no chat states are present', async () => {
+  const insertedHTML = jest.fn();
+  await renderComponent({ children: <SearchBox />, insertedHTML });
+
+  const element = insertedHTML.mock.calls.at(-1)![0] as React.ReactElement<any>;
+  expect(element.type).toBe('script');
+  expect(element.props.dangerouslySetInnerHTML.__html).not.toContain(
+    'InstantSearchInitialChatStates'
+  );
+});
+
+test('it injects the chat states registered during SSR', async () => {
+  const insertedHTML = jest.fn();
+  await renderComponent({
+    children: (
+      <>
+        <SearchBox />
+        <SeedChatStates
+          value={{ 'on-page-suggestions': { suggestions: ['A'] } }}
+        />
+      </>
+    ),
+    insertedHTML,
+  });
+
+  const element = insertedHTML.mock.calls.at(-1)![0] as React.ReactElement<any>;
+  expect(element.type).toBe(React.Fragment);
+
+  const children = React.Children.toArray(element.props.children) as Array<
+    React.ReactElement<any>
+  >;
+  expect(children).toHaveLength(2);
+  expect(children[1].props.dangerouslySetInnerHTML.__html).toContain(
+    'InstantSearchInitialChatStates'
+  );
+  expect(children[1].props.dangerouslySetInnerHTML.__html).toContain(
+    'suggestions'
+  );
 });
 
 test('it resolves without a request when no widget requires a search', async () => {

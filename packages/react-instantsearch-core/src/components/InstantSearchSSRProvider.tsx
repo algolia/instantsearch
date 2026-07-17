@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 
 export type InstantSearchServerState = {
   initialResults: InitialResults;
+  initialChatStates?: Record<string, unknown>;
 };
 
 export type InstantSearchSSRProviderProps =
