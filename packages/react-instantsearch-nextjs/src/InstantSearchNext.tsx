@@ -21,13 +21,9 @@ import type {
 } from 'react-instantsearch-core';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
-const InstantSearchInitialChatStates = Symbol.for(
-  'InstantSearchInitialChatStates'
-);
 declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
-    [InstantSearchInitialChatStates]?: Record<string, unknown>;
   }
 }
 
@@ -114,20 +110,13 @@ function ServerOrHydrationProvider({
   const [initialResults] = useState<InitialResults | undefined>(() =>
     safelyRunOnBrowser(({ window }) => window[InstantSearchInitialResults])
   );
-  const [initialChatStates] = useState<Record<string, unknown> | undefined>(
-    () =>
-      safelyRunOnBrowser(({ window }) => window[InstantSearchInitialChatStates])
-  );
-  // After commit, clear the globals so a later <InstantSearchNext> mount —
+  // After commit, clear the global so a later <InstantSearchNext> mount —
   // typically the destination of an App Router <Link> click — does not
   // recycle this mount's serialized state.
   useEffect(() => {
     safelyRunOnBrowser(({ window }) => {
       if (window[InstantSearchInitialResults] !== undefined) {
         window[InstantSearchInitialResults] = undefined;
-      }
-      if (window[InstantSearchInitialChatStates] !== undefined) {
-        window[InstantSearchInitialChatStates] = undefined;
       }
     });
   }, []);
@@ -148,7 +137,6 @@ function ServerOrHydrationProvider({
       <InstantSearchSSRContext.Provider
         value={{
           initialResults,
-          initialChatStates,
           ssrSearchRef: isServer ? undefined : instance,
         }}
       >

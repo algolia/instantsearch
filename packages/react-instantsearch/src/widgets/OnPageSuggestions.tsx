@@ -58,7 +58,6 @@ export function OnPageSuggestions({
   transformHits,
   context,
   transformItems,
-  ssrTimeout,
   ...props
 }: OnPageSuggestionsProps) {
   const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
@@ -70,7 +69,6 @@ export function OnPageSuggestions({
         transformHits,
         context,
         transformItems,
-        ssrTimeout,
       } as UseOnPageSuggestionsProps,
       {
         $$widgetType: 'ais.onPageSuggestions',

@@ -230,15 +230,6 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
-  /**
-   * Snapshot of chat-related widget state produced during SSR, keyed by a
-   * widget-specific id. Value shape is widget-specific (e.g.
-   * `{ suggestions: string[] }` for on-page-suggestions). Hydrated on the
-   * client so widgets can skip re-firing their initial agent request after
-   * server rendering succeeded.
-   * @internal
-   */
-  public _initialChatStates: Record<string, unknown> | null;
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
@@ -246,13 +237,6 @@ class InstantSearch<
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
-  /**
-   * Promises that widgets registered during SSR init that `waitForResults`
-   * must await before resolving. Cleared once the wait resolves so subsequent
-   * SSR passes start fresh.
-   * @internal
-   */
-  public _serverWaitPromises: Array<Promise<unknown>> = [];
   public _insights: InstantSearchOptions['insights'];
   /**
    * The options the instance was created with, kept verbatim so consumers
@@ -291,27 +275,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     );
 
     return this.status === 'stalled';
-  }
-
-  /**
-   * Registers a promise that `waitForResults()` must await before resolving
-   * during server-side rendering. Used by widgets that need to do async work
-   * (e.g. AI completions) outside of the search/recommend lifecycle.
-   * @internal
-   */
-  public registerServerWait(promise: Promise<unknown>): void {
-    this._serverWaitPromises.push(promise);
-  }
-
-  /**
-   * Returns the promises registered with `registerServerWait` and clears the
-   * internal list. Consumed by `waitForResults()` during SSR.
-   * @internal
-   */
-  public consumeServerWaitPromises(): Array<Promise<unknown>> {
-    const promises = this._serverWaitPromises;
-    this._serverWaitPromises = [];
-    return promises;
   }
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
@@ -424,7 +387,6 @@ See documentation: ${createDocumentationLink({
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
-    this._initialChatStates = null;
 
     this._insights = insights;
 

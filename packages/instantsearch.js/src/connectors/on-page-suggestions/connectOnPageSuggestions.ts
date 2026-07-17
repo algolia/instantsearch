@@ -4,7 +4,6 @@ import {
   createDocumentationMessageGenerator,
   getRefinements,
   noop,
-  safelyRunOnBrowser,
   warning,
 } from '../../lib/utils';
 import connectStructuredOutput from '../structured-output/connectStructuredOutput';
@@ -16,7 +15,6 @@ import type {
   Hit,
   IndexRenderState,
   InitOptions,
-  InstantSearch,
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
@@ -35,7 +33,6 @@ const withUsage = createDocumentationMessageGenerator({
 const RENDER_STATE_KEY = 'onPageSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
-const DEFAULT_SSR_TIMEOUT_MS = 150;
 
 function parseSuggestions(data: unknown): string[] {
   const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
@@ -53,22 +50,6 @@ function parseSuggestions(data: unknown): string[] {
 function buildSuggestionMessage(suggestion: string): string {
   return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
 }
-
-type InstantSearchWithChatStates = InstantSearch & {
-  _initialChatStates: Record<string, unknown> | null;
-};
-
-type OnPageSuggestionsSnapshot = {
-  suggestions: string[];
-};
-
-function isServerRendering(): boolean {
-  return safelyRunOnBrowser(() => false, { fallback: () => true });
-}
-
-// Per-InstantSearch SSR wait cache: two-pass SSR (e.g. React) renders twice on
-// the server, so reuse the in-flight fetch across passes instead of firing twice.
-const serverWaitRegistry = new WeakMap<InstantSearch, Promise<void>>();
 
 /** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
 export type OnPageSuggestionsTransport = TaskTransport;
@@ -131,11 +112,6 @@ export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: OnPageSuggestionsTransformItems;
-  /**
-   * Max ms SSR waits for the agent before flushing; on timeout the client refetches after hydration.
-   * @default 150
-   */
-  ssrTimeout?: number;
 };
 
 export type OnPageSuggestionsWidgetDescription = {
@@ -231,7 +207,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         context,
         transformItems = (items) => items,
         transport,
-        ssrTimeout = DEFAULT_SSR_TIMEOUT_MS,
       } = widgetParams;
 
       if (!agentId && !transport) {
@@ -248,31 +223,10 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
       let latestRenderOptions: RenderOptions | null = null;
-      // Set when SSR seeded suggestions; first post-hydration `render()` skips
-      // its fetch (it just seeds the state signature) so the client doesn't
-      // immediately overwrite the server snapshot.
-      let hydratedFromSnapshot = false;
-      let hydrationAttempted = false;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
       let disposed = false;
-
-      const hydrateFromSnapshot = (
-        instantSearchInstance: InstantSearch
-      ): void => {
-        if (hydrationAttempted) return;
-        hydrationAttempted = true;
-        const states = (instantSearchInstance as InstantSearchWithChatStates)
-          ._initialChatStates;
-        const snapshot = states?.[RENDER_STATE_KEY] as
-          | OnPageSuggestionsSnapshot
-          | undefined;
-        if (snapshot && Array.isArray(snapshot.suggestions)) {
-          suggestions = snapshot.suggestions;
-          hydratedFromSnapshot = true;
-        }
-      };
 
       const getStateSignature = (results: SearchResults): string => {
         const query = results.query || '';
@@ -404,70 +358,11 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         fetchAndRender(results, latestRenderOptions);
       };
 
-      const buildServerWait = (
-        instantSearchInstance: InstantSearch
-      ): Promise<void> => {
-        return new Promise<void>((resolve) => {
-          let settled = false;
-          const settle = () => {
-            if (settled) return;
-            settled = true;
-            resolve();
-          };
-
-          const timer = setTimeout(settle, ssrTimeout);
-
-          const derivedHelper =
-            instantSearchInstance.mainHelper?.derivedHelpers?.[0];
-          if (!derivedHelper) {
-            clearTimeout(timer);
-            settle();
-            return;
-          }
-
-          const onResult = (event: { results?: SearchResults }) => {
-            derivedHelper.removeListener('result', onResult);
-            // The SSR timeout may have already resolved this wait; a late
-            // `result` event must not fire another agent request.
-            if (settled || !soState) return;
-            const results = event?.results;
-            const hasContext = context !== undefined;
-            if (!results || (!hasContext && !results.hits?.length)) {
-              clearTimeout(timer);
-              settle();
-              return;
-            }
-            soState
-              .submit(buildInput(results))
-              .then((output) => {
-                // Skip seeding on error so the client refetches on hydration
-                // instead of hydrating an empty snapshot that suppresses it.
-                if (settled || soState?.error) return;
-                const target =
-                  instantSearchInstance as InstantSearchWithChatStates;
-                if (!target._initialChatStates) {
-                  target._initialChatStates = {};
-                }
-                target._initialChatStates[RENDER_STATE_KEY] = {
-                  suggestions: parseSuggestions(output),
-                } satisfies OnPageSuggestionsSnapshot;
-              })
-              .finally(() => {
-                clearTimeout(timer);
-                settle();
-              });
-          };
-          derivedHelper.on('result', onResult);
-        });
-      };
-
       const getWidgetRenderState = (
         renderOptions: InitOptions | RenderOptions
       ): Omit<OnPageSuggestionsRenderState, never> & {
         widgetParams: OnPageSuggestionsConnectorParams;
       } => {
-        hydrateFromSnapshot(renderOptions.instantSearchInstance);
-
         const results =
           'results' in renderOptions ? renderOptions.results : undefined;
         const transformed = transformItems(suggestions, {
@@ -496,17 +391,15 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
       // Mirrors each inner render (submit start → skeleton, stream partials,
       // resolve/error) into this widget's state and re-renders on the client.
-      // SSR seeds via the awaited `submit` in `buildServerWait`, so outward
-      // renders are skipped there.
       const handleInnerRender = (renderState: StructuredOutputRenderState) => {
         soState = renderState;
-        // Preserve SSR-hydrated pills until the first generation begins: only
-        // adopt the inner output once a request is loading or has produced one.
+        // Only adopt the inner output once a request is loading or has produced
+        // one, so the initial no-op render doesn't clobber existing pills.
         if (renderState.isLoading || renderState.output !== undefined) {
           suggestions = parseSuggestions(renderState.output);
         }
         isLoading = renderState.isLoading;
-        if (isServerRendering() || !latestRenderOptions) return;
+        if (!latestRenderOptions) return;
         renderOutward(latestRenderOptions);
       };
 
@@ -526,17 +419,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           const { instantSearchInstance } = initOptions;
 
           structuredOutputWidget.init!(initOptions);
-
-          hydrateFromSnapshot(instantSearchInstance);
-
-          if (isServerRendering()) {
-            let wait = serverWaitRegistry.get(instantSearchInstance);
-            if (!wait) {
-              wait = buildServerWait(instantSearchInstance);
-              serverWaitRegistry.set(instantSearchInstance, wait);
-            }
-            instantSearchInstance.registerServerWait(wait);
-          }
 
           renderFn(
             {
@@ -564,22 +446,6 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           }
 
           const stateSignature = getStateSignature(results);
-
-          // First post-hydration render: seed the signature so future state
-          // changes still trigger a refetch, but skip the immediate one so we
-          // don't overwrite the server-seeded suggestions.
-          if (hydratedFromSnapshot) {
-            hydratedFromSnapshot = false;
-            lastStateSignature = stateSignature;
-            renderFn(
-              {
-                ...getWidgetRenderState(renderOptions),
-                instantSearchInstance,
-              },
-              false
-            );
-            return;
-          }
 
           if (stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;
