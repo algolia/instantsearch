@@ -3,6 +3,7 @@
  */
 
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { createCarouselTool } from '../SearchIndexTool';
@@ -98,6 +99,51 @@ describe('createCarouselTool', () => {
 
       expect(screen.getByText('MCP Product 1')).toBeInTheDocument();
       expect(screen.getByText('MCP Product 2')).toBeInTheDocument();
+    });
+
+    test('converts MCP `facet_<name>` input into `facetFilters` on "View all"', async () => {
+      const applyFilters = jest.fn().mockReturnValue({});
+      const tool = createCarouselTool<TestHit>(true, mockItemComponent);
+      const LayoutComponent = tool.layoutComponent!;
+
+      const message: ClientSideToolComponentProps['message'] = {
+        type: 'tool-algolia_search_index_products',
+        state: 'output-available',
+        toolCallId: 'test-call-id',
+        input: {
+          query: '',
+          facet_type: ['book'],
+          facet_brand: [],
+          facet_categories: ['Literature & Fiction', 'Teen & Young Adult'],
+          facet__collections: [],
+        },
+        output: {
+          hits: [{ objectID: '1', name: 'MCP Product 1', __position: 1 }],
+          nbHits: 50,
+        },
+      };
+
+      render(
+        <LayoutComponent
+          message={message}
+          applyFilters={applyFilters}
+          metadata={metadata}
+          indexUiState={{}}
+          addToolResult={jest.fn()}
+          setIndexUiState={jest.fn()}
+          sendEvent={jest.fn()}
+        />
+      );
+
+      await userEvent.click(screen.getByText('View all'));
+
+      expect(applyFilters).toHaveBeenCalledWith({
+        query: '',
+        facetFilters: [
+          ['type:book'],
+          ['categories:Literature & Fiction', 'categories:Teen & Young Adult'],
+        ],
+      });
     });
   });
 });

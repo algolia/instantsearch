@@ -20,6 +20,7 @@ import {
 } from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
 import { TAG_PLACEHOLDER } from '../../../lib/utils';
+import connectConfigure from '../../configure/connectConfigure';
 import connectAutocomplete from '../connectAutocomplete';
 
 import type { SearchClient, SearchResponse } from '../../../types';
@@ -105,6 +106,100 @@ search.addWidgets([
         dispose: expect.any(Function),
       })
     );
+  });
+
+  it('depends on search by default', () => {
+    const customAutocomplete = connectAutocomplete(jest.fn());
+    const widget = customAutocomplete({});
+
+    expect(widget.dependsOn).toBe('search');
+  });
+
+  it('can be configured to depend on no backend request', () => {
+    const customAutocomplete = connectAutocomplete(jest.fn());
+    const widget = customAutocomplete({ requiresSearch: false });
+
+    expect(widget.dependsOn).toBe('none');
+  });
+
+  it('does not trigger a search on its own when it requires no search', async () => {
+    const searchClient = createSearchClient();
+    const autocomplete = connectAutocomplete(jest.fn());
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([autocomplete({ requiresSearch: false })]);
+    search.start();
+
+    await wait(0);
+
+    expect(searchClient.search).not.toHaveBeenCalled();
+  });
+
+  it('keeps rendering refinements when it requires no search', async () => {
+    const searchClient = createSearchClient();
+    const render = jest.fn();
+    const autocomplete = connectAutocomplete(render);
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([autocomplete({ requiresSearch: false })]);
+    search.start();
+    await wait(0);
+
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({ currentRefinement: '' }),
+      false
+    );
+
+    const { refine } = render.mock.calls.at(-1)![0];
+    refine('hello');
+    await wait(0);
+
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({ currentRefinement: 'hello' }),
+      false
+    );
+    expect(searchClient.search).not.toHaveBeenCalled();
+  });
+
+  it('still contributes search parameters when another widget triggers search', async () => {
+    const searchClient = createSearchClient();
+    const autocomplete = connectAutocomplete(jest.fn());
+    const configure = connectConfigure(jest.fn());
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+      },
+    });
+
+    search.addWidgets([
+      autocomplete({ requiresSearch: false }),
+      configure({ searchParameters: { hitsPerPage: 2 } }),
+    ]);
+    search.start();
+
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(searchClient.search).toHaveBeenCalledWith([
+      {
+        indexName: 'indexName',
+        params: expect.objectContaining({
+          hitsPerPage: 2,
+          query: 'apple',
+          ...TAG_PLACEHOLDER,
+        }),
+      },
+    ]);
   });
 
   it('renders during init and render', () => {

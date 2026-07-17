@@ -153,7 +153,7 @@ export function useConnector<
   useWidget({
     widget,
     parentIndex,
-    props: stableProps,
+    props: [stableProps, stableAdditionalWidgetProperties],
     shouldSsr: Boolean(serverContext),
     skipSuspense,
   });

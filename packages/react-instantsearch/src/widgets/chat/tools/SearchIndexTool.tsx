@@ -3,6 +3,7 @@ import {
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
+  getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
 import { addAbsolutePosition, addQueryID } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
@@ -15,17 +16,12 @@ import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
+  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
@@ -43,13 +39,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     metadata,
   }: ClientSideToolComponentProps) {
     const { onClose } = metadata;
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-          facet_filters?: string[][];
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -144,7 +134,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                 if (!input || !applyFilters) return;
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (

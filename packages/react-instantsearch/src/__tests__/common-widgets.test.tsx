@@ -219,6 +219,9 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createRangeSliderWidgetTests() {
+    throw new Error('RangeSlider is not supported in React InstantSearch');
+  },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -406,7 +409,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -424,7 +431,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           </>
         )}
         <ChatTrigger />
-        <Chat {...chatWidgetParams} />
+        {renderChat && <Chat {...chatWidgetParams} />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -456,6 +463,11 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
+  createRangeSliderWidgetTests: {
+    skippedTests: {
+      'RangeSlider widget common tests': true,
+    },
+  },
   createRatingMenuWidgetTests: {
     act,
     skippedTests: {

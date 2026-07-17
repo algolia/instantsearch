@@ -21,15 +21,18 @@ import React, {
   createElement,
   Fragment,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import {
   Configure,
+  Feeds,
   Index,
   useAutocomplete,
   useInstantSearch,
+  useInstantSearchContext,
   useSearchBox,
 } from 'react-instantsearch-core';
 
@@ -106,6 +109,12 @@ const AutocompleteDetachedSearchButton =
   });
 
 let id = 0;
+// Colons (`:r0:`) preserved so concatenations like `autocomplete:r0:input`
+// have a recognisable boundary; callers that need a colon-free variant for
+// InstantSearch's `indexId` strip them at the use site.
+const useAutocompleteId: () => string = React.useId
+  ? () => React.useId()
+  : () => React.useState(() => `:a${id++}:`)[0];
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId: React.useId || (() => React.useState(() => (id++).toString())),
@@ -287,61 +296,101 @@ function useDetachedMode(mediaQuery?: string) {
   return { isDetached, isModalDetached, isModalOpen, setIsModalOpen };
 }
 
-export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
-  indices?: Array<IndexConfig<TItem>>;
-  showQuerySuggestions?: Partial<
-    Pick<
-      IndexConfig<{ query: string }>,
-      | 'indexName'
-      | 'getURL'
-      | 'headerComponent'
-      | 'itemComponent'
-      | 'classNames'
-      | 'searchParameters'
-    >
-  >;
-  showPromptSuggestions?: Partial<
-    Pick<
-      IndexConfig<{ query: string; label?: string }>,
-      | 'indexName'
-      | 'getURL'
-      | 'headerComponent'
-      | 'itemComponent'
-      | 'classNames'
-      | 'searchParameters'
-    >
-  >;
-  showRecent?:
-    | boolean
-    | {
-        /**
-         * Storage key to use in the local storage.
-         */
-        storageKey?: string;
+export type FeedConfig<TItem extends BaseHit> = {
+  feedID: string;
+  headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
+  itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
+  noResultsComponent?: AutocompleteIndexProps<TItem>['NoResultsComponent'];
+  getURL?: AutocompleteIndexConfig<TItem>['getURL'];
+  getQuery?: AutocompleteIndexConfig<TItem>['getQuery'];
+  classNames?: Partial<AutocompleteIndexClassNames>;
+};
 
-        /**
-         * Component to use for the header, before the list of items.
-         */
-        headerComponent?: AutocompleteIndexProps<{
-          query: string;
-        }>['HeaderComponent'];
+type IndicesShowQuerySuggestionsConfig = Partial<
+  Pick<
+    IndexConfig<{ query: string }>,
+    | 'indexName'
+    | 'getURL'
+    | 'headerComponent'
+    | 'itemComponent'
+    | 'classNames'
+    | 'searchParameters'
+  >
+>;
 
-        /**
-         * Component to use for each recent search item.
-         */
-        itemComponent?: AutocompleteIndexProps<{
-          query: string;
-        }>['ItemComponent'] & {
-          onRemoveRecentSearch: () => void;
-        };
+type FeedsShowQuerySuggestionsConfig = {
+  feedID: string;
+  getURL?: IndexConfig<{ query: string }>['getURL'];
+  headerComponent?: IndexConfig<{ query: string }>['headerComponent'];
+  itemComponent?: IndexConfig<{ query: string }>['itemComponent'];
+  classNames?: Partial<AutocompleteIndexClassNames>;
+};
 
-        classNames?: Partial<AutocompleteIndexClassNames>;
-      };
+type IndicesShowPromptSuggestionsConfig = Partial<
+  Pick<
+    IndexConfig<{ query: string; label?: string }>,
+    | 'indexName'
+    | 'getURL'
+    | 'headerComponent'
+    | 'itemComponent'
+    | 'classNames'
+    | 'searchParameters'
+  >
+>;
+
+type FeedsShowPromptSuggestionsConfig = {
+  feedID: string;
+  getURL?: IndexConfig<{ query: string; label?: string }>['getURL'];
+  headerComponent?: IndexConfig<{
+    query: string;
+    label?: string;
+  }>['headerComponent'];
+  itemComponent?: IndexConfig<{
+    query: string;
+    label?: string;
+  }>['itemComponent'];
+  classNames?: Partial<AutocompleteIndexClassNames>;
+};
+
+type AutocompleteShowRecentConfig = {
+  /**
+   * Storage key to use in the local storage.
+   */
+  storageKey?: string;
+
+  /**
+   * Component to use for the header, before the list of items.
+   */
+  headerComponent?: AutocompleteIndexProps<{
+    query: string;
+  }>['HeaderComponent'];
+
+  /**
+   * Component to use for each recent search item.
+   */
+  itemComponent?: AutocompleteIndexProps<{
+    query: string;
+  }>['ItemComponent'] & {
+    onRemoveRecentSearch: () => void;
+  };
+
+  classNames?: Partial<AutocompleteIndexClassNames>;
+};
+
+type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
+  showRecent?: boolean | AutocompleteShowRecentConfig;
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
   transformItems?: (
     indices: TransformItemsIndicesConfig[]
   ) => TransformItemsIndicesConfig[];
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];
@@ -373,9 +422,29 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   aiMode?: boolean;
 };
 
+export type AutocompleteIndicesProps<TItem extends BaseHit> =
+  AutocompleteCommonProps<TItem> & {
+    indices?: Array<IndexConfig<TItem>>;
+    feeds?: never;
+    showQuerySuggestions?: IndicesShowQuerySuggestionsConfig;
+    showPromptSuggestions?: IndicesShowPromptSuggestionsConfig;
+  };
+
+export type AutocompleteFeedsProps<TItem extends BaseHit> =
+  AutocompleteCommonProps<TItem> & {
+    feeds: Array<FeedConfig<TItem>>;
+    indices?: never;
+    showQuerySuggestions?: FeedsShowQuerySuggestionsConfig;
+    showPromptSuggestions?: FeedsShowPromptSuggestionsConfig;
+  };
+
+export type AutocompleteProps<TItem extends BaseHit> =
+  | AutocompleteIndicesProps<TItem>
+  | AutocompleteFeedsProps<TItem>;
+
 type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
-  AutocompleteProps<TItem>,
-  'indices' | 'translations'
+  AutocompleteIndicesProps<TItem>,
+  'indices' | 'translations' | 'feeds'
 > & {
   indicesConfig: Array<IndexConfig<TItem>>;
   refineSearchBox: ReturnType<typeof useSearchBox>['refine'];
@@ -391,136 +460,265 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
     itemComponent: typeof AutocompleteRecentSearch;
     classNames: Partial<AutocompleteIndexClassNames>;
   };
+  domId: string;
+  detached: ReturnType<typeof useDetachedMode>;
 };
 
-export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
-  indices = [],
-  showQuerySuggestions,
-  showPromptSuggestions,
-  showRecent,
-  searchParameters: userSearchParameters,
-  detachedMediaQuery,
-  translations: userTranslations = {},
-  aiMode,
-  ...props
-}: AutocompleteProps<TItem>) {
+export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
+  props: AutocompleteProps<TItem>
+) {
+  const indices = 'indices' in props ? props.indices : undefined;
+  const feeds = 'feeds' in props ? props.feeds : undefined;
+  const isFeedsMode = feeds !== undefined;
+  const {
+    showQuerySuggestions,
+    showPromptSuggestions,
+    showRecent,
+    searchParameters: userSearchParameters,
+    detachedMediaQuery,
+    translations: userTranslations = {},
+    transformItems,
+    requiresSearch = true,
+    ...restProps
+  } = props;
+  const { autoFocus, placeholder, classNames } = restProps as {
+    autoFocus?: boolean;
+    placeholder?: string;
+    classNames?: Partial<AutocompleteClassNames>;
+  };
+  // Eager-mount only when `autoFocus` is set — otherwise wait for first focus
+  // before registering the autocomplete subtree in the search graph.
+  const [activated, setActivated] = useState(autoFocus === true);
   const translations: AutocompleteTranslations = {
     ...DEFAULT_TRANSLATIONS,
     ...userTranslations,
   };
   const { indexUiState, indexRenderState, status } = useInstantSearch();
+  const { compositionID } = useInstantSearchContext();
+  const dependsOn = requiresSearch ? ('search' as const) : ('none' as const);
   const { refine } = useSearchBox(
     {},
     {
       $$type: 'ais.autocomplete',
       $$widgetType: 'ais.autocomplete',
-      ...(aiMode ? { opensChat: true } : {}),
+      dependsOn,
+      ...(props.aiMode ? { opensChat: true } : {}),
     }
   );
+  const domId = useAutocompleteId();
+  const instanceKey = domId.replace(/:/g, '');
+
+  if (isFeedsMode && indices !== undefined) {
+    throw new Error(
+      'EXPERIMENTAL_Autocomplete: `feeds` and `indices` are mutually exclusive.'
+    );
+  }
+  if (isFeedsMode && !compositionID) {
+    throw new Error(
+      'EXPERIMENTAL_Autocomplete in feeds-mode requires a composition-based <InstantSearch> (compositionID must be set).'
+    );
+  }
+
   const isSearchStalled = status === 'stalled';
   const searchParameters = {
     hitsPerPage: 5,
     ...userSearchParameters,
   };
-  const indicesConfig = [...indices];
-  if (showQuerySuggestions?.indexName) {
-    indicesConfig.unshift({
-      indexName: showQuerySuggestions.indexName,
-      headerComponent:
-        showQuerySuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
-      itemComponent: (showQuerySuggestions.itemComponent ||
-        (({
-          item,
-          onSelect,
-          onApply,
-        }: Parameters<typeof AutocompleteSuggestion>[0]) => (
-          <AutocompleteSuggestion
-            item={item}
-            onSelect={onSelect}
-            onApply={onApply}
-          >
-            <ConditionalReverseHighlight
-              item={item as unknown as Hit<{ query: string }>}
-            />
-          </AutocompleteSuggestion>
-        ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
-      classNames: {
-        root: cx(
-          'ais-AutocompleteSuggestions',
-          showQuerySuggestions?.classNames?.root
-        ),
-        list: cx(
-          'ais-AutocompleteSuggestionsList',
-          showQuerySuggestions?.classNames?.list
-        ),
-        header: cx(
-          'ais-AutocompleteSuggestionsHeader',
-          showQuerySuggestions?.classNames?.header
-        ),
-        item: cx(
-          'ais-AutocompleteSuggestionsItem',
-          showQuerySuggestions?.classNames?.item
-        ),
-      },
-      searchParameters: {
-        hitsPerPage: 3,
-        ...showQuerySuggestions.searchParameters,
-      },
-      getQuery: (item) => item.query,
-      getURL:
-        showQuerySuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
-    });
-  }
-  if (showPromptSuggestions?.indexName) {
-    indicesConfig.push({
-      indexName: showPromptSuggestions.indexName,
-      headerComponent:
-        showPromptSuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
-      itemComponent: (showPromptSuggestions.itemComponent ||
-        (({
-          item,
-          onSelect,
-        }: {
-          item: {
-            prompt: string;
-            label?: string;
+
+  // In feeds-mode `indexName` carries the feedID so downstream matching
+  // (section building, dedupe in createAutocompleteStorage) treats feeds
+  // like indices without any changes to InnerAutocomplete.
+  const querySuggestionsKey = isFeedsMode
+    ? (showQuerySuggestions as FeedsShowQuerySuggestionsConfig | undefined)
+        ?.feedID
+    : (showQuerySuggestions as IndicesShowQuerySuggestionsConfig | undefined)
+        ?.indexName;
+  const promptSuggestionsKey = isFeedsMode
+    ? (showPromptSuggestions as FeedsShowPromptSuggestionsConfig | undefined)
+        ?.feedID
+    : (showPromptSuggestions as IndicesShowPromptSuggestionsConfig | undefined)
+        ?.indexName;
+
+  const indicesConfig = useMemo((): Array<IndexConfig<TItem>> => {
+    const config: Array<IndexConfig<TItem>> = isFeedsMode
+      ? feeds.map((feed) => ({
+          indexName: feed.feedID,
+          headerComponent: feed.headerComponent,
+          itemComponent: feed.itemComponent,
+          noResultsComponent: feed.noResultsComponent,
+          getURL: feed.getURL,
+          getQuery: feed.getQuery,
+          classNames: feed.classNames,
+        }))
+      : [...(indices ?? [])];
+    if (querySuggestionsKey) {
+      const querySuggestionsSearchParameters = isFeedsMode
+        ? undefined
+        : {
+            hitsPerPage: 3,
+            ...(showQuerySuggestions as IndicesShowQuerySuggestionsConfig)
+              .searchParameters,
           };
-          onSelect: () => void;
-        }) => (
-          <AutocompletePromptSuggestion item={item} onSelect={onSelect}>
-            <ConditionalHighlight
-              item={item as unknown as Hit<{ prompt: string }>}
-              attribute="prompt"
-            />
-          </AutocompletePromptSuggestion>
-        ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
-      classNames: {
-        root: cx(
-          'ais-AutocompletePromptSuggestions',
-          showPromptSuggestions.classNames?.root
-        ),
-        list: cx(
-          'ais-AutocompletePromptSuggestionsList',
-          showPromptSuggestions.classNames?.list
-        ),
-        header: cx(
-          'ais-AutocompletePromptSuggestionsHeader',
-          showPromptSuggestions.classNames?.header
-        ),
-        item: cx(
-          'ais-AutocompletePromptSuggestionsItem',
-          showPromptSuggestions.classNames?.item
-        ),
-      },
-      searchParameters: {
-        hitsPerPage: 3,
-        ...showPromptSuggestions.searchParameters,
-      },
-      getQuery: (item) => item.prompt,
-      getURL:
-        showPromptSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
-    });
-  }
+      config.unshift({
+        indexName: querySuggestionsKey,
+        headerComponent: showQuerySuggestions!
+          .headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
+        itemComponent: (showQuerySuggestions!.itemComponent ||
+          (({
+            item,
+            onSelect,
+            onApply,
+          }: Parameters<typeof AutocompleteSuggestion>[0]) => (
+            <AutocompleteSuggestion
+              item={item}
+              onSelect={onSelect}
+              onApply={onApply}
+            >
+              <ConditionalReverseHighlight
+                item={item as unknown as Hit<{ query: string }>}
+              />
+            </AutocompleteSuggestion>
+          ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
+        classNames: {
+          root: cx(
+            'ais-AutocompleteSuggestions',
+            showQuerySuggestions?.classNames?.root
+          ),
+          list: cx(
+            'ais-AutocompleteSuggestionsList',
+            showQuerySuggestions?.classNames?.list
+          ),
+          header: cx(
+            'ais-AutocompleteSuggestionsHeader',
+            showQuerySuggestions?.classNames?.header
+          ),
+          item: cx(
+            'ais-AutocompleteSuggestionsItem',
+            showQuerySuggestions?.classNames?.item
+          ),
+        },
+        searchParameters: querySuggestionsSearchParameters,
+        getQuery: (item) => item.query,
+        getURL: showQuerySuggestions!
+          .getURL as unknown as IndexConfig<TItem>['getURL'],
+      });
+    }
+    if (promptSuggestionsKey) {
+      const promptSuggestionsSearchParameters = isFeedsMode
+        ? undefined
+        : {
+            hitsPerPage: 3,
+            ...(showPromptSuggestions as IndicesShowPromptSuggestionsConfig)
+              .searchParameters,
+          };
+      config.push({
+        indexName: promptSuggestionsKey,
+        headerComponent: showPromptSuggestions!
+          .headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
+        itemComponent: (showPromptSuggestions!.itemComponent ||
+          (({
+            item,
+            onSelect,
+          }: {
+            item: {
+              prompt: string;
+              label?: string;
+            };
+            onSelect: () => void;
+          }) => (
+            <AutocompletePromptSuggestion item={item} onSelect={onSelect}>
+              <ConditionalHighlight
+                item={item as unknown as Hit<{ prompt: string }>}
+                attribute="prompt"
+              />
+            </AutocompletePromptSuggestion>
+          ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
+        classNames: {
+          root: cx(
+            'ais-AutocompletePromptSuggestions',
+            showPromptSuggestions?.classNames?.root
+          ),
+          list: cx(
+            'ais-AutocompletePromptSuggestionsList',
+            showPromptSuggestions?.classNames?.list
+          ),
+          header: cx(
+            'ais-AutocompletePromptSuggestionsHeader',
+            showPromptSuggestions?.classNames?.header
+          ),
+          item: cx(
+            'ais-AutocompletePromptSuggestionsItem',
+            showPromptSuggestions?.classNames?.item
+          ),
+        },
+        searchParameters: promptSuggestionsSearchParameters,
+        getQuery: (item) => item.prompt,
+        getURL: showPromptSuggestions!
+          .getURL as unknown as IndexConfig<TItem>['getURL'],
+      });
+    }
+    return config;
+  }, [
+    feeds,
+    indices,
+    isFeedsMode,
+    promptSuggestionsKey,
+    querySuggestionsKey,
+    showPromptSuggestions,
+    showQuerySuggestions,
+  ]);
+
+  // Normalize `show*` for InnerAutocomplete: always surface `indexName`
+  // (in feeds-mode it carries the feedID). Keeps downstream dedupe in
+  // createAutocompleteStorage (suggestionsIndexName === index.indexName) working.
+  const normalizedShowQuerySuggestions = useMemo(():
+    | IndicesShowQuerySuggestionsConfig
+    | undefined => {
+    if (!showQuerySuggestions) {
+      return undefined;
+    }
+    if (isFeedsMode) {
+      return {
+        ...showQuerySuggestions,
+        indexName: querySuggestionsKey,
+      } as IndicesShowQuerySuggestionsConfig;
+    }
+    return showQuerySuggestions as IndicesShowQuerySuggestionsConfig;
+  }, [isFeedsMode, querySuggestionsKey, showQuerySuggestions]);
+
+  const normalizedShowPromptSuggestions = useMemo(():
+    | IndicesShowPromptSuggestionsConfig
+    | undefined => {
+    if (!showPromptSuggestions) {
+      return undefined;
+    }
+    if (isFeedsMode) {
+      return {
+        ...showPromptSuggestions,
+        indexName: promptSuggestionsKey,
+      } as IndicesShowPromptSuggestionsConfig;
+    }
+    return showPromptSuggestions as IndicesShowPromptSuggestionsConfig;
+  }, [isFeedsMode, promptSuggestionsKey, showPromptSuggestions]);
+
+  // In feeds-mode, remap `indexName := indexId` so downstream storage (which
+  // matches on indexName) sees feedIDs instead of the composition index name
+  // that connectAutocomplete sets from the helper results.
+  // Must be memoized: useConnector's useStableValue runs dequal on each render
+  // and treats a new function identity as a change, re-registering the widget.
+  const effectiveTransformItems = useMemo(
+    () =>
+      isFeedsMode
+        ? (items: TransformItemsIndicesConfig[]) => {
+            const remapped = items.map((item) => ({
+              ...item,
+              indexName: item.indexId,
+            }));
+            return transformItems ? transformItems(remapped) : remapped;
+          }
+        : transformItems,
+    [isFeedsMode, transformItems]
+  );
 
   const recentSearchConfig = showRecent
     ? {
@@ -568,35 +766,161 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     [indexRenderState]
   );
 
-  return (
-    <Fragment>
-      <Index EXPERIMENTAL_isolated>
+  const {
+    indices: _unusedIndices,
+    feeds: _unusedFeeds,
+    ...forwardedProps
+  } = restProps as Record<string, unknown>;
+
+  const instance = useInstantSearchContext();
+  const detached = useDetachedMode(detachedMediaQuery);
+  const { isDetached, setIsModalOpen } = detached;
+  // Lazy activation only: when `activated` flips from false to true, the
+  // newly-mounted isolated `<Index>` schedules the parent's search even
+  // though the parent's state hasn't changed. Cancel it so only the
+  // autocomplete's own search fires on activation. Skip when `autoFocus`
+  // mounts the inner eagerly — the parent's legitimate initial search
+  // shares the same defer slot and must not be cancelled.
+  const initialActivatedRef = useRef(activated);
+  useLayoutEffect(() => {
+    if (activated && !initialActivatedRef.current) {
+      initialActivatedRef.current = true;
+      (
+        instance as unknown as { scheduleSearch: { cancel: () => void } }
+      ).scheduleSearch.cancel();
+    }
+  }, [activated, instance]);
+
+  if (!activated) {
+    const {
+      indices: _shellUnusedIndices,
+      feeds: _shellUnusedFeeds,
+      autoFocus: _shellUnusedAutoFocus,
+      placeholder: _shellUnusedPlaceholder,
+      classNames: _shellUnusedClassNames,
+      aiMode: _shellUnusedAiMode,
+      panelComponent: _shellUnusedPanelComponent,
+      getSearchPageURL: _shellUnusedGetSearchPageURL,
+      onSelect: _shellUnusedOnSelect,
+      ...shellRootProps
+    } = restProps as Record<string, unknown>;
+    const activateWithQueryMirror = () => {
+      // Routing only fills the parent index's UI state, not the
+      // autocomplete's isolated one, so without this, the autocomplete
+      // would activate with an empty query and fire a useless search.
+      // We copy the parent's query into the autocomplete's slot of
+      // `_initialUiState` right before flipping `activated`: that's the
+      // moment the isolated `<Index>` is about to mount and read it.
+      // Doing this later would mean firing a second search to correct
+      // the first.
+      if (indexUiState.query) {
+        const isoIndexId = `ais-autocomplete-${instanceKey}`;
+        const initial = (
+          instance as { _initialUiState: Record<string, IndexUiState> }
+        )._initialUiState;
+        initial[isoIndexId] = {
+          ...initial[isoIndexId],
+          query: indexUiState.query,
+        };
+      }
+      setActivated(true);
+    };
+    return (
+      <Autocomplete
+        {...(shellRootProps as React.HTMLAttributes<HTMLDivElement>)}
+        classNames={classNames}
+      >
+        {isDetached ? (
+          <AutocompleteDetachedSearchButton
+            query={indexUiState.query ?? ''}
+            placeholder={placeholder}
+            classNames={classNames}
+            translations={translations}
+            onClick={() => {
+              setIsModalOpen(true);
+              activateWithQueryMirror();
+            }}
+          />
+        ) : (
+          <AutocompleteSearch
+            inputProps={{
+              id: `autocomplete${domId}input`,
+              role: 'combobox',
+              placeholder,
+              onFocus: activateWithQueryMirror,
+            }}
+            clearQuery={() => {}}
+            query={indexUiState.query ?? ''}
+            isSearchStalled={false}
+            classNames={classNames}
+          />
+        )}
+      </Autocomplete>
+    );
+  }
+
+  const innerAutocomplete = (
+    <InnerAutocomplete
+      {...(forwardedProps as Omit<
+        AutocompleteIndicesProps<TItem>,
+        | 'indices'
+        | 'feeds'
+        | 'showQuerySuggestions'
+        | 'showPromptSuggestions'
+        | 'showRecent'
+        | 'searchParameters'
+        | 'detachedMediaQuery'
+        | 'translations'
+        | 'transformItems'
+      >)}
+      autoFocus
+      domId={domId}
+      detached={detached}
+      indicesConfig={indicesConfig}
+      refineSearchBox={refine}
+      isSearchStalled={isSearchStalled}
+      indexUiState={indexUiState}
+      isSearchPage={isSearchPage}
+      showRecent={showRecent}
+      recentSearchConfig={recentSearchConfig}
+      showQuerySuggestions={normalizedShowQuerySuggestions}
+      translations={translations}
+      showPromptSuggestions={normalizedShowPromptSuggestions}
+      transformItems={effectiveTransformItems}
+      chatRenderState={
+        indexRenderState.chat as Partial<ChatRenderState> | undefined
+      }
+    />
+  );
+
+  if (isFeedsMode) {
+    return (
+      <Index
+        EXPERIMENTAL_isolated
+        indexName={compositionID}
+        indexId={`ais-autocomplete-${instanceKey}`}
+      >
         <Configure {...searchParameters} />
-        {indicesConfig.map((index) => (
-          <Index key={index.indexName} indexName={index.indexName}>
-            <Configure {...index.searchParameters} />
-          </Index>
-        ))}
-        <InnerAutocomplete
-          {...props}
-          aiMode={aiMode}
-          indicesConfig={indicesConfig}
-          refineSearchBox={refine}
-          isSearchStalled={isSearchStalled}
-          indexUiState={indexUiState}
-          isSearchPage={isSearchPage}
-          showRecent={showRecent}
-          recentSearchConfig={recentSearchConfig}
-          showQuerySuggestions={showQuerySuggestions}
-          detachedMediaQuery={detachedMediaQuery}
-          translations={translations}
-          showPromptSuggestions={showPromptSuggestions}
-          chatRenderState={
-            indexRenderState.chat as Partial<ChatRenderState> | undefined
-          }
-        />
+        <Feeds isolated={false} renderFeed={() => null} />
+        {innerAutocomplete}
       </Index>
-    </Fragment>
+    );
+  }
+
+  return (
+    <Index EXPERIMENTAL_isolated indexId={`ais-autocomplete-${instanceKey}`}>
+      <Configure {...searchParameters} />
+      {indicesConfig.map((index) => (
+        <Index
+          key={index.indexName}
+          indexName={index.indexName}
+          indexId={`ais-autocomplete-${instanceKey}-${index.indexName}`}
+        >
+          <Configure {...index.searchParameters} />
+        </Index>
+      ))}
+      {innerAutocomplete}
+    </Index>
   );
 }
 
@@ -617,10 +941,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   transformItems,
   placeholder,
   autoFocus,
-  detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
   aiMode,
+  domId,
+  detached,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -637,8 +962,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       ? currentRefinement
       : indexUiState.query ?? '';
 
-  const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } =
-    useDetachedMode(detachedMediaQuery);
+  const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } = detached;
   const previousIsDetachedRef = useRef(isDetached);
 
   const {
@@ -735,6 +1059,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     setIsOpen,
     focusInput,
   } = usePropGetters<TItem>({
+    id: domId,
     indices: indicesForPropGettersWithPromptSuggestions,
     indicesConfig: indicesConfigForPropGetters,
     onRefine: (query) => {
@@ -874,7 +1199,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         NoResultsComponent={currentIndexConfig.noResultsComponent}
         items={hits.map((item) => ({
           ...item,
-          __indexName: indexId,
+          __indexName: indexName,
         }))}
         getItemProps={getItemProps}
         sendEvent={sendEvent}
@@ -936,7 +1261,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   const panelContent = (
     <AutocompletePanel
       {...getPanelProps()}
-      classNames={{ root: classNames?.panel, open: classNames?.panelOpen, layout: classNames?.panelLayout }}
+      classNames={{
+        root: classNames?.panel,
+        open: classNames?.panelOpen,
+        layout: classNames?.panelLayout,
+      }}
     >
       {PanelComponent ? (
         <PanelComponent
@@ -991,9 +1320,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             <AutocompleteDetachedContainer
               classNames={detachedContainerClassNames}
             >
-              <AutocompleteDetachedFormContainer
-                classNames={classNames}
-              >
+              <AutocompleteDetachedFormContainer classNames={classNames}>
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
               {panelContent}

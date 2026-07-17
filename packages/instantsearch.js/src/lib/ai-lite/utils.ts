@@ -92,3 +92,47 @@ export function resolveValue<T>(
   }
   return Promise.resolve(value);
 }
+
+/**
+ * Error shape for custom chat implementations that still surface a
+ * `data-guardrail-violation` chunk through the error UI. The `message` carries
+ * the service-provided `fallbackResponse`, which is authored for end-user
+ * display.
+ *
+ * Detection across package boundaries should rely on `error.name` rather than
+ * `instanceof` to avoid issues with mixed module copies in bundled apps.
+ */
+export class GuardrailViolationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'GuardrailViolationError';
+  }
+}
+
+/**
+ * Reads a non-empty `message` field off a JSON-serialized error envelope.
+ *
+ * Both transports backing `AbstractChat` (stream `error` chunks and HTTP error
+ * responses) serialize errors as `{"message": "...", ...}` — the same shape as
+ * the shared `ErrorResponse` on the API side. Returns the trimmed message if
+ * the input is such a JSON object, otherwise `undefined`.
+ */
+export function tryParseErrorMessage(text: string): string | undefined {
+  try {
+    const parsed: unknown = JSON.parse(text);
+    if (
+      parsed &&
+      typeof parsed === 'object' &&
+      !Array.isArray(parsed) &&
+      typeof (parsed as { message?: unknown }).message === 'string'
+    ) {
+      const message = (parsed as { message: string }).message.trim();
+      if (message) {
+        return message;
+      }
+    }
+  } catch {
+    // Not JSON — caller falls back to its own default.
+  }
+  return undefined;
+}

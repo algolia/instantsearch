@@ -4,7 +4,7 @@
 /** @jsx h */
 
 import { mount } from '@instantsearch/testutils/enzyme';
-import { render } from '@testing-library/preact';
+import { act, render } from '@testing-library/preact';
 import { h } from 'preact';
 
 import createHelpers from '../../../lib/createHelpers';
@@ -39,6 +39,25 @@ describe('Stats', () => {
           dangerouslySetInnerHTML={
             {
               "__html": "1,234 results found in 42ms",
+            }
+          }
+        />
+        <span
+          aria-atomic="true"
+          aria-live="polite"
+          className="ais-Stats-announcement"
+          role="status"
+          style={
+            {
+              "border": 0,
+              "clip": "rect(0, 0, 0, 0)",
+              "height": "1px",
+              "margin": "-1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "absolute",
+              "whiteSpace": "nowrap",
+              "width": "1px",
             }
           }
         />
@@ -125,6 +144,40 @@ describe('Stats', () => {
         No relevant results sorted out of 1,234 found in 42ms
       </span>
     `);
+  });
+
+  it('announces the trimmed count after a debounce when results change', () => {
+    jest.useFakeTimers();
+
+    try {
+      const { container, rerender } = render(
+        <Stats {...getProps()} templateProps={{ templates: defaultTemplates }} />
+      );
+
+      const region = container.querySelector('.ais-Stats-announcement');
+
+      // Initial results are not announced.
+      expect(region).toHaveTextContent('');
+      expect(region!.textContent).toBe('');
+
+      rerender(
+        <Stats
+          {...getProps({ nbHits: 5 })}
+          templateProps={{ templates: defaultTemplates }}
+        />
+      );
+
+      // Still empty before the debounce elapses.
+      expect(region!.textContent).toBe('');
+
+      act(() => {
+        jest.advanceTimersByTime(1400);
+      });
+
+      expect(region).toHaveTextContent('5 results');
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   function getProps(extraProps = {}) {

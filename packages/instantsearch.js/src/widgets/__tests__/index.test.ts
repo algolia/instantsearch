@@ -163,9 +163,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           widget as Widgets['EXPERIMENTAL_autocomplete'];
 
         const instance = EXPERIMENTAL_autocomplete({ container, indices: [] });
-        const autocomplete = (instance[1] as IndexWidget)
-          .getWidgets()
-          .find((w) => w.$$type === 'ais.autocomplete');
+        const autocomplete = instance.find(
+          (w) => w.$$type === 'ais.autocomplete'
+        );
 
         if (!autocomplete) {
           throw new Error('autocomplete widget not found');

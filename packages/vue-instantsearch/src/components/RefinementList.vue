@@ -70,6 +70,8 @@
         @click="toggleShowMore"
         v-if="showMore"
         :disabled="!state.canToggleShowMore"
+        :aria-expanded="state.isShowingMore ? 'true' : 'false'"
+        :aria-label="showMoreButtonLabel"
       >
         <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
           Show {{ state.isShowingMore ? 'less' : 'more' }}
@@ -141,6 +143,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    showMoreButtonLabel: {
+      type: String,
+      required: false,
+      default: undefined,
     },
     sortBy: {
       type: [Array, Function],

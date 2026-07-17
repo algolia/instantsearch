@@ -63,9 +63,7 @@ describe('chat', () => {
       }).not.toThrow();
 
       expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining(
-          'The `chat` widget has no way to be opened.'
-        )
+        expect.stringContaining('The `chat` widget has no way to be opened.')
       );
 
       warnSpy.mockRestore();
@@ -99,9 +97,7 @@ describe('chat', () => {
       }).not.toThrow();
 
       expect(warnSpy).not.toHaveBeenCalledWith(
-        expect.stringContaining(
-          'The `chat` widget has no way to be opened.'
-        )
+        expect.stringContaining('The `chat` widget has no way to be opened.')
       );
 
       warnSpy.mockRestore();
@@ -131,12 +127,59 @@ describe('chat', () => {
       }).not.toThrow();
 
       expect(warnSpy).not.toHaveBeenCalledWith(
-        expect.stringContaining(
-          'The `chat` widget has no way to be opened.'
-        )
+        expect.stringContaining('The `chat` widget has no way to be opened.')
       );
 
       warnSpy.mockRestore();
+    });
+
+    test('triggers the main search by default', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not trigger the main search when requiresSearch is false', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          requiresSearch: false,
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).not.toHaveBeenCalled();
     });
   });
 
@@ -286,9 +329,7 @@ describe('chat', () => {
       fireEvent.input(textareaBefore!, { target: { value: 'hel' } });
       await wait(0);
 
-      const textareaAfter = container.querySelector(
-        '.ais-ChatPrompt-textarea'
-      );
+      const textareaAfter = container.querySelector('.ais-ChatPrompt-textarea');
 
       expect(textareaAfter).toBe(textareaBefore);
       expect(document.activeElement).toBe(textareaAfter);

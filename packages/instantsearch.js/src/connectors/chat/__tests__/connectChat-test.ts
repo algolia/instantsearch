@@ -16,7 +16,7 @@ import connectChat from '../connectChat';
 
 import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
-import type { ChatConnectorParams } from '../connectChat';
+import type { ChatConnectorParams, ChatCustomInstance } from '../connectChat';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
@@ -30,7 +30,7 @@ describe('connectChat', () => {
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
       disableTriggerValidation: true,
       ...widgetParams,
-    });
+    } as ChatConnectorParams);
 
     const helper = algoliasearchHelper(createSearchClient(), '');
 
@@ -70,6 +70,102 @@ describe('connectChat', () => {
         })
       );
     });
+
+    it('depends on search by default', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
+
+      expect(widget.dependsOn).toBe('search');
+    });
+
+    it('can be configured to depend on no backend request', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        requiresSearch: false,
+      });
+
+      expect(widget.dependsOn).toBe('none');
+    });
+
+    it('types requestOptions as agentId-only', () => {
+      const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
+        params: TParams
+      ) => params;
+      const assertChatCustomInstanceParams = (
+        params: ChatCustomInstance<UIMessage>
+      ) => params;
+      const customChat = undefined as unknown as Chat<UIMessage>;
+
+      const agentParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        requestOptions: {
+          queryParameters: { cache: false },
+          headers: { 'x-algolia-referer': 'chat-widget' },
+        },
+      });
+
+      const legacyAgentWithTransportParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+      });
+      const agentPersistenceParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const transportPersistenceParams = assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        persistence: false,
+      });
+
+      // @ts-expect-error requestOptions is only valid with agentId
+      assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      // @ts-expect-error requestOptions is not valid when a custom transport is provided
+      assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      assertChatConnectorParams({
+        // @ts-expect-error requestOptions is not valid with a custom chat instance
+        chat: customChat,
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      assertChatCustomInstanceParams({
+        chat: customChat,
+        // @ts-expect-error persistence is owned by custom chat instances
+        persistence: false,
+      });
+
+      expect(agentParams.requestOptions?.queryParameters).toEqual({
+        cache: false,
+      });
+      expect(agentParams.requestOptions?.headers).toEqual({
+        'x-algolia-referer': 'chat-widget',
+      });
+      expect(legacyAgentWithTransportParams).toEqual({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+      });
+      expect(agentPersistenceParams.persistence).toBe(false);
+      expect(transportPersistenceParams.persistence).toBe(false);
+    });
   });
 
   describe('getWidgetRenderState', () => {
@@ -101,13 +197,11 @@ describe('connectChat', () => {
         expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -166,12 +260,10 @@ describe('connectChat', () => {
         chat: expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -310,10 +402,11 @@ describe('connectChat', () => {
       expect(updatedRenderState.open).toBe(true);
     });
 
-    it('updates clearing state when clearMessages is called', () => {
+    it('clears messages and resets the conversation when clearMessages is called', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
+      const conversationIdBeforeClear = renderState.id;
 
       const message: UIMessage = {
         id: '1',
@@ -321,54 +414,54 @@ describe('connectChat', () => {
         parts: [{ type: 'text', text: 'Hello' }],
       };
       renderState.setMessages([message]);
-
-      expect(renderState.isClearing).toBe(false);
 
       renderState.clearMessages();
 
       const updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
+      expect(updatedRenderState.messages).toHaveLength(0);
+      expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
-    it('does not change state when clearing empty messages', () => {
+    it('renders the rotated conversation id when clearing', () => {
       const { getRenderState, renderFn } = getInitializedWidget();
 
       const renderState = getRenderState();
+      renderState.setMessages([
+        { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+      ]);
+      const idBeforeClear = getRenderState().id;
 
-      if (renderState.messages.length > 0) {
-        renderState.setMessages([]);
-      }
-
-      const callCountBeforeClear = renderFn.mock.calls.length;
+      renderFn.mockClear();
       renderState.clearMessages();
 
-      expect(renderFn.mock.calls.length).toBe(callCountBeforeClear);
+      // The render emitted while clearing must observe the rotated id, not the
+      // stale one (state that doesn't emit a callback is reset first).
+      const lastRenderState =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastRenderState.id).not.toBe(idBeforeClear);
     });
 
-    it('clears messages and resets state on transition end', () => {
-      const { getRenderState } = getInitializedWidget();
+    it('exits the error state and resets the conversation even with no messages', () => {
+      // An error/stream can be set with no messages (e.g. a failed resume), so
+      // clearing must not shortcut out on an empty message list.
+      const { getRenderState, widget } = getInitializedWidget();
 
-      const renderState = getRenderState();
+      let renderState = getRenderState();
+      renderState.setMessages([]);
+      // Simulate an error state with no messages (e.g. a failed resume).
+      widget.chatInstance._state.status = 'error';
+      widget.chatInstance._state.error = new Error('boom');
+      const idBeforeClear = getRenderState().id;
 
-      const message: UIMessage = {
-        id: '1',
-        role: 'user',
-        parts: [{ type: 'text', text: 'Hello' }],
-      };
-      renderState.setMessages([message]);
       renderState.clearMessages();
 
-      let updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
-
-      renderState.onClearTransitionEnd();
-
-      updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(false);
-      expect(updatedRenderState.messages).toHaveLength(0);
+      renderState = getRenderState();
+      expect(renderState.messages).toHaveLength(0);
+      expect(renderState.status).toBe('ready');
+      expect(renderState.id).not.toBe(idBeforeClear);
     });
 
-    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+    it('regenerates the chat id on clear so the server starts a fresh conversation', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -382,7 +475,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.id).toEqual(expect.any(String));
@@ -418,7 +510,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       expect(chatInstance.id).toEqual(expect.any(String));
       expect(chatInstance.id).not.toBe(initialId);
@@ -523,6 +614,92 @@ describe('connectChat', () => {
   });
 
   describe('default chat instance', () => {
+    const cacheKey = 'instantsearch-chat-initial-messages';
+
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    it('does not restore messages from sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+
+      expect(getRenderState().messages).toEqual([]);
+    });
+
+    it('does not save messages to sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const storageKey = `${cacheKey}-agentId`;
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const nextMessages: UIMessage[] = [
+        {
+          id: 'next',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Next message' }],
+        },
+      ];
+
+      getRenderState().setMessages(nextMessages);
+
+      expect(sessionStorage.getItem(storageKey)).toBe(
+        JSON.stringify(previousMessages)
+      );
+    });
+
+    it('applies initialMessages when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const initialMessages: UIMessage[] = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+        initialMessages,
+      });
+
+      expect(getRenderState().messages).toEqual(initialMessages);
+    });
+
     it('adds a compatibility layer for Algolia MCP Server search tool', async () => {
       const onSearchToolCall = jest.fn();
 
@@ -904,6 +1081,165 @@ data: [DONE]`,
         expect(toolPart?.rawOutput).toBeUndefined();
       });
     });
+
+    it('renders a guardrail-violation fallbackResponse as assistant history', async () => {
+      const fallbackResponse =
+        "I'm sorry I couldn't respond to that, please try again with another message.";
+      const onError = jest.fn();
+      const onFinish = jest.fn();
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(
+            `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "text-start", "id": "msg-1"}
+
+data: {"type": "text-delta", "id": "msg-1", "delta": "If you need help"}
+
+data: {"type": "text-end", "id": "msg-1"}
+
+data: {"type": "finish-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "product_returns", "guardrailType": "input", "fallbackResponse": ${JSON.stringify(
+              fallbackResponse
+            )}}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+            {
+              headers: { 'Content-Type': 'text/event-stream' },
+            }
+          )
+        )
+        .mockResolvedValueOnce(
+          new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+            headers: { 'Content-Type': 'text/event-stream' },
+          })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: fetchMock,
+        },
+        onError,
+        onFinish,
+      });
+
+      const { chatInstance } = widget;
+      const messagesBeforeSend = chatInstance.messages.length;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'how do I return a product?' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(onError).not.toHaveBeenCalled();
+        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 2);
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+        });
+        expect(JSON.stringify(chatInstance.messages)).not.toContain(
+          'If you need help'
+        );
+      });
+
+      const assistant = chatInstance.messages[chatInstance.messages.length - 1];
+
+      expect(onFinish).toHaveBeenCalledWith({
+        message: assistant,
+        messages: chatInstance.messages,
+        isAbort: false,
+        isDisconnect: false,
+        isError: false,
+      });
+
+      await chatInstance.sendMessage({
+        id: 'follow-up-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'what can you help with?' }],
+      });
+
+      await waitFor(() => {
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+      });
+
+      const [, secondRequest] = fetchMock.mock.calls[1];
+      const secondRequestBody = JSON.parse(
+        (secondRequest as RequestInit).body as string
+      );
+      expect(secondRequestBody.messages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'test-id',
+            role: 'assistant',
+            parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+          }),
+        ])
+      );
+    });
+
+    it('renders a generic assistant message when fallbackResponse is missing', async () => {
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "data-guardrail-violation", "data": {"category": "x", "guardrailType": "input"}}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+      });
+
+      const { chatInstance } = widget;
+
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'blocked input' }],
+      });
+
+      await waitFor(() => {
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'text',
+              text: 'Sorry, we are not able to generate a response at the moment.',
+              state: 'done',
+            },
+          ],
+        });
+      });
+    });
   });
 
   describe('transport configuration', () => {
@@ -954,8 +1290,9 @@ data: [DONE]`,
       });
 
       function getRequestPayload() {
-        const [, init] = fetchMock.mock.calls[0];
+        const [url, init] = fetchMock.mock.calls[0];
         return {
+          url: String(url),
           headers: init.headers as Record<string, string>,
           body: JSON.parse(init.body as string),
         };
@@ -1002,6 +1339,120 @@ data: [DONE]`,
         );
       });
 
+      it('sends persistent query parameters on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: false,
+              hitsPerPage: 4,
+              explain: true,
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('cache')).toBe('false');
+        expect(searchParams.get('hitsPerPage')).toBe('4');
+        expect(searchParams.get('explain')).toBe('true');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
+      it('keeps the built-in compatibility mode on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              compatibilityMode: 'custom',
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
+      it('sends persistent headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
+      it('sends persistent Headers instance on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: new Headers({
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            }),
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
+      it('keeps the x-algolia-agent chat marker even when requestOptions tries to override it', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-application-id': 'spoofed-app',
+              'x-algolia-api-key': 'spoofed-key',
+              'x-algolia-agent': 'spoofed-agent',
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-application-id']).toBe('appId');
+        expect(headers['x-algolia-api-key']).toBe('apiKey');
+        expect(headers['x-algolia-agent']).toContain('; chat');
+        expect(headers['x-algolia-agent']).not.toBe('spoofed-agent');
+        expect(headers['x-algolia-referer']).toBe('chat-widget');
+      });
+
       it('does not register `chat` on the search client user-agent', () => {
         const addAlgoliaAgent = jest.fn();
         const client = Object.assign(createSearchClient(), {
@@ -1041,6 +1492,41 @@ data: [DONE]`,
         });
       });
 
+      it('lets per-call headers override persistent headers for one request', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'chat-widget'
+        );
+      });
+
       it('does not carry over the x-algolia-referer to follow-up messages', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
@@ -1066,13 +1552,33 @@ data: [DONE]`,
         expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
       });
 
+      it('forces cache=false when regenerating with persistent cache query parameter', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: true,
+            },
+          },
+        });
+
+        await widget.chatInstance.regenerate();
+
+        const { url } = getRequestPayload();
+        expect(new URL(url).searchParams.get('cache')).toBe('false');
+      });
+
       it('does not duplicate transport metadata in the request body', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
         await widget.chatInstance.sendMessage({ text: 'hello' });
 
         const { body } = getRequestPayload();
-        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+        ]);
         expect(body).not.toHaveProperty('headers');
         expect(body).not.toHaveProperty('api');
         expect(body).not.toHaveProperty('credentials');
@@ -1144,11 +1650,10 @@ data: [DONE]`,
       return new Chat<UIMessage>({ transport: createMockTransport() });
     }
 
-    function createChatWidgetWithContext(
-      params: Omit<ChatConnectorParams<UIMessage>, 'transport' | 'agentId'> & {
-        chat: Chat<UIMessage>;
-      }
-    ) {
+    function createChatWidgetWithContext(params: {
+      chat: Chat<UIMessage>;
+      context?: ChatConnectorParams<UIMessage>['context'];
+    }) {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
       const widget = makeWidget({
@@ -1345,6 +1850,93 @@ data: [DONE]`,
       // of silently sending the message without context.
       expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
       expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendAutomaticallyWhen', () => {
+    // A minimal, immediately-terminating assistant turn — enough for the
+    // automatic follow-up request's stream to settle.
+    const terminalStream = () =>
+      new Response(
+        `data: {"type": "start", "messageId": "assistant-2"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    // An assistant message with a single, still-unresolved tool call. Assigning
+    // it directly (rather than streaming it in) keeps the test deterministic:
+    // the only request that can fire is the auto-continuation from
+    // `addToolResult`.
+    const assistantWithPendingTool = () =>
+      [
+        { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+        {
+          id: 'a1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-myTool',
+              toolCallId: 'call_1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ] as unknown as UIMessage[];
+
+    it('auto-continues by default once a resolved tool completes the assistant message', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      // Resolving the tool result flips the last assistant message's tool part
+      // to `output-available`; the default
+      // `lastAssistantMessageIsCompleteWithToolCalls` then resubmits. Awaiting
+      // `addToolResult` waits for that follow-up to complete, so the assertion
+      // is deterministic.
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not auto-continue when a user `sendAutomaticallyWhen` returns false', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+      const sendAutomaticallyWhen = jest.fn(() => false);
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen,
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      // The user predicate was consulted with the resolved messages...
+      expect(sendAutomaticallyWhen).toHaveBeenCalledWith(
+        expect.objectContaining({ messages: expect.any(Array) })
+      );
+      // ...and because it returned `false`, no automatic follow-up fired at
+      // all. This is the escape hatch for the runaway auto-continuation loop: a
+      // resolved tool no longer forces another completions request.
+      expect(fetchMock).not.toHaveBeenCalled();
     });
   });
 });

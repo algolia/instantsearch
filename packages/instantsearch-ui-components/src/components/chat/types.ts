@@ -431,6 +431,8 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
     body?: object;
   }) => Promise<void>;
 
+  resetConversationId: () => void;
+
   clearError: () => void;
 
   addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(params: {
@@ -447,11 +449,21 @@ export type AddToolResultWithOutput = (
   params: Pick<Parameters<AddToolResult>[0], 'output'>
 ) => ReturnType<AddToolResult>;
 
-export type SearchToolInput = {
+type SearchToolInputBase = {
   query: string;
   number_of_results?: number;
+};
+
+type DefaultSearchToolInput = SearchToolInputBase & {
   facet_filters?: string[][];
 };
+
+type McpSearchToolInput = SearchToolInputBase & {
+  facet_filters?: undefined;
+  [facetKey: `facet_${string}`]: string[] | undefined;
+};
+
+export type SearchToolInput = DefaultSearchToolInput | McpSearchToolInput;
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -540,6 +552,7 @@ export type ChatComponentPropsWithMetadata<
 
 export type ClientSideToolComponentProps = ChatComponentPropsWithMetadata<{
   message: ChatToolMessage;
+  messages?: ChatMessageBase[];
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   addToolResult: AddToolResultWithOutput;

@@ -17,6 +17,7 @@ import {
   hits,
   index,
   rangeInput,
+  rangeSlider,
   hitsPerPage,
   clearRefinements,
   currentRefinements,
@@ -278,6 +279,22 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     instantsearch(instantSearchOptions)
       .addWidgets([
         rangeInput({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createRangeSliderWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        rangeSlider({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -639,7 +656,11 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
 
     const refinementsWidgets = [];
     if (renderRefinements) {
@@ -673,10 +694,16 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
-        chat({
-          container: document.body.appendChild(document.createElement('div')),
-          ...chatWidgetParams,
-        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                ...chatWidgetParams,
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*
@@ -692,7 +719,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
         EXPERIMENTAL_autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
-        }),
+        } as Parameters<typeof EXPERIMENTAL_autocomplete>[0]),
       ])
       .on('error', () => {
         /*
@@ -733,6 +760,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createRangeInputWidgetTests: undefined,
+  createRangeSliderWidgetTests: undefined,
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,

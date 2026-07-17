@@ -125,6 +125,12 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
+   * The full conversation. Forwarded to tool components so those that only
+   * receive object IDs (e.g. display results) can hydrate records from a
+   * preceding search tool's hits.
+   */
+  messages?: ChatMessageBase[];
+  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -136,6 +142,17 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * Optional translations
    */
   translations?: Partial<ChatMessageTranslations>;
+  /**
+   * Whether to render text parts as markdown.
+   *
+   * When `true` (default), text parts are compiled with `markdown-to-jsx`
+   * (links, code blocks, emphasis, …). When `false`, text parts render as
+   * plain text with newlines preserved — useful for user messages where the
+   * source is the human's literal input and incidental markdown syntax (`*`,
+   * `_`, …) shouldn't be transformed. Note that opting out means links in the
+   * output are no longer clickable.
+   */
+  parseMarkdown?: boolean;
 };
 
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
@@ -159,8 +176,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       footerComponent: FooterComponent,
       indexUiState,
       setIndexUiState,
+      messages,
       translations: userTranslations,
       suggestionsElement,
+      parseMarkdown = true,
       metadata,
       ...props
     } = userProps;
@@ -211,6 +230,19 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           part.text.endsWith('</context>')
         ) {
           return null;
+        }
+        if (!parseMarkdown) {
+          // Render the literal text. The `ais-ChatMessage-text` class applies
+          // `white-space: pre-wrap` to preserve the newlines that markdown
+          // would otherwise collapse, and streaming deltas append cleanly
+          // because there's no parser state to get into a half-parsed entity.
+          // Wrapped in a `<p>` to keep some structure for screen readers
+          // (markdown produces semantic elements; a bare text node would not).
+          return (
+            <p key={`${message.id}-${index}`} className="ais-ChatMessage-text">
+              {part.text}
+            </p>
+          );
         }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
@@ -267,6 +299,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={tool.sendEvent || (() => {})}

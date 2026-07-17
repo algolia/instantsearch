@@ -6,9 +6,10 @@ import {
   ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
+  getFacetFiltersFromToolInput,
 } from 'instantsearch-ui-components';
-import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { Component, Fragment, h, render } from 'preact';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -75,7 +76,33 @@ import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-const Chat = createChatComponent({ createElement: h, Fragment });
+// Lightweight `memo` for the Preact flavor. `preact/compat` is intentionally
+// avoided across this package (it bloats the bundle and patches Preact
+// globally); a class component with `shouldComponentUpdate` is all the chat
+// message memoization needs.
+const memo: Parameters<typeof createChatComponent>[0]['memo'] = (
+  FunctionComponent,
+  propsAreEqual
+) => {
+  class Memoized extends Component<Record<string, unknown>> {
+    shouldComponentUpdate(nextProps: Record<string, unknown>) {
+      return propsAreEqual
+        ? !propsAreEqual(this.props as never, nextProps as never)
+        : true;
+    }
+    render() {
+      return h(FunctionComponent as never, this.props);
+    }
+  }
+  return (props) => h(Memoized, props as Record<string, unknown>);
+};
+
+const Chat = createChatComponent({
+  createElement: h,
+  Fragment,
+  memo,
+  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+});
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
 
@@ -103,12 +130,7 @@ function createCarouselTool<
     metadata,
   }: ClientSideToolTemplateData) {
     const { onClose } = metadata;
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -211,7 +233,7 @@ function createCarouselTool<
                 if (!input || !applyFilters) return;
                 const params = applyFilters({
                   query: input.query,
-                  facetFilters: input.facet_filters,
+                  facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
                 if (
@@ -300,9 +322,7 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
-  isClearing: boolean;
   clearMessages: () => void;
-  onClearTransitionEnd: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
@@ -378,9 +398,7 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
-  isClearing,
   clearMessages,
-  onClearTransitionEnd,
   onFeedback,
   feedbackState,
   toolsForUi,
@@ -395,6 +413,18 @@ function ChatWrapper({
       initial: 'smooth',
       resize: 'smooth',
     });
+
+  // Keep the conversation pinned to the bottom while streaming. The stick-to-
+  // bottom ResizeObserver only reacts to content *height* changes, but tool
+  // results such as a horizontally-growing carousel stream in without changing
+  // height — so we also re-pin on every message/status update. Passing
+  // `preserveScrollPosition` reuses the existing "only if already at the
+  // bottom" gate, so this never fights a user who has scrolled up to read.
+  useEffect(() => {
+    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+      scrollToBottom({ preserveScrollPosition: true });
+    }
+  }, [chatMessages, chatStatus, scrollToBottom]);
 
   state.init();
 
@@ -418,7 +448,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        canClear: Boolean(chatMessages?.length),
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -429,13 +459,12 @@ function ChatWrapper({
         status: chatStatus,
         error,
         onReload: (messageId) => regenerate({ messageId }),
+        onNewConversation: clearMessages,
         onClose: () => setChatOpen(false),
         onFeedback,
         feedbackState,
         messages: chatMessages,
         indexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -528,6 +557,35 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         data={props as unknown as Record<string, unknown>}
       />
     );
+  }
+
+  // Tool layout components are rendered as component types downstream, exactly
+  // like the chat templates above. Recreating them each render makes Preact see
+  // a new component type and remount the whole tool subtree on every streaming
+  // delta — which re-mounts e.g. a carousel's `<ol>` and resets its scroll
+  // position. `tools` is created once per widget, so cache one stable component
+  // per tool key and reuse it across renders.
+  const toolLayoutComponentCache = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+  function getStableToolLayoutComponent(
+    key: string,
+    widgetTool: NonNullable<typeof tools[string]>
+  ): (props: ClientSideToolComponentProps) => JSX.Element {
+    let component = toolLayoutComponentCache.get(key);
+    if (!component) {
+      component = (layoutComponentProps: ClientSideToolComponentProps) => (
+        <TemplateComponent
+          templates={widgetTool.templates}
+          rootTagName="fragment"
+          templateKey="layout"
+          data={layoutComponentProps}
+        />
+      );
+      toolLayoutComponentCache.set(key, component);
+    }
+    return component;
   }
 
   const stableHeaderLayoutComponent = templates.header?.layout
@@ -704,9 +762,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       error,
       regenerate,
       stop,
-      isClearing,
       clearMessages,
-      onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
       sendChatMessageFeedback: onFeedback,
@@ -738,18 +794,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       toolsForUi[key] = {
         ...connectorTool,
         ...(widgetTool?.templates?.layout && {
-          layoutComponent: (
-            layoutComponentProps: ClientSideToolComponentProps
-          ) => {
-            return (
-              <TemplateComponent
-                templates={widgetTool.templates}
-                rootTagName="fragment"
-                templateKey="layout"
-                data={layoutComponentProps}
-              />
-            );
-          },
+          layoutComponent: getStableToolLayoutComponent(key, widgetTool),
         }),
       };
     });
@@ -864,9 +909,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
-          isClearing={isClearing}
           clearMessages={clearMessages}
-          onClearTransitionEnd={onClearTransitionEnd}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}

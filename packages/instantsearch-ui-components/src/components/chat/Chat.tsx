@@ -7,7 +7,7 @@ import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 
-import type { Renderer, ComponentProps } from '../../types';
+import type { Renderer, ComponentProps, Hooks } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
@@ -92,9 +92,26 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
-export function createChatComponent({ createElement, Fragment }: Renderer) {
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
+export function createChatComponent({
+  createElement,
+  Fragment,
+  memo,
+  useState,
+}: Renderer & Pick<Hooks, 'memo' | 'useState'>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
-  const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
+  const ChatMessages = createChatMessagesComponent({
+    createElement,
+    Fragment,
+    memo,
+  });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
     createElement,
@@ -126,8 +143,39 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       ...props
     } = userProps;
 
+    const [isClearing, setIsClearing] = useState(false);
+
+    const commitClear = headerProps.onClear || messagesProps.onNewConversation;
+
+    const startClear = () => {
+      if (!commitClear) {
+        return;
+      }
+      // Reduced motion disables the transition, so `transitionend` never fires;
+      // commit immediately instead of waiting for it.
+      if (prefersReducedMotion()) {
+        commitClear();
+        return;
+      }
+      // Stop streaming now so the assistant stops immediately, not after the fade.
+      if (
+        messagesProps.status === 'submitted' ||
+        messagesProps.status === 'streaming'
+      ) {
+        stop();
+      }
+      setIsClearing(true);
+    };
+
+    const finishClear = () => {
+      commitClear?.();
+      setIsClearing(false);
+    };
+
     const headerComponent = createElement(HeaderComponent || ChatHeader, {
       ...headerProps,
+      onClear: commitClear ? startClear : headerProps.onClear,
+      canClear: headerProps.canClear && !isClearing,
       classNames: classNames.header,
       maximized,
     });
@@ -135,6 +183,12 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     const messagesComponent = (
       <ChatMessages
         {...messagesProps}
+        isClearing={isClearing}
+        onClearTransitionEnd={finishClear}
+        onNewConversation={
+          commitClear ? startClear : messagesProps.onNewConversation
+        }
+        error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
         suggestionsElement={createElement(
@@ -165,9 +219,9 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         messages={messagesProps.messages}
         status={messagesProps.status}
         tools={messagesProps.tools}
-        isClearing={messagesProps.isClearing}
-        clearMessages={headerProps.onClear}
-        onClearTransitionEnd={messagesProps.onClearTransitionEnd}
+        isClearing={isClearing}
+        clearMessages={commitClear ? startClear : headerProps.onClear}
+        onClearTransitionEnd={finishClear}
         suggestions={suggestionsProps.suggestions}
         sendMessage={sendMessage}
         regenerate={regenerate}

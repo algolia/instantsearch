@@ -1,6 +1,7 @@
 import { CommanderError } from 'commander';
 
 import { failureEnvelope, formatEnvelope } from './envelope';
+import { HandledFailure } from './handled-failure';
 import { defaultIO, type IO } from './io';
 import { createProgram, KNOWN_COMMANDS, PROGRAM_NAME } from './program';
 
@@ -11,6 +12,7 @@ type ParserFailureCode =
   | 'invalid_flag'
   | 'unknown_command'
   | 'internal_error';
+
 
 export async function run(
   argv: string[],
@@ -34,6 +36,11 @@ export async function run(
     ) {
       io.stderr(errBuffer.join(''));
       return 0;
+    }
+
+    if (error instanceof HandledFailure) {
+      io.stderr(errBuffer.join(''));
+      return error.exitCode;
     }
 
     const { code, message } = classifyError(error);

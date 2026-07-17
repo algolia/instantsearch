@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { processStream } from './stream-parser';
-import { generateId as defaultGenerateId, SerialJobExecutor } from './utils';
+import {
+  generateId as defaultGenerateId,
+  SerialJobExecutor,
+  tryParseErrorMessage,
+} from './utils';
 
-import type { MutableKeys } from '../../types';
 import type {
   ChatInit,
   ChatRequestOptions,
@@ -119,12 +122,19 @@ const parseToolInputDelta = (
   return fallbackInput;
 };
 
+const defaultGuardrailFallbackResponse =
+  'Sorry, we are not able to generate a response at the moment.';
+
 /**
  * Abstract base class for chat implementations.
  */
 export abstract class AbstractChat<TUIMessage extends UIMessage> {
-  readonly id: string;
+  private conversationId: string;
   readonly generateId: IdGenerator;
+
+  get id(): string {
+    return this.conversationId;
+  }
   protected state: ChatState<TUIMessage>;
 
   private readonly transport?: ChatTransport<TUIMessage>;
@@ -156,7 +166,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
-    this.id = id;
+    this.conversationId = id;
     this.generateId = generateId;
     this.state = state;
     this.transport = transport;
@@ -195,6 +205,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   get error(): Error | undefined {
     return this.state.error;
+  }
+
+  /**
+   * Starts a new server-side conversation thread by rotating the id sent as
+   * `chatId` / `id` on the next request. The InstantSearch connector calls this
+   * after the user clears the transcript so completions are not tied to prior
+   * context.
+   */
+  resetConversationId(): void {
+    this.conversationId = this.generateId();
   }
 
   get messages(): TUIMessage[] {
@@ -389,14 +409,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     if (this.state.status === 'error') {
       this.setStatus({ status: 'ready', error: undefined });
     }
-  };
-
-  /**
-   * Regenerate the chat id. Use this to start a fresh conversation on the
-   * server while keeping the same Chat instance and its registered listeners.
-   */
-  regenerateId = (): void => {
-    (this as MutableKeys<this, 'id'>).id = this.generateId();
   };
 
   /**
@@ -954,39 +966,96 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
-            case 'tool-error': {
+            case 'tool-input-error': {
+              if (!currentMessage) break;
+              delete toolRawInputByCallId[chunk.toolCallId];
+              delete toolRawOutputByCallId[chunk.toolCallId];
+
+              const toolIndex = currentMessage.parts.findIndex(
+                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
+              );
+              const existingPart =
+                toolIndex >= 0
+                  ? (currentMessage.parts[toolIndex] as any)
+                  : null;
+
+              const {
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                output: _ignoredOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                rawOutput: _ignoredRawOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                preliminary: _ignoredPreliminary,
+                ...carryOver
+              } = existingPart ?? {};
+
+              const nextToolPart = {
+                ...carryOver,
+                type: `tool-${chunk.toolName}` as const,
+                toolCallId: chunk.toolCallId,
+                state: 'output-error' as const,
+                input: undefined,
+                rawInput: chunk.input ?? carryOver.rawInput,
+                errorText: chunk.errorText,
+                providerExecuted:
+                  chunk.providerExecuted ?? carryOver.providerExecuted,
+                callProviderMetadata:
+                  chunk.providerMetadata ?? carryOver.callProviderMetadata,
+              };
+
+              if (toolIndex >= 0) {
+                const updatedParts = [...currentMessage.parts];
+                updatedParts[toolIndex] = nextToolPart;
+                currentMessage = {
+                  ...currentMessage,
+                  parts: updatedParts,
+                } as TUIMessage;
+              } else {
+                currentMessage = {
+                  ...currentMessage,
+                  parts: [...currentMessage.parts, nextToolPart],
+                } as TUIMessage;
+              }
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              break;
+            }
+
+            case 'tool-output-error': {
               if (!currentMessage) break;
 
               const toolIndex = currentMessage.parts.findIndex(
                 (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
               );
+              if (toolIndex < 0) break;
 
-              if (toolIndex >= 0) {
-                delete toolRawInputByCallId[chunk.toolCallId];
-                delete toolRawOutputByCallId[chunk.toolCallId];
+              delete toolRawInputByCallId[chunk.toolCallId];
+              delete toolRawOutputByCallId[chunk.toolCallId];
 
-                const updatedParts = [...currentMessage.parts];
-                const existingPart = updatedParts[toolIndex] as any;
-                const {
-                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-                  rawOutput: _ignoredRawOutput,
-                  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-                  preliminary: _ignoredPreliminary,
-                  ...rest
-                } = existingPart;
-                updatedParts[toolIndex] = {
-                  ...rest,
-                  state: 'output-error',
-                  errorText: chunk.errorText,
-                  input: chunk.input ?? existingPart.input,
-                  callProviderMetadata: chunk.callProviderMetadata,
-                };
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
-              }
+              const updatedParts = [...currentMessage.parts];
+              const existingPart = updatedParts[toolIndex] as any;
+              const {
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                rawOutput: _ignoredRawOutput,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                preliminary: _ignoredPreliminary,
+                // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+                output: _ignoredOutput,
+                ...rest
+              } = existingPart;
+              updatedParts[toolIndex] = {
+                ...rest,
+                state: 'output-error',
+                errorText: chunk.errorText,
+                providerExecuted:
+                  chunk.providerExecuted ?? rest.providerExecuted,
+                callProviderMetadata:
+                  chunk.providerMetadata ?? rest.callProviderMetadata,
+              };
+              currentMessage = {
+                ...currentMessage,
+                parts: updatedParts,
+              } as TUIMessage;
+              this.state.replaceMessage(currentMessageIndex, currentMessage);
               break;
             }
 
@@ -1071,7 +1140,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'error': {
               isError = true;
-              throw new Error(chunk.errorText);
+              const text = chunk.errorText.trim();
+              throw new Error(
+                tryParseErrorMessage(text) || text || 'Unknown error'
+              );
             }
 
             case 'abort': {
@@ -1090,8 +1162,46 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               break;
             }
 
+            case 'data-guardrail-violation': {
+              // `chunk.data` widens to `unknown` here: the chunk union also
+              // carries a generic `data-${string}` member, and the literal
+              // matches both, so narrowing can't pick the specific shape.
+              const { fallbackResponse } = chunk.data as {
+                fallbackResponse?: string;
+              };
+              const fallbackText =
+                fallbackResponse || defaultGuardrailFallbackResponse;
+
+              // The stream closes after a guardrail violation; keep the
+              // fallback as the current message so the normal finish path runs.
+              currentMessage = {
+                id: currentMessage?.id || currentMessageId || this.generateId(),
+                role: 'assistant',
+                metadata: currentMessage?.metadata,
+                parts: [
+                  {
+                    type: 'text',
+                    text: fallbackText,
+                    state: 'done',
+                  },
+                ],
+              } as unknown as TUIMessage;
+
+              if (currentMessageIndex >= 0) {
+                this.state.replaceMessage(currentMessageIndex, currentMessage);
+              } else {
+                this.state.pushMessage(currentMessage);
+                currentMessageIndex = this.state.messages.length - 1;
+              }
+
+              currentMessageId = currentMessage.id;
+              currentTextPartId = undefined;
+              currentReasoningPartId = undefined;
+              break;
+            }
+
             default: {
-              // Handle data parts (data-*)
+              // Handle generic data parts (data-*)
               const chunkType = (chunk as any).type as string;
               if (chunkType?.startsWith('data-') && currentMessage) {
                 const dataPart = {

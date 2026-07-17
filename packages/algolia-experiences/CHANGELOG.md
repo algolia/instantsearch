@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.15](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.14...algolia-experiences@1.8.15) (2026-07-14)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.14](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.13...algolia-experiences@1.8.14) (2026-07-07)
+
+
+### Bug Fixes
+
+* **pagination:** mark the current page with aria-current ([#7103](https://github.com/algolia/instantsearch/issues/7103)) ([f3db948](https://github.com/algolia/instantsearch/commit/f3db948b884e64c1b121fbb3801b10959ddb07ea)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+
+
+
+
+
+## [1.8.13](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.11...algolia-experiences@1.8.13) (2026-06-30)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.12](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.11...algolia-experiences@1.8.12) (2026-06-25)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.11](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.10...algolia-experiences@1.8.11) (2026-06-19)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.10](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.9...algolia-experiences@1.8.10) (2026-06-09)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.9](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.8...algolia-experiences@1.8.9) (2026-06-03)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.8.8](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.7...algolia-experiences@1.8.8) (2026-06-02)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
 ## [1.8.7](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.8.6...algolia-experiences@1.8.7) (2026-05-26)
 
 **Note:** Version bump only for package algolia-experiences
