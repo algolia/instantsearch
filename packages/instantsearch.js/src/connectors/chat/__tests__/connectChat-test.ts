@@ -1852,4 +1852,91 @@ data: [DONE]`,
       expect(sendMessageSpy).not.toHaveBeenCalled();
     });
   });
+
+  describe('sendAutomaticallyWhen', () => {
+    // A minimal, immediately-terminating assistant turn — enough for the
+    // automatic follow-up request's stream to settle.
+    const terminalStream = () =>
+      new Response(
+        `data: {"type": "start", "messageId": "assistant-2"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    // An assistant message with a single, still-unresolved tool call. Assigning
+    // it directly (rather than streaming it in) keeps the test deterministic:
+    // the only request that can fire is the auto-continuation from
+    // `addToolResult`.
+    const assistantWithPendingTool = () =>
+      [
+        { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+        {
+          id: 'a1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-myTool',
+              toolCallId: 'call_1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ] as unknown as UIMessage[];
+
+    it('auto-continues by default once a resolved tool completes the assistant message', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      // Resolving the tool result flips the last assistant message's tool part
+      // to `output-available`; the default
+      // `lastAssistantMessageIsCompleteWithToolCalls` then resubmits. Awaiting
+      // `addToolResult` waits for that follow-up to complete, so the assertion
+      // is deterministic.
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not auto-continue when a user `sendAutomaticallyWhen` returns false', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+      const sendAutomaticallyWhen = jest.fn(() => false);
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen,
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      // The user predicate was consulted with the resolved messages...
+      expect(sendAutomaticallyWhen).toHaveBeenCalledWith(
+        expect.objectContaining({ messages: expect.any(Array) })
+      );
+      // ...and because it returned `false`, no automatic follow-up fired at
+      // all. This is the escape hatch for the runaway auto-continuation loop: a
+      // resolved tool no longer forces another completions request.
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+  });
 });
