@@ -43,6 +43,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
       </li>
     </ul>
     <button
+      aria-expanded="false"
       class="showMore disabledShowMore"
       disabled=""
     >
@@ -72,6 +73,7 @@ exports[`RefinementList rendering with facets and show more 1`] = `
       </li>
     </ul>
     <button
+      aria-expanded="false"
       class="showMore"
     >
       {"isShowingMore":false}
@@ -109,6 +111,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
             type="search"
           />
           <button
+            aria-label="Submit the search query"
             class="submit"
             title="Submit the search query"
             type="submit"
@@ -116,6 +119,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
             submit
           </button>
           <button
+            aria-label="Clear the search query"
             class="reset"
             hidden=""
             title="Clear the search query"
@@ -187,6 +191,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
             type="search"
           />
           <button
+            aria-label="Submit the search query"
             class="submit"
             title="Submit the search query"
             type="submit"
@@ -194,6 +199,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
             submit
           </button>
           <button
+            aria-label="Clear the search query"
             class="reset"
             hidden=""
             title="Clear the search query"

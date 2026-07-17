@@ -334,7 +334,6 @@ const createRenderer = <TItem extends BaseHit>(
         recentSearchHeaderComponent,
         hasWarnedMissingPromptSuggestionsChat: false,
       };
-
     }
 
     render(
@@ -832,7 +831,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       query={localQuery}
       inputProps={{
         ...inputProps,
-        onFocus: (event) => {
+        onFocus: (event: unknown) => {
           activate();
           (inputProps as { onFocus?: (event: unknown) => void }).onFocus?.(
             event
@@ -938,9 +937,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             <AutocompleteDetachedContainer
               classNames={detachedContainerCssClasses}
             >
-              <AutocompleteDetachedFormContainer
-                classNames={cssClasses}
-              >
+              <AutocompleteDetachedFormContainer classNames={cssClasses}>
                 {searchBoxContent}
               </AutocompleteDetachedFormContainer>
               {panelContent}
@@ -1081,6 +1078,14 @@ type BaseAutocompleteWidgetParams<TItem extends BaseHit> = {
   ) => TransformItemsIndicesConfig[];
 
   /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
+
+  /**
    * Search parameters to apply to the autocomplete indices.
    */
   searchParameters?: AutocompleteSearchParameters;
@@ -1188,6 +1193,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     showPromptSuggestions,
     showRecent,
     searchParameters: userSearchParameters,
+    requiresSearch = true,
     getSearchPageURL,
     onSelect,
     templates = {},
@@ -1202,9 +1208,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   if (isFeedsMode && indices !== undefined) {
     throw new Error(
-      withUsage(
-        'The `feeds` and `indices` options are mutually exclusive.'
-      )
+      withUsage('The `feeds` and `indices` options are mutually exclusive.')
     );
   }
   if (!container) {
@@ -1226,8 +1230,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   // (section building, dedupe in createAutocompleteStorage) treats feeds
   // like indices without changes to the renderer / storage.
   const querySuggestionsKey = isFeedsMode
-    ? (showQuerySuggestions as FeedsShowQuerySuggestionsWidgetParams | undefined)
-        ?.feedID
+    ? (
+        showQuerySuggestions as
+          | FeedsShowQuerySuggestionsWidgetParams
+          | undefined
+      )?.feedID
     : (
         showQuerySuggestions as
           | IndicesShowQuerySuggestionsWidgetParams
@@ -1235,7 +1242,9 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       )?.indexName;
   const promptSuggestionsKey = isFeedsMode
     ? (
-        showPromptSuggestions as FeedsShowPromptSuggestionsWidgetParams | undefined
+        showPromptSuggestions as
+          | FeedsShowPromptSuggestionsWidgetParams
+          | undefined
       )?.feedID
     : (
         showPromptSuggestions as
@@ -1306,8 +1315,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       },
       searchParameters: querySuggestionsSearchParameters,
       getQuery: (item) => item.query,
-      getURL:
-        showQuerySuggestions!.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showQuerySuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
   if (promptSuggestionsKey) {
@@ -1361,8 +1370,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       },
       searchParameters: promptSuggestionsSearchParameters,
       getQuery: (item) => item.prompt,
-      getURL:
-        showPromptSuggestions!.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL: showPromptSuggestions!
+        .getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
 
@@ -1399,6 +1408,12 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     : transformItems;
 
   const instanceId = ++autocompleteInstanceId;
+  const dependsOn = requiresSearch ? ('search' as const) : ('none' as const);
+  const createSearchBoxCompanion = (): Widget =>
+    ({
+      ...connectSearchBox(() => null)({}),
+      dependsOn,
+    } as Widget);
   const shouldShowRecent = showRecent || undefined;
   const showRecentOptions =
     typeof shouldShowRecent === 'boolean' ? {} : shouldShowRecent;
@@ -1496,7 +1511,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     }
 
     return [
-      connectSearchBox(() => null)({}),
+      createSearchBoxCompanion(),
       createBootstrap((instantSearchInstance) => {
         if (!instantSearchInstance.compositionID) {
           throw new Error(
@@ -1535,7 +1550,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   return [
-    connectSearchBox(() => null)({}),
+    createSearchBoxCompanion(),
     createBootstrap(() =>
       index({
         indexId: `ais-autocomplete-${instanceId}`,
@@ -1568,6 +1583,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     return {
       $$type: 'ais.autocomplete',
       $$widgetType: 'ais.autocomplete',
+      dependsOn,
       init({ instantSearchInstance, parent }) {
         parentRef = parent;
         instanceRef = instantSearchInstance;

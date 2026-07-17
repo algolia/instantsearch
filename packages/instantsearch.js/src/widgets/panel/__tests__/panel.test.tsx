@@ -64,6 +64,15 @@ describe('panel', () => {
                   >
                     10 results found in 0ms
                   </span>
+                  <span
+                    aria-atomic="true"
+                    aria-live="polite"
+                    class="ais-Stats-announcement"
+                    role="status"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
+                  >
+                    
+                  </span>
                 </div>
               </div>
             </div>
@@ -142,6 +151,15 @@ describe('panel', () => {
                     class="ais-Stats-text"
                   >
                     10 results found in 0ms
+                  </span>
+                  <span
+                    aria-atomic="true"
+                    aria-live="polite"
+                    class="ais-Stats-announcement"
+                    role="status"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
+                  >
+                    
                   </span>
                 </div>
               </div>
@@ -233,6 +251,15 @@ describe('panel', () => {
                     class="ais-Stats-text"
                   >
                     10 results found in 0ms
+                  </span>
+                  <span
+                    aria-atomic="true"
+                    aria-live="polite"
+                    class="ais-Stats-announcement"
+                    role="status"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px;"
+                  >
+                    
                   </span>
                 </div>
               </div>

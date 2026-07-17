@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.12...react-instantsearch-nextjs@1.2.13) (2026-07-14)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.2.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.11...react-instantsearch-nextjs@1.2.12) (2026-07-07)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.2.11](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.9...react-instantsearch-nextjs@1.2.11) (2026-06-30)
+
+
+### Bug Fixes
+
+* **react-instantsearch-nextjs:** trigger client search on App Router SPA navigation ([#7019](https://github.com/algolia/instantsearch/issues/7019)) ([7dc4f73](https://github.com/algolia/instantsearch/commit/7dc4f73ec6f7b391a1f272db7c37bb7b080fa0cc))
+
+
+
+
+
 ## [1.2.10](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.9...react-instantsearch-nextjs@1.2.10) (2026-06-25)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

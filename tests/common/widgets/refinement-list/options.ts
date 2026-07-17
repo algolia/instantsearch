@@ -34,6 +34,10 @@ function normalizeSnapshot(html: string) {
     .replace('hidden="hidden"', 'hidden=""')
     .replace('title="Search"', 'title="Submit the search query"')
     .replace('title="Clear"', 'title="Clear the search query"')
+    // The input's `aria-label="Search"` is already normalized above, so these
+    // target the submit/reset buttons, whose titles differ across flavors.
+    .replace('aria-label="Search"', 'aria-label="Submit the search query"')
+    .replace('aria-label="Clear"', 'aria-label="Clear the search query"')
     .replace(/<div>(.*?)<\/div>/gs, '$1')
     .replace(
       /(<div class="ais-RefinementList-searchBox">)(<form.+?>.+?<\/form>)(<\/div>)/s,
@@ -1132,6 +1136,7 @@ export function createOptionsTests(
                     type="search"
                   />
                   <button
+                    aria-label="Submit the search query"
                     class="ais-SearchBox-submit"
                     title="Submit the search query"
                     type="submit"
@@ -1149,6 +1154,7 @@ export function createOptionsTests(
                     </svg>
                   </button>
                   <button
+                    aria-label="Clear the search query"
                     class="ais-SearchBox-reset"
                     title="Clear the search query"
                     type="reset"
@@ -1483,6 +1489,7 @@ export function createOptionsTests(
         ) as HTMLButtonElement;
 
         expect(showMoreButton).toHaveTextContent('Show more');
+        expect(showMoreButton).toHaveAttribute('aria-expanded', 'false');
 
         expect(
           document.querySelector('.ais-RefinementList')
@@ -1727,6 +1734,7 @@ export function createOptionsTests(
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-RefinementList-showMore"
             >
               Show more
@@ -1742,6 +1750,7 @@ export function createOptionsTests(
         });
 
         expect(showMoreButton).toHaveTextContent('Show less');
+        expect(showMoreButton).toHaveAttribute('aria-expanded', 'true');
         expect(
           document.querySelectorAll('.ais-RefinementList-item')
         ).toHaveLength(20);

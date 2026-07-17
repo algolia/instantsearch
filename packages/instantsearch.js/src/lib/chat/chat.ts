@@ -4,12 +4,22 @@ import type {
   UIMessage,
   ChatState as BaseChatState,
   ChatStatus,
-  ChatInit,
+  ChatInit as BaseChatInit,
 } from '../ai-lite';
 
 export type { UIMessage };
 export { AbstractChat };
-export { ChatInit };
+
+export type ChatInit<TUiMessage extends UIMessage> =
+  BaseChatInit<TUiMessage> & {
+    agentId?: string;
+    /**
+     * Whether to persist and restore messages from sessionStorage.
+     *
+     * @default true
+     */
+    persistence?: boolean;
+  };
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 
@@ -35,9 +45,21 @@ export class ChatState<TUiMessage extends UIMessage>
 
   constructor(
     id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages: TUiMessage[] | undefined = undefined,
+    persistence = true
   ) {
-    this._messages = initialMessages;
+    if (initialMessages !== undefined) {
+      this._messages = initialMessages;
+    } else if (persistence) {
+      this._messages = getDefaultInitialMessages<TUiMessage>(id);
+    } else {
+      this._messages = [];
+    }
+
+    if (!persistence) {
+      return;
+    }
+
     const saveMessagesInLocalStorage = () => {
       if (this.status === 'ready') {
         try {
@@ -148,9 +170,10 @@ export class Chat<
   constructor({
     messages,
     agentId,
+    persistence = true,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
+  }: ChatInit<TUiMessage>) {
+    const state = new ChatState(agentId, messages, persistence);
     super({ ...init, state });
     this._state = state;
   }

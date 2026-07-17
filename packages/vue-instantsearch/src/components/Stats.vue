@@ -12,6 +12,14 @@
         > found in {{ state.processingTimeMS.toLocaleString() }}ms</span
       >
     </slot>
+    <span
+      :class="suit('announcement')"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      :style="visuallyHiddenStyle"
+      >{{ announcement }}</span
+    >
   </div>
 </template>
 
@@ -20,6 +28,12 @@ import { connectStats } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
+import { isVue3 } from '../util/vue-compat';
+
+// Delay before announcing an update, so that rapid changes (e.g. typing in the
+// search box) settle into a single announcement instead of piling up. Mirrors
+// the debounce used by GOV.UK's accessible-autocomplete.
+const ANNOUNCEMENT_DELAY = 1400;
 
 export default {
   name: 'AisStats',
@@ -32,7 +46,54 @@ export default {
     ),
     createSuitMixin({ name: 'Stats' }),
   ],
+  data() {
+    return {
+      announcement: '',
+      announcementTimer: undefined,
+      isInitialAnnouncement: true,
+      visuallyHiddenStyle: {
+        position: 'absolute',
+        width: '1px',
+        height: '1px',
+        padding: 0,
+        margin: '-1px',
+        overflow: 'hidden',
+        clip: 'rect(0, 0, 0, 0)',
+        whiteSpace: 'nowrap',
+        border: 0,
+      },
+    };
+  },
+  [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
+    clearTimeout(this.announcementTimer);
+  },
+  watch: {
+    announcementText(next) {
+      // Don't announce the initial results, only subsequent changes.
+      if (this.isInitialAnnouncement) {
+        this.isInitialAnnouncement = false;
+        return;
+      }
+
+      clearTimeout(this.announcementTimer);
+      this.announcementTimer = setTimeout(() => {
+        this.announcement = next;
+      }, ANNOUNCEMENT_DELAY);
+    },
+  },
   computed: {
+    // Result count without the volatile details (such as the processing time)
+    // that are part of the visible text, so that only the meaningful count is
+    // announced.
+    announcementText() {
+      if (!this.state) {
+        return '';
+      }
+
+      return this.state.areHitsSorted
+        ? this.sortedResultsSentence
+        : this.resultsSentence;
+    },
     sortedResultsSentence() {
       const { nbHits, nbSortedHits } = this.state;
 

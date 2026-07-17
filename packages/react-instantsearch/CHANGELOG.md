@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.39.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.39.0...react-instantsearch@7.39.1) (2026-07-14)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+# [7.39.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.38.0...react-instantsearch@7.39.0) (2026-07-07)
+
+
+### Bug Fixes
+
+* **pagination:** mark the current page with aria-current ([#7103](https://github.com/algolia/instantsearch/issues/7103)) ([f3db948](https://github.com/algolia/instantsearch/commit/f3db948b884e64c1b121fbb3801b10959ddb07ea)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **refinement-list:** expose show more/less state via aria-expanded ([#7102](https://github.com/algolia/instantsearch/issues/7102)) ([7d82c2f](https://github.com/algolia/instantsearch/commit/7d82c2f101b4a69b3d613d9cfb9be44e0881a4ea)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **searchbox:** give submit and reset buttons a reliable accessible name ([#7100](https://github.com/algolia/instantsearch/issues/7100)) ([59aba4f](https://github.com/algolia/instantsearch/commit/59aba4f7cf422e814ac3df35fbe8eada434ef30a)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098) [#7098](https://github.com/algolia/instantsearch/issues/7098)
+
+
+### Features
+
+* **refinement-list:** allow a custom accessible name for the show more button ([#7101](https://github.com/algolia/instantsearch/issues/7101)) ([cf04cb7](https://github.com/algolia/instantsearch/commit/cf04cb758b7e2ba2c8e0c07c9ec8157491bcaee5)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **stats:** announce result changes to screen readers ([#7099](https://github.com/algolia/instantsearch/issues/7099)) ([0821eb8](https://github.com/algolia/instantsearch/commit/0821eb846b9bbf6ec3740b39050798eaec133855)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+
+
+
+
+
+# [7.38.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.36.0...react-instantsearch@7.38.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **chat:** move clear-animation lifecycle to the view layer ([#7092](https://github.com/algolia/instantsearch/issues/7092)) ([bf5857e](https://github.com/algolia/instantsearch/commit/bf5857e28d19e084b6ef283d9dc7ddebd588ebf4))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
 # [7.37.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.36.0...react-instantsearch@7.37.0) (2026-06-25)
 
 

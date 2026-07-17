@@ -315,6 +315,61 @@ function resolveScopedResultsFromWidgets(
   }, []);
 }
 
+function getWidgetsRequestDependencies(widgets: Array<Widget | IndexWidget>): {
+  hasSearchWidget: boolean;
+  hasRecommendWidget: boolean;
+} {
+  return widgets.reduce<{
+    hasSearchWidget: boolean;
+    hasRecommendWidget: boolean;
+  }>(
+    (dependencies, widget) => {
+      if (isIndexWidget(widget)) {
+        if (widget._isolated) {
+          return dependencies;
+        }
+
+        const childDependencies = getWidgetsRequestDependencies(
+          widget.getWidgets()
+        );
+
+        return {
+          hasSearchWidget:
+            dependencies.hasSearchWidget || childDependencies.hasSearchWidget,
+          hasRecommendWidget:
+            dependencies.hasRecommendWidget ||
+            childDependencies.hasRecommendWidget,
+        };
+      }
+
+      if (widget.dependsOn === 'recommend') {
+        return { ...dependencies, hasRecommendWidget: true };
+      }
+
+      if (widget.dependsOn === 'none') {
+        return dependencies;
+      }
+
+      return { ...dependencies, hasSearchWidget: true };
+    },
+    {
+      hasSearchWidget: false,
+      hasRecommendWidget: false,
+    }
+  );
+}
+
+function recomputeInstantSearchRequestDependencies(
+  instantSearchInstance: InstantSearch
+) {
+  const { hasSearchWidget, hasRecommendWidget } = getWidgetsRequestDependencies(
+    instantSearchInstance.mainIndex.getWidgets()
+  );
+
+  instantSearchInstance._hasSearchWidget = hasSearchWidget;
+  instantSearchInstance._hasRecommendWidget = hasRecommendWidget;
+}
+
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
@@ -339,8 +394,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
-  let hasRecommendWidget: boolean = false;
-  let hasSearchWidget: boolean = false;
+
+  const recomputeLocalRequestDependencies = () => {
+    if (localInstantSearchInstance) {
+      recomputeInstantSearchRequestDependencies(localInstantSearchInstance);
+    }
+  };
 
   return {
     $$type: 'ais.index',
@@ -469,24 +528,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       flatWidgets.forEach((widget) => {
         widget.parent = this;
-        if (isIndexWidget(widget)) {
-          return;
+        if (!isIndexWidget(widget)) {
+          addWidgetId(widget);
         }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
-
-        addWidgetId(widget);
       });
 
       localWidgets = localWidgets.concat(flatWidgets);
+      recomputeLocalRequestDependencies();
+
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
@@ -565,22 +614,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         (widget) => flatWidgets.indexOf(widget) === -1
       );
 
-      localWidgets.forEach((widget) => {
+      flatWidgets.forEach((widget) => {
         widget.parent = undefined;
-        if (isIndexWidget(widget)) {
-          return;
-        }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
       });
+      recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         const { cleanedSearchState, cleanedRecommendState } =
@@ -894,12 +931,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
       }
 
-      if (hasRecommendWidget) {
-        instantSearchInstance._hasRecommendWidget = true;
-      }
-      if (hasSearchWidget) {
-        instantSearchInstance._hasSearchWidget = true;
-      }
+      recomputeLocalRequestDependencies();
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
