@@ -74,7 +74,10 @@ export type IndexWidgetParams =
        * @default false
        */
       isolated: true;
-      EXPERIMENTAL_isolated?: never;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
+      EXPERIMENTAL_isolated?: boolean;
       /**
        * The index or composition id to target.
        */
@@ -90,7 +93,13 @@ export type IndexWidgetParams =
        * @deprecated Use `isolated` instead.
        */
       EXPERIMENTAL_isolated: true;
-      isolated?: never;
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      isolated?: boolean;
       /**
        * The index or composition id to target.
        */
