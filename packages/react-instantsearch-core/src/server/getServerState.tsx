@@ -143,11 +143,13 @@ function execute({
       return waitForResults(searchRef.current, skipRecommend);
     })
     .then((requestParamsList) => {
+      const search = searchRef.current! as InstantSearch & {
+        _initialChatStates?: Record<string, unknown> | null;
+      };
+      const initialChatStates = search._initialChatStates ?? undefined;
       return {
-        initialResults: getInitialResults(
-          searchRef.current!.mainIndex,
-          requestParamsList
-        ),
+        initialResults: getInitialResults(search.mainIndex, requestParamsList),
+        ...(initialChatStates ? { initialChatStates } : {}),
       };
     });
 }

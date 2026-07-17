@@ -53,6 +53,24 @@ export type InternalInstantSearch<
    * @private
    */
   _preventWidgetCleanup?: boolean;
+  /**
+   * Registers a promise that `waitForResults()` must await before resolving
+   * during SSR. Stripped from public `.d.ts` so it's re-declared here.
+   * @private
+   */
+  registerServerWait(promise: Promise<unknown>): void;
+  /**
+   * Returns and clears the promises registered with `registerServerWait`.
+   * Stripped from public `.d.ts` so it's re-declared here.
+   * @private
+   */
+  consumeServerWaitPromises(): Array<Promise<unknown>>;
+  /**
+   * SSR snapshot of chat messages keyed by chat instance id. Re-declared
+   * here because it's stripped from the public `.d.ts`.
+   * @private
+   */
+  _initialChatStates: Record<string, unknown> | null;
 };
 
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
@@ -63,6 +81,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
   const { waitForResultsRef } = useRSCContext();
   const initialResults = serverState?.initialResults;
+  const initialChatStates = serverState?.initialChatStates;
   const prevPropsRef = useRef(props);
 
   const shouldRenderAtOnce =
@@ -108,6 +127,9 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // an additional network request. (This is equivalent to monkey-patching
       // `scheduleSearch` to a noop.)
       search._initialResults = initialResults || {};
+      if (initialChatStates) {
+        search._initialChatStates = initialChatStates;
+      }
       // We don't rely on the `defer` to reset the schedule search, but will call
       // `search._resetScheduleSearch()` manually in the effect after children
       // mount in `InstantSearch`.

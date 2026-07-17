@@ -230,6 +230,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  public _initialChatStates: Record<string, unknown> | null;
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
@@ -237,6 +238,7 @@ class InstantSearch<
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
+  public _serverWaitPromises: Array<Promise<unknown>> = [];
   public _insights: InstantSearchOptions['insights'];
   /**
    * The options the instance was created with, kept verbatim so consumers
@@ -275,6 +277,16 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     );
 
     return this.status === 'stalled';
+  }
+
+  public registerServerWait(promise: Promise<unknown>): void {
+    this._serverWaitPromises.push(promise);
+  }
+
+  public consumeServerWaitPromises(): Array<Promise<unknown>> {
+    const promises = this._serverWaitPromises;
+    this._serverWaitPromises = [];
+    return promises;
   }
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
@@ -387,6 +399,7 @@ See documentation: ${createDocumentationLink({
     this._createURL = defaultCreateURL;
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
+    this._initialChatStates = null;
 
     this._insights = insights;
 

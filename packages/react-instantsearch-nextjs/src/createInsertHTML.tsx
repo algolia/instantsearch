@@ -8,10 +8,12 @@ export const createInsertHTML =
   ({
     options,
     results,
+    chatStates,
     nonce,
   }: {
     options: { inserted: boolean };
     results: InitialResults;
+    chatStates?: Record<string, unknown>;
     nonce?: string;
   }) =>
   () => {
@@ -19,7 +21,7 @@ export const createInsertHTML =
       return <></>;
     }
     options.inserted = true;
-    return (
+    const resultsScript = (
       <script
         nonce={nonce}
         dangerouslySetInnerHTML={{
@@ -28,5 +30,21 @@ export const createInsertHTML =
           )}`,
         }}
       />
+    );
+    if (!chatStates) {
+      return resultsScript;
+    }
+    return (
+      <>
+        {resultsScript}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `window[Symbol.for("InstantSearchInitialChatStates")] = ${htmlEscapeJsonString(
+              JSON.stringify(chatStates)
+            )}`,
+          }}
+        />
+      </>
     );
   };
