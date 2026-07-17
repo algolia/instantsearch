@@ -26,17 +26,10 @@ export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
-  if (typeof sessionStorage === 'undefined') {
-    return [];
-  }
-  try {
-    const initialMessages = sessionStorage.getItem(
-      CACHE_KEY + (id ? `-${id}` : '')
-    );
-    return initialMessages ? JSON.parse(initialMessages) : [];
-  } catch {
-    return [];
-  }
+  const initialMessages = sessionStorage.getItem(
+    CACHE_KEY + (id ? `-${id}` : '')
+  );
+  return initialMessages ? JSON.parse(initialMessages) : [];
 }
 
 export class ChatState<TUiMessage extends UIMessage>
@@ -68,7 +61,7 @@ export class ChatState<TUiMessage extends UIMessage>
     }
 
     const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready' && typeof sessionStorage !== 'undefined') {
+      if (this.status === 'ready') {
         try {
           sessionStorage.setItem(
             CACHE_KEY + (id ? `-${id}` : ''),
