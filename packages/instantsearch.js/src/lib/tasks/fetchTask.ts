@@ -96,7 +96,7 @@ function unwrap(envelope: unknown): unknown {
   return (envelope as { output?: unknown } | null | undefined)?.output;
 }
 
-export type StructuredOutputRunnerOptions = {
+export type TaskRunnerOptions = {
   endpoint: string;
   headers: Record<string, string>;
   task: string;
@@ -104,24 +104,24 @@ export type StructuredOutputRunnerOptions = {
   prepareRequest?: TaskPrepareRequest;
 };
 
-export type StructuredOutputSubmitOptions = {
+export type TaskSubmitOptions = {
   onData?: (output: unknown) => void;
 };
 
-export type StructuredOutputRunner = {
+export type TaskRunner = {
   submit: (
     variables: Record<string, unknown>,
-    options?: StructuredOutputSubmitOptions
+    options?: TaskSubmitOptions
   ) => Promise<unknown>;
 };
 
-export function createStructuredOutputRunner({
+export function createTaskRunner({
   endpoint,
   headers,
   task,
   stream = true,
   prepareRequest,
-}: StructuredOutputRunnerOptions): StructuredOutputRunner {
+}: TaskRunnerOptions): TaskRunner {
   return {
     submit(variables, { onData } = {}) {
       const payload = buildTaskPayload({

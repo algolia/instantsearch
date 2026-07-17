@@ -6,9 +6,9 @@ import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createInitOptions } from '../../../../test/createWidget';
-import connectStructuredOutput from '../connectStructuredOutput';
+import connectTasks from '../connectTasks';
 
-import type { StructuredOutputConnectorParams } from '../connectStructuredOutput';
+import type { TasksConnectorParams } from '../connectTasks';
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -49,9 +49,9 @@ function flush(ms = 0) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function init(params: StructuredOutputConnectorParams) {
+function init(params: TasksConnectorParams) {
   const renderFn = jest.fn();
-  const widget = connectStructuredOutput(renderFn)(params);
+  const widget = connectTasks(renderFn)(params);
   const helper = algoliasearchHelper(createSearchClient(), '');
   widget.init!(createInitOptions({ helper }));
   const lastState = () =>
@@ -59,7 +59,7 @@ function init(params: StructuredOutputConnectorParams) {
   return { renderFn, widget, lastState };
 }
 
-describe('connectStructuredOutput', () => {
+describe('connectTasks', () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
@@ -76,32 +76,32 @@ describe('connectStructuredOutput', () => {
     it('throws without a render function', () => {
       expect(() => {
         // @ts-expect-error testing invalid input
-        connectStructuredOutput()({ agentId: 'a', task: 't' });
+        connectTasks()({ agentId: 'a', task: 't' });
       }).toThrowError(/render function is not valid/);
     });
 
     it('throws when neither agentId nor transport is provided', () => {
-      const makeWidget = connectStructuredOutput(jest.fn());
+      const makeWidget = connectTasks(jest.fn());
       expect(() =>
-        makeWidget({ task: 't' } as StructuredOutputConnectorParams)
+        makeWidget({ task: 't' } as TasksConnectorParams)
       ).toThrowError(/agentId.*transport/);
     });
 
     it('throws when task is missing', () => {
-      const makeWidget = connectStructuredOutput(jest.fn());
+      const makeWidget = connectTasks(jest.fn());
       expect(() =>
-        makeWidget({ agentId: 'a' } as StructuredOutputConnectorParams)
+        makeWidget({ agentId: 'a' } as TasksConnectorParams)
       ).toThrowError(/task/);
     });
 
     it('returns the widget descriptor', () => {
-      const widget = connectStructuredOutput(jest.fn())({
+      const widget = connectTasks(jest.fn())({
         agentId: 'a',
         task: 't',
       });
       expect(widget).toEqual(
         expect.objectContaining({
-          $$type: 'ais.structuredOutput',
+          $$type: 'ais.tasks',
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),

@@ -6,7 +6,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import connectStructuredOutput from '../structured-output/connectStructuredOutput';
+import connectTasks from '../tasks/connectTasks';
 
 import type { TaskTransport } from '../../lib/tasks';
 import type {
@@ -20,9 +20,9 @@ import type {
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
 import type {
-  StructuredOutputConnectorParams,
-  StructuredOutputRenderState,
-} from '../structured-output/connectStructuredOutput';
+  TasksConnectorParams,
+  TasksRenderState,
+} from '../tasks/connectTasks';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -130,19 +130,14 @@ export type PromptSuggestionsConnector = Connector<
   PromptSuggestionsConnectorParams
 >;
 
-const INTERNAL_HIT_KEYS = [
-  '_highlightResult',
-  '_snippetResult',
-  '_rankingInfo',
-  '_distinctSeqID',
-  '__position',
-  '__queryID',
-] as const;
-
 function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
-  const clean: Record<string, unknown> = { ...hit };
-  INTERNAL_HIT_KEYS.forEach((key) => {
-    delete clean[key];
+  const clean: Record<string, unknown> = {};
+  Object.keys(hit).forEach((key) => {
+    // Strip internal metadata, which is `_`-prefixed
+    // (`_highlightResult`, `_rankingInfo`, `__position`, …).
+    if (!key.startsWith('_')) {
+      clean[key] = (hit as Record<string, unknown>)[key];
+    }
   });
   return clean;
 }
@@ -217,7 +212,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         );
       }
 
-      let soState: StructuredOutputRenderState | undefined;
+      let tasksState: TasksRenderState | undefined;
       let suggestions: string[] = [];
       let isLoading = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
@@ -337,7 +332,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         results: SearchResults,
         renderOptions: RenderOptions
       ) => {
-        if (disposed || !soState) return;
+        if (disposed || !tasksState) return;
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
           suggestions = [];
@@ -346,7 +341,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           return;
         }
 
-        soState.submit(buildInput(results));
+        tasksState.submit(buildInput(results));
       };
 
       const refresh = () => {
@@ -391,8 +386,8 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
       // Mirrors each inner render (submit start → skeleton, stream partials,
       // resolve/error) into this widget's state and re-renders on the client.
-      const handleInnerRender = (renderState: StructuredOutputRenderState) => {
-        soState = renderState;
+      const handleInnerRender = (renderState: TasksRenderState) => {
+        tasksState = renderState;
         // Only adopt the inner output once a request is loading or has produced
         // one, so the initial no-op render doesn't clobber existing pills.
         if (renderState.isLoading || renderState.output !== undefined) {
@@ -403,14 +398,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         renderOutward(latestRenderOptions);
       };
 
-      const structuredOutputWidget = connectStructuredOutput(
+      const tasksWidget = connectTasks(
         handleInnerRender,
         noop
       )({
         ...(transport ? { transport } : { agentId }),
         task: configurationId ?? 'prompt_suggestions',
         stream: true,
-      } as StructuredOutputConnectorParams);
+      } as TasksConnectorParams);
 
       return {
         $$type: 'ais.promptSuggestions',
@@ -418,7 +413,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
 
-          structuredOutputWidget.init!(initOptions);
+          tasksWidget.init!(initOptions);
 
           renderFn(
             {
@@ -472,7 +467,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         dispose(disposeOptions: DisposeOptions) {
           disposed = true;
           clearTimeout(debounceTimer);
-          structuredOutputWidget.dispose!(disposeOptions);
+          tasksWidget.dispose!(disposeOptions);
           unmountFn();
         },
 

@@ -57,7 +57,7 @@ export { default as connectFrequentlyBoughtTogether } from './frequently-bought-
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 export { default as connectChat } from './chat/connectChat';
 export { default as connectPromptSuggestions } from './prompt-suggestions/connectPromptSuggestions';
-export { default as connectStructuredOutput } from './structured-output/connectStructuredOutput';
+export { default as connectTasks } from './tasks/connectTasks';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectChatTrigger } from './chat/connectChatTrigger';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

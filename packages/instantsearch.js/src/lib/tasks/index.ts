@@ -1,7 +1,7 @@
 export { resolveEndpoint } from './endpoint';
 export {
   buildTaskPayload,
-  createStructuredOutputRunner,
+  createTaskRunner,
   fetchTask,
 } from './fetchTask';
 
@@ -15,7 +15,7 @@ export type {
 export type {
   BuildTaskPayloadOptions,
   FetchTaskOptions,
-  StructuredOutputRunner,
-  StructuredOutputRunnerOptions,
-  StructuredOutputSubmitOptions,
+  TaskRunner,
+  TaskRunnerOptions,
+  TaskSubmitOptions,
 } from './fetchTask';
