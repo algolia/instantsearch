@@ -1,13 +1,25 @@
 @use '../../shared/_common';
 @use '../../shared/_variables';
 
-.ais-ChatPromptSuggestions {
+.ais-OnPageSuggestions {
   display: flex;
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-ChatPromptSuggestions-suggestion {
+.ais-OnPageSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-OnPageSuggestions-headerTitle {
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-OnPageSuggestions-suggestion {
   font-size: revert;
   line-height: var(--ais-spacing);
   width: fit-content;
@@ -33,6 +45,50 @@
 
   &:active:not(:disabled) {
     background-color: rgba(var(--ais-muted-color-rgb), 0.3);
+  }
+}
+
+.ais-OnPageSuggestions-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-OnPageSuggestions-skeletonItem {
+  height: calc(var(--ais-spacing) * 2);
+  border-radius: var(--ais-border-radius-lg);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.15);
+  animation: ais-chat-prompt-suggestions-skeleton 1.5s ease-in-out infinite;
+
+  // Varying widths so the skeleton row mimics real pills.
+  &:nth-child(1) {
+    width: 65%;
+  }
+
+  &:nth-child(2) {
+    width: 80%;
+  }
+
+  &:nth-child(3) {
+    width: 55%;
+  }
+
+  &:nth-child(4) {
+    width: 70%;
+  }
+
+  &:nth-child(5) {
+    width: 60%;
+  }
+}
+
+@keyframes ais-chat-prompt-suggestions-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
   }
 }
 

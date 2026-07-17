@@ -56,6 +56,8 @@ export { default as connectRelevantSort } from './relevant-sort/connectRelevantS
 export { default as connectFrequentlyBoughtTogether } from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 export { default as connectChat } from './chat/connectChat';
+export { default as connectOnPageSuggestions } from './on-page-suggestions/connectOnPageSuggestions';
+export { default as connectStructuredOutput } from './structured-output/connectStructuredOutput';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectChatTrigger } from './chat/connectChatTrigger';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

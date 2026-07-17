@@ -34,6 +34,7 @@ import {
   DynamicWidgets,
   Chat,
   ChatTrigger,
+  OnPageSuggestions,
   EXPERIMENTAL_Autocomplete,
   FilterSuggestions,
 } from '..';
@@ -452,6 +453,14 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createOnPageSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <OnPageSuggestions {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -506,6 +515,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
+  createOnPageSuggestionsWidgetTests: { act },
 };
 
 /**

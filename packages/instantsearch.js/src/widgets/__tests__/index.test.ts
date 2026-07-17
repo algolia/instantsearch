@@ -173,6 +173,13 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'onPageSuggestions': {
+        const onPageSuggestions = widget as Widgets['onPageSuggestions'];
+        return onPageSuggestions({
+          container,
+          agentId: 'test-agent-id',
+        });
+      }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({
