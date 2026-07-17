@@ -14,7 +14,11 @@ import {
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
-import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
+import type {
+  UIMessage,
+  UIMessageChunk,
+  ChatTransport,
+} from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams, ChatCustomInstance } from '../connectChat';
 
@@ -592,6 +596,14 @@ describe('connectChat', () => {
   });
 
   describe('tool handling', () => {
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
     it('provides tools in render state', () => {
       const mockTool = {};
 
@@ -610,6 +622,35 @@ describe('connectChat', () => {
           sendEvent: expect.any(Function),
         },
       });
+    });
+
+    it('keeps the development diagnostic for an unknown tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'missingTool',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      await widget.chatInstance.sendMessage({ text: 'use a missing tool' });
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(widget.chatInstance.error).toEqual(
+        new Error(
+          'No tool implementation found for "missingTool". Please provide a tool implementation in the `tools` prop.'
+        )
+      );
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -1908,7 +1949,16 @@ data: [DONE]`,
         output: { ok: true },
       });
 
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: false },
+      });
+
       expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(widget.chatInstance.messages[1].parts[0]).toMatchObject({
+        output: { ok: true },
+      });
     });
 
     it('does not auto-continue when a user `sendAutomaticallyWhen` returns false', async () => {

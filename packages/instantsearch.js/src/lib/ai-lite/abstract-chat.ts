@@ -30,6 +30,13 @@ import type {
 type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
   abortController: AbortController;
   stream?: ReadableStream<TChunk>;
+  messageId?: string;
+  requiredToolCallIds: Set<string>;
+  resolvedToolCallIds: Set<string>;
+  outcome: 'active' | 'success' | 'error' | 'abort';
+  finishNotified: boolean;
+  continuationChecked: boolean;
+  errorHandled: boolean;
 };
 
 const tryParseJson = (value: string): unknown | undefined => {
@@ -150,6 +157,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private activeResponse: ActiveResponse<
     InferUIMessageChunk<TUIMessage>
   > | null = null;
+  private toolCallResponses = new Map<
+    string,
+    ActiveResponse<InferUIMessageChunk<TUIMessage>>
+  >();
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -223,6 +234,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   set messages(messages: TUIMessage[]) {
     this.state.messages = messages;
+    this.toolCallResponses.clear();
   }
 
   get lastMessage(): TUIMessage | undefined {
@@ -355,6 +367,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       if (targetIndex >= 0) {
         // Remove the assistant message and all messages after it
         this.state.messages = this.state.messages.slice(0, targetIndex);
+        this.pruneToolCallResponses();
       }
 
       return this.makeRequest({
@@ -378,6 +391,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         );
       }
 
+      if (this.activeResponse) {
+        this.activeResponse.outcome = 'abort';
+        this.activeResponse.abortController.abort();
+      }
+
+      const response = this.createResponse();
+      this.activeResponse = response;
       this.setStatus({ status: 'submitted' });
 
       return this.transport
@@ -388,14 +408,26 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         .then(
           (stream) => {
             if (stream) {
-              return this.processStreamWithCallbacks(stream);
+              if (this.activeResponse !== response) return Promise.resolve();
+              response.stream = stream;
+              return this.processStreamWithCallbacks(stream, response);
             } else {
-              this.setStatus({ status: 'ready' });
+              response.outcome = 'success';
+              if (this.activeResponse === response) {
+                this.activeResponse = null;
+                this.setStatus({ status: 'ready' });
+              }
               return Promise.resolve();
             }
           },
           (error) => {
-            this.handleError(error as Error);
+            if (
+              response.outcome === 'abort' ||
+              this.activeResponse !== response
+            ) {
+              return Promise.resolve();
+            }
+            this.failResponse(response, error as Error);
             return Promise.resolve();
           }
         );
@@ -411,11 +443,141 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
   };
 
+  private createResponse(): ActiveResponse<InferUIMessageChunk<TUIMessage>> {
+    return {
+      abortController: new AbortController(),
+      requiredToolCallIds: new Set(),
+      resolvedToolCallIds: new Set(),
+      outcome: 'active',
+      finishNotified: false,
+      continuationChecked: false,
+      errorHandled: false,
+    };
+  }
+
+  private getResponseForToolCall(
+    toolCallId: string
+  ): ActiveResponse<InferUIMessageChunk<TUIMessage>> | undefined {
+    this.pruneToolCallResponses();
+    return this.toolCallResponses.get(toolCallId);
+  }
+
+  private pruneToolCallResponses(): void {
+    const messageIds = new Set(
+      this.state.messages.map((message) => message.id)
+    );
+
+    this.toolCallResponses.forEach((response, toolCallId) => {
+      if (response.messageId && !messageIds.has(response.messageId)) {
+        this.toolCallResponses.delete(toolCallId);
+      }
+    });
+  }
+
+  private commitToolResult(toolCallId: string, output: unknown): boolean {
+    const messageIndex = this.state.messages.findIndex((message) =>
+      message.parts?.some(
+        (part) => 'toolCallId' in part && part.toolCallId === toolCallId
+      )
+    );
+
+    if (messageIndex === -1) return false;
+
+    const message = this.state.messages[messageIndex];
+    let didUpdate = false;
+    const updatedParts = message.parts.map((part) => {
+      if (
+        'toolCallId' in part &&
+        part.toolCallId === toolCallId &&
+        'state' in part
+      ) {
+        if (
+          part.state === 'output-available' ||
+          part.state === 'output-error'
+        ) {
+          return part;
+        }
+        didUpdate = true;
+        return {
+          ...part,
+          state: 'output-available' as const,
+          output,
+        };
+      }
+      return part;
+    });
+
+    if (!didUpdate) return false;
+
+    this.state.replaceMessage(messageIndex, {
+      ...message,
+      parts: updatedParts,
+    } as TUIMessage);
+    return true;
+  }
+
+  private hasAllToolResults(
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>
+  ): boolean {
+    return (
+      response.requiredToolCallIds.size > 0 &&
+      Array.from(response.requiredToolCallIds).every((toolCallId) =>
+        response.resolvedToolCallIds.has(toolCallId)
+      )
+    );
+  }
+
+  private continueResponseIfReady(
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>
+  ): Promise<void> {
+    if (
+      response.outcome !== 'success' ||
+      !response.finishNotified ||
+      response.continuationChecked ||
+      !this.hasAllToolResults(response)
+    ) {
+      return Promise.resolve();
+    }
+
+    response.continuationChecked = true;
+    if (!this.sendAutomaticallyWhen) return Promise.resolve();
+
+    return Promise.resolve()
+      .then(() =>
+        this.sendAutomaticallyWhen!({
+          messages: this.state.messages,
+        })
+      )
+      .then((shouldSend) => {
+        if (!shouldSend) return Promise.resolve();
+        return this.makeRequest({ trigger: 'submit-message' });
+      })
+      .catch((error) => {
+        this.failResponse(response, error as Error, true);
+      });
+  }
+
+  private continueUnownedResult(): Promise<void> {
+    if (!this.sendAutomaticallyWhen) return Promise.resolve();
+
+    return Promise.resolve()
+      .then(() =>
+        this.sendAutomaticallyWhen!({ messages: this.state.messages })
+      )
+      .then((shouldSend) => {
+        if (!shouldSend) return Promise.resolve();
+        return this.makeRequest({ trigger: 'submit-message' });
+      })
+      .catch((error) => {
+        this.handleError(error as Error);
+      });
+  }
+
   /**
    * Add a tool result for a tool call.
    */
   addToolResult = <TTool extends keyof InferUIMessageTools<TUIMessage>>({
-    tool,
+    tool: _tool,
     toolCallId,
     output,
   }: {
@@ -423,58 +585,25 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     toolCallId: string;
     output: InferUIMessageTools<TUIMessage>[TTool]['output'];
   }): Promise<void> => {
-    return this.jobExecutor.run(() => {
-      // Find the message with this tool call
-      const messageIndex = this.state.messages.findIndex(
-        (m) =>
-          m.parts?.some(
-            (p) =>
-              ('toolCallId' in p && p.toolCallId === toolCallId) ||
-              ('type' in p && p.type === `tool-${String(tool)}`)
-          ) ?? false
-      );
-
-      if (messageIndex === -1) return Promise.resolve();
-
-      const message = this.state.messages[messageIndex];
-      const updatedParts = message.parts.map((part) => {
-        if (
-          'toolCallId' in part &&
-          part.toolCallId === toolCallId &&
-          'state' in part
-        ) {
-          return {
-            ...part,
-            state: 'output-available' as const,
-            output,
-          };
-        }
-        return part;
-      });
-
-      this.state.replaceMessage(messageIndex, {
-        ...message,
-        parts: updatedParts,
-      } as TUIMessage);
-
-      // Check if we should auto-send based on sendAutomaticallyWhen
-      if (this.sendAutomaticallyWhen) {
-        return Promise.resolve(
-          this.sendAutomaticallyWhen({
-            messages: this.state.messages,
-          })
-        ).then((shouldSend) => {
-          if (shouldSend) {
-            return this.makeRequest({
-              trigger: 'submit-message',
-            });
-          }
-          return Promise.resolve();
-        });
+    const response = this.getResponseForToolCall(toolCallId);
+    const commitResult = (): Promise<void> => {
+      if (!this.commitToolResult(toolCallId, output)) {
+        return Promise.resolve();
       }
 
-      return Promise.resolve();
-    });
+      if (response) {
+        response.resolvedToolCallIds.add(toolCallId);
+        return this.continueResponseIfReady(response);
+      }
+
+      return this.continueUnownedResult();
+    };
+
+    if (response?.outcome === 'active') {
+      return commitResult();
+    }
+
+    return this.jobExecutor.run(commitResult);
   };
 
   /**
@@ -482,8 +611,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    */
   stop = (): Promise<void> => {
     if (this.activeResponse) {
-      this.activeResponse.abortController.abort();
+      const response = this.activeResponse;
+      response.outcome = 'abort';
       this.activeResponse = null;
+      response.abortController.abort();
     }
     this.setStatus({ status: 'ready' });
     return Promise.resolve();
@@ -505,11 +636,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     // Abort any existing request
     if (this.activeResponse) {
-      this.activeResponse.abortController.abort();
+      const previousResponse = this.activeResponse;
+      previousResponse.outcome = 'abort';
+      previousResponse.abortController.abort();
     }
 
-    const abortController = new AbortController();
-    this.activeResponse = { abortController };
+    const response = this.createResponse();
+    this.activeResponse = response;
 
     this.setStatus({ status: 'submitted' });
 
@@ -517,7 +650,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       .sendMessages({
         chatId: this.id,
         messages: this.state.messages,
-        abortSignal: abortController.signal,
+        abortSignal: response.abortController.signal,
         trigger: options.trigger,
         messageId: options.messageId,
         headers: options.headers,
@@ -526,24 +659,94 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       })
       .then(
         (stream) => {
-          this.activeResponse!.stream = stream;
-          return this.processStreamWithCallbacks(stream);
+          if (this.activeResponse !== response) return Promise.resolve();
+          response.stream = stream;
+          return this.processStreamWithCallbacks(stream, response);
         },
         (error) => {
           if ((error as Error).name === 'AbortError') {
-            // Request was aborted, don't treat as error
+            response.outcome = 'abort';
+            if (this.activeResponse === response) {
+              this.activeResponse = null;
+              this.setStatus({ status: 'ready' });
+            }
             return Promise.resolve();
           }
-          this.handleError(error as Error);
+          if (
+            response.outcome === 'abort' ||
+            this.activeResponse !== response
+          ) {
+            return Promise.resolve();
+          }
+          this.failResponse(response, error as Error);
           return Promise.resolve();
         }
       );
   }
 
+  private getResponseMessage(
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>
+  ): TUIMessage | undefined {
+    if (!response.messageId) return undefined;
+    return this.state.messages.find(
+      (message) => message.id === response.messageId
+    );
+  }
+
+  private notifyResponseFinish(
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>,
+    flags: {
+      isAbort: boolean;
+      isDisconnect: boolean;
+      isError: boolean;
+    }
+  ): void {
+    if (response.finishNotified) return;
+    response.finishNotified = true;
+
+    const message = this.getResponseMessage(response);
+    if (this.onFinish && message) {
+      this.onFinish({
+        message,
+        messages: this.state.messages,
+        ...flags,
+      });
+    }
+  }
+
+  private failResponse(
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>,
+    error: Error,
+    allowInactive = false
+  ): void {
+    if (response.errorHandled) return;
+
+    response.errorHandled = true;
+    response.outcome = 'error';
+    response.continuationChecked = true;
+    response.abortController.abort();
+
+    if (this.activeResponse === response || allowInactive) {
+      if (this.activeResponse === response) {
+        this.activeResponse = null;
+      }
+      this.handleError(error);
+    }
+
+    this.notifyResponseFinish(response, {
+      isAbort: false,
+      isDisconnect: false,
+      isError: true,
+    });
+  }
+
   private processStreamWithCallbacks(
-    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>
+    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>,
+    response: ActiveResponse<InferUIMessageChunk<TUIMessage>>
   ): Promise<void> {
-    this.setStatus({ status: 'streaming' });
+    if (this.activeResponse === response) {
+      this.setStatus({ status: 'streaming' });
+    }
 
     let currentMessageId: string | undefined;
     let currentMessage: TUIMessage | undefined;
@@ -558,17 +761,29 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
 
-    // Promise chain for handling tool calls that return promises
-    let pendingToolCall: Promise<void> = Promise.resolve();
+    const pendingToolCalls: Array<Promise<void>> = [];
 
     return new Promise((resolve) => {
       processStream<UIMessageChunk>(
         stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
+          if (response.outcome !== 'active') return;
+
+          if (currentMessageId) {
+            const canonicalMessageIndex = this.state.messages.findIndex(
+              (message) => message.id === currentMessageId
+            );
+            if (canonicalMessageIndex >= 0) {
+              currentMessageIndex = canonicalMessageIndex;
+              currentMessage = this.state.messages[canonicalMessageIndex];
+            }
+          }
+
           switch (chunk.type) {
             case 'start': {
               currentMessageId = chunk.messageId || this.generateId();
+              response.messageId = currentMessageId;
 
               // Check if we're continuing an existing message or creating a new one
               const lastMessage = this.lastMessage;
@@ -743,6 +958,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'tool-input-start': {
               if (!currentMessage) break;
 
+              const completedPart = currentMessage.parts.find(
+                (part) =>
+                  'toolCallId' in part &&
+                  part.toolCallId === chunk.toolCallId &&
+                  'state' in part &&
+                  (part.state === 'output-available' ||
+                    part.state === 'output-error')
+              );
+              if (completedPart) break;
+
               const initialRawInput =
                 typeof chunk.input === 'string'
                   ? chunk.input
@@ -780,6 +1005,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 toolIndex >= 0
                   ? (currentMessage.parts[toolIndex] as any)
                   : null;
+              if (
+                existingPart?.state === 'output-available' ||
+                existingPart?.state === 'output-error'
+              ) {
+                break;
+              }
               const previousRawInput =
                 existingPart?.rawInput ??
                 toolRawInputByCallId[chunk.toolCallId] ??
@@ -833,6 +1064,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const existingIndex = currentMessage.parts.findIndex(
                 (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
               );
+              const existingPart =
+                existingIndex >= 0
+                  ? (currentMessage.parts[existingIndex] as any)
+                  : null;
+              if (
+                existingPart?.state === 'output-available' ||
+                existingPart?.state === 'output-error'
+              ) {
+                break;
+              }
 
               const toolPart = {
                 type: `tool-${chunk.toolName}` as const,
@@ -861,16 +1102,35 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               // Trigger onToolCall callback only for client-executed tools
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
-                const result = this.onToolCall({
-                  toolCall: {
-                    toolName: chunk.toolName,
-                    toolCallId: chunk.toolCallId,
-                    input: chunk.input,
-                    dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
-                  } as InferUIMessageToolCall<TUIMessage>,
-                });
-                if (result && typeof result.then === 'function') {
-                  pendingToolCall = pendingToolCall.then(() => result);
+                response.requiredToolCallIds.add(chunk.toolCallId);
+                this.toolCallResponses.set(chunk.toolCallId, response);
+
+                try {
+                  const result = this.onToolCall({
+                    toolCall: {
+                      toolName: chunk.toolName,
+                      toolCallId: chunk.toolCallId,
+                      input: chunk.input,
+                      dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                    } as InferUIMessageToolCall<TUIMessage>,
+                  });
+                  if (result && typeof result.then === 'function') {
+                    pendingToolCalls.push(
+                      Promise.resolve(result).catch((error) => {
+                        this.failResponse(
+                          response,
+                          error instanceof Error
+                            ? error
+                            : new Error(String(error))
+                        );
+                      })
+                    );
+                  }
+                } catch (error) {
+                  this.failResponse(
+                    response,
+                    error instanceof Error ? error : new Error(String(error))
+                  );
                 }
               }
               break;
@@ -1195,6 +1455,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               }
 
               currentMessageId = currentMessage.id;
+              response.messageId = currentMessageId;
               currentTextPartId = undefined;
               currentReasoningPartId = undefined;
               break;
@@ -1225,48 +1486,79 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           }
         },
         () => {
-          // Wait for any pending tool calls to complete
-          pendingToolCall.then(() => {
-            // Stream finished successfully
-            this.setStatus({ status: 'ready' });
-            this.activeResponse = null;
-
-            // Trigger onFinish callback
-            if (this.onFinish && currentMessage) {
-              this.onFinish({
-                message: currentMessage,
-                messages: this.state.messages,
-                isAbort,
-                isDisconnect,
-                isError,
-              });
+          Promise.all(pendingToolCalls).then(() => {
+            if (response.outcome === 'error') {
+              resolve();
+              return;
             }
 
-            // Note: sendAutomaticallyWhen is only checked in addToolResult,
-            // not here. For server-executed tools, the server continues the
-            // conversation. For client-executed tools, addToolResult handles it.
-            resolve();
-          });
-        },
-        (error) => {
-          if (error.name === 'AbortError') {
-            isAbort = true;
-            this.setStatus({ status: 'ready' });
-          } else {
-            isDisconnect = true;
-            this.handleError(error);
-          }
+            if (response.outcome === 'abort') {
+              this.notifyResponseFinish(response, {
+                isAbort: true,
+                isDisconnect: false,
+                isError: false,
+              });
+              resolve();
+              return;
+            }
 
-          // Still call onFinish even on error/abort
-          if (this.onFinish && currentMessage) {
-            this.onFinish({
-              message: currentMessage,
-              messages: this.state.messages,
+            response.outcome = isAbort ? 'abort' : 'success';
+            if (this.activeResponse === response) {
+              this.activeResponse = null;
+              this.setStatus({ status: 'ready' });
+            }
+
+            this.notifyResponseFinish(response, {
               isAbort,
               isDisconnect,
               isError,
             });
+
+            if (response.outcome === 'success') {
+              this.continueResponseIfReady(response).then(resolve);
+            } else {
+              resolve();
+            }
+          });
+        },
+        (error) => {
+          if (response.outcome === 'error') {
+            resolve();
+            return;
           }
+
+          if (response.outcome === 'abort') {
+            this.notifyResponseFinish(response, {
+              isAbort: true,
+              isDisconnect: false,
+              isError: false,
+            });
+            resolve();
+            return;
+          }
+
+          if (error.name === 'AbortError') {
+            isAbort = true;
+            response.outcome = 'abort';
+            if (this.activeResponse === response) {
+              this.activeResponse = null;
+              this.setStatus({ status: 'ready' });
+            }
+          } else {
+            isDisconnect = true;
+            response.outcome = 'error';
+            response.continuationChecked = true;
+            if (this.activeResponse === response) {
+              this.activeResponse = null;
+              this.handleError(error);
+            }
+          }
+
+          this.notifyResponseFinish(response, {
+            isAbort,
+            isDisconnect,
+            isError,
+          });
 
           resolve();
         }

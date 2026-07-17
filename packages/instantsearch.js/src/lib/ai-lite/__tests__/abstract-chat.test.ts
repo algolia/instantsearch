@@ -94,23 +94,45 @@ type SendMessagesCall = Parameters<ChatTransport<UIMessage>['sendMessages']>[0];
 function createTestSetup(
   {
     chunks,
+    chunksByRequest,
     sse,
+    streamFactory,
+    sendMessagesFactory,
     onToolCall,
     onFinish,
     onError,
+    sendAutomaticallyWhen,
   }: {
     chunks?: UIMessageChunk[];
+    chunksByRequest?: UIMessageChunk[][];
     sse?: string;
+    streamFactory?: (requestIndex: number) => ReadableStream<UIMessageChunk>;
+    sendMessagesFactory?: (
+      requestIndex: number,
+      options: SendMessagesCall
+    ) => Promise<ReadableStream<UIMessageChunk>>;
     onToolCall?: (options: { toolCall: any }) => void | Promise<void>;
     onFinish?: ChatOnFinishCallback<UIMessage>;
     onError?: ChatOnErrorCallback;
+    sendAutomaticallyWhen?: (options: {
+      messages: UIMessage[];
+    }) => boolean | PromiseLike<boolean>;
   } = { chunks: [] }
 ) {
-  const makeStream = (): ReadableStream<UIMessageChunk> =>
-    sse !== undefined ? streamFromSse(sse) : chunksToStream(chunks ?? []);
+  let requestIndex = 0;
+  const makeStream = (index: number): ReadableStream<UIMessageChunk> => {
+    if (streamFactory) return streamFactory(index);
+    if (sse !== undefined) return streamFromSse(sse);
+    return chunksToStream(chunksByRequest?.[index] ?? chunks ?? []);
+  };
   const sendMessages = jest.fn(
-    (_options: SendMessagesCall): Promise<ReadableStream<UIMessageChunk>> =>
-      Promise.resolve(makeStream())
+    (options: SendMessagesCall): Promise<ReadableStream<UIMessageChunk>> => {
+      const index = requestIndex;
+      requestIndex += 1;
+      return sendMessagesFactory
+        ? sendMessagesFactory(index, options)
+        : Promise.resolve(makeStream(index));
+    }
   );
   const reconnectToStream = jest.fn(() => Promise.resolve(null));
   const transport: ChatTransport<UIMessage> = {
@@ -131,6 +153,7 @@ function createTestSetup(
     onError,
     onFinish,
     onToolCall,
+    sendAutomaticallyWhen,
   });
 
   return { chat, state, transport, sendMessages };
@@ -142,9 +165,28 @@ const startChunk = (id = 'msg-1'): UIMessageChunk => ({
 });
 const finishChunk = (): UIMessageChunk => ({ type: 'finish' });
 
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
+    resolve = resolvePromise;
+    reject = rejectPromise;
+  });
+  return { promise, resolve, reject };
+}
+
 function assistantPart(state: InMemoryChatState): any {
   const assistant = state.messages.find((m) => m.role === 'assistant');
   return assistant?.parts[0];
+}
+
+function assistantToolPart(state: InMemoryChatState, toolCallId: string): any {
+  const assistant = state.messages.find(
+    (message) => message.role === 'assistant'
+  );
+  return assistant?.parts.find(
+    (part) => 'toolCallId' in part && part.toolCallId === toolCallId
+  );
 }
 
 describe('AbstractChat.processStreamWithCallbacks', () => {
@@ -249,6 +291,469 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
   });
 
   describe('tool-input lifecycle (existing chunks)', () => {
+    it('settles when onToolCall returns addToolResult and commits the output', async () => {
+      let chat!: TestChat;
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }) =>
+          chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: ['hello'] },
+          }),
+        onFinish,
+      });
+      chat = setup.chat;
+
+      const outcome = await Promise.race([
+        chat.sendMessage({ text: 'search for hello' }).then(() => 'settled'),
+        new Promise<string>((resolve) =>
+          setTimeout(() => resolve('timed out'), 100)
+        ),
+      ]);
+
+      expect(outcome).toBe('settled');
+      expect(assistantPart(setup.state)).toMatchObject({
+        type: 'tool-search',
+        toolCallId: 'call-1',
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-1',
+                state: 'output-available',
+              }),
+            ],
+          }),
+        })
+      );
+    });
+
+    it('settles when an async onToolCall awaits addToolResult', async () => {
+      let chat!: TestChat;
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: async ({ toolCall }) => {
+          await chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: ['hello'] },
+          });
+        },
+      });
+      chat = setup.chat;
+
+      await expect(
+        chat.sendMessage({ text: 'search for hello' })
+      ).resolves.toBeUndefined();
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+    });
+
+    it('does not let later input chunks downgrade a committed tool result', async () => {
+      let chat!: TestChat;
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          {
+            type: 'tool-input-start',
+            toolName: 'search',
+            toolCallId: 'call-1',
+          },
+          {
+            type: 'tool-input-delta',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            inputTextDelta: '{"q":"stale"}',
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }) =>
+          chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: ['canonical'] },
+          }),
+        onFinish,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search' });
+
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: ['canonical'] },
+      });
+      expect(onFinish.mock.calls[0][0].message.parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { hits: ['canonical'] },
+      });
+    });
+
+    it('continues once after reverse-order results and ignores duplicate submissions', async () => {
+      let chat!: TestChat;
+      let submitLateResult!: () => Promise<void>;
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'first' },
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-2',
+              input: { q: 'second' },
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }) => {
+          const submit = () =>
+            chat.addToolResult({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { id: toolCall.toolCallId },
+            });
+          if (toolCall.toolCallId === 'call-1') {
+            submitLateResult = submit;
+          } else {
+            void submit();
+          }
+        },
+        onFinish,
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search twice' });
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(1);
+
+      await submitLateResult();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(2);
+      expect(onFinish.mock.invocationCallOrder[0]).toBeLessThan(
+        setup.sendMessages.mock.invocationCallOrder[1]
+      );
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        output: { id: 'call-1' },
+      });
+      expect(assistantToolPart(setup.state, 'call-2')).toMatchObject({
+        output: { id: 'call-2' },
+      });
+
+      await submitLateResult();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps a completed result pending until its follow-up request settles', async () => {
+      let chat!: TestChat;
+      let submitLateResult!: () => Promise<void>;
+      const followUpRequest = deferred<ReadableStream<UIMessageChunk>>();
+      const followUpStarted = deferred<undefined>();
+      const setup = createTestSetup({
+        sendMessagesFactory: (requestIndex) => {
+          if (requestIndex === 0) {
+            return Promise.resolve(
+              chunksToStream([
+                startChunk('assistant-1'),
+                {
+                  type: 'tool-input-available',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                  input: {},
+                },
+                finishChunk(),
+              ])
+            );
+          }
+
+          followUpStarted.resolve(undefined);
+          return followUpRequest.promise;
+        },
+        onToolCall: ({ toolCall }) => {
+          submitLateResult = () =>
+            chat.addToolResult({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { ok: true },
+            });
+        },
+        sendAutomaticallyWhen: () => true,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search' });
+
+      let didSettle = false;
+      const resultPromise = submitLateResult().then(() => {
+        didSettle = true;
+      });
+      await followUpStarted.promise;
+
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(didSettle).toBe(false);
+
+      followUpRequest.resolve(
+        chunksToStream([startChunk('assistant-2'), finishChunk()])
+      );
+      await resultPromise;
+
+      expect(didSettle).toBe(true);
+    });
+
+    it.each([
+      ['synchronous', () => false],
+      ['asynchronous', () => Promise.resolve(false)],
+    ])(
+      'does not continue when a %s sendAutomaticallyWhen returns false',
+      async (_name, sendAutomaticallyWhen) => {
+        let chat!: TestChat;
+        const setup = createTestSetup({
+          chunks: [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          onToolCall: ({ toolCall }) =>
+            chat.addToolResult({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { ok: true },
+            }),
+          sendAutomaticallyWhen,
+        });
+        chat = setup.chat;
+
+        await chat.sendMessage({ text: 'search' });
+
+        expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    it.each([
+      [
+        'throws synchronously',
+        () => {
+          throw new Error('tool failed');
+        },
+      ],
+      [
+        'rejects asynchronously',
+        () => Promise.reject(new Error('tool failed')),
+      ],
+    ])(
+      'uses the existing error path when onToolCall %s',
+      async (_name, onToolCall) => {
+        const onError = jest.fn();
+        const onFinish = jest.fn();
+        const setup = createTestSetup({
+          chunks: [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          onToolCall,
+          onError,
+          onFinish,
+          sendAutomaticallyWhen: () => true,
+        });
+
+        await setup.chat.sendMessage({ text: 'search' });
+
+        expect(setup.state.status).toBe('error');
+        expect(setup.state.error).toEqual(new Error('tool failed'));
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onFinish).toHaveBeenCalledTimes(1);
+        expect(onFinish).toHaveBeenCalledWith(
+          expect.objectContaining({
+            isAbort: false,
+            isDisconnect: false,
+            isError: true,
+          })
+        );
+        expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    it('keeps a successful onFinish and reports a rejected continuation predicate once', async () => {
+      let chat!: TestChat;
+      const onError = jest.fn();
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }) =>
+          chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          }),
+        onError,
+        onFinish,
+        sendAutomaticallyWhen: () =>
+          Promise.reject(new Error('predicate failed')),
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search' });
+
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({ isError: false })
+      );
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(setup.state.status).toBe('error');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+      ['aborts', [{ type: 'abort' } as UIMessageChunk, finishChunk()], 'ready'],
+      [
+        'fails',
+        [{ type: 'error', errorText: 'stream failed' } as UIMessageChunk],
+        'error',
+      ],
+    ])(
+      'does not continue when the owning stream %s before a late result',
+      async (_name, terminalChunks, expectedStatus) => {
+        let submitLateResult!: () => Promise<void>;
+        const sendAutomaticallyWhen = jest.fn(() => true);
+        const setup = createTestSetup({
+          chunks: [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            ...terminalChunks,
+          ],
+          onToolCall: ({ toolCall }) => {
+            submitLateResult = () =>
+              setup.chat.addToolResult({
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+                output: { ok: true },
+              });
+          },
+          sendAutomaticallyWhen,
+        });
+
+        await setup.chat.sendMessage({ text: 'search' });
+        await submitLateResult();
+
+        expect(setup.state.status).toBe(expectedStatus);
+        expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+          state: 'output-available',
+        });
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      }
+    );
+
+    it('quietly ignores an unknown toolCallId', async () => {
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({ sendAutomaticallyWhen });
+
+      await setup.chat.addToolResult({
+        tool: 'search',
+        toolCallId: 'missing',
+        output: { ok: true },
+      });
+
+      expect(setup.state.messages).toEqual([]);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).not.toHaveBeenCalled();
+    });
+
+    it('does not let a stopped response rejection overwrite the next response', async () => {
+      const firstRequest = deferred<ReadableStream<UIMessageChunk>>();
+      const setup = createTestSetup({
+        sendMessagesFactory: (requestIndex) =>
+          requestIndex === 0
+            ? firstRequest.promise
+            : Promise.resolve(
+                chunksToStream([startChunk('assistant-2'), finishChunk()])
+              ),
+      });
+
+      const stoppedSend = setup.chat.sendMessage({ text: 'first' });
+      await Promise.resolve();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      await setup.chat.stop();
+      const nextSend = setup.chat.sendMessage({ text: 'second' });
+      firstRequest.reject(new Error('stale transport failure'));
+
+      await stoppedSend;
+      await nextSend;
+
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(setup.state.status).toBe('ready');
+      expect(setup.state.error).toBeUndefined();
+    });
+
     it('tool-input-start, tool-input-delta and tool-input-available drive a part through input-streaming to input-available, repairing partial JSON and triggering onToolCall', async () => {
       const onToolCall = jest.fn();
       const { chat, state } = createTestSetup({
