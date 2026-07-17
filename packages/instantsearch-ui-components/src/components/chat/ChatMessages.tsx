@@ -251,13 +251,20 @@ const copyToClipboard = (message: ChatMessageBase) => {
  * Memoization comparator for a message row. `replaceMessage` only clones the
  * message being updated, so completed messages keep a stable reference across
  * streaming deltas. We compare just what affects a row's render — `message`,
- * `status`, `suggestionsElement`, and this message's feedback — and ignore the
- * props that get a fresh reference every render but don't change the output
- * (`tools`, `messages`, callbacks, `indexUiState`). `indexUiState` in
+ * Chat `status`, the tools' InstantSearch status, `suggestionsElement`, and
+ * this message's feedback — and ignore the props that get a fresh reference
+ * every render but don't change the output (`messages`, callbacks,
+ * `indexUiState`). The InstantSearch status is included so tool result view
+ * events can retry when the current search becomes idle. `indexUiState` in
  * particular can't be compared: `getUiState()` returns a new object each render
  * and would defeat the memo. Trade-off: a completed row keeps the callbacks/
  * `indexUiState` it last rendered with until its next genuine render.
  */
+function getInstantSearchStatus(tools: ClientSideTools) {
+  return Object.values(tools).find((tool) => tool.insightsEventContext)
+    ?.insightsEventContext?.instantSearchStatus;
+}
+
 function areMessagePropsEqual(
   prev: { message: ChatMessageBase; [key: string]: unknown },
   next: { message: ChatMessageBase; [key: string]: unknown }
@@ -265,6 +272,8 @@ function areMessagePropsEqual(
   return (
     prev.message === next.message &&
     prev.status === next.status &&
+    getInstantSearchStatus(prev.tools as ClientSideTools) ===
+      getInstantSearchStatus(next.tools as ClientSideTools) &&
     prev.suggestionsElement === next.suggestionsElement &&
     (prev.feedbackState as Record<string, unknown> | undefined)?.[
       prev.message.id

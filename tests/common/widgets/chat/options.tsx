@@ -1,6 +1,10 @@
 /** @jsx React.createElement */
-import { createSearchClient } from '@instantsearch/mocks';
+import {
+  createControlledSearchClient,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import {
   Chat,
@@ -2186,6 +2190,51 @@ export function createOptionsTests(
     });
 
     describe('sendEvent', () => {
+      const createSearchResultMessage = ({
+        id = 'assistant-message-id',
+        displayResults = false,
+        searchToolCallId = 'search-call-id',
+        displayToolCallId = 'display-call-id',
+      } = {}) => ({
+        id,
+        role: 'assistant' as const,
+        ...(displayResults
+          ? { metadata: { displayResultsEnabled: true } }
+          : {}),
+        parts: [
+          {
+            type: `tool-${SearchIndexToolType}` as const,
+            toolCallId: searchToolCallId,
+            input: { query: 'test', number_of_results: 1 },
+            state: 'output-available' as const,
+            output: {
+              hits: [
+                {
+                  objectID: '123',
+                  name: 'Product 123',
+                  __position: 1,
+                  __queryID: 'search-query-id',
+                },
+              ],
+              nbHits: 1,
+            },
+          },
+          ...(displayResults
+            ? [
+                {
+                  type: `tool-${DisplayResultsToolType}` as const,
+                  toolCallId: displayToolCallId,
+                  input: {},
+                  state: 'output-available' as const,
+                  output: {
+                    groups: [{ results: [{ objectID: '123' }] }],
+                  },
+                },
+              ]
+            : []),
+        ],
+      });
+
       test('sends click event when a carousel item in the search tool is clicked', async () => {
         const searchClient = createSearchClient();
 
@@ -2313,11 +2362,13 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        const viewEvents = (window as any).aa.mock.calls.filter(
-          ([method]: [string]) => method === 'viewedObjectIDs'
-        );
-
-        expect(viewEvents).toHaveLength(1);
+        await waitFor(() => {
+          expect(
+            (window as any).aa.mock.calls.filter(
+              ([method]: [string]) => method === 'viewedObjectIDs'
+            )
+          ).toHaveLength(1);
+        });
         expect((window as any).aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           expect.objectContaining({
@@ -2335,6 +2386,87 @@ export function createOptionsTests(
           })
         );
       });
+
+      test.each([
+        {
+          resultType: 'fallback search results',
+          displayResults: false,
+          toolCallId: 'retry-search-call-id',
+        },
+        {
+          resultType: 'displayed results',
+          displayResults: true,
+          toolCallId: 'retry-display-call-id',
+        },
+      ])(
+        'sends the $resultType view event after InstantSearch becomes idle',
+        async ({ displayResults, toolCallId }) => {
+          const { searchClient, searches } = createControlledSearchClient();
+
+          (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
+
+          const chat = new Chat({ id: 'chat-id' });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+              insights: true,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          (window as any).aa.mockClear();
+
+          await openChat(act);
+
+          await act(async () => {
+            chat.messages = [
+              createSearchResultMessage({
+                displayResults,
+                ...(displayResults
+                  ? { displayToolCallId: toolCallId }
+                  : { searchToolCallId: toolCallId }),
+              }),
+            ];
+            await wait(0);
+          });
+
+          const getViewEvents = () =>
+            (window as any).aa.mock.calls.filter(
+              ([method, payload]: [string, { toolCallId?: string }]) =>
+                method === 'viewedObjectIDs' &&
+                payload.toolCallId === toolCallId
+            );
+
+          expect(getViewEvents()).toHaveLength(0);
+
+          await act(async () => {
+            searches[0].resolver();
+            await searches[0].promise;
+            await wait(0);
+          });
+
+          await waitFor(() => {
+            expect(getViewEvents()).toHaveLength(1);
+          });
+          expect((window as any).aa).toHaveBeenCalledWith(
+            'viewedObjectIDs',
+            expect.objectContaining({
+              eventName: 'items_shown',
+              objectIDs: ['123'],
+              queryID: 'message_assistant-message-id',
+              agentId: 'agentId',
+              toolCallId,
+            }),
+            expect.any(Object)
+          );
+        }
+      );
 
       test('attributes displayed result clicks to the assistant message by default', async () => {
         const searchClient = createSearchClient();
@@ -2492,11 +2624,13 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        const viewEvents = (window as any).aa.mock.calls.filter(
-          ([method]: [string]) => method === 'viewedObjectIDs'
-        );
-
-        expect(viewEvents).toHaveLength(1);
+        await waitFor(() => {
+          expect(
+            (window as any).aa.mock.calls.filter(
+              ([method]: [string]) => method === 'viewedObjectIDs'
+            )
+          ).toHaveLength(1);
+        });
         expect((window as any).aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           expect.objectContaining({
@@ -2520,47 +2654,7 @@ export function createOptionsTests(
 
         (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
 
-        const createDisplayedResultMessage = (id: string) => ({
-          id,
-          role: 'assistant' as const,
-          metadata: { displayResultsEnabled: true },
-          parts: [
-            {
-              type: `tool-${SearchIndexToolType}` as const,
-              toolCallId: `search-call-id-${id}`,
-              input: { query: 'test', number_of_results: 1 },
-              state: 'output-available' as const,
-              output: {
-                hits: [
-                  {
-                    objectID: '123',
-                    name: 'Product 123',
-                    __position: 1,
-                    __queryID: 'search-query-id',
-                  },
-                ],
-                nbHits: 1,
-              },
-            },
-            {
-              type: `tool-${DisplayResultsToolType}` as const,
-              toolCallId: `display-call-id-${id}`,
-              input: {},
-              state: 'output-available' as const,
-              output: {
-                groups: [{ results: [{ objectID: '123' }] }],
-              },
-            },
-          ],
-        });
-
-        const chat = new Chat({
-          messages: [
-            createDisplayedResultMessage('assistant-message-id-1'),
-            createDisplayedResultMessage('assistant-message-id-2'),
-          ],
-          id: 'chat-id',
-        });
+        const chat = new Chat({ id: 'chat-id' });
 
         await setup({
           instantSearchOptions: {
@@ -2580,14 +2674,33 @@ export function createOptionsTests(
         await openChat(act);
 
         await act(async () => {
+          chat.messages = [
+            createSearchResultMessage({
+              id: 'assistant-message-id-1',
+              displayResults: true,
+              searchToolCallId: 'search-call-id-assistant-message-id-1',
+              displayToolCallId: 'display-call-id-assistant-message-id-1',
+            }),
+            createSearchResultMessage({
+              id: 'assistant-message-id-2',
+              displayResults: true,
+              searchToolCallId: 'search-call-id-assistant-message-id-2',
+              displayToolCallId: 'display-call-id-assistant-message-id-2',
+            }),
+          ];
           await wait(0);
         });
 
-        const viewEvents = (window as any).aa.mock.calls.filter(
-          ([method]: [string]) => method === 'viewedObjectIDs'
-        );
-
-        expect(viewEvents).toHaveLength(2);
+        await waitFor(() => {
+          expect(
+            (window as any).aa.mock.calls.filter(
+              ([method, payload]: [string, { queryID?: string }]) =>
+                method === 'viewedObjectIDs' &&
+                (payload.queryID === 'message_assistant-message-id-1' ||
+                  payload.queryID === 'message_assistant-message-id-2')
+            )
+          ).toHaveLength(2);
+        });
         expect((window as any).aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           expect.objectContaining({

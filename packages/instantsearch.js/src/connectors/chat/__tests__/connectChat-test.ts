@@ -610,6 +610,7 @@ describe('connectChat', () => {
           sendEvent: expect.any(Function),
           insightsEventContext: {
             agentId: 'agentId',
+            instantSearchStatus: 'idle',
           },
         },
       });

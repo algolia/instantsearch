@@ -253,10 +253,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           // Wrapped in a `<p>` to keep some structure for screen readers
           // (markdown produces semantic elements; a bare text node would not).
           return (
-            <p
-              key={`${message.id}-${index}`}
-              className="ais-ChatMessage-text"
-            >
+            <p key={`${message.id}-${index}`} className="ais-ChatMessage-text">
               {part.text}
             </p>
           );
@@ -338,6 +335,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             >
               <ToolLayoutComponent
                 message={toolMessage}
+                insightsEventContext={tool.insightsEventContext}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}

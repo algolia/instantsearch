@@ -76,7 +76,9 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, messages, sendEvent } = toolProps;
+    const { message, messages, insightsEventContext, sendEvent } = toolProps;
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
@@ -91,7 +93,11 @@ export function createDisplayResultsToolComponent<
 
     const output = message?.output as DisplayResultsOutput<TObject> | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
-    const groups = Array.isArray(output?.groups) ? output.groups : [];
+    const rawGroups = output?.groups;
+    const groups = useMemo(
+      () => (Array.isArray(rawGroups) ? rawGroups : []),
+      [rawGroups]
+    );
 
     const displayedGroups = useMemo(
       () =>
@@ -149,6 +155,7 @@ export function createDisplayResultsToolComponent<
 
     useEffect(() => {
       if (
+        instantSearchStatus !== 'idle' ||
         viewedItems.length === 0 ||
         viewedItemsSignature === lastViewedItemsSignatureRef.current
       ) {
@@ -163,7 +170,7 @@ export function createDisplayResultsToolComponent<
       return () => {
         clearTimeout(timer);
       };
-    }, [sendEvent, viewedItems, viewedItemsSignature]);
+    }, [instantSearchStatus, sendEvent, viewedItems, viewedItemsSignature]);
 
     const isStreaming =
       message?.state === 'output-available' &&

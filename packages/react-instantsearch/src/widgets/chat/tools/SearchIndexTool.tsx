@@ -36,8 +36,11 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     message,
     applyFilters,
     onClose,
+    insightsEventContext,
     sendEvent,
   }: ClientSideToolComponentProps) {
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
     const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
@@ -63,6 +66,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
     React.useEffect(() => {
       if (
+        instantSearchStatus !== 'idle' ||
         items.length === 0 ||
         viewedItemsSignature === lastViewedItemsSignatureRef.current
       ) {
@@ -77,7 +81,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       return () => {
         clearTimeout(timer);
       };
-    }, [items, sendEvent, viewedItemsSignature]);
+    }, [instantSearchStatus, items, sendEvent, viewedItemsSignature]);
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (

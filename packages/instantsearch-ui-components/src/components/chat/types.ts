@@ -495,6 +495,7 @@ export type ChatLayoutOwnProps<
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   messages?: ChatMessageBase[];
+  insightsEventContext?: ChatInsightsEventContext;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
@@ -509,6 +510,7 @@ export type ClientSideToolComponent = (
 
 export type ChatInsightsEventContext = {
   agentId?: string;
+  instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
 };
 
 export type ClientSideTool = {

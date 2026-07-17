@@ -127,8 +127,11 @@ function createCarouselTool<
     message,
     applyFilters,
     onClose,
+    insightsEventContext,
     sendEvent,
   }: ClientSideToolTemplateData) {
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
     const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
@@ -151,6 +154,7 @@ function createCarouselTool<
 
     useEffect(() => {
       if (
+        instantSearchStatus !== 'idle' ||
         items.length === 0 ||
         viewedItemsSignature === lastViewedItemsSignatureRef.current
       ) {
@@ -165,7 +169,7 @@ function createCarouselTool<
       return () => {
         clearTimeout(timer);
       };
-    }, [items, sendEvent, viewedItemsSignature]);
+    }, [instantSearchStatus, items, sendEvent, viewedItemsSignature]);
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
@@ -580,7 +584,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   >();
   function getStableToolLayoutComponent(
     key: string,
-    widgetTool: NonNullable<(typeof tools)[string]>
+    widgetTool: NonNullable<typeof tools[string]>
   ): (props: ClientSideToolComponentProps) => JSX.Element {
     let component = toolLayoutComponentCache.get(key);
     if (!component) {
