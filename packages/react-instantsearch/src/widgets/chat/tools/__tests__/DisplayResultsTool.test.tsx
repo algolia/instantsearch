@@ -7,7 +7,18 @@ import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentMetadata,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+const metadata: ChatComponentMetadata = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  tools: {},
+  onClose: jest.fn(),
+};
 
 type TestResult = {
   objectID: string;
@@ -52,11 +63,11 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         message={message}
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -82,19 +93,17 @@ describe('createDisplayResultsTool', () => {
             input: {},
             output: {
               intro: 'Curating',
-              groups: [
-                { title: 'Runners', results: [{ objectID: '1' }] },
-              ],
+              groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
             },
             preliminary: true,
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -128,11 +137,11 @@ describe('createDisplayResultsTool', () => {
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -157,11 +166,11 @@ describe('createDisplayResultsTool', () => {
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 

@@ -9,10 +9,9 @@ import { MenuIcon } from './icons';
 import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
+  ChatComponentPropsWithMetadata,
   ChatMessageBase,
-  ChatStatus,
   ChatToolMessage,
-  ClientSideTools,
 } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
@@ -85,10 +84,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   message: ChatMessageBase;
   /**
-   * The status of the message (e.g. whether it's still streaming)
-   */
-  status: ChatStatus;
-  /**
    * The side of the message
    */
   side?: ChatMessageSide;
@@ -111,10 +106,12 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Custom actions renderer
    */
-  actionsComponent?: (props: {
-    actions: ChatMessageActionProps[];
-    message: ChatMessageBase;
-  }) => JSX.Element | null;
+  actionsComponent?: (
+    props: ChatComponentPropsWithMetadata<{
+      actions: ChatMessageActionProps[];
+      message: ChatMessageBase;
+    }>
+  ) => JSX.Element | null;
   /**
    * Footer content
    */
@@ -127,14 +124,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * Set the index UI state
    */
   setIndexUiState: (state: object) => void;
-  /**
-   * Close the chat
-   */
-  onClose: () => void;
-  /**
-   * Array of tools available for the assistant (for tool messages)
-   */
-  tools: ClientSideTools;
   /**
    * Optional suggestions element
    */
@@ -155,11 +144,12 @@ const SearchIndexToolType = 'algolia_search_index';
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatMessage(userProps: ChatMessageProps) {
+  return function ChatMessage(
+    userProps: ChatComponentPropsWithMetadata<ChatMessageProps>
+  ) {
     const {
       classNames = {},
       message,
-      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -167,14 +157,15 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      tools = {},
       indexUiState,
       setIndexUiState,
-      onClose,
       translations: userTranslations,
       suggestionsElement,
+      metadata,
       ...props
     } = userProps;
+
+    const { status, tools } = metadata;
 
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
@@ -259,10 +250,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
-          if (
-            toolMessage.state === 'input-streaming' &&
-            !tool.streamInput
-          ) {
+          if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;
           }
 
@@ -282,7 +270,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={tool.sendEvent || (() => {})}
-                onClose={onClose}
+                metadata={metadata}
               />
             </div>
           );
@@ -317,7 +305,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 aria-label={translations.actionsLabel}
               >
                 {ActionsComponent ? (
-                  <ActionsComponent actions={actions} message={message} />
+                  <ActionsComponent
+                    actions={actions}
+                    message={message}
+                    metadata={metadata}
+                  />
                 ) : (
                   actions.map((action, index) => (
                     <Button

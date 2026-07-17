@@ -161,7 +161,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -179,7 +181,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -201,7 +205,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -251,7 +257,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });
@@ -310,5 +318,52 @@ describe('ChatMessages', () => {
         </div>
       </div>
     `);
+  });
+
+  test('forwards metadata to overridable components', () => {
+    const Loader = jest.fn(() => <span>Loader</span>);
+    const setIndexUiState = jest.fn();
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Working on it' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{ query: 'shoes' }}
+        setIndexUiState={setIndexUiState}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        loaderComponent={Loader}
+      />
+    );
+
+    expect(Loader).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          messages,
+          status: 'submitted',
+          error: undefined,
+          isClearing: false,
+          activePart: { type: 'text', text: 'Working on it' },
+          tools: {},
+          sendMessage,
+          setInput,
+          onClose,
+        }),
+      }),
+      {}
+    );
   });
 });

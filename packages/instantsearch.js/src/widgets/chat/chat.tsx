@@ -52,13 +52,13 @@ import type {
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
+  ChatComponentPropsWithMetadata,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
-  ChatEmptyProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
@@ -99,9 +99,10 @@ function createCarouselTool<
   function SearchLayoutComponent({
     message,
     applyFilters,
-    onClose,
     sendEvent,
+    metadata,
   }: ClientSideToolTemplateData) {
+    const { onClose } = metadata;
     const input = message?.input as
       | {
           query: string;
@@ -315,12 +316,24 @@ type ChatWrapperProps = {
   };
   messagesProps: {
     loaderComponent:
-      | ((props: ChatMessageLoaderProps) => JSX.Element)
+      | ((
+          props: ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+        ) => JSX.Element)
       | undefined;
-    errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
+    errorComponent:
+      | ((
+          props: ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+        ) => JSX.Element)
+      | undefined;
+    emptyComponent:
+      | ((props: ChatComponentPropsWithMetadata<{}>) => JSX.Element)
+      | undefined;
     actionsComponent:
-      | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
+      | ((
+          props: ChatComponentPropsWithMetadata<{
+            actions: ChatMessageActionProps[];
+          }>
+        ) => JSX.Element)
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
@@ -414,6 +427,7 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
+        error,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
         onFeedback,
@@ -552,14 +566,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableMessagesErrorComponent = templates.messages?.error
-    ? createStableTemplateComponent<ChatMessageErrorProps>(
-        messagesTemplateRef,
-        'error',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+      >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatEmptyProps>(
+    ? createStableTemplateComponent<ChatComponentPropsWithMetadata<{}>>(
         emptyTemplateRef,
         'empty',
         'div'
@@ -617,7 +629,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableActionsComponent = templates.actions
-    ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
+    ? (
+        actionsProps: ChatComponentPropsWithMetadata<{
+          actions: ChatMessageActionProps[];
+        }>
+      ) => (
         <TemplateComponent
           {...renderState.templateProps}
           templateKey="actions"
@@ -627,11 +643,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableLoaderComponent = templates.loader
-    ? createStableTemplateComponent<ChatMessageLoaderProps>(
-        loaderTemplateRef,
-        'loader',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+      >(loaderTemplateRef, 'loader', 'div')
     : undefined;
   const stableSuggestionsComponent = templates.suggestions
     ? (suggestionsProps: {
@@ -964,7 +978,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Custom loader template for the chat widget.
      */
-    loader: Template<ChatMessageLoaderProps>;
+    loader: Template<ChatComponentPropsWithMetadata<ChatMessageLoaderProps>>;
 
     /**
      * Text to display in the loader
@@ -1024,7 +1038,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       /**
        * Template to use when there is an error loading messages
        */
-      error: Template<ChatMessageErrorProps>;
+      error: Template<ChatComponentPropsWithMetadata<ChatMessageErrorProps>>;
       /**
        * Label for the scroll to bottom button
        */
@@ -1126,15 +1140,17 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the message actions.
      */
-    actions: Template<{
-      actions: ChatMessageActionProps[];
-      message: ChatMessageBase;
-    }>;
+    actions: Template<
+      ChatComponentPropsWithMetadata<{
+        actions: ChatMessageActionProps[];
+        message: ChatMessageBase;
+      }>
+    >;
 
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatEmptyProps>;
+    empty?: Template<ChatComponentPropsWithMetadata<{}>>;
 
     /**
      * Template to use for prompt suggestions.

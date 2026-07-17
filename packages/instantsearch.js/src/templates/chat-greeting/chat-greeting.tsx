@@ -3,7 +3,10 @@
 import { createChatGreetingComponent } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import type { ChatGreetingProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentPropsWithMetadata,
+  ChatGreetingProps,
+} from 'instantsearch-ui-components';
 
 const ChatGreetingComponent = createChatGreetingComponent({
   createElement: h,
@@ -12,7 +15,9 @@ const ChatGreetingComponent = createChatGreetingComponent({
 export function chatGreeting(
   options?: Pick<ChatGreetingProps, 'banner' | 'translations' | 'classNames'>
 ) {
-  return function ChatGreetingTemplate(props: ChatGreetingProps) {
+  return function ChatGreetingTemplate(
+    props: ChatComponentPropsWithMetadata<ChatGreetingProps>
+  ) {
     return <ChatGreetingComponent {...props} {...options} />;
   };
 }

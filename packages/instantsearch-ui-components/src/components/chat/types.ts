@@ -480,15 +480,72 @@ export type ChatLayoutOwnProps<
   > &
   ComponentProps<'div'>;
 
-export type ClientSideToolComponentProps = {
+/**
+ * Shared chat state and callbacks injected into every overridable chat
+ * component by the widget. This is the component-layer analog of the templates
+ * system's `params` argument: a single, consistent object every component can
+ * read, regardless of which override point it plugs into.
+ */
+export type ChatComponentMetadata<
+  TMessage extends ChatMessageBase = ChatMessageBase
+> = {
+  /**
+   * The messages currently in the chat.
+   */
+  messages: TMessage[];
+  /**
+   * Current chat status.
+   */
+  status: ChatStatus;
+  /**
+   * The current error, when the chat is in an error state.
+   */
+  error?: Error;
+  /**
+   * Whether the messages are being cleared (drives the clearing animation).
+   */
+  isClearing: boolean;
+  /**
+   * The message part currently being processed by the assistant, if any.
+   */
+  activePart?: TMessage['parts'][number];
+  /**
+   * Tools registered for the assistant.
+   */
+  tools: ClientSideTools;
+  /**
+   * Send a message to the chat.
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Set the prompt input value.
+   */
+  setInput?: (input: string) => void;
+  /**
+   * Close the chat.
+   */
+  onClose: () => void;
+};
+
+/**
+ * Augments a chat component's own props with the metadata the widget always
+ * injects. `TOwnProps` is the per-component data; `metadata` is the shared bag.
+ */
+export type ChatComponentPropsWithMetadata<
+  TOwnProps = {},
+  TMessage extends ChatMessageBase = ChatMessageBase
+> = TOwnProps & {
+  metadata: ChatComponentMetadata<TMessage>;
+};
+
+export type ClientSideToolComponentProps = ChatComponentPropsWithMetadata<{
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
-  onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
   sendEvent: SendEventForHits;
-};
+}>;
 
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
@@ -515,23 +572,3 @@ export type UserClientSideTool = Omit<
   'addToolResult' | 'applyFilters' | 'sendEvent'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
-
-export type ChatEmptyProps = {
-  /**
-   * Function to send a message to the chat
-   */
-  sendMessage?: ChatLayoutOwnProps['sendMessage'];
-  /**
-   * Current chat status
-   */
-  status?: ChatStatus;
-  /**
-   * Callback to close the chat
-   */
-  onClose?: () => void;
-  /**
-   * Function to set the prompt input value
-   */
-  setInput?: (input: string) => void;
-};
-

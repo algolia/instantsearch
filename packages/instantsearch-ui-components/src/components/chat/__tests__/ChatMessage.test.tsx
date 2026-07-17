@@ -7,9 +7,22 @@ import { Fragment, createElement } from 'preact';
 
 import { createChatMessageComponent } from '../ChatMessage';
 
+import type { ChatComponentMetadata } from '../types';
+
 const ChatMessage = createChatMessageComponent({
   createElement,
   Fragment,
+});
+
+const createMetadata = (
+  overrides: Partial<ChatComponentMetadata> = {}
+): ChatComponentMetadata => ({
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  tools: {},
+  onClose: jest.fn(),
+  ...overrides,
 });
 
 describe('ChatMessage', () => {
@@ -19,9 +32,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        metadata={createMetadata()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -56,7 +67,6 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [],
         }}
-        status="ready"
         classNames={{
           root: 'root',
           container: 'container',
@@ -65,8 +75,7 @@ describe('ChatMessage', () => {
           message: 'message',
           actions: 'actions',
         }}
-        tools={{}}
-        onClose={jest.fn()}
+        metadata={createMetadata()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -102,9 +111,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          metadata={createMetadata()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -114,9 +121,7 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          metadata={createMetadata()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -126,9 +131,7 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          metadata={createMetadata()}
         />
       </div>
     );
@@ -225,9 +228,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        metadata={createMetadata()}
       />
     );
 
@@ -254,9 +255,7 @@ describe('ChatMessage', () => {
             },
           },
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        metadata={createMetadata()}
       />
     );
 
@@ -283,18 +282,18 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: ({ message }) => (
-              <div className="wrapper">{JSON.stringify(message.output)}</div>
-            ),
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
+        metadata={createMetadata({
+          tools: {
+            test_tool: {
+              layoutComponent: ({ message }) => (
+                <div className="wrapper">{JSON.stringify(message.output)}</div>
+              ),
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
     expect(container).toMatchInlineSnapshot(`

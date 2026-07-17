@@ -309,6 +309,7 @@ function ChatInner<
       }}
       messagesProps={{
         status,
+        error,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         sendMessage: sendMessage as ChatUiProps['sendMessage'],
