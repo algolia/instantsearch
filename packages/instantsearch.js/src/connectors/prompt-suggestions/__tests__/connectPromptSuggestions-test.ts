@@ -12,9 +12,9 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import connectOnPageSuggestions from '../connectOnPageSuggestions';
+import connectPromptSuggestions from '../connectPromptSuggestions';
 
-import type { OnPageSuggestionsConnectorParams } from '../connectOnPageSuggestions';
+import type { PromptSuggestionsConnectorParams } from '../connectPromptSuggestions';
 import type { SearchResults } from 'algoliasearch-helper';
 
 // Matches the connector's internal DEBOUNCE_MS constant. Tests wait this long
@@ -79,7 +79,7 @@ function flush(ms = 0) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-describe('connectOnPageSuggestions', () => {
+describe('connectPromptSuggestions', () => {
   const originalFetch = global.fetch;
 
   beforeEach(() => {
@@ -100,24 +100,24 @@ describe('connectOnPageSuggestions', () => {
     it('throws without a render function', () => {
       expect(() => {
         // @ts-expect-error
-        connectOnPageSuggestions()({ agentId: 'a' });
+        connectPromptSuggestions()({ agentId: 'a' });
       }).toThrowError(/render function is not valid/);
     });
 
     it('throws when neither agentId nor transport is provided', () => {
-      const makeWidget = connectOnPageSuggestions(jest.fn());
+      const makeWidget = connectPromptSuggestions(jest.fn());
       expect(() =>
-        makeWidget({} as OnPageSuggestionsConnectorParams)
+        makeWidget({} as PromptSuggestionsConnectorParams)
       ).toThrowError(/agentId.*transport/);
     });
 
     it('returns the widget descriptor', () => {
-      const widget = connectOnPageSuggestions(jest.fn())({
+      const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
       });
       expect(widget).toEqual(
         expect.objectContaining({
-          $$type: 'ais.onPageSuggestions',
+          $$type: 'ais.promptSuggestions',
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
@@ -129,7 +129,7 @@ describe('connectOnPageSuggestions', () => {
   describe('fetch lifecycle', () => {
     it('fires one request after the debounce window on first results', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -156,7 +156,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('skips the request when there are no hits', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -174,7 +174,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('does not refetch when the state signature is unchanged', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -193,7 +193,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('refetches when the query changes', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -218,7 +218,7 @@ describe('connectOnPageSuggestions', () => {
       // state does not track live refinements, so reading it made facet
       // changes (query unchanged) invisible — the pills never refreshed.
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -251,7 +251,7 @@ describe('connectOnPageSuggestions', () => {
       // The state signature must also track numeric (and tag) refinements, so a
       // range-filter change refreshes the pills like a facet change does.
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '', {});
       widget.init!(createInitOptions({ helper }));
 
@@ -283,7 +283,7 @@ describe('connectOnPageSuggestions', () => {
       // new ones swap in silently — no loading state ever shows after the
       // first fetch.
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -328,7 +328,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('does not render after dispose when an in-flight fetch resolves late', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -362,7 +362,7 @@ describe('connectOnPageSuggestions', () => {
         string[],
         [string[], { query: string; results: unknown }]
       >((items) => items.map((s) => `! ${s}`));
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
         transformItems: transform,
       });
@@ -396,7 +396,7 @@ describe('connectOnPageSuggestions', () => {
         (hits: Array<Record<string, unknown>>) =>
           hits.slice(0, 1).map((h) => ({ id: h.objectID }))
       );
-      const widget = connectOnPageSuggestions(jest.fn())({
+      const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         transformHits: transformHits as any,
@@ -416,13 +416,13 @@ describe('connectOnPageSuggestions', () => {
       expect(transformHits).toHaveBeenCalledTimes(1);
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;
       const parsed = JSON.parse((init as RequestInit).body as string);
-      expect(parsed.task).toBe('on_page_suggestions');
+      expect(parsed.task).toBe('prompt_suggestions');
       expect(parsed.input).not.toHaveProperty('pageType');
       expect(parsed.input.hitsSample).toEqual([{ id: '1' }]);
     });
 
     it('strips InstantSearch hit metadata from the default context', async () => {
-      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(
@@ -453,7 +453,7 @@ describe('connectOnPageSuggestions', () => {
     });
 
     it('sends the active filters alongside the query and hitsSample', async () => {
-      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -476,7 +476,7 @@ describe('connectOnPageSuggestions', () => {
     });
 
     it('OR-groups multiple values on the same disjunctive facet', async () => {
-      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -502,7 +502,7 @@ describe('connectOnPageSuggestions', () => {
     });
 
     it('omits filters when no refinements are active', async () => {
-      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(
@@ -517,7 +517,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('when `context` is provided, sends only the context object and skips auto-extraction', async () => {
       const transformHits = jest.fn();
-      const widget = connectOnPageSuggestions(jest.fn())({
+      const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
         context: { focalProduct: { id: '42' } },
         transformHits,
@@ -546,7 +546,7 @@ describe('connectOnPageSuggestions', () => {
     });
 
     it('still fetches when `context` is provided and there are no hits', async () => {
-      const widget = connectOnPageSuggestions(jest.fn())({
+      const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
         context: { focalProduct: { id: '42' } },
       });
@@ -562,7 +562,7 @@ describe('connectOnPageSuggestions', () => {
 
     it('exposes `refresh()` which bypasses the debounce and refetches', async () => {
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -581,7 +581,7 @@ describe('connectOnPageSuggestions', () => {
       const prepare = jest.fn((body: Record<string, unknown>) => ({
         body: { ...body, injected: true },
       }));
-      const widget = connectOnPageSuggestions(jest.fn())({
+      const widget = connectPromptSuggestions(jest.fn())({
         transport: {
           api: 'https://example.test/agents',
           headers: { 'x-foo': 'bar' },
@@ -608,7 +608,7 @@ describe('connectOnPageSuggestions', () => {
         Promise.resolve(sseResponse([taskOutputEvent(['a', 'b'])]))
       ) as unknown as typeof fetch;
 
-      const widget = connectOnPageSuggestions(jest.fn())({ agentId: 'a' });
+      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -636,7 +636,7 @@ describe('connectOnPageSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -674,7 +674,7 @@ describe('connectOnPageSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -696,7 +696,7 @@ describe('connectOnPageSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({ agentId: 'a' });
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -726,7 +726,7 @@ describe('connectOnPageSuggestions', () => {
       } as any;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       widget.init!(
@@ -764,7 +764,7 @@ describe('connectOnPageSuggestions', () => {
             },
           },
         },
-        { headers: { 'x-algolia-referer': 'on-page-suggestions' } }
+        { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
       );
     });
 
@@ -780,7 +780,7 @@ describe('connectOnPageSuggestions', () => {
       } as any;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       widget.init!(
@@ -802,7 +802,7 @@ describe('connectOnPageSuggestions', () => {
       } as any;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       widget.init!(
@@ -828,7 +828,7 @@ describe('connectOnPageSuggestions', () => {
       } as any;
 
       const renderFn = jest.fn();
-      const widget = connectOnPageSuggestions(renderFn)({
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       widget.init!(

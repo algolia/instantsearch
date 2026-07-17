@@ -173,9 +173,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
-      case 'onPageSuggestions': {
-        const onPageSuggestions = widget as Widgets['onPageSuggestions'];
-        return onPageSuggestions({
+      case 'promptSuggestions': {
+        const promptSuggestions = widget as Widgets['promptSuggestions'];
+        return promptSuggestions({
           container,
           agentId: 'test-agent-id',
         });

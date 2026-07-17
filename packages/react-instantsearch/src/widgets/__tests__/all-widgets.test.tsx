@@ -74,9 +74,9 @@ describe('widgets', () => {
           "name": "Breadcrumb",
         },
         {
-          "$$type": "ais.onPageSuggestions",
-          "$$widgetType": "ais.onPageSuggestions",
-          "name": "OnPageSuggestions",
+          "$$type": "ais.promptSuggestions",
+          "$$widgetType": "ais.promptSuggestions",
+          "name": "PromptSuggestions",
         },
         {
           "$$type": "ais.chatTrigger",

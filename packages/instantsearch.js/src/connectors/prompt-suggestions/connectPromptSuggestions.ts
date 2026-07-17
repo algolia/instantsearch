@@ -26,11 +26,11 @@ import type {
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'on-page-suggestions',
+  name: 'prompt-suggestions',
   connector: true,
 });
 
-const RENDER_STATE_KEY = 'onPageSuggestions' as const;
+const RENDER_STATE_KEY = 'promptSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
 
@@ -52,24 +52,24 @@ function buildSuggestionMessage(suggestion: string): string {
 }
 
 /** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
-export type OnPageSuggestionsTransport = TaskTransport;
+export type PromptSuggestionsTransport = TaskTransport;
 
 /** Metadata passed to `transformItems`. */
-export type OnPageSuggestionsTransformItemsMetadata = {
+export type PromptSuggestionsTransformItemsMetadata = {
   query: string;
   results: SearchResults | null;
 };
 
-/** Custom `transformItems` signature for `connectOnPageSuggestions`. */
-export type OnPageSuggestionsTransformItems = (
+/** Custom `transformItems` signature for `connectPromptSuggestions`. */
+export type PromptSuggestionsTransformItems = (
   items: string[],
-  metadata: OnPageSuggestionsTransformItemsMetadata
+  metadata: PromptSuggestionsTransformItemsMetadata
 ) => string[];
 
 /** Receives every hit and returns the subset (or reshaped objects) forwarded to the agent as context. */
-export type OnPageSuggestionsTransformHits = (hits: Hit[]) => unknown[];
+export type PromptSuggestionsTransformHits = (hits: Hit[]) => unknown[];
 
-export type OnPageSuggestionsRenderState = {
+export type PromptSuggestionsRenderState = {
   /** Backend-generated prompt strings rendered as clickable pills. */
   suggestions: string[];
   /** Whether suggestions are currently being fetched. */
@@ -88,7 +88,7 @@ export type OnPageSuggestionsRenderState = {
 };
 
 /** Either `agentId` or a custom `transport` is required. */
-export type OnPageSuggestionsSource =
+export type PromptSuggestionsSource =
   | {
       /** ID of the agent configured in the Algolia dashboard. */
       agentId: string;
@@ -96,38 +96,38 @@ export type OnPageSuggestionsSource =
     }
   | {
       /** Custom transport. When set, `agentId` and client credentials are ignored. */
-      transport: OnPageSuggestionsTransport;
+      transport: PromptSuggestionsTransport;
       agentId?: never;
     };
 
-export type OnPageSuggestionsConnectorParams = OnPageSuggestionsSource & {
+export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
    * Agent Studio configuration to invoke, sent as the `task` field.
-   * @default 'on_page_suggestions'
+   * @default 'prompt_suggestions'
    */
   configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
-  transformHits?: OnPageSuggestionsTransformHits;
+  transformHits?: PromptSuggestionsTransformHits;
   /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
-  transformItems?: OnPageSuggestionsTransformItems;
+  transformItems?: PromptSuggestionsTransformItems;
 };
 
-export type OnPageSuggestionsWidgetDescription = {
-  $$type: 'ais.onPageSuggestions';
-  renderState: OnPageSuggestionsRenderState;
+export type PromptSuggestionsWidgetDescription = {
+  $$type: 'ais.promptSuggestions';
+  renderState: PromptSuggestionsRenderState;
   indexRenderState: {
-    onPageSuggestions: WidgetRenderState<
-      OnPageSuggestionsRenderState,
-      OnPageSuggestionsConnectorParams
+    promptSuggestions: WidgetRenderState<
+      PromptSuggestionsRenderState,
+      PromptSuggestionsConnectorParams
     >;
   };
 };
 
-export type OnPageSuggestionsConnector = Connector<
-  OnPageSuggestionsWidgetDescription,
-  OnPageSuggestionsConnectorParams
+export type PromptSuggestionsConnector = Connector<
+  PromptSuggestionsWidgetDescription,
+  PromptSuggestionsConnectorParams
 >;
 
 const INTERNAL_HIT_KEYS = [
@@ -147,7 +147,7 @@ function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
   return clean;
 }
 
-const DEFAULT_TRANSFORM_HITS: OnPageSuggestionsTransformHits = (hits) =>
+const DEFAULT_TRANSFORM_HITS: PromptSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5).map(stripInternalHitMetadata);
 
 function buildFilters(results: SearchResults): string[][] | undefined {
@@ -190,14 +190,14 @@ function buildFilters(results: SearchResults): string[][] | undefined {
   return groups.length > 0 ? groups : undefined;
 }
 
-const connectOnPageSuggestions: OnPageSuggestionsConnector =
-  function connectOnPageSuggestions(renderFn, unmountFn = noop) {
+const connectPromptSuggestions: PromptSuggestionsConnector =
+  function connectPromptSuggestions(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
       warning(
         false,
-        'OnPageSuggestions is not yet stable and will change in the future.'
+        'PromptSuggestions is not yet stable and will change in the future.'
       );
 
       const {
@@ -273,7 +273,7 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
             null;
           openChat(chatRenderState, {
             message: buildSuggestionMessage(prompt),
-            referer: 'on-page-suggestions',
+            referer: 'prompt-suggestions',
             turnContext: buildTurnContext(results),
           });
           return true;
@@ -360,8 +360,8 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
 
       const getWidgetRenderState = (
         renderOptions: InitOptions | RenderOptions
-      ): Omit<OnPageSuggestionsRenderState, never> & {
-        widgetParams: OnPageSuggestionsConnectorParams;
+      ): Omit<PromptSuggestionsRenderState, never> & {
+        widgetParams: PromptSuggestionsConnectorParams;
       } => {
         const results =
           'results' in renderOptions ? renderOptions.results : undefined;
@@ -408,12 +408,12 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
         noop
       )({
         ...(transport ? { transport } : { agentId }),
-        task: configurationId ?? 'on_page_suggestions',
+        task: configurationId ?? 'prompt_suggestions',
         stream: true,
       } as StructuredOutputConnectorParams);
 
       return {
-        $$type: 'ais.onPageSuggestions',
+        $$type: 'ais.promptSuggestions',
 
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
@@ -480,7 +480,7 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
           renderState,
           renderOptions
         ): IndexRenderState &
-          OnPageSuggestionsWidgetDescription['indexRenderState'] {
+          PromptSuggestionsWidgetDescription['indexRenderState'] {
           return {
             ...renderState,
             [RENDER_STATE_KEY]: this.getWidgetRenderState(renderOptions),
@@ -494,4 +494,4 @@ const connectOnPageSuggestions: OnPageSuggestionsConnector =
     };
   };
 
-export default connectOnPageSuggestions;
+export default connectPromptSuggestions;

@@ -596,9 +596,9 @@ const testSetups = {
   createFilterSuggestionsWidgetTests() {
     throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
   },
-  createOnPageSuggestionsWidgetTests() {
+  createPromptSuggestionsWidgetTests() {
     throw new Error(
-      'OnPageSuggestions is not supported in Vue InstantSearch'
+      'PromptSuggestions is not supported in Vue InstantSearch'
     );
   },
 };
@@ -663,8 +663,8 @@ const testOptions = {
   createFilterSuggestionsWidgetTests: {
     skippedTests: { 'FilterSuggestions widget common tests': true },
   },
-  createOnPageSuggestionsWidgetTests: {
-    skippedTests: { 'OnPageSuggestions widget common tests': true },
+  createPromptSuggestionsWidgetTests: {
+    skippedTests: { 'PromptSuggestions widget common tests': true },
   },
 };
 

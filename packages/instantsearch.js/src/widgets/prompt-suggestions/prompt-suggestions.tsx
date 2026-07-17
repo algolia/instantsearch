@@ -1,76 +1,76 @@
 /** @jsx h */
 
-import { createOnPageSuggestionsComponent } from 'instantsearch-ui-components';
+import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
-import connectOnPageSuggestions from '../../connectors/on-page-suggestions/connectOnPageSuggestions';
+import connectPromptSuggestions from '../../connectors/prompt-suggestions/connectPromptSuggestions';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
 import type {
-  OnPageSuggestionsRenderState,
-  OnPageSuggestionsConnectorParams,
-  OnPageSuggestionsWidgetDescription,
-} from '../../connectors/on-page-suggestions/connectOnPageSuggestions';
+  PromptSuggestionsRenderState,
+  PromptSuggestionsConnectorParams,
+  PromptSuggestionsWidgetDescription,
+} from '../../connectors/prompt-suggestions/connectPromptSuggestions';
 import type { WidgetFactory, Renderer } from '../../types';
 import type {
-  OnPageSuggestionsClassNames,
-  OnPageSuggestionsHeaderComponentProps,
-  OnPageSuggestionsTranslations,
+  PromptSuggestionsClassNames,
+  PromptSuggestionsHeaderComponentProps,
+  PromptSuggestionsTranslations,
 } from 'instantsearch-ui-components';
 import type { ComponentChildren } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'on-page-suggestions',
+  name: 'prompt-suggestions',
 });
 
-const OnPageSuggestions = createOnPageSuggestionsComponent({
+const PromptSuggestions = createPromptSuggestionsComponent({
   createElement: h,
   Fragment: 'fragment',
 });
 
-export type OnPageSuggestionsCSSClasses =
-  Partial<OnPageSuggestionsClassNames>;
+export type PromptSuggestionsCSSClasses =
+  Partial<PromptSuggestionsClassNames>;
 
 /**
  * Props passed to a custom `templates.layout`. Mirrors the connector render
  * state so a layout template owns the full markup.
  */
-export type OnPageSuggestionsLayoutTemplateProps = {
+export type PromptSuggestionsLayoutTemplateProps = {
   suggestions: string[];
   isLoading: boolean;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
 };
 
-export type OnPageSuggestionsTemplates = {
+export type PromptSuggestionsTemplates = {
   /**
    * Replaces the default pills layout with custom markup. Receives the full
    * render state — the template is responsible for rendering the list, the
    * loading state, and the click handlers.
    */
   layout?: (
-    props: OnPageSuggestionsLayoutTemplateProps
+    props: PromptSuggestionsLayoutTemplateProps
   ) => ComponentChildren;
   /**
    * Replaces the default header. Set to `false` to disable the header.
    */
   header?:
-    | ((props: OnPageSuggestionsHeaderComponentProps) => ComponentChildren)
+    | ((props: PromptSuggestionsHeaderComponentProps) => ComponentChildren)
     | false;
 };
 
-type OnPageSuggestionsWidgetParams = {
+type PromptSuggestionsWidgetParams = {
   /** CSS Selector or HTMLElement to insert the widget. */
   container: string | HTMLElement;
   /** CSS classes to add. */
-  cssClasses?: OnPageSuggestionsCSSClasses;
+  cssClasses?: PromptSuggestionsCSSClasses;
   /** Custom templates. */
-  templates?: OnPageSuggestionsTemplates;
+  templates?: PromptSuggestionsTemplates;
   /** Translations for the widget. */
-  translations?: Partial<OnPageSuggestionsTranslations>;
+  translations?: Partial<PromptSuggestionsTranslations>;
   /**
    * Override the default click behavior (handoff to the chat widget). Receives
    * the prompt and a `sendToChat` callback you can use to fall through to the
@@ -82,12 +82,12 @@ type OnPageSuggestionsWidgetParams = {
   ) => void;
 };
 
-export type OnPageSuggestionsWidget = WidgetFactory<
-  OnPageSuggestionsWidgetDescription & {
-    $$widgetType: 'ais.onPageSuggestions';
+export type PromptSuggestionsWidget = WidgetFactory<
+  PromptSuggestionsWidgetDescription & {
+    $$widgetType: 'ais.promptSuggestions';
   },
-  OnPageSuggestionsConnectorParams,
-  OnPageSuggestionsWidgetParams
+  PromptSuggestionsConnectorParams,
+  PromptSuggestionsWidgetParams
 >;
 
 const createRenderer =
@@ -99,13 +99,13 @@ const createRenderer =
     onSuggestionClickOverride,
   }: {
     containerNode: HTMLElement;
-    cssClasses: OnPageSuggestionsCSSClasses;
-    templates?: OnPageSuggestionsTemplates;
-    translations?: Partial<OnPageSuggestionsTranslations>;
-    onSuggestionClickOverride?: OnPageSuggestionsWidgetParams['onSuggestionClick'];
+    cssClasses: PromptSuggestionsCSSClasses;
+    templates?: PromptSuggestionsTemplates;
+    translations?: Partial<PromptSuggestionsTranslations>;
+    onSuggestionClickOverride?: PromptSuggestionsWidgetParams['onSuggestionClick'];
   }): Renderer<
-    OnPageSuggestionsRenderState,
-    Partial<OnPageSuggestionsWidgetParams>
+    PromptSuggestionsRenderState,
+    Partial<PromptSuggestionsWidgetParams>
   > =>
   (props) => {
     const {
@@ -140,13 +140,13 @@ const createRenderer =
       headerComponent = false as const;
     } else if (templates?.header) {
       const headerTemplate = templates.header;
-      headerComponent = (headerProps: OnPageSuggestionsHeaderComponentProps) => (
+      headerComponent = (headerProps: PromptSuggestionsHeaderComponentProps) => (
         <Fragment>{headerTemplate(headerProps)}</Fragment>
       );
     }
 
     render(
-      <OnPageSuggestions
+      <PromptSuggestions
         classNames={cssClasses}
         suggestions={suggestions}
         isLoading={isLoading}
@@ -159,9 +159,9 @@ const createRenderer =
     );
   };
 
-export default (function onPageSuggestions(
-  widgetParams: OnPageSuggestionsWidgetParams &
-    OnPageSuggestionsConnectorParams
+export default (function promptSuggestions(
+  widgetParams: PromptSuggestionsWidgetParams &
+    PromptSuggestionsConnectorParams
 ) {
   const {
     container,
@@ -186,12 +186,12 @@ export default (function onPageSuggestions(
     onSuggestionClickOverride,
   });
 
-  const makeWidget = connectOnPageSuggestions(specializedRenderer, () =>
+  const makeWidget = connectPromptSuggestions(specializedRenderer, () =>
     render(null, containerNode)
   );
 
   return {
     ...makeWidget(connectorParams),
-    $$widgetType: 'ais.onPageSuggestions',
+    $$widgetType: 'ais.promptSuggestions',
   };
-} satisfies OnPageSuggestionsWidget);
+} satisfies PromptSuggestionsWidget);

@@ -36,7 +36,7 @@ import {
   dynamicWidgets,
   chat,
   chatTrigger,
-  onPageSuggestions,
+  promptSuggestions,
   EXPERIMENTAL_autocomplete,
   filterSuggestions,
 } from '../widgets';
@@ -746,13 +746,13 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
-  createOnPageSuggestionsWidgetTests({
+  createPromptSuggestionsWidgetTests({
     instantSearchOptions,
     widgetParams,
   }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
-        onPageSuggestions({
+        promptSuggestions({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -802,7 +802,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
-  createOnPageSuggestionsWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

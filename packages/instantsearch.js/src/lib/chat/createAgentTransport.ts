@@ -35,7 +35,7 @@ export type CreateAgentTransportOptions = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   /**
    * Optional algolia-agent suffix appended to the user agent (e.g. `'chat'`,
-   * `'on-page-suggestions'`).
+   * `'prompt-suggestions'`).
    */
   algoliaAgentSuffix?: string;
   /**

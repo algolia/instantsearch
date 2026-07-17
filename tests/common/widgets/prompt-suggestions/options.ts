@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
-import type { OnPageSuggestionsWidgetSetup } from '.';
+import type { PromptSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchResponse } from 'instantsearch.js';
@@ -50,7 +50,7 @@ function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
 }
 
 export function createOptionsTests(
-  setup: OnPageSuggestionsWidgetSetup,
+  setup: PromptSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
@@ -95,19 +95,19 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-OnPageSuggestions')
+        document.querySelector('.ais-PromptSuggestions')
       ).toBeInTheDocument();
 
       // The default header renders above the pills.
       expect(
-        document.querySelector('.ais-OnPageSuggestions-header')
+        document.querySelector('.ais-PromptSuggestions-header')
       ).toBeInTheDocument();
       expect(
-        document.querySelector('.ais-OnPageSuggestions-headerTitle')
+        document.querySelector('.ais-PromptSuggestions-headerTitle')
       ).toHaveTextContent('Suggestions');
 
       const pills = document.querySelectorAll(
-        '.ais-OnPageSuggestions-suggestion'
+        '.ais-PromptSuggestions-suggestion'
       );
       expect(pills).toHaveLength(SUGGESTIONS.length);
       expect(document.body.textContent).toContain('Suggestion A');
@@ -148,14 +148,14 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-OnPageSuggestions-skeleton')
+        document.querySelector('.ais-PromptSuggestions-skeleton')
       ).toBeInTheDocument();
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-skeletonItem')
+        document.querySelectorAll('.ais-PromptSuggestions-skeletonItem')
           .length
       ).toBeGreaterThan(0);
       expect(
-        document.querySelector('.ais-OnPageSuggestions-suggestion')
+        document.querySelector('.ais-PromptSuggestions-suggestion')
       ).toBeNull();
 
       await act(async () => {
@@ -164,10 +164,10 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
+        document.querySelectorAll('.ais-PromptSuggestions-suggestion')
       ).toHaveLength(SUGGESTIONS.length);
       expect(
-        document.querySelector('.ais-OnPageSuggestions-skeleton')
+        document.querySelector('.ais-PromptSuggestions-skeleton')
       ).toBeNull();
     });
 
@@ -192,13 +192,13 @@ export function createOptionsTests(
 
       // The UI component keeps a stable (empty) root element when there are no
       // suggestions and it isn't loading — no pills, no skeleton.
-      const root = document.querySelector('.ais-OnPageSuggestions');
+      const root = document.querySelector('.ais-PromptSuggestions');
       expect(root).not.toBeNull();
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
+        document.querySelectorAll('.ais-PromptSuggestions-suggestion')
       ).toHaveLength(0);
       expect(
-        document.querySelector('.ais-OnPageSuggestions-skeleton')
+        document.querySelector('.ais-PromptSuggestions-skeleton')
       ).toBeNull();
     });
 
@@ -221,10 +221,10 @@ export function createOptionsTests(
 
       expect(fetchMock).not.toHaveBeenCalled();
       // No request fires, but the widget still renders its stable empty root.
-      const root = document.querySelector('.ais-OnPageSuggestions');
+      const root = document.querySelector('.ais-PromptSuggestions');
       expect(root).not.toBeNull();
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
+        document.querySelectorAll('.ais-PromptSuggestions-suggestion')
       ).toHaveLength(0);
     });
 
@@ -296,7 +296,7 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('defaults the configurationId to `on_page_suggestions`', async () => {
+    test('defaults the configurationId to `prompt_suggestions`', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -322,7 +322,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       // `configurationId` is sent to the backend as the `task` field.
-      expect(body.task).toBe('on_page_suggestions');
+      expect(body.task).toBe('prompt_suggestions');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {
@@ -404,7 +404,7 @@ export function createOptionsTests(
 
       await act(async () => {
         userEvent.click(
-          document.querySelector('.ais-OnPageSuggestions-suggestion')!
+          document.querySelector('.ais-PromptSuggestions-suggestion')!
         );
         await wait(0);
       });

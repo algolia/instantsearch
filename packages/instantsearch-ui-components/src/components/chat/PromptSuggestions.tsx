@@ -5,7 +5,7 @@ import { createButtonComponent } from '../Button';
 
 import type { ComponentProps, Renderer } from '../../types';
 
-export type OnPageSuggestionsClassNames = {
+export type PromptSuggestionsClassNames = {
   root?: string | string[];
   header?: string | string[];
   headerTitle?: string | string[];
@@ -14,21 +14,21 @@ export type OnPageSuggestionsClassNames = {
   skeletonItem?: string | string[];
 };
 
-export type OnPageSuggestionsTranslations = {
+export type PromptSuggestionsTranslations = {
   /**
    * The title displayed in the header.
    */
   headerTitle: string;
 };
 
-export type OnPageSuggestionsHeaderComponentProps = {
+export type PromptSuggestionsHeaderComponentProps = {
   classNames: Partial<
-    Pick<OnPageSuggestionsClassNames, 'header' | 'headerTitle'>
+    Pick<PromptSuggestionsClassNames, 'header' | 'headerTitle'>
   >;
-  translations: OnPageSuggestionsTranslations;
+  translations: PromptSuggestionsTranslations;
 };
 
-export type OnPageSuggestionsOwnProps = ComponentProps<'div'> & {
+export type PromptSuggestionsOwnProps = ComponentProps<'div'> & {
   /*
    * List of prompt suggestions.
    */
@@ -55,19 +55,19 @@ export type OnPageSuggestionsOwnProps = ComponentProps<'div'> & {
    * Component to render the header. Set to `false` to disable the header.
    */
   headerComponent?:
-    | ((props: OnPageSuggestionsHeaderComponentProps) => JSX.Element)
+    | ((props: PromptSuggestionsHeaderComponentProps) => JSX.Element)
     | false;
   /**
    * Optional translations for the component.
    */
-  translations?: Partial<OnPageSuggestionsTranslations>;
+  translations?: Partial<PromptSuggestionsTranslations>;
   /**
    * Optional class names for elements
    */
-  classNames?: Partial<OnPageSuggestionsClassNames>;
+  classNames?: Partial<PromptSuggestionsClassNames>;
 };
 
-export function createOnPageSuggestionsComponent({
+export function createPromptSuggestionsComponent({
   createElement,
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
@@ -75,14 +75,14 @@ export function createOnPageSuggestionsComponent({
   function DefaultHeader({
     classNames,
     translations,
-  }: OnPageSuggestionsHeaderComponentProps) {
+  }: PromptSuggestionsHeaderComponentProps) {
     return (
       <div
-        className={cx('ais-OnPageSuggestions-header', classNames.header)}
+        className={cx('ais-PromptSuggestions-header', classNames.header)}
       >
         <span
           className={cx(
-            'ais-OnPageSuggestions-headerTitle',
+            'ais-PromptSuggestions-headerTitle',
             classNames.headerTitle
           )}
         >
@@ -92,8 +92,8 @@ export function createOnPageSuggestionsComponent({
     );
   }
 
-  return function OnPageSuggestions(
-    userProps: OnPageSuggestionsOwnProps
+  return function PromptSuggestions(
+    userProps: PromptSuggestionsOwnProps
   ) {
     const {
       suggestions = [],
@@ -107,7 +107,7 @@ export function createOnPageSuggestionsComponent({
       ...props
     } = userProps;
 
-    const translations: OnPageSuggestionsTranslations = {
+    const translations: PromptSuggestionsTranslations = {
       headerTitle: 'Suggestions',
       ...userTranslations,
     };
@@ -121,7 +121,7 @@ export function createOnPageSuggestionsComponent({
       <div
         {...props}
         className={cx(
-          'ais-OnPageSuggestions',
+          'ais-PromptSuggestions',
           classNames.root,
           props.className
         )}
@@ -138,7 +138,7 @@ export function createOnPageSuggestionsComponent({
         {isLoading && suggestions.length === 0 ? (
           <div
             className={cx(
-              'ais-OnPageSuggestions-skeleton',
+              'ais-PromptSuggestions-skeleton',
               classNames.skeleton
             )}
           >
@@ -146,7 +146,7 @@ export function createOnPageSuggestionsComponent({
               <div
                 key={i}
                 className={cx(
-                  'ais-OnPageSuggestions-skeletonItem',
+                  'ais-PromptSuggestions-skeletonItem',
                   classNames.skeletonItem
                 )}
               />
@@ -159,7 +159,7 @@ export function createOnPageSuggestionsComponent({
               size="sm"
               variant="primary"
               className={cx(
-                'ais-OnPageSuggestions-suggestion',
+                'ais-PromptSuggestions-suggestion',
                 classNames.suggestion
               )}
               onClick={() => onSuggestionClick(suggestion)}

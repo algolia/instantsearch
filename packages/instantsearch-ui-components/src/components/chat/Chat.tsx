@@ -5,13 +5,13 @@ import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
 import { createChatPromptComponent } from './ChatPrompt';
-import { createOnPageSuggestionsComponent } from './OnPageSuggestions';
+import { createPromptSuggestionsComponent } from './PromptSuggestions';
 
 import type { Renderer, ComponentProps, Hooks } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
-import type { OnPageSuggestionsOwnProps } from './OnPageSuggestions';
+import type { PromptSuggestionsOwnProps } from './PromptSuggestions';
 import type { ChatLayoutOwnProps } from './types';
 
 export type ChatClassNames = {
@@ -21,7 +21,7 @@ export type ChatClassNames = {
   messages?: ChatMessagesProps['classNames'];
   message?: ChatMessagesProps['messageClassNames'];
   prompt?: ChatPromptProps['classNames'];
-  suggestions?: OnPageSuggestionsOwnProps['classNames'];
+  suggestions?: PromptSuggestionsOwnProps['classNames'];
 };
 
 export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
@@ -46,9 +46,9 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    */
   promptProps: ChatPromptProps;
   /*
-   * Props for the OnPageSuggestions component.
+   * Props for the PromptSuggestions component.
    */
-  suggestionsProps: OnPageSuggestionsOwnProps;
+  suggestionsProps: PromptSuggestionsOwnProps;
   /**
    * Optional class names for elements
    */
@@ -68,7 +68,7 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /**
    * Optional suggestions component for the chat
    */
-  suggestionsComponent?: (props: OnPageSuggestionsOwnProps) => JSX.Element;
+  suggestionsComponent?: (props: PromptSuggestionsOwnProps) => JSX.Element;
   /**
    * Function to send a message to the chat.
    */
@@ -113,7 +113,7 @@ export function createChatComponent({
     memo,
   });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
-  const OnPageSuggestions = createOnPageSuggestionsComponent({
+  const PromptSuggestions = createPromptSuggestionsComponent({
     createElement,
     Fragment,
   });
@@ -193,7 +193,7 @@ export function createChatComponent({
         messageClassNames={classNames.message}
         suggestionsElement={
           suggestionsProps.suggestions?.length || suggestionsProps.isLoading
-            ? createElement(SuggestionsComponent || OnPageSuggestions, {
+            ? createElement(SuggestionsComponent || PromptSuggestions, {
                 headerComponent: false,
                 ...suggestionsProps,
                 classNames: classNames.suggestions,

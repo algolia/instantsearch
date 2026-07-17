@@ -62,6 +62,6 @@ export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
-export { default as onPageSuggestions } from './on-page-suggestions/on-page-suggestions';
+export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';
 export { default as chatTrigger } from './chat-trigger/chat-trigger';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';

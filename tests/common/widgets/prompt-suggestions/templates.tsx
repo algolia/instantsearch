@@ -2,7 +2,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import React from 'react';
 
-import type { OnPageSuggestionsWidgetSetup } from '.';
+import type { PromptSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchResponse } from 'instantsearch.js';
@@ -44,7 +44,7 @@ function mockAgentFetch() {
 }
 
 export function createTemplatesTests(
-  setup: OnPageSuggestionsWidgetSetup,
+  setup: PromptSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
@@ -79,9 +79,9 @@ export function createTemplatesTests(
       });
 
       // The custom layout owns the whole markup, so the default UI component
-      // (and its `ais-OnPageSuggestions` root) is not rendered.
+      // (and its `ais-PromptSuggestions` root) is not rendered.
       expect(
-        document.querySelector('.ais-OnPageSuggestions')
+        document.querySelector('.ais-PromptSuggestions')
       ).toBeNull();
       expect(document.body.textContent).toContain(
         'Custom layout: Suggestion A, Suggestion B, Suggestion C'
@@ -115,11 +115,11 @@ export function createTemplatesTests(
 
       // The default header is replaced, but the pills still render.
       expect(
-        document.querySelector('.ais-OnPageSuggestions-header')
+        document.querySelector('.ais-PromptSuggestions-header')
       ).toBeNull();
       expect(document.body.textContent).toContain('Ask me anything');
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
+        document.querySelectorAll('.ais-PromptSuggestions-suggestion')
       ).toHaveLength(SUGGESTIONS.length);
     });
 
@@ -147,7 +147,7 @@ export function createTemplatesTests(
       });
 
       expect(
-        document.querySelector('.ais-OnPageSuggestions-headerTitle')
+        document.querySelector('.ais-PromptSuggestions-headerTitle')
       ).toHaveTextContent('Ideas');
     });
 
@@ -175,10 +175,10 @@ export function createTemplatesTests(
       });
 
       expect(
-        document.querySelector('.ais-OnPageSuggestions-header')
+        document.querySelector('.ais-PromptSuggestions-header')
       ).toBeNull();
       expect(
-        document.querySelectorAll('.ais-OnPageSuggestions-suggestion')
+        document.querySelectorAll('.ais-PromptSuggestions-suggestion')
       ).toHaveLength(SUGGESTIONS.length);
     });
   });

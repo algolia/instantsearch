@@ -1,25 +1,25 @@
 @use '../../shared/_common';
 @use '../../shared/_variables';
 
-.ais-OnPageSuggestions {
+.ais-PromptSuggestions {
   display: flex;
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-OnPageSuggestions-header {
+.ais-PromptSuggestions-header {
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-OnPageSuggestions-headerTitle {
+.ais-PromptSuggestions-headerTitle {
   font-size: var(--ais-font-size-sm);
   font-weight: 500;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 }
 
-.ais-OnPageSuggestions-suggestion {
+.ais-PromptSuggestions-suggestion {
   font-size: revert;
   line-height: var(--ais-spacing);
   width: fit-content;
@@ -48,13 +48,13 @@
   }
 }
 
-.ais-OnPageSuggestions-skeleton {
+.ais-PromptSuggestions-skeleton {
   display: flex;
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-OnPageSuggestions-skeletonItem {
+.ais-PromptSuggestions-skeletonItem {
   height: calc(var(--ais-spacing) * 2);
   border-radius: var(--ais-border-radius-lg);
   background-color: rgba(var(--ais-muted-color-rgb), 0.15);
