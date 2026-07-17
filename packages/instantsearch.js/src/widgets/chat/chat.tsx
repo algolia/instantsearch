@@ -56,7 +56,6 @@ import type {
   ChatPromptProps,
   ChatPromptTranslations,
   ChatStatus,
-  ChatToggleButtonProps,
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
@@ -322,7 +321,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const assistantMessageTemplateRef = makeTemplateRef();
   const userMessageTemplateRef = makeTemplateRef();
   const promptTemplateRef = makeTemplateRef();
-  const toggleButtonTemplateRef = makeTemplateRef();
   const layoutTemplateRef = makeTemplateRef();
 
   // Per-tool layout components must be stable across renders or Preact will
@@ -674,14 +672,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
-    toggleButtonTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['toggleButton']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.toggleButton,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-
     layoutTemplateRef.current = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<Pick<ChatTemplates<THit>, 'layout'>>
@@ -797,16 +787,12 @@ export type ChatCSSClasses = Partial<ChatClassNames>;
 
 export type ChatLayoutTemplateData = Omit<
   ChatLayoutOwnProps,
-  | 'headerComponent'
-  | 'messagesComponent'
-  | 'promptComponent'
-  | 'toggleButtonComponent'
+  'headerComponent' | 'messagesComponent' | 'promptComponent'
 > & {
   templates: {
     header: () => JSX.Element;
     messages: () => JSX.Element;
     prompt: () => JSX.Element;
-    toggleButton: () => JSX.Element;
   };
 };
 
@@ -985,20 +971,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
 
     /**
-     * Templates to use for the toggle button.
-     */
-    toggleButton: Partial<{
-      /**
-       * Template to use for the toggle button layout.
-       */
-      layout: Template<ChatToggleButtonProps>;
-      /**
-       * Template to use for the toggle button icon.
-       */
-      icon: Template<{ isOpen: boolean }>;
-    }>;
-
-    /**
      * Template to use for the message actions.
      */
     actions: Template<{
@@ -1048,6 +1020,11 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * CSS classes to add.
    */
   cssClasses?: ChatCSSClasses;
+
+  /**
+   * Disable validation that requires either `chatTrigger` or AI mode.
+   */
+  disableTriggerValidation?: boolean;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1072,6 +1049,7 @@ export default (function chat<
     resume = false,
     tools: userTools,
     getSearchPageURL,
+    disableTriggerValidation = false,
     ...options
   } = widgetParams || {};
 
@@ -1090,6 +1068,16 @@ export default (function chat<
 
   const tools = { ...defaultTools, ...userTools };
 
+  // Inline layouts are always visible, so they don't require a `chatTrigger`
+  // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker
+  // set on the template function returned by `chatInlineLayout()`.
+  const isInlineLayoutTemplate =
+    typeof templates.layout === 'function' &&
+    (templates.layout as { $$inlineLayout?: true }).$$inlineLayout === true;
+
+  const effectiveDisableTriggerValidation =
+    disableTriggerValidation || isInlineLayoutTemplate;
+
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
@@ -1106,6 +1094,7 @@ export default (function chat<
     ...makeWidget({
       resume,
       tools,
+      disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),
     $$widgetType: 'ais.chat',

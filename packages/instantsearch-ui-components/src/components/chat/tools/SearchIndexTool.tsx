@@ -84,12 +84,16 @@ function createHeaderComponent({ createElement }: Renderer) {
                   facetFilters: getFacetFiltersFromToolInput(input),
                 });
 
-                if (
-                  getSearchPageURL &&
-                  new URL(getSearchPageURL(params)).pathname !==
-                    window.location.pathname
-                ) {
-                  window.location.href = getSearchPageURL(params);
+                if (getSearchPageURL) {
+                  const searchPageURL = getSearchPageURL(params);
+                  const resolvedURL = new URL(
+                    searchPageURL,
+                    window.location.href
+                  );
+
+                  if (resolvedURL.pathname !== window.location.pathname) {
+                    window.location.href = searchPageURL;
+                  }
                 }
 
                 onClose();
