@@ -713,6 +713,148 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
+    it('settles an awaited late result after stop without continuing', async () => {
+      let chat!: TestChat;
+      const toolCallStarted = deferred<undefined>();
+      const releaseToolResult = deferred<undefined>();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: async ({ toolCall }) => {
+          toolCallStarted.resolve(undefined);
+          await releaseToolResult.promise;
+          await chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          });
+        },
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search' });
+      await toolCallStarted.promise;
+      await chat.stop();
+      releaseToolResult.resolve(undefined);
+
+      const outcome = await Promise.race([
+        send.then(() => 'settled'),
+        new Promise<string>((resolve) =>
+          setTimeout(() => resolve('timed out'), 100)
+        ),
+      ]);
+
+      expect(outcome).toBe('settled');
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { ok: true },
+      });
+      expect(setup.state.status).toBe('ready');
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it('commits a reused toolCallId to its owning assistant message', async () => {
+      let chat!: TestChat;
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-new'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'new' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }) =>
+          chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: 'new' },
+          }),
+        onFinish,
+      });
+      chat = setup.chat;
+      setup.state.messages = [
+        {
+          id: 'assistant-old',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { q: 'old' },
+            },
+          ],
+        },
+      ];
+
+      await chat.sendMessage({ text: 'search again' });
+
+      const oldMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-old'
+      );
+      const newMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-new'
+      );
+
+      expect(oldMessage?.parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'old' },
+      });
+      expect(newMessage?.parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'new' },
+      });
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({
+            id: 'assistant-new',
+            parts: [
+              expect.objectContaining({
+                state: 'output-available',
+                output: { owner: 'new' },
+              }),
+            ],
+          }),
+        })
+      );
+
+      await chat.addToolResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'duplicate' },
+      });
+
+      expect(
+        setup.state.messages.find((message) => message.id === 'assistant-old')
+          ?.parts[0]
+      ).toMatchObject({
+        state: 'input-available',
+        input: { q: 'old' },
+      });
+      expect(
+        setup.state.messages.find((message) => message.id === 'assistant-new')
+          ?.parts[0]
+      ).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'new' },
+      });
+    });
+
     it('quietly ignores an unknown toolCallId', async () => {
       const sendAutomaticallyWhen = jest.fn(() => true);
       const setup = createTestSetup({ sendAutomaticallyWhen });

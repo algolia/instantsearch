@@ -29,7 +29,11 @@ import type {
 
 // pendingToolCalls is a lifecycle latch: undefined = none, >0 = pending,
 // 0 = continue, -1 = terminal or consumed, -2 = callback failure reported.
-type ActiveResponse = [controller: AbortController, pendingToolCalls?: number];
+type ActiveResponse = [
+  controller: AbortController,
+  pendingToolCalls?: number,
+  messageId?: string
+];
 
 const tryParseJson = (value: string): unknown | undefined => {
   try {
@@ -128,11 +132,11 @@ const defaultGuardrailFallbackResponse =
  * Abstract base class for chat implementations.
  */
 export abstract class AbstractChat<TUIMessage extends UIMessage> {
-  private conversationId: string;
+  private chatId: string;
   readonly generateId: IdGenerator;
 
   get id(): string {
-    return this.conversationId;
+    return this.chatId;
   }
   protected state: ChatState<TUIMessage>;
 
@@ -141,14 +145,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private onToolCall?: ChatOnToolCallCallback<TUIMessage>;
   private onFinish?: ChatOnFinishCallback<TUIMessage>;
   private onData?: ChatOnDataCallback<TUIMessage>;
-  private sendAutomaticallyWhen?: (options: {
+  private autoSend?: (options: {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
-  private shouldRepairToolInput?: (toolName: string) => boolean;
+  private repairToolInput?: (toolName: string) => boolean;
 
-  private activeResponse: ActiveResponse | null = null;
-  private toolCallResponses = new Map<string, ActiveResponse>();
-  private jobExecutor = new SerialJobExecutor();
+  private active: ActiveResponse | null = null;
+  private calls = new Map<string, ActiveResponse>();
+  private jobs = new SerialJobExecutor();
 
   constructor({
     generateId = defaultGenerateId,
@@ -164,7 +168,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
-    this.conversationId = id;
+    this.chatId = id;
     this.generateId = generateId;
     this.state = state;
     this.transport = transport;
@@ -172,8 +176,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onToolCall = onToolCall;
     this.onFinish = onFinish;
     this.onData = onData;
-    this.sendAutomaticallyWhen = sendAutomaticallyWhen;
-    this.shouldRepairToolInput = shouldRepairToolInput;
+    this.autoSend = sendAutomaticallyWhen;
+    this.repairToolInput = shouldRepairToolInput;
   }
 
   /**
@@ -212,7 +216,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * context.
    */
   resetConversationId(): void {
-    this.conversationId = this.generateId();
+    this.chatId = this.generateId();
   }
 
   get messages(): TUIMessage[] {
@@ -221,7 +225,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   set messages(messages: TUIMessage[]) {
     this.state.messages = messages;
-    this.toolCallResponses.clear();
+    this.calls.clear();
   }
 
   get lastMessage(): TUIMessage | undefined {
@@ -254,7 +258,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         },
     options?: ChatRequestOptions
   ): Promise<void> => {
-    return this.jobExecutor.run(() => {
+    return this.jobs.run(() => {
       // Build the user message
       let userMessagePromise: Promise<TUIMessage | undefined>;
 
@@ -335,7 +339,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     messageId,
     ...options
   }: { messageId?: string } & ChatRequestOptions = {}): Promise<void> => {
-    return this.jobExecutor.run(() => {
+    return this.jobs.run(() => {
       // Find the message to regenerate from
       let targetIndex = -1;
 
@@ -368,7 +372,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * Attempt to resume an ongoing streaming response.
    */
   resumeStream = (options?: ChatRequestOptions): Promise<void> => {
-    return this.jobExecutor.run(() => {
+    return this.jobs.run(() => {
       if (!this.transport) {
         return Promise.reject(
           new Error(
@@ -377,7 +381,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         );
       }
 
-      return this.consumeResponse(() =>
+      return this.consume(() =>
         this.transport!.reconnectToStream({
           chatId: this.id,
           ...options,
@@ -395,11 +399,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
   };
 
-  private commitToolResult(toolCallId: string, output: unknown): boolean {
+  private commit(
+    toolCallId: string,
+    output: unknown,
+    messageId?: string
+  ): boolean {
     const isTargetPart = (part: TUIMessage['parts'][number]): boolean =>
       'toolCallId' in part && part.toolCallId === toolCallId;
-    const messageIndex = this.messages.findIndex((message) =>
-      message.parts.some(isTargetPart)
+    const messageIndex = this.messages.findIndex(
+      (message) =>
+        (!messageId || message.id === messageId) &&
+        message.parts.some(isTargetPart)
     );
 
     if (messageIndex === -1) return false;
@@ -428,19 +438,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return true;
   }
 
-  private continueIfReady(response?: ActiveResponse): Promise<void> {
+  private resume(response?: ActiveResponse): Promise<void> {
     if (response) {
-      if (this.activeResponse === response || response[1] !== 0) {
+      if (this.active === response || response[1] !== 0) {
         return Promise.resolve();
       }
       response[1] = -1;
     }
 
-    if (!this.sendAutomaticallyWhen) return Promise.resolve();
+    if (!this.autoSend) return Promise.resolve();
 
     return Promise.resolve()
       .then(() =>
-        this.sendAutomaticallyWhen!({
+        this.autoSend!({
           messages: this.messages,
         })
       )
@@ -465,34 +475,33 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     toolCallId: string;
     output: InferUIMessageTools<TUIMessage>[TTool]['output'];
   }): Promise<void> => {
-    const response = this.toolCallResponses.get(toolCallId);
+    const response = this.calls.get(toolCallId);
     const commitResult = (): Promise<void> => {
-      if (!this.commitToolResult(toolCallId, output)) {
+      if (!this.commit(toolCallId, output, response?.[2])) {
         return Promise.resolve();
       }
 
-      if (response) {
+      if (response && response[1]! > 0) {
         response[1]!--;
-        this.toolCallResponses.delete(toolCallId);
       }
-      return this.continueIfReady(response);
+      return this.resume(response);
     };
 
-    if (response && this.activeResponse === response) {
+    if (response && (this.active === response || response[1]! < 0)) {
       return commitResult();
     }
 
-    return this.jobExecutor.run(commitResult);
+    return this.jobs.run(commitResult);
   };
 
   /**
    * Abort the current request immediately, keep the generated tokens if any.
    */
   stop = (): Promise<void> => {
-    if (this.activeResponse) {
-      const response = this.activeResponse;
+    if (this.active) {
+      const response = this.active;
       response[1] = -1;
-      this.activeResponse = null;
+      this.active = null;
       response[0].abort();
     }
     this.setStatus({ status: 'ready' });
@@ -513,7 +522,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
     }
 
-    return this.consumeResponse((abortSignal) =>
+    return this.consume((abortSignal) =>
       this.transport!.sendMessages({
         chatId: this.id,
         messages: this.messages,
@@ -527,31 +536,31 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     );
   }
 
-  private consumeResponse(
+  private consume(
     createStream: (
       abortSignal: AbortSignal
     ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>
   ): Promise<void> {
-    if (this.activeResponse) {
-      this.activeResponse[1] = -1;
-      this.activeResponse[0].abort();
+    if (this.active) {
+      this.active[1] = -1;
+      this.active[0].abort();
     }
     const response: ActiveResponse = [new AbortController()];
-    this.activeResponse = response;
+    this.active = response;
     this.setStatus({ status: 'submitted' });
 
     return createStream(response[0].signal).then(
       (stream) => {
-        if (this.activeResponse === response) {
-          if (stream) return this.processStreamWithCallbacks(stream, response);
-          this.activeResponse = null;
+        if (this.active === response) {
+          if (stream) return this.processStream(stream, response);
+          this.active = null;
           this.setStatus({ status: 'ready' });
         }
         return undefined;
       },
       (error) => {
-        if (this.activeResponse !== response) return;
-        this.activeResponse = null;
+        if (this.active !== response) return;
+        this.active = null;
         if ((error as Error).name === 'AbortError') {
           this.setStatus({ status: 'ready' });
         } else {
@@ -561,7 +570,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     );
   }
 
-  private processStreamWithCallbacks(
+  private processStream(
     stream: ReadableStream<InferUIMessageChunk<TUIMessage>>,
     response: ActiveResponse
   ): Promise<void> {
@@ -594,8 +603,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       response[1] = -2;
       response[0].abort();
 
-      if (this.activeResponse === response) {
-        this.activeResponse = null;
+      if (this.active === response) {
+        this.active = null;
         this.handleError(error);
       }
       if (this.onFinish && currentMessage) {
@@ -621,8 +630,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         if (isAbort || error) {
           response[1] = -1;
         }
-        if (this.activeResponse === response) {
-          this.activeResponse = null;
+        if (this.active === response) {
+          this.active = null;
           if (error && !isAbort) {
             this.handleError(error);
           } else {
@@ -639,14 +648,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             isError,
           });
         }
-        resolve(isAbort || error ? undefined : this.continueIfReady(response));
+        resolve(isAbort || error ? undefined : this.resume(response));
       };
 
       processStream<UIMessageChunk>(
         stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
-          if (this.activeResponse !== response) return;
+          if (this.active !== response) return;
 
           if (currentMessageId) {
             const canonicalMessageIndex = this.messages.findIndex(
@@ -661,6 +670,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           switch (chunk.type) {
             case 'start': {
               currentMessageId = chunk.messageId || this.generateId();
+              response[2] = currentMessageId;
 
               // Check if we're continuing an existing message or creating a new one
               const lastMessage = this.lastMessage;
@@ -793,7 +803,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const toolName =
                 chunk.toolName ?? existingPart?.type?.replace('tool-', '');
               const shouldRepair = toolName
-                ? this.shouldRepairToolInput?.(toolName) ?? true
+                ? this.repairToolInput?.(toolName) ?? true
                 : true;
               const parsedInput = shouldRepair
                 ? parseToolInputDelta(nextRawInput, existingPart?.input)
@@ -846,7 +856,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
                 response[1] = (response[1] || 0) + 1;
-                this.toolCallResponses.set(chunk.toolCallId, response);
+                this.calls.set(chunk.toolCallId, response);
 
                 try {
                   const result = this.onToolCall({
