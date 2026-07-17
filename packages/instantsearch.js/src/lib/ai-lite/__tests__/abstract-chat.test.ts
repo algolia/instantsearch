@@ -1008,6 +1008,45 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.sendMessages).toHaveBeenCalledTimes(1);
     });
 
+    it('settles when onToolCall synchronously stops, clears and returns a result', async () => {
+      let chat!: TestChat;
+      const onError = jest.fn();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }) => {
+          chat.stop();
+          chat.messages = [];
+          return chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          });
+        },
+        onError,
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      await expect(
+        chat.sendMessage({ text: 'search' })
+      ).resolves.toBeUndefined();
+      expect(setup.state.messages).toEqual([]);
+      expect(setup.state.status).toBe('ready');
+      expect(onError).not.toHaveBeenCalled();
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
     it('commits a reused toolCallId to its owning assistant message', async () => {
       let chat!: TestChat;
       const onFinish = jest.fn();
@@ -1097,6 +1136,69 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         state: 'output-available',
         output: { owner: 'new' },
       });
+    });
+
+    it('rejects overlapping response ownership for a reused toolCallId', async () => {
+      let submitOldResult!: () => Promise<void>;
+      const onError = jest.fn();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-old'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'old' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-new'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'new' },
+            },
+            finishChunk(),
+          ],
+        ],
+        onToolCall: ({ toolCall }) => {
+          submitOldResult ??= () =>
+            setup.chat.addToolResult({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { owner: 'old' },
+            });
+        },
+        onError,
+        sendAutomaticallyWhen,
+      });
+
+      await setup.chat.sendMessage({ text: 'first search' });
+      await setup.chat.sendMessage({ text: 'second search' });
+      await submitOldResult();
+
+      const oldMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-old'
+      );
+      const newMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-new'
+      );
+      expect(oldMessage?.parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'old' },
+      });
+      expect(newMessage?.parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'new' },
+      });
+      expect(setup.state.status).toBe('error');
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
     });
 
     it('quietly ignores an unknown toolCallId', async () => {

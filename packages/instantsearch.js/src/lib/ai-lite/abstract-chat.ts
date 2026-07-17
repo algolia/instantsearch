@@ -924,8 +924,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               // Trigger onToolCall callback only for client-executed tools
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
+                const existingOwner = this.responseByToolCallId.get(
+                  chunk.toolCallId
+                );
+                if (existingOwner && existingOwner !== response) {
+                  // Neither response may continue once ownership is ambiguous.
+                  existingOwner.didEvaluateContinuation = true;
+                  failToolCall(
+                    new Error(
+                      `Tool call "${chunk.toolCallId}" is already owned by another response.`
+                    )
+                  );
+                  break;
+                }
+
                 response.requiredToolCallIds.add(chunk.toolCallId);
                 this.responseByToolCallId.set(chunk.toolCallId, response);
+                response.pendingToolCallbacks++;
 
                 try {
                   const result = this.onToolCall({
@@ -937,7 +952,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     } as InferUIMessageToolCall<TUIMessage>,
                   });
                   if (result) {
-                    response.pendingToolCallbacks++;
                     response.returnedToolCallbacks.push(
                       Promise.resolve(result)
                         .catch(failToolCall)
@@ -946,9 +960,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                           this.pruneDetachedResponse(response);
                         })
                     );
+                  } else {
+                    response.pendingToolCallbacks--;
+                    this.pruneDetachedResponse(response);
                   }
                 } catch (error) {
+                  response.pendingToolCallbacks--;
                   failToolCall(error);
+                  this.pruneDetachedResponse(response);
                 }
               }
               break;
