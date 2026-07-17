@@ -375,6 +375,55 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       });
     });
 
+    it('passes the canonical delayed tool result to onFinish after the stream closes', async () => {
+      let chat!: TestChat;
+      const toolCallStarted = deferred<undefined>();
+      const releaseToolResult = deferred<undefined>();
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: async ({ toolCall }) => {
+          toolCallStarted.resolve(undefined);
+          await releaseToolResult.promise;
+          await chat.addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: ['delayed'] },
+          });
+        },
+        onFinish,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search for hello' });
+      await toolCallStarted.promise;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      releaseToolResult.resolve(undefined);
+      await send;
+
+      const assistant = setup.state.messages.find(
+        (message) => message.role === 'assistant'
+      );
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: ['delayed'] },
+      });
+      expect(setup.state.status).toBe('ready');
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({ message: assistant })
+      );
+    });
+
     it('does not let later input chunks downgrade a committed tool result', async () => {
       let chat!: TestChat;
       const onFinish = jest.fn();

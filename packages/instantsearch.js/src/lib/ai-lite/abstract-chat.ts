@@ -596,6 +596,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       currentMessage = { ...currentMessage!, parts } as TUIMessage;
       this.state.replaceMessage(currentMessageIndex, currentMessage);
     };
+    const getCanonicalMessage = (): TUIMessage | undefined =>
+      response[2]
+        ? this.messages.find((message) => message.id === response[2]) ??
+          currentMessage
+        : currentMessage;
     const failToolCall = (reason: unknown): void => {
       if (response[1]! < 0) return;
       const error =
@@ -607,9 +612,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         this.active = null;
         this.handleError(error);
       }
-      if (this.onFinish && currentMessage) {
+      const canonicalMessage = getCanonicalMessage();
+      if (this.onFinish && canonicalMessage) {
         this.onFinish({
-          message: currentMessage,
+          message: canonicalMessage,
           messages: this.messages,
           isAbort: false,
           isDisconnect: false,
@@ -639,9 +645,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           }
         }
 
-        if (this.onFinish && currentMessage) {
+        const canonicalMessage = getCanonicalMessage();
+        if (this.onFinish && canonicalMessage) {
           this.onFinish({
-            message: currentMessage,
+            message: canonicalMessage,
             messages: this.messages,
             isAbort,
             isDisconnect: !!error && !isAbort,

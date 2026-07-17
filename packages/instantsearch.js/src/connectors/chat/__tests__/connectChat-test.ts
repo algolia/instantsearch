@@ -652,6 +652,47 @@ describe('connectChat', () => {
       );
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
+
+    it('supports returning the injected addToolResult from a configured tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'hello' },
+          },
+          { type: 'finish' },
+        ])
+      );
+      const onToolCall = jest.fn(({ addToolResult }) =>
+        addToolResult({ output: { hits: ['hello'] } })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen: () => false,
+        tools: { search: { onToolCall } },
+      });
+
+      await expect(
+        widget.chatInstance.sendMessage({ text: 'search for hello' })
+      ).resolves.toBeUndefined();
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.role === 'assistant'
+      );
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(assistant?.parts[0]).toMatchObject({
+        type: 'tool-search',
+        toolCallId: 'call-1',
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('default chat instance', () => {
