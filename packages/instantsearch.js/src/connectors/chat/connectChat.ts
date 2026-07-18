@@ -19,6 +19,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
+import type { ResponseScopedOnToolCallCallback } from '../../lib/ai-lite/abstract-chat';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -45,11 +46,6 @@ import type {
   ClientSideTools,
   ClientSideTool,
 } from 'instantsearch-ui-components';
-
-type ResponseScopedOnToolCallCallback<TUiMessage extends UIMessage> = (
-  options: Parameters<NonNullable<ChatInitAi<TUiMessage>['onToolCall']>>[0],
-  addToolResult?: AbstractChat<TUiMessage>['addToolResult']
-) => ReturnType<NonNullable<ChatInitAi<TUiMessage>['onToolCall']>>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -620,7 +616,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        }) as ResponseScopedOnToolCallCallback<TUiMessage>,
+        }) satisfies ResponseScopedOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 

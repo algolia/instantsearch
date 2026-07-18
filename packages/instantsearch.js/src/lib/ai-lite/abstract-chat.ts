@@ -19,6 +19,7 @@ import type {
   InferUIMessageMetadata,
   InferUIMessageToolCall,
   InferUIMessageTools,
+  ProviderMetadata,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -50,9 +51,10 @@ type ToolResultSubmission<TUIMessage extends UIMessage> = <
   output: InferUIMessageTools<TUIMessage>[TTool]['output'];
 }) => Promise<void>;
 
-type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
+/** @internal */
+export type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
   options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
-  addToolResult?: ToolResultSubmission<TUIMessage>
+  addToolResult: ToolResultSubmission<TUIMessage>
 ) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
 
 const tryParseJson = (value: string): unknown | undefined => {
@@ -559,6 +561,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       output: InferUIMessageTools<TUIMessage>[TTool]['output'];
     }
   ): Promise<void> {
+    if (response?.isRetired) return Promise.resolve();
+
     const commitResult = (): Promise<void> => {
       if (!this.commit(toolCallId, output, response?.messageId)) {
         return Promise.resolve();
@@ -711,6 +715,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       parts[index < 0 ? parts.length : index] = part;
       currentMessage = { ...currentMessage!, parts } as TUIMessage;
       this.state.replaceMessage(currentMessageIndex, currentMessage);
+    };
+    const mergeCallProviderMetadata = (
+      toolCallId: string,
+      metadata?: ProviderMetadata
+    ): void => {
+      const toolIndex = findToolPart(toolCallId);
+      if (toolIndex < 0) return;
+
+      const existingPart = currentMessage!.parts[toolIndex] as any;
+      setPart(toolIndex, {
+        ...existingPart,
+        callProviderMetadata: metadata ?? existingPart.callProviderMetadata,
+      });
     };
     const getCanonicalMessage = (): TUIMessage | undefined =>
       response.messageId
@@ -1013,9 +1030,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 );
                 if (existingOwner && existingOwner !== response) {
                   const canTransferOwnership =
-                    existingOwner.outcome === 'succeeded' &&
-                    existingOwner.resolvedToolCallIds.has(chunk.toolCallId) &&
-                    existingOwner.pendingToolCallbacks === 0;
+                    existingOwner.isRetired ||
+                    (existingOwner.outcome === 'succeeded' &&
+                      existingOwner.resolvedToolCallIds.has(chunk.toolCallId) &&
+                      existingOwner.pendingToolCallbacks === 0);
                   if (!canTransferOwnership) {
                     // Neither response may continue once ownership is ambiguous.
                     existingOwner.didEvaluateContinuation = true;
@@ -1026,6 +1044,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     );
                     break;
                   }
+                  existingOwner.isRetired = true;
                   existingOwner.didEvaluateContinuation = true;
                 }
 
@@ -1116,8 +1135,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'tool-output-available': {
               if (!currentMessage) break;
-              if (response.resolvedToolCallIds.has(chunk.toolCallId)) break;
-
               const toolIndex = findToolPart(chunk.toolCallId);
 
               if (toolIndex >= 0) {
@@ -1125,6 +1142,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 delete toolRawOutputByCallId[chunk.toolCallId];
 
                 const existingPart = currentMessage.parts[toolIndex] as any;
+                if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                  mergeCallProviderMetadata(
+                    chunk.toolCallId,
+                    chunk.callProviderMetadata
+                  );
+                  break;
+                }
+
                 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
                 const { rawOutput: _ignored, ...rest } = existingPart;
                 setPart(toolIndex, {
@@ -1143,7 +1168,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'tool-input-error': {
               if (!currentMessage) break;
-              if (response.resolvedToolCallIds.has(chunk.toolCallId)) break;
+              if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                mergeCallProviderMetadata(
+                  chunk.toolCallId,
+                  chunk.providerMetadata
+                );
+                break;
+              }
               delete toolRawInputByCallId[chunk.toolCallId];
               delete toolRawOutputByCallId[chunk.toolCallId];
 
@@ -1184,7 +1215,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'tool-output-error': {
               if (!currentMessage) break;
-              if (response.resolvedToolCallIds.has(chunk.toolCallId)) break;
+              if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                mergeCallProviderMetadata(
+                  chunk.toolCallId,
+                  chunk.providerMetadata
+                );
+                break;
+              }
 
               const toolIndex = findToolPart(chunk.toolCallId);
               if (toolIndex < 0) break;

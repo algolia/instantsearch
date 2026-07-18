@@ -39,6 +39,12 @@ class InMemoryChatState implements ChatState<UIMessage> {
 
 class TestChat extends AbstractChat<UIMessage> {}
 
+class ConcurrentTestChat extends TestChat {
+  startResponse(stream: ReadableStream<UIMessageChunk>): Promise<void> {
+    return (this as any).consume(() => Promise.resolve(stream));
+  }
+}
+
 /**
  * Builds a `ReadableStream<Uint8Array>` from raw SSE text, flushing one line
  * at a time (one `Uint8Array` per line). This mimics how a server flushes
@@ -1434,6 +1440,214 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.sendMessages).toHaveBeenCalledTimes(1);
     });
 
+    it('ignores a public result routed through a retired response', async () => {
+      const callbackStarted = deferred<undefined>();
+      const releaseCallback = deferred<undefined>();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'old' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: async () => {
+          callbackStarted.resolve(undefined);
+          await releaseCallback.promise;
+        },
+        sendAutomaticallyWhen,
+      });
+
+      const send = setup.chat.sendMessage({ text: 'old request' });
+      await callbackStarted.promise;
+
+      setup.chat.messages = [];
+      setup.chat.messages = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { q: 'restored' },
+            },
+          ],
+        },
+      ];
+
+      await setup.chat.addToolResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'old' },
+      });
+
+      expect(setup.chat.messages[0].parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'restored' },
+      });
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+
+      releaseCallback.resolve(undefined);
+      await send;
+      expect(setup.state.status).toBe('ready');
+      expect(setup.state.error).toBeUndefined();
+    });
+
+    it('lets a newer response replace a retired routing owner', async () => {
+      const callbackStarted = deferred<undefined>();
+      const releaseCallback = deferred<undefined>();
+      const onError = jest.fn();
+      let callbackCount = 0;
+      const state = new InMemoryChatState();
+      const sendMessages = jest.fn(() =>
+        Promise.resolve(
+          chunksToStream([
+            startChunk('assistant-old'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'old' },
+            },
+            finishChunk(),
+          ])
+        )
+      );
+      const onToolCall = (
+        { toolCall }: { toolCall: any },
+        addToolResult?: TestChat['addToolResult']
+      ): void | Promise<void> => {
+        callbackCount++;
+        if (callbackCount === 1) {
+          callbackStarted.resolve(undefined);
+          return releaseCallback.promise;
+        }
+        return addToolResult!({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: { owner: 'new' },
+        });
+      };
+      const chat = new ConcurrentTestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: sendMessages as any,
+          reconnectToStream: jest.fn(() => Promise.resolve(null)) as any,
+        },
+        onError,
+        onToolCall,
+        sendAutomaticallyWhen: () => false,
+      });
+
+      const oldSend = chat.sendMessage({ text: 'old request' });
+      await callbackStarted.promise;
+      chat.messages = [];
+
+      await chat.startResponse(
+        chunksToStream([
+          startChunk('assistant-new'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'new' },
+          },
+          finishChunk(),
+        ])
+      );
+
+      expect(onError).not.toHaveBeenCalled();
+      expect(state.messages[0].parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'new' },
+      });
+
+      releaseCallback.resolve(undefined);
+      await oldSend;
+      expect(state.status).toBe('ready');
+    });
+
+    it('makes a transferred routing owner inert after its message is removed', async () => {
+      let addFirstResult!: TestChat['addToolResult'];
+      let callbackCount = 0;
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-old'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'old' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-new'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'new' },
+            },
+            finishChunk(),
+          ],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          callbackCount++;
+          if (callbackCount === 1) {
+            addFirstResult = addToolResult!;
+          }
+          return addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: callbackCount === 1 ? 'old' : 'new' },
+          });
+        },
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'old request' });
+      await setup.chat.sendMessage({ text: 'new request' });
+
+      setup.chat.messages = setup.chat.messages.filter(
+        (message) => message.id !== 'assistant-old'
+      );
+      setup.chat.messages = [
+        ...setup.chat.messages,
+        {
+          id: 'assistant-old',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { q: 'restored' },
+            },
+          ],
+        },
+      ];
+
+      await addFirstResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'stale' },
+      });
+
+      expect(setup.chat.messages.at(-1)?.parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'restored' },
+      });
+    });
+
     it('cleans a retired owner when the same message id is restored', async () => {
       let chat!: TestChat;
       let settleFirstToolCall!: () => Promise<void>;
@@ -1974,6 +2188,121 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect((part as any).preliminary).toBeUndefined();
       expect((part as any).rawOutput).toBeUndefined();
       expect(setup.state.status).toBe('ready');
+    });
+
+    it('merges later server metadata without replacing a committed client result', async () => {
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          {
+            type: 'tool-output-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            output: { owner: 'server' },
+            callProviderMetadata: { openai: { itemId: 'fc_123' } },
+            preliminary: true,
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: 'client' },
+          }),
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      const part = setup.state.messages.find(
+        (message) => message.id === 'assistant-1'
+      )?.parts[0] as any;
+      expect(part).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'client' },
+        callProviderMetadata: { openai: { itemId: 'fc_123' } },
+      });
+      expect(part.preliminary).toBeUndefined();
+    });
+
+    it('merges metadata from a later input error without replacing a committed client result', async () => {
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          {
+            type: 'tool-input-error',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            errorText: 'late input error',
+            providerMetadata: { openai: { itemId: 'fc_input' } },
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: 'client' },
+          }),
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      expect(setup.state.messages[1].parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'client' },
+        callProviderMetadata: { openai: { itemId: 'fc_input' } },
+      });
+    });
+
+    it('merges metadata from a later output error without replacing a committed client result', async () => {
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          {
+            type: 'tool-output-error',
+            toolCallId: 'call-1',
+            errorText: 'late output error',
+            providerMetadata: { openai: { itemId: 'fc_output' } },
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: 'client' },
+          }),
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      expect(setup.state.messages[1].parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'client' },
+        callProviderMetadata: { openai: { itemId: 'fc_output' } },
+      });
     });
 
     it('continues once after mixed server and client tool results', async () => {
