@@ -41,6 +41,19 @@ type ResponseRecord = {
   didEvaluateContinuation: boolean;
 };
 
+type ToolResultSubmission<TUIMessage extends UIMessage> = <
+  TTool extends keyof InferUIMessageTools<TUIMessage>
+>(options: {
+  tool: TTool;
+  toolCallId: string;
+  output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+}) => Promise<void>;
+
+type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
+  options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
+  addToolResult?: ToolResultSubmission<TUIMessage>
+) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
+
 const tryParseJson = (value: string): unknown | undefined => {
   try {
     return JSON.parse(value);
@@ -148,7 +161,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private readonly transport?: ChatTransport<TUIMessage>;
   private onError?: ChatOnErrorCallback;
-  private onToolCall?: ChatOnToolCallCallback<TUIMessage>;
+  private onToolCall?: ResponseScopedOnToolCallCallback<TUIMessage>;
   private onFinish?: ChatOnFinishCallback<TUIMessage>;
   private onData?: ChatOnDataCallback<TUIMessage>;
   private sendAutomaticallyWhen?: (options: {
@@ -430,17 +443,24 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const part = message.parts[partIndex];
     if (
       !('state' in part) ||
-      part.state === 'output-available' ||
+      (part.state === 'output-available' && !part.preliminary) ||
       part.state === 'output-error'
     ) {
       return false;
     }
+    const {
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      preliminary: _ignoredPreliminary,
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      rawOutput: _ignoredRawOutput,
+      ...committedPart
+    } = part as any;
     const updatedParts = [...message.parts];
     updatedParts[partIndex] = {
-      ...part,
+      ...committedPart,
       state: 'output-available' as const,
       output,
-    } as any;
+    };
 
     this.state.replaceMessage(messageIndex, {
       ...message,
@@ -498,18 +518,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     });
   }
 
-  /**
-   * Add a tool result for a tool call.
-   */
-  addToolResult = <TTool extends keyof InferUIMessageTools<TUIMessage>>({
-    toolCallId,
-    output,
-  }: {
-    tool: TTool;
-    toolCallId: string;
-    output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-  }): Promise<void> => {
-    const response = this.responseByToolCallId.get(toolCallId);
+  private submitToolResult<TTool extends keyof InferUIMessageTools<TUIMessage>>(
+    response: ResponseRecord | undefined,
+    {
+      toolCallId,
+      output,
+    }: {
+      tool: TTool;
+      toolCallId: string;
+      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    }
+  ): Promise<void> {
     const commitResult = (): Promise<void> => {
       if (!this.commit(toolCallId, output, response?.messageId)) {
         return Promise.resolve();
@@ -531,6 +550,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
 
     return this.jobExecutor.run(commitResult);
+  }
+
+  /**
+   * Add a tool result for a tool call.
+   */
+  addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
+    return this.submitToolResult(
+      this.responseByToolCallId.get(options.toolCallId),
+      options
+    );
   };
 
   /**
@@ -690,6 +719,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         isDisconnect: false,
         isError: true,
       });
+    };
+    const acceptServerToolResult = (toolCallId: string): void => {
+      if (response.requiredToolCallIds.has(toolCallId)) {
+        response.resolvedToolCallIds.add(toolCallId);
+      }
     };
 
     return new Promise((resolve) => {
@@ -928,14 +962,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   chunk.toolCallId
                 );
                 if (existingOwner && existingOwner !== response) {
-                  // Neither response may continue once ownership is ambiguous.
+                  const canTransferOwnership =
+                    existingOwner.outcome === 'succeeded' &&
+                    existingOwner.resolvedToolCallIds.has(chunk.toolCallId) &&
+                    existingOwner.pendingToolCallbacks === 0;
+                  if (!canTransferOwnership) {
+                    // Neither response may continue once ownership is ambiguous.
+                    existingOwner.didEvaluateContinuation = true;
+                    failToolCall(
+                      new Error(
+                        `Tool call "${chunk.toolCallId}" is already owned by another response.`
+                      )
+                    );
+                    break;
+                  }
                   existingOwner.didEvaluateContinuation = true;
-                  failToolCall(
-                    new Error(
-                      `Tool call "${chunk.toolCallId}" is already owned by another response.`
-                    )
-                  );
-                  break;
                 }
 
                 response.requiredToolCallIds.add(chunk.toolCallId);
@@ -943,14 +984,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 response.pendingToolCallbacks++;
 
                 try {
-                  const result = this.onToolCall({
-                    toolCall: {
-                      toolName: chunk.toolName,
-                      toolCallId: chunk.toolCallId,
-                      input: chunk.input,
-                      dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
-                    } as InferUIMessageToolCall<TUIMessage>,
-                  });
+                  const result = this.onToolCall(
+                    {
+                      toolCall: {
+                        toolName: chunk.toolName,
+                        toolCallId: chunk.toolCallId,
+                        input: chunk.input,
+                        dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                      } as InferUIMessageToolCall<TUIMessage>,
+                    },
+                    (options) => this.submitToolResult(response, options)
+                  );
                   if (result) {
                     response.returnedToolCallbacks.push(
                       Promise.resolve(result)
@@ -1037,6 +1081,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   callProviderMetadata: chunk.callProviderMetadata,
                   preliminary: chunk.preliminary,
                 });
+                if (!chunk.preliminary) {
+                  acceptServerToolResult(chunk.toolCallId);
+                }
               }
               break;
             }
@@ -1078,6 +1125,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               };
 
               setPart(toolIndex, nextToolPart);
+              acceptServerToolResult(chunk.toolCallId);
               break;
             }
 
@@ -1110,6 +1158,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 callProviderMetadata:
                   chunk.providerMetadata ?? rest.callProviderMetadata,
               });
+              acceptServerToolResult(chunk.toolCallId);
               break;
             }
 

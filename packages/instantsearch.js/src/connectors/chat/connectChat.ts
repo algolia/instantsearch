@@ -46,6 +46,11 @@ import type {
   ClientSideTool,
 } from 'instantsearch-ui-components';
 
+type ResponseScopedOnToolCallCallback<TUiMessage extends UIMessage> = (
+  options: Parameters<NonNullable<ChatInitAi<TUiMessage>['onToolCall']>>[0],
+  addToolResult?: AbstractChat<TUiMessage>['addToolResult']
+) => ReturnType<NonNullable<ChatInitAi<TUiMessage>['onToolCall']>>;
+
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
   connector: true,
@@ -572,7 +577,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall({ toolCall }) {
+        onToolCall: ((
+          { toolCall },
+          submitToolResult = _chatInstance.addToolResult
+        ) => {
           let tool = tools[toolCall.toolName];
 
           // Compatibility shim with Algolia MCP Server search tool
@@ -590,7 +598,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return submitToolResult({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -599,7 +607,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           if (tool.onToolCall) {
             const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
+              submitToolResult({
                 output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
@@ -612,7 +620,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        },
+        }) as ResponseScopedOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
