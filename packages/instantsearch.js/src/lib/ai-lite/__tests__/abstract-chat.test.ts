@@ -2080,6 +2080,172 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.state.status).toBe('ready');
     });
 
+    it('keeps unrelated tool results active when another call id transfers', async () => {
+      let submitPendingOldResult!: TestChat['addToolResult'];
+      const sendAutomaticallyWhen = jest.fn(
+        ({ messages }: { messages: UIMessage[] }) => {
+          const oldMessage = messages.find(
+            (message) => message.id === 'assistant-old'
+          );
+          const pendingPart = oldMessage?.parts.find(
+            (part) => 'toolCallId' in part && part.toolCallId === 'call-pending'
+          );
+
+          return pendingPart &&
+            'state' in pendingPart &&
+            pendingPart.state === 'output-available'
+            ? true
+            : false;
+        }
+      );
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-old'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-reused',
+              input: { q: 'old' },
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-pending',
+              input: { q: 'pending' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-new'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-reused',
+              input: { q: 'new' },
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-continuation'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          if (toolCall.toolCallId === 'call-pending') {
+            submitPendingOldResult = addToolResult!;
+            return;
+          }
+
+          return addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: toolCall.input.q },
+          });
+        },
+        sendAutomaticallyWhen,
+      });
+
+      await setup.chat.sendMessage({ text: 'first search' });
+      await setup.chat.sendMessage({ text: 'second search' });
+      await submitPendingOldResult({
+        tool: 'search',
+        toolCallId: 'call-pending',
+        output: { owner: 'old' },
+      });
+
+      const oldMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-old'
+      );
+      expect(
+        oldMessage?.parts.find(
+          (part) => 'toolCallId' in part && part.toolCallId === 'call-pending'
+        )
+      ).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'old' },
+      });
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(2);
+      expect(setup.sendMessages).toHaveBeenCalledTimes(3);
+      expect(setup.state.status).toBe('ready');
+    });
+
+    it('ignores an ambiguous public result after call ownership transfers', async () => {
+      let submitOldPublicResult!: () => Promise<void>;
+      let submitNewScopedResult!: TestChat['addToolResult'];
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-old'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'old' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-new'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'new' },
+            },
+            finishChunk(),
+          ],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          if (toolCall.input.q === 'old') {
+            submitOldPublicResult = () =>
+              setup.chat.addToolResult({
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+                output: { owner: 'old' },
+              });
+            return addToolResult!({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { owner: 'old' },
+            });
+          }
+
+          submitNewScopedResult = addToolResult!;
+          return;
+        },
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'first search' });
+      await setup.chat.sendMessage({ text: 'second search' });
+      await submitOldPublicResult();
+
+      const newMessage = setup.state.messages.find(
+        (message) => message.id === 'assistant-new'
+      );
+      expect(newMessage?.parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'new' },
+      });
+
+      await submitNewScopedResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'new' },
+      });
+
+      expect(newMessage?.parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { q: 'new' },
+      });
+      expect(
+        setup.state.messages.find((message) => message.id === 'assistant-new')
+          ?.parts[0]
+      ).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'new' },
+      });
+      expect(setup.state.status).toBe('ready');
+    });
+
     it('settles an awaited client result after a server result for the same call', async () => {
       const toolCallStarted = deferred<undefined>();
       const releaseToolResult = deferred<undefined>();

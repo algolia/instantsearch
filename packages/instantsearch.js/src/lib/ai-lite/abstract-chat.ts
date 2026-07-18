@@ -173,7 +173,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private shouldRepairToolInput?: (toolName: string) => boolean;
 
   private activeResponse: ResponseRecord | null = null;
-  private responseByToolCallId = new Map<string, ResponseRecord>();
+  private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
+  private ambiguousPublicToolCallIds = new Set<string>();
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -248,7 +249,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   set messages(messages: TUIMessage[]) {
     this.state.messages = messages;
     const retainedMessageIds = new Set(messages.map((message) => message.id));
-    const responses = new Set(this.responseByToolCallId.values());
+    const responses = new Set<ResponseRecord>();
+    this.responsesByToolCallId.forEach((owners) => {
+      owners.forEach((response) => responses.add(response));
+    });
     if (this.activeResponse) {
       responses.add(this.activeResponse);
     }
@@ -543,9 +547,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     // addToolResult calls settle directly instead of entering the executor.
     if (response.pendingToolCallbacks > 0) return;
 
-    this.responseByToolCallId.forEach((owner, toolCallId) => {
-      if (owner === response) {
-        this.responseByToolCallId.delete(toolCallId);
+    this.responsesByToolCallId.forEach((owners, toolCallId) => {
+      owners.delete(response);
+      if (owners.size === 0) {
+        this.responsesByToolCallId.delete(toolCallId);
+        this.ambiguousPublicToolCallIds.delete(toolCallId);
       }
     });
   }
@@ -590,7 +596,15 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * Add a tool result for a tool call.
    */
   addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
-    const response = this.responseByToolCallId.get(options.toolCallId);
+    // A public result only carries a tool call id, so it cannot identify an
+    // owner after that id has been reused by multiple retained responses.
+    if (this.ambiguousPublicToolCallIds.has(options.toolCallId)) {
+      return Promise.resolve();
+    }
+
+    const owners = this.responsesByToolCallId.get(options.toolCallId);
+    const response =
+      owners?.size === 1 ? owners.values().next().value : undefined;
     const hasRestoredToolCall = this.messages.some((message) =>
       message.parts.some(
         (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
@@ -1025,18 +1039,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               // Trigger onToolCall callback only for client-executed tools
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
-                const existingOwner = this.responseByToolCallId.get(
-                  chunk.toolCallId
+                const owners =
+                  this.responsesByToolCallId.get(chunk.toolCallId) ??
+                  new Set<ResponseRecord>();
+                const existingOwners = Array.from(owners).filter(
+                  (owner) => owner !== response
                 );
-                if (existingOwner && existingOwner !== response) {
-                  const canTransferOwnership =
-                    existingOwner.isRetired ||
-                    (existingOwner.outcome === 'succeeded' &&
-                      existingOwner.resolvedToolCallIds.has(chunk.toolCallId) &&
-                      existingOwner.pendingToolCallbacks === 0);
-                  if (!canTransferOwnership) {
+                if (existingOwners.length > 0) {
+                  const conflictingOwner = existingOwners.find(
+                    (owner) =>
+                      !owner.isRetired &&
+                      (owner.outcome !== 'succeeded' ||
+                        !owner.resolvedToolCallIds.has(chunk.toolCallId) ||
+                        owner.pendingToolCallbacks > 0)
+                  );
+                  if (conflictingOwner) {
                     // Neither response may continue once ownership is ambiguous.
-                    existingOwner.didEvaluateContinuation = true;
+                    conflictingOwner.didEvaluateContinuation = true;
                     failToolCall(
                       new Error(
                         `Tool call "${chunk.toolCallId}" is already owned by another response.`
@@ -1044,12 +1063,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     );
                     break;
                   }
-                  existingOwner.isRetired = true;
-                  existingOwner.didEvaluateContinuation = true;
+                  this.ambiguousPublicToolCallIds.add(chunk.toolCallId);
                 }
 
                 response.requiredToolCallIds.add(chunk.toolCallId);
-                this.responseByToolCallId.set(chunk.toolCallId, response);
+                owners.add(response);
+                this.responsesByToolCallId.set(chunk.toolCallId, owners);
                 response.pendingToolCallbacks++;
 
                 try {
