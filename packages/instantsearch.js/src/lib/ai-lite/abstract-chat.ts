@@ -33,6 +33,7 @@ type ResponseRecord = {
   abortController: AbortController;
   messageId?: string;
   outcome: ResponseOutcome;
+  isRetired: boolean;
   requiredToolCallIds: Set<string>;
   resolvedToolCallIds: Set<string>;
   returnedToolCallbacks: Array<Promise<void>>;
@@ -245,8 +246,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   set messages(messages: TUIMessage[]) {
     this.state.messages = messages;
     const retainedMessageIds = new Set(messages.map((message) => message.id));
-    this.responseByToolCallId.forEach((response) => {
-      if (!response.messageId || !retainedMessageIds.has(response.messageId)) {
+    const responses = new Set(this.responseByToolCallId.values());
+    if (this.activeResponse) {
+      responses.add(this.activeResponse);
+    }
+    responses.forEach((response) => {
+      if (response.messageId && !retainedMessageIds.has(response.messageId)) {
         this.pruneDetachedResponse(response);
       }
     });
@@ -471,7 +476,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private continueResponse(response?: ResponseRecord): Promise<void> {
     if (response) {
+      this.pruneDetachedResponse(response);
       if (
+        response.isRetired ||
         response.outcome !== 'succeeded' ||
         response.requiredToolCallIds.size === 0 ||
         response.resolvedToolCallIds.size !==
@@ -493,23 +500,46 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         })
       )
       .then((shouldSend) => {
+        if (response) {
+          this.pruneDetachedResponse(response);
+          if (response.isRetired) return undefined;
+        }
         return shouldSend
           ? this.makeRequest({ trigger: 'submit-message' })
           : undefined;
       })
       .catch((error) => {
+        if (response) {
+          this.pruneDetachedResponse(response);
+          if (response.isRetired) return;
+        }
         this.handleError(error as Error);
       });
   }
 
   private pruneDetachedResponse(response: ResponseRecord): void {
     if (
-      response.pendingToolCallbacks > 0 ||
-      (response.messageId &&
-        this.messages.some((message) => message.id === response.messageId))
+      !response.messageId ||
+      this.messages.some((message) => message.id === response.messageId)
     ) {
       return;
     }
+
+    if (!response.isRetired) {
+      response.isRetired = true;
+      response.didEvaluateContinuation = true;
+
+      if (this.activeResponse === response) {
+        response.outcome = 'aborted';
+        this.activeResponse = null;
+        response.abortController.abort();
+        this.setStatus({ status: 'ready' });
+      }
+    }
+
+    // Keep a routing tombstone while a callback is running so public
+    // addToolResult calls settle directly instead of entering the executor.
+    if (response.pendingToolCallbacks > 0) return;
 
     this.responseByToolCallId.forEach((owner, toolCallId) => {
       if (owner === response) {
@@ -556,10 +586,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * Add a tool result for a tool call.
    */
   addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
-    return this.submitToolResult(
-      this.responseByToolCallId.get(options.toolCallId),
-      options
+    const response = this.responseByToolCallId.get(options.toolCallId);
+    const hasRestoredToolCall = this.messages.some((message) =>
+      message.parts.some(
+        (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
+      )
     );
+
+    if (!response && !hasRestoredToolCall) return Promise.resolve();
+
+    return this.submitToolResult(response, options);
   };
 
   /**
@@ -616,6 +652,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const response: ResponseRecord = {
       abortController: new AbortController(),
       outcome: 'active',
+      isRetired: false,
       requiredToolCallIds: new Set(),
       resolvedToolCallIds: new Set(),
       returnedToolCallbacks: [],
@@ -689,7 +726,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       isDisconnect: boolean;
       isError: boolean;
     }): void => {
-      if (response.didNotifyFinish) return;
+      this.pruneDetachedResponse(response);
+      if (response.isRetired || response.didNotifyFinish) return;
       response.didNotifyFinish = true;
 
       const canonicalMessage = getCanonicalMessage();
@@ -758,16 +796,18 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
-          if (this.activeResponse !== response) return;
+          if (this.activeResponse !== response || response.isRetired) return;
 
           if (currentMessageId) {
             const canonicalMessageIndex = this.messages.findIndex(
               (message) => message.id === currentMessageId
             );
-            if (canonicalMessageIndex >= 0) {
-              currentMessageIndex = canonicalMessageIndex;
-              currentMessage = this.messages[canonicalMessageIndex];
+            if (canonicalMessageIndex === -1) {
+              this.pruneDetachedResponse(response);
+              return;
             }
+            currentMessageIndex = canonicalMessageIndex;
+            currentMessage = this.messages[canonicalMessageIndex];
           }
 
           switch (chunk.type) {

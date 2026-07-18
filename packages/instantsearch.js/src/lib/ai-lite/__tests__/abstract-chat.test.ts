@@ -1050,6 +1050,166 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.sendMessages).toHaveBeenCalledTimes(1);
     });
 
+    it('does not let a detached response overwrite its replacement message', async () => {
+      let chat!: TestChat;
+      const replacementMessage: UIMessage = {
+        id: 'assistant-replacement',
+        role: 'assistant',
+        parts: [{ type: 'text', text: 'replacement', state: 'done' }],
+      };
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-detached'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'text-start', id: 'text-1' },
+          { type: 'text-delta', id: 'text-1', delta: 'stale' },
+          finishChunk(),
+        ],
+        onToolCall: () => {
+          chat.messages = [chat.messages[0], replacementMessage];
+        },
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search' });
+
+      expect(setup.state.messages).toEqual([
+        expect.objectContaining({ role: 'user' }),
+        replacementMessage,
+      ]);
+      expect(
+        setup.state.messages.some(
+          (message) => message.id === 'assistant-detached'
+        )
+      ).toBe(false);
+    });
+
+    it('does not continue a response removed by onFinish', async () => {
+      let chat!: TestChat;
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          }),
+        onFinish: () => {
+          chat.messages = [];
+        },
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search' });
+
+      expect(setup.state.messages).toEqual([]);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not continue when its message is removed while the predicate is pending', async () => {
+      let chat!: TestChat;
+      const predicateStarted = deferred<undefined>();
+      const predicateResult = deferred<boolean>();
+      const sendAutomaticallyWhen = jest.fn(() => {
+        predicateStarted.resolve(undefined);
+        return predicateResult.promise;
+      });
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          }),
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search' });
+      await predicateStarted.promise;
+      chat.messages = [];
+      predicateResult.resolve(true);
+      await send;
+
+      expect(setup.state.messages).toEqual([]);
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not surface a predicate error after its message is removed', async () => {
+      let chat!: TestChat;
+      const predicateStarted = deferred<undefined>();
+      const predicateResult = deferred<boolean>();
+      const sendAutomaticallyWhen = jest.fn(() => {
+        predicateStarted.resolve(undefined);
+        return predicateResult.promise;
+      });
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { ok: true },
+          }),
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search' });
+      await predicateStarted.promise;
+      chat.messages = [];
+      predicateResult.reject(new Error('stale predicate failure'));
+      await send;
+
+      expect(setup.state.messages).toEqual([]);
+      expect(setup.state.status).toBe('ready');
+      expect(setup.state.error).toBeUndefined();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
     it('commits a reused toolCallId to its owning assistant message', async () => {
       let chat!: TestChat;
       const onFinish = jest.fn();
@@ -1453,6 +1613,40 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.state.messages).toEqual([]);
       expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
       expect(setup.sendMessages).not.toHaveBeenCalled();
+    });
+
+    it('settles an unknown public result returned from onToolCall', async () => {
+      let chat!: TestChat;
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: () =>
+          chat.addToolResult({
+            tool: 'search',
+            toolCallId: 'missing',
+            output: { ok: true },
+          }),
+      });
+      chat = setup.chat;
+
+      const outcome = await Promise.race([
+        chat.sendMessage({ text: 'search' }).then(() => 'settled'),
+        new Promise<string>((resolve) =>
+          setTimeout(() => resolve('timed out'), 100)
+        ),
+      ]);
+
+      expect(outcome).toBe('settled');
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
     });
 
     it('does not let a stopped response rejection overwrite the next response', async () => {
