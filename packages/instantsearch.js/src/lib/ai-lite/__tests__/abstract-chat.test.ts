@@ -1210,6 +1210,427 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.sendMessages).toHaveBeenCalledTimes(1);
     });
 
+    it('commits a single fire-and-forget result and settles without hanging', async () => {
+      let chat!: TestChat;
+      const onFinish = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'hello' },
+          },
+          finishChunk(),
+        ],
+        // Fire-and-forget: commit but never return or await the promise.
+        onToolCall: ({ toolCall }, addToolResult) => {
+          void addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: ['hello'] },
+          });
+        },
+        onFinish,
+      });
+      chat = setup.chat;
+
+      const outcome = await Promise.race([
+        chat.sendMessage({ text: 'search for hello' }).then(() => 'settled'),
+        new Promise<string>((resolve) =>
+          setTimeout(() => resolve('timed out'), 100)
+        ),
+      ]);
+
+      expect(outcome).toBe('settled');
+      expect(setup.state.status).toBe('ready');
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps response ownership when messages are rehydrated as fresh objects', async () => {
+      let chat!: TestChat;
+      const submitResults = new Map<string, () => Promise<void>>();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'first' },
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-2',
+              input: { q: 'second' },
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          submitResults.set(toolCall.toolCallId, () =>
+            addToolResult!({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { id: toolCall.toolCallId },
+            })
+          );
+        },
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'search twice' });
+      // True cross-session rehydration: structurally-equal but fresh objects,
+      // so ownership survives only if it is keyed by message id.
+      chat.messages = JSON.parse(JSON.stringify(chat.messages)) as UIMessage[];
+
+      await submitResults.get('call-1')!();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+
+      await submitResults.get('call-2')!();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        output: { id: 'call-1' },
+      });
+      expect(assistantToolPart(setup.state, 'call-2')).toMatchObject({
+        output: { id: 'call-2' },
+      });
+    });
+
+    it('does not let an old response retirement disturb a newer active response', async () => {
+      let chat!: TestChat;
+      let secondController!: ReadableStreamDefaultController<UIMessageChunk>;
+      const setup = createTestSetup({
+        streamFactory: (index) => {
+          if (index === 0) {
+            return chunksToStream([
+              startChunk('assistant-1'),
+              {
+                type: 'tool-input-available',
+                toolName: 'search',
+                toolCallId: 'call-1',
+                input: {},
+              },
+              finishChunk(),
+            ]);
+          }
+          // Second response stays open so it remains the active response.
+          return new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              controller.enqueue(startChunk('assistant-2'));
+              secondController = controller;
+            },
+          });
+        },
+        // Fire-and-forget so call-1 stays owned by the first response.
+        onToolCall: () => {},
+        sendAutomaticallyWhen: () => false,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'first' });
+      const second = chat.sendMessage({ text: 'second' });
+      let guard = 0;
+      while (
+        !setup.state.messages.some((message) => message.id === 'assistant-2') &&
+        guard++ < 500
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+      expect(setup.state.status).toBe('streaming');
+
+      // Detach the first (old) response's message while the second is active.
+      chat.messages = chat.messages.filter(
+        (message) => message.id !== 'assistant-1'
+      );
+
+      // Retiring the old response must not clear or finalize the newer one.
+      expect(setup.state.status).toBe('streaming');
+      expect(
+        setup.state.messages.some((message) => message.id === 'assistant-2')
+      ).toBe(true);
+
+      secondController.enqueue(finishChunk());
+      secondController.close();
+      await second;
+
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(setup.state.error).toBeUndefined();
+    });
+
+    it('settles a tombstoned result after retirement and cleans up ownership', async () => {
+      let chat!: TestChat;
+      let releaseToolResult!: () => Promise<void>;
+      const onError = jest.fn();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        // Returned promise stays pending so the response is held active.
+        onToolCall: ({ toolCall }, addToolResult) =>
+          new Promise<void>((resolve) => {
+            releaseToolResult = async () => {
+              await addToolResult!({
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+                output: { ok: true },
+              });
+              resolve();
+            };
+          }),
+        onError,
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search' });
+      let guard = 0;
+      while (!releaseToolResult && guard++ < 500) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+
+      // Detach the message while the callback is in flight (tombstone kept).
+      chat.messages = [];
+
+      // The in-flight result now routes through the tombstone and settles.
+      await releaseToolResult();
+      await send;
+
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+
+      // Ownership is cleaned up: a later result for the same id is a no-op.
+      await expect(
+        chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { ok: true },
+        })
+      ).resolves.toBeUndefined();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+    });
+
+    it('cleans a retired owner when the same message id is restored', async () => {
+      let chat!: TestChat;
+      let settleFirstToolCall!: () => Promise<void>;
+      let toolCallCount = 0;
+      const onError = jest.fn();
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'first' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-2'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { q: 'second' },
+            },
+            finishChunk(),
+          ],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          toolCallCount++;
+          if (toolCallCount === 1) {
+            return new Promise<void>((resolve) => {
+              settleFirstToolCall = async () => {
+                await addToolResult!({
+                  tool: toolCall.toolName,
+                  toolCallId: toolCall.toolCallId,
+                  output: { owner: 'first' },
+                });
+                resolve();
+              };
+            });
+          }
+
+          return addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { owner: 'second' },
+          });
+        },
+        onError,
+        sendAutomaticallyWhen: () => false,
+      });
+      chat = setup.chat;
+
+      const firstSend = chat.sendMessage({ text: 'first search' });
+      let guard = 0;
+      while (!settleFirstToolCall && guard++ < 500) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+
+      chat.messages = chat.messages.filter(
+        (message) => message.id !== 'assistant-1'
+      );
+      chat.messages = chat.messages.concat({
+        id: 'assistant-1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: 'restored', state: 'done' }],
+      });
+
+      await settleFirstToolCall();
+      await firstSend;
+      await chat.sendMessage({ text: 'second search' });
+
+      expect(onError).not.toHaveBeenCalled();
+      expect(setup.state.status).toBe('ready');
+      const secondAssistant = setup.state.messages.find(
+        (message) => message.id === 'assistant-2'
+      );
+      const secondToolPart = secondAssistant?.parts.find(
+        (part) => 'toolCallId' in part && part.toolCallId === 'call-1'
+      );
+      expect(secondToolPart).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'second' },
+      });
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+    });
+
+    it('ignores a scoped result after its response is retired', async () => {
+      let chat!: TestChat;
+      let settleOldToolCall!: () => Promise<void>;
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'old' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          new Promise<void>((resolve) => {
+            settleOldToolCall = async () => {
+              await addToolResult!({
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+                output: { owner: 'old' },
+              });
+              resolve();
+            };
+          }),
+        sendAutomaticallyWhen: () => false,
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'old request' });
+      let guard = 0;
+      while (!settleOldToolCall && guard++ < 500) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+
+      chat.messages = chat.messages.filter(
+        (message) => message.id !== 'assistant-1'
+      );
+      chat.messages = chat.messages.concat({
+        id: 'assistant-1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'input-available',
+            input: { q: 'new' },
+          },
+        ],
+      });
+
+      await settleOldToolCall();
+      await send;
+
+      const restoredPart = chat.messages
+        .find((message) => message.id === 'assistant-1')
+        ?.parts.find(
+          (part) => 'toolCallId' in part && part.toolCallId === 'call-1'
+        );
+      expect(restoredPart).toMatchObject({
+        state: 'input-available',
+        input: { q: 'new' },
+      });
+    });
+
+    it('preserves the error finish when onError clears messages', async () => {
+      let chat!: TestChat;
+      const callbackOrder: string[] = [];
+      const onError = jest.fn(() => {
+        callbackOrder.push('onError');
+        chat.messages = [];
+      });
+      const onFinish = jest.fn(() => {
+        callbackOrder.push('onFinish');
+      });
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: () => {
+          throw new Error('tool failed');
+        },
+        onError,
+        onFinish,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'fail tool' });
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({ id: 'assistant-1' }),
+          messages: [],
+          isError: true,
+        })
+      );
+      expect(callbackOrder).toEqual(['onError', 'onFinish']);
+      expect(chat.messages).toEqual([]);
+    });
+
     it('commits a reused toolCallId to its owning assistant message', async () => {
       let chat!: TestChat;
       const onFinish = jest.fn();

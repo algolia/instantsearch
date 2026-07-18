@@ -518,14 +518,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   private pruneDetachedResponse(response: ResponseRecord): void {
-    if (
-      !response.messageId ||
-      this.messages.some((message) => message.id === response.messageId)
-    ) {
-      return;
-    }
-
     if (!response.isRetired) {
+      if (
+        !response.messageId ||
+        this.messages.some((message) => message.id === response.messageId)
+      ) {
+        return;
+      }
+
       response.isRetired = true;
       response.didEvaluateContinuation = true;
 
@@ -721,16 +721,22 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       isAbort,
       isDisconnect,
       isError,
+      message,
+      allowRetired = false,
     }: {
       isAbort: boolean;
       isDisconnect: boolean;
       isError: boolean;
+      message?: TUIMessage;
+      allowRetired?: boolean;
     }): void => {
       this.pruneDetachedResponse(response);
-      if (response.isRetired || response.didNotifyFinish) return;
+      if ((response.isRetired && !allowRetired) || response.didNotifyFinish) {
+        return;
+      }
       response.didNotifyFinish = true;
 
-      const canonicalMessage = getCanonicalMessage();
+      const canonicalMessage = message ?? getCanonicalMessage();
       if (this.onFinish && canonicalMessage) {
         this.onFinish({
           message: canonicalMessage,
@@ -743,6 +749,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     };
     const failToolCall = (reason: unknown): void => {
       if (response.outcome !== 'active') return;
+      const message = getCanonicalMessage();
+      const wasRetired = response.isRetired;
       const error =
         reason instanceof Error ? reason : new Error(String(reason));
       response.outcome = 'failed';
@@ -756,6 +764,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         isAbort: false,
         isDisconnect: false,
         isError: true,
+        message,
+        allowRetired: !wasRetired,
       });
     };
     const acceptServerToolResult = (toolCallId: string): void => {
@@ -1033,7 +1043,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
                       } as InferUIMessageToolCall<TUIMessage>,
                     },
-                    (options) => this.submitToolResult(response, options)
+                    (options) =>
+                      response.isRetired
+                        ? Promise.resolve()
+                        : this.submitToolResult(response, options)
                   );
                   if (result) {
                     response.returnedToolCallbacks.push(
