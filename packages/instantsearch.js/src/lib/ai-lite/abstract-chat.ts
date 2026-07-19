@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { isEqual } from '../utils/isEqual';
+
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
@@ -173,8 +175,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private shouldRepairToolInput?: (toolName: string) => boolean;
 
   private activeResponse: ResponseRecord | null = null;
+  private latestResponse: ResponseRecord | null = null;
   private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
-  private ambiguousPublicToolCallIds = new Set<string>();
+  private responseByMessage = new WeakMap<TUIMessage, ResponseRecord>();
+  // Once tool ownership is discarded, an identifier-only result cannot prove
+  // which response generation submitted it. Scoped submissions remain safe.
+  private acceptsIdentifierOnlyToolResults = true;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -239,6 +245,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * context.
    */
   resetConversationId(): void {
+    if (
+      this.responsesByToolCallId.size > 0 ||
+      this.messages.some((message) =>
+        message.parts?.some((part) => 'toolCallId' in part)
+      )
+    ) {
+      this.acceptsIdentifierOnlyToolResults = false;
+    }
     this.conversationId = this.generateId();
   }
 
@@ -247,6 +261,68 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   set messages(messages: TUIMessage[]) {
+    const getToolOccurrences = (message: TUIMessage) =>
+      message.parts
+        .filter(
+          (
+            part
+          ): part is TUIMessage['parts'][number] & { toolCallId: string } =>
+            'toolCallId' in part
+        )
+        .map((part) => ({
+          type: part.type,
+          toolCallId: part.toolCallId,
+          state: 'state' in part ? part.state : undefined,
+          input: 'input' in part ? part.input : undefined,
+          output: 'output' in part ? part.output : undefined,
+          errorText: 'errorText' in part ? part.errorText : undefined,
+          providerExecuted:
+            'providerExecuted' in part ? part.providerExecuted : undefined,
+        }));
+    const isEquivalentRehydration = (message: TUIMessage): boolean => {
+      const replacements = messages.filter(
+        (candidate) => candidate.id === message.id
+      );
+      if (replacements.length !== 1) return false;
+
+      const toolOccurrences = getToolOccurrences(message);
+      const replacementToolOccurrences = getToolOccurrences(replacements[0]);
+      return toolOccurrences.length > 0 || replacementToolOccurrences.length > 0
+        ? isEqual(toolOccurrences, replacementToolOccurrences)
+        : isEqual(message.parts, replacements[0].parts);
+    };
+    const detachedResponses = new Set<ResponseRecord>();
+    this.state.messages.forEach((message) => {
+      if (!messages.includes(message)) {
+        const response = this.responseByMessage.get(message);
+        if (response && !isEquivalentRehydration(message)) {
+          detachedResponses.add(response);
+        }
+      }
+    });
+    const removedToolOwner = this.state.messages.some(
+      (message) =>
+        message.parts?.some((part) => 'toolCallId' in part) &&
+        !messages.includes(message) &&
+        !isEquivalentRehydration(message)
+    );
+    const toolCallIds = new Set<string>();
+    const hasDuplicateToolCallId = messages.some(
+      (message) =>
+        message.parts?.some((part) => {
+          if (!('toolCallId' in part)) {
+            return false;
+          }
+          if (toolCallIds.has(part.toolCallId)) {
+            return true;
+          }
+          toolCallIds.add(part.toolCallId);
+          return false;
+        }) === true
+    );
+    if (removedToolOwner || hasDuplicateToolCallId) {
+      this.acceptsIdentifierOnlyToolResults = false;
+    }
     this.state.messages = messages;
     const retainedMessageIds = new Set(messages.map((message) => message.id));
     const responses = new Set<ResponseRecord>();
@@ -256,8 +332,31 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     if (this.activeResponse) {
       responses.add(this.activeResponse);
     }
+    detachedResponses.forEach((response) => {
+      responses.add(response);
+      this.retireResponse(response);
+    });
     responses.forEach((response) => {
-      if (response.messageId && !retainedMessageIds.has(response.messageId)) {
+      const message = response.messageId
+        ? messages.find((candidate) => candidate.id === response.messageId)
+        : undefined;
+      if (message && !response.isRetired && !detachedResponses.has(response)) {
+        this.responseByMessage.set(message, response);
+      }
+    });
+    if (this.activeResponse?.messageId) {
+      const activeMessage = messages.find(
+        (message) => message.id === this.activeResponse!.messageId
+      );
+      if (activeMessage) {
+        this.responseByMessage.set(activeMessage, this.activeResponse);
+      }
+    }
+    responses.forEach((response) => {
+      if (
+        detachedResponses.has(response) ||
+        (response.messageId && !retainedMessageIds.has(response.messageId))
+      ) {
         this.pruneDetachedResponse(response);
       }
     });
@@ -437,13 +536,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private commit(
     toolCallId: string,
     output: unknown,
-    messageId?: string
+    messageId?: string,
+    response?: ResponseRecord,
+    expectedMessage?: TUIMessage
   ): boolean {
     const isTargetPart = (part: TUIMessage['parts'][number]): boolean =>
       'toolCallId' in part && part.toolCallId === toolCallId;
     const messageIndex = this.messages.findIndex(
       (message) =>
         (!messageId || message.id === messageId) &&
+        (!expectedMessage || message === expectedMessage) &&
         message.parts.some(isTargetPart)
     );
 
@@ -473,10 +575,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       output,
     };
 
-    this.state.replaceMessage(messageIndex, {
+    const updatedMessage = {
       ...message,
       parts: updatedParts,
-    } as TUIMessage);
+    } as TUIMessage;
+    if (response) {
+      this.responseByMessage.set(updatedMessage, response);
+    }
+    this.state.replaceMessage(messageIndex, updatedMessage);
     return true;
   }
 
@@ -518,9 +624,27 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         if (response) {
           this.pruneDetachedResponse(response);
           if (response.isRetired) return;
+          this.handleError(error as Error, {
+            updateState: this.latestResponse === response,
+          });
+          return;
         }
         this.handleError(error as Error);
       });
+  }
+
+  private retireResponse(response: ResponseRecord): void {
+    if (response.isRetired) return;
+
+    response.isRetired = true;
+    response.didEvaluateContinuation = true;
+
+    if (this.activeResponse === response) {
+      response.outcome = 'aborted';
+      this.activeResponse = null;
+      response.abortController.abort();
+      this.setStatus({ status: 'ready' });
+    }
   }
 
   private pruneDetachedResponse(response: ResponseRecord): void {
@@ -532,15 +656,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         return;
       }
 
-      response.isRetired = true;
-      response.didEvaluateContinuation = true;
-
-      if (this.activeResponse === response) {
-        response.outcome = 'aborted';
-        this.activeResponse = null;
-        response.abortController.abort();
-        this.setStatus({ status: 'ready' });
-      }
+      this.retireResponse(response);
     }
 
     // Keep a routing tombstone while a callback is running so public
@@ -551,7 +667,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       owners.delete(response);
       if (owners.size === 0) {
         this.responsesByToolCallId.delete(toolCallId);
-        this.ambiguousPublicToolCallIds.delete(toolCallId);
       }
     });
   }
@@ -565,12 +680,18 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       tool: TTool;
       toolCallId: string;
       output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    }
+    },
+    messageId = response?.messageId,
+    expectedMessage = messageId
+      ? this.messages.find((message) => message.id === messageId)
+      : undefined
   ): Promise<void> {
     if (response?.isRetired) return Promise.resolve();
 
     const commitResult = (): Promise<void> => {
-      if (!this.commit(toolCallId, output, response?.messageId)) {
+      if (
+        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+      ) {
         return Promise.resolve();
       }
 
@@ -596,24 +717,52 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * Add a tool result for a tool call.
    */
   addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
-    // A public result only carries a tool call id, so it cannot identify an
-    // owner after that id has been reused by multiple retained responses.
-    if (this.ambiguousPublicToolCallIds.has(options.toolCallId)) {
+    if (!this.acceptsIdentifierOnlyToolResults) {
       return Promise.resolve();
     }
 
     const owners = this.responsesByToolCallId.get(options.toolCallId);
     const response =
       owners?.size === 1 ? owners.values().next().value : undefined;
-    const hasRestoredToolCall = this.messages.some((message) =>
-      message.parts.some(
+    if (response) return this.submitToolResult(response, options);
+
+    const matchingMessages = this.messages.filter((message) =>
+      message.parts?.some(
         (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
       )
     );
+    if (matchingMessages.length !== 1) return Promise.resolve();
 
-    if (!response && !hasRestoredToolCall) return Promise.resolve();
+    return this.submitToolResult(
+      undefined,
+      options,
+      matchingMessages[0].id,
+      matchingMessages[0]
+    );
+  };
 
-    return this.submitToolResult(response, options);
+  /** @internal */
+  '~addToolResultForMessage' = <
+    TTool extends keyof InferUIMessageTools<TUIMessage>
+  >(
+    message: TUIMessage,
+    options: {
+      tool: TTool;
+      toolCallId: string;
+      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    }
+  ): Promise<void> => {
+    if (
+      !this.messages.includes(message) ||
+      !message.parts?.some(
+        (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
+      )
+    ) {
+      return Promise.resolve();
+    }
+
+    const response = this.responseByMessage.get(message);
+    return this.submitToolResult(response, options, message.id, message);
   };
 
   /**
@@ -679,6 +828,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       didEvaluateContinuation: false,
     };
     this.activeResponse = response;
+    this.latestResponse = response;
     this.setStatus({ status: 'submitted' });
 
     return createStream(response.abortController.signal).then(
@@ -728,6 +878,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       const parts = [...currentMessage!.parts];
       parts[index < 0 ? parts.length : index] = part;
       currentMessage = { ...currentMessage!, parts } as TUIMessage;
+      this.responseByMessage.set(currentMessage, response);
       this.state.replaceMessage(currentMessageIndex, currentMessage);
     };
     const mergeCallProviderMetadata = (
@@ -849,6 +1000,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             }
             currentMessageIndex = canonicalMessageIndex;
             currentMessage = this.messages[canonicalMessageIndex];
+            this.responseByMessage.set(currentMessage, response);
           }
 
           switch (chunk.type) {
@@ -863,8 +1015,15 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 lastMessage.role === 'assistant' &&
                 lastMessage.id === currentMessageId
               ) {
-                currentMessage = lastMessage;
+                if (lastMessage.parts.some((part) => 'toolCallId' in part)) {
+                  this.acceptsIdentifierOnlyToolResults = false;
+                }
+                currentMessage = {
+                  ...lastMessage,
+                  parts: [...lastMessage.parts],
+                } as TUIMessage;
                 currentMessageIndex = this.messages.length - 1;
+                this.state.replaceMessage(currentMessageIndex, currentMessage);
               } else {
                 currentMessage = {
                   id: currentMessageId,
@@ -875,6 +1034,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 this.state.pushMessage(currentMessage);
                 currentMessageIndex = this.messages.length - 1;
               }
+              this.responseByMessage.set(currentMessage, response);
               break;
             }
 
@@ -1010,6 +1170,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'tool-input-available': {
               if (!currentMessage) break;
 
+              if (response.requiredToolCallIds.has(chunk.toolCallId)) break;
+
               delete toolRawInputByCallId[chunk.toolCallId];
 
               // Find existing tool part or create new one
@@ -1036,6 +1198,20 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               setPart(existingIndex, toolPart);
 
+              if (
+                this.messages.some(
+                  (message) =>
+                    message !== currentMessage &&
+                    message.parts?.some(
+                      (part) =>
+                        'toolCallId' in part &&
+                        part.toolCallId === chunk.toolCallId
+                    )
+                )
+              ) {
+                this.acceptsIdentifierOnlyToolResults = false;
+              }
+
               // Trigger onToolCall callback only for client-executed tools
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
@@ -1046,12 +1222,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   (owner) => owner !== response
                 );
                 if (existingOwners.length > 0) {
+                  this.acceptsIdentifierOnlyToolResults = false;
                   const conflictingOwner = existingOwners.find(
                     (owner) =>
                       !owner.isRetired &&
-                      (owner.outcome !== 'succeeded' ||
-                        !owner.resolvedToolCallIds.has(chunk.toolCallId) ||
-                        owner.pendingToolCallbacks > 0)
+                      (owner.outcome === 'active' ||
+                        (owner.outcome === 'succeeded' &&
+                          (!owner.resolvedToolCallIds.has(chunk.toolCallId) ||
+                            owner.pendingToolCallbacks > 0)))
                   );
                   if (conflictingOwner) {
                     // Neither response may continue once ownership is ambiguous.
@@ -1063,9 +1241,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     );
                     break;
                   }
-                  this.ambiguousPublicToolCallIds.add(chunk.toolCallId);
                 }
-
                 response.requiredToolCallIds.add(chunk.toolCallId);
                 owners.add(response);
                 this.responsesByToolCallId.set(chunk.toolCallId, owners);
@@ -1328,6 +1504,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 ...currentMessage,
                 metadata: chunk.messageMetadata,
               } as TUIMessage;
+              this.responseByMessage.set(currentMessage, response);
               this.state.replaceMessage(currentMessageIndex, currentMessage);
               break;
             }
@@ -1351,6 +1528,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   ...currentMessage,
                   metadata: chunk.messageMetadata,
                 } as TUIMessage;
+                this.responseByMessage.set(currentMessage, response);
                 this.state.replaceMessage(currentMessageIndex, currentMessage);
               }
               break;
@@ -1380,6 +1558,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   },
                 ],
               } as unknown as TUIMessage;
+              this.responseByMessage.set(currentMessage, response);
 
               if (currentMessageIndex >= 0) {
                 this.state.replaceMessage(currentMessageIndex, currentMessage);
@@ -1418,8 +1597,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     });
   }
 
-  private handleError(error: Error): void {
-    this.setStatus({ status: 'error', error });
+  private handleError(
+    error: Error,
+    { updateState = true }: { updateState?: boolean } = {}
+  ): void {
+    if (updateState) {
+      this.setStatus({ status: 'error', error });
+    }
 
     if (this.onError) {
       this.onError(error);

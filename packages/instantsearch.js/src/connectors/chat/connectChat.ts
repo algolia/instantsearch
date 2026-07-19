@@ -769,11 +769,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
-          const toolWithAddToolResult: ClientSideTool = {
+          const toolWithAddToolResult = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            '~addToolResultForMessage':
+              _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
+          } satisfies ClientSideTool & {
+            '~addToolResultForMessage': typeof _chatInstance['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

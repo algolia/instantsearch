@@ -618,6 +618,7 @@ describe('connectChat', () => {
         testTool: {
           ...mockTool,
           addToolResult: expect.any(Function),
+          '~addToolResultForMessage': expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
         },
@@ -1936,6 +1937,10 @@ data: [DONE]`,
   });
 
   describe('sendAutomaticallyWhen', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
     // A minimal, immediately-terminating assistant turn — enough for the
     // automatic follow-up request's stream to settle.
     const terminalStream = () =>
