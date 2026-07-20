@@ -1,0 +1,26 @@
+name: Compressed Size
+
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  compressed-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          build-script: 'build:ci'
+          compression: 'gzip'
+          pattern: './packages/{*/dist/*.js,*/dist/umd/*.min.js,vue-instantsearch/vue{2,3}/{umd,cjs}/*.js,instantsearch.css/{themes,components}/*.css}'
+          exclude: '{**/*.map,**/node_modules/**,**/instantsearch-codemods/**}'

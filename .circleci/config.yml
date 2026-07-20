@@ -178,9 +178,6 @@ jobs:
           command: |
             yarn run build:ci
       - run:
-          name: Test packages size
-          command: yarn run test:size
-      - run:
           name: Test Exports
           command: yarn run test:exports
       - persist_to_workspace:
