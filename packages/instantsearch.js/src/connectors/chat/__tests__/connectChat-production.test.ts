@@ -11,7 +11,7 @@ import connectChat from '../connectChat';
 import type { UIMessageChunk } from '../../../lib/ai-lite';
 import type { ChatConnectorParams } from '../connectChat';
 
-(globalThis as any).__DEV__ = false;
+const originalDev = (globalThis as any).__DEV__;
 
 const chatStream = (chunks: UIMessageChunk[]) =>
   new Response(
@@ -22,6 +22,14 @@ const chatStream = (chunks: UIMessageChunk[]) =>
   );
 
 describe('connectChat production tool handling', () => {
+  beforeAll(() => {
+    (globalThis as any).__DEV__ = false;
+  });
+
+  afterAll(() => {
+    (globalThis as any).__DEV__ = originalDev;
+  });
+
   it('submits the unknown-tool fallback and continues once', async () => {
     const fetchMock = jest
       .fn()
