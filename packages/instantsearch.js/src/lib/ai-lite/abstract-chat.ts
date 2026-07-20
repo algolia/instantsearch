@@ -344,14 +344,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         this.responseByMessage.set(message, response);
       }
     });
-    if (this.activeResponse?.messageId) {
-      const activeMessage = messages.find(
-        (message) => message.id === this.activeResponse!.messageId
-      );
-      if (activeMessage) {
-        this.responseByMessage.set(activeMessage, this.activeResponse);
-      }
-    }
     responses.forEach((response) => {
       if (
         detachedResponses.has(response) ||
@@ -533,6 +525,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
   };
 
+  private replaceMessage(
+    index: number,
+    message: TUIMessage,
+    response?: ResponseRecord
+  ): TUIMessage {
+    this.state.replaceMessage(index, message);
+    const canonicalMessage = this.messages[index] ?? message;
+    if (response && this.messages.includes(canonicalMessage)) {
+      this.responseByMessage.set(canonicalMessage, response);
+    }
+    return canonicalMessage;
+  }
+
   private commit(
     toolCallId: string,
     output: unknown,
@@ -579,10 +584,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       ...message,
       parts: updatedParts,
     } as TUIMessage;
-    if (response) {
-      this.responseByMessage.set(updatedMessage, response);
-    }
-    this.state.replaceMessage(messageIndex, updatedMessage);
+    this.replaceMessage(messageIndex, updatedMessage, response);
     return true;
   }
 
@@ -878,8 +880,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       const parts = [...currentMessage!.parts];
       parts[index < 0 ? parts.length : index] = part;
       currentMessage = { ...currentMessage!, parts } as TUIMessage;
-      this.responseByMessage.set(currentMessage, response);
-      this.state.replaceMessage(currentMessageIndex, currentMessage);
+      currentMessage = this.replaceMessage(
+        currentMessageIndex,
+        currentMessage,
+        response
+      );
     };
     const mergeCallProviderMetadata = (
       toolCallId: string,
@@ -1023,7 +1028,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   parts: [...lastMessage.parts],
                 } as TUIMessage;
                 currentMessageIndex = this.messages.length - 1;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               } else {
                 currentMessage = {
                   id: currentMessageId,
@@ -1033,8 +1042,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 } as unknown as TUIMessage;
                 this.state.pushMessage(currentMessage);
                 currentMessageIndex = this.messages.length - 1;
+                this.responseByMessage.set(currentMessage, response);
               }
-              this.responseByMessage.set(currentMessage, response);
               break;
             }
 
@@ -1504,8 +1513,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 ...currentMessage,
                 metadata: chunk.messageMetadata,
               } as TUIMessage;
-              this.responseByMessage.set(currentMessage, response);
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              currentMessage = this.replaceMessage(
+                currentMessageIndex,
+                currentMessage,
+                response
+              );
               break;
             }
 
@@ -1528,8 +1540,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   ...currentMessage,
                   metadata: chunk.messageMetadata,
                 } as TUIMessage;
-                this.responseByMessage.set(currentMessage, response);
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               }
               break;
             }
@@ -1558,13 +1573,16 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   },
                 ],
               } as unknown as TUIMessage;
-              this.responseByMessage.set(currentMessage, response);
-
               if (currentMessageIndex >= 0) {
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               } else {
                 this.state.pushMessage(currentMessage);
                 currentMessageIndex = this.messages.length - 1;
+                this.responseByMessage.set(currentMessage, response);
               }
 
               currentMessageId = currentMessage.id;

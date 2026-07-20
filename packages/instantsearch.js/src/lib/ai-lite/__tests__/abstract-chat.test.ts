@@ -1,6 +1,7 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
+import { ChatState as RuntimeChatState } from '../../chat/chat';
 import { AbstractChat } from '../abstract-chat';
 import { parseJsonEventStream } from '../stream-parser';
 
@@ -108,6 +109,7 @@ function createTestSetup(
     onFinish,
     onError,
     sendAutomaticallyWhen,
+    state = new InMemoryChatState(),
   }: {
     chunks?: UIMessageChunk[];
     chunksByRequest?: UIMessageChunk[][];
@@ -126,6 +128,7 @@ function createTestSetup(
     sendAutomaticallyWhen?: (options: {
       messages: UIMessage[];
     }) => boolean | PromiseLike<boolean>;
+    state?: ChatState<UIMessage>;
   } = { chunks: [] }
 ) {
   let requestIndex = 0;
@@ -149,7 +152,6 @@ function createTestSetup(
     reconnectToStream: reconnectToStream as any,
   };
 
-  const state = new InMemoryChatState();
   const chat = new TestChat({
     id: 'test-chat',
     state,
@@ -184,12 +186,15 @@ function deferred<T>() {
   return { promise, resolve, reject };
 }
 
-function assistantPart(state: InMemoryChatState): any {
+function assistantPart(state: ChatState<UIMessage>): any {
   const assistant = state.messages.find((m) => m.role === 'assistant');
   return assistant?.parts[0];
 }
 
-function assistantToolPart(state: InMemoryChatState, toolCallId: string): any {
+function assistantToolPart(
+  state: ChatState<UIMessage>,
+  toolCallId: string
+): any {
   const assistant = state.messages.find(
     (message) => message.role === 'assistant'
   );
@@ -198,7 +203,10 @@ function assistantToolPart(state: InMemoryChatState, toolCallId: string): any {
   );
 }
 
-function messageById(state: InMemoryChatState, messageId: string): UIMessage {
+function messageById(
+  state: ChatState<UIMessage>,
+  messageId: string
+): UIMessage {
   return state.messages.find((message) => message.id === messageId)!;
 }
 
@@ -2478,6 +2486,88 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         state: 'output-available',
         output: { owner: 'new' },
       });
+    });
+
+    it('keeps identifier-only results available when state snapshots messages', async () => {
+      const setup = createTestSetup({
+        state: new RuntimeChatState<UIMessage>('test-chat', [], false),
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { q: 'phone' },
+          },
+          finishChunk(),
+        ],
+        onToolCall: () => undefined,
+        sendAutomaticallyWhen: () => false,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+      await setup.chat.addToolResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { hits: 1 },
+      });
+
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: 1 },
+      });
+    });
+
+    it('commits a message-scoped result while snapshotting state is streaming', async () => {
+      const toolCallAvailable = deferred<undefined>();
+      const releaseStream = deferred<undefined>();
+      const setup = createTestSetup({
+        state: new RuntimeChatState<UIMessage>('test-chat', [], false),
+        streamFactory: () =>
+          new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              controller.enqueue(startChunk('assistant-1'));
+              controller.enqueue({
+                type: 'tool-input-available',
+                toolName: 'search',
+                toolCallId: 'call-1',
+                input: { q: 'phone' },
+              });
+              releaseStream.promise.then(() => {
+                controller.enqueue(finishChunk());
+                controller.close();
+              });
+            },
+          }),
+        onToolCall: () => {
+          toolCallAvailable.resolve(undefined);
+        },
+        sendAutomaticallyWhen: () => false,
+      });
+
+      const send = setup.chat.sendMessage({ text: 'search' });
+      await toolCallAvailable.promise;
+      const result = setup.chat['~addToolResultForMessage'](
+        messageById(setup.state, 'assistant-1'),
+        {
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { hits: 1 },
+        }
+      );
+
+      try {
+        await Promise.resolve();
+        await Promise.resolve();
+        expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+          state: 'output-available',
+          output: { hits: 1 },
+        });
+      } finally {
+        releaseStream.resolve(undefined);
+        await send;
+        await result;
+      }
     });
 
     it('settles a message-scoped result for a restored tool call', async () => {

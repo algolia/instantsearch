@@ -573,10 +573,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall: ((
-          { toolCall },
-          submitToolResult = _chatInstance.addToolResult
-        ) => {
+        onToolCall: (({ toolCall }, submitToolResult) => {
           let tool = tools[toolCall.toolName];
 
           // Compatibility shim with Algolia MCP Server search tool
