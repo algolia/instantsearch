@@ -37,9 +37,25 @@ export function lastAssistantMessageIsCompleteWithToolCalls({
 
   if (toolParts.length === 0) return false;
 
-  return toolParts.every(
+  const allResolved = toolParts.every(
     (part) => part.state === 'output-available' || part.state === 'output-error'
   );
+
+  if (!allResolved) return false;
+
+  // A resolved tool call that marked itself `terminal` (a display/render-only
+  // tool) carries nothing the model needs to act on. If EVERY resolved tool
+  // call is terminal, the turn is done — do not fire an automatic follow-up
+  // completion. This is what stops display tools (e.g. product cards) from
+  // looping: the tool is still resolved server-side (no dangling call), it just
+  // doesn't re-invoke the model. A single non-terminal result (a data tool the
+  // model must reason about) keeps today's auto-continue behavior, so legitimate
+  // multi-tool turns are unaffected.
+  const everyResolvedToolIsTerminal = toolParts.every(
+    (part) => part.state === 'output-available' && part.terminal === true
+  );
+
+  return !everyResolvedToolIsTerminal;
 }
 
 export class SerialJobExecutor {

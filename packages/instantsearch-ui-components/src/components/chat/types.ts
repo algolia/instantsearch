@@ -439,6 +439,12 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
     tool: TTool;
     toolCallId: string;
     output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    /**
+     * Resolve without arming an automatic follow-up completion. Set by
+     * display/render-only tools whose result the model does not consume, so
+     * they resolve cleanly server-side without triggering another turn.
+     */
+    terminal?: boolean;
   }) => Promise<void>;
 
   stop: () => Promise<void>;
@@ -446,7 +452,7 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
 export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
 
 export type AddToolResultWithOutput = (
-  params: Pick<Parameters<AddToolResult>[0], 'output'>
+  params: Pick<Parameters<AddToolResult>[0], 'output' | 'terminal'>
 ) => ReturnType<AddToolResult>;
 
 type SearchToolInputBase = {
