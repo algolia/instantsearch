@@ -60,7 +60,7 @@ export function resolveEndpoint(params: {
     'x-algolia-api-key': params.apiKey,
   };
   if (params.algoliaAgent) {
-    headers['x-algolia-agent'] = params.algoliaAgent;
+    headers['x-algolia-agent'] = `${params.algoliaAgent}; tasks`;
   }
 
   return {

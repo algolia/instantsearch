@@ -6,9 +6,9 @@ import type { ChatRenderState } from '../../connectors/chat/connectChat';
  * as a correlation tag for attribution.
  */
 export type ChatReferer =
-  | 'prompt-suggestions'
   | 'ai-mode'
-  | 'prompt-suggestions';
+  | 'prompt-suggestions'
+  | 'prompt-suggestions-autocomplete';
 
 export type OpenChatOptions = {
   /**

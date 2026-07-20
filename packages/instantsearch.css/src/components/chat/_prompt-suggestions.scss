@@ -32,7 +32,7 @@
 
   // Staggered delays for each suggestion
   @for $i from 1 through 5 {
-    &:nth-child(#{$i}) {
+    &:nth-child(5n + #{$i}) {
       animation-delay: #{($i - 1) * 100}ms;
     }
   }
@@ -61,23 +61,23 @@
   animation: ais-chat-prompt-suggestions-skeleton 1.5s ease-in-out infinite;
 
   // Varying widths so the skeleton row mimics real pills.
-  &:nth-child(1) {
+  &:nth-child(5n + 1) {
     width: 65%;
   }
 
-  &:nth-child(2) {
+  &:nth-child(5n + 2) {
     width: 80%;
   }
 
-  &:nth-child(3) {
+  &:nth-child(5n + 3) {
     width: 55%;
   }
 
-  &:nth-child(4) {
+  &:nth-child(5n + 4) {
     width: 70%;
   }
 
-  &:nth-child(5) {
+  &:nth-child(5n + 5) {
     width: 60%;
   }
 }

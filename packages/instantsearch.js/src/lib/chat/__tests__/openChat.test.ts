@@ -28,7 +28,11 @@ describe('openChat', () => {
     expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
   });
 
-  test.each(['prompt-suggestions', 'ai-mode'] as const)(
+  test.each([
+    'ai-mode',
+    'prompt-suggestions',
+    'prompt-suggestions-autocomplete',
+  ] as const)(
     'forwards the `%s` referer as the x-algolia-referer header',
     (referer) => {
       const chat = createChatRenderState();

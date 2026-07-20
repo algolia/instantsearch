@@ -1078,7 +1078,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             if (
               openChat(chatRenderState, {
                 message: item.prompt,
-                referer: 'prompt-suggestions',
+                referer: 'prompt-suggestions-autocomplete',
               })
             ) {
               setQuery('');

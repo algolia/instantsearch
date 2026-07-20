@@ -33,7 +33,8 @@ type OwnedUiProps =
   | 'suggestions'
   | 'isLoading'
   | 'onSuggestionClick'
-  | 'disabled';
+  | 'disabled'
+  | 'skeletonCount';
 
 export type PromptSuggestionsProps = Omit<
   PromptSuggestionsOwnProps,
@@ -48,7 +49,6 @@ export type PromptSuggestionsProps = Omit<
 
 export function PromptSuggestions({
   classNames = {},
-  skeletonCount,
   layoutComponent: LayoutComponent,
   onSuggestionClick: onSuggestionClickOverride,
   // Connector params — forwarded to the hook, not the UI root.
@@ -94,7 +94,6 @@ export function PromptSuggestions({
     <PromptSuggestionsUi
       {...props}
       classNames={classNames}
-      skeletonCount={skeletonCount}
       suggestions={suggestions}
       isLoading={isLoading}
       onSuggestionClick={handleClick}
