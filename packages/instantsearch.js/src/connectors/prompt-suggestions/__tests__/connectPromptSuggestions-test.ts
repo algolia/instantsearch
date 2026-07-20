@@ -710,7 +710,7 @@ describe('connectPromptSuggestions', () => {
   });
 
   describe('handoff', () => {
-    it('onSuggestionClick calls sendMessage on the index chat render state with page-suggestions referer', async () => {
+    it('onSuggestionClick calls sendMessage on the index chat render state with prompt-suggestions-widget referer', async () => {
       const sendMessage = jest.fn();
       const setOpen = jest.fn();
       const search = createInstantSearch();
@@ -764,7 +764,7 @@ describe('connectPromptSuggestions', () => {
             },
           },
         },
-        { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        { headers: { 'x-algolia-referer': 'prompt-suggestions-widget' } }
       );
     });
 

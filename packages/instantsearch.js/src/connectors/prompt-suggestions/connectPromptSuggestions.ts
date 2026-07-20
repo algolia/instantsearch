@@ -268,7 +268,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             null;
           openChat(chatRenderState, {
             message: buildSuggestionMessage(prompt),
-            referer: 'prompt-suggestions',
+            referer: 'prompt-suggestions-widget',
             turnContext: buildTurnContext(results),
           });
           return true;

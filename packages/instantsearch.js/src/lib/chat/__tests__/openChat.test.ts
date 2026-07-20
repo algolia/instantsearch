@@ -30,7 +30,7 @@ describe('openChat', () => {
 
   test.each([
     'ai-mode',
-    'prompt-suggestions',
+    'prompt-suggestions-widget',
     'prompt-suggestions-autocomplete',
   ] as const)(
     'forwards the `%s` referer as the x-algolia-referer header',
