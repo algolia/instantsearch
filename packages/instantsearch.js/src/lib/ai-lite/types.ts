@@ -105,6 +105,16 @@ export type ToolUIPart<TOOLS extends UITools = UITools> = ValueOf<{
         providerExecuted?: boolean;
         callProviderMetadata?: ProviderMetadata;
         preliminary?: boolean;
+        /**
+         * Marks this resolved tool call as terminating the turn: the call is
+         * fully resolved (no dangling server-side state), but its result carries
+         * nothing the model needs to reason about, so it must NOT trigger an
+         * automatic follow-up completion. Display/render-only tools (e.g. product
+         * cards) set this. Mirrors the server-side `is_terminal` semantic that
+         * already exists for `algolia_display_results`. Absent/false preserves
+         * today's behavior (the result feeds the next turn).
+         */
+        terminal?: boolean;
       }
     | {
         state: 'output-error';
@@ -144,6 +154,8 @@ export type DynamicToolUIPart = {
       errorText?: never;
       callProviderMetadata?: ProviderMetadata;
       preliminary?: boolean;
+      /** See `ToolUIPart`'s `terminal`. */
+      terminal?: boolean;
     }
   | {
       state: 'output-error';

@@ -418,10 +418,18 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     tool,
     toolCallId,
     output,
+    terminal,
   }: {
     tool: TTool;
     toolCallId: string;
     output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    /**
+     * Resolve this tool call without arming an automatic follow-up completion.
+     * Set by display/render-only tools whose result the model does not consume.
+     * See `ToolUIPart`'s `terminal`. Defaults to `false` (result feeds the next
+     * turn, preserving existing behavior).
+     */
+    terminal?: boolean;
   }): Promise<void> => {
     return this.jobExecutor.run(() => {
       // Find the message with this tool call
@@ -447,6 +455,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             ...part,
             state: 'output-available' as const,
             output,
+            terminal,
           };
         }
         return part;

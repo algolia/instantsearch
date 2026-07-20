@@ -598,9 +598,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           if (tool.onToolCall) {
-            const addToolResult: AddToolResultWithOutput = ({ output }) =>
+            const addToolResult: AddToolResultWithOutput = ({
+              output,
+              terminal,
+            }) =>
               _chatInstance.addToolResult({
                 output,
+                terminal,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               });
