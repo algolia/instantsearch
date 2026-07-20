@@ -728,19 +728,35 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       owners?.size === 1 ? owners.values().next().value : undefined;
     if (response) return this.submitToolResult(response, options);
 
-    const matchingMessages = this.messages.filter((message) =>
-      message.parts?.some(
-        (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
-      )
-    );
-    if (matchingMessages.length !== 1) return Promise.resolve();
+    const findMatchingMessage = (): TUIMessage | undefined => {
+      const matchingMessages = this.messages.filter((message) =>
+        message.parts?.some(
+          (part) =>
+            'toolCallId' in part && part.toolCallId === options.toolCallId
+        )
+      );
+      return matchingMessages.length === 1 ? matchingMessages[0] : undefined;
+    };
+    if (!findMatchingMessage()) return Promise.resolve();
 
-    return this.submitToolResult(
-      undefined,
-      options,
-      matchingMessages[0].id,
-      matchingMessages[0]
-    );
+    return this.jobExecutor.run(() => {
+      if (!this.acceptsIdentifierOnlyToolResults) return Promise.resolve();
+
+      const message = findMatchingMessage();
+      if (
+        !message ||
+        !this.commit(
+          options.toolCallId,
+          options.output,
+          message.id,
+          undefined,
+          message
+        )
+      ) {
+        return Promise.resolve();
+      }
+      return this.continueResponse();
+    });
   };
 
   /** @internal */
@@ -754,17 +770,33 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       output: InferUIMessageTools<TUIMessage>[TTool]['output'];
     }
   ): Promise<void> => {
-    if (
-      !this.messages.includes(message) ||
-      !message.parts?.some(
+    const hasToolCall = (candidate: TUIMessage): boolean =>
+      candidate.parts?.some(
         (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
-      )
-    ) {
+      ) === true;
+    if (!hasToolCall(message)) {
       return Promise.resolve();
     }
 
     const response = this.responseByMessage.get(message);
-    return this.submitToolResult(response, options, message.id, message);
+    const currentMessage = this.messages.includes(message)
+      ? message
+      : response && !response.isRetired
+      ? this.messages.find(
+          (candidate) =>
+            candidate.id === message.id &&
+            this.responseByMessage.get(candidate) === response &&
+            hasToolCall(candidate)
+        )
+      : undefined;
+    if (!currentMessage) return Promise.resolve();
+
+    return this.submitToolResult(
+      response,
+      options,
+      currentMessage.id,
+      currentMessage
+    );
   };
 
   /**

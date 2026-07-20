@@ -2570,6 +2570,152 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     });
 
+    it('commits a layout result captured before a later snapshot of the same response', async () => {
+      const toolCallAvailable = deferred<undefined>();
+      const releaseLaterChunk = deferred<undefined>();
+      const laterChunkProcessed = deferred<undefined>();
+      const releaseStream = deferred<undefined>();
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      state['~registerMessagesCallback'](() => {
+        const assistant = state.messages.find(
+          (message) => message.id === 'assistant-1'
+        );
+        if (
+          assistant?.parts.some(
+            (part) => part.type === 'text' && part.text === 'Still working'
+          )
+        ) {
+          laterChunkProcessed.resolve(undefined);
+        }
+      });
+      const setup = createTestSetup({
+        state,
+        streamFactory: () =>
+          new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              controller.enqueue(startChunk('assistant-1'));
+              controller.enqueue({
+                type: 'tool-input-available',
+                toolName: 'search',
+                toolCallId: 'call-1',
+                input: { q: 'phone' },
+              });
+              releaseLaterChunk.promise.then(() => {
+                controller.enqueue({ type: 'text-start', id: 'text-1' });
+                controller.enqueue({
+                  type: 'text-delta',
+                  id: 'text-1',
+                  delta: 'Still working',
+                });
+                releaseStream.promise.then(() => {
+                  controller.enqueue(finishChunk());
+                  controller.close();
+                });
+              });
+            },
+          }),
+        onToolCall: () => {
+          toolCallAvailable.resolve(undefined);
+        },
+        sendAutomaticallyWhen: () => false,
+      });
+
+      const send = setup.chat.sendMessage({ text: 'search' });
+      await toolCallAvailable.promise;
+      const capturedMessage = messageById(state, 'assistant-1');
+      releaseLaterChunk.resolve(undefined);
+      await laterChunkProcessed.promise;
+
+      const currentMessage = messageById(state, 'assistant-1');
+      expect(currentMessage).not.toBe(capturedMessage);
+
+      try {
+        await setup.chat['~addToolResultForMessage'](capturedMessage, {
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { hits: 1 },
+        });
+
+        expect(assistantToolPart(state, 'call-1')).toMatchObject({
+          state: 'output-available',
+          output: { hits: 1 },
+        });
+      } finally {
+        releaseStream.resolve(undefined);
+        await send;
+      }
+    });
+
+    it('ignores a layout result captured by an older response with the same message id', async () => {
+      const oldToolAvailable = deferred<undefined>();
+      const failOldResponse = deferred<undefined>();
+      const state = new InMemoryChatState();
+      const chat = new ConcurrentTestChat({
+        state,
+        onError: jest.fn(),
+        onToolCall: () => {
+          oldToolAvailable.resolve(undefined);
+        },
+        sendAutomaticallyWhen: () => false,
+      });
+
+      const oldResponse = chat.startResponse(
+        new ReadableStream<UIMessageChunk>({
+          start(controller) {
+            controller.enqueue(startChunk('assistant-shared'));
+            controller.enqueue({
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { owner: 'old' },
+            });
+            failOldResponse.promise.then(() => {
+              controller.error(new Error('disconnected'));
+            });
+          },
+        })
+      );
+      await oldToolAvailable.promise;
+      const oldMessage = messageById(state, 'assistant-shared');
+      failOldResponse.resolve(undefined);
+      await oldResponse;
+
+      await chat.startResponse(
+        chunksToStream([
+          startChunk('assistant-shared'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { owner: 'new' },
+          },
+          finishChunk(),
+        ])
+      );
+      const currentMessage = messageById(state, 'assistant-shared');
+      expect(currentMessage).not.toBe(oldMessage);
+
+      await chat['~addToolResultForMessage'](oldMessage, {
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'old-layout' },
+      });
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'input-available',
+        input: { owner: 'new' },
+      });
+
+      await chat['~addToolResultForMessage'](currentMessage, {
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'new-layout' },
+      });
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'new-layout' },
+      });
+    });
+
     it('settles a message-scoped result for a restored tool call', async () => {
       const followUpStarted = deferred<undefined>();
       const finishFollowUp = deferred<undefined>();
@@ -2645,6 +2791,71 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
 
       expect(settled).toBe(true);
       expect(setup.state.status).toBe('ready');
+    });
+
+    it('commits concurrent public results queued for the same message', async () => {
+      const responseStarted = deferred<undefined>();
+      const releaseResponse = deferred<undefined>();
+      const setup = createTestSetup({
+        streamFactory: () =>
+          new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              controller.enqueue(startChunk('assistant-active'));
+              responseStarted.resolve(undefined);
+              releaseResponse.promise.then(() => {
+                controller.enqueue(finishChunk());
+                controller.close();
+              });
+            },
+          }),
+        sendAutomaticallyWhen: () => false,
+      });
+      setup.chat.messages = [
+        {
+          id: 'assistant-restored',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-a',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-search',
+              toolCallId: 'call-b',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      const send = setup.chat.sendMessage({ text: 'keep working' });
+      await responseStarted.promise;
+      const results = Promise.all([
+        setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-a',
+          output: { value: 'a' },
+        }),
+        setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-b',
+          output: { value: 'b' },
+        }),
+      ]);
+
+      releaseResponse.resolve(undefined);
+      await send;
+      await results;
+
+      expect(
+        messageById(setup.state, 'assistant-restored').parts
+      ).toMatchObject([
+        { state: 'output-available', output: { value: 'a' } },
+        { state: 'output-available', output: { value: 'b' } },
+      ]);
     });
 
     it('ignores a public result when restored messages share a call id', async () => {
