@@ -35,9 +35,10 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   function SearchLayoutComponent({
     message,
     applyFilters,
-    onClose,
     sendEvent,
+    metadata,
   }: ClientSideToolComponentProps) {
+    const { onClose } = metadata;
     const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as

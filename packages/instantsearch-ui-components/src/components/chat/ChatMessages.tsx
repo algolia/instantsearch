@@ -39,7 +39,8 @@ import type {
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
-  ChatEmptyProps,
+  ChatComponentMetadata,
+  ChatComponentPropsWithMetadata,
   ChatLayoutOwnProps,
   ChatMessageBase,
   ChatStatus,
@@ -114,19 +115,27 @@ export type ChatMessagesProps<
   /**
    * Custom message renderer
    */
-  messageComponent?: (props: { message: TMessage }) => JSX.Element;
+  messageComponent?: (
+    props: ChatComponentPropsWithMetadata<{ message: TMessage }, TMessage>
+  ) => JSX.Element;
   /**
    * Custom loader component
    */
-  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
+  loaderComponent?: (
+    props: ChatComponentPropsWithMetadata<ChatMessageLoaderProps, TMessage>
+  ) => JSX.Element;
   /**
    * Custom error component
    */
-  errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
+  errorComponent?: (
+    props: ChatComponentPropsWithMetadata<ChatMessageErrorProps, TMessage>
+  ) => JSX.Element;
   /**
    * Custom empty component shown when there are no messages
    */
-  emptyComponent?: (props: ChatEmptyProps) => JSX.Element;
+  emptyComponent?: (
+    props: ChatComponentPropsWithMetadata<{}, TMessage>
+  ) => JSX.Element;
   /**
    * Custom actions component
    */
@@ -282,15 +291,12 @@ function createDefaultMessageComponent<
 
   return function DefaultMessage({
     message,
-    status,
     userMessageProps,
     assistantMessageProps,
-    tools,
     indexUiState,
     setIndexUiState,
     messages,
     onReload,
-    onClose,
     onFeedback,
     feedbackState,
     actionsComponent,
@@ -298,18 +304,16 @@ function createDefaultMessageComponent<
     messageTranslations,
     translations,
     suggestionsElement,
+    metadata,
   }: {
     key: string;
     message: TMessage;
-    status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
     messages?: ChatMessageBase[];
-    tools: ClientSideTools;
     onReload: (messageId?: string) => void;
-    onClose: () => void;
     onFeedback?: (messageId: string, vote: 0 | 1) => void;
     feedbackState?: Record<string, 'sending' | 0 | 1>;
     actionsComponent?: ChatMessageProps['actionsComponent'];
@@ -317,6 +321,7 @@ function createDefaultMessageComponent<
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
     suggestionsElement?: VNode;
+    metadata: ChatComponentMetadata<TMessage>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -389,18 +394,16 @@ function createDefaultMessageComponent<
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
-        status={status}
-        tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
         messages={messages}
-        onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
         classNames={classNames}
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
+        metadata={metadata}
         {...messageProps}
       />
     );
@@ -496,6 +499,21 @@ export function createChatMessagesComponent({
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     const showLoader = getShowLoader(status, lastPart, tools);
 
+    // The shared bag handed to every overridable chat component, so custom
+    // components can read the current chat state and common callbacks from a
+    // single, consistent place.
+    const metadata: ChatComponentMetadata<TMessage> = {
+      messages,
+      status,
+      error,
+      isClearing,
+      activePart: lastPart,
+      tools,
+      sendMessage,
+      setInput,
+      onClose,
+    };
+
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
 
@@ -528,22 +546,15 @@ export function createChatMessagesComponent({
             }}
           >
             {showEmpty && EmptyComponent && (
-              <EmptyComponent
-                sendMessage={sendMessage}
-                setInput={setInput}
-                status={status}
-                onClose={onClose}
-              />
+              <EmptyComponent metadata={metadata} />
             )}
 
             {messages.map((message, index) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
-                status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
-                tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}
@@ -551,10 +562,10 @@ export function createChatMessagesComponent({
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}
                 actionsComponent={ActionsComponent}
-                onClose={onClose}
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
+                metadata={metadata}
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
@@ -568,6 +579,7 @@ export function createChatMessagesComponent({
             {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
+                metadata={metadata}
               />
             )}
 
@@ -588,6 +600,7 @@ export function createChatMessagesComponent({
                       }
                     : undefined
                 }
+                metadata={metadata}
               />
             )}
           </div>

@@ -9,6 +9,7 @@ import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
 import type { ChatMessageErrorProps } from '../ChatMessageError';
+import type { ChatComponentPropsWithMetadata } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -219,9 +220,7 @@ describe('ChatMessages', () => {
 
       const messages = container.querySelectorAll('.ais-ChatMessage-message');
       // User message: plain text, no emphasis.
-      expect(
-        messages[0].querySelector('.ais-ChatMessage-text')
-      ).not.toBeNull();
+      expect(messages[0].querySelector('.ais-ChatMessage-text')).not.toBeNull();
       expect(messages[0].querySelector('em')).toBeNull();
       // Assistant message: still parsed as markdown.
       expect(messages[1].querySelector('em')).not.toBeNull();
@@ -251,7 +250,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -269,7 +270,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -291,7 +294,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -341,7 +346,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });
@@ -474,7 +481,9 @@ describe('ChatMessages', () => {
   });
 
   test('allows error translation to use raw error message', () => {
-    const CustomError = (props: ChatMessageErrorProps) => (
+    const CustomError = (
+      props: ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+    ) => (
       <ChatMessageError
         {...props}
         translations={{
@@ -557,5 +566,52 @@ describe('ChatMessages', () => {
         </div>
       </div>
     `);
+  });
+
+  test('forwards metadata to overridable components', () => {
+    const Loader = jest.fn(() => <span>Loader</span>);
+    const setIndexUiState = jest.fn();
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Working on it' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{ query: 'shoes' }}
+        setIndexUiState={setIndexUiState}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        loaderComponent={Loader}
+      />
+    );
+
+    expect(Loader).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          messages,
+          status: 'submitted',
+          error: undefined,
+          isClearing: false,
+          activePart: { type: 'text', text: 'Working on it' },
+          tools: {},
+          sendMessage,
+          setInput,
+          onClose,
+        }),
+      }),
+      {}
+    );
   });
 });

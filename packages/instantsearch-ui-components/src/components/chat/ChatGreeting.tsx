@@ -3,7 +3,7 @@
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatEmptyProps } from './types';
+import type { ChatComponentPropsWithMetadata } from './types';
 
 export type ChatGreetingTranslations = {
   /**
@@ -35,7 +35,7 @@ export type ChatGreetingClassNames = {
   banner?: string | string[];
 };
 
-export type ChatGreetingProps = ChatEmptyProps & ComponentProps<'div'> & {
+export type ChatGreetingProps = ComponentProps<'div'> & {
   /**
    * Optional translations
    */
@@ -53,21 +53,18 @@ export type ChatGreetingProps = ChatEmptyProps & ComponentProps<'div'> & {
 export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function ChatGreeting(userProps: ChatGreetingProps) {
+  return function ChatGreeting(
+    userProps: ChatComponentPropsWithMetadata<ChatGreetingProps>
+  ) {
     const {
       translations: userTranslations,
       classNames = {},
-      sendMessage: _sendMessage,
-      status: _status,
-      onClose: _onClose,
-      setInput: _setInput,
+      metadata,
       banner,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
-      heading:
-        userTranslations?.heading ??
-        'How can I help you today?',
+      heading: userTranslations?.heading ?? 'How can I help you today?',
       subheading:
         userTranslations?.subheading ??
         "Ask me anything about our products, and I'll do my best to assist you.",

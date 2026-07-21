@@ -322,6 +322,7 @@ function ChatInner<
       }}
       messagesProps={{
         status,
+        error,
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),
@@ -354,7 +355,6 @@ function ChatInner<
         translations: messagesTranslations,
         messageTranslations,
         ...messagesProps,
-        error,
       }}
       promptProps={{
         promptRef,

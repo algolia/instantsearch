@@ -7,7 +7,18 @@ import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentMetadata,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+const metadata: ChatComponentMetadata = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  tools: {},
+  onClose: jest.fn(),
+};
 
 type TestResult = {
   objectID: string;
@@ -61,11 +72,11 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         message={message}
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -126,7 +137,7 @@ describe('createDisplayResultsTool', () => {
         message={message}
         messages={messages}
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
+        metadata={metadata}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
@@ -180,7 +191,7 @@ describe('createDisplayResultsTool', () => {
         message={message}
         messages={messages}
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
+        metadata={metadata}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
@@ -213,11 +224,11 @@ describe('createDisplayResultsTool', () => {
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -251,11 +262,11 @@ describe('createDisplayResultsTool', () => {
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
@@ -280,11 +291,11 @@ describe('createDisplayResultsTool', () => {
           } as ClientSideToolComponentProps['message']
         }
         applyFilters={jest.fn()}
-        onClose={jest.fn()}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
         sendEvent={jest.fn()}
+        metadata={metadata}
       />
     );
 
