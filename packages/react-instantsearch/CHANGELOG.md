@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.40.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.39.1...react-instantsearch@7.40.0) (2026-07-21)
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
 ## [7.39.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.39.0...react-instantsearch@7.39.1) (2026-07-14)
 
 **Note:** Version bump only for package react-instantsearch
