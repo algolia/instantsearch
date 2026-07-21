@@ -10,7 +10,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "algoliasearch": "5.55.2"
+    "algoliasearch": "5.56.0"
   },
   "devDependencies": {
     "babel-eslint": "10.0.2",
