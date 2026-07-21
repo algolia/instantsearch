@@ -595,8 +595,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         response.isRetired ||
         response.outcome !== 'succeeded' ||
         response.requiredToolCallIds.size === 0 ||
-        response.resolvedToolCallIds.size !==
-          response.requiredToolCallIds.size ||
+        Array.from(response.requiredToolCallIds).some(
+          (toolCallId) => !response.resolvedToolCallIds.has(toolCallId)
+        ) ||
         !response.didNotifyFinish ||
         response.didEvaluateContinuation
       ) {
@@ -697,7 +698,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         return Promise.resolve();
       }
 
-      if (response) {
+      if (response?.requiredToolCallIds.has(toolCallId)) {
         response.resolvedToolCallIds.add(toolCallId);
       }
       return this.continueResponse(response);

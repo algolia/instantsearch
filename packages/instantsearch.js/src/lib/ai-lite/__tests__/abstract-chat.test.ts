@@ -3991,6 +3991,62 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.state.status).toBe('ready');
     });
 
+    it('waits for the required client result after a provider result is submitted', async () => {
+      let submitClientResult!: TestChat['addToolResult'];
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const setup = createTestSetup({
+        state,
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'lookup',
+              toolCallId: 'server-call',
+              input: { q: 'server' },
+              providerExecuted: true,
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'client-call',
+              input: { q: 'client' },
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          expect(toolCall.toolCallId).toBe('client-call');
+          submitClientResult = addToolResult!;
+        },
+        sendAutomaticallyWhen,
+      });
+
+      await setup.chat.sendMessage({ text: 'use both tools' });
+      const message = messageById(state, 'assistant-1');
+
+      await setup.chat['~addToolResultForMessage'](message, {
+        tool: 'lookup',
+        toolCallId: 'server-call',
+        output: { owner: 'layout' },
+      });
+
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+
+      await submitClientResult({
+        tool: 'search',
+        toolCallId: 'client-call',
+        output: { owner: 'client' },
+      });
+
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(setup.state.status).toBe('ready');
+    });
+
     it('quietly ignores an unknown toolCallId', async () => {
       const sendAutomaticallyWhen = jest.fn(() => true);
       const setup = createTestSetup({ sendAutomaticallyWhen });
