@@ -522,7 +522,7 @@ describe('connectPromptSuggestions', () => {
       expect(transformHits).toHaveBeenCalledTimes(1);
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;
       const parsed = JSON.parse((init as RequestInit).body as string);
-      expect(parsed.task).toBe('prompt_suggestions');
+      expect(parsed.task).toBe('prompt-suggestions');
       expect(parsed.input).not.toHaveProperty('pageType');
       expect(parsed.input.hitsSample).toEqual([{ id: '1' }]);
     });

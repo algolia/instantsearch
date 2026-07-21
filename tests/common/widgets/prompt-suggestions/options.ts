@@ -296,7 +296,7 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('defaults the configurationId to `prompt_suggestions`', async () => {
+    test('defaults the configurationId to `prompt-suggestions`', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -322,7 +322,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       // `configurationId` is sent to the backend as the `task` field.
-      expect(body.task).toBe('prompt_suggestions');
+      expect(body.task).toBe('prompt-suggestions');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {

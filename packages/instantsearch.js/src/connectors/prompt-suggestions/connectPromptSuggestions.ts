@@ -103,7 +103,7 @@ export type PromptSuggestionsSource =
 export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
    * Agent Studio configuration to invoke, sent as the `task` field.
-   * @default 'prompt_suggestions'
+   * @default 'prompt-suggestions'
    */
   configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
@@ -408,7 +408,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         noop
       )({
         ...(transport ? { transport } : { agentId }),
-        task: configurationId ?? 'prompt_suggestions',
+        task: configurationId ?? 'prompt-suggestions',
         stream: true,
       } as TasksConnectorParams);
 
