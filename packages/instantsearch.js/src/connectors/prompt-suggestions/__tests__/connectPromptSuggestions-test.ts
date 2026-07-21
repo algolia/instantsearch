@@ -385,6 +385,54 @@ describe('connectPromptSuggestions', () => {
       expect(afterSecond.suggestions).toEqual(['x', 'y']);
     });
 
+    it('ignores a stale in-flight response that resolves during the debounce for a newer state', async () => {
+      // Regression: an older request must not win once the search state has
+      // moved on. If request A (for state 'a') resolves while the debounced
+      // refetch for state 'b' is still pending, its suggestions must not paint.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      // Hold the first fetch (state 'a') open so it stays in flight.
+      let resolveFirst: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFirst = resolve;
+          })
+      );
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // State moves to 'b' before the first request resolves: a new debounce is
+      // pending, so the still-in-flight 'a' request is now stale.
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'b' }) })
+      );
+
+      // The stale 'a' response arrives during the debounce window.
+      resolveFirst(jsonResponse({ output: { suggestions: ['stale'] } }));
+      await flush(0);
+
+      // It must not paint stale pills.
+      const duringDebounce =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(duringDebounce.suggestions).not.toContain('stale');
+
+      // The debounced 'b' request fires and resolves with fresh pills.
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      await flush(0);
+      const afterSecond =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterSecond.suggestions).toEqual(['a', 'b', 'c']);
+    });
+
     it('does not render after dispose when an in-flight fetch resolves late', async () => {
       const renderFn = jest.fn();
       const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
@@ -848,6 +896,35 @@ describe('connectPromptSuggestions', () => {
       const initCall = renderFn.mock.calls[0][0];
       expect(initCall.sendToChat('hello')).toBe(true);
       expect(sendMessage).toHaveBeenCalled();
+    });
+
+    it('sendToChat returns false when the chat is busy and nothing is sent', async () => {
+      const sendMessage = jest.fn();
+      const setOpen = jest.fn();
+      const search = createInstantSearch();
+      search.renderState = {
+        [search.helper!.state.index]: {
+          chat: { sendMessage, setOpen, status: 'streaming' },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+      const initCall = renderFn.mock.calls[0][0];
+      // The chat is mid-stream: openChat opens it but doesn't dispatch, so the
+      // handler must report that nothing was sent.
+      expect(initCall.sendToChat('hello')).toBe(false);
+      expect(setOpen).toHaveBeenCalledWith(true);
+      expect(sendMessage).not.toHaveBeenCalled();
     });
 
     it('sendToChat returns false when no chat widget is in render state', async () => {

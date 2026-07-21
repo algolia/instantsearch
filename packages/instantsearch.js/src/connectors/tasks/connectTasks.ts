@@ -8,7 +8,7 @@ import {
 } from '../../lib/utils';
 
 import type { TaskRunner, TaskTransport } from '../../lib/tasks';
-import type { Connector } from '../../types';
+import type { Renderer, Unmounter, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'tasks',
@@ -36,7 +36,7 @@ export type TasksRenderState<TOutput = unknown> = {
    * new output once the request settles (or `undefined` if it failed — the
    * failure is surfaced via `error`). The returned promise never rejects.
    */
-  submit: (variables: Record<string, unknown>) => Promise<unknown>;
+  submit: (variables: Record<string, unknown>) => Promise<TOutput | undefined>;
 };
 
 /**
@@ -62,14 +62,18 @@ export type TasksWidgetDescription<TOutput = unknown> = {
   renderState: TasksRenderState<TOutput>;
 };
 
-export type TasksConnector = Connector<
-  TasksWidgetDescription,
-  TasksConnectorParams
+export type TasksConnector = <TOutput = unknown>(
+  renderFn: Renderer<TasksRenderState<TOutput>, TasksConnectorParams>,
+  unmountFn?: Unmounter
+) => (
+  widgetParams: TasksConnectorParams
+) => Widget<
+  TasksWidgetDescription<TOutput> & { widgetParams: TasksConnectorParams }
 >;
 
-const connectTasks: TasksConnector = function connectTasks(
-  renderFn,
-  unmountFn = noop
+const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
+  renderFn: Renderer<TasksRenderState<TOutput>, TasksConnectorParams>,
+  unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
@@ -89,14 +93,16 @@ const connectTasks: TasksConnector = function connectTasks(
     }
 
     let runner: TaskRunner;
-    let output: unknown;
+    let output: TOutput | undefined;
     let isLoading = false;
     let error: Error | undefined;
     let disposed = false;
     let triggerRender: () => void = noop;
     let requestId = 0;
 
-    const submit = (variables: Record<string, unknown>): Promise<unknown> => {
+    const submit = (
+      variables: Record<string, unknown>
+    ): Promise<TOutput | undefined> => {
       if (disposed) return Promise.resolve(undefined);
       const currentRequestId = (requestId += 1);
       const isStale = () => disposed || currentRequestId !== requestId;
@@ -107,19 +113,21 @@ const connectTasks: TasksConnector = function connectTasks(
       isLoading = true;
       triggerRender();
 
-      return runner
-        .submit(variables, {
-          onData: stream
-            ? (partial) => {
-                if (isStale()) return;
-                output = partial;
-                triggerRender();
-              }
-            : undefined,
-        })
+      return Promise.resolve()
+        .then(() =>
+          runner.submit(variables, {
+            onData: stream
+              ? (partial) => {
+                  if (isStale()) return;
+                  output = partial as TOutput;
+                  triggerRender();
+                }
+              : undefined,
+          })
+        )
         .then((next) => {
           if (isStale()) return;
-          output = next;
+          output = next as TOutput;
         })
         .catch((err) => {
           if (isStale()) return;
@@ -134,7 +142,7 @@ const connectTasks: TasksConnector = function connectTasks(
         .then(() => output);
     };
 
-    const getWidgetRenderState = (): TasksRenderState & {
+    const getWidgetRenderState = (): TasksRenderState<TOutput> & {
       widgetParams: TasksConnectorParams;
     } => ({
       output,

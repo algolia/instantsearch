@@ -222,6 +222,11 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
       let disposed = false;
+      // True between a state-signature change and the debounced refetch that
+      // follows it. While pending, the search state has already moved on, so a
+      // still-in-flight request from the previous state must not paint its
+      // suggestions, its inner render is ignored until the new `submit` starts.
+      let refetchPending = false;
 
       const getStateSignature = (results: SearchResults): string => {
         if (results.queryID) {
@@ -265,12 +270,11 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             latestRenderOptions?.results ??
             ('results' in renderOptions ? renderOptions.results : null) ??
             null;
-          openChat(chatRenderState, {
+          return openChat(chatRenderState, {
             message: buildSuggestionMessage(prompt),
             referer: 'prompt-suggestions-widget',
             turnContext: buildTurnContext(results),
           });
-          return true;
         };
 
       const resolvePageContext = (
@@ -332,6 +336,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         renderOptions: RenderOptions
       ) => {
         if (disposed || !tasksState) return;
+        refetchPending = false;
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
           suggestions = [];
@@ -387,6 +392,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // resolve/error) into this widget's state and re-renders on the client.
       const handleInnerRender = (renderState: TasksRenderState) => {
         tasksState = renderState;
+        if (refetchPending) return;
         // Only adopt the inner output once a request is loading or has produced
         // one, so the initial no-op render doesn't clobber existing pills.
         if (renderState.isLoading || renderState.output !== undefined) {
@@ -443,6 +449,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
           if (stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;
+            refetchPending = true;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
               if (latestRenderOptions?.results) {

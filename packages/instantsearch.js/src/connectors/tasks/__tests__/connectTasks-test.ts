@@ -210,6 +210,26 @@ describe('connectTasks', () => {
       expect(lastState().isLoading).toBe(false);
     });
 
+    it('surfaces a synchronous error from request building and stops loading', async () => {
+      const { lastState } = init({
+        transport: {
+          api: 'https://custom.test/tasks',
+          prepareSendMessagesRequest: () => {
+            throw new Error('cannot build request');
+          },
+        },
+        task: 't',
+      });
+
+      lastState().submit({});
+      await flush(0);
+
+      expect(lastState().error).toBeInstanceOf(Error);
+      expect(lastState().error?.message).toMatch(/cannot build request/);
+      expect(lastState().isLoading).toBe(false);
+      expect(lastState().output).toBeUndefined();
+    });
+
     it('resolves credentials from a custom transport', async () => {
       const { lastState } = init({
         transport: {
@@ -243,6 +263,9 @@ describe('connectTasks', () => {
       // Fire two overlapping submits; the first one resolves *last*.
       lastState().submit({ n: 1 });
       lastState().submit({ n: 2 });
+      // `submit` defers the `fetch` call by a microtask (so a synchronous
+      // throw is caught by the chain), so flush before touching resolvers.
+      await flush(0);
 
       // Resolve the newer request (2) first, then the stale one (1).
       resolvers[1](jsonResponse({ output: { winner: 2 } }));
