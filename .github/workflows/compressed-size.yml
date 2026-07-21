@@ -22,5 +22,6 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           build-script: 'build:ci'
           compression: 'gzip'
+          minimum-change-threshold: 10
           pattern: './packages/{*/dist/*.js,*/dist/umd/*.min.js,vue-instantsearch/vue{2,3}/{umd,cjs}/*.js,instantsearch.css/{themes,components}/*.css}'
           exclude: '{**/*.map,**/node_modules/**,**/instantsearch-codemods/**}'
