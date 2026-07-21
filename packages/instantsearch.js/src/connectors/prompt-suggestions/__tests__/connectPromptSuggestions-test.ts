@@ -25,13 +25,18 @@ function makeResults(
   overrides: {
     hits?: Array<Record<string, unknown>>;
     query?: string;
+    queryID?: string;
   } = {}
 ): SearchResults {
-  const { hits = [{ objectID: '1' }, { objectID: '2' }], query = 'q' } =
-    overrides;
+  const {
+    hits = [{ objectID: '1' }, { objectID: '2' }],
+    query = 'q',
+    queryID,
+  } = overrides;
   const response = createSingleSearchResponse({
     hits: hits as unknown as SearchResults['hits'],
     query,
+    ...(queryID ? { queryID } : {}),
   });
   const helper = algoliasearchHelper(createSearchClient(), '');
   return new algoliasearchHelper.SearchResults(helper.state, [response]);
@@ -225,7 +230,10 @@ describe('connectPromptSuggestions', () => {
       widget.init!(createInitOptions({ helper }));
 
       const unrefined = new algoliasearchHelper.SearchResults(helper.state, [
-        createSingleSearchResponse({ hits: [{ objectID: '1' }] as any, query: '' }),
+        createSingleSearchResponse({
+          hits: [{ objectID: '1' }] as any,
+          query: '',
+        }),
       ]);
       widget.render!(createRenderOptions({ helper, results: unrefined }));
       await flush(DEBOUNCE_WAIT);
@@ -256,7 +264,10 @@ describe('connectPromptSuggestions', () => {
       widget.init!(createInitOptions({ helper }));
 
       const unrefined = new algoliasearchHelper.SearchResults(helper.state, [
-        createSingleSearchResponse({ hits: [{ objectID: '1' }] as any, query: '' }),
+        createSingleSearchResponse({
+          hits: [{ objectID: '1' }] as any,
+          query: '',
+        }),
       ]);
       widget.render!(createRenderOptions({ helper, results: unrefined }));
       await flush(DEBOUNCE_WAIT);
@@ -276,6 +287,56 @@ describe('connectPromptSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
+    it('refetches whenever the results `queryID` changes', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes', queryID: 'q1' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes', queryID: 'q2' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not refetch when the `queryID` is unchanged', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a' });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes', queryID: 'q1' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes', queryID: 'q1' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
     it('clears stale pills and exposes the loading state on every refetch', async () => {
       // Regression: on a refetch (query/refinement change) the previous pills
       // must be cleared so the UI's `isLoading && suggestions.length === 0`
@@ -293,8 +354,7 @@ describe('connectPromptSuggestions', () => {
       );
       await flush(DEBOUNCE_WAIT);
       await flush(0);
-      const afterFirst =
-        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      const afterFirst = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(afterFirst.suggestions).toEqual(['a', 'b', 'c']);
       expect(afterFirst.isLoading).toBe(false);
 
@@ -313,8 +373,7 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       // Mid-refetch: stale pills gone, skeleton state exposed.
-      const midFlight =
-        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      const midFlight = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(midFlight.isLoading).toBe(true);
       expect(midFlight.suggestions).toEqual([]);
 
@@ -392,9 +451,8 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('forwards `transformHits(hits)` output to the agent as context', async () => {
-      const transformHits = jest.fn(
-        (hits: Array<Record<string, unknown>>) =>
-          hits.slice(0, 1).map((h) => ({ id: h.objectID }))
+      const transformHits = jest.fn((hits: Array<Record<string, unknown>>) =>
+        hits.slice(0, 1).map((h) => ({ id: h.objectID }))
       );
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
@@ -505,9 +563,7 @@ describe('connectPromptSuggestions', () => {
       const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a' });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
-      widget.render!(
-        createRenderOptions({ helper, results: makeResults() })
-      );
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
       await flush(DEBOUNCE_WAIT);
 
       const [[, init]] = (global.fetch as jest.Mock).mock.calls;

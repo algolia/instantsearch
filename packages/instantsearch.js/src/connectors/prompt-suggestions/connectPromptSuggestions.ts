@@ -224,16 +224,15 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       let disposed = false;
 
       const getStateSignature = (results: SearchResults): string => {
+        if (results.queryID) {
+          return results.queryID;
+        }
         const query = results.query || '';
-        const state = results._state;
-        const refinements = state
-          ? JSON.stringify(state.facetsRefinements) +
-            JSON.stringify(state.disjunctiveFacetsRefinements) +
-            JSON.stringify(state.hierarchicalFacetsRefinements) +
-            JSON.stringify(state.numericRefinements) +
-            JSON.stringify(state.tagRefinements)
-          : '';
-        return `${query}|${refinements}`;
+        const filters = JSON.stringify(buildFilters(results) ?? []);
+        const hitIds = (results.hits || [])
+          .map((hit) => hit.objectID)
+          .join(',');
+        return `${query}|${filters}|${hitIds}`;
       };
 
       const getChatRenderState = (
