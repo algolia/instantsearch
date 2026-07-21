@@ -312,12 +312,13 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         if (!pageContext) {
           return undefined;
         }
-        return Object.fromEntries(
-          Object.entries(pageContext).map(([key, value]) => [
+        const entries = Object.entries(pageContext)
+          .map(([key, value]): [string, string] => [
             key,
             typeof value === 'string' ? value : JSON.stringify(value),
           ])
-        );
+          .filter(([, value]) => value.trim() !== '');
+        return entries.length > 0 ? Object.fromEntries(entries) : undefined;
       };
 
       const renderOutward = (renderOptions: InitOptions | RenderOptions) => {

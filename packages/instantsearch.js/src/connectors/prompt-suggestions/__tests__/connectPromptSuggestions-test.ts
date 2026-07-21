@@ -843,7 +843,7 @@ describe('connectPromptSuggestions', () => {
         createRenderOptions({
           instantSearchInstance: search,
           helper: search.helper!,
-          results: makeResults(),
+          results: makeResults({ query: '' }),
         })
       );
       await flush(DEBOUNCE_WAIT);
@@ -860,7 +860,6 @@ describe('connectPromptSuggestions', () => {
           text: expect.stringContaining('Suggestion: try this'),
           metadata: {
             turnContext: {
-              query: 'q',
               hitsSample: JSON.stringify([
                 { objectID: '1' },
                 { objectID: '2' },
