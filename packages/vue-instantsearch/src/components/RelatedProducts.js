@@ -46,7 +46,7 @@ export default {
       default: undefined,
     },
     fallbackParameters: {
-      type: Array,
+      type: Object,
       required: false,
       default: undefined,
     },
