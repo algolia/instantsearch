@@ -2,6 +2,11 @@ name: Bundle Size
 
 on: [pull_request]
 
+# Cancel an in-progress run when a new commit is pushed to the same PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pull-requests: write
