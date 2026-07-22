@@ -80,6 +80,8 @@ function getAllComponents() {
         props.indexName = 'indexName';
       } else if (name === 'AisFeeds') {
         props.isolated = false;
+      } else if (name === 'AisRelatedProducts') {
+        props.objectIDs = ['1'];
       } else {
         props.attribute = 'attr';
       }

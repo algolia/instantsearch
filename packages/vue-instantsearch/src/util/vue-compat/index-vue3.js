@@ -7,6 +7,14 @@ const Vue2 = undefined;
 export { createApp, createSSRApp, h, version, nextTick } from 'vue';
 export { Vue, Vue2, isVue2, isVue3 };
 
+/**
+ * A Fragment for the React-style renderer: a plain function component that
+ * returns its children. Matches the Vue 2 implementation so shared markup
+ * serializes identically across versions — the real Vue 3 `Fragment` symbol
+ * introduces anchor/whitespace nodes that would break shared snapshots.
+ */
+export const Fragment = (props) => (props && props.children) || [];
+
 export function renderCompat(fn) {
   function h(tag, props, ...childrenArray) {
     const children = childrenArray.length > 0 ? childrenArray : undefined;
@@ -50,6 +58,90 @@ export function renderCompat(fn) {
   return function () {
     return fn.call(this, h);
   };
+}
+
+/**
+ * A `createElement` that understands the React-style markup emitted by
+ * `instantsearch-ui-components` factories (`className`, `onClick`/`onKeyDown`
+ * handlers, and `ref` as a MutableRef `{ current }`), mapping them onto Vue 3's
+ * `h`. Mirrors the Vue 2 implementation in `index-vue2.js`.
+ */
+export function augmentReactCreateElement(baseH) {
+  return function reactCreateElement(tag, rawProps, ...rest) {
+    const props = rawProps || {};
+    const children = flattenChildren(rest);
+    const childArg = children.length > 0 ? children : undefined;
+
+    // Plain function components (shared sub-factories, Fragment) render eagerly.
+    if (typeof tag === 'function') {
+      return tag(
+        Object.assign({}, props, {
+          class: props.className || props.class,
+          children: childArg,
+        })
+      );
+    }
+
+    const data = {};
+
+    Object.keys(props).forEach((name) => {
+      const value = props[name];
+
+      if (name === 'className') {
+        data.class = value;
+      } else if (name === 'children') {
+        // handled via the children argument
+      } else if (name === 'ref') {
+        const functionRef = makeFunctionRef(value);
+        if (functionRef) {
+          data.ref = functionRef;
+        }
+      } else if (isEventProp(name, value)) {
+        // React `onKeyDown` -> Vue 3 `onKeydown` (compiler-style handler key)
+        const eventName = name.slice(2).toLowerCase();
+        data[`on${eventName[0].toUpperCase()}${eventName.slice(1)}`] = value;
+      } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
+        data[name] = String(value);
+      } else {
+        data[name] = value;
+      }
+    });
+
+    return baseH(tag, data, childArg);
+  };
+}
+
+export function renderReactCompat(fn) {
+  return function () {
+    return fn.call(this, augmentReactCreateElement(Vue.h));
+  };
+}
+
+function isEventProp(name, value) {
+  return (
+    typeof value === 'function' && name.length > 2 && /^on[A-Z]/.test(name)
+  );
+}
+
+function makeFunctionRef(ref) {
+  if (!ref || typeof ref !== 'object' || !('current' in ref)) {
+    return undefined;
+  }
+  return (element) => {
+    ref.current = element;
+  };
+}
+
+function flattenChildren(nodes) {
+  return nodes.reduce((acc, node) => {
+    if (Array.isArray(node)) {
+      return acc.concat(flattenChildren(node));
+    }
+    if (node !== undefined && node !== null && node !== false) {
+      acc.push(node);
+    }
+    return acc;
+  }, []);
 }
 
 export function getDefaultSlot(component) {
