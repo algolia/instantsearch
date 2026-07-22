@@ -14,7 +14,11 @@ import {
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
-import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
+import type {
+  UIMessage,
+  UIMessageChunk,
+  ChatTransport,
+} from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams, ChatCustomInstance } from '../connectChat';
 
@@ -69,6 +73,27 @@ describe('connectChat', () => {
           dispose: expect.any(Function),
         })
       );
+    });
+
+    it('depends on search by default', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
+
+      expect(widget.dependsOn).toBe('search');
+    });
+
+    it('can be configured to depend on no backend request', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        requiresSearch: false,
+      });
+
+      expect(widget.dependsOn).toBe('none');
     });
 
     it('types requestOptions as agentId-only', () => {
@@ -571,6 +596,14 @@ describe('connectChat', () => {
   });
 
   describe('tool handling', () => {
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
     it('provides tools in render state', () => {
       const mockTool = {};
 
@@ -585,10 +618,81 @@ describe('connectChat', () => {
         testTool: {
           ...mockTool,
           addToolResult: expect.any(Function),
+          '~addToolResultForMessage': expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
         },
       });
+    });
+
+    it('keeps the development diagnostic for an unknown tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'missingTool',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      await widget.chatInstance.sendMessage({ text: 'use a missing tool' });
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(widget.chatInstance.error).toEqual(
+        new Error(
+          'No tool implementation found for "missingTool". Please provide a tool implementation in the `tools` prop.'
+        )
+      );
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('supports returning the injected addToolResult from a configured tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'hello' },
+          },
+          { type: 'finish' },
+        ])
+      );
+      const onToolCall = jest.fn(({ addToolResult }) =>
+        addToolResult({ output: { hits: ['hello'] } })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen: () => false,
+        tools: { search: { onToolCall } },
+      });
+
+      await expect(
+        widget.chatInstance.sendMessage({ text: 'search for hello' })
+      ).resolves.toBeUndefined();
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.role === 'assistant'
+      );
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(assistant?.parts[0]).toMatchObject({
+        type: 'tool-search',
+        toolCallId: 'call-1',
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -1829,6 +1933,106 @@ data: [DONE]`,
       // of silently sending the message without context.
       expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
       expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendAutomaticallyWhen', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    // A minimal, immediately-terminating assistant turn — enough for the
+    // automatic follow-up request's stream to settle.
+    const terminalStream = () =>
+      new Response(
+        `data: {"type": "start", "messageId": "assistant-2"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    // An assistant message with a single, still-unresolved tool call. Assigning
+    // it directly (rather than streaming it in) keeps the test deterministic:
+    // the only request that can fire is the auto-continuation from
+    // `addToolResult`.
+    const assistantWithPendingTool = () =>
+      [
+        { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+        {
+          id: 'a1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-myTool',
+              toolCallId: 'call_1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ] as unknown as UIMessage[];
+
+    it('auto-continues by default once a resolved tool completes the assistant message', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      // Resolving the tool result flips the last assistant message's tool part
+      // to `output-available`; the default
+      // `lastAssistantMessageIsCompleteWithToolCalls` then resubmits. Awaiting
+      // `addToolResult` waits for that follow-up to complete, so the assertion
+      // is deterministic.
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: false },
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(widget.chatInstance.messages[1].parts[0]).toMatchObject({
+        output: { ok: true },
+      });
+    });
+
+    it('does not auto-continue when a user `sendAutomaticallyWhen` returns false', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+      const sendAutomaticallyWhen = jest.fn(() => false);
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen,
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      // The user predicate was consulted with the resolved messages...
+      expect(sendAutomaticallyWhen).toHaveBeenCalledWith(
+        expect.objectContaining({ messages: expect.any(Array) })
+      );
+      // ...and because it returned `false`, no automatic follow-up fired at
+      // all. This is the escape hatch for the runaway auto-continuation loop: a
+      // resolved tool no longer forces another completions request.
+      expect(fetchMock).not.toHaveBeenCalled();
     });
   });
 });

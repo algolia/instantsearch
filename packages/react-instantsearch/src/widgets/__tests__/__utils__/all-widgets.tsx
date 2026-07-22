@@ -18,6 +18,8 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  // Deprecated alias of `Autocomplete`, covered separately.
+  'EXPERIMENTAL_Autocomplete',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -42,6 +44,8 @@ const NON_COMPONENTS = [
   // the switch below, breaking other cases. Covered by a dedicated test in
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
+  // Deprecated alias of `Autocomplete`, covered separately.
+  'EXPERIMENTAL_Autocomplete',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
@@ -138,7 +142,7 @@ function Widget<TWidget extends SingleWidget>({
     case 'TrendingFacets': {
       return <widget.Component facetName="brand" {...props} />;
     }
-    case 'EXPERIMENTAL_Autocomplete': {
+    case 'Autocomplete': {
       // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
     }

@@ -158,7 +158,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   it('does not throw without `indexName` option when `isolated` is true', () => {
     expect(() => {
-      index({ EXPERIMENTAL_isolated: true });
+      index({ isolated: true });
     }).not.toThrow();
   });
 
@@ -498,6 +498,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.removeWidgets([pagination]);
 
       expect(instance.getWidgets()).toEqual([searchBox]);
+    });
+
+    it('clears the parent only on removed widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox, pagination]);
+      instance.removeWidgets([pagination]);
+
+      expect(searchBox.parent).toBe(instance);
+      expect(pagination.parent).toBeUndefined();
     });
 
     it('removes given widgets from the instance', () => {
@@ -3487,7 +3499,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           virtualSearchBox({}),
           index({
             indexName: 'childInstance',
-            EXPERIMENTAL_isolated: true,
+            isolated: true,
           }).addWidgets([virtualPagination({})]),
         ]),
       ]);
@@ -3897,9 +3909,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   describe('isolated', () => {
     it('sets _isolated to true when isolated option is true', () => {
-      const instance = index({ EXPERIMENTAL_isolated: true });
+      const instance = index({ isolated: true });
       expect(instance._isolated).toBe(true);
       expect(instance.getParent()).toBeNull();
+    });
+
+    it('supports the deprecated `EXPERIMENTAL_isolated` alias with a warning', () => {
+      warning.cache = {};
+      expect(() => {
+        const instance = index({ EXPERIMENTAL_isolated: true });
+        expect(instance._isolated).toBe(true);
+        expect(instance.getParent()).toBeNull();
+      }).toWarnDev(
+        '[InstantSearch.js]: The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
+      );
     });
 
     it('sets _isolated to false when isolated option is false or omitted', () => {
@@ -3917,7 +3940,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('returns null parent for isolated indices', () => {
       const parent = index({ indexName: 'parentIndex' });
-      const child = index({ EXPERIMENTAL_isolated: true });
+      const child = index({ isolated: true });
       parent.addWidgets([child]);
       child.init(createIndexInitOptions({ parent }));
       expect(child.getParent()).toBeNull();
@@ -3927,13 +3950,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+        index({ isolated: true }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
       search.start();
 
       await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
       expect(search.client.search).toHaveBeenCalledTimes(0);
     });
 
@@ -3941,7 +3966,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: false, indexName: 'a' }).addWidgets([
+        index({ isolated: false, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3966,7 +3991,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+        index({ isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3995,7 +4020,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+        index({ isolated: true }).addWidgets([
           index({ indexName: 'a' }),
           virtualSearchBox({}),
         ]),
@@ -4010,25 +4035,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(search.client.search).toHaveBeenCalledTimes(1);
     });
 
-    it('triggers composition when root has a compositionId', async () => {
+    it('does not trigger the root composition for an isolated index', async () => {
       const search = instantsearch({
         searchClient: createCompositionClient(),
         compositionID: 'composition-id',
       }).addWidgets([
-        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+        index({ isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
       search.start();
 
       await wait(0);
-      // Now called for the root, as a compositionId is set
-      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(search.client.search).not.toHaveBeenCalled();
 
       search.renderState.a.searchBox?.refine('please search now');
 
-      expect(search.client.search).toHaveBeenCalledTimes(2);
-      expect(castToJestMock(search.client.search).mock.calls[1][0])
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
         .toMatchInlineSnapshot(`
         {
           "compositionID": "a",
@@ -4039,6 +4063,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         }
       `);
+    });
+
+    it('does not trigger composition for an empty isolated index', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([index({ EXPERIMENTAL_isolated: true })]);
+      search.start();
+
+      await wait(0);
+      expect(search._hasSearchWidget).toBe(false);
+      expect(search.status).toBe('idle');
+      expect(search.client.search).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger composition when a root widget requires no request', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([
+        createWidget({ dependsOn: 'none' }),
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).not.toHaveBeenCalled();
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
     });
   });
 

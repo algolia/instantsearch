@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import { connectSearchBox } from '../../connectors';
+import { connectAutocomplete, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 
 import type InstantSearch from '../InstantSearch';
@@ -19,6 +19,7 @@ function createDelayedSearchClient(timeout: number) {
 }
 
 const virtualSearchBox = connectSearchBox(() => {});
+const virtualAutocomplete = connectAutocomplete(() => {});
 
 describe('status', () => {
   test('is initially "idle"', () => {
@@ -41,6 +42,25 @@ describe('status', () => {
     await wait(0);
 
     expect(search.status).toBe('idle');
+  });
+
+  test('stays "idle" when no widget requires a request', async () => {
+    const searchClient = createSearchClient();
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const render = jest.fn();
+
+    search.on('render', render);
+    search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
+    search.start();
+
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(searchClient.search).not.toHaveBeenCalled();
+    expect(render).toHaveBeenCalled();
   });
 
   test('becomes "loading" after calling `start()` when there are widgets', async () => {
@@ -144,6 +164,29 @@ describe('status', () => {
     await wait(20);
 
     expect(search.status).toBe('idle');
+  });
+
+  test('stays "idle" when removing the last widget that requires a request', async () => {
+    const searchClient = createSearchClient();
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const requestFreeWidget = virtualAutocomplete({ requiresSearch: false });
+
+    search.addWidgets([searchBox, requestFreeWidget]);
+    search.start();
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
   test('becomes "stalled" when the API takes longer than the `stalledSearchDelay` to respond', async () => {

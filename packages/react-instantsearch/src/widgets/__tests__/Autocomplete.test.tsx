@@ -13,11 +13,11 @@ import { act, fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { InstantSearchSSRProvider } from 'react-instantsearch-core';
 
-import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
+import { Autocomplete } from '../Autocomplete';
 
 const noop = () => {};
 
-describe('EXPERIMENTAL_Autocomplete', () => {
+describe('Autocomplete', () => {
   beforeEach(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -49,7 +49,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
             compositionID="my-comp"
             indexName={undefined as unknown as string}
           >
-            <EXPERIMENTAL_Autocomplete
+            <Autocomplete
               feeds={[
                 {
                   feedID: 'products',
@@ -76,7 +76,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
       expect(() => {
         render(
           <InstantSearchTestWrapper searchClient={searchClient}>
-            <EXPERIMENTAL_Autocomplete
+            <Autocomplete
               feeds={[
                 {
                   feedID: 'products',
@@ -102,7 +102,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
       expect(() => {
         render(
           <InstantSearchTestWrapper searchClient={searchClient}>
-            <EXPERIMENTAL_Autocomplete
+            <Autocomplete
               indices={[
                 {
                   indexName: 'my-index',
@@ -120,6 +120,49 @@ describe('EXPERIMENTAL_Autocomplete', () => {
   });
 
   describe('lazy activation', () => {
+    test('updates its main search dependency when requiresSearch changes', async () => {
+      const searchClient = createSearchClient({});
+      const indices = [
+        {
+          indexName: 'my-index',
+          itemComponent: ({ item }: { item: { objectID: string } }) =>
+            React.createElement('div', null, String(item.objectID)),
+        },
+      ];
+
+      function App({ requiresSearch }: { requiresSearch: boolean }) {
+        return (
+          <InstantSearchTestWrapper
+            searchClient={searchClient}
+            indexName="indexName"
+          >
+            <Autocomplete
+              indices={indices}
+              requiresSearch={requiresSearch}
+            />
+          </InstantSearchTestWrapper>
+        );
+      }
+
+      const { rerender } = render(<App requiresSearch />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+      rerender(<App requiresSearch={false} />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+      rerender(<App requiresSearch />);
+      await act(async () => {
+        await wait(0);
+      });
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
+
     test('does not search on mount in indices-mode', async () => {
       const searchClient = createSearchClient({});
 
@@ -128,7 +171,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
           searchClient={searchClient}
           indexName="indexName"
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             indices={[
               {
                 indexName: 'my-index',
@@ -160,7 +203,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
           searchClient={searchClient}
           indexName="indexName"
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             indices={[
               {
                 indexName: 'my-index',
@@ -201,7 +244,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
             indexName: { query: 'macbook' },
           }}
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             indices={[
               {
                 indexName: 'my-index',
@@ -250,7 +293,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
             indexName: { query: 'macbook' },
           }}
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             indices={[
               {
                 indexName: 'my-index',
@@ -301,7 +344,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
             searchClient={searchClient as never}
             indexName="instant_search"
           >
-            <EXPERIMENTAL_Autocomplete
+            <Autocomplete
               indices={[
                 {
                   indexName: 'instant_search',
@@ -344,7 +387,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
           searchClient={searchClient}
           indexName="indexName"
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             autoFocus
             indices={[
               {
@@ -377,7 +420,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
           searchClient={searchClient}
           indexName="indexName"
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             indices={[
               {
                 indexName: 'my-index',
@@ -428,7 +471,7 @@ describe('EXPERIMENTAL_Autocomplete', () => {
           searchClient={searchClient}
           indexName="indexName"
         >
-          <EXPERIMENTAL_Autocomplete
+          <Autocomplete
             detachedMediaQuery={detachedMediaQuery}
             indices={[
               {

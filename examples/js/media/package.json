@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.115.0",
+  "version": "1.117.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,7 @@
     "htm": "^3.0.0",
     "instantsearch-ui-components": "0.33.1",
     "instantsearch.css": "8.18.0",
-    "instantsearch.js": "4.105.0"
+    "instantsearch.js": "4.107.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

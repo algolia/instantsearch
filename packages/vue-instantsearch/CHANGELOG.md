@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.28.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.27.1...vue-instantsearch@4.28.0) (2026-07-21)
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
+## [4.27.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.27.0...vue-instantsearch@4.27.1) (2026-07-14)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
 # [4.27.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.26.11...vue-instantsearch@4.27.0) (2026-07-07)
 
 

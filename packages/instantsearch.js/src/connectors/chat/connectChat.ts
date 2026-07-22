@@ -19,6 +19,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
+import type { ResponseScopedOnToolCallCallback } from '../../lib/ai-lite/abstract-chat';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -33,6 +34,8 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  InitOptions,
+  RenderOptions,
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
@@ -159,6 +162,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   feedback?: never;
   requestOptions?: never;
   persistence?: never;
+  sendAutomaticallyWhen?: never;
 };
 
 export type ApplyFiltersParams = {
@@ -181,6 +185,13 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   /**
    * Configuration for client-side tools.
    */
@@ -331,6 +342,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
+      requiresSearch = true,
       ...options
     } = widgetParams || {};
 
@@ -550,8 +563,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
+        sendAutomaticallyWhen,
         transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         shouldRepairToolInput(toolName) {
           let tool = tools[toolName];
           if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
@@ -560,7 +573,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall({ toolCall }) {
+        onToolCall: (({ toolCall }, submitToolResult) => {
           let tool = tools[toolCall.toolName];
 
           // Compatibility shim with Algolia MCP Server search tool
@@ -578,7 +591,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return submitToolResult({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -587,7 +600,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           if (tool.onToolCall) {
             const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
+              submitToolResult({
                 output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
@@ -600,12 +613,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        },
+        }) satisfies ResponseScopedOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
     return {
       $$type: 'ais.chat',
+      dependsOn: requiresSearch ? ('search' as const) : ('none' as const),
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -721,8 +735,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       getRenderState(
-        renderState,
-        renderOptions
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
         // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
       ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
@@ -732,7 +746,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState(renderOptions: InitOptions | RenderOptions) {
         const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
@@ -752,11 +766,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
-          const toolWithAddToolResult: ClientSideTool = {
+          const toolWithAddToolResult = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            '~addToolResultForMessage':
+              _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
+          } satisfies ClientSideTool & {
+            '~addToolResultForMessage': typeof _chatInstance['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

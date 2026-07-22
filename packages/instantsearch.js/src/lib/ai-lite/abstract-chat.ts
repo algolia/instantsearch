@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { isEqual } from '../utils/isEqual';
+
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
@@ -19,6 +21,7 @@ import type {
   InferUIMessageMetadata,
   InferUIMessageToolCall,
   InferUIMessageTools,
+  ProviderMetadata,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -27,10 +30,34 @@ import type {
   ChatOnDataCallback,
 } from './types';
 
-type ActiveResponse<TChunk extends UIMessageChunk = UIMessageChunk> = {
+type ResponseOutcome = 'active' | 'succeeded' | 'aborted' | 'failed';
+
+type ResponseRecord = {
   abortController: AbortController;
-  stream?: ReadableStream<TChunk>;
+  messageId?: string;
+  outcome: ResponseOutcome;
+  isRetired: boolean;
+  requiredToolCallIds: Set<string>;
+  resolvedToolCallIds: Set<string>;
+  returnedToolCallbacks: Array<Promise<void>>;
+  pendingToolCallbacks: number;
+  didNotifyFinish: boolean;
+  didEvaluateContinuation: boolean;
 };
+
+type ToolResultSubmission<TUIMessage extends UIMessage> = <
+  TTool extends keyof InferUIMessageTools<TUIMessage>
+>(options: {
+  tool: TTool;
+  toolCallId: string;
+  output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+}) => Promise<void>;
+
+/** @internal */
+export type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
+  options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
+  addToolResult: ToolResultSubmission<TUIMessage>
+) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
 
 const tryParseJson = (value: string): unknown | undefined => {
   try {
@@ -139,7 +166,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private readonly transport?: ChatTransport<TUIMessage>;
   private onError?: ChatOnErrorCallback;
-  private onToolCall?: ChatOnToolCallCallback<TUIMessage>;
+  private onToolCall?: ResponseScopedOnToolCallCallback<TUIMessage>;
   private onFinish?: ChatOnFinishCallback<TUIMessage>;
   private onData?: ChatOnDataCallback<TUIMessage>;
   private sendAutomaticallyWhen?: (options: {
@@ -147,9 +174,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
 
-  private activeResponse: ActiveResponse<
-    InferUIMessageChunk<TUIMessage>
-  > | null = null;
+  private activeResponse: ResponseRecord | null = null;
+  private latestResponse: ResponseRecord | null = null;
+  private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
+  private responseByMessage = new WeakMap<TUIMessage, ResponseRecord>();
+  // Once tool ownership is discarded, an identifier-only result cannot prove
+  // which response generation submitted it. Scoped submissions remain safe.
+  private acceptsIdentifierOnlyToolResults = true;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -214,6 +245,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    * context.
    */
   resetConversationId(): void {
+    if (
+      this.responsesByToolCallId.size > 0 ||
+      this.messages.some((message) =>
+        message.parts?.some((part) => 'toolCallId' in part)
+      )
+    ) {
+      this.acceptsIdentifierOnlyToolResults = false;
+    }
     this.conversationId = this.generateId();
   }
 
@@ -222,7 +261,97 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   set messages(messages: TUIMessage[]) {
+    const getToolOccurrences = (message: TUIMessage) =>
+      message.parts
+        .filter(
+          (
+            part
+          ): part is TUIMessage['parts'][number] & { toolCallId: string } =>
+            'toolCallId' in part
+        )
+        .map((part) => ({
+          type: part.type,
+          toolCallId: part.toolCallId,
+          state: 'state' in part ? part.state : undefined,
+          input: 'input' in part ? part.input : undefined,
+          output: 'output' in part ? part.output : undefined,
+          errorText: 'errorText' in part ? part.errorText : undefined,
+          providerExecuted:
+            'providerExecuted' in part ? part.providerExecuted : undefined,
+        }));
+    const isEquivalentRehydration = (message: TUIMessage): boolean => {
+      const replacements = messages.filter(
+        (candidate) => candidate.id === message.id
+      );
+      if (replacements.length !== 1) return false;
+
+      const toolOccurrences = getToolOccurrences(message);
+      const replacementToolOccurrences = getToolOccurrences(replacements[0]);
+      return toolOccurrences.length > 0 || replacementToolOccurrences.length > 0
+        ? isEqual(toolOccurrences, replacementToolOccurrences)
+        : isEqual(message.parts, replacements[0].parts);
+    };
+    const detachedResponses = new Set<ResponseRecord>();
+    this.state.messages.forEach((message) => {
+      if (!messages.includes(message)) {
+        const response = this.responseByMessage.get(message);
+        if (response && !isEquivalentRehydration(message)) {
+          detachedResponses.add(response);
+        }
+      }
+    });
+    const removedToolOwner = this.state.messages.some(
+      (message) =>
+        message.parts?.some((part) => 'toolCallId' in part) &&
+        !messages.includes(message) &&
+        !isEquivalentRehydration(message)
+    );
+    const toolCallIds = new Set<string>();
+    const hasDuplicateToolCallId = messages.some(
+      (message) =>
+        message.parts?.some((part) => {
+          if (!('toolCallId' in part)) {
+            return false;
+          }
+          if (toolCallIds.has(part.toolCallId)) {
+            return true;
+          }
+          toolCallIds.add(part.toolCallId);
+          return false;
+        }) === true
+    );
+    if (removedToolOwner || hasDuplicateToolCallId) {
+      this.acceptsIdentifierOnlyToolResults = false;
+    }
     this.state.messages = messages;
+    const retainedMessageIds = new Set(messages.map((message) => message.id));
+    const responses = new Set<ResponseRecord>();
+    this.responsesByToolCallId.forEach((owners) => {
+      owners.forEach((response) => responses.add(response));
+    });
+    if (this.activeResponse) {
+      responses.add(this.activeResponse);
+    }
+    detachedResponses.forEach((response) => {
+      responses.add(response);
+      this.retireResponse(response);
+    });
+    responses.forEach((response) => {
+      const message = response.messageId
+        ? messages.find((candidate) => candidate.id === response.messageId)
+        : undefined;
+      if (message && !response.isRetired && !detachedResponses.has(response)) {
+        this.responseByMessage.set(message, response);
+      }
+    });
+    responses.forEach((response) => {
+      if (
+        detachedResponses.has(response) ||
+        (response.messageId && !retainedMessageIds.has(response.messageId))
+      ) {
+        this.pruneDetachedResponse(response);
+      }
+    });
   }
 
   get lastMessage(): TUIMessage | undefined {
@@ -341,11 +470,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       let targetIndex = -1;
 
       if (messageId) {
-        targetIndex = this.state.messages.findIndex((m) => m.id === messageId);
+        targetIndex = this.messages.findIndex((m) => m.id === messageId);
       } else {
         // Find the last assistant message
-        for (let i = this.state.messages.length - 1; i >= 0; i--) {
-          if (this.state.messages[i].role === 'assistant') {
+        for (let i = this.messages.length - 1; i >= 0; i--) {
+          if (this.messages[i].role === 'assistant') {
             targetIndex = i;
             break;
           }
@@ -354,7 +483,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
       if (targetIndex >= 0) {
         // Remove the assistant message and all messages after it
-        this.state.messages = this.state.messages.slice(0, targetIndex);
+        this.messages = this.messages.slice(0, targetIndex);
       }
 
       return this.makeRequest({
@@ -378,27 +507,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         );
       }
 
-      this.setStatus({ status: 'submitted' });
-
-      return this.transport
-        .reconnectToStream({
+      return this.consume(() =>
+        this.transport!.reconnectToStream({
           chatId: this.id,
           ...options,
         })
-        .then(
-          (stream) => {
-            if (stream) {
-              return this.processStreamWithCallbacks(stream);
-            } else {
-              this.setStatus({ status: 'ready' });
-              return Promise.resolve();
-            }
-          },
-          (error) => {
-            this.handleError(error as Error);
-            return Promise.resolve();
-          }
-        );
+      );
     });
   };
 
@@ -411,70 +525,279 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
   };
 
+  private replaceMessage(
+    index: number,
+    message: TUIMessage,
+    response?: ResponseRecord
+  ): TUIMessage {
+    this.state.replaceMessage(index, message);
+    const canonicalMessage = this.messages[index] ?? message;
+    if (response && this.messages.includes(canonicalMessage)) {
+      this.responseByMessage.set(canonicalMessage, response);
+    }
+    return canonicalMessage;
+  }
+
+  private commit(
+    toolCallId: string,
+    output: unknown,
+    messageId?: string,
+    response?: ResponseRecord,
+    expectedMessage?: TUIMessage
+  ): boolean {
+    const isTargetPart = (part: TUIMessage['parts'][number]): boolean =>
+      'toolCallId' in part && part.toolCallId === toolCallId;
+    const messageIndex = this.messages.findIndex(
+      (message) =>
+        (!messageId || message.id === messageId) &&
+        (!expectedMessage || message === expectedMessage) &&
+        message.parts.some(isTargetPart)
+    );
+
+    if (messageIndex === -1) return false;
+
+    const message = this.messages[messageIndex];
+    const partIndex = message.parts.findIndex(isTargetPart);
+    const part = message.parts[partIndex];
+    if (
+      !('state' in part) ||
+      (part.state === 'output-available' && !part.preliminary) ||
+      part.state === 'output-error'
+    ) {
+      return false;
+    }
+    const {
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      preliminary: _ignoredPreliminary,
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      rawOutput: _ignoredRawOutput,
+      ...committedPart
+    } = part as any;
+    const updatedParts = [...message.parts];
+    updatedParts[partIndex] = {
+      ...committedPart,
+      state: 'output-available' as const,
+      output,
+    };
+
+    const updatedMessage = {
+      ...message,
+      parts: updatedParts,
+    } as TUIMessage;
+    this.replaceMessage(messageIndex, updatedMessage, response);
+    return true;
+  }
+
+  private continueResponse(response?: ResponseRecord): Promise<void> {
+    if (response) {
+      this.pruneDetachedResponse(response);
+      if (
+        response.isRetired ||
+        response.outcome !== 'succeeded' ||
+        response.requiredToolCallIds.size === 0 ||
+        Array.from(response.requiredToolCallIds).some(
+          (toolCallId) => !response.resolvedToolCallIds.has(toolCallId)
+        ) ||
+        !response.didNotifyFinish ||
+        response.didEvaluateContinuation
+      ) {
+        return Promise.resolve();
+      }
+      response.didEvaluateContinuation = true;
+    }
+
+    if (!this.sendAutomaticallyWhen) return Promise.resolve();
+
+    return Promise.resolve()
+      .then(() =>
+        this.sendAutomaticallyWhen!({
+          messages: this.messages,
+        })
+      )
+      .then((shouldSend) => {
+        if (response) {
+          this.pruneDetachedResponse(response);
+          if (response.isRetired) return undefined;
+        }
+        return shouldSend
+          ? this.makeRequest({ trigger: 'submit-message' })
+          : undefined;
+      })
+      .catch((error) => {
+        if (response) {
+          this.pruneDetachedResponse(response);
+          if (response.isRetired) return;
+          this.handleError(error as Error, {
+            updateState: this.latestResponse === response,
+          });
+          return;
+        }
+        this.handleError(error as Error);
+      });
+  }
+
+  private retireResponse(response: ResponseRecord): void {
+    if (response.isRetired) return;
+
+    response.isRetired = true;
+    response.didEvaluateContinuation = true;
+
+    if (this.activeResponse === response) {
+      response.outcome = 'aborted';
+      this.activeResponse = null;
+      response.abortController.abort();
+      this.setStatus({ status: 'ready' });
+    }
+  }
+
+  private pruneDetachedResponse(response: ResponseRecord): void {
+    if (!response.isRetired) {
+      if (
+        !response.messageId ||
+        this.messages.some((message) => message.id === response.messageId)
+      ) {
+        return;
+      }
+
+      this.retireResponse(response);
+    }
+
+    // Keep a routing tombstone while a callback is running so public
+    // addToolResult calls settle directly instead of entering the executor.
+    if (response.pendingToolCallbacks > 0) return;
+
+    this.responsesByToolCallId.forEach((owners, toolCallId) => {
+      owners.delete(response);
+      if (owners.size === 0) {
+        this.responsesByToolCallId.delete(toolCallId);
+      }
+    });
+  }
+
+  private submitToolResult<TTool extends keyof InferUIMessageTools<TUIMessage>>(
+    response: ResponseRecord | undefined,
+    {
+      toolCallId,
+      output,
+    }: {
+      tool: TTool;
+      toolCallId: string;
+      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    },
+    messageId = response?.messageId,
+    expectedMessage = messageId
+      ? this.messages.find((message) => message.id === messageId)
+      : undefined
+  ): Promise<void> {
+    if (response?.isRetired) return Promise.resolve();
+
+    const commitResult = (): Promise<void> => {
+      if (
+        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+      ) {
+        return Promise.resolve();
+      }
+
+      if (response?.requiredToolCallIds.has(toolCallId)) {
+        response.resolvedToolCallIds.add(toolCallId);
+      }
+      return this.continueResponse(response);
+    };
+
+    if (
+      response &&
+      (this.activeResponse === response ||
+        response.outcome !== 'succeeded' ||
+        response.didEvaluateContinuation)
+    ) {
+      return commitResult();
+    }
+
+    return this.jobExecutor.run(commitResult);
+  }
+
   /**
    * Add a tool result for a tool call.
    */
-  addToolResult = <TTool extends keyof InferUIMessageTools<TUIMessage>>({
-    tool,
-    toolCallId,
-    output,
-  }: {
-    tool: TTool;
-    toolCallId: string;
-    output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-  }): Promise<void> => {
-    return this.jobExecutor.run(() => {
-      // Find the message with this tool call
-      const messageIndex = this.state.messages.findIndex(
-        (m) =>
-          m.parts?.some(
-            (p) =>
-              ('toolCallId' in p && p.toolCallId === toolCallId) ||
-              ('type' in p && p.type === `tool-${String(tool)}`)
-          ) ?? false
-      );
-
-      if (messageIndex === -1) return Promise.resolve();
-
-      const message = this.state.messages[messageIndex];
-      const updatedParts = message.parts.map((part) => {
-        if (
-          'toolCallId' in part &&
-          part.toolCallId === toolCallId &&
-          'state' in part
-        ) {
-          return {
-            ...part,
-            state: 'output-available' as const,
-            output,
-          };
-        }
-        return part;
-      });
-
-      this.state.replaceMessage(messageIndex, {
-        ...message,
-        parts: updatedParts,
-      } as TUIMessage);
-
-      // Check if we should auto-send based on sendAutomaticallyWhen
-      if (this.sendAutomaticallyWhen) {
-        return Promise.resolve(
-          this.sendAutomaticallyWhen({
-            messages: this.state.messages,
-          })
-        ).then((shouldSend) => {
-          if (shouldSend) {
-            return this.makeRequest({
-              trigger: 'submit-message',
-            });
-          }
-          return Promise.resolve();
-        });
-      }
-
+  addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
+    if (!this.acceptsIdentifierOnlyToolResults) {
       return Promise.resolve();
+    }
+
+    const owners = this.responsesByToolCallId.get(options.toolCallId);
+    const response =
+      owners?.size === 1 ? owners.values().next().value : undefined;
+    if (response) return this.submitToolResult(response, options);
+
+    const findMatchingMessage = (): TUIMessage | undefined => {
+      const matchingMessages = this.messages.filter((message) =>
+        message.parts?.some(
+          (part) =>
+            'toolCallId' in part && part.toolCallId === options.toolCallId
+        )
+      );
+      return matchingMessages.length === 1 ? matchingMessages[0] : undefined;
+    };
+    if (!findMatchingMessage()) return Promise.resolve();
+
+    return this.jobExecutor.run(() => {
+      if (!this.acceptsIdentifierOnlyToolResults) return Promise.resolve();
+
+      const message = findMatchingMessage();
+      if (
+        !message ||
+        !this.commit(
+          options.toolCallId,
+          options.output,
+          message.id,
+          undefined,
+          message
+        )
+      ) {
+        return Promise.resolve();
+      }
+      return this.continueResponse();
     });
+  };
+
+  /** @internal */
+  '~addToolResultForMessage' = <
+    TTool extends keyof InferUIMessageTools<TUIMessage>
+  >(
+    message: TUIMessage,
+    options: {
+      tool: TTool;
+      toolCallId: string;
+      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+    }
+  ): Promise<void> => {
+    const hasToolCall = (candidate: TUIMessage): boolean =>
+      candidate.parts?.some(
+        (part) => 'toolCallId' in part && part.toolCallId === options.toolCallId
+      ) === true;
+    if (!hasToolCall(message)) {
+      return Promise.resolve();
+    }
+
+    const response = this.responseByMessage.get(message);
+    const currentMessage = this.messages.includes(message)
+      ? message
+      : response && !response.isRetired
+      ? this.messages.find(
+          (candidate) =>
+            candidate.id === message.id &&
+            this.responseByMessage.get(candidate) === response &&
+            hasToolCall(candidate)
+        )
+      : undefined;
+    if (!currentMessage) return Promise.resolve();
+
+    return this.submitToolResult(
+      response,
+      options,
+      currentMessage.id,
+      currentMessage
+    );
   };
 
   /**
@@ -482,8 +805,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    */
   stop = (): Promise<void> => {
     if (this.activeResponse) {
-      this.activeResponse.abortController.abort();
+      const response = this.activeResponse;
+      response.outcome = 'aborted';
       this.activeResponse = null;
+      response.abortController.abort();
     }
     this.setStatus({ status: 'ready' });
     return Promise.resolve();
@@ -503,45 +828,71 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
     }
 
-    // Abort any existing request
-    if (this.activeResponse) {
-      this.activeResponse.abortController.abort();
-    }
-
-    const abortController = new AbortController();
-    this.activeResponse = { abortController };
-
-    this.setStatus({ status: 'submitted' });
-
-    return this.transport
-      .sendMessages({
+    return this.consume((abortSignal) =>
+      this.transport!.sendMessages({
         chatId: this.id,
-        messages: this.state.messages,
-        abortSignal: abortController.signal,
+        messages: this.messages,
+        abortSignal,
         trigger: options.trigger,
         messageId: options.messageId,
         headers: options.headers,
         body: options.body,
         requestMetadata: options.metadata,
       })
-      .then(
-        (stream) => {
-          this.activeResponse!.stream = stream;
-          return this.processStreamWithCallbacks(stream);
-        },
-        (error) => {
-          if ((error as Error).name === 'AbortError') {
-            // Request was aborted, don't treat as error
-            return Promise.resolve();
-          }
-          this.handleError(error as Error);
-          return Promise.resolve();
-        }
-      );
+    );
   }
 
-  private processStreamWithCallbacks(
-    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>
+  private consume(
+    createStream: (
+      abortSignal: AbortSignal
+    ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>
+  ): Promise<void> {
+    if (this.activeResponse) {
+      this.activeResponse.outcome = 'aborted';
+      this.activeResponse.abortController.abort();
+    }
+    const response: ResponseRecord = {
+      abortController: new AbortController(),
+      outcome: 'active',
+      isRetired: false,
+      requiredToolCallIds: new Set(),
+      resolvedToolCallIds: new Set(),
+      returnedToolCallbacks: [],
+      pendingToolCallbacks: 0,
+      didNotifyFinish: false,
+      didEvaluateContinuation: false,
+    };
+    this.activeResponse = response;
+    this.latestResponse = response;
+    this.setStatus({ status: 'submitted' });
+
+    return createStream(response.abortController.signal).then(
+      (stream) => {
+        if (this.activeResponse === response) {
+          if (stream) return this.processStream(stream, response);
+          response.outcome = 'succeeded';
+          this.activeResponse = null;
+          this.setStatus({ status: 'ready' });
+        }
+        return undefined;
+      },
+      (error) => {
+        if (this.activeResponse !== response) return;
+        this.activeResponse = null;
+        if ((error as Error).name === 'AbortError') {
+          response.outcome = 'aborted';
+          this.setStatus({ status: 'ready' });
+        } else {
+          response.outcome = 'failed';
+          this.handleError(error as Error);
+        }
+      }
+    );
+  }
+
+  private processStream(
+    stream: ReadableStream<InferUIMessageChunk<TUIMessage>>,
+    response: ResponseRecord
   ): Promise<void> {
     this.setStatus({ status: 'streaming' });
 
@@ -549,26 +900,151 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     let currentMessage: TUIMessage | undefined;
     let currentMessageIndex = -1;
     let isAbort = false;
-    let isDisconnect = false;
     let isError = false;
 
-    // Track current text/reasoning part state
-    let currentTextPartId: string | undefined;
-    let currentReasoningPartId: string | undefined;
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
 
-    // Promise chain for handling tool calls that return promises
-    let pendingToolCall: Promise<void> = Promise.resolve();
+    const findToolPart = (toolCallId: string): number =>
+      currentMessage!.parts.findIndex(
+        (part) => 'toolCallId' in part && part.toolCallId === toolCallId
+      );
+    const setPart = (index: number, part: any): void => {
+      const parts = [...currentMessage!.parts];
+      parts[index < 0 ? parts.length : index] = part;
+      currentMessage = { ...currentMessage!, parts } as TUIMessage;
+      currentMessage = this.replaceMessage(
+        currentMessageIndex,
+        currentMessage,
+        response
+      );
+    };
+    const mergeCallProviderMetadata = (
+      toolCallId: string,
+      metadata?: ProviderMetadata
+    ): void => {
+      const toolIndex = findToolPart(toolCallId);
+      if (toolIndex < 0) return;
+
+      const existingPart = currentMessage!.parts[toolIndex] as any;
+      setPart(toolIndex, {
+        ...existingPart,
+        callProviderMetadata: metadata ?? existingPart.callProviderMetadata,
+      });
+    };
+    const getCanonicalMessage = (): TUIMessage | undefined =>
+      response.messageId
+        ? this.messages.find((message) => message.id === response.messageId) ??
+          currentMessage
+        : currentMessage;
+    const notifyFinish = ({
+      isAbort,
+      isDisconnect,
+      isError,
+      message,
+      allowRetired = false,
+    }: {
+      isAbort: boolean;
+      isDisconnect: boolean;
+      isError: boolean;
+      message?: TUIMessage;
+      allowRetired?: boolean;
+    }): void => {
+      this.pruneDetachedResponse(response);
+      if ((response.isRetired && !allowRetired) || response.didNotifyFinish) {
+        return;
+      }
+      response.didNotifyFinish = true;
+
+      const canonicalMessage = message ?? getCanonicalMessage();
+      if (this.onFinish && canonicalMessage) {
+        this.onFinish({
+          message: canonicalMessage,
+          messages: this.messages,
+          isAbort,
+          isDisconnect,
+          isError,
+        });
+      }
+    };
+    const failToolCall = (reason: unknown): void => {
+      if (response.outcome !== 'active') return;
+      const message = getCanonicalMessage();
+      const wasRetired = response.isRetired;
+      const error =
+        reason instanceof Error ? reason : new Error(String(reason));
+      response.outcome = 'failed';
+      response.abortController.abort();
+
+      if (this.activeResponse === response) {
+        this.activeResponse = null;
+        this.handleError(error);
+      }
+      notifyFinish({
+        isAbort: false,
+        isDisconnect: false,
+        isError: true,
+        message,
+        allowRetired: !wasRetired,
+      });
+    };
+    const acceptServerToolResult = (toolCallId: string): void => {
+      if (response.requiredToolCallIds.has(toolCallId)) {
+        response.resolvedToolCallIds.add(toolCallId);
+      }
+    };
 
     return new Promise((resolve) => {
+      const finish = (error?: Error): void => {
+        if (response.outcome === 'failed') {
+          resolve();
+          return;
+        }
+
+        isAbort ||=
+          response.outcome === 'aborted' ||
+          (!!error && error.name === 'AbortError');
+        response.outcome = isAbort ? 'aborted' : error ? 'failed' : 'succeeded';
+        if (this.activeResponse === response) {
+          this.activeResponse = null;
+          if (error && !isAbort) {
+            this.handleError(error);
+          } else {
+            this.setStatus({ status: 'ready' });
+          }
+        }
+
+        notifyFinish({
+          isAbort,
+          isDisconnect: !!error && !isAbort,
+          isError,
+        });
+        resolve(isAbort || error ? undefined : this.continueResponse(response));
+      };
+
       processStream<UIMessageChunk>(
         stream as ReadableStream<UIMessageChunk>,
         // eslint-disable-next-line complexity
         (chunk) => {
+          if (this.activeResponse !== response || response.isRetired) return;
+
+          if (currentMessageId) {
+            const canonicalMessageIndex = this.messages.findIndex(
+              (message) => message.id === currentMessageId
+            );
+            if (canonicalMessageIndex === -1) {
+              this.pruneDetachedResponse(response);
+              return;
+            }
+            currentMessageIndex = canonicalMessageIndex;
+            currentMessage = this.messages[canonicalMessageIndex];
+            this.responseByMessage.set(currentMessage, response);
+          }
+
           switch (chunk.type) {
             case 'start': {
               currentMessageId = chunk.messageId || this.generateId();
+              response.messageId = currentMessageId;
 
               // Check if we're continuing an existing message or creating a new one
               const lastMessage = this.lastMessage;
@@ -577,8 +1053,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 lastMessage.role === 'assistant' &&
                 lastMessage.id === currentMessageId
               ) {
-                currentMessage = lastMessage;
-                currentMessageIndex = this.state.messages.length - 1;
+                if (lastMessage.parts.some((part) => 'toolCallId' in part)) {
+                  this.acceptsIdentifierOnlyToolResults = false;
+                }
+                currentMessage = {
+                  ...lastMessage,
+                  parts: [...lastMessage.parts],
+                } as TUIMessage;
+                currentMessageIndex = this.messages.length - 1;
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               } else {
                 currentMessage = {
                   id: currentMessageId,
@@ -587,161 +1074,73 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   metadata: chunk.messageMetadata,
                 } as unknown as TUIMessage;
                 this.state.pushMessage(currentMessage);
-                currentMessageIndex = this.state.messages.length - 1;
+                currentMessageIndex = this.messages.length - 1;
+                this.responseByMessage.set(currentMessage, response);
               }
               break;
             }
 
-            case 'text-start': {
-              if (!currentMessage) break;
-              currentTextPartId = chunk.id;
-
-              const textPart = {
-                type: 'text' as const,
-                text: '',
-                state: 'streaming' as const,
-                providerMetadata: chunk.providerMetadata,
-              };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, textPart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
-              break;
-            }
-
-            case 'text-delta': {
-              if (!currentMessage || !currentTextPartId) break;
-
-              const partIndex = currentMessage.parts.findIndex(
-                (p) => p.type === 'text' && p.state === 'streaming'
-              );
-              if (partIndex === -1) break;
-
-              const updatedParts = [...currentMessage.parts];
-              const textPart = updatedParts[partIndex] as {
-                type: 'text';
-                text: string;
-                state?: 'streaming' | 'done';
-              };
-              updatedParts[partIndex] = {
-                ...textPart,
-                text: textPart.text + chunk.delta,
-              };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: updatedParts,
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
-              break;
-            }
-
-            case 'text-end': {
-              if (!currentMessage) break;
-
-              const partIndex = currentMessage.parts.findIndex(
-                (p) => p.type === 'text' && p.state === 'streaming'
-              );
-              if (partIndex === -1) break;
-
-              const updatedParts = [...currentMessage.parts];
-              const textPart = updatedParts[partIndex] as {
-                type: 'text';
-                text: string;
-                state?: 'streaming' | 'done';
-              };
-              updatedParts[partIndex] = {
-                ...textPart,
-                state: 'done' as const,
-              };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: updatedParts,
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
-              currentTextPartId = undefined;
-              break;
-            }
-
+            case 'text-start':
             case 'reasoning-start': {
               if (!currentMessage) break;
-              currentReasoningPartId = chunk.id;
-
-              const reasoningPart = {
-                type: 'reasoning' as const,
+              const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
+              setPart(-1, {
+                type,
                 text: '',
                 state: 'streaming' as const,
                 providerMetadata: chunk.providerMetadata,
-              };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, reasoningPart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              });
               break;
             }
 
+            case 'text-delta':
             case 'reasoning-delta': {
-              if (!currentMessage || !currentReasoningPartId) break;
-
-              const partIndex = currentMessage.parts.findIndex(
-                (p) => p.type === 'reasoning' && p.state === 'streaming'
-              );
-              if (partIndex === -1) break;
-
-              const updatedParts = [...currentMessage.parts];
-              const reasoningPart = updatedParts[partIndex] as {
-                type: 'reasoning';
-                text: string;
-                state?: 'streaming' | 'done';
-              };
-              updatedParts[partIndex] = {
-                ...reasoningPart,
-                text: reasoningPart.text + chunk.delta,
-              };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: updatedParts,
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
-              break;
-            }
-
-            case 'reasoning-end': {
+              const type = chunk.type === 'text-delta' ? 'text' : 'reasoning';
               if (!currentMessage) break;
 
               const partIndex = currentMessage.parts.findIndex(
-                (p) => p.type === 'reasoning' && p.state === 'streaming'
+                (part) => part.type === type && part.state === 'streaming'
               );
               if (partIndex === -1) break;
 
-              const updatedParts = [...currentMessage.parts];
-              const reasoningPart = updatedParts[partIndex] as {
-                type: 'reasoning';
+              const part = currentMessage.parts[partIndex] as {
+                type: 'text' | 'reasoning';
                 text: string;
                 state?: 'streaming' | 'done';
               };
-              updatedParts[partIndex] = {
-                ...reasoningPart,
-                state: 'done' as const,
-              };
+              setPart(partIndex, { ...part, text: part.text + chunk.delta });
+              break;
+            }
 
-              currentMessage = {
-                ...currentMessage,
-                parts: updatedParts,
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
-              currentReasoningPartId = undefined;
+            case 'text-end':
+            case 'reasoning-end': {
+              if (!currentMessage) break;
+              const type = chunk.type === 'text-end' ? 'text' : 'reasoning';
+
+              const partIndex = currentMessage.parts.findIndex(
+                (part) => part.type === type && part.state === 'streaming'
+              );
+              if (partIndex === -1) break;
+
+              setPart(partIndex, {
+                ...currentMessage.parts[partIndex],
+                state: 'done',
+              });
               break;
             }
 
             case 'tool-input-start': {
               if (!currentMessage) break;
+
+              const completedPart = currentMessage.parts.find(
+                (part) =>
+                  'toolCallId' in part &&
+                  part.toolCallId === chunk.toolCallId &&
+                  'state' in part &&
+                  (part.state === 'output-available' ||
+                    part.state === 'output-error')
+              );
+              if (completedPart) break;
 
               const initialRawInput =
                 typeof chunk.input === 'string'
@@ -761,25 +1160,25 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 providerExecuted: chunk.providerExecuted,
               };
 
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, toolPart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(-1, toolPart);
               break;
             }
 
             case 'tool-input-delta': {
               if (!currentMessage) break;
 
-              const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
-              );
+              const toolIndex = findToolPart(chunk.toolCallId);
 
               const existingPart =
                 toolIndex >= 0
                   ? (currentMessage.parts[toolIndex] as any)
                   : null;
+              if (
+                existingPart?.state === 'output-available' ||
+                existingPart?.state === 'output-error'
+              ) {
+                break;
+              }
               const previousRawInput =
                 existingPart?.rawInput ??
                 toolRawInputByCallId[chunk.toolCallId] ??
@@ -806,33 +1205,29 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 rawInput: nextRawInput,
               };
 
-              if (toolIndex >= 0) {
-                const updatedParts = [...currentMessage.parts];
-                updatedParts[toolIndex] = nextToolPart;
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-              } else {
-                currentMessage = {
-                  ...currentMessage,
-                  parts: [...currentMessage.parts, nextToolPart],
-                } as TUIMessage;
-              }
-
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(toolIndex, nextToolPart);
               break;
             }
 
             case 'tool-input-available': {
               if (!currentMessage) break;
 
+              if (response.requiredToolCallIds.has(chunk.toolCallId)) break;
+
               delete toolRawInputByCallId[chunk.toolCallId];
 
               // Find existing tool part or create new one
-              const existingIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
-              );
+              const existingIndex = findToolPart(chunk.toolCallId);
+              const existingPart =
+                existingIndex >= 0
+                  ? (currentMessage.parts[existingIndex] as any)
+                  : null;
+              if (
+                existingPart?.state === 'output-available' ||
+                existingPart?.state === 'output-error'
+              ) {
+                break;
+              }
 
               const toolPart = {
                 type: `tool-${chunk.toolName}` as const,
@@ -843,34 +1238,89 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 providerExecuted: chunk.providerExecuted,
               };
 
-              if (existingIndex >= 0) {
-                const updatedParts = [...currentMessage.parts];
-                updatedParts[existingIndex] = toolPart;
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-              } else {
-                currentMessage = {
-                  ...currentMessage,
-                  parts: [...currentMessage.parts, toolPart],
-                } as TUIMessage;
+              setPart(existingIndex, toolPart);
+
+              if (
+                this.messages.some(
+                  (message) =>
+                    message !== currentMessage &&
+                    message.parts?.some(
+                      (part) =>
+                        'toolCallId' in part &&
+                        part.toolCallId === chunk.toolCallId
+                    )
+                )
+              ) {
+                this.acceptsIdentifierOnlyToolResults = false;
               }
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
 
               // Trigger onToolCall callback only for client-executed tools
               // (server-executed tools have providerExecuted: true and don't need client handling)
               if (this.onToolCall && !chunk.providerExecuted) {
-                const result = this.onToolCall({
-                  toolCall: {
-                    toolName: chunk.toolName,
-                    toolCallId: chunk.toolCallId,
-                    input: chunk.input,
-                    dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
-                  } as InferUIMessageToolCall<TUIMessage>,
-                });
-                if (result && typeof result.then === 'function') {
-                  pendingToolCall = pendingToolCall.then(() => result);
+                const owners =
+                  this.responsesByToolCallId.get(chunk.toolCallId) ??
+                  new Set<ResponseRecord>();
+                const existingOwners = Array.from(owners).filter(
+                  (owner) => owner !== response
+                );
+                if (existingOwners.length > 0) {
+                  this.acceptsIdentifierOnlyToolResults = false;
+                  const conflictingOwner = existingOwners.find(
+                    (owner) =>
+                      !owner.isRetired &&
+                      (owner.outcome === 'active' ||
+                        (owner.outcome === 'succeeded' &&
+                          (!owner.resolvedToolCallIds.has(chunk.toolCallId) ||
+                            owner.pendingToolCallbacks > 0)))
+                  );
+                  if (conflictingOwner) {
+                    // Neither response may continue once ownership is ambiguous.
+                    conflictingOwner.didEvaluateContinuation = true;
+                    failToolCall(
+                      new Error(
+                        `Tool call "${chunk.toolCallId}" is already owned by another response.`
+                      )
+                    );
+                    break;
+                  }
+                }
+                response.requiredToolCallIds.add(chunk.toolCallId);
+                owners.add(response);
+                this.responsesByToolCallId.set(chunk.toolCallId, owners);
+                response.pendingToolCallbacks++;
+
+                try {
+                  const result = this.onToolCall(
+                    {
+                      toolCall: {
+                        toolName: chunk.toolName,
+                        toolCallId: chunk.toolCallId,
+                        input: chunk.input,
+                        dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
+                      } as InferUIMessageToolCall<TUIMessage>,
+                    },
+                    (options) =>
+                      response.isRetired
+                        ? Promise.resolve()
+                        : this.submitToolResult(response, options)
+                  );
+                  if (result) {
+                    response.returnedToolCallbacks.push(
+                      Promise.resolve(result)
+                        .catch(failToolCall)
+                        .then(() => {
+                          response.pendingToolCallbacks--;
+                          this.pruneDetachedResponse(response);
+                        })
+                    );
+                  } else {
+                    response.pendingToolCallbacks--;
+                    this.pruneDetachedResponse(response);
+                  }
+                } catch (error) {
+                  response.pendingToolCallbacks--;
+                  failToolCall(error);
+                  this.pruneDetachedResponse(response);
                 }
               }
               break;
@@ -884,10 +1334,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 toolName: string;
                 delta: string;
               };
+              if (response.resolvedToolCallIds.has(toolCallId)) break;
 
-              const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === toolCallId
-              );
+              const toolIndex = findToolPart(toolCallId);
 
               const existingPart =
                 toolIndex >= 0
@@ -917,63 +1366,56 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 preliminary: true,
               };
 
-              if (toolIndex >= 0) {
-                const updatedParts = [...currentMessage.parts];
-                updatedParts[toolIndex] = nextToolPart;
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-              } else {
-                currentMessage = {
-                  ...currentMessage,
-                  parts: [...currentMessage.parts, nextToolPart],
-                } as TUIMessage;
-              }
-
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(toolIndex, nextToolPart);
               break;
             }
 
             case 'tool-output-available': {
               if (!currentMessage) break;
-
-              const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
-              );
+              const toolIndex = findToolPart(chunk.toolCallId);
 
               if (toolIndex >= 0) {
                 delete toolRawInputByCallId[chunk.toolCallId];
                 delete toolRawOutputByCallId[chunk.toolCallId];
 
-                const updatedParts = [...currentMessage.parts];
-                const existingPart = updatedParts[toolIndex] as any;
+                const existingPart = currentMessage.parts[toolIndex] as any;
+                if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                  mergeCallProviderMetadata(
+                    chunk.toolCallId,
+                    chunk.callProviderMetadata
+                  );
+                  break;
+                }
+
                 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
                 const { rawOutput: _ignored, ...rest } = existingPart;
-                updatedParts[toolIndex] = {
+                setPart(toolIndex, {
                   ...rest,
                   state: 'output-available',
                   output: chunk.output,
                   callProviderMetadata: chunk.callProviderMetadata,
                   preliminary: chunk.preliminary,
-                };
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                });
+                if (!chunk.preliminary) {
+                  acceptServerToolResult(chunk.toolCallId);
+                }
               }
               break;
             }
 
             case 'tool-input-error': {
               if (!currentMessage) break;
+              if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                mergeCallProviderMetadata(
+                  chunk.toolCallId,
+                  chunk.providerMetadata
+                );
+                break;
+              }
               delete toolRawInputByCallId[chunk.toolCallId];
               delete toolRawOutputByCallId[chunk.toolCallId];
 
-              const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
-              );
+              const toolIndex = findToolPart(chunk.toolCallId);
               const existingPart =
                 toolIndex >= 0
                   ? (currentMessage.parts[toolIndex] as any)
@@ -1003,36 +1445,28 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   chunk.providerMetadata ?? carryOver.callProviderMetadata,
               };
 
-              if (toolIndex >= 0) {
-                const updatedParts = [...currentMessage.parts];
-                updatedParts[toolIndex] = nextToolPart;
-                currentMessage = {
-                  ...currentMessage,
-                  parts: updatedParts,
-                } as TUIMessage;
-              } else {
-                currentMessage = {
-                  ...currentMessage,
-                  parts: [...currentMessage.parts, nextToolPart],
-                } as TUIMessage;
-              }
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(toolIndex, nextToolPart);
+              acceptServerToolResult(chunk.toolCallId);
               break;
             }
 
             case 'tool-output-error': {
               if (!currentMessage) break;
+              if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
+                mergeCallProviderMetadata(
+                  chunk.toolCallId,
+                  chunk.providerMetadata
+                );
+                break;
+              }
 
-              const toolIndex = currentMessage.parts.findIndex(
-                (p) => 'toolCallId' in p && p.toolCallId === chunk.toolCallId
-              );
+              const toolIndex = findToolPart(chunk.toolCallId);
               if (toolIndex < 0) break;
 
               delete toolRawInputByCallId[chunk.toolCallId];
               delete toolRawOutputByCallId[chunk.toolCallId];
 
-              const updatedParts = [...currentMessage.parts];
-              const existingPart = updatedParts[toolIndex] as any;
+              const existingPart = currentMessage.parts[toolIndex] as any;
               const {
                 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
                 rawOutput: _ignoredRawOutput,
@@ -1042,7 +1476,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 output: _ignoredOutput,
                 ...rest
               } = existingPart;
-              updatedParts[toolIndex] = {
+              setPart(toolIndex, {
                 ...rest,
                 state: 'output-error',
                 errorText: chunk.errorText,
@@ -1050,12 +1484,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   chunk.providerExecuted ?? rest.providerExecuted,
                 callProviderMetadata:
                   chunk.providerMetadata ?? rest.callProviderMetadata,
-              };
-              currentMessage = {
-                ...currentMessage,
-                parts: updatedParts,
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              });
+              acceptServerToolResult(chunk.toolCallId);
               break;
             }
 
@@ -1069,11 +1499,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 title: chunk.title,
               };
 
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, sourcePart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(-1, sourcePart);
               break;
             }
 
@@ -1089,11 +1515,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 providerMetadata: chunk.providerMetadata,
               };
 
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, docPart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(-1, docPart);
               break;
             }
 
@@ -1106,24 +1528,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 mediaType: chunk.mediaType,
               };
 
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, filePart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(-1, filePart);
               break;
             }
 
             case 'start-step': {
               if (!currentMessage) break;
 
-              const stepPart = { type: 'step-start' as const };
-
-              currentMessage = {
-                ...currentMessage,
-                parts: [...currentMessage.parts, stepPart],
-              } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              setPart(-1, { type: 'step-start' });
               break;
             }
 
@@ -1134,7 +1546,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 ...currentMessage,
                 metadata: chunk.messageMetadata,
               } as TUIMessage;
-              this.state.replaceMessage(currentMessageIndex, currentMessage);
+              currentMessage = this.replaceMessage(
+                currentMessageIndex,
+                currentMessage,
+                response
+              );
               break;
             }
 
@@ -1157,7 +1573,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   ...currentMessage,
                   metadata: chunk.messageMetadata,
                 } as TUIMessage;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               }
               break;
             }
@@ -1186,17 +1606,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   },
                 ],
               } as unknown as TUIMessage;
-
               if (currentMessageIndex >= 0) {
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                currentMessage = this.replaceMessage(
+                  currentMessageIndex,
+                  currentMessage,
+                  response
+                );
               } else {
                 this.state.pushMessage(currentMessage);
-                currentMessageIndex = this.state.messages.length - 1;
+                currentMessageIndex = this.messages.length - 1;
+                this.responseByMessage.set(currentMessage, response);
               }
 
               currentMessageId = currentMessage.id;
-              currentTextPartId = undefined;
-              currentReasoningPartId = undefined;
               break;
             }
 
@@ -1210,11 +1632,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   data: (chunk as any).data,
                 };
 
-                currentMessage = {
-                  ...currentMessage,
-                  parts: [...currentMessage.parts, dataPart],
-                } as TUIMessage;
-                this.state.replaceMessage(currentMessageIndex, currentMessage);
+                setPart(-1, dataPart);
 
                 // Trigger onData callback
                 if (this.onData) {
@@ -1224,58 +1642,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             }
           }
         },
-        () => {
-          // Wait for any pending tool calls to complete
-          pendingToolCall.then(() => {
-            // Stream finished successfully
-            this.setStatus({ status: 'ready' });
-            this.activeResponse = null;
-
-            // Trigger onFinish callback
-            if (this.onFinish && currentMessage) {
-              this.onFinish({
-                message: currentMessage,
-                messages: this.state.messages,
-                isAbort,
-                isDisconnect,
-                isError,
-              });
-            }
-
-            // Note: sendAutomaticallyWhen is only checked in addToolResult,
-            // not here. For server-executed tools, the server continues the
-            // conversation. For client-executed tools, addToolResult handles it.
-            resolve();
-          });
-        },
-        (error) => {
-          if (error.name === 'AbortError') {
-            isAbort = true;
-            this.setStatus({ status: 'ready' });
-          } else {
-            isDisconnect = true;
-            this.handleError(error);
-          }
-
-          // Still call onFinish even on error/abort
-          if (this.onFinish && currentMessage) {
-            this.onFinish({
-              message: currentMessage,
-              messages: this.state.messages,
-              isAbort,
-              isDisconnect,
-              isError,
-            });
-          }
-
-          resolve();
-        }
+        () => Promise.all(response.returnedToolCallbacks).then(() => finish()),
+        (error) => finish(error)
       );
     });
   }
 
-  private handleError(error: Error): void {
-    this.setStatus({ status: 'error', error });
+  private handleError(
+    error: Error,
+    { updateState = true }: { updateState?: boolean } = {}
+  ): void {
+    if (updateState) {
+      this.setStatus({ status: 'error', error });
+    }
 
     if (this.onError) {
       this.onError(error);

@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.107.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.106.0...instantsearch.js@4.107.0) (2026-07-21)
+
+
+### Bug Fixes
+
+* **chat:** allow user to override `sendAutomaticallyWhen` in the Chat widget ([#7116](https://github.com/algolia/instantsearch/issues/7116)) ([1c82852](https://github.com/algolia/instantsearch/commit/1c82852ae4ff874f35c4ac82724d59952b71cd7d))
+* **index:** clear parent only on removed widgets ([#7115](https://github.com/algolia/instantsearch/issues/7115)) ([c8e392c](https://github.com/algolia/instantsearch/commit/c8e392c23faa45e810757338380770811692c16b))
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
+# [4.106.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.105.0...instantsearch.js@4.106.0) (2026-07-14)
+
+
+### Features
+
+* **chat:** add persistence opt-out ([#7107](https://github.com/algolia/instantsearch/issues/7107)) ([ad04f65](https://github.com/algolia/instantsearch/commit/ad04f65c4ddfbebc58cf35f0b8cc483821b61458))
+* **chat:** render guardrail fallback as assistant message ([#7108](https://github.com/algolia/instantsearch/issues/7108)) ([f0f4e41](https://github.com/algolia/instantsearch/commit/f0f4e416b5cff94981a6e01885ba1e224d0f0e0b))
+
+
+
+
+
 # [4.105.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.104.0...instantsearch.js@4.105.0) (2026-07-07)
 
 

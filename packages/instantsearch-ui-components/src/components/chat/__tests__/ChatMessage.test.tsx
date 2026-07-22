@@ -7,6 +7,8 @@ import { Fragment, createElement } from 'preact';
 
 import { createChatMessageComponent } from '../ChatMessage';
 
+import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
+
 const ChatMessage = createChatMessageComponent({
   createElement,
   Fragment,
@@ -469,5 +471,105 @@ describe('ChatMessage', () => {
         </article>
       </div>
     `);
+  });
+
+  test('submits a layout result for the owning assistant message', async () => {
+    let submitResult!: (params: { output: unknown }) => Promise<void>;
+    const addToolResult = jest.fn(() => Promise.resolve());
+    const addToolResultForMessage = jest.fn(() => Promise.resolve());
+    const tool: ClientSideTool & {
+      '~addToolResultForMessage': (
+        message: ChatMessageBase,
+        params: Parameters<AddToolResult>[0]
+      ) => ReturnType<AddToolResult>;
+    } = {
+      layoutComponent: ({ addToolResult: submit }) => {
+        submitResult = submit;
+        return <div />;
+      },
+      addToolResult,
+      '~addToolResultForMessage': addToolResultForMessage,
+      applyFilters: jest.fn(),
+    };
+
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: 'assistant-new',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: 'call-1',
+              input: {},
+              state: 'input-available',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{
+          test_tool: tool,
+        }}
+        onClose={jest.fn()}
+      />
+    );
+
+    await submitResult({ output: { owner: 'new' } });
+
+    expect(addToolResultForMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'assistant-new' }),
+      {
+        tool: 'tool-test_tool',
+        toolCallId: 'call-1',
+        output: { owner: 'new' },
+      }
+    );
+    expect(addToolResult).not.toHaveBeenCalled();
+  });
+
+  test('falls back to the public tool result submission', async () => {
+    let submitResult!: (params: { output: unknown }) => Promise<void>;
+    const addToolResult = jest.fn(() => Promise.resolve());
+
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: 'assistant-1',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: 'call-1',
+              input: {},
+              state: 'input-available',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{
+          test_tool: {
+            layoutComponent: ({ addToolResult: submit }) => {
+              submitResult = submit;
+              return <div />;
+            },
+            addToolResult,
+            applyFilters: jest.fn(),
+          },
+        }}
+        onClose={jest.fn()}
+      />
+    );
+
+    await submitResult({ output: { owner: 'public' } });
+
+    expect(addToolResult).toHaveBeenCalledWith({
+      tool: 'tool-test_tool',
+      toolCallId: 'call-1',
+      output: { owner: 'public' },
+    });
   });
 });

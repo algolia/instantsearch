@@ -10,9 +10,9 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
 import { Configure, InstantSearch } from 'react-instantsearch-core';
 
-import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
+import { Autocomplete } from '../Autocomplete';
 
-describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
+describe('Autocomplete feeds-mode (integration)', () => {
   beforeEach(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -51,7 +51,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
     const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
         <Configure hitsPerPage={8} />
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           placeholder="Search"
           feeds={[
             {
@@ -95,7 +95,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -150,7 +150,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -205,7 +205,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container, getByText } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -249,7 +249,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -292,7 +292,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
     const { container } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
         <Configure hitsPerPage={8} />
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -343,7 +343,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container, queryByText } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -396,7 +396,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container, queryByText } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
@@ -450,7 +450,7 @@ describe('EXPERIMENTAL_Autocomplete feeds-mode (integration)', () => {
 
     const { container, getAllByText } = render(
       <InstantSearch searchClient={searchClient} compositionID="my-comp">
-        <EXPERIMENTAL_Autocomplete
+        <Autocomplete
           feeds={[
             {
               feedID: 'products',
