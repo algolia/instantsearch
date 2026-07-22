@@ -35,6 +35,12 @@ skip_re='instantsearch-codemods'
 
 baseline="${1:-}"
 
+# We've cd'd to the repo root above, so resolve a relative baseline against
+# the caller's original directory ($OLDPWD) rather than the repo root.
+if [[ -n "$baseline" && "$baseline" != /* ]]; then
+  baseline="$OLDPWD/$baseline"
+fi
+
 if [[ -n "$baseline" && ! -f "$baseline" ]]; then
   echo "baseline file not found: $baseline" >&2
   exit 1
