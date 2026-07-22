@@ -92,9 +92,9 @@ export function augmentReactCreateElement(baseH) {
       } else if (name === 'children') {
         // handled via the children argument
       } else if (name === 'ref') {
-        const functionRef = makeFunctionRef(value);
-        if (functionRef) {
-          data.ref = functionRef;
+        const vueRef = toVueRef(value);
+        if (vueRef) {
+          data.ref = vueRef;
         }
       } else if (isEventProp(name, value)) {
         // React `onKeyDown` -> Vue 3 `onKeydown` (compiler-style handler key)
@@ -132,13 +132,19 @@ function isEventProp(name, value) {
   );
 }
 
-function makeFunctionRef(ref) {
-  if (!ref || typeof ref !== 'object' || !('current' in ref)) {
-    return undefined;
+function toVueRef(ref) {
+  // Callback refs pass through as Vue 3 function refs.
+  if (typeof ref === 'function') {
+    return ref;
   }
-  return (element) => {
-    ref.current = element;
-  };
+  // MutableRef objects (`{ current }`) become a function ref that writes
+  // through to `.current`.
+  if (ref && typeof ref === 'object' && 'current' in ref) {
+    return (element) => {
+      ref.current = element;
+    };
+  }
+  return undefined;
 }
 
 function flattenChildren(nodes) {

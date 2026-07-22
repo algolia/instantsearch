@@ -34,6 +34,8 @@ import {
   AisLookingSimilar,
   AisTrendingItems,
   AisTrendingFacets,
+  AisChat,
+  AisChatTrigger,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -662,8 +664,49 @@ const testSetups = {
       document.body.appendChild(document.createElement('div'))
     );
   },
-  createChatWidgetTests() {
-    throw new Error('Chat is not supported in Vue InstantSearch');
+  async createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            renderRefinements && h(AisSearchBox, { key: 'searchbox' }),
+            renderRefinements &&
+              h(AisRefinementList, {
+                key: 'brand',
+                props: { attribute: 'brand' },
+              }),
+            renderRefinements &&
+              h(AisRefinementList, {
+                key: 'category',
+                props: { attribute: 'category' },
+              }),
+            renderRefinements &&
+              h(AisHierarchicalMenu, {
+                key: 'hierarchy',
+                props: {
+                  attributes: [
+                    'hierarchicalCategories.lvl0',
+                    'hierarchicalCategories.lvl1',
+                    'hierarchicalCategories.lvl2',
+                  ],
+                },
+              }),
+            h(AisChatTrigger, { key: 'trigger' }),
+            renderChat && h(AisChat, { key: 'chat', props: chatWidgetParams }),
+            h(GlobalErrorSwallower, { key: 'errors' }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createAutocompleteWidgetTests() {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
@@ -718,6 +761,12 @@ const testOptions = {
   createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
+  // The AisChat/AisChatTrigger widgets are implemented and covered by
+  // component tests. The shared common suite stays skipped until its `vue`
+  // widgetParams variant is extended to carry a `chat` instance + options
+  // (it's currently `Record<string, never>`, and the tests drive a
+  // test-owned `chat` that only reaches the JS/React widgets). Tracked as a
+  // follow-up.
   createChatWidgetTests: {
     skippedTests: { 'Chat widget common tests': true },
   },
