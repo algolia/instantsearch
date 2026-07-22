@@ -81,7 +81,7 @@ export function augmentReactCreateElement(createElement) {
       );
     }
 
-    const data = { attrs: {}, on: {} };
+    const data = { attrs: {}, domProps: {}, on: {} };
 
     Object.keys(props).forEach((name) => {
       const value = props[name];
@@ -101,6 +101,11 @@ export function augmentReactCreateElement(createElement) {
       } else if (isEventProp(name, value)) {
         // onKeyDown -> keydown, onClick -> click, onFocus -> focus
         data.on[name.slice(2).toLowerCase()] = value;
+      } else if (name === 'value' || name === 'checked') {
+        // Controlled form fields from shared TSX (e.g. `<input value={query} />`
+        // in AutocompleteSearch). In Vue 2, `attrs.value` sets only the initial
+        // attribute and won't stay in sync across rerenders — use `domProps`.
+        data.domProps[name] = value;
       } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
         // React renders `aria-expanded={false}` as "false"; Vue 2 drops falsy
         // boolean attrs, so stringify to preserve the accessibility contract.
@@ -125,8 +130,17 @@ export function renderReactCompat(fn) {
 }
 
 function isEventProp(name, value) {
+  if (typeof value !== 'function' || name.length < 3) {
+    return false;
+  }
+  // Matches `on` followed by an uppercase letter (e.g. onClick, onKeyDown)
+  // without a regex, to keep static analysers happy.
+  const thirdCharCode = name.charCodeAt(2);
   return (
-    typeof value === 'function' && name.length > 2 && /^on[A-Z]/.test(name)
+    name[0] === 'o' &&
+    name[1] === 'n' &&
+    thirdCharCode >= 65 &&
+    thirdCharCode <= 90
   );
 }
 

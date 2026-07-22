@@ -118,8 +118,17 @@ export function renderReactCompat(fn) {
 }
 
 function isEventProp(name, value) {
+  if (typeof value !== 'function' || name.length < 3) {
+    return false;
+  }
+  // Matches `on` followed by an uppercase letter (e.g. onClick, onKeyDown)
+  // without a regex, to keep static analysers happy.
+  const thirdCharCode = name.charCodeAt(2);
   return (
-    typeof value === 'function' && name.length > 2 && /^on[A-Z]/.test(name)
+    name[0] === 'o' &&
+    name[1] === 'n' &&
+    thirdCharCode >= 65 &&
+    thirdCharCode <= 90
   );
 }
 
