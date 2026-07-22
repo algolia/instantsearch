@@ -1,4 +1,4 @@
-name: Compressed Size
+name: Bundle Size
 
 on: [pull_request]
 
@@ -7,7 +7,8 @@ permissions:
   pull-requests: write
 
 jobs:
-  compressed-size:
+  bundle-size:
+    name: Report bundle size
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
