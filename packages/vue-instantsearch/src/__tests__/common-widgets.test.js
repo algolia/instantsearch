@@ -29,6 +29,7 @@ import {
   AisPoweredBy,
   AisMenuSelect,
   AisDynamicWidgets,
+  AisRelatedProducts,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -512,8 +513,23 @@ const testSetups = {
 
     await nextTick();
   },
-  createRelatedProductsWidgetTests() {
-    throw new Error('RelatedProduct is not supported in Vue InstantSearch');
+  async createRelatedProductsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRelatedProducts, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createFrequentlyBoughtTogetherWidgetTests() {
     throw new Error(
@@ -630,11 +646,7 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
-  createRelatedProductsWidgetTests: {
-    skippedTests: {
-      'RelatedProducts widget common tests': true,
-    },
-  },
+  createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherWidgetTests: {
     skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
   },
