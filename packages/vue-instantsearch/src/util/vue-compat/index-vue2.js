@@ -51,6 +51,132 @@ export function renderCompat(fn) {
   };
 }
 
+/**
+ * A Fragment for the React-style renderer: a plain function component that
+ * returns its children. Vue 2 has no native Fragment, but shared
+ * `instantsearch-ui-components` factories only use it to group children.
+ */
+export const Fragment = (props) => (props && props.children) || [];
+
+/**
+ * A `createElement` that understands the React-style markup emitted by
+ * `instantsearch-ui-components` factories (`className`, `onClick`/`onKeyDown`
+ * handlers, and `ref` as a MutableRef `{ current }`), mapping them onto Vue 2's
+ * `h`. This is what lets Vue consume shared, hook-driven components (Carousel,
+ * Autocomplete, …) rather than reimplementing their markup.
+ */
+export function augmentReactCreateElement(createElement) {
+  return function reactCreateElement(tag, rawProps, ...rest) {
+    const props = rawProps || {};
+    const children = flattenChildren(rest);
+    const childArg = children.length > 0 ? children : undefined;
+
+    // Plain function components (shared sub-factories, Fragment) render eagerly.
+    if (typeof tag === 'function') {
+      return tag(
+        Object.assign({}, props, {
+          class: props.className || props.class,
+          children: childArg,
+        })
+      );
+    }
+
+    const data = { attrs: {}, domProps: {}, on: {} };
+
+    Object.keys(props).forEach((name) => {
+      const value = props[name];
+
+      if (name === 'className') {
+        data.class = value;
+      } else if (name === 'class') {
+        data.class = data.class || value;
+      } else if (name === 'style') {
+        data.style = value;
+      } else if (name === 'key') {
+        data.key = value;
+      } else if (name === 'children') {
+        // handled via the children argument
+      } else if (name === 'ref') {
+        bindMutableRef(data, value);
+      } else if (isEventProp(name, value)) {
+        // onKeyDown -> keydown, onClick -> click, onFocus -> focus
+        data.on[name.slice(2).toLowerCase()] = value;
+      } else if (name === 'value' || name === 'checked') {
+        // Controlled form fields from shared TSX (e.g. `<input value={query} />`
+        // in AutocompleteSearch). In Vue 2, `attrs.value` sets only the initial
+        // attribute and won't stay in sync across rerenders — use `domProps`.
+        data.domProps[name] = value;
+      } else if (typeof value === 'boolean' && name.indexOf('aria-') === 0) {
+        // React renders `aria-expanded={false}` as "false"; Vue 2 drops falsy
+        // boolean attrs, so stringify to preserve the accessibility contract.
+        data.attrs[name] = String(value);
+      } else {
+        data.attrs[name] = value;
+      }
+    });
+
+    return createElement(tag, data, childArg);
+  };
+}
+
+/**
+ * Wraps a render function so it receives a React-style `createElement`, the way
+ * `renderCompat` provides the Vue-style one.
+ */
+export function renderReactCompat(fn) {
+  return function (createElement) {
+    return fn.call(this, augmentReactCreateElement(createElement));
+  };
+}
+
+function isEventProp(name, value) {
+  if (typeof value !== 'function' || name.length < 3) {
+    return false;
+  }
+  // Matches `on` followed by an uppercase letter (e.g. onClick, onKeyDown)
+  // without a regex, to keep static analysers happy.
+  const thirdCharCode = name.charCodeAt(2);
+  return (
+    name[0] === 'o' &&
+    name[1] === 'n' &&
+    thirdCharCode >= 65 &&
+    thirdCharCode <= 90
+  );
+}
+
+function bindMutableRef(data, ref) {
+  if (!ref || typeof ref !== 'object' || !('current' in ref)) {
+    return;
+  }
+
+  // Vue 2 has no function refs, so populate the MutableRef via vnode lifecycle
+  // hooks. `vnode.elm` is the underlying DOM node.
+  data.hook = data.hook || {};
+  const previousInsert = data.hook.insert;
+  const previousDestroy = data.hook.destroy;
+
+  data.hook.insert = (vnode) => {
+    ref.current = vnode.elm;
+    if (previousInsert) previousInsert(vnode);
+  };
+  data.hook.destroy = (vnode) => {
+    ref.current = null;
+    if (previousDestroy) previousDestroy(vnode);
+  };
+}
+
+function flattenChildren(nodes) {
+  return nodes.reduce((acc, node) => {
+    if (Array.isArray(node)) {
+      return acc.concat(flattenChildren(node));
+    }
+    if (node !== undefined && node !== null && node !== false) {
+      acc.push(node);
+    }
+    return acc;
+  }, []);
+}
+
 export function getDefaultSlot(component) {
   return component.$slots.default;
 }
