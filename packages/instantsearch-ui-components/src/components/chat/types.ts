@@ -495,6 +495,7 @@ export type ChatLayoutOwnProps<
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   messages?: ChatMessageBase[];
+  insightsEventContext?: ChatInsightsEventContext;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
@@ -507,11 +508,17 @@ export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
 ) => JSX.Element;
 
+export type ChatInsightsEventContext = {
+  agentId?: string;
+  instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
   sendEvent?: SendEventForHits;
+  insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
@@ -525,7 +532,7 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent'
+  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
 

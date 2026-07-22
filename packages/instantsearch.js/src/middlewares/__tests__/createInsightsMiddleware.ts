@@ -1428,6 +1428,48 @@ describe('insights', () => {
       ).toHaveLength(1);
     });
 
+    it('sends view events for the same objectID when queryID differs', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          queryID: 'message_1',
+        },
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          queryID: 'message_2',
+        },
+      });
+
+      expect(
+        insightsClient.mock.calls.filter(
+          (call) => call[0] === 'viewedObjectIDs'
+        )
+      ).toHaveLength(2);
+    });
+
     it('clears saved view events when the query changes', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
 

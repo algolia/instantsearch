@@ -3,6 +3,7 @@
  */
 
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -75,6 +76,111 @@ describe('createDisplayResultsTool', () => {
     expect(screen.getByText('Casual')).toBeInTheDocument();
     expect(screen.getByTestId('why-1')).toHaveTextContent('iconic');
     expect(screen.getByTestId('why-2')).toHaveTextContent('everyday classic');
+  });
+
+  test('sends a click event when a displayed result is selected', async () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+    const sendEvent = jest.fn();
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {},
+      output: {
+        groups: [
+          {
+            results: [{ objectID: '1', why: 'iconic' }],
+          },
+        ],
+      },
+    };
+
+    render(
+      <LayoutComponent
+        message={message}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={sendEvent}
+      />
+    );
+
+    await userEvent.click(screen.getByTestId('item-1'));
+
+    expect(sendEvent).toHaveBeenCalledWith(
+      'click:internal',
+      expect.objectContaining({
+        objectID: '1',
+        __position: 1,
+        __displayToolResult: { objectID: '1', why: 'iconic' },
+      }),
+      'Item Clicked'
+    );
+  });
+
+  test('lets custom displayed result items send conversion events', async () => {
+    const sendEvent = jest.fn();
+    const conversionItemComponent = ({
+      item,
+      sendEvent: sendItemEvent,
+    }: {
+      item: TestResult;
+      sendEvent: ClientSideToolComponentProps['sendEvent'];
+    }) => (
+      <button
+        type="button"
+        onClick={(event) => {
+          event.stopPropagation();
+          sendItemEvent('conversion', item, 'Product Added To Cart');
+        }}
+      >
+        Add {item.objectID} to cart
+      </button>
+    );
+
+    const tool = createDisplayResultsTool<TestResult>(conversionItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {},
+      output: {
+        groups: [
+          {
+            results: [{ objectID: '1' }],
+          },
+        ],
+      },
+    };
+
+    render(
+      <LayoutComponent
+        message={message}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={sendEvent}
+      />
+    );
+
+    await userEvent.click(screen.getByText('Add 1 to cart'));
+
+    expect(sendEvent).toHaveBeenCalledWith(
+      'conversion',
+      expect.objectContaining({
+        objectID: '1',
+        __position: 1,
+      }),
+      'Product Added To Cart'
+    );
   });
 
   test('hydrates results from the preceding search tool, keeping display fields', () => {

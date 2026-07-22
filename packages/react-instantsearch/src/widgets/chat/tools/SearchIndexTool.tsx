@@ -36,8 +36,11 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     message,
     applyFilters,
     onClose,
+    insightsEventContext,
     sendEvent,
   }: ClientSideToolComponentProps) {
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
     const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
@@ -54,6 +57,31 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       (input?.number_of_results ?? output?.hits?.length) || 5
     );
     const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
+    const viewedItemsSignature = items
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = React.useRef<string | undefined>(
+      undefined
+    );
+
+    React.useEffect(() => {
+      if (
+        instantSearchStatus !== 'idle' ||
+        items.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', items, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [instantSearchStatus, items, sendEvent, viewedItemsSignature]);
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (

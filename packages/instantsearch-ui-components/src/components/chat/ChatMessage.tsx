@@ -6,7 +6,12 @@ import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Renderer,
+  SendEventForHits,
+  VNode,
+} from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -248,10 +253,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           // Wrapped in a `<p>` to keep some structure for screen readers
           // (markdown produces semantic elements; a bare text node would not).
           return (
-            <p
-              key={`${message.id}-${index}`}
-              className="ais-ChatMessage-text"
-            >
+            <p key={`${message.id}-${index}`} className="ais-ChatMessage-text">
               {part.text}
             </p>
           );
@@ -302,6 +304,30 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             return null;
           }
 
+          const toolSendEvent = tool.sendEvent || (() => {});
+          const agentId = tool.insightsEventContext?.agentId;
+          const sendEvent = ((
+            eventType: any,
+            hits?: any,
+            eventName?: any,
+            additionalData?: any
+          ) => {
+            if (
+              hits === undefined &&
+              eventName === undefined &&
+              additionalData === undefined
+            ) {
+              return toolSendEvent(eventType);
+            }
+
+            return toolSendEvent(eventType, hits, eventName, {
+              ...(additionalData || {}),
+              queryID: 'message_' + message.id,
+              ...(agentId ? { agentId } : {}),
+              toolCallId: toolMessage.toolCallId,
+            });
+          }) as SendEventForHits;
+
           return (
             <div
               key={`${message.id}-${index}`}
@@ -309,12 +335,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             >
               <ToolLayoutComponent
                 message={toolMessage}
+                insightsEventContext={tool.insightsEventContext}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
-                sendEvent={tool.sendEvent || (() => {})}
+                sendEvent={sendEvent}
                 onClose={onClose}
               />
             </div>
