@@ -1,9 +1,5 @@
 # E2E Testing Guide
 
-**Playwright is the only e2e framework.** The WebdriverIO + Sauce Labs stack was removed
-along with IE11 support — don't reintroduce WDIO, `internet explorer` capabilities, or a
-`test:e2e:ie11` job.
-
 ## Test Locations and Frameworks
 
 | Location | Framework | Purpose |
