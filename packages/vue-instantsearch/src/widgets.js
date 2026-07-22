@@ -1,4 +1,4 @@
-export { default as AisAutocomplete } from './components/Autocomplete.vue';
+export { default as AisAutocomplete } from './components/Autocomplete';
 export { default as AisBreadcrumb } from './components/Breadcrumb.vue';
 export { default as AisClearRefinements } from './components/ClearRefinements.vue';
 export { default as AisConfigure } from './components/Configure';

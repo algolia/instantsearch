@@ -88,7 +88,12 @@ export function augmentReactCreateElement(baseH) {
       const value = props[name];
 
       if (name === 'className') {
-        data.class = value;
+        data.class = value || data.class;
+      } else if (name === 'class') {
+        // Shared components render `<el className={..} {...props}>` where props
+        // can carry a `class: undefined`; keep the className-derived value
+        // rather than letting an undefined `class` overwrite it.
+        data.class = data.class || value;
       } else if (name === 'children') {
         // handled via the children argument
       } else if (name === 'ref') {
