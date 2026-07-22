@@ -30,6 +30,7 @@ import {
   AisMenuSelect,
   AisDynamicWidgets,
   AisRelatedProducts,
+  AisFrequentlyBoughtTogether,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -531,10 +532,23 @@ const testSetups = {
 
     await nextTick();
   },
-  createFrequentlyBoughtTogetherWidgetTests() {
-    throw new Error(
-      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+  async createFrequentlyBoughtTogetherWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisFrequentlyBoughtTogether, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
     );
+
+    await nextTick();
   },
   createTrendingItemsWidgetTests() {
     throw new Error('TrendingItems is not supported in Vue InstantSearch');
@@ -647,9 +661,7 @@ const testOptions = {
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
   createRelatedProductsWidgetTests: undefined,
-  createFrequentlyBoughtTogetherWidgetTests: {
-    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
-  },
+  createFrequentlyBoughtTogetherWidgetTests: undefined,
   createTrendingItemsWidgetTests: {
     skippedTests: { 'TrendingItems widget common tests': true },
   },

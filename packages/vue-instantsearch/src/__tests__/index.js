@@ -80,7 +80,10 @@ function getAllComponents() {
         props.indexName = 'indexName';
       } else if (name === 'AisFeeds') {
         props.isolated = false;
-      } else if (name === 'AisRelatedProducts') {
+      } else if (
+        name === 'AisRelatedProducts' ||
+        name === 'AisFrequentlyBoughtTogether'
+      ) {
         props.objectIDs = ['1'];
       } else {
         props.attribute = 'attr';
