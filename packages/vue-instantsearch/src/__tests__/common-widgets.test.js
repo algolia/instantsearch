@@ -31,6 +31,9 @@ import {
   AisDynamicWidgets,
   AisRelatedProducts,
   AisFrequentlyBoughtTogether,
+  AisLookingSimilar,
+  AisTrendingItems,
+  AisTrendingFacets,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -550,14 +553,56 @@ const testSetups = {
 
     await nextTick();
   },
-  createTrendingItemsWidgetTests() {
-    throw new Error('TrendingItems is not supported in Vue InstantSearch');
+  async createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingItems, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
-  createTrendingFacetsWidgetTests() {
-    throw new Error('TrendingFacets is not supported in Vue InstantSearch');
+  async createTrendingFacetsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisTrendingFacets, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
-  createLookingSimilarWidgetTests() {
-    throw new Error('LookingSimilar is not supported in Vue InstantSearch');
+  async createLookingSimilarWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisLookingSimilar, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
@@ -662,15 +707,9 @@ const testOptions = {
   createStatsWidgetTests: undefined,
   createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherWidgetTests: undefined,
-  createTrendingItemsWidgetTests: {
-    skippedTests: { 'TrendingItems widget common tests': true },
-  },
-  createTrendingFacetsWidgetTests: {
-    skippedTests: { 'TrendingFacets widget common tests': true },
-  },
-  createLookingSimilarWidgetTests: {
-    skippedTests: { 'LookingSimilar widget common tests': true },
-  },
+  createTrendingItemsWidgetTests: undefined,
+  createTrendingFacetsWidgetTests: undefined,
+  createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: {
