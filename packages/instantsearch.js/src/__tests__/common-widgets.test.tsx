@@ -36,7 +36,7 @@ import {
   dynamicWidgets,
   chat,
   chatTrigger,
-  EXPERIMENTAL_autocomplete,
+  autocomplete,
   filterSuggestions,
 } from '../widgets';
 
@@ -716,10 +716,10 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
-        } as Parameters<typeof EXPERIMENTAL_autocomplete>[0]),
+        } as Parameters<typeof autocomplete>[0]),
       ])
       .on('error', () => {
         /*
