@@ -18,7 +18,7 @@
     "plugin/no-unsupported-browser-features": [
       true,
       {
-        "browsers": ["defaults"],
+        "browsers": ["chrome >= 60", "firefox >= 55", "safari >= 12.2", "not op_mini all"],
         "severity": "warning"
       }
     ]
