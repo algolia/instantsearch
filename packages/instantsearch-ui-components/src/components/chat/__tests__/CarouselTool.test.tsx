@@ -6,7 +6,7 @@ import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 import { useMemo, useRef, useState } from 'preact/hooks';
 
-import { createSearchIndexToolComponent } from '../tools/SearchIndexTool';
+import { createCarouselToolComponent } from '../tools/CarouselTool';
 
 import type { Pragma, RecordWithObjectID } from '../../../types';
 import type { ChatToolMessage, ClientSideToolComponentProps } from '../types';
@@ -14,13 +14,16 @@ import type { ChatToolMessage, ClientSideToolComponentProps } from '../types';
 type Hit = RecordWithObjectID<{ name: string }>;
 type InputHit = { objectID: string; name: string };
 
-const SearchIndexTool = createSearchIndexToolComponent<Hit>({
+const CarouselTool = createCarouselToolComponent<Hit>({
   createElement: createElement as Pragma,
   Fragment,
+  useMemo,
+  useRef,
+  useState,
 });
 
 type ItemComponentProps = NonNullable<
-  Parameters<typeof SearchIndexTool>[0]['itemComponent']
+  Parameters<typeof CarouselTool>[0]['itemComponent']
 >;
 type ItemArgs = Parameters<ItemComponentProps>[0];
 
@@ -59,10 +62,7 @@ function renderTool(
 
   function Wrapper() {
     return (
-      <SearchIndexTool
-        useMemo={useMemo}
-        useRef={useRef}
-        useState={useState}
+      <CarouselTool
         getSearchPageURL={overrides.getSearchPageURL}
         headerProps={{ showViewAll: overrides.showViewAll ?? false }}
         itemComponent={ItemComponent}
@@ -93,7 +93,7 @@ function makeHits(count: number): InputHit[] {
   }));
 }
 
-describe('SearchIndexTool', () => {
+describe('CarouselTool', () => {
   test('renders no header when there are no hits', () => {
     const { container } = renderTool(
       buildMessage({ query: 'tv' }, { hits: [], nbHits: 0 })
@@ -233,10 +233,7 @@ describe('SearchIndexTool', () => {
 
     function Wrapper() {
       return (
-        <SearchIndexTool
-          useMemo={useMemo}
-          useRef={useRef}
-          useState={useState}
+        <CarouselTool
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
           toolProps={{
@@ -271,10 +268,7 @@ describe('SearchIndexTool', () => {
 
     function Wrapper() {
       return (
-        <SearchIndexTool
-          useMemo={useMemo}
-          useRef={useRef}
-          useState={useState}
+        <CarouselTool
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
           toolProps={{

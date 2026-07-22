@@ -12,6 +12,7 @@ export type Hooks = {
   useMemo: UseMemo;
   useCallback: UseCallback;
   useId: UseId;
+  memo: Memo;
 };
 
 export type UseState = <TState>(
@@ -36,3 +37,11 @@ export type UseCallback = <TCallback extends (...args: any[]) => any>(
 ) => TCallback;
 
 export type UseId = () => string;
+
+export type Memo = <TProps>(
+  component: (props: TProps) => JSX.Element,
+  propsAreEqual?: (
+    prevProps: Readonly<TProps>,
+    nextProps: Readonly<TProps>
+  ) => boolean
+) => (props: TProps) => JSX.Element;

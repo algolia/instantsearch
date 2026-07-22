@@ -1,11 +1,12 @@
 /** @jsx createElement */
 
 import { getFacetFiltersFromToolInput } from '../../../lib/utils/chat';
+import { addAbsolutePosition, addQueryID } from '../../../lib/utils/hits';
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
 import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons';
 
-import type { RecordWithObjectID, Renderer } from '../../../types';
+import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type {
   CarouselProps,
   HeaderComponentProps as CarouselHeaderComponentProps,
@@ -30,12 +31,7 @@ type HeaderProps = {
   onClose: () => void;
 };
 
-export type SearchIndexToolProps<THit extends RecordWithObjectID> = {
-  useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
-  useRef: <TType>(initialValue: TType) => { current: TType };
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => unknown];
+export type CarouselToolProps<THit extends RecordWithObjectID> = {
   getSearchPageURL?: (params: SearchParameters) => string;
   toolProps: ClientSideToolComponentProps;
   itemComponent?: CarouselProps<THit>['itemComponent'];
@@ -135,17 +131,20 @@ function createHeaderComponent({ createElement }: Renderer) {
   };
 }
 
-export function createSearchIndexToolComponent<
+export function createCarouselToolComponent<
   TObject extends RecordWithObjectID
->({ createElement, Fragment }: Renderer) {
+>({
+  createElement,
+  Fragment,
+  useMemo,
+  useRef,
+  useState,
+}: Renderer & Pick<Hooks, 'useMemo' | 'useRef' | 'useState'>) {
   const DefaultHeader = createHeaderComponent({ createElement, Fragment });
   const Carousel = createCarouselComponent({ createElement, Fragment });
 
-  return function SearchIndexTool(userProps: SearchIndexToolProps<TObject>) {
+  return function CarouselTool(userProps: CarouselToolProps<TObject>) {
     const {
-      useMemo,
-      useRef,
-      useState,
       itemComponent: ItemComponent,
       headerComponent: HeaderComponent,
       getSearchPageURL,
@@ -163,11 +162,11 @@ export function createSearchIndexToolComponent<
         }
       | undefined;
 
-    const items = (output?.hits || []).map((hit, idx) => ({
-      ...hit,
-      __position: idx + 1,
-      ...(output?.queryID ? { __queryID: output.queryID } : {}),
-    }));
+    const hits = output?.hits || [];
+    const items = addQueryID(
+      addAbsolutePosition(hits, 0, hits.length),
+      output?.queryID
+    );
     const nbItems = items.length;
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);

@@ -1,5 +1,11 @@
-import { createSearchIndexToolComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment } from 'react';
+import { createCarouselToolComponent } from 'instantsearch-ui-components';
+import React, {
+  createElement,
+  useMemo,
+  useState,
+  useRef,
+  Fragment,
+} from 'react';
 
 import type { SearchParameters } from 'algoliasearch-helper';
 import type {
@@ -17,17 +23,17 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideTool {
-  const SearchLayoutUIComponent = createSearchIndexToolComponent<TObject>({
+  const SearchLayoutUIComponent = createCarouselToolComponent<TObject>({
     createElement: createElement as Pragma,
     Fragment,
+    useMemo,
+    useRef,
+    useState,
   });
 
   const SearchLayoutComponent = (toolProps: ClientSideToolComponentProps) => {
     return (
       <SearchLayoutUIComponent
-        useMemo={React.useMemo}
-        useRef={React.useRef}
-        useState={React.useState}
         getSearchPageURL={getSearchPageURL}
         headerProps={{ showViewAll }}
         itemComponent={itemComponent}
