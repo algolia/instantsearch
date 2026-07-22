@@ -46,6 +46,28 @@ export default {
       required: false,
       default: undefined,
     },
+    // Optional overrides used by the chat tools (custom header, no built-in
+    // navigation, custom scroll icons).
+    headerComponent: {
+      type: Function,
+      required: false,
+      default: undefined,
+    },
+    showNavigation: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    previousIconComponent: {
+      type: Function,
+      required: false,
+      default: undefined,
+    },
+    nextIconComponent: {
+      type: Function,
+      required: false,
+      default: undefined,
+    },
   },
   created() {
     this.hooksStore = createHooksStore(() => this.$forceUpdate());
@@ -81,6 +103,10 @@ export default {
       itemComponent: this.itemComponent,
       sendEvent: this.sendEvent,
       translations: this.translations,
+      headerComponent: this.headerComponent,
+      showNavigation: this.showNavigation,
+      previousIconComponent: this.previousIconComponent,
+      nextIconComponent: this.nextIconComponent,
       // The parent recommend widget forwards its own `list`/`item` classes.
       classNames: this.classNames && {
         list: this.classNames.list,

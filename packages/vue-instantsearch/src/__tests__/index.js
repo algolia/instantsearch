@@ -46,7 +46,7 @@ function getAllComponents() {
 
     try {
       suitClass = mixins
-        .find(mixin => mixin.methods && mixin.methods.suit)
+        .find((mixin) => mixin.methods && mixin.methods.suit)
         .methods.suit();
     } catch (e) {
       /* no suit class, so will fail the assertions */
@@ -82,12 +82,19 @@ function getAllComponents() {
         props.isolated = false;
       } else if (name === 'AisRelatedProducts') {
         props.objectIDs = ['1'];
+      } else if (name === 'AisChat') {
+        // A transport avoids the agentId appId/apiKey requirement; the trigger
+        // validation is disabled since no ChatTrigger is mounted here.
+        props.transport = {};
+        props.disableTriggerValidation = true;
+      } else if (name === 'AisChatTrigger') {
+        // no required props
       } else {
         props.attribute = 'attr';
       }
 
       const Component = {
-        render: renderCompat(h =>
+        render: renderCompat((h) =>
           h(
             AisInstantSearch,
             {
@@ -149,6 +156,9 @@ describe('DOM component', () => {
         expect(suitClass).toBe(`ais-InstantSearch`);
       } else if (name === 'AisExperimentalDynamicWidgets') {
         expect(suitClass).toBe(`ais-DynamicWidgets`);
+      } else if (name === 'AisChatTrigger') {
+        // Renders the shared ChatToggleButton markup.
+        expect(suitClass).toBe(`ais-ChatToggleButton`);
       } else {
         expect(suitClass).toBe(`ais-${name.substr(3)}`);
       }

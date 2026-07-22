@@ -145,22 +145,35 @@ function isEventProp(name, value) {
 }
 
 function bindMutableRef(data, ref) {
-  if (!ref || typeof ref !== 'object' || !('current' in ref)) {
+  // Support both MutableRef objects (`{ current }`) and callback refs
+  // (`(element) => void`), the two shapes shared components use.
+  const isMutableRef = ref && typeof ref === 'object' && 'current' in ref;
+  const isCallbackRef = typeof ref === 'function';
+
+  if (!isMutableRef && !isCallbackRef) {
     return;
   }
 
-  // Vue 2 has no function refs, so populate the MutableRef via vnode lifecycle
-  // hooks. `vnode.elm` is the underlying DOM node.
+  const assign = (element) => {
+    if (isCallbackRef) {
+      ref(element);
+    } else {
+      ref.current = element;
+    }
+  };
+
+  // Vue 2 has no function refs, so populate the ref via vnode lifecycle hooks.
+  // `vnode.elm` is the underlying DOM node.
   data.hook = data.hook || {};
   const previousInsert = data.hook.insert;
   const previousDestroy = data.hook.destroy;
 
   data.hook.insert = (vnode) => {
-    ref.current = vnode.elm;
+    assign(vnode.elm);
     if (previousInsert) previousInsert(vnode);
   };
   data.hook.destroy = (vnode) => {
-    ref.current = null;
+    assign(null);
     if (previousDestroy) previousDestroy(vnode);
   };
 }
