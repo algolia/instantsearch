@@ -86,12 +86,14 @@ export function createCarouselTool(
                       facetFilters: getFacetFiltersFromToolInput(input),
                     });
 
+                    const searchPageURL =
+                      getSearchPageURL && getSearchPageURL(params);
                     if (
-                      getSearchPageURL &&
-                      new URL(getSearchPageURL(params)).pathname !==
+                      searchPageURL &&
+                      new URL(searchPageURL).pathname !==
                         window.location.pathname
                     ) {
-                      window.location.href = getSearchPageURL(params);
+                      window.location.href = searchPageURL;
                     }
 
                     onClose();
