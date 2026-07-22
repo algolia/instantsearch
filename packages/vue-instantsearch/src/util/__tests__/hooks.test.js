@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import { renderCompat } from '../vue-compat';
 import { createHooksStore } from '../hooks';
+import { renderCompat } from '../vue-compat';
 
 function makeHookedComponent(useBody) {
   return {

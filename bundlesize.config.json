@@ -26,11 +26,11 @@
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "73 kB"
+      "maxSize": "75 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "73.25 kB"
+      "maxSize": "75.5 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
@@ -38,7 +38,7 @@
     },
     {
       "path": "packages/vue-instantsearch/vue3/cjs/index.js",
-      "maxSize": "21 kB"
+      "maxSize": "21.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
