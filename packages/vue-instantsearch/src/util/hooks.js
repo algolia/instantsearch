@@ -125,8 +125,15 @@ export function createHooksStore(scheduleRender) {
     }
   };
 
+  // `memo(component, propsAreEqual?)` — the React/Preact HOC that skips
+  // re-rendering when props are shallow-equal. In this eager-invocation model
+  // it's an identity passthrough: functionally correct (same output), it only
+  // forgoes the streaming re-render optimization. A real per-key memo is a
+  // future optimization (see the vue-instantsearch chat notes).
+  const memo = (component) => component;
+
   return {
-    hooks: { useState, useEffect, useRef, useMemo, useCallback, useId },
+    hooks: { useState, useEffect, useRef, useMemo, useCallback, useId, memo },
     beginRender,
     endRender,
     flushEffects,
