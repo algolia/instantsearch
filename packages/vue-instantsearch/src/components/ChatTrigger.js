@@ -45,7 +45,8 @@ export default {
 
     return h(ChatToggleButton, {
       open: this.state.open,
-      onClick: () => this.state.toggleOpen(),
+      // `toggleOpen` is already bound by the connector; pass it directly.
+      onClick: this.state.toggleOpen,
       classNames: rootClassName ? { root: rootClassName } : undefined,
     });
   }),
