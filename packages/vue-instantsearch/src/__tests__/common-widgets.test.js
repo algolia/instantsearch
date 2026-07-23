@@ -32,6 +32,7 @@ import {
   AisRelatedProducts,
   AisChat,
   AisChatTrigger,
+  AisAutocomplete,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -649,8 +650,20 @@ const testSetups = {
 
     await nextTick();
   },
-  createAutocompleteWidgetTests() {
-    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  async createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisAutocomplete, { key: 'autocomplete', props: widgetParams }),
+            h(GlobalErrorSwallower, { key: 'errors' }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
   createFilterSuggestionsWidgetTests() {
     throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
@@ -713,6 +726,11 @@ const testOptions = {
   createChatWidgetTests: {
     skippedTests: { 'Chat widget common tests': true },
   },
+  // The rich AisAutocomplete widget is implemented and covered by component
+  // tests. The shared common suite stays skipped until its `vue` widgetParams
+  // variant is extended to carry `indices`/`showQuerySuggestions`/templates
+  // (it's currently `{ requiresSearch?: boolean }`, so most tests can't pass
+  // Vue the config they assert on). Tracked as a follow-up.
   createAutocompleteWidgetTests: {
     skippedTests: { 'Autocomplete widget common tests': true },
   },
