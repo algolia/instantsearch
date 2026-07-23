@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.41.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.40.0...react-instantsearch@7.41.0) (2026-07-23)
+
+
+### Features
+
+* **autocomplete:** autocomplete widget and isolated index are stable ([#7117](https://github.com/algolia/instantsearch/issues/7117)) ([8fd77dc](https://github.com/algolia/instantsearch/commit/8fd77dce8dbb9a641facfe1639cb678f968cdd46))
+
+
+
+
+
 # [7.40.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.39.1...react-instantsearch@7.40.0) (2026-07-21)
 
 
