@@ -1,34 +1,61 @@
-import algoliasearch from 'algoliasearch';
+import { algoliasearch } from 'algoliasearch';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
-const index = client.initIndex('instant_search');
 
 const $searchBox = document.querySelector('#searchBox input[type=search]');
 const $hits = document.querySelector('#hits');
 
 function renderHits(query) {
-  index.search(query).then(result => {
-    // Please sanitize user-provided data when using `innerHTML` to avoid XSS
-    $hits.innerHTML = `
-      <ol class="ais-hits">
-        ${result.hits
-          .map(
-            hit =>
-              `<li class="ais-hits--item">
-                <article>
-                  <div>
-                    <h1>${hit._highlightResult.name.value}</h1>
-                    <p>${hit._highlightResult.description.value}</p>
-                  </div>
-                </article>
-              </li>`
-          )
-          .join('')}
-      </ol>`;
-  });
+  client
+    .search({
+      requests: [
+        {
+          indexName: 'instant_search',
+          query: query,
+        },
+      ],
+    })
+    .then(({ results }) => {
+      $hits.innerHTML = '';
+
+      results.forEach((result) => {
+        const indexTitle = result.index;
+        const hits = result.hits;
+
+        const sectionHTML = `
+          <section class="search-section">
+            <h2>Results from ${indexTitle}</h2>
+            <ol class="ais-hits">
+              ${hits
+                .map((hit) => {
+                  const name = hit._highlightResult.name.value;
+                  const description = hit._highlightResult.description.value;
+                  return `
+                    <li class="ais-hits--item">
+                      <article>
+                        <div>
+                          <h3>${name}</h3>
+                          <p>${description}</p>
+                        </div>
+                      </article>
+                    </li>
+                  `;
+                })
+                .join('')}
+            </ol>
+          </section>
+        `;
+
+        $hits.insertAdjacentHTML('beforeend', sectionHTML);
+      });
+    })
+    .catch((err) => {
+      console.error('Search error:', err);
+      $hits.innerHTML = '<p class="error">Failed to load results.</p>';
+    });
 }
 
-$searchBox.addEventListener('input', event => {
+$searchBox.addEventListener('input', (event) => {
   const query = event.target.value;
 
   renderHits(query);
