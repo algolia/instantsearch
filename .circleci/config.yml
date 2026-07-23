@@ -84,14 +84,6 @@ workflows:
             branches:
               only:
                 - master
-      - e2e tests ie11:
-          context: fx-libraries
-          requires:
-            - examples
-          filters:
-            branches:
-              only:
-                - master
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -147,10 +139,6 @@ workflows:
           requires:
             - build
       - e2e tests playwright:
-          context: fx-libraries
-          requires:
-            - examples
-      - e2e tests ie11:
           context: fx-libraries
           requires:
             - examples
@@ -390,71 +378,6 @@ jobs:
                         "text": "CircleCI"
                       },
                       "url": "$CIRCLE_BUILD_URL"
-                    }
-                  ]
-                }
-              ]
-            }
-
-  e2e tests ie11:
-    <<: *defaults
-    resource_class: large
-    steps:
-      - checkout
-      - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
-      - run:
-          name: End-to-end tests (IE11)
-          command: yarn run test:e2e:ie11
-      - store_test_results:
-          path: tests/e2e/junit/wdio/
-      - slack/notify:
-          channel: $SLACK_E2E_NOTIF_CHANNEL
-          event: fail
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":warning: End-to-end tests failed",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Browser*: Internet Explorer 11"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "CircleCI"
-                      },
-                      "url": "$CIRCLE_BUILD_URL"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "SauceLabs"
-                      },
-                      "url": "https://app.saucelabs.com/dashboard/tests/vdc"
                     }
                   ]
                 }
