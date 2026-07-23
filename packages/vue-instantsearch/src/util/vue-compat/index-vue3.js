@@ -88,7 +88,7 @@ export function augmentReactCreateElement(baseH) {
       const value = props[name];
 
       if (name === 'className') {
-        data.class = value || data.class;
+        data.class = value;
       } else if (name === 'class') {
         // Shared components may spread their remaining props (which include
         // the `class` this adapter hands them) after `className`.

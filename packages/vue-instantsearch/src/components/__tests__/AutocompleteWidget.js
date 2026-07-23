@@ -116,4 +116,29 @@ describe('AutocompleteWidget (rich)', () => {
     expect(items.length).toBeGreaterThan(0);
     expect(items[0].textContent).toContain('Item 1');
   });
+
+  it('wires the searchbox companion `dependsOn` from `requiresSearch`', async () => {
+    mountAutocomplete({
+      indices: [
+        { indexName: 'indexName', itemComponent: (props) => props.item.name },
+      ],
+    });
+    await flush();
+    expect(wrapper.findComponent(AutocompleteWidget).vm.widget.dependsOn).toBe(
+      'search'
+    );
+
+    wrapper.destroy();
+
+    mountAutocomplete({
+      requiresSearch: false,
+      indices: [
+        { indexName: 'indexName', itemComponent: (props) => props.item.name },
+      ],
+    });
+    await flush();
+    expect(wrapper.findComponent(AutocompleteWidget).vm.widget.dependsOn).toBe(
+      'none'
+    );
+  });
 });
