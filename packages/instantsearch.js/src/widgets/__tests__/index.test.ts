@@ -181,6 +181,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'onPageSuggestions': {
+        const onPageSuggestions = widget as Widgets['onPageSuggestions'];
+        return onPageSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          contextType: 'pdp',
+        });
+      }
       case 'chatTrigger': {
         const chatTriggerWidget = widget as Widgets['chatTrigger'];
         return chatTriggerWidget({

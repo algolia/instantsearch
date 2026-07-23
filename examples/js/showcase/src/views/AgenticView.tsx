@@ -9,6 +9,7 @@ import { WidgetChatTrigger } from "../components/widgets/WidgetChatTrigger";
 // TODO: re-enable once the `filterSuggestions` widget works properly.
 // import { WidgetFilterSuggestions } from "../components/widgets/WidgetFilterSuggestions";
 import { WidgetHits } from "../components/widgets/WidgetHits";
+import { WidgetOnPageSuggestions } from "../components/widgets/WidgetOnPageSuggestions";
 import { WidgetSwitcher } from "../components/WidgetSwitcher";
 import { ChatLayoutContext } from "../context/chatLayout";
 import { SearchContext } from "../context/search";
@@ -76,7 +77,14 @@ export function AgenticView() {
             </ChatLayoutSwitcher>
           </div>
 
-          {/* Row 3: Hits */}
+          {/* Row 3: On-page suggestions (generic structured-outputs endpoint) */}
+          <WidgetSwitcher
+            widgets={[
+              { title: "onPageSuggestions (PDP)", body: WidgetOnPageSuggestions },
+            ]}
+          />
+
+          {/* Row 4: Hits */}
           <WidgetSwitcher widgets={[{ title: "hits", body: WidgetHits }]} />
         </div>
       </ChatLayoutContext.Provider>
