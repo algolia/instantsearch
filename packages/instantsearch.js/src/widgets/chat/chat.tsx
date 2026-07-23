@@ -1,14 +1,7 @@
 /** @jsx h */
 
-import {
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  createButtonComponent,
-  createChatComponent,
-  getFacetFiltersFromToolInput,
-} from 'instantsearch-ui-components';
-import { Component, Fragment, h, render } from 'preact';
+import { createChatComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
@@ -24,14 +17,12 @@ import {
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
-  addAbsolutePosition,
-  addQueryID,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { carousel } from '../../templates';
 
 import { createDisplayResultsTool } from './display-results-tool';
+import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type {
@@ -50,7 +41,6 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
   ChatHeaderProps,
@@ -69,39 +59,17 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-// Lightweight `memo` for the Preact flavor. `preact/compat` is intentionally
-// avoided across this package (it bloats the bundle and patches Preact
-// globally); a class component with `shouldComponentUpdate` is all the chat
-// message memoization needs.
-const memo: Parameters<typeof createChatComponent>[0]['memo'] = (
-  FunctionComponent,
-  propsAreEqual
-) => {
-  class Memoized extends Component<Record<string, unknown>> {
-    shouldComponentUpdate(nextProps: Record<string, unknown>) {
-      return propsAreEqual
-        ? !propsAreEqual(this.props as never, nextProps as never)
-        : true;
-    }
-    render() {
-      return h(FunctionComponent as never, this.props);
-    }
-  }
-  return (props) => h(Memoized, props as Record<string, unknown>);
-};
-
 const Chat = createChatComponent({
   createElement: h,
   Fragment,
-  memo,
-  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+  useMemo,
+  useState,
 });
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
@@ -110,180 +78,6 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
     Object.entries(obj).filter(([, value]) => value !== undefined)
   ) as Partial<T>;
-}
-
-function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
->(
-  showViewAll: boolean,
-  templates: ChatTemplates<THit>,
-  getSearchPageURL?: (params: SearchParameters) => string
-): UserClientSideToolWithTemplate {
-  const Button = createButtonComponent({
-    createElement: h,
-  });
-
-  function SearchLayoutComponent({
-    message,
-    applyFilters,
-    onClose,
-    sendEvent,
-  }: ClientSideToolTemplateData) {
-    const input = message?.input as SearchToolInput | undefined;
-
-    const output = message?.output as
-      | {
-          hits?: Array<RecordWithObjectID<THit>>;
-          nbHits?: number;
-          queryID?: string;
-        }
-      | undefined;
-    const hitsWithAbsolutePosition = addAbsolutePosition(
-      output?.hits || [],
-      0,
-      (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
-    );
-    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
-
-    const MemoedHeaderComponent = useMemo(() => {
-      return (
-        props: Omit<
-          ComponentProps<typeof HeaderComponent>,
-          | 'nbHits'
-          | 'query'
-          | 'hitsPerPage'
-          | 'setIndexUiState'
-          | 'indexUiState'
-          | 'getSearchPageURL'
-          | 'onClose'
-        >
-      ) => (
-        <HeaderComponent
-          nbHits={output?.nbHits}
-          input={input}
-          hitsPerPage={items.length}
-          applyFilters={applyFilters}
-          onClose={onClose}
-          {...props}
-        />
-      );
-    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
-
-    return carousel({
-      showNavigation: false,
-      templates: {
-        header: MemoedHeaderComponent,
-      },
-    })({
-      items,
-      templates: {
-        item: ({ item }) => (
-          <TemplateComponent
-            templates={templates}
-            templateKey="item"
-            data={item}
-            rootTagName="fragment"
-          />
-        ),
-      },
-      sendEvent,
-    });
-  }
-
-  function HeaderComponent({
-    canScrollLeft,
-    canScrollRight,
-    scrollLeft,
-    scrollRight,
-    nbHits,
-    input,
-    hitsPerPage,
-    applyFilters,
-    onClose,
-  }: {
-    canScrollLeft: boolean;
-    canScrollRight: boolean;
-    scrollLeft: () => void;
-    scrollRight: () => void;
-    nbHits?: number;
-    input?: SearchToolInput;
-    hitsPerPage?: number;
-    applyFilters?: ClientSideToolComponentProps['applyFilters'];
-    onClose: () => void;
-  }) {
-    if ((hitsPerPage ?? 0) < 1) {
-      return null;
-    }
-
-    return (
-      <div className="ais-ChatToolSearchIndexCarouselHeader">
-        <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
-          {nbHits && (
-            <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
-              {nbHits > 1 ? 's' : ''}
-            </div>
-          )}
-          {showViewAll && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (!input || !applyFilters) return;
-                const params = applyFilters({
-                  query: input.query,
-                  facetFilters: getFacetFiltersFromToolInput(input),
-                });
-
-                if (
-                  getSearchPageURL &&
-                  new URL(getSearchPageURL(params)).pathname !==
-                    window.location.pathname
-                ) {
-                  window.location.href = getSearchPageURL(params);
-                }
-
-                onClose();
-              }}
-              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-            >
-              View all
-              <ArrowRightIcon createElement={h} />
-            </Button>
-          )}
-        </div>
-
-        {(hitsPerPage ?? 0) > 2 && (
-          <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronLeftIcon createElement={h} />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollRight}
-              disabled={!canScrollRight}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronRightIcon createElement={h} />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return {
-    templates: { layout: SearchLayoutComponent },
-  };
 }
 
 function createDefaultTools<
@@ -444,9 +238,7 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
-        error,
         onReload: (messageId) => regenerate({ messageId }),
-        onNewConversation: clearMessages,
         onClose: () => setChatOpen(false),
         onFeedback,
         feedbackState,
@@ -531,6 +323,19 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const promptTemplateRef = makeTemplateRef();
   const layoutTemplateRef = makeTemplateRef();
 
+  // Per-tool layout components must be stable across renders or Preact will
+  // remount each tool subtree on every streaming update (e.g. resetting
+  // carousel scroll). One component per tool key reads its latest templates
+  // from a mutable ref refreshed on each render.
+  const toolTemplatesByKey = new Map<
+    string,
+    { current: UserClientSideToolWithTemplate['templates'] }
+  >();
+  const toolLayoutComponentByKey = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+
   function createStableTemplateComponent<TProps>(
     templateRef: TemplateRef,
     templateKey: string,
@@ -544,35 +349,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         data={props as unknown as Record<string, unknown>}
       />
     );
-  }
-
-  // Tool layout components are rendered as component types downstream, exactly
-  // like the chat templates above. Recreating them each render makes Preact see
-  // a new component type and remount the whole tool subtree on every streaming
-  // delta — which re-mounts e.g. a carousel's `<ol>` and resets its scroll
-  // position. `tools` is created once per widget, so cache one stable component
-  // per tool key and reuse it across renders.
-  const toolLayoutComponentCache = new Map<
-    string,
-    (props: ClientSideToolComponentProps) => JSX.Element
-  >();
-  function getStableToolLayoutComponent(
-    key: string,
-    widgetTool: NonNullable<(typeof tools)[string]>
-  ): (props: ClientSideToolComponentProps) => JSX.Element {
-    let component = toolLayoutComponentCache.get(key);
-    if (!component) {
-      component = (layoutComponentProps: ClientSideToolComponentProps) => (
-        <TemplateComponent
-          templates={widgetTool.templates}
-          rootTagName="fragment"
-          templateKey="layout"
-          data={layoutComponentProps}
-        />
-      );
-      toolLayoutComponentCache.set(key, component);
-    }
-    return component;
   }
 
   const stableHeaderLayoutComponent = templates.header?.layout
@@ -778,11 +554,38 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         widgetTool = tools[SearchIndexToolType];
       }
 
+      let layoutComponent:
+        | ((props: ClientSideToolComponentProps) => JSX.Element)
+        | undefined;
+      if (widgetTool?.templates?.layout) {
+        let templatesRef = toolTemplatesByKey.get(key);
+        if (!templatesRef) {
+          templatesRef = { current: widgetTool.templates };
+          toolTemplatesByKey.set(key, templatesRef);
+        } else {
+          templatesRef.current = widgetTool.templates;
+        }
+
+        layoutComponent = toolLayoutComponentByKey.get(key);
+        if (!layoutComponent) {
+          const ref = templatesRef;
+          layoutComponent = (
+            layoutComponentProps: ClientSideToolComponentProps
+          ) => (
+            <TemplateComponent
+              templates={ref.current}
+              rootTagName="fragment"
+              templateKey="layout"
+              data={layoutComponentProps}
+            />
+          );
+          toolLayoutComponentByKey.set(key, layoutComponent);
+        }
+      }
+
       toolsForUi[key] = {
         ...connectorTool,
-        ...(widgetTool?.templates?.layout && {
-          layoutComponent: getStableToolLayoutComponent(key, widgetTool),
-        }),
+        ...(layoutComponent && { layoutComponent }),
       };
     });
 
@@ -1294,7 +1097,7 @@ export default (function chat<
       disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),
-    $$widgetType: 'ais.chat' as const,
+    $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
 
