@@ -1,5 +1,5 @@
 import index from 'instantsearch.js/es/widgets/index/index';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { useForceUpdate } from './useForceUpdate';
 import { useIndexContext } from './useIndexContext';
@@ -20,12 +20,18 @@ export function useIndex(props: UseIndexProps) {
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
   const indexWidget = useMemo(() => index(stableProps), [stableProps]);
-  const helper = indexWidget.getHelper();
+  const helperRef = useRef<any>(null);
   const forceUpdate = useForceUpdate();
 
   useIsomorphicLayoutEffect(() => {
-    forceUpdate();
-  }, [helper, forceUpdate]);
+    const currentHelper = indexWidget.getHelper();
+    if (helperRef.current === null || currentHelper !== helperRef.current) {
+      helperRef.current = currentHelper;
+      if (helperRef.current !== null) {
+        forceUpdate();
+      }
+    }
+  }, [indexWidget, forceUpdate]);
 
   useWidget({
     widget: indexWidget,
@@ -35,5 +41,24 @@ export function useIndex(props: UseIndexProps) {
     skipSuspense: true,
   });
 
-  return indexWidget;
+  return useMemo(
+    () => ({
+      ...indexWidget,
+      getHelper: () => {
+        const currentHelper = indexWidget.getHelper();
+
+        if (currentHelper !== null) {
+          helperRef.current = currentHelper;
+          return currentHelper;
+        }
+
+        if (helperRef.current !== null) {
+          return helperRef.current;
+        }
+
+        return null;
+      },
+    }),
+    [indexWidget]
+  );
 }
