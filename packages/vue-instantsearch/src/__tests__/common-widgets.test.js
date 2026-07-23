@@ -655,8 +655,8 @@ const testSetups = {
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisAutocomplete, { props: widgetParams }),
-            h(GlobalErrorSwallower),
+            h(AisAutocomplete, { key: 'autocomplete', props: widgetParams }),
+            h(GlobalErrorSwallower, { key: 'errors' }),
           ])
         ),
       },

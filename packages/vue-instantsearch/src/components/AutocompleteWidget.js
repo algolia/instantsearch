@@ -115,7 +115,12 @@ const AisAutocompleteInner = {
       this.usePropGetters({
         indices,
         indicesConfig,
-        onRefine: (query) => refineAutocomplete(query),
+        // Committing a query (submit / selection) refines both the isolated
+        // autocomplete index and the parent search box, matching React/JS.
+        onRefine: (query) => {
+          refineAutocomplete(query);
+          refineSearchBox(query);
+        },
         onSelect: ({ setQuery }) => {
           // Default onSelect fills the query with the selected item.
           if (setQuery) {
@@ -136,7 +141,9 @@ const AisAutocompleteInner = {
     const inputProps = getInputProps();
     const searchBoxContent = h(AutocompleteSearchUi, {
       inputProps: Object.assign({}, inputProps, {
-        onChange: (event) => refineAutocomplete(event.currentTarget.value),
+        // Per-keystroke refine: in Vue render functions `onChange` maps to the
+        // native `change` event (fires on blur), so use `onInput`.
+        onInput: (event) => refineAutocomplete(event.currentTarget.value),
       }),
       onClear: () => {
         refineSearchBox('');
@@ -228,6 +235,12 @@ export default {
   },
   created() {
     this.instanceKey = `ais-autocomplete-${(autocompleteInstanceId += 1)}`;
+    // Mirror React: the searchbox companion requires the main search only when
+    // `requiresSearch` is true. `this.widget` is created by the widget mixin's
+    // `created` hook, which runs before this one.
+    if (this.widget) {
+      this.widget.dependsOn = this.requiresSearch ? 'search' : 'none';
+    }
   },
   mounted() {
     this.bootstrapIsolatedSearch();
