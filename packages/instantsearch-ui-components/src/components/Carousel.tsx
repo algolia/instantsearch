@@ -220,6 +220,8 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       return null;
     }
 
+    const itemOccurrences = new Map<string, number>();
+
     return (
       <div {...props} className={cx(cssClasses.root)}>
         {HeaderComponent && (
@@ -267,22 +269,27 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
             }
           }}
         >
-          {items.map((item, index) => (
-            <li
-              key={`${item.objectID}:${index}`}
-              className={cx(cssClasses.item)}
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${items.length}`}
-              onClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-              onAuxClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-            >
-              <ItemComponent item={item} sendEvent={sendEvent} />
-            </li>
-          ))}
+          {items.map((item, index) => {
+            const occurrence = itemOccurrences.get(item.objectID) ?? 0;
+            itemOccurrences.set(item.objectID, occurrence + 1);
+
+            return (
+              <li
+                key={JSON.stringify([item.objectID, occurrence])}
+                className={cx(cssClasses.item)}
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${items.length}`}
+                onClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+                onAuxClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+              >
+                <ItemComponent item={item} sendEvent={sendEvent} />
+              </li>
+            );
+          })}
         </ol>
 
         {showNavigation && (

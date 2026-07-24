@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 import { createCarouselComponent, generateCarouselId } from '../Carousel';
 
@@ -307,5 +307,63 @@ describe('Carousel', () => {
     expect(
       container.querySelector('.ais-Carousel-navigation--next')
     ).toHaveClass('NAVIGATION', 'NAVIGATION_NEXT');
+  });
+
+  test('keeps retained item components mounted when an item is inserted first', () => {
+    const mounts: string[] = [];
+    const TrackingItemComponent: CarouselProps<RecordWithObjectID>['itemComponent'] =
+      ({ item }) => {
+        useEffect(() => {
+          mounts.push(item.objectID);
+        }, []);
+
+        return <div>{item.objectID}</div>;
+      };
+    const initialItems = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const { rerender } = render(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={initialItems}
+        itemComponent={TrackingItemComponent}
+      />
+    );
+
+    expect(mounts).toEqual(['1', '2']);
+
+    rerender(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={[{ objectID: '0', __position: 1 }, ...initialItems]}
+        itemComponent={TrackingItemComponent}
+      />
+    );
+
+    expect(mounts).toEqual(['1', '2', '0']);
+  });
+
+  test('renders repeated and key-like object IDs without duplicate key warnings', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const { getAllByText } = render(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={[
+          { objectID: '1', __position: 1 },
+          { objectID: '1', __position: 2 },
+          { objectID: '1:0', __position: 3 },
+        ]}
+        itemComponent={ItemComponent}
+      />
+    );
+
+    expect(getAllByText('1')).toHaveLength(2);
+    expect(getAllByText('1:0')).toHaveLength(1);
+    expect(consoleError).not.toHaveBeenCalled();
+
+    consoleError.mockRestore();
   });
 });
