@@ -33,6 +33,10 @@ export type ChatTriggerConnectorParams = Record<string, never>;
 
 export type ChatTriggerRenderState = {
   /**
+   * Whether the sibling chat widget has published its render state.
+   */
+  isChatReady: boolean;
+  /**
    * Whether the sibling chat widget is currently open.
    */
   open: boolean;
@@ -125,6 +129,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
       getWidgetRenderState(renderOptions: InitOptions | RenderOptions) {
         const chatState = getChatRenderState(renderOptions);
         return {
+          isChatReady: chatState !== undefined,
           open: chatState?.open ?? false,
           toggleOpen,
           widgetParams: params,

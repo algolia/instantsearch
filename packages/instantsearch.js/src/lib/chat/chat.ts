@@ -26,10 +26,14 @@ export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
-  const initialMessages = sessionStorage.getItem(
-    CACHE_KEY + (id ? `-${id}` : '')
-  );
-  return initialMessages ? JSON.parse(initialMessages) : [];
+  try {
+    const initialMessages = sessionStorage.getItem(
+      CACHE_KEY + (id ? `-${id}` : '')
+    );
+    return initialMessages ? JSON.parse(initialMessages) : [];
+  } catch {
+    return [];
+  }
 }
 
 export class ChatState<TUiMessage extends UIMessage>

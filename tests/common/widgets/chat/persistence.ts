@@ -38,6 +38,12 @@ export function createPersistenceTests(
         },
       });
 
+      expect(
+        document.querySelector(
+          '.ais-ChatToggleButton:not(.ais-ChatToggleButton--open)'
+        )
+      ).toBeNull();
+
       await act(async () => {
         await wait(0);
       });

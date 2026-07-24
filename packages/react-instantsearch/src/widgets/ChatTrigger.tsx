@@ -48,10 +48,14 @@ export function ChatTrigger({
   floating = true,
   ...props
 }: ChatTriggerProps) {
-  const { open, toggleOpen } = useChatTrigger(
+  const { isChatReady, open, toggleOpen } = useChatTrigger(
     {},
     { $$widgetType: 'ais.chatTrigger' }
   );
+
+  if (!isChatReady) {
+    return null;
+  }
 
   const handleClick = () => {
     toggleOpen();

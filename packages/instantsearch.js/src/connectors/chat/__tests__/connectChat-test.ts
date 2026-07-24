@@ -550,7 +550,6 @@ describe('connectChat', () => {
       try {
         const { getRenderState } = getInitializedWidget({
           persistOpen: true,
-          persistence: false,
         });
 
         expect(getRenderState().open).toBe(false);

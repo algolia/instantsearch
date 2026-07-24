@@ -72,6 +72,35 @@ describe('ChatState', () => {
     expect(chatState.messages).toEqual(initialMessages);
   });
 
+  it('should use empty messages when reading sessionStorage throws', () => {
+    // eslint-disable-next-line jest/unbound-method
+    const originalGetItem = sessionStorage.getItem;
+    sessionStorage.getItem = () => {
+      throw new Error('blocked');
+    };
+
+    try {
+      let chatState!: ChatState<any>;
+      expect(() => {
+        chatState = new ChatState('agentID-blocked');
+      }).not.toThrow();
+      expect(chatState.messages).toEqual([]);
+    } finally {
+      sessionStorage.getItem = originalGetItem;
+    }
+  });
+
+  it('should use empty messages when persisted data is malformed', () => {
+    const agentId = 'agentID-malformed';
+    sessionStorage.setItem(`${CACHE_KEY}-${agentId}`, '{');
+
+    let chatState!: ChatState<any>;
+    expect(() => {
+      chatState = new ChatState(agentId);
+    }).not.toThrow();
+    expect(chatState.messages).toEqual([]);
+  });
+
   it('should not load initial messages from sessionStorage when persistence is disabled', () => {
     const agentId = 'agentID5';
     const initialMessages = [
