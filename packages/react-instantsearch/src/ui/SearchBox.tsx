@@ -306,7 +306,7 @@ export function SearchBox({
           )}
           hidden={!isSearchStalled}
         >
-          <LoadingIcon classNames={classNames} />
+          {isSearchStalled && <LoadingIcon classNames={classNames} />}
         </span>
       </form>
     </div>
