@@ -237,6 +237,106 @@ describe('createDisplayResultsTool', () => {
     expect(screen.queryByText('Runners')).not.toBeInTheDocument();
   });
 
+  test('omits unresolved prototype-named object IDs', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {
+        groups: [
+          {
+            title: 'Runners',
+            results: [
+              { objectID: '1' },
+              { objectID: 'constructor' },
+              { objectID: '__proto__' },
+              { objectID: '2' },
+            ],
+          },
+          {
+            title: 'Unknown only',
+            results: [{ objectID: 'constructor' }],
+          },
+        ],
+      },
+      output: {
+        status: 'warning',
+        unknownObjectIds: ['constructor', '__proto__'],
+      },
+    };
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={createMessages(message, [
+          { objectID: '1', name: 'Air Runner' },
+          { objectID: '2', name: 'Trail Runner' },
+        ])}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(
+      screen
+        .getAllByTestId(/^item-/)
+        .map((element) => element.getAttribute('data-testid'))
+    ).toEqual(['item-1', 'item-2']);
+    expect(screen.queryByTestId('item-constructor')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('item-__proto__')).not.toBeInTheDocument();
+    expect(screen.queryByText('Unknown only')).not.toBeInTheDocument();
+  });
+
+  test('renders hydrated prototype-named object IDs', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {
+        groups: [
+          {
+            title: 'Reserved names',
+            results: [{ objectID: 'constructor' }, { objectID: '__proto__' }],
+          },
+        ],
+      },
+      output: { status: 'success', unknownObjectIds: [] },
+    };
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={createMessages(message, [
+          { objectID: 'constructor', name: 'Constructor record' },
+          { objectID: '__proto__', name: 'Prototype record' },
+        ])}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.getByTestId('name-constructor')).toHaveTextContent(
+      'Constructor record'
+    );
+    expect(screen.getByTestId('name-__proto__')).toHaveTextContent(
+      'Prototype record'
+    );
+  });
+
   test('does not render preliminary legacy output', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
