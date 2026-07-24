@@ -287,6 +287,42 @@ describe('getHitsByObjectID', () => {
     });
   });
 
+  test('ignores searches after `untilToolCallId` in the same message', () => {
+    const messages: ChatMessageBase[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-before',
+            state: 'output-available',
+            input: { query: 'shoes' },
+            output: { hits: [{ objectID: '1', name: 'Runner' }] },
+          },
+          {
+            type: 'tool-algolia_display_results',
+            toolCallId: 'display',
+            state: 'output-available',
+            input: {},
+            output: {},
+          },
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-after',
+            state: 'output-available',
+            input: { query: 'future search' },
+            output: { hits: [{ objectID: '1', name: 'Future Runner' }] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    expect(getHitsByObjectID(messages, 'display')).toEqual({
+      1: { objectID: '1', name: 'Runner' },
+    });
+  });
+
   test('returns an empty map when there are no search outputs', () => {
     expect(getHitsByObjectID([])).toEqual({});
   });

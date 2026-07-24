@@ -132,10 +132,9 @@ const collectHitsFromPart = (
  * preceding search tool already fetched.
  *
  * Pass `untilToolCallId` (the display tool's own `toolCallId`) to scope
- * collection to the turn that produced it: hits are only gathered up to and
- * including the message that contains that tool call. This prevents a later
- * turn's search from overwriting an earlier display tool's records (and their
- * per-query metadata like `__queryID`).
+ * collection to the call that produced it: hits are only gathered before the
+ * matching tool part. This prevents later searches from overwriting an earlier
+ * display tool's records and per-query metadata like `__queryID`.
  */
 export const getHitsByObjectID = (
   messages: ChatMessageBase[],
@@ -146,20 +145,20 @@ export const getHitsByObjectID = (
   for (const message of messages) {
     let reachedBoundary = false;
 
-    message.parts.forEach((part) => {
+    for (const part of message.parts) {
       if (!isPartTool(part)) {
-        return;
+        continue;
       }
-      // Note the boundary but keep processing the rest of this message's parts:
-      // the search tool that fed this display tool lives in the same message,
-      // so its hits must still be collected before we stop.
+
       if (untilToolCallId && part.toolCallId === untilToolCallId) {
         reachedBoundary = true;
+        break;
       }
+
       if (isSearchToolPart(part)) {
         collectHitsFromPart(part, hitsByObjectID);
       }
-    });
+    }
 
     if (reachedBoundary) {
       break;
