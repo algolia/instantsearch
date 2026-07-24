@@ -49,6 +49,7 @@ export type ChatMessageReasoningClassNames = {
 type ChatMessageReasoningProps = {
   key?: string | number;
   part: ReasoningUIPart;
+  isStreaming: boolean;
   translations: ChatMessageReasoningTranslations;
   classNames: ChatMessageReasoningClassNames;
 };
@@ -57,8 +58,7 @@ export function createChatMessageReasoningComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatMessageReasoning(userProps: ChatMessageReasoningProps) {
-    const { part, translations, classNames } = userProps;
-    const isStreaming = part.state === 'streaming';
+    const { part, isStreaming, translations, classNames } = userProps;
     const markdown = compiler(part.text, {
       createElement: createElement as any,
       disableParsingRawHTML: true,

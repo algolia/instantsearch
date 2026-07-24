@@ -1,5 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import { createDefaultWidgetParams, openChat } from './utils';
@@ -59,6 +61,76 @@ export function createReasoningTests(
       expect(document.body).not.toHaveTextContent('Check the catalog.');
     });
 
+    test('copies only answer text when reasoning is hidden', async () => {
+      const searchClient = createSearchClient();
+      const writeText = jest.fn();
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: { writeText },
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(createChatWithReasoning()),
+          react: createDefaultWidgetParams(createChatWithReasoning()),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      userEvent.click(
+        within(document.body).getByRole('button', {
+          name: 'Copy to clipboard',
+        })
+      );
+
+      expect(writeText).toHaveBeenCalledWith('The answer is 2001.');
+    });
+
+    test('does not offer Copy when hidden reasoning is the only content', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({
+        messages: [
+          {
+            id: 'assistant-reasoning-only',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'No answer was produced.',
+                state: 'done',
+              },
+            ],
+          },
+        ],
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      expect(
+        within(document.body).queryByRole('button', {
+          name: 'Copy to clipboard',
+        })
+      ).not.toBeInTheDocument();
+    });
+
     test('renders each reasoning part in a collapsed disclosure when enabled', async () => {
       const searchClient = createSearchClient();
 
@@ -100,6 +172,74 @@ export function createReasoningTests(
         'catalog'
       );
       expect(disclosures[1]).toHaveTextContent('Compare release dates.');
+    });
+
+    test('moves the streaming state to a newly appended response', async () => {
+      const searchClient = createSearchClient();
+      const previousMessage = {
+        id: 'assistant-previous',
+        role: 'assistant' as const,
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Previous reasoning',
+            state: 'streaming' as const,
+          },
+        ],
+      };
+      const chat = new Chat({ messages: [previousMessage] });
+      chat._state.status = 'streaming';
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      expect(
+        within(document.body).getByRole('group', {
+          name: 'Reasoning',
+        })
+      ).toHaveAttribute('aria-busy', 'true');
+
+      await act(async () => {
+        chat.messages = [
+          previousMessage,
+          {
+            id: 'assistant-current',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Current reasoning',
+                state: 'streaming',
+              },
+            ],
+          },
+        ];
+        await wait(0);
+      });
+
+      const disclosures = within(document.body).getAllByRole('group', {
+        name: 'Reasoning',
+      });
+      expect(disclosures).toHaveLength(2);
+      expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+      expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
     });
 
     test('renders the translated reasoning label', async () => {

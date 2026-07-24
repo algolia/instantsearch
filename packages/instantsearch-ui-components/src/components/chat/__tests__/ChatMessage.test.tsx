@@ -354,6 +354,55 @@ describe('ChatMessage', () => {
     expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
   });
 
+  test('marks reasoning as busy only on the active response', () => {
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: 'previous',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Stopped reasoning',
+            state: 'streaming' as const,
+          },
+        ],
+      },
+      {
+        role: 'assistant' as const,
+        id: 'current',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Current reasoning',
+            state: 'streaming' as const,
+          },
+        ],
+      },
+    ];
+
+    const { getAllByRole } = render(
+      <Fragment>
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            indexUiState={{}}
+            setIndexUiState={jest.fn()}
+            message={message}
+            messages={messages}
+            status="streaming"
+            tools={{}}
+            onClose={jest.fn()}
+            showReasoning={true}
+          />
+        ))}
+      </Fragment>
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+  });
+
   test('preserves an open disclosure while reasoning text streams', () => {
     const renderMessage = (text: string) => (
       <ChatMessage

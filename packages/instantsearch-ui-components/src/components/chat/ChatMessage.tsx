@@ -225,6 +225,9 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     const hasLeading = Boolean(LeadingComponent);
+    const isCurrentMessage =
+      messages === undefined ||
+      messages[messages.length - 1]?.id === message.id;
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
@@ -282,16 +285,22 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           return null;
         }
 
+        const isReasoningStreaming =
+          part.state === 'streaming' &&
+          status === 'streaming' &&
+          isCurrentMessage;
+
         return (
           <ChatMessageReasoning
             key={`${message.id}-${index}`}
             part={part}
+            isStreaming={isReasoningStreaming}
             translations={translations}
             classNames={{
               ...cssClasses,
               reasoningLabel: cx(
                 'ais-ChatMessageReasoning-label',
-                part.state === 'streaming' &&
+                isReasoningStreaming &&
                   'ais-ChatMessageReasoning-label--streaming',
                 classNames.reasoningLabel
               ),

@@ -14,6 +14,8 @@ import { Chat } from '../Chat';
 
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
+const searchClient = createSearchClient();
+
 function createChat() {
   return new ChatInstance<UIMessage>({
     persistence: false,
@@ -59,13 +61,15 @@ function createChat() {
 function ChatUnderTest({
   chat,
   showReasoning,
+  reasoningLabel = 'Reasoning',
 }: {
   chat: ChatInstance<UIMessage>;
   showReasoning: boolean;
+  reasoningLabel?: string;
 }) {
   return (
     <InstantSearch
-      searchClient={createSearchClient()}
+      searchClient={searchClient}
       indexName="indexName"
       future={{ preserveSharedStateOnUnmount: true }}
     >
@@ -75,6 +79,7 @@ function ChatUnderTest({
         layoutComponent={ChatInlineLayout}
         requiresSearch={false}
         showReasoning={showReasoning}
+        translations={{ message: { reasoningLabel } }}
       />
     </InstantSearch>
   );
@@ -118,6 +123,39 @@ describe('Chat', () => {
 
     expect(screen.queryAllByRole('group', { name: 'Reasoning' })).toHaveLength(
       0
+    );
+  });
+
+  test('updates the reasoning label on completed messages', async () => {
+    const chat = createChat();
+    const { rerender } = render(
+      <ChatUnderTest
+        chat={chat}
+        showReasoning={true}
+        reasoningLabel="Reasoning"
+      />
+    );
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getAllByRole('group', { name: 'Reasoning' })).toHaveLength(2);
+
+    rerender(
+      <ChatUnderTest
+        chat={chat}
+        showReasoning={true}
+        reasoningLabel="Raisonnement"
+      />
+    );
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.queryAllByRole('group', { name: 'Reasoning' })).toHaveLength(
+      0
+    );
+    expect(screen.getAllByRole('group', { name: 'Raisonnement' })).toHaveLength(
+      2
     );
   });
 });

@@ -14,7 +14,7 @@ const SearchIndexToolType = 'algolia_search_index';
 
 export const getTextContent = (message: ChatMessageBase) => {
   return message.parts
-    .map((part) => ('text' in part ? part.text : ''))
+    .map((part) => (part.type === 'text' ? part.text : ''))
     .join('');
 };
 

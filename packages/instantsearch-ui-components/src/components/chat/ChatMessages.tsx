@@ -273,6 +273,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    isCurrentMessage: boolean;
     status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
@@ -398,14 +399,17 @@ export function createChatMessagesComponent({
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
     const showReasoning = props.assistantMessageProps?.showReasoning;
+    const reasoningLabel = props.messageTranslations?.reasoningLabel;
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       [
         props.message,
+        props.isCurrentMessage,
         props.status,
         props.suggestionsElement,
         messageFeedback,
         showReasoning,
+        reasoningLabel,
       ]
     );
   }
@@ -528,6 +532,7 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
+                isCurrentMessage={index === messages.length - 1}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
