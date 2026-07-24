@@ -31,7 +31,9 @@ describe('connectChat', () => {
     const renderFn = jest.fn();
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
-      ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
+      ...(!('agentId' in widgetParams) && !('chat' in widgetParams)
+        ? { agentId: 'agentId' }
+        : {}),
       disableTriggerValidation: true,
       ...widgetParams,
     } as ChatConnectorParams);
@@ -125,6 +127,10 @@ describe('connectChat', () => {
         transport: { api: 'https://custom.api' },
         persistence: false,
       });
+      const customChatOpenPersistenceParams = assertChatConnectorParams({
+        chat: customChat,
+        persistOpen: true,
+      });
 
       // @ts-expect-error requestOptions is only valid with agentId
       assertChatConnectorParams({
@@ -169,6 +175,7 @@ describe('connectChat', () => {
       });
       expect(agentPersistenceParams.persistence).toBe(false);
       expect(transportPersistenceParams.persistence).toBe(false);
+      expect(customChatOpenPersistenceParams.persistOpen).toBe(true);
     });
   });
 
@@ -382,6 +389,12 @@ describe('connectChat', () => {
   });
 
   describe('state management', () => {
+    const openStateCacheKey = 'instantsearch-chat-open-state-chat';
+
+    beforeEach(() => {
+      sessionStorage.removeItem(openStateCacheKey);
+    });
+
     it('updates input state', () => {
       const { getRenderState } = getInitializedWidget();
 
@@ -404,6 +417,202 @@ describe('connectChat', () => {
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.open).toBe(true);
+    });
+
+    it('restores the persisted open state on the first render when enabled', () => {
+      sessionStorage.setItem(openStateCacheKey, 'true');
+
+      const { getRenderState, renderFn } = getInitializedWidget({
+        persistOpen: true,
+        persistence: false,
+      });
+
+      expect(renderFn.mock.calls[0][0].open).toBe(true);
+      expect(getRenderState().open).toBe(true);
+    });
+
+    it('restores before a pre-init render state read', () => {
+      sessionStorage.setItem(openStateCacheKey, 'true');
+      const getItem = jest.spyOn(Storage.prototype, 'getItem');
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        persistOpen: true,
+        persistence: false,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      const renderState = widget.getWidgetRenderState(
+        createInitOptions({ helper })
+      );
+      widget.init(createInitOptions({ helper }));
+
+      expect(renderState.open).toBe(true);
+      expect(
+        getItem.mock.calls.filter(([key]) => key === openStateCacheKey)
+      ).toHaveLength(1);
+
+      getItem.mockRestore();
+    });
+
+    it('persists explicit open and close transitions when enabled', () => {
+      const { getRenderState } = getInitializedWidget({
+        persistOpen: true,
+        persistence: false,
+      });
+
+      getRenderState().setOpen(true);
+      expect(sessionStorage.getItem(openStateCacheKey)).toBe('true');
+
+      getRenderState().setOpen(false);
+      expect(sessionStorage.getItem(openStateCacheKey)).toBe('false');
+    });
+
+    it('does not access open state storage when persistence is disabled', () => {
+      const getItem = jest.spyOn(Storage.prototype, 'getItem');
+      const setItem = jest.spyOn(Storage.prototype, 'setItem');
+
+      const { getRenderState } = getInitializedWidget({
+        persistOpen: false,
+        persistence: false,
+      });
+      getRenderState().setOpen(true);
+
+      expect(getItem).not.toHaveBeenCalledWith(openStateCacheKey);
+      expect(setItem).not.toHaveBeenCalledWith(
+        openStateCacheKey,
+        expect.any(String)
+      );
+
+      getItem.mockRestore();
+      setItem.mockRestore();
+    });
+
+    it('accesses open state storage when persistence is enabled', () => {
+      const getItem = jest.spyOn(Storage.prototype, 'getItem');
+      const setItem = jest.spyOn(Storage.prototype, 'setItem');
+
+      const { getRenderState } = getInitializedWidget({
+        persistOpen: true,
+        persistence: false,
+      });
+      getRenderState().setOpen(true);
+
+      expect(getItem).toHaveBeenCalledWith(openStateCacheKey);
+      expect(setItem).toHaveBeenCalledWith(openStateCacheKey, 'true');
+
+      getItem.mockRestore();
+      setItem.mockRestore();
+    });
+
+    it.each(['false', 'unexpected', '1'])(
+      'restores closed for the persisted value %p',
+      (persistedValue) => {
+        sessionStorage.setItem(openStateCacheKey, persistedValue);
+
+        const { getRenderState } = getInitializedWidget({
+          persistOpen: true,
+          persistence: false,
+        });
+
+        expect(getRenderState().open).toBe(false);
+      }
+    );
+
+    it('scopes persisted open state by connector type', () => {
+      sessionStorage.setItem(
+        'instantsearch-chat-open-state-supportChat',
+        'true'
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        type: 'supportChat',
+        persistOpen: true,
+        persistence: false,
+      });
+
+      expect(getRenderState().open).toBe(true);
+    });
+
+    it('fails closed when sessionStorage access throws', () => {
+      const descriptor = Object.getOwnPropertyDescriptor(
+        window,
+        'sessionStorage'
+      );
+
+      Object.defineProperty(window, 'sessionStorage', {
+        configurable: true,
+        get() {
+          throw new Error('blocked');
+        },
+      });
+
+      try {
+        const { getRenderState } = getInitializedWidget({
+          persistOpen: true,
+        });
+
+        expect(getRenderState().open).toBe(false);
+        expect(() => getRenderState().setOpen(true)).not.toThrow();
+        expect(getRenderState().open).toBe(true);
+      } finally {
+        Object.defineProperty(window, 'sessionStorage', descriptor!);
+      }
+    });
+
+    it('fails closed when reading the persisted state throws', () => {
+      const originalGetItem = Storage.prototype.getItem;
+      const getItem = jest
+        .spyOn(Storage.prototype, 'getItem')
+        .mockImplementation(function (this: Storage, key) {
+          if (key === openStateCacheKey) {
+            throw new Error('blocked');
+          }
+          return originalGetItem.call(this, key);
+        });
+
+      const { getRenderState } = getInitializedWidget({
+        persistOpen: true,
+        persistence: false,
+      });
+
+      expect(getRenderState().open).toBe(false);
+      getItem.mockRestore();
+    });
+
+    it('keeps visible state when writing the persisted state throws', () => {
+      const originalSetItem = Storage.prototype.setItem;
+      const setItem = jest
+        .spyOn(Storage.prototype, 'setItem')
+        .mockImplementation(function (this: Storage, key, value) {
+          if (key === openStateCacheKey) {
+            throw new DOMException('Storage is full', 'QuotaExceededError');
+          }
+          return originalSetItem.call(this, key, value);
+        });
+      const { getRenderState } = getInitializedWidget({
+        persistOpen: true,
+        persistence: false,
+      });
+
+      expect(() => getRenderState().setOpen(true)).not.toThrow();
+      expect(getRenderState().open).toBe(true);
+      setItem.mockRestore();
+    });
+
+    it('restores open state for a new widget with a custom Chat instance', () => {
+      const firstWidget = getInitializedWidget({
+        chat: new Chat({ id: 'first' }),
+        persistOpen: true,
+      });
+      firstWidget.getRenderState().setOpen(true);
+
+      const nextWidget = getInitializedWidget({
+        chat: new Chat({ id: 'second' }),
+        persistOpen: true,
+      });
+
+      expect(nextWidget.getRenderState().open).toBe(true);
     });
 
     it('clears messages and resets the conversation when clearMessages is called', () => {
