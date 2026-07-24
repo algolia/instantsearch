@@ -297,6 +297,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 laterPart.state === 'streaming'
             );
 
+        if (!isReasoningStreaming && part.text.trim().length === 0) {
+          return null;
+        }
+
         return (
           <ChatMessageReasoning
             key={`${message.id}-${index}`}

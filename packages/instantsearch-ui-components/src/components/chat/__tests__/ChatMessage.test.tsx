@@ -256,6 +256,58 @@ describe('ChatMessage', () => {
     expect(queryByText('Private reasoning')).not.toBeInTheDocument();
   });
 
+  test.each([
+    ['stopped', 'ready' as const, ''],
+    ['disconnected', 'error' as const, ''],
+    ['finished with only whitespace', 'ready' as const, ' \n '],
+  ])(
+    'does not render blank reasoning after a response is %s',
+    (_responseState, status, text) => {
+      const { queryByRole } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={{
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text, state: 'done' }],
+          }}
+          status={status}
+          tools={{}}
+          onClose={jest.fn()}
+          showReasoning={true}
+        />
+      );
+
+      expect(
+        queryByRole('group', { name: 'Reasoning' })
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  test('renders empty reasoning while the response is active', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
+      'aria-busy',
+      'true'
+    );
+  });
+
   test('keeps reasoning disclosures in message part order', () => {
     const { container, getAllByRole, getByText } = render(
       <ChatMessage
