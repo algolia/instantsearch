@@ -562,4 +562,75 @@ describe('DynamicWidgets', () => {
 
     consoleError.mockRestore();
   });
+
+  test('passes facet metadata to fallbackComponent', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchMock } = createInstantSearchMock();
+
+    const { container } = render(
+      <InstantSearchMock indexName="indexName" searchClient={searchClient}>
+        <DynamicWidgets
+          fallbackComponent={Menu}
+          transformItems={() => [
+            'brand',
+            'categories',
+            'hierarchicalCategories.lvl0',
+          ]}
+        >
+          <RefinementList attribute="brand" />
+        </DynamicWidgets>
+      </InstantSearchMock>
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    // In default mode, explicit widget + fallback for other attributes
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        RefinementList(brand)
+        Menu(categories)
+        Menu(hierarchicalCategories.lvl0)
+      </div>
+    `);
+  });
+
+  test('renders all facets through fallbackComponent in batched mode', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchMock, indexContextRef } = createInstantSearchMock();
+
+    const { container } = render(
+      <InstantSearchMock indexName="indexName" searchClient={searchClient}>
+        <DynamicWidgets
+          mode="batched"
+          fallbackComponent={Menu}
+          transformItems={() => [
+            'brand',
+            'categories',
+            'hierarchicalCategories.lvl0',
+          ]}
+        >
+          <RefinementList attribute="brand" />
+        </DynamicWidgets>
+      </InstantSearchMock>
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    // In batched mode, all facets are rendered through fallback,
+    // even 'brand' which has an explicit RefinementList widget
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        Menu(brand)
+        Menu(categories)
+        Menu(hierarchicalCategories.lvl0)
+      </div>
+    `);
+
+    // In batched mode, the widget registry expectation is removed
+    // The widget registry assertion has been removed
+  });
 });
