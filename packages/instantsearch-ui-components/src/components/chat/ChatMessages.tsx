@@ -486,7 +486,12 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    const showLoader = getShowLoader(status, lastPart, tools);
+    const showLoader = getShowLoader(
+      status,
+      lastPart,
+      tools,
+      assistantMessageProps?.showReasoning
+    );
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -609,13 +614,15 @@ export function createChatMessagesComponent({
 const getShowLoader = (
   status: ChatStatus,
   lastPart: ChatMessageBase['parts'][number] | undefined,
-  tools: ClientSideTools
+  tools: ClientSideTools,
+  showReasoning: boolean | undefined
 ): boolean => {
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
   if (!lastPart) return true;
   if (isPartText(lastPart)) return false;
+  if (lastPart.type === 'reasoning' && showReasoning) return false;
 
   if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
     const tool = findTool(lastPart.type, tools);

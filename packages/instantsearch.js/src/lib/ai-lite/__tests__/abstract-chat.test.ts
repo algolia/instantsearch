@@ -785,57 +785,115 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
   });
 
   describe('guardrail violations', () => {
-    it('replaces partial assistant content with the fallback and finishes ready', async () => {
-      const fallbackResponse =
-        "I can't help with that request, but I can help with product questions.";
-      const onFinish = jest.fn();
-      const onError = jest.fn();
-      const { chat, state } = createTestSetup({
-        chunks: [
-          startChunk(),
+    it.each<{
+      name: string;
+      openChunks: UIMessageChunk[];
+      trailingChunk: UIMessageChunk;
+    }>([
+      {
+        name: 'a text end',
+        openChunks: [
           { type: 'text-start', id: 'text-1' },
           {
             type: 'text-delta',
             id: 'text-1',
             delta: 'Unsafe partial content',
           },
-          {
-            type: 'data-guardrail-violation',
-            data: {
-              category: 'blocked',
-              guardrailType: 'output',
-              fallbackResponse,
-            },
-          },
-          finishChunk(),
         ],
-        onError,
-        onFinish,
-      });
+        trailingChunk: { type: 'text-end', id: 'text-1' },
+      },
+      {
+        name: 'a text delta',
+        openChunks: [{ type: 'text-start', id: 'text-1' }],
+        trailingChunk: {
+          type: 'text-delta',
+          id: 'text-1',
+          delta: 'Unsafe trailing content',
+        },
+      },
+      {
+        name: 'a reasoning end',
+        openChunks: [
+          { type: 'reasoning-start', id: 'reasoning-1' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-1',
+            delta: 'Unsafe partial reasoning',
+          },
+        ],
+        trailingChunk: { type: 'reasoning-end', id: 'reasoning-1' },
+      },
+      {
+        name: 'a reasoning delta',
+        openChunks: [{ type: 'reasoning-start', id: 'reasoning-1' }],
+        trailingChunk: {
+          type: 'reasoning-delta',
+          id: 'reasoning-1',
+          delta: 'Unsafe trailing reasoning',
+        },
+      },
+      {
+        name: 'a new text part',
+        openChunks: [{ type: 'text-start', id: 'text-1' }],
+        trailingChunk: { type: 'text-start', id: 'text-2' },
+      },
+      {
+        name: 'a new reasoning part',
+        openChunks: [{ type: 'reasoning-start', id: 'reasoning-1' }],
+        trailingChunk: { type: 'reasoning-start', id: 'reasoning-2' },
+      },
+    ])(
+      'keeps the guardrail fallback after $name',
+      async ({ openChunks, trailingChunk }) => {
+        const fallbackResponse =
+          "I can't help with that request, but I can help with product questions.";
+        const onFinish = jest.fn();
+        const onError = jest.fn();
+        const { chat, state } = createTestSetup({
+          chunks: [
+            startChunk(),
+            { type: 'start-step' },
+            ...openChunks,
+            {
+              type: 'data-guardrail-violation',
+              data: {
+                category: 'blocked',
+                guardrailType: 'output',
+                fallbackResponse,
+              },
+            },
+            trailingChunk,
+            {
+              type: 'finish',
+              messageMetadata: { finishReason: 'stop' },
+            },
+          ],
+          onError,
+          onFinish,
+        });
 
-      await chat.sendMessage({ text: 'blocked request' });
+        await chat.sendMessage({ text: 'blocked request' });
 
-      const assistant = state.messages.find((m) => m.role === 'assistant')!;
+        const assistant = state.messages.find((m) => m.role === 'assistant')!;
 
-      expect(state.status).toBe('ready');
-      expect(state.error).toBeUndefined();
-      expect(onError).not.toHaveBeenCalled();
-      expect(assistant).toMatchObject({
-        id: 'msg-1',
-        role: 'assistant',
-        parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
-      });
-      expect(JSON.stringify(assistant.parts)).not.toContain(
-        'Unsafe partial content'
-      );
-      expect(onFinish).toHaveBeenCalledWith({
-        message: assistant,
-        messages: state.messages,
-        isAbort: false,
-        isDisconnect: false,
-        isError: false,
-      });
-    });
+        expect(state.status).toBe('ready');
+        expect(state.error).toBeUndefined();
+        expect(onError).not.toHaveBeenCalled();
+        expect(assistant).toMatchObject({
+          id: 'msg-1',
+          role: 'assistant',
+          metadata: { finishReason: 'stop' },
+          parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+        });
+        expect(onFinish).toHaveBeenCalledWith({
+          message: assistant,
+          messages: state.messages,
+          isAbort: false,
+          isDisconnect: false,
+          isError: false,
+        });
+      }
+    );
 
     it('creates a fallback assistant message when violation arrives before an assistant message starts', async () => {
       const onFinish = jest.fn();

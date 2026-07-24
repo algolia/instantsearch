@@ -945,8 +945,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawOutputByCallId: Record<string, string> = {};
     const streamPartIndexById = new Map<string, number>();
     const reusableReasoningPartIndexes: number[] = [];
+    const terminalContentMessageIds = new Set<string>();
     const streamPartKey = (type: 'text' | 'reasoning', id: string): string =>
       `${type}:${id}`;
+    const invalidateStreamParts = (): void => {
+      streamPartIndexById.clear();
+      reusableReasoningPartIndexes.length = 0;
+    };
     const findUnambiguousUnfinishedPart = (
       type: 'text' | 'reasoning'
     ): number | undefined => {
@@ -1096,8 +1101,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
           switch (chunk.type) {
             case 'start': {
-              streamPartIndexById.clear();
-              reusableReasoningPartIndexes.length = 0;
+              invalidateStreamParts();
               currentMessageId = chunk.messageId || this.generateId();
               response.messageId = currentMessageId;
 
@@ -1144,7 +1148,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
             case 'text-start':
             case 'reasoning-start': {
-              if (!currentMessage) break;
+              if (
+                !currentMessage ||
+                terminalContentMessageIds.has(currentMessage.id)
+              ) {
+                break;
+              }
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
               const reusablePartIndex =
                 type === 'reasoning'
@@ -1165,7 +1174,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'text-delta':
             case 'reasoning-delta': {
               const type = chunk.type === 'text-delta' ? 'text' : 'reasoning';
-              if (!currentMessage) break;
+              if (
+                !currentMessage ||
+                terminalContentMessageIds.has(currentMessage.id)
+              ) {
+                break;
+              }
 
               const partKey = streamPartKey(type, chunk.id);
               let partIndex = streamPartIndexById.get(partKey);
@@ -1177,19 +1191,29 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               }
               if (partIndex === undefined) break;
 
-              const part = currentMessage.parts[partIndex] as {
-                type: 'text' | 'reasoning';
-                text: string;
-                state?: 'streaming' | 'done';
-              };
-              if (part.type !== type || part.state !== 'streaming') break;
+              const part = currentMessage.parts[partIndex] as
+                | {
+                    type: 'text' | 'reasoning';
+                    text: string;
+                    state?: 'streaming' | 'done';
+                  }
+                | undefined;
+              if (!part || part.type !== type || part.state !== 'streaming') {
+                streamPartIndexById.delete(partKey);
+                break;
+              }
               setPart(partIndex, { ...part, text: part.text + chunk.delta });
               break;
             }
 
             case 'text-end':
             case 'reasoning-end': {
-              if (!currentMessage) break;
+              if (
+                !currentMessage ||
+                terminalContentMessageIds.has(currentMessage.id)
+              ) {
+                break;
+              }
               const type = chunk.type === 'text-end' ? 'text' : 'reasoning';
 
               const partKey = streamPartKey(type, chunk.id);
@@ -1203,7 +1227,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               if (partIndex === undefined) break;
 
               const part = currentMessage.parts[partIndex];
-              if (part.type !== type || part.state !== 'streaming') {
+              if (!part || part.type !== type || part.state !== 'streaming') {
                 streamPartIndexById.delete(partKey);
                 break;
               }
@@ -1679,6 +1703,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const fallbackText =
                 fallbackResponse || defaultGuardrailFallbackResponse;
 
+              invalidateStreamParts();
+
               // The stream closes after a guardrail violation; keep the
               // fallback as the current message so the normal finish path runs.
               currentMessage = {
@@ -1706,6 +1732,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               }
 
               currentMessageId = currentMessage.id;
+              terminalContentMessageIds.add(currentMessage.id);
               break;
             }
 

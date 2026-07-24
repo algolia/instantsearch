@@ -144,6 +144,69 @@ describe('ChatMessages', () => {
     `);
   });
 
+  test('shows the loader while streaming reasoning is hidden', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
+  test('does not show the loader below visible streaming reasoning', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getByRole('group', { name: 'Reasoning' })
+    ).toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
   describe('parseMarkdown', () => {
     test('parses user message text as markdown by default', () => {
       const { container } = render(
