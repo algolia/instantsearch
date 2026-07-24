@@ -324,6 +324,45 @@ describe('getHitsByObjectID', () => {
   });
 
   test('returns an empty map when there are no search outputs', () => {
-    expect(getHitsByObjectID([])).toEqual({});
+    const hits = getHitsByObjectID([]);
+
+    expect(hits).toEqual({});
+    expect(hits.constructor).toBeUndefined();
+    expect(hits.__proto__).toBeUndefined();
+  });
+
+  test('stores prototype-named object IDs as own hydrated records', () => {
+    const constructorHit = {
+      objectID: 'constructor',
+      name: 'Constructor record',
+    };
+    const protoHit = {
+      objectID: '__proto__',
+      name: 'Prototype record',
+    };
+    const messages = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: { hits: [constructorHit, protoHit] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    const hits = getHitsByObjectID(messages);
+
+    expect(Object.prototype.hasOwnProperty.call(hits, 'constructor')).toBe(
+      true
+    );
+    expect(Object.prototype.hasOwnProperty.call(hits, '__proto__')).toBe(true);
+    expect(hits.constructor).toEqual(constructorHit);
+    expect(hits.__proto__).toEqual(protoHit);
   });
 });

@@ -134,13 +134,13 @@ export function createDisplayResultsToolComponent<
 
       const items = results.reduce<Array<DisplayResultsItem<TObject>>>(
         (renderedItems, result, resultIndex) => {
-          const hydrated = hitsByObjectID?.[result.objectID] as
-            | RecordWithObjectID<TObject>
-            | undefined;
-
-          if (!hydrated) {
+          if (!hitsByObjectID || !hasOwn(hitsByObjectID, result.objectID)) {
             return renderedItems;
           }
+
+          const hydrated = hitsByObjectID[
+            result.objectID
+          ] as RecordWithObjectID<TObject>;
 
           renderedItems.push({
             ...hydrated,

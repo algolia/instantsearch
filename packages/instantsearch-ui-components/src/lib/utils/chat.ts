@@ -140,30 +140,28 @@ export const getHitsByObjectID = (
   messages: ChatMessageBase[],
   untilToolCallId?: string
 ): Record<string, RecordWithObjectID> => {
-  const hitsByObjectID: Record<string, RecordWithObjectID> = {};
+  const hitsByObjectID = Object.create(null) as Record<
+    string,
+    RecordWithObjectID
+  >;
 
-  for (const message of messages) {
-    let reachedBoundary = false;
-
-    for (const part of message.parts) {
+  messages.some((message) =>
+    message.parts.some((part) => {
       if (!isPartTool(part)) {
-        continue;
+        return false;
       }
 
       if (untilToolCallId && part.toolCallId === untilToolCallId) {
-        reachedBoundary = true;
-        break;
+        return true;
       }
 
       if (isSearchToolPart(part)) {
         collectHitsFromPart(part, hitsByObjectID);
       }
-    }
 
-    if (reachedBoundary) {
-      break;
-    }
-  }
+      return false;
+    })
+  );
 
   return hitsByObjectID;
 };
