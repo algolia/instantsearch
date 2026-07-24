@@ -98,5 +98,6 @@ export function createDisplayResultsTool<
 
   return {
     templates: { layout: DisplayResultsLayoutComponent },
+    streamInput: true,
   };
 }

@@ -269,7 +269,7 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
         >
           {items.map((item, index) => (
             <li
-              key={item.objectID}
+              key={`${item.objectID}:${index}`}
               className={cx(cssClasses.item)}
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${items.length}`}

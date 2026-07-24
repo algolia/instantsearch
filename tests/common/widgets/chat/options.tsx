@@ -386,7 +386,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -429,7 +432,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextFn },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextFn,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextFn },
           vue: {},
         },
@@ -461,15 +467,16 @@ export function createOptionsTests(
 
       const chat = new Chat({});
       jest.spyOn(chat, 'sendMessage').mockImplementation(async (message) => {
-        const text = (message as any).text;
+        const text = message && 'text' in message ? message.text : undefined;
+        const parts = message && 'parts' in message ? message.parts ?? [] : [];
+        const metadata =
+          message && 'metadata' in message ? message.metadata : undefined;
         chat.messages = [
           {
             id: '1',
             role: 'user',
-            parts: text
-              ? [{ type: 'text', text }]
-              : (message as any).parts ?? [],
-            metadata: (message as any).metadata,
+            parts: text ? [{ type: 'text', text }] : parts,
+            metadata,
           },
         ] as any;
       });
@@ -482,7 +489,10 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          javascript: { ...createDefaultWidgetParams(chat), context: contextValue },
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            context: contextValue,
+          },
           react: { ...createDefaultWidgetParams(chat), context: contextValue },
           vue: {},
         },
@@ -1831,20 +1841,36 @@ export function createOptionsTests(
 
       describe('display results tool', () => {
         const displayResultsMessage = (
-          output: unknown,
-          { preliminary = false } = {}
+          input: unknown,
+          {
+            state = 'output-available',
+            output = { status: 'success' },
+          }: {
+            state?: 'input-streaming' | 'input-available' | 'output-available';
+            output?: unknown;
+          } = {}
         ) =>
           ({
             id: '1',
             role: 'assistant',
             parts: [
               {
-                type: `tool-${DisplayResultsToolType}`,
-                toolCallId: '1',
-                input: {},
+                type: `tool-${SearchIndexToolType}`,
+                toolCallId: 'search',
+                input: { query: 'test' },
                 state: 'output-available',
+                output: {
+                  hits: ['1', '2', '3', '4', '5'].map((objectID) => ({
+                    objectID,
+                  })),
+                },
+              },
+              {
+                type: `tool-${DisplayResultsToolType}`,
+                toolCallId: 'display',
+                input,
+                state,
                 output,
-                ...(preliminary ? { preliminary: true } : {}),
               },
             ],
           } as any);
@@ -1911,10 +1937,16 @@ export function createOptionsTests(
           expect(whys).toHaveLength(1);
           expect(whys[0].textContent).toBe('matches your stride');
 
-          expect(document.querySelectorAll('.ais-Carousel')).toHaveLength(2);
-          expect(document.querySelectorAll('.ais-Carousel-item')).toHaveLength(
-            5
-          );
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel'
+            )
+          ).toHaveLength(2);
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+            )
+          ).toHaveLength(5);
 
           const counts = document.querySelectorAll(
             '.ais-ChatToolDisplayResultsCarouselHeaderCount'
@@ -1936,7 +1968,7 @@ export function createOptionsTests(
           });
         });
 
-        test('shows streaming caption while preliminary flag is true', async () => {
+        test('shows the streaming caption while tool input is streaming', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -1944,11 +1976,9 @@ export function createOptionsTests(
               displayResultsMessage(
                 {
                   intro: 'Curating',
-                  groups: [
-                    { title: 'Runners', results: [{ objectID: '1' }] },
-                  ],
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
-                { preliminary: true }
+                { state: 'input-streaming', output: undefined }
               ),
             ],
             id: 'chat-id',
@@ -1973,7 +2003,7 @@ export function createOptionsTests(
           ).toBeInTheDocument();
         });
 
-        test('renders nothing when output has no intro and no groups', async () => {
+        test('renders nothing when input has no intro and no groups', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2020,13 +2050,13 @@ export function createOptionsTests(
                   {
                     type: `tool-${DisplayResultsToolType}`,
                     toolCallId: '2',
-                    input: {},
-                    state: 'output-available',
-                    output: {
+                    input: {
                       groups: [
                         { title: 'Picks', results: [{ objectID: '1' }] },
                       ],
                     },
+                    state: 'output-available',
+                    output: { status: 'success' },
                   },
                 ],
               },
@@ -2078,13 +2108,13 @@ export function createOptionsTests(
                   {
                     type: `tool-${DisplayResultsToolType}`,
                     toolCallId: '2',
-                    input: {},
-                    state: 'output-available',
-                    output: {
+                    input: {
                       groups: [
                         { title: 'Picks', results: [{ objectID: '1' }] },
                       ],
                     },
+                    state: 'output-available',
+                    output: { status: 'success' },
                   },
                 ],
               },
@@ -2122,9 +2152,7 @@ export function createOptionsTests(
           const chat = new Chat({
             messages: [
               displayResultsMessage({
-                groups: [
-                  { title: 'Runners', results: [{ objectID: '1' }] },
-                ],
+                groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
               }),
             ],
             id: 'chat-id',
@@ -2141,8 +2169,7 @@ export function createOptionsTests(
                 tools: {
                   [DisplayResultsToolType]: {
                     templates: {
-                      layout:
-                        '<div id="custom-display">custom display</div>',
+                      layout: '<div id="custom-display">custom display</div>',
                     },
                   },
                 },
@@ -2163,9 +2190,9 @@ export function createOptionsTests(
 
           await openChat(act);
 
-          expect(
-            document.querySelector('#custom-display')!.textContent
-          ).toBe('custom display');
+          expect(document.querySelector('#custom-display')!.textContent).toBe(
+            'custom display'
+          );
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();
@@ -2263,8 +2290,7 @@ export function createOptionsTests(
                 layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
-                    ${props.templates.header()}
-                    ${props.templates.prompt()}
+                    ${props.templates.header()} ${props.templates.prompt()}
                   </div>`,
               },
             },
@@ -2318,7 +2344,7 @@ export function createOptionsTests(
                     <button
                       class="custom-send"
                       onclick="${() =>
-                      props.sendMessage({ text: 'hello from layout' })}"
+                        props.sendMessage({ text: 'hello from layout' })}"
                     >
                       Send
                     </button>
@@ -2394,18 +2420,18 @@ export function createOptionsTests(
 
         await openChat(act);
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('ready');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'ready'
+        );
 
         await act(async () => {
           chat._state.status = 'submitted';
           await wait(0);
         });
 
-        expect(
-          document.querySelector('.custom-status')!.textContent
-        ).toBe('submitted');
+        expect(document.querySelector('.custom-status')!.textContent).toBe(
+          'submitted'
+        );
       });
 
       test('renders with inline layout component', async () => {
