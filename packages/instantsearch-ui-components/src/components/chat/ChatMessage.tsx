@@ -4,6 +4,11 @@ import { compiler } from 'markdown-to-jsx';
 import { cx, startsWith } from '../../lib';
 import { createButtonComponent } from '../Button';
 
+import {
+  createChatMessageReasoningComponent,
+  type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningTranslations,
+} from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer, VNode } from '../../types';
@@ -36,7 +41,7 @@ export type ChatMessageTranslations = {
    * The label for message actions
    */
   actionsLabel: string;
-};
+} & ChatMessageReasoningTranslations;
 
 export type ChatMessageClassNames = {
   /**
@@ -67,7 +72,7 @@ export type ChatMessageClassNames = {
    * Class names to apply to the footer element
    */
   footer: string | string[];
-};
+} & ChatMessageReasoningClassNames;
 
 export type ChatMessageActionProps = {
   /**
@@ -155,6 +160,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   suggestionsElement?: VNode;
   /**
+   * Whether to render reasoning parts
+   */
+  showReasoning?: boolean;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -180,6 +189,9 @@ const SearchIndexToolType = 'algolia_search_index';
 
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
+  const ChatMessageReasoning = createChatMessageReasoningComponent({
+    createElement,
+  });
 
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
@@ -200,6 +212,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       onClose,
       translations: userTranslations,
       suggestionsElement,
+      showReasoning = false,
       parseMarkdown = true,
       ...props
     } = userProps;
@@ -207,6 +220,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
       actionsLabel: 'Message actions',
+      reasoningLabel: 'Reasoning',
       ...userTranslations,
     };
 
@@ -229,6 +243,31 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       message: cx('ais-ChatMessage-message', classNames.message),
       actions: cx('ais-ChatMessage-actions', classNames.actions),
       footer: cx('ais-ChatMessage-footer', classNames.footer),
+      reasoning: cx('ais-ChatMessageReasoning', classNames.reasoning),
+      reasoningHeader: cx(
+        'ais-ChatMessageReasoning-header',
+        classNames.reasoningHeader
+      ),
+      reasoningIcon: cx(
+        'ais-ChatMessageReasoning-icon',
+        classNames.reasoningIcon
+      ),
+      reasoningLabel: cx(
+        'ais-ChatMessageReasoning-label',
+        classNames.reasoningLabel
+      ),
+      reasoningChevron: cx(
+        'ais-ChatMessageReasoning-chevron',
+        classNames.reasoningChevron
+      ),
+      reasoningBody: cx(
+        'ais-ChatMessageReasoning-body',
+        classNames.reasoningBody
+      ),
+      reasoningText: cx(
+        'ais-ChatMessageReasoning-text',
+        classNames.reasoningText
+      ),
     };
 
     function renderMessagePart(
@@ -237,6 +276,28 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     ) {
       if (part.type === 'step-start') {
         return null;
+      }
+      if (part.type === 'reasoning') {
+        if (!showReasoning) {
+          return null;
+        }
+
+        return (
+          <ChatMessageReasoning
+            key={`${message.id}-${index}`}
+            part={part}
+            translations={translations}
+            classNames={{
+              ...cssClasses,
+              reasoningLabel: cx(
+                'ais-ChatMessageReasoning-label',
+                part.state === 'streaming' &&
+                  'ais-ChatMessageReasoning-label--streaming',
+                classNames.reasoningLabel
+              ),
+            }}
+          />
+        );
       }
       if (part.type === 'text') {
         // Back-compat shim for sessions started before the move from a

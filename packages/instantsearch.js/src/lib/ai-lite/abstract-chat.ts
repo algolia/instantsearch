@@ -538,6 +538,37 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return canonicalMessage;
   }
 
+  private completeReasoningParts(
+    response: ResponseRecord
+  ): TUIMessage | undefined {
+    const messageIndex = this.messages.findIndex(
+      (message) => this.responseByMessage.get(message) === response
+    );
+    if (messageIndex === -1) return undefined;
+
+    const message = this.messages[messageIndex];
+    if (
+      !message.parts.some(
+        (part) => part.type === 'reasoning' && part.state === 'streaming'
+      )
+    ) {
+      return message;
+    }
+
+    return this.replaceMessage(
+      messageIndex,
+      {
+        ...message,
+        parts: message.parts.map((part) =>
+          part.type === 'reasoning' && part.state === 'streaming'
+            ? { ...part, state: 'done' as const }
+            : part
+        ),
+      } as TUIMessage,
+      response
+    );
+  }
+
   private commit(
     toolCallId: string,
     output: unknown,
@@ -643,6 +674,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     response.didEvaluateContinuation = true;
 
     if (this.activeResponse === response) {
+      this.completeReasoningParts(response);
       response.outcome = 'aborted';
       this.activeResponse = null;
       response.abortController.abort();
@@ -806,6 +838,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   stop = (): Promise<void> => {
     if (this.activeResponse) {
       const response = this.activeResponse;
+      this.completeReasoningParts(response);
       response.outcome = 'aborted';
       this.activeResponse = null;
       response.abortController.abort();
@@ -848,6 +881,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>
   ): Promise<void> {
     if (this.activeResponse) {
+      this.completeReasoningParts(this.activeResponse);
       this.activeResponse.outcome = 'aborted';
       this.activeResponse.abortController.abort();
     }
@@ -969,7 +1003,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     };
     const failToolCall = (reason: unknown): void => {
       if (response.outcome !== 'active') return;
-      const message = getCanonicalMessage();
+      const message =
+        this.completeReasoningParts(response) ?? getCanonicalMessage();
       const wasRetired = response.isRetired;
       const error =
         reason instanceof Error ? reason : new Error(String(reason));
@@ -1001,6 +1036,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           return;
         }
 
+        this.completeReasoningParts(response);
         isAbort ||=
           response.outcome === 'aborted' ||
           (!!error && error.name === 'AbortError');
