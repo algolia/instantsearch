@@ -36,6 +36,7 @@ type ResponseRecord = {
   abortController: AbortController;
   messageId?: string;
   outcome: ResponseOutcome;
+  isResume: boolean;
   isRetired: boolean;
   requiredToolCallIds: Set<string>;
   resolvedToolCallIds: Set<string>;
@@ -507,11 +508,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         );
       }
 
-      return this.consume(() =>
-        this.transport!.reconnectToStream({
-          chatId: this.id,
-          ...options,
-        })
+      return this.consume(
+        () =>
+          this.transport!.reconnectToStream({
+            chatId: this.id,
+            ...options,
+          }),
+        { isResume: true }
       );
     });
   };
@@ -878,7 +881,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private consume(
     createStream: (
       abortSignal: AbortSignal
-    ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>
+    ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>,
+    { isResume = false }: { isResume?: boolean } = {}
   ): Promise<void> {
     if (this.activeResponse) {
       this.completeReasoningParts(this.activeResponse);
@@ -888,6 +892,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const response: ResponseRecord = {
       abortController: new AbortController(),
       outcome: 'active',
+      isResume,
       isRetired: false,
       requiredToolCallIds: new Set(),
       resolvedToolCallIds: new Set(),
@@ -939,8 +944,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
     const streamPartIndexById = new Map<string, number>();
+    const reusableReasoningPartIndexes: number[] = [];
     const streamPartKey = (type: 'text' | 'reasoning', id: string): string =>
       `${type}:${id}`;
+    const findUnambiguousUnfinishedPart = (
+      type: 'text' | 'reasoning'
+    ): number | undefined => {
+      const partIndexes = currentMessage?.parts.flatMap((part, index) =>
+        part.type === type && part.state === 'streaming' ? [index] : []
+      );
+      return partIndexes?.length === 1 ? partIndexes[0] : undefined;
+    };
 
     const findToolPart = (toolCallId: string): number =>
       currentMessage!.parts.findIndex(
@@ -1083,6 +1097,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           switch (chunk.type) {
             case 'start': {
               streamPartIndexById.clear();
+              reusableReasoningPartIndexes.length = 0;
               currentMessageId = chunk.messageId || this.generateId();
               response.messageId = currentMessageId;
 
@@ -1106,6 +1121,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   currentMessage,
                   response
                 );
+                if (response.isResume) {
+                  currentMessage.parts.forEach((part, index) => {
+                    if (part.type === 'reasoning') {
+                      reusableReasoningPartIndexes.push(index);
+                    }
+                  });
+                }
               } else {
                 currentMessage = {
                   id: currentMessageId,
@@ -1124,8 +1146,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'reasoning-start': {
               if (!currentMessage) break;
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
-              const partIndex = currentMessage.parts.length;
-              setPart(-1, {
+              const reusablePartIndex =
+                type === 'reasoning'
+                  ? reusableReasoningPartIndexes.shift()
+                  : undefined;
+              const partIndex =
+                reusablePartIndex ?? currentMessage.parts.length;
+              setPart(reusablePartIndex ?? -1, {
                 type,
                 text: '',
                 state: 'streaming' as const,
@@ -1140,9 +1167,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const type = chunk.type === 'text-delta' ? 'text' : 'reasoning';
               if (!currentMessage) break;
 
-              const partIndex = streamPartIndexById.get(
-                streamPartKey(type, chunk.id)
-              );
+              const partKey = streamPartKey(type, chunk.id);
+              let partIndex = streamPartIndexById.get(partKey);
+              if (partIndex === undefined && response.isResume) {
+                partIndex = findUnambiguousUnfinishedPart(type);
+                if (partIndex !== undefined) {
+                  streamPartIndexById.set(partKey, partIndex);
+                }
+              }
               if (partIndex === undefined) break;
 
               const part = currentMessage.parts[partIndex] as {
@@ -1161,7 +1193,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const type = chunk.type === 'text-end' ? 'text' : 'reasoning';
 
               const partKey = streamPartKey(type, chunk.id);
-              const partIndex = streamPartIndexById.get(partKey);
+              let partIndex = streamPartIndexById.get(partKey);
+              if (partIndex === undefined && response.isResume) {
+                partIndex = findUnambiguousUnfinishedPart(type);
+                if (partIndex !== undefined) {
+                  streamPartIndexById.set(partKey, partIndex);
+                }
+              }
               if (partIndex === undefined) break;
 
               const part = currentMessage.parts[partIndex];

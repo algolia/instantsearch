@@ -236,6 +236,44 @@ describe('ChatMessage', () => {
     expect(getByText('I should search the catalog first.')).toBeInTheDocument();
   });
 
+  test('makes overflowing reasoning keyboard reachable', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: Array.from(
+                { length: 20 },
+                (_, index) => `Reasoning paragraph ${index + 1}.`
+              ).join('\n\n'),
+              state: 'done',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+    const summary = disclosure.querySelector('summary')!;
+    userEvent.click(summary);
+
+    const body = getByRole('region', { name: 'Reasoning' });
+    expect(body).toHaveAttribute('tabindex', '0');
+
+    summary.focus();
+    userEvent.tab();
+    expect(body).toHaveFocus();
+  });
+
   test('does not render reasoning unless it is enabled', () => {
     const { queryByRole, queryByText } = render(
       <ChatMessage

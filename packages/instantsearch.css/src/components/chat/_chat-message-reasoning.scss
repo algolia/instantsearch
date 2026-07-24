@@ -109,6 +109,12 @@
   font-size: calc(var(--ais-spacing) * 0.875);
   line-height: calc(var(--ais-spacing) * 1.25);
   overflow-y: auto;
+
+  &:focus-visible {
+    outline: 2px solid
+      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+    outline-offset: -2px;
+  }
 }
 
 .ais-ChatMessageReasoning-text {

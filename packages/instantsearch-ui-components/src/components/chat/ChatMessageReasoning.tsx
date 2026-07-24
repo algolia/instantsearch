@@ -82,7 +82,12 @@ export function createChatMessageReasoningComponent({
           </span>
         </summary>
 
-        <div className={cx(classNames.reasoningBody)}>
+        <div
+          className={cx(classNames.reasoningBody)}
+          role="region"
+          aria-label={translations.reasoningLabel}
+          tabIndex={0}
+        >
           <div className={cx(classNames.reasoningText)}>{markdown}</div>
         </div>
       </details>

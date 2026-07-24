@@ -4,6 +4,7 @@
 import { ChatState as RuntimeChatState } from '../../chat/chat';
 import { AbstractChat } from '../abstract-chat';
 import { parseJsonEventStream } from '../stream-parser';
+import { DefaultChatTransport } from '../transport';
 
 import type {
   ChatOnErrorCallback,
@@ -358,7 +359,7 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       ]);
     });
 
-    it('keeps resumed reasoning separate from an unfinished stored part', async () => {
+    it('keeps new reasoning separate outside a resumed stream', async () => {
       const state = new RuntimeChatState<UIMessage>(
         'test-chat',
         [
@@ -376,35 +377,25 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         ],
         false
       );
-      const sendMessages = jest.fn();
-      const reconnectToStream = jest.fn(() =>
-        Promise.resolve(
-          chunksToStream([
-            startChunk(),
-            { type: 'reasoning-start', id: 'reasoning-after-reconnect' },
-            {
-              type: 'reasoning-delta',
-              id: 'reasoning-after-reconnect',
-              delta: 'After reconnect',
-            },
-            { type: 'reasoning-end', id: 'reasoning-after-reconnect' },
-            finishChunk(),
-          ])
-        )
-      );
-      const chat = new TestChat({
+      const chat = new ConcurrentTestChat({
         id: 'test-chat',
         state,
-        transport: {
-          sendMessages: sendMessages as any,
-          reconnectToStream: reconnectToStream as any,
-        },
       });
 
-      await chat.resumeStream();
+      await chat.startResponse(
+        chunksToStream([
+          startChunk(),
+          { type: 'reasoning-start', id: 'reasoning-after-reconnect' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-after-reconnect',
+            delta: 'After reconnect',
+          },
+          { type: 'reasoning-end', id: 'reasoning-after-reconnect' },
+          finishChunk(),
+        ])
+      );
 
-      expect(sendMessages).not.toHaveBeenCalled();
-      expect(reconnectToStream).toHaveBeenCalledTimes(1);
       expect(
         messageById(state, 'msg-1').parts.filter(
           (part) => part.type === 'reasoning'
@@ -420,6 +411,144 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
           text: 'After reconnect',
           state: 'done',
           providerMetadata: undefined,
+        },
+      ]);
+    });
+
+    it('reuses unfinished reasoning when a resumed stream replays it', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Already buffered',
+                state: 'streaming',
+              },
+            ],
+          },
+        ],
+        false
+      );
+      const replayedChunks: UIMessageChunk[] = [
+        startChunk(),
+        { type: 'reasoning-start', id: 'reasoning-1' },
+        {
+          type: 'reasoning-delta',
+          id: 'reasoning-1',
+          delta: 'Already ',
+        },
+        {
+          type: 'reasoning-delta',
+          id: 'reasoning-1',
+          delta: 'buffered',
+        },
+        {
+          type: 'reasoning-delta',
+          id: 'reasoning-1',
+          delta: ' and completed',
+        },
+        { type: 'reasoning-end', id: 'reasoning-1' },
+        finishChunk(),
+      ];
+      const replayedBody =
+        replayedChunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n`)
+          .join('') + 'data: [DONE]\n';
+      const fetch = jest.fn(() =>
+        Promise.resolve(
+          new Response(replayedBody, {
+            status: 200,
+            headers: { 'content-type': 'text/event-stream' },
+          })
+        )
+      ) as typeof globalThis.fetch;
+      const transport = new DefaultChatTransport<UIMessage>({
+        api: 'https://example.test/api/chat',
+        fetch,
+      });
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport,
+      });
+
+      await chat.resumeStream();
+
+      expect(fetch).toHaveBeenCalledWith(
+        'https://example.test/api/chat?chatId=test-chat',
+        expect.objectContaining({ method: 'GET' })
+      );
+      expect(state.status).toBe('ready');
+      expect(
+        messageById(state, 'msg-1').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Already buffered and completed',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
+    it('continues one unfinished reasoning part from resume suffix chunks', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Already buffered',
+                state: 'streaming',
+              },
+            ],
+          },
+        ],
+        false
+      );
+      const reconnectToStream = jest.fn(() =>
+        Promise.resolve(
+          chunksToStream([
+            startChunk(),
+            {
+              type: 'reasoning-delta',
+              id: 'reasoning-1',
+              delta: ' and completed',
+            },
+            { type: 'reasoning-end', id: 'reasoning-1' },
+            finishChunk(),
+          ])
+        )
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: jest.fn() as any,
+          reconnectToStream: reconnectToStream as any,
+        },
+      });
+
+      await chat.resumeStream();
+
+      expect(
+        messageById(state, 'msg-1').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Already buffered and completed',
+          state: 'done',
         },
       ]);
     });
