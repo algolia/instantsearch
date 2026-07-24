@@ -35,7 +35,7 @@ import {
   Chat,
   ChatTrigger,
   PromptSuggestions,
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   FilterSuggestions,
 } from '..';
 
@@ -440,7 +440,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <Autocomplete {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );

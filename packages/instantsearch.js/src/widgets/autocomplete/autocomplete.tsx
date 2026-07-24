@@ -1176,7 +1176,7 @@ export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
   AutocompleteWidgetParams<TItem>
 >;
 
-export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
+export function autocomplete<TItem extends BaseHit = BaseHit>(
   widgetParams: AutocompleteWidgetParams<TItem> & AutocompleteConnectorParams
 ) {
   const safeWidgetParams =
@@ -1523,7 +1523,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         const tree = index({
           indexName: instantSearchInstance.compositionID,
           indexId: `ais-autocomplete-${instanceId}`,
-          EXPERIMENTAL_isolated: true,
+          isolated: true,
         });
         const feedContainers = feedIDs.map((feedID) =>
           createFeedContainer(feedID, tree, instantSearchInstance)
@@ -1554,7 +1554,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     createBootstrap(() =>
       index({
         indexId: `ais-autocomplete-${instanceId}`,
-        EXPERIMENTAL_isolated: true,
+        isolated: true,
       }).addWidgets([
         configure(searchParameters),
         ...indicesConfig.map(

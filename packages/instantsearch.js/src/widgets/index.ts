@@ -1,6 +1,7 @@
 import { deprecate } from '../lib/utils';
 
 import answers from './answers/answers';
+import { autocomplete } from './autocomplete/autocomplete';
 import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
@@ -24,7 +25,12 @@ export const EXPERIMENTAL_dynamicWidgets = deprecate(
 export { dynamicWidgets };
 
 export { default as analytics } from './analytics/analytics';
-export { EXPERIMENTAL_autocomplete } from './autocomplete/autocomplete';
+export { autocomplete };
+/** @deprecated use autocomplete instead */
+export const EXPERIMENTAL_autocomplete = deprecate(
+  autocomplete,
+  'EXPERIMENTAL_autocomplete is no longer experimental. Please use autocomplete instead.'
+);
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
