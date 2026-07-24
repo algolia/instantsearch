@@ -287,7 +287,82 @@ describe('getHitsByObjectID', () => {
     });
   });
 
+  test('ignores searches after `untilToolCallId` in the same message', () => {
+    const messages: ChatMessageBase[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-before',
+            state: 'output-available',
+            input: { query: 'shoes' },
+            output: { hits: [{ objectID: '1', name: 'Runner' }] },
+          },
+          {
+            type: 'tool-algolia_display_results',
+            toolCallId: 'display',
+            state: 'output-available',
+            input: {},
+            output: {},
+          },
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search-after',
+            state: 'output-available',
+            input: { query: 'future search' },
+            output: { hits: [{ objectID: '1', name: 'Future Runner' }] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    expect(getHitsByObjectID(messages, 'display')).toEqual({
+      1: { objectID: '1', name: 'Runner' },
+    });
+  });
+
   test('returns an empty map when there are no search outputs', () => {
-    expect(getHitsByObjectID([])).toEqual({});
+    const hits = getHitsByObjectID([]);
+
+    expect(hits).toEqual({});
+    expect(hits.constructor).toBeUndefined();
+    expect(hits.__proto__).toBeUndefined();
+  });
+
+  test('stores prototype-named object IDs as own hydrated records', () => {
+    const constructorHit = {
+      objectID: 'constructor',
+      name: 'Constructor record',
+    };
+    const protoHit = {
+      objectID: '__proto__',
+      name: 'Prototype record',
+    };
+    const messages = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: { hits: [constructorHit, protoHit] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    const hits = getHitsByObjectID(messages);
+
+    expect(Object.prototype.hasOwnProperty.call(hits, 'constructor')).toBe(
+      true
+    );
+    expect(Object.prototype.hasOwnProperty.call(hits, '__proto__')).toBe(true);
+    expect(hits.constructor).toEqual(constructorHit);
+    expect(hits.__proto__).toEqual(protoHit);
   });
 });
