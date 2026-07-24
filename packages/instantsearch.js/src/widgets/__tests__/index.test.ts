@@ -178,6 +178,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return promptSuggestions({
           container,
           agentId: 'test-agent-id',
+          configurationId: 'prompt-suggestions',
         });
       }
       case 'filterSuggestions': {

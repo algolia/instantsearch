@@ -42,9 +42,7 @@ function parseSuggestions(data: unknown): string[] {
     return [];
   }
 
-  return suggestions.filter(
-    (s: unknown): s is string => typeof s === 'string' && s.trim().length > 0
-  );
+  return suggestions.filter((s: unknown): s is string => typeof s === 'string');
 }
 
 function buildSuggestionMessage(suggestion: string): string {
@@ -102,10 +100,10 @@ export type PromptSuggestionsSource =
 
 export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
-   * Agent Studio configuration to invoke, sent as the `task` field.
-   * @default 'prompt-suggestions'
+   * Agent Studio configuration to invoke, sent as the `task` field. Identifies
+   * the prompt-suggestions configuration created in the dashboard.
    */
-  configurationId?: string;
+  configurationId: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
   /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
@@ -210,6 +208,10 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             'The `agentId` option is required unless a custom `transport` is provided.'
           )
         );
+      }
+
+      if (!configurationId) {
+        throw new Error(withUsage('The `configurationId` option is required.'));
       }
 
       let tasksState: TasksRenderState | undefined;
@@ -340,6 +342,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         refetchPending = false;
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
+          tasksState.invalidate();
           suggestions = [];
           isLoading = false;
           renderOutward(renderOptions);
@@ -394,9 +397,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       const handleInnerRender = (renderState: TasksRenderState) => {
         tasksState = renderState;
         if (refetchPending) return;
-        // Only adopt the inner output once a request is loading or has produced
-        // one, so the initial no-op render doesn't clobber existing pills.
-        if (renderState.isLoading || renderState.output !== undefined) {
+        if (renderState.error) {
+          // A failed task (including a mid-stream `error` event) must not leave
+          // any streamed partial visible. There's no error UI for now, so fall
+          // back to a blank suggestions state.
+          suggestions = [];
+        } else if (renderState.isLoading || renderState.output !== undefined) {
+          // Only adopt the inner output once a request is loading or has
+          // produced one, so the initial no-op render doesn't clobber pills.
           suggestions = parseSuggestions(renderState.output);
         }
         isLoading = renderState.isLoading;
@@ -409,7 +417,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         noop
       )({
         ...(transport ? { transport } : { agentId }),
-        task: configurationId ?? 'prompt-suggestions',
+        task: configurationId,
         stream: true,
       } as TasksConnectorParams);
 

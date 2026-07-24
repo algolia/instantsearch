@@ -82,7 +82,13 @@ function Widget<TWidget extends SingleWidget>({
   switch (widget.name) {
     case 'PromptSuggestions': {
       // The connector requires `agentId` unless a custom `transport` is given.
-      return <widget.Component agentId="test-agent-id" {...props} />;
+      return (
+        <widget.Component
+          agentId="test-agent-id"
+          configurationId="prompt-suggestions"
+          {...props}
+        />
+      );
     }
     case 'Breadcrumb': {
       return <widget.Component attributes={['']} {...props} />;

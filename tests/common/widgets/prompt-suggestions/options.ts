@@ -84,8 +84,14 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id' },
-          react: { agentId: 'test-agent-id' },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
           vue: {},
         },
       });
@@ -136,8 +142,14 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id' },
-          react: { agentId: 'test-agent-id' },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
           vue: {},
         },
       });
@@ -180,8 +192,14 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id' },
-          react: { agentId: 'test-agent-id' },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
           vue: {},
         },
       });
@@ -209,8 +227,14 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id' },
-          react: { agentId: 'test-agent-id' },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
           vue: {},
         },
       });
@@ -241,8 +265,8 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { transport },
-          react: { transport },
+          javascript: { transport, configurationId: 'prompt-suggestions' },
+          react: { transport, configurationId: 'prompt-suggestions' },
           vue: {},
         },
       });
@@ -272,8 +296,16 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id', context },
-          react: { agentId: 'test-agent-id', context },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
           vue: {},
         },
       });
@@ -296,33 +328,22 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('defaults the configurationId to `prompt-suggestions`', async () => {
-      const searchClient = createResultsClient([
-        { objectID: '1', name: 'Product 1' },
-      ]);
-      const fetchMock = mockAgentFetch();
+    test('throws without configurationId', () => {
+      const searchClient = createSearchClient({});
 
-      await setup({
-        instantSearchOptions: { indexName: 'indexName', searchClient },
-        widgetParams: {
-          javascript: { agentId: 'test-agent-id' },
-          react: { agentId: 'test-agent-id' },
-          vue: {},
-        },
-      });
-
-      await act(async () => {
-        await wait(DEBOUNCE_MS + 50);
-      });
-
-      expect(fetchMock).toHaveBeenCalled();
-      const [, init] = fetchMock.mock.calls[0] as unknown as [
-        string,
-        RequestInit
-      ];
-      const body = JSON.parse(init.body as string);
-      // `configurationId` is sent to the backend as the `task` field.
-      expect(body.task).toBe('prompt-suggestions');
+      expect(() =>
+        setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: { agentId: 'test-agent-id' } as any,
+            react: { agentId: 'test-agent-id' } as any,
+            vue: {},
+          },
+        })
+      ).toThrow('The `configurationId` option is required.');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {
@@ -365,8 +386,16 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id', transformItems },
-          react: { agentId: 'test-agent-id', transformItems },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            transformItems,
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            transformItems,
+          },
           vue: {},
         },
       });
@@ -392,8 +421,16 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id', onSuggestionClick },
-          react: { agentId: 'test-agent-id', onSuggestionClick },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            onSuggestionClick,
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            onSuggestionClick,
+          },
           vue: {},
         },
       });

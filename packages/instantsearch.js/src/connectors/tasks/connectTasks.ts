@@ -37,6 +37,12 @@ export type TasksRenderState<TOutput = unknown> = {
    * failure is surfaced via `error`). The returned promise never rejects.
    */
   submit: (variables: Record<string, unknown>) => Promise<TOutput | undefined>;
+  /**
+   * Supersedes any in-flight `submit` so its pending result is ignored (the
+   * underlying request is not aborted, just abandoned) and clears the loading
+   * flag. Use when the inputs that produced the request are no longer valid.
+   */
+  invalidate: () => void;
 };
 
 /**
@@ -142,6 +148,15 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
         .then(() => output);
     };
 
+    const invalidate = () => {
+      if (disposed) return;
+      // Bump the request id so any in-flight request's callbacks see
+      // `isStale()` and are ignored. The fetch itself is left to complete.
+      requestId += 1;
+      isLoading = false;
+      triggerRender();
+    };
+
     const getWidgetRenderState = (): TasksRenderState<TOutput> & {
       widgetParams: TasksConnectorParams;
     } => ({
@@ -149,6 +164,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       isLoading,
       error,
       submit,
+      invalidate,
       widgetParams,
     });
 

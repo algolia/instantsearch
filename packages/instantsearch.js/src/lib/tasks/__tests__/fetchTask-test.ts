@@ -150,6 +150,29 @@ describe('fetchTask', () => {
     expect(result).toEqual({ output: { suggestions: ['What?'] } });
   });
 
+  it('rejects when the stream emits a terminal `error` event', async () => {
+    // The backend can stream partial output and then fail; the terminal
+    // `error` event must reject rather than resolve the last partial snapshot
+    // as a success.
+    global.fetch = jest.fn(() =>
+      Promise.resolve(
+        sseResponse([
+          outputEvent({ suggestions: ['What'] }),
+          JSON.stringify({ type: 'error', errorText: 'stream failed' }),
+          '[DONE]',
+        ])
+      )
+    ) as unknown as typeof fetch;
+
+    const seen: unknown[] = [];
+    await expect(
+      fetchTask({ ...OPTIONS, onData: (data) => seen.push(data) })
+    ).rejects.toThrow('stream failed');
+
+    // Any partial received before the error is not surfaced as a result.
+    expect(seen).toEqual([{ output: { suggestions: ['What'] } }]);
+  });
+
   it('omits `stream=true` and reads JSON when `stream` is false', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))

@@ -277,6 +277,33 @@ describe('connectTasks', () => {
       expect(lastState().output).toEqual({ winner: 2 });
       expect(lastState().isLoading).toBe(false);
     });
+
+    it('invalidate() abandons an in-flight submit so its late result is ignored', async () => {
+      let resolveFetch: (value: Response) => void = () => {};
+      global.fetch = jest.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFetch = resolve;
+          })
+      ) as unknown as typeof fetch;
+
+      const { lastState } = init({ agentId: 'a', task: 't' });
+
+      lastState().submit({ n: 1 });
+      await flush(0);
+      expect(lastState().isLoading).toBe(true);
+
+      // Abandon the in-flight request without cancelling the underlying fetch.
+      lastState().invalidate();
+      expect(lastState().isLoading).toBe(false);
+
+      // The now-stale request resolves late; its output must be ignored.
+      resolveFetch(jsonResponse({ output: { late: true } }));
+      await flush(0);
+
+      expect(lastState().output).toBeUndefined();
+      expect(lastState().isLoading).toBe(false);
+    });
   });
 
   describe('dispose', () => {

@@ -57,6 +57,7 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             templates: {
               layout: ({ suggestions }) =>
                 `Custom layout: ${suggestions.join(', ')}`,
@@ -64,6 +65,7 @@ export function createTemplatesTests(
           },
           react: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             layoutComponent: ({ suggestions }) => (
               <div className="custom-layout">
                 Custom layout: {suggestions.join(', ')}
@@ -88,6 +90,57 @@ export function createTemplatesTests(
       );
     });
 
+    test('passes the `html` helper to a function layout template', async () => {
+      const searchClient = createResultsClient();
+      mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            templates: {
+              // The `{ html }` helper is the second argument — before wiring
+              // this template through `TemplateComponent`, it was `undefined`
+              // and this tagged-template call threw.
+              layout: ({ suggestions }, { html }) =>
+                html`<div class="html-layout">
+                  ${suggestions.map(
+                    (suggestion) =>
+                      html`<button type="button">${suggestion}</button>`
+                  )}
+                </div>`,
+            },
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            layoutComponent: ({ suggestions }) => (
+              <div className="html-layout">
+                {suggestions.map((suggestion) => (
+                  <button key={suggestion} type="button">
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            ),
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(document.querySelector('.html-layout')).not.toBeNull();
+      expect(
+        document.querySelectorAll('.html-layout button')
+      ).toHaveLength(SUGGESTIONS.length);
+      expect(document.body.textContent).toContain('Suggestion A');
+    });
+
     test('replaces the default header with a custom one', async () => {
       const searchClient = createResultsClient();
       mockAgentFetch();
@@ -97,12 +150,14 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             templates: {
               header: () => 'Ask me anything',
             },
           },
           react: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             headerComponent: () => <div>Ask me anything</div>,
           },
           vue: {},
@@ -132,10 +187,12 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             translations: { headerTitle: 'Ideas' },
           },
           react: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             translations: { headerTitle: 'Ideas' },
           },
           vue: {},
@@ -160,10 +217,12 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             templates: { header: false },
           },
           react: {
             agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
             headerComponent: false,
           },
           vue: {},

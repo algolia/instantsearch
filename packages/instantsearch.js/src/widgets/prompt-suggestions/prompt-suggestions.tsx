@@ -1,9 +1,11 @@
 /** @jsx h */
 
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
-import { Fragment, h, render } from 'preact';
+import { h, render } from 'preact';
 
+import TemplateComponent from '../../components/Template/Template';
 import connectPromptSuggestions from '../../connectors/prompt-suggestions/connectPromptSuggestions';
+import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -14,13 +16,13 @@ import type {
   PromptSuggestionsConnectorParams,
   PromptSuggestionsWidgetDescription,
 } from '../../connectors/prompt-suggestions/connectPromptSuggestions';
-import type { WidgetFactory, Renderer } from '../../types';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
   PromptSuggestionsClassNames,
   PromptSuggestionsHeaderComponentProps,
   PromptSuggestionsTranslations,
 } from 'instantsearch-ui-components';
-import type { ComponentChildren } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'prompt-suggestions',
@@ -31,8 +33,7 @@ const PromptSuggestions = createPromptSuggestionsComponent({
   Fragment: 'fragment',
 });
 
-export type PromptSuggestionsCSSClasses =
-  Partial<PromptSuggestionsClassNames>;
+export type PromptSuggestionsCSSClasses = Partial<PromptSuggestionsClassNames>;
 
 /**
  * Props passed to a custom `templates.layout`. Mirrors the connector render
@@ -51,15 +52,16 @@ export type PromptSuggestionsTemplates = {
    * render state — the template is responsible for rendering the list, the
    * loading state, and the click handlers.
    */
-  layout?: (
-    props: PromptSuggestionsLayoutTemplateProps
-  ) => ComponentChildren;
+  layout?: Template<PromptSuggestionsLayoutTemplateProps>;
   /**
    * Replaces the default header. Set to `false` to disable the header.
    */
-  header?:
-    | ((props: PromptSuggestionsHeaderComponentProps) => ComponentChildren)
-    | false;
+  header?: Template<PromptSuggestionsHeaderComponentProps> | false;
+};
+
+type PromptSuggestionsPreparedTemplates = {
+  layout?: Template<PromptSuggestionsLayoutTemplateProps>;
+  header?: Template<PromptSuggestionsHeaderComponentProps>;
 };
 
 type PromptSuggestionsWidgetParams = {
@@ -94,12 +96,16 @@ const createRenderer =
   ({
     containerNode,
     cssClasses,
+    renderState,
     templates,
     translations,
     onSuggestionClickOverride,
   }: {
     containerNode: HTMLElement;
     cssClasses: PromptSuggestionsCSSClasses;
+    renderState: {
+      templateProps?: PreparedTemplateProps<PromptSuggestionsPreparedTemplates>;
+    };
     templates?: PromptSuggestionsTemplates;
     translations?: Partial<PromptSuggestionsTranslations>;
     onSuggestionClickOverride?: PromptSuggestionsWidgetParams['onSuggestionClick'];
@@ -107,14 +113,26 @@ const createRenderer =
     PromptSuggestionsRenderState,
     Partial<PromptSuggestionsWidgetParams>
   > =>
-  (props) => {
-    const {
+  (
+    {
       suggestions,
       isLoading,
       onSuggestionClick,
       isChatBusy,
       sendToChat,
-    } = props;
+      instantSearchInstance,
+    },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps =
+        prepareTemplateProps<PromptSuggestionsPreparedTemplates>({
+          defaultTemplates: {},
+          templatesConfig: instantSearchInstance.templatesConfig,
+          templates: templates as Partial<PromptSuggestionsPreparedTemplates>,
+        });
+      return;
+    }
 
     const handleClick = onSuggestionClickOverride
       ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
@@ -122,14 +140,17 @@ const createRenderer =
 
     if (templates?.layout) {
       render(
-        <Fragment>
-          {templates.layout({
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="layout"
+          rootTagName="fragment"
+          data={{
             suggestions,
             isLoading,
             onSuggestionClick: handleClick,
             isChatBusy,
-          })}
-        </Fragment>,
+          }}
+        />,
         containerNode
       );
       return;
@@ -139,9 +160,15 @@ const createRenderer =
     if (templates?.header === false) {
       headerComponent = false as const;
     } else if (templates?.header) {
-      const headerTemplate = templates.header;
-      headerComponent = (headerProps: PromptSuggestionsHeaderComponentProps) => (
-        <Fragment>{headerTemplate(headerProps)}</Fragment>
+      headerComponent = (
+        headerProps: PromptSuggestionsHeaderComponentProps
+      ) => (
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="header"
+          rootTagName="fragment"
+          data={headerProps}
+        />
       );
     }
 
@@ -160,8 +187,7 @@ const createRenderer =
   };
 
 export default (function promptSuggestions(
-  widgetParams: PromptSuggestionsWidgetParams &
-    PromptSuggestionsConnectorParams
+  widgetParams: PromptSuggestionsWidgetParams & PromptSuggestionsConnectorParams
 ) {
   const {
     container,
@@ -181,6 +207,7 @@ export default (function promptSuggestions(
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
+    renderState: {},
     templates,
     translations,
     onSuggestionClickOverride,

@@ -25,6 +25,7 @@ export function buildTaskPayload({
 type TaskStreamChunk = {
   type?: string;
   data?: unknown;
+  errorText?: string;
 };
 
 function withStreamParam(url: string): string {
@@ -47,7 +48,17 @@ function consumeTaskStream(
     processStream(
       chunkStream,
       (chunk) => {
-        if (!chunk || chunk.type !== 'data-task-output') {
+        if (!chunk) {
+          return;
+        }
+        // A terminal `error` event aborts the task: reject rather than let the
+        // stream close and resolve the last partial snapshot as a success.
+        // Throwing here lets `processStream` release the reader and stop
+        // consuming; the rejection propagates to the caller's `.catch`.
+        if (chunk.type === 'error') {
+          throw new Error(chunk.errorText || 'Task stream error');
+        }
+        if (chunk.type !== 'data-task-output') {
           return;
         }
         latest = resolveStreamedOutput(chunk.data, latest);
