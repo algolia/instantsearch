@@ -354,6 +354,45 @@ describe('ChatMessage', () => {
     expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
   });
 
+  test('marks only the latest unfinished reasoning block as busy', () => {
+    const { getAllByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Compare the candidates',
+              state: 'streaming',
+            },
+            {
+              type: 'reasoning',
+              text: 'Check one candidate',
+              state: 'streaming',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    expect(
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).not.toBeInTheDocument();
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).toBeInTheDocument();
+  });
+
   test('marks reasoning as busy only on the active response', () => {
     const messages = [
       {
@@ -401,6 +440,74 @@ describe('ChatMessage', () => {
     const disclosures = getAllByRole('group', { name: 'Reasoning' });
     expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
     expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+  });
+
+  test('does not mark reasoning as busy after answer text starts streaming', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Checking the catalog',
+              state: 'streaming',
+            },
+            {
+              type: 'text',
+              text: 'Here is what I found',
+              state: 'streaming',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+    expect(disclosure).toHaveAttribute('aria-busy', 'false');
+    expect(
+      disclosure.querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).not.toBeInTheDocument();
+  });
+
+  test('marks an earlier unfinished reasoning block as busy after a later block ends', () => {
+    const { getAllByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Compare the candidates',
+              state: 'streaming',
+            },
+            {
+              type: 'reasoning',
+              text: 'Check one candidate',
+              state: 'done',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'true');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
   });
 
   test('preserves an open disclosure while reasoning text streams', () => {

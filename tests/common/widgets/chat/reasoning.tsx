@@ -242,6 +242,55 @@ export function createReasoningTests(
       expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
     });
 
+    test('stops showing reasoning as busy when answer text starts streaming', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({
+        messages: [
+          {
+            id: 'assistant-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog',
+                state: 'streaming',
+              },
+              {
+                type: 'text',
+                text: 'Here is what I found',
+                state: 'streaming',
+              },
+            ],
+          },
+        ],
+      });
+      chat._state.status = 'streaming';
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      expect(
+        within(document.body).getByRole('group', { name: 'Reasoning' })
+      ).toHaveAttribute('aria-busy', 'false');
+    });
+
     test('renders the translated reasoning label', async () => {
       const searchClient = createSearchClient();
 

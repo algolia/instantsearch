@@ -264,6 +264,166 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       };
     }
 
+    it('keeps overlapping reasoning blocks associated with their stream ids', async () => {
+      const { chat, state } = createTestSetup({
+        chunks: [
+          startChunk(),
+          { type: 'reasoning-start', id: 'reasoning-a' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-a',
+            delta: 'A1 ',
+          },
+          { type: 'reasoning-start', id: 'reasoning-b' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-b',
+            delta: 'B1 ',
+          },
+          { type: 'reasoning-end', id: 'reasoning-b' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-a',
+            delta: 'A2',
+          },
+          { type: 'reasoning-end', id: 'reasoning-a' },
+          finishChunk(),
+        ],
+      });
+
+      await chat.sendMessage({ text: 'Compare two options' });
+
+      expect(
+        messageById(state, 'msg-1').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        {
+          type: 'reasoning',
+          text: 'A1 A2',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+        {
+          type: 'reasoning',
+          text: 'B1 ',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
+    it('keeps text and reasoning separate when their stream ids match', async () => {
+      const { chat, state } = createTestSetup({
+        chunks: [
+          startChunk(),
+          { type: 'reasoning-start', id: 'msg-1' },
+          {
+            type: 'reasoning-delta',
+            id: 'msg-1',
+            delta: 'Check the catalog. ',
+          },
+          { type: 'text-start', id: 'msg-1' },
+          {
+            type: 'text-delta',
+            id: 'msg-1',
+            delta: 'Here is what I found.',
+          },
+          {
+            type: 'reasoning-delta',
+            id: 'msg-1',
+            delta: 'Compare the results.',
+          },
+          { type: 'reasoning-end', id: 'msg-1' },
+          { type: 'text-end', id: 'msg-1' },
+          finishChunk(),
+        ],
+      });
+
+      await chat.sendMessage({ text: 'Find a product' });
+
+      expect(messageById(state, 'msg-1').parts).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Check the catalog. Compare the results.',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+        {
+          type: 'text',
+          text: 'Here is what I found.',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
+    it('keeps resumed reasoning separate from an unfinished stored part', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Before reconnect',
+                state: 'streaming',
+              },
+            ],
+          },
+        ],
+        false
+      );
+      const sendMessages = jest.fn();
+      const reconnectToStream = jest.fn(() =>
+        Promise.resolve(
+          chunksToStream([
+            startChunk(),
+            { type: 'reasoning-start', id: 'reasoning-after-reconnect' },
+            {
+              type: 'reasoning-delta',
+              id: 'reasoning-after-reconnect',
+              delta: 'After reconnect',
+            },
+            { type: 'reasoning-end', id: 'reasoning-after-reconnect' },
+            finishChunk(),
+          ])
+        )
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: sendMessages as any,
+          reconnectToStream: reconnectToStream as any,
+        },
+      });
+
+      await chat.resumeStream();
+
+      expect(sendMessages).not.toHaveBeenCalled();
+      expect(reconnectToStream).toHaveBeenCalledTimes(1);
+      expect(
+        messageById(state, 'msg-1').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Before reconnect',
+          state: 'done',
+        },
+        {
+          type: 'reasoning',
+          text: 'After reconnect',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
     it('completes unfinished reasoning when the response is stopped', async () => {
       const setup = createReasoningStreamSetup();
       const send = setup.chat.sendMessage({ text: 'Find a product' });

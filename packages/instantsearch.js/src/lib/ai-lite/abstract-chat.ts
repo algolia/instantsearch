@@ -938,6 +938,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
+    const streamPartIndexById = new Map<string, number>();
+    const streamPartKey = (type: 'text' | 'reasoning', id: string): string =>
+      `${type}:${id}`;
 
     const findToolPart = (toolCallId: string): number =>
       currentMessage!.parts.findIndex(
@@ -1079,6 +1082,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
           switch (chunk.type) {
             case 'start': {
+              streamPartIndexById.clear();
               currentMessageId = chunk.messageId || this.generateId();
               response.messageId = currentMessageId;
 
@@ -1120,12 +1124,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'reasoning-start': {
               if (!currentMessage) break;
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
+              const partIndex = currentMessage.parts.length;
               setPart(-1, {
                 type,
                 text: '',
                 state: 'streaming' as const,
                 providerMetadata: chunk.providerMetadata,
               });
+              streamPartIndexById.set(streamPartKey(type, chunk.id), partIndex);
               break;
             }
 
@@ -1134,16 +1140,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const type = chunk.type === 'text-delta' ? 'text' : 'reasoning';
               if (!currentMessage) break;
 
-              const partIndex = currentMessage.parts.findIndex(
-                (part) => part.type === type && part.state === 'streaming'
+              const partIndex = streamPartIndexById.get(
+                streamPartKey(type, chunk.id)
               );
-              if (partIndex === -1) break;
+              if (partIndex === undefined) break;
 
               const part = currentMessage.parts[partIndex] as {
                 type: 'text' | 'reasoning';
                 text: string;
                 state?: 'streaming' | 'done';
               };
+              if (part.type !== type || part.state !== 'streaming') break;
               setPart(partIndex, { ...part, text: part.text + chunk.delta });
               break;
             }
@@ -1153,15 +1160,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               if (!currentMessage) break;
               const type = chunk.type === 'text-end' ? 'text' : 'reasoning';
 
-              const partIndex = currentMessage.parts.findIndex(
-                (part) => part.type === type && part.state === 'streaming'
-              );
-              if (partIndex === -1) break;
+              const partKey = streamPartKey(type, chunk.id);
+              const partIndex = streamPartIndexById.get(partKey);
+              if (partIndex === undefined) break;
+
+              const part = currentMessage.parts[partIndex];
+              if (part.type !== type || part.state !== 'streaming') {
+                streamPartIndexById.delete(partKey);
+                break;
+              }
 
               setPart(partIndex, {
-                ...currentMessage.parts[partIndex],
+                ...part,
                 state: 'done',
               });
+              streamPartIndexById.delete(partKey);
               break;
             }
 

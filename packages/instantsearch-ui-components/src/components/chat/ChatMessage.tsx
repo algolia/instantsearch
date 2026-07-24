@@ -288,7 +288,14 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         const isReasoningStreaming =
           part.state === 'streaming' &&
           status === 'streaming' &&
-          isCurrentMessage;
+          isCurrentMessage &&
+          !message.parts
+            .slice(index + 1)
+            .some(
+              (laterPart) =>
+                laterPart.type !== 'reasoning' ||
+                laterPart.state === 'streaming'
+            );
 
         return (
           <ChatMessageReasoning
