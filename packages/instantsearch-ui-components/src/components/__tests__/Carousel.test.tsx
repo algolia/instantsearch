@@ -315,7 +315,7 @@ describe('Carousel', () => {
       ({ item }) => {
         useEffect(() => {
           mounts.push(item.objectID);
-        }, []);
+        }, [item.objectID]);
 
         return <div>{item.objectID}</div>;
       };

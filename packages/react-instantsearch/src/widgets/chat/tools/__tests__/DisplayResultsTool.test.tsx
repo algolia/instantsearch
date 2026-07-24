@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -292,6 +292,71 @@ describe('createDisplayResultsTool', () => {
     expect(screen.queryByTestId('item-constructor')).not.toBeInTheDocument();
     expect(screen.queryByTestId('item-__proto__')).not.toBeInTheDocument();
     expect(screen.queryByText('Unknown only')).not.toBeInTheDocument();
+  });
+
+  test('uses dense rendered positions for click analytics after omissions', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+    const sendEvent = jest.fn();
+
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {
+        groups: [
+          {
+            results: [
+              { objectID: 'missing' },
+              { objectID: 'known' },
+              { objectID: 'known-2' },
+              { objectID: 'known' },
+            ],
+          },
+        ],
+      },
+      output: { status: 'warning', unknownObjectIds: ['missing'] },
+    };
+
+    render(
+      <LayoutComponent
+        message={message}
+        messages={createMessages(message, [
+          { objectID: 'known', name: 'Known record' },
+          { objectID: 'known-2', name: 'Second known record' },
+        ])}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={sendEvent}
+      />
+    );
+
+    const knownItems = screen.getAllByTestId('item-known');
+    fireEvent.click(knownItems[0]);
+    fireEvent.click(screen.getByTestId('item-known-2'));
+    fireEvent.click(knownItems[1]);
+
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      1,
+      'click:internal',
+      expect.objectContaining({ objectID: 'known', __position: 1 }),
+      'Item Clicked'
+    );
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      2,
+      'click:internal',
+      expect.objectContaining({ objectID: 'known-2', __position: 2 }),
+      'Item Clicked'
+    );
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      3,
+      'click:internal',
+      expect.objectContaining({ objectID: 'known', __position: 3 }),
+      'Item Clicked'
+    );
   });
 
   test('renders hydrated prototype-named object IDs', () => {

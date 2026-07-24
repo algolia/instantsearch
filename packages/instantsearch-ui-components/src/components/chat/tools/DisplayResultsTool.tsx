@@ -133,7 +133,7 @@ export function createDisplayResultsToolComponent<
         : [];
 
       const items = results.reduce<Array<DisplayResultsItem<TObject>>>(
-        (renderedItems, result, resultIndex) => {
+        (renderedItems, result) => {
           if (!hitsByObjectID || !hasOwn(hitsByObjectID, result.objectID)) {
             return renderedItems;
           }
@@ -145,7 +145,7 @@ export function createDisplayResultsToolComponent<
           renderedItems.push({
             ...hydrated,
             objectID: result.objectID,
-            __position: resultIndex + 1,
+            __position: renderedItems.length + 1,
             __displayToolResult: result,
           });
           return renderedItems;
