@@ -36,6 +36,7 @@ import {
   dynamicWidgets,
   chat,
   chatTrigger,
+  promptSuggestions,
   autocomplete,
   filterSuggestions,
 } from '../widgets';
@@ -745,6 +746,25 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createPromptSuggestionsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        promptSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -782,6 +802,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

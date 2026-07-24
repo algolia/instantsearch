@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { isEqual } from '../utils/isEqual';
 
+import { parsePartialJson } from './parse-partial-json';
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
@@ -58,96 +59,6 @@ export type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
   options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
   addToolResult: ToolResultSubmission<TUIMessage>
 ) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
-
-const tryParseJson = (value: string): unknown | undefined => {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return undefined;
-  }
-};
-
-const repairPartialJson = (value: string): string => {
-  let repaired = value.trim();
-
-  if (!repaired) {
-    return repaired;
-  }
-
-  let inString = false;
-  let isEscaped = false;
-  const stack: Array<'{' | '['> = [];
-
-  for (let index = 0; index < repaired.length; index++) {
-    const char = repaired[index];
-    if (inString) {
-      if (isEscaped) {
-        isEscaped = false;
-      } else if (char === '\\') {
-        isEscaped = true;
-      } else if (char === '"') {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '{' || char === '[') {
-      stack.push(char);
-      continue;
-    }
-
-    if (char === '}' && stack[stack.length - 1] === '{') {
-      stack.pop();
-      continue;
-    }
-
-    if (char === ']' && stack[stack.length - 1] === '[') {
-      stack.pop();
-    }
-  }
-
-  if (inString && !isEscaped) {
-    repaired += '"';
-  }
-
-  repaired = repaired.replace(/,\s*$/u, '');
-
-  if (stack.length > 0) {
-    repaired += stack
-      .reverse()
-      .map((opening) => (opening === '{' ? '}' : ']'))
-      .join('');
-  }
-
-  return repaired.replace(/,\s*([}\]])/gu, '$1');
-};
-
-const parseToolInputDelta = (
-  accumulatedRawInput: string,
-  fallbackInput: unknown
-): unknown => {
-  const normalized = accumulatedRawInput.trim();
-  if (!normalized) {
-    return fallbackInput;
-  }
-
-  const directParsed = tryParseJson(normalized);
-  if (directParsed !== undefined) {
-    return directParsed;
-  }
-
-  const repairedParsed = tryParseJson(repairPartialJson(normalized));
-  if (repairedParsed !== undefined) {
-    return repairedParsed;
-  }
-
-  return fallbackInput;
-};
 
 const defaultGuardrailFallbackResponse =
   'Sorry, we are not able to generate a response at the moment.';
@@ -1192,7 +1103,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 ? this.shouldRepairToolInput?.(toolName) ?? true
                 : true;
               const parsedInput = shouldRepair
-                ? parseToolInputDelta(nextRawInput, existingPart?.input)
+                ? parsePartialJson(nextRawInput, existingPart?.input)
                 : existingPart?.input;
 
               const nextToolPart = {
@@ -1349,7 +1260,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const nextRawOutput = `${previousRawOutput}${delta}`;
               toolRawOutputByCallId[toolCallId] = nextRawOutput;
 
-              const parsedOutput = parseToolInputDelta(
+              const parsedOutput = parsePartialJson(
                 nextRawOutput,
                 existingPart?.output
               );

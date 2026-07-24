@@ -28,3 +28,4 @@ export * from './menu-select';
 export * from './chat';
 export * from './autocomplete';
 export * from './filter-suggestions';
+export * from './prompt-suggestions';

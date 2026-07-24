@@ -1,0 +1,94 @@
+@use '../../shared/_common';
+@use '../../shared/_variables';
+
+.ais-PromptSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-PromptSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-PromptSuggestions-headerTitle {
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-PromptSuggestions-suggestion {
+  font-size: revert;
+  line-height: var(--ais-spacing);
+  width: fit-content;
+  border-radius: var(--ais-border-radius-lg);
+  padding: calc(var(--ais-spacing) * 0.5) var(--ais-spacing);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  animation: ais-fadeIn 1500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  text-align: left;
+
+  // Staggered delays for each suggestion
+  @for $i from 1 through 5 {
+    &:nth-child(5n + #{$i}) {
+      animation-delay: #{($i - 1) * 100}ms;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+    }
+  }
+
+  &:active:not(:disabled) {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.3);
+  }
+}
+
+.ais-PromptSuggestions-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-PromptSuggestions-skeletonItem {
+  height: calc(var(--ais-spacing) * 2);
+  border-radius: var(--ais-border-radius-lg);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.15);
+  animation: ais-chat-prompt-suggestions-skeleton 1.5s ease-in-out infinite;
+
+  // Varying widths so the skeleton row mimics real pills.
+  &:nth-child(5n + 1) {
+    width: 65%;
+  }
+
+  &:nth-child(5n + 2) {
+    width: 80%;
+  }
+
+  &:nth-child(5n + 3) {
+    width: 55%;
+  }
+
+  &:nth-child(5n + 4) {
+    width: 70%;
+  }
+
+  &:nth-child(5n + 5) {
+    width: 60%;
+  }
+}
+
+@keyframes ais-chat-prompt-suggestions-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+

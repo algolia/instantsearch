@@ -636,7 +636,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             if (
               openChat(chatRenderState, {
                 message: item.prompt,
-                referer: 'prompt-suggestions',
+                referer: 'prompt-suggestions-autocomplete',
               })
             ) {
               setQuery('');
