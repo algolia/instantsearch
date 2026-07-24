@@ -16,7 +16,10 @@
   width: 100%;
   border: 1px solid rgba(var(--ais-muted-color-rgb), 0.25);
   border-radius: var(--ais-border-radius-sm);
-  background-color: var(--ais-background-color);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
   overflow: hidden;
 }
 
@@ -44,7 +47,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(var(--ais-primary-color-rgb), 0.5);
+    outline: 2px solid
+      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
     outline-offset: -2px;
   }
 }
@@ -121,7 +125,7 @@
 
 @keyframes ais-chat-reasoning-pulse {
   50% {
-    opacity: 0.5;
+    opacity: 0.85;
   }
 }
 

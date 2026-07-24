@@ -397,6 +397,7 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
+    const showReasoning = props.assistantMessageProps?.showReasoning;
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       [
@@ -404,6 +405,7 @@ export function createChatMessagesComponent({
         props.status,
         props.suggestionsElement,
         messageFeedback,
+        showReasoning,
       ]
     );
   }

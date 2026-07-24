@@ -211,6 +211,290 @@ function messageById(
 }
 
 describe('AbstractChat.processStreamWithCallbacks', () => {
+  describe('reasoning lifecycle', () => {
+    function createReasoningStreamSetup({
+      onError,
+      onFinish,
+    }: {
+      onError?: ChatOnErrorCallback;
+      onFinish?: ChatOnFinishCallback<UIMessage>;
+    } = {}) {
+      const reasoningStarted = deferred<void>();
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+
+      state['~registerMessagesCallback'](() => {
+        const reasoningPart = assistantPart(state);
+        if (
+          reasoningPart?.type === 'reasoning' &&
+          reasoningPart.state === 'streaming' &&
+          reasoningPart.text === 'Checking the catalog'
+        ) {
+          reasoningStarted.resolve();
+        }
+      });
+
+      const setup = createTestSetup({
+        state,
+        onError,
+        onFinish,
+        streamFactory: () =>
+          new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              streamController = controller;
+              controller.enqueue(startChunk());
+              controller.enqueue({
+                type: 'reasoning-start',
+                id: 'reasoning-1',
+              });
+              controller.enqueue({
+                type: 'reasoning-delta',
+                id: 'reasoning-1',
+                delta: 'Checking the catalog',
+              });
+            },
+          }),
+      });
+
+      return {
+        ...setup,
+        reasoningStarted: reasoningStarted.promise,
+        closeStream: () => streamController.close(),
+        failStream: (error: Error) => streamController.error(error),
+      };
+    }
+
+    it('completes unfinished reasoning when the response is stopped', async () => {
+      const setup = createReasoningStreamSetup();
+      const send = setup.chat.sendMessage({ text: 'Find a product' });
+      await setup.reasoningStarted;
+
+      await setup.chat.stop();
+
+      expect(setup.state.status).toBe('ready');
+      expect(assistantPart(setup.state)).toMatchObject({
+        type: 'reasoning',
+        text: 'Checking the catalog',
+        state: 'done',
+      });
+
+      setup.closeStream();
+      await send;
+    });
+
+    it('completes unfinished reasoning when the stream fails', async () => {
+      const onError = jest.fn();
+      const setup = createReasoningStreamSetup({ onError });
+      const send = setup.chat.sendMessage({ text: 'Find a product' });
+      await setup.reasoningStarted;
+
+      setup.failStream(new Error('disconnected'));
+      await send;
+
+      expect(setup.state.status).toBe('error');
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(assistantPart(setup.state)).toMatchObject({
+        type: 'reasoning',
+        text: 'Checking the catalog',
+        state: 'done',
+      });
+    });
+
+    it('completes unfinished reasoning when the stream closes', async () => {
+      const onFinish = jest.fn();
+      const setup = createReasoningStreamSetup({ onFinish });
+      const send = setup.chat.sendMessage({ text: 'Find a product' });
+      await setup.reasoningStarted;
+
+      setup.closeStream();
+      await send;
+
+      expect(setup.state.status).toBe('ready');
+      expect(assistantPart(setup.state)).toMatchObject({
+        type: 'reasoning',
+        text: 'Checking the catalog',
+        state: 'done',
+      });
+      expect(onFinish).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({
+            parts: [
+              expect.objectContaining({
+                type: 'reasoning',
+                state: 'done',
+              }),
+            ],
+          }),
+        })
+      );
+    });
+
+    it('only completes reasoning owned by the terminal response when message ids are reused', async () => {
+      const oldReasoningStarted = deferred<void>();
+      const newReasoningStarted = deferred<void>();
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      let oldStreamController!: ReadableStreamDefaultController<UIMessageChunk>;
+      let newStreamController!: ReadableStreamDefaultController<UIMessageChunk>;
+
+      state['~registerMessagesCallback'](() => {
+        const reasoningParts =
+          state.messages
+            .find((message) => message.id === 'assistant-shared')
+            ?.parts.filter((part) => part.type === 'reasoning') ?? [];
+
+        if (
+          reasoningParts.some(
+            (part) =>
+              part.type === 'reasoning' &&
+              part.text === 'Old response' &&
+              part.state === 'streaming'
+          )
+        ) {
+          oldReasoningStarted.resolve();
+        }
+        if (
+          reasoningParts.some(
+            (part) =>
+              part.type === 'reasoning' &&
+              part.text === 'New response' &&
+              part.state === 'streaming'
+          )
+        ) {
+          newReasoningStarted.resolve();
+        }
+      });
+
+      const chat = new ConcurrentTestChat({
+        state,
+        onError: jest.fn(),
+      });
+      const oldResponse = chat.startResponse(
+        new ReadableStream<UIMessageChunk>({
+          start(controller) {
+            oldStreamController = controller;
+            controller.enqueue(startChunk('assistant-shared'));
+            controller.enqueue({
+              type: 'reasoning-start',
+              id: 'reasoning-old',
+            });
+            controller.enqueue({
+              type: 'reasoning-delta',
+              id: 'reasoning-old',
+              delta: 'Old response',
+            });
+          },
+        })
+      );
+      await oldReasoningStarted.promise;
+
+      const newResponse = chat.startResponse(
+        new ReadableStream<UIMessageChunk>({
+          start(controller) {
+            newStreamController = controller;
+            controller.enqueue(startChunk('assistant-shared'));
+            controller.enqueue({
+              type: 'reasoning-start',
+              id: 'reasoning-new',
+            });
+            controller.enqueue({
+              type: 'reasoning-delta',
+              id: 'reasoning-new',
+              delta: 'New response',
+            });
+          },
+        })
+      );
+      await newReasoningStarted.promise;
+
+      expect(
+        messageById(state, 'assistant-shared').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        expect.objectContaining({
+          text: 'Old response',
+          state: 'done',
+        }),
+        expect.objectContaining({
+          text: 'New response',
+          state: 'streaming',
+        }),
+      ]);
+
+      oldStreamController.error(new Error('old response disconnected'));
+      await oldResponse;
+
+      expect(state.status).toBe('streaming');
+      expect(
+        messageById(state, 'assistant-shared').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        expect.objectContaining({
+          text: 'Old response',
+          state: 'done',
+        }),
+        expect.objectContaining({
+          text: 'New response',
+          state: 'streaming',
+        }),
+      ]);
+
+      newStreamController.close();
+      await newResponse;
+
+      expect(state.status).toBe('ready');
+      expect(
+        messageById(state, 'assistant-shared').parts.filter(
+          (part) => part.type === 'reasoning'
+        )
+      ).toEqual([
+        expect.objectContaining({
+          text: 'Old response',
+          state: 'done',
+        }),
+        expect.objectContaining({
+          text: 'New response',
+          state: 'done',
+        }),
+      ]);
+    });
+
+    it('completes unfinished reasoning when a tool callback rejects', async () => {
+      const onError = jest.fn();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          { type: 'reasoning-start', id: 'reasoning-1' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-1',
+            delta: 'Checking the catalog',
+          },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: () => Promise.reject(new Error('tool failed')),
+        onError,
+      });
+
+      await setup.chat.sendMessage({ text: 'Find a product' });
+
+      expect(setup.state.status).toBe('error');
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(assistantPart(setup.state)).toMatchObject({
+        type: 'reasoning',
+        text: 'Checking the catalog',
+        state: 'done',
+      });
+    });
+  });
+
   describe('guardrail violations', () => {
     it('replaces partial assistant content with the fallback and finishes ready', async () => {
       const fallbackResponse =
