@@ -149,6 +149,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
+    /**
+     * Whether to render reasoning parts
+     */
+    showReasoning?: boolean;
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -196,6 +200,7 @@ function ChatInner<
     title,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -340,9 +345,13 @@ function ChatInner<
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
+        translations: messagesTranslations,
+        messageTranslations,
+        ...messagesProps,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
+          showReasoning,
           ...messagesProps?.assistantMessageProps,
         },
         userMessageProps: {
@@ -350,9 +359,6 @@ function ChatInner<
           footerComponent: userMessageFooterComponent,
           ...messagesProps?.userMessageProps,
         },
-        translations: messagesTranslations,
-        messageTranslations,
-        ...messagesProps,
         error,
       }}
       promptProps={{
