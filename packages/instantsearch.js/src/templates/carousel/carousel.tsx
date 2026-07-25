@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type {
   CarouselProps as CarouselUiProps,
+  HeaderComponentProps,
   VNode,
 } from 'instantsearch-ui-components';
 
@@ -69,15 +70,7 @@ type CreateCarouselTemplateProps<TObject extends Record<string, unknown>> = {
   templates?: Partial<{
     previous: Exclude<Template, string>;
     next: Exclude<Template, string>;
-    header: Exclude<
-      Template<{
-        canScrollLeft: boolean;
-        canScrollRight: boolean;
-        scrollLeft: () => void;
-        scrollRight: () => void;
-      }>,
-      string
-    >;
+    header: Exclude<Template<HeaderComponentProps>, string>;
   }>;
   cssClasses?: Partial<CarouselUiProps<TObject>['classNames']>;
   showNavigation?: boolean;
@@ -100,34 +93,33 @@ export function carousel<TObject extends Record<string, unknown>>({
   templates = {},
   showNavigation = true,
 }: CreateCarouselTemplateProps<TObject> = {}) {
+  const { previous, next, header } = templates;
+  const HeaderComponent = (
+    header
+      ? (props: HeaderComponentProps) => header({ html, ...props })
+      : undefined
+  ) as CarouselUiProps<TObject>['headerComponent'];
+  const PreviousIconComponent = (
+    previous ? () => previous({ html }) : undefined
+  ) as CarouselUiProps<TObject>['previousIconComponent'];
+  const NextIconComponent = (
+    next ? () => next({ html }) : undefined
+  ) as CarouselUiProps<TObject>['nextIconComponent'];
+
   return function CarouselTemplate({
     items,
     templates: widgetTemplates,
     cssClasses: widgetCssClasses = {},
     sendEvent = () => {},
   }: CarouselTemplateProps<TObject>) {
-    const { previous, next, header } = templates;
-
     return (
       <CarouselWithRefs
         items={items}
         sendEvent={sendEvent}
         itemComponent={widgetTemplates.item}
-        headerComponent={
-          (header
-            ? (props) => header({ html, ...props })
-            : undefined) as CarouselUiProps<TObject>['headerComponent']
-        }
-        previousIconComponent={
-          (previous
-            ? () => previous({ html })
-            : undefined) as CarouselUiProps<TObject>['previousIconComponent']
-        }
-        nextIconComponent={
-          (next
-            ? () => next({ html })
-            : undefined) as CarouselUiProps<TObject>['nextIconComponent']
-        }
+        headerComponent={HeaderComponent}
+        previousIconComponent={PreviousIconComponent}
+        nextIconComponent={NextIconComponent}
         classNames={{
           ...cssClasses,
           ...{

@@ -14,6 +14,7 @@ import type {
 } from '../types';
 
 export type HeaderComponentProps = {
+  nbItems: number;
   canScrollLeft: boolean;
   canScrollRight: boolean;
   scrollLeft: () => void;
@@ -268,6 +269,7 @@ export function createCarouselComponent({
       <div {...props} className={cx(cssClasses.root)}>
         {HeaderComponent && (
           <HeaderComponent
+            nbItems={items.length}
             canScrollLeft={canScrollLeft}
             canScrollRight={canScrollRight}
             scrollLeft={scrollLeft}

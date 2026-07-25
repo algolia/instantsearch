@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -100,6 +100,64 @@ describe('createDisplayResultsTool', () => {
     expect(screen.getByText('Runners')).toBeInTheDocument();
     expect(screen.getByTestId('name-1')).toHaveTextContent('Air Runner');
     expect(screen.getByText('Curating results…')).toBeInTheDocument();
+  });
+
+  test('keeps carousel controls focused while tool input streams', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+    const createToolProps = (intro: string, objectIDs: string[]) => {
+      const message: ClientSideToolComponentProps['message'] = {
+        type: 'tool-algolia_display_results',
+        state: 'input-streaming',
+        toolCallId: 'display',
+        input: {
+          intro,
+          groups: [
+            {
+              title: 'Products',
+              results: objectIDs.map((objectID) => ({ objectID })),
+            },
+          ],
+        },
+      };
+
+      return {
+        message,
+        messages: createMessages(
+          message,
+          objectIDs.map((objectID) => ({
+            objectID,
+            name: `Product ${objectID}`,
+          }))
+        ),
+        applyFilters: jest.fn(),
+        onClose: jest.fn(),
+        indexUiState: {},
+        addToolResult: jest.fn(),
+        setIndexUiState: jest.fn(),
+        sendEvent: jest.fn(),
+      };
+    };
+    const { container, rerender } = render(
+      <LayoutComponent {...createToolProps('Original intro', ['1'])} />
+    );
+    const list = container.querySelector('.ais-Carousel-list')!;
+    Object.defineProperties(list, {
+      clientWidth: { configurable: true, value: 100 },
+      scrollWidth: { configurable: true, value: 200 },
+    });
+    const nextButtonBefore = within(container).getAllByRole('button')[1];
+
+    nextButtonBefore.focus();
+    rerender(
+      <LayoutComponent {...createToolProps('Updated intro', ['1', '2'])} />
+    );
+
+    const nextButtonAfter = within(container).getAllByRole('button')[1];
+
+    expect(screen.getByText('2 results')).toBeInTheDocument();
+    expect(nextButtonAfter).toBe(nextButtonBefore);
+    expect(document.activeElement).toBe(nextButtonAfter);
   });
 
   test('renders completed legacy v1 output when input has no v1 fields', () => {

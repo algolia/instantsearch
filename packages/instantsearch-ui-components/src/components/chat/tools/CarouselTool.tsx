@@ -170,8 +170,6 @@ export function createCarouselToolComponent<
       addAbsolutePosition(hits, 0, hits.length),
       output?.queryID
     );
-    const nbItems = items.length;
-
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -208,7 +206,6 @@ export function createCarouselToolComponent<
             showViewAll={showViewAll}
             nbHits={output?.nbHits}
             input={input}
-            nbItems={nbItems}
             applyFilters={applyFilters}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
@@ -222,7 +219,6 @@ export function createCarouselToolComponent<
           showViewAll={showViewAll}
           nbHits={output?.nbHits}
           input={input}
-          nbItems={nbItems}
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
@@ -234,7 +230,6 @@ export function createCarouselToolComponent<
       HeaderComponent,
       output?.nbHits,
       input,
-      nbItems,
       applyFilters,
       getSearchPageURL,
       onClose,
