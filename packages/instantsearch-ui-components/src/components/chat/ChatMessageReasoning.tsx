@@ -76,6 +76,7 @@ export function createChatMessageReasoningComponent({
           </span>
           <span className={cx(classNames.reasoningLabel)}>
             {translations.reasoningLabel}
+            {isStreaming ? <span aria-hidden="true">…</span> : null}
           </span>
           <span className={cx(classNames.reasoningChevron)} aria-hidden="true">
             <ChevronDownIcon createElement={createElement} />

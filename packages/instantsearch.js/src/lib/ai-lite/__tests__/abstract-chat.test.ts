@@ -2163,6 +2163,148 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       });
     });
 
+    it.each([1, 2])(
+      'keeps one continuation owner after $replayCount replay(s)',
+      async (replayCount) => {
+        const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+        let submitLateResult!: TestChat['addToolResult'];
+        const replayedToolChunks: UIMessageChunk[] = [
+          startChunk(),
+          {
+            type: 'tool-input-start',
+            toolName: 'search',
+            toolCallId: 'call-1',
+          },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'headphones' },
+          },
+        ];
+        const setup = createTestSetup({
+          state,
+          onError: jest.fn(),
+          onToolCall: (_options, addToolResult) => {
+            submitLateResult = addToolResult!;
+          },
+          sendAutomaticallyWhen: ({ messages }) =>
+            messages.some((message) =>
+              message.parts.some(
+                (part) =>
+                  'toolCallId' in part &&
+                  part.toolCallId === 'call-1' &&
+                  part.state === 'output-available'
+              )
+            ),
+          streamFactory: (index) => {
+            return index === 0
+              ? chunksToStream([...replayedToolChunks, finishChunk()])
+              : chunksToStream([
+                  startChunk(`continuation-${index}`),
+                  { type: 'text-start', id: `text-${index}` },
+                  {
+                    type: 'text-delta',
+                    id: `text-${index}`,
+                    delta: `continuation ${index}`,
+                  },
+                  { type: 'text-end', id: `text-${index}` },
+                  finishChunk(),
+                ]);
+          },
+        });
+        setup.transport.reconnectToStream = jest.fn(() =>
+          Promise.resolve(
+            chunksToStream([...replayedToolChunks, finishChunk()])
+          )
+        );
+
+        await setup.chat.sendMessage({ text: 'Find headphones' });
+        for (let replay = 0; replay < replayCount; replay++) {
+          await setup.chat.resumeStream();
+        }
+        await submitLateResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { hits: [] },
+        });
+
+        expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+        expect(assistantToolPart(state, 'call-1')).toMatchObject({
+          state: 'output-available',
+          output: { hits: [] },
+        });
+      }
+    );
+
+    it('reports a pending tool callback failure to the resumed response', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const callback = deferred<void>();
+      const callbackStarted = deferred<void>();
+      const onError = jest.fn();
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+      const replayedToolChunks: UIMessageChunk[] = [
+        startChunk(),
+        {
+          type: 'tool-input-start',
+          toolName: 'search',
+          toolCallId: 'call-1',
+        },
+        {
+          type: 'tool-input-available',
+          toolName: 'search',
+          toolCallId: 'call-1',
+          input: { query: 'headphones' },
+        },
+      ];
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onError,
+        onToolCall: jest.fn(() => {
+          callbackStarted.resolve();
+          return callback.promise;
+        }),
+        sendAutomaticallyWhen: () => true,
+        transport: {
+          sendMessages: jest.fn(() =>
+            Promise.resolve(
+              new ReadableStream<UIMessageChunk>({
+                start(controller) {
+                  streamController = controller;
+                  replayedToolChunks.forEach((chunk) =>
+                    controller.enqueue(chunk)
+                  );
+                },
+              })
+            )
+          ) as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([...replayedToolChunks, finishChunk()])
+            )
+          ) as any,
+        },
+      });
+
+      const send = chat.sendMessage({ text: 'Find headphones' });
+      await callbackStarted.promise;
+      streamController.error(new Error('disconnected'));
+      await send;
+      await chat.resumeStream();
+      await chat.resumeStream();
+
+      callback.reject(new Error('tool failed'));
+      await callback.promise.catch(() => undefined);
+      await Promise.resolve();
+
+      expect(onError).toHaveBeenCalledTimes(2);
+      expect(onError).toHaveBeenLastCalledWith(
+        expect.objectContaining({ message: 'tool failed' })
+      );
+      expect(chat.status).toBe('error');
+    });
+
     it('does not transfer replay ownership across messages sharing a tool call id', async () => {
       const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
       const onError = jest.fn();

@@ -425,6 +425,17 @@ describe('ChatMessage', () => {
     let disclosures = getAllByRole('group', { name: 'Reasoning' });
     expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
     expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    expect(
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning$/);
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning…$/);
+    expect(
+      disclosures[1].querySelector(
+        '.ais-ChatMessageReasoning-label [aria-hidden="true"]'
+      )
+    ).toHaveTextContent('…');
 
     rerender(
       <ChatMessage
@@ -444,6 +455,14 @@ describe('ChatMessage', () => {
     disclosures = getAllByRole('group', { name: 'Reasoning' });
     expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
     expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning$/);
+    expect(
+      disclosures[1].querySelector(
+        '.ais-ChatMessageReasoning-label [aria-hidden="true"]'
+      )
+    ).not.toBeInTheDocument();
   });
 
   test('marks only the latest unfinished reasoning block as busy', () => {

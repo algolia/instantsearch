@@ -42,7 +42,8 @@ type ResponseRecord = {
   resolvedToolCallIds: Set<string>;
   returnedToolCallbacks: Array<Promise<void>>;
   pendingToolCallbacks: number;
-  forwardToolResultsTo: Map<string, Set<ResponseRecord>>;
+  forwardToolOutcomeTo: Map<string, ResponseRecord>;
+  failToolCall?: (reason: unknown, toolCallId?: string) => void;
   didNotifyFinish: boolean;
   didEvaluateContinuation: boolean;
 };
@@ -736,10 +737,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       if (!response) {
         return this.continueResponse();
       }
-      const resultOwners = [
-        response,
-        ...(response.forwardToolResultsTo.get(toolCallId) ?? []),
-      ];
+      const forwardedResponse = response.forwardToolOutcomeTo.get(toolCallId);
+      const resultOwners = forwardedResponse
+        ? [response, forwardedResponse]
+        : [response];
       resultOwners.forEach((owner) => {
         if (owner.requiredToolCallIds.has(toolCallId)) {
           owner.resolvedToolCallIds.add(toolCallId);
@@ -909,7 +910,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       resolvedToolCallIds: new Set(),
       returnedToolCallbacks: [],
       pendingToolCallbacks: 0,
-      forwardToolResultsTo: new Map(),
+      forwardToolOutcomeTo: new Map(),
       didNotifyFinish: false,
       didEvaluateContinuation: false,
     };
@@ -1207,8 +1208,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         });
       }
     };
-    const failToolCall = (reason: unknown): void => {
-      if (response.outcome !== 'active') return;
+    const failToolCall = (reason: unknown, toolCallId?: string): void => {
+      if (response.outcome === 'failed' || response.outcome === 'aborted') {
+        const forwardedResponse = toolCallId
+          ? response.forwardToolOutcomeTo.get(toolCallId)
+          : undefined;
+        forwardedResponse?.failToolCall?.(reason, toolCallId);
+        return;
+      }
       completeReplays();
       const message =
         this.completeReasoningParts(response) ?? getCanonicalMessage();
@@ -1220,8 +1227,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
       if (this.activeResponse === response) {
         this.activeResponse = null;
-        this.handleError(error);
       }
+      this.handleError(error, {
+        updateState: this.latestResponse === response,
+      });
       notifyFinish({
         isAbort: false,
         isDisconnect: false,
@@ -1230,6 +1239,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         allowRetired: !wasRetired,
       });
     };
+    response.failToolCall = failToolCall;
     const acceptServerToolResult = (toolCallId: string): void => {
       if (response.requiredToolCallIds.has(toolCallId)) {
         response.resolvedToolCallIds.add(toolCallId);
@@ -1678,14 +1688,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                     if (!owner.requiredToolCallIds.has(chunk.toolCallId)) {
                       return;
                     }
-                    const forwardedResponses =
-                      owner.forwardToolResultsTo.get(chunk.toolCallId) ??
-                      new Set<ResponseRecord>();
-                    forwardedResponses.add(response);
-                    owner.forwardToolResultsTo.set(
-                      chunk.toolCallId,
-                      forwardedResponses
-                    );
+                    owner.forwardToolOutcomeTo.set(chunk.toolCallId, response);
+                    owner.didEvaluateContinuation = true;
                   });
                   break;
                 }
@@ -1733,7 +1737,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   if (result) {
                     response.returnedToolCallbacks.push(
                       Promise.resolve(result)
-                        .catch(failToolCall)
+                        .catch((error) => failToolCall(error, chunk.toolCallId))
                         .then(() => {
                           response.pendingToolCallbacks--;
                           this.pruneDetachedResponse(response);
@@ -1745,7 +1749,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   }
                 } catch (error) {
                   response.pendingToolCallbacks--;
-                  failToolCall(error);
+                  failToolCall(error, chunk.toolCallId);
                   this.pruneDetachedResponse(response);
                 }
               }
