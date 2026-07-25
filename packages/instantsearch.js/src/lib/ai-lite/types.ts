@@ -434,7 +434,8 @@ export interface ChatTransport<UI_MESSAGE extends UIMessage> {
    *
    * The returned stream must replay the full buffered assistant response in
    * its original part order. Stream chunk boundaries may differ between
-   * connections.
+   * connections. Data callbacks observe replayed chunks and may run again
+   * after reconnecting.
    */
   reconnectToStream: (
     options: {

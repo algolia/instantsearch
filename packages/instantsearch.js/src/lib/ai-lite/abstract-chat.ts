@@ -42,6 +42,7 @@ type ResponseRecord = {
   resolvedToolCallIds: Set<string>;
   returnedToolCallbacks: Array<Promise<void>>;
   pendingToolCallbacks: number;
+  forwardToolResultsTo: Map<string, Set<ResponseRecord>>;
   didNotifyFinish: boolean;
   didEvaluateContinuation: boolean;
 };
@@ -732,10 +733,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         return Promise.resolve();
       }
 
-      if (response?.requiredToolCallIds.has(toolCallId)) {
-        response.resolvedToolCallIds.add(toolCallId);
+      if (!response) {
+        return this.continueResponse();
       }
-      return this.continueResponse(response);
+      const resultOwners = [
+        response,
+        ...(response.forwardToolResultsTo.get(toolCallId) ?? []),
+      ];
+      resultOwners.forEach((owner) => {
+        if (owner.requiredToolCallIds.has(toolCallId)) {
+          owner.resolvedToolCallIds.add(toolCallId);
+        }
+      });
+      return Promise.all(
+        resultOwners.map((owner) => this.continueResponse(owner))
+      ).then(() => undefined);
     };
 
     if (
@@ -897,6 +909,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       resolvedToolCallIds: new Set(),
       returnedToolCallbacks: [],
       pendingToolCallbacks: 0,
+      forwardToolResultsTo: new Map(),
       didNotifyFinish: false,
       didEvaluateContinuation: false,
     };
@@ -942,14 +955,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const toolRawInputByCallId: Record<string, string> = {};
     const toolRawOutputByCallId: Record<string, string> = {};
+    const replayedToolOriginalRawInputByCallId = new Map<string, string>();
+    const replayedToolOriginalRawOutputByCallId = new Map<string, string>();
+    const replayedDispatchedToolCallIds = new Set<string>();
     const streamPartIndexById = new Map<string, number>();
     // A resumed stream replays buffered content in order. The persisted parts
-    // do not retain stream ids, so reuse them in order while the replay catches
-    // up without clearing text that is already visible.
-    const reusablePartIndexesByType = new Map<'text' | 'reasoning', number[]>([
-      ['text', []],
-      ['reasoning', []],
-    ]);
+    // do not all retain stream ids, so reuse the saved part sequence while the
+    // replay catches up without duplicating the message.
+    const reusablePartIndexes: number[] = [];
     const replayByPartKey = new Map<
       string,
       {
@@ -966,10 +979,47 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       `${type}:${id}`;
     const invalidateStreamParts = (): void => {
       streamPartIndexById.clear();
-      reusablePartIndexesByType.forEach((indexes) => {
-        indexes.length = 0;
-      });
+      reusablePartIndexes.length = 0;
       replayByPartKey.clear();
+      replayedToolOriginalRawInputByCallId.clear();
+      replayedToolOriginalRawOutputByCallId.clear();
+      replayedDispatchedToolCallIds.clear();
+    };
+    const consumeReusablePartsThrough = (partIndex: number): void => {
+      const reusableIndex = reusablePartIndexes.indexOf(partIndex);
+      if (reusableIndex >= 0) {
+        reusablePartIndexes.splice(0, reusableIndex + 1);
+      }
+    };
+    const claimNextReusablePart = (
+      predicate: (part: TUIMessage['parts'][number]) => boolean
+    ): number | undefined => {
+      if (!response.isResume || !currentMessage) return undefined;
+
+      const partIndex = reusablePartIndexes[0];
+      if (
+        partIndex === undefined ||
+        !predicate(currentMessage.parts[partIndex])
+      ) {
+        return undefined;
+      }
+
+      reusablePartIndexes.shift();
+      return partIndex;
+    };
+    const claimReusablePartByIdentity = (
+      predicate: (part: TUIMessage['parts'][number]) => boolean
+    ): number | undefined => {
+      if (!response.isResume || !currentMessage) return undefined;
+
+      const reusableIndex = reusablePartIndexes.findIndex((partIndex) =>
+        predicate(currentMessage!.parts[partIndex])
+      );
+      if (reusableIndex < 0) return undefined;
+
+      const partIndex = reusablePartIndexes[reusableIndex];
+      reusablePartIndexes.splice(0, reusableIndex + 1);
+      return partIndex;
     };
     const claimUnfinishedPart = (
       type: 'text' | 'reasoning',
@@ -980,9 +1030,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
       if (partIndexes?.length !== 1) return undefined;
 
-      reusablePartIndexesByType.forEach((indexes) => {
-        indexes.length = 0;
-      });
+      consumeReusablePartsThrough(partIndexes[0]);
       streamPartIndexById.set(partKey, partIndexes[0]);
       return partIndexes[0];
     };
@@ -1223,8 +1271,33 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 );
                 if (response.isResume) {
                   currentMessage.parts.forEach((part, index) => {
-                    if (part.type === 'text' || part.type === 'reasoning') {
-                      reusablePartIndexesByType.get(part.type)!.push(index);
+                    reusablePartIndexes.push(index);
+                    if ('toolCallId' in part) {
+                      if (
+                        'rawInput' in part &&
+                        typeof part.rawInput === 'string'
+                      ) {
+                        replayedToolOriginalRawInputByCallId.set(
+                          part.toolCallId,
+                          part.rawInput
+                        );
+                      }
+                      if (
+                        'rawOutput' in part &&
+                        typeof part.rawOutput === 'string'
+                      ) {
+                        replayedToolOriginalRawOutputByCallId.set(
+                          part.toolCallId,
+                          part.rawOutput
+                        );
+                      }
+                      if (
+                        part.state === 'input-available' &&
+                        (!('providerExecuted' in part) ||
+                          !part.providerExecuted)
+                      ) {
+                        replayedDispatchedToolCallIds.add(part.toolCallId);
+                      }
                     }
                   });
                 }
@@ -1252,9 +1325,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               }
               const type = chunk.type === 'text-start' ? 'text' : 'reasoning';
               const partKey = streamPartKey(type, chunk.id);
-              const reusablePartIndex = response.isResume
-                ? reusablePartIndexesByType.get(type)?.shift()
-                : undefined;
+              const reusablePartIndex = claimNextReusablePart(
+                (part) => part.type === type
+              );
               const reusablePart =
                 reusablePartIndex === undefined
                   ? undefined
@@ -1373,15 +1446,20 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'tool-input-start': {
               if (!currentMessage) break;
 
-              const completedPart = currentMessage.parts.find(
-                (part) =>
-                  'toolCallId' in part &&
-                  part.toolCallId === chunk.toolCallId &&
-                  'state' in part &&
-                  (part.state === 'output-available' ||
-                    part.state === 'output-error')
-              );
-              if (completedPart) break;
+              const existingIndex = findToolPart(chunk.toolCallId);
+              if (existingIndex >= 0) {
+                consumeReusablePartsThrough(existingIndex);
+              }
+              const existingPart =
+                existingIndex >= 0
+                  ? (currentMessage.parts[existingIndex] as any)
+                  : null;
+              if (
+                existingPart?.state === 'output-available' ||
+                existingPart?.state === 'output-error'
+              ) {
+                break;
+              }
 
               const initialRawInput =
                 typeof chunk.input === 'string'
@@ -1391,17 +1469,30 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   : '';
 
               toolRawInputByCallId[chunk.toolCallId] = initialRawInput;
-
               const toolPart = {
+                ...(response.isResume ? existingPart : null),
                 type: `tool-${chunk.toolName}` as const,
                 toolCallId: chunk.toolCallId,
-                state: 'input-streaming' as const,
-                input: chunk.input,
-                rawInput: initialRawInput || undefined,
-                providerExecuted: chunk.providerExecuted,
+                state:
+                  response.isResume && existingPart?.state === 'input-available'
+                    ? ('input-available' as const)
+                    : ('input-streaming' as const),
+                input:
+                  response.isResume && existingPart
+                    ? existingPart.input
+                    : chunk.input,
+                rawInput:
+                  response.isResume && existingPart?.rawInput !== undefined
+                    ? existingPart.rawInput
+                    : initialRawInput || undefined,
+                providerExecuted:
+                  chunk.providerExecuted ??
+                  (response.isResume
+                    ? existingPart?.providerExecuted
+                    : undefined),
               };
 
-              setPart(-1, toolPart);
+              setPart(existingIndex, toolPart);
               break;
             }
 
@@ -1421,8 +1512,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 break;
               }
               const previousRawInput =
-                existingPart?.rawInput ??
                 toolRawInputByCallId[chunk.toolCallId] ??
+                existingPart?.rawInput ??
                 '';
               const nextRawInput = `${previousRawInput}${chunk.inputTextDelta}`;
               toolRawInputByCallId[chunk.toolCallId] = nextRawInput;
@@ -1446,6 +1537,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 rawInput: nextRawInput,
               };
 
+              const originalRawInput = replayedToolOriginalRawInputByCallId.get(
+                chunk.toolCallId
+              );
+              if (
+                originalRawInput !== undefined &&
+                nextRawInput.length < originalRawInput.length &&
+                originalRawInput.startsWith(nextRawInput)
+              ) {
+                break;
+              }
+              replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
               setPart(toolIndex, nextToolPart);
               break;
             }
@@ -1456,9 +1558,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               if (response.requiredToolCallIds.has(chunk.toolCallId)) break;
 
               delete toolRawInputByCallId[chunk.toolCallId];
+              replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
 
               // Find existing tool part or create new one
               const existingIndex = findToolPart(chunk.toolCallId);
+              if (existingIndex >= 0) {
+                consumeReusablePartsThrough(existingIndex);
+              }
               const existingPart =
                 existingIndex >= 0
                   ? (currentMessage.parts[existingIndex] as any)
@@ -1504,6 +1610,28 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 const existingOwners = Array.from(owners).filter(
                   (owner) => owner !== response
                 );
+                if (
+                  response.isResume &&
+                  replayedDispatchedToolCallIds.has(chunk.toolCallId)
+                ) {
+                  response.requiredToolCallIds.add(chunk.toolCallId);
+                  existingOwners.forEach((owner) => {
+                    if (!owner.requiredToolCallIds.has(chunk.toolCallId)) {
+                      return;
+                    }
+                    const forwardedResponses =
+                      owner.forwardToolResultsTo.get(chunk.toolCallId) ??
+                      new Set<ResponseRecord>();
+                    forwardedResponses.add(response);
+                    owner.forwardToolResultsTo.set(
+                      chunk.toolCallId,
+                      forwardedResponses
+                    );
+                  });
+                  owners.add(response);
+                  this.responsesByToolCallId.set(chunk.toolCallId, owners);
+                  break;
+                }
                 if (existingOwners.length > 0) {
                   this.acceptsIdentifierOnlyToolResults = false;
                   const conflictingOwner = existingOwners.find(
@@ -1583,12 +1711,24 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 toolIndex >= 0
                   ? (currentMessage.parts[toolIndex] as any)
                   : null;
-              const previousRawOutput =
-                existingPart?.rawOutput ??
-                toolRawOutputByCallId[toolCallId] ??
-                '';
+              const previousRawOutput = response.isResume
+                ? toolRawOutputByCallId[toolCallId] ?? ''
+                : existingPart?.rawOutput ??
+                  toolRawOutputByCallId[toolCallId] ??
+                  '';
               const nextRawOutput = `${previousRawOutput}${delta}`;
               toolRawOutputByCallId[toolCallId] = nextRawOutput;
+
+              const originalRawOutput =
+                replayedToolOriginalRawOutputByCallId.get(toolCallId);
+              if (
+                originalRawOutput !== undefined &&
+                nextRawOutput.length < originalRawOutput.length &&
+                originalRawOutput.startsWith(nextRawOutput)
+              ) {
+                break;
+              }
+              replayedToolOriginalRawOutputByCallId.delete(toolCallId);
 
               const parsedOutput = parseToolInputDelta(
                 nextRawOutput,
@@ -1618,6 +1758,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               if (toolIndex >= 0) {
                 delete toolRawInputByCallId[chunk.toolCallId];
                 delete toolRawOutputByCallId[chunk.toolCallId];
+                replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
+                replayedToolOriginalRawOutputByCallId.delete(chunk.toolCallId);
 
                 const existingPart = currentMessage.parts[toolIndex] as any;
                 if (response.resolvedToolCallIds.has(chunk.toolCallId)) {
@@ -1655,6 +1797,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               }
               delete toolRawInputByCallId[chunk.toolCallId];
               delete toolRawOutputByCallId[chunk.toolCallId];
+              replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
+              replayedToolOriginalRawOutputByCallId.delete(chunk.toolCallId);
 
               const toolIndex = findToolPart(chunk.toolCallId);
               const existingPart =
@@ -1706,6 +1850,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               delete toolRawInputByCallId[chunk.toolCallId];
               delete toolRawOutputByCallId[chunk.toolCallId];
+              replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
+              replayedToolOriginalRawOutputByCallId.delete(chunk.toolCallId);
 
               const existingPart = currentMessage.parts[toolIndex] as any;
               const {
@@ -1740,7 +1886,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 title: chunk.title,
               };
 
-              setPart(-1, sourcePart);
+              const reusablePartIndex = claimReusablePartByIdentity(
+                (part) =>
+                  part.type === 'source-url' && part.sourceId === chunk.sourceId
+              );
+              setPart(reusablePartIndex ?? -1, sourcePart);
               break;
             }
 
@@ -1756,7 +1906,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 providerMetadata: chunk.providerMetadata,
               };
 
-              setPart(-1, docPart);
+              const reusablePartIndex = claimReusablePartByIdentity(
+                (part) =>
+                  part.type === 'source-document' &&
+                  part.sourceId === chunk.sourceId
+              );
+              setPart(reusablePartIndex ?? -1, docPart);
               break;
             }
 
@@ -1769,14 +1924,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 mediaType: chunk.mediaType,
               };
 
-              setPart(-1, filePart);
+              const reusablePartIndex = claimNextReusablePart(
+                (part) =>
+                  part.type === 'file' &&
+                  part.url === chunk.url &&
+                  part.mediaType === chunk.mediaType
+              );
+              setPart(reusablePartIndex ?? -1, filePart);
               break;
             }
 
             case 'start-step': {
               if (!currentMessage) break;
 
-              setPart(-1, { type: 'step-start' });
+              const reusablePartIndex = claimNextReusablePart(
+                (part) => part.type === 'step-start'
+              );
+              setPart(reusablePartIndex ?? -1, { type: 'step-start' });
               break;
             }
 
@@ -1870,13 +2034,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               // Handle generic data parts (data-*)
               const chunkType = (chunk as any).type as string;
               if (chunkType?.startsWith('data-') && currentMessage) {
+                const chunkId = (chunk as any).id as string | undefined;
                 const dataPart = {
                   type: chunkType,
-                  id: (chunk as any).id,
+                  id: chunkId,
                   data: (chunk as any).data,
                 };
 
-                setPart(-1, dataPart);
+                const reusablePartIndex =
+                  chunkId === undefined
+                    ? claimNextReusablePart((part) => part.type === chunkType)
+                    : claimReusablePartByIdentity(
+                        (part) =>
+                          part.type === chunkType &&
+                          'id' in part &&
+                          part.id === chunkId
+                      );
+                setPart(reusablePartIndex ?? -1, dataPart);
 
                 // Trigger onData callback
                 if (this.onData) {

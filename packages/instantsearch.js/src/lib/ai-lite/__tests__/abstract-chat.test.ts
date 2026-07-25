@@ -1686,6 +1686,526 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
     });
   });
 
+  describe('full response replay', () => {
+    function createFullReplaySetup(
+      parts: UIMessage['parts'],
+      chunks: UIMessageChunk[],
+      onData?: (dataPart: any) => void
+    ) {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [{ id: 'msg-1', role: 'assistant', parts }],
+        false
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: jest.fn() as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(chunksToStream([startChunk(), ...chunks]))
+          ) as any,
+        },
+        onData,
+      });
+
+      return { chat, state };
+    }
+
+    it('reuses an interrupted tool call before automatic continuation', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const toolStarted = deferred<void>();
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+      let chat!: TestChat;
+
+      state['~registerMessagesCallback'](() => {
+        if (assistantToolPart(state, 'call-1')?.state === 'input-streaming') {
+          toolStarted.resolve();
+        }
+      });
+
+      const onToolCall = jest.fn(
+        ({ toolCall }: { toolCall: any }, addToolResult = chat.addToolResult) =>
+          addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            output: { hits: [] },
+          })
+      );
+      const setup = createTestSetup({
+        state,
+        streamFactory: (index) => {
+          if (index === 0) {
+            return new ReadableStream<UIMessageChunk>({
+              start(controller) {
+                streamController = controller;
+                controller.enqueue(startChunk());
+                controller.enqueue({
+                  type: 'tool-input-start',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                });
+              },
+            });
+          }
+
+          return chunksToStream([
+            startChunk('msg-2'),
+            { type: 'text-start', id: 'text-2' },
+            {
+              type: 'text-delta',
+              id: 'text-2',
+              delta: 'Here are the results.',
+            },
+            { type: 'text-end', id: 'text-2' },
+            finishChunk(),
+          ]);
+        },
+        onError: jest.fn(),
+        onToolCall,
+        sendAutomaticallyWhen: ({ messages }) =>
+          messages.some((message) =>
+            message.parts.some(
+              (part) =>
+                'toolCallId' in part &&
+                part.toolCallId === 'call-1' &&
+                part.state === 'output-available'
+            )
+          ),
+      });
+      chat = setup.chat;
+      setup.transport.reconnectToStream = jest.fn(() =>
+        Promise.resolve(
+          chunksToStream([
+            startChunk(),
+            {
+              type: 'tool-input-start',
+              toolName: 'search',
+              toolCallId: 'call-1',
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: { query: 'headphones' },
+            },
+            finishChunk(),
+          ])
+        )
+      ) as any;
+
+      const send = chat.sendMessage({ text: 'Find headphones' });
+      await toolStarted.promise;
+      streamController.error(new Error('disconnected'));
+      await send;
+      await chat.resumeStream();
+
+      const replayedToolParts = messageById(state, 'msg-1').parts.filter(
+        (part) => 'toolCallId' in part && part.toolCallId === 'call-1'
+      );
+      const continuationMessages = setup.sendMessages.mock.calls[1][0]
+        .messages as UIMessage[];
+      const continuationToolCallIds = continuationMessages.flatMap((message) =>
+        message.parts.flatMap((part) =>
+          'toolCallId' in part ? [part.toolCallId] : []
+        )
+      );
+
+      expect(replayedToolParts).toEqual([
+        expect.objectContaining({
+          type: 'tool-search',
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: { hits: [] },
+        }),
+      ]);
+      expect(continuationToolCallIds).toEqual(['call-1']);
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+    });
+
+    it('keeps partial tool input when replay starts with a shorter prefix', async () => {
+      const { chat, state } = createFullReplaySetup(
+        [
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'input-streaming',
+            input: { query: 'head' },
+            rawInput: '{"query":"head',
+          },
+        ],
+        [
+          {
+            type: 'tool-input-start',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'he' },
+          },
+        ]
+      );
+
+      await chat.resumeStream();
+
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        type: 'tool-search',
+        toolCallId: 'call-1',
+        state: 'input-streaming',
+        input: { query: 'head' },
+        rawInput: '{"query":"head',
+      });
+    });
+
+    it('does not repeat a tool callback during a same-instance full replay', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      state.snapshot = <T>(value: T): T => value;
+      const toolCallDispatched = deferred<void>();
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+      const onToolCall = jest.fn(() => {
+        toolCallDispatched.resolve();
+      });
+      const replayedToolChunks: UIMessageChunk[] = [
+        startChunk(),
+        {
+          type: 'tool-input-start',
+          toolName: 'search',
+          toolCallId: 'call-1',
+        },
+        {
+          type: 'tool-input-available',
+          toolName: 'search',
+          toolCallId: 'call-1',
+          input: { query: 'headphones' },
+        },
+      ];
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onError: jest.fn(),
+        onToolCall,
+        transport: {
+          sendMessages: jest.fn(() =>
+            Promise.resolve(
+              new ReadableStream<UIMessageChunk>({
+                start(controller) {
+                  streamController = controller;
+                  replayedToolChunks.forEach((chunk) =>
+                    controller.enqueue(chunk)
+                  );
+                },
+              })
+            )
+          ) as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([...replayedToolChunks, finishChunk()])
+            )
+          ) as any,
+        },
+      });
+
+      const send = chat.sendMessage({ text: 'Find headphones' });
+      await toolCallDispatched.promise;
+      streamController.error(new Error('disconnected after tool callback'));
+      await send;
+      await chat.resumeStream();
+
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(
+        messageById(state, 'msg-1').parts.filter(
+          (part) => 'toolCallId' in part && part.toolCallId === 'call-1'
+        )
+      ).toHaveLength(1);
+    });
+
+    it('continues once when a pending tool callback resolves after replay', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const releaseToolResult = deferred<void>();
+      let sendIndex = 0;
+      let submitToolResult!: (options: any) => Promise<void>;
+      const replayedToolChunks: UIMessageChunk[] = [
+        startChunk(),
+        {
+          type: 'tool-input-start',
+          toolName: 'search',
+          toolCallId: 'call-1',
+        },
+        {
+          type: 'tool-input-available',
+          toolName: 'search',
+          toolCallId: 'call-1',
+          input: { query: 'headphones' },
+        },
+      ];
+      const sendMessages = jest.fn(() => {
+        if (sendIndex++ === 0) {
+          let chunkIndex = 0;
+          return Promise.resolve(
+            new ReadableStream<UIMessageChunk>({
+              pull(controller) {
+                if (chunkIndex < replayedToolChunks.length) {
+                  controller.enqueue(replayedToolChunks[chunkIndex++]);
+                } else {
+                  controller.error(
+                    new Error('disconnected while tool callback was pending')
+                  );
+                }
+              },
+            })
+          );
+        }
+        return Promise.resolve(
+          chunksToStream([
+            startChunk('msg-2'),
+            { type: 'text-start', id: 'text-2' },
+            {
+              type: 'text-delta',
+              id: 'text-2',
+              delta: 'Here are the results.',
+            },
+            { type: 'text-end', id: 'text-2' },
+            finishChunk(),
+          ])
+        );
+      });
+      const onToolCall = jest.fn(
+        (
+          _options: { toolCall: any },
+          addToolResult?: (options: any) => Promise<void>
+        ) => {
+          submitToolResult = addToolResult!;
+          return releaseToolResult.promise;
+        }
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onError: jest.fn(),
+        onToolCall,
+        sendAutomaticallyWhen: ({ messages }) =>
+          messages.some((message) =>
+            message.parts.some(
+              (part) =>
+                'toolCallId' in part &&
+                part.toolCallId === 'call-1' &&
+                part.state === 'output-available'
+            )
+          ),
+        transport: {
+          sendMessages: sendMessages as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([...replayedToolChunks, finishChunk()])
+            )
+          ) as any,
+        },
+      });
+
+      await chat.sendMessage({ text: 'Find headphones' });
+      await chat.resumeStream();
+      await submitToolResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { hits: [] },
+      });
+      releaseToolResult.resolve();
+      await releaseToolResult.promise;
+
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(sendMessages).toHaveBeenCalledTimes(2);
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: [] },
+      });
+    });
+
+    it('does not repeat a tool callback restored at input-available', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'tool-search',
+                toolCallId: 'call-1',
+                state: 'input-available',
+                input: { query: 'headphones' },
+              },
+            ],
+          },
+        ],
+        false
+      );
+      const onToolCall = jest.fn();
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onToolCall,
+        transport: {
+          sendMessages: jest.fn() as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([
+                startChunk(),
+                {
+                  type: 'tool-input-start',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                },
+                {
+                  type: 'tool-input-available',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                  input: { query: 'headphones' },
+                },
+                finishChunk(),
+              ])
+            )
+          ) as any,
+        },
+      });
+
+      await chat.resumeStream();
+
+      expect(onToolCall).not.toHaveBeenCalled();
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'input-available',
+        input: { query: 'headphones' },
+      });
+    });
+
+    it('reconciles replayed tool output deltas without duplicating the saved prefix', async () => {
+      const { chat, state } = createFullReplaySetup(
+        [
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'output-available',
+            input: { query: 'headphones' },
+            output: { hits: [] },
+            rawOutput: '{"hits":[',
+            preliminary: true,
+            providerExecuted: true,
+          } as any,
+        ],
+        [
+          {
+            type: 'tool-input-start',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            providerExecuted: true,
+          },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'headphones' },
+            providerExecuted: true,
+          },
+          {
+            type: 'data-tool-output-delta',
+            data: {
+              toolCallId: 'call-1',
+              toolName: 'search',
+              delta: '{"hits":[',
+            },
+          } as UIMessageChunk,
+          {
+            type: 'data-tool-output-delta',
+            data: {
+              toolCallId: 'call-1',
+              toolName: 'search',
+              delta: ']}',
+            },
+          } as UIMessageChunk,
+          finishChunk(),
+        ]
+      );
+
+      await chat.resumeStream();
+
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: [] },
+        rawOutput: '{"hits":[]}',
+      });
+    });
+
+    it('reuses structural parts while replayed data remains observable', async () => {
+      const onData = jest.fn();
+      const structuralParts: UIMessage['parts'] = [
+        {
+          type: 'source-url',
+          sourceId: 'source-1',
+          url: 'https://example.test/source',
+          title: 'Source',
+        },
+        {
+          type: 'source-document',
+          sourceId: 'document-1',
+          mediaType: 'text/plain',
+          title: 'Document',
+        },
+        {
+          type: 'file',
+          url: 'https://example.test/file.pdf',
+          mediaType: 'application/pdf',
+        },
+        { type: 'step-start' },
+        {
+          type: 'data-progress',
+          id: 'progress-1',
+          data: { value: 1 },
+        },
+        {
+          type: 'data-status',
+          data: { label: 'Searching' },
+        },
+      ];
+      const { chat, state } = createFullReplaySetup(
+        structuralParts,
+        [
+          {
+            type: 'source-url',
+            sourceId: 'source-1',
+            url: 'https://example.test/source',
+            title: 'Source',
+          },
+          {
+            type: 'source-document',
+            sourceId: 'document-1',
+            mediaType: 'text/plain',
+            title: 'Document',
+          },
+          {
+            type: 'file',
+            url: 'https://example.test/file.pdf',
+            mediaType: 'application/pdf',
+          },
+          { type: 'start-step' },
+          {
+            type: 'data-progress',
+            id: 'progress-1',
+            data: { value: 1 },
+          } as UIMessageChunk,
+          {
+            type: 'data-status',
+            data: { label: 'Searching' },
+          } as UIMessageChunk,
+          finishChunk(),
+        ],
+        onData
+      );
+
+      await chat.resumeStream();
+
+      expect(messageById(state, 'msg-1').parts).toEqual(structuralParts);
+      expect(onData).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('tool-input lifecycle (existing chunks)', () => {
     it('settles when onToolCall returns addToolResult and commits the output', async () => {
       let chat!: TestChat;
