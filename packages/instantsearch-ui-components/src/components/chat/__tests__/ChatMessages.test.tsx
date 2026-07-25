@@ -271,6 +271,43 @@ describe('ChatMessages', () => {
     expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
   });
 
+  test('does not show the loader while an earlier reasoning part is still active', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+              {
+                type: 'reasoning',
+                text: 'Comparing the results.',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getAllByRole('group', { name: 'Reasoning' })[0]
+    ).toHaveAttribute('aria-busy', 'true');
+    expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
   describe('parseMarkdown', () => {
     test('parses user message text as markdown by default', () => {
       const { container } = render(

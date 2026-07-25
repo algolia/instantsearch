@@ -2,6 +2,7 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
+import { isReasoningPartActive } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -286,16 +287,9 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         }
 
         const isReasoningStreaming =
-          part.state === 'streaming' &&
           status === 'streaming' &&
           isCurrentMessage &&
-          !message.parts
-            .slice(index + 1)
-            .some(
-              (laterPart) =>
-                laterPart.type !== 'reasoning' ||
-                laterPart.state === 'streaming'
-            );
+          isReasoningPartActive(message.parts, index);
 
         if (!isReasoningStreaming && part.text.trim().length === 0) {
           return null;

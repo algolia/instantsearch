@@ -1049,6 +1049,39 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         response
       );
     };
+    const insertPart = (index: number, part: any): void => {
+      const parts = [...currentMessage!.parts];
+      parts.splice(index, 0, part);
+
+      reusablePartIndexes.forEach((partIndex, reusableIndex) => {
+        if (partIndex >= index) {
+          reusablePartIndexes[reusableIndex] = partIndex + 1;
+        }
+      });
+      streamPartIndexById.forEach((partIndex, partKey) => {
+        if (partIndex >= index) {
+          streamPartIndexById.set(partKey, partIndex + 1);
+        }
+      });
+      replayByPartKey.forEach((replay) => {
+        if (replay.originalPartIndex >= index) {
+          replay.originalPartIndex++;
+        }
+        if (
+          replay.replayPartIndex !== undefined &&
+          replay.replayPartIndex >= index
+        ) {
+          replay.replayPartIndex++;
+        }
+      });
+
+      currentMessage = { ...currentMessage!, parts } as TUIMessage;
+      currentMessage = this.replaceMessage(
+        currentMessageIndex,
+        currentMessage,
+        response
+      );
+    };
     const updateReplayPart = (
       partKey: string,
       state: 'streaming' | 'done'
@@ -1089,14 +1122,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       // Divergent content cannot safely replace a persisted part without a
       // durable stream id. Preserve it and render the new replay separately.
       if (replay.replayPartIndex === undefined) {
-        replay.replayPartIndex = currentMessage.parts.length;
+        const replayPartIndex =
+          reusablePartIndexes[0] ?? currentMessage.parts.length;
+        insertPart(replayPartIndex, {
+          type: replay.type,
+          text: replay.replayedText,
+          state,
+          providerMetadata: replay.providerMetadata,
+        });
+        replay.replayPartIndex = replayPartIndex;
+      } else {
+        setPart(replay.replayPartIndex, {
+          type: replay.type,
+          text: replay.replayedText,
+          state,
+          providerMetadata: replay.providerMetadata,
+        });
       }
-      setPart(replay.replayPartIndex, {
-        type: replay.type,
-        text: replay.replayedText,
-        state,
-        providerMetadata: replay.providerMetadata,
-      });
       streamPartIndexById.set(partKey, replay.replayPartIndex);
     };
     const completeReplays = (): void => {
@@ -1243,6 +1285,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             this.responseByMessage.set(currentMessage, response);
           }
 
+          if (
+            currentMessage &&
+            terminalContentMessageIds.has(currentMessage.id) &&
+            chunk.type !== 'message-metadata' &&
+            chunk.type !== 'error' &&
+            chunk.type !== 'abort' &&
+            chunk.type !== 'finish'
+          ) {
+            return;
+          }
+
           switch (chunk.type) {
             case 'start': {
               invalidateStreamParts();
@@ -1256,9 +1309,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 lastMessage.role === 'assistant' &&
                 lastMessage.id === currentMessageId
               ) {
-                if (lastMessage.parts.some((part) => 'toolCallId' in part)) {
-                  this.acceptsIdentifierOnlyToolResults = false;
-                }
                 currentMessage = {
                   ...lastMessage,
                   parts: [...lastMessage.parts],
@@ -1273,6 +1323,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   currentMessage.parts.forEach((part, index) => {
                     reusablePartIndexes.push(index);
                     if ('toolCallId' in part) {
+                      const dispatchOwners = Array.from(
+                        this.responsesByToolCallId.get(part.toolCallId) ?? []
+                      ).filter(
+                        (owner) =>
+                          owner !== response &&
+                          owner.messageId === currentMessage!.id &&
+                          owner.requiredToolCallIds.has(part.toolCallId)
+                      );
                       if (
                         'rawInput' in part &&
                         typeof part.rawInput === 'string'
@@ -1294,7 +1352,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                       if (
                         part.state === 'input-available' &&
                         (!('providerExecuted' in part) ||
-                          !part.providerExecuted)
+                          !part.providerExecuted) &&
+                        dispatchOwners.length === 1
                       ) {
                         replayedDispatchedToolCallIds.add(part.toolCallId);
                       }
@@ -1628,8 +1687,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                       forwardedResponses
                     );
                   });
-                  owners.add(response);
-                  this.responsesByToolCallId.set(chunk.toolCallId, owners);
                   break;
                 }
                 if (existingOwners.length > 0) {

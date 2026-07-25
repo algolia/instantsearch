@@ -5,6 +5,7 @@ import {
   findTool,
   getTextContent,
   hasTextContent,
+  isReasoningPartActive,
   isPartText,
   isPartTool,
 } from '../../lib/utils/chat';
@@ -486,11 +487,16 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    const hasActiveReasoning =
+      lastMessage?.parts.some((_, index) =>
+        isReasoningPartActive(lastMessage.parts, index)
+      ) ?? false;
     const showLoader = getShowLoader(
       status,
       lastPart,
       tools,
-      assistantMessageProps?.showReasoning
+      assistantMessageProps?.showReasoning,
+      hasActiveReasoning
     );
 
     const showEmpty =
@@ -615,12 +621,14 @@ const getShowLoader = (
   status: ChatStatus,
   lastPart: ChatMessageBase['parts'][number] | undefined,
   tools: ClientSideTools,
-  showReasoning: boolean | undefined
+  showReasoning: boolean | undefined,
+  hasActiveReasoning: boolean
 ): boolean => {
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
   if (!lastPart) return true;
+  if (showReasoning && hasActiveReasoning) return false;
   if (isPartText(lastPart)) return false;
   if (lastPart.type === 'reasoning' && showReasoning) {
     return lastPart.state !== 'streaming';

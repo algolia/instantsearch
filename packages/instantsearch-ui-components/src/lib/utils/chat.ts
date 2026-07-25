@@ -34,6 +34,24 @@ export const isPartTool = (
   return startsWith(part.type, 'tool-');
 };
 
+export function isReasoningPartActive(
+  parts: ChatMessageBase['parts'],
+  index: number
+): boolean {
+  const part = parts[index];
+
+  return (
+    part?.type === 'reasoning' &&
+    part.state === 'streaming' &&
+    !parts
+      .slice(index + 1)
+      .some(
+        (laterPart) =>
+          laterPart.type !== 'reasoning' || laterPart.state === 'streaming'
+      )
+  );
+}
+
 export const findTool = (
   partType: string,
   tools: ClientSideTools

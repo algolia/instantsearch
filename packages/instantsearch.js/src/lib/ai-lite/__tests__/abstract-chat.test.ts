@@ -11,6 +11,7 @@ import { parseJsonEventStream } from '../stream-parser';
 import { DefaultChatTransport } from '../transport';
 
 import type {
+  ChatOnDataCallback,
   ChatOnErrorCallback,
   ChatOnFinishCallback,
   ChatState,
@@ -111,6 +112,7 @@ function createTestSetup(
     streamFactory,
     sendMessagesFactory,
     onToolCall,
+    onData,
     onFinish,
     onError,
     sendAutomaticallyWhen,
@@ -128,6 +130,7 @@ function createTestSetup(
       options: { toolCall: any },
       addToolResult?: TestChat['addToolResult']
     ) => void | Promise<void>;
+    onData?: ChatOnDataCallback<UIMessage>;
     onFinish?: ChatOnFinishCallback<UIMessage>;
     onError?: ChatOnErrorCallback;
     sendAutomaticallyWhen?: (options: {
@@ -167,6 +170,7 @@ function createTestSetup(
       return () => `gen-${++i}`;
     })(),
     onError,
+    onData,
     onFinish,
     onToolCall,
     sendAutomaticallyWhen,
@@ -1639,6 +1643,73 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
+    it.each<{
+      name: string;
+      trailingChunk: UIMessageChunk;
+    }>([
+      {
+        name: 'data',
+        trailingChunk: {
+          type: 'data-custom',
+          data: { unsafe: true },
+        } as UIMessageChunk,
+      },
+      {
+        name: 'source',
+        trailingChunk: {
+          type: 'source-url',
+          sourceId: 'source-1',
+          url: 'https://example.test/unsafe',
+          title: 'Unsafe source',
+        },
+      },
+      {
+        name: 'tool',
+        trailingChunk: {
+          type: 'tool-input-available',
+          toolName: 'search',
+          toolCallId: 'call-1',
+          input: { query: 'unsafe' },
+        },
+      },
+    ])(
+      'ignores trailing $name content after a guardrail violation',
+      async ({ trailingChunk }) => {
+        const fallbackResponse = 'This response was blocked.';
+        const onData = jest.fn();
+        const onToolCall = jest.fn();
+        const { chat, state } = createTestSetup({
+          chunks: [
+            startChunk(),
+            {
+              type: 'data-guardrail-violation',
+              data: {
+                category: 'blocked',
+                guardrailType: 'output',
+                fallbackResponse,
+              },
+            },
+            trailingChunk,
+            finishChunk(),
+          ],
+          onData,
+          onToolCall,
+        });
+
+        await chat.sendMessage({ text: 'blocked request' });
+
+        expect(messageById(state, 'msg-1').parts).toEqual([
+          {
+            type: 'text',
+            text: fallbackResponse,
+            state: 'done',
+          },
+        ]);
+        expect(onData).not.toHaveBeenCalled();
+        expect(onToolCall).not.toHaveBeenCalled();
+      }
+    );
+
     it('creates a fallback assistant message when violation arrives before an assistant message starts', async () => {
       const onFinish = jest.fn();
       const onError = jest.fn();
@@ -1856,6 +1927,88 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       });
     });
 
+    it('keeps divergent reasoning before replayed tools and text', async () => {
+      const { chat, state } = createFullReplaySetup(
+        [
+          {
+            type: 'reasoning',
+            text: 'Use the saved plan.',
+            state: 'done',
+          },
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'output-available',
+            input: { query: 'headphones' },
+            output: { hits: [] },
+            providerExecuted: true,
+          },
+          {
+            type: 'text',
+            text: 'Here are the results.',
+            state: 'done',
+          },
+        ],
+        [
+          { type: 'reasoning-start', id: 'reasoning-1' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-1',
+            delta: 'Use a different plan.',
+          },
+          { type: 'reasoning-end', id: 'reasoning-1' },
+          {
+            type: 'tool-input-start',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            providerExecuted: true,
+          },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'headphones' },
+            providerExecuted: true,
+          },
+          {
+            type: 'tool-output-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            output: { hits: [] },
+          },
+          { type: 'text-start', id: 'text-1' },
+          {
+            type: 'text-delta',
+            id: 'text-1',
+            delta: 'Here are the results.',
+          },
+          { type: 'text-end', id: 'text-1' },
+          finishChunk(),
+        ]
+      );
+
+      await chat.resumeStream();
+
+      expect(messageById(state, 'msg-1').parts).toEqual([
+        expect.objectContaining({
+          type: 'reasoning',
+          text: 'Use the saved plan.',
+        }),
+        expect.objectContaining({
+          type: 'reasoning',
+          text: 'Use a different plan.',
+        }),
+        expect.objectContaining({
+          type: 'tool-search',
+          toolCallId: 'call-1',
+        }),
+        expect.objectContaining({
+          type: 'text',
+          text: 'Here are the results.',
+        }),
+      ]);
+    });
+
     it('does not repeat a tool callback during a same-instance full replay', async () => {
       const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
       state.snapshot = <T>(value: T): T => value;
@@ -1922,7 +2075,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
       const releaseToolResult = deferred<void>();
       let sendIndex = 0;
-      let submitToolResult!: (options: any) => Promise<void>;
       const replayedToolChunks: UIMessageChunk[] = [
         startChunk(),
         {
@@ -1968,15 +2120,7 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
           ])
         );
       });
-      const onToolCall = jest.fn(
-        (
-          _options: { toolCall: any },
-          addToolResult?: (options: any) => Promise<void>
-        ) => {
-          submitToolResult = addToolResult!;
-          return releaseToolResult.promise;
-        }
-      );
+      const onToolCall = jest.fn(() => releaseToolResult.promise);
       const chat = new TestChat({
         id: 'test-chat',
         state,
@@ -2003,7 +2147,7 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
 
       await chat.sendMessage({ text: 'Find headphones' });
       await chat.resumeStream();
-      await submitToolResult({
+      await chat.addToolResult({
         tool: 'search',
         toolCallId: 'call-1',
         output: { hits: [] },
@@ -2019,7 +2163,99 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       });
     });
 
-    it('does not repeat a tool callback restored at input-available', async () => {
+    it('does not transfer replay ownership across messages sharing a tool call id', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const onError = jest.fn();
+      let submitOldResult!: TestChat['addToolResult'];
+      const onToolCall = jest.fn(
+        (
+          _options: { toolCall: any },
+          addToolResult?: TestChat['addToolResult']
+        ) => {
+          submitOldResult = addToolResult!;
+        }
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onError,
+        onToolCall,
+        sendAutomaticallyWhen: () => false,
+        transport: {
+          sendMessages: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([
+                startChunk('assistant-old'),
+                {
+                  type: 'tool-input-available',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                  input: { owner: 'old' },
+                },
+                finishChunk(),
+              ])
+            )
+          ) as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([
+                startChunk('assistant-new'),
+                {
+                  type: 'tool-input-start',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                },
+                {
+                  type: 'tool-input-available',
+                  toolName: 'search',
+                  toolCallId: 'call-1',
+                  input: { owner: 'new' },
+                },
+                finishChunk(),
+              ])
+            )
+          ) as any,
+        },
+      });
+
+      await chat.sendMessage({ text: 'first request' });
+      chat.messages = [
+        ...chat.messages,
+        {
+          id: 'assistant-new',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { owner: 'new' },
+            },
+          ],
+        },
+      ];
+
+      await chat.resumeStream();
+      await submitOldResult({
+        tool: 'search',
+        toolCallId: 'call-1',
+        output: { owner: 'old' },
+      });
+
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(chat.status).toBe('error');
+      expect(messageById(state, 'assistant-old').parts[0]).toMatchObject({
+        state: 'output-available',
+        output: { owner: 'old' },
+      });
+      expect(messageById(state, 'assistant-new').parts[0]).toMatchObject({
+        state: 'input-available',
+        input: { owner: 'new' },
+      });
+    });
+
+    it('executes a restored input-available tool when no callback owner exists', async () => {
       const state = new RuntimeChatState<UIMessage>(
         'test-chat',
         [
@@ -2038,13 +2274,32 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         ],
         false
       );
-      const onToolCall = jest.fn();
-      const chat = new TestChat({
+      const sendMessages = jest.fn(() =>
+        Promise.resolve(chunksToStream([startChunk('msg-2'), finishChunk()]))
+      );
+      let chat!: TestChat;
+      const onToolCall = jest.fn(({ toolCall }: { toolCall: any }) =>
+        chat.addToolResult({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: { hits: [] },
+        })
+      );
+      chat = new TestChat({
         id: 'test-chat',
         state,
         onToolCall,
+        sendAutomaticallyWhen: ({ messages }) =>
+          messages.some((message) =>
+            message.parts.some(
+              (part) =>
+                'toolCallId' in part &&
+                part.toolCallId === 'call-1' &&
+                part.state === 'output-available'
+            )
+          ),
         transport: {
-          sendMessages: jest.fn() as any,
+          sendMessages: sendMessages as any,
           reconnectToStream: jest.fn(() =>
             Promise.resolve(
               chunksToStream([
@@ -2069,10 +2324,12 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
 
       await chat.resumeStream();
 
-      expect(onToolCall).not.toHaveBeenCalled();
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(sendMessages).toHaveBeenCalledTimes(1);
       expect(assistantToolPart(state, 'call-1')).toMatchObject({
-        state: 'input-available',
+        state: 'output-available',
         input: { query: 'headphones' },
+        output: { hits: [] },
       });
     });
 
