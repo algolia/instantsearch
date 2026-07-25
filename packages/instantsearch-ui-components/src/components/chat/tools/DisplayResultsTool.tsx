@@ -81,7 +81,7 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, messages, sendEvent } = toolProps;
+    const { message, messages, sendEvent, status } = toolProps;
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
@@ -112,7 +112,11 @@ export function createDisplayResultsToolComponent<
     const groups = Array.isArray(payload?.groups)
       ? payload.groups.filter(isObject)
       : [];
-    const isStreaming = message?.state === 'input-streaming';
+    const latestMessage = messages?.[messages.length - 1];
+    const isStreaming =
+      status === 'streaming' &&
+      message?.state === 'input-streaming' &&
+      latestMessage?.parts.some((part) => part === message) === true;
 
     const renderableGroups = groups.reduce<
       Array<{

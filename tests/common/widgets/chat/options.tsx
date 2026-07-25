@@ -1968,7 +1968,7 @@ export function createOptionsTests(
           });
         });
 
-        test('shows the streaming caption while tool input is streaming', async () => {
+        test('shows the streaming caption only for the active response', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -1981,7 +1981,7 @@ export function createOptionsTests(
                 { state: 'input-streaming', output: undefined }
               ),
             ],
-            id: 'chat-id',
+            agentId: 'chat-id',
           });
 
           await setup({
@@ -1999,8 +1999,55 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
+
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
             document.querySelector('.ais-ChatToolDisplayResults-streaming')
           ).toBeInTheDocument();
+
+          await act(async () => {
+            await chat.stop();
+            await wait(0);
+          });
+
+          expect(chat.status).toBe('ready');
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
+
+          const restoredChat = new Chat({ agentId: 'chat-id' });
+          expect(restoredChat.messages[0].parts[1]).toEqual(
+            expect.objectContaining({ state: 'input-streaming' })
+          );
+
+          await act(async () => {
+            chat._state.messages = [
+              ...chat.messages,
+              {
+                id: '2',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Next answer' }],
+              },
+            ];
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
         });
 
         test('renders nothing when input has no intro and no groups', async () => {

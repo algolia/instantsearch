@@ -87,6 +87,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         message={message}
         messages={messages}
+        status="streaming"
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -130,6 +131,7 @@ describe('createDisplayResultsTool', () => {
             name: `Product ${objectID}`,
           }))
         ),
+        status: 'streaming' as const,
         applyFilters: jest.fn(),
         onClose: jest.fn(),
         indexUiState: {},
@@ -600,17 +602,18 @@ describe('createDisplayResultsTool', () => {
   test('shows the streaming caption before a renderable input field arrives', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
+    const message = {
+      type: 'tool-algolia_display_results',
+      state: 'input-streaming',
+      toolCallId: 'display',
+      input: {},
+    } as ClientSideToolComponentProps['message'];
 
     render(
       <LayoutComponent
-        message={
-          {
-            type: 'tool-algolia_display_results',
-            state: 'input-streaming',
-            toolCallId: 'display',
-            input: {},
-          } as ClientSideToolComponentProps['message']
-        }
+        message={message}
+        messages={createMessages(message, [])}
+        status="streaming"
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
