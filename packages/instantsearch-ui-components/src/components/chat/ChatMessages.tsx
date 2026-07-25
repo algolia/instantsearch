@@ -622,7 +622,9 @@ const getShowLoader = (
 
   if (!lastPart) return true;
   if (isPartText(lastPart)) return false;
-  if (lastPart.type === 'reasoning' && showReasoning) return false;
+  if (lastPart.type === 'reasoning' && showReasoning) {
+    return lastPart.state !== 'streaming' && !lastPart.text.trim();
+  }
 
   if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
     const tool = findTool(lastPart.type, tools);

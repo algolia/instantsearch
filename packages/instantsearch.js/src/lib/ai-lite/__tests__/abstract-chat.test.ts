@@ -945,6 +945,37 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       ]);
     });
 
+    it('waits for split replay deltas to identify the matching reasoning block', async () => {
+      const { chat, state } = createResumeSetup(
+        [
+          { type: 'reasoning', text: 'Search', state: 'done' },
+          {
+            type: 'reasoning',
+            text: 'Search catalog',
+            state: 'streaming',
+          },
+        ],
+        [
+          { type: 'reasoning-start', id: 'reasoning-b' },
+          { type: 'reasoning-delta', id: 'reasoning-b', delta: 'Search' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-b',
+            delta: ' catalog completed',
+          },
+          { type: 'reasoning-end', id: 'reasoning-b' },
+          finishChunk(),
+        ]
+      );
+
+      await chat.resumeStream();
+
+      expect(getReasoningText(state)).toEqual([
+        'Search',
+        'Search catalog completed',
+      ]);
+    });
+
     it.each(['close', 'error', 'stop'] as const)(
       'does not restore a cleared message when a pending replay ends with %s',
       async (termination) => {
@@ -1102,6 +1133,123 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         state: 'done',
       });
     });
+
+    it.each([
+      {
+        suffixId: 'reasoning-1',
+        expectedText: 'Already and completed',
+        description: 'continues the matching reasoning block',
+        replaceTranscript: false,
+      },
+      {
+        suffixId: 'reasoning-2',
+        expectedText: 'Already',
+        description: 'ignores a suffix owned by another reasoning block',
+        replaceTranscript: false,
+      },
+      {
+        suffixId: 'reasoning-1',
+        expectedText: 'Already',
+        description: 'ignores retired ownership after replacing the transcript',
+        replaceTranscript: true,
+      },
+    ])(
+      '$description when the same chat resumes after a disconnect',
+      async ({ suffixId, expectedText, replaceTranscript }) => {
+        const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+        const reasoningStarted = deferred<void>();
+        let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+
+        state['~registerMessagesCallback'](() => {
+          const reasoningPart = messageById(state, 'msg-1')?.parts.find(
+            (part) => part.type === 'reasoning'
+          );
+          if (
+            reasoningPart?.type === 'reasoning' &&
+            reasoningPart.text === 'Already'
+          ) {
+            reasoningStarted.resolve();
+          }
+        });
+
+        const chat = new TestChat({
+          id: 'test-chat',
+          state,
+          onError: jest.fn(),
+          transport: {
+            sendMessages: jest.fn(() =>
+              Promise.resolve(
+                new ReadableStream<UIMessageChunk>({
+                  start(controller) {
+                    streamController = controller;
+                    controller.enqueue(startChunk());
+                    controller.enqueue({
+                      type: 'reasoning-start',
+                      id: 'reasoning-1',
+                    });
+                    controller.enqueue({
+                      type: 'reasoning-delta',
+                      id: 'reasoning-1',
+                      delta: 'Already',
+                    });
+                  },
+                })
+              )
+            ) as any,
+            reconnectToStream: jest.fn(() =>
+              Promise.resolve(
+                chunksToStream([
+                  startChunk(),
+                  {
+                    type: 'reasoning-delta',
+                    id: suffixId,
+                    delta: ' and completed',
+                  },
+                  { type: 'reasoning-end', id: suffixId },
+                  finishChunk(),
+                ])
+              )
+            ) as any,
+          },
+        });
+
+        const send = chat.sendMessage({ text: 'Find a product' });
+        await reasoningStarted.promise;
+        streamController.error(new Error('disconnected'));
+        await send;
+
+        expect(chat.status).toBe('error');
+        expect(getReasoningText(state)).toEqual(['Already']);
+
+        if (replaceTranscript) {
+          chat.messages = chat.messages.map((message) =>
+            message.id === 'msg-1'
+              ? {
+                  id: 'msg-1',
+                  role: 'assistant',
+                  parts: [
+                    {
+                      type: 'reasoning',
+                      text: 'Already',
+                      state: 'done',
+                    },
+                    {
+                      type: 'text',
+                      text: 'Replacement answer',
+                      state: 'done',
+                    },
+                  ],
+                }
+              : message
+          );
+        }
+
+        await chat.resumeStream();
+
+        expect(chat.status).toBe('ready');
+        expect(getReasoningText(state)).toEqual([expectedText]);
+      }
+    );
 
     it('completes unfinished reasoning when the stream closes', async () => {
       const onFinish = jest.fn();

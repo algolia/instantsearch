@@ -207,6 +207,38 @@ describe('ChatMessages', () => {
     expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
   });
 
+  test('shows the loader after empty reasoning finishes while the response continues', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: '',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
   describe('parseMarkdown', () => {
     test('parses user message text as markdown by default', () => {
       const { container } = render(

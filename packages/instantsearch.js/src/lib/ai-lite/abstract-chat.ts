@@ -44,6 +44,13 @@ type ResponseRecord = {
   pendingToolCallbacks: number;
   didNotifyFinish: boolean;
   didEvaluateContinuation: boolean;
+  resumableReasoningPartsByKey: Map<string, ResumableReasoningPart>;
+};
+
+type ResumableReasoningPart = {
+  messageId: string;
+  partIndex: number;
+  text: string;
 };
 
 type ToolResultSubmission<TUIMessage extends UIMessage> = <
@@ -332,6 +339,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     });
     if (this.activeResponse) {
       responses.add(this.activeResponse);
+    }
+    if (this.latestResponse) {
+      responses.add(this.latestResponse);
     }
     detachedResponses.forEach((response) => {
       responses.add(response);
@@ -675,6 +685,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     response.isRetired = true;
     response.didEvaluateContinuation = true;
+    response.resumableReasoningPartsByKey.clear();
 
     if (this.activeResponse === response) {
       this.completeReasoningParts(response);
@@ -900,6 +911,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       pendingToolCallbacks: 0,
       didNotifyFinish: false,
       didEvaluateContinuation: false,
+      resumableReasoningPartsByKey:
+        isResume && this.latestResponse?.outcome === 'failed'
+          ? new Map(this.latestResponse.resumableReasoningPartsByKey)
+          : new Map(),
     };
     this.activeResponse = response;
     this.latestResponse = response;
@@ -945,6 +960,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawOutputByCallId: Record<string, string> = {};
     const streamPartIndexById = new Map<string, number>();
     const reusableReasoningPartIndexes: number[] = [];
+    const resumableReasoningPartIndexByKey = new Map<string, number>();
     const reasoningReplayByPartKey = new Map<
       string,
       {
@@ -959,6 +975,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const invalidateStreamParts = (): void => {
       streamPartIndexById.clear();
       reusableReasoningPartIndexes.length = 0;
+      resumableReasoningPartIndexByKey.clear();
       reasoningReplayByPartKey.clear();
     };
     const findUnambiguousUnfinishedPart = (
@@ -970,9 +987,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       return partIndexes?.length === 1 ? partIndexes[0] : undefined;
     };
     const claimUnambiguousUnfinishedPart = (
-      type: 'text' | 'reasoning'
+      type: 'text' | 'reasoning',
+      partKey: string
     ): number | undefined => {
-      const partIndex = findUnambiguousUnfinishedPart(type);
+      let partIndex = findUnambiguousUnfinishedPart(type);
+      if (partIndex === undefined && type === 'reasoning') {
+        partIndex = resumableReasoningPartIndexByKey.get(partKey);
+        const part =
+          partIndex === undefined
+            ? undefined
+            : currentMessage?.parts[partIndex];
+        if (part?.type === 'reasoning' && partIndex !== undefined) {
+          setPart(partIndex, { ...part, state: 'streaming' });
+          resumableReasoningPartIndexByKey.delete(partKey);
+        } else {
+          partIndex = undefined;
+        }
+      }
       if (partIndex !== undefined) {
         reusableReasoningPartIndexes.length = 0;
       }
@@ -1004,7 +1035,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         });
     const findReusableReasoningPart = (
       partKey: string,
-      replayedText: string
+      replayedText: string,
+      allowExactPrefixMatch: boolean
     ): number | undefined => {
       const compatiblePartIndexes = getCompatibleReasoningPartIndexes(
         partKey,
@@ -1017,13 +1049,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           ? undefined
           : currentMessage?.parts[firstCandidateIndex];
       if (
-        firstCandidate?.type === 'reasoning' &&
-        firstCandidate.text === replayedText
-      ) {
-        return firstCandidateIndex;
-      }
-
-      if (
+        !allowExactPrefixMatch &&
         compatiblePartIndexes.some((partIndex) => {
           const part = currentMessage!.parts[partIndex];
           return (
@@ -1032,6 +1058,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         })
       ) {
         return undefined;
+      }
+
+      if (
+        firstCandidate?.type === 'reasoning' &&
+        firstCandidate.text === replayedText
+      ) {
+        return firstCandidateIndex;
       }
 
       const matchingPartIndexes = compatiblePartIndexes.filter((partIndex) => {
@@ -1058,6 +1091,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       return longestMatches.length === 1 ? longestMatches[0] : undefined;
     };
     const consumeReasoningPart = (partKey: string, partIndex: number): void => {
+      resumableReasoningPartIndexByKey.forEach(
+        (candidatePartIndex, candidatePartKey) => {
+          if (candidatePartIndex === partIndex) {
+            resumableReasoningPartIndexByKey.delete(candidatePartKey);
+          }
+        }
+      );
       const candidateIndex = reusableReasoningPartIndexes.indexOf(partIndex);
       if (candidateIndex !== -1) {
         reusableReasoningPartIndexes.splice(
@@ -1125,7 +1165,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
       const reusablePartIndex = findReusableReasoningPart(
         partKey,
-        reasoningReplay.replayedText
+        reasoningReplay.replayedText,
+        replayState !== 'streaming'
       );
       if (reusablePartIndex !== undefined) {
         const part = currentMessage.parts[reusablePartIndex];
@@ -1227,6 +1268,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       const error =
         reason instanceof Error ? reason : new Error(String(reason));
       response.outcome = 'failed';
+      response.resumableReasoningPartsByKey.clear();
       response.abortController.abort();
 
       if (this.activeResponse === response) {
@@ -1255,10 +1297,42 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         }
 
         completeReasoningReplays();
-        this.completeReasoningParts(response);
         isAbort ||=
           response.outcome === 'aborted' ||
           (!!error && error.name === 'AbortError');
+        const messageId = response.messageId;
+        if (messageId) {
+          if (error && !isAbort && !isError) {
+            const message = getCanonicalMessage();
+            const partIndexByKey = new Map(resumableReasoningPartIndexByKey);
+            streamPartIndexById.forEach((partIndex, partKey) => {
+              if (partKey.startsWith('reasoning:')) {
+                partIndexByKey.set(partKey, partIndex);
+              }
+            });
+            const resumableParts = Array.from(partIndexByKey).flatMap(
+              ([partKey, partIndex]) => {
+                const part = message?.parts[partIndex];
+                return part?.type === 'reasoning'
+                  ? [
+                      [
+                        partKey,
+                        {
+                          messageId,
+                          partIndex,
+                          text: part.text,
+                        },
+                      ] as const,
+                    ]
+                  : [];
+              }
+            );
+            response.resumableReasoningPartsByKey = new Map(resumableParts);
+          } else {
+            response.resumableReasoningPartsByKey.clear();
+          }
+        }
+        this.completeReasoningParts(response);
         response.outcome = isAbort ? 'aborted' : error ? 'failed' : 'succeeded';
         if (this.activeResponse === response) {
           this.activeResponse = null;
@@ -1328,6 +1402,21 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                       reusableReasoningPartIndexes.push(index);
                     }
                   });
+                  response.resumableReasoningPartsByKey.forEach(
+                    ({ messageId, partIndex, text }, partKey) => {
+                      const part = currentMessage!.parts[partIndex];
+                      if (
+                        messageId === currentMessageId &&
+                        part?.type === 'reasoning' &&
+                        part.text === text
+                      ) {
+                        resumableReasoningPartIndexByKey.set(
+                          partKey,
+                          partIndex
+                        );
+                      }
+                    }
+                  );
                 }
               } else {
                 currentMessage = {
@@ -1399,7 +1488,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               let partIndex = streamPartIndexById.get(partKey);
               if (partIndex === undefined && response.isResume) {
-                partIndex = claimUnambiguousUnfinishedPart(type);
+                partIndex = claimUnambiguousUnfinishedPart(type, partKey);
                 if (partIndex !== undefined) {
                   streamPartIndexById.set(partKey, partIndex);
                 }
@@ -1443,7 +1532,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               let partIndex = streamPartIndexById.get(partKey);
               if (partIndex === undefined && response.isResume) {
-                partIndex = claimUnambiguousUnfinishedPart(type);
+                partIndex = claimUnambiguousUnfinishedPart(type, partKey);
                 if (partIndex !== undefined) {
                   streamPartIndexById.set(partKey, partIndex);
                 }
