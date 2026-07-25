@@ -4,6 +4,7 @@
 /** @jsx createElement */
 import { render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
+import { useMemo } from 'preact/hooks';
 
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
@@ -14,6 +15,11 @@ const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo: (factory) => factory(),
+});
+const MemoizedChatMessages = createChatMessagesComponent({
+  createElement,
+  Fragment,
+  useMemo,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 
@@ -306,6 +312,69 @@ describe('ChatMessages', () => {
       screen.getAllByRole('group', { name: 'Reasoning' })[0]
     ).toHaveAttribute('aria-busy', 'true');
     expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
+  test('updates nested reasoning labels for every completed message', () => {
+    const firstMessage = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const secondMessage = {
+      role: 'assistant' as const,
+      id: '2',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Comparing the results.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const { rerender } = render(
+      <MemoizedChatMessages
+        messages={[firstMessage, secondMessage]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        assistantMessageProps={{
+          showReasoning: true,
+          translations: { reasoningLabel: 'Reasoning' },
+        }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(screen.getAllByRole('group', { name: 'Reasoning' })).toHaveLength(2);
+
+    rerender(
+      <MemoizedChatMessages
+        messages={[firstMessage, { ...secondMessage }]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        assistantMessageProps={{
+          showReasoning: true,
+          translations: { reasoningLabel: 'Raisonnement' },
+        }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getAllByRole('group', { name: 'Raisonnement' })
+    ).toHaveLength(2);
   });
 
   describe('parseMarkdown', () => {

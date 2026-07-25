@@ -114,7 +114,7 @@ describe('ChatState', () => {
     );
   });
 
-  it('should not save messages to sessionStorage when status is not ready', () => {
+  it('should save committed messages when status changes to error', () => {
     const agentId = 'agentID3';
     const chatState = new ChatState<any>(agentId);
     const message = { role: 'user', content: 'Hello' };
@@ -125,7 +125,9 @@ describe('ChatState', () => {
     chatState.status = 'streaming';
     expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
     chatState.status = 'error';
-    expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
+    expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(
+      JSON.stringify([message])
+    );
   });
 
   it('should not save messages to sessionStorage when persistence is disabled', () => {

@@ -400,7 +400,9 @@ export function createChatMessagesComponent({
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
     const showReasoning = props.assistantMessageProps?.showReasoning;
-    const reasoningLabel = props.messageTranslations?.reasoningLabel;
+    const reasoningLabel =
+      props.assistantMessageProps?.translations?.reasoningLabel ??
+      props.messageTranslations?.reasoningLabel;
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       [

@@ -41,6 +41,7 @@ type ResponseRecord = {
   requiredToolCallIds: Set<string>;
   resolvedToolCallIds: Set<string>;
   returnedToolCallbacks: Array<Promise<void>>;
+  returnedToolCallbacksByCallId: Map<string, Promise<void>>;
   pendingToolCallbacks: number;
   forwardToolOutcomeTo: Map<string, ResponseRecord>;
   pendingToolCallFailures: Map<string, unknown>;
@@ -642,6 +643,94 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return true;
   }
 
+  private transferReplayToolOwnership(
+    response: ResponseRecord,
+    message: TUIMessage,
+    toolCallId: string
+  ): {
+    didNotifyFinish: boolean;
+    pendingFailures: unknown[];
+  } {
+    const dispatchOwners = Array.from(
+      this.responsesByToolCallId.get(toolCallId) ?? []
+    ).filter(
+      (owner) =>
+        owner !== response &&
+        !owner.isRetired &&
+        owner.messageId === message.id &&
+        owner.requiredToolCallIds.has(toolCallId)
+    );
+    if (dispatchOwners.length !== 1) {
+      return { didNotifyFinish: false, pendingFailures: [] };
+    }
+
+    const ownerChain = getToolOutcomeOwnerChain(
+      dispatchOwners[0],
+      toolCallId
+    ).filter(
+      (owner) =>
+        owner !== response &&
+        !owner.isRetired &&
+        owner.messageId === message.id &&
+        owner.requiredToolCallIds.has(toolCallId)
+    );
+    response.requiredToolCallIds.add(toolCallId);
+    if (
+      ownerChain.some((owner) => owner.resolvedToolCallIds.has(toolCallId))
+    ) {
+      response.resolvedToolCallIds.add(toolCallId);
+    }
+
+    const returnedToolCallback = ownerChain
+      .map((owner) => owner.returnedToolCallbacksByCallId.get(toolCallId))
+      .find((callback) => callback !== undefined);
+    if (
+      returnedToolCallback &&
+      !response.returnedToolCallbacksByCallId.has(toolCallId)
+    ) {
+      response.returnedToolCallbacksByCallId.set(
+        toolCallId,
+        returnedToolCallback
+      );
+      response.returnedToolCallbacks.push(returnedToolCallback);
+    }
+
+    const pendingFailures: unknown[] = [];
+    ownerChain.forEach((owner) => {
+      owner.forwardToolOutcomeTo.set(toolCallId, response);
+      owner.didEvaluateContinuation = true;
+      if (owner.pendingToolCallFailures.has(toolCallId)) {
+        pendingFailures.push(owner.pendingToolCallFailures.get(toolCallId));
+        owner.pendingToolCallFailures.delete(toolCallId);
+      }
+    });
+
+    return {
+      didNotifyFinish: ownerChain.some((owner) => owner.didNotifyFinish),
+      pendingFailures,
+    };
+  }
+
+  private waitForToolCallbacks(response: ResponseRecord): Promise<void> {
+    if (
+      response.returnedToolCallbacks.length === 0 ||
+      response.abortController.signal.aborted
+    ) {
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      const finish = () => {
+        response.abortController.signal.removeEventListener('abort', finish);
+        resolve();
+      };
+      response.abortController.signal.addEventListener('abort', finish, {
+        once: true,
+      });
+      Promise.all(response.returnedToolCallbacks).then(finish);
+    });
+  }
+
   private continueResponse(response?: ResponseRecord): Promise<void> {
     if (response) {
       this.pruneDetachedResponse(response);
@@ -746,8 +835,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     if (response?.isRetired) return Promise.resolve();
 
     const commitResult = (): Promise<void> => {
+      const resultOwners = response
+        ? getToolOutcomeOwnerChain(response, toolCallId)
+        : [];
+      const canonicalResponse =
+        resultOwners[resultOwners.length - 1] ?? response;
       if (
-        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+        !this.commit(
+          toolCallId,
+          output,
+          messageId,
+          canonicalResponse,
+          expectedMessage
+        )
       ) {
         return Promise.resolve();
       }
@@ -755,18 +855,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       if (!response) {
         return this.continueResponse();
       }
-      const forwardedResponse = response.forwardToolOutcomeTo.get(toolCallId);
-      const resultOwners = forwardedResponse
-        ? [response, forwardedResponse]
-        : [response];
       resultOwners.forEach((owner) => {
         if (owner.requiredToolCallIds.has(toolCallId)) {
           owner.resolvedToolCallIds.add(toolCallId);
         }
       });
-      return Promise.all(
-        resultOwners.map((owner) => this.continueResponse(owner))
-      ).then(() => undefined);
+      return this.continueResponse(canonicalResponse);
     };
 
     if (
@@ -914,6 +1008,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     ) => Promise<ReadableStream<InferUIMessageChunk<TUIMessage>> | null>,
     { isResume = false }: { isResume?: boolean } = {}
   ): Promise<void> {
+    const resumeTargetMessage =
+      isResume && this.lastMessage?.role === 'assistant'
+        ? this.lastMessage
+        : undefined;
     if (this.activeResponse) {
       this.completeReasoningParts(this.activeResponse);
       this.activeResponse.outcome = 'aborted';
@@ -921,12 +1019,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
     const response: ResponseRecord = {
       abortController: new AbortController(),
+      messageId: resumeTargetMessage?.id,
       outcome: 'active',
       isResume,
       isRetired: false,
       requiredToolCallIds: new Set(),
       resolvedToolCallIds: new Set(),
       returnedToolCallbacks: [],
+      returnedToolCallbacksByCallId: new Map(),
       pendingToolCallbacks: 0,
       forwardToolOutcomeTo: new Map(),
       pendingToolCallFailures: new Map(),
@@ -941,9 +1041,63 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       (stream) => {
         if (this.activeResponse === response) {
           if (stream) return this.processStream(stream, response);
-          response.outcome = 'succeeded';
-          this.activeResponse = null;
-          this.setStatus({ status: 'ready' });
+          response.failToolCall = (reason) => {
+            if (
+              response.isRetired ||
+              response.outcome === 'aborted' ||
+              response.outcome === 'failed'
+            ) {
+              return;
+            }
+            response.outcome = 'failed';
+            response.abortController.abort();
+            if (this.activeResponse === response) {
+              this.activeResponse = null;
+            }
+            this.handleError(
+              reason instanceof Error ? reason : new Error(String(reason)),
+              { updateState: this.latestResponse === response }
+            );
+          };
+
+          if (resumeTargetMessage) {
+            const currentMessage = this.messages.find(
+              (message) => message.id === resumeTargetMessage.id
+            );
+            if (currentMessage) {
+              this.responseByMessage.set(currentMessage, response);
+              currentMessage.parts.forEach((part) => {
+                if (
+                  'toolCallId' in part &&
+                  (!('providerExecuted' in part) || !part.providerExecuted)
+                ) {
+                  const transfer = this.transferReplayToolOwnership(
+                    response,
+                    currentMessage,
+                    part.toolCallId
+                  );
+                  response.didNotifyFinish ||= transfer.didNotifyFinish;
+                  transfer.pendingFailures.forEach((reason) => {
+                    response.failToolCall?.(reason, part.toolCallId);
+                  });
+                }
+              });
+            }
+          }
+
+          return this.waitForToolCallbacks(response).then(() => {
+            if (
+              this.activeResponse !== response ||
+              response.isRetired ||
+              response.outcome !== 'active'
+            ) {
+              return undefined;
+            }
+            response.outcome = 'succeeded';
+            this.activeResponse = null;
+            this.setStatus({ status: 'ready' });
+            return this.continueResponse(response);
+          });
         }
         return undefined;
       },
@@ -1338,11 +1492,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           switch (chunk.type) {
             case 'start': {
               invalidateStreamParts();
-              currentMessageId = chunk.messageId || this.generateId();
+              const lastMessage = this.lastMessage;
+              currentMessageId =
+                chunk.messageId ?? response.messageId ?? this.generateId();
               response.messageId = currentMessageId;
 
               // Check if we're continuing an existing message or creating a new one
-              const lastMessage = this.lastMessage;
               if (
                 lastMessage &&
                 lastMessage.role === 'assistant' &&
@@ -1359,22 +1514,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   response
                 );
                 if (response.isResume) {
+                  const replayMessage = currentMessage;
                   const pendingToolFailures: Array<{
                     reason: unknown;
                     toolCallId: string;
                   }> = [];
-                  currentMessage.parts.forEach((part, index) => {
+                  replayMessage.parts.forEach((part, index) => {
                     reusablePartIndexes.push(index);
                     if ('toolCallId' in part) {
-                      const dispatchOwners = Array.from(
-                        this.responsesByToolCallId.get(part.toolCallId) ?? []
-                      ).filter(
-                        (owner) =>
-                          owner !== response &&
-                          !owner.isRetired &&
-                          owner.messageId === currentMessage!.id &&
-                          owner.requiredToolCallIds.has(part.toolCallId)
-                      );
                       if (
                         'rawInput' in part &&
                         typeof part.rawInput === 'string'
@@ -1395,47 +1542,18 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                       }
                       if (
                         (!('providerExecuted' in part) ||
-                          !part.providerExecuted) &&
-                        dispatchOwners.length === 1
+                          !part.providerExecuted)
                       ) {
-                        const ownerChain = getToolOutcomeOwnerChain(
-                          dispatchOwners[0],
+                        const transfer = this.transferReplayToolOwnership(
+                          response,
+                          replayMessage,
                           part.toolCallId
-                        ).filter(
-                          (owner) =>
-                            !owner.isRetired &&
-                            owner.messageId === currentMessage!.id &&
-                            owner.requiredToolCallIds.has(part.toolCallId)
                         );
-                        response.requiredToolCallIds.add(part.toolCallId);
-                        if (
-                          ownerChain.some((owner) =>
-                            owner.resolvedToolCallIds.has(part.toolCallId)
-                          )
-                        ) {
-                          response.resolvedToolCallIds.add(part.toolCallId);
-                        }
-                        ownerChain.forEach((owner) => {
-                          owner.forwardToolOutcomeTo.set(
-                            part.toolCallId,
-                            response
-                          );
-                          owner.didEvaluateContinuation = true;
-                          if (
-                            owner.pendingToolCallFailures.has(part.toolCallId)
-                          ) {
-                            const pendingFailure =
-                              owner.pendingToolCallFailures.get(
-                                part.toolCallId
-                              );
-                            owner.pendingToolCallFailures.delete(
-                              part.toolCallId
-                            );
-                            pendingToolFailures.push({
-                              reason: pendingFailure,
-                              toolCallId: part.toolCallId,
-                            });
-                          }
+                        transfer.pendingFailures.forEach((reason) => {
+                          pendingToolFailures.push({
+                            reason,
+                            toolCallId: part.toolCallId,
+                          });
                         });
                       }
                     }
@@ -1795,14 +1913,17 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         : this.submitToolResult(response, options)
                   );
                   if (result) {
-                    response.returnedToolCallbacks.push(
-                      Promise.resolve(result)
-                        .catch((error) => failToolCall(error, chunk.toolCallId))
-                        .then(() => {
-                          response.pendingToolCallbacks--;
-                          this.pruneDetachedResponse(response);
-                        })
+                    const returnedToolCallback = Promise.resolve(result)
+                      .catch((error) => failToolCall(error, chunk.toolCallId))
+                      .then(() => {
+                        response.pendingToolCallbacks--;
+                        this.pruneDetachedResponse(response);
+                      });
+                    response.returnedToolCallbacksByCallId.set(
+                      chunk.toolCallId,
+                      returnedToolCallback
                     );
+                    response.returnedToolCallbacks.push(returnedToolCallback);
                   } else {
                     response.pendingToolCallbacks--;
                     this.pruneDetachedResponse(response);
@@ -2181,7 +2302,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             }
           }
         },
-        () => Promise.all(response.returnedToolCallbacks).then(() => finish()),
+        () => this.waitForToolCallbacks(response).then(() => finish()),
         (error) => finish(error)
       );
     });

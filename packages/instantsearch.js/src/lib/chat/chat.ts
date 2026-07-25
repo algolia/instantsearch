@@ -61,7 +61,7 @@ export class ChatState<TUiMessage extends UIMessage>
     }
 
     const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready') {
+      if (this.status === 'ready' || this.status === 'error') {
         try {
           sessionStorage.setItem(
             CACHE_KEY + (id ? `-${id}` : ''),
