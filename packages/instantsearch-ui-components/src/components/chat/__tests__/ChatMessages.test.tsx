@@ -239,6 +239,38 @@ describe('ChatMessages', () => {
     expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
   });
 
+  test('shows the loader after visible reasoning finishes while the response continues', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getByRole('group', { name: 'Reasoning' })
+    ).toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
   describe('parseMarkdown', () => {
     test('parses user message text as markdown by default', () => {
       const { container } = render(
@@ -314,9 +346,7 @@ describe('ChatMessages', () => {
 
       const messages = container.querySelectorAll('.ais-ChatMessage-message');
       // User message: plain text, no emphasis.
-      expect(
-        messages[0].querySelector('.ais-ChatMessage-text')
-      ).not.toBeNull();
+      expect(messages[0].querySelector('.ais-ChatMessage-text')).not.toBeNull();
       expect(messages[0].querySelector('em')).toBeNull();
       // Assistant message: still parsed as markdown.
       expect(messages[1].querySelector('em')).not.toBeNull();
@@ -346,7 +376,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -364,7 +396,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -386,7 +420,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -436,7 +472,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });

@@ -351,6 +351,13 @@ export interface ChatTransport<TUIMessage extends UIMessage> {
     messageId?: string;
   }) => Promise<ReadableStream<unknown>>;
 
+  /**
+   * Reconnects to an interrupted response.
+   *
+   * The returned stream must replay the full buffered assistant response in
+   * its original part order. Stream chunk boundaries may differ between
+   * connections.
+   */
   reconnectToStream: (options: {
     chatId: string;
   }) => Promise<ReadableStream<unknown> | null>;

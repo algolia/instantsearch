@@ -623,7 +623,7 @@ const getShowLoader = (
   if (!lastPart) return true;
   if (isPartText(lastPart)) return false;
   if (lastPart.type === 'reasoning' && showReasoning) {
-    return lastPart.state !== 'streaming' && !lastPart.text.trim();
+    return lastPart.state !== 'streaming';
   }
 
   if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {

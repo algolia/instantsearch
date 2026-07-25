@@ -429,6 +429,13 @@ export interface ChatTransport<UI_MESSAGE extends UIMessage> {
     } & ChatRequestOptions
   ) => Promise<ReadableStream<InferUIMessageChunk<UI_MESSAGE>>>;
 
+  /**
+   * Reconnects to an interrupted response.
+   *
+   * The returned stream must replay the full buffered assistant response in
+   * its original part order. Stream chunk boundaries may differ between
+   * connections.
+   */
   reconnectToStream: (
     options: {
       chatId: string;

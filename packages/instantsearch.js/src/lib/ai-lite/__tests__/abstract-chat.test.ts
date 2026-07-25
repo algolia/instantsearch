@@ -528,6 +528,321 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       ]);
     });
 
+    it('reuses a disconnected reasoning block when full replay coalesces its text', async () => {
+      const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
+      const reasoningStarted = deferred<void>();
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+
+      state['~registerMessagesCallback'](() => {
+        const reasoningPart = messageById(state, 'msg-1')?.parts.find(
+          (part) => part.type === 'reasoning'
+        );
+        if (
+          reasoningPart?.type === 'reasoning' &&
+          reasoningPart.text === 'Already'
+        ) {
+          reasoningStarted.resolve();
+        }
+      });
+
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        onError: jest.fn(),
+        transport: {
+          sendMessages: jest.fn(() =>
+            Promise.resolve(
+              new ReadableStream<UIMessageChunk>({
+                start(controller) {
+                  streamController = controller;
+                  controller.enqueue(startChunk());
+                  controller.enqueue({
+                    type: 'reasoning-start',
+                    id: 'reasoning-1',
+                  });
+                  controller.enqueue({
+                    type: 'reasoning-delta',
+                    id: 'reasoning-1',
+                    delta: 'Already',
+                  });
+                },
+              })
+            )
+          ) as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([
+                startChunk(),
+                { type: 'reasoning-start', id: 'reasoning-1' },
+                {
+                  type: 'reasoning-delta',
+                  id: 'reasoning-1',
+                  delta: 'Already and completed',
+                },
+                { type: 'reasoning-end', id: 'reasoning-1' },
+                finishChunk(),
+              ])
+            )
+          ) as any,
+        },
+      });
+
+      const send = chat.sendMessage({ text: 'Find a product' });
+      await reasoningStarted.promise;
+      streamController.error(new Error('disconnected'));
+      await send;
+      await chat.resumeStream();
+
+      expect(getReasoningText(state)).toEqual(['Already and completed']);
+    });
+
+    it('marks reused reasoning active while a full replay catches up', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Already',
+                state: 'done',
+              },
+            ],
+          },
+        ],
+        false
+      );
+      let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
+      const replayStarted = deferred<void>();
+      const replayCaughtUp = deferred<void>();
+      state['~registerMessagesCallback'](() => {
+        const metadata = messageById(state, 'msg-1').metadata as
+          | { replayPhase?: 'started' | 'caught-up' }
+          | undefined;
+        if (metadata?.replayPhase === 'started') {
+          replayStarted.resolve();
+        }
+        if (metadata?.replayPhase === 'caught-up') {
+          replayCaughtUp.resolve();
+        }
+      });
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: jest.fn() as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              new ReadableStream<UIMessageChunk>({
+                start(controller) {
+                  streamController = controller;
+                  controller.enqueue(startChunk());
+                  controller.enqueue({
+                    type: 'reasoning-start',
+                    id: 'reasoning-1',
+                  });
+                  controller.enqueue({
+                    type: 'message-metadata',
+                    messageMetadata: { replayPhase: 'started' },
+                  });
+                },
+              })
+            )
+          ) as any,
+        },
+      });
+
+      const resume = chat.resumeStream();
+      await replayStarted.promise;
+
+      expect(messageById(state, 'msg-1').parts[0]).toEqual({
+        type: 'reasoning',
+        text: 'Already',
+        state: 'streaming',
+      });
+
+      streamController.enqueue({
+        type: 'reasoning-delta',
+        id: 'reasoning-1',
+        delta: 'Already',
+      });
+      streamController.enqueue({
+        type: 'message-metadata',
+        messageMetadata: { replayPhase: 'caught-up' },
+      });
+      await replayCaughtUp.promise;
+
+      expect(messageById(state, 'msg-1').parts[0]).toEqual({
+        type: 'reasoning',
+        text: 'Already',
+        state: 'streaming',
+        providerMetadata: undefined,
+      });
+
+      streamController.close();
+      await resume;
+
+      expect(messageById(state, 'msg-1').parts[0]).toEqual({
+        type: 'reasoning',
+        text: 'Already',
+        state: 'done',
+        providerMetadata: undefined,
+      });
+    });
+
+    it('reuses text and reasoning blocks from a full replay in order', async () => {
+      const state = new RuntimeChatState<UIMessage>(
+        'test-chat',
+        [
+          {
+            id: 'msg-1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Search the catalog',
+                state: 'done',
+              },
+              {
+                type: 'text',
+                text: 'A partial answer',
+                state: 'streaming',
+              },
+            ],
+          },
+        ],
+        false
+      );
+      const chat = new TestChat({
+        id: 'test-chat',
+        state,
+        transport: {
+          sendMessages: jest.fn() as any,
+          reconnectToStream: jest.fn(() =>
+            Promise.resolve(
+              chunksToStream([
+                startChunk(),
+                { type: 'reasoning-start', id: 'reasoning-1' },
+                {
+                  type: 'reasoning-delta',
+                  id: 'reasoning-1',
+                  delta: 'Search the catalog',
+                },
+                { type: 'reasoning-end', id: 'reasoning-1' },
+                { type: 'text-start', id: 'text-1' },
+                {
+                  type: 'text-delta',
+                  id: 'text-1',
+                  delta: 'A partial answer completed',
+                },
+                { type: 'text-end', id: 'text-1' },
+                finishChunk(),
+              ])
+            )
+          ) as any,
+        },
+      });
+
+      await chat.resumeStream();
+
+      expect(messageById(state, 'msg-1').parts).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Search the catalog',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+        {
+          type: 'text',
+          text: 'A partial answer completed',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
+    it('preserves identical reasoning around a tool during full replay', async () => {
+      const { chat, state } = createResumeSetup(
+        [
+          {
+            type: 'reasoning',
+            text: 'Search the catalog',
+            state: 'done',
+          },
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'output-available',
+            input: { query: 'headphones' },
+            output: { hits: [] },
+            providerExecuted: true,
+          },
+          {
+            type: 'reasoning',
+            text: 'Search the catalog',
+            state: 'streaming',
+          },
+        ],
+        [
+          { type: 'reasoning-start', id: 'reasoning-before-tool' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-before-tool',
+            delta: 'Search the catalog',
+          },
+          { type: 'reasoning-end', id: 'reasoning-before-tool' },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'headphones' },
+            providerExecuted: true,
+          },
+          {
+            type: 'tool-output-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            output: { hits: [] },
+          },
+          { type: 'reasoning-start', id: 'reasoning-after-tool' },
+          {
+            type: 'reasoning-delta',
+            id: 'reasoning-after-tool',
+            delta: 'Search the catalog',
+          },
+          { type: 'reasoning-end', id: 'reasoning-after-tool' },
+          finishChunk(),
+        ]
+      );
+
+      await chat.resumeStream();
+
+      expect(messageById(state, 'msg-1').parts).toEqual([
+        {
+          type: 'reasoning',
+          text: 'Search the catalog',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+        {
+          type: 'tool-search',
+          toolCallId: 'call-1',
+          state: 'output-available',
+          input: { query: 'headphones' },
+          output: { hits: [] },
+          providerExecuted: true,
+        },
+        {
+          type: 'reasoning',
+          text: 'Search the catalog',
+          state: 'done',
+          providerMetadata: undefined,
+        },
+      ]);
+    });
+
     it('keeps saved reasoning when a replay diverges before catching up', async () => {
       const { chat, state } = createResumeSetup(
         [
@@ -797,91 +1112,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       ]);
     });
 
-    it.each([
-      {
-        firstBlock: 'First completed block',
-        secondBlock: 'Second partial block',
-        replayedBlock: 'Second partial block completed',
-      },
-      {
-        firstBlock: 'Same',
-        secondBlock: 'Same partial',
-        replayedBlock: 'Same partial completed',
-      },
-    ])(
-      'reuses the matching later reasoning block when replay resumes from it',
-      async ({ firstBlock, secondBlock, replayedBlock }) => {
-        const { chat, state } = createResumeSetup(
-          [
-            {
-              type: 'reasoning',
-              text: firstBlock,
-              state: 'done',
-            },
-            {
-              type: 'reasoning',
-              text: secondBlock,
-              state: 'streaming',
-            },
-          ],
-          [
-            { type: 'reasoning-start', id: 'reasoning-2' },
-            {
-              type: 'reasoning-delta',
-              id: 'reasoning-2',
-              delta: replayedBlock,
-            },
-            { type: 'reasoning-end', id: 'reasoning-2' },
-            finishChunk(),
-          ]
-        );
-
-        await chat.resumeStream();
-
-        expect(getReasoningText(state)).toEqual([firstBlock, replayedBlock]);
-      }
-    );
-
-    it.each([
-      {
-        savedBlock: 'Search the catalog',
-        resumedBlock: 'Search',
-        expectedBlocks: ['Search the catalog', 'Search'],
-      },
-      {
-        savedBlock: 'Search',
-        resumedBlock: 'Search more',
-        expectedBlocks: ['Search', 'Search more'],
-      },
-    ])(
-      'preserves saved reasoning for an ambiguous replay prefix',
-      async ({ savedBlock, resumedBlock, expectedBlocks }) => {
-        const { chat, state } = createResumeSetup(
-          [
-            {
-              type: 'reasoning',
-              text: savedBlock,
-              state: 'done',
-            },
-          ],
-          [
-            { type: 'reasoning-start', id: 'reasoning-2' },
-            {
-              type: 'reasoning-delta',
-              id: 'reasoning-2',
-              delta: resumedBlock,
-            },
-            { type: 'reasoning-end', id: 'reasoning-2' },
-            finishChunk(),
-          ]
-        );
-
-        await chat.resumeStream();
-
-        expect(getReasoningText(state)).toEqual(expectedBlocks);
-      }
-    );
-
     it('keeps overlapping resumed reasoning associated with its stream id', async () => {
       const { chat, state } = createResumeSetup(
         [
@@ -931,37 +1161,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
             type: 'reasoning-delta',
             id: 'reasoning-b',
             delta: 'Search catalog completed',
-          },
-          { type: 'reasoning-end', id: 'reasoning-b' },
-          finishChunk(),
-        ]
-      );
-
-      await chat.resumeStream();
-
-      expect(getReasoningText(state)).toEqual([
-        'Search',
-        'Search catalog completed',
-      ]);
-    });
-
-    it('waits for split replay deltas to identify the matching reasoning block', async () => {
-      const { chat, state } = createResumeSetup(
-        [
-          { type: 'reasoning', text: 'Search', state: 'done' },
-          {
-            type: 'reasoning',
-            text: 'Search catalog',
-            state: 'streaming',
-          },
-        ],
-        [
-          { type: 'reasoning-start', id: 'reasoning-b' },
-          { type: 'reasoning-delta', id: 'reasoning-b', delta: 'Search' },
-          {
-            type: 'reasoning-delta',
-            id: 'reasoning-b',
-            delta: ' catalog completed',
           },
           { type: 'reasoning-end', id: 'reasoning-b' },
           finishChunk(),
@@ -1133,123 +1332,6 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         state: 'done',
       });
     });
-
-    it.each([
-      {
-        suffixId: 'reasoning-1',
-        expectedText: 'Already and completed',
-        description: 'continues the matching reasoning block',
-        replaceTranscript: false,
-      },
-      {
-        suffixId: 'reasoning-2',
-        expectedText: 'Already',
-        description: 'ignores a suffix owned by another reasoning block',
-        replaceTranscript: false,
-      },
-      {
-        suffixId: 'reasoning-1',
-        expectedText: 'Already',
-        description: 'ignores retired ownership after replacing the transcript',
-        replaceTranscript: true,
-      },
-    ])(
-      '$description when the same chat resumes after a disconnect',
-      async ({ suffixId, expectedText, replaceTranscript }) => {
-        const state = new RuntimeChatState<UIMessage>('test-chat', [], false);
-        const reasoningStarted = deferred<void>();
-        let streamController!: ReadableStreamDefaultController<UIMessageChunk>;
-
-        state['~registerMessagesCallback'](() => {
-          const reasoningPart = messageById(state, 'msg-1')?.parts.find(
-            (part) => part.type === 'reasoning'
-          );
-          if (
-            reasoningPart?.type === 'reasoning' &&
-            reasoningPart.text === 'Already'
-          ) {
-            reasoningStarted.resolve();
-          }
-        });
-
-        const chat = new TestChat({
-          id: 'test-chat',
-          state,
-          onError: jest.fn(),
-          transport: {
-            sendMessages: jest.fn(() =>
-              Promise.resolve(
-                new ReadableStream<UIMessageChunk>({
-                  start(controller) {
-                    streamController = controller;
-                    controller.enqueue(startChunk());
-                    controller.enqueue({
-                      type: 'reasoning-start',
-                      id: 'reasoning-1',
-                    });
-                    controller.enqueue({
-                      type: 'reasoning-delta',
-                      id: 'reasoning-1',
-                      delta: 'Already',
-                    });
-                  },
-                })
-              )
-            ) as any,
-            reconnectToStream: jest.fn(() =>
-              Promise.resolve(
-                chunksToStream([
-                  startChunk(),
-                  {
-                    type: 'reasoning-delta',
-                    id: suffixId,
-                    delta: ' and completed',
-                  },
-                  { type: 'reasoning-end', id: suffixId },
-                  finishChunk(),
-                ])
-              )
-            ) as any,
-          },
-        });
-
-        const send = chat.sendMessage({ text: 'Find a product' });
-        await reasoningStarted.promise;
-        streamController.error(new Error('disconnected'));
-        await send;
-
-        expect(chat.status).toBe('error');
-        expect(getReasoningText(state)).toEqual(['Already']);
-
-        if (replaceTranscript) {
-          chat.messages = chat.messages.map((message) =>
-            message.id === 'msg-1'
-              ? {
-                  id: 'msg-1',
-                  role: 'assistant',
-                  parts: [
-                    {
-                      type: 'reasoning',
-                      text: 'Already',
-                      state: 'done',
-                    },
-                    {
-                      type: 'text',
-                      text: 'Replacement answer',
-                      state: 'done',
-                    },
-                  ],
-                }
-              : message
-          );
-        }
-
-        await chat.resumeStream();
-
-        expect(chat.status).toBe('ready');
-        expect(getReasoningText(state)).toEqual([expectedText]);
-      }
-    );
 
     it('completes unfinished reasoning when the stream closes', async () => {
       const onFinish = jest.fn();

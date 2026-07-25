@@ -237,7 +237,7 @@ describe('ChatMessage', () => {
   });
 
   test('makes overflowing reasoning keyboard reachable', () => {
-    const { getByRole } = render(
+    const { getByRole, queryByRole } = render(
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
@@ -266,8 +266,9 @@ describe('ChatMessage', () => {
     const summary = disclosure.querySelector('summary')!;
     userEvent.click(summary);
 
-    const body = getByRole('region', { name: 'Reasoning' });
+    const body = disclosure.querySelector('.ais-ChatMessageReasoning-body')!;
     expect(body).toHaveAttribute('tabindex', '0');
+    expect(queryByRole('region', { hidden: true })).not.toBeInTheDocument();
 
     summary.focus();
     userEvent.tab();
@@ -347,7 +348,7 @@ describe('ChatMessage', () => {
   });
 
   test('keeps reasoning disclosures in message part order', () => {
-    const { container, getAllByRole, getByText } = render(
+    const { container, getAllByRole, getByText, queryAllByRole } = render(
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
@@ -389,6 +390,7 @@ describe('ChatMessage', () => {
     expect(children[1]).toContainElement(getByText('Tool result'));
     expect(children[2]).toBe(disclosures[1]);
     expect(children[3]).toContainElement(getByText('Final answer'));
+    expect(queryAllByRole('region')).toHaveLength(0);
   });
 
   test('marks only the streaming reasoning disclosure as busy', () => {
