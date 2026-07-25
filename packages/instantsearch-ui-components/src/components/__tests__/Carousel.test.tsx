@@ -14,6 +14,8 @@ import type { CarouselProps } from '../Carousel';
 const Carousel = createCarouselComponent({
   createElement: createElement as Pragma,
   Fragment,
+  useEffect,
+  useRef,
 });
 
 function CarouselWithRefs(

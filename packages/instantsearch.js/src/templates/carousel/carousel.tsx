@@ -7,7 +7,7 @@ import {
   generateCarouselId,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type {
   CarouselProps as CarouselUiProps,
@@ -17,6 +17,8 @@ import type {
 const Carousel = createCarouselComponent({
   createElement: h,
   Fragment,
+  useEffect,
+  useRef,
 });
 
 function CarouselWithRefs<TObject extends Record<string, unknown>>(
