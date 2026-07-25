@@ -43,9 +43,27 @@ type ResponseRecord = {
   returnedToolCallbacks: Array<Promise<void>>;
   pendingToolCallbacks: number;
   forwardToolOutcomeTo: Map<string, ResponseRecord>;
+  pendingToolCallFailures: Map<string, unknown>;
   failToolCall?: (reason: unknown, toolCallId?: string) => void;
   didNotifyFinish: boolean;
   didEvaluateContinuation: boolean;
+};
+
+const getToolOutcomeOwnerChain = (
+  response: ResponseRecord,
+  toolCallId: string
+): ResponseRecord[] => {
+  const owners: ResponseRecord[] = [];
+  const visited = new Set<ResponseRecord>();
+  let owner: ResponseRecord | undefined = response;
+
+  while (owner && !visited.has(owner)) {
+    owners.push(owner);
+    visited.add(owner);
+    owner = owner.forwardToolOutcomeTo.get(toolCallId);
+  }
+
+  return owners;
 };
 
 type ToolResultSubmission<TUIMessage extends UIMessage> = <
@@ -911,6 +929,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       returnedToolCallbacks: [],
       pendingToolCallbacks: 0,
       forwardToolOutcomeTo: new Map(),
+      pendingToolCallFailures: new Map(),
       didNotifyFinish: false,
       didEvaluateContinuation: false,
     };
@@ -958,7 +977,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const toolRawOutputByCallId: Record<string, string> = {};
     const replayedToolOriginalRawInputByCallId = new Map<string, string>();
     const replayedToolOriginalRawOutputByCallId = new Map<string, string>();
-    const replayedDispatchedToolCallIds = new Set<string>();
     const streamPartIndexById = new Map<string, number>();
     // A resumed stream replays buffered content in order. The persisted parts
     // do not all retain stream ids, so reuse the saved part sequence while the
@@ -984,7 +1002,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       replayByPartKey.clear();
       replayedToolOriginalRawInputByCallId.clear();
       replayedToolOriginalRawOutputByCallId.clear();
-      replayedDispatchedToolCallIds.clear();
     };
     const consumeReusablePartsThrough = (partIndex: number): void => {
       const reusableIndex = reusablePartIndexes.indexOf(partIndex);
@@ -1209,11 +1226,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       }
     };
     const failToolCall = (reason: unknown, toolCallId?: string): void => {
-      if (response.outcome === 'failed' || response.outcome === 'aborted') {
+      if (response.isRetired) return;
+
+      if (response.outcome === 'aborted') return;
+
+      if (response.outcome === 'failed') {
         const forwardedResponse = toolCallId
           ? response.forwardToolOutcomeTo.get(toolCallId)
           : undefined;
-        forwardedResponse?.failToolCall?.(reason, toolCallId);
+        if (forwardedResponse) {
+          forwardedResponse.failToolCall?.(reason, toolCallId);
+        } else if (
+          toolCallId &&
+          response.requiredToolCallIds.has(toolCallId) &&
+          !response.resolvedToolCallIds.has(toolCallId)
+        ) {
+          response.pendingToolCallFailures.set(toolCallId, reason);
+        }
         return;
       }
       completeReplays();
@@ -1330,6 +1359,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                   response
                 );
                 if (response.isResume) {
+                  const pendingToolFailures: Array<{
+                    reason: unknown;
+                    toolCallId: string;
+                  }> = [];
                   currentMessage.parts.forEach((part, index) => {
                     reusablePartIndexes.push(index);
                     if ('toolCallId' in part) {
@@ -1338,6 +1371,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                       ).filter(
                         (owner) =>
                           owner !== response &&
+                          !owner.isRetired &&
                           owner.messageId === currentMessage!.id &&
                           owner.requiredToolCallIds.has(part.toolCallId)
                       );
@@ -1360,14 +1394,54 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         );
                       }
                       if (
-                        part.state === 'input-available' &&
                         (!('providerExecuted' in part) ||
                           !part.providerExecuted) &&
                         dispatchOwners.length === 1
                       ) {
-                        replayedDispatchedToolCallIds.add(part.toolCallId);
+                        const ownerChain = getToolOutcomeOwnerChain(
+                          dispatchOwners[0],
+                          part.toolCallId
+                        ).filter(
+                          (owner) =>
+                            !owner.isRetired &&
+                            owner.messageId === currentMessage!.id &&
+                            owner.requiredToolCallIds.has(part.toolCallId)
+                        );
+                        response.requiredToolCallIds.add(part.toolCallId);
+                        if (
+                          ownerChain.some((owner) =>
+                            owner.resolvedToolCallIds.has(part.toolCallId)
+                          )
+                        ) {
+                          response.resolvedToolCallIds.add(part.toolCallId);
+                        }
+                        ownerChain.forEach((owner) => {
+                          owner.forwardToolOutcomeTo.set(
+                            part.toolCallId,
+                            response
+                          );
+                          owner.didEvaluateContinuation = true;
+                          if (
+                            owner.pendingToolCallFailures.has(part.toolCallId)
+                          ) {
+                            const pendingFailure =
+                              owner.pendingToolCallFailures.get(
+                                part.toolCallId
+                              );
+                            owner.pendingToolCallFailures.delete(
+                              part.toolCallId
+                            );
+                            pendingToolFailures.push({
+                              reason: pendingFailure,
+                              toolCallId: part.toolCallId,
+                            });
+                          }
+                        });
                       }
                     }
+                  });
+                  pendingToolFailures.forEach(({ reason, toolCallId }) => {
+                    failToolCall(reason, toolCallId);
                   });
                 }
               } else {
@@ -1624,8 +1698,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
             case 'tool-input-available': {
               if (!currentMessage) break;
 
-              if (response.requiredToolCallIds.has(chunk.toolCallId)) break;
-
               delete toolRawInputByCallId[chunk.toolCallId];
               replayedToolOriginalRawInputByCallId.delete(chunk.toolCallId);
 
@@ -1656,6 +1728,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
               setPart(existingIndex, toolPart);
 
+              if (response.requiredToolCallIds.has(chunk.toolCallId)) break;
+
               if (
                 this.messages.some(
                   (message) =>
@@ -1679,20 +1753,6 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 const existingOwners = Array.from(owners).filter(
                   (owner) => owner !== response
                 );
-                if (
-                  response.isResume &&
-                  replayedDispatchedToolCallIds.has(chunk.toolCallId)
-                ) {
-                  response.requiredToolCallIds.add(chunk.toolCallId);
-                  existingOwners.forEach((owner) => {
-                    if (!owner.requiredToolCallIds.has(chunk.toolCallId)) {
-                      return;
-                    }
-                    owner.forwardToolOutcomeTo.set(chunk.toolCallId, response);
-                    owner.didEvaluateContinuation = true;
-                  });
-                  break;
-                }
                 if (existingOwners.length > 0) {
                   this.acceptsIdentifierOnlyToolResults = false;
                   const conflictingOwner = existingOwners.find(
