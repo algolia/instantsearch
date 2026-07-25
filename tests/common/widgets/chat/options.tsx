@@ -2146,14 +2146,17 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('allows overriding the display results tool via the tools option', async () => {
+        test('streams input with a layout-only display results override', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage({
-                groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
-              }),
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
             ],
             id: 'chat-id',
           });
@@ -2193,6 +2196,64 @@ export function createOptionsTests(
           expect(document.querySelector('#custom-display')!.textContent).toBe(
             'custom display'
           );
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+        });
+
+        test('allows a display results override to disable input streaming', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    streamInput: false,
+                    templates: {
+                      layout: '<div id="custom-display">custom display</div>',
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    streamInput: false,
+                    layoutComponent: () => (
+                      <div id="custom-display">custom display</div>
+                    ),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(document.querySelector('.ais-Chat')).toBeInTheDocument();
+          expect(
+            document.querySelector('#custom-display')
+          ).not.toBeInTheDocument();
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();

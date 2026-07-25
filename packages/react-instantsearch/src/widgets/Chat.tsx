@@ -75,6 +75,34 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   };
 }
 
+function mergeToolOptions<TTool extends { streamInput?: boolean }>(
+  defaultTools: Record<string, TTool>,
+  userTools?: Record<string, TTool>
+): Record<string, TTool> {
+  if (!userTools) {
+    return defaultTools;
+  }
+
+  const tools = { ...defaultTools, ...userTools };
+
+  Object.keys(userTools).forEach((toolName) => {
+    const userTool = userTools[toolName];
+    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+
+    if (
+      userTool.streamInput === undefined &&
+      defaultStreamInput !== undefined
+    ) {
+      tools[toolName] = {
+        ...userTool,
+        streamInput: defaultStreamInput,
+      };
+    }
+  });
+
+  return tools;
+}
+
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 type UiProps = Pick<
@@ -227,7 +255,7 @@ function ChatInner<
   const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
-    return { ...defaults, ...userTools };
+    return mergeToolOptions(defaults, userTools);
   }, [getSearchPageURL, itemComponent, userTools]);
 
   // Inline layouts are always visible, so they don't require a `<ChatTrigger />`
