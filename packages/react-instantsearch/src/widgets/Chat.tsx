@@ -75,7 +75,12 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   };
 }
 
-function mergeToolOptions<TTool extends { streamInput?: boolean }>(
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    layoutComponent?: unknown;
+  }
+>(
   defaultTools: Record<string, TTool>,
   userTools?: Record<string, TTool>
 ): Record<string, TTool> {
@@ -90,6 +95,7 @@ function mergeToolOptions<TTool extends { streamInput?: boolean }>(
     const defaultStreamInput = defaultTools[toolName]?.streamInput;
 
     if (
+      userTool.layoutComponent !== undefined &&
       userTool.streamInput === undefined &&
       defaultStreamInput !== undefined
     ) {

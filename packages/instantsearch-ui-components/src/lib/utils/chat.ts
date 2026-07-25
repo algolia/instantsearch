@@ -149,27 +149,27 @@ const collectHitsFromPart = (
  * relies on this map to hydrate each result with the full record that the
  * preceding search tool already fetched.
  *
- * Pass `untilToolCallId` (the display tool's own `toolCallId`) to scope
- * collection to the call that produced it: hits are only gathered before the
- * matching tool part. This prevents later searches from overwriting an earlier
- * display tool's records and per-query metadata like `__queryID`.
+ * Pass the display tool's own message part to scope collection to that exact
+ * occurrence. This prevents reused tool call IDs and later searches from
+ * changing another display tool's records or per-query metadata like
+ * `__queryID`.
  */
 export const getHitsByObjectID = (
   messages: ChatMessageBase[],
-  untilToolCallId?: string
+  untilToolPart?: ChatToolMessage
 ): Record<string, RecordWithObjectID> => {
   const hitsByObjectID = Object.create(null) as Record<
     string,
     RecordWithObjectID
   >;
 
-  messages.some((message) =>
+  const reachedBoundary = messages.some((message) =>
     message.parts.some((part) => {
       if (!isPartTool(part)) {
         return false;
       }
 
-      if (untilToolCallId && part.toolCallId === untilToolCallId) {
+      if (untilToolPart && part === untilToolPart) {
         return true;
       }
 
@@ -180,6 +180,10 @@ export const getHitsByObjectID = (
       return false;
     })
   );
+
+  if (untilToolPart && !reachedBoundary) {
+    return Object.create(null) as Record<string, RecordWithObjectID>;
+  }
 
   return hitsByObjectID;
 };

@@ -17,7 +17,10 @@ import type {
   ClientSideToolTemplateData,
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
-import type { RecordWithObjectID } from 'instantsearch-ui-components';
+import type {
+  CarouselProps,
+  RecordWithObjectID,
+} from 'instantsearch-ui-components';
 
 export function createDisplayResultsTool<
   THit extends RecordWithObjectID = RecordWithObjectID
@@ -32,6 +35,17 @@ export function createDisplayResultsTool<
 
   const Button = createButtonComponent({ createElement: h });
 
+  const itemComponent: NonNullable<
+    CarouselProps<RecordWithObjectID<THit>>['itemComponent']
+  > = ({ item }) => (
+    <TemplateComponent
+      templates={templates}
+      templateKey="item"
+      data={item}
+      rootTagName="fragment"
+    />
+  );
+
   function DisplayResultsLayoutComponent(
     toolProps: ClientSideToolTemplateData
   ) {
@@ -39,7 +53,7 @@ export function createDisplayResultsTool<
       <DisplayResultsUIComponent
         toolProps={toolProps}
         groupCarouselComponent={({ items, sendEvent }) =>
-          carousel({
+          carousel<RecordWithObjectID<THit>>({
             showNavigation: false,
             templates: {
               header: ({
@@ -80,14 +94,7 @@ export function createDisplayResultsTool<
           })({
             items,
             templates: {
-              item: ({ item }) => (
-                <TemplateComponent
-                  templates={templates}
-                  templateKey="item"
-                  data={item}
-                  rootTagName="fragment"
-                />
-              ),
+              item: itemComponent,
             },
             sendEvent,
           })

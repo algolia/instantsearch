@@ -2201,6 +2201,60 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
+        test('shows the loader for a callback-only display results override', async () => {
+          const searchClient = createSearchClient();
+          const chat = new Chat({});
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    templates: {},
+                    onToolCall: jest.fn(),
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    onToolCall: jest.fn(),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.messages = [
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ];
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).toBeInTheDocument();
+        });
+
         test('allows a display results override to disable input streaming', async () => {
           const searchClient = createSearchClient();
 
@@ -2250,6 +2304,11 @@ export function createOptionsTests(
 
           await openChat(act);
 
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
           expect(document.querySelector('.ais-Chat')).toBeInTheDocument();
           expect(
             document.querySelector('#custom-display')
@@ -2257,6 +2316,9 @@ export function createOptionsTests(
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).toBeInTheDocument();
         });
       });
     });

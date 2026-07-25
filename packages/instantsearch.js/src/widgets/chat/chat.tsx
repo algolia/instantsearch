@@ -80,7 +80,12 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
-function mergeToolOptions<TTool extends { streamInput?: boolean }>(
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    templates?: { layout?: unknown };
+  }
+>(
   defaultTools: Record<string, TTool>,
   userTools?: Record<string, TTool>
 ): Record<string, TTool> {
@@ -95,6 +100,7 @@ function mergeToolOptions<TTool extends { streamInput?: boolean }>(
     const defaultStreamInput = defaultTools[toolName]?.streamInput;
 
     if (
+      userTool.templates?.layout !== undefined &&
       userTool.streamInput === undefined &&
       defaultStreamInput !== undefined
     ) {

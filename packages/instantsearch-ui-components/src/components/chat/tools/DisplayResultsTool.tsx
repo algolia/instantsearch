@@ -88,10 +88,9 @@ export function createDisplayResultsToolComponent<
       ...userTranslations,
     };
 
-    const toolCallId = message?.toolCallId;
     const hitsByObjectID = useMemo(
-      () => (messages ? getHitsByObjectID(messages, toolCallId) : undefined),
-      [messages, toolCallId]
+      () => (messages ? getHitsByObjectID(messages, message) : undefined),
+      [messages, message]
     );
 
     const inputClaimsPayload = claimsDisplayResultsPayload(message?.input);

@@ -1,6 +1,6 @@
 import { getFacetFiltersFromToolInput, getHitsByObjectID } from '../chat';
 
-import type { ChatMessageBase } from '../../../components';
+import type { ChatMessageBase, ChatToolMessage } from '../../../components';
 
 describe('getFacetFiltersFromToolInput', () => {
   test('returns undefined when input is undefined', () => {
@@ -206,7 +206,7 @@ describe('getHitsByObjectID', () => {
     });
   });
 
-  test('scopes collection to the turn containing `untilToolCallId`, ignoring later searches', () => {
+  test('scopes collection to the owning tool part, ignoring later searches', () => {
     const messages: ChatMessageBase[] = [
       {
         id: '1',
@@ -248,7 +248,9 @@ describe('getHitsByObjectID', () => {
     ] as ChatMessageBase[];
 
     // Scoped to the first turn: the later search (with `q2`) must not leak in.
-    expect(getHitsByObjectID(messages, 'display-1')).toEqual({
+    expect(
+      getHitsByObjectID(messages, messages[0].parts[1] as ChatToolMessage)
+    ).toEqual({
       1: { objectID: '1', name: 'Runner', __queryID: 'q1' },
     });
 
@@ -258,7 +260,7 @@ describe('getHitsByObjectID', () => {
     });
   });
 
-  test('includes the search in the same message as `untilToolCallId`', () => {
+  test('includes the search before the boundary in the same message', () => {
     const messages: ChatMessageBase[] = [
       {
         id: '1',
@@ -282,12 +284,14 @@ describe('getHitsByObjectID', () => {
       },
     ] as ChatMessageBase[];
 
-    expect(getHitsByObjectID(messages, 'display')).toEqual({
+    expect(
+      getHitsByObjectID(messages, messages[0].parts[1] as ChatToolMessage)
+    ).toEqual({
       1: { objectID: '1', name: 'Runner' },
     });
   });
 
-  test('ignores searches after `untilToolCallId` in the same message', () => {
+  test('ignores searches after the boundary in the same message', () => {
     const messages: ChatMessageBase[] = [
       {
         id: '1',
@@ -318,9 +322,38 @@ describe('getHitsByObjectID', () => {
       },
     ] as ChatMessageBase[];
 
-    expect(getHitsByObjectID(messages, 'display')).toEqual({
+    expect(
+      getHitsByObjectID(messages, messages[0].parts[1] as ChatToolMessage)
+    ).toEqual({
       1: { objectID: '1', name: 'Runner' },
     });
+  });
+
+  test('fails closed when the boundary is not in the messages', () => {
+    const boundary = {
+      type: 'tool-algolia_display_results',
+      toolCallId: 'missing-display',
+      state: 'output-available',
+      input: {},
+      output: {},
+    } as ChatToolMessage;
+    const messages = [
+      {
+        id: '1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'search',
+            state: 'output-available',
+            input: {},
+            output: { hits: [{ objectID: '1', name: 'Runner' }] },
+          },
+        ],
+      },
+    ] as ChatMessageBase[];
+
+    expect(getHitsByObjectID(messages, boundary)).toEqual({});
   });
 
   test('returns an empty map when there are no search outputs', () => {

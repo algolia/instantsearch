@@ -663,4 +663,102 @@ describe('createDisplayResultsTool', () => {
     expect(screen.getAllByTestId('why-1')[0]).toHaveTextContent('first');
     expect(screen.getAllByTestId('why-1')[1]).toHaveTextContent('second');
   });
+
+  test('hydrates reused tool call IDs within their owning messages', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+    const firstDisplayMessage: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {
+        groups: [
+          { title: 'First turn', results: [{ objectID: 'old-product' }] },
+        ],
+      },
+      output: { status: 'success' },
+    };
+    const secondDisplayMessage: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'output-available',
+      toolCallId: 'display',
+      input: {
+        groups: [
+          { title: 'Second turn', results: [{ objectID: 'new-product' }] },
+        ],
+      },
+      output: { status: 'success' },
+    };
+    const messages = [
+      {
+        id: 'first-message',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'first-search',
+            state: 'output-available',
+            input: {},
+            output: {
+              hits: [{ objectID: 'old-product', name: 'Old product' }],
+            },
+          },
+          firstDisplayMessage,
+        ],
+      },
+      {
+        id: 'second-message',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'tool-algolia_search_index',
+            toolCallId: 'second-search',
+            state: 'output-available',
+            input: {},
+            output: {
+              hits: [{ objectID: 'new-product', name: 'New product' }],
+            },
+          },
+          secondDisplayMessage,
+        ],
+      },
+    ] as ClientSideToolComponentProps['messages'];
+
+    const firstRender = render(
+      <LayoutComponent
+        message={firstDisplayMessage}
+        messages={messages}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.getByTestId('name-old-product')).toHaveTextContent(
+      'Old product'
+    );
+
+    firstRender.unmount();
+
+    render(
+      <LayoutComponent
+        message={secondDisplayMessage}
+        messages={messages}
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    expect(screen.getByTestId('name-new-product')).toHaveTextContent(
+      'New product'
+    );
+    expect(screen.queryByTestId('name-old-product')).not.toBeInTheDocument();
+  });
 });
