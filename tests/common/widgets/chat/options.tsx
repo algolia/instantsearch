@@ -2256,6 +2256,60 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
+        test('hides the loader while the default tool streams its input', async () => {
+          const searchClient = createSearchClient();
+          const chat = new Chat({});
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.messages = [
+              displayResultsMessage(
+                {
+                  intro: 'Curating',
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ];
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          // The default tool opts into input streaming, so it owns the waiting
+          // state: content and its caption are visible and the loader is not.
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-groupTitle')
+              ?.textContent
+          ).toBe('Runners');
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+            )
+          ).toHaveLength(1);
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).not.toBeInTheDocument();
+        });
+
         test('shows the loader for a callback-only display results override', async () => {
           const searchClient = createSearchClient();
           const chat = new Chat({});
