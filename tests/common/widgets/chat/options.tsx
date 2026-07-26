@@ -2033,6 +2033,15 @@ export function createOptionsTests(
           );
 
           await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).toBeInTheDocument();
+
+          await act(async () => {
             chat._state.messages = [
               ...chat.messages,
               {
@@ -2041,7 +2050,6 @@ export function createOptionsTests(
                 parts: [{ type: 'text', text: 'Next answer' }],
               },
             ];
-            chat._state.status = 'streaming';
             await wait(0);
           });
 
