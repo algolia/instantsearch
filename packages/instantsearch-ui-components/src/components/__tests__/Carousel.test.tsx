@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { render, waitFor } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 
@@ -367,5 +367,53 @@ describe('Carousel', () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+  describe('built-in navigation on item count change', () => {
+    // jsdom reports zero dimensions, so both directions need explicit widths.
+    // Without them a test only proves the measurement ran, not what it decided.
+    const setGeometry = (
+      list: Element,
+      { clientWidth, scrollWidth }: { clientWidth: number; scrollWidth: number }
+    ) =>
+      Object.defineProperties(list, {
+        clientWidth: { configurable: true, value: clientWidth },
+        scrollWidth: { configurable: true, value: scrollWidth },
+      });
+    const items = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const nextButton = (container: Element) =>
+      container.querySelector<HTMLButtonElement>(
+        '.ais-Carousel-navigation--next'
+      )!;
+
+    test('hides the next control when the items fit', async () => {
+      const { container, rerender } = render(
+        <CarouselWithRefs items={items.slice(0, 1)} sendEvent={jest.fn()} />
+      );
+      setGeometry(container.querySelector('.ais-Carousel-list')!, {
+        clientWidth: 400,
+        scrollWidth: 400,
+      });
+
+      rerender(<CarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      await waitFor(() => expect(nextButton(container)).not.toBeVisible());
+    });
+
+    test('keeps the next control when the items overflow', async () => {
+      const { container, rerender } = render(
+        <CarouselWithRefs items={items.slice(0, 1)} sendEvent={jest.fn()} />
+      );
+      setGeometry(container.querySelector('.ais-Carousel-list')!, {
+        clientWidth: 200,
+        scrollWidth: 400,
+      });
+
+      rerender(<CarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      await waitFor(() => expect(nextButton(container)).toBeVisible());
+    });
   });
 });

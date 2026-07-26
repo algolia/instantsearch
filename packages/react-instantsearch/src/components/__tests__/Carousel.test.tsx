@@ -412,4 +412,42 @@ describe('Carousel', () => {
       expect(getByRole('button', { name: 'Next results' })).toBeEnabled()
     );
   });
+
+  test('wires the navigation measurement when items arrive after mount', async () => {
+    type Item = { objectID: string; __position: number };
+    const items: Array<Item> = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const noItems: Array<Item> = [];
+    const { container, rerender } = render(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={noItems}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+      />
+    );
+
+    expect(container.querySelector('.ais-Carousel')).toBeNull();
+
+    rerender(
+      <Carousel
+        sendEvent={jest.fn()}
+        items={items}
+        itemComponent={({ item }) => <p>{item.objectID}</p>}
+      />
+    );
+
+    // Only proves the flavor state wiring reaches the shared measurement. The
+    // fitting and overflowing decisions are covered in the shared Carousel suite,
+    // which sets explicit widths.
+    await waitFor(() =>
+      expect(
+        container.querySelector<HTMLButtonElement>(
+          '.ais-Carousel-navigation--next'
+        )
+      ).not.toBeVisible()
+    );
+  });
+
 });
