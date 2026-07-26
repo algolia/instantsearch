@@ -444,6 +444,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
+      if ('chat' in options) {
+        return options.chat;
+      }
+
       let transport;
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
@@ -555,10 +559,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         throw new Error(
           withUsage('You need to provide either an `agentId` or a `transport`.')
         );
-      }
-
-      if ('chat' in options) {
-        return options.chat;
       }
 
       return new Chat({
