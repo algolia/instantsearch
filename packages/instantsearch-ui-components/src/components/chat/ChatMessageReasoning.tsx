@@ -1,0 +1,122 @@
+/** @jsx createElement */
+import { compiler } from 'markdown-to-jsx';
+
+import { cx } from '../../lib';
+
+import { BrainIcon, ChevronDownIcon } from './icons';
+
+import type { Renderer } from '../../types';
+import type { ReasoningUIPart } from './types';
+
+export type ChatMessageReasoningTranslations = {
+  /**
+   * The label for a reasoning disclosure
+   */
+  reasoningLabel: string;
+};
+
+export type ChatMessageReasoningClassNames = {
+  /**
+   * Class names to apply to a reasoning disclosure
+   */
+  reasoning: string | string[];
+  /**
+   * Class names to apply to a reasoning disclosure header
+   */
+  reasoningHeader: string | string[];
+  /**
+   * Class names to apply to a reasoning disclosure icon
+   */
+  reasoningIcon: string | string[];
+  /**
+   * Class names to apply to a reasoning disclosure label
+   */
+  reasoningLabel: string | string[];
+  /**
+   * Class names to apply to a reasoning disclosure chevron
+   */
+  reasoningChevron: string | string[];
+  /**
+   * Class names to apply to a reasoning disclosure body
+   */
+  reasoningBody: string | string[];
+  /**
+   * Class names to apply to reasoning text
+   */
+  reasoningText: string | string[];
+};
+
+type ChatMessageReasoningProps = {
+  key?: string | number;
+  /**
+   * The reasoning part to render
+   */
+  part: ReasoningUIPart;
+  /**
+   * Whether this part is the one currently being produced
+   */
+  isStreaming: boolean;
+  /**
+   * Whether to parse the reasoning text as Markdown
+   */
+  parseMarkdown?: boolean;
+  translations: ChatMessageReasoningTranslations;
+  classNames: ChatMessageReasoningClassNames;
+};
+
+export function createChatMessageReasoningComponent({
+  createElement,
+}: Pick<Renderer, 'createElement'>) {
+  return function ChatMessageReasoning(userProps: ChatMessageReasoningProps) {
+    const {
+      part,
+      isStreaming,
+      parseMarkdown = true,
+      translations,
+      classNames,
+    } = userProps;
+    const body = parseMarkdown ? (
+      compiler(part.text, {
+        createElement: createElement as any,
+        disableParsingRawHTML: true,
+      })
+    ) : (
+      // `ais-ChatMessage-text` carries the `white-space: pre-wrap` that keeps the
+      // newlines markdown would otherwise collapse, as text parts do.
+      <p className="ais-ChatMessage-text">{part.text}</p>
+    );
+
+    return (
+      <details
+        className={cx(classNames.reasoning)}
+        aria-label={translations.reasoningLabel}
+        aria-busy={isStreaming}
+      >
+        <summary className={cx(classNames.reasoningHeader)}>
+          <span className={cx(classNames.reasoningIcon)} aria-hidden="true">
+            <BrainIcon createElement={createElement} />
+          </span>
+          {/* The indicator is a sibling of the label rather than part of its
+              text, so a translated label long enough to ellipsize truncates
+              before it. The chevron's auto margin takes the free space, keeping
+              the two adjacent without a wrapper.
+              Unclassed on purpose: the stylesheet reaches it as the unclassed
+              sibling of the streaming label, so no further `ais-*` name is
+              committed to. Being decorative it takes its type from the header, so
+              `reasoningHeader` styles it with the label. */}
+          <span className={cx(classNames.reasoningLabel)}>
+            {translations.reasoningLabel}
+          </span>
+          {isStreaming ? <span aria-hidden="true">…</span> : null}
+          <span className={cx(classNames.reasoningChevron)} aria-hidden="true">
+            <ChevronDownIcon createElement={createElement} />
+          </span>
+        </summary>
+
+        <div className={cx(classNames.reasoningBody)} tabIndex={0}>
+          <div className={cx(classNames.reasoningText)}>{body}</div>
+        </div>
+      </details>
+    );
+  };
+}

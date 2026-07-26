@@ -139,6 +139,7 @@ type ChatWrapperProps = {
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
+      showReasoning: ChatMessageProps['showReasoning'];
     };
     userMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
@@ -293,6 +294,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode,
   templates,
   tools,
+  showReasoning,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -301,6 +303,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
+  showReasoning: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
@@ -645,6 +648,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
+      reasoningLabel: templates.message?.reasoningLabelText,
     });
 
     userMessageTemplateRef.current = prepareTemplateProps({
@@ -719,6 +723,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             assistantMessageProps: {
               leadingComponent: stableAssistantMessageLeadingComponent,
               footerComponent: stableAssistantMessageFooterComponent,
+              showReasoning,
             },
             userMessageProps: {
               leadingComponent: stableUserMessageLeadingComponent,
@@ -898,6 +903,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the message container
        */
       messageLabelText?: string;
+      /**
+       * Label for reasoning disclosures
+       */
+      reasoningLabelText?: string;
     }>;
 
     /**
@@ -1025,6 +1034,11 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * Disable validation that requires either `chatTrigger` or AI mode.
    */
   disableTriggerValidation?: boolean;
+
+  /**
+   * Whether to render reasoning parts
+   */
+  showReasoning?: boolean;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1050,6 +1064,7 @@ export default (function chat<
     tools: userTools,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning = false,
     ...options
   } = widgetParams || {};
 
@@ -1084,6 +1099,7 @@ export default (function chat<
     renderState: {},
     templates,
     tools,
+    showReasoning,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>

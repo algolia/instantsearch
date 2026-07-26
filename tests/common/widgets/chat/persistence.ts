@@ -1,4 +1,5 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { within } from '@testing-library/dom';
 
 import { openChat } from './utils';
 
@@ -59,6 +60,62 @@ export function createPersistenceTests(
 
       expect(document.body).toHaveTextContent('Fresh greeting');
       expect(document.body).not.toHaveTextContent('Previous persisted answer');
+    });
+
+    test('renders restored unfinished reasoning as inactive when chat is ready', async () => {
+      sessionStorage.clear();
+      const searchClient = createSearchClient();
+      const cacheKey = 'instantsearch-chat-initial-messages';
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'assistant',
+          // The reasoning part is last and never settled, which is what a
+          // response stopped mid-reasoning persists. A trailing part of any
+          // other type would make `isReasoningPartActive` false on its own,
+          // so this fixture is what pins the `status === 'streaming'` guard.
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'A stopped response.',
+              state: 'streaming',
+            },
+          ],
+        },
+      ];
+
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'agentId',
+            showReasoning: true,
+          },
+          react: {
+            agentId: 'agentId',
+            showReasoning: true,
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      const disclosure = within(document.body).getByRole('group', {
+        name: 'Reasoning',
+      });
+      expect(disclosure).toHaveAttribute('aria-busy', 'false');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-label--streaming')
+      ).not.toBeInTheDocument();
     });
   });
 }

@@ -5,6 +5,7 @@ import {
   findTool,
   getTextContent,
   hasTextContent,
+  isReasoningPartActive,
   isPartText,
   isPartTool,
 } from '../../lib/utils/chat';
@@ -247,6 +248,11 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+// Own-key presence, which is what a JSX spread copies — `in` would also answer
+// for inherited keys the spread leaves behind.
+const hasOwnKey = (target: object | undefined, key: string) =>
+  target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
+
 function createDefaultMessageComponent<
   TMessage extends ChatMessageBase = ChatMessageBase
 >({ createElement, Fragment }: Renderer) {
@@ -273,6 +279,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    isCurrentMessage: boolean;
     status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
@@ -397,13 +404,57 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
+    // Resolve the per-role inputs below from the same side the row renders with
+    // (the `messageProps` selection in `DefaultMessage`), so a change to one
+    // role's props does not invalidate the other's completed rows, and a change
+    // to the row's own side is not missed.
+    const messageProps =
+      props.message.role === 'user'
+        ? props.userMessageProps
+        : props.assistantMessageProps;
+    const showReasoning = messageProps?.showReasoning;
+    const parseMarkdown = messageProps?.parseMarkdown;
+    // Object-level fallback, matching the render: `{...messageProps}` replaces
+    // `translations` wholesale rather than merging it, so resolving key by key
+    // here would keep a stale label when a caller swaps the object. Own-key
+    // presence rather than nullishness for the same reason — the spread copies a
+    // key that is present but `undefined`, which replaces the shared object
+    // instead of deferring to it and leaves the built-in default to render.
+    const reasoningTranslations = hasOwnKey(messageProps, 'translations')
+      ? messageProps?.translations
+      : props.messageTranslations;
+    const reasoningLabel = reasoningTranslations?.reasoningLabel;
+    const reasoningClassNames = hasOwnKey(messageProps, 'classNames')
+      ? messageProps?.classNames
+      : props.classNames;
+    const reasoningClassName = cx(reasoningClassNames?.reasoning);
+    const reasoningHeaderClassName = cx(reasoningClassNames?.reasoningHeader);
+    const reasoningIconClassName = cx(reasoningClassNames?.reasoningIcon);
+    const reasoningLabelClassName = cx(reasoningClassNames?.reasoningLabel);
+    const reasoningChevronClassName = cx(reasoningClassNames?.reasoningChevron);
+    const reasoningBodyClassName = cx(reasoningClassNames?.reasoningBody);
+    const reasoningTextClassName = cx(reasoningClassNames?.reasoningText);
+    // This dependency list is the row comparator. Using the full props object
+    // would recompile every completed message on each streaming update.
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [
         props.message,
+        props.isCurrentMessage,
         props.status,
         props.suggestionsElement,
         messageFeedback,
+        showReasoning,
+        parseMarkdown,
+        reasoningLabel,
+        reasoningClassName,
+        reasoningHeaderClassName,
+        reasoningIconClassName,
+        reasoningLabelClassName,
+        reasoningChevronClassName,
+        reasoningBodyClassName,
+        reasoningTextClassName,
       ]
     );
   }
@@ -480,7 +531,21 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    const showLoader = getShowLoader(status, lastPart, tools);
+    // Only the loader consumes this, and only when reasoning is rendered, so
+    // skip the scan entirely while the opt-in is off — it walks the last
+    // message's parts and slices the remainder for each streaming reasoning part.
+    const hasActiveReasoning = assistantMessageProps?.showReasoning
+      ? lastMessage?.parts?.some((_, index, parts) =>
+          isReasoningPartActive(parts, index)
+        ) ?? false
+      : false;
+    const showLoader = getShowLoader(
+      status,
+      lastPart,
+      tools,
+      assistantMessageProps?.showReasoning,
+      hasActiveReasoning
+    );
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -526,6 +591,7 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
+                isCurrentMessage={index === messages.length - 1}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
@@ -602,12 +668,18 @@ export function createChatMessagesComponent({
 const getShowLoader = (
   status: ChatStatus,
   lastPart: ChatMessageBase['parts'][number] | undefined,
-  tools: ClientSideTools
+  tools: ClientSideTools,
+  showReasoning: boolean | undefined,
+  hasActiveReasoning: boolean
 ): boolean => {
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
   if (!lastPart) return true;
+  // An active reasoning disclosure carries its own progress affordance, so the
+  // loader would double it. Reasoning that has settled still shows the loader,
+  // because the answer has not started yet.
+  if (showReasoning && hasActiveReasoning) return false;
   if (isPartText(lastPart)) return false;
 
   if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {

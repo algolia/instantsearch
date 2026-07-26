@@ -149,6 +149,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
+    /**
+     * Whether to render reasoning parts
+     */
+    showReasoning?: boolean;
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -196,6 +200,7 @@ function ChatInner<
     title,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -293,6 +298,12 @@ function ChatInner<
     throw error;
   }
 
+  const {
+    assistantMessageProps: callerAssistantMessageProps,
+    userMessageProps: callerUserMessageProps,
+    ...restMessagesProps
+  } = messagesProps ?? {};
+
   return (
     <ChatUiComponent
       title={title}
@@ -340,19 +351,24 @@ function ChatInner<
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
+        translations: messagesTranslations,
+        messageTranslations,
+        // `assistantMessageProps` and `userMessageProps` merge key by key rather
+        // than replace, so the dedicated top-level props still apply for keys the
+        // caller's nested object leaves unset. Spread explicitly so that merge
+        // does not depend on where these keys sit in the literal.
+        ...restMessagesProps,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
-          ...messagesProps?.assistantMessageProps,
+          showReasoning,
+          ...callerAssistantMessageProps,
         },
         userMessageProps: {
           leadingComponent: userMessageLeadingComponent,
           footerComponent: userMessageFooterComponent,
-          ...messagesProps?.userMessageProps,
+          ...callerUserMessageProps,
         },
-        translations: messagesTranslations,
-        messageTranslations,
-        ...messagesProps,
         error,
       }}
       promptProps={{
