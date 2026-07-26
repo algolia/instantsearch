@@ -143,4 +143,25 @@ describe('createDisplayResultsTool', () => {
     expect(nextButtonAfter).toBe(nextButtonBefore);
     expect(document.activeElement).toBe(nextButtonAfter);
   });
+
+  test('names the carousel scroll controls', () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const tool = createDisplayResultsTool({
+      item: (item, { html }) => html`<span>${item.objectID}</span>`,
+    });
+    const LayoutComponent = tool.templates
+      .layout as unknown as ComponentType<ClientSideToolComponentProps>;
+
+    render(<LayoutComponent {...createToolProps('Curating')} />, container);
+
+    // Icon-only controls carry no text, so the name has to come from the label.
+    expect(
+      within(container).getByRole('button', { name: 'Previous' })
+    ).toHaveClass('ais-ChatToolDisplayResultsCarouselHeaderScrollButton');
+    expect(within(container).getByRole('button', { name: 'Next' })).toHaveClass(
+      'ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+    );
+  });
 });

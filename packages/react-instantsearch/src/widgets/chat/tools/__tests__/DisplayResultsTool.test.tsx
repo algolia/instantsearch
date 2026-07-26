@@ -162,6 +162,41 @@ describe('createDisplayResultsTool', () => {
     expect(document.activeElement).toBe(nextButtonAfter);
   });
 
+  test('names the carousel scroll controls', () => {
+    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const LayoutComponent = tool.layoutComponent!;
+    const message: ClientSideToolComponentProps['message'] = {
+      type: 'tool-algolia_display_results',
+      state: 'input-streaming',
+      toolCallId: 'display',
+      input: {
+        intro: 'Curating',
+        groups: [{ title: 'Products', results: [{ objectID: '1' }] }],
+      },
+    };
+    const { container } = render(
+      <LayoutComponent
+        message={message}
+        messages={createMessages(message, [{ objectID: '1', name: 'Runner' }])}
+        status="streaming"
+        applyFilters={jest.fn()}
+        onClose={jest.fn()}
+        indexUiState={{}}
+        addToolResult={jest.fn()}
+        setIndexUiState={jest.fn()}
+        sendEvent={jest.fn()}
+      />
+    );
+
+    // Icon-only controls carry no text, so the name has to come from the label.
+    expect(
+      within(container).getByRole('button', { name: 'Previous' })
+    ).toHaveClass('ais-ChatToolDisplayResultsCarouselHeaderScrollButton');
+    expect(within(container).getByRole('button', { name: 'Next' })).toHaveClass(
+      'ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+    );
+  });
+
   test('renders completed legacy v1 output when input has no v1 fields', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;

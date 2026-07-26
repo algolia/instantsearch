@@ -54,6 +54,7 @@ export function createDisplayResultsTool<
               variant="outline"
               size="sm"
               iconOnly
+              aria-label="Previous"
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
@@ -64,6 +65,7 @@ export function createDisplayResultsTool<
               variant="outline"
               size="sm"
               iconOnly
+              aria-label="Next"
               onClick={scrollRight}
               disabled={!canScrollRight}
               className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"

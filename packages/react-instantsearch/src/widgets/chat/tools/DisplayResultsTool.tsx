@@ -48,6 +48,7 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
           variant="outline"
           size="sm"
           iconOnly
+          aria-label="Previous"
           onClick={scrollLeft}
           disabled={!canScrollLeft}
           className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
@@ -58,6 +59,7 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
           variant="outline"
           size="sm"
           iconOnly
+          aria-label="Next"
           onClick={scrollRight}
           disabled={!canScrollRight}
           className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
