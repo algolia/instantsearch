@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { InstantSearchHydrationContext } from '../lib/InstantSearchHydrationContext';
 import { InstantSearchSSRContext } from '../lib/InstantSearchSSRContext';
 
 import type { InternalInstantSearch } from '../lib/useInstantSearchApi';
@@ -33,19 +34,39 @@ export function InstantSearchSSRProvider<
   // This is used to re-map the result index to the requesting widget
   const recommendIdx = React.useRef(0);
 
+  const hasNativeHydrationSnapshot =
+    typeof React.useSyncExternalStore === 'function';
+  const [isHydrated, setIsHydrated] = React.useState(
+    hasNativeHydrationSnapshot
+  );
+  React.useEffect(() => {
+    if (!hasNativeHydrationSnapshot) {
+      setIsHydrated(true);
+    }
+  }, [hasNativeHydrationSnapshot]);
+
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.
   // To avoid the user's provider overriding the context value with an empty object,
   // we skip this provider.
   if (Object.keys(props).length === 0) {
-    return <>{children}</>;
+    // Only the SSR context is skipped. The hydration signal still has to reach
+    // consumers, or React 16 and 17 lose their masking and hydrate against a
+    // tree the server never rendered.
+    return (
+      <InstantSearchHydrationContext.Provider value={isHydrated}>
+        {children}
+      </InstantSearchHydrationContext.Provider>
+    );
   }
 
   return (
-    <InstantSearchSSRContext.Provider
-      value={{ ...props, ssrSearchRef, recommendIdx }}
-    >
-      {children}
-    </InstantSearchSSRContext.Provider>
+    <InstantSearchHydrationContext.Provider value={isHydrated}>
+      <InstantSearchSSRContext.Provider
+        value={{ ...props, ssrSearchRef, recommendIdx }}
+      >
+        {children}
+      </InstantSearchSSRContext.Provider>
+    </InstantSearchHydrationContext.Provider>
   );
 }
