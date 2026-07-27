@@ -174,58 +174,7 @@ export function createCarouselComponent({
   Fragment,
   useEffect,
   useRef,
-}: Renderer & Partial<Pick<Hooks, 'useEffect' | 'useRef'>>) {
-  // `useEffect` and `useRef` are optional so callers written against the
-  // pre-measurement signature keep compiling. Whether they were supplied is
-  // fixed when the component is created, so the branch below is stable for the
-  // component's whole lifetime and never changes hook order between renders.
-  const measurementHooks = useEffect && useRef ? { useEffect, useRef } : null;
-
-  /**
-   * Remeasures the list whenever the item count changes.
-   *
-   * Without the hooks this is inert, which is the behaviour callers had before
-   * item-count measurement existed: navigation state is then only recomputed on
-   * scroll.
-   */
-  const useItemCountMeasurement = measurementHooks
-    ? (itemCount: number, navigation: CarouselNavigationProps) => {
-        const previousItemCountRef = measurementHooks.useRef(itemCount);
-        // Destructured so the effect depends on the individually stable refs and
-        // setters rather than on the object literal, which is new every render.
-        const {
-          listRef,
-          nextButtonRef,
-          previousButtonRef,
-          setCanScrollLeft,
-          setCanScrollRight,
-        } = navigation;
-
-        measurementHooks.useEffect(() => {
-          if (previousItemCountRef.current !== itemCount) {
-            updateNavigationButtonsProps({
-              listRef,
-              nextButtonRef,
-              previousButtonRef,
-              setCanScrollLeft,
-              setCanScrollRight,
-            });
-            previousItemCountRef.current = itemCount;
-          }
-          // `previousItemCountRef` is a ref and therefore stable; it is listed
-          // only because the lint rule cannot see through `measurementHooks`.
-        }, [
-          itemCount,
-          listRef,
-          nextButtonRef,
-          previousButtonRef,
-          setCanScrollLeft,
-          setCanScrollRight,
-          previousItemCountRef,
-        ]);
-      }
-    : (_itemCount: number, _navigation: CarouselNavigationProps) => {};
-
+}: Renderer & Pick<Hooks, 'useEffect' | 'useRef'>) {
   return function Carousel<TObject extends Record<string, unknown>>(
     userProps: CarouselProps<TObject>
   ) {
@@ -261,6 +210,8 @@ export function createCarouselComponent({
       previousButtonTitle: 'Previous',
       ...userTranslations,
     };
+    const previousItemsLengthRef = useRef(items.length);
+
     const cssClasses: CarouselClassNames = {
       root: cx('ais-Carousel', classNames.root),
       list: cx('ais-Carousel-list', classNames.list),
@@ -288,13 +239,25 @@ export function createCarouselComponent({
       }
     }
 
-    useItemCountMeasurement(items.length, {
+    useEffect(() => {
+      if (previousItemsLengthRef.current !== items.length) {
+        updateNavigationButtonsProps({
+          listRef,
+          nextButtonRef,
+          previousButtonRef,
+          setCanScrollLeft,
+          setCanScrollRight,
+        });
+        previousItemsLengthRef.current = items.length;
+      }
+    }, [
+      items.length,
       listRef,
       nextButtonRef,
       previousButtonRef,
       setCanScrollLeft,
       setCanScrollRight,
-    });
+    ]);
 
     if (items.length === 0) {
       return null;
