@@ -46,6 +46,11 @@
   &:active:not(:disabled) {
     background-color: rgba(var(--ais-muted-color-rgb), 0.3);
   }
+
+  &:disabled {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+    color: rgba(var(--ais-text-color-rgb), 0.4);
+  }
 }
 
 .ais-PromptSuggestions-skeleton {
