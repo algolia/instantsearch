@@ -1,11 +1,17 @@
 import { AbstractChat } from '../ai-lite';
 
+import {
+  getChatMessagesSnapshotStore,
+  nextChatMessagesRevision,
+} from './messagesRevision';
+
 import type {
   UIMessage,
   ChatState as BaseChatState,
   ChatStatus,
   ChatInit as BaseChatInit,
 } from '../ai-lite';
+import type { ChatMessagesRevision } from './messagesRevision';
 
 export type { UIMessage };
 export { AbstractChat };
@@ -23,25 +29,6 @@ export type ChatInit<TUiMessage extends UIMessage> =
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 
-const ChatMessagesSnapshotState = Symbol.for(
-  'InstantSearchChatMessagesSnapshotState'
-);
-type ChatMessagesRevisionRegistration = {
-  deref: () => ChatMessagesRevision | undefined;
-};
-type ChatMessagesRevision = {
-  revision: number;
-  lifecycle: 'new' | 'active' | 'released';
-  messages: WeakMap<object, UIMessage[]>;
-  registration?: ChatMessagesRevisionRegistration;
-};
-type ChatMessagesSnapshotStore = {
-  revision: number;
-  active: Set<ChatMessagesRevisionRegistration>;
-};
-type WeakRefConstructor = new <T extends object>(target: T) => {
-  deref: () => T | undefined;
-};
 type TypedArrayConstructor = new (
   buffer: ArrayBufferLike,
   byteOffset: number,
@@ -179,23 +166,6 @@ function cloneArrayBufferContents(value: ArrayBufferLike): ArrayBufferLike {
   }
 
   return value;
-}
-
-function getChatMessagesSnapshotStore(): ChatMessagesSnapshotStore {
-  const globalSnapshots = globalThis as unknown as Record<
-    symbol,
-    ChatMessagesSnapshotStore | undefined
-  >;
-  const existingStore = globalSnapshots[ChatMessagesSnapshotState];
-  if (existingStore) {
-    return existingStore;
-  }
-  const snapshotStore = {
-    revision: 0,
-    active: new Set<ChatMessagesRevisionRegistration>(),
-  };
-  globalSnapshots[ChatMessagesSnapshotState] = snapshotStore;
-  return snapshotStore;
 }
 
 function readOwnEntries(
@@ -586,85 +556,6 @@ function cloneMessageValue<T>(
   return clone as T;
 }
 
-function getCurrentChatMessagesRevision(): number {
-  return getChatMessagesSnapshotStore().revision;
-}
-
-function nextChatMessagesRevision(): number {
-  const snapshotStore = getChatMessagesSnapshotStore();
-  snapshotStore.revision += 1;
-  return snapshotStore.revision;
-}
-
-/** @internal */
-export function getChatMessagesRevision(): ChatMessagesRevision {
-  return {
-    revision: getCurrentChatMessagesRevision(),
-    lifecycle: 'new',
-    messages: new WeakMap(),
-  };
-}
-
-/** @internal */
-export function trackChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
-): void {
-  const snapshotStore = getChatMessagesSnapshotStore();
-  snapshotStore.active.forEach((registration) => {
-    if (registration.deref() === undefined) {
-      snapshotStore.active.delete(registration);
-    }
-  });
-
-  if (
-    capturedRevision.lifecycle === 'released' ||
-    capturedRevision.registration
-  ) {
-    return;
-  }
-
-  const WeakRefRuntime = (
-    globalThis as unknown as {
-      WeakRef?: WeakRefConstructor;
-    }
-  ).WeakRef;
-  if (!WeakRefRuntime) {
-    return;
-  }
-
-  // Server and abandoned concurrent renders have no effect cleanup. A weak
-  // registration lets updates retain their snapshot without retaining the
-  // render itself after React releases it.
-  const registration = new WeakRefRuntime(capturedRevision);
-  capturedRevision.registration = registration;
-  snapshotStore.active.add(registration);
-}
-
-/** @internal */
-export function retainChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
-): void {
-  capturedRevision.lifecycle = 'active';
-  if (!capturedRevision.registration) {
-    const registration = {
-      deref: () => capturedRevision,
-    };
-    capturedRevision.registration = registration;
-    getChatMessagesSnapshotStore().active.add(registration);
-  }
-}
-
-/** @internal */
-export function releaseChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
-): void {
-  if (capturedRevision.registration) {
-    getChatMessagesSnapshotStore().active.delete(capturedRevision.registration);
-    capturedRevision.registration = undefined;
-  }
-  capturedRevision.lifecycle = 'released';
-}
-
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
@@ -688,7 +579,15 @@ export class ChatState<TUiMessage extends UIMessage>
   _messageSnapshot: TUiMessage[];
   /** @internal */
   _messagesRevision: number;
-  /** @internal */
+  /**
+   * Whether this chat's messages are deterministic enough to seed a server
+   * render. Fixed at construction and never changed by an update: a chat
+   * restored from browser storage keeps that restored prefix in its snapshot,
+   * so re-enabling seeding after an ordinary message would let a consumer that
+   * starts hydrating later adopt messages the server never rendered.
+   *
+   * @internal
+   */
   _messagesCanSeedServer: boolean;
   _status: ChatStatus = 'ready';
   _error: Error | undefined = undefined;
@@ -710,8 +609,14 @@ export class ChatState<TUiMessage extends UIMessage>
     } else if (persistence) {
       this._messages = getDefaultInitialMessages<TUiMessage>(id);
       this._messageSnapshot = cloneMessageValue(this._messages);
-      this._serverMessages = [];
-      this._messagesCanSeedServer = false;
+      // Only a restore that actually returned something makes this chat
+      // browser-derived. Empty storage leaves it as deterministic as a chat
+      // that never had persistence, so masking it would drop caller messages
+      // out of the server tree instead of protecting hydration.
+      this._messagesCanSeedServer = this._messages.length === 0;
+      this._serverMessages = this._messagesCanSeedServer
+        ? this._messageSnapshot
+        : [];
     } else {
       this._messages = [];
       this._messageSnapshot = [];
@@ -875,7 +780,6 @@ export class ChatState<TUiMessage extends UIMessage>
     this._messages = messages;
     this._messageSnapshot = messageSnapshot;
     this._messagesRevision = nextChatMessagesRevision();
-    this._messagesCanSeedServer = true;
     this._callMessagesCallbacks();
   };
 

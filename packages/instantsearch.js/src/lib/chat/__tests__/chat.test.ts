@@ -4,14 +4,12 @@
 import { runInNewContext } from 'vm';
 import { MessageChannel } from 'worker_threads';
 
+import { Chat, ChatState, CACHE_KEY } from '../chat';
 import {
-  Chat,
-  ChatState,
-  CACHE_KEY,
   getChatMessagesRevision,
   releaseChatMessagesRevision,
   retainChatMessagesRevision,
-} from '../chat';
+} from '../messagesRevision';
 
 function detachArrayBuffer(buffer: ArrayBuffer): void {
   const { port1, port2 } = new MessageChannel();
@@ -200,8 +198,9 @@ describe('ChatState', () => {
     let CopiedChat!: typeof Chat;
 
     jest.isolateModules(() => {
-      ({ getChatMessagesRevision: getRevision } =
-        jest.requireActual('../chat'));
+      ({ getChatMessagesRevision: getRevision } = jest.requireActual(
+        '../messagesRevision'
+      ));
     });
     jest.isolateModules(() => {
       ({ Chat: CopiedChat } = jest.requireActual('../chat'));

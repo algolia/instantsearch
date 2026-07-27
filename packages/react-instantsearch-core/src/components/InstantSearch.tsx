@@ -1,12 +1,14 @@
-import * as chatRuntime from 'instantsearch.js/es/lib/chat/chat';
 import React, { useEffect } from 'react';
 
 import { ChatMessageSnapshotContext } from '../lib/ChatMessageSnapshotContext';
 import { IndexContext } from '../lib/IndexContext';
 import { InstantSearchContext } from '../lib/InstantSearchContext';
+import {
+  ChatMessageSnapshotRetainer,
+  useInheritedChatMessagesRevision,
+  useOwnedChatMessagesRevision,
+} from '../lib/useChatMessagesRevision';
 import { useInstantSearchApi } from '../lib/useInstantSearchApi';
-import { useIsHydrated } from '../lib/useIsHydrated';
-import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
 
 import type {
   InternalInstantSearch,
@@ -24,43 +26,28 @@ export type InstantSearchProps<
   children?: React.ReactNode;
 };
 
-// Destructured rather than kept as a namespace: holding the namespace object in
-// a single binding defeats tree shaking and retains the whole Chat runtime for
-// consumers that never render Chat. Guarded by `test/module/tree-shaking.mjs`.
-const {
-  getChatMessagesRevision,
-  releaseChatMessagesRevision,
-  retainChatMessagesRevision,
-  trackChatMessagesRevision,
-} = chatRuntime as unknown as {
-  getChatMessagesRevision: () => unknown;
-  trackChatMessagesRevision: (revision: unknown) => void;
-  retainChatMessagesRevision: (revision: unknown) => void;
-  releaseChatMessagesRevision: (revision: unknown) => void;
-};
-
 export function InstantSearch<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >({ children, ...props }: InstantSearchProps<TUiState, TRouteState>) {
   const search = useInstantSearchApi<TUiState, TRouteState>(props);
-  const isHydrated = useIsHydrated();
-  const chatMessageSnapshotRef = React.useRef<unknown | undefined>(undefined);
-  if (chatMessageSnapshotRef.current === undefined) {
-    chatMessageSnapshotRef.current = getChatMessagesRevision();
-  }
-  const chatMessageSnapshot = chatMessageSnapshotRef.current;
-  if (!isHydrated) {
-    trackChatMessagesRevision(chatMessageSnapshot);
-  }
-  const retainChatMessageSnapshotRef = React.useRef<boolean | undefined>(
-    undefined
+  // An `InstantSearchSSRProvider` renders before any `<Suspense>` boundary
+  // below it, so when one is present its capture is the one that matches the
+  // server markup and this root inherits it.
+  //
+  // Capturing here is not only the client-only case. `react-instantsearch-nextjs`
+  // supplies `InstantSearchSSRContext` directly and never renders that provider,
+  // so every App Router hydration takes this path against real server markup.
+  // A boundary above this root is unprotected there, which the provider path
+  // does cover.
+  const inheritedChatMessageSnapshot = useInheritedChatMessagesRevision();
+  const ownsChatMessageSnapshot = inheritedChatMessageSnapshot === undefined;
+  const ownedChatMessageSnapshot = useOwnedChatMessagesRevision(
+    ownsChatMessageSnapshot
   );
-  if (retainChatMessageSnapshotRef.current === undefined) {
-    retainChatMessageSnapshotRef.current =
-      typeof window !== 'undefined' && !isHydrated;
-  }
-  const retainChatMessageSnapshot = retainChatMessageSnapshotRef.current;
+  const chatMessageSnapshot = ownsChatMessageSnapshot
+    ? ownedChatMessageSnapshot
+    : inheritedChatMessageSnapshot;
 
   if (!search.started) {
     return null;
@@ -72,10 +59,9 @@ export function InstantSearch<
     >
       <IndexContext.Provider value={search.mainIndex}>
         <ChatMessageSnapshotContext.Provider value={chatMessageSnapshot}>
-          <ChatMessageSnapshotRetainer
-            snapshot={chatMessageSnapshot}
-            retain={retainChatMessageSnapshot}
-          />
+          {ownsChatMessageSnapshot && (
+            <ChatMessageSnapshotRetainer snapshot={chatMessageSnapshot} />
+          )}
           {children}
           <ResetScheduleSearch
             search={
@@ -86,28 +72,6 @@ export function InstantSearch<
       </IndexContext.Provider>
     </InstantSearchContext.Provider>
   );
-}
-
-function ChatMessageSnapshotRetainer({
-  snapshot,
-  retain,
-}: {
-  snapshot: unknown;
-  retain: boolean;
-}) {
-  useIsomorphicLayoutEffect(() => {
-    if (!retain) {
-      return undefined;
-    }
-
-    retainChatMessagesRevision(snapshot);
-
-    return () => {
-      releaseChatMessagesRevision(snapshot);
-    };
-  }, [retain, snapshot]);
-
-  return null;
 }
 
 function ResetScheduleSearch({
