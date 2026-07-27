@@ -247,41 +247,9 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
-/**
- * Memoization comparator for a message row. `replaceMessage` only clones the
- * message being updated, so completed messages keep a stable reference across
- * streaming deltas. We compare just what affects a row's render — `message`,
- * Chat `status`, the tools' InstantSearch status, `suggestionsElement`, and
- * this message's feedback — and ignore the props that get a fresh reference
- * every render but don't change the output (`messages`, callbacks,
- * `indexUiState`). The InstantSearch status is included so tool result view
- * events can retry when the current search becomes idle. `indexUiState` in
- * particular can't be compared: `getUiState()` returns a new object each render
- * and would defeat the memo. Trade-off: a completed row keeps the callbacks/
- * `indexUiState` it last rendered with until its next genuine render.
- */
 function getInstantSearchStatus(tools: ClientSideTools) {
   return Object.values(tools).find((tool) => tool.insightsEventContext)
     ?.insightsEventContext?.instantSearchStatus;
-}
-
-function areMessagePropsEqual(
-  prev: { message: ChatMessageBase; [key: string]: unknown },
-  next: { message: ChatMessageBase; [key: string]: unknown }
-): boolean {
-  return (
-    prev.message === next.message &&
-    prev.status === next.status &&
-    getInstantSearchStatus(prev.tools as ClientSideTools) ===
-      getInstantSearchStatus(next.tools as ClientSideTools) &&
-    prev.suggestionsElement === next.suggestionsElement &&
-    (prev.feedbackState as Record<string, unknown> | undefined)?.[
-      prev.message.id
-    ] ===
-      (next.feedbackState as Record<string, unknown> | undefined)?.[
-        next.message.id
-      ]
-  );
 }
 
 function createDefaultMessageComponent<
@@ -419,17 +387,33 @@ function createDefaultMessageComponent<
 export function createChatMessagesComponent({
   createElement,
   Fragment,
-  memo,
-}: Renderer & Pick<Hooks, 'memo'>) {
+  useMemo,
+}: Renderer & Pick<Hooks, 'useMemo'>) {
   const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
   // Skip re-rendering (and re-compiling the markdown of) completed messages on
-  // every streaming delta.
-  const MemoizedDefaultMessage = memo(
-    DefaultMessageComponent,
-    areMessagePropsEqual
-  );
+  // every streaming delta. The deps tuple matches the row's render inputs;
+  // callbacks/`indexUiState` are intentionally excluded because `getUiState()`
+  // returns a fresh object every render and would defeat the memo — completed
+  // rows keep the callbacks/`indexUiState` they last rendered with until their
+  // next genuine update.
+  function MemoizedDefaultMessage(
+    props: Parameters<typeof DefaultMessageComponent>[0]
+  ) {
+    const messageFeedback = props.feedbackState?.[props.message.id];
+    const instantSearchStatus = getInstantSearchStatus(props.tools);
+    return useMemo(
+      () => <DefaultMessageComponent {...props} />,
+      [
+        props.message,
+        props.status,
+        instantSearchStatus,
+        props.suggestionsElement,
+        messageFeedback,
+      ]
+    );
+  }
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
     createElement,
   });

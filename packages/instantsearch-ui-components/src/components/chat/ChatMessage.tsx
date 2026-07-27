@@ -13,12 +13,21 @@ import type {
   VNode,
 } from '../../types';
 import type {
+  AddToolResult,
   AddToolResultWithOutput,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
+  ClientSideTool,
   ClientSideTools,
 } from './types';
+
+type MessageScopedClientSideTool = ClientSideTool & {
+  '~addToolResultForMessage'?: (
+    message: ChatMessageBase,
+    params: Parameters<AddToolResult>[0]
+  ) => ReturnType<AddToolResult>;
+};
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -266,11 +275,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       }
       if (startsWith(part.type, 'tool-')) {
         const toolName = part.type.replace('tool-', '');
-        let tool = tools[toolName];
+        let tool = tools[toolName] as MessageScopedClientSideTool | undefined;
 
         // Compatibility shim with Algolia MCP Server search tool
         if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
-          tool = tools[SearchIndexToolType];
+          tool = tools[SearchIndexToolType] as
+            | MessageScopedClientSideTool
+            | undefined;
         }
 
         const displayResultsEnabled =
@@ -290,11 +301,17 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           const toolMessage = part as ChatToolMessage;
 
           const boundAddToolResult: AddToolResultWithOutput = (params) =>
-            tool.addToolResult?.({
-              output: params.output,
-              tool: part.type,
-              toolCallId: toolMessage.toolCallId,
-            });
+            tool['~addToolResultForMessage']
+              ? tool['~addToolResultForMessage'](message, {
+                  output: params.output,
+                  tool: part.type,
+                  toolCallId: toolMessage.toolCallId,
+                })
+              : tool.addToolResult({
+                  output: params.output,
+                  tool: part.type,
+                  toolCallId: toolMessage.toolCallId,
+                });
 
           if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;

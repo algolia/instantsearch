@@ -103,14 +103,14 @@ function prefersReducedMotion(): boolean {
 export function createChatComponent({
   createElement,
   Fragment,
-  memo,
+  useMemo,
   useState,
-}: Renderer & Pick<Hooks, 'memo' | 'useState'>) {
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState'>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({
     createElement,
     Fragment,
-    memo,
+    useMemo,
   });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({

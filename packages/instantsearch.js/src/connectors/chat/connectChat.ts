@@ -19,6 +19,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
+import type { ResponseScopedOnToolCallCallback } from '../../lib/ai-lite/abstract-chat';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -162,6 +163,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   feedback?: never;
   requestOptions?: never;
   persistence?: never;
+  sendAutomaticallyWhen?: never;
 };
 
 export type ApplyFiltersParams = {
@@ -341,6 +343,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
       requiresSearch = true,
       ...options
     } = widgetParams || {};
@@ -561,8 +564,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
+        sendAutomaticallyWhen,
         transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         shouldRepairToolInput(toolName) {
           let tool = tools[toolName];
           if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
@@ -571,7 +574,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall({ toolCall }) {
+        onToolCall: (({ toolCall }, submitToolResult) => {
           let tool = tools[toolCall.toolName];
 
           // Compatibility shim with Algolia MCP Server search tool
@@ -589,7 +592,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return submitToolResult({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -598,7 +601,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           if (tool.onToolCall) {
             const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
+              submitToolResult({
                 output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
@@ -611,7 +614,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        },
+        }) satisfies ResponseScopedOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
@@ -768,12 +771,16 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
-          const toolWithAddToolResult: ClientSideTool = {
+          const toolWithAddToolResult = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            '~addToolResultForMessage':
+              _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
             insightsEventContext,
+          } satisfies ClientSideTool & {
+            '~addToolResultForMessage': typeof _chatInstance['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

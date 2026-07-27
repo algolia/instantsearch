@@ -10,7 +10,6 @@ import {
 import React, {
   createElement,
   Fragment,
-  memo,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -50,8 +49,8 @@ import type { UseChatProps } from 'react-instantsearch-core';
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
-  memo: memo as Parameters<typeof createChatComponent>[0]['memo'],
-  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+  useMemo,
+  useState,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(

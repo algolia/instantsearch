@@ -7,7 +7,7 @@ describe('widgets', () => {
     Record<typeof widgets[0]['name'], number>
   > = {
     // searchbox only (the isolated index attaches lazily on first focus)
-    EXPERIMENTAL_Autocomplete: 1,
+    Autocomplete: 1,
   };
 
   test('renders one widget', () => {
@@ -66,7 +66,7 @@ describe('widgets', () => {
         {
           "$$type": "ais.autocomplete",
           "$$widgetType": "ais.autocomplete",
-          "name": "EXPERIMENTAL_Autocomplete",
+          "name": "Autocomplete",
         },
         {
           "$$type": "ais.breadcrumb",

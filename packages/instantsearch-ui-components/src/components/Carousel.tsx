@@ -12,6 +12,13 @@ import type {
   SendEventForHits,
 } from '../types';
 
+export type HeaderComponentProps = {
+  canScrollLeft: boolean;
+  canScrollRight: boolean;
+  scrollLeft: () => void;
+  scrollRight: () => void;
+};
+
 export type CarouselProps<
   TObject,
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
@@ -31,12 +38,7 @@ export type CarouselProps<
   ) => JSX.Element;
   previousIconComponent?: () => JSX.Element;
   nextIconComponent?: () => JSX.Element;
-  headerComponent?: (props: {
-    canScrollLeft: boolean;
-    canScrollRight: boolean;
-    scrollLeft: () => void;
-    scrollRight: () => void;
-  }) => JSX.Element;
+  headerComponent?: (props: HeaderComponentProps) => JSX.Element;
   showNavigation?: boolean;
   classNames?: Partial<CarouselClassNames>;
   translations?: Partial<CarouselTranslations>;
