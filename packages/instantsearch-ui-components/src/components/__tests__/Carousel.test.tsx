@@ -402,16 +402,24 @@ describe('Carousel', () => {
       await waitFor(() => expect(nextButton(container)).not.toBeVisible());
     });
 
-    test('keeps the next control when the items overflow', async () => {
+    test('reverses the next control from hidden to visible once the list overflows', async () => {
+      const third = { objectID: '3', __position: 3 };
       const { container, rerender } = render(
         <CarouselWithRefs items={items.slice(0, 1)} sendEvent={jest.fn()} />
       );
-      setGeometry(container.querySelector('.ais-Carousel-list')!, {
-        clientWidth: 200,
-        scrollWidth: 400,
-      });
+      const list = container.querySelector('.ais-Carousel-list')!;
 
+      setGeometry(list, { clientWidth: 400, scrollWidth: 400 });
       rerender(<CarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      await waitFor(() => expect(nextButton(container)).not.toBeVisible());
+
+      // Same carousel instance, same node: only the measurement changed, so a
+      // list that starts fitting must hand its control back once it overflows.
+      setGeometry(list, { clientWidth: 200, scrollWidth: 400 });
+      rerender(
+        <CarouselWithRefs items={[...items, third]} sendEvent={jest.fn()} />
+      );
 
       await waitFor(() => expect(nextButton(container)).toBeVisible());
     });
