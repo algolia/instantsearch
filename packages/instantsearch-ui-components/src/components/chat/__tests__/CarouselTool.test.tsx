@@ -23,6 +23,17 @@ const CarouselTool = createCarouselToolComponent<Hit>({
   useState,
 });
 
+// Source-compatibility case: the pre-measurement call shape, without
+// `useEffect`, must keep compiling. `yarn type-check` fails if it becomes
+// required again.
+createCarouselToolComponent<Hit>({
+  createElement: createElement as Pragma,
+  Fragment,
+  useMemo,
+  useRef,
+  useState,
+});
+
 type ItemComponentProps = NonNullable<
   Parameters<typeof CarouselTool>[0]['itemComponent']
 >;

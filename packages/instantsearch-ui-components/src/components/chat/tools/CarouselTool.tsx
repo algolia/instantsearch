@@ -137,7 +137,11 @@ export function createCarouselToolComponent<
   useMemo,
   useRef,
   useState,
-}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef' | 'useState'>) {
+}: Renderer &
+  Pick<Hooks, 'useMemo' | 'useRef' | 'useState'> &
+  // Optional so callers written before item-count measurement keep compiling.
+  // Without it the carousel stays inert on item changes, as it was before.
+  Partial<Pick<Hooks, 'useEffect'>>) {
   const DefaultHeader = createHeaderComponent({ createElement, Fragment });
   const Carousel = createCarouselComponent({
     createElement,

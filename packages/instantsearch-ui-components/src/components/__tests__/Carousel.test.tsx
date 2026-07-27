@@ -18,6 +18,14 @@ const Carousel = createCarouselComponent({
   useRef,
 });
 
+// Source-compatibility case: the pre-measurement call shape must keep compiling.
+// This is a type assertion as much as a runtime one; `yarn type-check` fails if
+// the hooks become required again.
+const LegacyCarousel = createCarouselComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
 function CarouselWithRefs(
   props: Omit<
     CarouselProps<RecordWithObjectID>,
@@ -421,6 +429,73 @@ describe('Carousel', () => {
         <CarouselWithRefs items={[...items, third]} sendEvent={jest.fn()} />
       );
 
+      await waitFor(() => expect(nextButton(container)).toBeVisible());
+    });
+  });
+  describe('source compatibility with the pre-measurement signature', () => {
+    const items = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const nextButton = (container: Element) =>
+      container.querySelector<HTMLButtonElement>(
+        '.ais-Carousel-navigation--next'
+      )!;
+
+    function LegacyCarouselWithRefs(
+      props: Omit<
+        CarouselProps<RecordWithObjectID>,
+        | 'listRef'
+        | 'nextButtonRef'
+        | 'previousButtonRef'
+        | 'carouselIdRef'
+        | 'canScrollLeft'
+        | 'canScrollRight'
+        | 'setCanScrollLeft'
+        | 'setCanScrollRight'
+      >
+    ) {
+      return (
+        <LegacyCarousel
+          listRef={useRef(null)}
+          nextButtonRef={useRef(null)}
+          previousButtonRef={useRef(null)}
+          carouselIdRef={useRef(generateCarouselId())}
+          canScrollLeft={false}
+          canScrollRight={false}
+          setCanScrollLeft={() => {}}
+          setCanScrollRight={() => {}}
+          {...props}
+        />
+      );
+    }
+
+    test('renders without the measurement hooks', () => {
+      const { container } = render(
+        <LegacyCarouselWithRefs items={items} sendEvent={jest.fn()} />
+      );
+
+      expect(container.querySelector('.ais-Carousel')).toBeInTheDocument();
+      expect(container.querySelectorAll('.ais-Carousel-item')).toHaveLength(2);
+    });
+
+    test('stays inert on item changes, as it did before measurement existed', async () => {
+      const { container, rerender } = render(
+        <LegacyCarouselWithRefs
+          items={items.slice(0, 1)}
+          sendEvent={jest.fn()}
+        />
+      );
+      const list = container.querySelector('.ais-Carousel-list')!;
+
+      Object.defineProperties(list, {
+        clientWidth: { configurable: true, value: 400 },
+        scrollWidth: { configurable: true, value: 400 },
+      });
+      rerender(<LegacyCarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      // The hook-enabled carousel hides this control here. Without the hooks no
+      // measurement runs, so the control keeps its unmeasured default.
       await waitFor(() => expect(nextButton(container)).toBeVisible());
     });
   });
