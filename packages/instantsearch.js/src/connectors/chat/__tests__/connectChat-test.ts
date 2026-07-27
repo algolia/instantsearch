@@ -354,6 +354,40 @@ describe('connectChat', () => {
     );
   });
 
+  describe('browser side effects', () => {
+    it('still sends the initial user message in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const sendMessage = jest.fn();
+      (chat as any).sendMessage = sendMessage;
+      const widget = connectChat(jest.fn())({
+        chat,
+        initialUserMessage: 'Hello',
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(sendMessage).toHaveBeenCalledWith({ text: 'Hello' });
+    });
+
+    it('still resumes a stream in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const resumeStream = jest.fn();
+      (chat as any).resumeStream = resumeStream;
+      const widget = connectChat(jest.fn())({
+        chat,
+        resume: true,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(resumeStream).toHaveBeenCalled();
+    });
+  });
+
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();

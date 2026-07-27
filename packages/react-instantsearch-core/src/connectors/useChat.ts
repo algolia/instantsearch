@@ -90,9 +90,14 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
   // which the server rendered without them.
   const messages = getInitialMessages(props, chatMessageSnapshot);
 
+  // `messages` is pinned to a captured revision, so status and error have to
+  // be pinned with it. Letting them run live lets a delayed boundary render a
+  // tuple that never existed, and the hydrating client starts from another.
   return {
     ...chatState,
     messages,
+    status: 'ready',
+    error: undefined,
     suggestions: getSuggestions(messages),
   };
 }

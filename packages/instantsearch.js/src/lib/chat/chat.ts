@@ -413,12 +413,8 @@ function cloneMessageValue<T>(
       return value;
     }
 
-    const {
-      clone,
-      clonedBuffer,
-      shouldCloneBufferProperties,
-      sourceBuffer,
-    } = clonedView;
+    const { clone, clonedBuffer, shouldCloneBufferProperties, sourceBuffer } =
+      clonedView;
     if (shouldCloneBufferProperties) {
       seen.set(sourceBuffer, clonedBuffer);
     }
@@ -433,9 +429,7 @@ function cloneMessageValue<T>(
   if (typeof URL !== 'undefined' && prototype === URL.prototype) {
     const clone = tryClone(
       () =>
-        new URL(
-          getIntrinsicAccessorValue<string>(URL.prototype, 'href', value)
-        )
+        new URL(getIntrinsicAccessorValue<string>(URL.prototype, 'href', value))
     );
     if (!clone) {
       return value;

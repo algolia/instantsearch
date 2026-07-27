@@ -12,6 +12,7 @@ import {
   getAppIdAndApiKey,
   getRefinements,
   noop,
+  safelyRunOnBrowser,
   sendChatMessageFeedback,
   uniq,
   walkIndex,
@@ -705,13 +706,18 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
 
-        if (resume) {
-          _chatInstance.resumeStream();
-        }
+        // Resuming and sending reach the network. A server render must not do
+        // either: `getServerState` plus the HTML pass would double the work,
+        // and a transport failure would surface during rendering.
+        safelyRunOnBrowser(() => {
+          if (resume) {
+            _chatInstance.resumeStream();
+          }
 
-        if (initialUserMessage && !resume && !hasExistingMessages) {
-          _chatInstance.sendMessage({ text: initialUserMessage });
-        }
+          if (initialUserMessage && !resume && !hasExistingMessages) {
+            _chatInstance.sendMessage({ text: initialUserMessage });
+          }
+        });
 
         renderFn(
           {
