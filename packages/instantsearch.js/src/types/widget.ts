@@ -160,7 +160,7 @@ export type WidgetDescription = {
 };
 
 type SearchWidget<TWidgetDescription extends WidgetDescription> = {
-  dependsOn?: 'search';
+  dependsOn?: 'search' | 'none';
   getWidgetParameters?: (
     state: SearchParameters,
     widgetParametersOptions: {

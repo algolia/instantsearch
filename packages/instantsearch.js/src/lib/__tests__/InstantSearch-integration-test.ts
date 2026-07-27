@@ -174,7 +174,7 @@ describe('network requests', () => {
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -201,7 +201,7 @@ describe('network requests', () => {
         ]
       `);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -224,8 +224,9 @@ describe('network requests', () => {
       expect(
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -271,8 +272,9 @@ describe('network requests', () => {
           },
         ]
       `);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -316,7 +318,7 @@ describe('network requests', () => {
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -346,7 +348,7 @@ describe('network requests', () => {
         ]
       `);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -370,8 +372,9 @@ describe('network requests', () => {
       expect(
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -420,8 +423,9 @@ describe('network requests', () => {
           },
         ]
       `);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -465,7 +469,7 @@ describe('network requests', () => {
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -495,7 +499,7 @@ describe('network requests', () => {
         ]
       `);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
 
@@ -519,8 +523,9 @@ describe('network requests', () => {
       expect(
         castToJestMock(searchClient.search).mock.calls[0]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -569,8 +574,9 @@ describe('network requests', () => {
           },
         ]
       `);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -618,8 +624,9 @@ describe('network requests', () => {
           },
         ]
       `);
-      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
-        .toMatchInlineSnapshot(`
+      expect(
+        castToJestMock(searchClient.getRecommendations!).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`
         [
           {
             "fallbackParameters": undefined,
@@ -644,7 +651,7 @@ describe('network requests', () => {
         castToJestMock(searchClient.search).mock.calls[1]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[1]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[1]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
 
       // Ensure that calling search() after removing all widgets doesn't trigger a new search
@@ -654,7 +661,7 @@ describe('network requests', () => {
         castToJestMock(searchClient.search).mock.calls[2]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
       expect(
-        castToJestMock(searchClient.getRecommendations).mock.calls[2]?.[0]
+        castToJestMock(searchClient.getRecommendations!).mock.calls[2]?.[0]
       ).toMatchInlineSnapshot(`undefined`);
     });
   });

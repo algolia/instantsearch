@@ -8,7 +8,7 @@ import {
   InstantSearch,
   Pagination,
   RefinementList,
-  EXPERIMENTAL_Autocomplete,
+  Autocomplete,
   Chat,
   ChatTrigger,
 } from 'react-instantsearch';
@@ -68,7 +68,7 @@ export function App() {
                 </div>
 
                 <div className="search-panel__results">
-                  <EXPERIMENTAL_Autocomplete
+                  <Autocomplete
                     detachedMediaQuery="(max-width: 1024px)"
                     placeholder="Search for products"
                     indices={[

@@ -79,7 +79,8 @@ export function createInsightsTests(
         });
 
         // initial calls because the middleware is attached
-        expect(window.aa).toHaveBeenCalledTimes(5);
+        // 5 base calls + 1 usage event (__start__)
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -156,8 +157,12 @@ export function createInsightsTests(
 
         await setup(options);
 
-        // initial calls because the middleware is attached
-        expect(window.aa).toHaveBeenCalledTimes(4);
+        // initial calls because the middleware is attached. The usage
+        // `__start__` event is sent via `sendEvents` on the next tick; we
+        // filter it out so the base-call count stays deterministic.
+        expect(
+          window.aa.mock.calls.filter(([method]) => method !== 'sendEvents')
+        ).toHaveLength(4);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -170,7 +175,8 @@ export function createInsightsTests(
         });
 
         // Once result is available
-        expect(window.aa).toHaveBeenCalledTimes(5);
+        // 5 base calls + 1 usage event (__start__)
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {

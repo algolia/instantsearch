@@ -84,9 +84,9 @@ Read more on using connectors: https://alg.li/vue-custom`
   },
   methods: {
     updateState(state = {}, isFirstRender) {
-      if (!isFirstRender) {
-        // Avoid updating the state on first render
-        // otherwise there will be a flash of placeholder data
+      // Search-backed widgets skip placeholder state from init. Request-free
+      // widgets may not receive another render, so their init state is final.
+      if (!isFirstRender || this.widget.dependsOn === 'none') {
         this.state = state;
       }
     },

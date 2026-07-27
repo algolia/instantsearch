@@ -132,6 +132,55 @@ describe('chat', () => {
 
       warnSpy.mockRestore();
     });
+
+    test('triggers the main search by default', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not trigger the main search when requiresSearch is false', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          requiresSearch: false,
+        }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
   });
 
   describe('search tool compatibility', () => {

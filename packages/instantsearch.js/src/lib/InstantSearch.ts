@@ -17,6 +17,7 @@ import {
   hydrateRecommendCache,
   hydrateSearchClient,
   noop,
+  now,
   warning,
   setIndexHelperState,
   isIndexWidget,
@@ -237,11 +238,21 @@ class InstantSearch<
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
   public _insights: InstantSearchOptions['insights'];
+  /**
+   * The options the instance was created with, kept verbatim so consumers
+   * (e.g. usage events) can introspect the configuration without the class
+   * having to enumerate every option by hand. Typed without the class generics
+   * on purpose: referencing `TUiState`/`TRouteState` here (they sit in
+   * contravariant positions inside `InstantSearchOptions`) would break the
+   * assignability of `InstantSearch<SpecificUiState>` to `InstantSearch`.
+   */
+  public _initialOptions: InstantSearchOptions | null;
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
+  public _createdAt: number = now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */
@@ -349,6 +360,7 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
+    this._initialOptions = options as unknown as InstantSearchOptions;
     this.client = searchClient;
     this.future = future;
     this.insightsClient = insightsClient;
@@ -583,11 +595,17 @@ See documentation: ${createDocumentationLink({
     }
 
     mainHelper.search = () => {
-      this.status = 'loading';
-      this.scheduleRender(false);
+      const hasSearchOrRecommendWidget =
+        this._hasSearchWidget || this._hasRecommendWidget;
+
+      if (hasSearchOrRecommendWidget) {
+        this.status = 'loading';
+      }
+      this.scheduleRender(!hasSearchOrRecommendWidget);
 
       warning(
-        Boolean(this.indexName) ||
+        !hasSearchOrRecommendWidget ||
+          Boolean(this.indexName) ||
           Boolean(this.compositionID) ||
           this.mainIndex.getWidgets().some(isIndexWidget),
         'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
@@ -660,7 +678,7 @@ See documentation: ${createDocumentationLink({
       (error as any).error = error;
       this.error = error;
       this.status = 'error';
-      this.scheduleRender(false);
+      this.scheduleRender(!this._hasSearchWidget && !this._hasRecommendWidget);
 
       // This needs to execute last because it throws the error.
       this.emit('error', error);
@@ -778,6 +796,10 @@ See documentation: ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.unsubscribe();
     });
+
+    // Cleared after unsubscribe so in-flight readers (e.g. the insights
+    // start-event listener) have detached before the reference goes away.
+    this._initialOptions = null;
   }
 
   public scheduleSearch = defer(() => {

@@ -94,11 +94,10 @@ export function resolveValue<T>(
 }
 
 /**
- * Error raised when the upstream stream emits a `data-guardrail-violation`
- * chunk. The `message` carries the service-provided `fallbackResponse`, which
- * is intentionally surfaced verbatim through the chat error UI (unlike
- * generic cost-control / 4xx errors, where the raw API message is hidden
- * behind a friendly default).
+ * Error shape for custom chat implementations that still surface a
+ * `data-guardrail-violation` chunk through the error UI. The `message` carries
+ * the service-provided `fallbackResponse`, which is authored for end-user
+ * display.
  *
  * Detection across package boundaries should rely on `error.name` rather than
  * `instanceof` to avoid issues with mixed module copies in bundled apps.

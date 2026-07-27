@@ -16,7 +16,7 @@ import {
   isPromptSuggestion,
 } from 'instantsearch-ui-components';
 import { isChatBusy, openChat } from 'instantsearch.js/es/lib/chat';
-import { warn } from 'instantsearch.js/es/lib/utils';
+import { deprecate, warn } from 'instantsearch.js/es/lib/utils';
 import React, {
   createElement,
   Fragment,
@@ -54,7 +54,7 @@ import type { TransformItemsIndicesConfig } from 'instantsearch.js/es/connectors
 import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ComponentProps } from 'react';
 
-const Autocomplete = createAutocompleteComponent({
+const AutocompleteUiComponent = createAutocompleteComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
@@ -384,6 +384,13 @@ type AutocompleteCommonProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   transformItems?: (
     indices: TransformItemsIndicesConfig[]
   ) => TransformItemsIndicesConfig[];
+  /**
+   * Whether this widget should make InstantSearch require a main search request.
+   * If this is the only widget, and you mark `requiresSearch: false`, no search request will happen.
+   *
+   * @default true
+   */
+  requiresSearch?: boolean;
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];
@@ -457,7 +464,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
   detached: ReturnType<typeof useDetachedMode>;
 };
 
-export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
+export function Autocomplete<TItem extends BaseHit = BaseHit>(
   props: AutocompleteProps<TItem>
 ) {
   const indices = 'indices' in props ? props.indices : undefined;
@@ -471,6 +478,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     detachedMediaQuery,
     translations: userTranslations = {},
     transformItems,
+    requiresSearch = true,
     ...restProps
   } = props;
   const { autoFocus, placeholder, classNames } = restProps as {
@@ -487,11 +495,13 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   };
   const { indexUiState, indexRenderState, status } = useInstantSearch();
   const { compositionID } = useInstantSearchContext();
+  const dependsOn = requiresSearch ? ('search' as const) : ('none' as const);
   const { refine } = useSearchBox(
     {},
     {
       $$type: 'ais.autocomplete',
       $$widgetType: 'ais.autocomplete',
+      dependsOn,
       ...(props.aiMode ? { opensChat: true } : {}),
     }
   );
@@ -500,12 +510,12 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
 
   if (isFeedsMode && indices !== undefined) {
     throw new Error(
-      'EXPERIMENTAL_Autocomplete: `feeds` and `indices` are mutually exclusive.'
+      'Autocomplete: `feeds` and `indices` are mutually exclusive.'
     );
   }
   if (isFeedsMode && !compositionID) {
     throw new Error(
-      'EXPERIMENTAL_Autocomplete in feeds-mode requires a composition-based <InstantSearch> (compositionID must be set).'
+      'Autocomplete in feeds-mode requires a composition-based <InstantSearch> (compositionID must be set).'
     );
   }
 
@@ -816,7 +826,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
       setActivated(true);
     };
     return (
-      <Autocomplete
+      <AutocompleteUiComponent
         {...(shellRootProps as React.HTMLAttributes<HTMLDivElement>)}
         classNames={classNames}
       >
@@ -845,7 +855,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
             classNames={classNames}
           />
         )}
-      </Autocomplete>
+      </AutocompleteUiComponent>
     );
   }
 
@@ -886,7 +896,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   if (isFeedsMode) {
     return (
       <Index
-        EXPERIMENTAL_isolated
+        isolated
         indexName={compositionID}
         indexId={`ais-autocomplete-${instanceKey}`}
       >
@@ -898,7 +908,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   return (
-    <Index EXPERIMENTAL_isolated indexId={`ais-autocomplete-${instanceKey}`}>
+    <Index isolated indexId={`ais-autocomplete-${instanceKey}`}>
       <Configure {...searchParameters} />
       {indicesConfig.map((index) => (
         <Index
@@ -913,6 +923,12 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>(
     </Index>
   );
 }
+
+/** @deprecated use Autocomplete instead */
+export const EXPERIMENTAL_Autocomplete = deprecate(
+  Autocomplete,
+  'EXPERIMENTAL_Autocomplete is no longer experimental. Please use Autocomplete instead.'
+);
 
 function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   indicesConfig,
@@ -1282,7 +1298,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   if (isDetached) {
     return (
-      <Autocomplete
+      <AutocompleteUiComponent
         {...props}
         {...rootProps}
         rootRef={rootRef}
@@ -1317,13 +1333,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             </AutocompleteDetachedContainer>
           </AutocompleteDetachedOverlay>
         )}
-      </Autocomplete>
+      </AutocompleteUiComponent>
     );
   }
 
   // Normal (non-detached) rendering
   return (
-    <Autocomplete
+    <AutocompleteUiComponent
       {...props}
       {...rootProps}
       rootRef={rootRef}
@@ -1331,7 +1347,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     >
       {searchBoxContent}
       {panelContent}
-    </Autocomplete>
+    </AutocompleteUiComponent>
   );
 }
 

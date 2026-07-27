@@ -51,7 +51,7 @@ const connectCustomSearchBox: Connector<
       init(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             instantSearchInstance: params.instantSearchInstance,
           },
           true
@@ -60,7 +60,7 @@ const connectCustomSearchBox: Connector<
       render(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             query: 'query',
             instantSearchInstance: params.instantSearchInstance,
           },
@@ -156,7 +156,7 @@ const connectUnstableSearchBox: Connector<
       init(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             instantSearchInstance: params.instantSearchInstance,
           },
           true
@@ -165,7 +165,7 @@ const connectUnstableSearchBox: Connector<
       render(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             query: 'query',
             instantSearchInstance: params.instantSearchInstance,
           },
@@ -213,7 +213,7 @@ const connectCustomWidget: Connector<
       init(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             instantSearchInstance: params.instantSearchInstance,
           },
           true
@@ -222,7 +222,7 @@ const connectCustomWidget: Connector<
       render(params) {
         renderFn(
           {
-            ...this.getWidgetRenderState(params),
+            ...this.getWidgetRenderState!(params),
             instantSearchInstance: params.instantSearchInstance,
           },
           false
@@ -644,6 +644,44 @@ describe('useConnector', () => {
     expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
     expect(getByTestId('attribute')).toHaveTextContent('categories');
+  });
+
+  test('replaces the widget when additional widget properties change', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+    function CustomWidgetWithDependency({
+      dependsOn,
+    }: {
+      dependsOn: 'search' | 'none';
+    }) {
+      useConnector(connectCustomWidget, { attribute: 'brands' }, { dependsOn });
+
+      return null;
+    }
+
+    function App({ dependsOn }: { dependsOn: 'search' | 'none' }) {
+      return (
+        <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+          <CustomWidgetWithDependency dependsOn={dependsOn} />
+        </InstantSearchSpy>
+      );
+    }
+
+    const { rerender } = render(<App dependsOn="search" />);
+
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
+      expect.objectContaining({ dependsOn: 'search' }),
+    ]);
+
+    rerender(<App dependsOn="none" />);
+
+    await waitFor(() =>
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1)
+    );
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
+      expect.objectContaining({ dependsOn: 'none' }),
+    ]);
   });
 
   test('rerenders the widget on state change', async () => {

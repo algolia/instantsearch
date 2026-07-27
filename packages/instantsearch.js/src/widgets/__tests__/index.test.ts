@@ -158,11 +158,11 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
+      case 'autocomplete':
       case 'EXPERIMENTAL_autocomplete': {
-        const EXPERIMENTAL_autocomplete =
-          widget as Widgets['EXPERIMENTAL_autocomplete'];
+        const autocompleteWidget = widget as Widgets['autocomplete'];
 
-        const instance = EXPERIMENTAL_autocomplete({ container, indices: [] });
+        const instance = autocompleteWidget({ container, indices: [] });
         const autocomplete = instance.find(
           (w) => w.$$type === 'ais.autocomplete'
         );

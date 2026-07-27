@@ -6,7 +6,7 @@ import { createCompositionClient } from '@instantsearch/mocks';
 import { act, render } from '@testing-library/react';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
-import { SearchBox } from 'react-instantsearch';
+import { EXPERIMENTAL_Autocomplete, SearchBox } from 'react-instantsearch';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -43,6 +43,7 @@ const renderComponent = async ({
       <InstantSearchRSCContext.Provider
         value={{
           waitForResultsRef: ref,
+          resolveWaitForResultsRef: { current: null },
           countRef: { current: 0 },
           ignoreMultipleHooksWarning: false,
         }}
@@ -87,6 +88,41 @@ test('it waits for composition-based search', async () => {
     1,
     expect.objectContaining({ compositionID })
   );
+});
+
+test('it ignores isolated feeds when deciding whether to run a second pass', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = await renderComponent({
+    ref,
+    insertedHTML,
+    children: (
+      <>
+        <EXPERIMENTAL_Autocomplete
+          autoFocus
+          requiresSearch={false}
+          feeds={[
+            {
+              feedID: 'products',
+              itemComponent: ({ item }) => <>{item.objectID}</>,
+            },
+          ]}
+        />
+        <SearchBox />
+      </>
+    ),
+  });
+
+  await act(async () => {
+    await ref.current;
+  });
+
+  expect(ref.current!.status).toBe('fulfilled');
+  // One isolated feeds request and one main request. Opting the Autocomplete
+  // out of the main search must not repeat its isolated request.
+  expect(client.search).toHaveBeenCalledTimes(2);
+  expect(insertedHTML).toHaveBeenCalledTimes(1);
 });
 
 afterAll(() => {

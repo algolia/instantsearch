@@ -1,7 +1,7 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
-import { ChatState, CACHE_KEY } from '../chat';
+import { Chat, ChatState, CACHE_KEY } from '../chat';
 
 describe('ChatState', () => {
   beforeAll(() => {
@@ -18,6 +18,11 @@ describe('ChatState', () => {
         removeItem(key: string) {
           delete store[key];
         },
+        clear() {
+          Object.keys(store).forEach((key) => {
+            delete store[key];
+          });
+        },
       };
     })();
 
@@ -27,12 +32,7 @@ describe('ChatState', () => {
   });
 
   beforeEach(() => {
-    // Clear sessionStorage before each test
-    sessionStorage.removeItem(CACHE_KEY);
-    sessionStorage.removeItem(`${CACHE_KEY}-agentID1`);
-    sessionStorage.removeItem(`${CACHE_KEY}-agentID2`);
-    sessionStorage.removeItem(`${CACHE_KEY}-agentID3`);
-    sessionStorage.removeItem(`${CACHE_KEY}-agentID4`);
+    sessionStorage.clear();
   });
 
   afterAll(() => {
@@ -72,6 +72,48 @@ describe('ChatState', () => {
     expect(chatState.messages).toEqual(initialMessages);
   });
 
+  it('should not load initial messages from sessionStorage when persistence is disabled', () => {
+    const agentId = 'agentID5';
+    const initialMessages = [
+      { role: 'user', content: 'Hello' },
+      { role: 'bot', content: 'Hi there!' },
+    ];
+    sessionStorage.setItem(
+      `${CACHE_KEY}-${agentId}`,
+      JSON.stringify(initialMessages)
+    );
+
+    // eslint-disable-next-line jest/unbound-method
+    const originalGetItem = sessionStorage.getItem;
+    sessionStorage.getItem = () => {
+      throw new Error('unexpected sessionStorage read');
+    };
+
+    try {
+      const chatState = new ChatState(agentId, undefined, false);
+      expect(chatState.messages).toEqual([]);
+    } finally {
+      sessionStorage.getItem = originalGetItem;
+    }
+  });
+
+  it('should use explicit messages when persistence is disabled', () => {
+    const agentId = 'agentID6';
+    const storedMessages = [{ role: 'user', content: 'Stored message' }];
+    const initialMessages = [{ role: 'user', content: 'Explicit message' }];
+    sessionStorage.setItem(
+      `${CACHE_KEY}-${agentId}`,
+      JSON.stringify(storedMessages)
+    );
+
+    const chatState = new ChatState<any>(agentId, initialMessages, false);
+
+    expect(chatState.messages).toEqual(initialMessages);
+    expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(
+      JSON.stringify(storedMessages)
+    );
+  });
+
   it('should not save messages to sessionStorage when status is not ready', () => {
     const agentId = 'agentID3';
     const chatState = new ChatState<any>(agentId);
@@ -84,6 +126,36 @@ describe('ChatState', () => {
     expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
     chatState.status = 'error';
     expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
+  });
+
+  it('should not save messages to sessionStorage when persistence is disabled', () => {
+    const agentId = 'agentID7';
+    const chatState = new ChatState<any>(agentId, undefined, false);
+    const message = { role: 'user', content: 'Hello' };
+
+    chatState.status = 'submitted';
+    chatState.messages = [message];
+    chatState.status = 'ready';
+
+    expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(null);
+  });
+
+  it('should not persist messages for Chat when persistence is disabled', () => {
+    const agentId = 'agentID8';
+    const storedMessages = [{ role: 'user', content: 'Stored message' }];
+    const message = { role: 'user', content: 'Hello' };
+    sessionStorage.setItem(
+      `${CACHE_KEY}-${agentId}`,
+      JSON.stringify(storedMessages)
+    );
+
+    const chat = new Chat<any>({ agentId, persistence: false });
+    expect(chat.messages).toEqual([]);
+
+    chat.messages = [message];
+    expect(sessionStorage.getItem(`${CACHE_KEY}-${agentId}`)).toBe(
+      JSON.stringify(storedMessages)
+    );
   });
 
   it('should handle sessionStorage being unavailable', () => {

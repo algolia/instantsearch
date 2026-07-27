@@ -7,6 +7,7 @@ import {
 
 import type {
   Connector,
+  IndexRenderState,
   InitOptions,
   RenderOptions,
   WidgetRenderState,
@@ -93,6 +94,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
     return {
       $$type: 'ais.chatTrigger',
       opensChat: true as const,
+      dependsOn: 'none' as const,
 
       init(initOptions) {
         lastOptions = initOptions;
@@ -120,7 +122,7 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         unmountFn();
       },
 
-      getWidgetRenderState(renderOptions) {
+      getWidgetRenderState(renderOptions: InitOptions | RenderOptions) {
         const chatState = getChatRenderState(renderOptions);
         return {
           open: chatState?.open ?? false,
@@ -129,11 +131,18 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         };
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState: IndexRenderState,
+        renderOptions: InitOptions | RenderOptions
+      ) {
         return {
           ...renderState,
           chatTrigger: this.getWidgetRenderState(renderOptions),
         };
+      },
+
+      shouldRender() {
+        return true;
       },
     };
   };

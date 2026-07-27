@@ -1,4 +1,5 @@
 import {
+  createControlledSearchClient,
   createMultiSearchResponse,
   createSearchClient,
   createAlgoliaSearchClient,
@@ -6,9 +7,15 @@ import {
   createSingleSearchResponse,
   defaultRenderingContent,
 } from '@instantsearch/mocks';
+import connectAutocomplete from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
-import { Hits, RefinementList, TrendingItems } from 'react-instantsearch';
+import {
+  EXPERIMENTAL_Autocomplete,
+  Hits,
+  RefinementList,
+  TrendingItems,
+} from 'react-instantsearch';
 import {
   InstantSearch,
   InstantSearchSSRProvider,
@@ -16,6 +23,7 @@ import {
   DynamicWidgets,
   Feeds,
   version,
+  useConnector,
   useSearchBox,
 } from 'react-instantsearch-core';
 
@@ -37,6 +45,42 @@ function SearchBox() {
         <input className="ais-SearchBox-input" defaultValue={query} />
       </form>
     </div>
+  );
+}
+
+function AutocompleteWithoutSearch() {
+  useConnector(connectAutocomplete, { requiresSearch: false });
+
+  return null;
+}
+
+function RequestFreeAutocomplete() {
+  return (
+    <EXPERIMENTAL_Autocomplete
+      autoFocus
+      requiresSearch={false}
+      indices={[
+        {
+          indexName: 'suggestions',
+          itemComponent: ({ item }) => <>{item.objectID}</>,
+        },
+      ]}
+    />
+  );
+}
+
+function RequestFreeFeedsAutocomplete() {
+  return (
+    <EXPERIMENTAL_Autocomplete
+      autoFocus
+      requiresSearch={false}
+      feeds={[
+        {
+          feedID: 'products',
+          itemComponent: ({ item }) => <>{item.objectID}</>,
+        },
+      ]}
+    />
   );
 }
 
@@ -335,6 +379,78 @@ describe('getServerState', () => {
 
     expect(Object.keys(serverState.initialResults)).toHaveLength(4);
     expect(serverState.initialResults).toMatchSnapshot();
+  });
+
+  test('returns empty results when no widget requires a search', async () => {
+    const searchClient = createSearchClient({});
+
+    const serverState = await getServerState(
+      <InstantSearchSSRProvider>
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <AutocompleteWithoutSearch />
+        </InstantSearch>
+      </InstantSearchSSRProvider>,
+      { renderToString }
+    );
+
+    expect(serverState).toEqual({ initialResults: {} });
+    expect(searchClient.search).not.toHaveBeenCalled();
+  });
+
+  test('excludes isolated autocomplete results when no widget requires a search', async () => {
+    const searchClient = createSearchClient({});
+
+    const serverState = await getServerState(
+      <InstantSearchSSRProvider>
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <RequestFreeAutocomplete />
+        </InstantSearch>
+      </InstantSearchSSRProvider>,
+      { renderToString }
+    );
+
+    expect(searchClient.search).toHaveBeenCalledWith([
+      expect.objectContaining({ indexName: 'suggestions' }),
+    ]);
+    expect(serverState).toEqual({ initialResults: {} });
+  });
+
+  test('does not repeat isolated feeds when no widget requires a search', async () => {
+    const searchClient = createCompositionClient();
+
+    const serverState = await getServerState(
+      <InstantSearchSSRProvider>
+        <InstantSearch
+          searchClient={searchClient}
+          compositionID="my-composition"
+        >
+          <RequestFreeFeedsAutocomplete />
+        </InstantSearch>
+      </InstantSearchSSRProvider>,
+      { renderToString }
+    );
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(serverState).toEqual({ initialResults: {} });
+  });
+
+  test('does not wait for pending isolated autocomplete results', async () => {
+    const { searchClient, searches } = createControlledSearchClient();
+
+    const serverState = await getServerState(
+      <InstantSearchSSRProvider>
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <RequestFreeAutocomplete />
+        </InstantSearch>
+      </InstantSearchSSRProvider>,
+      { renderToString }
+    );
+
+    expect(searches).toHaveLength(1);
+    expect(serverState).toEqual({ initialResults: {} });
+
+    searches[0].resolver();
+    await searches[0].promise;
   });
 
   test('searches twice (cached) with dynamic widgets', async () => {

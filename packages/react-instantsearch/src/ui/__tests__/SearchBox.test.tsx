@@ -64,6 +64,7 @@ describe('SearchBox', () => {
               value=""
             />
             <button
+              aria-label="Submit the search query."
               class="ais-SearchBox-submit"
               title="Submit the search query."
               type="submit"
@@ -81,6 +82,7 @@ describe('SearchBox', () => {
               </svg>
             </button>
             <button
+              aria-label="Clear the search query."
               class="ais-SearchBox-reset"
               hidden=""
               title="Clear the search query."
@@ -183,6 +185,7 @@ describe('SearchBox', () => {
               value=""
             />
             <button
+              aria-label="Submit search"
               class="ais-SearchBox-submit"
               title="Submit search"
               type="submit"
@@ -200,6 +203,7 @@ describe('SearchBox', () => {
               </svg>
             </button>
             <button
+              aria-label="Reset query"
               class="ais-SearchBox-reset"
               hidden=""
               title="Reset query"
@@ -299,6 +303,7 @@ describe('SearchBox', () => {
               value=""
             />
             <button
+              aria-label="Submit the search query."
               class="ais-SearchBox-submit"
               title="Submit the search query."
               type="submit"
@@ -306,6 +311,7 @@ describe('SearchBox', () => {
               submit
             </button>
             <button
+              aria-label="Clear the search query."
               class="ais-SearchBox-reset"
               hidden=""
               title="Clear the search query."
@@ -577,6 +583,7 @@ describe('SearchBox', () => {
               value=""
             />
             <button
+              aria-label="Submit the search query."
               class="ais-SearchBox-submit SUBMIT"
               title="Submit the search query."
               type="submit"
@@ -594,6 +601,7 @@ describe('SearchBox', () => {
               </svg>
             </button>
             <button
+              aria-label="Clear the search query."
               class="ais-SearchBox-reset RESET"
               hidden=""
               title="Clear the search query."

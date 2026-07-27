@@ -882,6 +882,47 @@ describe('InstantSearch', () => {
       return (
         <StrictMode>
           <InstantSearch indexName="instant_search" searchClient={searchClient}>
+            <SearchBox />
+            {children}
+          </InstantSearch>
+        </StrictMode>
+      );
+    }
+
+    const { rerender } = render(
+      <App>
+        <RefinementList attribute="brand" />
+        <RefinementList attribute="category" />
+        <RefinementList attribute="color" />
+        <RefinementList attribute="price" />
+      </App>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    rerender(<App />);
+
+    await act(async () => {
+      await wait(0);
+      await wait(0);
+    });
+
+    // If the timing is wrong, the search will be called once for every removed
+    // widget instead of coalescing them into one search.
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not search when all search widgets are removed', async () => {
+    const searchClient = createAlgoliaSearchClient({});
+
+    function App({ children }: { children?: React.ReactNode }) {
+      return (
+        <StrictMode>
+          <InstantSearch indexName="instant_search" searchClient={searchClient}>
             {children}
           </InstantSearch>
         </StrictMode>
@@ -910,9 +951,7 @@ describe('InstantSearch', () => {
       await wait(0);
     });
 
-    // if the timing is wrong, the search will be called once for every removed widget
-    // except the final one (as there's no search if there are no widgets)
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
   describe('warn about Next.js router', () => {

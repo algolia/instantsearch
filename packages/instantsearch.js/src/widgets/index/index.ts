@@ -55,6 +55,10 @@ export type IndexWidgetParams =
        *
        * @default false
        */
+      isolated?: false;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated?: false;
     }
   | {
@@ -62,16 +66,40 @@ export type IndexWidgetParams =
        * If `true`, the index will not be merged with the main helper's state.
        * This means that the index will not be part of the main search request.
        *
-       * This option is EXPERIMENTAL, and implementation details may change in the future.
-       * Things that could change are:
-       * - which widgets get rendered when a change happens
-       * - whether the index searches automatically
-       * - whether the index is included in the URL / UiState
-       * - whether the index is included in server-side rendering
+       * When `isolated` is `true`:
+       * - the index searches on its own instead of within the main search request;
+       * - the index is not included in the URL / UiState;
+       * - the index is not included in server-side rendering.
        *
        * @default false
        */
+      isolated: true;
+      /**
+       * @deprecated Use `isolated` instead.
+       */
+      EXPERIMENTAL_isolated?: boolean;
+      /**
+       * The index or composition id to target.
+       */
+      indexName?: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+    }
+  | {
+      /**
+       * @deprecated Use `isolated` instead.
+       */
       EXPERIMENTAL_isolated: true;
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      isolated?: boolean;
       /**
        * The index or composition id to target.
        */
@@ -315,13 +343,76 @@ function resolveScopedResultsFromWidgets(
   }, []);
 }
 
+function getWidgetsRequestDependencies(widgets: Array<Widget | IndexWidget>): {
+  hasSearchWidget: boolean;
+  hasRecommendWidget: boolean;
+} {
+  return widgets.reduce<{
+    hasSearchWidget: boolean;
+    hasRecommendWidget: boolean;
+  }>(
+    (dependencies, widget) => {
+      if (isIndexWidget(widget)) {
+        if (widget._isolated) {
+          return dependencies;
+        }
+
+        const childDependencies = getWidgetsRequestDependencies(
+          widget.getWidgets()
+        );
+
+        return {
+          hasSearchWidget:
+            dependencies.hasSearchWidget || childDependencies.hasSearchWidget,
+          hasRecommendWidget:
+            dependencies.hasRecommendWidget ||
+            childDependencies.hasRecommendWidget,
+        };
+      }
+
+      if (widget.dependsOn === 'recommend') {
+        return { ...dependencies, hasRecommendWidget: true };
+      }
+
+      if (widget.dependsOn === 'none') {
+        return dependencies;
+      }
+
+      return { ...dependencies, hasSearchWidget: true };
+    },
+    {
+      hasSearchWidget: false,
+      hasRecommendWidget: false,
+    }
+  );
+}
+
+function recomputeInstantSearchRequestDependencies(
+  instantSearchInstance: InstantSearch
+) {
+  const { hasSearchWidget, hasRecommendWidget } = getWidgetsRequestDependencies(
+    instantSearchInstance.mainIndex.getWidgets()
+  );
+
+  instantSearchInstance._hasSearchWidget = hasSearchWidget;
+  instantSearchInstance._hasRecommendWidget = hasRecommendWidget;
+}
+
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
     (widgetParams.indexName === undefined &&
+      !widgetParams.isolated &&
       !widgetParams.EXPERIMENTAL_isolated)
   ) {
     throw new Error(withUsage('The `indexName` option is required.'));
+  }
+
+  if (__DEV__ && widgetParams.EXPERIMENTAL_isolated !== undefined) {
+    warning(
+      false,
+      'The `EXPERIMENTAL_isolated` option is no longer experimental and has been renamed. Please use `isolated` instead.'
+    );
   }
 
   // When isolated=true, we use an empty string as the default indexName.
@@ -329,7 +420,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   const {
     indexName = '',
     indexId = indexName,
-    EXPERIMENTAL_isolated: isolated = false,
+    isolated = widgetParams.EXPERIMENTAL_isolated ?? false,
   } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
@@ -339,8 +430,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
-  let hasRecommendWidget: boolean = false;
-  let hasSearchWidget: boolean = false;
+
+  const recomputeLocalRequestDependencies = () => {
+    if (localInstantSearchInstance) {
+      recomputeInstantSearchRequestDependencies(localInstantSearchInstance);
+    }
+  };
 
   return {
     $$type: 'ais.index',
@@ -469,24 +564,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       flatWidgets.forEach((widget) => {
         widget.parent = this;
-        if (isIndexWidget(widget)) {
-          return;
+        if (!isIndexWidget(widget)) {
+          addWidgetId(widget);
         }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
-
-        addWidgetId(widget);
       });
 
       localWidgets = localWidgets.concat(flatWidgets);
+      recomputeLocalRequestDependencies();
+
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
@@ -565,22 +650,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         (widget) => flatWidgets.indexOf(widget) === -1
       );
 
-      localWidgets.forEach((widget) => {
+      flatWidgets.forEach((widget) => {
         widget.parent = undefined;
-        if (isIndexWidget(widget)) {
-          return;
-        }
-
-        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
-          localInstantSearchInstance._hasRecommendWidget = true;
-        } else if (localInstantSearchInstance) {
-          localInstantSearchInstance._hasSearchWidget = true;
-        } else if (widget.dependsOn === 'recommend') {
-          hasRecommendWidget = true;
-        } else {
-          hasSearchWidget = true;
-        }
       });
+      recomputeLocalRequestDependencies();
 
       if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         const { cleanedSearchState, cleanedRecommendState } =
@@ -894,12 +967,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         instantSearchInstance.scheduleRender();
       }
 
-      if (hasRecommendWidget) {
-        instantSearchInstance._hasRecommendWidget = true;
-      }
-      if (hasSearchWidget) {
-        instantSearchInstance._hasSearchWidget = true;
-      }
+      recomputeLocalRequestDependencies();
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {

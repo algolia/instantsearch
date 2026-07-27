@@ -181,11 +181,10 @@ const renderer =
 type AugmentedWidget<
   TWidgetFactory extends AnyWidgetFactory,
   TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose',
-> = Omit<
-  ReturnType<TWidgetFactory>,
-  TOverriddenKeys | 'dependsOn' | 'getWidgetParameters'
-> &
-  Pick<Required<Widget>, TOverriddenKeys>;
+  TWidget extends Widget = ReturnType<TWidgetFactory>,
+> = TWidget extends Widget
+  ? Omit<TWidget, TOverriddenKeys> & Pick<Required<TWidget>, TOverriddenKeys>
+  : never;
 
 export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
   panelWidgetParams?: PanelWidgetParams<TWidgetFactory>

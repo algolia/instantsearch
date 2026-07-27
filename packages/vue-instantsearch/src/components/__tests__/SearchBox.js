@@ -133,7 +133,8 @@ test('overriding slots', () => {
 
   expect(htmlCompat(wrapper.find('.ais-SearchBox-submit').html()))
     .toMatchInlineSnapshot(`
-    <button class="ais-SearchBox-submit"
+    <button aria-label="Submit the search query"
+            class="ais-SearchBox-submit"
             hidden="hidden"
             title="Submit the search query"
             type="submit"
@@ -145,7 +146,8 @@ test('overriding slots', () => {
   `);
   expect(htmlCompat(wrapper.find('.ais-SearchBox-reset').html()))
     .toMatchInlineSnapshot(`
-    <button class="ais-SearchBox-reset"
+    <button aria-label="Clear the search query"
+            class="ais-SearchBox-reset"
             hidden="hidden"
             title="Clear the search query"
             type="reset"

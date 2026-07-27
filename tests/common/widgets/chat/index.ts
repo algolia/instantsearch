@@ -1,6 +1,8 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
+import { createGuardrailsTests } from './guardrails';
 import { createOptionsTests } from './options';
+import { createPersistenceTests } from './persistence';
 import { createStreamingTests } from './streaming';
 import { createTemplatesTests } from './templates';
 import { createTranslationsTests } from './translations';
@@ -14,8 +16,12 @@ type JSBaseWidgetParams = Parameters<ChatWidget>[0];
 // Explicitly adding ChatConnectorParams back. For some reason
 // ChatConnectorParams are not inferred when Omit is used with WidgetParams.
 export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
-  ChatConnectorParams & { renderRefinements?: boolean };
+  ChatConnectorParams & {
+    renderChat?: boolean;
+    renderRefinements?: boolean;
+  };
 export type ReactChatWidgetParams = ChatProps<unknown> & {
+  renderChat?: boolean;
   renderRefinements?: boolean;
 };
 
@@ -44,7 +50,9 @@ export function createChatWidgetTests(
   });
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {
+    createGuardrailsTests(setup, { act, skippedTests, flavor });
     createOptionsTests(setup, { act, skippedTests, flavor });
+    createPersistenceTests(setup, { act, skippedTests, flavor });
     createStreamingTests(setup, { act, skippedTests, flavor });
     createTemplatesTests(setup, { act, skippedTests, flavor });
     createTranslationsTests(setup, { act, skippedTests, flavor });
