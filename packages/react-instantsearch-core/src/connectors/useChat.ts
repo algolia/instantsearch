@@ -51,7 +51,10 @@ function getInitialMessages<TUiMessage extends UIMessage>(
   const messages =
     'chat' in props
       ? // A `chat` from another copy of instantsearch.js has no snapshot hook.
-        // Falling back beats taking the whole tree down on the server render.
+        // Fall back to empty rather than to `chat.messages`: that array also
+        // holds messages restored from storage, which the server never sees,
+        // so seeding the hydration render from it causes a mismatch. Such a
+        // chat's caller messages appear after hydration instead.
         (props.chat as typeof props.chat & Partial<HydratableChat<TUiMessage>>)[
           '~getServerMessages'
         ]?.(capturedRevision) ?? []
