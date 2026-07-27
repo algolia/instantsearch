@@ -52,6 +52,67 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+/**
+ * Maximum serialized (UTF-8) size of `metadata.turnContext`. Oversize contexts
+ * are truncated entry-by-entry rather than rejected so a send never fails
+ * because of ambient context.
+ */
+export const TURN_CONTEXT_MAX_BYTES = 10 * 1024;
+
+function utf8ByteLength(value: string): number {
+  let bytes = 0;
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code < 0x80) {
+      bytes += 1;
+    } else if (code < 0x800) {
+      bytes += 2;
+    } else if (code >= 0xd800 && code <= 0xdbff) {
+      // Surrogate pair: 4 bytes for the full code point, skip the low half.
+      bytes += 4;
+      i++;
+    } else {
+      bytes += 3;
+    }
+  }
+  return bytes;
+}
+
+/**
+ * Caps the serialized turn context at `TURN_CONTEXT_MAX_BYTES`. Entries are
+ * kept in insertion order; any entry that would push the serialized payload
+ * past the cap is dropped (later, smaller entries can still fit). Returns the
+ * input untouched when it already fits.
+ */
+function truncateTurnContext(
+  context: Record<string, unknown>
+): Record<string, unknown> {
+  if (utf8ByteLength(JSON.stringify(context)) <= TURN_CONTEXT_MAX_BYTES) {
+    return context;
+  }
+
+  const truncated: Record<string, unknown> = {};
+  const dropped: string[] = [];
+
+  Object.entries(context).forEach(([key, value]) => {
+    const candidate = JSON.stringify({ ...truncated, [key]: value });
+    if (utf8ByteLength(candidate) <= TURN_CONTEXT_MAX_BYTES) {
+      truncated[key] = value;
+    } else {
+      dropped.push(key);
+    }
+  });
+
+  warning(
+    false,
+    `The \`context\` payload exceeds ${TURN_CONTEXT_MAX_BYTES} bytes once serialized as JSON. The following entries were dropped to fit: ${dropped.join(
+      ', '
+    )}.`
+  );
+
+  return truncated;
+}
+
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
   input: string;
@@ -207,12 +268,14 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * `messages[last].metadata.turnContext` per the Agent Studio contract — never
    * rendered as a chat bubble and never persisted on assistant turns.
    *
-   * The server validates the payload (flat `Record<string, string>`, key/value
-   * length and shape) and rejects malformed contexts. Pass a function when the
-   * values change per-turn — it is invoked once per send. If the source is
-   * async, resolve it upstream and close over the value.
+   * Values can be any JSON-serializable data (nested objects and arrays
+   * included). The serialized payload is capped at 10 KB (UTF-8): entries that
+   * would push it past the cap are dropped client-side — with a dev-mode
+   * warning — so a send never fails because of oversize context. Pass a
+   * function when the values change per-turn — it is invoked once per send. If
+   * the source is async, resolve it upstream and close over the value.
    */
-  context?: Record<string, string> | (() => Record<string, string>);
+  context?: Record<string, unknown> | (() => Record<string, unknown>);
   /**
    * A message to send automatically when the chat is initialized.
    *
@@ -787,10 +850,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return _chatInstance.sendMessage(message, ...rest);
           }
 
-          // Resolve once per send; let the server validate the payload and
-          // surface any contract violations.
-          const turnContext =
-            typeof context === 'function' ? context() : context;
+          // Resolve once per send. The client only enforces the 10 KB size
+          // cap (by truncation); the server validates everything else and
+          // surfaces any contract violations.
+          const turnContext = truncateTurnContext(
+            typeof context === 'function' ? context() : context
+          );
 
           return _chatInstance.sendMessage(
             {

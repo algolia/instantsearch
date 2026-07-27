@@ -1881,20 +1881,29 @@ data: [DONE]`,
       expect(sendMessageSpy.mock.calls[0][0]).toBeUndefined();
     });
 
-    it('forwards values verbatim and leaves payload validation to the server', async () => {
+    it('forwards any JSON values verbatim when the serialized context fits 10 KB', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
 
-      const longValue = 'x'.repeat(1025);
+      // Any JSON-serializable payload is allowed — nested objects, arrays,
+      // numbers, booleans, null — and keys the server may still reject are
+      // forwarded as-is: the client only enforces the size cap.
+      const context = {
+        'bad key!': 'kept as-is',
+        cart: {
+          items: [
+            { sku: 'SKU-1', qty: 2 },
+            { sku: 'SKU-2', qty: 1 },
+          ],
+          total: 42.5,
+        },
+        flags: ['beta', 'ai-mode'],
+        premium: true,
+        referrer: null,
+      };
       const { widget, renderFn } = createChatWidgetWithContext({
         chat: chatInstance,
-        // Intentionally non-conforming entries: backend (HTTP 422) owns
-        // validation; the client must not silently mutate this payload.
-        context: {
-          'bad key!': 'kept as-is',
-          tooBig: longValue,
-          ok: 'kept',
-        } as Record<string, string>,
+        context,
       });
 
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -1905,11 +1914,61 @@ data: [DONE]`,
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
       expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
-        turnContext: {
-          'bad key!': 'kept as-is',
-          tooBig: longValue,
-          ok: 'kept',
+        turnContext: context,
+      });
+    });
+
+    it('drops entries that push the serialized context past 10 KB and keeps the rest', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const oversizeValue = 'x'.repeat(11 * 1024);
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: {
+          keep: 'small value',
+          oversize: oversizeValue,
+          alsoKeep: { nested: 'still fits' },
         },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+
+      expect(() => sendMessage({ text: 'hi' })).toWarnDev(
+        '[InstantSearch.js]: The `context` payload exceeds 10240 bytes once serialized as JSON. The following entries were dropped to fit: oversize.'
+      );
+
+      expect(sendMessageSpy).toHaveBeenCalledTimes(1);
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          keep: 'small value',
+          alsoKeep: { nested: 'still fits' },
+        },
+      });
+    });
+
+    it('sends the context untouched when it is exactly at the 10 KB cap', async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      // `{"v":"…"}` adds 8 bytes of JSON overhead around the value.
+      const value = 'x'.repeat(10 * 1024 - 8);
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { v: value },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      expect(() => sendMessage({ text: 'hi' })).not.toWarnDev();
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { v: value },
       });
     });
 
