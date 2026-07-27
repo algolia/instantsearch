@@ -38,8 +38,11 @@ export type PromptSuggestionsOwnProps = ComponentProps<'div'> & {
    */
   onSuggestionClick: (suggestion: string) => void;
   /**
-   * Whether suggestions are currently being fetched. When true and
-   * `suggestions` is empty, renders `skeletonCount` placeholder pills.
+   * Whether suggestions are currently being fetched. When true and no
+   * non-blank suggestion has arrived yet, renders `skeletonCount` placeholder
+   * pills; once partial suggestions stream in they render normally but ignore
+   * clicks until loading finishes, so an unfinished prompt can't be sent (their
+   * appearance is unchanged — only `disabled` styles the pills).
    */
   isLoading?: boolean;
   /**
@@ -67,9 +70,7 @@ export type PromptSuggestionsOwnProps = ComponentProps<'div'> & {
   classNames?: Partial<PromptSuggestionsClassNames>;
 };
 
-export function createPromptSuggestionsComponent({
-  createElement,
-}: Renderer) {
+export function createPromptSuggestionsComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
   function DefaultHeader({
@@ -77,9 +78,7 @@ export function createPromptSuggestionsComponent({
     translations,
   }: PromptSuggestionsHeaderComponentProps) {
     return (
-      <div
-        className={cx('ais-PromptSuggestions-header', classNames.header)}
-      >
+      <div className={cx('ais-PromptSuggestions-header', classNames.header)}>
         <span
           className={cx(
             'ais-PromptSuggestions-headerTitle',
@@ -92,9 +91,7 @@ export function createPromptSuggestionsComponent({
     );
   }
 
-  return function PromptSuggestions(
-    userProps: PromptSuggestionsOwnProps
-  ) {
+  return function PromptSuggestions(userProps: PromptSuggestionsOwnProps) {
     const {
       suggestions = [],
       onSuggestionClick,
@@ -115,7 +112,11 @@ export function createPromptSuggestionsComponent({
     const HeaderComponent =
       headerComponent === false ? null : headerComponent ?? DefaultHeader;
 
-    const hasContent = suggestions.length > 0 || isLoading;
+    const visibleSuggestions = suggestions.filter(
+      (suggestion) => suggestion.trim() !== ''
+    );
+
+    const hasContent = visibleSuggestions.length > 0 || isLoading;
 
     return (
       <div
@@ -135,7 +136,7 @@ export function createPromptSuggestionsComponent({
             translations={translations}
           />
         )}
-        {isLoading && suggestions.length === 0 ? (
+        {isLoading && visibleSuggestions.length === 0 ? (
           <div
             className={cx(
               'ais-PromptSuggestions-skeleton',
@@ -153,7 +154,7 @@ export function createPromptSuggestionsComponent({
             ))}
           </div>
         ) : (
-          suggestions.map((suggestion, index) => (
+          visibleSuggestions.map((suggestion, index) => (
             <Button
               key={index}
               size="sm"
@@ -162,7 +163,14 @@ export function createPromptSuggestionsComponent({
                 'ais-PromptSuggestions-suggestion',
                 classNames.suggestion
               )}
-              onClick={() => onSuggestionClick(suggestion)}
+              // Ignore clicks while streaming so an unfinished prompt (e.g.
+              // `Wh..`) can't be sent before generation settles — without
+              // toggling `disabled`, which would swap the pill's styling
+              // mid-stream.
+              onClick={() => {
+                if (isLoading) return;
+                onSuggestionClick(suggestion);
+              }}
               disabled={disabled}
             >
               {suggestion}

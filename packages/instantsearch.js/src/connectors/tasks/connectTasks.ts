@@ -32,9 +32,9 @@ export type TasksRenderState<TOutput = unknown> = {
   error: Error | undefined;
   /**
    * Sends `variables` as the task `input` and updates the render state with the
-   * result. Clears the previous `output` immediately, then resolves with the
-   * new output once the request settles (or `undefined` if it failed — the
-   * failure is surfaced via `error`). The returned promise never rejects.
+   * result. Clears the previous `output` immediately, then resolves with this
+   * call's own output once the request settles (or `undefined` if it failed —
+   * the failure is surfaced via `error`). The returned promise never rejects.
    */
   submit: (variables: Record<string, unknown>) => Promise<TOutput | undefined>;
   /**
@@ -131,21 +131,25 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
               : undefined,
           })
         )
-        .then((next) => {
-          if (isStale()) return;
-          output = next as TOutput;
+        .then((next): TOutput | undefined => {
+          const result = next as TOutput;
+          if (!isStale()) {
+            output = result;
+          }
+          return result;
         })
-        .catch((err) => {
-          if (isStale()) return;
-          output = undefined;
-          error = err instanceof Error ? err : new Error(String(err));
+        .catch((err): TOutput | undefined => {
+          if (!isStale()) {
+            output = undefined;
+            error = err instanceof Error ? err : new Error(String(err));
+          }
+          return undefined;
         })
         .finally(() => {
           if (isStale()) return;
           isLoading = false;
           triggerRender();
-        })
-        .then(() => output);
+        });
     };
 
     const invalidate = () => {

@@ -163,6 +163,74 @@ describe('PromptSuggestions', () => {
     ).toHaveLength(3);
   });
 
+  test('ignores clicks on partial pills while streaming without disabling them', () => {
+    // Mid-stream, an unfinished prompt must not be sent — but the pill keeps
+    // its normal (non-disabled) styling so it doesn't flicker.
+    const onSuggestionClick = jest.fn();
+    const { container } = render(
+      <PromptSuggestions
+        suggestions={['Wh']}
+        isLoading={true}
+        onSuggestionClick={onSuggestionClick}
+      />
+    );
+
+    const pill = container.querySelector<HTMLButtonElement>(
+      '.ais-PromptSuggestions-suggestion'
+    )!;
+    expect(pill).toBeEnabled();
+    pill.click();
+    expect(onSuggestionClick).not.toHaveBeenCalled();
+  });
+
+  test('sends the prompt once loading finishes', () => {
+    const onSuggestionClick = jest.fn();
+    const { container } = render(
+      <PromptSuggestions
+        suggestions={['What is the best laptop?']}
+        isLoading={false}
+        onSuggestionClick={onSuggestionClick}
+      />
+    );
+
+    const pill = container.querySelector<HTMLButtonElement>(
+      '.ais-PromptSuggestions-suggestion'
+    )!;
+    expect(pill).toBeEnabled();
+    pill.click();
+    expect(onSuggestionClick).toHaveBeenCalledWith('What is the best laptop?');
+  });
+
+  test('drops blank suggestions', () => {
+    const { container } = render(
+      <PromptSuggestions
+        suggestions={['A', '', '   ', 'B']}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelectorAll('.ais-PromptSuggestions-suggestion')
+    ).toHaveLength(2);
+  });
+
+  test('renders skeletons while loading when only blank suggestions exist', () => {
+    const { container } = render(
+      <PromptSuggestions
+        suggestions={['']}
+        isLoading={true}
+        onSuggestionClick={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-PromptSuggestions-skeleton')
+    ).toBeInTheDocument();
+    expect(
+      container.querySelectorAll('.ais-PromptSuggestions-suggestion')
+    ).toHaveLength(0);
+  });
+
   test('keeps existing pills (no skeletons) while refetching', () => {
     // Loading with suggestions already present must not swap the pills for
     // skeletons — that would make existing suggestions disappear mid-refetch.

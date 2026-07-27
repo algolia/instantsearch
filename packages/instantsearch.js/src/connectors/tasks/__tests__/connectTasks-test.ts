@@ -278,6 +278,34 @@ describe('connectTasks', () => {
       expect(lastState().isLoading).toBe(false);
     });
 
+    it('resolves each submit with its own result even when superseded', async () => {
+      const resolvers: Array<(value: Response) => void> = [];
+      global.fetch = jest.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolvers.push(resolve);
+          })
+      ) as unknown as typeof fetch;
+
+      const { lastState } = init({ agentId: 'a', task: 't' });
+
+      // Fire two overlapping submits; the older (1) resolves *last*.
+      const first = lastState().submit({ n: 1 });
+      const second = lastState().submit({ n: 2 });
+      await flush(0);
+
+      resolvers[1](jsonResponse({ output: { winner: 2 } }));
+      resolvers[0](jsonResponse({ output: { winner: 1 } }));
+
+      // Each promise resolves with its own output — the stale (first) call must
+      // not adopt the newer call's result just because it settled later.
+      await expect(first).resolves.toEqual({ winner: 1 });
+      await expect(second).resolves.toEqual({ winner: 2 });
+
+      // …while the shared render state still reflects only the latest request.
+      expect(lastState().output).toEqual({ winner: 2 });
+    });
+
     it('invalidate() abandons an in-flight submit so its late result is ignored', async () => {
       let resolveFetch: (value: Response) => void = () => {};
       global.fetch = jest.fn(
