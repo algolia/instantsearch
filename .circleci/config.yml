@@ -8,12 +8,6 @@ references:
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
-  install_yarn_version: &install_yarn_version
-    run:
-      name: Install specific Yarn version
-      command: |
-        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-        echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
   restore_yarn_cache: &restore_yarn_cache
     restore_cache:
       name: Restore Yarn cache
@@ -24,11 +18,11 @@ references:
       name: Save Yarn cache
       key: yarn-packages-{{ checksum "yarn.lock" }}
       paths:
-        - ~/.cache/yarn
+        - ~/.yarn/berry/cache
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
-      command: yarn install --frozen-lockfile
+      command: yarn install --immutable
 
 defaults: &defaults
   working_directory: ~/instantsearch
@@ -169,7 +163,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - *save_yarn_cache
@@ -201,7 +194,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - run:
           name: Test package versions
           command: yarn run test:versions
@@ -214,7 +206,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -229,7 +220,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -249,7 +239,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -270,7 +259,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -292,7 +280,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -307,7 +294,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -323,7 +309,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -340,7 +325,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -402,7 +386,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -467,7 +450,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -487,7 +469,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -506,7 +487,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
@@ -520,7 +500,6 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
