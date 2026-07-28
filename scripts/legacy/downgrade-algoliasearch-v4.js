@@ -75,19 +75,6 @@ shell.sed(
   ...shell.ls('examples/*/*/package.json')
 );
 
-shell.exec('yarn install');
-
-// Make sure a specific version of algoliasearch is installed
-shell.exec(
-  'yarn install --force --cwd scripts/legacy/algoliasearch@4-dependency-container'
-);
-shell.exec(
-  'yarn install --force --cwd scripts/legacy/algoliasearch-v5-dependency-container'
-);
-shell.rm('-rf', 'node_modules/@algolia');
-shell.exec(
-  'cp -rf scripts/legacy/algoliasearch@4-dependency-container/node_modules/* node_modules/'
-);
-shell.exec(
-  'cp -rf scripts/legacy/algoliasearch-v5-dependency-container/node_modules/* node_modules/'
-);
+// Yarn resolves each package's own `@algolia/*` versions, so `algoliasearch@4`
+// and the `algoliasearch-v5` alias coexist without hand-built nesting.
+shell.exec('yarn install --no-immutable');

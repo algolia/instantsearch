@@ -48,10 +48,10 @@
     "vue-server-renderer": "^2.6.11"
   },
   "peerDependenciesMeta": {
-    "vue-server-renderer": {
+    "@vue/server-renderer": {
       "optional": true
     },
-    "@vue/server-renderer": {
+    "vue-server-renderer": {
       "optional": true
     }
   },
