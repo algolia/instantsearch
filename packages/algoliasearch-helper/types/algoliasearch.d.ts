@@ -9,7 +9,7 @@ import type * as RecommendClient from '@algolia/recommend';
 // @ts-ignore
 import type * as AlgoliaSearch from 'algoliasearch';
 // @ts-ignore
-import type algoliasearch from 'algoliasearch/lite';
+import type algoliasearch from 'algoliasearch/lite'; // oxlint-disable-line import/default -- only v3/v4 of the client have a default export
 // @ts-ignore
 import type * as AlgoliaSearchLite from 'algoliasearch/lite';
 

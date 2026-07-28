@@ -12,6 +12,10 @@ const oxlintBin = path.join(
   process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint'
 );
 
+// oxlint applies `.gitignore` on top of this, so `.oxlintignore` only lists what isn't
+// already excluded from the repository.
+const ignorePath = path.join(repoRoot, '.oxlintignore');
+
 if (!existsSync(oxlintBin)) {
   process.stderr.write(
     [
@@ -163,6 +167,8 @@ function runOxlint({
 
   if (noIgnore) {
     commandArgs.push('--no-ignore');
+  } else if (!extraArgs.includes('--ignore-path')) {
+    commandArgs.push('--ignore-path', ignorePath);
   }
 
   commandArgs.push(...dedupe(paths));

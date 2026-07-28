@@ -400,7 +400,7 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript and TypeScript files are formatted with [oxfmt](https://oxc.rs/) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/). Formatting settings live in `.oxfmtrc.json`; lint rules live in `.oxlintrc.json`. Markdown, JSON, and YAML files are no longer auto-formatted.
+JavaScript and TypeScript files are formatted with [oxfmt](https://oxc.rs/) and linted with [Oxlint](https://oxc.rs/docs/guide/usage/linter/). Formatting settings live in `.oxfmtrc.json`; lint rules live in `.oxlintrc.json`, and the paths Oxlint skips on top of `.gitignore` live in `.oxlintignore`. Markdown, JSON, and YAML files are no longer auto-formatted.
 
 Useful lint commands:
 

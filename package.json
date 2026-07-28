@@ -98,6 +98,7 @@
     "babel-jest": "27.4.6",
     "doctoc": "1.4.0",
     "enzyme": "3.11.0",
+    "eslint-plugin-import": "^2.32.0",
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",

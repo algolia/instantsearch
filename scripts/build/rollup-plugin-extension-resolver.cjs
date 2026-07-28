@@ -119,9 +119,10 @@ function resolveRelativePath(baseDir, sourcePath, srcExtensions, dstExtension) {
 
 /**
  * Resolves an external module path (e.g., 'instantsearch.js/es/widgets').
- * Uses require.resolve to find the actual file path.
+ * Uses require.resolve to find the actual file path, which already carries its real extension —
+ * `dstExtension` is accepted for symmetry with the other resolvers but never needed here.
  */
-function resolveExternalModulePath(sourcePath, dstExtension) {
+function resolveExternalModulePath(sourcePath, _dstExtension) {
   try {
     // Get the package name (handles scoped packages)
     const packageNameRegex = sourcePath.startsWith('@')
