@@ -3,9 +3,14 @@
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
+import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
-import { createChatMessageComponent } from '../ChatMessage';
+import {
+  createChatMessageComponent,
+  type ChatMessageClassNames,
+  type ChatMessageTranslations,
+} from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
 
@@ -15,6 +20,38 @@ const ChatMessage = createChatMessageComponent({
 });
 
 describe('ChatMessage', () => {
+  test('accepts customization types without reasoning overrides', () => {
+    const classNames: ChatMessageClassNames = {
+      root: 'root',
+      container: 'container',
+      leading: 'leading',
+      content: 'content',
+      message: 'message',
+      actions: 'actions',
+      footer: 'footer',
+    };
+    const translations: ChatMessageTranslations = {
+      messageLabel: 'Message',
+      actionsLabel: 'Message actions',
+    };
+
+    expect({ classNames, translations }).toEqual({
+      classNames: {
+        root: 'root',
+        container: 'container',
+        leading: 'leading',
+        content: 'content',
+        message: 'message',
+        actions: 'actions',
+        footer: 'footer',
+      },
+      translations: {
+        messageLabel: 'Message',
+        actionsLabel: 'Message actions',
+      },
+    });
+  });
+
   test('renders with default props', () => {
     const { container } = render(
       <ChatMessage
@@ -206,6 +243,651 @@ describe('ChatMessage', () => {
         </div>
       </div>
     `);
+  });
+
+  test('renders reasoning in an accessible disclosure when enabled', () => {
+    const { getByRole, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'I should search the catalog first.',
+              state: 'done',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Reasoning' })).toBeInTheDocument();
+    expect(getByText('I should search the catalog first.')).toBeInTheDocument();
+  });
+
+  test('makes overflowing reasoning keyboard reachable', () => {
+    const { getByRole, queryByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: Array.from(
+                { length: 20 },
+                (_, index) => `Reasoning paragraph ${index + 1}.`
+              ).join('\n\n'),
+              state: 'done',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+    const summary = disclosure.querySelector('summary')!;
+    userEvent.click(summary);
+
+    const body = disclosure.querySelector('.ais-ChatMessageReasoning-body')!;
+    expect(body).toHaveAttribute('tabindex', '0');
+    expect(queryByRole('region', { hidden: true })).not.toBeInTheDocument();
+
+    summary.focus();
+    userEvent.tab();
+    expect(body).toHaveFocus();
+  });
+
+  test('does not render reasoning unless it is enabled', () => {
+    const { queryByRole, queryByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: 'Private reasoning' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(queryByRole('group', { name: 'Reasoning' })).not.toBeInTheDocument();
+    expect(queryByText('Private reasoning')).not.toBeInTheDocument();
+  });
+
+  test.each([
+    ['stopped', 'ready' as const, ''],
+    ['disconnected', 'error' as const, ''],
+    ['finished with only whitespace', 'ready' as const, ' \n '],
+  ])(
+    'does not render blank reasoning after a response is %s',
+    (_responseState, status, text) => {
+      const { queryByRole } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={{
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text, state: 'done' }],
+          }}
+          status={status}
+          tools={{}}
+          onClose={jest.fn()}
+          showReasoning={true}
+        />
+      );
+
+      expect(
+        queryByRole('group', { name: 'Reasoning' })
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  test('renders empty reasoning while the response is active', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
+      'aria-busy',
+      'true'
+    );
+  });
+
+  test('keeps reasoning disclosures in message part order', () => {
+    const { container, getAllByRole, getByText, queryAllByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            { type: 'reasoning', text: 'First thought', state: 'done' },
+            {
+              type: 'tool-test_tool',
+              toolCallId: '123',
+              input: {},
+              state: 'output-available',
+              output: { data: 'Tool result' },
+            },
+            { type: 'reasoning', text: 'Second thought', state: 'done' },
+            { type: 'text', text: 'Final answer' },
+          ],
+        }}
+        status="ready"
+        tools={{
+          test_tool: {
+            layoutComponent: () => <div>Tool result</div>,
+            addToolResult: jest.fn(),
+            applyFilters: jest.fn(),
+          },
+        }}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const message = container.querySelector('.ais-ChatMessage-message')!;
+    const children = Array.from(message.children);
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+
+    expect(children).toHaveLength(4);
+    expect(children[0]).toBe(disclosures[0]);
+    expect(children[1]).toContainElement(getByText('Tool result'));
+    expect(children[2]).toBe(disclosures[1]);
+    expect(children[3]).toContainElement(getByText('Final answer'));
+    expect(queryAllByRole('region')).toHaveLength(0);
+  });
+
+  test('marks only the streaming reasoning disclosure as busy', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Second thought',
+          state: 'streaming' as const,
+        },
+      ],
+    };
+    const { getAllByRole, rerender } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    let disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    expect(disclosures[0]).not.toHaveAttribute('open');
+    expect(disclosures[1]).not.toHaveAttribute('open');
+    expect(
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning$/);
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning$/);
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
+        .nextElementSibling
+    ).toHaveClass('ais-ChatMessageReasoning-chevron');
+
+    rerender(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          ...message,
+          parts: [message.parts[0], { ...message.parts[1], state: 'done' }],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[0]).not.toHaveAttribute('open');
+    expect(disclosures[1]).not.toHaveAttribute('open');
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
+    ).toHaveTextContent(/^Reasoning$/);
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
+        .nextElementSibling
+    ).toHaveClass('ais-ChatMessageReasoning-chevron');
+  });
+
+  test('signals activity on the label alone while streaming', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
+        }}
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
+          },
+        ]}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+        translations={{
+          reasoningLabel: 'Raisonnement de la demande en cours',
+        }}
+      />
+    );
+
+    const disclosure = getByRole('group', {
+      name: 'Raisonnement de la demande en cours',
+    });
+    const summary = disclosure.querySelector('summary')!;
+    const label = summary.querySelector('.ais-ChatMessageReasoning-label')!;
+
+    expect(disclosure).toHaveAttribute('aria-busy', 'true');
+    expect(label).toHaveTextContent(/^Raisonnement de la demande en cours$/);
+    expect(label).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+
+    expect(
+      Array.from(summary.children).map((child) => child.className)
+    ).toEqual([
+      'ais-ChatMessageReasoning-icon',
+      'ais-ChatMessageReasoning-label ais-ChatMessageReasoning-label--streaming',
+      'ais-ChatMessageReasoning-chevron',
+    ]);
+    expect(summary).toHaveTextContent(/^Raisonnement de la demande en cours$/);
+  });
+
+  test('routes custom header and label class names to their own elements', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
+        }}
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
+          },
+        ]}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+        classNames={{
+          reasoningHeader: 'custom-header',
+          reasoningLabel: 'custom-label',
+        }}
+      />
+    );
+
+    const summary = getByRole('group', { name: 'Reasoning' }).querySelector(
+      'summary'
+    )!;
+    const label = summary.querySelector('.ais-ChatMessageReasoning-label')!;
+
+    expect(summary).toHaveClass('custom-header');
+    expect(label).toHaveClass('custom-label');
+    expect(label).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+    expect(
+      summary.querySelector('.ais-ChatMessageReasoning-chevron')
+    ).not.toHaveClass('custom-label');
+  });
+
+  test('marks only the latest unfinished reasoning block as busy', () => {
+    const { getAllByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Compare the candidates',
+              state: 'streaming',
+            },
+            {
+              type: 'reasoning',
+              text: 'Check one candidate',
+              state: 'streaming',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    expect(
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).not.toBeInTheDocument();
+    expect(
+      disclosures[1].querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).toBeInTheDocument();
+  });
+
+  test('marks reasoning as busy only on the active response', () => {
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: 'previous',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Stopped reasoning',
+            state: 'streaming' as const,
+          },
+        ],
+      },
+      {
+        role: 'assistant' as const,
+        id: 'current',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Current reasoning',
+            state: 'streaming' as const,
+          },
+        ],
+      },
+    ];
+
+    const { getAllByRole } = render(
+      <Fragment>
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            indexUiState={{}}
+            setIndexUiState={jest.fn()}
+            message={message}
+            messages={messages}
+            status="streaming"
+            tools={{}}
+            onClose={jest.fn()}
+            showReasoning={true}
+          />
+        ))}
+      </Fragment>
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+  });
+
+  test('does not mark reasoning as busy after answer text starts streaming', () => {
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Checking the catalog',
+              state: 'streaming',
+            },
+            {
+              type: 'text',
+              text: 'Here is what I found',
+              state: 'streaming',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+    expect(disclosure).toHaveAttribute('aria-busy', 'false');
+    expect(
+      disclosure.querySelector('.ais-ChatMessageReasoning-label--streaming')
+    ).not.toBeInTheDocument();
+  });
+
+  test('marks an earlier unfinished reasoning block as busy after a later block ends', () => {
+    const { getAllByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Compare the candidates',
+              state: 'streaming',
+            },
+            {
+              type: 'reasoning',
+              text: 'Check one candidate',
+              state: 'done',
+            },
+          ],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+
+    const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'true');
+    expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
+  });
+
+  test('preserves an open disclosure while reasoning text streams', () => {
+    const renderMessage = (text: string) => (
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text, state: 'streaming' }],
+        }}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+    const { getByRole, rerender } = render(renderMessage('First'));
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+
+    userEvent.click(disclosure.querySelector('summary')!);
+    expect(disclosure).toHaveAttribute('open');
+
+    rerender(renderMessage('First second'));
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
+  });
+
+  test('keeps a reader-opened disclosure open once the answer starts and the response completes', () => {
+    const renderMessage = (
+      answer?: string,
+      status: 'streaming' | 'ready' = 'streaming'
+    ) => (
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Checking the catalog',
+              state: answer ? ('done' as const) : ('streaming' as const),
+            },
+            ...(answer
+              ? [
+                  {
+                    type: 'text' as const,
+                    text: answer,
+                    state:
+                      status === 'ready'
+                        ? ('done' as const)
+                        : ('streaming' as const),
+                  },
+                ]
+              : []),
+          ],
+        }}
+        status={status}
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+      />
+    );
+    const { getByRole, rerender } = render(renderMessage());
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+
+    expect(disclosure).not.toHaveAttribute('open');
+    expect(disclosure).toHaveAttribute('aria-busy', 'true');
+
+    userEvent.click(disclosure.querySelector('summary')!);
+    expect(disclosure).toHaveAttribute('open');
+
+    rerender(renderMessage('The answer starts'));
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
+      'aria-busy',
+      'false'
+    );
+
+    rerender(renderMessage('The answer starts', 'ready'));
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
+  });
+
+  test('renders reasoning as markdown with a translated label', () => {
+    const { container, getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Check the **release date**.',
+              state: 'done',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+        translations={{ reasoningLabel: 'Raisonnement' }}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Raisonnement' })).toBeInTheDocument();
+    expect(container.querySelector('strong')).toHaveTextContent('release date');
+  });
+
+  test('renders reasoning as plain text when parseMarkdown is false', () => {
+    const { container, getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'reasoning',
+              text: 'Check the **release date**.\nThen compare.',
+              state: 'done',
+            },
+          ],
+        }}
+        status="ready"
+        tools={{}}
+        onClose={jest.fn()}
+        showReasoning={true}
+        parseMarkdown={false}
+      />
+    );
+
+    const body = getByRole('group', { name: 'Reasoning' }).querySelector(
+      '.ais-ChatMessageReasoning-text'
+    )!;
+    expect(container.querySelector('strong')).toBeNull();
+    expect(body.textContent).toBe('Check the **release date**.\nThen compare.');
+    expect(body.querySelector('.ais-ChatMessage-text')).not.toBeNull();
   });
 
   test('parses text parts as markdown by default', () => {
