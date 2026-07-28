@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const fs = require('fs');
 const path = require('path');
 
 const shell = require('shelljs');
@@ -19,6 +20,14 @@ console.log(
   `Downgrading algoliasearch dependency to v3 in:
 - ${packageJsonPaths.join('\n- ')}`
 );
+
+// The root keeps algoliasearch v5, so `type-check:v3` resolves the v5 typings
+// bundled with the package rather than `@types/algoliasearch`. The workspaces
+// below are what the downgrade applies to.
+const rootPackageJsonPath = packageJsonPaths[0];
+const rootDevDependencies = JSON.parse(
+  fs.readFileSync(rootPackageJsonPath, 'utf8')
+).devDependencies;
 
 // change main dependency
 shell.sed(
@@ -54,6 +63,16 @@ shell.sed(
   /"algoliasearch": ".*"(,)?/,
   '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
   ...shell.ls('examples/*/*/package.json')
+);
+
+// Put the root's own dependencies back, undoing the rewrites above for it only.
+const rootPackageJson = JSON.parse(
+  fs.readFileSync(rootPackageJsonPath, 'utf8')
+);
+rootPackageJson.devDependencies = rootDevDependencies;
+fs.writeFileSync(
+  rootPackageJsonPath,
+  `${JSON.stringify(rootPackageJson, null, 2)}\n`
 );
 
 // `--no-immutable`: the rewrites above intentionally desync package.json from
