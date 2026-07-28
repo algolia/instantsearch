@@ -34,11 +34,12 @@ type ChatMessagesGlobalScope = Record<
 // reach, which is correct: there is nothing to share it with.
 const detachedGlobalScope = {} as ChatMessagesGlobalScope;
 
-// `globalThis` is ES2020 and the build targets `ie >= 11` without injecting
-// polyfills, so a bare reference is a `ReferenceError` there — and every
-// `<InstantSearch>` render reaches this module. The ladder still resolves the
-// realm global, so the store stays shared with everything reading the same
-// `Symbol.for` key.
+// The build targets `ie >= 11` and injects no polyfills, so an ES2020 global
+// has to be probed with `typeof` rather than read: a bare reference to a
+// missing binding throws. This module needs `Symbol` to load either way, so
+// what the ladder buys is the range in between: an engine with ES2015 but no
+// `globalThis`. Where one of the three names below is bound the store lands on
+// the realm global, shared with anything reading the same `Symbol.for` key.
 function getGlobalScope(): ChatMessagesGlobalScope {
   if (typeof globalThis !== 'undefined') {
     return globalThis as unknown as ChatMessagesGlobalScope;

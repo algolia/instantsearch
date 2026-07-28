@@ -10,14 +10,13 @@ import { rollup } from 'rollup';
 // `<InstantSearch>` reads the Chat message revision helpers on every render, so
 // whatever those helpers touch sits on the hot path of every consumer, Chat or
 // not. The build transpiles to `ie >= 11` and deliberately injects no
-// polyfills (`scripts/build/rollup.plugins.mjs`), so an ES2020 *global*
-// referenced bare is a ReferenceError on an old runtime rather than a missing
-// feature that can be feature-detected.
+// polyfills (`scripts/build/rollup.plugins.mjs`), so `globalThis` must be
+// probed with `typeof`: directly reading a missing global binding throws.
 //
-// This drives the built package through a realm with no `globalThis` binding,
-// which is the shape of IE11. Jest cannot cover it: the root `moduleNameMapper`
-// rewrites `instantsearch.js/es/*` back to TypeScript sources, so a unit test
-// never sees the downlevelled output.
+// This drives the built package through a modern realm with the `globalThis`
+// binding removed, which is narrower than an IE11 emulation. Jest cannot cover
+// it: the root `moduleNameMapper` rewrites `instantsearch.js/es/*` back to
+// TypeScript sources, so a unit test never sees the downlevelled output.
 
 const require = createRequire(import.meta.url);
 
@@ -91,8 +90,9 @@ function renderWithoutGlobalThis(label, browserLike) {
     `${label}: the globalThis binding survived, so this realm proves nothing`
   );
 
-  // Everything the revision helpers legitimately need is still present, so a
-  // failure below can only be about resolving the global object.
+  // Checked because the bundle evaluates them: `Symbol` and `Promise` at module
+  // scope, `WeakMap` and `Set` on the render path. `Promise` is there for
+  // `lib/utils/defer`, not for a revision helper.
   const missing = vm.runInContext(
     `['Symbol', 'WeakMap', 'Set', 'Promise'].filter(function (name) {
        return typeof this[name] !== 'function';
