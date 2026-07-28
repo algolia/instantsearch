@@ -369,8 +369,8 @@ describe('Carousel', () => {
     consoleError.mockRestore();
   });
   describe('built-in navigation on item count change', () => {
-    // jsdom reports zero dimensions, so both directions need explicit widths.
-    // Without them a test only proves the measurement ran, not what it decided.
+    // jsdom reports zero dimensions, so without explicit widths a test only
+    // proves the measurement ran, not what it decided.
     const setGeometry = (
       list: Element,
       { clientWidth, scrollWidth }: { clientWidth: number; scrollWidth: number }
@@ -414,8 +414,6 @@ describe('Carousel', () => {
 
       await waitFor(() => expect(nextButton(container)).not.toBeVisible());
 
-      // Same carousel instance, same node: only the measurement changed, so a
-      // list that starts fitting must hand its control back once it overflows.
       setGeometry(list, { clientWidth: 200, scrollWidth: 400 });
       rerender(
         <CarouselWithRefs items={[...items, third]} sendEvent={jest.fn()} />

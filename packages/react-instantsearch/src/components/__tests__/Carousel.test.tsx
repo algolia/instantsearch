@@ -438,9 +438,8 @@ describe('Carousel', () => {
       />
     );
 
-    // Only proves the flavor state wiring reaches the shared measurement. The
-    // fitting and overflowing decisions are covered in the shared Carousel suite,
-    // which sets explicit widths.
+    // Wiring only: jsdom has no geometry here, so the fitting and overflowing
+    // decisions live in the shared Carousel suite.
     await waitFor(() =>
       expect(
         container.querySelector<HTMLButtonElement>(

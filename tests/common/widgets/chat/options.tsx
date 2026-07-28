@@ -2288,8 +2288,6 @@ export function createOptionsTests(
             await wait(0);
           });
 
-          // The default tool opts into input streaming, so it owns the waiting
-          // state: content and its caption are visible and the loader is not.
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).toBeInTheDocument();
