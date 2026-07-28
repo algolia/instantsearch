@@ -353,10 +353,9 @@ function ChatInner<
         actionsComponent,
         translations: messagesTranslations,
         messageTranslations,
-        // `assistantMessageProps` and `userMessageProps` merge key by key rather
-        // than replace, so the dedicated top-level props still apply for keys the
-        // caller's nested object leaves unset. Spread explicitly so that merge
-        // does not depend on where these keys sit in the literal.
+        // The message props merge key by key rather than replace, so the dedicated
+        // top-level props still apply for keys the caller leaves unset. Spread
+        // explicitly so the merge does not depend on key order in the literal.
         ...restMessagesProps,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,

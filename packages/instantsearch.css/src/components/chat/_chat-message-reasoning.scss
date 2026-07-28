@@ -34,11 +34,9 @@
   list-style: none;
   user-select: none;
 
-  // Declared here rather than on the label so the label and the streaming
-  // indicator beside it inherit one value: `reasoningHeader` restyles the row,
-  // while a `reasoningLabel` override reaches the label alone — the indicator is
-  // its sibling, not its descendant. The icon and chevron inherit the size too,
-  // but set their own colour and are sized in px.
+  // On the header rather than the label so `reasoningHeader` restyles the whole
+  // row while `reasoningLabel` reaches the label alone. The icon and chevron set
+  // their own colour and are sized in px.
   color: rgba(var(--ais-muted-color-rgb), 0.95);
   font-size: calc(var(--ais-spacing) * 0.75);
   line-height: var(--ais-spacing);
@@ -73,10 +71,9 @@
     width: 100%;
     height: 100%;
 
-    // The icon passes no `strokeWidth`, so the width has to come from CSS in both
-    // renderers. The cap and join are here because it does pass those as
-    // camelCase JSX props, which only React turns into standard attributes: bare
-    // Preact forwards them unchanged for SVG, where they are inert.
+    // Stroke presentation lives here because Preact forwards the icon's camelCase
+    // SVG props unchanged, where they are inert. React normalizes them; CSS covers
+    // both renderers.
     stroke-width: var(--ais-icon-stroke-width);
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -92,28 +89,6 @@
 
 .ais-ChatMessageReasoning-label--streaming {
   animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-
-  // The literal indicator beside it is already an ellipsis, so let the label
-  // clip rather than paint a second one. Settled labels keep `ellipsis`.
-  text-overflow: clip;
-}
-
-// The streaming indicator. Reached as the unclassed sibling of the streaming
-// label, so it needs no class of its own — one fewer `ais-*` name to commit to on
-// a new surface. `:not([class])` is what keeps this off the chevron, which is the
-// label's next sibling once the indicator stops rendering. Type comes from the
-// header above.
-.ais-ChatMessageReasoning-label--streaming + span:not([class]) {
-  // The label beside it truncates, so this must not be the thing that gives way.
-  flex-shrink: 0;
-
-  // Cancels the header's gap, so the indicator reads as part of the label
-  // instead of a detached glyph.
-  margin-inline-start: calc(var(--ais-spacing) * -0.25);
-
-  // Rendered only while streaming, beside a label that pulses, so it keeps the
-  // same animation.
-  animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .ais-ChatMessageReasoning-chevron {
@@ -123,8 +98,8 @@
   color: rgba(var(--ais-muted-color-rgb), 0.9);
   flex-shrink: 0;
 
-  // The label is the only header item that shrinks, so this absorbs the free
-  // space and keeps the chevron at the end without wrapping the label pair.
+  // The label is the only header item that shrinks, so this absorbs the free space
+  // and keeps the chevron at the end.
   margin-inline-start: auto;
   transition: transform var(--ais-transition-duration)
     var(--ais-transition-timing-function);
@@ -133,9 +108,8 @@
     width: 100%;
     height: 100%;
 
-    // Same renderer caveat as the icon above. Stroke widths are in viewBox units
-    // and this box is 1.25x the icon's, so scaling the stroke by 1/1.25 makes the
-    // two draw at the same rendered width.
+    // Same renderer caveat as the icon. Stroke width is in viewBox units and this
+    // box is 1.25x the icon's, so 1/1.25 makes the two draw at the same width.
     stroke-width: calc(var(--ais-icon-stroke-width) * 0.8);
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -166,15 +140,11 @@
 .ais-ChatMessageReasoning-text {
   overflow-wrap: anywhere;
 
-  // Block margins collapse up through every border- and padding-free ancestor,
-  // so the margin that ends up against the body's padding box can start at any
-  // depth: markdown-to-jsx wraps multi-block content in an extra `div`, and a
-  // loose list inside a quote reaches `div > blockquote > ul > li > p`. Reset the
-  // whole chain of leading (trailing) children rather than a fixed number of
-  // levels. The `:not()` excludes anything under a sibling that is not itself
-  // first (last), so gaps between list items and inside a blockquote are left
-  // alone. The `#{&}` interpolation is required: a literal `&` inside `:where()`
-  // makes Sass drop the parent prefix, and the selector then matches the document.
+  // Block margins collapse through padding-free ancestors, so the one meeting the
+  // body's padding box can sit at any depth. Reset the whole leading (trailing)
+  // chain; the `:not()` spares gaps between siblings that are not themselves first
+  // (last). `#{&}` is required: a literal `&` inside `:where()` makes Sass drop the
+  // parent prefix, and the selector then matches the document.
   :first-child:not(:where(#{&} :not(:first-child) *)) {
     margin-block-start: 0;
   }
@@ -186,13 +156,12 @@
 
 @keyframes ais-chat-reasoning-pulse {
   50% {
-    opacity: 0.85;
+    opacity: 0.5;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ais-ChatMessageReasoning-label,
-  .ais-ChatMessageReasoning-label--streaming + span:not([class]),
   .ais-ChatMessageReasoning-chevron {
     animation: none;
     transition: none;

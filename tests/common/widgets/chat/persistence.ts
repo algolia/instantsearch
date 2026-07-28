@@ -70,10 +70,9 @@ export function createPersistenceTests(
         {
           id: 'previous',
           role: 'assistant',
-          // The reasoning part is last and never settled, which is what a
-          // response stopped mid-reasoning persists. A trailing part of any
-          // other type would make `isReasoningPartActive` false on its own,
-          // so this fixture is what pins the `status === 'streaming'` guard.
+          // A trailing unsettled reasoning part, which is what a response stopped
+          // mid-reasoning persists. Any other trailing type would make
+          // `isReasoningPartActive` false on its own and not reach the guard.
           parts: [
             {
               type: 'reasoning',

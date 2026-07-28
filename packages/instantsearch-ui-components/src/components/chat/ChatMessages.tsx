@@ -248,8 +248,8 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
-// Own-key presence, which is what a JSX spread copies — `in` would also answer
-// for inherited keys the spread leaves behind.
+// Own-key presence is what a JSX spread copies; `in` would also answer for
+// inherited keys the spread leaves behind.
 const hasOwnKey = (target: object | undefined, key: string) =>
   target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
 
@@ -404,22 +404,17 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
-    // Resolve the per-role inputs below from the same side the row renders with
-    // (the `messageProps` selection in `DefaultMessage`), so a change to one
-    // role's props does not invalidate the other's completed rows, and a change
-    // to the row's own side is not missed.
+    // Read the row's own side, mirroring `DefaultMessage`, so one role's change
+    // neither invalidates the other's completed rows nor goes unnoticed here.
     const messageProps =
       props.message.role === 'user'
         ? props.userMessageProps
         : props.assistantMessageProps;
     const showReasoning = messageProps?.showReasoning;
     const parseMarkdown = messageProps?.parseMarkdown;
-    // Object-level fallback, matching the render: `{...messageProps}` replaces
-    // `translations` wholesale rather than merging it, so resolving key by key
-    // here would keep a stale label when a caller swaps the object. Own-key
-    // presence rather than nullishness for the same reason — the spread copies a
-    // key that is present but `undefined`, which replaces the shared object
-    // instead of deferring to it and leaves the built-in default to render.
+    // Object-level fallback, matching the render: the spread replaces
+    // `translations` wholesale, and it copies a key holding `undefined` too. Both
+    // are why this resolves by own-key presence rather than key by key.
     const reasoningTranslations = hasOwnKey(messageProps, 'translations')
       ? messageProps?.translations
       : props.messageTranslations;
@@ -434,8 +429,8 @@ export function createChatMessagesComponent({
     const reasoningChevronClassName = cx(reasoningClassNames?.reasoningChevron);
     const reasoningBodyClassName = cx(reasoningClassNames?.reasoningBody);
     const reasoningTextClassName = cx(reasoningClassNames?.reasoningText);
-    // This dependency list is the row comparator. Using the full props object
-    // would recompile every completed message on each streaming update.
+    // The row comparator. The full props object would recompile every completed
+    // message on each streaming update.
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -531,9 +526,8 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    // Only the loader consumes this, and only when reasoning is rendered, so
-    // skip the scan entirely while the opt-in is off — it walks the last
-    // message's parts and slices the remainder for each streaming reasoning part.
+    // The scan slices the remaining parts per candidate, and only the loader reads
+    // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
       ? lastMessage?.parts?.some((_, index, parts) =>
           isReasoningPartActive(parts, index)
@@ -676,9 +670,8 @@ const getShowLoader = (
   if (status === 'submitted') return true;
 
   if (!lastPart) return true;
-  // An active reasoning disclosure carries its own progress affordance, so the
-  // loader would double it. Reasoning that has settled still shows the loader,
-  // because the answer has not started yet.
+  // An active disclosure carries its own progress affordance, so the loader would
+  // double it. Settled reasoning still shows it: the answer has not started.
   if (showReasoning && hasActiveReasoning) return false;
   if (isPartText(lastPart)) return false;
 

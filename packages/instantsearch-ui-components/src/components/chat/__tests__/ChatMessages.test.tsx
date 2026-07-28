@@ -466,9 +466,8 @@ describe('ChatMessages', () => {
     }
   );
 
-  // The test above moves all seven keys together, so six of them could stop
-  // being row comparator dependencies without it noticing. One key at a time
-  // makes each dependency individually load-bearing.
+  // The test above moves all seven keys at once, so six could stop being
+  // dependencies unnoticed. One key at a time makes each individually load-bearing.
   const reasoningClassCases: Array<
     [string, 'messageClassNames' | 'assistantMessageProps']
   > = [
@@ -501,8 +500,8 @@ describe('ChatMessages', () => {
       const createProps = (suffix: string) => {
         const reasoningClassNames = { [key]: `${key}-${suffix}` };
         return {
-          // The same `message` reference in both renders, so the one class name
-          // is the only input the comparator can react to.
+          // Same `message` reference in both renders, so the class name is the
+          // only input the comparator can react to.
           messages: [message],
           indexUiState: {},
           setIndexUiState: jest.fn(),
@@ -573,9 +572,8 @@ describe('ChatMessages', () => {
       'Nested'
     );
 
-    // The nested object replaces `messageTranslations` wholesale rather than
-    // merging, so dropping its label falls back to the built-in default, not to
-    // the outer `messageTranslations` value.
+    // The nested object replaces `messageTranslations` wholesale, so dropping its
+    // label falls back to the built-in default, not to the outer value.
     rerender(
       <MemoizedChatMessages {...createProps({ messageLabel: 'Unrelated' })} />
     );
@@ -619,10 +617,8 @@ describe('ChatMessages', () => {
       'Nested'
     );
 
-    // The key is still there, holding `undefined`. Spreading it replaces
-    // `messageTranslations` rather than deferring to it, so the built-in default
-    // renders — and the comparator has to read presence, not nullishness, or the
-    // row keeps the label it can no longer be showing.
+    // The key is present holding `undefined`, which still replaces
+    // `messageTranslations`. The comparator has to read presence, not nullishness.
     rerender(<MemoizedChatMessages {...createProps(undefined)} />);
 
     expect(container.querySelector('details')).toHaveAttribute(
@@ -663,10 +659,8 @@ describe('ChatMessages', () => {
     );
     expect(container.querySelectorAll('.shared-reasoning')).toHaveLength(1);
 
-    // The mirror of the translations case, and the reason both fallbacks read
-    // own-key presence: the two surfaces hold the same value here, so a nullish
-    // fallback would compute an unchanged dependency and strand the class on a
-    // row that no longer renders it.
+    // Both surfaces hold the same value here, so a nullish fallback would compute
+    // an unchanged dependency and strand the class on a row that dropped it.
     rerender(<MemoizedChatMessages {...createProps(undefined)} />);
 
     expect(container.querySelectorAll('.shared-reasoning')).toHaveLength(0);
@@ -717,11 +711,9 @@ describe('ChatMessages', () => {
 
     rerender(<MemoizedChatMessages {...createProps('Raisonnement')} />);
 
-    // A user row renders with `userMessageProps`, so an assistant-only change
-    // must not invalidate it — that would recompile its markdown to produce
-    // exactly the same output.
+    // A user row renders with `userMessageProps`, so an assistant-only change must
+    // not invalidate it and recompile its markdown to the same output.
     expect(userRenders).toBe(baseline);
-    // The assistant row still has to pick the new label up.
     expect(screen.getAllByRole('group', { name: 'Raisonnement' })).toHaveLength(
       1
     );
@@ -760,9 +752,7 @@ describe('ChatMessages', () => {
       'Reasoning'
     );
 
-    // The mirror of the test above: reading the row's own side is what keeps a
-    // user-side change from going stale, which reading `assistantMessageProps`
-    // for every role would have missed.
+    // Reading `assistantMessageProps` for every role would strand this change.
     rerender(<MemoizedChatMessages {...createProps('Raisonnement')} />);
 
     expect(container.querySelector('details')).toHaveAttribute(
@@ -804,9 +794,8 @@ describe('ChatMessages', () => {
 
     const { unmount } = render(<ChatMessages {...props} />);
 
-    // Only the loader reads the result, and only when reasoning is rendered, so
-    // the scan — which slices the remaining parts per candidate — must not run
-    // while the opt-in is off.
+    // The scan slices the remaining parts per candidate, so it must not run while
+    // the opt-in is off.
     expect(isReasoningPartActive).not.toHaveBeenCalled();
 
     unmount();
@@ -848,8 +837,8 @@ describe('ChatMessages', () => {
     );
     expect(container.querySelector('details')).toBeNull();
 
-    // Completed rows have to react to the option itself, not only to reasoning
-    // labels and classes: a host app can flip it after the answer settled.
+    // A host app can flip the option after the answer settled, so completed rows
+    // have to react to the option itself, not only to labels and classes.
     rerender(<MemoizedChatMessages {...createProps(true)} />);
 
     expect(container.querySelector('details')).not.toBeNull();
@@ -899,8 +888,6 @@ describe('ChatMessages', () => {
       );
       expect(container.querySelector('em')).not.toBeNull();
 
-      // The completed row has to recompile when the option flips, so the row
-      // comparator needs it too.
       rerender(<MemoizedChatMessages {...createProps(false)} />);
 
       expect(container.querySelector('em')).toBeNull();

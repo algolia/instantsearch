@@ -188,12 +188,11 @@ describe('Chat', () => {
       await wait(0);
     });
 
-    // The nested object sets one key, so the dedicated leading component and
-    // `showReasoning` both have to survive alongside it.
+    // The nested object sets one key; the dedicated props must survive alongside it.
     expect(screen.getAllByTestId('assistant-leading')).toHaveLength(2);
     expect(screen.getAllByRole('group', { name: 'Reasoning' })).toHaveLength(2);
     // And the caller's own key has to reach the message, or the merge is only
-    // being tested in one direction.
+    // tested in one direction.
     expect(
       container.querySelectorAll('.ais-ChatMessage--auto-hide-actions')
     ).toHaveLength(2);
@@ -311,8 +310,7 @@ describe('Chat', () => {
       await wait(0);
     });
 
-    // Every completed row has to re-render, not just the last one: earlier rows
-    // are memoized, so the prop has to take part in the comparator.
+    // Earlier rows are memoized, so the prop has to take part in the comparator.
     expect(container.querySelectorAll('strong')).toHaveLength(0);
   });
 });

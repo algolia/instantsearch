@@ -81,8 +81,8 @@ export function createChatMessageReasoningComponent({
         disableParsingRawHTML: true,
       })
     ) : (
-      // `ais-ChatMessage-text` carries the `white-space: pre-wrap` that keeps the
-      // newlines markdown would otherwise collapse, as text parts do.
+      // Borrowed from text parts for its `white-space: pre-wrap`, which keeps the
+      // newlines markdown would collapse.
       <p className="ais-ChatMessage-text">{part.text}</p>
     );
 
@@ -96,18 +96,9 @@ export function createChatMessageReasoningComponent({
           <span className={cx(classNames.reasoningIcon)} aria-hidden="true">
             <BrainIcon createElement={createElement} />
           </span>
-          {/* The indicator is a sibling of the label rather than part of its
-              text, so a translated label long enough to ellipsize truncates
-              before it. The chevron's auto margin takes the free space, keeping
-              the two adjacent without a wrapper.
-              Unclassed on purpose: the stylesheet reaches it as the unclassed
-              sibling of the streaming label, so no further `ais-*` name is
-              committed to. Being decorative it takes its type from the header, so
-              `reasoningHeader` styles it with the label. */}
           <span className={cx(classNames.reasoningLabel)}>
             {translations.reasoningLabel}
           </span>
-          {isStreaming ? <span aria-hidden="true">…</span> : null}
           <span className={cx(classNames.reasoningChevron)} aria-hidden="true">
             <ChevronDownIcon createElement={createElement} />
           </span>

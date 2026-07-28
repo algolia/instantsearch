@@ -472,7 +472,7 @@ describe('ChatMessage', () => {
     expect(
       disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
         .nextElementSibling
-    ).toHaveTextContent('…');
+    ).toHaveClass('ais-ChatMessageReasoning-chevron');
 
     rerender(
       <ChatMessage
@@ -497,14 +497,13 @@ describe('ChatMessage', () => {
     expect(
       disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
     ).toHaveTextContent(/^Reasoning$/);
-    // Nothing between the settled label and the chevron: the indicator is gone.
     expect(
       disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
         .nextElementSibling
     ).toHaveClass('ais-ChatMessageReasoning-chevron');
   });
 
-  test('keeps the streaming indicator out of the truncating label', () => {
+  test('signals activity on the label alone while streaming', () => {
     const { getByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -531,32 +530,27 @@ describe('ChatMessage', () => {
       />
     );
 
-    const summary = getByRole('group', {
+    const disclosure = getByRole('group', {
       name: 'Raisonnement de la demande en cours',
-    }).querySelector('summary')!;
+    });
+    const summary = disclosure.querySelector('summary')!;
     const label = summary.querySelector('.ais-ChatMessageReasoning-label')!;
-    const ellipsis = label.nextElementSibling!;
 
-    // The label carries `text-overflow: ellipsis`, so a long translated label
-    // truncates. The indicator has to live outside it to survive that, and
-    // directly between the label and the chevron: the chevron's auto margin is
-    // what takes the free space, keeping the indicator against the label.
+    expect(disclosure).toHaveAttribute('aria-busy', 'true');
     expect(label).toHaveTextContent(/^Raisonnement de la demande en cours$/);
     expect(label).toHaveClass('ais-ChatMessageReasoning-label--streaming');
-    expect(ellipsis).toHaveTextContent('…');
-    // Decorative, so it must stay out of the disclosure's accessible name.
-    expect(ellipsis).toHaveAttribute('aria-hidden', 'true');
-    expect(label.contains(ellipsis)).toBe(false);
-    expect(ellipsis.nextElementSibling).toBe(
-      summary.querySelector('.ais-ChatMessageReasoning-chevron')
-    );
-    // Unclassed on purpose. The stylesheet reaches it through the streaming
-    // label beside it, so the indicator adds no `ais-*` name to the public CSS
-    // surface — which is why that modifier is asserted above.
-    expect(ellipsis).not.toHaveAttribute('class');
+
+    expect(
+      Array.from(summary.children).map((child) => child.className)
+    ).toEqual([
+      'ais-ChatMessageReasoning-icon',
+      'ais-ChatMessageReasoning-label ais-ChatMessageReasoning-label--streaming',
+      'ais-ChatMessageReasoning-chevron',
+    ]);
+    expect(summary).toHaveTextContent(/^Raisonnement de la demande en cours$/);
   });
 
-  test('styles the streaming indicator through the header, not the label', () => {
+  test('routes custom header and label class names to their own elements', () => {
     const { getByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -589,14 +583,12 @@ describe('ChatMessage', () => {
     )!;
     const label = summary.querySelector('.ais-ChatMessageReasoning-label')!;
 
-    // The indicator is a decorative sibling of the label, so it inherits the
-    // row's type from the header. `reasoningHeader` therefore restyles the label
-    // and the indicator together, while `reasoningLabel` reaches the label only —
-    // it must not be applied to a second, non-label element to widen its reach.
     expect(summary).toHaveClass('custom-header');
     expect(label).toHaveClass('custom-label');
-    expect(label.nextElementSibling).not.toHaveClass('custom-label');
-    expect(label.nextElementSibling).not.toHaveAttribute('class');
+    expect(label).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+    expect(
+      summary.querySelector('.ais-ChatMessageReasoning-chevron')
+    ).not.toHaveClass('custom-label');
   });
 
   test('marks only the latest unfinished reasoning block as busy', () => {
@@ -821,14 +813,12 @@ describe('ChatMessage', () => {
     const { getByRole, rerender } = render(renderMessage());
     const disclosure = getByRole('group', { name: 'Reasoning' });
 
-    // Active reasoning stays collapsed until the reader opens it.
     expect(disclosure).not.toHaveAttribute('open');
     expect(disclosure).toHaveAttribute('aria-busy', 'true');
 
     userEvent.click(disclosure.querySelector('summary')!);
     expect(disclosure).toHaveAttribute('open');
 
-    // Reasoning ends and the answer starts mid-response.
     rerender(renderMessage('The answer starts'));
     expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
     expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
@@ -836,7 +826,6 @@ describe('ChatMessage', () => {
       'false'
     );
 
-    // The response completes.
     rerender(renderMessage('The answer starts', 'ready'));
     expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
   });
@@ -898,7 +887,6 @@ describe('ChatMessage', () => {
     )!;
     expect(container.querySelector('strong')).toBeNull();
     expect(body.textContent).toBe('Check the **release date**.\nThen compare.');
-    // Same literal-text element as text parts use, so the newline survives.
     expect(body.querySelector('.ais-ChatMessage-text')).not.toBeNull();
   });
 
