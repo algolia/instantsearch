@@ -2,8 +2,14 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
+import { isReasoningPartActive } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
+import {
+  createChatMessageReasoningComponent,
+  type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningTranslations,
+} from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
 import type {
@@ -41,7 +47,7 @@ export type ChatMessageTranslations = {
    * The label for message actions
    */
   actionsLabel: string;
-};
+} & Partial<ChatMessageReasoningTranslations>;
 
 export type ChatMessageClassNames = {
   /**
@@ -72,7 +78,7 @@ export type ChatMessageClassNames = {
    * Class names to apply to the footer element
    */
   footer: string | string[];
-};
+} & Partial<ChatMessageReasoningClassNames>;
 
 export type ChatMessageActionProps = {
   /**
@@ -160,6 +166,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   suggestionsElement?: VNode;
   /**
+   * Whether to render reasoning parts
+   */
+  showReasoning?: boolean;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -168,14 +178,14 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   translations?: Partial<ChatMessageTranslations>;
   /**
-   * Whether to render text parts as markdown.
+   * Whether to render text and reasoning parts as markdown.
    *
-   * When `true` (default), text parts are compiled with `markdown-to-jsx`
-   * (links, code blocks, emphasis, …). When `false`, text parts render as
-   * plain text with newlines preserved — useful for user messages where the
-   * source is the human's literal input and incidental markdown syntax (`*`,
-   * `_`, …) shouldn't be transformed. Note that opting out means links in the
-   * output are no longer clickable.
+   * When `true` (default), they are compiled with `markdown-to-jsx` (links,
+   * code blocks, emphasis, …). When `false`, they render as plain text with
+   * newlines preserved — useful for user messages where the source is the
+   * human's literal input and incidental markdown syntax (`*`, `_`, …)
+   * shouldn't be transformed. Note that opting out means links in the output
+   * are no longer clickable.
    */
   parseMarkdown?: boolean;
 };
@@ -185,6 +195,9 @@ const SearchIndexToolType = 'algolia_search_index';
 
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
+  const ChatMessageReasoning = createChatMessageReasoningComponent({
+    createElement,
+  });
 
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
@@ -205,6 +218,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       onClose,
       translations: userTranslations,
       suggestionsElement,
+      showReasoning = false,
       parseMarkdown = true,
       ...props
     } = userProps;
@@ -212,15 +226,19 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
       actionsLabel: 'Message actions',
+      reasoningLabel: 'Reasoning',
       ...userTranslations,
     };
 
     const hasLeading = Boolean(LeadingComponent);
+    const isCurrentMessage =
+      messages === undefined ||
+      messages[messages.length - 1]?.id === message.id;
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
 
-    const cssClasses: ChatMessageClassNames = {
+    const cssClasses: Required<ChatMessageClassNames> = {
       root: cx(
         'ais-ChatMessage',
         `ais-ChatMessage--${side}`,
@@ -234,6 +252,31 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       message: cx('ais-ChatMessage-message', classNames.message),
       actions: cx('ais-ChatMessage-actions', classNames.actions),
       footer: cx('ais-ChatMessage-footer', classNames.footer),
+      reasoning: cx('ais-ChatMessageReasoning', classNames.reasoning),
+      reasoningHeader: cx(
+        'ais-ChatMessageReasoning-header',
+        classNames.reasoningHeader
+      ),
+      reasoningIcon: cx(
+        'ais-ChatMessageReasoning-icon',
+        classNames.reasoningIcon
+      ),
+      reasoningLabel: cx(
+        'ais-ChatMessageReasoning-label',
+        classNames.reasoningLabel
+      ),
+      reasoningChevron: cx(
+        'ais-ChatMessageReasoning-chevron',
+        classNames.reasoningChevron
+      ),
+      reasoningBody: cx(
+        'ais-ChatMessageReasoning-body',
+        classNames.reasoningBody
+      ),
+      reasoningText: cx(
+        'ais-ChatMessageReasoning-text',
+        classNames.reasoningText
+      ),
     };
 
     function renderMessagePart(
@@ -242,6 +285,39 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     ) {
       if (part.type === 'step-start') {
         return null;
+      }
+      if (part.type === 'reasoning') {
+        if (!showReasoning) {
+          return null;
+        }
+
+        const isReasoningStreaming =
+          status === 'streaming' &&
+          isCurrentMessage &&
+          isReasoningPartActive(message.parts, index);
+
+        if (!isReasoningStreaming && part.text.trim().length === 0) {
+          return null;
+        }
+
+        return (
+          <ChatMessageReasoning
+            key={`${message.id}-${index}`}
+            part={part}
+            isStreaming={isReasoningStreaming}
+            parseMarkdown={parseMarkdown}
+            translations={translations}
+            classNames={{
+              ...cssClasses,
+              reasoningLabel: cx(
+                'ais-ChatMessageReasoning-label',
+                isReasoningStreaming &&
+                  'ais-ChatMessageReasoning-label--streaming',
+                classNames.reasoningLabel
+              ),
+            }}
+          />
+        );
       }
       if (part.type === 'text') {
         // Back-compat shim for sessions started before the move from a

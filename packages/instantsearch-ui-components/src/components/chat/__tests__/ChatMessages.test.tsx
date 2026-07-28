@@ -4,7 +4,9 @@
 /** @jsx createElement */
 import { render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
+import { useMemo } from 'preact/hooks';
 
+import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -14,6 +16,11 @@ const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo: (factory) => factory(),
+});
+const MemoizedChatMessages = createChatMessagesComponent({
+  createElement,
+  Fragment,
+  useMemo,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 
@@ -144,6 +151,699 @@ describe('ChatMessages', () => {
     `);
   });
 
+  test('shows the loader while streaming reasoning is hidden', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
+  test('does not show the loader below visible streaming reasoning', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getByRole('group', { name: 'Reasoning' })
+    ).toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
+  test('shows the loader after empty reasoning finishes while the response continues', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: '',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
+  test('shows the loader after visible reasoning finishes while the response continues', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getByRole('group', { name: 'Reasoning' })
+    ).toBeInTheDocument();
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+  });
+
+  test('does not show the loader while an earlier reasoning part is still active', () => {
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            role: 'assistant',
+            id: '1',
+            parts: [
+              {
+                type: 'reasoning',
+                text: 'Checking the catalog.',
+                state: 'streaming',
+              },
+              {
+                type: 'reasoning',
+                text: 'Comparing the results.',
+                state: 'done',
+              },
+            ],
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        status="streaming"
+        assistantMessageProps={{ showReasoning: true }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getAllByRole('group', { name: 'Reasoning' })[0]
+    ).toHaveAttribute('aria-busy', 'true');
+    expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
+  test('updates nested reasoning labels for every completed message', () => {
+    const firstMessage = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const secondMessage = {
+      role: 'assistant' as const,
+      id: '2',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Comparing the results.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const { rerender } = render(
+      <MemoizedChatMessages
+        messages={[firstMessage, secondMessage]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        assistantMessageProps={{
+          showReasoning: true,
+          translations: { reasoningLabel: 'Reasoning' },
+        }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(screen.getAllByRole('group', { name: 'Reasoning' })).toHaveLength(2);
+
+    rerender(
+      <MemoizedChatMessages
+        messages={[firstMessage, { ...secondMessage }]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        assistantMessageProps={{
+          showReasoning: true,
+          translations: { reasoningLabel: 'Raisonnement' },
+        }}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.queryByRole('group', { name: 'Reasoning' })
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByRole('group', { name: 'Raisonnement' })).toHaveLength(
+      2
+    );
+  });
+
+  test.each(['messageClassNames', 'assistantMessageProps'] as const)(
+    'updates reasoning classes for every completed message through %s',
+    (classNameSource) => {
+      const firstMessage = {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Checking the catalog.',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const secondMessage = {
+        role: 'assistant' as const,
+        id: '2',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Comparing the results.',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const createReasoningClassNames = (suffix: string) => ({
+        reasoning: `reasoning-${suffix}`,
+        reasoningHeader: `reasoning-header-${suffix}`,
+        reasoningIcon: `reasoning-icon-${suffix}`,
+        reasoningLabel: `reasoning-label-${suffix}`,
+        reasoningChevron: `reasoning-chevron-${suffix}`,
+        reasoningBody: `reasoning-body-${suffix}`,
+        reasoningText: `reasoning-text-${suffix}`,
+      });
+      const createClassNameProps = (suffix: string) =>
+        classNameSource === 'messageClassNames'
+          ? {
+              messageClassNames: createReasoningClassNames(suffix),
+              assistantMessageProps: { showReasoning: true },
+            }
+          : {
+              assistantMessageProps: {
+                showReasoning: true,
+                classNames: createReasoningClassNames(suffix),
+              },
+            };
+      const { container, rerender } = render(
+        <MemoizedChatMessages
+          messages={[firstMessage, secondMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          {...createClassNameProps('old')}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+      const firstDisclosure = container.querySelector('details');
+      firstDisclosure!.open = true;
+      Object.values(createReasoningClassNames('old')).forEach((className) => {
+        expect(container.querySelectorAll(`.${className}`)).toHaveLength(2);
+      });
+
+      rerender(
+        <MemoizedChatMessages
+          messages={[firstMessage, { ...secondMessage }]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          {...createClassNameProps('new')}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      Object.values(createReasoningClassNames('old')).forEach((className) => {
+        expect(container.querySelectorAll(`.${className}`)).toHaveLength(0);
+      });
+      Object.values(createReasoningClassNames('new')).forEach((className) => {
+        expect(container.querySelectorAll(`.${className}`)).toHaveLength(2);
+      });
+      expect(container.querySelector('details')).toBe(firstDisclosure);
+      expect(firstDisclosure).toHaveProperty('open', true);
+      expect(firstDisclosure).toHaveAttribute('aria-label', 'Reasoning');
+      expect(firstDisclosure).toHaveAttribute('aria-busy', 'false');
+    }
+  );
+
+  // The test above moves all seven keys at once, so six could stop being
+  // dependencies unnoticed. One key at a time makes each individually load-bearing.
+  const reasoningClassCases: Array<
+    [string, 'messageClassNames' | 'assistantMessageProps']
+  > = [
+    'reasoning',
+    'reasoningHeader',
+    'reasoningIcon',
+    'reasoningLabel',
+    'reasoningChevron',
+    'reasoningBody',
+    'reasoningText',
+  ].flatMap((key) => [
+    [key, 'messageClassNames'],
+    [key, 'assistantMessageProps'],
+  ]);
+
+  test.each(reasoningClassCases)(
+    'updates the %s class on its own for completed messages through %s',
+    (key, classNameSource) => {
+      const message = {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Checking the catalog.',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const createProps = (suffix: string) => {
+        const reasoningClassNames = { [key]: `${key}-${suffix}` };
+        return {
+          // Same `message` reference in both renders, so the class name is the
+          // only input the comparator can react to.
+          messages: [message],
+          indexUiState: {},
+          setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
+          ...(classNameSource === 'messageClassNames'
+            ? {
+                messageClassNames: reasoningClassNames,
+                assistantMessageProps: { showReasoning: true },
+              }
+            : {
+                assistantMessageProps: {
+                  showReasoning: true,
+                  classNames: reasoningClassNames,
+                },
+              }),
+        };
+      };
+
+      const { container, rerender } = render(
+        <MemoizedChatMessages {...createProps('old')} />
+      );
+      const disclosure = container.querySelector('details')!;
+      disclosure.open = true;
+      expect(container.querySelectorAll(`.${key}-old`)).toHaveLength(1);
+
+      rerender(<MemoizedChatMessages {...createProps('new')} />);
+
+      expect(container.querySelectorAll(`.${key}-old`)).toHaveLength(0);
+      expect(container.querySelectorAll(`.${key}-new`)).toHaveLength(1);
+      // Updated in place rather than remounted, so reader state survives.
+      expect(container.querySelector('details')).toBe(disclosure);
+      expect(disclosure).toHaveProperty('open', true);
+    }
+  );
+
+  test('falls back to the default label when a nested override is removed', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const createProps = (
+      translations: Record<string, string>
+    ): React.ComponentProps<typeof MemoizedChatMessages> => ({
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      messageTranslations: { reasoningLabel: 'Nested' },
+      assistantMessageProps: { showReasoning: true, translations },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { container, rerender } = render(
+      <MemoizedChatMessages {...createProps({ reasoningLabel: 'Nested' })} />
+    );
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Nested'
+    );
+
+    // The nested object replaces `messageTranslations` wholesale, so dropping its
+    // label falls back to the built-in default, not to the outer value.
+    rerender(
+      <MemoizedChatMessages {...createProps({ messageLabel: 'Unrelated' })} />
+    );
+
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Reasoning'
+    );
+  });
+
+  test('falls back to the default label when a nested override becomes undefined', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const createProps = (
+      translations: Record<string, string> | undefined
+    ): React.ComponentProps<typeof MemoizedChatMessages> => ({
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      messageTranslations: { reasoningLabel: 'Nested' },
+      assistantMessageProps: { showReasoning: true, translations },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { container, rerender } = render(
+      <MemoizedChatMessages {...createProps({ reasoningLabel: 'Nested' })} />
+    );
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Nested'
+    );
+
+    // The key is present holding `undefined`, which still replaces
+    // `messageTranslations`. The comparator has to read presence, not nullishness.
+    rerender(<MemoizedChatMessages {...createProps(undefined)} />);
+
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Reasoning'
+    );
+  });
+
+  test('drops a nested class override when it becomes undefined', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const createProps = (
+      classNames: Record<string, string> | undefined
+    ): React.ComponentProps<typeof MemoizedChatMessages> => ({
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      messageClassNames: { reasoning: 'shared-reasoning' },
+      assistantMessageProps: { showReasoning: true, classNames },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { container, rerender } = render(
+      <MemoizedChatMessages
+        {...createProps({ reasoning: 'shared-reasoning' })}
+      />
+    );
+    expect(container.querySelectorAll('.shared-reasoning')).toHaveLength(1);
+
+    // Both surfaces hold the same value here, so a nullish fallback would compute
+    // an unchanged dependency and strand the class on a row that dropped it.
+    rerender(<MemoizedChatMessages {...createProps(undefined)} />);
+
+    expect(container.querySelectorAll('.shared-reasoning')).toHaveLength(0);
+  });
+
+  test('leaves completed user rows alone when assistant reasoning changes', () => {
+    const userMessage = {
+      role: 'user' as const,
+      id: '1',
+      parts: [{ type: 'text' as const, text: 'Show me sneakers.' }],
+    };
+    const assistantMessage = {
+      role: 'assistant' as const,
+      id: '2',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    let userRenders = 0;
+    const createProps = (reasoningLabel: string) => ({
+      messages: [userMessage, assistantMessage],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      userMessageProps: {
+        footerComponent: () => {
+          userRenders++;
+          return <span />;
+        },
+      },
+      assistantMessageProps: {
+        showReasoning: true,
+        translations: { reasoningLabel },
+      },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { rerender } = render(
+      <MemoizedChatMessages {...createProps('Reasoning')} />
+    );
+    const baseline = userRenders;
+    expect(baseline).toBeGreaterThan(0);
+
+    rerender(<MemoizedChatMessages {...createProps('Raisonnement')} />);
+
+    // A user row renders with `userMessageProps`, so an assistant-only change must
+    // not invalidate it and recompile its markdown to the same output.
+    expect(userRenders).toBe(baseline);
+    expect(screen.getAllByRole('group', { name: 'Raisonnement' })).toHaveLength(
+      1
+    );
+  });
+
+  test('updates completed user rows when their own reasoning changes', () => {
+    const message = {
+      role: 'user' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const createProps = (reasoningLabel: string) => ({
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      userMessageProps: {
+        showReasoning: true,
+        translations: { reasoningLabel },
+      },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { container, rerender } = render(
+      <MemoizedChatMessages {...createProps('Reasoning')} />
+    );
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Reasoning'
+    );
+
+    // Reading `assistantMessageProps` for every role would strand this change.
+    rerender(<MemoizedChatMessages {...createProps('Raisonnement')} />);
+
+    expect(container.querySelector('details')).toHaveAttribute(
+      'aria-label',
+      'Raisonnement'
+    );
+  });
+
+  test('does not scan for active reasoning while the disclosure is off', () => {
+    const isReasoningPartActive = jest.spyOn(
+      chatUtils,
+      'isReasoningPartActive'
+    );
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'One.',
+          state: 'streaming' as const,
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Two.',
+          state: 'streaming' as const,
+        },
+      ],
+    };
+    const props = {
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      status: 'streaming' as const,
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const { unmount } = render(<ChatMessages {...props} />);
+
+    // The scan slices the remaining parts per candidate, so it must not run while
+    // the opt-in is off.
+    expect(isReasoningPartActive).not.toHaveBeenCalled();
+
+    unmount();
+    render(
+      <ChatMessages
+        {...props}
+        assistantMessageProps={{ showReasoning: true }}
+      />
+    );
+
+    expect(isReasoningPartActive).toHaveBeenCalled();
+    isReasoningPartActive.mockRestore();
+  });
+
+  test('toggles the disclosure on completed messages when the option changes', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Checking the catalog.',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const createProps = (showReasoning: boolean) => ({
+      messages: [message],
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      assistantMessageProps: { showReasoning },
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    });
+
+    const { container, rerender } = render(
+      <MemoizedChatMessages {...createProps(false)} />
+    );
+    expect(container.querySelector('details')).toBeNull();
+
+    // A host app can flip the option after the answer settled, so completed rows
+    // have to react to the option itself, not only to labels and classes.
+    rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+    expect(container.querySelector('details')).not.toBeNull();
+  });
+
   describe('parseMarkdown', () => {
     test('parses user message text as markdown by default', () => {
       const { container } = render(
@@ -165,6 +865,33 @@ describe('ChatMessages', () => {
 
       expect(container.querySelector('em')).not.toBeNull();
       expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
+    });
+
+    test('switches completed messages between markdown and plain text', () => {
+      const message = {
+        role: 'user' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'a *b* c' }],
+      };
+      const createProps = (parseMarkdown: boolean) => ({
+        messages: [message],
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        userMessageProps: { parseMarkdown },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { container, rerender } = render(
+        <MemoizedChatMessages {...createProps(true)} />
+      );
+      expect(container.querySelector('em')).not.toBeNull();
+
+      rerender(<MemoizedChatMessages {...createProps(false)} />);
+
+      expect(container.querySelector('em')).toBeNull();
+      expect(container.querySelector('.ais-ChatMessage-text')).not.toBeNull();
     });
 
     test('renders user message text as plain text via userMessageProps', () => {
@@ -219,9 +946,7 @@ describe('ChatMessages', () => {
 
       const messages = container.querySelectorAll('.ais-ChatMessage-message');
       // User message: plain text, no emphasis.
-      expect(
-        messages[0].querySelector('.ais-ChatMessage-text')
-      ).not.toBeNull();
+      expect(messages[0].querySelector('.ais-ChatMessage-text')).not.toBeNull();
       expect(messages[0].querySelector('em')).toBeNull();
       // Assistant message: still parsed as markdown.
       expect(messages[1].querySelector('em')).not.toBeNull();
@@ -251,7 +976,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(2);
     });
 
@@ -269,7 +996,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -291,7 +1020,9 @@ describe('ChatMessages', () => {
         container.querySelector('.ais-ChatMessage-feedbackSpinner')
       ).not.toBeNull();
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
 
@@ -341,7 +1072,9 @@ describe('ChatMessages', () => {
       );
 
       expect(
-        container.querySelectorAll('[aria-label="Like"], [aria-label="Dislike"]')
+        container.querySelectorAll(
+          '[aria-label="Like"], [aria-label="Dislike"]'
+        )
       ).toHaveLength(0);
     });
   });
