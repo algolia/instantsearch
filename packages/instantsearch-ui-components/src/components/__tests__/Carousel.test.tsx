@@ -2,9 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { render, waitFor } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 import { createCarouselComponent, generateCarouselId } from '../Carousel';
 
@@ -14,6 +14,8 @@ import type { CarouselProps } from '../Carousel';
 const Carousel = createCarouselComponent({
   createElement: createElement as Pragma,
   Fragment,
+  useEffect,
+  useRef,
 });
 
 function CarouselWithRefs(
@@ -307,5 +309,117 @@ describe('Carousel', () => {
     expect(
       container.querySelector('.ais-Carousel-navigation--next')
     ).toHaveClass('NAVIGATION', 'NAVIGATION_NEXT');
+  });
+
+  test('keeps retained item components mounted when an item is inserted first', () => {
+    const mounts: string[] = [];
+    const TrackingItemComponent: CarouselProps<RecordWithObjectID>['itemComponent'] =
+      ({ item }) => {
+        useEffect(() => {
+          mounts.push(item.objectID);
+        }, [item.objectID]);
+
+        return <div>{item.objectID}</div>;
+      };
+    const initialItems = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const { rerender } = render(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={initialItems}
+        itemComponent={TrackingItemComponent}
+      />
+    );
+
+    expect(mounts).toEqual(['1', '2']);
+
+    rerender(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={[{ objectID: '0', __position: 1 }, ...initialItems]}
+        itemComponent={TrackingItemComponent}
+      />
+    );
+
+    expect(mounts).toEqual(['1', '2', '0']);
+  });
+
+  test('renders repeated and key-like object IDs without duplicate key warnings', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const { getAllByText } = render(
+      <CarouselWithRefs
+        sendEvent={jest.fn()}
+        items={[
+          { objectID: '1', __position: 1 },
+          { objectID: '1', __position: 2 },
+          { objectID: '1:0', __position: 3 },
+        ]}
+        itemComponent={ItemComponent}
+      />
+    );
+
+    expect(getAllByText('1')).toHaveLength(2);
+    expect(getAllByText('1:0')).toHaveLength(1);
+    expect(consoleError).not.toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
+  describe('built-in navigation on item count change', () => {
+    // jsdom reports zero dimensions, so without explicit widths a test only
+    // proves the measurement ran, not what it decided.
+    const setGeometry = (
+      list: Element,
+      { clientWidth, scrollWidth }: { clientWidth: number; scrollWidth: number }
+    ) =>
+      Object.defineProperties(list, {
+        clientWidth: { configurable: true, value: clientWidth },
+        scrollWidth: { configurable: true, value: scrollWidth },
+      });
+    const items = [
+      { objectID: '1', __position: 1 },
+      { objectID: '2', __position: 2 },
+    ];
+    const nextButton = (container: Element) =>
+      container.querySelector<HTMLButtonElement>(
+        '.ais-Carousel-navigation--next'
+      )!;
+
+    test('hides the next control when the items fit', async () => {
+      const { container, rerender } = render(
+        <CarouselWithRefs items={items.slice(0, 1)} sendEvent={jest.fn()} />
+      );
+      setGeometry(container.querySelector('.ais-Carousel-list')!, {
+        clientWidth: 400,
+        scrollWidth: 400,
+      });
+
+      rerender(<CarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      await waitFor(() => expect(nextButton(container)).not.toBeVisible());
+    });
+
+    test('reverses the next control from hidden to visible once the list overflows', async () => {
+      const third = { objectID: '3', __position: 3 };
+      const { container, rerender } = render(
+        <CarouselWithRefs items={items.slice(0, 1)} sendEvent={jest.fn()} />
+      );
+      const list = container.querySelector('.ais-Carousel-list')!;
+
+      setGeometry(list, { clientWidth: 400, scrollWidth: 400 });
+      rerender(<CarouselWithRefs items={items} sendEvent={jest.fn()} />);
+
+      await waitFor(() => expect(nextButton(container)).not.toBeVisible());
+
+      setGeometry(list, { clientWidth: 200, scrollWidth: 400 });
+      rerender(
+        <CarouselWithRefs items={[...items, third]} sendEvent={jest.fn()} />
+      );
+
+      await waitFor(() => expect(nextButton(container)).toBeVisible());
+    });
   });
 });

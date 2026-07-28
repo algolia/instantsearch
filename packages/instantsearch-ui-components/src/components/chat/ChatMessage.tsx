@@ -399,6 +399,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             >
               <ToolLayoutComponent
                 message={toolMessage}
+                status={status}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}

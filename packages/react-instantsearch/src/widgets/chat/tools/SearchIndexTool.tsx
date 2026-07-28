@@ -1,6 +1,7 @@
 import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
+  useEffect,
   useMemo,
   useState,
   useRef,
@@ -26,6 +27,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   const SearchLayoutUIComponent = createCarouselToolComponent<TObject>({
     createElement: createElement as Pragma,
     Fragment,
+    useEffect,
     useMemo,
     useRef,
     useState,
