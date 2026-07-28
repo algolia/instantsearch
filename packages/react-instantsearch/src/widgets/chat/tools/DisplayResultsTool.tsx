@@ -16,6 +16,7 @@ import { Carousel } from '../../../components';
 
 import type {
   ClientSideToolComponentProps,
+  HeaderComponentProps,
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
@@ -35,7 +36,47 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
     useRef,
   });
 
-  const Button = createButtonComponent({ createElement: createElement as Pragma });
+  const Button = createButtonComponent({
+    createElement: createElement as Pragma,
+  });
+
+  const DisplayResultsCarouselHeader = ({
+    nbItems,
+    canScrollLeft,
+    canScrollRight,
+    scrollLeft,
+    scrollRight,
+  }: HeaderComponentProps) => (
+    <div className="ais-ChatToolDisplayResultsCarouselHeader">
+      <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
+        {nbItems} result{nbItems > 1 ? 's' : ''}
+      </div>
+      <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+        <Button
+          variant="outline"
+          size="sm"
+          iconOnly
+          aria-label="Previous"
+          onClick={scrollLeft}
+          disabled={!canScrollLeft}
+          className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+        >
+          <ChevronLeftIcon createElement={createElement as Pragma} />
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          iconOnly
+          aria-label="Next"
+          onClick={scrollRight}
+          disabled={!canScrollRight}
+          className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+        >
+          <ChevronRightIcon createElement={createElement as Pragma} />
+        </Button>
+      </div>
+    </div>
+  );
 
   const DisplayResultsLayoutComponent = (
     toolProps: ClientSideToolComponentProps
@@ -49,42 +90,7 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
             itemComponent={itemComponent}
             sendEvent={sendEvent}
             showNavigation={false}
-            headerComponent={({
-              canScrollLeft,
-              canScrollRight,
-              scrollLeft,
-              scrollRight,
-            }) => (
-              <div className="ais-ChatToolDisplayResultsCarouselHeader">
-                <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
-                  {items.length} result{items.length > 1 ? 's' : ''}
-                </div>
-                <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    iconOnly
-                    onClick={scrollLeft}
-                    disabled={!canScrollLeft}
-                    className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                  >
-                    <ChevronLeftIcon createElement={createElement as Pragma} />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    iconOnly
-                    onClick={scrollRight}
-                    disabled={!canScrollRight}
-                    className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                  >
-                    <ChevronRightIcon
-                      createElement={createElement as Pragma}
-                    />
-                  </Button>
-                </div>
-              </div>
-            )}
+            headerComponent={DisplayResultsCarouselHeader}
           />
         )}
       />
@@ -93,6 +99,7 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
 
   return {
     layoutComponent: DisplayResultsLayoutComponent,
+    streamInput: true,
   };
 }
 

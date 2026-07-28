@@ -11,7 +11,6 @@ import {
   trendingItems,
   chat,
   chatTrigger,
-  filterSuggestions,
   currentRefinements,
 } from 'instantsearch.js/es/widgets';
 
@@ -54,14 +53,6 @@ search.addWidgets([
     hidden: ({ items }) => items.length === 0,
   })(currentRefinements)({
     container: '#current-refinements',
-  }),
-  panel({ templates: { header: 'Filter Suggestions' } })(filterSuggestions)({
-    container: '#filter-suggestions',
-    agentId: '3123062d-d611-4d4f-8ab2-4fa39302dc64',
-    attributes: ['brand', 'categories'],
-    templates: {
-      header: false,
-    },
   }),
   hits({
     container: '#hits',

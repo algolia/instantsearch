@@ -482,12 +482,16 @@ export function createOptionsTests(
         .spyOn(chat, 'sendMessage')
         .mockImplementation(async (message: MockSendMessageInput) => {
           const text = message && 'text' in message ? message.text : undefined;
+          const parts =
+            message && 'parts' in message ? message.parts ?? [] : [];
+          const metadata =
+            message && 'metadata' in message ? message.metadata : undefined;
           chat.messages = [
             {
               id: '1',
               role: 'user',
-              parts: text ? [{ type: 'text', text }] : message?.parts ?? [],
-              metadata: message?.metadata,
+              parts: text ? [{ type: 'text', text }] : parts,
+              metadata,
             },
           ] as any;
         });
@@ -1852,20 +1856,36 @@ export function createOptionsTests(
 
       describe('display results tool', () => {
         const displayResultsMessage = (
-          output: unknown,
-          { preliminary = false } = {}
+          input: unknown,
+          {
+            state = 'output-available',
+            output = { status: 'success' },
+          }: {
+            state?: 'input-streaming' | 'input-available' | 'output-available';
+            output?: unknown;
+          } = {}
         ) =>
           ({
             id: '1',
             role: 'assistant',
             parts: [
               {
-                type: `tool-${DisplayResultsToolType}`,
-                toolCallId: '1',
-                input: {},
+                type: `tool-${SearchIndexToolType}`,
+                toolCallId: 'search',
+                input: { query: 'test' },
                 state: 'output-available',
+                output: {
+                  hits: ['1', '2', '3', '4', '5'].map((objectID) => ({
+                    objectID,
+                  })),
+                },
+              },
+              {
+                type: `tool-${DisplayResultsToolType}`,
+                toolCallId: 'display',
+                input,
+                state,
                 output,
-                ...(preliminary ? { preliminary: true } : {}),
               },
             ],
           } as any);
@@ -1932,10 +1952,16 @@ export function createOptionsTests(
           expect(whys).toHaveLength(1);
           expect(whys[0].textContent).toBe('matches your stride');
 
-          expect(document.querySelectorAll('.ais-Carousel')).toHaveLength(2);
-          expect(document.querySelectorAll('.ais-Carousel-item')).toHaveLength(
-            5
-          );
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel'
+            )
+          ).toHaveLength(2);
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+            )
+          ).toHaveLength(5);
 
           const counts = document.querySelectorAll(
             '.ais-ChatToolDisplayResultsCarouselHeaderCount'
@@ -1957,7 +1983,7 @@ export function createOptionsTests(
           });
         });
 
-        test('shows streaming caption while preliminary flag is true', async () => {
+        test('shows the streaming caption only for the active response', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -1967,10 +1993,10 @@ export function createOptionsTests(
                   intro: 'Curating',
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
-                { preliminary: true }
+                { state: 'input-streaming', output: undefined }
               ),
             ],
-            id: 'chat-id',
+            agentId: 'chat-id',
           });
 
           await setup({
@@ -1988,11 +2014,66 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
+
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
             document.querySelector('.ais-ChatToolDisplayResults-streaming')
           ).toBeInTheDocument();
+
+          await act(async () => {
+            await chat.stop();
+            await wait(0);
+          });
+
+          expect(chat.status).toBe('ready');
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
+
+          const restoredChat = new Chat({ agentId: 'chat-id' });
+          expect(restoredChat.messages[0].parts[1]).toEqual(
+            expect.objectContaining({ state: 'input-streaming' })
+          );
+
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).toBeInTheDocument();
+
+          await act(async () => {
+            chat._state.messages = [
+              ...chat.messages,
+              {
+                id: '2',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Next answer' }],
+              },
+            ];
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).not.toBeInTheDocument();
         });
 
-        test('renders nothing when output has no intro and no groups', async () => {
+        test('renders nothing when input has no intro and no groups', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2039,13 +2120,13 @@ export function createOptionsTests(
                   {
                     type: `tool-${DisplayResultsToolType}`,
                     toolCallId: '2',
-                    input: {},
-                    state: 'output-available',
-                    output: {
+                    input: {
                       groups: [
                         { title: 'Picks', results: [{ objectID: '1' }] },
                       ],
                     },
+                    state: 'output-available',
+                    output: { status: 'success' },
                   },
                 ],
               },
@@ -2097,13 +2178,13 @@ export function createOptionsTests(
                   {
                     type: `tool-${DisplayResultsToolType}`,
                     toolCallId: '2',
-                    input: {},
-                    state: 'output-available',
-                    output: {
+                    input: {
                       groups: [
                         { title: 'Picks', results: [{ objectID: '1' }] },
                       ],
                     },
+                    state: 'output-available',
+                    output: { status: 'success' },
                   },
                 ],
               },
@@ -2135,14 +2216,17 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('allows overriding the display results tool via the tools option', async () => {
+        test('streams input with a layout-only display results override', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage({
-                groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
-              }),
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
             ],
             id: 'chat-id',
           });
@@ -2185,6 +2269,178 @@ export function createOptionsTests(
           expect(
             document.querySelector('.ais-ChatToolDisplayResults')
           ).not.toBeInTheDocument();
+        });
+
+        test('hides the loader while the default tool streams its input', async () => {
+          const searchClient = createSearchClient();
+          const chat = new Chat({});
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.messages = [
+              displayResultsMessage(
+                {
+                  intro: 'Curating',
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ];
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-groupTitle')
+              ?.textContent
+          ).toBe('Runners');
+          expect(
+            document.querySelectorAll(
+              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+            )
+          ).toHaveLength(1);
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).not.toBeInTheDocument();
+        });
+
+        test('shows the loader for a callback-only display results override', async () => {
+          const searchClient = createSearchClient();
+          const chat = new Chat({});
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    templates: {},
+                    onToolCall: jest.fn(),
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    onToolCall: jest.fn(),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.messages = [
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ];
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).toBeInTheDocument();
+        });
+
+        test('allows a display results override to disable input streaming', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage(
+                {
+                  groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
+                },
+                { state: 'input-streaming', output: undefined }
+              ),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    streamInput: false,
+                    templates: {
+                      layout: '<div id="custom-display">custom display</div>',
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [DisplayResultsToolType]: {
+                    streamInput: false,
+                    layoutComponent: () => (
+                      <div id="custom-display">custom display</div>
+                    ),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          expect(document.querySelector('.ais-Chat')).toBeInTheDocument();
+          expect(
+            document.querySelector('#custom-display')
+          ).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-ChatMessageLoader')
+          ).toBeInTheDocument();
         });
       });
     });

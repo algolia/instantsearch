@@ -6,8 +6,6 @@ import { ChatLayoutSwitcher } from "../components/ChatLayoutSwitcher";
 import { WidgetAiAutocomplete } from "../components/widgets/WidgetAiAutocomplete";
 import { WidgetChat, type ChatLayout } from "../components/widgets/WidgetChat";
 import { WidgetChatTrigger } from "../components/widgets/WidgetChatTrigger";
-// TODO: re-enable once the `filterSuggestions` widget works properly.
-// import { WidgetFilterSuggestions } from "../components/widgets/WidgetFilterSuggestions";
 import { WidgetHits } from "../components/widgets/WidgetHits";
 import { WidgetSwitcher } from "../components/WidgetSwitcher";
 import { ChatLayoutContext } from "../context/chatLayout";
