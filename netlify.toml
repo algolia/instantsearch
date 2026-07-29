@@ -6,6 +6,3 @@
     yarn workspace algoliasearch-helper doc
     """
   publish="website"
-
-[build.environment]
-  YARN_VERSION = "1.13.0"
