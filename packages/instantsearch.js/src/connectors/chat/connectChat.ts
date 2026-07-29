@@ -45,6 +45,7 @@ import type {
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
+  ChatInsightsEventContext,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -764,6 +765,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return updateStateFromSearchToolInput(params, helper);
         }
 
+        const insightsEventContext: ChatInsightsEventContext = {
+          agentId,
+          instantSearchStatus: instantSearchInstance.status,
+        };
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult = {
@@ -773,6 +778,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
+            insightsEventContext,
           } satisfies ClientSideTool & {
             '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };

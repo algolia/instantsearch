@@ -151,9 +151,17 @@ export function createCarouselToolComponent<
       itemComponent: ItemComponent,
       headerComponent: HeaderComponent,
       getSearchPageURL,
-      toolProps: { message, applyFilters, onClose, sendEvent },
+      toolProps: {
+        message,
+        applyFilters,
+        onClose,
+        insightsEventContext,
+        sendEvent,
+      },
       headerProps: { showViewAll },
     } = userProps;
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
 
     const input = message?.input as SearchToolInput | undefined;
 
@@ -170,6 +178,30 @@ export function createCarouselToolComponent<
       addAbsolutePosition(hits, 0, hits.length),
       output?.queryID
     );
+    const viewedItemsSignature = items
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = useRef<string | undefined>(undefined);
+
+    useEffect(() => {
+      if (
+        instantSearchStatus !== 'idle' ||
+        items.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', items, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [instantSearchStatus, items, sendEvent, viewedItemsSignature]);
+
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 

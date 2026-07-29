@@ -134,7 +134,7 @@ export type DisplayResultsItem<THit extends RecordWithObjectID> =
 
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
-    items: Array<RecordWithObjectID<THit>>;
+    items: Array<DisplayResultsItem<THit>>;
     sendEvent: ClientSideToolComponentProps['sendEvent'];
   };
 
@@ -158,7 +158,13 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
 export function createDisplayResultsToolComponent<
   TObject extends RecordWithObjectID,
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment, useMemo }: Renderer & Pick<Hooks, 'useMemo'>) {
+>({
+  createElement,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
@@ -167,7 +173,10 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, messages, sendEvent, status } = toolProps;
+    const { message, messages, insightsEventContext, sendEvent, status } =
+      toolProps;
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
@@ -265,6 +274,31 @@ export function createDisplayResultsToolComponent<
       });
       return renderedGroups;
     }, []);
+
+    const viewedItems = renderableGroups.flatMap((group) => group.items);
+    const viewedItemsSignature = viewedItems
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = useRef<string | undefined>(undefined);
+
+    useEffect(() => {
+      if (
+        instantSearchStatus !== 'idle' ||
+        viewedItems.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', viewedItems, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [instantSearchStatus, sendEvent, viewedItems, viewedItemsSignature]);
 
     if (!intro && renderableGroups.length === 0 && !isStreaming) {
       return <Fragment />;

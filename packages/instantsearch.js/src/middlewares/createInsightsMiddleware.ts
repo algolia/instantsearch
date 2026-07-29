@@ -390,14 +390,19 @@ export function createInsightsMiddleware<
             if (event.insightsMethod === 'viewedObjectIDs') {
               const payload = event.payload as {
                 objectIDs: string[];
+                queryID?: string;
               };
+              const getViewEventKey = (objectID: string) =>
+                payload.queryID ? `${payload.queryID}:${objectID}` : objectID;
               const difference = payload.objectIDs.filter(
-                (objectID) => !viewedObjectIDs.has(objectID)
+                (objectID) => !viewedObjectIDs.has(getViewEventKey(objectID))
               );
               if (difference.length === 0) {
                 return;
               }
-              difference.forEach((objectID) => viewedObjectIDs.add(objectID));
+              difference.forEach((objectID) =>
+                viewedObjectIDs.add(getViewEventKey(objectID))
+              );
               payload.objectIDs = difference;
             }
 
