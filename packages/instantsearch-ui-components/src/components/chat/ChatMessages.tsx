@@ -5,6 +5,7 @@ import {
   findTool,
   getTextContent,
   hasTextContent,
+  isReasoningPartActive,
   isPartText,
   isPartTool,
 } from '../../lib/utils/chat';
@@ -247,6 +248,11 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+// Own-key presence is what a JSX spread copies; `in` would also answer for
+// inherited keys the spread leaves behind.
+const hasOwnKey = (target: object | undefined, key: string) =>
+  target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
+
 function createDefaultMessageComponent<
   TMessage extends ChatMessageBase = ChatMessageBase,
 >({ createElement, Fragment }: Renderer) {
@@ -273,6 +279,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    isCurrentMessage: boolean;
     status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
@@ -397,9 +404,53 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
+    // Read the row's own side, mirroring `DefaultMessage`, so one role's change
+    // neither invalidates the other's completed rows nor goes unnoticed here.
+    const messageProps =
+      props.message.role === 'user'
+        ? props.userMessageProps
+        : props.assistantMessageProps;
+    const showReasoning = messageProps?.showReasoning;
+    const parseMarkdown = messageProps?.parseMarkdown;
+    // Object-level fallback, matching the render: the spread replaces
+    // `translations` wholesale, and it copies a key holding `undefined` too. Both
+    // are why this resolves by own-key presence rather than key by key.
+    const reasoningTranslations = hasOwnKey(messageProps, 'translations')
+      ? messageProps?.translations
+      : props.messageTranslations;
+    const reasoningLabel = reasoningTranslations?.reasoningLabel;
+    const reasoningClassNames = hasOwnKey(messageProps, 'classNames')
+      ? messageProps?.classNames
+      : props.classNames;
+    const reasoningClassName = cx(reasoningClassNames?.reasoning);
+    const reasoningHeaderClassName = cx(reasoningClassNames?.reasoningHeader);
+    const reasoningIconClassName = cx(reasoningClassNames?.reasoningIcon);
+    const reasoningLabelClassName = cx(reasoningClassNames?.reasoningLabel);
+    const reasoningChevronClassName = cx(reasoningClassNames?.reasoningChevron);
+    const reasoningBodyClassName = cx(reasoningClassNames?.reasoningBody);
+    const reasoningTextClassName = cx(reasoningClassNames?.reasoningText);
+    // The row comparator. The full props object would recompile every completed
+    // message on each streaming update.
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
-      [props.message, props.status, props.suggestionsElement, messageFeedback]
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [
+        props.message,
+        props.isCurrentMessage,
+        props.status,
+        props.suggestionsElement,
+        messageFeedback,
+        showReasoning,
+        parseMarkdown,
+        reasoningLabel,
+        reasoningClassName,
+        reasoningHeaderClassName,
+        reasoningIconClassName,
+        reasoningLabelClassName,
+        reasoningChevronClassName,
+        reasoningBodyClassName,
+        reasoningTextClassName,
+      ]
     );
   }
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
@@ -475,7 +526,20 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    const showLoader = getShowLoader(status, lastPart, tools);
+    // The scan slices the remaining parts per candidate, and only the loader reads
+    // it, so skip it entirely while the opt-in is off.
+    const hasActiveReasoning = assistantMessageProps?.showReasoning
+      ? (lastMessage?.parts?.some((_, index, parts) =>
+          isReasoningPartActive(parts, index)
+        ) ?? false)
+      : false;
+    const showLoader = getShowLoader(
+      status,
+      lastPart,
+      tools,
+      assistantMessageProps?.showReasoning,
+      hasActiveReasoning
+    );
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -521,6 +585,7 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
+                isCurrentMessage={index === messages.length - 1}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
@@ -597,12 +662,17 @@ export function createChatMessagesComponent({
 const getShowLoader = (
   status: ChatStatus,
   lastPart: ChatMessageBase['parts'][number] | undefined,
-  tools: ClientSideTools
+  tools: ClientSideTools,
+  showReasoning: boolean | undefined,
+  hasActiveReasoning: boolean
 ): boolean => {
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
   if (!lastPart) return true;
+  // An active disclosure carries its own progress affordance, so the loader would
+  // double it. Settled reasoning still shows it: the answer has not started.
+  if (showReasoning && hasActiveReasoning) return false;
   if (isPartText(lastPart)) return false;
 
   if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
