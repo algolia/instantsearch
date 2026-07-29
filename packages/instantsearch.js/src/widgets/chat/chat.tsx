@@ -80,6 +80,40 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    templates?: { layout?: unknown };
+  },
+>(
+  defaultTools: Record<string, TTool>,
+  userTools?: Record<string, TTool>
+): Record<string, TTool> {
+  if (!userTools) {
+    return defaultTools;
+  }
+
+  const tools = { ...defaultTools, ...userTools };
+
+  Object.keys(userTools).forEach((toolName) => {
+    const userTool = userTools[toolName];
+    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+
+    if (
+      userTool.templates?.layout !== undefined &&
+      userTool.streamInput === undefined &&
+      defaultStreamInput !== undefined
+    ) {
+      tools[toolName] = {
+        ...userTool,
+        streamInput: defaultStreamInput,
+      };
+    }
+  });
+
+  return tools;
+}
+
 function createDefaultTools<
   THit extends RecordWithObjectID = RecordWithObjectID,
 >(
@@ -1081,7 +1115,7 @@ export default (function chat<
 
   const defaultTools = createDefaultTools(templates, getSearchPageURL);
 
-  const tools = { ...defaultTools, ...userTools };
+  const tools = mergeToolOptions(defaultTools, userTools);
 
   // Inline layouts are always visible, so they don't require a `chatTrigger`
   // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker

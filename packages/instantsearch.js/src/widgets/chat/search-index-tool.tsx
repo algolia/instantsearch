@@ -2,7 +2,7 @@
 
 import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 
@@ -26,6 +26,7 @@ export function createCarouselTool<
   const SearchLayoutUIComponent = createCarouselToolComponent<THit>({
     createElement: h,
     Fragment,
+    useEffect,
     useMemo,
     useRef,
     useState,

@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import { createCarouselToolComponent } from '../tools/CarouselTool';
 
@@ -17,6 +17,7 @@ type InputHit = { objectID: string; name: string };
 const CarouselTool = createCarouselToolComponent<Hit>({
   createElement: createElement as Pragma,
   Fragment,
+  useEffect,
   useMemo,
   useRef,
   useState,
