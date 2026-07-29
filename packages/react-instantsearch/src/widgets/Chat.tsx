@@ -10,7 +10,6 @@ import {
 import React, {
   createElement,
   Fragment,
-  memo,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -50,8 +49,8 @@ import type { UseChatProps } from 'react-instantsearch-core';
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
-  memo: memo as Parameters<typeof createChatComponent>[0]['memo'],
-  useState: useState as Parameters<typeof createChatComponent>[0]['useState'],
+  useMemo,
+  useState,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -150,6 +149,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
+    /**
+     * Whether to render reasoning parts
+     */
+    showReasoning?: boolean;
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -197,6 +200,7 @@ function ChatInner<
     title,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -294,6 +298,12 @@ function ChatInner<
     throw error;
   }
 
+  const {
+    assistantMessageProps: callerAssistantMessageProps,
+    userMessageProps: callerUserMessageProps,
+    ...restMessagesProps
+  } = messagesProps ?? {};
+
   return (
     <ChatUiComponent
       title={title}
@@ -322,7 +332,6 @@ function ChatInner<
       }}
       messagesProps={{
         status,
-        error,
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),
@@ -342,19 +351,24 @@ function ChatInner<
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
+        translations: messagesTranslations,
+        messageTranslations,
+        // The message props merge key by key rather than replace, so the dedicated
+        // top-level props still apply for keys the caller leaves unset. Spread
+        // explicitly so the merge does not depend on key order in the literal.
+        ...restMessagesProps,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
-          ...messagesProps?.assistantMessageProps,
+          showReasoning,
+          ...callerAssistantMessageProps,
         },
         userMessageProps: {
           leadingComponent: userMessageLeadingComponent,
           footerComponent: userMessageFooterComponent,
-          ...messagesProps?.userMessageProps,
+          ...callerUserMessageProps,
         },
-        translations: messagesTranslations,
-        messageTranslations,
-        ...messagesProps,
+        error,
       }}
       promptProps={{
         promptRef,

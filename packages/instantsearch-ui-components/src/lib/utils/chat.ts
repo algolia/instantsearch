@@ -14,7 +14,7 @@ const SearchIndexToolType = 'algolia_search_index';
 
 export const getTextContent = (message: ChatMessageBase) => {
   return message.parts
-    .map((part) => ('text' in part ? part.text : ''))
+    .map((part) => (part.type === 'text' ? part.text : ''))
     .join('');
 };
 
@@ -33,6 +33,24 @@ export const isPartTool = (
 ): part is ChatToolMessage => {
   return startsWith(part.type, 'tool-');
 };
+
+export function isReasoningPartActive(
+  parts: ChatMessageBase['parts'],
+  index: number
+): boolean {
+  const part = parts[index];
+
+  return (
+    part?.type === 'reasoning' &&
+    part.state === 'streaming' &&
+    !parts
+      .slice(index + 1)
+      .some(
+        (laterPart) =>
+          laterPart.type !== 'reasoning' || laterPart.state === 'streaming'
+      )
+  );
+}
 
 export const findTool = (
   partType: string,
