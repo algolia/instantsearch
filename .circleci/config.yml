@@ -160,6 +160,11 @@ workflows:
 jobs:
   build:
     <<: *defaults
+    # This is the only job that installs before the cache exists. Fetching the
+    # whole dependency tree peaks around 4GB, which a medium container cannot
+    # fit. Every other job restores the cache this one saves, which brings the
+    # same install down to around 1GB.
+    resource_class: large
     steps:
       - checkout
       - *attach_workspace
