@@ -196,7 +196,9 @@ jobs:
       - *attach_workspace
       - run:
           name: Test package versions
-          command: yarn run test:versions
+          # Run the script directly: it only reads `package.json` files, so this
+          # job deliberately skips installing dependencies.
+          command: node ./tests/versions/index.js
 
   lint:
     <<: *defaults
