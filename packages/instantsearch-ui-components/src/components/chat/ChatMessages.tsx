@@ -248,6 +248,10 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+function getInstantSearchStatus(tools: ClientSideTools) {
+  return Object.values(tools).find((tool) => tool.insightsEventContext)
+    ?.insightsEventContext?.instantSearchStatus;
+}
 // Own-key presence is what a JSX spread copies; `in` would also answer for
 // inherited keys the spread leaves behind.
 const hasOwnKey = (target: object | undefined, key: string) =>
@@ -404,6 +408,7 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
+    const instantSearchStatus = getInstantSearchStatus(props.tools);
     // Read the row's own side, mirroring `DefaultMessage`, so one role's change
     // neither invalidates the other's completed rows nor goes unnoticed here.
     const messageProps =
@@ -438,6 +443,7 @@ export function createChatMessagesComponent({
         props.message,
         props.isCurrentMessage,
         props.status,
+        instantSearchStatus,
         props.suggestionsElement,
         messageFeedback,
         showReasoning,

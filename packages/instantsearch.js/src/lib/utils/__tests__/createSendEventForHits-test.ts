@@ -366,6 +366,38 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('lets additional click event data override the search query ID', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    sendEvent('click', hits[0], 'Product Clicked', {
+      queryID: 'message_assistant-message-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'click',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'clickedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        positions: [0],
+        queryID: 'message_assistant-message-id',
+        agentId: 'agent-id',
+        toolCallId: 'tool-call-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
   it('sends click event with more than 20 hits', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment({
       nbHits: 21,
@@ -454,6 +486,37 @@ describe('createSendEventForHits', () => {
         objectIDs: ['obj0'],
         queryID: 'test-query-id',
         ...additionalData,
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('lets additional conversion event data override the search query ID', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    sendEvent('conversion', hits[0], 'Product Added To Cart', {
+      queryID: 'message_assistant-message-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
+    });
+
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'convertedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Added To Cart',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        queryID: 'message_assistant-message-id',
+        agentId: 'agent-id',
+        toolCallId: 'tool-call-id',
       },
       widgetType: 'ais.testWidget',
     });
@@ -601,7 +664,7 @@ describe('createSendEventForHits', () => {
 describe('createBindEventForHits', () => {
   function parsePayload(payload: string): Record<string, unknown> {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
-    return deserializePayload(payload.substr('data-insights-event='.length));
+    return deserializePayload(payload.slice('data-insights-event='.length));
   }
 
   it('returns a payload for view event', () => {

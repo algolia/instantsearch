@@ -12,7 +12,12 @@ import {
 } from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer, VNode } from '../../types';
+import type {
+  ComponentProps,
+  Renderer,
+  SendEventForHits,
+  VNode,
+} from '../../types';
 import type {
   AddToolResult,
   AddToolResultWithOutput,
@@ -392,6 +397,30 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             return null;
           }
 
+          const toolSendEvent = tool.sendEvent || (() => {});
+          const agentId = tool.insightsEventContext?.agentId;
+          const sendEvent = ((
+            eventType: any,
+            hits?: any,
+            eventName?: any,
+            additionalData?: any
+          ) => {
+            if (
+              hits === undefined &&
+              eventName === undefined &&
+              additionalData === undefined
+            ) {
+              return toolSendEvent(eventType);
+            }
+
+            return toolSendEvent(eventType, hits, eventName, {
+              ...(additionalData || {}),
+              queryID: 'message_' + message.id,
+              ...(agentId ? { agentId } : {}),
+              toolCallId: toolMessage.toolCallId,
+            });
+          }) as SendEventForHits;
+
           return (
             <div
               key={`${message.id}-${index}`}
@@ -399,13 +428,14 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             >
               <ToolLayoutComponent
                 message={toolMessage}
+                insightsEventContext={tool.insightsEventContext}
                 status={status}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
-                sendEvent={tool.sendEvent || (() => {})}
+                sendEvent={sendEvent}
                 onClose={onClose}
               />
             </div>

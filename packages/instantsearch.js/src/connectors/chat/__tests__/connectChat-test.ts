@@ -621,6 +621,10 @@ describe('connectChat', () => {
           '~addToolResultForMessage': expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
+          insightsEventContext: {
+            agentId: 'agentId',
+            instantSearchStatus: 'idle',
+          },
         },
       });
     });
