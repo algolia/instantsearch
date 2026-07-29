@@ -125,12 +125,6 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
-   * The full conversation. Forwarded to tool components so those that only
-   * receive object IDs (e.g. display results) can hydrate records from a
-   * preceding search tool's hits.
-   */
-  messages?: ChatMessageBase[];
-  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -176,7 +170,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       footerComponent: FooterComponent,
       indexUiState,
       setIndexUiState,
-      messages,
       translations: userTranslations,
       suggestionsElement,
       parseMarkdown = true,
@@ -299,7 +292,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
-                messages={messages}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={tool.sendEvent || (() => {})}

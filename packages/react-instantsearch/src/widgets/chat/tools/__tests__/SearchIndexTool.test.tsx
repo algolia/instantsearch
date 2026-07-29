@@ -17,7 +17,12 @@ const metadata: ChatComponentMetadata = {
   messages: [],
   status: 'ready',
   isClearing: false,
+  open: true,
+  maximized: false,
   tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
   onClose: jest.fn(),
 };
 

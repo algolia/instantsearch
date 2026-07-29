@@ -187,6 +187,22 @@ export type ChatMessagesProps<
    */
   sendMessage?: ChatLayoutOwnProps['sendMessage'];
   /**
+   * Function to regenerate the last assistant response
+   */
+  regenerate?: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Function to stop the current streaming response
+   */
+  stop?: ChatLayoutOwnProps['stop'];
+  /**
+   * Whether the chat panel is open
+   */
+  open?: boolean;
+  /**
+   * Whether the chat panel is maximized
+   */
+  maximized?: boolean;
+  /**
    * Function to set the prompt input value
    */
   setInput?: (input: string) => void;
@@ -295,7 +311,6 @@ function createDefaultMessageComponent<
     assistantMessageProps,
     indexUiState,
     setIndexUiState,
-    messages,
     onReload,
     onFeedback,
     feedbackState,
@@ -312,7 +327,6 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    messages?: ChatMessageBase[];
     onReload: (messageId?: string) => void;
     onFeedback?: (messageId: string, vote: 0 | 1) => void;
     feedbackState?: Record<string, 'sending' | 0 | 1>;
@@ -396,7 +410,6 @@ function createDefaultMessageComponent<
         message={message}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
-        messages={messages}
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
@@ -454,6 +467,10 @@ export function createChatMessagesComponent({
       onNewConversation,
       onClose,
       sendMessage,
+      regenerate = () => Promise.resolve(),
+      stop = () => Promise.resolve(),
+      open = false,
+      maximized = false,
       setInput,
       translations: userTranslations,
       userMessageProps,
@@ -507,10 +524,16 @@ export function createChatMessagesComponent({
       status,
       error,
       isClearing,
+      open,
+      maximized,
       activePart: lastPart,
       tools,
       sendMessage,
+      regenerate,
+      stop,
       setInput,
+      onReload,
+      onNewConversation,
       onClose,
     };
 
@@ -557,7 +580,6 @@ export function createChatMessagesComponent({
                 assistantMessageProps={assistantMessageProps}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
-                messages={messages}
                 onReload={onReload}
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}

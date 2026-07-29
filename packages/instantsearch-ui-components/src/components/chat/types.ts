@@ -518,6 +518,14 @@ export type ChatComponentMetadata<
    */
   isClearing: boolean;
   /**
+   * Whether the chat panel is open.
+   */
+  open: boolean;
+  /**
+   * Whether the chat panel is maximized.
+   */
+  maximized: boolean;
+  /**
    * The message part currently being processed by the assistant, if any.
    */
   activePart?: TMessage['parts'][number];
@@ -530,9 +538,25 @@ export type ChatComponentMetadata<
    */
   sendMessage?: ChatLayoutOwnProps['sendMessage'];
   /**
+   * Regenerate the last assistant response.
+   */
+  regenerate: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Stop the current streaming response.
+   */
+  stop: ChatLayoutOwnProps['stop'];
+  /**
    * Set the prompt input value.
    */
   setInput?: (input: string) => void;
+  /**
+   * Reload (regenerate) a message, optionally targeting a specific message id.
+   */
+  onReload: (messageId?: string) => void;
+  /**
+   * Clear the conversation and start a new one, when available.
+   */
+  onNewConversation?: () => void;
   /**
    * Close the chat.
    */
@@ -552,7 +576,6 @@ export type ChatComponentPropsWithMetadata<
 
 export type ClientSideToolComponentProps = ChatComponentPropsWithMetadata<{
   message: ChatToolMessage;
-  messages?: ChatMessageBase[];
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   addToolResult: AddToolResultWithOutput;

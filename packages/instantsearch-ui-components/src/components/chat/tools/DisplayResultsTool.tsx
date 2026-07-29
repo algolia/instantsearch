@@ -70,7 +70,8 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, messages, sendEvent } = toolProps;
+    const { message, metadata, sendEvent } = toolProps;
+    const { messages } = metadata;
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,

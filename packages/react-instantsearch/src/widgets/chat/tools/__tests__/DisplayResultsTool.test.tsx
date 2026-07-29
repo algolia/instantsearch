@@ -16,7 +16,12 @@ const metadata: ChatComponentMetadata = {
   messages: [],
   status: 'ready',
   isClearing: false,
+  open: true,
+  maximized: false,
   tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
   onClose: jest.fn(),
 };
 
@@ -110,7 +115,7 @@ describe('createDisplayResultsTool', () => {
 
     // The preceding search tool (same assistant message) carries the full
     // records; the display tool hydrates from them.
-    const messages: ClientSideToolComponentProps['messages'] = [
+    const messages: ChatComponentMetadata['messages'] = [
       {
         id: '1',
         role: 'assistant',
@@ -130,14 +135,13 @@ describe('createDisplayResultsTool', () => {
           message,
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentMetadata['messages'];
 
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
         applyFilters={jest.fn()}
-        metadata={metadata}
+        metadata={{ ...metadata, messages }}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
@@ -169,7 +173,7 @@ describe('createDisplayResultsTool', () => {
       },
     };
 
-    const messages: ClientSideToolComponentProps['messages'] = [
+    const messages: ChatComponentMetadata['messages'] = [
       {
         id: '1',
         role: 'assistant',
@@ -184,14 +188,13 @@ describe('createDisplayResultsTool', () => {
           message,
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentMetadata['messages'];
 
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
         applyFilters={jest.fn()}
-        metadata={metadata}
+        metadata={{ ...metadata, messages }}
         indexUiState={{}}
         addToolResult={jest.fn()}
         setIndexUiState={jest.fn()}
