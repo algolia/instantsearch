@@ -11,10 +11,7 @@ import type {
   CarouselProps,
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
-import type {
-  ClientSideToolComponentProps,
-  SearchToolInput,
-} from '../types';
+import type { ClientSideToolComponentProps, SearchToolInput } from '../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 type HeaderProps = {
@@ -136,12 +133,18 @@ export function createCarouselToolComponent<
 >({
   createElement,
   Fragment,
+  useEffect,
   useMemo,
   useRef,
   useState,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useRef' | 'useState'>) {
+}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef' | 'useState'>) {
   const DefaultHeader = createHeaderComponent({ createElement, Fragment });
-  const Carousel = createCarouselComponent({ createElement, Fragment });
+  const Carousel = createCarouselComponent({
+    createElement,
+    Fragment,
+    useEffect,
+    useRef,
+  });
 
   return function CarouselTool(userProps: CarouselToolProps<TObject>) {
     const {
@@ -169,8 +172,6 @@ export function createCarouselToolComponent<
       addAbsolutePosition(hits, 0, hits.length),
       output?.queryID
     );
-    const nbItems = items.length;
-
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -207,7 +208,6 @@ export function createCarouselToolComponent<
             showViewAll={showViewAll}
             nbHits={output?.nbHits}
             input={input}
-            nbItems={nbItems}
             applyFilters={applyFilters}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
@@ -221,7 +221,6 @@ export function createCarouselToolComponent<
           showViewAll={showViewAll}
           nbHits={output?.nbHits}
           input={input}
-          nbItems={nbItems}
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
@@ -233,7 +232,6 @@ export function createCarouselToolComponent<
       HeaderComponent,
       output?.nbHits,
       input,
-      nbItems,
       applyFilters,
       getSearchPageURL,
       onClose,

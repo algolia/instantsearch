@@ -122,6 +122,12 @@ export type ToolUIPart<TTools extends UITools = UITools> = ValueOf<{
     | {
         state: 'input-streaming';
         input: DeepPartial<TTools[NAME]['input']> | undefined;
+        /**
+         * The raw accumulated input text. `input` is parsed from it with
+         * partial-JSON repair, so a value still mid-delta can be exposed as a
+         * complete one. Consult this when completeness matters.
+         */
+        rawInput?: string;
         providerExecuted?: boolean;
         output?: never;
         errorText?: never;

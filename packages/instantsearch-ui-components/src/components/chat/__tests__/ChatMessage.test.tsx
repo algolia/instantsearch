@@ -1076,6 +1076,9 @@ describe('ChatMessage', () => {
   });
 
   test('renders with tools', () => {
+    const layoutComponent = jest.fn(({ message }) => (
+      <div className="wrapper">{JSON.stringify(message.output)}</div>
+    ));
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
@@ -1096,9 +1099,7 @@ describe('ChatMessage', () => {
         metadata={createMetadata({
           tools: {
             test_tool: {
-              layoutComponent: ({ message }) => (
-                <div className="wrapper">{JSON.stringify(message.output)}</div>
-              ),
+              layoutComponent,
               addToolResult: jest.fn(),
               onToolCall: jest.fn(),
               applyFilters: jest.fn(),
@@ -1106,6 +1107,11 @@ describe('ChatMessage', () => {
           },
         })}
       />
+    );
+    expect(layoutComponent.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        metadata: expect.objectContaining({ status: 'ready' }),
+      })
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
