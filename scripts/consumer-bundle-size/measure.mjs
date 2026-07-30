@@ -2321,7 +2321,7 @@ function renderReport(results, attributionByFixture) {
         'After attribution review, provide the three selected candidate records as JSON encoded with base64:',
         '',
         '```sh',
-        `node ${HARNESS_DIRECTORY}/measure.mjs --rank-candidates --candidate-payload <base64-candidate-array>`,
+        'node scripts/consumer-bundle-size/measure.mjs --rank-candidates --candidate-payload <base64-candidate-array>',
         '```',
         ''
       );
