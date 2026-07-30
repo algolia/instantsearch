@@ -17,12 +17,14 @@ import { useChat } from '../useChat';
 import type { InstantSearchServerState } from '../../components/InstantSearchSSRProvider';
 
 const agentId = 'hydration-agent';
-const foreignAgentId = 'foreign-agent';
 
-// Parses server markup into a container `hydrateRoot` can adopt. Assigning
-// `innerHTML` from a variable would do the same thing here, but the security
-// scanner cannot tell `renderToString` output from untrusted input and flags
-// it. `useIsHydrated.test.tsx` builds its container the same way.
+function createMessage(id: string, text: string) {
+  return { id, role: 'assistant', parts: [{ type: 'text', text }] };
+}
+
+// Parses server markup into a container `hydrateRoot` can adopt. `innerHTML`
+// would do the same, but static analysis cannot tell `renderToString` output
+// from untrusted input and flags it.
 function createHydrationContainer(html: string) {
   const container = document.createElement('div');
   container.append(document.createRange().createContextualFragment(html));
@@ -31,146 +33,187 @@ function createHydrationContainer(html: string) {
   return container;
 }
 
-function ChatProbe() {
-  const { messages } = useChat<any>({
-    agentId,
-    disableTriggerValidation: true,
-    requiresSearch: false,
-  } as any);
+function createApp(props: Record<string, unknown>) {
+  function ChatProbe() {
+    const { messages, status, suggestions, id, error } = useChat<any>({
+      agentId,
+      disableTriggerValidation: true,
+      requiresSearch: false,
+      ...props,
+    } as any);
 
-  return (
-    <span data-messages>
-      {messages.map((message: any) => message.parts[0].text).join('|')}
-    </span>
-  );
-}
-
-function App({ serverState }: { serverState?: InstantSearchServerState }) {
-  return (
-    <InstantSearchSSRProvider {...serverState}>
-      <InstantSearch
-        searchClient={createSearchClient({})}
-        indexName="indexName"
+    return (
+      <span
+        data-testid="probe"
+        data-status={status}
+        data-chat-id={id}
+        data-error={error ? error.message : ''}
       >
-        <ChatProbe />
-      </InstantSearch>
-    </InstantSearchSSRProvider>
-  );
+        {`${messages.map((message: any) => message.parts[0].text).join('|')}/${(
+          suggestions || []
+        ).join('|')}`}
+      </span>
+    );
+  }
+
+  return function App({
+    serverState,
+  }: {
+    serverState?: InstantSearchServerState;
+  }) {
+    return (
+      <InstantSearchSSRProvider {...serverState}>
+        <InstantSearch
+          searchClient={createSearchClient({})}
+          indexName="indexName"
+        >
+          <ChatProbe />
+        </InstantSearch>
+      </InstantSearchSSRProvider>
+    );
+  };
 }
 
-describe('useChat hydration', () => {
+async function renderServerMarkup(App: ReturnType<typeof createApp>) {
+  const serverState = await getServerState(<App />, { renderToString });
+
+  return {
+    serverState,
+    html: renderToString(<App serverState={serverState} />),
+  };
+}
+
+describe('useChat server rendering', () => {
   beforeEach(() => {
     sessionStorage.clear();
   });
 
-  it('does not seed the server tree from a chat without the snapshot hook', async () => {
-    // A `chat` from another copy of instantsearch.js exposes no way to ask
-    // which of its messages came from storage. Seeding the hydration render
-    // from `chat.messages` would put restored messages in a tree the server
-    // rendered without them, so the conservative empty fallback is correct
-    // even though it means caller messages appear only after hydration.
-    sessionStorage.setItem(
-      `${CACHE_KEY}-${foreignAgentId}`,
-      JSON.stringify([
-        {
-          id: 'restored',
-          role: 'assistant',
-          parts: [{ type: 'text', text: 'RESTORED' }],
-        },
-      ])
-    );
-
-    const foreignChat = new Chat<any>({
-      agentId: foreignAgentId,
-      transport: {} as any,
-    });
-    delete (foreignChat as any)['~getServerMessages'];
-
-    function ForeignProbe() {
-      const { messages } = useChat<any>({
-        chat: foreignChat,
-        disableTriggerValidation: true,
-        requiresSearch: false,
-      } as any);
-
-      return (
-        <span data-messages>
-          {messages.map((message: any) => message.parts[0].text).join('|')}
-        </span>
-      );
-    }
-
-    function ForeignApp({
-      serverState,
-    }: {
-      serverState?: InstantSearchServerState;
-    }) {
-      return (
-        <InstantSearchSSRProvider {...serverState}>
-          <InstantSearch
-            searchClient={createSearchClient({})}
-            indexName="indexName"
-          >
-            <ForeignProbe />
-          </InstantSearch>
-        </InstantSearchSSRProvider>
-      );
-    }
-
-    const serverState = await getServerState(<ForeignApp />, {
-      renderToString,
-    });
-    const html = renderToString(<ForeignApp serverState={serverState} />);
-
-    expect(html).not.toContain('RESTORED');
-
-    // The point of the empty fallback is that hydration stays clean. Seeding
-    // from `chat.messages` here would make the client render RESTORED against
-    // a server tree that has none.
-    const container = createHydrationContainer(html);
-
-    const recoverableErrors: string[] = [];
-    let root!: ReturnType<typeof hydrateRoot>;
-    await act(async () => {
-      root = hydrateRoot(container, <ForeignApp serverState={serverState} />, {
-        onRecoverableError: (error) => {
-          recoverableErrors.push(String(error));
-        },
-      });
+  it('renders no messages passed as a connector option', async () => {
+    const App = createApp({
+      messages: [createMessage('explicit', 'EXPLICIT')],
     });
 
-    expect(recoverableErrors).toEqual([]);
+    const { html } = await renderServerMarkup(App);
 
-    await act(async () => {
-      root.unmount();
-    });
-    container.remove();
+    expect(html).not.toContain('EXPLICIT');
   });
 
-  it('withholds messages restored from storage until hydration completes', async () => {
+  it('renders no initial messages', async () => {
+    const App = createApp({
+      initialMessages: [createMessage('initial', 'INITIAL')],
+    });
+
+    const { html } = await renderServerMarkup(App);
+
+    expect(html).not.toContain('INITIAL');
+  });
+
+  it('renders no messages restored from browser storage', async () => {
+    sessionStorage.setItem(
+      `${CACHE_KEY}-${agentId}`,
+      JSON.stringify([createMessage('restored', 'RESTORED')])
+    );
+    const App = createApp({});
+
+    const { html } = await renderServerMarkup(App);
+
+    // Storage exists here and the connector's Chat does restore the message, so
+    // what keeps it out of the markup is the inert shell, not missing storage.
+    expect(html).not.toContain('RESTORED');
+  });
+
+  it('renders no suggestions carried by a stored message', async () => {
     sessionStorage.setItem(
       `${CACHE_KEY}-${agentId}`,
       JSON.stringify([
         {
           id: 'restored',
           role: 'assistant',
-          parts: [{ type: 'text', text: 'RESTORED' }],
+          parts: [
+            { type: 'text', text: 'RESTORED' },
+            { type: 'data-suggestions', data: { suggestions: ['SUGGESTED'] } },
+          ],
         },
       ])
     );
+    const App = createApp({});
 
-    const serverState = await getServerState(<App />, { renderToString });
-    const html = renderToString(<App serverState={serverState} />);
+    const { html } = await renderServerMarkup(App);
 
-    // `sessionStorage` exists in this environment and the connector's Chat
-    // does restore the message. What keeps it out of the markup is the
-    // hydration masking, not the absence of storage.
-    expect(html).not.toContain('RESTORED');
+    expect(html).not.toContain('SUGGESTED');
+  });
+
+  it('renders a ready status while a chat is mid-stream', async () => {
+    // A custom `chat` can already be streaming when a consumer mounts, which a
+    // server render never reproduces: its own chat has no transport activity.
+    const chat = new Chat<any>({
+      persistence: false,
+      transport: { reconnectToStream: () => new Promise(() => {}) } as any,
+    });
+    chat.resumeStream();
+    const App = createApp({ chat, transport: {} });
+
+    const { html } = await renderServerMarkup(App);
+
+    expect(chat.status).toBe('submitted');
+    expect(html).toContain('data-status="ready"');
+  });
+
+  it('renders no error a caller-owned chat is already holding', async () => {
+    // A custom `chat` can already have failed when a consumer mounts, which a
+    // server render never reproduces: its own chat runs no request. The widget's
+    // own error UI is gated on the already-pinned `status`, so what an unpinned
+    // error diverges is the render state `useChat` hands to its callers.
+    const chat = new Chat<any>({
+      persistence: false,
+      transport: {
+        sendMessages: () => Promise.reject(new Error('TRANSPORT_BOOM')),
+      } as any,
+    });
+    await chat.sendMessage({ text: 'Hello' });
+    const App = createApp({ chat, transport: {} });
+
+    const { html } = await renderServerMarkup(App);
+
+    expect(chat.error?.message).toBe('TRANSPORT_BOOM');
+    expect(html).toContain('data-error=""');
+  });
+
+  it('renders no default chat id', async () => {
+    // The default is a random string per Chat, and the server and the browser
+    // each build their own, so an unpinned default cannot survive hydration.
+    const App = createApp({});
+
+    const { html } = await renderServerMarkup(App);
+
+    expect(html).toContain('data-chat-id=""');
+  });
+
+  it('renders a chat id the caller supplied', async () => {
+    // A supplied `id` is the same on both sides, so withholding it would ship an
+    // empty value the consumer has to correct after hydration.
+    const App = createApp({ id: 'conversation-1' });
+
+    const { html } = await renderServerMarkup(App);
+
+    expect(html).toContain('data-chat-id="conversation-1"');
+  });
+
+  it('hydrates the shell without a recoverable error, then applies live state', async () => {
+    const App = createApp({});
+
+    // The markup is produced with empty storage, the way a server that cannot
+    // read it does. The browser then has a message the server never saw.
+    const { serverState, html } = await renderServerMarkup(App);
+    sessionStorage.setItem(
+      `${CACHE_KEY}-${agentId}`,
+      JSON.stringify([createMessage('restored', 'RESTORED')])
+    );
 
     const container = createHydrationContainer(html);
-
     const recoverableErrors: string[] = [];
     let root!: ReturnType<typeof hydrateRoot>;
+
     await act(async () => {
       root = hydrateRoot(container, <App serverState={serverState} />, {
         onRecoverableError: (error) => {
@@ -181,11 +224,10 @@ describe('useChat hydration', () => {
 
     expect(recoverableErrors).toEqual([]);
 
-    // The restored message is applied once the consumer has hydrated.
     await waitFor(() => {
-      expect(container.querySelector('[data-messages]')).toHaveTextContent(
-        'RESTORED'
-      );
+      expect(
+        container.querySelector('[data-testid="probe"]')
+      ).toHaveTextContent('RESTORED');
     });
 
     await act(async () => {

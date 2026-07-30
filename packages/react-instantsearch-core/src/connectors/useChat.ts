@@ -1,8 +1,6 @@
 import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
-import { useContext } from 'react';
 
 import { useConnector } from '../hooks/useConnector';
-import { ChatMessageSnapshotContext } from '../lib/ChatMessageSnapshotContext';
 import { useIsHydrated } from '../lib/useIsHydrated';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
@@ -16,63 +14,11 @@ import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 export type UseChatProps<TUiMessage extends UIMessage = UIMessage> =
   ChatConnectorParams<TUiMessage>;
 
-type HydratableChat<TUiMessage extends UIMessage> = {
-  '~getServerMessages': (capturedRevision?: unknown) => TUiMessage[];
-};
-
-function getSuggestions<TUiMessage extends UIMessage>(
-  messages: TUiMessage[]
-): string[] | undefined {
-  const assistantMessage = [...messages]
-    .reverse()
-    .find((message) => message.role === 'assistant' && message.parts);
-  const suggestionsPart = assistantMessage?.parts?.find(
-    (
-      part
-    ): part is {
-      type: `data-${string}`;
-      data: { suggestions: string[] };
-    } =>
-      'type' in part &&
-      part.type === 'data-suggestions' &&
-      'data' in part &&
-      Array.isArray(
-        (part as { data?: { suggestions?: unknown } }).data?.suggestions
-      )
-  );
-
-  return suggestionsPart?.data.suggestions;
-}
-
-function getInitialMessages<TUiMessage extends UIMessage>(
-  props: UseChatProps<TUiMessage>,
-  capturedRevision: unknown | undefined
-): TUiMessage[] {
-  const messages =
-    'chat' in props
-      ? // A `chat` from another copy of instantsearch.js has no snapshot hook.
-        // Fall back to empty rather than to `chat.messages`: that array also
-        // holds messages restored from storage, which the server never sees,
-        // so seeding the hydration render from it causes a mismatch. Such a
-        // chat's caller messages appear after hydration instead.
-        (props.chat as typeof props.chat & Partial<HydratableChat<TUiMessage>>)[
-          '~getServerMessages'
-        ]?.(capturedRevision) ?? []
-      : props.messages ?? [];
-
-  if (messages.length > 0 || props.resume || !props.initialMessages?.length) {
-    return messages;
-  }
-
-  return props.initialMessages;
-}
-
 export function useChat<TUiMessage extends UIMessage = UIMessage>(
   props: UseChatProps<TUiMessage>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
   const isHydrated = useIsHydrated();
-  const chatMessageSnapshot = useContext(ChatMessageSnapshotContext);
   const chatState = useConnector<
     ChatConnectorParams<TUiMessage>,
     ChatWidgetDescription<TUiMessage>
@@ -86,18 +32,24 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
     return chatState;
   }
 
-  // Messages restored from browser storage must not enter the hydration tree,
-  // which the server rendered without them.
-  const messages = getInitialMessages(props, chatMessageSnapshot);
-
-  // `messages` is pinned to a captured revision, so status and error have to
-  // be pinned with it. Letting them run live lets a delayed boundary render a
-  // tuple that never existed, and the hydrating client starts from another.
+  // Server rendering only promises the closed Chat shell, so a render that has
+  // to reproduce that markup shows no conversation either. `status` is pinned
+  // with `messages` because it diverges two ways: a server render suppresses
+  // `resumeStream()`, which the browser runs synchronously while initialising,
+  // and a caller-owned chat can already be streaming. `error` is pinned because
+  // a caller-owned chat can already have failed, which a connector-built one
+  // cannot, since its failures arrive in a microtask. `suggestions` is pinned
+  // because the connector derives them from those messages. Only an `id` given
+  // as a connector option passes through, because that value is the same on
+  // both sides. Anything else is withheld: the default is random per Chat, and
+  // an `id` carried by a caller-owned instance is no safer, since the server and
+  // the browser each construct their own.
   return {
     ...chatState,
-    messages,
-    status: 'ready',
     error: undefined,
-    suggestions: getSuggestions(messages),
+    id: ('id' in props && props.id) || '',
+    messages: [],
+    status: 'ready',
+    suggestions: undefined,
   };
 }

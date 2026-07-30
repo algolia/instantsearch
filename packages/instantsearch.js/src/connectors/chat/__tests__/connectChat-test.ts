@@ -355,12 +355,14 @@ describe('connectChat', () => {
   });
 
   describe('browser side effects', () => {
+    // Positive controls for the negative assertions in `connectChat-ssr.test.ts`.
     it('still sends the initial user message in a browser', () => {
       const chat = new Chat({ persistence: false, transport: {} as any });
       const sendMessage = jest.fn();
       (chat as any).sendMessage = sendMessage;
       const widget = connectChat(jest.fn())({
         chat,
+        transport: {},
         initialUserMessage: 'Hello',
         disableTriggerValidation: true,
       } as any);
@@ -377,6 +379,7 @@ describe('connectChat', () => {
       (chat as any).resumeStream = resumeStream;
       const widget = connectChat(jest.fn())({
         chat,
+        transport: {},
         resume: true,
         disableTriggerValidation: true,
       } as any);
@@ -385,6 +388,28 @@ describe('connectChat', () => {
       widget.init(createInitOptions({ helper }));
 
       expect(resumeStream).toHaveBeenCalled();
+    });
+
+    it('still applies initial messages in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'INITIAL IN BROWSER' }],
+        },
+      ];
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(chat.messages).toEqual(initialMessages);
     });
   });
 

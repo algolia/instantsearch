@@ -2,144 +2,131 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { act, render, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import React from 'react';
-import { hydrateRoot } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 
+import { InstantSearchServerContext } from '../../components/InstantSearchServerContext';
 import { InstantSearchSSRProvider } from '../../components/InstantSearchSSRProvider';
+import * as serverContext from '../useInstantSearchServerContext';
+import * as ssrContext from '../useInstantSearchSSRContext';
 import { useIsHydrated } from '../useIsHydrated';
 
-import type { RootOptions } from 'react-dom/client';
+function Probe({ hook, seen }: { hook: () => boolean; seen?: boolean[] }) {
+  const isHydrated = hook();
+  seen?.push(isHydrated);
 
-function HydrationProbe({ renderedStates }: { renderedStates?: boolean[] }) {
-  const isHydrated = useIsHydrated();
-  renderedStates?.push(isHydrated);
+  return <span data-testid="probe">{String(isHydrated)}</span>;
+}
 
-  return <span>{String(isHydrated)}</span>;
+function ServerRenderedProbe({
+  hook,
+  seen,
+}: {
+  hook: () => boolean;
+  seen?: boolean[];
+}) {
+  return (
+    <InstantSearchSSRProvider initialResults={{}}>
+      <Probe hook={hook} seen={seen} />
+    </InstantSearchSSRProvider>
+  );
+}
+
+// `getServerState` collects results by rendering the tree wrapped in this
+// context alone, without the SSR provider, so it is a server render the hook has
+// to recognise on its own.
+function CollectedProbe({
+  hook,
+  seen,
+}: {
+  hook: () => boolean;
+  seen?: boolean[];
+}) {
+  return (
+    <InstantSearchServerContext.Provider value={{ notifyServer() {} } as any}>
+      <Probe hook={hook} seen={seen} />
+    </InstantSearchServerContext.Provider>
+  );
+}
+
+// Re-reads the hook the way React 16 and 17 see it, since it picks its
+// implementation when the module loads. Each mock hands the isolated copy this
+// registry's own instances: React so the dispatcher the outer `react-dom`
+// renders through matches, and the two context hooks so the providers below are
+// the ones it reads.
+function requireWithoutSyncExternalStore(): typeof useIsHydrated {
+  const legacyReact: Record<string, unknown> = { ...React };
+  delete legacyReact.useSyncExternalStore;
+  jest.doMock('react', () => legacyReact);
+  jest.doMock('../useInstantSearchSSRContext', () => ssrContext);
+  jest.doMock('../useInstantSearchServerContext', () => serverContext);
+
+  try {
+    let legacy!: typeof useIsHydrated;
+    jest.isolateModules(() => {
+      ({ useIsHydrated: legacy } = require('../useIsHydrated'));
+    });
+
+    return legacy;
+  } finally {
+    jest.dontMock('react');
+    jest.dontMock('../useInstantSearchSSRContext');
+    jest.dontMock('../useInstantSearchServerContext');
+  }
 }
 
 describe('useIsHydrated', () => {
-  test('uses the server state during server rendering', () => {
-    const html = renderToString(
-      <InstantSearchSSRProvider initialResults={{}}>
-        <HydrationProbe />
-      </InstantSearchSSRProvider>
-    );
-
-    expect(html).toContain('false');
+  it('is false on the server', () => {
+    expect(renderToString(<Probe hook={useIsHydrated} />)).toContain('false');
   });
 
-  test('starts hydrated on a client-only root', () => {
-    const renderedStates: boolean[] = [];
+  it('is true on the first client render', () => {
+    const seen: boolean[] = [];
 
-    render(
-      <InstantSearchSSRProvider initialResults={{}}>
-        <HydrationProbe renderedStates={renderedStates} />
-      </InstantSearchSSRProvider>
-    );
+    render(<Probe hook={useIsHydrated} seen={seen} />);
 
-    expect(renderedStates[0]).toBe(true);
+    expect(seen).toEqual([true]);
   });
 
-  test('starts hydrated when mounted after its SSR provider hydrates', async () => {
-    const initialStates: boolean[] = [];
-    const lateStates: boolean[] = [];
-    const { rerender } = render(
-      <InstantSearchSSRProvider initialResults={{}}>
-        <HydrationProbe renderedStates={initialStates} />
-      </InstantSearchSSRProvider>
-    );
+  describe('where useSyncExternalStore is unavailable', () => {
+    it('is false on the server', () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
 
-    await waitFor(() => {
-      expect(initialStates).toContain(true);
+      expect(
+        renderToString(<ServerRenderedProbe hook={legacyUseIsHydrated} />)
+      ).toContain('false');
     });
 
-    rerender(
-      <InstantSearchSSRProvider initialResults={{}}>
-        <HydrationProbe key="late" renderedStates={lateStates} />
-      </InstantSearchSSRProvider>
-    );
+    it('flips after an effect when there is server markup to reproduce', async () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+      const seen: boolean[] = [];
 
-    expect(lateStates[0]).toBe(true);
-  });
-
-  test('keeps a delayed boundary on the server state until it hydrates', async () => {
-    let releaseBoundary!: () => void;
-    let shouldSuspend = false;
-    const boundary = new Promise<void>((resolve) => {
-      releaseBoundary = resolve;
-    });
-    const renderedStates: boolean[] = [];
-    const recoverableErrors: unknown[] = [];
-    const parentCommitted = jest.fn();
-
-    function DelayedBoundary({ children }: { children: React.ReactNode }) {
-      if (shouldSuspend) {
-        throw boundary;
-      }
-
-      return <>{children}</>;
-    }
-
-    function ParentCommitProbe() {
-      React.useEffect(parentCommitted, []);
-      return null;
-    }
-
-    function App({ record = false }: { record?: boolean }) {
-      return (
-        <InstantSearchSSRProvider initialResults={{}}>
-          <ParentCommitProbe />
-          <React.Suspense fallback={<span>Loading</span>}>
-            <DelayedBoundary>
-              <HydrationProbe
-                renderedStates={record ? renderedStates : undefined}
-              />
-            </DelayedBoundary>
-          </React.Suspense>
-        </InstantSearchSSRProvider>
+      const { getByTestId } = render(
+        <ServerRenderedProbe hook={legacyUseIsHydrated} seen={seen} />
       );
-    }
 
-    const serverHtml = renderToString(<App />);
-    const container = document.createElement('div');
-    container.appendChild(
-      document.createRange().createContextualFragment(serverHtml)
-    );
-    document.body.appendChild(container);
-    const serverProbe = container.querySelector('span');
-
-    shouldSuspend = true;
-    let root: ReturnType<typeof hydrateRoot>;
-    await act(async () => {
-      root = hydrateRoot(container, <App record />, {
-        onRecoverableError(error) {
-          recoverableErrors.push(error);
-        },
-      } satisfies RootOptions);
+      await waitFor(() => {
+        expect(getByTestId('probe')).toHaveTextContent('true');
+      });
+      expect(seen).toEqual([false, true]);
     });
 
-    await waitFor(() => {
-      expect(parentCommitted).toHaveBeenCalled();
+    it('is false in the pass that collects server state', () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+
+      expect(
+        renderToString(<CollectedProbe hook={legacyUseIsHydrated} />)
+      ).toContain('false');
     });
 
-    await act(async () => {
-      shouldSuspend = false;
-      releaseBoundary();
-      await boundary;
-    });
+    it('is true on the first render of a mount with no server markup', () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+      const seen: boolean[] = [];
 
-    await waitFor(() => {
-      expect(renderedStates).toContain(true);
-    });
-    expect(renderedStates[0]).toBe(false);
-    expect(container.querySelector('span')).toBe(serverProbe);
-    expect(recoverableErrors).toEqual([]);
+      render(<Probe hook={legacyUseIsHydrated} seen={seen} />);
 
-    await act(async () => {
-      root!.unmount();
+      expect(seen).toEqual([true]);
     });
-    container.remove();
   });
 });

@@ -445,6 +445,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
+      // A caller-owned `chat` brings its own transport, so resolving credentials
+      // and building one here would reject a configuration the public type allows.
       if ('chat' in options) {
         return options.chat;
       }
@@ -529,7 +531,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
-            ...(options.requestOptions?.headers instanceof Headers
+            // `Headers` is absent on runtimes without fetch globals, and a
+            // server render reaches this while building the transport.
+            ...(typeof Headers !== 'undefined' &&
+            options.requestOptions?.headers instanceof Headers
               ? Object.fromEntries(options.requestOptions.headers.entries())
               : options.requestOptions?.headers),
             // Preserve the required Algolia identity headers and chat agent
@@ -697,18 +702,22 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const hasExistingMessages = _chatInstance.messages.length > 0;
 
         // Set initialMessages before registering callbacks to avoid
-        // triggering re-renders during init
-        if (initialMessages?.length && !resume && !hasExistingMessages) {
-          _chatInstance.messages = initialMessages;
-        }
+        // triggering re-renders during init. A server render owns no
+        // conversation, so it leaves the instance empty.
+        safelyRunOnBrowser(() => {
+          if (initialMessages?.length && !resume && !hasExistingMessages) {
+            _chatInstance.messages = initialMessages;
+          }
+        });
 
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
 
-        // Resuming and sending reach the network. A server render must not do
-        // either: `getServerState` plus the HTML pass would double the work,
-        // and a transport failure would surface during rendering.
+        // Resuming and sending reach the network, which a server render must
+        // not: the HTML pass repeats what `getServerState` already rendered, so
+        // each send happens at least twice, and each failure resolves into chat
+        // state well after the render that started it has finished.
         safelyRunOnBrowser(() => {
           if (resume) {
             _chatInstance.resumeStream();

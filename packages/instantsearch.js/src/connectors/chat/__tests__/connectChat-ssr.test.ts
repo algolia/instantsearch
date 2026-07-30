@@ -8,41 +8,87 @@ import { createInitOptions } from '../../../../test/createWidget';
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
-describe('server rendering side effects', () => {
-  it('does not start chat network work during a server render', () => {
+function createMessage(id: string, text: string) {
+  return { id, role: 'assistant', parts: [{ type: 'text', text }] };
+}
+
+// A caller-owned `chat` is a complete configuration on its own; passing a
+// `transport` alongside it would hide whether that is true.
+function createServerWidget(
+  widgetParams: Record<string, unknown>,
+  chat: Chat<any>
+) {
+  return connectChat(jest.fn())({
+    chat,
+    disableTriggerValidation: true,
+    ...widgetParams,
+  } as any);
+}
+
+describe('connectChat server rendering', () => {
+  it('does not send the initial user message', () => {
     const chat = new Chat<any>({ persistence: false, transport: {} as any });
     const sendMessage = jest.fn();
-    const resumeStream = jest.fn();
     (chat as any).sendMessage = sendMessage;
-    (chat as any).resumeStream = resumeStream;
-
-    const widget = connectChat(jest.fn())({
-      chat,
-      initialUserMessage: 'HELLO FROM SSR',
-      disableTriggerValidation: true,
-    } as any);
+    const widget = createServerWidget(
+      { initialUserMessage: 'HELLO FROM SSR' },
+      chat
+    );
     const helper = algoliasearchHelper(createSearchClient(), 'indexName');
 
     widget.init(createInitOptions({ helper }));
 
     expect(sendMessage).not.toHaveBeenCalled();
-    expect(resumeStream).not.toHaveBeenCalled();
   });
 
-  it('resumes a stream only in a browser', () => {
+  it('does not resume a stream', () => {
     const chat = new Chat<any>({ persistence: false, transport: {} as any });
     const resumeStream = jest.fn();
     (chat as any).resumeStream = resumeStream;
-
-    const widget = connectChat(jest.fn())({
-      chat,
-      resume: true,
-      disableTriggerValidation: true,
-    } as any);
+    const widget = createServerWidget({ resume: true }, chat);
     const helper = algoliasearchHelper(createSearchClient(), 'indexName');
 
     widget.init(createInitOptions({ helper }));
 
     expect(resumeStream).not.toHaveBeenCalled();
+  });
+
+  it('keeps the status ready when a resume is suppressed', () => {
+    // A real resume sets `submitted` synchronously, so suppressing it is what
+    // makes the server report `ready`. That difference is why a hydration render
+    // has to pin `status` even for a chat the connector built itself.
+    const chat = new Chat<any>({
+      persistence: false,
+      transport: { reconnectToStream: () => new Promise(() => {}) } as any,
+    });
+    const widget = createServerWidget({ resume: true }, chat);
+    const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+    const initOptions = createInitOptions({ helper });
+
+    widget.init(initOptions);
+
+    expect(chat.status).toBe('ready');
+    expect(widget.getWidgetRenderState(initOptions).status).toBe('ready');
+  });
+
+  it('initialises a chat-only widget without a transport', () => {
+    const chat = new Chat<any>({ persistence: false, transport: {} as any });
+    const widget = createServerWidget({}, chat);
+    const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+
+    expect(() => widget.init(createInitOptions({ helper }))).not.toThrow();
+  });
+
+  it('does not apply initial messages', () => {
+    const chat = new Chat<any>({ persistence: false, transport: {} as any });
+    const widget = createServerWidget(
+      { initialMessages: [createMessage('initial', 'INITIAL FROM SSR')] },
+      chat
+    );
+    const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+
+    widget.init(createInitOptions({ helper }));
+
+    expect(chat.messages).toEqual([]);
   });
 });
