@@ -2,7 +2,7 @@
 
 [![Edit react-native](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react/react-native)
 
-This example shows how to use React InstantSearch with React Native.
+This example shows how to use React InstantSearch with React Native (Expo). It demonstrates a search box, infinite scroll with highlighting, a brand filters modal, sorting between index replicas, and search stats — all built with `react-instantsearch-core` hooks and React Native primitives.
 
 ## Clone the example
 
