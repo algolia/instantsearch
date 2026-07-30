@@ -1011,7 +1011,7 @@ describe('ChatState', () => {
   );
 
   it('does not make a captured revision the owner of Chat states', () => {
-    const capturedRevision = getChatMessagesRevision();
+    const capturedRevision = getChatMessagesRevision()!;
 
     expect(capturedRevision.messages).toBeInstanceOf(WeakMap);
   });

@@ -1,8 +1,14 @@
 import type { UIMessage } from '../ai-lite';
 
-const ChatMessagesSnapshotState = Symbol.for(
-  'InstantSearchChatMessagesSnapshotState'
-);
+// `Symbol.for` keeps the store shared between two copies of this module in one
+// realm; where `Symbol` is absent, a string property on the same object is
+// looked up the same way. The module has to load either way, because every
+// `<InstantSearch>` render reaches it whether or not the tree holds a Chat.
+const ChatMessagesSnapshotState = (
+  typeof Symbol === 'function' && typeof Symbol.for === 'function'
+    ? Symbol.for('InstantSearchChatMessagesSnapshotState')
+    : 'InstantSearchChatMessagesSnapshotState'
+) as symbol;
 
 type ChatMessagesRevisionRegistration = {
   deref: () => ChatMessagesRevision | undefined;
@@ -36,10 +42,8 @@ const detachedGlobalScope = {} as ChatMessagesGlobalScope;
 
 // The build targets `ie >= 11` and injects no polyfills, so an ES2020 global
 // has to be probed with `typeof` rather than read: a bare reference to a
-// missing binding throws. This module needs `Symbol` to load either way, so
-// what the ladder buys is the range in between: an engine with ES2015 but no
-// `globalThis`. Where one of the three names below is bound the store lands on
-// the realm global, shared with anything reading the same `Symbol.for` key.
+// missing binding throws. Where one of the three names below is bound the
+// store lands on the realm global, shared with anything reading the same key.
 function getGlobalScope(): ChatMessagesGlobalScope {
   if (typeof globalThis !== 'undefined') {
     return globalThis as unknown as ChatMessagesGlobalScope;
@@ -68,10 +72,6 @@ export function getChatMessagesSnapshotStore(): ChatMessagesSnapshotStore {
   return snapshotStore;
 }
 
-function getCurrentChatMessagesRevision(): number {
-  return getChatMessagesSnapshotStore().revision;
-}
-
 /** @internal */
 export function nextChatMessagesRevision(): number {
   const snapshotStore = getChatMessagesSnapshotStore();
@@ -79,10 +79,25 @@ export function nextChatMessagesRevision(): number {
   return snapshotStore.revision;
 }
 
-/** @internal */
-export function getChatMessagesRevision(): ChatMessagesRevision {
+/**
+ * Captures the revision a hydrating consumer renders against, or `undefined`
+ * where the runtime cannot support one.
+ *
+ * The polyfills the React InstantSearch installation guide asks IE11 users to
+ * load do not include either collection below, and capturing runs on every
+ * `<InstantSearch>` root, Chat or not. So it degrades on those runtimes rather
+ * than taking the root down: consumers get the message baseline they had
+ * before revisions existed.
+ *
+ * @internal
+ */
+export function getChatMessagesRevision(): ChatMessagesRevision | undefined {
+  if (typeof Set !== 'function' || typeof WeakMap !== 'function') {
+    return undefined;
+  }
+
   return {
-    revision: getCurrentChatMessagesRevision(),
+    revision: getChatMessagesSnapshotStore().revision,
     lifecycle: 'new',
     messages: new WeakMap(),
   };
@@ -90,9 +105,10 @@ export function getChatMessagesRevision(): ChatMessagesRevision {
 
 /** @internal */
 export function trackChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
+  capturedRevision?: ChatMessagesRevision
 ): void {
   if (
+    !capturedRevision ||
     capturedRevision.lifecycle === 'released' ||
     capturedRevision.registration
   ) {
@@ -124,8 +140,12 @@ export function trackChatMessagesRevision(
 
 /** @internal */
 export function retainChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
+  capturedRevision?: ChatMessagesRevision
 ): void {
+  if (!capturedRevision) {
+    return;
+  }
+
   capturedRevision.lifecycle = 'active';
   if (!capturedRevision.registration) {
     const registration = {
@@ -138,8 +158,12 @@ export function retainChatMessagesRevision(
 
 /** @internal */
 export function releaseChatMessagesRevision(
-  capturedRevision: ChatMessagesRevision
+  capturedRevision?: ChatMessagesRevision
 ): void {
+  if (!capturedRevision) {
+    return;
+  }
+
   if (capturedRevision.registration) {
     getChatMessagesSnapshotStore().active.delete(capturedRevision.registration);
     capturedRevision.registration = undefined;

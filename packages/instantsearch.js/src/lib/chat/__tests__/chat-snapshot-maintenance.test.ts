@@ -17,6 +17,24 @@ function createMessage(id: string, text: string) {
   } as any;
 }
 
+/**
+ * Runs `body` with the global `name` unbound.
+ *
+ * The capture helper probes for it with `typeof` on every call rather than at
+ * module load, so deleting the binding is enough to reproduce a runtime that
+ * never had it.
+ */
+function withoutGlobal<T>(name: string, body: () => T): T {
+  const scope = globalThis as unknown as Record<string, unknown>;
+  const runtime = scope[name];
+  delete scope[name];
+  try {
+    return body();
+  } finally {
+    scope[name] = runtime;
+  }
+}
+
 describe('ChatState snapshot maintenance', () => {
   beforeAll(() => {
     // Mock sessionStorage for the tests
@@ -176,7 +194,7 @@ describe('ChatState snapshot maintenance', () => {
   });
 
   it('registers a captured revision on retain and clears it on release', () => {
-    const capturedRevision = getChatMessagesRevision();
+    const capturedRevision = getChatMessagesRevision()!;
 
     expect(capturedRevision.lifecycle).toBe('new');
     expect(capturedRevision.registration).toBeUndefined();
@@ -193,7 +211,7 @@ describe('ChatState snapshot maintenance', () => {
   });
 
   it('keeps a single retain registration across repeated retains', () => {
-    const capturedRevision = getChatMessagesRevision();
+    const capturedRevision = getChatMessagesRevision()!;
     retainChatMessagesRevision(capturedRevision);
     const registration = capturedRevision.registration;
 
@@ -230,7 +248,7 @@ describe('ChatState snapshot maintenance', () => {
 
 describe('tracked chat message revisions', () => {
   it('registers a revision once, however many renders track it', () => {
-    const capturedRevision = getChatMessagesRevision();
+    const capturedRevision = getChatMessagesRevision()!;
 
     trackChatMessagesRevision(capturedRevision);
     const firstRegistration = capturedRevision.registration;
@@ -248,7 +266,7 @@ describe('tracked chat message revisions', () => {
   it('does not re-register a revision that was already released', () => {
     const chat = new Chat<any>({ persistence: false });
     chat.messages = [createMessage('captured', 'Captured message')];
-    const capturedRevision = getChatMessagesRevision();
+    const capturedRevision = getChatMessagesRevision()!;
     retainChatMessagesRevision(capturedRevision);
     releaseChatMessagesRevision(capturedRevision);
 
@@ -262,7 +280,7 @@ describe('tracked chat message revisions', () => {
   });
 
   it('drops registrations whose revision has been collected', () => {
-    const collected = getChatMessagesRevision();
+    const collected = getChatMessagesRevision()!;
     trackChatMessagesRevision(collected);
     const collectedRegistration = collected.registration!;
     // Stand in for a revision the collector reclaimed after React discarded
@@ -281,12 +299,38 @@ describe('tracked chat message revisions', () => {
 
     // Pruning happens on the path that adds a registration, so tracking a
     // fresh revision is what clears the dead one.
-    const live = getChatMessagesRevision();
+    const live = getChatMessagesRevision()!;
     trackChatMessagesRevision(live);
 
     expect(store.active.has(collectedRegistration)).toBe(false);
     expect(store.active.has(live.registration!)).toBe(true);
 
     releaseChatMessagesRevision(live);
+  });
+});
+
+describe('runtimes without the revision collections', () => {
+  // The polyfills the React InstantSearch installation guide asks IE11 users
+  // to load do not include these. Capturing runs on every `<InstantSearch>`
+  // root, Chat or not, so a root on that runtime has to render without one.
+  it.each(['WeakMap', 'Set'])('captures nothing without %s', (name) => {
+    const capturedRevision = withoutGlobal(name, getChatMessagesRevision);
+
+    expect(capturedRevision).toBeUndefined();
+  });
+
+  it('leaves the lifecycle helpers callable with nothing captured', () => {
+    expect(() => {
+      trackChatMessagesRevision(undefined);
+      retainChatMessagesRevision(undefined);
+      releaseChatMessagesRevision(undefined);
+    }).not.toThrow();
+  });
+
+  it('reads the construction messages when nothing was captured', () => {
+    const chat = new Chat<any>({ persistence: false });
+    chat.messages = [createMessage('live', 'Live message')];
+
+    expect(chat['~getServerMessages'](undefined)).toEqual([]);
   });
 });
