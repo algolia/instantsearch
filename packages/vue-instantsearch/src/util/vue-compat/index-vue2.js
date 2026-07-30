@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { unref } from 'vue';
 
 const isVue2 = true;
 const isVue3 = false;
@@ -59,8 +59,23 @@ export function getScopedSlot(component, name) {
   return (component.$scopedSlots || {})[name];
 }
 
+// Composition APIs available in both Vue 2.7 and Vue 3 with compatible
+// signatures (PoC: consumed by the composables).
+export {
+  computed,
+  inject,
+  onBeforeUnmount,
+  shallowRef,
+  unref,
+  watch,
+} from 'vue';
+
+// `toValue` is Vue 3.3+ only; local shim works in 2.7 and 3.
+export function toValue(source) {
+  return typeof source === 'function' ? source() : unref(source);
+}
+
 // Vue3-only APIs
-export const computed = undefined;
 export const createApp = undefined;
 export const createSSRApp = undefined;
 export const createRef = undefined;
@@ -70,7 +85,6 @@ export const defineComponent = undefined;
 export const del = undefined;
 export const getCurrentInstance = undefined;
 export const h = undefined;
-export const inject = undefined;
 export const isRaw = undefined;
 export const isReactive = undefined;
 export const isReadonly = undefined;
@@ -79,7 +93,6 @@ export const markRaw = undefined;
 export const nextTick = undefined;
 export const onActivated = undefined;
 export const onBeforeMount = undefined;
-export const onBeforeUnmount = undefined;
 export const onBeforeUpdate = undefined;
 export const onDeactivated = undefined;
 export const onErrorCaptured = undefined;
@@ -95,14 +108,11 @@ export const ref = undefined;
 export const set = undefined;
 export const shallowReactive = undefined;
 export const shallowReadonly = undefined;
-export const shallowRef = undefined;
 export const toRaw = undefined;
 export const toRef = undefined;
 export const toRefs = undefined;
 export const triggerRef = undefined;
-export const unref = undefined;
 export const useCSSModule = undefined;
 export const useCssModule = undefined;
 export const warn = undefined;
-export const watch = undefined;
 export const watchEffect = undefined;
