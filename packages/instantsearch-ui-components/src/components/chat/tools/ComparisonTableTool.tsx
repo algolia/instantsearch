@@ -104,11 +104,125 @@ function productLabel(hit: RecordWithObjectID | undefined): unknown {
   return hit.name ?? hit.title ?? hit.objectID;
 }
 
+/**
+ * Everything the grounded table needs to render. Note there is deliberately no
+ * field for attribute VALUES: they can only come from `hitsByObjectID`.
+ */
+export type GroundedComparisonTableProps = {
+  /** Optional model-authored lead-in (prose, rendered above the table). */
+  intro?: string;
+  /** Products to compare, one row each, referenced by objectID only. */
+  objectIDs: string[];
+  /** Attribute keys to read off each hit (also used as default headers). */
+  attributes: string[];
+  /** Optional display labels: [productColumn, ...attributeColumns]. */
+  columns?: string[];
+  /** objectID -> catalog record, hydrated from real search hits. */
+  hitsByObjectID: Record<string, RecordWithObjectID>;
+  translations: ComparisonTableTranslations;
+};
+
+/**
+ * Shared presentational component for grounded comparison tables. Used by both
+ * the `algolia_display_results` markdownTable path (`ComparisonTableTool`) and
+ * the builtin `algolia_compare_products` tool (`CompareProductsTool`).
+ */
+export function createGroundedComparisonTableComponent({
+  createElement,
+  Fragment,
+}: Renderer) {
+  return function GroundedComparisonTable(props: GroundedComparisonTableProps) {
+    const { intro, objectIDs, attributes, columns, hitsByObjectID } = props;
+    const { translations } = props;
+
+    if (objectIDs.length === 0) {
+      return <Fragment />;
+    }
+
+    const headerLabels = [
+      columns?.[0] ?? translations.productColumnLabel,
+      ...attributes.map((attr, index) => columns?.[index + 1] ?? attr),
+    ];
+
+    return (
+      <div className="ais-ChatToolComparisonTable">
+        {intro && (
+          <div className="ais-ChatToolComparisonTable-intro">{intro}</div>
+        )}
+        <table className="ais-ChatToolComparisonTable-table">
+          <thead>
+            <tr>
+              {headerLabels.map((label, index) => (
+                <th
+                  key={`h-${index}`}
+                  scope="col"
+                  className="ais-ChatToolComparisonTable-header"
+                >
+                  {label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {objectIDs.map((objectID) => {
+              const hit = hitsByObjectID[objectID] as
+                | RecordWithObjectID
+                | undefined;
+              const name = productLabel(hit);
+
+              return (
+                <tr
+                  key={objectID}
+                  data-object-id={objectID}
+                  className="ais-ChatToolComparisonTable-row"
+                >
+                  <th
+                    scope="row"
+                    data-testid={`product-${objectID}`}
+                    className="ais-ChatToolComparisonTable-product"
+                  >
+                    {name === undefined
+                      ? translations.missingValueLabel
+                      : String(name)}
+                  </th>
+                  {attributes.map((attribute) => {
+                    // The ONLY source of a cell value is the catalog hit.
+                    const value = hit ? hit[attribute] : undefined;
+                    const isMissing =
+                      value === undefined || value === null || value === '';
+
+                    return (
+                      <td
+                        key={`${objectID}-${attribute}`}
+                        data-testid={`cell-${objectID}-${attribute}`}
+                        className="ais-ChatToolComparisonTable-cell"
+                      >
+                        {isMissing
+                          ? translations.missingValueLabel
+                          : String(value)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+}
+
 export function createComparisonTableToolComponent({
   createElement,
   Fragment,
   useMemo,
 }: Renderer & Pick<Hooks, 'useMemo'>) {
+  const GroundedComparisonTable = createGroundedComparisonTableComponent({
+    createElement,
+    Fragment,
+  });
+
   return function ComparisonTableTool(userProps: ComparisonTableToolProps) {
     const { toolProps, translations: userTranslations } = userProps;
     const { message, messages } = toolProps;
@@ -132,79 +246,15 @@ export function createComparisonTableToolComponent({
       return <Fragment />;
     }
 
-    const attributes = table.attributes ?? [];
-    const headerLabels = [
-      table.columns?.[0] ?? translations.productColumnLabel,
-      ...attributes.map(
-        (attr, index) => table.columns?.[index + 1] ?? attr
-      ),
-    ];
-
     return (
-      <div className="ais-ChatToolComparisonTable">
-        {intro && (
-          <div className="ais-ChatToolComparisonTable-intro">{intro}</div>
-        )}
-        <table className="ais-ChatToolComparisonTable-table">
-          <thead>
-            <tr>
-              {headerLabels.map((label, index) => (
-                <th
-                  key={`h-${index}`}
-                  scope="col"
-                  className="ais-ChatToolComparisonTable-header"
-                >
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {table.rows!.map((row) => {
-              const hit = hitsByObjectID[row.objectID] as
-                | RecordWithObjectID
-                | undefined;
-              const name = productLabel(hit);
-
-              return (
-                <tr
-                  key={row.objectID}
-                  data-object-id={row.objectID}
-                  className="ais-ChatToolComparisonTable-row"
-                >
-                  <th
-                    scope="row"
-                    data-testid={`product-${row.objectID}`}
-                    className="ais-ChatToolComparisonTable-product"
-                  >
-                    {name === undefined
-                      ? translations.missingValueLabel
-                      : String(name)}
-                  </th>
-                  {attributes.map((attribute) => {
-                    // The ONLY source of a cell value is the catalog hit.
-                    const value = hit ? hit[attribute] : undefined;
-                    const isMissing =
-                      value === undefined || value === null || value === '';
-
-                    return (
-                      <td
-                        key={`${row.objectID}-${attribute}`}
-                        data-testid={`cell-${row.objectID}-${attribute}`}
-                        className="ais-ChatToolComparisonTable-cell"
-                      >
-                        {isMissing
-                          ? translations.missingValueLabel
-                          : String(value)}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <GroundedComparisonTable
+        intro={intro}
+        objectIDs={table.rows.map((row) => row.objectID)}
+        attributes={table.attributes ?? []}
+        columns={table.columns}
+        hitsByObjectID={hitsByObjectID}
+        translations={translations}
+      />
     );
   };
 }

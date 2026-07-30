@@ -20,6 +20,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -31,6 +32,7 @@ import {
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
+import { createCompareProductsTool } from './compare-products-tool';
 import { createDisplayResultsTool } from './display-results-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
@@ -99,7 +101,12 @@ const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
 
 const Chat = createChatComponent({ createElement: h, Fragment, memo });
 
-export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
+export {
+  SearchIndexToolType,
+  RecommendToolType,
+  DisplayResultsToolType,
+  CompareProductsToolType,
+};
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -295,6 +302,7 @@ function createDefaultTools<
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
+    [CompareProductsToolType]: createCompareProductsTool(),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },
