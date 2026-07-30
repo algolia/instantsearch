@@ -1,0 +1,1651 @@
+[
+  {
+    "moduleId": "node_modules/react-dom/cjs/react-dom-client.production.js",
+    "transformedSourceSha256": "4815baec40ef6ba2c704943035e68c4c61c5b42ebe95e2f2381878c02449242b",
+    "renderedLength": 524032,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/ai-lite/abstract-chat.js",
+    "transformedSourceSha256": "9bbd888deb68c9cae605e5b911f925983ed79d85070862987998634f73a82573",
+    "renderedLength": 73824,
+    "renderedExports": ["AbstractChat"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/algoliasearch.helper.js",
+    "transformedSourceSha256": "835b9ef96558a298ba01f6c3c7b4a9e423a5a6de71f45682c24ad971d8ce9689",
+    "renderedLength": 68927,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/SearchParameters/index.js",
+    "transformedSourceSha256": "a5d09191ec522dffd1b4c2c36b017957703bc38037d9c73df1994baf873b144b",
+    "renderedLength": 57766,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/SearchResults/index.js",
+    "transformedSourceSha256": "0dfd7a3227b807be0bbc89d154b69eceaf8c73008572b3c65f9410d5bc39a62a",
+    "renderedLength": 37824,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/widgets/index/index.js",
+    "transformedSourceSha256": "5859dc836e651bcaef64d0b8dcb361cb0f6db2d53454d531adcb54b8b63d7d96",
+    "renderedLength": 33379,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/InstantSearch.js",
+    "transformedSourceSha256": "1dcb00424c51ae750a2d555bd4fa803043dbb3fcec163083995aad22ac659c39",
+    "renderedLength": 28325,
+    "renderedExports": ["INSTANTSEARCH_FUTURE_DEFAULTS", "default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/connectors/chat/connectChat.js",
+    "transformedSourceSha256": "901aba78703bd0bbc947fb8534750b94e503a1ae43eeb96a73576e66b562a5c1",
+    "renderedLength": 24796,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/middlewares/createInsightsMiddleware.js",
+    "transformedSourceSha256": "eac8071c29484af9c42bc6eb2d2578af83d7385d1d1d4791acc0040b62f8f722",
+    "renderedLength": 22356,
+    "renderedExports": ["createInsightsMiddleware"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/stickToBottom.js",
+    "transformedSourceSha256": "1dffcf0d71e75b0c739f412f52e959ab48c63b1f0141b1dd778fc5cda77198c2",
+    "renderedLength": 20819,
+    "renderedExports": ["createStickToBottom"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js",
+    "transformedSourceSha256": "5ff7712d01e857f8872196b6168fb0a0175cf86d53e0003528c186a86b98a15e",
+    "renderedLength": 20391,
+    "renderedExports": ["createChatMessagesComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/react/cjs/react.production.js",
+    "transformedSourceSha256": "e131f3de8b80e7a70243959a32c2100f6a05562a82278c52b32495301552835f",
+    "renderedLength": 17911,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/requestBuilder.js",
+    "transformedSourceSha256": "661d94d27c075f3eda63b6aa8bd508d77885ab29c9bfa9b2427bf40962c09195",
+    "renderedLength": 17419,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/node_modules/markdown-to-jsx/dist/index.modern.js",
+    "transformedSourceSha256": "ab99331dcd287457c67ca40eb69440c9d1cb15113c8ed52b5ec160691b04cff2",
+    "renderedLength": 15197,
+    "renderedExports": ["compiler", "sanitizer", "slugify"],
+    "removedExports": ["RuleType", "default"]
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js",
+    "transformedSourceSha256": "cfff06ec9726476e972684d3349a5d1af39a5c2f5c3d81722d054fd2f3eaecdb",
+    "renderedLength": 12839,
+    "renderedExports": ["createChatMessageComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/Chat.js",
+    "transformedSourceSha256": "db9750e1c1d34ee10d1c311fb349176cf164b6c5a785bb9aabc8f56819a5fc91",
+    "renderedLength": 12126,
+    "renderedExports": ["Chat", "createDefaultTools"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/routers/history.js",
+    "transformedSourceSha256": "5eaf4fb239f582cd252b42a168b72c12f7a5366536e932b639f3c3820bc726cc",
+    "renderedLength": 12124,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/scheduler/cjs/scheduler.production.js",
+    "transformedSourceSha256": "df4ef326c2211704b6bdbf9f7cd2823af7d1e75d4517753412450fa24a63e0d4",
+    "renderedLength": 11256,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/icons.js",
+    "transformedSourceSha256": "cbfd7c149c391c350140d58ac04cd98f16521e3f392a71735e59ef1ca213ad64",
+    "renderedLength": 10960,
+    "renderedExports": [
+      "ArrowRightIcon",
+      "ArrowUpIcon",
+      "BrainIcon",
+      "CheckIcon",
+      "ChevronDownIcon",
+      "ChevronLeftIcon",
+      "ChevronRightIcon",
+      "CloseIcon",
+      "CopyIcon",
+      "LoadingSpinnerIcon",
+      "MaximizeIcon",
+      "MenuIcon",
+      "MinimizeIcon",
+      "ReloadIcon",
+      "SparklesIcon",
+      "StopIcon",
+      "ThumbsDownIcon",
+      "ThumbsUpIcon"
+    ],
+    "removedExports": ["ChevronUpIcon"]
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/ai-lite/transport.js",
+    "transformedSourceSha256": "916dea20f9e8969873590b4d0df35840574478c43600a0fd21fb70ff30d201e6",
+    "renderedLength": 10336,
+    "renderedExports": ["DefaultChatTransport", "HttpChatTransport"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/tools/DisplayResultsTool.js",
+    "transformedSourceSha256": "47e53cf2e8901e6513b2d5f3cca7e5927217c55aadf061ae733426e4a2c48edf",
+    "renderedLength": 9899,
+    "renderedExports": ["createDisplayResultsToolComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/Carousel.js",
+    "transformedSourceSha256": "94b58bdc354b083550b32586a044931f4b4a08cbdab007d0d0a8079b79aad477",
+    "renderedLength": 9897,
+    "renderedExports": ["createCarouselComponent", "generateCarouselId"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/qs/lib/parse.js",
+    "transformedSourceSha256": "e531bff4db20b164a50c7b1a05ae6edf2066a777dfff78058cd113a0e88edadf",
+    "renderedLength": 9501,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/qs/lib/stringify.js",
+    "transformedSourceSha256": "de3fceaef84cf68c0365cf0b53b27d4e72758ecd50b007b75ab17ab7554515f4",
+    "renderedLength": 9307,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useInstantSearchApi.js",
+    "transformedSourceSha256": "35eb009a176b99d14f4ce3109a9280b66714b123d1b97b6f55a1d64061796bbb",
+    "renderedLength": 8989,
+    "renderedExports": ["useInstantSearchApi"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@algolia/events/events.js",
+    "transformedSourceSha256": "42bee7ec86a96e500b0fde8598bc1e265209069371866004fd8ecaf166bebd2a",
+    "renderedLength": 8717,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/ui/SearchBox.js",
+    "transformedSourceSha256": "c63a565b65ae0d830b876bfe1142329972e6f0237a8d254315e1e60965620acc",
+    "renderedLength": 8569,
+    "renderedExports": ["SearchBox"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatPrompt.js",
+    "transformedSourceSha256": "752294e3b2c2e5a44c2180f683bc66dfa4ee535280ec671149aab2b421d47af0",
+    "renderedLength": 7945,
+    "renderedExports": ["createChatPromptComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/tools/CarouselTool.js",
+    "transformedSourceSha256": "f0d84232efc96bd4712fca03668687d281d044486510a1e628b561eaec2d0521",
+    "renderedLength": 7939,
+    "renderedExports": ["createCarouselToolComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/react-dom/cjs/react-dom.production.js",
+    "transformedSourceSha256": "3504e20d6ffa29f1e14bd921c43a2c7f3ac1d8e855eb148d425d199a9ce43577",
+    "renderedLength": 7216,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/qs/lib/utils.js",
+    "transformedSourceSha256": "c4f58d85a6372331e200bbc6ea698cd32610d5152c119c026bf8a4b6b0861a30",
+    "renderedLength": 7143,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/chat/chat.js",
+    "transformedSourceSha256": "cc3a6181b5c340d9b632e7c5975468be5c6c7e3df4ef8e234edbe99eddd135cb",
+    "renderedLength": 6877,
+    "renderedExports": ["AbstractChat", "CACHE_KEY", "Chat", "ChatState"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/hooks/useConnector.js",
+    "transformedSourceSha256": "6a2a67bacf7b3d457c9365e44b17618ddfbb1f2bbbc8f36bc340ab77c56925c3",
+    "renderedLength": 6690,
+    "renderedExports": ["useConnector"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/SearchResults/generate-hierarchical-tree.js",
+    "transformedSourceSha256": "14e8a18966d91fd98c8274909ec17203497b78140db20d42195670212df94c68",
+    "renderedLength": 6455,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/SearchParameters/RefinementList.js",
+    "transformedSourceSha256": "6b4e8c15099b996022d1350d125823caa7f9ee554e9d9d39adf01f6239d648d8",
+    "renderedLength": 6260,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/createSendEventForHits.js",
+    "transformedSourceSha256": "43d9ea8ea107deb613c70fe95f7e182535022e43ab049e34f9027dc8b93a09de",
+    "renderedLength": 5996,
+    "renderedExports": [
+      "_buildEventPayloadsForHits",
+      "createBindEventForHits",
+      "createSendEventForHits"
+    ],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/hydrateSearchClient.js",
+    "transformedSourceSha256": "1f112e58cbb28956b07417f65bef6534631ef70d2762ef2ea98c5575e3dcfc5a",
+    "renderedLength": 5830,
+    "renderedExports": ["hydrateSearchClient"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/Chat.js",
+    "transformedSourceSha256": "0089296564fcd0796181953d7d091f37ca399860c6bc14a3215caa2e8b0b6fb6",
+    "renderedLength": 5648,
+    "renderedExports": ["createChatComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getRefinements.js",
+    "transformedSourceSha256": "c747f61517be7bfa0443ccb11b593d620d52a92455e9cd13c28c24bcbb67a296",
+    "renderedLength": 5377,
+    "renderedExports": ["getRefinements"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/connectors/hits/connectHits.js",
+    "transformedSourceSha256": "80b1a8fbc8269e7106d625276188aa5829f9d979171c5ca3aaeb6a745bc565a3",
+    "renderedLength": 5204,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/utils/chat.js",
+    "transformedSourceSha256": "af1d29995fa908632fd2a4ae333bb534ac114201fa01c3bba2067056fc0ce44a",
+    "renderedLength": 4824,
+    "renderedExports": [
+      "findTool",
+      "getFacetFiltersFromToolInput",
+      "getHitsByObjectID",
+      "getTextContent",
+      "hasTextContent",
+      "isPartText",
+      "isPartTool",
+      "isReasoningPartActive"
+    ],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/ai-lite/stream-parser.js",
+    "transformedSourceSha256": "a53bf17b7203a5ca9935e8cf1cf10ae0025c25a438fedf6e1e439207a22fc807",
+    "renderedLength": 4755,
+    "renderedExports": ["parseJsonEventStream", "processStream"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/mergeSearchParameters.js",
+    "transformedSourceSha256": "0e462d049cabcf5c6e04f7f84c52fbe3a7d745346874b4c73e7ef8ba1b0c6cc9",
+    "renderedLength": 4657,
+    "renderedExports": ["mergeSearchParameters"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useWidget.js",
+    "transformedSourceSha256": "4b73d73de5abca5cf0ce1d13b5cb6d1d8c9b5f7a784eb9295f5240d6d2ceb6bf",
+    "renderedLength": 4656,
+    "renderedExports": ["useWidget"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/ai-lite/utils.js",
+    "transformedSourceSha256": "be4e11c963361870dacd3a9d358a4ae6a870e017adbfb6259a0fc34ff88c2496",
+    "renderedLength": 4414,
+    "renderedExports": [
+      "SerialJobExecutor",
+      "generateId",
+      "lastAssistantMessageIsCompleteWithToolCalls",
+      "resolveValue",
+      "tryParseErrorMessage"
+    ],
+    "removedExports": ["GuardrailViolationError"]
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageError.js",
+    "transformedSourceSha256": "1c59074b05668c6705b6ae4b07e39dae24889f30ba628ac25c2a5eddf236db0c",
+    "renderedLength": 3971,
+    "renderedExports": ["createChatMessageErrorComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/connectors/search-box/connectSearchBox.js",
+    "transformedSourceSha256": "b61c410b209ad46440786cc99f12cf0bc32f0e93a532792c04cbfb4a9e9adf54",
+    "renderedLength": 3737,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatHeader.js",
+    "transformedSourceSha256": "a09f3a1adf071f3e7cee58afa9d5d95bd1105c49b88d457ac9ff8c5bb8ef4119",
+    "renderedLength": 3708,
+    "renderedExports": ["createChatHeaderComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/middlewares/createRouterMiddleware.js",
+    "transformedSourceSha256": "7f054cf29aec4d824fc647a81ab2f012c0f9e469391c008f5641bf89f0f936d0",
+    "renderedLength": 3599,
+    "renderedExports": ["createRouterMiddleware"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/index.js",
+    "transformedSourceSha256": "fb1a083c1284b3f1f31c4c438898398ec7b08e44968eb6dc46dc11a1dd59ba25",
+    "renderedLength": 3504,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/Hits.js",
+    "transformedSourceSha256": "09c7103bf73ca65eed356c8fb3e2eacf30638344e86faa90831249e2d45fb695",
+    "renderedLength": 3236,
+    "renderedExports": ["createHitsComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/SearchBox.js",
+    "transformedSourceSha256": "6ac1c31c63f119c9f9fe0f273d116ef02b923d63cd862cfff12816b70b9ba045",
+    "renderedLength": 3010,
+    "renderedExports": ["SearchBox"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/createHelpers.js",
+    "transformedSourceSha256": "84e000f393cfea5696ca2d55025ff79a7ccd7465b0d41fe54753132a732ee573",
+    "renderedLength": 2890,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/chat/tools/DisplayResultsTool.js",
+    "transformedSourceSha256": "6e14a63d2afe2ba71e3518c15e930cf3aec33d07a5edc6739440af9e3c5008f9",
+    "renderedLength": 2852,
+    "renderedExports": ["createDisplayResultsTool"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/RecommendParameters/index.js",
+    "transformedSourceSha256": "4c8230934a79ece2c38da7d0cdf8877ba05b430b21cc5a060f4afead00116235",
+    "renderedLength": 2731,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/buildWidgetTree.js",
+    "transformedSourceSha256": "4e7b663bd2d4c55464a392d1646623b5d1023b3418c0c2635f76ac6fa694c1a9",
+    "renderedLength": 2578,
+    "renderedExports": ["buildWidgetTree", "serializeWidgetParams"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/middlewares/createMetadataMiddleware.js",
+    "transformedSourceSha256": "6ae893748345cdc6fc0c7ca99bd56054e50a8a16e4c0edb6552a43ed65a2f516",
+    "renderedLength": 2560,
+    "renderedExports": ["createMetadataMiddleware", "isMetadataEnabled"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/merge.js",
+    "transformedSourceSha256": "6af81af792921627ac4d3e3f5859a3f4bd254a16efb2eee1edbca2bd39b295c7",
+    "renderedLength": 2287,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useSearchResults.js",
+    "transformedSourceSha256": "fbd837d3cbb7760333a4e2b50fbd270d85a707e8cffae6140f27bda0982b89a0",
+    "renderedLength": 2108,
+    "renderedExports": ["useSearchResults"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/hooks/useInstantSearch.js",
+    "transformedSourceSha256": "ecd8381089ae7d25feaae26bf99ccbd65ed3edf69e90c236fcc217f9d3ae07b5",
+    "renderedLength": 2045,
+    "renderedExports": ["useInstantSearch"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/Hits.js",
+    "transformedSourceSha256": "ea3cca76a1ec9e87fda18ed57907438b61e312dd2e97828c7790e0d284d250d7",
+    "renderedLength": 2019,
+    "renderedExports": ["Hits"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/orderBy.js",
+    "transformedSourceSha256": "8ab72c84ba158c1b666c5f0a59e86f160712c26e011bcfdab95323ca1a4724e2",
+    "renderedLength": 2001,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/insights.js",
+    "transformedSourceSha256": "da0e9e92f10cd469ff7c44080d992e98df559ea2a01ccdb933e73f4dc2abb40d",
+    "renderedLength": 1979,
+    "renderedExports": ["default", "getUsageSessionId", "writeDataAttributes"],
+    "removedExports": ["readDataAttributes"]
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageReasoning.js",
+    "transformedSourceSha256": "ddee9c82ec7ac592cdde01049f622cf2b140a11df2daef7f8bf41d2a5d895d66",
+    "renderedLength": 1978,
+    "renderedExports": ["createChatMessageReasoningComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/render-args.js",
+    "transformedSourceSha256": "eeef42a7cbfd3a2732f0b60c666a8578f7274dd9f59ef37e5d9727942249dcc3",
+    "renderedLength": 1953,
+    "renderedExports": [
+      "createInitArgs",
+      "createRenderArgs",
+      "storeRenderState"
+    ],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatOverlayLayout.js",
+    "transformedSourceSha256": "b01689b4492f4f57f48f34e41d2fb892bd6cf1b26de331ef6a3488668442d53a",
+    "renderedLength": 1859,
+    "renderedExports": ["createChatOverlayLayoutComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/utils/sortAndMergeRecommendations.js",
+    "transformedSourceSha256": "970a278e2d37301c40e1487a64c3f48bc527434c0accfb4b518a7e058c242950",
+    "renderedLength": 1817,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/chat/openChat.js",
+    "transformedSourceSha256": "36a9cd667dfb1b7dacece3c1c633f53c0b0315f25c430768a3f22aaa7ed247a7",
+    "renderedLength": 1788,
+    "renderedExports": ["isChatBusy", "openChat"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useSearchState.js",
+    "transformedSourceSha256": "b246bbcd4d08efb8f467d1f143895162339c301ea4c4048e756a2d7bb7181d91",
+    "renderedLength": 1763,
+    "renderedExports": ["useSearchState"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/DerivedHelper/index.js",
+    "transformedSourceSha256": "05622ece1a4c40741468a166cd04a35253c22bd78f488c2c93b9dbc477c05641",
+    "renderedLength": 1744,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/escape-highlight.js",
+    "transformedSourceSha256": "ca2927558ad00b48d4889d43355c461e2949893ff3d609acd3332ce60e697a5d",
+    "renderedLength": 1722,
+    "renderedExports": ["TAG_PLACEHOLDER", "TAG_REPLACEMENT", "escapeHits"],
+    "removedExports": ["escapeFacets"]
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/dequal.js",
+    "transformedSourceSha256": "81303e6806634de95d0afd6f29df72007b2d07fc4a1991fcaf67308fc55c41bf",
+    "renderedLength": 1686,
+    "renderedExports": ["dequal"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageLoader.js",
+    "transformedSourceSha256": "5fef053b6e841d64463a56d4200fb43681a1eeeb0b63441b21efb72063a27b47",
+    "renderedLength": 1682,
+    "renderedExports": ["createChatMessageLoaderComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/escape-html.js",
+    "transformedSourceSha256": "fcdedd9fa2d6e02bb63228be97983b600c1f9bec1be542aad13a977b406107c4",
+    "renderedLength": 1512,
+    "renderedExports": ["escape", "unescape"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/stateMappings/simple.js",
+    "transformedSourceSha256": "dd673e245f75263e7ca79723c0b9441f4384570b149916342fc5364f8e5f2193",
+    "renderedLength": 1411,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/isEqual.js",
+    "transformedSourceSha256": "0bb1f85889e4321196060045c5c4b3d5d1efa1a49c3efcfa0eb919dab661d627",
+    "renderedLength": 1404,
+    "renderedExports": ["isEqual"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.min.js",
+    "transformedSourceSha256": "508b14da56e764d749e9b2d60776f52e71627d372cc084000cd83acf87d506b1",
+    "renderedLength": 1398,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/clearRefinements.js",
+    "transformedSourceSha256": "fd99783fe761dd2e381c3d2f1172607b128cad4466af834223fdbdc68329e05e",
+    "renderedLength": 1356,
+    "renderedExports": ["clearRefinements"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/formatSort.js",
+    "transformedSourceSha256": "cdf2723febced7a4129376125bba2fbe4d8104562776bda371629012fc425d79",
+    "renderedLength": 1296,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/reverseHighlight.js",
+    "transformedSourceSha256": "5e531c6494e222c868aac6c34cc508571bc32408bce4bd4ad93a8ba4ae1e48a6",
+    "renderedLength": 1274,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/reverseSnippet.js",
+    "transformedSourceSha256": "77ffa66c08382b2c97fce2d7977341186a9c996fe0e82e812cbabaae220bcc02",
+    "renderedLength": 1258,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/extractWidgetPayload.js",
+    "transformedSourceSha256": "3bb75d1f2a27c2f8e4b6fa8f88aabb061ee85d0aca18394d4bf3485dbdc41498",
+    "renderedLength": 1249,
+    "renderedExports": ["extractWidgetPayload"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatPromptSuggestions.js",
+    "transformedSourceSha256": "446e84249ae40ec9f0302534be880e7edd2eb81ef8421738855991ded93ec071",
+    "renderedLength": 1221,
+    "renderedExports": ["createChatPromptSuggestionsComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/highlight.js",
+    "transformedSourceSha256": "c5f4f94148477e4343e584fba690872621e0a1c22cac3195a8c9d6f3c9395e23",
+    "renderedLength": 1124,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/snippet.js",
+    "transformedSourceSha256": "01a022b2598de12799fa87bd8a4c627b0010c9e961bd311690e44f7e9a9c1e06",
+    "renderedLength": 1112,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/mergeNumericMax.js",
+    "transformedSourceSha256": "0c138f65efcee4891d88b8dbb428a5b8e19070ed86fb03520c0dfecb02483759",
+    "renderedLength": 1044,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getAppIdAndApiKey.js",
+    "transformedSourceSha256": "67ae8a810ba3a9ebce97a28f254e103ae5cd11579bff0e231e201631b3625279",
+    "renderedLength": 1038,
+    "renderedExports": ["getAppIdAndApiKey"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/components/Carousel.js",
+    "transformedSourceSha256": "a38ba42cf96925e24131007c1837634b73305ec91d03d34d2f58d5e6609433e8",
+    "renderedLength": 1032,
+    "renderedExports": ["Carousel"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/isPlainObject.js",
+    "transformedSourceSha256": "72127d9ca348cac0c9fbbc150bce1d26b595930aec598370c3527bff361c6a9d",
+    "renderedLength": 1005,
+    "renderedExports": ["isPlainObject"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_object_without_properties.js",
+    "transformedSourceSha256": "d36fd8502e89865b52227fd85942f5c98706eccddd7ea6dd707bdd99f0818425",
+    "renderedLength": 1002,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/Button.js",
+    "transformedSourceSha256": "9df9e13c8c1bbeb3cb7f4f30d5003a0d32b5411e3887c17f699353f724acd767",
+    "renderedLength": 984,
+    "renderedExports": ["createButtonComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/RecommendResults/index.js",
+    "transformedSourceSha256": "cc087090bd8cf4e1a6eca5d079b9faa3fc2ea8d6d6a389b8e2abbef7a215998e",
+    "renderedLength": 975,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/escapeFacetValue.js",
+    "transformedSourceSha256": "801f76709e666189cd4af10a0f044130d944eaa164f1ef561ec1142e03aa6df1",
+    "renderedLength": 964,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/defer.js",
+    "transformedSourceSha256": "aee49e7bb78dbd86a3e689a22260b47344a6b00545e4605ace1285a0c8087b93",
+    "renderedLength": 962,
+    "renderedExports": ["defer"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/react-dom/index.js",
+    "transformedSourceSha256": "de0cd4d4aa486c4d7e761ba1e67f0f540d717c3cb46e92ff7b03dbdb06b8fcfc",
+    "renderedLength": 904,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/react-dom/client.js",
+    "transformedSourceSha256": "4973acf8a0d0ffa14352cb5dee3b8cd0c672bee5c8dd12e7fb48cd40927756cf",
+    "renderedLength": 896,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/sendChatMessageFeedback.js",
+    "transformedSourceSha256": "9d20a66725900c5cab3538247269fa69005e8a70698ca50997655d59dae5f9d3",
+    "renderedLength": 889,
+    "renderedExports": ["sendChatMessageFeedback"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/getIndexSearchResults.js",
+    "transformedSourceSha256": "c5e524feed3b46df6650fdf3e7f1e79e5147f7a10c905535e0c90e6e8c2955d2",
+    "renderedLength": 871,
+    "renderedExports": ["getIndexSearchResults"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_wrap_native_super.js",
+    "transformedSourceSha256": "850912e9524900620651e48cfcfbc7febc579e702f1dde955273f7f6d6ba0ea6",
+    "renderedLength": 869,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getHighlightedParts.js",
+    "transformedSourceSha256": "d3fc4031e9d0c87fb0d1675d8c447423db6070cc5c16ed6ab22e8123dfb24449",
+    "renderedLength": 861,
+    "renderedExports": ["getHighlightedParts"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/createSearchResults.js",
+    "transformedSourceSha256": "e466bc618348601e051698ce413537d1b5e8cf8001a6cf42e403c2de94dfd9b7",
+    "renderedLength": 853,
+    "renderedExports": ["createSearchResults"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/chat/tools/SearchIndexTool.js",
+    "transformedSourceSha256": "a4941b9e779d1a914f5f90d4b97c84ada35b3accba757942c2476172deb77291",
+    "renderedLength": 844,
+    "renderedExports": ["createCarouselTool"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/documentation.js",
+    "transformedSourceSha256": "82437d82af61de61db87267b49ed8c1a38d157b70c4adf226ae96ec68393d987",
+    "renderedLength": 805,
+    "renderedExports": [
+      "createDocumentationLink",
+      "createDocumentationMessageGenerator"
+    ],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/defaultsPure.js",
+    "transformedSourceSha256": "7f15014131bb6cd2e9cd82c826579aac4462cb4fda5271a8a6392cf97d238332",
+    "renderedLength": 792,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/components/InstantSearch.js",
+    "transformedSourceSha256": "c995fcab2b3b7fa66663edb1596ef25fd1ccfa9d22701770ca4ea75658a9c409",
+    "renderedLength": 790,
+    "renderedExports": ["InstantSearch"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/helpers/get-insights-anonymous-user-token.js",
+    "transformedSourceSha256": "4151a7138e54ea24d1d182495eab876ad686c026c927d639971fe445d4ede476",
+    "renderedLength": 745,
+    "renderedExports": [
+      "ANONYMOUS_TOKEN_COOKIE_KEY",
+      "getInsightsAnonymousUserTokenInternal"
+    ],
+    "removedExports": ["default"]
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/find.js",
+    "transformedSourceSha256": "54fb50aa5d3e1e63ec60292b3d6aed1566f451fd19742df9000d8b190ed81b9c",
+    "renderedLength": 730,
+    "renderedExports": ["find"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/omit.js",
+    "transformedSourceSha256": "f0d9fe9f32c1b9c3c1087b9ad75462ec47ff4a97ceadb3fa366bbde32214a953",
+    "renderedLength": 707,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getHighlightFromSiblings.js",
+    "transformedSourceSha256": "d1da42cbe7e4e5393c71d0ba27de3709fda692d416afcfdb6a1b8830a5969be0",
+    "renderedLength": 697,
+    "renderedExports": ["getHighlightFromSiblings"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/findIndex.js",
+    "transformedSourceSha256": "9d1cbc26625a9fe3bb5822f22240a29659503ea09b1231d45d8d15cc6b71e054",
+    "renderedLength": 670,
+    "renderedExports": ["findIndex"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_iterable_to_array_limit.js",
+    "transformedSourceSha256": "b49cf468d22e90c503d6434d38c8d27bbc48b78e054698b87db9953397a49f25",
+    "renderedLength": 668,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_object_spread_props.js",
+    "transformedSourceSha256": "5df0a2eab0c5da3e1939e87881c0a9a51cfbd22aa302e88d4f2aae337e95864b",
+    "renderedLength": 655,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_is_native_reflect_construct.js",
+    "transformedSourceSha256": "f2da361eb1dad0b946ed5acecaa3e6402cd9b3ecac9666517ae3cc0933cb88b2",
+    "renderedLength": 654,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_object_spread.js",
+    "transformedSourceSha256": "4777455972e3cf6f43971cf78f0622788af715ccf7401397997d33a8fae0da2c",
+    "renderedLength": 634,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/qs/lib/formats.js",
+    "transformedSourceSha256": "3626b5afc02a738c703c47d53bb072b77efcf59af09b4bc165a41a5d91c243ea",
+    "renderedLength": 625,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/omit.js",
+    "transformedSourceSha256": "7edb74b2f6c08cb87d322b570323a9b9634630e90eaabe2539b9f22344df0de4",
+    "renderedLength": 589,
+    "renderedExports": ["omit"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "scripts/consumer-bundle-size/fixtures/search-client.mjs",
+    "transformedSourceSha256": "ea2df869dee913a17767efe4b8a991a66a99faa0ac66774826321764984804b0",
+    "renderedLength": 574,
+    "renderedExports": ["searchClient"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/safelyRunOnBrowser.js",
+    "transformedSourceSha256": "a77457cf16a6cfc80e23e99908a1b2f743cd309d2175d556ea53473c25375f33",
+    "renderedLength": 563,
+    "renderedExports": ["safelyRunOnBrowser"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/valToNumber.js",
+    "transformedSourceSha256": "3ebcec35b8dd482677642924e6fd1396bdc3882d28f6a689c4c5d6a04de8d0d1",
+    "renderedLength": 535,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_create_class.js",
+    "transformedSourceSha256": "30b2282963aec8f45e97717051a1e567bb356d995ec861587a88c8c434e83e2d",
+    "renderedLength": 531,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_construct.js",
+    "transformedSourceSha256": "c8555a28484244d2e648a4610fd7651a8dfb5f762598c8f6df4d15305d52abb0",
+    "renderedLength": 525,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/suit.js",
+    "transformedSourceSha256": "951f5c572a864408fb4651cc384ecae08249d736aef34108460168f48f3d35ab",
+    "renderedLength": 513,
+    "renderedExports": ["component"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/reverseHighlightedParts.js",
+    "transformedSourceSha256": "584877723482d3fce772c7c3c8a0f3dae6b676697416d4090e01c194d240459b",
+    "renderedLength": 494,
+    "renderedExports": ["reverseHighlightedParts"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/hydrateRecommendCache.js",
+    "transformedSourceSha256": "5f90ffaf4ddc92345c3773c693f16c98197acd9f3677d31787a764e9290443e0",
+    "renderedLength": 487,
+    "renderedExports": ["hydrateRecommendCache"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/findIndex.js",
+    "transformedSourceSha256": "2d52ab952b7dff2ce34fe04584d573ca633bf591e6711f9e1ccdd599a8b08e8e",
+    "renderedLength": 476,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/utils/hits.js",
+    "transformedSourceSha256": "6e55f8005c1dbea019d97e7b881b79e555e16481a904ca1cff9d60992f3b1046",
+    "renderedLength": 470,
+    "renderedExports": ["addAbsolutePosition", "addQueryID"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/find.js",
+    "transformedSourceSha256": "d202c22870f576dbe62e738bf8545650ff9376dcc592e41b12fe71f701331b8e",
+    "renderedLength": 453,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_unsupported_iterable_to_array.js",
+    "transformedSourceSha256": "987f81bac1bc75f361a9d01e229ec9db4b5ff14f4987782ecd2462c412ad1d8d",
+    "renderedLength": 451,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_object_without_properties_loose.js",
+    "transformedSourceSha256": "67224f139b25c09ea8c059e58068a850d7502a9f167198920e967b79e5262270",
+    "renderedLength": 443,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/intersection.js",
+    "transformedSourceSha256": "8d1deef0914dc20768851c409a0f934ea63c0d51ed660cb0a723805d3e5ffa6e",
+    "renderedLength": 438,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/setIndexHelperState.js",
+    "transformedSourceSha256": "5429057ce7ca4f69c55e77cac5598966889426f1e9bc379a558a3aa7e26a7010",
+    "renderedLength": 427,
+    "renderedExports": ["setIndexHelperState"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_call_super.js",
+    "transformedSourceSha256": "f890267789d67b51dcf2868440bcc387e3f31eb8bc4d2a1229ef3f136cae0e3e",
+    "renderedLength": 423,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/inherits.js",
+    "transformedSourceSha256": "ad17f49ea4579e9739488aea9f62aee0909cf851bd311b7a0c88fb3c753f6f96",
+    "renderedLength": 419,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/cx.js",
+    "transformedSourceSha256": "80a67cf73f70bf88c72700c3391fc30f51ce4daae23d885f409b662dfae8753c",
+    "renderedLength": 414,
+    "renderedExports": ["cx"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_inherits.js",
+    "transformedSourceSha256": "8a45fcdd7a0dc84be2e47cc5c1ffa7f4c4ee6c4412742224d788ed6b19a830cf",
+    "renderedLength": 413,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/invariant.js",
+    "transformedSourceSha256": "41a56fe5cbd7e707810cd37b3ebbeca952539d5a57d1847080edab043a6efd60",
+    "renderedLength": 395,
+    "renderedExports": ["invariant"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/uuid.js",
+    "transformedSourceSha256": "c95a59ea8e901884a5eee4bd83eb0287f5ad69e98a9c00b9101d4056fb0e282a",
+    "renderedLength": 392,
+    "renderedExports": ["createUUID"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/utils/isValidUserToken.js",
+    "transformedSourceSha256": "694eca1e68d6f69225b7edd6586ef8e729893742e586835d3b54ab59a3bc343a",
+    "renderedLength": 382,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_extends.js",
+    "transformedSourceSha256": "80d8d6eaef35d35adfc8de27d81a32f580776a68f831c45e7adb66adf35af5ce",
+    "renderedLength": 377,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useForceUpdate.js",
+    "transformedSourceSha256": "4c8123924ce46719c916163d4b9fbe574e89b863fa98112714165f4cd346dc89",
+    "renderedLength": 341,
+    "renderedExports": ["useForceUpdate"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/escapeFacetValue.js",
+    "transformedSourceSha256": "b9d7a64bc30b8daf79a2acd1eef6792f93e51625df476b9da18aac99f64a18cc",
+    "renderedLength": 333,
+    "renderedExports": ["escapeFacetValue", "unescapeFacetValue"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/flat.js",
+    "transformedSourceSha256": "adc3f05630161be90bd709ae957cea45a34a0c8cdb741ae047cd4ec1152cc2ac",
+    "renderedLength": 316,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/objectHasKeys.js",
+    "transformedSourceSha256": "e44f597d69cff147878e3e37c172fa4da7602d5742ae692fb6b7a841c7c21027",
+    "renderedLength": 315,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/resolveSearchParameters.js",
+    "transformedSourceSha256": "dfaf3387fee4531218bc306b13a190d74cd062129d3aaf55e686882a4e4b0ecb",
+    "renderedLength": 315,
+    "renderedExports": ["resolveSearchParameters"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/concatHighlightedParts.js",
+    "transformedSourceSha256": "faf493b0a2638daeafd6409c9bc0f3bbb246813c12a02d17918ee4ac0907a19b",
+    "renderedLength": 307,
+    "renderedExports": ["concatHighlightedParts"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/qs/lib/index.js",
+    "transformedSourceSha256": "dda46fd69ee262f7dc1dd70befe51b198f1918253aec6a15ec2d2c9f199efd2b",
+    "renderedLength": 305,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "scripts/consumer-bundle-size/fixtures/react-chat.mjs",
+    "transformedSourceSha256": "c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff",
+    "renderedLength": 302,
+    "renderedExports": [],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useStableValue.js",
+    "transformedSourceSha256": "aff0f8af607777d1af611163587c5430d145f8547c969ea2af454991892c30e5",
+    "renderedLength": 299,
+    "renderedExports": ["useStableValue"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useIsomorphicLayoutEffect.js",
+    "transformedSourceSha256": "81e4d06d05c001bfcf95e7343bee2cdd2ed3469b99e0652e01b2de769985c488",
+    "renderedLength": 290,
+    "renderedExports": ["useIsomorphicLayoutEffect"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/chat/index.js",
+    "transformedSourceSha256": "6a7b9752fd3b26d99cae1aed7a5e231a2088e6a42b0b1e96161dc21d30563f80",
+    "renderedLength": 286,
+    "renderedExports": [
+      "DisplayResultsToolType",
+      "MemorizeToolType",
+      "MemorySearchToolType",
+      "PonderToolType",
+      "RecommendToolType",
+      "SearchIndexToolType"
+    ],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/functions/compact.js",
+    "transformedSourceSha256": "cb9e77831f6ede649e7ea07f142625cd4951768bb416d2a2b9a96580b044ec78",
+    "renderedLength": 280,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/components/recommend-shared/DefaultItem.js",
+    "transformedSourceSha256": "dc6bf052c6e985b1d1325f6858a25d2d85fdd3e4a3faeb590aa4227bb96e1c58",
+    "renderedLength": 271,
+    "renderedExports": ["createDefaultItemComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/walkIndex.js",
+    "transformedSourceSha256": "1f0af5f97daa991603836f880e3acd1ea8fe064119a8603a7a11d6ed83fb4adb",
+    "renderedLength": 266,
+    "renderedExports": ["walkIndex"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/checkRendering.js",
+    "transformedSourceSha256": "ed44678469506a99e4f3fe483d2b0235ca69e38fe8cac797a046716bd1cec018",
+    "renderedLength": 255,
+    "renderedExports": ["checkRendering"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/isTwoPassWidget.js",
+    "transformedSourceSha256": "ca3e6d2af1d1eb00d437afb28775babbff067d4cb900a65e7bcf27ef83d674d6",
+    "renderedLength": 254,
+    "renderedExports": ["isTwoPassWidget"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/hits-query-id.js",
+    "transformedSourceSha256": "bd5dab7eec2da19867d0763e627c8a2931fb7c8708e8090fbe8f7f9cc5b0e338",
+    "renderedLength": 237,
+    "renderedExports": ["addQueryID"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/hits-absolute-position.js",
+    "transformedSourceSha256": "05c3a9e5ed91e949912d3ce650d944bd6eb7b88d8657351eb9e839714938252b",
+    "renderedLength": 236,
+    "renderedExports": ["addAbsolutePosition"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/lib/useStickToBottom.js",
+    "transformedSourceSha256": "1dab218cde52d101b95e6fe096ac1f406f2019e5b883f05d871a568702131fa5",
+    "renderedLength": 234,
+    "renderedExports": ["useStickToBottom"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/InstantSearchRSCContext.js",
+    "transformedSourceSha256": "1bda7a7c36052622715037dc3179b01f323bbab2c4255a75be0e9e951c30777e",
+    "renderedLength": 232,
+    "renderedExports": ["InstantSearchRSCContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_get_prototype_of.js",
+    "transformedSourceSha256": "9575ba800292924a4acad3d7544db7d844ff829d0fb90920e916158b8657020a",
+    "renderedLength": 231,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_define_property.js",
+    "transformedSourceSha256": "8a1b51b07d0f45dcebfb93d1010f0b824ffea124cefa84efc3a15c1479dc6a93",
+    "renderedLength": 227,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/scheduler/index.js",
+    "transformedSourceSha256": "a6d33de0f7482743909eb9dd8a59f5e3371ea811d52a3b9e9430b12ea87e3046",
+    "renderedLength": 227,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_instanceof.js",
+    "transformedSourceSha256": "bdf3fd2a650d8c0f3e16019f372d579cfe8787b9491c84dc4baad1f3e7c77e0b",
+    "renderedLength": 215,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/use-sync-external-store/shim/index.js",
+    "transformedSourceSha256": "f8b9a25723a3bc15de921c1d9f1f8ae544cd9f0f43c29aaf7e7b995d233b3de6",
+    "renderedLength": 211,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getPropertyByPath.js",
+    "transformedSourceSha256": "385a41b3349b3027298af9d4ea1e3733a393856ea65567f60407a480dfc83c8e",
+    "renderedLength": 211,
+    "renderedExports": ["getPropertyByPath"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_set_prototype_of.js",
+    "transformedSourceSha256": "11018bead857f91c4d6dafbf9a84475b2df610826d24b092e5d23c269c70dc58",
+    "renderedLength": 205,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_non_iterable_rest.js",
+    "transformedSourceSha256": "7a0207bb3640db15f680af1acc9fb0c7fcfc60cc322ab747595b1561c61b9788",
+    "renderedLength": 199,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getAlgoliaAgent.js",
+    "transformedSourceSha256": "ecbd02f6bbdc466afab13623fde200679f560b20086414f1509f510e6552b1a5",
+    "renderedLength": 199,
+    "renderedExports": ["getAlgoliaAgent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_array_like_to_array.js",
+    "transformedSourceSha256": "f08910af68a9fd9d915f447fdcc5f648345691497a8f69ec51d5bbdd1ceed11d",
+    "renderedLength": 196,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_non_iterable_spread.js",
+    "transformedSourceSha256": "a8908e5a5312eb7060ccfd14dc79f0a547f26993b8edc7a413f12d73778044a5",
+    "renderedLength": 196,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/react/index.js",
+    "transformedSourceSha256": "00cfd6c5b90927385ca84c9e3c1e39d84eb1464db3eadbf5623d7f1328add64f",
+    "renderedLength": 195,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_possible_constructor_return.js",
+    "transformedSourceSha256": "6072778ab6f304f25c773095edb114e053cb20b7f67ac60148eede962ca68b6d",
+    "renderedLength": 187,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/algoliasearch-helper/src/version.js",
+    "transformedSourceSha256": "02570987f6879fc2322d1ae14e8bc4faa683335c7faedd8fc18c3980f58e913d",
+    "renderedLength": 181,
+    "renderedExports": ["__require"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_iterable_to_array.js",
+    "transformedSourceSha256": "1b1ef3ae131a90cf41147f0ede7b990e22321910f3da7389027ec8f5b73870bc",
+    "renderedLength": 180,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_sliced_to_array.js",
+    "transformedSourceSha256": "510bd2b185c35d37d653e3e43ce7c3a4f4ddda32b6946fa85fb6068156f60db4",
+    "renderedLength": 174,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_assert_this_initialized.js",
+    "transformedSourceSha256": "b6616b9b8334f2d88056353df4691d634635c1c7e628f373f9687c94bbe1c962",
+    "renderedLength": 173,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_to_consumable_array.js",
+    "transformedSourceSha256": "22797ac8a5ffb625524ce7229bb0f956688c375393bbbc1ed8354eb9be74794b",
+    "renderedLength": 168,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_type_of.js",
+    "transformedSourceSha256": "2d7bdb230179674afc1eb85a7636ee0d298423d49691e2371c1e33b98c574b03",
+    "renderedLength": 159,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/noop.js",
+    "transformedSourceSha256": "3f5804ba75b8dfd2766fe9eeecba95070163d68f6c5429801a3c073de34d0c22",
+    "renderedLength": 158,
+    "renderedExports": ["noop"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_class_call_check.js",
+    "transformedSourceSha256": "5f557c588e111867c9b4833c913a3e5ba6b674fd2321e8e0b41c06fffa4c4c89",
+    "renderedLength": 155,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/packages/algoliasearch-helper/index.js?commonjs-es-import",
+    "transformedSourceSha256": "682199b8b0844c9ccfa744a49fe1bf9cd2730244122c803b39191bb35cd5eb0c",
+    "renderedLength": 154,
+    "renderedExports": ["__moduleExports", "default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useInstantSearchContext.js",
+    "transformedSourceSha256": "6053c2a2bd4c9ec259bee17acddcfa2147a26140a5b4ac0a257cefdca8958d66",
+    "renderedLength": 153,
+    "renderedExports": ["useInstantSearchContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_to_array.js",
+    "transformedSourceSha256": "af9bd03571f5ebe23193ccaea47664996badfc61dd3571f8d77004686e3cacdb",
+    "renderedLength": 152,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_object_destructuring_empty.js",
+    "transformedSourceSha256": "ae621f57f1afda08b9e15b24a74ced6e30daf3395cd1ba70e726ac6e3b89876f",
+    "renderedLength": 142,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useIndexContext.js",
+    "transformedSourceSha256": "f80b3e82f08a7c1957e95a6ce971e7b38cafc79b9336102a5c552cf61552ada2",
+    "renderedLength": 140,
+    "renderedExports": ["useIndexContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/commonjsHelpers.js",
+    "transformedSourceSha256": "2f3c4722374428486ca17f4266c5762776ff3a6b0fd51fdbb10db7adcde8b399",
+    "renderedLength": 140,
+    "renderedExports": ["getDefaultExportFromCjs"],
+    "removedExports": [
+      "commonjsGlobal",
+      "getAugmentedNamespace",
+      "getDefaultExportFromNamespaceIfNotNamed",
+      "getDefaultExportFromNamespaceIfPresent"
+    ]
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/connectors/useSearchBox.js",
+    "transformedSourceSha256": "9354dcac390bd938afe378688495851408c5c792382d56baf515460bb0f3a837",
+    "renderedLength": 138,
+    "renderedExports": ["useSearchBox"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/addWidgetId.js",
+    "transformedSourceSha256": "56b2cad3236cb1f638ec8c01d180b0c84811ba2afa7e0ada14bcb82c80767eeb",
+    "renderedLength": 134,
+    "renderedExports": ["addWidgetId"],
+    "removedExports": ["resetWidgetId"]
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/uniq.js",
+    "transformedSourceSha256": "a734bd04141f5390b4b977d62e9c20e94ae29f62310645ed6e44ffa698fad9fb",
+    "renderedLength": 133,
+    "renderedExports": ["uniq"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/now.js",
+    "transformedSourceSha256": "38aab4504ccee98369f2b2816838b31022193619722b8b79cb86a79619f78138",
+    "renderedLength": 132,
+    "renderedExports": ["now"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/connectors/useChat.js",
+    "transformedSourceSha256": "ac4ab59cde95c14756a99d439e13d874e0ed4fe8d4b5d6130960a26570d2b72b",
+    "renderedLength": 128,
+    "renderedExports": ["useChat"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/connectors/useHits.js",
+    "transformedSourceSha256": "7dbce619b110aceacf350039b47e93b6b88c5d57ae672235007b7b8510cfe30d",
+    "renderedLength": 128,
+    "renderedExports": ["useHits"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/use.js",
+    "transformedSourceSha256": "d07bac2a9fb5f6060fa3c15a7152c1a3fa166ba68e22e9a685f958c1e35fc130",
+    "renderedLength": 120,
+    "renderedExports": ["use"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/flat.js",
+    "transformedSourceSha256": "b831185148c98c4a7a9470a9b2df6b2f2480ab1f5e1acaaa67c1eb55bc1b74b3",
+    "renderedLength": 113,
+    "renderedExports": ["flat"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useInstantSearchServerContext.js",
+    "transformedSourceSha256": "f920d46a582a29bdf4a8fa72e97e271d8ca90d4c396f2620e78f45c6c98f2897",
+    "renderedLength": 108,
+    "renderedExports": ["useInstantSearchServerContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/@algolia/events/events.js?commonjs-es-import",
+    "transformedSourceSha256": "7b8d42e1c5ec171cd895f770f38475900747366a84b186a48d34002d43fee8dc",
+    "renderedLength": 108,
+    "renderedExports": ["__moduleExports", "default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_is_native_function.js",
+    "transformedSourceSha256": "dace295a1df2fab91d7151487d4f96fa698c59d09c71076502fc8302fc53ab30",
+    "renderedLength": 107,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useInstantSearchSSRContext.js",
+    "transformedSourceSha256": "f8753da1268f264bb39c5801c8ba41810cd00ceaea62a39256b2dd439e248f00",
+    "renderedLength": 102,
+    "renderedExports": ["useInstantSearchSSRContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_array_without_holes.js",
+    "transformedSourceSha256": "73cb9a11c22feda81d73ea5a530e4e8a416c2bfe75261ba94129302275a0382b",
+    "renderedLength": 100,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/serializer.js",
+    "transformedSourceSha256": "90d3fb57b54b0a85875f62055761afe0fa96d8f8dab281fcc9fcb855a2898ae5",
+    "renderedLength": 100,
+    "renderedExports": ["serializePayload"],
+    "removedExports": ["deserializePayload"]
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/getObjectType.js",
+    "transformedSourceSha256": "4a4aac370add7ea296d2430775db61a35c4903fd7478980144a4965614f9e2d2",
+    "renderedLength": 98,
+    "renderedExports": ["getObjectType"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react/index.js?commonjs-es-import",
+    "transformedSourceSha256": "a43782fcf1c99e95e1584c78b7a7e3022889973312c5493ae0b444df45f67f2c",
+    "renderedLength": 98,
+    "renderedExports": ["__moduleExports", "default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/formatNumber.js",
+    "transformedSourceSha256": "f46cedd8e91533d9f8a8bcfc78b1ee392f29bdfc5bf8a0860803a7806b94a36a",
+    "renderedLength": 93,
+    "renderedExports": ["formatNumber"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/useRSCContext.js",
+    "transformedSourceSha256": "9d7a2a920431fb2f147d6597b4891f603db4f6c2298233f6deef129bd3e7f634",
+    "renderedLength": 89,
+    "renderedExports": ["useRSCContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/qs/lib/index.js?commonjs-es-import",
+    "transformedSourceSha256": "fd4db92e4a6fd30bea8863144449ec03d9ffdbd9ec3391cb1186b0543ff8c01d",
+    "renderedLength": 89,
+    "renderedExports": ["__moduleExports", "default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/utils/startsWith.js",
+    "transformedSourceSha256": "457413004360da8dea222c4a9d26e1d566ddaa67a04d74954f229dc7825ecd9b",
+    "renderedLength": 87,
+    "renderedExports": ["startsWith"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/utils/isIndexWidget.js",
+    "transformedSourceSha256": "f350a095a370b705ea3d567b7e64802472aa488f7b735c299426b6ef18a1b8ea",
+    "renderedLength": 87,
+    "renderedExports": ["isIndexWidget"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "node_modules/@swc/helpers/esm/_array_with_holes.js",
+    "transformedSourceSha256": "72992e55086ce0a262d59128cf01d7d2826b23051034eea1adae834d89aa0138",
+    "renderedLength": 75,
+    "renderedExports": ["_"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/types/widget.js",
+    "transformedSourceSha256": "885da076edd1ba124930e95902c8212f6ded38fdaf6ec86d123624c3baacb050",
+    "renderedLength": 68,
+    "renderedExports": ["indexWidgetTypes"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/components/InstantSearchServerContext.js",
+    "transformedSourceSha256": "fe47abcc37ebe6fa923d0770146a86ba8c880c716b0688a2c638a2451caaedf0",
+    "renderedLength": 66,
+    "renderedExports": ["InstantSearchServerContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/InstantSearchSSRContext.js",
+    "transformedSourceSha256": "0382f4a71e4f20cc060dc8b846a175852485a7cdb2db27bc57046faa3e7942be",
+    "renderedLength": 63,
+    "renderedExports": ["InstantSearchSSRContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/InstantSearchContext.js",
+    "transformedSourceSha256": "e7ba22137ad7cc54dea110e4726a86b5be779158b50e90b957ff95c23c5ec30e",
+    "renderedLength": 60,
+    "renderedExports": ["InstantSearchContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/lib/IndexContext.js",
+    "transformedSourceSha256": "179f83e2df80e6f466e130bdc1ba335ebd14350f601cdde02f54c6bb7f8e58b9",
+    "renderedLength": 52,
+    "renderedExports": ["IndexContext"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.min.js?commonjs-exports",
+    "transformedSourceSha256": "45b7e07ced07e741fa18d2e3834d911ad163ad24c2631d6768788c71dfd8f49f",
+    "renderedLength": 49,
+    "renderedExports": ["__exports"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react-dom/client.js?commonjs-es-import",
+    "transformedSourceSha256": "3f15003da47cf8ecd93e4fa2f958386bf65b900b1c9066a0a50dee4a2d8427e9",
+    "renderedLength": 36,
+    "renderedExports": ["__moduleExports"],
+    "removedExports": ["default"]
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react-dom/cjs/react-dom-client.production.js?commonjs-exports",
+    "transformedSourceSha256": "7e074f976c240a996c04e8472153225d7d77d0657c60752c3b6ef990b44930a3",
+    "renderedLength": 35,
+    "renderedExports": ["__exports"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/use-sync-external-store/shim/index.js?commonjs-es-import",
+    "transformedSourceSha256": "5c57c532cb41d21a3bb3327b15de1a73000e09184ac48b621df611ffa5f030b7",
+    "renderedLength": 32,
+    "renderedExports": ["__moduleExports"],
+    "removedExports": ["default"]
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/scheduler/cjs/scheduler.production.js?commonjs-exports",
+    "transformedSourceSha256": "cebd3c7b3f0127162489c3eca1032cd29478bec1885b050fa3bf07d56a01d142",
+    "renderedLength": 30,
+    "renderedExports": ["__exports"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/scheduler/index.js?commonjs-module",
+    "transformedSourceSha256": "de8e588052823cec918e91ca43dd82fe5e1a142a5b2694bff7a3252709dbf936",
+    "renderedLength": 30,
+    "renderedExports": ["__module"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react-dom/cjs/react-dom.production.js?commonjs-exports",
+    "transformedSourceSha256": "efe142fe05eab24877ce7d6e1ad8c9ba9cdb0aeea426d830d4ee9e8264b4fc0a",
+    "renderedLength": 29,
+    "renderedExports": ["__exports"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react-dom/index.js?commonjs-module",
+    "transformedSourceSha256": "fb180274a8e80d866f5402b1c96b4acbc756d79b60eea9ee8cf490121d17f744",
+    "renderedLength": 29,
+    "renderedExports": ["__module"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react-dom/client.js?commonjs-module",
+    "transformedSourceSha256": "36fdb00c4b7df00da5cc5df4c37b45fa7f892440ab238b59c9b2179993e0814b",
+    "renderedLength": 27,
+    "renderedExports": ["__module"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react/cjs/react.production.js?commonjs-exports",
+    "transformedSourceSha256": "595b523098c614ad0908e216f74af302ad4ebc7ca5c4496aec79a0613c5cb0ca",
+    "renderedLength": 26,
+    "renderedExports": ["__exports"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/react/index.js?commonjs-module",
+    "transformedSourceSha256": "a93d97bbaf40d63764a8d188bfb926b39877d9b980ff1578d0176a8d6d46a56f",
+    "renderedLength": 26,
+    "renderedExports": ["__module"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch-core/dist/es/version.js",
+    "transformedSourceSha256": "4aa90d39f2cbc4680da46c3c68d58ace68c1e894966dbc6019b92ea38fd7ae28",
+    "renderedLength": 25,
+    "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "virtual/commonjs/node_modules/use-sync-external-store/shim/index.js?commonjs-module",
+    "transformedSourceSha256": "b08f0edefab025b946a0e6c4a594d3b253bbddec542d139384efd4805fdced49",
+    "renderedLength": 25,
+    "renderedExports": ["__module"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch.js/es/lib/version.js",
+    "transformedSourceSha256": "a6ea86b0565a748766f5d7768330889db13cfa7b2fb0317699e4425cba526afc",
+    "renderedLength": 24,
+    "renderedExports": ["default"],
+    "removedExports": []
+  }
+]

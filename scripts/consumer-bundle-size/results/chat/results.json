@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "resultStatus": "provisional",
+  "libraryBaseCommit": "f7c7f52aac694f2346c9433e3f43cb8bb18840e3",
+  "harnessCommit": null,
+  "measurementCommit": "f7c7f52aac694f2346c9433e3f43cb8bb18840e3",
+  "measurementTree": "014a104ae80ae7fba57e1ee0f8ac2e8e77456495",
+  "candidateCommit": null,
+  "patchHash": "1559b4d1c09612dd2e548ed817ce40a10c967c49f0880fb3cc2577c2eecc1402",
+  "repositoryClean": false,
+  "harnessSourceSha256": "f84517995af4b3b200c0872f080b302158084f89f6048f830aa4ff5563ee00e7",
+  "environment": {
+    "nodeVersion": "20.19.0",
+    "yarnVersion": "1.22.22",
+    "rollupVersion": "4.29.1",
+    "nodeResolvePluginVersion": "16.0.0",
+    "commonjsPluginVersion": "28.0.2",
+    "jsonPluginVersion": "6.1.0",
+    "replacePluginVersion": "6.0.2",
+    "terserPluginVersion": "0.4.4",
+    "terserEngineVersion": "5.46.0",
+    "zlibVersion": "1.3.0.1-motley-82a5fec",
+    "platform": "darwin",
+    "architecture": "arm64"
+  },
+  "measurementContract": {
+    "entryNames": ["js-basic", "js-chat", "react-basic", "react-chat"],
+    "externalModules": [],
+    "outputFormat": "es",
+    "sourceMap": false,
+    "inlineDynamicImports": true,
+    "treeshake": true,
+    "environmentReplacements": {
+      "__DEV__": false,
+      "process.env.NODE_ENV": "production"
+    },
+    "pluginOrder": [
+      "createResolvePlugin",
+      "createCommonjsPlugin",
+      "json",
+      "createReplacePlugin",
+      "createProvenancePlugin",
+      "createTerserPlugin"
+    ],
+    "terserOptions": {
+      "maxWorkers": 1,
+      "compress": {
+        "passes": 4,
+        "toplevel": true,
+        "pure_getters": true
+      },
+      "mangle": {
+        "toplevel": true
+      }
+    },
+    "gzipLevel": 9,
+    "yarnLockSha256": "4b28955df49f41124863ed20b0b6d7db07ef0e05a3948e2eca4c2d738a2578ab"
+  },
+  "contractHash": "806bd9138668e5ebb80c860bfbf4e1d93709cf04427f5530b13000027a27cac1",
+  "resolvedInputGraphHash": "5eaf9f6ac8c120b0384b4febc6ad6bca0b6ae81eda635b5117a3474315440d86",
+  "approvedCandidatePaths": [],
+  "candidateChangedPaths": [],
+  "fixtures": {
+    "label": "static retention microbenchmarks",
+    "measurement": "total loaded graph",
+    "searchClient": {
+      "path": "scripts/consumer-bundle-size/fixtures/search-client.mjs",
+      "sha256": "ea2df869dee913a17767efe4b8a991a66a99faa0ac66774826321764984804b0"
+    },
+    "entries": [
+      {
+        "name": "js-basic",
+        "path": "scripts/consumer-bundle-size/fixtures/js-basic.mjs",
+        "flavor": "javascript",
+        "includesChat": false
+      },
+      {
+        "name": "js-chat",
+        "path": "scripts/consumer-bundle-size/fixtures/js-chat.mjs",
+        "flavor": "javascript",
+        "includesChat": true
+      },
+      {
+        "name": "react-basic",
+        "path": "scripts/consumer-bundle-size/fixtures/react-basic.mjs",
+        "flavor": "react",
+        "includesChat": false
+      },
+      {
+        "name": "react-chat",
+        "path": "scripts/consumer-bundle-size/fixtures/react-chat.mjs",
+        "flavor": "react",
+        "includesChat": true
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run": 1,
+      "fixtures": {
+        "js-basic": {
+          "entrySha256": "8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10",
+          "resolvedInputGraphSha256": "130bdb2b1a7f7860b0d40b2f48ca3509aab2cd979066ad5f169595c043b74ee3",
+          "minifiedBytes": 167044,
+          "gzipBytes": 46530,
+          "minifiedSha256": "4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4",
+          "gzipSha256": "a419faf9a5a2c4899001d1c6eed695ef29d05a0574587e5f1c9be95e4178c9ea",
+          "attributionSha256": "75744b7fe346659936700877d79b2fd0aef3ac90789da6c7d9657402424089c5"
+        },
+        "js-chat": {
+          "entrySha256": "de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd",
+          "resolvedInputGraphSha256": "e237b8b702e1113c4289a8cacafbff7d27937a031a1b292bce196c287c4d2031",
+          "minifiedBytes": 290388,
+          "gzipBytes": 83576,
+          "minifiedSha256": "207d4a936d1e3e6d917a3bf29e5dd7b3720d7ddc77cbea06bc1ac4e44980f425",
+          "gzipSha256": "8270e599fb43229b21de13d6588a627cead74fcdd607f197563288a9a7c41d37",
+          "attributionSha256": "0f8f98a950816c3294bb1258c45c46e2c47e001fb918149a06aec6fdb927d10f"
+        },
+        "react-basic": {
+          "entrySha256": "d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc",
+          "resolvedInputGraphSha256": "d729da9c5c56244283e27e4612be7533379b7d88f83a4cc105e03e7120a207dd",
+          "minifiedBytes": 323255,
+          "gzipBytes": 94642,
+          "minifiedSha256": "3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b",
+          "gzipSha256": "eab4bafae93d69ed1a64c3b7bd87d41c23c3c3ddb87e9d406b091664a4d65ecd",
+          "attributionSha256": "6e0fd5b301d74480aa66e280421584da78aa798173dbf4d1dd2d1fb16d8bc87d"
+        },
+        "react-chat": {
+          "entrySha256": "c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff",
+          "resolvedInputGraphSha256": "d7d1e23a3a28e8fb35773043f5c0cb8bf022723801094216a85919c429ef44a4",
+          "minifiedBytes": 430159,
+          "gzipBytes": 125962,
+          "minifiedSha256": "e43f0d1bc4eea6f87c27f41440006743ea1d7f9129e5fc093d66085726210902",
+          "gzipSha256": "5356200ed3c0d62b0802ec5b07e1deb537dc29859793c2dd110d4b8e8b0d0b4a",
+          "attributionSha256": "4ea97f950e2d5e3580f09084ac0aecca2d46747a5cbbb5024f9d931e710cd54e"
+        }
+      }
+    }
+  ],
+  "comparison": {
+    "retention": {
+      "js": {
+        "chatMinusBasicMinifiedBytes": 123344,
+        "chatMinusBasicGzipBytes": 37046
+      },
+      "react": {
+        "chatMinusBasicMinifiedBytes": 106904,
+        "chatMinusBasicGzipBytes": 31320
+      }
+    },
+    "candidate": null
+  },
+  "candidates": []
+}
