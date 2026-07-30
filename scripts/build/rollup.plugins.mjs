@@ -59,7 +59,7 @@ export function createSwcPlugin(options = {}) {
       ...jscOverrides,
     },
     env: {
-      targets: 'ie >= 11',
+      targets: ['chrome >= 60', 'firefox >= 55', 'safari >= 12.2', 'not op_mini all'],
       // Don't inject polyfills - let consumers handle that
       ...envOverrides,
     },

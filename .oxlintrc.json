@@ -321,31 +321,7 @@
         "jest/no-export": "off",
         "jest/unbound-method": "off",
         "react-hooks/exhaustive-deps": "off",
-        "react-hooks/rules-of-hooks": "off",
-        "no-unused-vars": [
-          "error",
-          {
-            "argsIgnorePattern": "^_",
-            "caughtErrors": "none",
-            "ignoreRestSiblings": true,
-            "varsIgnorePattern": "WebdriverIOAsync"
-          }
-        ]
-      }
-    },
-    {
-      "env": {
-        "jasmine": true
-      },
-      "files": [
-        "tests/e2e/all-flavors.spec.ts",
-        "tests/e2e/helpers/**/*.ts",
-        "tests/e2e/specs/**/*.spec.ts",
-        "tests/e2e/wdio.*.conf.js"
-      ],
-      "rules": {
-        "@typescript-eslint/no-namespace": "off",
-        "jest/no-export": "off"
+        "react-hooks/rules-of-hooks": "off"
       }
     },
     {

@@ -1,28 +1,28 @@
 const webpack = require('webpack');
 
 module.exports = ({ config, mode }) => {
-  // Add babel-loader rule ONLY for algoliasearch to handle modern JS syntax
-  // (optional chaining, etc.) that Storybook 5.3.9/Webpack 4 can't parse.
+  // Down-level modern JS syntax (optional chaining, nullish coalescing) that
+  // Storybook 5.3.9 / webpack 4 can't parse. This hits the SWC-built workspace
+  // deps (`instantsearch.js`, `instantsearch-ui-components`, `algoliasearch-helper`,
+  // resolved via symlink to `packages/*` so their paths have no `node_modules/`)
+  // and the `algoliasearch` vendor package. With no browser targets, preset-env
+  // transpiles everything down so webpack 4 can parse it.
   //
-  // IMPORTANT: Do NOT include the project's own source files in this rule.
-  // Vue SFC scripts are already processed by Storybook's built-in babel-loader
-  // via vue-loader. Adding another babel-loader pass would cause
-  // "export 'default' was not found" errors.
+  // IMPORTANT: Do NOT re-process Vue InstantSearch's own source. Its `.js`/SFC
+  // files are already handled by Storybook's built-in babel-loader; a second
+  // pass causes "export 'default' was not found" errors.
   config.module.rules.push({
     test: /\.js$/,
-    include: /node_modules\/algoliasearch/,
+    exclude: (modulePath) =>
+      /packages\/vue-instantsearch\/src\//.test(modulePath) ||
+      /node_modules\/(?!(algoliasearch|instantsearch\.js|instantsearch-ui-components|algoliasearch-helper)\/).*/.test(
+        modulePath
+      ),
     use: [
       {
         loader: 'babel-loader',
         options: {
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                targets: { ie: 11 },
-              },
-            ],
-          ],
+          presets: ['@babel/preset-env'],
         },
       },
     ],

@@ -6,7 +6,9 @@ module.exports = ({ config, mode }) => {
 
   config.module.rules.push({
     test: /\.(js|ts|tsx)$/,
-    exclude: /node_modules\/(?!(algoliasearch)\/).*/,
+    // Transpile our own source plus workspace deps that ship modern syntax
+    // (SWC-built `dist/es`, e.g. optional chaining) — webpack 4 can't parse it.
+    exclude: /node_modules\/(?!(algoliasearch|instantsearch-ui-components)\/).*/,
     use: [
       {
         loader: 'babel-loader',

@@ -355,21 +355,20 @@ To run the test continuously based on what you changed (useful when developing o
 yarn test --watch
 ```
 
-End-to-end tests are defined in [tests/e2e](./tests/e2e/README.md).
+End-to-end tests use [Playwright](https://playwright.dev) and are defined in [tests/e2e](./tests/e2e/README.md).
 
-To run them locally:
-
-```sh
-yarn test:e2e:local
-```
-
-To run them on Sauce Labs:
+Build the examples first, then run them locally:
 
 ```sh
-yarn test:e2e:saucelabs
+yarn website:examples
+yarn test:e2e
 ```
 
-> **Note** Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+Scope to a single flavor and/or browser for faster local iteration:
+
+```sh
+E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
+```
 
 For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 

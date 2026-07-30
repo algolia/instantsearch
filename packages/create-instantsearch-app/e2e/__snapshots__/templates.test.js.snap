@@ -2876,8 +2876,7 @@ exports[`Templates InstantSearch.js widget File content: package.json 1`] = `
     \\"last 2 chrome versions\\",
     \\"last 2 firefox versions\\",
     \\"last 2 edge versions\\",
-    \\"last 2 safari versions\\",
-    \\"IE 11\\"
+    \\"last 2 safari versions\\"
   ],
   \\"partialDependencies\\": {}
 }"
@@ -4807,7 +4806,7 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   \\"browserslist\\": [
     \\"> 1%\\",
     \\"last 2 versions\\",
-    \\"not ie <= 8\\"
+    \\"not dead\\"
   ],
   \\"partialDependencies\\": {
     \\"vue-instantsearch\\": \\"3.0.0\\"
