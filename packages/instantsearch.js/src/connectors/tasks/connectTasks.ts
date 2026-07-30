@@ -1,4 +1,4 @@
-import { createTaskRunner, resolveEndpoint } from '../../lib/tasks';
+import { resolveEndpoint, TaskController } from '../../lib/tasks';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -7,8 +7,16 @@ import {
   noop,
 } from '../../lib/utils';
 
-import type { TaskRunner, TaskTransport } from '../../lib/tasks';
-import type { Renderer, Unmounter, Widget } from '../../types';
+import type { TaskTransport } from '../../lib/tasks';
+import type {
+  IndexRenderState,
+  InitOptions,
+  Renderer,
+  RenderOptions,
+  Unmounter,
+  Widget,
+  WidgetRenderState,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'tasks',
@@ -43,6 +51,33 @@ export type TasksRenderState<TOutput = unknown> = {
    * flag. Use when the inputs that produced the request are no longer valid.
    */
   invalidate: () => void;
+  /**
+   * Re-runs the search-driven `input` immediately, bypassing the debounce.
+   * No-op in manual mode (no `input`) or while a request is already in flight.
+   */
+  refresh: () => void;
+};
+
+/**
+ * Optional search-driven mode. When `input` is set, the widget auto-submits
+ * whenever the derived input changes between renders — the task-side analog of
+ * how `index` re-runs a search when the UI state changes. Without it, the
+ * widget is purely manual and `submit`/`invalidate` are driven by the consumer.
+ */
+export type TasksSearchDrive = {
+  /**
+   * Maps the current render (search results and state) to the task `input`.
+   * Return `null` to clear the output without firing a request (e.g. no results
+   * to describe). Called at submit time, after the debounce.
+   */
+  input?: (renderOptions: RenderOptions) => Record<string, unknown> | null;
+  /**
+   * Dedup key derived from the current render; when it is unchanged between
+   * renders, no refetch fires. Defaults to a JSON stringify of `input(...)`.
+   */
+  getSignature?: (renderOptions: RenderOptions) => string | null;
+  /** Debounce (ms) applied to auto-refetch on a signature change. Default `0`. */
+  debounce?: number;
 };
 
 /**
@@ -58,10 +93,35 @@ export type TasksSource =
       agentId?: never;
     };
 
-export type TasksConnectorParams = TasksSource & {
-  task: string;
-  stream?: boolean;
-};
+/**
+ * Projects the raw task engine state into a custom widget render state. Receives
+ * the current render options so it can read search `results`/`parent`. When set,
+ * its result is what the render function and `getWidgetRenderState` expose — the
+ * mapper owns the full shape, including its own `widgetParams`. This is the hook
+ * a *preset* over `connectTasks` (e.g. `connectPromptSuggestions`) uses to expose
+ * a domain-specific render state instead of the generic task state.
+ */
+export type TasksMapRenderState = (
+  state: TasksRenderState,
+  renderOptions: InitOptions | RenderOptions
+) => Record<string, unknown>;
+
+export type TasksConnectorParams = TasksSource &
+  TasksSearchDrive & {
+    task: string;
+    stream?: boolean;
+    /**
+     * Render-state key under which the widget exposes its state in the index
+     * render state. Defaults to `'tasks'`. Presets override it (e.g.
+     * `'promptSuggestions'`) so consumers read `renderState[indexId].<key>`.
+     */
+    renderStateKey?: string;
+    /**
+     * Optional projection from the task engine state to a custom render state.
+     * See {@link TasksMapRenderState}.
+     */
+    mapRenderState?: TasksMapRenderState;
+  };
 
 export type TasksWidgetDescription<TOutput = unknown> = {
   $$type: 'ais.tasks';
@@ -84,7 +144,17 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { agentId, transport, task, stream = true } = widgetParams;
+    const {
+      agentId,
+      transport,
+      task,
+      stream = true,
+      input,
+      getSignature,
+      debounce = 0,
+      renderStateKey = 'tasks',
+      mapRenderState,
+    } = widgetParams;
 
     if (!agentId && !transport) {
       throw new Error(
@@ -98,89 +168,113 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       throw new Error(withUsage('The `task` option is required.'));
     }
 
-    let runner: TaskRunner;
-    let output: TOutput | undefined;
-    let isLoading = false;
-    let error: Error | undefined;
-    let disposed = false;
-    let triggerRender: () => void = noop;
-    let requestId = 0;
+    // The stateful request engine (output/isLoading/error, request
+    // sequencing). Created in `init` once credentials are resolvable from the
+    // search client; `undefined` beforehand.
+    let controller: TaskController<TOutput> | undefined;
+    let unsubscribe: () => void = noop;
+
+    // Search-driven mode: auto-submit whenever the input signature changes.
+    const autoMode = typeof input === 'function';
+    let latestRenderOptions: InitOptions | RenderOptions | undefined;
+    let lastSignature: string | null = null;
+    let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+    // True between a signature change and the debounced submit that follows.
+    // While pending, a still-in-flight previous request must not paint, so
+    // controller emits are suppressed until the new submit starts.
+    let refetchPending = false;
+
+    const computeSignature = (
+      renderOptions: RenderOptions
+    ): string | null => {
+      if (getSignature) {
+        return getSignature(renderOptions);
+      }
+      const nextInput = input!(renderOptions);
+      return nextInput === null ? null : JSON.stringify(nextInput);
+    };
+
+    const fire = (renderOptions: RenderOptions) => {
+      if (!controller) {
+        return;
+      }
+      refetchPending = false;
+      const nextInput = input!(renderOptions);
+      if (nextInput === null) {
+        // Nothing to describe — clear any previous output rather than fetch.
+        controller.reset();
+        return;
+      }
+      controller.submit(nextInput);
+    };
 
     const submit = (
       variables: Record<string, unknown>
-    ): Promise<TOutput | undefined> => {
-      if (disposed) return Promise.resolve(undefined);
-      const currentRequestId = (requestId += 1);
-      const isStale = () => disposed || currentRequestId !== requestId;
-      // Clear the previous output so consumers can show a loading state
-      // rather than stale data while the new request is in flight.
-      output = undefined;
-      error = undefined;
-      isLoading = true;
-      triggerRender();
-
-      return Promise.resolve()
-        .then(() =>
-          runner.submit(variables, {
-            onData: stream
-              ? (partial) => {
-                  if (isStale()) return;
-                  output = partial as TOutput;
-                  triggerRender();
-                }
-              : undefined,
-          })
-        )
-        .then((next): TOutput | undefined => {
-          const result = next as TOutput;
-          if (!isStale()) {
-            output = result;
-          }
-          return result;
-        })
-        .catch((err): TOutput | undefined => {
-          if (!isStale()) {
-            output = undefined;
-            error = err instanceof Error ? err : new Error(String(err));
-          }
-          return undefined;
-        })
-        .finally(() => {
-          if (isStale()) return;
-          isLoading = false;
-          triggerRender();
-        });
-    };
+    ): Promise<TOutput | undefined> =>
+      controller ? controller.submit(variables) : Promise.resolve(undefined);
 
     const invalidate = () => {
-      if (disposed) return;
-      // Bump the request id so any in-flight request's callbacks see
-      // `isStale()` and are ignored. The fetch itself is left to complete.
-      requestId += 1;
-      isLoading = false;
-      triggerRender();
+      controller?.invalidate();
     };
 
-    const getWidgetRenderState = (): TasksRenderState<TOutput> & {
-      widgetParams: TasksConnectorParams;
-    } => ({
-      output,
-      isLoading,
-      error,
+    const refresh = () => {
+      if (!autoMode || !controller || controller.isLoading) {
+        return;
+      }
+      const renderOptions = latestRenderOptions;
+      if (!renderOptions || !('results' in renderOptions) || !renderOptions.results) {
+        return;
+      }
+      clearTimeout(debounceTimer);
+      lastSignature = computeSignature(renderOptions);
+      fire(renderOptions);
+    };
+
+    const buildEngineState = (): TasksRenderState<TOutput> => ({
+      output: controller?.output,
+      isLoading: controller?.isLoading ?? false,
+      error: controller?.error,
       submit,
       invalidate,
-      widgetParams,
+      refresh,
     });
+
+    // The widget render state exposed to the render function and to consumers.
+    // With `mapRenderState`, the mapper owns the full shape (including its own
+    // `widgetParams`); otherwise it's the raw engine state plus this widget's
+    // `widgetParams`.
+    const computeWidgetRenderState = (
+      renderOptions: InitOptions | RenderOptions
+    ): Record<string, unknown> =>
+      mapRenderState
+        ? mapRenderState(buildEngineState(), renderOptions)
+        : { ...buildEngineState(), widgetParams };
+
+    // Calls the render function with the current widget render state merged with
+    // the active `instantSearchInstance`.
+    const triggerRender = (
+      renderOptions: InitOptions | RenderOptions,
+      isFirstRendering: boolean
+    ) => {
+      renderFn(
+        {
+          ...computeWidgetRenderState(renderOptions),
+          instantSearchInstance: renderOptions.instantSearchInstance,
+        } as unknown as Parameters<typeof renderFn>[0],
+        isFirstRendering
+      );
+    };
 
     return {
       $$type: 'ais.tasks',
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
+        latestRenderOptions = initOptions;
 
         if (transport) {
           const resolved = resolveEndpoint({ transport });
-          runner = createTaskRunner({
+          controller = new TaskController<TOutput>({
             endpoint: resolved.endpoint,
             headers: resolved.headers,
             task,
@@ -206,7 +300,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
             agentId,
             algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
           });
-          runner = createTaskRunner({
+          controller = new TaskController<TOutput>({
             endpoint: resolved.endpoint,
             headers: resolved.headers,
             task,
@@ -214,26 +308,62 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
           });
         }
 
-        triggerRender = () => {
-          renderFn({ ...getWidgetRenderState(), instantSearchInstance }, false);
-        };
+        unsubscribe = controller.on(() => {
+          // Ignore a stale in-flight request's emits during the debounce window
+          // so its output doesn't flash before the new submit starts.
+          if (refetchPending) {
+            return;
+          }
+          triggerRender(latestRenderOptions ?? initOptions, false);
+        });
 
-        renderFn({ ...getWidgetRenderState(), instantSearchInstance }, true);
+        triggerRender(initOptions, true);
       },
 
       render(renderOptions) {
-        renderFn(
-          {
-            ...getWidgetRenderState(),
-            instantSearchInstance: renderOptions.instantSearchInstance,
-          },
-          false
-        );
+        latestRenderOptions = renderOptions;
+
+        if (autoMode) {
+          const signature = renderOptions.results
+            ? computeSignature(renderOptions)
+            : null;
+          if (signature !== lastSignature) {
+            lastSignature = signature;
+            refetchPending = true;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              // Auto-mode only schedules from `render`, so by the time this
+              // fires `latestRenderOptions` is always a `RenderOptions`.
+              const options = latestRenderOptions as RenderOptions | undefined;
+              if (options) {
+                fire(options);
+              }
+            }, debounce);
+          }
+        }
+
+        triggerRender(renderOptions, false);
       },
 
       dispose() {
-        disposed = true;
+        clearTimeout(debounceTimer);
+        unsubscribe();
+        controller?.dispose();
         unmountFn();
+      },
+
+      getWidgetRenderState(renderOptions) {
+        return computeWidgetRenderState(renderOptions) as WidgetRenderState<
+          TasksRenderState<TOutput>,
+          TasksConnectorParams
+        >;
+      },
+
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          [renderStateKey]: computeWidgetRenderState(renderOptions),
+        } as IndexRenderState;
       },
     };
   };
