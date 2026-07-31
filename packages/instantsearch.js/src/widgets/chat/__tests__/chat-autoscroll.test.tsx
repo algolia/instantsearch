@@ -13,11 +13,11 @@ import chat from '../chat';
 // a height-only ResizeObserver, which doesn't fire for content that grows
 // horizontally (e.g. a carousel) — the effect under test is what re-pins on
 // every message/status update instead.
-jest.mock('../../../lib/useStickToBottom', () => {
+jest.mock('../../../lib/useChatStickToBottom', () => {
   const scrollToBottom = jest.fn();
   return {
     __esModule: true,
-    useStickToBottom: () => ({
+    useChatStickToBottom: () => ({
       scrollRef: { current: null },
       contentRef: { current: null },
       scrollToBottom,
@@ -28,7 +28,7 @@ jest.mock('../../../lib/useStickToBottom', () => {
 });
 
 const { scrollToBottomSpy }: { scrollToBottomSpy: jest.Mock } =
-  jest.requireMock('../../../lib/useStickToBottom');
+  jest.requireMock('../../../lib/useChatStickToBottom');
 
 const STREAM = [
   '{"type":"start","messageId":"a1"}',

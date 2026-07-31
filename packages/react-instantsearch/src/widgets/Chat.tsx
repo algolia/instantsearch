@@ -18,7 +18,7 @@ import React, {
 } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { useStickToBottom } from '../lib/useStickToBottom';
+import { useChatStickToBottom } from '../lib/useChatStickToBottom';
 
 import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
@@ -253,10 +253,7 @@ function ChatInner<
   const promptRef = useRef<HTMLTextAreaElement>(null);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
-    useStickToBottom({
-      initial: 'smooth',
-      resize: 'smooth',
-    });
+    useChatStickToBottom();
 
   const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);

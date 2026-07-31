@@ -15,7 +15,7 @@ import {
   DisplayResultsToolType,
 } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
-import { useStickToBottom } from '../../lib/useStickToBottom';
+import { useChatStickToBottom } from '../../lib/useChatStickToBottom';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -225,10 +225,7 @@ function ChatWrapper({
   state,
 }: ChatWrapperProps) {
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
-    useStickToBottom({
-      initial: 'smooth',
-      resize: 'smooth',
-    });
+    useChatStickToBottom();
 
   // Keep the conversation pinned to the bottom while streaming. The stick-to-
   // bottom ResizeObserver only reacts to content *height* changes, but tool
