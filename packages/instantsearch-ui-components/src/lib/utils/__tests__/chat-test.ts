@@ -2,8 +2,6 @@ import { getApplyFiltersParamsFromToolInput, getHitsByObjectID } from '../chat';
 
 import type { ChatMessageBase, ChatToolMessage } from '../../../components';
 
-type ToolInput = Parameters<typeof getApplyFiltersParamsFromToolInput>[0];
-
 describe('getApplyFiltersParamsFromToolInput', () => {
   test('returns nothing to refine when input is undefined', () => {
     expect(getApplyFiltersParamsFromToolInput(undefined)).toEqual({
@@ -40,7 +38,7 @@ describe('getApplyFiltersParamsFromToolInput', () => {
         facet__collections: [],
         facet_price: [],
         userIntent: 'irrelevant',
-      } as ToolInput)
+      })
     ).toEqual({
       query: 'book',
       facetFilters: [
@@ -74,7 +72,7 @@ describe('getApplyFiltersParamsFromToolInput', () => {
         ],
         clickAnalytics: true,
         originalQuery: 'give me some laptops',
-      } as unknown as ToolInput)
+      })
     ).toEqual({
       query: 'laptop',
       facetFilters: [
@@ -97,7 +95,7 @@ describe('getApplyFiltersParamsFromToolInput', () => {
       getApplyFiltersParamsFromToolInput({
         query: '',
         facet__collections: ['summer'],
-      } as ToolInput).facetFilters
+      }).facetFilters
     ).toEqual([['_collections:summer']]);
   });
 
@@ -106,8 +104,8 @@ describe('getApplyFiltersParamsFromToolInput', () => {
       getApplyFiltersParamsFromToolInput({
         query: '',
         facet_brand: [],
-        facet_type: [42, 'book', null] as unknown as string[],
-      } as ToolInput).facetFilters
+        facet_type: [42, 'book', null],
+      }).facetFilters
     ).toEqual([['type:book']]);
   });
 
@@ -117,7 +115,7 @@ describe('getApplyFiltersParamsFromToolInput', () => {
         query: 'phone',
         facet_brand: [],
         facet_type: [],
-      } as ToolInput).facetFilters
+      }).facetFilters
     ).toBeUndefined();
   });
 });
