@@ -16,20 +16,17 @@ function useNativeIsHydrated() {
 }
 
 // React 16 and 17 have no `useSyncExternalStore`, so the flip waits for an
-// effect and the render itself cannot tell hydration from a plain mount. Being
-// inside one of the two server-rendering contexts stands in for that signal, and
-// between them they cover every render the SSR flow performs: the pass that
-// collects server state provides the server context, and the pass that produces
-// the HTML provides the SSR context, as does the browser hydrating that HTML.
+// effect and the render itself cannot tell hydration from a plain mount. These
+// contexts provide that signal for the supported `getServerState` and
+// `InstantSearchSSRProvider` flow: the server context covers state collection,
+// and the SSR context covers HTML rendering and hydration.
 //
-// The signal is still inexact, in the direction that costs a render rather than
-// correctness. An app that never server renders is in neither context and is
-// never withheld, so it behaves as it does without this hook; but a mount inside
-// a provider that carries server state is withheld for one render even long
-// after hydration, when there is no server markup left to reproduce.
+// This can cost an extra render: a mount inside a provider that carries server
+// state is withheld once even when there is no server markup to reproduce. A
+// mount outside both contexts is never withheld.
 //
-// Reusing the repository's `use-sync-external-store` shim would not help, since
-// it ignores the server snapshot and reports a hydration render as hydrated.
+// The shim's React 16 and 17 fallback ignores the server snapshot, so using it
+// here would not change this limitation.
 function useLegacyIsHydrated() {
   const serverContext = useInstantSearchServerContext();
   const ssrContext = useInstantSearchSSRContext();

@@ -184,6 +184,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   disableTriggerValidation?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
+   * This option has no effect during server rendering.
    */
   resume?: boolean;
   /**
@@ -216,6 +217,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
+   * This message is sent only in the browser.
    *
    * This message is only sent when the chat has no existing messages yet. If
    * messages were restored or otherwise already exist when the widget starts,
@@ -226,6 +228,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   initialUserMessage?: string;
   /**
    * Messages to pre-populate the chat with when it is initialized.
+   * These messages are applied only in the browser.
    *
    * These messages are set without triggering an AI response. They are only
    * applied when the chat has no existing messages yet. If messages were
@@ -445,8 +448,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
-      // A caller-owned `chat` brings its own transport, so resolving credentials
-      // and building one here would reject a configuration the public type allows.
+      // A caller supplied `chat` already owns its transport, so it bypasses the
+      // connector's transport construction and validation below.
       if ('chat' in options) {
         return options.chat;
       }
