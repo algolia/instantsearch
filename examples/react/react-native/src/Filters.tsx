@@ -2,17 +2,24 @@ import React from 'react';
 import {
   useClearRefinements,
   useCurrentRefinements,
-  useRefinementList,
 } from 'react-instantsearch-core';
 import {
   Button,
   Modal,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { HierarchicalMenu } from './HierarchicalMenu';
+import { Panel } from './Panel';
+import { PriceRange } from './PriceRange';
+import { RatingMenu } from './RatingMenu';
+import { RefinementList } from './RefinementList';
+import { ToggleRefinement } from './ToggleRefinement';
 
 type FiltersProps = {
   isModalOpen: boolean;
@@ -21,7 +28,6 @@ type FiltersProps = {
 };
 
 export function Filters({ isModalOpen, onToggleModal, onChange }: FiltersProps) {
-  const { items, refine } = useRefinementList({ attribute: 'brand' });
   const { canRefine: canClear, refine: clear } = useClearRefinements();
   const { items: currentRefinements } = useCurrentRefinements();
   const totalRefinements = currentRefinements.reduce(
@@ -34,8 +40,8 @@ export function Filters({ isModalOpen, onToggleModal, onChange }: FiltersProps) 
       <TouchableOpacity style={styles.filtersButton} onPress={onToggleModal}>
         <Text style={styles.filtersButtonText}>Filters</Text>
         {totalRefinements > 0 && (
-          <View style={styles.itemCount}>
-            <Text style={styles.itemCountText}>{totalRefinements}</Text>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{totalRefinements}</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -45,38 +51,51 @@ export function Filters({ isModalOpen, onToggleModal, onChange }: FiltersProps) 
         visible={isModalOpen}
         onRequestClose={onToggleModal}
       >
-        <SafeAreaView style={styles.safe}>
-          <View style={styles.container}>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>Brand</Text>
-            </View>
-            <View style={styles.list}>
-              {items.map((item) => (
-                <TouchableOpacity
-                  key={item.value}
-                  style={styles.item}
-                  onPress={() => {
-                    refine(item.value);
-                    onChange();
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.labelText,
-                      item.isRefined && styles.labelTextRefined,
-                    ]}
-                  >
-                    {item.label}
-                  </Text>
-                  <View style={styles.itemCount}>
-                    <Text style={styles.itemCountText}>{item.count}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
+        <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Filters</Text>
           </View>
-          <View style={styles.filterListButtonContainer}>
-            <View style={styles.filterListButton}>
+
+          <ScrollView contentContainerStyle={styles.body}>
+            <Panel header="Category">
+              <HierarchicalMenu
+                attributes={[
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                ]}
+                onChange={onChange}
+              />
+            </Panel>
+
+            <Panel header="Brands">
+              <RefinementList
+                attribute="brand"
+                searchable
+                searchablePlaceholder="Search for brands…"
+                onChange={onChange}
+              />
+            </Panel>
+
+            <Panel header="Price">
+              <PriceRange attribute="price" onChange={onChange} />
+            </Panel>
+
+            <Panel header="Free shipping">
+              <ToggleRefinement
+                attribute="free_shipping"
+                label="Display only items with free shipping"
+                on={true}
+                onChange={onChange}
+              />
+            </Panel>
+
+            <Panel header="Ratings">
+              <RatingMenu attribute="rating" onChange={onChange} />
+            </Panel>
+          </ScrollView>
+
+          <View style={styles.footer}>
+            <View style={styles.footerButton}>
               <Button
                 title="Clear all"
                 color="#252b33"
@@ -87,7 +106,7 @@ export function Filters({ isModalOpen, onToggleModal, onChange }: FiltersProps) 
                 }}
               />
             </View>
-            <View style={styles.filterListButton}>
+            <View style={styles.footerButton}>
               <Button
                 title="See results"
                 color="#252b33"
@@ -106,46 +125,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  container: {
-    flex: 1,
-    padding: 18,
-  },
-  title: {
+  header: {
     alignItems: 'center',
-    marginBottom: 10,
-  },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  list: {
-    marginTop: 16,
-  },
-  item: {
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#e5e5e5',
   },
-  labelText: {
-    fontSize: 16,
-  },
-  labelTextRefined: {
+  headerText: {
+    fontSize: 20,
     fontWeight: 'bold',
   },
-  filterListButtonContainer: {
+  body: {
+    paddingHorizontal: 18,
+    paddingBottom: 24,
+  },
+  footer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderTopWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#e5e5e5',
   },
-  filterListButton: {
+  footerButton: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 10,
   },
   filtersButton: {
     flexDirection: 'row',
@@ -161,14 +164,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#252b33',
   },
-  itemCount: {
+  badge: {
     backgroundColor: '#252b33',
     borderRadius: 24,
     paddingVertical: 2,
     paddingHorizontal: 6,
     marginLeft: 6,
   },
-  itemCountText: {
+  badgeText: {
     color: '#ffffff',
     fontSize: 12,
     fontWeight: '800',
