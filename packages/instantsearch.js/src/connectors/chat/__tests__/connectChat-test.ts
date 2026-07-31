@@ -356,6 +356,49 @@ describe('connectChat', () => {
 
   describe('browser side effects', () => {
     // Positive controls for the negative assertions in `connectChat-ssr.test.ts`.
+    it('registers callbacks that render chat updates', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      renderFn.mockClear();
+
+      const messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      chat.messages = messages;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ messages }),
+        false
+      );
+
+      chat._state.status = 'streaming';
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ status: 'streaming' }),
+        false
+      );
+
+      const error = new Error('Failed');
+      chat._state.error = error;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ error }),
+        false
+      );
+      expect(renderFn).toHaveBeenCalledTimes(3);
+    });
+
     it('still sends the initial user message in a browser', () => {
       const chat = new Chat({ persistence: false, transport: {} as any });
       const sendMessage = jest.fn();

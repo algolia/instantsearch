@@ -710,9 +710,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         });
 
-        _chatInstance['~registerErrorCallback'](render);
-        _chatInstance['~registerMessagesCallback'](render);
-        _chatInstance['~registerStatusCallback'](render);
+        safelyRunOnBrowser(() => {
+          _chatInstance['~registerErrorCallback'](render);
+          _chatInstance['~registerMessagesCallback'](render);
+          _chatInstance['~registerStatusCallback'](render);
+        });
 
         // Resuming and sending reach the network, which a server render must
         // not: the HTML pass repeats what `getServerState` already rendered, so

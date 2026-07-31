@@ -26,6 +26,18 @@ function createServerWidget(
 }
 
 describe('connectChat server rendering', () => {
+  it('does not retain callbacks across initializations', () => {
+    const chat = new Chat<any>({ persistence: false, transport: {} as any });
+    const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+
+    createServerWidget({}, chat).init(createInitOptions({ helper }));
+    createServerWidget({}, chat).init(createInitOptions({ helper }));
+
+    expect(chat._state._messagesCallbacks.size).toBe(0);
+    expect(chat._state._statusCallbacks.size).toBe(0);
+    expect(chat._state._errorCallbacks.size).toBe(0);
+  });
+
   it('does not send the initial user message', () => {
     const chat = new Chat<any>({ persistence: false, transport: {} as any });
     const sendMessage = jest.fn();
