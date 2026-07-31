@@ -14,14 +14,14 @@ Result state: **verified**.
 | --- | --- |
 | Library base commit | `f7c7f52aac694f2346c9433e3f43cb8bb18840e3` |
 | Harness commit | `df1233ad6915268da35add99f7a556698329c821` |
-| Measurement commit | `df1233ad6915268da35add99f7a556698329c821` |
-| Measurement tree | `2de436c75dfb6ed74023039b94df51f89328b458` |
-| Candidate commit | Not applicable |
+| Measurement commit | `ae380ecdfc4146950aef4cd32b8f60c95d7e9235` |
+| Measurement tree | `1b803c4e53d84a5fd91fccc5416b3c6b32eb3697` |
+| Candidate commit | `ae380ecdfc4146950aef4cd32b8f60c95d7e9235` |
 | Patch hash | Not applicable |
 | Repository clean before measurement | `true` |
 | Harness source SHA256 | `36211e7dee4e014b52e1c3caa4668e02eb150fbb0e04d0235730ffb7081767e3` |
 | Contract SHA256 | `04c9afea42e3cedcc0e7fcc6889d57cd17da09a1f060085084b8b51a143ebe5d` |
-| Resolved input graph SHA256 | `5eaf9f6ac8c120b0384b4febc6ad6bca0b6ae81eda635b5117a3474315440d86` |
+| Resolved input graph SHA256 | `bf48390cb6ee420c045247c7a9236a19efb912516c72f17f377c2c0e0c9dad71` |
 
 ### Environment
 
@@ -69,27 +69,23 @@ External modules: `[]`. React and React DOM remain bundled in React entries. The
 | `react-basic` | verified | 323255 | 323.3 | 94642 | 94.6 |
 | `react-chat` | verified | 430159 | 430.2 | 125962 | 126.0 |
 
-## Provisional impact
-
-No provisional values are presented as verified results.
-
 ## Fixture and output hashes
 
 Shared search client SHA256: `ea2df869dee913a17767efe4b8a991a66a99faa0ac66774826321764984804b0`.
 
 | Entry | State | Entry SHA256 | Input graph SHA256 | Minified SHA256 | Gzip SHA256 | Attribution SHA256 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `js-basic` | verified | `8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10` | `130bdb2b1a7f7860b0d40b2f48ca3509aab2cd979066ad5f169595c043b74ee3` | `4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4` | `a419faf9a5a2c4899001d1c6eed695ef29d05a0574587e5f1c9be95e4178c9ea` | `75744b7fe346659936700877d79b2fd0aef3ac90789da6c7d9657402424089c5` |
-| `js-chat` | verified | `de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd` | `e237b8b702e1113c4289a8cacafbff7d27937a031a1b292bce196c287c4d2031` | `207d4a936d1e3e6d917a3bf29e5dd7b3720d7ddc77cbea06bc1ac4e44980f425` | `8270e599fb43229b21de13d6588a627cead74fcdd607f197563288a9a7c41d37` | `0f8f98a950816c3294bb1258c45c46e2c47e001fb918149a06aec6fdb927d10f` |
-| `react-basic` | verified | `d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc` | `d729da9c5c56244283e27e4612be7533379b7d88f83a4cc105e03e7120a207dd` | `3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b` | `eab4bafae93d69ed1a64c3b7bd87d41c23c3c3ddb87e9d406b091664a4d65ecd` | `6e0fd5b301d74480aa66e280421584da78aa798173dbf4d1dd2d1fb16d8bc87d` |
-| `react-chat` | verified | `c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff` | `d7d1e23a3a28e8fb35773043f5c0cb8bf022723801094216a85919c429ef44a4` | `e43f0d1bc4eea6f87c27f41440006743ea1d7f9129e5fc093d66085726210902` | `5356200ed3c0d62b0802ec5b07e1deb537dc29859793c2dd110d4b8e8b0d0b4a` | `4ea97f950e2d5e3580f09084ac0aecca2d46747a5cbbb5024f9d931e710cd54e` |
+| `js-basic` | verified | `8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10` | `99d1969e41c12afb929508104c025770ba5a72699e40a24e76fade4d92f52ab3` | `4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4` | `a419faf9a5a2c4899001d1c6eed695ef29d05a0574587e5f1c9be95e4178c9ea` | `75744b7fe346659936700877d79b2fd0aef3ac90789da6c7d9657402424089c5` |
+| `js-chat` | verified | `de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd` | `e327e21e71ed3a0bfae2a98499d33892bc296efc8f678bc8956345b86b52f950` | `0e3e375c0d56ac92470486dac29e2961d3207c51f459b8119474e711f5c408d5` | `d4356184fcc9e57119a33b66982fcc8792b2dfb0c4d57e3ab7b1196ba3ee58b5` | `cc9af2b6c5be3e80e2383b45721f2bbf4b1efc7d97dd416251732e12460a8c66` |
+| `react-basic` | verified | `d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc` | `caa3f3a7a1517a9d5e5ad0cb3f7b2de57b4634ec026d253d6add6fed29c6cac4` | `3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b` | `eab4bafae93d69ed1a64c3b7bd87d41c23c3c3ddb87e9d406b091664a4d65ecd` | `6e0fd5b301d74480aa66e280421584da78aa798173dbf4d1dd2d1fb16d8bc87d` |
+| `react-chat` | verified | `c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff` | `bc3b7564c689e6ea88f45451fa136bcfd8904171d3fd0b48c6f1d32fa5cb62cf` | `754440746dc808a11a5f3fbf2629872f666b39f6d3f1d03220cae96f72323e60` | `0f6c884778398ac538e3c1eb4a1ae9e219b89ba64c3c3647bd54b762b8ca65af` | `48c3714becd2d3016c8616c586e355cc5b849bee38c6dd4b455b68f6e7ef077d` |
 
 ## Retention comparison
 
 | Flavor | State | Chat minus basic minified bytes | Chat minus basic gzip bytes |
 | --- | --- | --: | --: |
-| js | verified | 123344 | 37046 |
-| react | verified | 106904 | 31320 |
+| js | verified | 122999 | 37020 |
+| react | verified | 106544 | 31215 |
 
 ## Retained module attribution
 
@@ -125,15 +121,15 @@ The basic SearchBox path retains the shared Chat opening helper because the buil
 | `packages/algoliasearch-helper/src/SearchParameters/index.js` | 57766 |
 | `packages/algoliasearch-helper/src/SearchResults/index.js` | 37824 |
 | `packages/instantsearch.js/es/generated/200b0f0b2b5c90fd1df895e1c894f4216f8888e55132fe79db6dec098ddaa31c.js` | 33399 |
-| `packages/instantsearch.js/es/widgets/chat/chat.js` | 29755 |
+| `packages/instantsearch.js/es/widgets/chat/chat.js` | 29720 |
 | `packages/instantsearch.js/es/generated/634593b8fd98242540de4a3886216cc9aa688eb7499bc09cdc56f13e03051a15.js` | 28341 |
 | `packages/instantsearch.js/es/connectors/chat/connectChat.js` | 24788 |
 | `packages/instantsearch.js/es/generated/885fb9a06bda515d5542636aa0c4ca40ce7ca1407054c8aa049e7378584892ed.js` | 22372 |
-| `packages/instantsearch-ui-components/dist/es/lib/stickToBottom.js` | 20819 |
+| `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js` | 20391 |
 
 React modules retained: `node_modules/react/cjs/react.production.js`, `node_modules/react/index.js`.
 
-Chat or ai-lite modules retained: `packages/instantsearch.js/es/lib/ai-lite/abstract-chat.js`, `packages/instantsearch.js/es/widgets/chat/chat.js`, `packages/instantsearch.js/es/connectors/chat/connectChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js`, `packages/instantsearch-ui-components/dist/es/components/chat/icons.js`, `packages/instantsearch.js/es/lib/ai-lite/transport.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPrompt.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/CarouselTool.js`, `packages/instantsearch.js/es/lib/chat/chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/Chat.js`, `packages/instantsearch-ui-components/dist/es/lib/utils/chat.js`, `packages/instantsearch.js/es/lib/ai-lite/stream-parser.js`, `packages/instantsearch.js/es/lib/ai-lite/utils.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageError.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatHeader.js`, `packages/instantsearch.js/es/widgets/chat/display-results-tool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageReasoning.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatOverlayLayout.js`, `packages/instantsearch.js/es/lib/chat/openChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageLoader.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPromptSuggestions.js`, `packages/instantsearch.js/es/widgets/chat/search-index-tool.js`, `packages/instantsearch.js/es/lib/chat/index.js`.
+Chat or ai-lite modules retained: `packages/instantsearch.js/es/lib/ai-lite/abstract-chat.js`, `packages/instantsearch.js/es/widgets/chat/chat.js`, `packages/instantsearch.js/es/connectors/chat/connectChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js`, `packages/instantsearch-ui-components/dist/es/components/chat/icons.js`, `packages/instantsearch.js/es/lib/ai-lite/transport.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPrompt.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/CarouselTool.js`, `packages/instantsearch.js/es/lib/chat/chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/Chat.js`, `packages/instantsearch-ui-components/dist/es/lib/utils/chat.js`, `packages/instantsearch.js/es/lib/ai-lite/stream-parser.js`, `packages/instantsearch.js/es/lib/ai-lite/utils.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageError.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatHeader.js`, `packages/instantsearch.js/es/widgets/chat/display-results-tool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageReasoning.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatOverlayLayout.js`, `packages/instantsearch-ui-components/dist/es/lib/chatStickToBottom.js`, `packages/instantsearch.js/es/lib/chat/openChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageLoader.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPromptSuggestions.js`, `packages/instantsearch.js/es/widgets/chat/search-index-tool.js`, `packages/instantsearch.js/es/lib/chat/index.js`.
 
 The JavaScript Chat graph retains React because its reached Markdown renderer has a static React import.
 
@@ -171,11 +167,11 @@ The basic SearchBox path retains the shared Chat opening helper because the buil
 | `packages/instantsearch.js/es/lib/InstantSearch.js` | 28325 |
 | `packages/instantsearch.js/es/connectors/chat/connectChat.js` | 24796 |
 | `packages/instantsearch.js/es/middlewares/createInsightsMiddleware.js` | 22356 |
-| `packages/instantsearch-ui-components/dist/es/lib/stickToBottom.js` | 20819 |
+| `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js` | 20391 |
 
 React modules retained: `node_modules/react-dom/cjs/react-dom-client.production.js`, `node_modules/react/cjs/react.production.js`, `node_modules/react-dom/cjs/react-dom.production.js`, `node_modules/react-dom/index.js`, `node_modules/react-dom/client.js`, `node_modules/react/index.js`.
 
-Chat or ai-lite modules retained: `packages/instantsearch.js/es/lib/ai-lite/abstract-chat.js`, `packages/instantsearch.js/es/connectors/chat/connectChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js`, `packages/react-instantsearch/dist/es/widgets/Chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/icons.js`, `packages/instantsearch.js/es/lib/ai-lite/transport.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPrompt.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/CarouselTool.js`, `packages/instantsearch.js/es/lib/chat/chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/Chat.js`, `packages/instantsearch-ui-components/dist/es/lib/utils/chat.js`, `packages/instantsearch.js/es/lib/ai-lite/stream-parser.js`, `packages/instantsearch.js/es/lib/ai-lite/utils.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageError.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatHeader.js`, `packages/react-instantsearch/dist/es/widgets/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageReasoning.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatOverlayLayout.js`, `packages/instantsearch.js/es/lib/chat/openChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageLoader.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPromptSuggestions.js`, `packages/react-instantsearch/dist/es/widgets/chat/tools/SearchIndexTool.js`, `packages/instantsearch.js/es/lib/chat/index.js`.
+Chat or ai-lite modules retained: `packages/instantsearch.js/es/lib/ai-lite/abstract-chat.js`, `packages/instantsearch.js/es/connectors/chat/connectChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js`, `packages/react-instantsearch/dist/es/widgets/Chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/icons.js`, `packages/instantsearch.js/es/lib/ai-lite/transport.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPrompt.js`, `packages/instantsearch-ui-components/dist/es/components/chat/tools/CarouselTool.js`, `packages/instantsearch.js/es/lib/chat/chat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/Chat.js`, `packages/instantsearch-ui-components/dist/es/lib/utils/chat.js`, `packages/instantsearch.js/es/lib/ai-lite/stream-parser.js`, `packages/instantsearch.js/es/lib/ai-lite/utils.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageError.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatHeader.js`, `packages/react-instantsearch/dist/es/widgets/chat/tools/DisplayResultsTool.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageReasoning.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatOverlayLayout.js`, `packages/instantsearch-ui-components/dist/es/lib/chatStickToBottom.js`, `packages/instantsearch.js/es/lib/chat/openChat.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatMessageLoader.js`, `packages/instantsearch-ui-components/dist/es/components/chat/ChatPromptSuggestions.js`, `packages/react-instantsearch/dist/es/widgets/chat/tools/SearchIndexTool.js`, `packages/instantsearch.js/es/lib/chat/index.js`.
 
 ## Repeatability boundary
 
@@ -209,7 +205,22 @@ Only output from a build that satisfies all five absence preconditions can suppl
 
 ## Candidate experiment
 
-No production candidate is measured or selected in this report.
+Gate lane: `shared`.
+
+Size gate passed: `false`.
+
+| Entry | Baseline minified bytes | Candidate minified bytes | Minified delta | Baseline gzip bytes | Candidate gzip bytes | Gzip delta |
+| --- | --: | --: | --: | --: | --: | --: |
+| `js-basic` | 167044 | 167044 | +0 | 46530 | 46530 | +0 |
+| `js-chat` | 290388 | 290043 | -345 | 83576 | 83550 | -26 |
+| `react-basic` | 323255 | 323255 | +0 | 94642 | 94642 | +0 |
+| `react-chat` | 430159 | 429799 | -360 | 125962 | 125857 | -105 |
+
+## Compatibility evidence
+
+Compatibility: not run because the size gate failed.
+
+Verdict: **reject**.
 
 ## Reproduction
 
@@ -217,7 +228,6 @@ No production candidate is measured or selected in this report.
 fnm use 20.19.0
 test "$(node --version)" = "v20.19.0"
 test "$(YARN_IGNORE_PATH=1 yarn --version)" = "1.22.22"
-candidate_payload="$(node scripts/consumer-bundle-size/measure.mjs --print-candidate-payload)"
 YARN_IGNORE_PATH=1 yarn install --frozen-lockfile
 test ! -e packages/instantsearch.js/es
 test ! -e packages/react-instantsearch/dist
@@ -225,18 +235,7 @@ test ! -e packages/react-instantsearch-core/dist
 test ! -e packages/instantsearch-ui-components/dist
 test ! -e packages/algoliasearch-helper/dist
 YARN_IGNORE_PATH=1 yarn build:ci
-node scripts/consumer-bundle-size/measure.mjs --runs 3 --status verified
-node scripts/consumer-bundle-size/measure.mjs --rank-candidates --candidate-payload "$candidate_payload"
-```
-
-## Candidate ranking reproduction
-
-The clean verified measurement command always writes `candidates: []`. Candidate selection happens afterward and does not rerun measurement.
-
-The complete reproduction block preserves the ranked records before measurement resets `results.json`, then restores them through the validated payload. For a ranking only replay that does not rerun measurement, the current result file remains valid input:
-
-```sh
-node scripts/consumer-bundle-size/measure.mjs --rank-candidates --candidate-file scripts/consumer-bundle-size/results/chat/results.json
+node scripts/consumer-bundle-size/measure.mjs --runs 3 --status verified --harness-commit df1233ad6915268da35add99f7a556698329c821 --baseline-commit 0d5d0a5dcbc1ea3a4fbb775869d5ca364baec33c --gate-lane shared --approved-candidate-path packages/instantsearch-ui-components/src/lib/chatStickToBottom.ts --approved-candidate-path packages/instantsearch-ui-components/src/lib/index.ts --approved-candidate-path packages/instantsearch-ui-components/src/lib/stickToBottom.ts --approved-candidate-path packages/instantsearch-ui-components/src/lib/stickToBottomCore.ts --approved-candidate-path packages/instantsearch.js/src/lib/useChatStickToBottom.ts --approved-candidate-path packages/instantsearch.js/src/widgets/chat/__tests__/chat-autoscroll.test.tsx --approved-candidate-path packages/instantsearch.js/src/widgets/chat/chat.tsx --approved-candidate-path packages/react-instantsearch/src/lib/useChatStickToBottom.ts --approved-candidate-path packages/react-instantsearch/src/widgets/Chat.tsx
 ```
 
 Focused ranking lifecycle test:

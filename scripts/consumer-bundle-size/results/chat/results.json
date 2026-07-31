@@ -3,9 +3,9 @@
   "resultStatus": "verified",
   "libraryBaseCommit": "f7c7f52aac694f2346c9433e3f43cb8bb18840e3",
   "harnessCommit": "df1233ad6915268da35add99f7a556698329c821",
-  "measurementCommit": "df1233ad6915268da35add99f7a556698329c821",
-  "measurementTree": "2de436c75dfb6ed74023039b94df51f89328b458",
-  "candidateCommit": null,
+  "measurementCommit": "ae380ecdfc4146950aef4cd32b8f60c95d7e9235",
+  "measurementTree": "1b803c4e53d84a5fd91fccc5416b3c6b32eb3697",
+  "candidateCommit": "ae380ecdfc4146950aef4cd32b8f60c95d7e9235",
   "patchHash": null,
   "repositoryClean": true,
   "harnessSourceSha256": "36211e7dee4e014b52e1c3caa4668e02eb150fbb0e04d0235730ffb7081767e3",
@@ -57,9 +57,31 @@
     "yarnLockSha256": "4b28955df49f41124863ed20b0b6d7db07ef0e05a3948e2eca4c2d738a2578ab"
   },
   "contractHash": "04c9afea42e3cedcc0e7fcc6889d57cd17da09a1f060085084b8b51a143ebe5d",
-  "resolvedInputGraphHash": "5eaf9f6ac8c120b0384b4febc6ad6bca0b6ae81eda635b5117a3474315440d86",
-  "approvedCandidatePaths": [],
-  "candidateChangedPaths": [],
+  "resolvedInputGraphHash": "bf48390cb6ee420c045247c7a9236a19efb912516c72f17f377c2c0e0c9dad71",
+  "approvedCandidatePaths": [
+    "packages/instantsearch-ui-components/src/lib/chatStickToBottom.ts",
+    "packages/instantsearch-ui-components/src/lib/index.ts",
+    "packages/instantsearch-ui-components/src/lib/stickToBottom.ts",
+    "packages/instantsearch-ui-components/src/lib/stickToBottomCore.ts",
+    "packages/instantsearch.js/src/lib/useChatStickToBottom.ts",
+    "packages/instantsearch.js/src/widgets/chat/__tests__/chat-autoscroll.test.tsx",
+    "packages/instantsearch.js/src/widgets/chat/chat.tsx",
+    "packages/react-instantsearch/src/lib/useChatStickToBottom.ts",
+    "packages/react-instantsearch/src/widgets/Chat.tsx"
+  ],
+  "candidateChangedPaths": [
+    "packages/instantsearch-ui-components/src/lib/chatStickToBottom.ts",
+    "packages/instantsearch-ui-components/src/lib/index.ts",
+    "packages/instantsearch-ui-components/src/lib/stickToBottom.ts",
+    "packages/instantsearch-ui-components/src/lib/stickToBottomCore.ts",
+    "packages/instantsearch.js/src/lib/useChatStickToBottom.ts",
+    "packages/instantsearch.js/src/widgets/chat/__tests__/chat-autoscroll.test.tsx",
+    "packages/instantsearch.js/src/widgets/chat/chat.tsx",
+    "packages/react-instantsearch/src/lib/useChatStickToBottom.ts",
+    "packages/react-instantsearch/src/widgets/Chat.tsx",
+    "scripts/consumer-bundle-size/results/chat/report.md",
+    "scripts/consumer-bundle-size/results/chat/results.json"
+  ],
   "fixtures": {
     "label": "static retention microbenchmarks",
     "measurement": "total loaded graph",
@@ -100,7 +122,7 @@
       "fixtures": {
         "js-basic": {
           "entrySha256": "8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10",
-          "resolvedInputGraphSha256": "130bdb2b1a7f7860b0d40b2f48ca3509aab2cd979066ad5f169595c043b74ee3",
+          "resolvedInputGraphSha256": "99d1969e41c12afb929508104c025770ba5a72699e40a24e76fade4d92f52ab3",
           "minifiedBytes": 167044,
           "gzipBytes": 46530,
           "minifiedSha256": "4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4",
@@ -109,16 +131,16 @@
         },
         "js-chat": {
           "entrySha256": "de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd",
-          "resolvedInputGraphSha256": "e237b8b702e1113c4289a8cacafbff7d27937a031a1b292bce196c287c4d2031",
-          "minifiedBytes": 290388,
-          "gzipBytes": 83576,
-          "minifiedSha256": "207d4a936d1e3e6d917a3bf29e5dd7b3720d7ddc77cbea06bc1ac4e44980f425",
-          "gzipSha256": "8270e599fb43229b21de13d6588a627cead74fcdd607f197563288a9a7c41d37",
-          "attributionSha256": "0f8f98a950816c3294bb1258c45c46e2c47e001fb918149a06aec6fdb927d10f"
+          "resolvedInputGraphSha256": "e327e21e71ed3a0bfae2a98499d33892bc296efc8f678bc8956345b86b52f950",
+          "minifiedBytes": 290043,
+          "gzipBytes": 83550,
+          "minifiedSha256": "0e3e375c0d56ac92470486dac29e2961d3207c51f459b8119474e711f5c408d5",
+          "gzipSha256": "d4356184fcc9e57119a33b66982fcc8792b2dfb0c4d57e3ab7b1196ba3ee58b5",
+          "attributionSha256": "cc9af2b6c5be3e80e2383b45721f2bbf4b1efc7d97dd416251732e12460a8c66"
         },
         "react-basic": {
           "entrySha256": "d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc",
-          "resolvedInputGraphSha256": "d729da9c5c56244283e27e4612be7533379b7d88f83a4cc105e03e7120a207dd",
+          "resolvedInputGraphSha256": "caa3f3a7a1517a9d5e5ad0cb3f7b2de57b4634ec026d253d6add6fed29c6cac4",
           "minifiedBytes": 323255,
           "gzipBytes": 94642,
           "minifiedSha256": "3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b",
@@ -127,12 +149,12 @@
         },
         "react-chat": {
           "entrySha256": "c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff",
-          "resolvedInputGraphSha256": "d7d1e23a3a28e8fb35773043f5c0cb8bf022723801094216a85919c429ef44a4",
-          "minifiedBytes": 430159,
-          "gzipBytes": 125962,
-          "minifiedSha256": "e43f0d1bc4eea6f87c27f41440006743ea1d7f9129e5fc093d66085726210902",
-          "gzipSha256": "5356200ed3c0d62b0802ec5b07e1deb537dc29859793c2dd110d4b8e8b0d0b4a",
-          "attributionSha256": "4ea97f950e2d5e3580f09084ac0aecca2d46747a5cbbb5024f9d931e710cd54e"
+          "resolvedInputGraphSha256": "bc3b7564c689e6ea88f45451fa136bcfd8904171d3fd0b48c6f1d32fa5cb62cf",
+          "minifiedBytes": 429799,
+          "gzipBytes": 125857,
+          "minifiedSha256": "754440746dc808a11a5f3fbf2629872f666b39f6d3f1d03220cae96f72323e60",
+          "gzipSha256": "0f6c884778398ac538e3c1eb4a1ae9e219b89ba64c3c3647bd54b762b8ca65af",
+          "attributionSha256": "48c3714becd2d3016c8616c586e355cc5b849bee38c6dd4b455b68f6e7ef077d"
         }
       }
     },
@@ -141,7 +163,7 @@
       "fixtures": {
         "js-basic": {
           "entrySha256": "8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10",
-          "resolvedInputGraphSha256": "130bdb2b1a7f7860b0d40b2f48ca3509aab2cd979066ad5f169595c043b74ee3",
+          "resolvedInputGraphSha256": "99d1969e41c12afb929508104c025770ba5a72699e40a24e76fade4d92f52ab3",
           "minifiedBytes": 167044,
           "gzipBytes": 46530,
           "minifiedSha256": "4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4",
@@ -150,16 +172,16 @@
         },
         "js-chat": {
           "entrySha256": "de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd",
-          "resolvedInputGraphSha256": "e237b8b702e1113c4289a8cacafbff7d27937a031a1b292bce196c287c4d2031",
-          "minifiedBytes": 290388,
-          "gzipBytes": 83576,
-          "minifiedSha256": "207d4a936d1e3e6d917a3bf29e5dd7b3720d7ddc77cbea06bc1ac4e44980f425",
-          "gzipSha256": "8270e599fb43229b21de13d6588a627cead74fcdd607f197563288a9a7c41d37",
-          "attributionSha256": "0f8f98a950816c3294bb1258c45c46e2c47e001fb918149a06aec6fdb927d10f"
+          "resolvedInputGraphSha256": "e327e21e71ed3a0bfae2a98499d33892bc296efc8f678bc8956345b86b52f950",
+          "minifiedBytes": 290043,
+          "gzipBytes": 83550,
+          "minifiedSha256": "0e3e375c0d56ac92470486dac29e2961d3207c51f459b8119474e711f5c408d5",
+          "gzipSha256": "d4356184fcc9e57119a33b66982fcc8792b2dfb0c4d57e3ab7b1196ba3ee58b5",
+          "attributionSha256": "cc9af2b6c5be3e80e2383b45721f2bbf4b1efc7d97dd416251732e12460a8c66"
         },
         "react-basic": {
           "entrySha256": "d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc",
-          "resolvedInputGraphSha256": "d729da9c5c56244283e27e4612be7533379b7d88f83a4cc105e03e7120a207dd",
+          "resolvedInputGraphSha256": "caa3f3a7a1517a9d5e5ad0cb3f7b2de57b4634ec026d253d6add6fed29c6cac4",
           "minifiedBytes": 323255,
           "gzipBytes": 94642,
           "minifiedSha256": "3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b",
@@ -168,12 +190,12 @@
         },
         "react-chat": {
           "entrySha256": "c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff",
-          "resolvedInputGraphSha256": "d7d1e23a3a28e8fb35773043f5c0cb8bf022723801094216a85919c429ef44a4",
-          "minifiedBytes": 430159,
-          "gzipBytes": 125962,
-          "minifiedSha256": "e43f0d1bc4eea6f87c27f41440006743ea1d7f9129e5fc093d66085726210902",
-          "gzipSha256": "5356200ed3c0d62b0802ec5b07e1deb537dc29859793c2dd110d4b8e8b0d0b4a",
-          "attributionSha256": "4ea97f950e2d5e3580f09084ac0aecca2d46747a5cbbb5024f9d931e710cd54e"
+          "resolvedInputGraphSha256": "bc3b7564c689e6ea88f45451fa136bcfd8904171d3fd0b48c6f1d32fa5cb62cf",
+          "minifiedBytes": 429799,
+          "gzipBytes": 125857,
+          "minifiedSha256": "754440746dc808a11a5f3fbf2629872f666b39f6d3f1d03220cae96f72323e60",
+          "gzipSha256": "0f6c884778398ac538e3c1eb4a1ae9e219b89ba64c3c3647bd54b762b8ca65af",
+          "attributionSha256": "48c3714becd2d3016c8616c586e355cc5b849bee38c6dd4b455b68f6e7ef077d"
         }
       }
     },
@@ -182,7 +204,7 @@
       "fixtures": {
         "js-basic": {
           "entrySha256": "8566c45f1d5be77a3cd1dee27cc737e708cd41bc3f80046d4f248cbd88e59f10",
-          "resolvedInputGraphSha256": "130bdb2b1a7f7860b0d40b2f48ca3509aab2cd979066ad5f169595c043b74ee3",
+          "resolvedInputGraphSha256": "99d1969e41c12afb929508104c025770ba5a72699e40a24e76fade4d92f52ab3",
           "minifiedBytes": 167044,
           "gzipBytes": 46530,
           "minifiedSha256": "4d627e95287e9a69853a1bf1c651826ec13c5826f7884b7ba85a15316b1355b4",
@@ -191,16 +213,16 @@
         },
         "js-chat": {
           "entrySha256": "de92d9b84beb5a2e7c4d53ed54a5d1abe3e6a6d957d25de444e7a67eb8d615dd",
-          "resolvedInputGraphSha256": "e237b8b702e1113c4289a8cacafbff7d27937a031a1b292bce196c287c4d2031",
-          "minifiedBytes": 290388,
-          "gzipBytes": 83576,
-          "minifiedSha256": "207d4a936d1e3e6d917a3bf29e5dd7b3720d7ddc77cbea06bc1ac4e44980f425",
-          "gzipSha256": "8270e599fb43229b21de13d6588a627cead74fcdd607f197563288a9a7c41d37",
-          "attributionSha256": "0f8f98a950816c3294bb1258c45c46e2c47e001fb918149a06aec6fdb927d10f"
+          "resolvedInputGraphSha256": "e327e21e71ed3a0bfae2a98499d33892bc296efc8f678bc8956345b86b52f950",
+          "minifiedBytes": 290043,
+          "gzipBytes": 83550,
+          "minifiedSha256": "0e3e375c0d56ac92470486dac29e2961d3207c51f459b8119474e711f5c408d5",
+          "gzipSha256": "d4356184fcc9e57119a33b66982fcc8792b2dfb0c4d57e3ab7b1196ba3ee58b5",
+          "attributionSha256": "cc9af2b6c5be3e80e2383b45721f2bbf4b1efc7d97dd416251732e12460a8c66"
         },
         "react-basic": {
           "entrySha256": "d7b257321a8a509a79c5d05cf7e4fa23f7562f7f5c32fc2428a89f4850b643dc",
-          "resolvedInputGraphSha256": "d729da9c5c56244283e27e4612be7533379b7d88f83a4cc105e03e7120a207dd",
+          "resolvedInputGraphSha256": "caa3f3a7a1517a9d5e5ad0cb3f7b2de57b4634ec026d253d6add6fed29c6cac4",
           "minifiedBytes": 323255,
           "gzipBytes": 94642,
           "minifiedSha256": "3313a9beea33eb310f99d2af4af9e868d4a2fc1148db9eb887da69125a5bd11b",
@@ -209,12 +231,12 @@
         },
         "react-chat": {
           "entrySha256": "c1454b7415e561082b084fc035e90ab2b045f847c8e937d204d9f122b3e956ff",
-          "resolvedInputGraphSha256": "d7d1e23a3a28e8fb35773043f5c0cb8bf022723801094216a85919c429ef44a4",
-          "minifiedBytes": 430159,
-          "gzipBytes": 125962,
-          "minifiedSha256": "e43f0d1bc4eea6f87c27f41440006743ea1d7f9129e5fc093d66085726210902",
-          "gzipSha256": "5356200ed3c0d62b0802ec5b07e1deb537dc29859793c2dd110d4b8e8b0d0b4a",
-          "attributionSha256": "4ea97f950e2d5e3580f09084ac0aecca2d46747a5cbbb5024f9d931e710cd54e"
+          "resolvedInputGraphSha256": "bc3b7564c689e6ea88f45451fa136bcfd8904171d3fd0b48c6f1d32fa5cb62cf",
+          "minifiedBytes": 429799,
+          "gzipBytes": 125857,
+          "minifiedSha256": "754440746dc808a11a5f3fbf2629872f666b39f6d3f1d03220cae96f72323e60",
+          "gzipSha256": "0f6c884778398ac538e3c1eb4a1ae9e219b89ba64c3c3647bd54b762b8ca65af",
+          "attributionSha256": "48c3714becd2d3016c8616c586e355cc5b849bee38c6dd4b455b68f6e7ef077d"
         }
       }
     }
@@ -222,15 +244,38 @@
   "comparison": {
     "retention": {
       "js": {
-        "chatMinusBasicMinifiedBytes": 123344,
-        "chatMinusBasicGzipBytes": 37046
+        "chatMinusBasicMinifiedBytes": 122999,
+        "chatMinusBasicGzipBytes": 37020
       },
       "react": {
-        "chatMinusBasicMinifiedBytes": 106904,
-        "chatMinusBasicGzipBytes": 31320
+        "chatMinusBasicMinifiedBytes": 106544,
+        "chatMinusBasicGzipBytes": 31215
       }
     },
-    "candidate": null
+    "candidate": {
+      "baselineCommit": "0d5d0a5dcbc1ea3a4fbb775869d5ca364baec33c",
+      "gateLane": "shared",
+      "deltas": {
+        "js-basic": {
+          "minifiedBytes": 0,
+          "gzipBytes": 0
+        },
+        "js-chat": {
+          "minifiedBytes": -345,
+          "gzipBytes": -26
+        },
+        "react-basic": {
+          "minifiedBytes": 0,
+          "gzipBytes": 0
+        },
+        "react-chat": {
+          "minifiedBytes": -360,
+          "gzipBytes": -105
+        }
+      },
+      "sizeGatePassed": false,
+      "verdict": "reject"
+    }
   },
   "candidates": [
     {

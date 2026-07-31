@@ -63,13 +63,6 @@
     "removedExports": []
   },
   {
-    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/stickToBottom.js",
-    "transformedSourceSha256": "1dffcf0d71e75b0c739f412f52e959ab48c63b1f0141b1dd778fc5cda77198c2",
-    "renderedLength": 20819,
-    "renderedExports": ["createStickToBottom"],
-    "removedExports": []
-  },
-  {
     "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessages.js",
     "transformedSourceSha256": "5ff7712d01e857f8872196b6168fb0a0175cf86d53e0003528c186a86b98a15e",
     "renderedLength": 20391,
@@ -98,6 +91,13 @@
     "removedExports": ["RuleType", "default"]
   },
   {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/stickToBottomCore.js",
+    "transformedSourceSha256": "f0760ca73e493ed6e9067f0b5c1b1d584578d66110560ded858101f234dc9187",
+    "renderedLength": 14787,
+    "renderedExports": ["createStickToBottomCore"],
+    "removedExports": []
+  },
+  {
     "moduleId": "packages/instantsearch-ui-components/dist/es/components/chat/ChatMessage.js",
     "transformedSourceSha256": "cfff06ec9726476e972684d3349a5d1af39a5c2f5c3d81722d054fd2f3eaecdb",
     "renderedLength": 12839,
@@ -105,17 +105,17 @@
     "removedExports": []
   },
   {
-    "moduleId": "packages/react-instantsearch/dist/es/widgets/Chat.js",
-    "transformedSourceSha256": "db9750e1c1d34ee10d1c311fb349176cf164b6c5a785bb9aabc8f56819a5fc91",
-    "renderedLength": 12126,
-    "renderedExports": ["Chat", "createDefaultTools"],
-    "removedExports": []
-  },
-  {
     "moduleId": "packages/instantsearch.js/es/lib/routers/history.js",
     "transformedSourceSha256": "5eaf4fb239f582cd252b42a168b72c12f7a5366536e932b639f3c3820bc726cc",
     "renderedLength": 12124,
     "renderedExports": ["default"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/react-instantsearch/dist/es/widgets/Chat.js",
+    "transformedSourceSha256": "9fa3e0318bded4eb31d140edc1071a422e727d13abbe169f455e99ae56972516",
+    "renderedLength": 12091,
+    "renderedExports": ["Chat", "createDefaultTools"],
     "removedExports": []
   },
   {
@@ -501,6 +501,13 @@
     "transformedSourceSha256": "b01689b4492f4f57f48f34e41d2fb892bd6cf1b26de331ef6a3488668442d53a",
     "renderedLength": 1859,
     "renderedExports": ["createChatOverlayLayoutComponent"],
+    "removedExports": []
+  },
+  {
+    "moduleId": "packages/instantsearch-ui-components/dist/es/lib/chatStickToBottom.js",
+    "transformedSourceSha256": "f5a999f1de7a76ba3c8930248b77a00b451f281a3523cb939e14b3f0424cbc4c",
+    "renderedLength": 1850,
+    "renderedExports": ["createChatStickToBottom"],
     "removedExports": []
   },
   {
@@ -1140,6 +1147,13 @@
     "removedExports": []
   },
   {
+    "moduleId": "packages/react-instantsearch/dist/es/lib/useChatStickToBottom.js",
+    "transformedSourceSha256": "c0bf14628db6c52ac5279ca2d4aa11d3e606164e84c27ff76db42cfec4cfa619",
+    "renderedLength": 242,
+    "renderedExports": ["useChatStickToBottom"],
+    "removedExports": []
+  },
+  {
     "moduleId": "packages/instantsearch.js/es/lib/utils/hits-query-id.js",
     "transformedSourceSha256": "bd5dab7eec2da19867d0763e627c8a2931fb7c8708e8090fbe8f7f9cc5b0e338",
     "renderedLength": 237,
@@ -1151,13 +1165,6 @@
     "transformedSourceSha256": "05c3a9e5ed91e949912d3ce650d944bd6eb7b88d8657351eb9e839714938252b",
     "renderedLength": 236,
     "renderedExports": ["addAbsolutePosition"],
-    "removedExports": []
-  },
-  {
-    "moduleId": "packages/react-instantsearch/dist/es/lib/useStickToBottom.js",
-    "transformedSourceSha256": "1dab218cde52d101b95e6fe096ac1f406f2019e5b883f05d871a568702131fa5",
-    "renderedLength": 234,
-    "renderedExports": ["useStickToBottom"],
     "removedExports": []
   },
   {
