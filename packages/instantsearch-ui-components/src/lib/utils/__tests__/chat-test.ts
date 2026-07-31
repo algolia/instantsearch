@@ -1,27 +1,32 @@
-import { getFacetFiltersFromToolInput, getHitsByObjectID } from '../chat';
+import { getApplyFiltersParamsFromToolInput, getHitsByObjectID } from '../chat';
 
 import type { ChatMessageBase, ChatToolMessage } from '../../../components';
 
-describe('getFacetFiltersFromToolInput', () => {
-  test('returns undefined when input is undefined', () => {
-    expect(getFacetFiltersFromToolInput(undefined)).toBeUndefined();
+type ToolInput = Parameters<typeof getApplyFiltersParamsFromToolInput>[0];
+
+describe('getApplyFiltersParamsFromToolInput', () => {
+  test('returns nothing to refine when input is undefined', () => {
+    expect(getApplyFiltersParamsFromToolInput(undefined)).toEqual({
+      query: undefined,
+      facetFilters: undefined,
+    });
   });
 
-  test('returns the standard `facet_filters` array when present', () => {
+  test('returns the query and the standard `facet_filters` array', () => {
     const facetFilters = [['brand:Apple'], ['type:book']];
 
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: 'phone',
         facet_filters: facetFilters,
       })
-    ).toBe(facetFilters);
+    ).toEqual({ query: 'phone', facetFilters });
   });
 
   test('builds facet filters from MCP `facet_<attribute>` keys', () => {
     expect(
-      getFacetFiltersFromToolInput({
-        query: '',
+      getApplyFiltersParamsFromToolInput({
+        query: 'book',
         clickAnalytics: true,
         facet_type: ['book'],
         facet_brand: [],
@@ -35,43 +40,84 @@ describe('getFacetFiltersFromToolInput', () => {
         facet__collections: [],
         facet_price: [],
         userIntent: 'irrelevant',
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
-    ).toEqual([
-      ['type:book'],
-      [
-        'categories:Literature & Fiction',
-        'categories:Mystery, Thriller & Suspense',
-        'categories:Teen & Young Adult',
+      } as ToolInput)
+    ).toEqual({
+      query: 'book',
+      facetFilters: [
+        ['type:book'],
+        [
+          'categories:Literature & Fiction',
+          'categories:Mystery, Thriller & Suspense',
+          'categories:Teen & Young Adult',
+        ],
       ],
-    ]);
+    });
+  });
+
+  test('reads the query and the facets of the first entry of a `queries` input', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        queries: [
+          {
+            query: 'laptop',
+            facet_free_shipping: null,
+            facet_brand: null,
+            facet_categories: ['Laptops'],
+            'facet_hierarchicalCategories.lvl0': ['Computers & Tablets'],
+            'facet_hierarchicalCategories.lvl1': [
+              'Computers & Tablets > Laptops',
+            ],
+            'facet_hierarchicalCategories.lvl2': null,
+            facet_price: null,
+          },
+          { query: 'ignored', facet_brand: ['Apple'] },
+        ],
+        clickAnalytics: true,
+        originalQuery: 'give me some laptops',
+      } as unknown as ToolInput)
+    ).toEqual({
+      query: 'laptop',
+      facetFilters: [
+        ['categories:Laptops'],
+        ['hierarchicalCategories.lvl0:Computers & Tablets'],
+        ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+      ],
+    });
+  });
+
+  test('returns nothing to refine when `queries` is empty', () => {
+    expect(getApplyFiltersParamsFromToolInput({ queries: [] })).toEqual({
+      query: undefined,
+      facetFilters: undefined,
+    });
   });
 
   test('preserves the attribute name including leading underscores', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: '',
         facet__collections: ['summer'],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+      } as ToolInput).facetFilters
     ).toEqual([['_collections:summer']]);
   });
 
   test('ignores non-string and empty facet values', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: '',
         facet_brand: [],
         facet_type: [42, 'book', null] as unknown as string[],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+      } as ToolInput).facetFilters
     ).toEqual([['type:book']]);
   });
 
-  test('returns undefined when there are no facet refinements', () => {
+  test('returns no facet filters when there are no refinements', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: 'phone',
         facet_brand: [],
         facet_type: [],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+      } as ToolInput).facetFilters
     ).toBeUndefined();
   });
 });
