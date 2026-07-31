@@ -455,21 +455,40 @@ export type AddToolResultWithOutput = (
   params: Pick<Parameters<AddToolResult>[0], 'output'>
 ) => ReturnType<AddToolResult>;
 
-type SearchToolInputBase = {
+type SearchToolQueryBase = {
   query: string;
   number_of_results?: number;
 };
 
-type DefaultSearchToolInput = SearchToolInputBase & {
+type DefaultSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: string[][];
 };
 
-type McpSearchToolInput = SearchToolInputBase & {
+type McpSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: undefined;
   [facetKey: `facet_${string}`]: string[] | undefined;
 };
 
-export type SearchToolInput = DefaultSearchToolInput | McpSearchToolInput;
+/**
+ * A single query of a search tool input: the query string along with its
+ * refinements, either as a ready-to-use `facet_filters` array or as individual
+ * `facet_<attribute>` keys.
+ */
+export type SearchToolQuery = DefaultSearchToolQuery | McpSearchToolQuery;
+
+/** Search tool input holding the query and its refinements at the root. */
+type SingleQuerySearchToolInput = SearchToolQuery & { queries?: undefined };
+
+/** Search tool input nesting one or more queries in a `queries` array. */
+type MultiQuerySearchToolInput = {
+  query?: undefined;
+  facet_filters?: undefined;
+  queries: SearchToolQuery[];
+};
+
+export type SearchToolInput =
+  | SingleQuerySearchToolInput
+  | MultiQuerySearchToolInput;
 
 export type ApplyFiltersParams = {
   query?: string;
