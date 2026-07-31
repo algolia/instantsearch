@@ -13,14 +13,14 @@ Result state: **verified**.
 | Field | Value |
 | --- | --- |
 | Library base commit | `f7c7f52aac694f2346c9433e3f43cb8bb18840e3` |
-| Harness commit | `576b11decb9088fe5cc2145b5ba054b9e62383b6` |
-| Measurement commit | `576b11decb9088fe5cc2145b5ba054b9e62383b6` |
-| Measurement tree | `ba837d8a7ce0b90ae21756e2d06102f9db8d9976` |
+| Harness commit | `df1233ad6915268da35add99f7a556698329c821` |
+| Measurement commit | `df1233ad6915268da35add99f7a556698329c821` |
+| Measurement tree | `2de436c75dfb6ed74023039b94df51f89328b458` |
 | Candidate commit | Not applicable |
 | Patch hash | Not applicable |
 | Repository clean before measurement | `true` |
-| Harness source SHA256 | `9225870f9e2639fc0f1bd2bd1f060722232d8ce98375d32b1b4d4fb3ddb70883` |
-| Contract SHA256 | `c61f15cdff3a0a80ae75dc3a02dc7cf0cabd3af026f9a48984867e0ef0efeba1` |
+| Harness source SHA256 | `36211e7dee4e014b52e1c3caa4668e02eb150fbb0e04d0235730ffb7081767e3` |
+| Contract SHA256 | `04c9afea42e3cedcc0e7fcc6889d57cd17da09a1f060085084b8b51a143ebe5d` |
 | Resolved input graph SHA256 | `5eaf9f6ac8c120b0384b4febc6ad6bca0b6ae81eda635b5117a3474315440d86` |
 
 ### Environment
