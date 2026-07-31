@@ -1381,6 +1381,15 @@ function passesCandidateSizeGate(deltas, gateLane) {
   );
 }
 
+function candidateVerdict(sizeGatePassed, gateLane) {
+  if (!sizeGatePassed) {
+    return 'reject';
+  }
+  return gateLane === 'shared'
+    ? 'follow-up, compatibility evidence required'
+    : 'follow-up, gate confirmation and compatibility evidence required';
+}
+
 function assertCandidateGateRules() {
   const passingShared = {
     'js-basic': { gzipBytes: 100 },
@@ -1451,11 +1460,7 @@ function evaluateCandidateComparison(
     gateLane,
     deltas,
     sizeGatePassed,
-    verdict: sizeGatePassed
-      ? gateLane === 'shared'
-        ? 'follow-up, compatibility evidence required'
-        : 'follow-up, gate confirmation and compatibility evidence required'
-      : 'reject',
+    verdict: candidateVerdict(sizeGatePassed, gateLane),
   };
 }
 
@@ -1959,8 +1964,291 @@ function markdownValue(value) {
   return value === null ? 'Not applicable' : `\`${value}\``;
 }
 
+function formatSignedBytes(bytes) {
+  return bytes >= 0 ? `+${bytes}` : `${bytes}`;
+}
+
+function buildCandidateMeasurementRows(fixtureResults, candidateComparison) {
+  return ENTRY_NAMES.map((entryName) => {
+    const candidate = fixtureResults[entryName];
+    const delta = candidateComparison.deltas[entryName];
+    const values = [
+      candidate?.minifiedBytes,
+      candidate?.gzipBytes,
+      delta?.minifiedBytes,
+      delta?.gzipBytes,
+    ];
+
+    if (!values.every(Number.isSafeInteger)) {
+      fail(
+        'BUNDLE_MEASUREMENT_CANDIDATE_REPORT_INVALID',
+        'Candidate report measurements must be safe integers.'
+      );
+    }
+
+    const baselineMinifiedBytes = candidate.minifiedBytes - delta.minifiedBytes;
+    const baselineGzipBytes = candidate.gzipBytes - delta.gzipBytes;
+    if (
+      !Number.isSafeInteger(baselineMinifiedBytes) ||
+      !Number.isSafeInteger(baselineGzipBytes) ||
+      baselineMinifiedBytes < 0 ||
+      baselineGzipBytes < 0 ||
+      candidate.minifiedBytes - baselineMinifiedBytes !== delta.minifiedBytes ||
+      candidate.gzipBytes - baselineGzipBytes !== delta.gzipBytes
+    ) {
+      fail(
+        'BUNDLE_MEASUREMENT_CANDIDATE_REPORT_INVALID',
+        'Candidate report measurements do not reproduce the verified baseline.'
+      );
+    }
+
+    return {
+      entryName,
+      baselineMinifiedBytes,
+      candidateMinifiedBytes: candidate.minifiedBytes,
+      minifiedDelta: delta.minifiedBytes,
+      baselineGzipBytes,
+      candidateGzipBytes: candidate.gzipBytes,
+      gzipDelta: delta.gzipBytes,
+    };
+  });
+}
+
+function renderCandidateExperiment(fixtureResults, candidateComparison) {
+  const rows = buildCandidateMeasurementRows(
+    fixtureResults,
+    candidateComparison
+  );
+  const lines = [
+    `Gate lane: \`${candidateComparison.gateLane}\`.`,
+    '',
+    `Size gate passed: \`${candidateComparison.sizeGatePassed}\`.`,
+    '',
+    '| Entry | Baseline minified bytes | Candidate minified bytes | Minified delta | Baseline gzip bytes | Candidate gzip bytes | Gzip delta |',
+    '| --- | ---: | ---: | ---: | ---: | ---: | ---: |',
+  ];
+
+  rows.forEach((row) => {
+    lines.push(
+      `| \`${row.entryName}\` | ${row.baselineMinifiedBytes} | ${
+        row.candidateMinifiedBytes
+      } | ${formatSignedBytes(row.minifiedDelta)} | ${
+        row.baselineGzipBytes
+      } | ${row.candidateGzipBytes} | ${formatSignedBytes(row.gzipDelta)} |`
+    );
+  });
+
+  lines.push(
+    '',
+    '## Compatibility evidence',
+    '',
+    candidateComparison.sizeGatePassed
+      ? 'Compatibility evidence not yet recorded.'
+      : 'Compatibility: not run because the size gate failed.',
+    '',
+    `Verdict: **${candidateComparison.verdict}**.`
+  );
+  return lines;
+}
+
+function assertCandidateReportRules() {
+  const fixtureResults = {
+    'js-basic': {
+      minifiedBytes: 10000,
+      gzipBytes: 5000,
+      entrySha256: 'a'.repeat(64),
+      resolvedInputGraphSha256: 'b'.repeat(64),
+      minifiedSha256: 'c'.repeat(64),
+      gzipSha256: 'd'.repeat(64),
+      attributionSha256: 'e'.repeat(64),
+    },
+    'js-chat': {
+      minifiedBytes: 20000,
+      gzipBytes: 8000,
+      entrySha256: 'f'.repeat(64),
+      resolvedInputGraphSha256: '1'.repeat(64),
+      minifiedSha256: '2'.repeat(64),
+      gzipSha256: '3'.repeat(64),
+      attributionSha256: '4'.repeat(64),
+    },
+    'react-basic': {
+      minifiedBytes: 30000,
+      gzipBytes: 12000,
+      entrySha256: '5'.repeat(64),
+      resolvedInputGraphSha256: '6'.repeat(64),
+      minifiedSha256: '7'.repeat(64),
+      gzipSha256: '8'.repeat(64),
+      attributionSha256: '9'.repeat(64),
+    },
+    'react-chat': {
+      minifiedBytes: 40000,
+      gzipBytes: 16000,
+      entrySha256: '0'.repeat(64),
+      resolvedInputGraphSha256: 'a'.repeat(64),
+      minifiedSha256: 'b'.repeat(64),
+      gzipSha256: 'c'.repeat(64),
+      attributionSha256: 'd'.repeat(64),
+    },
+  };
+  const passingDeltas = {
+    'js-basic': { minifiedBytes: 0, gzipBytes: 100 },
+    'js-chat': { minifiedBytes: -2000, gzipBytes: -1000 },
+    'react-basic': { minifiedBytes: 50, gzipBytes: 100 },
+    'react-chat': { minifiedBytes: -3000, gzipBytes: -1000 },
+  };
+  const failingDeltas = {
+    ...passingDeltas,
+    'react-chat': { minifiedBytes: -3000, gzipBytes: -999 },
+  };
+  const passingComparison = {
+    baselineCommit: 'a'.repeat(40),
+    gateLane: 'shared',
+    deltas: passingDeltas,
+    sizeGatePassed: passesCandidateSizeGate(passingDeltas, 'shared'),
+    verdict: candidateVerdict(true, 'shared'),
+  };
+  const failingComparison = {
+    baselineCommit: 'a'.repeat(40),
+    gateLane: 'shared',
+    deltas: failingDeltas,
+    sizeGatePassed: passesCandidateSizeGate(failingDeltas, 'shared'),
+    verdict: candidateVerdict(false, 'shared'),
+  };
+  const attributionByFixture = Object.fromEntries(
+    ENTRY_NAMES.map((entryName) => [entryName, []])
+  );
+  const baseResults = {
+    resultStatus: 'verified',
+    libraryBaseCommit: '1'.repeat(40),
+    harnessCommit: '2'.repeat(40),
+    measurementCommit: '3'.repeat(40),
+    measurementTree: '4'.repeat(40),
+    candidateCommit: '5'.repeat(40),
+    patchHash: null,
+    repositoryClean: true,
+    harnessSourceSha256: '6'.repeat(64),
+    contractHash: '7'.repeat(64),
+    resolvedInputGraphHash: '8'.repeat(64),
+    environment: {
+      nodeVersion: '20.19.0',
+      yarnVersion: '1.22.22',
+      rollupVersion: '4.29.1',
+      nodeResolvePluginVersion: '16.0.0',
+      commonjsPluginVersion: '28.0.2',
+      jsonPluginVersion: '6.1.0',
+      replacePluginVersion: '6.0.2',
+      terserPluginVersion: '0.4.4',
+      terserEngineVersion: '5.46.0',
+      zlibVersion: '1.3.1',
+      platform: 'test',
+      architecture: 'test',
+    },
+    measurementContract: {
+      entryNames: ENTRY_NAMES,
+      externalModules: [],
+      outputFormat: 'es',
+      sourceMap: false,
+      inlineDynamicImports: true,
+      treeshake: true,
+      environmentReplacements: {},
+      pluginOrder: [],
+      terserOptions: {},
+      gzipLevel: 9,
+      yarnLockSha256: '9'.repeat(64),
+    },
+    approvedCandidatePaths: [],
+    fixtures: {
+      searchClient: { sha256: '0'.repeat(64) },
+    },
+    runs: [{ run: 1, fixtures: fixtureResults }],
+    comparison: {
+      retention: computeRetentionComparison(fixtureResults),
+      candidate: null,
+    },
+    candidates: [],
+  };
+  const passingReport = renderReport(
+    {
+      ...baseResults,
+      comparison: {
+        ...baseResults.comparison,
+        candidate: passingComparison,
+      },
+    },
+    attributionByFixture
+  );
+  const failingReport = renderReport(
+    {
+      ...baseResults,
+      comparison: {
+        ...baseResults.comparison,
+        candidate: failingComparison,
+      },
+    },
+    attributionByFixture
+  );
+  const provisionalReport = renderReport(
+    {
+      ...baseResults,
+      resultStatus: 'provisional',
+      harnessCommit: null,
+      candidateCommit: null,
+      patchHash: 'a'.repeat(64),
+      comparison: {
+        ...baseResults.comparison,
+        candidate: null,
+      },
+    },
+    attributionByFixture
+  );
+  const passingRows = [
+    '| `js-basic` | 10000 | 10000 | +0 | 4900 | 5000 | +100 |',
+    '| `js-chat` | 22000 | 20000 | -2000 | 9000 | 8000 | -1000 |',
+    '| `react-basic` | 29950 | 30000 | +50 | 11900 | 12000 | +100 |',
+    '| `react-chat` | 43000 | 40000 | -3000 | 17000 | 16000 | -1000 |',
+  ];
+  const failingRows = [
+    ...passingRows.slice(0, 3),
+    '| `react-chat` | 43000 | 40000 | -3000 | 16999 | 16000 | -999 |',
+  ];
+
+  if (
+    passingComparison.sizeGatePassed !== true ||
+    !passingRows.every((row) => passingReport.includes(row)) ||
+    !passingReport.includes('Compatibility evidence not yet recorded.') ||
+    !passingReport.includes(
+      'Verdict: **follow-up, compatibility evidence required**.'
+    ) ||
+    passingReport.includes('pursue') ||
+    passingReport.includes('No verified baseline is recorded') ||
+    passingReport.includes('## Provisional impact') ||
+    failingComparison.sizeGatePassed !== false ||
+    !failingRows.every((row) => failingReport.includes(row)) ||
+    !failingReport.includes(
+      'Compatibility: not run because the size gate failed.'
+    ) ||
+    !failingReport.includes('Verdict: **reject**.') ||
+    failingReport.includes('pursue') ||
+    failingReport.includes('No verified baseline is recorded') ||
+    failingReport.includes('## Provisional impact') ||
+    !provisionalReport.includes('## Provisional impact') ||
+    !provisionalReport.includes(
+      '| `js-basic` | provisional | 10000 | 10.0 | 5000 | 5.0 |'
+    )
+  ) {
+    fail(
+      'BUNDLE_MEASUREMENT_CANDIDATE_REPORT_INVALID',
+      'Candidate report lifecycle rules are inconsistent.'
+    );
+  }
+}
+
 function renderReport(results, attributionByFixture) {
   const firstRun = results.runs[0].fixtures;
+  const candidateRows =
+    results.comparison.candidate === null
+      ? null
+      : buildCandidateMeasurementRows(firstRun, results.comparison.candidate);
   const lines = [
     '# InstantSearch consumer bundle measurement with and without Chat',
     '',
@@ -2040,13 +2328,25 @@ function renderReport(results, attributionByFixture) {
     '',
   ];
 
-  if (results.resultStatus === 'verified' && results.candidateCommit === null) {
+  if (
+    (results.resultStatus === 'verified' && results.candidateCommit === null) ||
+    candidateRows !== null
+  ) {
     lines.push(
       '| Entry | State | Minified bytes | Minified kB | Gzip bytes | Gzip kB |',
       '| --- | --- | ---: | ---: | ---: | ---: |'
     );
     ENTRY_NAMES.forEach((entryName) => {
-      const fixture = firstRun[entryName];
+      const candidateRow = candidateRows?.find(
+        (row) => row.entryName === entryName
+      );
+      const fixture =
+        candidateRow === undefined
+          ? firstRun[entryName]
+          : {
+              minifiedBytes: candidateRow.baselineMinifiedBytes,
+              gzipBytes: candidateRow.baselineGzipBytes,
+            };
       lines.push(
         `| \`${entryName}\` | verified | ${
           fixture.minifiedBytes
@@ -2061,24 +2361,26 @@ function renderReport(results, attributionByFixture) {
     );
   }
 
-  lines.push('', '## Provisional impact', '');
-  if (results.resultStatus === 'provisional') {
-    lines.push(
-      '| Entry | State | Minified bytes | Minified kB | Gzip bytes | Gzip kB |',
-      '| --- | --- | ---: | ---: | ---: | ---: |'
-    );
-    ENTRY_NAMES.forEach((entryName) => {
-      const fixture = firstRun[entryName];
+  if (results.comparison.candidate === null) {
+    lines.push('', '## Provisional impact', '');
+    if (results.resultStatus === 'provisional') {
       lines.push(
-        `| \`${entryName}\` | provisional | ${
-          fixture.minifiedBytes
-        } | ${decimalKilobytes(fixture.minifiedBytes)} | ${
-          fixture.gzipBytes
-        } | ${decimalKilobytes(fixture.gzipBytes)} |`
+        '| Entry | State | Minified bytes | Minified kB | Gzip bytes | Gzip kB |',
+        '| --- | --- | ---: | ---: | ---: | ---: |'
       );
-    });
-  } else {
-    lines.push('No provisional values are presented as verified results.');
+      ENTRY_NAMES.forEach((entryName) => {
+        const fixture = firstRun[entryName];
+        lines.push(
+          `| \`${entryName}\` | provisional | ${
+            fixture.minifiedBytes
+          } | ${decimalKilobytes(fixture.minifiedBytes)} | ${
+            fixture.gzipBytes
+          } | ${decimalKilobytes(fixture.gzipBytes)} |`
+        );
+      });
+    } else {
+      lines.push('No provisional values are presented as verified results.');
+    }
   }
 
   lines.push(
@@ -2243,11 +2545,7 @@ function renderReport(results, attributionByFixture) {
     );
   } else {
     lines.push(
-      `Gate lane: \`${results.comparison.candidate.gateLane}\`.`,
-      '',
-      `Size gate passed: \`${results.comparison.candidate.sizeGatePassed}\`.`,
-      '',
-      `Verdict: **${results.comparison.candidate.verdict}**.`
+      ...renderCandidateExperiment(firstRun, results.comparison.candidate)
     );
   }
 
@@ -2679,6 +2977,7 @@ async function runMeasurement(options) {
 async function main() {
   const options = parseArguments(process.argv.slice(2));
   assertCandidateGateRules();
+  assertCandidateReportRules();
 
   if (options.mode === 'ranking-test') {
     runRankingWorkflowTest();
