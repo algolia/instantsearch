@@ -2,359 +2,217 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
-import algoliasearchHelper from 'algoliasearch-helper';
+import createTasksWidget from '../connectTasks';
 
-import { createInitOptions } from '../../../../test/createWidget';
-import connectTasks from '../connectTasks';
+import type { TaskController } from '../../../lib/tasks';
+import type { RenderOptions } from '../../../types';
+import type { TasksWidgetControls } from '../connectTasks';
+import type { SearchResults } from 'algoliasearch-helper';
 
-import type { TasksConnectorParams } from '../connectTasks';
-
-function jsonResponse(body: unknown): Response {
-  return new Response(JSON.stringify(body), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-// Builds a fake `text/event-stream` response whose body replays `events` as SSE
-// `data:` lines. Kept as a plain object (not a real `Response`) so the test
-// doesn't depend on `Response.body` support in the jsdom environment.
-function sseResponse(events: string[]): Response {
-  const encoder = new TextEncoder();
-  const body = new ReadableStream<Uint8Array>({
-    start(controller) {
-      events.forEach((event) => {
-        controller.enqueue(encoder.encode(`data: ${event}\n\n`));
-      });
-      controller.close();
-    },
-  });
-  return {
-    ok: true,
-    status: 200,
-    headers: {
-      get: (name: string) =>
-        name.toLowerCase() === 'content-type' ? 'text/event-stream' : null,
-    },
-    body,
-  } as unknown as Response;
-}
-
-function outputEvent(output: unknown): string {
-  return JSON.stringify({ type: 'data-task-output', data: { output } });
-}
+const DEBOUNCE = 20;
+const WAIT = DEBOUNCE + 10;
 
 function flush(ms = 0) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function init(params: TasksConnectorParams) {
-  const renderFn = jest.fn();
-  const widget = connectTasks(renderFn)(params);
-  const helper = algoliasearchHelper(createSearchClient(), '');
-  widget.init!(createInitOptions({ helper }));
-  const lastState = () =>
-    renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-  return { renderFn, widget, lastState };
+// A minimal stand-in for the engine the widget drives. Only the surface the
+// widget actually touches is mocked (`isLoading` + the imperative methods).
+function createFakeController(
+  overrides: Partial<TaskController> = {}
+): TaskController & {
+  submit: jest.Mock;
+  reset: jest.Mock;
+  invalidate: jest.Mock;
+} {
+  return {
+    output: undefined,
+    isLoading: false,
+    error: undefined,
+    submit: jest.fn(() => Promise.resolve(undefined)),
+    reset: jest.fn(),
+    invalidate: jest.fn(),
+    on: jest.fn(() => () => {}),
+    dispose: jest.fn(),
+    ...overrides,
+  } as unknown as TaskController & {
+    submit: jest.Mock;
+    reset: jest.Mock;
+    invalidate: jest.Mock;
+  };
 }
 
-describe('connectTasks', () => {
-  const originalFetch = global.fetch;
+// Builds render options carrying just what the widget reads: `results`, whose
+// `query` the default `input` maps to the task input.
+function renderOptions(query: string | null): RenderOptions {
+  const results =
+    query === null
+      ? null
+      : ({ query, hits: [{ objectID: '1' }] } as unknown as SearchResults);
+  return { results } as unknown as RenderOptions;
+}
 
-  beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
-    ) as unknown as typeof fetch;
+const input = (options: RenderOptions) =>
+  options.results ? { query: options.results.query } : null;
+
+describe('createTasksWidget', () => {
+  it('is a headless `ais.tasks` widget with a render/dispose lifecycle', () => {
+    const widget = createTasksWidget({
+      controller: createFakeController(),
+      input,
+    });
+
+    expect(widget.$$type).toBe('ais.tasks');
+    expect(typeof widget.render).toBe('function');
+    expect(typeof widget.dispose).toBe('function');
+    // Headless: it owns no render state.
+    expect(widget.getWidgetRenderState).toBeUndefined();
   });
 
-  afterEach(() => {
-    global.fetch = originalFetch;
-  });
+  describe('search-drive', () => {
+    it('submits the derived input after the debounce on first results', async () => {
+      const controller = createFakeController();
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
 
-  describe('Usage', () => {
-    it('throws without a render function', () => {
-      expect(() => {
-        // @ts-expect-error testing invalid input
-        connectTasks()({ agentId: 'a', task: 't' });
-      }).toThrowError(/render function is not valid/);
+      widget.render!(renderOptions('shoes'));
+      expect(controller.submit).not.toHaveBeenCalled();
+
+      await flush(WAIT);
+      expect(controller.submit).toHaveBeenCalledTimes(1);
+      expect(controller.submit).toHaveBeenCalledWith({ query: 'shoes' });
     });
 
-    it('throws when neither agentId nor transport is provided', () => {
-      const makeWidget = connectTasks(jest.fn());
-      expect(() =>
-        makeWidget({ task: 't' } as TasksConnectorParams)
-      ).toThrowError(/agentId.*transport/);
+    it('does not refetch when the signature is unchanged', async () => {
+      const controller = createFakeController();
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
+
+      widget.render!(renderOptions('shoes'));
+      await flush(WAIT);
+      widget.render!(renderOptions('shoes'));
+      await flush(WAIT);
+
+      expect(controller.submit).toHaveBeenCalledTimes(1);
     });
 
-    it('throws when task is missing', () => {
-      const makeWidget = connectTasks(jest.fn());
-      expect(() =>
-        makeWidget({ agentId: 'a' } as TasksConnectorParams)
-      ).toThrowError(/task/);
+    it('refetches when the signature changes', async () => {
+      const controller = createFakeController();
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
+
+      widget.render!(renderOptions('a'));
+      await flush(WAIT);
+      widget.render!(renderOptions('b'));
+      await flush(WAIT);
+
+      expect(controller.submit).toHaveBeenCalledTimes(2);
+      expect(controller.submit).toHaveBeenLastCalledWith({ query: 'b' });
     });
 
-    it('returns the widget descriptor', () => {
-      const widget = connectTasks(jest.fn())({
-        agentId: 'a',
-        task: 't',
-      });
-      expect(widget).toEqual(
-        expect.objectContaining({
-          $$type: 'ais.tasks',
-          init: expect.any(Function),
-          render: expect.any(Function),
-          dispose: expect.any(Function),
-        })
-      );
-    });
-  });
+    it('resets the controller (no fetch) when the input maps to null', async () => {
+      const controller = createFakeController();
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
 
-  describe('render state', () => {
-    it('exposes an initial idle state before any submit', () => {
-      const { lastState } = init({ agentId: 'a', task: 't' });
-      expect(lastState()).toEqual(
-        expect.objectContaining({
-          output: undefined,
-          isLoading: false,
-          error: undefined,
-          submit: expect.any(Function),
-        })
-      );
+      // Move from a real state to an empty one to exercise the reset path (the
+      // default signature also goes null, so the change is detected).
+      widget.render!(renderOptions('a'));
+      await flush(WAIT);
+      widget.render!(renderOptions(null));
+      await flush(WAIT);
+
+      expect(controller.reset).toHaveBeenCalled();
     });
 
-    it('sets isLoading while a submit is in flight and clears it on resolve', async () => {
-      const { renderFn, lastState } = init({ agentId: 'a', task: 't' });
-
-      lastState().submit({ foo: 'bar' });
-      // Synchronously after submit, the loading state is rendered.
-      expect(lastState().isLoading).toBe(true);
-      expect(lastState().error).toBeUndefined();
-
-      await flush(0);
-      expect(lastState().isLoading).toBe(false);
-      // Output is the unwrapped envelope (`{ output }` stripped).
-      expect(lastState().output).toEqual({ suggestions: ['a'] });
-      expect(renderFn).toHaveBeenCalled();
-    });
-
-    it('sends the variables as the task `input` and targets the tasks endpoint', async () => {
-      const { lastState } = init({ agentId: 'my-agent', task: 'my_task' });
-
-      lastState().submit({ query: 'shoes' });
-      await flush(0);
-
-      const [[url, request]] = (global.fetch as jest.Mock).mock.calls;
-      expect(url).toContain('/agents/my-agent/');
-      expect(url).toContain('stream=true');
-      expect(JSON.parse(request.body)).toEqual({
-        task: 'my_task',
-        input: { query: 'shoes' },
-      });
-    });
-
-    it('surfaces streamed partial outputs through the render state', async () => {
-      global.fetch = jest.fn(() =>
-        Promise.resolve(
-          sseResponse([
-            JSON.stringify({ type: 'start' }),
-            outputEvent({ value: 'a' }),
-            outputEvent({ value: 'ab' }),
-            JSON.stringify({ type: 'finish' }),
-            '[DONE]',
-          ])
-        )
-      ) as unknown as typeof fetch;
-
-      const { renderFn, lastState } = init({ agentId: 'a', task: 't' });
-      lastState().submit({});
-      await flush(0);
-
-      const outputs = renderFn.mock.calls
-        .map((call) => call[0].output)
-        .filter(Boolean);
-      // Intermediate snapshots were surfaced as they streamed in.
-      expect(outputs).toContainEqual({ value: 'a' });
-      expect(lastState().output).toEqual({ value: 'ab' });
-      expect(lastState().isLoading).toBe(false);
-    });
-
-    it('does not stream partials when `stream` is false', async () => {
-      const onDataSpy = jest.fn();
-      global.fetch = jest.fn(() => {
-        onDataSpy();
-        return Promise.resolve(jsonResponse({ output: { done: true } }));
-      }) as unknown as typeof fetch;
-
-      const { lastState } = init({ agentId: 'a', task: 't', stream: false });
-      lastState().submit({});
-      await flush(0);
-
-      const [[url]] = (global.fetch as jest.Mock).mock.calls;
-      expect(url).not.toContain('stream=true');
-      expect(lastState().output).toEqual({ done: true });
-    });
-
-    it('surfaces the error and clears output on a failed submit', async () => {
-      global.fetch = jest.fn(() =>
-        Promise.resolve(new Response('nope', { status: 500 }))
-      ) as unknown as typeof fetch;
-
-      const { lastState } = init({ agentId: 'a', task: 't' });
-      lastState().submit({});
-      await flush(0);
-
-      expect(lastState().output).toBeUndefined();
-      expect(lastState().error).toBeInstanceOf(Error);
-      expect(lastState().error?.message).toMatch(/HTTP error 500/);
-      expect(lastState().isLoading).toBe(false);
-    });
-
-    it('surfaces a synchronous error from request building and stops loading', async () => {
-      const { lastState } = init({
-        transport: {
-          api: 'https://custom.test/tasks',
-          prepareSendMessagesRequest: () => {
-            throw new Error('cannot build request');
-          },
-        },
-        task: 't',
+    it('honours a custom `getSignature` for dedup', async () => {
+      const controller = createFakeController();
+      const getSignature = jest.fn(() => 'static');
+      const widget = createTasksWidget({
+        controller,
+        input,
+        getSignature,
+        debounce: DEBOUNCE,
       });
 
-      lastState().submit({});
-      await flush(0);
+      widget.render!(renderOptions('a'));
+      await flush(WAIT);
+      // Different query, but the custom signature is unchanged → no refetch.
+      widget.render!(renderOptions('b'));
+      await flush(WAIT);
 
-      expect(lastState().error).toBeInstanceOf(Error);
-      expect(lastState().error?.message).toMatch(/cannot build request/);
-      expect(lastState().isLoading).toBe(false);
-      expect(lastState().output).toBeUndefined();
+      expect(controller.submit).toHaveBeenCalledTimes(1);
     });
 
-    it('resolves credentials from a custom transport', async () => {
-      const { lastState } = init({
-        transport: {
-          api: 'https://custom.test/tasks',
-          headers: { 'x-custom': '1' },
-        },
-        task: 't',
-      });
+    it('abandons an in-flight request when the signature changes mid-flight', async () => {
+      const controller = createFakeController({ isLoading: true });
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
 
-      lastState().submit({});
-      await flush(0);
+      widget.render!(renderOptions('a'));
+      await flush(WAIT);
+      controller.invalidate.mockClear();
 
-      const [[url, request]] = (global.fetch as jest.Mock).mock.calls;
-      expect(url).toContain('https://custom.test/tasks');
-      expect(request.headers).toMatchObject({ 'x-custom': '1' });
+      // A newer signature arrives while a request is in flight.
+      widget.render!(renderOptions('b'));
+
+      expect(controller.invalidate).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('request sequencing', () => {
-    it('ignores a stale response when a newer submit is in flight', async () => {
-      const resolvers: Array<(value: Response) => void> = [];
-      global.fetch = jest.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolvers.push(resolve);
-          })
-      ) as unknown as typeof fetch;
+  describe('controls', () => {
+    it('populates `refresh`, which submits immediately, bypassing the debounce', () => {
+      const controller = createFakeController();
+      const controls: TasksWidgetControls = { refresh: jest.fn() };
+      const widget = createTasksWidget({
+        controller,
+        input,
+        debounce: DEBOUNCE,
+        controls,
+      });
 
-      const { lastState } = init({ agentId: 'a', task: 't' });
+      widget.render!(renderOptions('shoes'));
+      // The debounced submit has not fired yet.
+      expect(controller.submit).not.toHaveBeenCalled();
 
-      // Fire two overlapping submits; the first one resolves *last*.
-      lastState().submit({ n: 1 });
-      lastState().submit({ n: 2 });
-      // `submit` defers the `fetch` call by a microtask (so a synchronous
-      // throw is caught by the chain), so flush before touching resolvers.
-      await flush(0);
-
-      // Resolve the newer request (2) first, then the stale one (1).
-      resolvers[1](jsonResponse({ output: { winner: 2 } }));
-      await flush(0);
-      resolvers[0](jsonResponse({ output: { winner: 1 } }));
-      await flush(0);
-
-      // The stale (first) response must not overwrite the latest output.
-      expect(lastState().output).toEqual({ winner: 2 });
-      expect(lastState().isLoading).toBe(false);
+      controls.refresh();
+      expect(controller.submit).toHaveBeenCalledTimes(1);
+      expect(controller.submit).toHaveBeenCalledWith({ query: 'shoes' });
     });
 
-    it('resolves each submit with its own result even when superseded', async () => {
-      const resolvers: Array<(value: Response) => void> = [];
-      global.fetch = jest.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolvers.push(resolve);
-          })
-      ) as unknown as typeof fetch;
+    it('`refresh` is a no-op while a request is in flight', () => {
+      const controller = createFakeController({ isLoading: true });
+      const controls: TasksWidgetControls = { refresh: jest.fn() };
+      const widget = createTasksWidget({
+        controller,
+        input,
+        debounce: DEBOUNCE,
+        controls,
+      });
 
-      const { lastState } = init({ agentId: 'a', task: 't' });
+      widget.render!(renderOptions('shoes'));
+      controls.refresh();
 
-      // Fire two overlapping submits; the older (1) resolves *last*.
-      const first = lastState().submit({ n: 1 });
-      const second = lastState().submit({ n: 2 });
-      await flush(0);
-
-      resolvers[1](jsonResponse({ output: { winner: 2 } }));
-      resolvers[0](jsonResponse({ output: { winner: 1 } }));
-
-      // Each promise resolves with its own output — the stale (first) call must
-      // not adopt the newer call's result just because it settled later.
-      await expect(first).resolves.toEqual({ winner: 1 });
-      await expect(second).resolves.toEqual({ winner: 2 });
-
-      // …while the shared render state still reflects only the latest request.
-      expect(lastState().output).toEqual({ winner: 2 });
+      expect(controller.submit).not.toHaveBeenCalled();
     });
 
-    it('invalidate() abandons an in-flight submit so its late result is ignored', async () => {
-      let resolveFetch: (value: Response) => void = () => {};
-      global.fetch = jest.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolveFetch = resolve;
-          })
-      ) as unknown as typeof fetch;
+    it('`refresh` is a no-op before the first render with results', () => {
+      const controller = createFakeController();
+      const controls: TasksWidgetControls = { refresh: jest.fn() };
+      createTasksWidget({ controller, input, debounce: DEBOUNCE, controls });
 
-      const { lastState } = init({ agentId: 'a', task: 't' });
-
-      lastState().submit({ n: 1 });
-      await flush(0);
-      expect(lastState().isLoading).toBe(true);
-
-      // Abandon the in-flight request without cancelling the underlying fetch.
-      lastState().invalidate();
-      expect(lastState().isLoading).toBe(false);
-
-      // The now-stale request resolves late; its output must be ignored.
-      resolveFetch(jsonResponse({ output: { late: true } }));
-      await flush(0);
-
-      expect(lastState().output).toBeUndefined();
-      expect(lastState().isLoading).toBe(false);
+      controls.refresh();
+      expect(controller.submit).not.toHaveBeenCalled();
     });
   });
 
   describe('dispose', () => {
-    it('does not render after dispose when a late submit resolves', async () => {
-      let resolveFetch: (value: Response) => void = () => {};
-      global.fetch = jest.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolveFetch = resolve;
-          })
-      ) as unknown as typeof fetch;
+    it('cancels a pending debounced submit and leaves the engine intact', async () => {
+      const controller = createFakeController();
+      const widget = createTasksWidget({ controller, input, debounce: DEBOUNCE });
 
-      const { renderFn, widget, lastState } = init({ agentId: 'a', task: 't' });
-      lastState().submit({});
+      widget.render!(renderOptions('shoes'));
+      widget.dispose!({} as never);
+      await flush(WAIT);
 
-      const callsBeforeDispose = renderFn.mock.calls.length;
-      widget.dispose!({} as any);
-
-      resolveFetch(jsonResponse({ output: { late: true } }));
-      await flush(0);
-
-      // The post-dispose resolution must not trigger another render.
-      expect(renderFn.mock.calls.length).toBe(callsBeforeDispose);
+      expect(controller.submit).not.toHaveBeenCalled();
+      // The engine is owned by the consumer — the widget must not tear it down.
+      expect(controller.dispose).not.toHaveBeenCalled();
     });
   });
 });

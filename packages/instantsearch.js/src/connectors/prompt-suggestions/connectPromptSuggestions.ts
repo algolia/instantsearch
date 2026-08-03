@@ -1,52 +1,21 @@
 import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
-import {
-  checkRendering,
-  createDocumentationMessageGenerator,
-  getRefinements,
-  noop,
-  warning,
-} from '../../lib/utils';
-import connectTasks from '../tasks/connectTasks';
+import { getRefinements, warning } from '../../lib/utils';
+import { createTaskConnector } from '../tasks/createTaskConnector';
 
 import type { TaskTransport } from '../../lib/tasks';
 import type {
   Connector,
   Hit,
   InitOptions,
-  Renderer,
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
-import type {
-  TasksConnectorParams,
-  TasksRenderState,
-} from '../tasks/connectTasks';
 import type { SearchResults } from 'algoliasearch-helper';
-
-const withUsage = createDocumentationMessageGenerator({
-  name: 'prompt-suggestions',
-  connector: true,
-});
 
 const RENDER_STATE_KEY = 'promptSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const DEBOUNCE_MS = 300;
-
-function parseSuggestions(data: unknown): string[] {
-  const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
-    ?.suggestions;
-
-  if (!Array.isArray(suggestions)) {
-    return [];
-  }
-
-  return suggestions.filter((s: unknown): s is string => typeof s === 'string');
-}
-
-function buildSuggestionMessage(suggestion: string): string {
-  return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
-}
 
 /** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
 export type PromptSuggestionsTransport = TaskTransport;
@@ -127,6 +96,18 @@ export type PromptSuggestionsConnector = Connector<
   PromptSuggestionsConnectorParams
 >;
 
+// ── Domain helpers ─────────────────────────────────────────────────────────
+// Pure, params-driven projections of the search state → task input / chat
+// hand-off. The generic task machinery (controller, search-drive, disposal)
+// lives in `createTaskConnector`; this file is only the prompt-suggestions
+// domain layered on top of it.
+
+/** The subset of `widgetParams` the context/input helpers need, with defaults applied. */
+type ContextConfig = {
+  context: PromptSuggestionsConnectorParams['context'];
+  transformHits: PromptSuggestionsTransformHits;
+};
+
 function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
   const clean: Record<string, unknown> = {};
   Object.keys(hit).forEach((key) => {
@@ -141,6 +122,30 @@ function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
 
 const DEFAULT_TRANSFORM_HITS: PromptSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5).map(stripInternalHitMetadata);
+
+function resolveContextConfig(
+  widgetParams: PromptSuggestionsConnectorParams
+): ContextConfig {
+  return {
+    context: widgetParams.context,
+    transformHits: widgetParams.transformHits ?? DEFAULT_TRANSFORM_HITS,
+  };
+}
+
+function parseSuggestions(data: unknown): string[] {
+  const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
+    ?.suggestions;
+
+  if (!Array.isArray(suggestions)) {
+    return [];
+  }
+
+  return suggestions.filter((s: unknown): s is string => typeof s === 'string');
+}
+
+function buildSuggestionMessage(suggestion: string): string {
+  return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
+}
 
 function buildFilters(results: SearchResults): string[][] | undefined {
   const state = results._state;
@@ -182,220 +187,203 @@ function buildFilters(results: SearchResults): string[][] | undefined {
   return groups.length > 0 ? groups : undefined;
 }
 
-const connectPromptSuggestions: PromptSuggestionsConnector =
-  function connectPromptSuggestions(renderFn, unmountFn = noop) {
-    checkRendering(renderFn, withUsage());
+function getStateSignature(results: SearchResults): string {
+  if (results.queryID) {
+    return results.queryID;
+  }
+  const query = results.query || '';
+  const filters = JSON.stringify(buildFilters(results) ?? []);
+  const hitIds = (results.hits || []).map((hit) => hit.objectID).join(',');
+  return `${query}|${filters}|${hitIds}`;
+}
 
-    return (widgetParams) => {
-      warning(
-        false,
-        'PromptSuggestions is not yet stable and will change in the future.'
-      );
+function resolvePageContext(
+  results: SearchResults | null,
+  { context, transformHits }: ContextConfig
+): Record<string, unknown> | undefined {
+  const resolvedContext = typeof context === 'function' ? context() : context;
+  // Explicit context replaces auto-extraction; otherwise derive it from the
+  // current search state. The task's server-owned instructions decide how to
+  // interpret the shape — the client doesn't label it.
+  if (resolvedContext) {
+    return { ...resolvedContext };
+  }
+  if (!results) {
+    return undefined;
+  }
+  const filters = buildFilters(results);
+  return {
+    query: results.query || '',
+    ...(filters ? { filters } : {}),
+    hitsSample: transformHits(results.hits as Hit[]),
+  };
+}
 
-      const {
-        agentId,
-        configurationId,
-        transformHits = DEFAULT_TRANSFORM_HITS,
-        context,
-        transformItems = (items) => items,
-        transport,
-      } = widgetParams;
+// The same page context, flattened for the chat handoff: `turnContext` is a
+// flat `Record<string, string>` per the Agent Studio contract, so non-string
+// values (e.g. `hitsSample`) are serialized.
+function buildTurnContext(
+  results: SearchResults | null,
+  config: ContextConfig
+): Record<string, string> | undefined {
+  const pageContext = resolvePageContext(results, config);
+  if (!pageContext) {
+    return undefined;
+  }
+  const entries = Object.entries(pageContext)
+    .map(([key, value]): [string, string] => [
+      key,
+      typeof value === 'string' ? value : JSON.stringify(value),
+    ])
+    .filter(([, value]) => value.trim() !== '');
+  return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+}
 
-      if (!agentId && !transport) {
-        throw new Error(
-          withUsage(
-            'The `agentId` option is required unless a custom `transport` is provided.'
-          )
+function getChatRenderState(
+  renderOptions: InitOptions | RenderOptions
+): Partial<ChatRenderState> | undefined {
+  const { instantSearchInstance, parent } = renderOptions;
+  const indexId = parent ? parent.getIndexId() : '';
+  if (!indexId || !instantSearchInstance.renderState?.[indexId]) {
+    return undefined;
+  }
+  return instantSearchInstance.renderState[indexId][CHAT_RENDER_STATE_KEY] as
+    | Partial<ChatRenderState>
+    | undefined;
+}
+
+function sendToChat(
+  renderOptions: InitOptions | RenderOptions,
+  config: ContextConfig
+) {
+  return (prompt: string): boolean => {
+    const chatRenderState = getChatRenderState(renderOptions);
+    if (!chatRenderState || !chatRenderState.sendMessage) {
+      if (__DEV__) {
+        warning(
+          false,
+          `No chat widget found in render state. Make sure a \`connectChat\` widget is mounted on the same index, or pass an \`onSuggestionClick\` prop to handle the click yourself.`
         );
       }
-
-      if (!configurationId) {
-        throw new Error(withUsage('The `configurationId` option is required.'));
-      }
-
-      // The generic `tasks` widget owns the entire fetch lifecycle (request
-      // engine, debounced auto-submit, request sequencing) *and* its own
-      // init/render/dispose. This connector is a *preset* over it: it declares
-      // how the search state maps to the task `input`, how the task output maps
-      // to the suggestions render state, and the chat hand-off — then returns
-      // the configured `tasks` widget directly. No lifecycle lives here.
-      const getStateSignature = (results: SearchResults): string => {
-        if (results.queryID) {
-          return results.queryID;
-        }
-        const query = results.query || '';
-        const filters = JSON.stringify(buildFilters(results) ?? []);
-        const hitIds = (results.hits || [])
-          .map((hit) => hit.objectID)
-          .join(',');
-        return `${query}|${filters}|${hitIds}`;
-      };
-
-      const getChatRenderState = (
-        renderOptions: InitOptions | RenderOptions
-      ): Partial<ChatRenderState> | undefined => {
-        const { instantSearchInstance, parent } = renderOptions;
-        const indexId = parent ? parent.getIndexId() : '';
-        if (!indexId || !instantSearchInstance.renderState?.[indexId]) {
-          return undefined;
-        }
-        return instantSearchInstance.renderState[indexId][
-          CHAT_RENDER_STATE_KEY
-        ] as Partial<ChatRenderState> | undefined;
-      };
-
-      const sendToChat =
-        (renderOptions: InitOptions | RenderOptions) =>
-        (prompt: string): boolean => {
-          const chatRenderState = getChatRenderState(renderOptions);
-          if (!chatRenderState || !chatRenderState.sendMessage) {
-            if (__DEV__) {
-              warning(
-                false,
-                `No chat widget found in render state. Make sure a \`connectChat\` widget is mounted on the same index, or pass an \`onSuggestionClick\` prop to handle the click yourself.`
-              );
-            }
-            return false;
-          }
-          const results =
-            ('results' in renderOptions ? renderOptions.results : null) ?? null;
-          return openChat(chatRenderState, {
-            message: buildSuggestionMessage(prompt),
-            referer: 'prompt-suggestions-widget',
-            turnContext: buildTurnContext(results),
-          });
-        };
-
-      const resolvePageContext = (
-        results: SearchResults | null
-      ): Record<string, unknown> | undefined => {
-        const resolvedContext =
-          typeof context === 'function' ? context() : context;
-        // Explicit context replaces auto-extraction; otherwise derive it from
-        // the current search state. The task's server-owned instructions decide
-        // how to interpret the shape — the client doesn't label it.
-        if (resolvedContext) {
-          return { ...resolvedContext };
-        }
-        if (!results) {
-          return undefined;
-        }
-        const filters = buildFilters(results);
-        return {
-          query: results.query || '',
-          ...(filters ? { filters } : {}),
-          hitsSample: transformHits(results.hits as Hit[]),
-        };
-      };
-
-      // The same page context, flattened for the chat handoff: `turnContext` is
-      // a flat `Record<string, string>` per the Agent Studio contract, so
-      // non-string values (e.g. `hitsSample`) are serialized.
-      const buildTurnContext = (
-        results: SearchResults | null
-      ): Record<string, string> | undefined => {
-        const pageContext = resolvePageContext(results);
-        if (!pageContext) {
-          return undefined;
-        }
-        const entries = Object.entries(pageContext)
-          .map(([key, value]): [string, string] => [
-            key,
-            typeof value === 'string' ? value : JSON.stringify(value),
-          ])
-          .filter(([, value]) => value.trim() !== '');
-        return entries.length > 0 ? Object.fromEntries(entries) : undefined;
-      };
-
-      // ── Preset config passed to the generic `tasks` widget ──────────────
-      // Maps the current search state to the task input. Returning `null` means
-      // "nothing to describe" — the `tasks` widget clears its output instead of
-      // firing a request.
-      const buildTaskInput = (
-        renderOptions: RenderOptions
-      ): Record<string, unknown> | null => {
-        const results = renderOptions.results;
-        const hasContext = context !== undefined;
-        if (!hasContext && !results?.hits?.length) {
-          return null;
-        }
-        return resolvePageContext(results) ?? {};
-      };
-
-      const getTaskSignature = (
-        renderOptions: RenderOptions
-      ): string | null => {
-        const results = renderOptions.results;
-        return results ? getStateSignature(results) : null;
-      };
-
-      // Projects the generic task engine state → this preset's suggestions
-      // render state. Passed to `connectTasks` as `mapRenderState`, so the
-      // generic widget invokes it (with the current render options) for both the
-      // render function and `getRenderState`/`getWidgetRenderState`. A failed
-      // task (including a mid-stream `error` event) must not leave any streamed
-      // partial visible; fall back to a blank suggestions state.
-      const mapRenderState = (
-        taskState: TasksRenderState,
-        renderOptions: InitOptions | RenderOptions
-      ): PromptSuggestionsRenderState & {
-        widgetParams: PromptSuggestionsConnectorParams;
-      } => {
-        const results =
-          'results' in renderOptions ? renderOptions.results : undefined;
-
-        const suggestions = taskState.error
-          ? []
-          : parseSuggestions(taskState.output);
-
-        const transformed = transformItems(suggestions, {
-          query: results?.query || '',
-          results: results || null,
-        });
-
-        const chatRenderState = getChatRenderState(renderOptions);
-
-        const isChatBusy = chatRenderState
-          ? !chatRenderState.sendMessage || isChatStreaming(chatRenderState)
-          : false;
-
-        const send = sendToChat(renderOptions);
-
-        return {
-          suggestions: transformed,
-          isLoading: taskState.isLoading,
-          onSuggestionClick: send,
-          sendToChat: send,
-          refresh: taskState.refresh,
-          isChatBusy,
-          widgetParams,
-        };
-      };
-
-      // Return the configured generic `tasks` widget directly — InstantSearch
-      // drives its own `init`/`render`/`dispose`, and `mapRenderState` +
-      // `renderStateKey` make it expose this preset's suggestions render state
-      // under `promptSuggestions`. Only `$$type` is overridden so the widget
-      // still identifies as `ais.promptSuggestions`.
-      const tasksWidget = connectTasks(
-        renderFn as unknown as Renderer<TasksRenderState, TasksConnectorParams>,
-        unmountFn
-      )({
-        ...(transport ? { transport } : { agentId }),
-        task: configurationId,
-        stream: true,
-        input: buildTaskInput,
-        getSignature: getTaskSignature,
-        debounce: DEBOUNCE_MS,
-        renderStateKey: RENDER_STATE_KEY,
-        mapRenderState: mapRenderState as TasksConnectorParams['mapRenderState'],
-      } as TasksConnectorParams);
-
-      return {
-        ...tasksWidget,
-        $$type: 'ais.promptSuggestions',
-      } as unknown as ReturnType<ReturnType<PromptSuggestionsConnector>>;
-    };
+      return false;
+    }
+    const results =
+      ('results' in renderOptions ? renderOptions.results : null) ?? null;
+    return openChat(chatRenderState, {
+      message: buildSuggestionMessage(prompt),
+      referer: 'prompt-suggestions-widget',
+      turnContext: buildTurnContext(results, config),
+    });
   };
+}
+
+// Maps the current search state to the task input. Returning `null` means
+// "nothing to describe" — the `tasks` widget clears its output instead of
+// firing a request.
+function buildTaskInput(
+  renderOptions: RenderOptions,
+  config: ContextConfig
+): Record<string, unknown> | null {
+  const results = renderOptions.results;
+  const hasContext = config.context !== undefined;
+  if (!hasContext && !results?.hits?.length) {
+    return null;
+  }
+  return resolvePageContext(results, config) ?? {};
+}
+
+function getTaskSignature(renderOptions: RenderOptions): string | null {
+  const results = renderOptions.results;
+  return results ? getStateSignature(results) : null;
+}
+
+// ── The connector: prompt-suggestions as a thin template over `tasks` ────────
+// All the request/lifecycle machinery is supplied by `createTaskConnector`;
+// this only declares the task identity and the domain projections above.
+const connectPromptSuggestions: PromptSuggestionsConnector = createTaskConnector<
+  PromptSuggestionsWidgetDescription,
+  PromptSuggestionsConnectorParams
+>({
+  connectorName: 'prompt-suggestions',
+  $$type: 'ais.promptSuggestions',
+  renderStateKey: RENDER_STATE_KEY,
+  debounce: DEBOUNCE_MS,
+
+  getControllerOptions(widgetParams, withUsage) {
+    warning(
+      false,
+      'PromptSuggestions is not yet stable and will change in the future.'
+    );
+
+    const { agentId, configurationId, transport } = widgetParams;
+
+    if (!agentId && !transport) {
+      throw new Error(
+        withUsage(
+          'The `agentId` option is required unless a custom `transport` is provided.'
+        )
+      );
+    }
+
+    if (!configurationId) {
+      throw new Error(withUsage('The `configurationId` option is required.'));
+    }
+
+    return {
+      ...(transport ? { transport } : { agentId }),
+      task: configurationId,
+      stream: true,
+    };
+  },
+
+  getInput(widgetParams) {
+    const config = resolveContextConfig(widgetParams);
+    return (renderOptions) => buildTaskInput(renderOptions, config);
+  },
+
+  getSignature() {
+    return (renderOptions) => getTaskSignature(renderOptions);
+  },
+
+  getWidgetRenderState({
+    widgetParams,
+    output,
+    isLoading,
+    error,
+    refresh,
+    renderOptions,
+  }) {
+    const config = resolveContextConfig(widgetParams);
+    const results =
+      'results' in renderOptions ? renderOptions.results : undefined;
+
+    // A failed task (including a mid-stream `error` event) must not leave any
+    // streamed partial visible; fall back to a blank suggestions state.
+    const suggestions = error ? [] : parseSuggestions(output);
+
+    const transformItems =
+      widgetParams.transformItems ?? ((items: string[]) => items);
+    const transformed = transformItems(suggestions, {
+      query: results?.query || '',
+      results: results || null,
+    });
+
+    const chatRenderState = getChatRenderState(renderOptions);
+    const isChatBusy = chatRenderState
+      ? !chatRenderState.sendMessage || isChatStreaming(chatRenderState)
+      : false;
+
+    const send = sendToChat(renderOptions, config);
+
+    return {
+      suggestions: transformed,
+      isLoading,
+      onSuggestionClick: send,
+      sendToChat: send,
+      refresh,
+      isChatBusy,
+    };
+  },
+});
 
 export default connectPromptSuggestions;

@@ -12,14 +12,64 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import connectPromptSuggestions from '../connectPromptSuggestions';
+import baseConnectPromptSuggestions from '../connectPromptSuggestions';
 
+import type { Widget } from '../../../types';
 import type { PromptSuggestionsConnectorParams } from '../connectPromptSuggestions';
 import type { SearchResults } from 'algoliasearch-helper';
 
 // Matches the connector's internal DEBOUNCE_MS constant. Tests wait this long
 // (plus a small buffer) for the debounced fetch to fire.
 const DEBOUNCE_WAIT = 320;
+
+// The connector mounts a headless, search-driven `tasks` widget on its parent
+// index (via `addWidgets`) and lets the index drive that widget's render cycle.
+// These unit tests drive a single widget by hand, so this wrapper captures the
+// mounted `tasks` widget and forwards each manual `render`/`dispose` to it —
+// standing in for the index. Otherwise it is behaviorally transparent.
+function connectPromptSuggestions(
+  renderFn: Parameters<typeof baseConnectPromptSuggestions>[0]
+) {
+  const make = baseConnectPromptSuggestions(renderFn);
+
+  return (params: PromptSuggestionsConnectorParams) => {
+    const real = make(params);
+    const mounted: Widget[] = [];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const patchParent = (realParent: any) => ({
+      getIndexId: () => realParent.getIndexId(),
+      addWidgets: (widgets: Widget[]) => {
+        mounted.push(...widgets);
+      },
+      removeWidgets: (widgets: Widget[]) => {
+        widgets.forEach((widget) => {
+          const index = mounted.indexOf(widget);
+          if (index > -1) {
+            mounted.splice(index, 1);
+          }
+        });
+      },
+    });
+
+    return {
+      ...real,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render(options: any) {
+        const renderOptions = { ...options, parent: patchParent(options.parent) };
+        real.render!(renderOptions);
+        mounted.forEach((widget) => widget.render!(renderOptions));
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispose(options: any) {
+        return real.dispose!({
+          ...options,
+          parent: patchParent(options.parent),
+        });
+      },
+    } as ReturnType<typeof make>;
+  };
+}
 
 function makeResults(
   overrides: {
