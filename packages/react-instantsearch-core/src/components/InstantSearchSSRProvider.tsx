@@ -46,15 +46,15 @@ export function InstantSearchSSRProvider<
     return <>{children}</>;
   }
 
+  const contextValue = {
+    ...props,
+    ssrSearchRef,
+    recommendIdx,
+    hydrationCompleteRef,
+  };
+
   return (
-    <InstantSearchSSRContext.Provider
-      value={{
-        ...props,
-        ssrSearchRef,
-        recommendIdx,
-        hydrationCompleteRef,
-      }}
-    >
+    <InstantSearchSSRContext.Provider value={contextValue}>
       {children}
     </InstantSearchSSRContext.Provider>
   );

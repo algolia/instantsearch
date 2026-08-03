@@ -7,6 +7,10 @@ const subscribe = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
+type InternalInstantSearchSSRContext = {
+  hydrationCompleteRef?: { current: boolean };
+};
+
 function useNativeIsHydrated() {
   return React.useSyncExternalStore(
     subscribe,
@@ -27,7 +31,9 @@ function useLegacyIsHydrated() {
   const serverContext = useInstantSearchServerContext();
   const ssrContext = useInstantSearchSSRContext();
   const isServerRendered = serverContext !== null || ssrContext !== null;
-  const isProviderHydrated = ssrContext?.hydrationCompleteRef?.current === true;
+  const isProviderHydrated =
+    (ssrContext as InternalInstantSearchSSRContext | null)?.hydrationCompleteRef
+      ?.current === true;
   const [isHydrated, setIsHydrated] = React.useState(
     !isServerRendered || isProviderHydrated
   );
