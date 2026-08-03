@@ -11,10 +11,9 @@ import connectTasks from '../tasks/connectTasks';
 import type { TaskTransport } from '../../lib/tasks';
 import type {
   Connector,
-  DisposeOptions,
   Hit,
-  IndexRenderState,
   InitOptions,
+  Renderer,
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
@@ -214,22 +213,12 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         throw new Error(withUsage('The `configurationId` option is required.'));
       }
 
-      let tasksState: TasksRenderState | undefined;
-      let suggestions: string[] = [];
-      let isLoading = false;
-      let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-      let lastStateSignature: string | null = null;
-      let latestRenderOptions: RenderOptions | null = null;
-      // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
-      // the widget is unmounted; this guard stops those late callbacks from
-      // calling `renderFn` into a torn-down container.
-      let disposed = false;
-      // True between a state-signature change and the debounced refetch that
-      // follows it. While pending, the search state has already moved on, so a
-      // still-in-flight request from the previous state must not paint its
-      // suggestions, its inner render is ignored until the new `submit` starts.
-      let refetchPending = false;
-
+      // The generic `tasks` widget owns the entire fetch lifecycle (request
+      // engine, debounced auto-submit, request sequencing) *and* its own
+      // init/render/dispose. This connector is a *preset* over it: it declares
+      // how the search state maps to the task `input`, how the task output maps
+      // to the suggestions render state, and the chat hand-off — then returns
+      // the configured `tasks` widget directly. No lifecycle lives here.
       const getStateSignature = (results: SearchResults): string => {
         if (results.queryID) {
           return results.queryID;
@@ -269,9 +258,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             return false;
           }
           const results =
-            latestRenderOptions?.results ??
-            ('results' in renderOptions ? renderOptions.results : null) ??
-            null;
+            ('results' in renderOptions ? renderOptions.results : null) ?? null;
           return openChat(chatRenderState, {
             message: buildSuggestionMessage(prompt),
             referer: 'prompt-suggestions-widget',
@@ -301,9 +288,6 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         };
       };
 
-      const buildInput = (results: SearchResults): Record<string, unknown> =>
-        resolvePageContext(results) ?? {};
-
       // The same page context, flattened for the chat handoff: `turnContext` is
       // a flat `Record<string, string>` per the Agent Studio contract, so
       // non-string values (e.g. `hitsSample`) are serialized.
@@ -323,51 +307,47 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         return entries.length > 0 ? Object.fromEntries(entries) : undefined;
       };
 
-      const renderOutward = (renderOptions: InitOptions | RenderOptions) => {
-        if (disposed) return;
-        renderFn(
-          {
-            ...getWidgetRenderState(renderOptions),
-            instantSearchInstance: renderOptions.instantSearchInstance,
-          },
-          false
-        );
-      };
-
-      const fetchAndRender = (
-        results: SearchResults,
+      // ── Preset config passed to the generic `tasks` widget ──────────────
+      // Maps the current search state to the task input. Returning `null` means
+      // "nothing to describe" — the `tasks` widget clears its output instead of
+      // firing a request.
+      const buildTaskInput = (
         renderOptions: RenderOptions
-      ) => {
-        if (disposed || !tasksState) return;
-        refetchPending = false;
+      ): Record<string, unknown> | null => {
+        const results = renderOptions.results;
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
-          tasksState.invalidate();
-          suggestions = [];
-          isLoading = false;
-          renderOutward(renderOptions);
-          return;
+          return null;
         }
-
-        tasksState.submit(buildInput(results));
+        return resolvePageContext(results) ?? {};
       };
 
-      const refresh = () => {
-        if (isLoading) return;
-        const results = latestRenderOptions?.results;
-        if (!results || !latestRenderOptions) return;
-        clearTimeout(debounceTimer);
-        lastStateSignature = getStateSignature(results);
-        fetchAndRender(results, latestRenderOptions);
+      const getTaskSignature = (
+        renderOptions: RenderOptions
+      ): string | null => {
+        const results = renderOptions.results;
+        return results ? getStateSignature(results) : null;
       };
 
-      const getWidgetRenderState = (
+      // Projects the generic task engine state → this preset's suggestions
+      // render state. Passed to `connectTasks` as `mapRenderState`, so the
+      // generic widget invokes it (with the current render options) for both the
+      // render function and `getRenderState`/`getWidgetRenderState`. A failed
+      // task (including a mid-stream `error` event) must not leave any streamed
+      // partial visible; fall back to a blank suggestions state.
+      const mapRenderState = (
+        taskState: TasksRenderState,
         renderOptions: InitOptions | RenderOptions
-      ): Omit<PromptSuggestionsRenderState, never> & {
+      ): PromptSuggestionsRenderState & {
         widgetParams: PromptSuggestionsConnectorParams;
       } => {
         const results =
           'results' in renderOptions ? renderOptions.results : undefined;
+
+        const suggestions = taskState.error
+          ? []
+          : parseSuggestions(taskState.output);
+
         const transformed = transformItems(suggestions, {
           query: results?.query || '',
           results: results || null,
@@ -383,124 +363,38 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
         return {
           suggestions: transformed,
-          isLoading,
+          isLoading: taskState.isLoading,
           onSuggestionClick: send,
           sendToChat: send,
-          refresh,
+          refresh: taskState.refresh,
           isChatBusy,
           widgetParams,
         };
       };
 
-      // Mirrors each inner render (submit start → skeleton, stream partials,
-      // resolve/error) into this widget's state and re-renders on the client.
-      const handleInnerRender = (renderState: TasksRenderState) => {
-        tasksState = renderState;
-        if (refetchPending) return;
-        if (renderState.error) {
-          // A failed task (including a mid-stream `error` event) must not leave
-          // any streamed partial visible. There's no error UI for now, so fall
-          // back to a blank suggestions state.
-          suggestions = [];
-        } else if (renderState.isLoading || renderState.output !== undefined) {
-          // Only adopt the inner output once a request is loading or has
-          // produced one, so the initial no-op render doesn't clobber pills.
-          suggestions = parseSuggestions(renderState.output);
-        }
-        isLoading = renderState.isLoading;
-        if (!latestRenderOptions) return;
-        renderOutward(latestRenderOptions);
-      };
-
+      // Return the configured generic `tasks` widget directly — InstantSearch
+      // drives its own `init`/`render`/`dispose`, and `mapRenderState` +
+      // `renderStateKey` make it expose this preset's suggestions render state
+      // under `promptSuggestions`. Only `$$type` is overridden so the widget
+      // still identifies as `ais.promptSuggestions`.
       const tasksWidget = connectTasks(
-        handleInnerRender,
-        noop
+        renderFn as unknown as Renderer<TasksRenderState, TasksConnectorParams>,
+        unmountFn
       )({
         ...(transport ? { transport } : { agentId }),
         task: configurationId,
         stream: true,
+        input: buildTaskInput,
+        getSignature: getTaskSignature,
+        debounce: DEBOUNCE_MS,
+        renderStateKey: RENDER_STATE_KEY,
+        mapRenderState: mapRenderState as TasksConnectorParams['mapRenderState'],
       } as TasksConnectorParams);
 
       return {
+        ...tasksWidget,
         $$type: 'ais.promptSuggestions',
-
-        init(initOptions) {
-          const { instantSearchInstance } = initOptions;
-
-          tasksWidget.init!(initOptions);
-
-          renderFn(
-            {
-              ...getWidgetRenderState(initOptions),
-              instantSearchInstance,
-            },
-            true
-          );
-        },
-
-        render(renderOptions) {
-          const { results, instantSearchInstance } = renderOptions;
-
-          latestRenderOptions = renderOptions;
-
-          if (!results) {
-            renderFn(
-              {
-                ...getWidgetRenderState(renderOptions),
-                instantSearchInstance,
-              },
-              false
-            );
-            return;
-          }
-
-          const stateSignature = getStateSignature(results);
-
-          if (stateSignature !== lastStateSignature) {
-            lastStateSignature = stateSignature;
-            refetchPending = true;
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-              if (latestRenderOptions?.results) {
-                fetchAndRender(
-                  latestRenderOptions.results,
-                  latestRenderOptions
-                );
-              }
-            }, DEBOUNCE_MS);
-          }
-
-          renderFn(
-            {
-              ...getWidgetRenderState(renderOptions),
-              instantSearchInstance,
-            },
-            false
-          );
-        },
-
-        dispose(disposeOptions: DisposeOptions) {
-          disposed = true;
-          clearTimeout(debounceTimer);
-          tasksWidget.dispose!(disposeOptions);
-          unmountFn();
-        },
-
-        getRenderState(
-          renderState,
-          renderOptions
-        ): IndexRenderState &
-          PromptSuggestionsWidgetDescription['indexRenderState'] {
-          return {
-            ...renderState,
-            [RENDER_STATE_KEY]: this.getWidgetRenderState(renderOptions),
-          };
-        },
-
-        getWidgetRenderState(renderOptions) {
-          return getWidgetRenderState(renderOptions);
-        },
-      };
+      } as unknown as ReturnType<ReturnType<PromptSuggestionsConnector>>;
     };
   };
 

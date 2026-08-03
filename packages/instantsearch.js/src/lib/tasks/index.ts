@@ -4,6 +4,7 @@ export {
   createTaskRunner,
   fetchTask,
 } from './fetchTask';
+export { TaskController } from './TaskController';
 
 export type {
   ResolvedEndpoint,
