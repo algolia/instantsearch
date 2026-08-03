@@ -36,11 +36,12 @@ import { ProductHit } from './types/ProductHit';
 
 import type { Router, UiState } from 'instantsearch.js';
 
-const APP_ID = 'latency';
-const API_KEY = '6be0576ff61c053d5f9a3225e2a90f76';
 const USER_TOKEN = 'react-native-demo-user';
 
-const searchClient = algoliasearch(APP_ID, API_KEY);
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 export default function App() {
   const [routing, setRouting] = useState<{ router: Router<UiState> } | null>(
@@ -48,11 +49,10 @@ export default function App() {
   );
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [insightsClient] = useState(() =>
-    createInsightsClient({
-      appId: APP_ID,
-      apiKey: API_KEY,
-      initialUserToken: USER_TOKEN,
-    })
+    // The insights middleware extracts the Algolia credentials from
+    // `searchClient` and forwards them to the client, so they don't need to
+    // be repeated here.
+    createInsightsClient({ initialUserToken: USER_TOKEN })
   );
 
   // The custom router's `read()` is synchronous, so route state must be
