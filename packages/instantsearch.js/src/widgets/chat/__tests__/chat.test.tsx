@@ -7,6 +7,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, screen } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
+import { openChat } from '../../../lib/chat/openChat';
 import { warning } from '../../../lib/utils';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { chatInlineLayout } from '../../../templates';
@@ -395,6 +396,135 @@ describe('chat', () => {
   });
 
   describe('prompt focus stability', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    test('focuses only for explicit open transitions', async () => {
+      const container = document.createElement('div');
+      const triggerContainer = document.createElement('div');
+      const externalButton = document.createElement('button');
+      document.body.append(container, triggerContainer, externalButton);
+      externalButton.focus();
+
+      const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+      jest
+        .spyOn(window, 'requestAnimationFrame')
+        .mockImplementation((callback) => {
+          callback(0);
+          return 0;
+        });
+      sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          persistOpen: true,
+          requiresSearch: false,
+        }),
+        chatTrigger({ container: triggerContainer }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(document.activeElement).toBe(externalButton);
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(document.activeElement).toBe(externalButton);
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      externalButton.focus();
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).toBe(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      );
+
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      externalButton.focus();
+      fireEvent.click(triggerContainer.querySelector('.ais-ChatToggleButton')!);
+      await wait(0);
+
+      expect(focusSpy).toHaveBeenCalledTimes(2);
+      expect(document.activeElement).toBe(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      );
+
+      externalButton.focus();
+      search.renderState.indexName.chat!.focusInput();
+      await wait(0);
+
+      expect(focusSpy).toHaveBeenCalledTimes(3);
+      expect(document.activeElement).toBe(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      );
+    });
+
+    test('does not move focus when openChat submits to an open panel', async () => {
+      const container = document.createElement('div');
+      const externalButton = document.createElement('button');
+      document.body.append(container, externalButton);
+
+      const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+      jest
+        .spyOn(window, 'requestAnimationFrame')
+        .mockImplementation((callback) => {
+          callback(0);
+          return 0;
+        });
+      sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          persistOpen: true,
+          requiresSearch: false,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+      externalButton.focus();
+
+      openChat(
+        { ...search.renderState.indexName.chat, status: 'submitted' },
+        { message: 'macbook' }
+      );
+      await wait(0);
+
+      expect(document.activeElement).toBe(externalButton);
+      expect(focusSpy).not.toHaveBeenCalled();
+    });
+
     // A fresh `layoutComponent` per render would remount the chat subtree
     // and drop textarea focus on every keystroke.
     test('keeps the prompt textarea mounted across re-renders with a custom templates.layout', async () => {

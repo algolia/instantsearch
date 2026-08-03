@@ -4,17 +4,29 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { act, render, screen } from '@testing-library/react';
-import { Chat as ChatInstance } from 'instantsearch.js/es/lib/chat';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { Chat as ChatInstance, openChat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
-import { InstantSearch } from 'react-instantsearch-core';
+import { InstantSearch, useInstantSearch } from 'react-instantsearch-core';
 
 import { ChatInlineLayout } from '../../components/ChatInlineLayout';
 import { Chat } from '../Chat';
+import { ChatTrigger } from '../ChatTrigger';
 
+import type { ChatHandle } from '../Chat';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
 const searchClient = createSearchClient();
+
+function CaptureChatRenderState({
+  capture,
+}: {
+  capture: (chat: Parameters<typeof openChat>[0]) => void;
+}) {
+  const { indexRenderState } = useInstantSearch();
+  capture(indexRenderState.chat);
+  return null;
+}
 
 function createChat() {
   return new ChatInstance<UIMessage>({
@@ -86,6 +98,185 @@ function ChatUnderTest({
 }
 
 describe('Chat', () => {
+  afterEach(() => {
+    sessionStorage.clear();
+    jest.restoreAllMocks();
+  });
+
+  test('focuses only for explicit open transitions', async () => {
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+    externalButton.focus();
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+    const chatRef = React.createRef<ChatHandle>();
+    let chatRenderState: Parameters<typeof openChat>[0];
+
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          ref={chatRef}
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          persistOpen={true}
+          requiresSearch={false}
+        />
+        <ChatTrigger floating={false} />
+        <CaptureChatRenderState
+          capture={(renderState) => {
+            chatRenderState = renderState;
+          }}
+        />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    expect(document.activeElement).toBe(externalButton);
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    await act(async () => {
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+
+    expect(document.activeElement).toBe(externalButton);
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    externalButton.focus();
+    await act(async () => {
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    externalButton.focus();
+    await act(async () => {
+      fireEvent.click(container.querySelector('.ais-ChatToggleButton')!);
+      await wait(0);
+    });
+
+    expect(focusSpy).toHaveBeenCalledTimes(2);
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.focus();
+    await act(async () => {
+      chatRenderState!.focusInput!();
+      await wait(0);
+    });
+
+    expect(focusSpy).toHaveBeenCalledTimes(3);
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.remove();
+  });
+
+  test('does not move focus when openChat submits to an open panel', async () => {
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+    externalButton.focus();
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+    let chatRenderState: Parameters<typeof openChat>[0];
+
+    render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          persistOpen={true}
+          requiresSearch={false}
+        />
+        <CaptureChatRenderState
+          capture={(renderState) => {
+            chatRenderState = renderState;
+          }}
+        />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+    externalButton.focus();
+
+    await act(async () => {
+      openChat(
+        { ...chatRenderState, status: 'submitted' },
+        { message: 'macbook' }
+      );
+      await wait(0);
+    });
+
+    expect(document.activeElement).toBe(externalButton);
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    externalButton.remove();
+  });
+
+  test('keeps prompt autofocus when open persistence is disabled', async () => {
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+    externalButton.focus();
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          requiresSearch={false}
+        />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.remove();
+  });
+
   test('shows reasoning on completed messages when enabled after rendering', async () => {
     const chat = createChat();
     const { rerender } = render(

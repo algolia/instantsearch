@@ -295,7 +295,10 @@ function ChatInner<
     suggestions,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
-  } = chatState;
+    '~consumeInputFocus': consumeInputFocus,
+  } = chatState as typeof chatState & {
+    '~consumeInputFocus'?: () => boolean;
+  };
 
   useImperativeHandle(ref, () => ({
     setOpen,
@@ -303,18 +306,13 @@ function ChatInner<
     setInput,
   }));
 
-  const wasOpenRef = useRef(false);
   useEffect(() => {
-    const shouldFocusPrompt = !wasOpenRef.current && open;
-
-    if (shouldFocusPrompt) {
+    if (consumeInputFocus?.()) {
       window.requestAnimationFrame(() => {
         promptRef.current?.focus();
       });
     }
-
-    wasOpenRef.current = open;
-  }, [open]);
+  });
 
   // Keep the conversation pinned to the bottom while streaming. The stick-to-
   // bottom ResizeObserver only reacts to content *height* changes, but tool
@@ -422,6 +420,7 @@ function ChatInner<
         headerComponent: promptHeaderComponent,
         footerComponent: promptFooterComponent,
         ...promptProps,
+        autoFocus: promptProps?.autoFocus ?? !props.persistOpen,
       }}
       suggestionsProps={{
         suggestions,

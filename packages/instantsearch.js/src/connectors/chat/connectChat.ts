@@ -69,6 +69,8 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Opens the chat (if needed) and focuses the prompt input.
    */
   focusInput: () => void;
+  /** @internal */
+  '~consumeInputFocus'?: () => boolean;
   /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
@@ -398,6 +400,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let focusInput: ChatRenderState<TUiMessage>['focusInput'];
+    let inputFocusRequested = false;
     let setFeedbackState: (messageId: string, state: 'sending' | 0 | 1) => void;
     let hasValidatedEntryPoints = false;
 
@@ -688,8 +691,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         };
 
-        setOpen = (o) => {
-          open = o;
+        const updateOpen = (nextOpen: boolean, requestFocus: boolean) => {
+          open = nextOpen;
+          inputFocusRequested =
+            nextOpen && (inputFocusRequested || requestFocus);
           if (persistOpen) {
             writePersistedOpen(type, open);
           }
@@ -700,8 +705,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           initOptions.instantSearchInstance.scheduleRender();
         };
 
+        setOpen = (nextOpen) => {
+          updateOpen(nextOpen, nextOpen && !open);
+        };
+
         focusInput = () => {
-          setOpen(true);
+          updateOpen(true, true);
         };
 
         setInput = (i) => {
@@ -882,6 +891,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           focusInput,
+          '~consumeInputFocus'() {
+            const shouldFocus = inputFocusRequested;
+            inputFocusRequested = false;
+            return shouldFocus;
+          },
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,

@@ -128,5 +128,26 @@ describe('useIsHydrated', () => {
 
       expect(seen).toEqual([true]);
     });
+
+    it('is true on the first render of a late mount under a retained provider', () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+      const seen: boolean[] = [];
+
+      function App({ showProbe }: { showProbe: boolean }) {
+        return (
+          <InstantSearchSSRProvider initialResults={{}}>
+            {showProbe ? (
+              <Probe hook={legacyUseIsHydrated} seen={seen} />
+            ) : null}
+          </InstantSearchSSRProvider>
+        );
+      }
+
+      const { rerender } = render(<App showProbe={false} />);
+
+      rerender(<App showProbe={true} />);
+
+      expect(seen).toEqual([true]);
+    });
   });
 });

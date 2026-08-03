@@ -14,6 +14,8 @@ export type InstantSearchSSRContextApi<
     TRouteState
   > | null>;
   recommendIdx: MutableRefObject<number>;
+  /** @internal */
+  hydrationCompleteRef: MutableRefObject<boolean>;
 };
 
 export const InstantSearchSSRContext = createContext<Partial<

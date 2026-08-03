@@ -25,7 +25,10 @@ describe('openChat', () => {
 
     expect(sent).toBe(true);
     expect(chat.setOpen).toHaveBeenCalledWith(true);
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test.each(['prompt-suggestions', 'ai-mode'] as const)(
@@ -47,7 +50,10 @@ describe('openChat', () => {
 
     openChat(chat, { message: 'macbook' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test('trims whitespace before sending', () => {
@@ -55,7 +61,10 @@ describe('openChat', () => {
 
     openChat(chat, { message: '  macbook  ' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test('opens the chat and focuses the composer when message is empty', () => {
@@ -64,7 +73,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -75,7 +84,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '   ' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -86,7 +95,7 @@ describe('openChat', () => {
     const sent = openChat(chat);
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });

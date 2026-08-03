@@ -32,6 +32,11 @@ export function InstantSearchSSRProvider<
 
   // This is used to re-map the result index to the requesting widget
   const recommendIdx = React.useRef(0);
+  const hydrationCompleteRef = React.useRef(false);
+
+  React.useEffect(() => {
+    hydrationCompleteRef.current = true;
+  }, []);
 
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.
@@ -43,7 +48,12 @@ export function InstantSearchSSRProvider<
 
   return (
     <InstantSearchSSRContext.Provider
-      value={{ ...props, ssrSearchRef, recommendIdx }}
+      value={{
+        ...props,
+        ssrSearchRef,
+        recommendIdx,
+        hydrationCompleteRef,
+      }}
     >
       {children}
     </InstantSearchSSRContext.Provider>

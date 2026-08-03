@@ -204,6 +204,8 @@ describe('connectChat', () => {
           feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
+          focusInput: expect.any(Function),
+          '~consumeInputFocus': expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
           sendEvent: expect.any(Function),
@@ -266,6 +268,8 @@ describe('connectChat', () => {
           open: false,
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
+          focusInput: expect.any(Function),
+          '~consumeInputFocus': expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
           sendEvent: expect.any(Function),
@@ -506,6 +510,27 @@ describe('connectChat', () => {
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.open).toBe(true);
+    });
+
+    it('requests focus only for an open transition or explicit focus', () => {
+      const { getRenderState } = getInitializedWidget();
+      const consumeInputFocus = () => getRenderState()['~consumeInputFocus']();
+
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(true);
+      expect(consumeInputFocus()).toBe(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().focusInput();
+      expect(consumeInputFocus()).toBe(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(false);
+      expect(consumeInputFocus()).toBe(false);
     });
 
     describe('open state persistence', () => {
