@@ -3,7 +3,9 @@ const Module = require('module');
 const os = require('os');
 const path = require('path');
 
-const { extensionResolver } = require('../rollup-plugin-extension-resolver.cjs');
+const {
+  extensionResolver,
+} = require('../rollup-plugin-extension-resolver.cjs');
 const tempDirs = [];
 
 function createTempDir() {
@@ -95,7 +97,10 @@ describe('rollup-plugin-extension-resolver', () => {
     fs.writeFileSync(moduleEntry, '');
 
     try {
-      process.env.NODE_PATH = [path.join(tempDir, 'node_modules'), originalNodePath]
+      process.env.NODE_PATH = [
+        path.join(tempDir, 'node_modules'),
+        originalNodePath,
+      ]
         .filter(Boolean)
         .join(path.delimiter);
       Module._initPaths();

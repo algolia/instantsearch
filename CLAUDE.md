@@ -49,9 +49,10 @@ yarn jest common-widgets        # shared cross-flavor widget suites (JS+React+Vu
 yarn jest common-widgets -t "Chat widget common tests"   # scope to one widget (label = "<Widget> widget common tests")
 yarn test                       # everything (slow)
 
-# Lint (oxlint) + format (prettier) + types
+# Lint (oxlint) + format (oxfmt) + types
 yarn lint:changed               # lint only changed files — use this while iterating
 yarn lint:fix                   # auto-fix
+yarn format                     # format the repo; yarn format:check only reports
 yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy algoliasearch)
 
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:

@@ -33,7 +33,9 @@ function extensionResolver({
      * ensuring extensions are added to the generated code.
      */
     renderChunk(code, chunk) {
-      const chunkDir = chunk.facadeModuleId ? dirname(chunk.facadeModuleId) : process.cwd();
+      const chunkDir = chunk.facadeModuleId
+        ? dirname(chunk.facadeModuleId)
+        : process.cwd();
 
       // Match import/export statements with string specifiers
       // Handles: import x from './foo', export { x } from './foo', export * from './foo'
@@ -73,10 +75,19 @@ function extensionResolver({
  * @param {ExtensionResolverOptions} options
  * @returns {string} The resolved path with extension
  */
-function resolveSourcePath(sourcePath, baseDir, { modulesToResolve, srcExtensions, dstExtension }) {
+function resolveSourcePath(
+  sourcePath,
+  baseDir,
+  { modulesToResolve, srcExtensions, dstExtension }
+) {
   // Check if it's a relative import
   if (isRelativePath(sourcePath)) {
-    return resolveRelativePath(baseDir, sourcePath, srcExtensions, dstExtension);
+    return resolveRelativePath(
+      baseDir,
+      sourcePath,
+      srcExtensions,
+      dstExtension
+    );
   }
 
   // Check if it's an external module we should resolve
@@ -141,7 +152,9 @@ function resolveExternalModulePath(sourcePath, _dstExtension) {
 
     // Get the package root
     const packageJson = '/package.json';
-    const packagePath = require.resolve(packageName + packageJson).slice(0, -packageJson.length);
+    const packagePath = require
+      .resolve(packageName + packageJson)
+      .slice(0, -packageJson.length);
 
     // Get the path inside the package
     const [, resolvedPath] = fullPath.split(packagePath);
@@ -166,7 +179,11 @@ function isRelativePath(pathValue) {
  */
 function hasExtension(pathValue) {
   const lastSegment = pathValue.split('/').pop();
-  return lastSegment.includes('.') && !lastSegment.startsWith('.') && !lastSegment.endsWith('/');
+  return (
+    lastSegment.includes('.') &&
+    !lastSegment.startsWith('.') &&
+    !lastSegment.endsWith('/')
+  );
 }
 
 /**

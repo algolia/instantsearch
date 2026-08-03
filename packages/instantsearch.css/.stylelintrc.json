@@ -1,6 +1,5 @@
 {
   "extends": [
-    "stylelint-prettier/recommended",
     "stylelint-config-standard-scss",
     "stylelint-config-prettier-scss",
     "stylelint-a11y/recommended"
