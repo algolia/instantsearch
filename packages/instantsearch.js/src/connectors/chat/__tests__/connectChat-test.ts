@@ -354,6 +354,108 @@ describe('connectChat', () => {
     );
   });
 
+  describe('browser side effects', () => {
+    // Positive controls for the negative assertions in `connectChat-ssr.test.ts`.
+    it('registers callbacks that render chat updates', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      renderFn.mockClear();
+
+      const messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      chat.messages = messages;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ messages }),
+        false
+      );
+
+      chat._state.status = 'streaming';
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ status: 'streaming' }),
+        false
+      );
+
+      const error = new Error('Failed');
+      chat._state.error = error;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ error }),
+        false
+      );
+      expect(renderFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('still sends the initial user message in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const sendMessage = jest.fn();
+      (chat as any).sendMessage = sendMessage;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialUserMessage: 'Hello',
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(sendMessage).toHaveBeenCalledWith({ text: 'Hello' });
+    });
+
+    it('still resumes a stream in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const resumeStream = jest.fn();
+      (chat as any).resumeStream = resumeStream;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        resume: true,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(resumeStream).toHaveBeenCalled();
+    });
+
+    it('still applies initial messages in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'INITIAL IN BROWSER' }],
+        },
+      ];
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(chat.messages).toEqual(initialMessages);
+    });
+  });
+
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
