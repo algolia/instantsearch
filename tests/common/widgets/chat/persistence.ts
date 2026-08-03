@@ -1,5 +1,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import { openChat } from './utils';
 
@@ -12,6 +15,122 @@ export function createPersistenceTests(
   { act }: Required<TestOptions>
 ) {
   describe('persistence', () => {
+    const openStateKey = 'instantsearch-chat-open-state-chat';
+
+    test('restores and persists open state independently from messages', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'agentId',
+            persistence: false,
+            persistOpen: true,
+          },
+          react: {
+            agentId: 'agentId',
+            persistence: false,
+            persistOpen: true,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+
+      await act(async () => {
+        userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(sessionStorage.getItem(openStateKey)).toBe('false');
+    });
+
+    test('does not enable open persistence with message persistence', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'agentId',
+            persistence: true,
+            persistOpen: false,
+          },
+          react: {
+            agentId: 'agentId',
+            persistence: true,
+            persistOpen: false,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
+    });
+
+    test('restores open state with a caller-owned Chat', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+      const customChat = new Chat({
+        persistence: false,
+        transport: {} as any,
+      });
+      customChat.messages = [
+        {
+          id: 'owned',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Caller-owned message' }],
+        },
+      ];
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: { chat: customChat, persistOpen: true },
+          react: { chat: customChat, persistOpen: true },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(document.body).toHaveTextContent('Caller-owned message');
+      expect(customChat.messages).toHaveLength(1);
+    });
+
     test('does not restore persisted messages when persistence is disabled', async () => {
       sessionStorage.clear();
       const searchClient = createSearchClient();

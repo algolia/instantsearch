@@ -49,6 +49,7 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
     error: undefined,
     id: ('id' in props && props.id) || '',
     messages: [],
+    open: false,
     status: 'ready',
     suggestions: undefined,
   };

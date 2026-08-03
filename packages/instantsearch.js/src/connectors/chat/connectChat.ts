@@ -180,6 +180,12 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   | ChatInit<TUiMessage>
 ) & {
   /**
+   * Whether to persist and restore the Chat open state from sessionStorage.
+   *
+   * @default false
+   */
+  persistOpen?: boolean;
+  /**
    * Disable validation that requires either a dedicated trigger or AI mode.
    */
   disableTriggerValidation?: boolean;
@@ -260,6 +266,38 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatWidgetDescription<TUiMessage>,
   ChatConnectorParams<TUiMessage>
 >;
+
+const OPEN_STATE_CACHE_KEY = 'instantsearch-chat-open-state';
+
+function getOpenStateCacheKey(type: string) {
+  return `${OPEN_STATE_CACHE_KEY}-${type}`;
+}
+
+function readPersistedOpen(type: string) {
+  try {
+    return safelyRunOnBrowser(
+      ({ window: browserWindow }) =>
+        browserWindow.sessionStorage.getItem(getOpenStateCacheKey(type)) ===
+        'true',
+      { fallback: () => false }
+    );
+  } catch {
+    return false;
+  }
+}
+
+function writePersistedOpen(type: string, open: boolean) {
+  try {
+    safelyRunOnBrowser(({ window: browserWindow }) => {
+      browserWindow.sessionStorage.setItem(
+        getOpenStateCacheKey(type),
+        String(open)
+      );
+    });
+  } catch {
+    // Storage availability must not block the visible state change.
+  }
+}
 
 function getAttributesToClear({
   results,
@@ -343,6 +381,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
+      persistOpen = false,
       context,
       initialUserMessage,
       initialMessages,
@@ -636,6 +675,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         validateEntryPoints(instantSearchInstance);
 
+        open = persistOpen ? readPersistedOpen(type) : false;
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -650,6 +690,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         setOpen = (o) => {
           open = o;
+          if (persistOpen) {
+            writePersistedOpen(type, open);
+          }
           render();
           // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
           // shared `renderState`. Schedule a full re-render so they pick up

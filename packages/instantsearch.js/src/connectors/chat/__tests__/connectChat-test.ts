@@ -508,6 +508,156 @@ describe('connectChat', () => {
       expect(updatedRenderState.open).toBe(true);
     });
 
+    describe('open state persistence', () => {
+      const cacheKey = 'instantsearch-chat-open-state-chat';
+
+      beforeEach(() => {
+        sessionStorage.clear();
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      it.each([undefined, false])(
+        'does not access storage when persistOpen is %s',
+        (persistOpen) => {
+          const getItem = jest.spyOn(Storage.prototype, 'getItem');
+          const setItem = jest.spyOn(Storage.prototype, 'setItem');
+          const { getRenderState } = getInitializedWidget({
+            persistence: false,
+            persistOpen,
+          });
+
+          getRenderState().setOpen(true);
+          getRenderState().setOpen(false);
+
+          expect(getItem).not.toHaveBeenCalledWith(cacheKey);
+          expect(setItem).not.toHaveBeenCalledWith(cacheKey, expect.anything());
+        }
+      );
+
+      it.each([
+        ['true', true],
+        ['false', false],
+      ] as const)('restores the exact stored %s value', (stored, expected) => {
+        sessionStorage.setItem(cacheKey, stored);
+
+        const { renderFn, getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+        });
+
+        expect(renderFn).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ open: expected }),
+          true
+        );
+        expect(getRenderState().open).toBe(expected);
+      });
+
+      it.each([null, '', 'TRUE', '1'])('fails closed for %s', (stored) => {
+        if (stored !== null) {
+          sessionStorage.setItem(cacheKey, stored);
+        }
+
+        const { getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+        });
+
+        expect(getRenderState().open).toBe(false);
+      });
+
+      it('fails closed when accessing sessionStorage throws', () => {
+        const descriptor = Object.getOwnPropertyDescriptor(
+          window,
+          'sessionStorage'
+        )!;
+        let initialized: ReturnType<typeof getInitializedWidget>;
+        Object.defineProperty(window, 'sessionStorage', {
+          configurable: true,
+          get() {
+            throw new Error('STORAGE_UNAVAILABLE');
+          },
+        });
+
+        try {
+          expect(() => {
+            initialized = getInitializedWidget({
+              persistence: false,
+              persistOpen: true,
+            });
+          }).not.toThrow();
+        } finally {
+          Object.defineProperty(window, 'sessionStorage', descriptor);
+        }
+
+        expect(initialized!.getRenderState().open).toBe(false);
+      });
+
+      it('fails closed when reading storage throws', () => {
+        jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+          throw new Error('READ_FAILED');
+        });
+
+        const { getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+        });
+
+        expect(getRenderState().open).toBe(false);
+      });
+
+      it('writes every explicit open state', () => {
+        const setItem = jest.spyOn(Storage.prototype, 'setItem');
+        const { getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+        });
+
+        getRenderState().setOpen(true);
+        getRenderState().setOpen(false);
+
+        expect(setItem).toHaveBeenNthCalledWith(1, cacheKey, 'true');
+        expect(setItem).toHaveBeenNthCalledWith(2, cacheKey, 'false');
+      });
+
+      it('updates visible state when writing storage throws', () => {
+        jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+          throw new Error('WRITE_FAILED');
+        });
+        const { renderFn, getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+        });
+
+        expect(() => getRenderState().setOpen(true)).not.toThrow();
+
+        expect(getRenderState().open).toBe(true);
+        expect(renderFn).toHaveBeenLastCalledWith(
+          expect.objectContaining({ open: true }),
+          false
+        );
+      });
+
+      it('scopes storage by type', () => {
+        const setItem = jest.spyOn(Storage.prototype, 'setItem');
+        const { getRenderState } = getInitializedWidget({
+          persistence: false,
+          persistOpen: true,
+          type: 'support',
+        });
+
+        getRenderState().setOpen(true);
+
+        expect(setItem).toHaveBeenCalledWith(
+          'instantsearch-chat-open-state-support',
+          'true'
+        );
+      });
+    });
+
     it('clears messages and resets the conversation when clearMessages is called', () => {
       const { getRenderState } = getInitializedWidget();
 

@@ -33,18 +33,23 @@ function createHydrationContainer(html: string) {
   return container;
 }
 
-function createApp(props: Record<string, unknown>) {
+function createApp(
+  props: Record<string, unknown>,
+  onRender?: (open: boolean) => void
+) {
   function ChatProbe() {
-    const { messages, status, suggestions, id, error } = useChat<any>({
+    const { messages, status, suggestions, id, error, open } = useChat<any>({
       agentId,
       disableTriggerValidation: true,
       requiresSearch: false,
       ...props,
     } as any);
+    onRender?.(open);
 
     return (
       <span
         data-testid="probe"
+        data-open={String(open)}
         data-status={status}
         data-chat-id={id}
         data-error={error ? error.message : ''}
@@ -228,6 +233,45 @@ describe('useChat server rendering', () => {
       expect(
         container.querySelector('[data-testid="probe"]')
       ).toHaveTextContent('RESTORED');
+    });
+
+    await act(async () => {
+      root.unmount();
+    });
+    container.remove();
+  });
+
+  it('hydrates closed before exposing persisted open state', async () => {
+    const renderedOpenStates: boolean[] = [];
+    const App = createApp({ persistOpen: true }, (open) => {
+      renderedOpenStates.push(open);
+    });
+    const { serverState, html } = await renderServerMarkup(App);
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+    expect(html).toContain('data-open="false"');
+    renderedOpenStates.length = 0;
+
+    const container = createHydrationContainer(html);
+    const recoverableErrors: string[] = [];
+    let root!: ReturnType<typeof hydrateRoot>;
+
+    await act(async () => {
+      root = hydrateRoot(container, <App serverState={serverState} />, {
+        onRecoverableError: (error) => {
+          recoverableErrors.push(String(error));
+        },
+      });
+    });
+
+    expect(renderedOpenStates[0]).toBe(false);
+    expect(recoverableErrors).toEqual([]);
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-testid="probe"]')).toHaveAttribute(
+        'data-open',
+        'true'
+      );
     });
 
     await act(async () => {
