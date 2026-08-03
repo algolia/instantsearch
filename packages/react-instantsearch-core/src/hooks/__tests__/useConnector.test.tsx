@@ -239,6 +239,50 @@ const connectCustomWidget: Connector<
     };
   };
 
+type FunctionStateWidgetParams = { value: string };
+
+type FunctionStateWidgetDescription = {
+  $$type: 'test.functionStateWidget';
+  renderState: { getValue: () => string };
+};
+
+const connectFunctionStateWidget: Connector<
+  FunctionStateWidgetDescription,
+  FunctionStateWidgetParams
+> =
+  (renderFn, unmountFn = noop) =>
+  (widgetParams) => ({
+    $$type: 'test.functionStateWidget',
+    dependsOn: 'none',
+    init(params) {
+      renderFn(
+        {
+          ...this.getWidgetRenderState!(params),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        true
+      );
+    },
+    render(params) {
+      renderFn(
+        {
+          ...this.getWidgetRenderState!(params),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        false
+      );
+    },
+    dispose() {
+      unmountFn();
+    },
+    getWidgetRenderState() {
+      return {
+        getValue: () => widgetParams.value,
+        widgetParams,
+      };
+    },
+  });
+
 describe('useConnector', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
@@ -644,6 +688,38 @@ describe('useConnector', () => {
     expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
     expect(getByTestId('attribute')).toHaveTextContent('categories');
+  });
+
+  test('refreshes function render state when widget props change', async () => {
+    const searchClient = createSearchClient({});
+
+    function FunctionStateWidget({ value }: FunctionStateWidgetParams) {
+      const { getValue } = useConnector(
+        connectFunctionStateWidget,
+        { value },
+        { $$widgetType: 'test.functionStateWidget' }
+      );
+
+      return <div data-testid="function-state">{getValue()}</div>;
+    }
+
+    function App({ value }: FunctionStateWidgetParams) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <FunctionStateWidget value={value} />
+        </InstantSearch>
+      );
+    }
+
+    const { getByTestId, rerender } = render(<App value="first" />);
+
+    expect(getByTestId('function-state')).toHaveTextContent('first');
+
+    rerender(<App value="second" />);
+
+    await waitFor(() => {
+      expect(getByTestId('function-state')).toHaveTextContent('second');
+    });
   });
 
   test('replaces the widget when additional widget properties change', async () => {

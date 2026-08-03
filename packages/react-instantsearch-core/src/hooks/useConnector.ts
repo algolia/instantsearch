@@ -42,6 +42,7 @@ export function useConnector<
     additionalWidgetProperties
   );
   const shouldSetStateRef = useRef(true);
+  const hasRenderStateRef = useRef(false);
   const previousRenderStateRef = useRef<TDescription['renderState'] | null>(
     null
   );
@@ -56,6 +57,37 @@ export function useConnector<
         // - It prevents UI flashes when updating the widget props.
         if (isFirstRender) {
           shouldSetStateRef.current = true;
+
+          if (hasRenderStateRef.current) {
+            const functionRenderState: Record<string, unknown> = {};
+            const connectorStateRecord = connectorState as Record<
+              string,
+              unknown
+            >;
+
+            Object.keys(connectorStateRecord).forEach((key) => {
+              const value = connectorStateRecord[key];
+
+              if (
+                key !== 'instantSearchInstance' &&
+                key !== 'widgetParams' &&
+                typeof value === 'function'
+              ) {
+                functionRenderState[key] = value;
+              }
+            });
+
+            if (Object.keys(functionRenderState).length > 0) {
+              setState(
+                (currentState) =>
+                  ({
+                    ...currentState,
+                    ...functionRenderState,
+                  } as TDescription['renderState'])
+              );
+            }
+          }
+
           return;
         }
 
@@ -72,11 +104,13 @@ export function useConnector<
         if (shouldSetStateRef.current) {
           const { instantSearchInstance, widgetParams, ...renderState } =
             connectorState;
+          hasRenderStateRef.current = true;
 
           // We only update the state when a widget render state param changes,
           // except for functions. We ignore function reference changes to avoid
           // infinite loops. It's safe to omit them because they get updated
-          // every time another render param changes.
+          // every time another render param changes. Widget initialisation
+          // refreshes them separately without exposing other initial state.
           if (
             !dequal(
               renderState,
@@ -144,6 +178,7 @@ export function useConnector<
         error: search.error,
       });
 
+      hasRenderStateRef.current = true;
       return renderState;
     }
 

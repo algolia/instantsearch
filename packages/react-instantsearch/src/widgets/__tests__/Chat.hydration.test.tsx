@@ -14,11 +14,15 @@ import {
   getServerState,
 } from 'react-instantsearch-core';
 
+import { ChatOverlayLayout } from '../../components/ChatOverlayLayout';
 import { Chat } from '../Chat';
+import { ChatTrigger } from '../ChatTrigger';
 
+import type { ChatLayoutOwnProps } from 'instantsearch-ui-components';
 import type { InstantSearchServerState } from 'react-instantsearch-core';
 
 const agentId = 'hydration-agent';
+const searchClient = createSearchClient({});
 
 // Parses server markup into a container `hydrateRoot` can adopt. `innerHTML`
 // would do the same, but static analysis cannot tell `renderToString` output
@@ -34,16 +38,51 @@ function createHydrationContainer(html: string) {
 function App({ serverState }: { serverState?: InstantSearchServerState }) {
   return (
     <InstantSearchSSRProvider {...serverState}>
-      <InstantSearch
-        searchClient={createSearchClient({})}
-        indexName="indexName"
-      >
+      <InstantSearch searchClient={searchClient} indexName="indexName">
         {/* `requiresSearch` is left at its default, so this hydrates the
             search-dependent widget against real initial results. */}
         <Chat agentId={agentId} disableTriggerValidation />
       </InstantSearch>
     </InstantSearchSSRProvider>
   );
+}
+
+function createPersistedOpenApp({
+  onPanelRender,
+  onTriggerRender,
+}: {
+  onPanelRender: (open: boolean) => void;
+  onTriggerRender: (open: boolean) => void;
+}) {
+  function Layout(props: ChatLayoutOwnProps) {
+    onPanelRender(props.open);
+    return <ChatOverlayLayout {...props} />;
+  }
+
+  function TriggerIcon({ isOpen }: { isOpen: boolean }) {
+    onTriggerRender(isOpen);
+    return <span />;
+  }
+
+  return function PersistedOpenApp({
+    serverState,
+  }: {
+    serverState?: InstantSearchServerState;
+  }) {
+    return (
+      <InstantSearchSSRProvider {...serverState}>
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            agentId={agentId}
+            layoutComponent={Layout}
+            persistOpen={true}
+            requiresSearch={false}
+          />
+          <ChatTrigger floating={false} toggleIconComponent={TriggerIcon} />
+        </InstantSearch>
+      </InstantSearchSSRProvider>
+    );
+  };
 }
 
 describe('Chat hydration', () => {
@@ -95,6 +134,70 @@ describe('Chat hydration', () => {
     await act(async () => {
       root.unmount();
     });
+    container.remove();
+  });
+
+  it('restores the panel and trigger together without moving focus', async () => {
+    const panelStates: boolean[] = [];
+    const triggerStates: boolean[] = [];
+    const PersistedOpenApp = createPersistedOpenApp({
+      onPanelRender: (open) => panelStates.push(open),
+      onTriggerRender: (open) => triggerStates.push(open),
+    });
+    const serverState = await getServerState(<PersistedOpenApp />, {
+      renderToString,
+    });
+    const html = renderToString(<PersistedOpenApp serverState={serverState} />);
+
+    expect(html).not.toContain('ais-Chat-container--open');
+    expect(html).not.toContain('ais-ChatToggleButton--open');
+
+    panelStates.length = 0;
+    triggerStates.length = 0;
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+    externalButton.focus();
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    const container = createHydrationContainer(html);
+    const recoverableErrors: string[] = [];
+    let root!: ReturnType<typeof hydrateRoot>;
+
+    await act(async () => {
+      root = hydrateRoot(
+        container,
+        <PersistedOpenApp serverState={serverState} />,
+        {
+          onRecoverableError: (error) => {
+            recoverableErrors.push(String(error));
+          },
+        }
+      );
+    });
+
+    expect(panelStates[0]).toBe(false);
+    expect(triggerStates[0]).toBe(false);
+    expect(recoverableErrors).toEqual([]);
+
+    await waitFor(() => {
+      expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(container.querySelector('.ais-ChatToggleButton')).toHaveClass(
+        'ais-ChatToggleButton--open'
+      );
+    });
+
+    expect(panelStates).toContain(true);
+    expect(triggerStates).toContain(true);
+    expect(document.activeElement).toBe(externalButton);
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    await act(async () => {
+      root.unmount();
+    });
+    externalButton.remove();
     container.remove();
   });
 });

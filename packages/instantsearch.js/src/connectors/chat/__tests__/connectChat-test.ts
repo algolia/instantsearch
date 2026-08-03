@@ -533,6 +533,18 @@ describe('connectChat', () => {
       expect(consumeInputFocus()).toBe(false);
     });
 
+    it('opens and requests focus once when focusInput is called while closed', () => {
+      const { getRenderState } = getInitializedWidget();
+
+      expect(getRenderState().open).toBe(false);
+
+      getRenderState().focusInput();
+
+      expect(getRenderState().open).toBe(true);
+      expect(getRenderState()['~consumeInputFocus']()).toBe(true);
+      expect(getRenderState()['~consumeInputFocus']()).toBe(false);
+    });
+
     describe('open state persistence', () => {
       const cacheKey = 'instantsearch-chat-open-state-chat';
 
