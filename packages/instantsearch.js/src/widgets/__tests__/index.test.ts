@@ -173,6 +173,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'promptSuggestions': {
+        const promptSuggestions = widget as Widgets['promptSuggestions'];
+        return promptSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          configurationId: 'prompt-suggestions',
+        });
+      }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({

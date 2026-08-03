@@ -31,7 +31,11 @@ describe('openChat', () => {
     );
   });
 
-  test.each(['prompt-suggestions', 'ai-mode'] as const)(
+  test.each([
+    'ai-mode',
+    'prompt-suggestions-widget',
+    'prompt-suggestions-autocomplete',
+  ] as const)(
     'forwards the `%s` referer as the x-algolia-referer header',
     (referer) => {
       const chat = createChatRenderState();
@@ -44,6 +48,31 @@ describe('openChat', () => {
       );
     }
   );
+
+  test('attaches turnContext to the message metadata when provided', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, {
+      message: 'macbook',
+      turnContext: { query: 'macbook', page: 'plp' },
+    });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      {
+        text: 'macbook',
+        metadata: { turnContext: { query: 'macbook', page: 'plp' } },
+      },
+      undefined
+    );
+  });
+
+  test('omits the metadata key entirely when no turnContext is provided', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, { message: 'macbook' });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+  });
 
   test('does not add the x-algolia-referer header when no referer is provided', () => {
     const chat = createChatRenderState();
