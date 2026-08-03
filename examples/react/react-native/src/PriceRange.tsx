@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRange, UseRangeProps } from 'react-instantsearch-core';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
@@ -17,15 +17,16 @@ export function PriceRange({ onChange, ...props }: PriceRangeProps) {
   const { range, start, refine, canRefine } = useRange(props);
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
+  const [startMin, startMax] = start;
 
-  // Keep local inputs in sync when the refinement changes elsewhere
-  // (e.g. cleared from the current-refinements chips).
-  const [prevStart, setPrevStart] = useState(start);
-  if (start !== prevStart) {
-    setFrom(toInputValue(start[0]));
-    setTo(toInputValue(start[1]));
-    setPrevStart(start);
-  }
+  // Keep local inputs in sync when the refinement changes elsewhere (e.g.
+  // cleared from the current-refinements chips). `start` is a new array on every
+  // render, so we depend on its primitive bounds rather than the reference to
+  // avoid an update loop.
+  useEffect(() => {
+    setFrom(toInputValue(startMin));
+    setTo(toInputValue(startMax));
+  }, [startMin, startMax]);
 
   if (!canRefine) {
     return null;
