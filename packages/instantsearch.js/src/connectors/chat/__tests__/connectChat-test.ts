@@ -559,6 +559,19 @@ describe('connectChat', () => {
 
           expect(getItem).not.toHaveBeenCalledWith(cacheKey);
           expect(setItem).not.toHaveBeenCalledWith(cacheKey, expect.anything());
+
+          getItem.mockClear();
+          setItem.mockClear();
+
+          const enabled = getInitializedWidget({
+            persistence: false,
+            persistOpen: true,
+          });
+
+          enabled.getRenderState().setOpen(true);
+
+          expect(getItem).toHaveBeenCalledWith(cacheKey);
+          expect(setItem).toHaveBeenCalledWith(cacheKey, 'true');
         }
       );
 

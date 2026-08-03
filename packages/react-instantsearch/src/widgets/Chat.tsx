@@ -420,7 +420,9 @@ function ChatInner<
         headerComponent: promptHeaderComponent,
         footerComponent: promptFooterComponent,
         ...promptProps,
-        autoFocus: promptProps?.autoFocus ?? !props.persistOpen,
+        autoFocus:
+          promptProps?.autoFocus ??
+          (!props.persistOpen || isInlineLayoutComponent),
       }}
       suggestionsProps={{
         suggestions,

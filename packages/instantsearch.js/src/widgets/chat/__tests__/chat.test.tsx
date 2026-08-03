@@ -525,6 +525,33 @@ describe('chat', () => {
       expect(focusSpy).not.toHaveBeenCalled();
     });
 
+    test('keeps prompt autofocus for an inline layout with open persistence', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          templates: { layout: chatInlineLayout() },
+          persistOpen: true,
+          requiresSearch: false,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      ).toHaveAttribute('autofocus');
+    });
+
     // A fresh `layoutComponent` per render would remount the chat subtree
     // and drop textarea focus on every keystroke.
     test('keeps the prompt textarea mounted across re-renders with a custom templates.layout', async () => {

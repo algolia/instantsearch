@@ -91,6 +91,16 @@ describe('connectChat server rendering', () => {
     expect(() => widget.init(createInitOptions({ helper }))).not.toThrow();
   });
 
+  it('initialises closed when open persistence is enabled without a window', () => {
+    const chat = new Chat<any>({ persistence: false, transport: {} as any });
+    const widget = createServerWidget({ persistOpen: true }, chat);
+    const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+    const initOptions = createInitOptions({ helper });
+
+    expect(() => widget.init(initOptions)).not.toThrow();
+    expect(widget.getWidgetRenderState(initOptions).open).toBe(false);
+  });
+
   it('does not apply initial messages', () => {
     const chat = new Chat<any>({ persistence: false, transport: {} as any });
     const widget = createServerWidget(

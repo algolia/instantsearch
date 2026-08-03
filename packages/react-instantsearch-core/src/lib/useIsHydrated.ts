@@ -27,7 +27,7 @@ function useLegacyIsHydrated() {
   const serverContext = useInstantSearchServerContext();
   const ssrContext = useInstantSearchSSRContext();
   const isServerRendered = serverContext !== null || ssrContext !== null;
-  const isProviderHydrated = ssrContext?.hydrationCompleteRef.current === true;
+  const isProviderHydrated = ssrContext?.hydrationCompleteRef?.current === true;
   const [isHydrated, setIsHydrated] = React.useState(
     !isServerRendered || isProviderHydrated
   );

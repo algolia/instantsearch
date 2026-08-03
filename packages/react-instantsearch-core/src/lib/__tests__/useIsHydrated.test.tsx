@@ -8,6 +8,7 @@ import { renderToString } from 'react-dom/server';
 
 import { InstantSearchServerContext } from '../../components/InstantSearchServerContext';
 import { InstantSearchSSRProvider } from '../../components/InstantSearchSSRProvider';
+import { InstantSearchSSRContext } from '../InstantSearchSSRContext';
 import * as serverContext from '../useInstantSearchServerContext';
 import * as ssrContext from '../useInstantSearchSSRContext';
 import { useIsHydrated } from '../useIsHydrated';
@@ -30,6 +31,20 @@ function ServerRenderedProbe({
     <InstantSearchSSRProvider initialResults={{}}>
       <Probe hook={hook} seen={seen} />
     </InstantSearchSSRProvider>
+  );
+}
+
+function PartialServerRenderedProbe({
+  hook,
+  seen,
+}: {
+  hook: () => boolean;
+  seen?: boolean[];
+}) {
+  return (
+    <InstantSearchSSRContext.Provider value={{ initialResults: {} }}>
+      <Probe hook={hook} seen={seen} />
+    </InstantSearchSSRContext.Provider>
   );
 }
 
@@ -104,6 +119,20 @@ describe('useIsHydrated', () => {
 
       const { getByTestId } = render(
         <ServerRenderedProbe hook={legacyUseIsHydrated} seen={seen} />
+      );
+
+      await waitFor(() => {
+        expect(getByTestId('probe')).toHaveTextContent('true');
+      });
+      expect(seen).toEqual([false, true]);
+    });
+
+    it('falls back safely when a partial SSR context has no hydration signal', async () => {
+      const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+      const seen: boolean[] = [];
+
+      const { getByTestId } = render(
+        <PartialServerRenderedProbe hook={legacyUseIsHydrated} seen={seen} />
       );
 
       await waitFor(() => {

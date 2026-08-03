@@ -332,6 +332,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   tools,
   showReasoning,
   persistOpen,
+  isInlineLayoutTemplate,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -342,6 +343,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   tools: UserClientSideToolsWithTemplate;
   showReasoning: boolean;
   persistOpen: boolean;
+  isInlineLayoutTemplate: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
@@ -778,7 +780,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             footerComponent: stablePromptFooterComponent,
             translations: promptTranslations,
             promptRef,
-            autoFocus: !persistOpen,
+            autoFocus: !persistOpen || isInlineLayoutTemplate,
           }}
           state={state}
           suggestionsProps={{
@@ -1139,6 +1141,7 @@ export default (function chat<
     tools,
     showReasoning,
     persistOpen,
+    isInlineLayoutTemplate,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>

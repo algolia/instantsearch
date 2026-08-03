@@ -17,6 +17,10 @@ export function createPersistenceTests(
   describe('persistence', () => {
     const openStateKey = 'instantsearch-chat-open-state-chat';
 
+    afterEach(() => {
+      sessionStorage.removeItem(openStateKey);
+    });
+
     test('restores and persists open state independently from messages', async () => {
       sessionStorage.clear();
       sessionStorage.setItem(openStateKey, 'true');

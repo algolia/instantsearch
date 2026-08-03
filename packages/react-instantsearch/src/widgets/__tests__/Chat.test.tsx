@@ -277,6 +277,35 @@ describe('Chat', () => {
     externalButton.remove();
   });
 
+  test('keeps prompt autofocus for an inline layout with open persistence', async () => {
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+    externalButton.focus();
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          agentId="test-agent-id"
+          layoutComponent={ChatInlineLayout}
+          persistOpen={true}
+          requiresSearch={false}
+        />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.remove();
+  });
+
   test('shows reasoning on completed messages when enabled after rendering', async () => {
     const chat = createChat();
     const { rerender } = render(
