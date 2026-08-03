@@ -1,3 +1,8 @@
+# Ignore list for oxlint, wired up through `--ignore-path` in `scripts/lint/run-oxlint.cjs`.
+# `ignorePatterns` in `.oxlintrc.json` can't be used for all of this: it is matched after the
+# directory walk, so it never prunes paths reached through a symlink (see the `examples` entry
+# below). Patterns here use gitignore syntax and are applied during the walk itself.
+
 # Vendors
 node_modules
 **/node_modules/**
@@ -6,7 +11,6 @@ node_modules
 
 # Artifacts
 dist
-build
 website
 **/cjs
 **/es
@@ -28,7 +32,7 @@ examples/js/e-commerce-umd/public/packages
 examples/**/polyfills.js
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
 examples/react/react-native
-## Next.js examples have their own tsconfig and are type-checked during their build
+## Next.js examples are linted from their own workspace, see `run-oxlint.cjs`
 examples/react/next
 examples/react/next-routing
 examples/react/next-app-router
@@ -41,16 +45,8 @@ packages/create-instantsearch-app/src/templates/**
 ## test fixtures for codemods
 packages/instantsearch-codemods/__testfixtures__
 packages/instantsearch-codemods/__testfixtures__/**
-## legacy ESLint configs kept for reference/migration only
-**/.eslintrc
-**/.eslintrc.js
-**/.eslintrc.cjs
-**/eslint.config.js
 
 # Playwright artifacts and test files (Playwright has its own tsconfig)
 **/playwright-report/**
 **/test-results/**
 tests/e2e/playwright/**
-
-## Rollup configs use import attributes syntax not yet supported by ESLint parser
-**/rollup.config.mjs

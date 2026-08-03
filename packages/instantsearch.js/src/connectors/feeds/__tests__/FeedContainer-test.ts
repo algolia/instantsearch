@@ -300,10 +300,11 @@ describe('FeedContainer', () => {
         instantSearchInstance
       );
 
-      const cleanedState = instantSearchInstance.helper!.state.setQueryParameter(
-        'disjunctiveFacets',
-        []
-      );
+      const cleanedState =
+        instantSearchInstance.helper!.state.setQueryParameter(
+          'disjunctiveFacets',
+          []
+        );
       const widget = createWidget({
         dispose: jest.fn(() => cleanedState),
       });

@@ -11,7 +11,7 @@ import type { InstantSearchProps } from 'react-instantsearch-core';
 
 export function useInstantSearchRouting<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >(
   passedRouting: InstantSearchNextProps<TUiState, TRouteState>['routing'],
   isMounting: React.RefObject<boolean>

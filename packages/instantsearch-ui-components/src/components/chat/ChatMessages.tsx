@@ -25,13 +25,6 @@ import {
 } from './icons';
 
 import type {
-  ComponentProps,
-  Hooks,
-  MutableRef,
-  Renderer,
-  VNode,
-} from '../../types';
-import type {
   ChatMessageProps,
   ChatMessageActionProps,
   ChatMessageClassNames,
@@ -46,6 +39,13 @@ import type {
   ChatStatus,
   ClientSideTools,
 } from './types';
+import type {
+  ComponentProps,
+  Hooks,
+  MutableRef,
+  Renderer,
+  VNode,
+} from '../../types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -106,7 +106,7 @@ export type ChatMessagesClassNames = {
 };
 
 export type ChatMessagesProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'div'> & {
   /**
    * Array of messages to display
@@ -258,7 +258,7 @@ const hasOwnKey = (target: object | undefined, key: string) =>
   target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
 
 function createDefaultMessageComponent<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 >({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
@@ -467,7 +467,7 @@ export function createChatMessagesComponent({
   });
 
   return function ChatMessages<
-    TMessage extends ChatMessageBase = ChatMessageBase
+    TMessage extends ChatMessageBase = ChatMessageBase,
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},
@@ -535,9 +535,9 @@ export function createChatMessagesComponent({
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
-      ? lastMessage?.parts?.some((_, index, parts) =>
+      ? (lastMessage?.parts?.some((_, index, parts) =>
           isReasoningPartActive(parts, index)
-        ) ?? false
+        ) ?? false)
       : false;
     const showLoader = getShowLoader(
       status,

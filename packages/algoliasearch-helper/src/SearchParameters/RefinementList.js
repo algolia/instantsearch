@@ -134,8 +134,7 @@ var lib = {
         memo[key] = facetList;
 
         return memo;
-      },
-      {});
+      }, {});
 
       if (hasChanged) return newRefinementList;
       return refinementList;

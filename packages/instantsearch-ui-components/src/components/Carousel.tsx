@@ -23,7 +23,7 @@ export type HeaderComponentProps = {
 
 export type CarouselProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>,
 > = ComponentProps<'div'> & {
   listRef: MutableRef<HTMLOListElement | null>;
   nextButtonRef: MutableRef<HTMLButtonElement | null>;

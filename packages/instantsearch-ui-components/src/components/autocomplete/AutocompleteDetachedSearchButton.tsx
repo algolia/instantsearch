@@ -4,8 +4,8 @@ import { cx } from '../../lib/cx';
 
 import { ClearIcon, SearchIcon } from './icons';
 
-import type { Renderer } from '../../types';
 import type { AutocompleteClassNames } from './Autocomplete';
+import type { Renderer } from '../../types';
 
 export type AutocompleteDetachedTranslations = {
   detachedCancelButtonText: string;

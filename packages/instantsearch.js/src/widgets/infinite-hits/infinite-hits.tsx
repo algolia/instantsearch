@@ -136,7 +136,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
   }>;
 
 export type InfiniteHitsWidgetParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.
@@ -230,7 +230,7 @@ const renderer =
   };
 
 export default (function infiniteHits<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 >(
   widgetParams: InfiniteHitsWidgetParams<THit> &
     InfiniteHitsConnectorParams<THit>

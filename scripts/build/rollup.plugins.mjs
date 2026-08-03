@@ -6,13 +6,20 @@ import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
-import swc from 'rollup-plugin-swc3';
 import MagicString from 'magic-string';
+import swc from 'rollup-plugin-swc3';
 
 /**
  * Default extensions to resolve
  */
-export const DEFAULT_EXTENSIONS = ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'];
+export const DEFAULT_EXTENSIONS = [
+  '.mjs',
+  '.js',
+  '.ts',
+  '.jsx',
+  '.tsx',
+  '.json',
+];
 
 /**
  * Creates the node-resolve plugin with common settings.
@@ -36,8 +43,12 @@ export function createResolvePlugin(options = {}) {
  * @returns Configured swc plugin
  */
 export function createSwcPlugin(options = {}) {
-  const { jsc: jscOverrides = {}, env: envOverrides = {}, ...restOptions } = options;
-  
+  const {
+    jsc: jscOverrides = {},
+    env: envOverrides = {},
+    ...restOptions
+  } = options;
+
   return swc({
     include: /\.[jt]sx?$/,
     exclude: /node_modules/,
@@ -181,7 +192,9 @@ export function createReplacePlugin({ mode, additional = {} }) {
   return replace({
     preventAssignment: true,
     __DEV__: mode === 'development',
-    'process.env.NODE_ENV': JSON.stringify(mode === 'development' ? 'development' : 'production'),
+    'process.env.NODE_ENV': JSON.stringify(
+      mode === 'development' ? 'development' : 'production'
+    ),
     ...additional,
   });
 }

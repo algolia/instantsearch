@@ -1716,9 +1716,7 @@ describe('insights', () => {
         }),
       ]);
 
-      instantSearchInstance.use(
-        createInsightsMiddleware({ insightsClient })
-      );
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
 
       instantSearchInstance.start();
       await wait(0);

@@ -483,7 +483,7 @@ export function createOptionsTests(
         .mockImplementation(async (message: MockSendMessageInput) => {
           const text = message && 'text' in message ? message.text : undefined;
           const parts =
-            message && 'parts' in message ? message.parts ?? [] : [];
+            message && 'parts' in message ? (message.parts ?? []) : [];
           const metadata =
             message && 'metadata' in message ? message.metadata : undefined;
           chat.messages = [
@@ -1888,7 +1888,7 @@ export function createOptionsTests(
                 output,
               },
             ],
-          } as any);
+          }) as any;
 
         test('renders the default layout', async () => {
           const searchClient = createSearchClient();

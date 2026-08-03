@@ -5,7 +5,7 @@ Search UI libraries for Algolia across three flavors (vanilla JS, React, Vue), s
 ## Repo map
 
 | Package | What it is |
-|---|---|
+| --- | --- |
 | `packages/instantsearch.js` | **Core.** Vanilla JS library. **All connectors live here** (`src/connectors/`) and are shared by every flavor. |
 | `packages/react-instantsearch-core` | Headless React: hooks (`useSearchBox`, …) that wrap connectors. Framework-agnostic (web/RN). |
 | `packages/react-instantsearch` | React DOM widgets = hooks + UI from `instantsearch-ui-components`. |
@@ -23,7 +23,7 @@ Architecture in one line: **connector (logic, in instantsearch.js) → flavor wr
 Because behavior lives in the connector and the flavors only wrap it, most changes have a natural home — and the per-package `CLAUDE.md` files carry each layer's conventions:
 
 | Work in… | Package |
-|---|---|
+| --- | --- |
 | Connectors, JS widgets, runtime (`src/lib`), legacy Preact components (`src/components`), types | `packages/instantsearch.js` |
 | Shared framework-agnostic markup / `ais-*` classes | `packages/instantsearch-ui-components` |
 | React widgets/hooks + Next.js integrations | `react-instantsearch` / `react-instantsearch-core` / `*-nextjs` |
@@ -49,9 +49,10 @@ yarn jest common-widgets        # shared cross-flavor widget suites (JS+React+Vu
 yarn jest common-widgets -t "Chat widget common tests"   # scope to one widget (label = "<Widget> widget common tests")
 yarn test                       # everything (slow)
 
-# Lint (oxlint) + format (prettier) + types
+# Lint (oxlint) + format (oxfmt) + types
 yarn lint:changed               # lint only changed files — use this while iterating
 yarn lint:fix                   # auto-fix
+yarn format                     # format the repo; yarn format:check only reports
 yarn type-check                 # tsc + per-package (also :v3 / :v4 for legacy algoliasearch)
 
 # E2E — see .claude/rules/e2e.md (Playwright). Examples must be built first:
@@ -61,7 +62,7 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ## Conventions
 
 - **TypeScript strict.** No implicit any; unused vars/params error. Avoid `for-in`/`for-of` and `async` in library code (oxlint enforces).
-- **Tests** co-locate in `__tests__/` next to source — Jest picks up *any* file under `__tests__/` (the default `testMatch`), so some legacy tests are plain `*.js`; name new ones `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
+- **Tests** co-locate in `__tests__/` next to source — Jest picks up _any_ file under `__tests__/` (the default `testMatch`), so some legacy tests are plain `*.js`; name new ones `*.test.ts(x)`. Prefer focused assertions; use inline snapshots sparingly (initial render only). Mocks/helpers come from `@instantsearch/mocks` and `@instantsearch/testutils`.
 - **Cross-flavor tests** live in `tests/common/{widgets,connectors}/<name>/` and each flavor registers them in its `common-widgets.test.*` / `common-connectors.test.*`. Run with `yarn jest common-widgets` (all three flavors) and scope to one widget via `-t "<Widget> widget common tests"`. This is the primary test surface for newer widgets like Autocomplete and Chat. See `tests/common/README.md`.
 - **Commits: Conventional Commits** — `type(scope): description`, scope = widget/connector or topic (`deps`, `ci`). e.g. `fix(searchbox): increase magnifying glass size`, `feat(hits): add custom rendering`. Reference issues with `fix #1234` in the body.
 - **Branches:** target `master`; `vX` branches are critical-fix-only. Branch names: `fix/<issue>`, `feat/<name>`.

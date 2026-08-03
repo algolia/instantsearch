@@ -824,7 +824,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             sendEvent,
             insightsEventContext,
           } satisfies ClientSideTool & {
-            '~addToolResultForMessage': typeof _chatInstance['~addToolResultForMessage'];
+            '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

@@ -57,7 +57,7 @@ const fakeInstantSearch = jest.fn(
         instantsearchInstance.mainIndex.addWidgets(widgets);
       },
       removeWidgets(widgets) {
-        widgets.forEach(widget => {
+        widgets.forEach((widget) => {
           const i = instantsearchInstance.mainIndex._widgets.indexOf(widget);
           if (i === -1) {
             return;

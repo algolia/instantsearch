@@ -3950,9 +3950,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ isolated: true }).addWidgets([
-          virtualSearchBox({}),
-        ]),
+        index({ isolated: true }).addWidgets([virtualSearchBox({})]),
       ]);
       search.start();
 

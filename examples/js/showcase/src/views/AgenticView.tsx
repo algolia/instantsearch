@@ -1,21 +1,24 @@
-import { liteClient as algoliasearch } from "algoliasearch/lite";
-import instantsearch from "instantsearch.js";
-import { useRef, useEffect, useState } from "preact/hooks";
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import instantsearch from 'instantsearch.js';
+import { useRef, useEffect, useState } from 'preact/hooks';
 
-import { ChatLayoutSwitcher } from "../components/ChatLayoutSwitcher";
-import { WidgetAiAutocomplete } from "../components/widgets/WidgetAiAutocomplete";
-import { WidgetChat, type ChatLayout } from "../components/widgets/WidgetChat";
-import { WidgetChatTrigger } from "../components/widgets/WidgetChatTrigger";
-import { WidgetHits } from "../components/widgets/WidgetHits";
-import { WidgetSwitcher } from "../components/WidgetSwitcher";
-import { ChatLayoutContext } from "../context/chatLayout";
-import { SearchContext } from "../context/search";
+import { ChatLayoutSwitcher } from '../components/ChatLayoutSwitcher';
+import { WidgetAiAutocomplete } from '../components/widgets/WidgetAiAutocomplete';
+import { WidgetChat, type ChatLayout } from '../components/widgets/WidgetChat';
+import { WidgetChatTrigger } from '../components/widgets/WidgetChatTrigger';
+import { WidgetHits } from '../components/widgets/WidgetHits';
+import { WidgetSwitcher } from '../components/WidgetSwitcher';
+import { ChatLayoutContext } from '../context/chatLayout';
+import { SearchContext } from '../context/search';
 
-import type { ChatRenderState } from "instantsearch.js/es/connectors/chat/connectChat";
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
-const searchClient = algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76");
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
-const INDEX_NAME = "instant_search";
+const INDEX_NAME = 'instant_search';
 
 export function AgenticView() {
   const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
@@ -26,7 +29,7 @@ export function AgenticView() {
     });
   }
 
-  const [chatLayout, setChatLayout] = useState<ChatLayout>("inline");
+  const [chatLayout, setChatLayout] = useState<ChatLayout>('inline');
 
   useEffect(() => {
     const search = searchRef.current!;
@@ -51,7 +54,11 @@ export function AgenticView() {
           {/* Row 1: AI autocomplete */}
           <WidgetSwitcher
             widgets={[
-              { title: "autocomplete (showPromptSuggestions + aiMode)", body: WidgetAiAutocomplete, docs: ["autocomplete"] },
+              {
+                title: 'autocomplete (showPromptSuggestions + aiMode)',
+                body: WidgetAiAutocomplete,
+                docs: ['autocomplete'],
+              },
             ]}
           />
 
@@ -63,7 +70,7 @@ export function AgenticView() {
           <div class="flex flex-col gap-2 sm:flex-row">
             <WidgetSwitcher
               class="min-w-0 flex-1"
-              widgets={[{ title: "chatTrigger", body: WidgetChatTrigger }]}
+              widgets={[{ title: 'chatTrigger', body: WidgetChatTrigger }]}
             />
             <ChatLayoutSwitcher
               class="min-w-0 flex-1"
@@ -75,7 +82,7 @@ export function AgenticView() {
           </div>
 
           {/* Row 3: Hits */}
-          <WidgetSwitcher widgets={[{ title: "hits", body: WidgetHits }]} />
+          <WidgetSwitcher widgets={[{ title: 'hits', body: WidgetHits }]} />
         </div>
       </ChatLayoutContext.Provider>
     </SearchContext.Provider>

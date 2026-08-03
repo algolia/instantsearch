@@ -42,7 +42,9 @@ function isSelectionExcluded(filename) {
   ) {
     return true;
   }
-  return SELECTION_EXCLUDED_PATTERNS.some((pattern) => pattern.test(normalized));
+  return SELECTION_EXCLUDED_PATTERNS.some((pattern) =>
+    pattern.test(normalized)
+  );
 }
 
 function parseArgs(argv) {
@@ -79,10 +81,14 @@ function parseArgs(argv) {
   }
 
   if (!args.rule) {
-    throw new Error('--rule is required (use "auto" to pick highest-count rule)');
+    throw new Error(
+      '--rule is required (use "auto" to pick highest-count rule)'
+    );
   }
   if (!Number.isInteger(args.maxFiles) || args.maxFiles <= 0) {
-    throw new Error(`--max-files must be a positive integer (got ${args.maxFiles})`);
+    throw new Error(
+      `--max-files must be a positive integer (got ${args.maxFiles})`
+    );
   }
 
   return args;
@@ -134,7 +140,10 @@ function groupByRule(diagnostics, skipList) {
     }
 
     bucket.total += 1;
-    bucket.byFile.set(diag.filename, (bucket.byFile.get(diag.filename) || 0) + 1);
+    bucket.byFile.set(
+      diag.filename,
+      (bucket.byFile.get(diag.filename) || 0) + 1
+    );
   }
 
   return byRule;

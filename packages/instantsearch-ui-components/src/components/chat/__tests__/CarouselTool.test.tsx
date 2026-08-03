@@ -58,7 +58,7 @@ function renderTool(
   }> = {}
 ) {
   const applyFilters =
-    overrides.applyFilters ?? (jest.fn(() => ({} as any)) as any);
+    overrides.applyFilters ?? (jest.fn(() => ({}) as any) as any);
   const onClose = overrides.onClose ?? jest.fn();
 
   function Wrapper() {
@@ -246,7 +246,7 @@ describe('CarouselTool', () => {
             setIndexUiState: jest.fn(),
             onClose: jest.fn(),
             addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({} as any)) as any,
+            applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
           }}
         />
@@ -281,7 +281,7 @@ describe('CarouselTool', () => {
             setIndexUiState: jest.fn(),
             onClose: jest.fn(),
             addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({} as any)) as any,
+            applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
           }}
         />

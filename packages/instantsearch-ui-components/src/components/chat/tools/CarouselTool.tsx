@@ -128,7 +128,7 @@ function createHeaderComponent({ createElement }: Renderer) {
 }
 
 export function createCarouselToolComponent<
-  TObject extends RecordWithObjectID
+  TObject extends RecordWithObjectID,
 >({
   createElement,
   Fragment,

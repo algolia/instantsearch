@@ -5,6 +5,7 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type { ChatRenderState } from './connectChat';
 import type {
   Connector,
   IndexRenderState,
@@ -12,7 +13,6 @@ import type {
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
-import type { ChatRenderState } from './connectChat';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chatTrigger',

@@ -31,12 +31,12 @@ const nextUserAgent = (nextVersion?: string) =>
 
 export type UseInstantSearchApiProps<
   TUiState extends UiState,
-  TRouteState
+  TRouteState,
 > = InstantSearchOptions<TUiState, TRouteState>;
 
 export type InternalInstantSearch<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = InstantSearch<TUiState, TRouteState> & {
   /**
    * Schedule a function to be called on the next timer tick
