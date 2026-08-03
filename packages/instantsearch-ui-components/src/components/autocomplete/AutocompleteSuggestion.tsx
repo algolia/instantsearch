@@ -7,7 +7,7 @@ import { SubmitIcon, ApplyIcon } from './icons';
 import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteSuggestionProps<
-  T = { query: string } & Record<string, unknown>
+  T = { query: string } & Record<string, unknown>,
 > = {
   item: T;
   onSelect: () => void;

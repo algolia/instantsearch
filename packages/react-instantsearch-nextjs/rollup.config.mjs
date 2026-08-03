@@ -1,4 +1,8 @@
-import { createESMConfig, createCJSConfig, collectSourceEntries } from '../../scripts/build/rollup.base.mjs';
+import {
+  createESMConfig,
+  createCJSConfig,
+  collectSourceEntries,
+} from '../../scripts/build/rollup.base.mjs';
 
 import pkg from './package.json' with { type: 'json' };
 
@@ -10,7 +14,12 @@ const isCJS = process.env.BUILD_FORMAT === 'cjs';
 // These are peer dependencies of this package or its peer dependencies
 const external = (id) => {
   // Always external: React and related packages
-  if (id === 'react' || id === 'react-dom' || id.startsWith('react/') || id.startsWith('react-dom/')) {
+  if (
+    id === 'react' ||
+    id === 'react-dom' ||
+    id.startsWith('react/') ||
+    id.startsWith('react-dom/')
+  ) {
     return true;
   }
   // Always external: Next.js
@@ -24,7 +33,10 @@ const external = (id) => {
   if (id === 'react-instantsearch' || id.startsWith('react-instantsearch/')) {
     return true;
   }
-  if (id === 'react-instantsearch-core' || id.startsWith('react-instantsearch-core/')) {
+  if (
+    id === 'react-instantsearch-core' ||
+    id.startsWith('react-instantsearch-core/')
+  ) {
     return true;
   }
   // Relative imports are not external

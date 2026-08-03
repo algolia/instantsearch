@@ -59,9 +59,7 @@ describe('TrendingFacets', () => {
   });
 
   test('renders default empty component', () => {
-    const { container } = render(
-      <TrendingFacets status="idle" items={[]} />
-    );
+    const { container } = render(<TrendingFacets status="idle" items={[]} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>

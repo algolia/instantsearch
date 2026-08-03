@@ -181,7 +181,7 @@ const renderer =
 type AugmentedWidget<
   TWidgetFactory extends AnyWidgetFactory,
   TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose',
-  TWidget extends Widget = ReturnType<TWidgetFactory>
+  TWidget extends Widget = ReturnType<TWidgetFactory>,
 > = TWidget extends Widget
   ? Omit<TWidget, TOverriddenKeys> & Pick<Required<TWidget>, TOverriddenKeys>
   : never;

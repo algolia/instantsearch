@@ -2,6 +2,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import json from '@rollup/plugin-json';
+import vue2PluginModule from 'rollup-plugin-vue2';
+import vue3Plugin from 'rollup-plugin-vue3';
+
+import { extensionResolver } from '../../scripts/build/rollup-plugin-extension-resolver.mjs';
 import {
   createCommonjsPlugin,
   createPackageJsonPlugin,
@@ -11,9 +15,6 @@ import {
   createSwcPlugin,
   createTerserPlugin,
 } from '../../scripts/build/rollup.plugins.mjs';
-import { extensionResolver } from '../../scripts/build/rollup-plugin-extension-resolver.mjs';
-import vue2PluginModule from 'rollup-plugin-vue2';
-import vue3Plugin from 'rollup-plugin-vue3';
 
 const vue2Plugin = vue2PluginModule.default || vue2PluginModule;
 const packageRoot = path.dirname(fileURLToPath(import.meta.url));
@@ -29,7 +30,7 @@ const createFile = (fileName, content) => ({
   },
 });
 
-const aliasVueCompat = vueVersion => ({
+const aliasVueCompat = (vueVersion) => ({
   name: 'alias-vue-compat',
   resolveId(source, importer) {
     // Only intercept imports that:
@@ -86,7 +87,8 @@ const fixVue3SfcExports = () => ({
       if (chunk.type !== 'chunk') continue;
 
       if (chunk.fileName.endsWith('.vue.js')) {
-        const bridgePattern = /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
+        const bridgePattern =
+          /import\s+(\w+)\s+from"([^"]*\.vue2\.js)";import{render as (\w+)}from"([^"]*\.vue3\.js)";([^]*)export{(\w+)\s+as\s+default};/;
 
         const match = chunk.code.match(bridgePattern);
 
@@ -135,7 +137,7 @@ const fixVue3SfcExports = () => ({
   },
 });
 
-const external = id =>
+const external = (id) =>
   [
     'algoliasearch-helper',
     'instantsearch.js',
@@ -143,7 +145,7 @@ const external = id =>
     'vue',
     'mitt',
     '@swc/helpers',
-  ].some(dep => id === dep || id.startsWith(`${dep}/`));
+  ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
 function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vue3Plugin : vue2Plugin;

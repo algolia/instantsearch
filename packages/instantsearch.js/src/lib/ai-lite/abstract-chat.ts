@@ -46,7 +46,7 @@ type ResponseRecord = {
 };
 
 type ToolResultSubmission<TUIMessage extends UIMessage> = <
-  TTool extends keyof InferUIMessageTools<TUIMessage>
+  TTool extends keyof InferUIMessageTools<TUIMessage>,
 >(options: {
   tool: TTool;
   toolCallId: string;
@@ -434,7 +434,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 role: 'user',
                 parts: fileParts,
                 metadata: message.metadata,
-              } as TUIMessage)
+              }) as TUIMessage
           );
         } else {
           userMessagePromise = Promise.resolve(undefined);
@@ -762,7 +762,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   /** @internal */
   '~addToolResultForMessage' = <
-    TTool extends keyof InferUIMessageTools<TUIMessage>
+    TTool extends keyof InferUIMessageTools<TUIMessage>,
   >(
     message: TUIMessage,
     options: {
@@ -783,13 +783,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     const currentMessage = this.messages.includes(message)
       ? message
       : response && !response.isRetired
-      ? this.messages.find(
-          (candidate) =>
-            candidate.id === message.id &&
-            this.responseByMessage.get(candidate) === response &&
-            hasToolCall(candidate)
-        )
-      : undefined;
+        ? this.messages.find(
+            (candidate) =>
+              candidate.id === message.id &&
+              this.responseByMessage.get(candidate) === response &&
+              hasToolCall(candidate)
+          )
+        : undefined;
     if (!currentMessage) return Promise.resolve();
 
     return this.submitToolResult(
@@ -934,8 +934,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     };
     const getCanonicalMessage = (): TUIMessage | undefined =>
       response.messageId
-        ? this.messages.find((message) => message.id === response.messageId) ??
-          currentMessage
+        ? (this.messages.find((message) => message.id === response.messageId) ??
+          currentMessage)
         : currentMessage;
     const notifyFinish = ({
       isAbort,
@@ -1146,8 +1146,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 typeof chunk.input === 'string'
                   ? chunk.input
                   : chunk.input !== undefined
-                  ? JSON.stringify(chunk.input)
-                  : '';
+                    ? JSON.stringify(chunk.input)
+                    : '';
 
               toolRawInputByCallId[chunk.toolCallId] = initialRawInput;
 
@@ -1189,7 +1189,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
               const toolName =
                 chunk.toolName ?? existingPart?.type?.replace('tool-', '');
               const shouldRepair = toolName
-                ? this.shouldRepairToolInput?.(toolName) ?? true
+                ? (this.shouldRepairToolInput?.(toolName) ?? true)
                 : true;
               const parsedInput = shouldRepair
                 ? parseToolInputDelta(nextRawInput, existingPart?.input)

@@ -124,7 +124,10 @@ export function RefinementList({
   }
 
   const mergedTranslations: Required<
-    Omit<NonNullable<RefinementListProps['translations']>, 'showMoreButtonLabel'>
+    Omit<
+      NonNullable<RefinementListProps['translations']>,
+      'showMoreButtonLabel'
+    >
   > = {
     resetButtonTitle: 'Clear the search query',
     submitButtonTitle: 'Submit the search query',

@@ -45,10 +45,7 @@
   }
 
   .ais-ChatToolDisplayResults-intro {
-    color: rgba(
-      var(--ais-text-color-rgb),
-      var(--ais-text-color-alpha)
-    );
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
     line-height: 1.5;
   }
 
@@ -61,10 +58,7 @@
   .ais-ChatToolDisplayResults-groupTitle {
     font-size: calc(var(--ais-spacing) * 1.05);
     font-weight: var(--ais-font-weight-semibold);
-    color: rgba(
-      var(--ais-text-color-rgb),
-      var(--ais-text-color-alpha)
-    );
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
     margin: 0;
   }
 
@@ -128,9 +122,7 @@
     scroll-padding-right: calc(var(--ais-spacing) * 0.5);
 
     &:has(.ais-Carousel-item:only-child) {
-      grid-auto-columns: calc(
-        var(--ais-carousel-item-width) * 1.5
-      ) !important;
+      grid-auto-columns: calc(var(--ais-carousel-item-width) * 1.5) !important;
     }
   }
 

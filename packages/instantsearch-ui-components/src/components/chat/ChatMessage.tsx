@@ -13,12 +13,6 @@ import {
 import { MenuIcon } from './icons';
 
 import type {
-  ComponentProps,
-  Renderer,
-  SendEventForHits,
-  VNode,
-} from '../../types';
-import type {
   AddToolResult,
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -27,6 +21,12 @@ import type {
   ClientSideTool,
   ClientSideTools,
 } from './types';
+import type {
+  ComponentProps,
+  Renderer,
+  SendEventForHits,
+  VNode,
+} from '../../types';
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (

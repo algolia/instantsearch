@@ -45,12 +45,12 @@ export type TemplateWidgetTypes =
   | 'ais.trendingItems';
 
 export type TemplateWidget<
-  TKeys extends TemplateWidgetTypes = TemplateWidgetTypes
+  TKeys extends TemplateWidgetTypes = TemplateWidgetTypes,
 > = {
   [key in TKeys]: {
     type: key;
     parameters: Omit<
-      Parameters<typeof widgets[key]>[0],
+      Parameters<(typeof widgets)[key]>[0],
       'container' | 'templates'
     >;
     children: TemplateChild[];
@@ -70,7 +70,7 @@ export type PanelWidgetTypes =
 export type PanelWidget<TKeys extends PanelWidgetTypes = PanelWidgetTypes> = {
   [key in TKeys]: {
     type: key;
-    parameters: Omit<Parameters<typeof widgets[key]>[0], 'container'> & {
+    parameters: Omit<Parameters<(typeof widgets)[key]>[0], 'container'> & {
       header?: string;
       collapsed?: boolean;
     };
@@ -81,7 +81,7 @@ type RegularWidget<TKeys extends keyof typeof widgets = keyof typeof widgets> =
   {
     [key in TKeys]: {
       type: key;
-      parameters: Omit<Parameters<typeof widgets[key]>[0], 'container'>;
+      parameters: Omit<Parameters<(typeof widgets)[key]>[0], 'container'>;
     };
   }[TKeys];
 
@@ -90,8 +90,8 @@ export type Block =
       [key in keyof typeof widgets]: key extends TemplateWidgetTypes
         ? TemplateWidget<key>
         : key extends PanelWidgetTypes
-        ? PanelWidget<key>
-        : RegularWidget<key>;
+          ? PanelWidget<key>
+          : RegularWidget<key>;
     }[keyof typeof widgets]
   | {
       type: 'grid';

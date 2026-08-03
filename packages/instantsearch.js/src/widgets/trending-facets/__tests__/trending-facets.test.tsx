@@ -96,9 +96,9 @@ describe('trendingFacets', () => {
       expect(container.querySelector('.ais-TrendingFacets')).toHaveClass(
         'ROOT'
       );
-      expect(
-        container.querySelector('.ais-TrendingFacets-title')
-      ).toHaveClass('TITLE');
+      expect(container.querySelector('.ais-TrendingFacets-title')).toHaveClass(
+        'TITLE'
+      );
       expect(
         container.querySelector('.ais-TrendingFacets-container')
       ).toHaveClass('CONTAINER');

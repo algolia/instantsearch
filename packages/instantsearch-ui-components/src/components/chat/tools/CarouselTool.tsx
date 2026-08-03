@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { getFacetFiltersFromToolInput } from '../../../lib/utils/chat';
+import { getApplyFiltersParamsFromToolInput } from '../../../lib/utils/chat';
 import { addAbsolutePosition, addQueryID } from '../../../lib/utils/hits';
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
@@ -72,10 +72,9 @@ function createHeaderComponent({ createElement }: Renderer) {
               onClick={() => {
                 if (!input || !applyFilters) return;
 
-                const params = applyFilters({
-                  query: input.query,
-                  facetFilters: getFacetFiltersFromToolInput(input),
-                });
+                const params = applyFilters(
+                  getApplyFiltersParamsFromToolInput(input)
+                );
 
                 if (getSearchPageURL) {
                   const searchPageURL = getSearchPageURL(params);
@@ -129,7 +128,7 @@ function createHeaderComponent({ createElement }: Renderer) {
 }
 
 export function createCarouselToolComponent<
-  TObject extends RecordWithObjectID
+  TObject extends RecordWithObjectID,
 >({
   createElement,
   Fragment,

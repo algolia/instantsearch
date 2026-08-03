@@ -12,13 +12,17 @@ describe('parseArgs', () => {
   });
 
   it('parses --rule and --out as space-separated values', () => {
-    expect(parseArgs(['--rule', 'eslint(no-debugger)', '--out', 'x.json']))
-      .toEqual({ rule: 'eslint(no-debugger)', maxFiles: 10, out: 'x.json' });
+    expect(
+      parseArgs(['--rule', 'eslint(no-debugger)', '--out', 'x.json'])
+    ).toEqual({ rule: 'eslint(no-debugger)', maxFiles: 10, out: 'x.json' });
   });
 
   it('parses --flag=value form', () => {
-    expect(parseArgs(['--rule=eslint(no-debugger)', '--max-files=5']))
-      .toEqual({ rule: 'eslint(no-debugger)', maxFiles: 5, out: null });
+    expect(parseArgs(['--rule=eslint(no-debugger)', '--max-files=5'])).toEqual({
+      rule: 'eslint(no-debugger)',
+      maxFiles: 5,
+      out: null,
+    });
   });
 
   it.each([

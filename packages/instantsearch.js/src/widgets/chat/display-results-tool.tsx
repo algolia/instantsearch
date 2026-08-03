@@ -23,7 +23,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 export function createDisplayResultsTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(templates: ChatTemplates<THit>): UserClientSideToolWithTemplate {
   const DisplayResultsUIComponent = createDisplayResultsToolComponent<
     RecordWithObjectID<THit>

@@ -101,7 +101,7 @@ const endsInsideResultObjectId = (rawInput: string) => {
       expectValue = false;
     } else if (char === '{' || char === '[') {
       frames.push({
-        key: expectValue ? frames[frames.length - 1]?.lastKey ?? '' : '',
+        key: expectValue ? (frames[frames.length - 1]?.lastKey ?? '') : '',
         lastKey: '',
         isObject: char === '{',
       });
@@ -156,7 +156,7 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
 };
 
 export function createDisplayResultsToolComponent<
-  TObject extends RecordWithObjectID
+  TObject extends RecordWithObjectID,
   // oxlint-disable-next-line no-unused-vars
 >({
   createElement,
@@ -199,8 +199,8 @@ export function createDisplayResultsToolComponent<
       inputClaimsPayload
         ? message?.input
         : claimsDisplayResultsPayload(legacyOutput)
-        ? legacyOutput
-        : undefined
+          ? legacyOutput
+          : undefined
     ) as DisplayResultsPayload<TObject> | undefined;
     const intro =
       typeof payload?.intro === 'string' ? payload.intro : undefined;

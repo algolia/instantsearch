@@ -485,7 +485,9 @@ $nav-background-light: mix($nav-background, #fff, 92%);
   text-align: right;
   font-weight: $light;
   transform: translate(100%, 0);
-  transition: transform 140ms ease-out, opacity 140ms 100ms ease-out;
+  transition:
+    transform 140ms ease-out,
+    opacity 140ms 100ms ease-out;
   opacity: 0;
   will-change: transform;
 

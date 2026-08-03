@@ -49,8 +49,7 @@ function sortAndMergeRecommendations(objectIDs, results) {
       return hit.objectID === avgIndexRef.objectID;
     });
     return result ? orderedHits.concat(result) : orderedHits;
-  },
-  []);
+  }, []);
 
   return finalOrder;
 }

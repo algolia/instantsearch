@@ -1,12 +1,14 @@
-import { menu } from "instantsearch.js/es/widgets";
+import { menu } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetMenu() {
-  const ref = useWidget((el) => menu({ container: el, attribute: "brand" }));
+  const ref = useWidget((el) => menu({ container: el, attribute: 'brand' }));
   return (
     <div>
-      <h4 class="mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">Brands</h4>
+      <h4 class="mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        Brands
+      </h4>
       <div ref={ref} />
     </div>
   );

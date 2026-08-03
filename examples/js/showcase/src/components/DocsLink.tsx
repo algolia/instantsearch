@@ -1,11 +1,11 @@
-import { ExternalLink } from "lucide-preact";
+import { ExternalLink } from 'lucide-preact';
 
-import { useFlavor, type Flavor } from "../context/flavor";
+import { useFlavor, type Flavor } from '../context/flavor';
 
-const BASE_URL = "https://www.algolia.com/doc/api-reference/widgets";
+const BASE_URL = 'https://www.algolia.com/doc/api-reference/widgets';
 
 function docsUrl(name: string, flavor: Flavor): string {
-  const kebab = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+  const kebab = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
   return `${BASE_URL}/${kebab}/${flavor}/`;
 }
 
@@ -33,7 +33,7 @@ export function DocsLinks({
 }) {
   return (
     <span
-      class={`ml-auto flex gap-1 transition-opacity ${visible ? "opacity-100" : "opacity-0"}`}
+      class={`ml-auto flex gap-1 transition-opacity ${visible ? 'opacity-100' : 'opacity-0'}`}
       inert={!visible}
     >
       {names.map((name) => (

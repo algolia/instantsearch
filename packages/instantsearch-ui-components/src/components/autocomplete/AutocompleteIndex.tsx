@@ -5,7 +5,7 @@ import { cx } from '../../lib/cx';
 import type { ComponentProps, Renderer, SendEventForHits } from '../../types';
 
 export type AutocompleteIndexProps<
-  T = { objectID: string; __indexName: string } & Record<string, unknown>
+  T = { objectID: string; __indexName: string } & Record<string, unknown>,
 > = {
   items: T[];
   HeaderComponent?: (props: { items: T[] }) => JSX.Element;
@@ -96,18 +96,10 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
                     className
                   )}
                   onClick={() => {
-                    sendEvent?.(
-                      'click:internal',
-                      item,
-                      'Hit Clicked'
-                    );
+                    sendEvent?.('click:internal', item, 'Hit Clicked');
                   }}
                   onAuxClick={() => {
-                    sendEvent?.(
-                      'click:internal',
-                      item,
-                      'Hit Clicked'
-                    );
+                    sendEvent?.('click:internal', item, 'Hit Clicked');
                   }}
                 >
                   <ItemComponent

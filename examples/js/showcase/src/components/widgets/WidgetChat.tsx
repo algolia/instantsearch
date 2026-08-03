@@ -2,19 +2,19 @@ import {
   chatInlineLayout,
   chatOverlayLayout,
   chatSidePanelLayout,
-} from "instantsearch.js/es/templates";
-import { chat } from "instantsearch.js/es/widgets";
-import { useEffect, useRef } from "preact/hooks";
+} from 'instantsearch.js/es/templates';
+import { chat } from 'instantsearch.js/es/widgets';
+import { useEffect, useRef } from 'preact/hooks';
 
-import { useSearch } from "../../context/search";
+import { useSearch } from '../../context/search';
 
-import { renderCarouselHit } from "./ProductCard";
+import { renderCarouselHit } from './ProductCard';
 
-import type { ChatRenderState } from "instantsearch.js/es/connectors/chat/connectChat";
+import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
-export type ChatLayout = "inline" | "overlay" | "sidePanel";
+export type ChatLayout = 'inline' | 'overlay' | 'sidePanel';
 
-const CHAT_AGENT_ID = "eedef238-5468-470d-bc37-f99fa741bd25";
+const CHAT_AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
 
 type Props = {
   layout: ChatLayout;

@@ -15,10 +15,5 @@
     "checkJs": true
   },
   "exclude": ["node_modules", "playwright"],
-  "include": [
-    "./*.ts",
-    "./*.js",
-    "./specs/**/*.ts",
-    "./helpers/**/*.ts"
-  ]
+  "include": ["./*.ts", "./*.js", "./specs/**/*.ts", "./helpers/**/*.ts"]
 }

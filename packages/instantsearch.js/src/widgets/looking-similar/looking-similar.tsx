@@ -165,7 +165,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
 export type LookingSimilarCSSClasses = Partial<RecommendClassNames>;
 
 export type LookingSimilarTemplates<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Partial<{
   /**
    * Template to use when there are no results.
@@ -231,7 +231,7 @@ export type LookingSimilarWidget = WidgetFactory<
 >;
 
 export default (function lookingSimilar<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 >(
   widgetParams: LookingSimilarWidgetParams<THit> &
     LookingSimilarConnectorParams<THit>
