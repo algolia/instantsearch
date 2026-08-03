@@ -1,4 +1,4 @@
-export { getFacetFiltersFromToolInput } from './chat';
+export { getApplyFiltersParamsFromToolInput } from './chat';
 export * from './find';
 export * from './hits';
 export * from './promptSuggestions';

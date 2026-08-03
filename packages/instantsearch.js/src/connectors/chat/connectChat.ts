@@ -293,29 +293,53 @@ function updateStateFromSearchToolInput(
   );
 
   if (params.facetFilters) {
-    const attributes = flat(params.facetFilters).map((filter) => {
-      const [attribute, value] = filter.split(':');
+    const refinements = flat(params.facetFilters).reduce<
+      Array<{ attribute: string; value: string }>
+    >((acc, filter) => {
+      const separatorIndex = filter.indexOf(':');
 
-      return { attribute, value };
-    });
+      if (separatorIndex > 0) {
+        acc.push({
+          attribute: filter.slice(0, separatorIndex),
+          value: filter.slice(separatorIndex + 1),
+        });
+      }
 
-    attributes.forEach(({ attribute, value }) => {
+      return acc;
+    }, []);
+
+    const hierarchicalRefinements = new Map<string, string>();
+
+    refinements.forEach(({ attribute, value }) => {
+      const hierarchicalFacet = helper.state.hierarchicalFacets.find(
+        (facet) =>
+          facet.name === attribute || facet.attributes.includes(attribute)
+      );
+
+      if (hierarchicalFacet) {
+        const currentValue = hierarchicalRefinements.get(
+          hierarchicalFacet.name
+        );
+
+        if (currentValue === undefined || value.length > currentValue.length) {
+          hierarchicalRefinements.set(hierarchicalFacet.name, value);
+        }
+
+        return;
+      }
+
       if (
         !helper.state.isConjunctiveFacet(attribute) &&
-        !helper.state.isHierarchicalFacet(attribute) &&
         !helper.state.isDisjunctiveFacet(attribute)
       ) {
-        const s = helper.state.addDisjunctiveFacet(attribute);
-        helper.setState(s);
-        helper.toggleFacetRefinement(attribute, value);
-      } else {
-        const attr =
-          helper.state.hierarchicalFacets.find(
-            (facet) => facet.name === attribute
-          )?.name || attribute;
-
-        helper.toggleFacetRefinement(attr, value);
+        helper.setState(helper.state.addDisjunctiveFacet(attribute));
       }
+
+      helper.toggleFacetRefinement(attribute, value);
+    });
+
+    hierarchicalRefinements.forEach((value, name) => {
+      helper.toggleFacetRefinement(name, value);
     });
   }
 

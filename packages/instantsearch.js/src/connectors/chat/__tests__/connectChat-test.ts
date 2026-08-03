@@ -2,9 +2,12 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
@@ -27,7 +30,10 @@ jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
 }));
 
 describe('connectChat', () => {
-  const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
+  const getInitializedWidget = (
+    widgetParams: ChatConnectorParams = {},
+    helper = algoliasearchHelper(createSearchClient(), '')
+  ) => {
     const renderFn = jest.fn();
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
@@ -35,8 +41,6 @@ describe('connectChat', () => {
       disableTriggerValidation: true,
       ...widgetParams,
     } as ChatConnectorParams);
-
-    const helper = algoliasearchHelper(createSearchClient(), '');
 
     widget.init(createInitOptions({ helper }));
 
@@ -694,6 +698,92 @@ describe('connectChat', () => {
       renderState.sendChatMessageFeedback!('msg-1', 0);
 
       expect(mockedFn).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('applyFilters', () => {
+    const getApplyFilters = () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'index', {
+        hierarchicalFacets: [
+          {
+            name: 'hierarchicalCategories.lvl0',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+            ],
+            separator: ' > ',
+          },
+        ],
+      });
+      helper.lastResults = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const { getRenderState } = getInitializedWidget(
+        { tools: { testTool: {} } },
+        helper
+      );
+
+      return {
+        helper,
+        applyFilters: getRenderState().tools.testTool.applyFilters,
+      };
+    };
+
+    it('refines the query and the facets of the search tool', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        query: 'laptop',
+        facetFilters: [['categories:Laptops'], ['brand:Apple']],
+      });
+
+      expect(helper.state.query).toBe('laptop');
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        categories: ['Laptops'],
+        brand: ['Apple'],
+      });
+    });
+
+    it('keeps the value after the first colon in a facet filter', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({ facetFilters: [['brand:Bang & Olufsen: Beoplay']] });
+
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        brand: ['Bang & Olufsen: Beoplay'],
+      });
+    });
+
+    it('refines a hierarchical facet from its deepest level', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({});
+    });
+
+    it('refines a hierarchical facet regardless of the level order', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
     });
   });
 
