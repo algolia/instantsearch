@@ -243,8 +243,10 @@ type FunctionStateWidgetParams = { value: string };
 
 type FunctionStateWidgetDescription = {
   $$type: 'test.functionStateWidget';
-  renderState: { getValue: () => string };
+  renderState: { value: string; getValue: () => string };
 };
+
+const functionStateRenderStateSpy = jest.fn<void, [() => string]>();
 
 const connectFunctionStateWidget: Connector<
   FunctionStateWidgetDescription,
@@ -276,8 +278,12 @@ const connectFunctionStateWidget: Connector<
       unmountFn();
     },
     getWidgetRenderState() {
+      const getValue = () => widgetParams.value;
+      functionStateRenderStateSpy(getValue);
+
       return {
-        getValue: () => widgetParams.value,
+        value: widgetParams.value,
+        getValue,
         widgetParams,
       };
     },
@@ -690,17 +696,21 @@ describe('useConnector', () => {
     expect(getByTestId('attribute')).toHaveTextContent('categories');
   });
 
-  test('refreshes function render state when widget props change', async () => {
+  test('refreshes render state atomically when widget props change', async () => {
     const searchClient = createSearchClient({});
 
     function FunctionStateWidget({ value }: FunctionStateWidgetParams) {
-      const { getValue } = useConnector(
+      const state = useConnector(
         connectFunctionStateWidget,
         { value },
         { $$widgetType: 'test.functionStateWidget' }
       );
 
-      return <div data-testid="function-state">{getValue()}</div>;
+      return (
+        <div data-testid="function-state">
+          {state.value}:{state.getValue()}
+        </div>
+      );
     }
 
     function App({ value }: FunctionStateWidgetParams) {
@@ -713,13 +723,28 @@ describe('useConnector', () => {
 
     const { getByTestId, rerender } = render(<App value="first" />);
 
-    expect(getByTestId('function-state')).toHaveTextContent('first');
+    expect(getByTestId('function-state')).toHaveTextContent('first:first');
 
     rerender(<App value="second" />);
 
     await waitFor(() => {
-      expect(getByTestId('function-state')).toHaveTextContent('second');
+      expect(getByTestId('function-state')).toHaveTextContent('second:second');
     });
+  });
+
+  test('keeps the precomputed state during initial widget initialization', () => {
+    functionStateRenderStateSpy.mockClear();
+    const wrapper = createInstantSearchTestWrapper();
+
+    const { result } = renderHook(
+      () => useConnector(connectFunctionStateWidget, { value: 'first' }),
+      { wrapper }
+    );
+
+    expect(functionStateRenderStateSpy.mock.calls[1]).toBeDefined();
+    expect(result.current.getValue).toBe(
+      functionStateRenderStateSpy.mock.calls[0][0]
+    );
   });
 
   test('replaces the widget when additional widget properties change', async () => {

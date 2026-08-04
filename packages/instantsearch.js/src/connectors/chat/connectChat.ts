@@ -828,7 +828,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      getWidgetRenderState(renderOptions: InitOptions | RenderOptions) {
+      getWidgetRenderState(
+        renderOptions: InitOptions | RenderOptions
+      ): WidgetRenderState<
+        ChatRenderState<TUiMessage>,
+        TWidgetParams & ChatConnectorParams<TUiMessage>
+      > {
         const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
@@ -891,7 +896,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         };
 
-        return {
+        const renderState = {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
           open,
@@ -925,6 +930,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           status: _chatInstance.status,
           stop: _chatInstance.stop,
         };
+
+        return renderState;
       },
 
       dispose() {

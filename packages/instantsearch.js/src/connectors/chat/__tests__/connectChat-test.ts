@@ -514,7 +514,7 @@ describe('connectChat', () => {
 
     it('requests focus only for an open transition or explicit focus', () => {
       const { getRenderState } = getInitializedWidget();
-      const consumeInputFocus = () => getRenderState()['~consumeInputFocus']();
+      const consumeInputFocus = () => getRenderState()['~consumeInputFocus']!();
 
       expect(consumeInputFocus()).toBe(false);
 
@@ -541,8 +541,8 @@ describe('connectChat', () => {
       getRenderState().focusInput();
 
       expect(getRenderState().open).toBe(true);
-      expect(getRenderState()['~consumeInputFocus']()).toBe(true);
-      expect(getRenderState()['~consumeInputFocus']()).toBe(false);
+      expect(getRenderState()['~consumeInputFocus']!()).toBe(true);
+      expect(getRenderState()['~consumeInputFocus']!()).toBe(false);
     });
 
     describe('open state persistence', () => {
