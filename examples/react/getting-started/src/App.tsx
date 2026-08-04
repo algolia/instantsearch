@@ -14,10 +14,13 @@ import {
   Chat,
   ChatTrigger,
   FilterSuggestions,
+  PromptSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
+import { SearchSummary } from './SearchSummary';
+import { TaskDemo } from './TaskDemo';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -27,6 +30,18 @@ const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
+
+// The connected `<PromptSuggestions>` requires a real prompt-suggestions
+// configuration id (none ships with the examples). Paste one here to see it
+// derive its context from the live search state and resolve credentials from
+// the search client — the in-InstantSearch counterpart of the standalone widget
+// in `TaskDemo`.
+const PROMPT_SUGGESTIONS_CONFIGURATION_ID: string = '';
+
+// The generic `createTaskConnector` demo (`SearchSummary`) also needs a real
+// task id. Paste one to see the connected generic-task API auto-refetch off the
+// live search query — the in-InstantSearch counterpart of the `useTask` hook.
+const SEARCH_SUMMARY_TASK_ID: string = '';
 
 export function App() {
   return (
@@ -42,6 +57,8 @@ export function App() {
           </a>
         </p>
       </header>
+
+      <TaskDemo />
 
       <div className="container">
         <InstantSearch
@@ -77,6 +94,29 @@ export function App() {
                   headerComponent={false}
                 />
               </Panel>
+              {PROMPT_SUGGESTIONS_CONFIGURATION_ID && (
+                <Panel header="Prompt Suggestions (connected)">
+                  <PromptSuggestions
+                    agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+                    configurationId={PROMPT_SUGGESTIONS_CONFIGURATION_ID}
+                    // Connected: hand the prompt to the chat widget, falling
+                    // back to an alert if chat isn't mounted/ready.
+                    onSuggestionClick={(prompt, { sendToChat }) => {
+                      if (!sendToChat(prompt)) {
+                        window.alert(prompt);
+                      }
+                    }}
+                  />
+                </Panel>
+              )}
+              {SEARCH_SUMMARY_TASK_ID && (
+                <Panel header="Search Summary (generic task connector)">
+                  <SearchSummary
+                    agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+                    task={SEARCH_SUMMARY_TASK_ID}
+                  />
+                </Panel>
+              )}
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">

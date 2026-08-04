@@ -2,6 +2,8 @@ import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
 import { getRefinements, warning } from '../../lib/utils';
 import { createTaskConnector } from '../tasks/createTaskConnector';
 
+import { parseSuggestions } from './parseSuggestions';
+
 import type { TaskTransport } from '../../lib/tasks';
 import type {
   Connector,
@@ -130,17 +132,6 @@ function resolveContextConfig(
     context: widgetParams.context,
     transformHits: widgetParams.transformHits ?? DEFAULT_TRANSFORM_HITS,
   };
-}
-
-function parseSuggestions(data: unknown): string[] {
-  const suggestions = (data as { suggestions?: unknown[] } | null | undefined)
-    ?.suggestions;
-
-  if (!Array.isArray(suggestions)) {
-    return [];
-  }
-
-  return suggestions.filter((s: unknown): s is string => typeof s === 'string');
 }
 
 function buildSuggestionMessage(suggestion: string): string {

@@ -2,6 +2,8 @@ import { createTaskController } from '../../lib/tasks';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  getAlgoliaAgent,
+  getAppIdAndApiKey,
   noop,
 } from '../../lib/utils';
 
@@ -35,8 +37,9 @@ export type TaskWidgetDescription = WidgetDescription & {
 
 /**
  * The controller wiring resolved from `widgetParams`. Mirrors the tail of
- * {@link createTaskController}'s options (the `instantSearchInstance` is
- * injected by the factory at `init` time).
+ * {@link createTaskController}'s options; the Algolia credentials (`appId`/
+ * `apiKey`/`algoliaAgent`) are injected by the factory at `init` time, resolved
+ * from the running InstantSearch instance's search client.
  */
 export type TaskControllerOptions = {
   /** Agent Studio agent id. Ignored when `transport` is set. */
@@ -225,10 +228,18 @@ export function createTaskConnector<
         init(initOptions: InitOptions) {
           latestRenderOptions = initOptions;
 
-          // Created here so it can resolve credentials from the search client.
-          // Owned by this widget; the `tasks` widget only pumps it.
+          // The task engine itself is InstantSearch-agnostic (it takes plain
+          // credentials or a transport). This is the single seam that couples
+          // it to InstantSearch: we resolve `{ appId, apiKey }` + the Algolia
+          // agent from the running instance's search client here, so the
+          // controller stays usable standalone. A custom `transport` (in
+          // `controllerOptions`) overrides these.
+          const { client } = initOptions.instantSearchInstance;
+          const [appId, apiKey] = getAppIdAndApiKey(client);
           controller = createTaskController<TOutput>({
-            instantSearchInstance: initOptions.instantSearchInstance,
+            appId,
+            apiKey,
+            algoliaAgent: getAlgoliaAgent(client),
             ...controllerOptions,
           });
 

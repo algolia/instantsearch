@@ -1,17 +1,18 @@
-import { getAlgoliaAgent, getAppIdAndApiKey } from '../utils';
-
 import { resolveEndpoint } from './endpoint';
 import { TaskController } from './TaskController';
 
-import type { InstantSearch } from '../../types';
 import type { TaskTransport } from './endpoint';
 
 export type CreateTaskControllerOptions = {
-  /** The running InstantSearch instance — its search client is the credential source. */
-  instantSearchInstance: InstantSearch;
+  /** Algolia application id. Ignored when `transport` is set. */
+  appId?: string;
+  /** Algolia API key. Ignored when `transport` is set. */
+  apiKey?: string;
   /** Agent Studio agent id. Ignored when `transport` is set. */
   agentId?: string;
-  /** Custom transport. When set, `agentId` and client credentials are ignored. */
+  /** Value for the `x-algolia-agent` header. Ignored when `transport` is set. */
+  algoliaAgent?: string;
+  /** Custom transport. When set, `appId`/`apiKey`/`agentId` are ignored. */
   transport?: TaskTransport;
   /** Task (a.k.a. configuration) id sent as the `task` field. */
   task: string;
@@ -20,42 +21,27 @@ export type CreateTaskControllerOptions = {
 };
 
 /**
- * Builds a {@link TaskController} from an InstantSearch instance, resolving the
- * endpoint/headers from a custom `transport` or from the search client's
- * `{ appId, apiKey }` + `agentId`. This is the one seam that couples a task
- * engine to InstantSearch; the controller it returns is otherwise standalone.
+ * Builds a {@link TaskController} from a custom `transport` or from plain
+ * Algolia credentials (`{ appId, apiKey, agentId }`). This helper has **no
+ * InstantSearch coupling** — callers inside InstantSearch resolve the
+ * credentials from their search client and pass them in, but the task stack
+ * can also be driven standalone by supplying them directly.
  */
 export function createTaskController<TOutput = unknown>({
-  instantSearchInstance,
+  appId,
+  apiKey,
   agentId,
+  algoliaAgent,
   transport,
   task,
   stream = true,
 }: CreateTaskControllerOptions): TaskController<TOutput> {
-  if (transport) {
-    const resolved = resolveEndpoint({ transport });
-    return new TaskController<TOutput>({
-      endpoint: resolved.endpoint,
-      headers: resolved.headers,
-      task,
-      stream,
-      prepareRequest: resolved.prepareSendMessagesRequest,
-    });
-  }
-
-  const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
-
-  if (!appId || !apiKey) {
-    throw new Error(
-      'Could not extract Algolia credentials from the search client.'
-    );
-  }
-
   const resolved = resolveEndpoint({
+    transport,
     appId,
     apiKey,
     agentId,
-    algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
+    algoliaAgent,
   });
 
   return new TaskController<TOutput>({
@@ -63,5 +49,6 @@ export function createTaskController<TOutput = unknown>({
     headers: resolved.headers,
     task,
     stream,
+    prepareRequest: resolved.prepareSendMessagesRequest,
   });
 }

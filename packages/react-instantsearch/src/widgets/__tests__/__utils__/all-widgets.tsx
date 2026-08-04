@@ -18,6 +18,9 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  // Standalone: uses no connector and renders with no `<InstantSearch>`
+  // provider, so it has no place in this in-InstantSearch SSR harness.
+  'PromptSuggestionsStandalone',
   // Deprecated alias of `Autocomplete`, covered separately.
   'EXPERIMENTAL_Autocomplete',
   'createDefaultTools',
@@ -44,6 +47,9 @@ const NON_COMPONENTS = [
   // the switch below, breaking other cases. Covered by a dedicated test in
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
+  // Standalone widget with a "credentials XOR transport" union that isn't
+  // constructible from this harness's generic props; not a connector widget.
+  'PromptSuggestionsStandalone',
   // Deprecated alias of `Autocomplete`, covered separately.
   'EXPERIMENTAL_Autocomplete',
 ] as const;

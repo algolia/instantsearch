@@ -40,6 +40,7 @@ export * from './connectors/useLookingSimilar';
 export * from './connectors/useFilterSuggestions';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
+export * from './hooks/useTask';
 export * from './lib/wrapPromiseWithState';
 export * from './lib/useInstantSearchContext';
 export * from './lib/useRSCContext';
