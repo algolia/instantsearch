@@ -380,7 +380,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     warning(false, 'Chat is not yet stable and will change in the future.');
 
     const {
-      ['~getInitialOpen']: getInitialOpen,
       resume = false,
       tools = {},
       type = 'chat',
@@ -392,10 +391,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
       requiresSearch = true,
       ...options
-    } = widgetParams as TWidgetParams &
-      ChatConnectorParams<TUiMessage> & {
-        '~getInitialOpen'?: () => boolean | undefined;
-      };
+    } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -682,8 +678,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         validateEntryPoints(instantSearchInstance);
 
-        open =
-          getInitialOpen?.() ?? (persistOpen ? readPersistedOpen(type) : false);
+        open = persistOpen ? readPersistedOpen(type) : false;
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {

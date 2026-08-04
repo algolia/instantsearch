@@ -55,24 +55,7 @@ export function useConnector<
         //   the InstantSearch.js lifecycle starts.
         // - It prevents UI flashes when updating the widget props.
         if (isFirstRender) {
-          const shouldRefreshState = !shouldSetStateRef.current;
           shouldSetStateRef.current = true;
-
-          if (shouldRefreshState) {
-            const { instantSearchInstance, widgetParams, ...renderState } =
-              connectorState;
-            const renderStateRecord = renderState as Record<string, unknown>;
-            const hasFunctionRenderState = Object.keys(renderStateRecord).some(
-              (key) => typeof renderStateRecord[key] === 'function'
-            );
-
-            if (hasFunctionRenderState) {
-              setState(renderState);
-              previousRenderStateRef.current = renderState;
-              previousStatusRef.current = instantSearchInstance.status;
-            }
-          }
-
           return;
         }
 

@@ -1,5 +1,4 @@
 import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
-import { useRef } from 'react';
 
 import { useConnector } from '../hooks/useConnector';
 import { useIsHydrated } from '../lib/useIsHydrated';
@@ -20,23 +19,14 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
   const isHydrated = useIsHydrated();
-  const openRef = useRef<boolean | undefined>(undefined);
-  const getInitialOpenRef = useRef(() => openRef.current);
-
-  const connectorProps = {
-    ...props,
-    '~getInitialOpen': getInitialOpenRef.current,
-  };
   const chatState = useConnector<
     ChatConnectorParams<TUiMessage>,
     ChatWidgetDescription<TUiMessage>
   >(
     connectChat as unknown as ChatConnector<TUiMessage>,
-    connectorProps,
+    props,
     additionalWidgetProperties
   );
-
-  openRef.current = chatState.open;
 
   if (isHydrated) {
     return chatState;
