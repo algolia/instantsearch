@@ -125,7 +125,7 @@ describe('Chat', () => {
           ref={chatRef}
           agentId="test-agent-id"
           disableTriggerValidation={true}
-          persistOpen={true}
+          persistence={true}
           requiresSearch={false}
         />
         <ChatTrigger floating={false} />
@@ -219,7 +219,7 @@ describe('Chat', () => {
         <Chat
           agentId="test-agent-id"
           disableTriggerValidation={true}
-          persistOpen={true}
+          persistence={true}
           requiresSearch={false}
         />
         <CaptureChatRenderState
@@ -260,6 +260,7 @@ describe('Chat', () => {
         <Chat
           agentId="test-agent-id"
           disableTriggerValidation={true}
+          persistence={false}
           requiresSearch={false}
         />
       </InstantSearch>
@@ -288,7 +289,7 @@ describe('Chat', () => {
         <Chat
           agentId="test-agent-id"
           layoutComponent={ChatInlineLayout}
-          persistOpen={true}
+          persistence={true}
           requiresSearch={false}
         />
       </InstantSearch>

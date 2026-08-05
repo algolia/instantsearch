@@ -21,7 +21,50 @@ export function createPersistenceTests(
       sessionStorage.removeItem(openStateKey);
     });
 
-    test('restores and persists open state independently from messages', async () => {
+    test.each([
+      ['omitted', undefined],
+      ['true', true],
+    ])(
+      'enables message and open persistence when %s',
+      async (_, persistence) => {
+        const previousMessages: UIMessage[] = [
+          {
+            id: 'previous',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'Previous persisted answer' }],
+          },
+        ];
+        sessionStorage.clear();
+        sessionStorage.setItem(openStateKey, 'true');
+        sessionStorage.setItem(
+          'instantsearch-chat-initial-messages-agentId',
+          JSON.stringify(previousMessages)
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient: createSearchClient(),
+          },
+          widgetParams: {
+            javascript: { agentId: 'agentId', persistence },
+            react: { agentId: 'agentId', persistence },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+          'ais-Chat-container--open'
+        );
+        expect(document.body).toHaveTextContent('Previous persisted answer');
+      }
+    );
+
+    test('persists open state without restoring messages', async () => {
       sessionStorage.clear();
       sessionStorage.setItem(openStateKey, 'true');
 
@@ -33,13 +76,11 @@ export function createPersistenceTests(
         widgetParams: {
           javascript: {
             agentId: 'agentId',
-            persistence: false,
-            persistOpen: true,
+            persistence: { messages: false, open: true },
           },
           react: {
             agentId: 'agentId',
-            persistence: false,
-            persistOpen: true,
+            persistence: { messages: false, open: true },
           },
           vue: {},
         },
@@ -64,9 +105,20 @@ export function createPersistenceTests(
       expect(sessionStorage.getItem(openStateKey)).toBe('false');
     });
 
-    test('does not enable open persistence with message persistence', async () => {
+    test('restores messages without restoring open state', async () => {
       sessionStorage.clear();
       sessionStorage.setItem(openStateKey, 'true');
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Previous persisted answer' }],
+        },
+      ];
+      sessionStorage.setItem(
+        'instantsearch-chat-initial-messages-agentId',
+        JSON.stringify(previousMessages)
+      );
 
       await setup({
         instantSearchOptions: {
@@ -76,13 +128,11 @@ export function createPersistenceTests(
         widgetParams: {
           javascript: {
             agentId: 'agentId',
-            persistence: true,
-            persistOpen: false,
+            persistence: { messages: true, open: false },
           },
           react: {
             agentId: 'agentId',
-            persistence: true,
-            persistOpen: false,
+            persistence: { messages: true, open: false },
           },
           vue: {},
         },
@@ -95,6 +145,10 @@ export function createPersistenceTests(
       expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
         'ais-Chat-container--open'
       );
+
+      await openChat(act);
+
+      expect(document.body).toHaveTextContent('Previous persisted answer');
     });
 
     test('restores open state with a caller-owned Chat', async () => {
@@ -118,8 +172,8 @@ export function createPersistenceTests(
           searchClient: createSearchClient(),
         },
         widgetParams: {
-          javascript: { chat: customChat, persistOpen: true },
-          react: { chat: customChat, persistOpen: true },
+          javascript: { chat: customChat, persistence: { open: true } },
+          react: { chat: customChat, persistence: { open: true } },
           vue: {},
         },
       });
@@ -137,6 +191,7 @@ export function createPersistenceTests(
 
     test('does not restore persisted messages when persistence is disabled', async () => {
       sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
       const searchClient = createSearchClient();
       const cacheKey = 'instantsearch-chat-initial-messages';
       const previousMessages: UIMessage[] = [
@@ -178,6 +233,14 @@ export function createPersistenceTests(
           vue: {},
         },
       });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
 
       await openChat(act);
 

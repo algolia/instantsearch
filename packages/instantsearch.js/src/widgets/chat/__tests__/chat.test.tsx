@@ -429,7 +429,7 @@ describe('chat', () => {
         chat({
           container,
           agentId: 'test-agent-id',
-          persistOpen: true,
+          persistence: true,
           requiresSearch: false,
         }),
         chatTrigger({ container: triggerContainer }),
@@ -506,7 +506,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           disableTriggerValidation: true,
-          persistOpen: true,
+          persistence: true,
           requiresSearch: false,
         }),
       ]);
@@ -539,7 +539,7 @@ describe('chat', () => {
           container,
           agentId: 'test-agent-id',
           templates: { layout: chatInlineLayout() },
-          persistOpen: true,
+          persistence: true,
           requiresSearch: false,
         }),
       ]);

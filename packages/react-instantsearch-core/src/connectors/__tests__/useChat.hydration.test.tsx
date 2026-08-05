@@ -273,7 +273,7 @@ describe('useChat server rendering', () => {
 
   it('hydrates closed before exposing persisted open state', async () => {
     const renderedOpenStates: boolean[] = [];
-    const App = createApp({ persistOpen: true }, (open) => {
+    const App = createApp({ persistence: true }, (open) => {
       renderedOpenStates.push(open);
     });
     const { serverState, html } = await renderServerMarkup(App);
@@ -319,7 +319,7 @@ describe('useChat server rendering', () => {
     const serverState = { initialResults: {} };
 
     const initialStates: boolean[] = [];
-    const InitialApp = createApp({ persistOpen: true }, (open) => {
+    const InitialApp = createApp({ persistence: true }, (open) => {
       initialStates.push(open);
     });
     const initial = render(<InitialApp serverState={serverState} />);
@@ -331,7 +331,7 @@ describe('useChat server rendering', () => {
     initial.unmount();
 
     const lateStates: boolean[] = [];
-    const LateApp = createApp({ persistOpen: true }, (open) => {
+    const LateApp = createApp({ persistence: true }, (open) => {
       lateStates.push(open);
     });
     const late = render(<LateApp serverState={serverState} showChat={false} />);
@@ -348,7 +348,7 @@ describe('useChat server rendering', () => {
     late.unmount();
 
     const clientStates: boolean[] = [];
-    const ClientApp = createApp({ persistOpen: true }, (open) => {
+    const ClientApp = createApp({ persistence: true }, (open) => {
       clientStates.push(open);
     });
     const client = render(<ClientApp />);

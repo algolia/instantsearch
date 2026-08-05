@@ -20,7 +20,7 @@ import type {
   ChatTransport,
 } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
-import type { ChatConnectorParams, ChatCustomInstance } from '../connectChat';
+import type { ChatConnectorParams } from '../connectChat';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
@@ -100,9 +100,6 @@ describe('connectChat', () => {
       const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
         params: TParams
       ) => params;
-      const assertChatCustomInstanceParams = (
-        params: ChatCustomInstance<UIMessage>
-      ) => params;
       const customChat = undefined as unknown as Chat<UIMessage>;
 
       const agentParams = assertChatConnectorParams({
@@ -123,7 +120,18 @@ describe('connectChat', () => {
       });
       const transportPersistenceParams = assertChatConnectorParams({
         transport: { api: 'https://custom.api' },
-        persistence: false,
+        persistence: { messages: false, open: true },
+      });
+      const customChatParams = assertChatConnectorParams({
+        chat: customChat,
+      });
+      const customChatOpenPersistenceParams = assertChatConnectorParams({
+        chat: customChat,
+        persistence: { open: true },
+      });
+      const customChatPersistenceParams = assertChatConnectorParams({
+        chat: customChat,
+        persistence: { open: false },
       });
 
       // @ts-expect-error requestOptions is only valid with agentId
@@ -143,18 +151,26 @@ describe('connectChat', () => {
         },
       });
 
+      // @ts-expect-error requestOptions is not valid with a custom chat instance
       assertChatConnectorParams({
-        // @ts-expect-error requestOptions is not valid with a custom chat instance
         chat: customChat,
         requestOptions: {
           queryParameters: { cache: false },
         },
       });
 
-      assertChatCustomInstanceParams({
+      // @ts-expect-error boolean shorthand would imply control over message persistence
+      assertChatConnectorParams({
         chat: customChat,
-        // @ts-expect-error persistence is owned by custom chat instances
         persistence: false,
+      });
+
+      // @ts-expect-error message persistence is owned by custom chat instances
+      assertChatConnectorParams({
+        chat: customChat,
+        persistence: {
+          messages: true,
+        },
       });
 
       expect(agentParams.requestOptions?.queryParameters).toEqual({
@@ -168,7 +184,15 @@ describe('connectChat', () => {
         transport: { api: 'https://custom.api' },
       });
       expect(agentPersistenceParams.persistence).toBe(false);
-      expect(transportPersistenceParams.persistence).toBe(false);
+      expect(transportPersistenceParams.persistence).toEqual({
+        messages: false,
+        open: true,
+      });
+      expect(customChatParams.chat).toBe(customChat);
+      expect(customChatOpenPersistenceParams.persistence).toEqual({
+        open: true,
+      });
+      expect(customChatPersistenceParams.persistence).toEqual({ open: false });
     });
   });
 
@@ -488,6 +512,10 @@ describe('connectChat', () => {
   });
 
   describe('state management', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
     it('updates input state', () => {
       const { getRenderState } = getInitializedWidget();
 
@@ -546,7 +574,15 @@ describe('connectChat', () => {
     });
 
     describe('open state persistence', () => {
-      const cacheKey = 'instantsearch-chat-open-state-chat';
+      const openStateKey = 'instantsearch-chat-open-state-chat';
+      const messageKey = 'instantsearch-chat-initial-messages-agentId';
+      const persistedMessages: UIMessage[] = [
+        {
+          id: 'persisted',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Persisted message' }],
+        },
+      ];
 
       beforeEach(() => {
         sessionStorage.clear();
@@ -556,34 +592,54 @@ describe('connectChat', () => {
         jest.restoreAllMocks();
       });
 
-      it.each([undefined, false])(
-        'does not access storage when persistOpen is %s',
-        (persistOpen) => {
+      it.each([
+        ['omitted', undefined, true, true],
+        ['true', true, true, true],
+        ['false', false, false, false],
+        ['messages only', { messages: true, open: false }, true, false],
+        ['open only', { messages: false, open: true }, false, true],
+        ['empty object', {}, false, false],
+      ])(
+        'normalizes %s persistence for messages and open state',
+        (_, persistence, persistsMessages, persistsOpen) => {
+          sessionStorage.setItem(messageKey, JSON.stringify(persistedMessages));
+          sessionStorage.setItem(openStateKey, 'true');
           const getItem = jest.spyOn(Storage.prototype, 'getItem');
           const setItem = jest.spyOn(Storage.prototype, 'setItem');
           const { getRenderState } = getInitializedWidget({
-            persistence: false,
-            persistOpen,
+            agentId: 'agentId',
+            persistence,
           });
 
-          getRenderState().setOpen(true);
-          getRenderState().setOpen(false);
-
-          expect(getItem).not.toHaveBeenCalledWith(cacheKey);
-          expect(setItem).not.toHaveBeenCalledWith(cacheKey, expect.anything());
+          expect(getRenderState().messages).toEqual(
+            persistsMessages ? persistedMessages : []
+          );
+          expect(getRenderState().open).toBe(persistsOpen);
+          expect(getItem.mock.calls.some(([key]) => key === messageKey)).toBe(
+            persistsMessages
+          );
+          expect(getItem.mock.calls.some(([key]) => key === openStateKey)).toBe(
+            persistsOpen
+          );
 
           getItem.mockClear();
           setItem.mockClear();
 
-          const enabled = getInitializedWidget({
-            persistence: false,
-            persistOpen: true,
-          });
+          getRenderState().setMessages([
+            {
+              id: 'next',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Next message' }],
+            },
+          ]);
+          getRenderState().setOpen(false);
 
-          enabled.getRenderState().setOpen(true);
-
-          expect(getItem).toHaveBeenCalledWith(cacheKey);
-          expect(setItem).toHaveBeenCalledWith(cacheKey, 'true');
+          expect(setItem.mock.calls.some(([key]) => key === messageKey)).toBe(
+            persistsMessages
+          );
+          expect(setItem.mock.calls.some(([key]) => key === openStateKey)).toBe(
+            persistsOpen
+          );
         }
       );
 
@@ -591,11 +647,10 @@ describe('connectChat', () => {
         ['true', true],
         ['false', false],
       ] as const)('restores the exact stored %s value', (stored, expected) => {
-        sessionStorage.setItem(cacheKey, stored);
+        sessionStorage.setItem(openStateKey, stored);
 
         const { renderFn, getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
         });
 
         expect(renderFn).toHaveBeenNthCalledWith(
@@ -606,14 +661,37 @@ describe('connectChat', () => {
         expect(getRenderState().open).toBe(expected);
       });
 
+      it.each([
+        ['omitted', undefined, true],
+        ['open disabled', { open: false }, false],
+        ['empty object', {}, false],
+      ])(
+        'uses %s persistence with a caller supplied Chat',
+        (_, persistence, expectedOpen) => {
+          sessionStorage.setItem(openStateKey, 'true');
+          const chat = new Chat<UIMessage>({
+            persistence: false,
+            transport: {} as any,
+          });
+          chat.messages = persistedMessages;
+
+          const { getRenderState } = getInitializedWidget({
+            chat,
+            persistence,
+          });
+
+          expect(getRenderState().open).toBe(expectedOpen);
+          expect(getRenderState().messages).toEqual(persistedMessages);
+        }
+      );
+
       it.each([null, '', 'TRUE', '1'])('fails closed for %s', (stored) => {
         if (stored !== null) {
-          sessionStorage.setItem(cacheKey, stored);
+          sessionStorage.setItem(openStateKey, stored);
         }
 
         const { getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
         });
 
         expect(getRenderState().open).toBe(false);
@@ -635,8 +713,7 @@ describe('connectChat', () => {
         try {
           expect(() => {
             initialized = getInitializedWidget({
-              persistence: false,
-              persistOpen: true,
+              persistence: { messages: false, open: true },
             });
           }).not.toThrow();
         } finally {
@@ -652,8 +729,7 @@ describe('connectChat', () => {
         });
 
         const { getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
         });
 
         expect(getRenderState().open).toBe(false);
@@ -662,15 +738,14 @@ describe('connectChat', () => {
       it('writes every explicit open state', () => {
         const setItem = jest.spyOn(Storage.prototype, 'setItem');
         const { getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
         });
 
         getRenderState().setOpen(true);
         getRenderState().setOpen(false);
 
-        expect(setItem).toHaveBeenNthCalledWith(1, cacheKey, 'true');
-        expect(setItem).toHaveBeenNthCalledWith(2, cacheKey, 'false');
+        expect(setItem).toHaveBeenNthCalledWith(1, openStateKey, 'true');
+        expect(setItem).toHaveBeenNthCalledWith(2, openStateKey, 'false');
       });
 
       it('updates visible state when writing storage throws', () => {
@@ -678,8 +753,7 @@ describe('connectChat', () => {
           throw new Error('WRITE_FAILED');
         });
         const { renderFn, getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
         });
 
         expect(() => getRenderState().setOpen(true)).not.toThrow();
@@ -694,8 +768,7 @@ describe('connectChat', () => {
       it('scopes storage by type', () => {
         const setItem = jest.spyOn(Storage.prototype, 'setItem');
         const { getRenderState } = getInitializedWidget({
-          persistence: false,
-          persistOpen: true,
+          persistence: { messages: false, open: true },
           type: 'support',
         });
 

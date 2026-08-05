@@ -331,7 +331,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates,
   tools,
   showReasoning,
-  persistOpen,
   isInlineLayoutTemplate,
 }: {
   containerNode: HTMLElement;
@@ -342,7 +341,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
   showReasoning: boolean;
-  persistOpen: boolean;
   isInlineLayoutTemplate: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
@@ -573,6 +571,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       sendChatMessageFeedback: onFeedback,
       feedbackState,
       '~consumeInputFocus': consumeInputFocus,
+      '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
     } = props;
 
     if (__DEV__ && error) {
@@ -780,7 +779,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             footerComponent: stablePromptFooterComponent,
             translations: promptTranslations,
             promptRef,
-            autoFocus: !persistOpen || isInlineLayoutTemplate,
+            autoFocus: !isOpenStatePersistenceEnabled || isInlineLayoutTemplate,
           }}
           state={state}
           suggestionsProps={{
@@ -1104,7 +1103,6 @@ export default (function chat<
     getSearchPageURL,
     disableTriggerValidation = false,
     showReasoning = false,
-    persistOpen = false,
     ...options
   } = widgetParams || {};
 
@@ -1140,7 +1138,6 @@ export default (function chat<
     templates,
     tools,
     showReasoning,
-    persistOpen,
     isInlineLayoutTemplate,
   });
 
@@ -1153,7 +1150,6 @@ export default (function chat<
       resume,
       tools,
       disableTriggerValidation: effectiveDisableTriggerValidation,
-      persistOpen,
       ...options,
     }),
     $$widgetType: 'ais.chat',

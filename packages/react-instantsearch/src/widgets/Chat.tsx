@@ -296,8 +296,10 @@ function ChatInner<
     sendChatMessageFeedback: onFeedback,
     feedbackState,
     '~consumeInputFocus': consumeInputFocus,
+    '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
   } = chatState as typeof chatState & {
     '~consumeInputFocus'?: () => boolean;
+    '~isOpenStatePersistenceEnabled'?: boolean;
   };
 
   useImperativeHandle(ref, () => ({
@@ -422,7 +424,7 @@ function ChatInner<
         ...promptProps,
         autoFocus:
           promptProps?.autoFocus ??
-          (!props.persistOpen || isInlineLayoutComponent),
+          (!isOpenStatePersistenceEnabled || isInlineLayoutComponent),
       }}
       suggestionsProps={{
         suggestions,

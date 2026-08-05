@@ -71,6 +71,8 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   focusInput: () => void;
   /** @internal */
   '~consumeInputFocus'?: () => boolean;
+  /** @internal */
+  '~isOpenStatePersistenceEnabled'?: boolean;
   /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
@@ -117,10 +119,26 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   | 'stop'
 >;
 
+export type ChatPersistence =
+  | boolean
+  | {
+      messages?: boolean;
+      open?: boolean;
+    };
+
 export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
   ChatInitAi<TUiMessage>,
-  'transport'
->;
+  'persistence' | 'transport'
+> & {
+  chat?: never;
+  /**
+   * Whether to persist messages and open state in sessionStorage.
+   * An object configures each policy independently.
+   *
+   * @default true
+   */
+  persistence?: ChatPersistence;
+};
 
 export type ChatAgentRequestOptions = {
   /**
@@ -165,7 +183,16 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
   feedback?: never;
   requestOptions?: never;
-  persistence?: never;
+  /**
+   * Whether to persist open state in sessionStorage. Message persistence is
+   * configured when constructing the Chat instance.
+   *
+   * @default true
+   */
+  persistence?: {
+    open?: boolean;
+    messages?: never;
+  };
   sendAutomaticallyWhen?: never;
 };
 
@@ -181,12 +208,6 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   | ChatCustomInstance<TUiMessage>
   | ChatInit<TUiMessage>
 ) & {
-  /**
-   * Whether to persist and restore the Chat open state from sessionStorage.
-   *
-   * @default false
-   */
-  persistOpen?: boolean;
   /**
    * Disable validation that requires either a dedicated trigger or AI mode.
    */
@@ -270,6 +291,33 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
 >;
 
 const OPEN_STATE_CACHE_KEY = 'instantsearch-chat-open-state';
+
+function normalizePersistence(
+  persistence: ChatPersistence | undefined,
+  hasCustomChat: boolean
+) {
+  if (hasCustomChat) {
+    return {
+      messages: false,
+      open:
+        persistence === undefined ||
+        (typeof persistence === 'object' && persistence.open === true),
+    };
+  }
+
+  if (persistence === undefined || persistence === true) {
+    return { messages: true, open: true };
+  }
+
+  if (persistence === false) {
+    return { messages: false, open: false };
+  }
+
+  return {
+    messages: persistence.messages === true,
+    open: persistence.open === true,
+  };
+}
 
 function getOpenStateCacheKey(type: string) {
   return `${OPEN_STATE_CACHE_KEY}-${type}`;
@@ -383,7 +431,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       resume = false,
       tools = {},
       type = 'chat',
-      persistOpen = false,
+      persistence,
       context,
       initialUserMessage,
       initialMessages,
@@ -392,6 +440,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       requiresSearch = true,
       ...options
     } = widgetParams || {};
+    const normalizedPersistence = normalizePersistence(
+      persistence,
+      'chat' in options
+    );
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -494,7 +546,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // A caller supplied `chat` already owns its transport, so it bypasses the
       // connector's transport construction and validation below.
       if ('chat' in options) {
-        return options.chat;
+        return options.chat!;
       }
 
       let transport;
@@ -615,6 +667,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
+        persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
         transport,
         shouldRepairToolInput(toolName) {
@@ -678,7 +731,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         validateEntryPoints(instantSearchInstance);
 
-        open = persistOpen ? readPersistedOpen(type) : false;
+        open = normalizedPersistence.open ? readPersistedOpen(type) : false;
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -695,7 +748,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           open = nextOpen;
           inputFocusRequested =
             nextOpen && (inputFocusRequested || requestFocus);
-          if (persistOpen) {
+          if (normalizedPersistence.open) {
             writePersistedOpen(type, open);
           }
           render();
@@ -905,6 +958,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             inputFocusRequested = false;
             return shouldFocus;
           },
+          '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,

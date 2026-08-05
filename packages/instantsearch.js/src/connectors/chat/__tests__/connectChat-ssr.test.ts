@@ -93,7 +93,7 @@ describe('connectChat server rendering', () => {
 
   it('initialises closed when open persistence is enabled without a window', () => {
     const chat = new Chat<any>({ persistence: false, transport: {} as any });
-    const widget = createServerWidget({ persistOpen: true }, chat);
+    const widget = createServerWidget({ persistence: { open: true } }, chat);
     const helper = algoliasearchHelper(createSearchClient(), 'indexName');
     const initOptions = createInitOptions({ helper });
 

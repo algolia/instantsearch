@@ -75,7 +75,7 @@ function createPersistedOpenApp({
           <Chat
             agentId={agentId}
             layoutComponent={Layout}
-            persistOpen={true}
+            persistence={true}
             requiresSearch={false}
           />
           <ChatTrigger floating={false} toggleIconComponent={TriggerIcon} />
