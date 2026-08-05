@@ -1,4 +1,9 @@
 import {
+  collectChatRecords,
+  createChatRecordsStore,
+} from 'instantsearch-ui-components';
+
+import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
@@ -47,6 +52,7 @@ import type {
   ClientSideTools,
   ClientSideTool,
   ChatInsightsEventContext,
+  ChatRecordsStore,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -86,6 +92,16 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * The records the chat's tools have fetched, keyed by `objectID`.
+   *
+   * Tools that search return full records while the tools that present them are
+   * handed only object IDs, so this is the shared lookup between the two. Each
+   * tool contributes through its own `getRecords`, and every contribution merges
+   * into one map, last write winning per `objectID`. It is attached to every tool
+   * as `records` too, which is how a tool's `layoutComponent` reads it.
+   */
+  records: ChatRecordsStore;
   /**
    * Suggestions received from the AI model.
    */
@@ -387,6 +403,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
+    // One store per chat widget, outliving every render: tools read records from
+    // it, and it is fed as messages arrive rather than derived per render, so it
+    // is current for anything reading outside a render too. Which outputs hold
+    // records is each tool's own business — this only owns the timing.
+    const records = createChatRecordsStore();
+    const collectRecords = () =>
+      collectChatRecords(_chatInstance.messages, tools, records);
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
@@ -439,6 +462,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // ChatState callbacks that synchronously re-render, so they must run last
       // for that render to see the cleared feedback and rotated conversation id.
       feedbackState = {};
+      records.clear();
       _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
@@ -740,6 +764,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         safelyRunOnBrowser(() => {
           _chatInstance['~registerErrorCallback'](render);
+          // Registered before `render` so a delta's records are collected by the
+          // time the tools of that delta render.
+          _chatInstance['~registerMessagesCallback'](collectRecords);
           _chatInstance['~registerMessagesCallback'](render);
           _chatInstance['~registerStatusCallback'](render);
         });
@@ -809,6 +836,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return updateStateFromSearchToolInput(params, helper);
         }
 
+        // A conversation restored from storage, or one a server render was
+        // handed, never emitted the messages callback above. Collecting here as
+        // well covers it: merging is idempotent, so a second pass over records
+        // already collected changes nothing.
+        collectRecords();
+
         const insightsEventContext: ChatInsightsEventContext = {
           agentId,
           instantSearchStatus: instantSearchInstance.status,
@@ -823,6 +856,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             applyFilters,
             sendEvent,
             insightsEventContext,
+            records,
           } satisfies ClientSideTool & {
             '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };
@@ -867,6 +901,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,
           tools: toolsWithAddToolResult,
+          records,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,
           widgetParams,

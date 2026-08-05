@@ -1,3 +1,7 @@
+import type {
+  ChatRecordsStore,
+  ChatToolRecordsGetter,
+} from '../../lib/utils/chatRecords';
 import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
@@ -514,6 +518,12 @@ export type ChatLayoutOwnProps<
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   messages?: ChatMessageBase[];
+  /**
+   * The records the chat's search tools have fetched, keyed by `objectID`. Any
+   * tool the backend hands plain object IDs to hydrates them from here:
+   * `records.get(objectID)`.
+   */
+  records?: ChatRecordsStore;
   insightsEventContext?: ChatInsightsEventContext;
   status?: ChatStatus;
   indexUiState: object;
@@ -537,6 +547,18 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
+  /**
+   * Reads the records a completed call of this tool fetched, so the tools that
+   * are handed only object IDs can resolve them. Declared by the tool because
+   * only it knows the shape of its own output; `getHitsFromToolOutput` covers a
+   * tool returning an Algolia `hits` array.
+   */
+  getRecords?: ChatToolRecordsGetter;
+  /**
+   * The chat's record store, attached by the connector. Shared by every tool of
+   * a chat, and forwarded to `layoutComponent` as `records`.
+   */
+  records?: ChatRecordsStore;
   sendEvent?: SendEventForHits;
   insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
@@ -552,7 +574,11 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
+  | 'addToolResult'
+  | 'applyFilters'
+  | 'sendEvent'
+  | 'insightsEventContext'
+  | 'records'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
 

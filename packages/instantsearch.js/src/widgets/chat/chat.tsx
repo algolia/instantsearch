@@ -56,6 +56,7 @@ import type {
   ChatPromptProps,
   ChatPromptTranslations,
   ChatStatus,
+  ChatToolRecordsGetter,
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
@@ -83,6 +84,7 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    getRecords?: ChatToolRecordsGetter;
     templates?: { layout?: unknown };
   },
 >(
@@ -98,6 +100,13 @@ function mergeToolOptions<
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
     const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultGetRecords = defaultTools[toolName]?.getRecords;
+
+    // Publishing records is about the tool's output, not its rendering, so a
+    // user overriding a default tool keeps it unless they replace it.
+    if (userTool.getRecords === undefined && defaultGetRecords !== undefined) {
+      tools[toolName] = { ...tools[toolName], getRecords: defaultGetRecords };
+    }
 
     if (
       userTool.templates?.layout !== undefined &&
@@ -105,7 +114,7 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
       };
     }

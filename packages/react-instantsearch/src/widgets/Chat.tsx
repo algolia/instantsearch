@@ -34,6 +34,7 @@ export {
 
 import type {
   Pragma,
+  ChatToolRecordsGetter,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
@@ -78,6 +79,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    getRecords?: ChatToolRecordsGetter;
     layoutComponent?: unknown;
   },
 >(
@@ -93,6 +95,13 @@ function mergeToolOptions<
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
     const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultGetRecords = defaultTools[toolName]?.getRecords;
+
+    // Publishing records is about the tool's output, not its rendering, so a
+    // user overriding a default tool keeps it unless they replace it.
+    if (userTool.getRecords === undefined && defaultGetRecords !== undefined) {
+      tools[toolName] = { ...tools[toolName], getRecords: defaultGetRecords };
+    }
 
     if (
       userTool.layoutComponent !== undefined &&
@@ -100,7 +109,7 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
       };
     }

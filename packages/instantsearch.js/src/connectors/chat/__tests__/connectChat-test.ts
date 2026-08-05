@@ -8,13 +8,14 @@ import {
 } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import { getHitsFromToolOutput } from 'instantsearch-ui-components';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { Chat } from '../../../lib/chat';
+import { Chat, SearchIndexToolType } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
 import type {
@@ -817,8 +818,102 @@ describe('connectChat', () => {
             agentId: 'agentId',
             instantSearchStatus: 'idle',
           },
+          records: renderState.records,
         },
       });
+      // Every tool shares the chat's one store.
+      expect(renderState.records.getAll()).toEqual({});
+    });
+
+    it('combines the records of every search into the chat store', () => {
+      const searchPart = (toolCallId: string, hits: unknown[]) => ({
+        type: 'tool-algolia_search_index',
+        toolCallId,
+        state: 'output-available',
+        input: {},
+        output: { hits },
+      });
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        // Collection is delegated to the tool that fetched the records.
+        tools: { [SearchIndexToolType]: { getRecords: getHitsFromToolOutput } },
+        // A restored conversation: the store is collected from it, which is what
+        // keeps a rehydrated chat resolving the same records.
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
+              searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
+            ],
+          },
+          {
+            id: '2',
+            role: 'assistant',
+            parts: [
+              searchPart('search-3', [
+                { objectID: '1', name: 'Runner Pro' },
+                { objectID: '3', name: 'Trail' },
+              ]),
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records } = getRenderState();
+
+      // Every search contributes, and the newest copy of a record wins.
+      expect(records.getAll()).toEqual({
+        1: { objectID: '1', name: 'Runner Pro' },
+        2: { objectID: '2', name: 'Sneaker' },
+        3: { objectID: '3', name: 'Trail' },
+      });
+
+      // A new search of a later turn joins the same map.
+      getRenderState().setMessages((messages) =>
+        messages.concat({
+          id: '3',
+          role: 'assistant',
+          parts: [searchPart('search-4', [{ objectID: '4', name: 'Boot' }])],
+        } as unknown as (typeof messages)[number])
+      );
+
+      expect(records.get('4')).toEqual({ objectID: '4', name: 'Boot' });
+      expect(records.get('1')).toEqual({ objectID: '1', name: 'Runner Pro' });
+
+      // The store outlives every render rather than being derived per render.
+      expect(getRenderState().records).toBe(records);
+    });
+
+    it('drops the records of a cleared conversation', () => {
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        tools: { [SearchIndexToolType]: { getRecords: getHitsFromToolOutput } },
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'tool-algolia_search_index',
+                toolCallId: 'search',
+                state: 'output-available',
+                input: {},
+                output: { hits: [{ objectID: '1', name: 'Runner' }] },
+              },
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records, clearMessages } = getRenderState();
+
+      expect(records.has('1')).toBe(true);
+
+      clearMessages();
+
+      expect(records.getAll()).toEqual({});
     });
 
     it('keeps the development diagnostic for an unknown tool', async () => {

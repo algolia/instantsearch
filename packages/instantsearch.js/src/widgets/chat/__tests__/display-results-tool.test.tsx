@@ -3,6 +3,10 @@
  */
 /** @jsx h */
 import { fireEvent, screen, within } from '@testing-library/dom';
+import {
+  collectChatRecords,
+  getHitsFromToolOutput,
+} from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import { createDisplayResultsTool } from '../display-results-tool';
@@ -29,29 +33,34 @@ const createToolProps = (
     },
   } as ClientSideToolComponentProps['message'];
 
+  const messages = [
+    {
+      id: 'assistant-message-id',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-algolia_search_index',
+          toolCallId: 'search',
+          state: 'output-available',
+          input: { query: 'products' },
+          output: {
+            hits: objectIDs.map((objectID) => ({
+              objectID,
+              name: `Product ${objectID}`,
+            })),
+          },
+        },
+        message,
+      ],
+    },
+  ] as ClientSideToolComponentProps['messages'];
+
   return {
     message,
-    messages: [
-      {
-        id: 'assistant-message-id',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'products' },
-            output: {
-              hits: objectIDs.map((objectID) => ({
-                objectID,
-                name: `Product ${objectID}`,
-              })),
-            },
-          },
-          message,
-        ],
-      },
-    ] as ClientSideToolComponentProps['messages'],
+    messages,
+    records: collectChatRecords(messages, {
+      algolia_search_index: { getRecords: getHitsFromToolOutput },
+    }),
     indexUiState: {},
     setIndexUiState: jest.fn(),
     onClose: jest.fn(),

@@ -3,6 +3,7 @@ import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
 import { isReasoningPartActive } from '../../lib/utils/chat';
+import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -21,6 +22,7 @@ import type {
   ClientSideTool,
   ClientSideTools,
 } from './types';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   ComponentProps,
   Renderer,
@@ -230,6 +232,16 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       ...userTranslations,
     };
 
+    // The connector owns one store per chat and attaches it to every tool. A
+    // message rendered without one (standalone, or a hand-built `tools`) falls
+    // back to collecting from the conversation it was handed — from the same
+    // per-tool `getRecords`, so no extraction knowledge lives here either.
+    let fallbackRecords: ChatRecordsStore | undefined;
+    const getFallbackRecords = () => {
+      fallbackRecords = fallbackRecords || collectChatRecords(messages, tools);
+      return fallbackRecords;
+    };
+
     const hasLeading = Boolean(LeadingComponent);
     const isCurrentMessage =
       messages === undefined ||
@@ -433,6 +445,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}
+                records={tool.records || getFallbackRecords()}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={sendEvent}

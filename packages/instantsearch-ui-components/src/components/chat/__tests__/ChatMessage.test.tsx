@@ -6,6 +6,7 @@ import { render } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
+import { getHitsFromToolOutput } from '../../../lib/utils/chatRecords';
 import {
   createChatMessageComponent,
   type ChatMessageClassNames,
@@ -1157,6 +1158,62 @@ describe('ChatMessage', () => {
         </article>
       </div>
     `);
+  });
+
+  test('hands any tool the records the conversation searched for', () => {
+    const searchPart = {
+      type: 'tool-algolia_search_index',
+      toolCallId: 'search',
+      input: { query: 'shoes' },
+      state: 'output-available',
+      output: { hits: [{ objectID: 'record-1', name: 'Runner' }] },
+    } as const;
+    // A tool of our own, handed nothing but an object ID.
+    const customPart = {
+      type: 'tool-custom_tool',
+      toolCallId: 'custom',
+      input: { objectID: 'record-1' },
+      state: 'output-available',
+      output: {},
+    } as const;
+    const message = {
+      role: 'assistant',
+      id: '1',
+      parts: [searchPart, customPart],
+    } as ChatMessageBase;
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        messages={[message]}
+        status="ready"
+        tools={{
+          // The search tool publishes its records; the custom tool consumes them.
+          algolia_search_index: {
+            getRecords: getHitsFromToolOutput,
+            addToolResult: jest.fn(),
+            applyFilters: jest.fn(),
+          },
+          custom_tool: {
+            layoutComponent: ({ message: part, records }) => (
+              <div className="custom">
+                {
+                  records?.get((part.input as { objectID: string }).objectID)
+                    ?.name as string
+                }
+              </div>
+            ),
+            addToolResult: jest.fn(),
+            applyFilters: jest.fn(),
+          },
+        }}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.querySelector('.custom')).toHaveTextContent('Runner');
   });
 
   test('adds assistant message attribution to tool result events', () => {
