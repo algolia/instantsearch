@@ -7,8 +7,8 @@
     "strict": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-    },
+      "@components/*": ["./src/components/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src"]
 }

@@ -107,7 +107,7 @@ export type ChatMessagesClassNames = {
 };
 
 export type ChatMessagesProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'div'> & {
   /**
    * Array of messages to display
@@ -273,13 +273,17 @@ const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
 
+function getInstantSearchStatus(tools: ClientSideTools) {
+  return Object.values(tools).find((tool) => tool.insightsEventContext)
+    ?.insightsEventContext?.instantSearchStatus;
+}
 // Own-key presence is what a JSX spread copies; `in` would also answer for
 // inherited keys the spread leaves behind.
 const hasOwnKey = (target: object | undefined, key: string) =>
   target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
 
 function createDefaultMessageComponent<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 >({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
@@ -421,6 +425,7 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
+    const instantSearchStatus = getInstantSearchStatus(props.metadata.tools);
     // Read the row's own side, mirroring `DefaultMessage`, so one role's change
     // neither invalidates the other's completed rows nor goes unnoticed here.
     const messageProps =
@@ -455,6 +460,7 @@ export function createChatMessagesComponent({
         props.message,
         props.isCurrentMessage,
         props.status,
+        instantSearchStatus,
         props.suggestionsElement,
         messageFeedback,
         showReasoning,
@@ -478,7 +484,7 @@ export function createChatMessagesComponent({
   });
 
   return function ChatMessages<
-    TMessage extends ChatMessageBase = ChatMessageBase
+    TMessage extends ChatMessageBase = ChatMessageBase,
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},
@@ -550,9 +556,9 @@ export function createChatMessagesComponent({
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
-      ? lastMessage?.parts?.some((_, index, parts) =>
+      ? (lastMessage?.parts?.some((_, index, parts) =>
           isReasoningPartActive(parts, index)
-        ) ?? false
+        ) ?? false)
       : false;
     const showLoader = getShowLoader(
       status,

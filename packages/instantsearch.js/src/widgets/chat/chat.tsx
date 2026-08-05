@@ -84,7 +84,7 @@ function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
     templates?: { layout?: unknown };
-  }
+  },
 >(
   defaultTools: Record<string, TTool>,
   userTools?: Record<string, TTool>
@@ -115,7 +115,7 @@ function mergeToolOptions<
 }
 
 function createDefaultTools<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
@@ -1102,7 +1102,7 @@ const defaultTemplates: ChatTemplates = {
 };
 
 export default (function chat<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,

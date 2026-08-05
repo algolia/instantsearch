@@ -1,4 +1,4 @@
-import type { ComponentChildren } from "preact";
+import type { ComponentChildren } from 'preact';
 
 export interface SegmentedOption<T extends string> {
   value: T;
@@ -13,19 +13,30 @@ interface Props<T extends string> {
   class?: string;
 }
 
-export function SegmentedControl<T extends string>({ options, value, onChange, class: className }: Props<T>) {
+export function SegmentedControl<T extends string>({
+  options,
+  value,
+  onChange,
+  class: className,
+}: Props<T>) {
   return (
-    <div class={`inline-flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-xs md:flex-row dark:border-neutral-700 dark:bg-neutral-800 ${className ?? ""}`}>
+    <div
+      class={`inline-flex flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-xs md:flex-row dark:border-neutral-700 dark:bg-neutral-800 ${
+        className ?? ''
+      }`}
+    >
       {options.map((option, index) => (
         <button
           key={option.value}
           type="button"
           class={`cursor-pointer p-2 md:px-3 md:py-1.5 font-medium transition-colors ${
-            index > 0 ? "border-t border-neutral-200 md:border-l md:border-t-0 dark:border-neutral-700" : ""
+            index > 0
+              ? 'border-t border-neutral-200 md:border-l md:border-t-0 dark:border-neutral-700'
+              : ''
           } ${
             value === option.value
-              ? "bg-neutral-100 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100"
-              : "text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
+              ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-700 dark:text-neutral-100'
+              : 'text-neutral-400 hover:bg-neutral-50 hover:text-neutral-600 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-300'
           }`}
           onClick={() => onChange(option.value)}
         >

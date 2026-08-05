@@ -101,7 +101,7 @@ const endsInsideResultObjectId = (rawInput: string) => {
       expectValue = false;
     } else if (char === '{' || char === '[') {
       frames.push({
-        key: expectValue ? frames[frames.length - 1]?.lastKey ?? '' : '',
+        key: expectValue ? (frames[frames.length - 1]?.lastKey ?? '') : '',
         lastKey: '',
         isObject: char === '{',
       });
@@ -134,7 +134,7 @@ export type DisplayResultsItem<THit extends RecordWithObjectID> =
 
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
-    items: Array<RecordWithObjectID<THit>>;
+    items: Array<DisplayResultsItem<THit>>;
     sendEvent: ClientSideToolComponentProps['sendEvent'];
   };
 
@@ -156,9 +156,15 @@ const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
 };
 
 export function createDisplayResultsToolComponent<
-  TObject extends RecordWithObjectID
+  TObject extends RecordWithObjectID,
   // oxlint-disable-next-line no-unused-vars
->({ createElement, Fragment, useMemo }: Renderer & Pick<Hooks, 'useMemo'>) {
+>({
+  createElement,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
@@ -167,8 +173,10 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, metadata, sendEvent } = toolProps;
+    const { message, metadata, insightsEventContext, sendEvent } = toolProps;
     const { messages, status } = metadata;
+    const instantSearchStatus =
+      insightsEventContext?.instantSearchStatus ?? 'idle';
 
     const translations: DisplayResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
@@ -191,8 +199,8 @@ export function createDisplayResultsToolComponent<
       inputClaimsPayload
         ? message?.input
         : claimsDisplayResultsPayload(legacyOutput)
-        ? legacyOutput
-        : undefined
+          ? legacyOutput
+          : undefined
     ) as DisplayResultsPayload<TObject> | undefined;
     const intro =
       typeof payload?.intro === 'string' ? payload.intro : undefined;
@@ -266,6 +274,31 @@ export function createDisplayResultsToolComponent<
       });
       return renderedGroups;
     }, []);
+
+    const viewedItems = renderableGroups.flatMap((group) => group.items);
+    const viewedItemsSignature = viewedItems
+      .map((item) => `${item.objectID}:${item.__position}`)
+      .join('|');
+    const lastViewedItemsSignatureRef = useRef<string | undefined>(undefined);
+
+    useEffect(() => {
+      if (
+        instantSearchStatus !== 'idle' ||
+        viewedItems.length === 0 ||
+        viewedItemsSignature === lastViewedItemsSignatureRef.current
+      ) {
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        lastViewedItemsSignatureRef.current = viewedItemsSignature;
+        sendEvent('view:internal', viewedItems, 'items_shown');
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [instantSearchStatus, sendEvent, viewedItems, viewedItemsSignature]);
 
     if (!intro && renderableGroups.length === 0 && !isStreaming) {
       return <Fragment />;

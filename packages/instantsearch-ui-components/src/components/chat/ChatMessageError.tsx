@@ -11,9 +11,7 @@ export type ChatMessageErrorTranslations = {
   /**
    * Error message text
    */
-  errorMessage:
-    | string
-    | ((params: { errorMessage?: string }) => string);
+  errorMessage: string | ((params: { errorMessage?: string }) => string);
   /**
    * New conversation button text
    */
@@ -81,7 +79,7 @@ export function createChatMessageErrorComponent({
     const resolvedErrorMessage =
       typeof errorMessageTranslation === 'function'
         ? errorMessageTranslation({ errorMessage })
-        : errorMessageTranslation ?? defaultErrorMessage;
+        : (errorMessageTranslation ?? defaultErrorMessage);
     const newConversationText =
       userTranslations?.newConversationText ?? defaultNewConversationText;
     const retryText = userTranslations?.retryText ?? defaultRetryText;

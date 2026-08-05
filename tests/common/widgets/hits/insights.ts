@@ -86,7 +86,9 @@ export function createInsightsTests(
       // `sendEvents`, so we count only `viewedObjectIDs` calls).
       {
         expect(
-          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+          window.aa.mock.calls.filter(
+            ([method]) => method === 'viewedObjectIDs'
+          )
         ).toHaveLength(2);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
@@ -137,7 +139,9 @@ export function createInsightsTests(
         });
 
         expect(
-          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+          window.aa.mock.calls.filter(
+            ([method]) => method === 'viewedObjectIDs'
+          )
         ).toHaveLength(2);
       }
     });
@@ -204,7 +208,9 @@ export function createInsightsTests(
       // events are sent via `sendEvents`, so we count only `viewedObjectIDs`).
       {
         expect(
-          window.aa.mock.calls.filter(([method]) => method === 'viewedObjectIDs')
+          window.aa.mock.calls.filter(
+            ([method]) => method === 'viewedObjectIDs'
+          )
         ).toHaveLength(4);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',

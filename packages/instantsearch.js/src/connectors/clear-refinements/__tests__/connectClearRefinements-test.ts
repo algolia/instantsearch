@@ -242,9 +242,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           ],
         });
 
-        const renderState1 = clearRefinements.getWidgetRenderState(
-          createInitOptions()
-        );
+        const renderState1 =
+          clearRefinements.getWidgetRenderState(createInitOptions());
 
         expect(renderState1).toEqual({
           hasRefinements: false,

@@ -1,4 +1,5 @@
 import { AbstractChat } from '../ai-lite';
+import { safelyRunOnBrowser } from '../utils/safelyRunOnBrowser';
 
 import type {
   UIMessage,
@@ -23,18 +24,26 @@ export type ChatInit<TUiMessage extends UIMessage> =
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 
+// Message history is a browser concern, and a server render constructs a Chat
+// too. Reading storage there throws during rendering; the write below only
+// throws into its own `catch`, so gating it just stops a pointless attempt.
 function getDefaultInitialMessages<TUIMessage extends UIMessage>(
   id?: string
 ): TUIMessage[] {
-  const initialMessages = sessionStorage.getItem(
-    CACHE_KEY + (id ? `-${id}` : '')
+  return safelyRunOnBrowser<TUIMessage[]>(
+    () => {
+      const initialMessages = sessionStorage.getItem(
+        CACHE_KEY + (id ? `-${id}` : '')
+      );
+      return initialMessages ? JSON.parse(initialMessages) : [];
+    },
+    { fallback: () => [] }
   );
-  return initialMessages ? JSON.parse(initialMessages) : [];
 }
 
-export class ChatState<TUiMessage extends UIMessage>
-  implements BaseChatState<TUiMessage>
-{
+export class ChatState<
+  TUiMessage extends UIMessage,
+> implements BaseChatState<TUiMessage> {
   _messages: TUiMessage[];
   _status: ChatStatus = 'ready';
   _error: Error | undefined = undefined;
@@ -62,14 +71,16 @@ export class ChatState<TUiMessage extends UIMessage>
 
     const saveMessagesInLocalStorage = () => {
       if (this.status === 'ready') {
-        try {
-          sessionStorage.setItem(
-            CACHE_KEY + (id ? `-${id}` : ''),
-            JSON.stringify(this.messages)
-          );
-        } catch (e) {
-          // Do nothing if sessionStorage is not available or full
-        }
+        safelyRunOnBrowser(() => {
+          try {
+            sessionStorage.setItem(
+              CACHE_KEY + (id ? `-${id}` : ''),
+              JSON.stringify(this.messages)
+            );
+          } catch (e) {
+            // Do nothing if sessionStorage is not available or full
+          }
+        });
       }
     };
     this['~registerMessagesCallback'](saveMessagesInLocalStorage);
@@ -163,7 +174,7 @@ export class ChatState<TUiMessage extends UIMessage>
 }
 
 export class Chat<
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
 

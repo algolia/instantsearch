@@ -17,7 +17,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 export function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,

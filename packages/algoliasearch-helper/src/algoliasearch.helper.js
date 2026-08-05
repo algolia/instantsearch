@@ -1873,9 +1873,8 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
     var state = s.state;
     var queriesCount = s.queriesCount;
     var helper = s.helper;
-    var specificResults = queriesCount !== undefined
-      ? results.splice(0, queriesCount)
-      : results;
+    var specificResults =
+      queriesCount !== undefined ? results.splice(0, queriesCount) : results;
 
     if (!state.index) {
       helper.emit('result', {

@@ -231,9 +231,7 @@ describe('RelatedProducts', () => {
       />
     );
 
-    userEvent.click(
-      container.querySelectorAll('.ais-RelatedProducts-item')[0]
-    );
+    userEvent.click(container.querySelectorAll('.ais-RelatedProducts-item')[0]);
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
     expect(sendEvent).toHaveBeenNthCalledWith(

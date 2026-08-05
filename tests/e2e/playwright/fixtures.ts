@@ -30,12 +30,16 @@ class InstantSearchHelpers {
     const oldUrl = this.page.url();
     // Use header-scoped selector to avoid matching RefinementList search inputs
     // Support both #header (JS examples) and .header (React examples)
-    const searchBox = this.page.locator(
-      '#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]'
-    ).first();
-    const resetButton = this.page.locator(
-      '#header .ais-SearchBox [type=reset], .header > .ais-SearchBox [type=reset], [data-widget="searchbox"] .ais-SearchBox [type=reset]'
-    ).first();
+    const searchBox = this.page
+      .locator(
+        '#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]'
+      )
+      .first();
+    const resetButton = this.page
+      .locator(
+        '#header .ais-SearchBox [type=reset], .header > .ais-SearchBox [type=reset], [data-widget="searchbox"] .ais-SearchBox [type=reset]'
+      )
+      .first();
 
     // Click the reset button to clear the input if visible
     if (await resetButton.isVisible()) {
@@ -53,9 +57,11 @@ class InstantSearchHelpers {
   async getSearchBoxValue(): Promise<string> {
     // Use header-scoped selector to avoid matching RefinementList search inputs
     // Support both #header (JS examples) and .header (React examples)
-    const searchBox = this.page.locator(
-      '#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]'
-    ).first();
+    const searchBox = this.page
+      .locator(
+        '#header .ais-SearchBox [type=search], .header > .ais-SearchBox [type=search], [data-widget="searchbox"] .ais-SearchBox [type=search]'
+      )
+      .first();
     return await searchBox.inputValue();
   }
 
@@ -128,7 +134,9 @@ class InstantSearchHelpers {
     await this.page.waitForURL((url) => url.href !== oldUrl);
 
     // Return the actual value after dragging
-    const newLowerHandle = this.page.locator(RANGE_SLIDER_HANDLE_SELECTOR).first();
+    const newLowerHandle = this.page
+      .locator(RANGE_SLIDER_HANDLE_SELECTOR)
+      .first();
     return Number(await newLowerHandle.getAttribute('aria-valuenow'));
   }
 
@@ -171,7 +179,9 @@ class InstantSearchHelpers {
     await this.page.waitForURL((url) => url.href !== oldUrl);
 
     // Return the actual value after dragging
-    const newUpperHandle = this.page.locator(RANGE_SLIDER_HANDLE_SELECTOR).nth(1);
+    const newUpperHandle = this.page
+      .locator(RANGE_SLIDER_HANDLE_SELECTOR)
+      .nth(1);
     return Number(await newUpperHandle.getAttribute('aria-valuenow'));
   }
 

@@ -1,11 +1,11 @@
 [build]
-  command=""" \
+command = """ \
     yarn build:ci && \
     yarn website:storybook && \
     yarn website:examples --concurrency=1 && \
     yarn workspace algoliasearch-helper doc
     """
-  publish="website"
+publish = "website"
 
 [build.environment]
-  YARN_VERSION = "1.13.0"
+YARN_VERSION = "1.13.0"

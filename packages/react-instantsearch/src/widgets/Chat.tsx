@@ -79,7 +79,7 @@ function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
     layoutComponent?: unknown;
-  }
+  },
 >(
   defaultTools: Record<string, TTool>,
   userTools?: Record<string, TTool>
@@ -203,7 +203,7 @@ export type ChatHandle = {
 
 function ChatInner<
   TObject extends RecordWithObjectID,
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 >(
   {
     tools: userTools,
@@ -436,7 +436,7 @@ function ChatInner<
 
 export const Chat = React.forwardRef(ChatInner) as <
   TObject extends RecordWithObjectID = RecordWithObjectID,
-  TUiMessage extends UIMessage = UIMessage
+  TUiMessage extends UIMessage = UIMessage,
 >(
   props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
 ) => React.ReactElement | null;

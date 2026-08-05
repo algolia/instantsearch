@@ -7,7 +7,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useRef } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import { carousel } from '../../templates';
@@ -23,14 +23,16 @@ import type {
 } from 'instantsearch-ui-components';
 
 export function createDisplayResultsTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(templates: ChatTemplates<THit>): UserClientSideToolWithTemplate {
   const DisplayResultsUIComponent = createDisplayResultsToolComponent<
     RecordWithObjectID<THit>
   >({
     createElement: h,
     Fragment,
+    useEffect,
     useMemo,
+    useRef,
   });
 
   const Button = createButtonComponent({ createElement: h });

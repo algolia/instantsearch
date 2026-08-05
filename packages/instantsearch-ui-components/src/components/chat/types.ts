@@ -204,7 +204,7 @@ export type DynamicToolUIPart = {
  */
 export type UIMessagePart<
   TDataTypes extends UIDataTypes = UIDataTypes,
-  TTools extends UITools = UITools
+  TTools extends UITools = UITools,
 > =
   | TextUIPart
   | ReasoningUIPart
@@ -222,7 +222,7 @@ export type UIMessagePart<
 export interface UIMessage<
   TMetadata = unknown,
   TDataParts extends UIDataTypes = UIDataTypes,
-  TTools extends UITools = UITools
+  TTools extends UITools = UITools,
 > {
   /** A unique identifier for the message. */
   id: string;
@@ -245,32 +245,20 @@ export type ChatToolType = ChatToolMessage['type'];
 /**
  * Infer metadata type from UIMessage.
  */
-export type InferUIMessageMetadata<T extends UIMessage> = T extends UIMessage<
-  infer TMetadata
->
-  ? TMetadata
-  : unknown;
+export type InferUIMessageMetadata<T extends UIMessage> =
+  T extends UIMessage<infer TMetadata> ? TMetadata : unknown;
 
 /**
  * Infer data types from UIMessage.
  */
-export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  infer TDataTypes
->
-  ? TDataTypes
-  : UIDataTypes;
+export type InferUIMessageData<T extends UIMessage> =
+  T extends UIMessage<unknown, infer TDataTypes> ? TDataTypes : UIDataTypes;
 
 /**
  * Infer tools from UIMessage.
  */
-export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  UIDataTypes,
-  infer TTools
->
-  ? TTools
-  : UITools;
+export type InferUIMessageTools<T extends UIMessage> =
+  T extends UIMessage<unknown, UIDataTypes, infer TTools> ? TTools : UITools;
 
 /**
  * Chat state interface.
@@ -455,21 +443,46 @@ export type AddToolResultWithOutput = (
   params: Pick<Parameters<AddToolResult>[0], 'output'>
 ) => ReturnType<AddToolResult>;
 
-type SearchToolInputBase = {
+type SearchToolExtraFields = {
+  [key: string]: unknown;
+};
+
+type SearchToolQueryBase = SearchToolExtraFields & {
   query: string;
   number_of_results?: number;
 };
 
-type DefaultSearchToolInput = SearchToolInputBase & {
+type FacetFiltersSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: string[][];
 };
 
-type McpSearchToolInput = SearchToolInputBase & {
+type FacetKeysSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: undefined;
   [facetKey: `facet_${string}`]: string[] | undefined;
 };
 
-export type SearchToolInput = DefaultSearchToolInput | McpSearchToolInput;
+/**
+ * A single query of a search tool input: the query string along with its
+ * refinements, either as a ready-to-use `facet_filters` array or as individual
+ * `facet_<attribute>` keys.
+ */
+export type SearchToolQuery =
+  | FacetFiltersSearchToolQuery
+  | FacetKeysSearchToolQuery;
+
+/** Search tool input holding the query and its refinements at the root. */
+type SingleQuerySearchToolInput = SearchToolQuery & { queries?: undefined };
+
+/** Search tool input nesting one or more queries in a `queries` array. */
+type MultiQuerySearchToolInput = SearchToolExtraFields & {
+  query?: undefined;
+  facet_filters?: undefined;
+  queries: SearchToolQuery[];
+};
+
+export type SearchToolInput =
+  | SingleQuerySearchToolInput
+  | MultiQuerySearchToolInput;
 
 export type ApplyFiltersParams = {
   query?: string;
@@ -477,7 +490,7 @@ export type ApplyFiltersParams = {
 };
 
 export type ChatLayoutOwnProps<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = {
   open: boolean;
   maximized: boolean;
@@ -505,7 +518,7 @@ export type ChatLayoutOwnProps<
  * read, regardless of which override point it plugs into.
  */
 export type ChatComponentMetadata<
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = {
   /**
    * The messages currently in the chat.
@@ -575,13 +588,14 @@ export type ChatComponentMetadata<
  */
 export type ChatComponentPropsWithMetadata<
   TOwnProps = {},
-  TMessage extends ChatMessageBase = ChatMessageBase
+  TMessage extends ChatMessageBase = ChatMessageBase,
 > = TOwnProps & {
   metadata: ChatComponentMetadata<TMessage>;
 };
 
 export type ClientSideToolComponentProps = ChatComponentPropsWithMetadata<{
   message: ChatToolMessage;
+  insightsEventContext?: ChatInsightsEventContext;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   addToolResult: AddToolResultWithOutput;
@@ -593,11 +607,17 @@ export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
 ) => JSX.Element;
 
+export type ChatInsightsEventContext = {
+  agentId?: string;
+  instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
   sendEvent?: SendEventForHits;
+  insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
@@ -611,6 +631,6 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent'
+  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;

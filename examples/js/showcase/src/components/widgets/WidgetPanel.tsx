@@ -1,14 +1,14 @@
-import { panel, refinementList } from "instantsearch.js/es/widgets";
+import { panel, refinementList } from 'instantsearch.js/es/widgets';
 
-import { useWidget } from "../../hooks/useWidget";
+import { useWidget } from '../../hooks/useWidget';
 
 const panelRefinementList = panel({
   templates: {
     header() {
-      return "Brands";
+      return 'Brands';
     },
     collapseButtonText({ collapsed }) {
-      return collapsed ? "Show" : "Hide";
+      return collapsed ? 'Show' : 'Hide';
     },
   },
   collapsed: () => false,
@@ -16,7 +16,7 @@ const panelRefinementList = panel({
 
 export function WidgetPanel() {
   const ref = useWidget((el) =>
-    panelRefinementList({ container: el, attribute: "brand", searchable: true }),
+    panelRefinementList({ container: el, attribute: 'brand', searchable: true })
   );
   return <div ref={ref} />;
 }

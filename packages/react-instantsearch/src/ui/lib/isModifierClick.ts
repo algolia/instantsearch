@@ -5,9 +5,9 @@ export function isModifierClick(event: React.MouseEvent) {
 
   return Boolean(
     isMiddleClick ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.metaKey ||
-      event.shiftKey
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey
   );
 }
