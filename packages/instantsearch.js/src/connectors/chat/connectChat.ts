@@ -187,7 +187,7 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
    * Whether to persist open state in sessionStorage. Message persistence is
    * configured when constructing the Chat instance.
    *
-   * @default true
+   * @default { open: true }
    */
   persistence?: {
     open?: boolean;
