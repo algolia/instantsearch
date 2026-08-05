@@ -28,7 +28,7 @@ const NON_WIDGETS = [
   'PonderToolType',
   'DisplayResultsToolType',
 ] as const;
-type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
+type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
 
 // Non-components that should be excluded from SingleWidget type
 const NON_COMPONENTS = [
@@ -47,7 +47,7 @@ const NON_COMPONENTS = [
   // Deprecated alias of `Autocomplete`, covered separately.
   'EXPERIMENTAL_Autocomplete',
 ] as const;
-type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
+type ComponentWidgets = Omit<typeof widgets, (typeof NON_COMPONENTS)[number]>;
 
 export type SingleWidget = {
   [name in keyof ComponentWidgets]: {
@@ -80,6 +80,16 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
+    case 'PromptSuggestions': {
+      // The connector requires `agentId` unless a custom `transport` is given.
+      return (
+        <widget.Component
+          agentId="test-agent-id"
+          configurationId="prompt-suggestions"
+          {...props}
+        />
+      );
+    }
     case 'Breadcrumb': {
       return <widget.Component attributes={['']} {...props} />;
     }
@@ -166,7 +176,7 @@ export function getAllInstantSearchWidgets() {
         regularWidget
       ): regularWidget is [
         keyof RegularWidgets,
-        RegularWidgets[keyof RegularWidgets]
+        RegularWidgets[keyof RegularWidgets],
       ] =>
         (NON_WIDGETS as readonly string[]).includes(regularWidget[0]) === false
     )

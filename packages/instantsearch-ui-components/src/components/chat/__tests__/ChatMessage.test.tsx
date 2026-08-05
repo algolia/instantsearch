@@ -1092,6 +1092,9 @@ describe('ChatMessage', () => {
   });
 
   test('renders with tools', () => {
+    const layoutComponent = jest.fn(({ message }) => (
+      <div className="wrapper">{JSON.stringify(message.output)}</div>
+    ));
     const { container } = render(
       <ChatMessage
         indexUiState={{}}
@@ -1112,9 +1115,7 @@ describe('ChatMessage', () => {
         status="ready"
         tools={{
           test_tool: {
-            layoutComponent: ({ message }) => (
-              <div className="wrapper">{JSON.stringify(message.output)}</div>
-            ),
+            layoutComponent,
             addToolResult: jest.fn(),
             onToolCall: jest.fn(),
             applyFilters: jest.fn(),
@@ -1122,6 +1123,9 @@ describe('ChatMessage', () => {
         }}
         onClose={jest.fn()}
       />
+    );
+    expect(layoutComponent.mock.calls[0][0]).toEqual(
+      expect.objectContaining({ status: 'ready' })
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -1153,6 +1157,62 @@ describe('ChatMessage', () => {
         </article>
       </div>
     `);
+  });
+
+  test('adds assistant message attribution to tool result events', () => {
+    const sendEvent = jest.fn();
+    const hit = {
+      objectID: 'record-1',
+      __queryID: 'search-query-id',
+      __position: 1,
+    };
+
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: 'assistant-message-id',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: 'tool-call-id',
+              input: {},
+              state: 'output-available',
+              output: {},
+            },
+          ],
+        }}
+        status="ready"
+        tools={{
+          test_tool: {
+            layoutComponent: ({ sendEvent: toolSendEvent }) => {
+              toolSendEvent('click', hit, 'Product Clicked', {
+                customField: 'custom value',
+              });
+
+              return <div>Tool result</div>;
+            },
+            addToolResult: jest.fn(),
+            onToolCall: jest.fn(),
+            applyFilters: jest.fn(),
+            sendEvent,
+            insightsEventContext: {
+              agentId: 'agent-id',
+            },
+          },
+        }}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(sendEvent).toHaveBeenCalledWith('click', hit, 'Product Clicked', {
+      customField: 'custom value',
+      queryID: 'message_assistant-message-id',
+      agentId: 'agent-id',
+      toolCallId: 'tool-call-id',
+    });
   });
 
   test('submits a layout result for the owning assistant message', async () => {

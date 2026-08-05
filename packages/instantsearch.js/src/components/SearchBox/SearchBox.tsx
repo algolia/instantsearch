@@ -12,14 +12,13 @@ import type {
 } from '../../widgets/search-box/search-box';
 import type { ComponentProps } from 'preact';
 
-export type SearchBoxComponentCSSClasses =
-  ComponentCSSClasses<
-    Omit<SearchBoxCSSClasses, 'aiModeButton' | 'aiModeIcon' | 'aiModeLabel'>
-  > & {
-    aiModeButton?: string;
-    aiModeIcon?: string;
-    aiModeLabel?: string;
-  };
+export type SearchBoxComponentCSSClasses = ComponentCSSClasses<
+  Omit<SearchBoxCSSClasses, 'aiModeButton' | 'aiModeIcon' | 'aiModeLabel'>
+> & {
+  aiModeButton?: string;
+  aiModeIcon?: string;
+  aiModeLabel?: string;
+};
 
 export type SearchBoxComponentTemplates = Required<
   Omit<SearchBoxTemplates, 'aiMode'>

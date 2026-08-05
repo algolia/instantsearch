@@ -2,9 +2,12 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
@@ -27,7 +30,10 @@ jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
 }));
 
 describe('connectChat', () => {
-  const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
+  const getInitializedWidget = (
+    widgetParams: ChatConnectorParams = {},
+    helper = algoliasearchHelper(createSearchClient(), '')
+  ) => {
     const renderFn = jest.fn();
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
@@ -35,8 +41,6 @@ describe('connectChat', () => {
       disableTriggerValidation: true,
       ...widgetParams,
     } as ChatConnectorParams);
-
-    const helper = algoliasearchHelper(createSearchClient(), '');
 
     widget.init(createInitOptions({ helper }));
 
@@ -354,6 +358,108 @@ describe('connectChat', () => {
     );
   });
 
+  describe('browser side effects', () => {
+    // Positive controls for the negative assertions in `connectChat-ssr.test.ts`.
+    it('registers callbacks that render chat updates', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      renderFn.mockClear();
+
+      const messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      chat.messages = messages;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ messages }),
+        false
+      );
+
+      chat._state.status = 'streaming';
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ status: 'streaming' }),
+        false
+      );
+
+      const error = new Error('Failed');
+      chat._state.error = error;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ error }),
+        false
+      );
+      expect(renderFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('still sends the initial user message in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const sendMessage = jest.fn();
+      (chat as any).sendMessage = sendMessage;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialUserMessage: 'Hello',
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(sendMessage).toHaveBeenCalledWith({ text: 'Hello' });
+    });
+
+    it('still resumes a stream in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const resumeStream = jest.fn();
+      (chat as any).resumeStream = resumeStream;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        resume: true,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(resumeStream).toHaveBeenCalled();
+    });
+
+    it('still applies initial messages in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'INITIAL IN BROWSER' }],
+        },
+      ];
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(chat.messages).toEqual(initialMessages);
+    });
+  });
+
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
@@ -595,6 +701,92 @@ describe('connectChat', () => {
     });
   });
 
+  describe('applyFilters', () => {
+    const getApplyFilters = () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'index', {
+        hierarchicalFacets: [
+          {
+            name: 'hierarchicalCategories.lvl0',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+            ],
+            separator: ' > ',
+          },
+        ],
+      });
+      helper.lastResults = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const { getRenderState } = getInitializedWidget(
+        { tools: { testTool: {} } },
+        helper
+      );
+
+      return {
+        helper,
+        applyFilters: getRenderState().tools.testTool.applyFilters,
+      };
+    };
+
+    it('refines the query and the facets of the search tool', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        query: 'laptop',
+        facetFilters: [['categories:Laptops'], ['brand:Apple']],
+      });
+
+      expect(helper.state.query).toBe('laptop');
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        categories: ['Laptops'],
+        brand: ['Apple'],
+      });
+    });
+
+    it('keeps the value after the first colon in a facet filter', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({ facetFilters: [['brand:Bang & Olufsen: Beoplay']] });
+
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        brand: ['Bang & Olufsen: Beoplay'],
+      });
+    });
+
+    it('refines a hierarchical facet from its deepest level', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({});
+    });
+
+    it('refines a hierarchical facet regardless of the level order', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
+    });
+  });
+
   describe('tool handling', () => {
     const chatStream = (chunks: UIMessageChunk[]) =>
       new Response(
@@ -621,6 +813,10 @@ describe('connectChat', () => {
           '~addToolResultForMessage': expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
+          insightsEventContext: {
+            agentId: 'agentId',
+            instantSearchStatus: 'idle',
+          },
         },
       });
     });

@@ -12,6 +12,7 @@ import {
   getAppIdAndApiKey,
   getRefinements,
   noop,
+  safelyRunOnBrowser,
   sendChatMessageFeedback,
   uniq,
   walkIndex,
@@ -45,6 +46,7 @@ import type {
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
+  ChatInsightsEventContext,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -183,6 +185,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   disableTriggerValidation?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
+   * This option has no effect during server rendering.
    */
   resume?: boolean;
   /**
@@ -215,6 +218,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   context?: Record<string, string> | (() => Record<string, string>);
   /**
    * A message to send automatically when the chat is initialized.
+   * This message is sent only in the browser.
    *
    * This message is only sent when the chat has no existing messages yet. If
    * messages were restored or otherwise already exist when the widget starts,
@@ -225,6 +229,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
   initialUserMessage?: string;
   /**
    * Messages to pre-populate the chat with when it is initialized.
+   * These messages are applied only in the browser.
    *
    * These messages are set without triggering an AI response. They are only
    * applied when the chat has no existing messages yet. If messages were
@@ -288,29 +293,53 @@ function updateStateFromSearchToolInput(
   );
 
   if (params.facetFilters) {
-    const attributes = flat(params.facetFilters).map((filter) => {
-      const [attribute, value] = filter.split(':');
+    const refinements = flat(params.facetFilters).reduce<
+      Array<{ attribute: string; value: string }>
+    >((acc, filter) => {
+      const separatorIndex = filter.indexOf(':');
 
-      return { attribute, value };
-    });
+      if (separatorIndex > 0) {
+        acc.push({
+          attribute: filter.slice(0, separatorIndex),
+          value: filter.slice(separatorIndex + 1),
+        });
+      }
 
-    attributes.forEach(({ attribute, value }) => {
+      return acc;
+    }, []);
+
+    const hierarchicalRefinements = new Map<string, string>();
+
+    refinements.forEach(({ attribute, value }) => {
+      const hierarchicalFacet = helper.state.hierarchicalFacets.find(
+        (facet) =>
+          facet.name === attribute || facet.attributes.includes(attribute)
+      );
+
+      if (hierarchicalFacet) {
+        const currentValue = hierarchicalRefinements.get(
+          hierarchicalFacet.name
+        );
+
+        if (currentValue === undefined || value.length > currentValue.length) {
+          hierarchicalRefinements.set(hierarchicalFacet.name, value);
+        }
+
+        return;
+      }
+
       if (
         !helper.state.isConjunctiveFacet(attribute) &&
-        !helper.state.isHierarchicalFacet(attribute) &&
         !helper.state.isDisjunctiveFacet(attribute)
       ) {
-        const s = helper.state.addDisjunctiveFacet(attribute);
-        helper.setState(s);
-        helper.toggleFacetRefinement(attribute, value);
-      } else {
-        const attr =
-          helper.state.hierarchicalFacets.find(
-            (facet) => facet.name === attribute
-          )?.name || attribute;
-
-        helper.toggleFacetRefinement(attr, value);
+        helper.setState(helper.state.addDisjunctiveFacet(attribute));
       }
+
+      helper.toggleFacetRefinement(attribute, value);
+    });
+
+    hierarchicalRefinements.forEach((value, name) => {
+      helper.toggleFacetRefinement(name, value);
     });
   }
 
@@ -444,6 +473,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
+      // A caller supplied `chat` already owns its transport, so it bypasses the
+      // connector's transport construction and validation below.
+      if ('chat' in options) {
+        return options.chat;
+      }
+
       let transport;
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
@@ -524,7 +559,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport = new DefaultChatTransport({
           api: baseApi,
           headers: {
-            ...(options.requestOptions?.headers instanceof Headers
+            // `Headers` is absent on runtimes without fetch globals, and a
+            // server render reaches this while building the transport.
+            ...(typeof Headers !== 'undefined' &&
+            options.requestOptions?.headers instanceof Headers
               ? Object.fromEntries(options.requestOptions.headers.entries())
               : options.requestOptions?.headers),
             // Preserve the required Algolia identity headers and chat agent
@@ -555,10 +593,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         throw new Error(
           withUsage('You need to provide either an `agentId` or a `transport`.')
         );
-      }
-
-      if ('chat' in options) {
-        return options.chat;
       }
 
       return new Chat({
@@ -696,22 +730,33 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const hasExistingMessages = _chatInstance.messages.length > 0;
 
         // Set initialMessages before registering callbacks to avoid
-        // triggering re-renders during init
-        if (initialMessages?.length && !resume && !hasExistingMessages) {
-          _chatInstance.messages = initialMessages;
-        }
+        // triggering re-renders during init. A server render owns no
+        // conversation, so it leaves the instance empty.
+        safelyRunOnBrowser(() => {
+          if (initialMessages?.length && !resume && !hasExistingMessages) {
+            _chatInstance.messages = initialMessages;
+          }
+        });
 
-        _chatInstance['~registerErrorCallback'](render);
-        _chatInstance['~registerMessagesCallback'](render);
-        _chatInstance['~registerStatusCallback'](render);
+        safelyRunOnBrowser(() => {
+          _chatInstance['~registerErrorCallback'](render);
+          _chatInstance['~registerMessagesCallback'](render);
+          _chatInstance['~registerStatusCallback'](render);
+        });
 
-        if (resume) {
-          _chatInstance.resumeStream();
-        }
+        // Resuming and sending reach the network, which a server render must
+        // not: the HTML pass repeats what `getServerState` already rendered, so
+        // each send happens at least twice, and each failure resolves into chat
+        // state well after the render that started it has finished.
+        safelyRunOnBrowser(() => {
+          if (resume) {
+            _chatInstance.resumeStream();
+          }
 
-        if (initialUserMessage && !resume && !hasExistingMessages) {
-          _chatInstance.sendMessage({ text: initialUserMessage });
-        }
+          if (initialUserMessage && !resume && !hasExistingMessages) {
+            _chatInstance.sendMessage({ text: initialUserMessage });
+          }
+        });
 
         renderFn(
           {
@@ -764,6 +809,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return updateStateFromSearchToolInput(params, helper);
         }
 
+        const insightsEventContext: ChatInsightsEventContext = {
+          agentId,
+          instantSearchStatus: instantSearchInstance.status,
+        };
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult = {
@@ -773,8 +822,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               _chatInstance['~addToolResultForMessage'],
             applyFilters,
             sendEvent,
+            insightsEventContext,
           } satisfies ClientSideTool & {
-            '~addToolResultForMessage': typeof _chatInstance['~addToolResultForMessage'];
+            '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

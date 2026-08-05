@@ -2,10 +2,12 @@ import { startsWith } from './startsWith';
 
 import type { ChatMessageBase } from '../../components';
 import type {
+  ApplyFiltersParams,
   ChatToolMessage,
   ClientSideTool,
   ClientSideTools,
   SearchToolInput,
+  SearchToolQuery,
 } from '../../components/chat/types';
 import type { RecordWithObjectID } from '../../types';
 
@@ -68,27 +70,32 @@ export const findTool = (
 
 const FACET_KEY_PREFIX = 'facet_';
 
-/**
- * Extracts the `facetFilters` from a search tool input.
- *
- * The default search tool provides a ready-to-use `facet_filters` array. The
- * Algolia MCP Server search tool instead expresses refinements as individual
- * `facet_<attribute>` keys (e.g. `facet_categories: ['Books', 'Toys']`), which
- * are converted here into the `[['attribute:value']]` shape `applyFilters`
- * expects.
- */
-export const getFacetFiltersFromToolInput = (
+const hasQueries = (
+  input: SearchToolInput
+): input is { queries: SearchToolQuery[] } => Array.isArray(input.queries);
+
+const getSearchToolQuery = (
   input: SearchToolInput | undefined
-): string[][] | undefined => {
+): SearchToolQuery | undefined => {
   if (!input) {
     return undefined;
   }
 
-  if (Array.isArray(input.facet_filters)) {
-    return input.facet_filters;
+  return hasQueries(input) ? input.queries[0] : input;
+};
+
+const getFacetFilters = (
+  query: SearchToolQuery | undefined
+): string[][] | undefined => {
+  if (!query) {
+    return undefined;
   }
 
-  const facetFilters = Object.entries(input).reduce<string[][]>(
+  if (Array.isArray(query.facet_filters)) {
+    return query.facet_filters;
+  }
+
+  const facetFilters = Object.entries(query).reduce<string[][]>(
     (acc, [key, value]) => {
       if (!startsWith(key, FACET_KEY_PREFIX) || !Array.isArray(value)) {
         return acc;
@@ -109,6 +116,26 @@ export const getFacetFiltersFromToolInput = (
   );
 
   return facetFilters.length > 0 ? facetFilters : undefined;
+};
+
+/**
+ * Extracts the refinements a search tool searched with, in the shape
+ * `applyFilters` expects.
+ *
+ * The default search tool provides a ready-to-use `facet_filters` array. The
+ * Algolia MCP Server search tool instead expresses refinements as individual
+ * `facet_<attribute>` keys (e.g. `facet_categories: ['Books', 'Toys']`), which
+ * are converted here into `[['attribute:value']]`.
+ */
+export const getApplyFiltersParamsFromToolInput = (
+  input: SearchToolInput | undefined
+): ApplyFiltersParams => {
+  const query = getSearchToolQuery(input);
+
+  return {
+    query: query?.query,
+    facetFilters: getFacetFilters(query),
+  };
 };
 
 const isSearchToolPart = (part: ChatToolMessage) =>
@@ -149,39 +176,40 @@ const collectHitsFromPart = (
  * relies on this map to hydrate each result with the full record that the
  * preceding search tool already fetched.
  *
- * Pass `untilToolCallId` (the display tool's own `toolCallId`) to scope
- * collection to the turn that produced it: hits are only gathered up to and
- * including the message that contains that tool call. This prevents a later
- * turn's search from overwriting an earlier display tool's records (and their
- * per-query metadata like `__queryID`).
+ * Pass the display tool's own message part to scope collection to that exact
+ * occurrence. This prevents reused tool call IDs and later searches from
+ * changing another display tool's records or per-query metadata like
+ * `__queryID`.
  */
 export const getHitsByObjectID = (
   messages: ChatMessageBase[],
-  untilToolCallId?: string
+  untilToolPart?: ChatToolMessage
 ): Record<string, RecordWithObjectID> => {
-  const hitsByObjectID: Record<string, RecordWithObjectID> = {};
+  const hitsByObjectID = Object.create(null) as Record<
+    string,
+    RecordWithObjectID
+  >;
 
-  for (const message of messages) {
-    let reachedBoundary = false;
-
-    message.parts.forEach((part) => {
+  const reachedBoundary = messages.some((message) =>
+    message.parts.some((part) => {
       if (!isPartTool(part)) {
-        return;
+        return false;
       }
-      // Note the boundary but keep processing the rest of this message's parts:
-      // the search tool that fed this display tool lives in the same message,
-      // so its hits must still be collected before we stop.
-      if (untilToolCallId && part.toolCallId === untilToolCallId) {
-        reachedBoundary = true;
+
+      if (untilToolPart && part === untilToolPart) {
+        return true;
       }
+
       if (isSearchToolPart(part)) {
         collectHitsFromPart(part, hitsByObjectID);
       }
-    });
 
-    if (reachedBoundary) {
-      break;
-    }
+      return false;
+    })
+  );
+
+  if (untilToolPart && !reachedBoundary) {
+    return Object.create(null) as Record<string, RecordWithObjectID>;
   }
 
   return hitsByObjectID;

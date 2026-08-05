@@ -160,7 +160,7 @@ export type GeoSearchConnector<THit extends GeoHit = GeoHit> = Connector<
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  */
 export default (function connectGeoSearch<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     GeoSearchRenderState,

@@ -8,7 +8,7 @@ function getIndexStateWithoutConfigure<TIndexUiState extends IndexUiState>(
 }
 
 export default function singleIndexStateMapping<
-  TUiState extends UiState = UiState
+  TUiState extends UiState = UiState,
 >(
   indexName: keyof TUiState
 ): StateMapping<TUiState, TUiState[typeof indexName]> {

@@ -5,9 +5,9 @@ import { tryParseErrorMessage } from '../utils';
 
 describe('tryParseErrorMessage', () => {
   it('returns the trimmed `message` from a JSON object', () => {
-    expect(
-      tryParseErrorMessage('{"message":"  Something went wrong  "}')
-    ).toBe('Something went wrong');
+    expect(tryParseErrorMessage('{"message":"  Something went wrong  "}')).toBe(
+      'Something went wrong'
+    );
   });
 
   it('returns the `message` from a full ErrorResponse payload', () => {

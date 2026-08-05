@@ -99,7 +99,9 @@
   align-items: center;
   padding: 1.5rem;
   display: flex;
-  box-shadow: 0 0 0 1px #23263b0d, 0 1px 3px #23263b26;
+  box-shadow:
+    0 0 0 1px #23263b0d,
+    0 1px 3px #23263b26;
 }
 
 .ais-TrendingItems-item img,

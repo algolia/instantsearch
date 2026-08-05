@@ -66,11 +66,10 @@ search.addWidgets([
   instantsearch.widgets.hits({
     container: '#products',
     templates: {
-      item: (hit, { html, components }) =>
-        html`
-          <h3>${components.Highlight({ attribute: 'name', hit })}</h3>
-          <p>${components.Snippet({ attribute: 'description', hit })}</p>
-        `,
+      item: (hit, { html, components }) => html`
+        <h3>${components.Highlight({ attribute: 'name', hit })}</h3>
+        <p>${components.Snippet({ attribute: 'description', hit })}</p>
+      `,
     },
   }),
 

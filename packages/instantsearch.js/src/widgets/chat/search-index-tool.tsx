@@ -2,7 +2,7 @@
 
 import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 
@@ -17,7 +17,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 export function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
@@ -26,6 +26,7 @@ export function createCarouselTool<
   const SearchLayoutUIComponent = createCarouselToolComponent<THit>({
     createElement: h,
     Fragment,
+    useEffect,
     useMemo,
     useRef,
     useState,

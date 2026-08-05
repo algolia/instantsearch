@@ -12,7 +12,7 @@ import type {
 
 export type RouterProps<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = {
   router?: Router<TRouteState>;
   // ideally stateMapping should be required if TRouteState is given,
@@ -26,7 +26,7 @@ export type RouterProps<
 
 export const createRouterMiddleware = <
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >(
   props: RouterProps<TUiState, TRouteState> = {}
 ): InternalMiddleware<TUiState> => {

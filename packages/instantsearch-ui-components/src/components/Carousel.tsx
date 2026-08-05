@@ -5,6 +5,7 @@ import { createDefaultItemComponent } from './recommend-shared';
 
 import type {
   ComponentProps,
+  Hooks,
   MutableRef,
   RecommendItemComponentProps,
   RecordWithObjectID,
@@ -13,6 +14,7 @@ import type {
 } from '../types';
 
 export type HeaderComponentProps = {
+  nbItems: number;
   canScrollLeft: boolean;
   canScrollRight: boolean;
   scrollLeft: () => void;
@@ -21,7 +23,7 @@ export type HeaderComponentProps = {
 
 export type CarouselProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>,
 > = ComponentProps<'div'> & {
   listRef: MutableRef<HTMLOListElement | null>;
   nextButtonRef: MutableRef<HTMLButtonElement | null>;
@@ -44,6 +46,42 @@ export type CarouselProps<
   translations?: Partial<CarouselTranslations>;
   sendEvent: SendEventForHits;
 };
+
+type CarouselNavigationProps = Pick<
+  CarouselProps<unknown>,
+  | 'listRef'
+  | 'nextButtonRef'
+  | 'previousButtonRef'
+  | 'setCanScrollLeft'
+  | 'setCanScrollRight'
+>;
+
+function updateNavigationButtonsProps({
+  listRef,
+  nextButtonRef,
+  previousButtonRef,
+  setCanScrollLeft,
+  setCanScrollRight,
+}: CarouselNavigationProps) {
+  if (!listRef.current) {
+    return;
+  }
+
+  const isLeftHidden = listRef.current.scrollLeft <= 0;
+  const isRightHidden =
+    listRef.current.scrollLeft + listRef.current.clientWidth >=
+    listRef.current.scrollWidth;
+
+  setCanScrollLeft(!isLeftHidden);
+  setCanScrollRight(!isRightHidden);
+
+  if (previousButtonRef.current) {
+    previousButtonRef.current.hidden = isLeftHidden;
+  }
+  if (nextButtonRef.current) {
+    nextButtonRef.current.hidden = isRightHidden;
+  }
+}
 
 export type CarouselClassNames = {
   /**
@@ -131,7 +169,12 @@ function NextIconDefaultComponent({
   );
 }
 
-export function createCarouselComponent({ createElement, Fragment }: Renderer) {
+export function createCarouselComponent({
+  createElement,
+  Fragment,
+  useEffect,
+  useRef,
+}: Renderer & Pick<Hooks, 'useEffect' | 'useRef'>) {
   return function Carousel<TObject extends Record<string, unknown>>(
     userProps: CarouselProps<TObject>
   ) {
@@ -167,6 +210,7 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       previousButtonTitle: 'Previous',
       ...userTranslations,
     };
+    const previousItemsLengthRef = useRef(items.length);
 
     const cssClasses: CarouselClassNames = {
       root: cx('ais-Carousel', classNames.root),
@@ -195,35 +239,37 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       }
     }
 
-    function updateNavigationButtonsProps() {
-      if (!listRef.current) {
-        return;
+    useEffect(() => {
+      if (previousItemsLengthRef.current !== items.length) {
+        updateNavigationButtonsProps({
+          listRef,
+          nextButtonRef,
+          previousButtonRef,
+          setCanScrollLeft,
+          setCanScrollRight,
+        });
+        previousItemsLengthRef.current = items.length;
       }
-
-      const isLeftHidden = listRef.current.scrollLeft <= 0;
-      const isRightHidden =
-        listRef.current.scrollLeft + listRef.current.clientWidth >=
-        listRef.current.scrollWidth;
-
-      setCanScrollLeft(!isLeftHidden);
-      setCanScrollRight(!isRightHidden);
-
-      if (previousButtonRef.current) {
-        previousButtonRef.current.hidden = isLeftHidden;
-      }
-      if (nextButtonRef.current) {
-        nextButtonRef.current.hidden = isRightHidden;
-      }
-    }
+    }, [
+      items.length,
+      listRef,
+      nextButtonRef,
+      previousButtonRef,
+      setCanScrollLeft,
+      setCanScrollRight,
+    ]);
 
     if (items.length === 0) {
       return null;
     }
 
+    const itemOccurrences = new Map<string, number>();
+
     return (
       <div {...props} className={cx(cssClasses.root)}>
         {HeaderComponent && (
           <HeaderComponent
+            nbItems={items.length}
             canScrollLeft={canScrollLeft}
             canScrollRight={canScrollRight}
             scrollLeft={scrollLeft}
@@ -256,7 +302,15 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
           aria-roledescription="carousel"
           aria-label={translations.listLabel}
           aria-live="polite"
-          onScroll={updateNavigationButtonsProps}
+          onScroll={() =>
+            updateNavigationButtonsProps({
+              listRef,
+              nextButtonRef,
+              previousButtonRef,
+              setCanScrollLeft,
+              setCanScrollRight,
+            })
+          }
           onKeyDown={(event) => {
             if (event.key === 'ArrowLeft') {
               event.preventDefault();
@@ -267,22 +321,27 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
             }
           }}
         >
-          {items.map((item, index) => (
-            <li
-              key={item.objectID}
-              className={cx(cssClasses.item)}
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${items.length}`}
-              onClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-              onAuxClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-            >
-              <ItemComponent item={item} sendEvent={sendEvent} />
-            </li>
-          ))}
+          {items.map((item, index) => {
+            const occurrence = itemOccurrences.get(item.objectID) ?? 0;
+            itemOccurrences.set(item.objectID, occurrence + 1);
+
+            return (
+              <li
+                key={JSON.stringify([item.objectID, occurrence])}
+                className={cx(cssClasses.item)}
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${items.length}`}
+                onClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+                onAuxClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+              >
+                <ItemComponent item={item} sendEvent={sendEvent} />
+              </li>
+            );
+          })}
         </ol>
 
         {showNavigation && (

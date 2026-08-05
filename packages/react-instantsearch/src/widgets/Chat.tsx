@@ -75,6 +75,40 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   };
 }
 
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    layoutComponent?: unknown;
+  },
+>(
+  defaultTools: Record<string, TTool>,
+  userTools?: Record<string, TTool>
+): Record<string, TTool> {
+  if (!userTools) {
+    return defaultTools;
+  }
+
+  const tools = { ...defaultTools, ...userTools };
+
+  Object.keys(userTools).forEach((toolName) => {
+    const userTool = userTools[toolName];
+    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+
+    if (
+      userTool.layoutComponent !== undefined &&
+      userTool.streamInput === undefined &&
+      defaultStreamInput !== undefined
+    ) {
+      tools[toolName] = {
+        ...userTool,
+        streamInput: defaultStreamInput,
+      };
+    }
+  });
+
+  return tools;
+}
+
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 type UiProps = Pick<
@@ -169,7 +203,7 @@ export type ChatHandle = {
 
 function ChatInner<
   TObject extends RecordWithObjectID,
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 >(
   {
     tools: userTools,
@@ -227,7 +261,7 @@ function ChatInner<
   const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
-    return { ...defaults, ...userTools };
+    return mergeToolOptions(defaults, userTools);
   }, [getSearchPageURL, itemComponent, userTools]);
 
   // Inline layouts are always visible, so they don't require a `<ChatTrigger />`
@@ -402,7 +436,7 @@ function ChatInner<
 
 export const Chat = React.forwardRef(ChatInner) as <
   TObject extends RecordWithObjectID = RecordWithObjectID,
-  TUiMessage extends UIMessage = UIMessage
+  TUiMessage extends UIMessage = UIMessage,
 >(
   props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
 ) => React.ReactElement | null;

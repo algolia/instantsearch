@@ -172,7 +172,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
 export type RelatedProductsCSSClasses = Partial<RecommendClassNames>;
 
 export type RelatedProductsTemplates<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = Partial<{
   /**
    * Template to use when there are no results.
@@ -238,7 +238,7 @@ export type RelatedProductsWidget = WidgetFactory<
 >;
 
 export default (function relatedProducts<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 >(
   widgetParams: RelatedProductsWidgetParams<THit> &
     RelatedProductsConnectorParams<THit>

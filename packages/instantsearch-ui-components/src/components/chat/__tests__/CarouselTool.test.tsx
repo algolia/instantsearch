@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
-import { useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import { createCarouselToolComponent } from '../tools/CarouselTool';
 
@@ -17,6 +17,7 @@ type InputHit = { objectID: string; name: string };
 const CarouselTool = createCarouselToolComponent<Hit>({
   createElement: createElement as Pragma,
   Fragment,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -57,7 +58,7 @@ function renderTool(
   }> = {}
 ) {
   const applyFilters =
-    overrides.applyFilters ?? (jest.fn(() => ({} as any)) as any);
+    overrides.applyFilters ?? (jest.fn(() => ({}) as any) as any);
   const onClose = overrides.onClose ?? jest.fn();
 
   function Wrapper() {
@@ -245,7 +246,7 @@ describe('CarouselTool', () => {
             setIndexUiState: jest.fn(),
             onClose: jest.fn(),
             addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({} as any)) as any,
+            applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
           }}
         />
@@ -280,7 +281,7 @@ describe('CarouselTool', () => {
             setIndexUiState: jest.fn(),
             onClose: jest.fn(),
             addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({} as any)) as any,
+            applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
           }}
         />

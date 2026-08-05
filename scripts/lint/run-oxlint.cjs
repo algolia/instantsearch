@@ -12,6 +12,10 @@ const oxlintBin = path.join(
   process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint'
 );
 
+// oxlint applies `.gitignore` on top of this, so `.oxlintignore` only lists what isn't
+// already excluded from the repository.
+const ignorePath = path.join(repoRoot, '.oxlintignore');
+
 if (!existsSync(oxlintBin)) {
   process.stderr.write(
     [
@@ -44,9 +48,7 @@ function toPosix(filePath) {
 }
 
 function isInside(basePath, targetPath) {
-  return (
-    targetPath === basePath || targetPath.startsWith(`${basePath}/`)
-  );
+  return targetPath === basePath || targetPath.startsWith(`${basePath}/`);
 }
 
 function relativeToRoot(targetPath) {
@@ -150,7 +152,13 @@ function isTopLevelTarget(target) {
   return !target.includes('/');
 }
 
-function runOxlint({ cwd, extraArgs, paths, noIgnore = false, typeAware = false }) {
+function runOxlint({
+  cwd,
+  extraArgs,
+  paths,
+  noIgnore = false,
+  typeAware = false,
+}) {
   const commandArgs = [...extraArgs];
 
   if (typeAware && !extraArgs.includes('--type-aware')) {
@@ -159,6 +167,8 @@ function runOxlint({ cwd, extraArgs, paths, noIgnore = false, typeAware = false 
 
   if (noIgnore) {
     commandArgs.push('--no-ignore');
+  } else if (!extraArgs.includes('--ignore-path')) {
+    commandArgs.push('--ignore-path', ignorePath);
   }
 
   commandArgs.push(...dedupe(paths));

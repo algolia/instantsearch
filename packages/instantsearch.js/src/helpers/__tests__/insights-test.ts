@@ -64,7 +64,9 @@ describe('getUsageSessionId', () => {
     expect(sessionStorage.getItem(STORAGE_KEY)).toBe(original);
 
     jest.resetModules();
-    const { getUsageSessionId: getUsageSessionIdAgain } = require('../insights');
+    const {
+      getUsageSessionId: getUsageSessionIdAgain,
+    } = require('../insights');
 
     expect(getUsageSessionIdAgain()).toBe(original);
   });

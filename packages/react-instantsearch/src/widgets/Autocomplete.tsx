@@ -966,7 +966,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   const resolvedQuery =
     currentRefinement !== undefined
       ? currentRefinement
-      : indexUiState.query ?? '';
+      : (indexUiState.query ?? '');
 
   const { isDetached, isModalDetached, isModalOpen, setIsModalOpen } = detached;
   const previousIsDetachedRef = useRef(isDetached);
@@ -1084,7 +1084,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             if (
               openChat(chatRenderState, {
                 message: item.prompt,
-                referer: 'prompt-suggestions',
+                referer: 'prompt-suggestions-autocomplete',
               })
             ) {
               setQuery('');
@@ -1369,7 +1369,7 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
 
 function ConditionalHighlight<
   TItem extends BaseHit,
-  TAttribute extends keyof TItem & string = keyof TItem & string
+  TAttribute extends keyof TItem & string = keyof TItem & string,
 >({
   item,
   attribute = 'query' as TAttribute,
