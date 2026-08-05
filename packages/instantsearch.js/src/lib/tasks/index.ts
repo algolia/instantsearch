@@ -1,9 +1,5 @@
 export { resolveEndpoint } from './endpoint';
-export {
-  buildTaskPayload,
-  createTaskRunner,
-  fetchTask,
-} from './fetchTask';
+export { buildTaskPayload, createTaskRunner, fetchTask } from './fetchTask';
 
 export type {
   ResolvedEndpoint,

@@ -746,10 +746,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
-  createPromptSuggestionsWidgetTests({
-    instantSearchOptions,
-    widgetParams,
-  }) {
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         promptSuggestions({

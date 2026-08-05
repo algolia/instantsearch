@@ -71,7 +71,10 @@ describe('openChat', () => {
 
     openChat(chat, { message: 'macbook' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test('does not add the x-algolia-referer header when no referer is provided', () => {

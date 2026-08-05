@@ -105,7 +105,10 @@ describe('connectPromptSuggestions', () => {
     it('throws without a render function', () => {
       expect(() => {
         // @ts-expect-error
-        connectPromptSuggestions()({ agentId: 'a', configurationId: 'prompt-suggestions' });
+        connectPromptSuggestions()({
+          agentId: 'a',
+          configurationId: 'prompt-suggestions',
+        });
       }).toThrowError(/render function is not valid/);
     });
 
@@ -201,7 +204,10 @@ describe('connectPromptSuggestions', () => {
 
       // Had-hits state → the debounced fetch fires and stays in flight.
       widget.render!(
-        createRenderOptions({ helper, results: makeResults({ query: 'phones' }) })
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'phones' }),
+        })
       );
       await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -274,7 +280,10 @@ describe('connectPromptSuggestions', () => {
       // state does not track live refinements, so reading it made facet
       // changes (query unchanged) invisible — the pills never refreshed.
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -310,7 +319,10 @@ describe('connectPromptSuggestions', () => {
       // The state signature must also track numeric (and tag) refinements, so a
       // range-filter change refreshes the pills like a facet change does.
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '', {});
       widget.init!(createInitOptions({ helper }));
 
@@ -340,7 +352,10 @@ describe('connectPromptSuggestions', () => {
 
     it('refetches whenever the results `queryID` changes', async () => {
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -365,7 +380,10 @@ describe('connectPromptSuggestions', () => {
 
     it('does not refetch when the `queryID` is unchanged', async () => {
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -395,7 +413,10 @@ describe('connectPromptSuggestions', () => {
       // new ones swap in silently — no loading state ever shows after the
       // first fetch.
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -441,7 +462,10 @@ describe('connectPromptSuggestions', () => {
       // moved on. If request A (for state 'a') resolves while the debounced
       // refetch for state 'b' is still pending, its suggestions must not paint.
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -486,7 +510,10 @@ describe('connectPromptSuggestions', () => {
 
     it('does not render after dispose when an in-flight fetch resolves late', async () => {
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
 
@@ -581,7 +608,10 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('strips InstantSearch hit metadata from the default context', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(
@@ -612,7 +642,10 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('sends the active filters alongside the query and hitsSample', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -635,7 +668,10 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('OR-groups multiple values on the same disjunctive facet', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
       });
@@ -661,7 +697,10 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('omits filters when no refinements are active', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -769,7 +808,10 @@ describe('connectPromptSuggestions', () => {
         Promise.resolve(sseResponse([taskOutputEvent(['a', 'b'])]))
       ) as unknown as typeof fetch;
 
-      const widget = connectPromptSuggestions(jest.fn())({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -797,7 +839,10 @@ describe('connectPromptSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -835,7 +880,10 @@ describe('connectPromptSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));
@@ -890,7 +938,10 @@ describe('connectPromptSuggestions', () => {
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
-      const widget = connectPromptSuggestions(renderFn)({ agentId: 'a', configurationId: 'prompt-suggestions' });
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
       widget.render!(createRenderOptions({ helper, results: makeResults() }));

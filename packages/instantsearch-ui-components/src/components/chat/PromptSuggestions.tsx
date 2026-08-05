@@ -110,7 +110,7 @@ export function createPromptSuggestionsComponent({ createElement }: Renderer) {
     };
 
     const HeaderComponent =
-      headerComponent === false ? null : headerComponent ?? DefaultHeader;
+      headerComponent === false ? null : (headerComponent ?? DefaultHeader);
 
     const visibleSuggestions = suggestions.filter(
       (suggestion) => suggestion.trim() !== ''
