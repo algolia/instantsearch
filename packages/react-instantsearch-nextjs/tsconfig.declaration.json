@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.declaration",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "global.d.ts"],
   "exclude": ["**/__tests__/**/*", "**/dist/**/*"]
 }

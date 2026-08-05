@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
 import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-core';
+import { StyleSheet, View, TextInput } from 'react-native';
 
 type SearchBoxProps = UseSearchBoxProps & {
   onChange: (newValue: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
-export function SearchBox({ onChange, ...props }: SearchBoxProps) {
+export function SearchBox({
+  onChange,
+  onFocus,
+  onBlur,
+  ...props
+}: SearchBoxProps) {
   const { query, refine } = useSearchBox(props);
   const [value, setValue] = useState(query);
   const inputRef = useRef<TextInput>(null);
@@ -43,11 +50,13 @@ export function SearchBox({ onChange, ...props }: SearchBoxProps) {
           setValue(newValue);
           onChange(newValue);
         }}
+        onFocus={onFocus}
+        onBlur={onBlur}
         clearButtonMode="while-editing"
         autoCapitalize="none"
         autoCorrect={false}
         spellCheck={false}
-        autoCompleteType="off"
+        autoComplete="off"
       />
     </View>
   );
