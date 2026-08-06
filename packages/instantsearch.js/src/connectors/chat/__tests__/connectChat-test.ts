@@ -461,6 +461,84 @@ describe('connectChat', () => {
   });
 
   describe('dispose', () => {
+    it('unsubscribes each Chat callback once across lifecycle cycles', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const unsubscribeErrors = [jest.fn(), jest.fn()];
+      const unsubscribeMessages = [jest.fn(), jest.fn()];
+      const unsubscribeStatuses = [jest.fn(), jest.fn()];
+      jest
+        .spyOn(chat, '~registerErrorCallback')
+        .mockReturnValueOnce(unsubscribeErrors[0])
+        .mockReturnValueOnce(unsubscribeErrors[1]);
+      jest
+        .spyOn(chat, '~registerMessagesCallback')
+        .mockReturnValueOnce(unsubscribeMessages[0])
+        .mockReturnValueOnce(unsubscribeMessages[1]);
+      jest
+        .spyOn(chat, '~registerStatusCallback')
+        .mockReturnValueOnce(unsubscribeStatuses[0])
+        .mockReturnValueOnce(unsubscribeStatuses[1]);
+      const unmountFn = jest.fn();
+      const widget = connectChat(
+        jest.fn(),
+        unmountFn
+      )({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      widget.dispose();
+      widget.init(createInitOptions({ helper }));
+      widget.dispose();
+      widget.dispose();
+
+      [
+        ...unsubscribeErrors,
+        ...unsubscribeMessages,
+        ...unsubscribeStatuses,
+      ].forEach((unsubscribe) => expect(unsubscribe).toHaveBeenCalledTimes(1));
+      expect(unmountFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('reuses a caller-owned Chat across connector replacement', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const firstRender = jest.fn();
+      const secondRender = jest.fn();
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      const firstWidget = connectChat(firstRender)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const secondWidget = connectChat(secondRender)({
+        chat,
+        disableTriggerValidation: true,
+      });
+
+      firstWidget.init(createInitOptions({ helper }));
+      firstWidget.dispose();
+      firstRender.mockClear();
+      secondWidget.init(createInitOptions({ helper }));
+      secondRender.mockClear();
+
+      chat.messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+
+      expect(firstRender).not.toHaveBeenCalled();
+      expect(secondRender).toHaveBeenCalledTimes(1);
+
+      secondWidget.dispose();
+      secondRender.mockClear();
+      chat._state.status = 'streaming';
+      expect(secondRender).not.toHaveBeenCalled();
+    });
+
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
       const makeWidget = connectChat(() => {}, unmountFn);

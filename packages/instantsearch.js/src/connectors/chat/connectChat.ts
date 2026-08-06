@@ -20,7 +20,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
-import type { ResponseScopedOnToolCallCallback } from '../../lib/ai-lite/abstract-chat';
+import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -390,6 +390,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
+    let chatSubscriptionUnsubscribers: Array<() => void> = [];
+
+    const unsubscribeChatCallbacks = () => {
+      chatSubscriptionUnsubscribers
+        .splice(0)
+        .forEach((unsubscribe) => unsubscribe());
+    };
 
     // Extract suggestions from the last assistant message's data-suggestions part
     const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
@@ -647,7 +654,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        }) satisfies ResponseScopedOnToolCallCallback<TUiMessage>,
+        }) satisfies ChatOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
@@ -739,9 +746,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         });
 
         safelyRunOnBrowser(() => {
-          _chatInstance['~registerErrorCallback'](render);
-          _chatInstance['~registerMessagesCallback'](render);
-          _chatInstance['~registerStatusCallback'](render);
+          unsubscribeChatCallbacks();
+          chatSubscriptionUnsubscribers = [
+            _chatInstance['~registerErrorCallback'](render),
+            _chatInstance['~registerMessagesCallback'](render),
+            _chatInstance['~registerStatusCallback'](render),
+          ];
         });
 
         // Resuming and sending reach the network, which a server render must
@@ -887,6 +897,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       dispose() {
         feedbackAbortController?.abort();
+        unsubscribeChatCallbacks();
         unmountFn();
       },
 

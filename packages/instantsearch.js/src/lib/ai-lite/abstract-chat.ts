@@ -23,6 +23,7 @@ import type {
   InferUIMessageToolCall,
   InferUIMessageTools,
   ProviderMetadata,
+  ToolResultSubmission,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -46,20 +47,6 @@ type ResponseRecord = {
   didEvaluateContinuation: boolean;
 };
 
-type ToolResultSubmission<TUIMessage extends UIMessage> = <
-  TTool extends keyof InferUIMessageTools<TUIMessage>,
->(options: {
-  tool: TTool;
-  toolCallId: string;
-  output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-}) => Promise<void>;
-
-/** @internal */
-export type ResponseScopedOnToolCallCallback<TUIMessage extends UIMessage> = (
-  options: Parameters<ChatOnToolCallCallback<TUIMessage>>[0],
-  addToolResult: ToolResultSubmission<TUIMessage>
-) => ReturnType<ChatOnToolCallCallback<TUIMessage>>;
-
 const defaultGuardrailFallbackResponse =
   'Sorry, we are not able to generate a response at the moment.';
 
@@ -77,7 +64,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private readonly transport?: ChatTransport<TUIMessage>;
   private onError?: ChatOnErrorCallback;
-  private onToolCall?: ResponseScopedOnToolCallCallback<TUIMessage>;
+  private onToolCall?: ChatOnToolCallCallback<TUIMessage>;
   private onFinish?: ChatOnFinishCallback<TUIMessage>;
   private onData?: ChatOnDataCallback<TUIMessage>;
   private sendAutomaticallyWhen?: (options: {
