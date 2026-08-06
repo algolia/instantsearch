@@ -7,7 +7,7 @@ describe('addInsightsToRecommendParameters', () => {
     new algoliasearchHelper.RecommendParameters().addRelatedProducts({
       objectID: 'objectID',
       $$id: 1,
-      queryParameters: { hitsPerPage: 3 },
+      queryParameters: { filters: 'brand:Apple' },
     });
 
   it('returns the same parameters when the state has no insights parameters', () => {
@@ -34,7 +34,7 @@ describe('addInsightsToRecommendParameters', () => {
         model: 'related-products',
         $$id: 1,
         queryParameters: {
-          hitsPerPage: 3,
+          filters: 'brand:Apple',
           userToken: 'my-token',
           clickAnalytics: true,
         },
@@ -59,7 +59,7 @@ describe('addInsightsToRecommendParameters', () => {
         objectID: 'objectID',
         model: 'related-products',
         $$id: 1,
-        queryParameters: { hitsPerPage: 3 },
+        queryParameters: { filters: 'brand:Apple' },
       },
     ]);
   });
@@ -77,9 +77,10 @@ describe('addInsightsToRecommendParameters', () => {
       clickAnalytics: true,
     });
 
-    expect(parameters.params[0].queryParameters).toEqual({
-      userToken: 'widget-token',
-      clickAnalytics: false,
-    });
+    expect(parameters.params).toEqual([
+      expect.objectContaining({
+        queryParameters: { userToken: 'widget-token', clickAnalytics: false },
+      }),
+    ]);
   });
 });

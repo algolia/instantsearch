@@ -26,13 +26,21 @@ export function addInsightsToRecommendParameters(
   }
 
   return new algoliasearchHelper.RecommendParameters({
-    params: recommendParameters.params.map((params) => ({
-      ...params,
-      queryParameters: {
-        ...(clickAnalytics === undefined ? {} : { clickAnalytics }),
-        ...(userToken === undefined ? {} : { userToken }),
-        ...params.queryParameters,
-      },
-    })),
+    params: recommendParameters.params.map((params) => {
+      // v4 `TrendingFacetsQuery` doesn't include `queryParameters`, but the v5
+      // API and the helper support them, like `connectTrendingFacets` does.
+      const { queryParameters } = params as {
+        queryParameters?: PlainSearchParameters;
+      };
+
+      return {
+        ...params,
+        queryParameters: {
+          ...(clickAnalytics === undefined ? {} : { clickAnalytics }),
+          ...(userToken === undefined ? {} : { userToken }),
+          ...queryParameters,
+        },
+      } as RecommendParameters['params'][number];
+    }),
   });
 }
