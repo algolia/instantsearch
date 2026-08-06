@@ -163,8 +163,7 @@ export function createOptionsTests(
         document.querySelector('.ais-PromptSuggestions-skeleton')
       ).toBeInTheDocument();
       expect(
-        document.querySelectorAll('.ais-PromptSuggestions-skeletonItem')
-          .length
+        document.querySelectorAll('.ais-PromptSuggestions-skeletonItem').length
       ).toBeGreaterThan(0);
       expect(
         document.querySelector('.ais-PromptSuggestions-suggestion')
@@ -317,7 +316,7 @@ export function createOptionsTests(
       expect(fetchMock).toHaveBeenCalled();
       const [, init] = fetchMock.mock.calls[0] as unknown as [
         string,
-        RequestInit
+        RequestInit,
       ];
       const body = JSON.parse(init.body as string);
       // Explicit context forwards only that object (no auto-extracted
@@ -355,8 +354,14 @@ export function createOptionsTests(
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          javascript: { agentId: 'test-agent-id', configurationId: 'my_custom_task' },
-          react: { agentId: 'test-agent-id', configurationId: 'my_custom_task' },
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'my_custom_task',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'my_custom_task',
+          },
           vue: {},
         },
       });
@@ -368,7 +373,7 @@ export function createOptionsTests(
       expect(fetchMock).toHaveBeenCalled();
       const [, init] = fetchMock.mock.calls[0] as unknown as [
         string,
-        RequestInit
+        RequestInit,
       ];
       const body = JSON.parse(init.body as string);
       expect(body.task).toBe('my_custom_task');

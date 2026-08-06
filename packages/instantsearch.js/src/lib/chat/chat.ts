@@ -32,10 +32,17 @@ function getDefaultInitialMessages<TUIMessage extends UIMessage>(
 ): TUIMessage[] {
   return safelyRunOnBrowser<TUIMessage[]>(
     () => {
-      const initialMessages = sessionStorage.getItem(
-        CACHE_KEY + (id ? `-${id}` : '')
-      );
-      return initialMessages ? JSON.parse(initialMessages) : [];
+      try {
+        // `sessionStorage` is not available in every environment with a
+        // `window` (e.g. React Native), and some browsers throw on access
+        // when storage is disabled.
+        const initialMessages = sessionStorage.getItem(
+          CACHE_KEY + (id ? `-${id}` : '')
+        );
+        return initialMessages ? JSON.parse(initialMessages) : [];
+      } catch (e) {
+        return [];
+      }
     },
     { fallback: () => [] }
   );

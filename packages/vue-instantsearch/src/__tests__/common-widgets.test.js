@@ -597,9 +597,7 @@ const testSetups = {
     throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
   },
   createPromptSuggestionsWidgetTests() {
-    throw new Error(
-      'PromptSuggestions is not supported in Vue InstantSearch'
-    );
+    throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
   },
 };
 

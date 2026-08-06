@@ -82,9 +82,7 @@ export function createTemplatesTests(
 
       // The custom layout owns the whole markup, so the default UI component
       // (and its `ais-PromptSuggestions` root) is not rendered.
-      expect(
-        document.querySelector('.ais-PromptSuggestions')
-      ).toBeNull();
+      expect(document.querySelector('.ais-PromptSuggestions')).toBeNull();
       expect(document.body.textContent).toContain(
         'Custom layout: Suggestion A, Suggestion B, Suggestion C'
       );
@@ -135,9 +133,9 @@ export function createTemplatesTests(
       });
 
       expect(document.querySelector('.html-layout')).not.toBeNull();
-      expect(
-        document.querySelectorAll('.html-layout button')
-      ).toHaveLength(SUGGESTIONS.length);
+      expect(document.querySelectorAll('.html-layout button')).toHaveLength(
+        SUGGESTIONS.length
+      );
       expect(document.body.textContent).toContain('Suggestion A');
     });
 
