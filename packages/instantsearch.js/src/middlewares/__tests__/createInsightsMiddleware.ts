@@ -15,7 +15,7 @@ import { fireEvent } from '@testing-library/dom';
 
 import { createInsightsMiddleware } from '..';
 import { createInstantSearch } from '../../../test/createInstantSearch';
-import { connectSearchBox } from '../../connectors';
+import { connectRelatedProducts, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
 import { warning } from '../../lib/utils';
@@ -1180,6 +1180,127 @@ describe('insights', () => {
 
         expect(getUserToken()).toEqual('token-from-queue-before-init');
       });
+    });
+  });
+
+  describe('recommend', () => {
+    const getRecommendClient = () =>
+      searchClientWithCredentials as SearchClient & {
+        getRecommendations: jest.Mock;
+      };
+
+    it('sets the userToken and clickAnalytics on recommend queries', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance, getUserToken } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          model: 'related-products',
+          objectID: 'objectID',
+          queryParameters: expect.objectContaining({
+            clickAnalytics: true,
+            userToken: getUserToken(),
+          }),
+        }),
+      ]);
+      expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
+    });
+
+    it('lets the widget userToken take precedence', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          queryParameters: { userToken: 'widget-token' },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          queryParameters: expect.objectContaining({
+            userToken: 'widget-token',
+          }),
+        }),
+      ]);
+    });
+
+    it('refetches recommendations when the userToken changes', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+      expect(
+        searchClient.getRecommendations.mock.calls[0][0][0].queryParameters
+          .userToken
+      ).toEqual(expect.stringMatching(/^anonymous-/));
+
+      insightsClient('setUserToken', 'authenticated-token');
+
+      await wait(0);
+
+      // Recommend responses are cached per widget, so this only happens because
+      // the middleware invalidates that cache when the token changes.
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          queryParameters: expect.objectContaining({
+            userToken: 'authenticated-token',
+          }),
+        }),
+      ]);
+    });
+
+    it('does not refetch recommendations when the userToken is unchanged', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          insightsInitParams: { userToken: 'my-token' },
+        })
+      );
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
+
+      insightsClient('setUserToken', 'my-token');
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
     });
   });
 

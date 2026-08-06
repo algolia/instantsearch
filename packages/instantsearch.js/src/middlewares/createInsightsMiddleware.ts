@@ -262,6 +262,8 @@ export function createInsightsMiddleware<
             });
 
             if (existingToken && existingToken !== userToken) {
+              helper._recommendCache = {};
+
               instantSearchInstance.scheduleSearch();
             }
           }
