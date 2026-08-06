@@ -5,8 +5,8 @@ import { cx } from '../../lib';
 
 import { BrainIcon, ChevronDownIcon } from './icons';
 
-import type { Renderer } from '../../types';
 import type { ReasoningUIPart } from './types';
+import type { Renderer } from '../../types';
 
 export type ChatMessageReasoningTranslations = {
   /**

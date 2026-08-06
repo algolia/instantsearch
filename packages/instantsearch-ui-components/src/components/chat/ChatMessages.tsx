@@ -25,13 +25,6 @@ import {
 } from './icons';
 
 import type {
-  ComponentProps,
-  Hooks,
-  MutableRef,
-  Renderer,
-  VNode,
-} from '../../types';
-import type {
   ChatMessageProps,
   ChatMessageActionProps,
   ChatMessageClassNames,
@@ -47,6 +40,13 @@ import type {
   ChatStatus,
   ClientSideTools,
 } from './types';
+import type {
+  ComponentProps,
+  Hooks,
+  MutableRef,
+  Renderer,
+  VNode,
+} from '../../types';
 
 export type ChatMessagesTranslations = {
   /**

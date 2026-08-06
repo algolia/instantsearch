@@ -2,8 +2,8 @@
 
 import { LoadingSpinnerIcon } from './icons';
 
-import type { ComponentProps, Renderer } from '../../types';
 import type { ChatComponentPropsWithMetadata } from './types';
+import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageLoaderTranslations = {
   /**

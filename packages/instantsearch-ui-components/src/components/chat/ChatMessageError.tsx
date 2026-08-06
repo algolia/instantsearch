@@ -4,8 +4,8 @@ import { createButtonComponent } from '../Button';
 
 import { ReloadIcon } from './icons';
 
-import type { ComponentProps, Renderer } from '../../types';
 import type { ChatComponentPropsWithMetadata } from './types';
+import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageErrorTranslations = {
   /**
