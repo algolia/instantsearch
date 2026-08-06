@@ -736,17 +736,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const hasExistingMessages = _chatInstance.messages.length > 0;
 
-        // Set initialMessages before registering callbacks to avoid
-        // triggering re-renders during init. A server render owns no
-        // conversation, so it leaves the instance empty.
+        // Unsubscribe previous callbacks before setting initialMessages, then
+        // register the current callbacks after to avoid re-renders during init.
+        // A server render owns no conversation, so it leaves the instance empty.
         safelyRunOnBrowser(() => {
+          unsubscribeChatCallbacks();
           if (initialMessages?.length && !resume && !hasExistingMessages) {
             _chatInstance.messages = initialMessages;
           }
         });
 
         safelyRunOnBrowser(() => {
-          unsubscribeChatCallbacks();
           chatSubscriptionUnsubscribers = [
             _chatInstance['~registerErrorCallback'](render),
             _chatInstance['~registerMessagesCallback'](render),

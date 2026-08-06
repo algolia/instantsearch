@@ -458,6 +458,54 @@ describe('connectChat', () => {
 
       expect(chat.messages).toEqual(initialMessages);
     });
+
+    it('renders restored initial messages only with the current init options', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome' }],
+        },
+      ];
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const firstInstantSearchInstance = createInstantSearch();
+      const secondInstantSearchInstance = createInstantSearch();
+
+      widget.init(
+        createInitOptions({ instantSearchInstance: firstInstantSearchInstance })
+      );
+      chat.messages = [];
+      renderFn.mockClear();
+
+      widget.init(
+        createInitOptions({
+          instantSearchInstance: secondInstantSearchInstance,
+        })
+      );
+
+      expect(
+        renderFn.mock.calls.map(([renderState, isFirstRendering]) => ({
+          init:
+            renderState.instantSearchInstance === firstInstantSearchInstance
+              ? 'previous'
+              : 'current',
+          isFirstRendering,
+          messages: renderState.messages,
+        }))
+      ).toEqual([
+        {
+          init: 'current',
+          isFirstRendering: true,
+          messages: initialMessages,
+        },
+      ]);
+    });
   });
 
   describe('dispose', () => {
