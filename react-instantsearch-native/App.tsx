@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { StatusBar } from 'expo-status-bar';
-import algoliasearch from 'algoliasearch/lite';
+import React, { useRef } from 'react';
 import { InstantSearch } from 'react-instantsearch-core';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { InfiniteHits } from './src/InfiniteHits';
 import { SearchBox } from './src/SearchBox';
@@ -14,23 +15,31 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
+const future = { preserveSharedStateOnUnmount: true };
+
 export default function App() {
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList<ProductHit>>(null);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar style="light" />
-      <View style={styles.container}>
-        <InstantSearch searchClient={searchClient} indexName="instant_search">
-          <SearchBox
-            onChange={() =>
-              listRef.current?.scrollToOffset({ animated: false, offset: 0 })
-            }
-          />
-          <InfiniteHits ref={listRef} hitComponent={Hit} />
-        </InstantSearch>
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safe}>
+        <StatusBar style="light" />
+        <View style={styles.container}>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="instant_search"
+            future={future}
+          >
+            <SearchBox
+              onChange={() =>
+                listRef.current?.scrollToOffset({ animated: false, offset: 0 })
+              }
+            />
+            <InfiniteHits ref={listRef} hitComponent={Hit} />
+          </InstantSearch>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

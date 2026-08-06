@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
 import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-core';
+import { StyleSheet, View, TextInput } from 'react-native';
 
 type SearchBoxProps = UseSearchBoxProps & {
   onChange: (newValue: string) => void;
@@ -47,7 +47,7 @@ export function SearchBox({ onChange, ...props }: SearchBoxProps) {
         autoCapitalize="none"
         autoCorrect={false}
         spellCheck={false}
-        autoCompleteType="off"
+        autoComplete="off"
         placeholder=""
       />
     </View>
