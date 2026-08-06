@@ -158,6 +158,21 @@ describe('ChatState', () => {
     );
   });
 
+  it('should not throw at construction when sessionStorage is unavailable (e.g. React Native)', () => {
+    // eslint-disable-next-line jest/unbound-method
+    const originalGetItem = sessionStorage.getItem;
+    sessionStorage.getItem = () => {
+      throw new ReferenceError('sessionStorage is not defined');
+    };
+
+    try {
+      const chatState = new ChatState<any>('agentID9');
+      expect(chatState.messages).toEqual([]);
+    } finally {
+      sessionStorage.getItem = originalGetItem;
+    }
+  });
+
   it('should handle sessionStorage being unavailable', () => {
     const agentId = 'agentID4';
     // eslint-disable-next-line jest/unbound-method

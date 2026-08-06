@@ -6,12 +6,12 @@ import {
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-type HighlightPartProps = {
+type SnippetPartProps = {
   children: React.ReactNode;
   isHighlighted: boolean;
 };
 
-function HighlightPart({ children, isHighlighted }: HighlightPartProps) {
+function SnippetPart({ children, isHighlighted }: SnippetPartProps) {
   return (
     <Text style={isHighlighted ? styles.highlighted : styles.nonHighlighted}>
       {children}
@@ -19,20 +19,21 @@ function HighlightPart({ children, isHighlighted }: HighlightPartProps) {
   );
 }
 
-type HighlightProps<THit> = {
+type SnippetProps<THit> = {
   hit: THit;
   attribute: keyof THit | string[];
-  className?: string;
   separator?: string;
 };
 
-export function Highlight<THit extends AlgoliaHit>({
+// Renders the `_snippetResult` of an attribute, mirroring the web `<Snippet>`
+// widget but with React Native `Text` nodes instead of DOM elements.
+export function Snippet<THit extends AlgoliaHit>({
   hit,
   attribute,
   separator = ', ',
-}: HighlightProps<THit>) {
+}: SnippetProps<THit>) {
   const { value: attributeValue = '' } =
-    getPropertyByPath(hit._highlightResult, attribute as string) || {};
+    getPropertyByPath(hit._snippetResult, attribute as string) || {};
   const parts = getHighlightedParts(attributeValue);
 
   return (
@@ -44,12 +45,12 @@ export function Highlight<THit extends AlgoliaHit>({
           return (
             <Fragment key={partIndex}>
               {part.map((subPart, subPartIndex) => (
-                <HighlightPart
+                <SnippetPart
                   key={subPartIndex}
                   isHighlighted={subPart.isHighlighted}
                 >
                   {subPart.value}
-                </HighlightPart>
+                </SnippetPart>
               ))}
 
               {!isLastPart && separator}
@@ -58,9 +59,9 @@ export function Highlight<THit extends AlgoliaHit>({
         }
 
         return (
-          <HighlightPart key={partIndex} isHighlighted={part.isHighlighted}>
+          <SnippetPart key={partIndex} isHighlighted={part.isHighlighted}>
             {part.value}
-          </HighlightPart>
+          </SnippetPart>
         );
       })}
     </>
@@ -70,12 +71,9 @@ export function Highlight<THit extends AlgoliaHit>({
 const styles = StyleSheet.create({
   highlighted: {
     fontWeight: 'bold',
-    backgroundColor: '#f5df4d',
     color: '#6f6106',
   },
   nonHighlighted: {
-    fontWeight: 'normal',
-    backgroundColor: 'transparent',
-    color: 'black',
+    color: '#666',
   },
 });
