@@ -16,6 +16,9 @@ import type {
  *
  * Parameters set on a widget win, so an explicit `queryParameters.userToken`
  * keeps overriding the middleware.
+ *
+ * The fallback query is a regular search, so it gets the same treatment — but
+ * only merged into a `fallbackParameters` the widget already set. See below.
  */
 export function addInsightsToRecommendParameters(
   recommendParameters: RecommendParameters,
@@ -25,21 +28,36 @@ export function addInsightsToRecommendParameters(
     return recommendParameters;
   }
 
+  const insightsParameters = {
+    ...(clickAnalytics === undefined ? {} : { clickAnalytics }),
+    ...(userToken === undefined ? {} : { userToken }),
+  };
+
   return new algoliasearchHelper.RecommendParameters({
     params: recommendParameters.params.map((params) => {
-      // v4 `TrendingFacetsQuery` doesn't include `queryParameters`, but the v5
-      // API and the helper support them, like `connectTrendingFacets` does.
-      const { queryParameters } = params as {
+      // v4 `TrendingFacetsQuery` doesn't include `queryParameters` or
+      // `fallbackParameters`, but the v5 API and the helper support them, like
+      // `connectTrendingFacets` does.
+      const { queryParameters, fallbackParameters } = params as {
         queryParameters?: PlainSearchParameters;
+        fallbackParameters?: PlainSearchParameters;
       };
 
       return {
         ...params,
         queryParameters: {
-          ...(clickAnalytics === undefined ? {} : { clickAnalytics }),
-          ...(userToken === undefined ? {} : { userToken }),
+          ...insightsParameters,
           ...queryParameters,
         },
+        // Merged into a fallback the widget configured, never introduced: a
+        // widget without `fallbackParameters` sends none today, and adding the
+        // parameter would change the request for every one of them.
+        ...(fallbackParameters && {
+          fallbackParameters: {
+            ...insightsParameters,
+            ...fallbackParameters,
+          },
+        }),
       } as RecommendParameters['params'][number];
     }),
   });

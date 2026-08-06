@@ -1239,6 +1239,49 @@ describe('insights', () => {
       ]);
     });
 
+    it('sets them on the fallback parameters of a widget that has some', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance, getUserToken } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          fallbackParameters: { filters: 'brand:Apple' },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          fallbackParameters: expect.objectContaining({
+            filters: 'brand:Apple',
+            clickAnalytics: true,
+            userToken: getUserToken(),
+          }),
+        }),
+      ]);
+    });
+
+    it('leaves the fallback parameters alone when a widget has none', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+
+      await wait(0);
+
+      expect(
+        searchClient.getRecommendations.mock.calls[0][0][0].fallbackParameters
+      ).toBeUndefined();
+    });
+
     it('refetches recommendations when the userToken changes', async () => {
       const searchClient = getRecommendClient();
       const { insightsClient, instantSearchInstance } = createTestEnvironment({
