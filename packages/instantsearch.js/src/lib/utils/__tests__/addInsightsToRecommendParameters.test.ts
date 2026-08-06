@@ -116,6 +116,35 @@ describe('addInsightsToRecommendParameters', () => {
     ]);
   });
 
+  it('merges into the fallback parameters without overriding either value', () => {
+    const parameters = addInsightsToRecommendParameters(
+      new algoliasearchHelper.RecommendParameters()
+        .addRelatedProducts({
+          objectID: 'only-token',
+          $$id: 1,
+          fallbackParameters: { userToken: 'widget-token' },
+        })
+        .addRelatedProducts({
+          objectID: 'only-click-analytics',
+          $$id: 2,
+          fallbackParameters: { clickAnalytics: false },
+        }),
+      { userToken: 'my-token', clickAnalytics: true }
+    );
+
+    expect(parameters.params).toEqual([
+      expect.objectContaining({
+        objectID: 'only-token',
+        // The widget kept its token and still got the missing parameter.
+        fallbackParameters: { userToken: 'widget-token', clickAnalytics: true },
+      }),
+      expect.objectContaining({
+        objectID: 'only-click-analytics',
+        fallbackParameters: { clickAnalytics: false, userToken: 'my-token' },
+      }),
+    ]);
+  });
+
   it('does not mutate the given parameters', () => {
     const recommendParameters = createRecommendParameters();
 
@@ -149,6 +178,35 @@ describe('addInsightsToRecommendParameters', () => {
     expect(parameters.params).toEqual([
       expect.objectContaining({
         queryParameters: { userToken: 'widget-token', clickAnalytics: false },
+      }),
+    ]);
+  });
+
+  it('merges into the query parameters without overriding either value', () => {
+    const parameters = addInsightsToRecommendParameters(
+      new algoliasearchHelper.RecommendParameters()
+        .addRelatedProducts({
+          objectID: 'only-token',
+          $$id: 1,
+          queryParameters: { userToken: 'widget-token' },
+        })
+        .addRelatedProducts({
+          objectID: 'only-click-analytics',
+          $$id: 2,
+          queryParameters: { clickAnalytics: false },
+        }),
+      { userToken: 'my-token', clickAnalytics: true }
+    );
+
+    expect(parameters.params).toEqual([
+      expect.objectContaining({
+        objectID: 'only-token',
+        // The widget kept its token and still got the missing parameter.
+        queryParameters: { userToken: 'widget-token', clickAnalytics: true },
+      }),
+      expect.objectContaining({
+        objectID: 'only-click-analytics',
+        queryParameters: { clickAnalytics: false, userToken: 'my-token' },
       }),
     ]);
   });

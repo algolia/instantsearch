@@ -1265,6 +1265,34 @@ describe('insights', () => {
       ]);
     });
 
+    it('lets the fallback parameters of a widget take precedence', async () => {
+      const searchClient = getRecommendClient();
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({
+          objectIDs: ['objectID'],
+          fallbackParameters: {
+            userToken: 'widget-token',
+            clickAnalytics: false,
+          },
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenLastCalledWith([
+        expect.objectContaining({
+          fallbackParameters: expect.objectContaining({
+            userToken: 'widget-token',
+            clickAnalytics: false,
+          }),
+        }),
+      ]);
+    });
+
     it('leaves the fallback parameters alone when a widget has none', async () => {
       const searchClient = getRecommendClient();
       const { instantSearchInstance } = createTestEnvironment({
