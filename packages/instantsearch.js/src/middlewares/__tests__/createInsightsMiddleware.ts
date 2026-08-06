@@ -1275,6 +1275,39 @@ describe('insights', () => {
       ]);
     });
 
+    it('does not refetch recommendations when the same numeric userToken is set again', async () => {
+      const searchClient = getRecommendClient();
+      const { insightsClient, instantSearchInstance } = createTestEnvironment({
+        started: false,
+      });
+
+      instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+      instantSearchInstance.addWidgets([
+        connectRelatedProducts(() => ({}))({ objectIDs: ['objectID'] }),
+      ]);
+      instantSearchInstance.start();
+
+      await wait(0);
+
+      // The anonymous token is replaced, so this one does refetch.
+      insightsClient('setUserToken', 123);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+      expect(
+        searchClient.getRecommendations.mock.calls[1][0][0].queryParameters
+          .userToken
+      ).toBe('123');
+
+      // The token normalizes to the same string, so this one must not.
+      insightsClient('setUserToken', 123);
+
+      await wait(0);
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledTimes(2);
+    });
+
     it('does not refetch recommendations when the userToken is unchanged', async () => {
       const searchClient = getRecommendClient();
       const { insightsClient, instantSearchInstance } = createTestEnvironment({

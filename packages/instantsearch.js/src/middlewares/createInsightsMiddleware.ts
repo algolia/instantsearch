@@ -261,7 +261,7 @@ export function createInsightsMiddleware<
               userToken: normalizedUserToken,
             });
 
-            if (existingToken && existingToken !== userToken) {
+            if (existingToken && existingToken !== normalizedUserToken) {
               helper._recommendCache = {};
 
               instantSearchInstance.scheduleSearch();
