@@ -1,6 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
+  addInsightsToRecommendParameters,
   checkIndexUiState,
   createDocumentationMessageGenerator,
   resolveSearchParameters,
@@ -823,7 +824,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             mainHelper.state,
             ...resolveSearchParameters(this)
           ),
-        () => this.getHelper()!.recommendState
+        () =>
+          addInsightsToRecommendParameters(
+            this.getHelper()!.recommendState,
+            mainHelper.state
+          )
       );
 
       const indexInitialResults =
