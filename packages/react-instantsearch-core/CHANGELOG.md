@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.40.0...react-instantsearch-core@7.42.0) (2026-08-06)
+# [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.41.0...react-instantsearch-core@7.42.0) (2026-08-06)
 
 
 ### Bug Fixes

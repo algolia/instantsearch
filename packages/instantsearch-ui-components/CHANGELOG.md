@@ -3,12 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.34.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.1...instantsearch-ui-components@0.34.0) (2026-08-06)
+# [0.34.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.2...instantsearch-ui-components@0.34.0) (2026-08-06)
 
 
 ### Bug Fixes
 
-* **chat:** allow tool result submission during response streaming ([#7118](https://github.com/algolia/instantsearch/issues/7118)) ([2d196b3](https://github.com/algolia/instantsearch/commit/2d196b3c003c616e2a0a0fd57b800cef7125f641))
 * **chat:** update query extraction in search index tool ([#7149](https://github.com/algolia/instantsearch/issues/7149)) ([62a45e5](https://github.com/algolia/instantsearch/commit/62a45e54686f4c61af3f2d14e243e7ba8e5747b5))
 
 
