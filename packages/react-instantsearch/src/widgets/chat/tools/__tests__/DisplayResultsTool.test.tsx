@@ -4,10 +4,7 @@
 
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  collectChatRecords,
-  getHitsFromToolOutput,
-} from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -58,16 +55,12 @@ const createMessages = (
     },
   ] as ClientSideToolComponentProps['messages'];
 
-// The search tool publishes the records; this tool only consumes them.
-const searchTools = {
-  algolia_search_index: { getRecords: getHitsFromToolOutput },
-};
-
+// The search tool fetched the records; this tool only consumes them.
 const conversationOf = (
   messages: ClientSideToolComponentProps['messages']
 ) => ({
   messages,
-  records: collectChatRecords(messages, searchTools),
+  records: collectChatRecords(messages),
 });
 
 const conversation = (

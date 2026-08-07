@@ -8,10 +8,7 @@
  * mid-delta identifier reach `input` looking complete.
  */
 import { render, screen } from '@testing-library/react';
-import {
-  collectChatRecords,
-  getHitsFromToolOutput,
-} from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
@@ -114,9 +111,7 @@ function renderFrame(part: ClientSideToolComponentProps['message']) {
     <LayoutComponent
       message={part}
       messages={messages}
-      records={collectChatRecords(messages, {
-        algolia_search_index: { getRecords: getHitsFromToolOutput },
-      })}
+      records={collectChatRecords(messages)}
       status="streaming"
       applyFilters={jest.fn()}
       onClose={jest.fn()}

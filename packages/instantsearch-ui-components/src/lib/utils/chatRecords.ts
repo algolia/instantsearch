@@ -1,7 +1,6 @@
-import { findTool, isPartTool } from './chat';
+import { isPartTool } from './chat';
 
 import type { ChatMessageBase } from '../../components';
-import type { ChatToolMessage } from '../../components/chat/types';
 
 /**
  * A record as a tool returned it. Display-time annotations (`__position`, …) are
@@ -13,21 +12,10 @@ export type ChatRecord = Record<string, unknown> & { objectID: string };
 export type ChatRecords = Record<string, ChatRecord>;
 
 /**
- * Reads the records a completed call of a tool fetched. A tool declares one so
- * the records it holds become available to the tools that are handed only object
- * IDs — see `ClientSideTool.getRecords`.
- */
-export type ChatToolRecordsGetter = (
-  part: ChatToolMessage
-) => ChatRecord[] | undefined;
-
-/**
  * The records the chat's tools have fetched, keyed by `objectID`.
  *
  * Tools that search return full records, while the tools that present them are
- * handed only identifiers. This store is the shared lookup between the two, and
- * knows nothing about either: what counts as a record in a given output is the
- * contributing tool's own business.
+ * handed only identifiers. This store is the shared lookup between the two.
  *
  * Every contribution merges into one map, a later one overwriting an earlier one
  * for the same `objectID` — the newest copy of a record is the accurate one, so
@@ -91,8 +79,11 @@ export function createChatRecordsStore(): ChatRecordsStore {
 }
 
 /**
- * Collects into `store` the records of every completed tool call in `messages`,
- * asking each call's own tool what it fetched.
+ * Collects into `store` the records of every completed tool call in `messages`
+ * whose output holds an Algolia `hits` array — the shape the search and
+ * recommend tools return. Matching on the output rather than on a tool name
+ * means a tool that fetches records contributes them by returning them, with
+ * nothing to declare.
  *
  * Because merging is keyed by `objectID` and idempotent, this can run over a
  * whole conversation on every update: a streaming delta and a conversation
@@ -101,35 +92,21 @@ export function createChatRecordsStore(): ChatRecordsStore {
  */
 export function collectChatRecords(
   messages: ChatMessageBase[] | undefined,
-  tools: Record<string, { getRecords?: ChatToolRecordsGetter } | undefined>,
   store: ChatRecordsStore = createChatRecordsStore()
 ): ChatRecordsStore {
   messages?.forEach((message) => {
     message.parts.forEach((part) => {
-      if (!isPartTool(part)) {
+      if (!isPartTool(part) || part.state !== 'output-available') {
         return;
       }
 
-      const contributed = findTool(part.type, tools)?.getRecords?.(part);
+      const { hits } = (part.output ?? {}) as { hits?: ChatRecord[] };
 
-      if (contributed) {
-        store.merge(contributed);
+      if (Array.isArray(hits)) {
+        store.merge(hits);
       }
     });
   });
 
   return store;
 }
-
-/**
- * A ready-made `getRecords` for a tool whose output holds an Algolia `hits`
- * array, which is the shape the search and recommend tools return.
- */
-export const getHitsFromToolOutput: ChatToolRecordsGetter = (part) => {
-  const output =
-    part.state === 'output-available'
-      ? (part.output as { hits?: ChatRecord[] } | undefined)
-      : undefined;
-
-  return Array.isArray(output?.hits) ? output.hits : undefined;
-};

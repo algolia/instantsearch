@@ -96,10 +96,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * The records the chat's tools have fetched, keyed by `objectID`.
    *
    * Tools that search return full records while the tools that present them are
-   * handed only object IDs, so this is the shared lookup between the two. Each
-   * tool contributes through its own `getRecords`, and every contribution merges
-   * into one map, last write winning per `objectID`. It is attached to every tool
-   * as `records` too, which is how a tool's `layoutComponent` reads it.
+   * handed only object IDs, so this is the shared lookup between the two. Every
+   * tool call that returned `hits` contributes them, merged into one map with the
+   * last write winning per `objectID`. It is attached to every tool as `records`
+   * too, which is how a tool's `layoutComponent` reads it.
    */
   records: ChatRecordsStore;
   /**
@@ -404,12 +404,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
     // One store per chat widget, outliving every render: tools read records from
-    // it, and it is fed as messages arrive rather than derived per render, so it
-    // is current for anything reading outside a render too. Which outputs hold
-    // records is each tool's own business — this only owns the timing.
+    // it, and it is fed as messages arrive rather than derived per render. It has
+    // to be collected here rather than by the tool that searched, because that
+    // tool renders nothing when the display-results tool is presenting its
+    // records — and because a record has to outlive the render that produced it.
     const records = createChatRecordsStore();
     const collectRecords = () =>
-      collectChatRecords(_chatInstance.messages, tools, records);
+      collectChatRecords(_chatInstance.messages, records);
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;

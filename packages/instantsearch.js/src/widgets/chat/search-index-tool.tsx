@@ -1,9 +1,6 @@
 /** @jsx h */
 
-import {
-  createCarouselToolComponent,
-  getHitsFromToolOutput,
-} from 'instantsearch-ui-components';
+import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
@@ -61,6 +58,5 @@ export function createCarouselTool<
 
   return {
     templates: { layout: SearchLayoutComponent },
-    getRecords: getHitsFromToolOutput,
   };
 }

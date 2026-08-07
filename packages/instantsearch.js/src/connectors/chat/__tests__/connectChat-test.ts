@@ -8,14 +8,13 @@ import {
 } from '@instantsearch/mocks';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { getHitsFromToolOutput } from 'instantsearch-ui-components';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { Chat, SearchIndexToolType } from '../../../lib/chat';
+import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
 import type {
@@ -835,8 +834,6 @@ describe('connectChat', () => {
       });
       const { getRenderState } = getInitializedWidget({
         persistence: false,
-        // Collection is delegated to the tool that fetched the records.
-        tools: { [SearchIndexToolType]: { getRecords: getHitsFromToolOutput } },
         // A restored conversation: the store is collected from it, which is what
         // keeps a rehydrated chat resolving the same records.
         initialMessages: [
@@ -889,7 +886,6 @@ describe('connectChat', () => {
     it('drops the records of a cleared conversation', () => {
       const { getRenderState } = getInitializedWidget({
         persistence: false,
-        tools: { [SearchIndexToolType]: { getRecords: getHitsFromToolOutput } },
         initialMessages: [
           {
             id: '1',

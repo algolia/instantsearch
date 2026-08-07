@@ -1,7 +1,4 @@
-import type {
-  ChatRecordsStore,
-  ChatToolRecordsGetter,
-} from '../../lib/utils/chatRecords';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
@@ -547,13 +544,6 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
-  /**
-   * Reads the records a completed call of this tool fetched, so the tools that
-   * are handed only object IDs can resolve them. Declared by the tool because
-   * only it knows the shape of its own output; `getHitsFromToolOutput` covers a
-   * tool returning an Algolia `hits` array.
-   */
-  getRecords?: ChatToolRecordsGetter;
   /**
    * The chat's record store, attached by the connector. Shared by every tool of
    * a chat, and forwarded to `layoutComponent` as `records`.

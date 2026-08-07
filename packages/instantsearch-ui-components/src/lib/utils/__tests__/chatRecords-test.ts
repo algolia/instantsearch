@@ -1,11 +1,7 @@
-import {
-  collectChatRecords,
-  createChatRecordsStore,
-  getHitsFromToolOutput,
-} from '../chatRecords';
+import { collectChatRecords, createChatRecordsStore } from '../chatRecords';
 
 import type { ChatMessageBase, ChatToolMessage } from '../../../components';
-import type { ChatRecord, ChatToolRecordsGetter } from '../chatRecords';
+import type { ChatRecord } from '../chatRecords';
 
 const searchPart = (
   toolCallId: string,
@@ -22,11 +18,6 @@ const searchPart = (
 
 const assistantMessage = (id: string, parts: unknown[]) =>
   ({ id, role: 'assistant', parts }) as ChatMessageBase;
-
-// What the search and recommend tools declare.
-const searchTools = {
-  algolia_search_index: { getRecords: getHitsFromToolOutput },
-};
 
 describe('createChatRecordsStore', () => {
   test('keys merged records by objectID', () => {
@@ -143,52 +134,20 @@ describe('createChatRecordsStore', () => {
   });
 });
 
-describe('getHitsFromToolOutput', () => {
-  test('reads the hits of a completed call', () => {
-    expect(
-      getHitsFromToolOutput(searchPart('search', [{ objectID: '1' }]))
-    ).toEqual([{ objectID: '1' }]);
-  });
-
-  test('reads nothing from a call that has no hits yet', () => {
-    expect(
-      getHitsFromToolOutput({
-        type: 'tool-algolia_search_index',
-        toolCallId: 'search',
-        state: 'input-available',
-        input: { query: 'shoes' },
-      } as ChatToolMessage)
-    ).toBeUndefined();
-
-    expect(
-      getHitsFromToolOutput({
-        type: 'tool-algolia_search_index',
-        toolCallId: 'search',
-        state: 'output-available',
-        input: {},
-        output: { status: 'success' },
-      } as ChatToolMessage)
-    ).toBeUndefined();
-  });
-});
-
 describe('collectChatRecords', () => {
   test('combines the records of every tool call of the conversation', () => {
-    const store = collectChatRecords(
-      [
-        assistantMessage('1', [
-          searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
-          searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
+    const store = collectChatRecords([
+      assistantMessage('1', [
+        searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
+        searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
+      ]),
+      assistantMessage('2', [
+        searchPart('search-3', [
+          { objectID: '1', name: 'Runner Pro' },
+          { objectID: '3', name: 'Trail' },
         ]),
-        assistantMessage('2', [
-          searchPart('search-3', [
-            { objectID: '1', name: 'Runner Pro' },
-            { objectID: '3', name: 'Trail' },
-          ]),
-        ]),
-      ],
-      searchTools
-    );
+      ]),
+    ]);
 
     // Every call contributes, and the newest copy of a record wins.
     expect(store.getAll()).toEqual({
@@ -199,82 +158,78 @@ describe('collectChatRecords', () => {
   });
 
   test('resolves a record a tool of an earlier turn fetched', () => {
-    const store = collectChatRecords(
-      [
-        assistantMessage('1', [
-          searchPart('search', [{ objectID: '1', name: 'Runner' }]),
-        ]),
-        assistantMessage('2', [
-          {
-            type: 'tool-algolia_display_results',
-            toolCallId: 'display',
-            state: 'output-available',
-            input: { groups: [{ results: [{ objectID: '1' }] }] },
-            output: {},
-          },
-        ]),
-      ],
-      searchTools
-    );
+    const store = collectChatRecords([
+      assistantMessage('1', [
+        searchPart('search', [{ objectID: '1', name: 'Runner' }]),
+      ]),
+      assistantMessage('2', [
+        {
+          type: 'tool-algolia_display_results',
+          toolCallId: 'display',
+          state: 'output-available',
+          input: { groups: [{ results: [{ objectID: '1' }] }] },
+          output: {},
+        },
+      ]),
+    ]);
 
     expect(store.get('1')).toEqual({ objectID: '1', name: 'Runner' });
   });
 
-  test('asks each call its own tool, so a tool without getRecords contributes nothing', () => {
-    const store = collectChatRecords(
-      [
-        assistantMessage('1', [
-          { type: 'text', text: 'Here you go' },
-          // Holds hits, but its tool declares no `getRecords`.
-          searchPart('other', [{ objectID: 'ignored' }], 'tool-other_tool'),
-          searchPart('search', [{ objectID: '1', name: 'Runner' }]),
-        ]),
-      ],
-      { ...searchTools, other_tool: {} }
-    );
+  test('ignores parts that are not a completed tool call', () => {
+    const store = collectChatRecords([
+      assistantMessage('1', [
+        { type: 'text', text: 'Here you go' },
+        // Still streaming its input, so it holds no output to read.
+        {
+          type: 'tool-algolia_search_index',
+          toolCallId: 'pending',
+          state: 'input-available',
+          input: { query: 'shoes' },
+        },
+        // Completed, but its output holds no records.
+        {
+          type: 'tool-algolia_memorize',
+          toolCallId: 'memorize',
+          state: 'output-available',
+          input: {},
+          output: { status: 'success' },
+        },
+        searchPart('search', [{ objectID: '1', name: 'Runner' }]),
+      ]),
+    ]);
 
     expect(store.getAll()).toEqual({ 1: { objectID: '1', name: 'Runner' } });
   });
 
-  test('matches the Algolia MCP Server tool name shim', () => {
-    const store = collectChatRecords(
-      [
-        assistantMessage('1', [
-          searchPart(
-            'search',
-            [{ objectID: '1', name: 'Runner' }],
-            'tool-algolia_search_index_products'
-          ),
-        ]),
-      ],
-      searchTools
-    );
+  test('collects by output shape, so any tool name contributes', () => {
+    // Covers the recommend tool and the Algolia MCP Server's suffixed search
+    // tool name alike: what matters is that the call returned hits.
+    const store = collectChatRecords([
+      assistantMessage('1', [
+        searchPart(
+          'search',
+          [{ objectID: '1', name: 'Runner' }],
+          'tool-algolia_search_index_products'
+        ),
+        searchPart(
+          'recommend',
+          [{ objectID: '2', name: 'Sneaker' }],
+          'tool-algolia_recommend'
+        ),
+        searchPart(
+          'catalog',
+          [{ objectID: '3', name: 'Trail' }],
+          'tool-my_own_catalog'
+        ),
+      ]),
+    ]);
 
-    expect(store.get('1')).toEqual({ objectID: '1', name: 'Runner' });
-  });
-
-  test('lets any tool contribute its own records', () => {
-    // A tool of one's own, publishing records from a shape of its own.
-    const getRecords: ChatToolRecordsGetter = (part) =>
-      part.state === 'output-available'
-        ? (part.output as { products?: Array<{ objectID: string }> }).products
-        : undefined;
-    const store = collectChatRecords(
-      [
-        assistantMessage('1', [
-          {
-            type: 'tool-my_catalog',
-            toolCallId: 'catalog',
-            state: 'output-available',
-            input: {},
-            output: { products: [{ objectID: '1', name: 'Runner' }] },
-          },
-        ]),
-      ],
-      { my_catalog: { getRecords } }
-    );
-
-    expect(store.get('1')).toEqual({ objectID: '1', name: 'Runner' });
+    expect(store.getAll()).toEqual({
+      1: { objectID: '1', name: 'Runner' },
+      2: { objectID: '2', name: 'Sneaker' },
+      3: { objectID: '3', name: 'Trail' },
+    });
   });
 
   test('merges into a store it is given, across repeated collections', () => {
@@ -283,7 +238,7 @@ describe('collectChatRecords', () => {
       searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
     ]);
 
-    expect(collectChatRecords([first], searchTools, store)).toBe(store);
+    expect(collectChatRecords([first], store)).toBe(store);
 
     // A later turn's records join the same store.
     collectChatRecords(
@@ -293,7 +248,6 @@ describe('collectChatRecords', () => {
           searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
         ]),
       ],
-      searchTools,
       store
     );
 
@@ -314,12 +268,10 @@ describe('collectChatRecords', () => {
           searchPart('search', [{ objectID: '1', name: 'Runner' }]),
         ]),
       ],
-      searchTools,
       store
     );
     collectChatRecords(
       [assistantMessage('1', [{ type: 'text', text: 'Redone' }])],
-      searchTools,
       store
     );
 
@@ -337,13 +289,13 @@ describe('collectChatRecords', () => {
       ])
     ) as ChatMessageBase[];
 
-    expect(collectChatRecords(restored, searchTools).get('1')).toEqual({
+    expect(collectChatRecords(restored).get('1')).toEqual({
       objectID: '1',
       name: 'Runner',
     });
   });
 
   test('handles a missing conversation', () => {
-    expect(collectChatRecords(undefined, searchTools).getAll()).toEqual({});
+    expect(collectChatRecords(undefined).getAll()).toEqual({});
   });
 });

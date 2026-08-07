@@ -3,10 +3,7 @@
  */
 /** @jsx h */
 import { fireEvent, screen, within } from '@testing-library/dom';
-import {
-  collectChatRecords,
-  getHitsFromToolOutput,
-} from 'instantsearch-ui-components';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import { createDisplayResultsTool } from '../display-results-tool';
@@ -58,9 +55,7 @@ const createToolProps = (
   return {
     message,
     messages,
-    records: collectChatRecords(messages, {
-      algolia_search_index: { getRecords: getHitsFromToolOutput },
-    }),
+    records: collectChatRecords(messages),
     indexUiState: {},
     setIndexUiState: jest.fn(),
     onClose: jest.fn(),

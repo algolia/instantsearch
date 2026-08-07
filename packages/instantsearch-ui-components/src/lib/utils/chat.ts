@@ -5,6 +5,7 @@ import type {
   ApplyFiltersParams,
   ChatToolMessage,
   ClientSideTool,
+  ClientSideTools,
   SearchToolInput,
   SearchToolQuery,
 } from '../../components/chat/types';
@@ -49,12 +50,12 @@ export function isReasoningPartActive(
   );
 }
 
-export const findTool = <TTool = ClientSideTool>(
+export const findTool = (
   partType: string,
-  tools: Record<string, TTool | undefined>
-): TTool | undefined => {
+  tools: ClientSideTools
+): ClientSideTool | undefined => {
   const toolName = partType.replace('tool-', '');
-  let tool: TTool | undefined = tools[toolName];
+  let tool: ClientSideTool | undefined = tools[toolName];
   if (!tool) {
     tool = Object.entries(tools).find(([key]) =>
       startsWith(toolName, `${key}_`)

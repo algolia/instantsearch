@@ -1,7 +1,4 @@
-import {
-  createCarouselToolComponent,
-  getHitsFromToolOutput,
-} from 'instantsearch-ui-components';
+import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import React, {
   createElement,
   useEffect,
@@ -49,7 +46,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
   return {
     layoutComponent: SearchLayoutComponent,
-    getRecords: getHitsFromToolOutput,
   };
 }
 

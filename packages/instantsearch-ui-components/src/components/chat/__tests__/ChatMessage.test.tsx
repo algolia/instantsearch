@@ -6,7 +6,6 @@ import { render } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
-import { getHitsFromToolOutput } from '../../../lib/utils/chatRecords';
 import {
   createChatMessageComponent,
   type ChatMessageClassNames,
@@ -1190,9 +1189,8 @@ describe('ChatMessage', () => {
         messages={[message]}
         status="ready"
         tools={{
-          // The search tool publishes its records; the custom tool consumes them.
+          // The search tool fetched the records; the custom tool consumes them.
           algolia_search_index: {
-            getRecords: getHitsFromToolOutput,
             addToolResult: jest.fn(),
             applyFilters: jest.fn(),
           },
