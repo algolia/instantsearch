@@ -4,7 +4,7 @@ import { createChatMessageLoaderComponent } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import type {
-  ChatComponentPropsWithMetadata,
+  ChatComponentPropsWithContext,
   ChatMessageLoaderProps,
 } from 'instantsearch-ui-components';
 
@@ -13,7 +13,7 @@ const ChatMessageLoader = createChatMessageLoaderComponent({
 });
 
 export function chatMessageLoader(
-  props: ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+  props: ChatComponentPropsWithContext<ChatMessageLoaderProps>
 ) {
   return <ChatMessageLoader {...props} />;
 }

@@ -43,7 +43,7 @@ import type {
 } from '../../types';
 import type {
   ChatClassNames,
-  ChatComponentPropsWithMetadata,
+  ChatComponentPropsWithContext,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
@@ -164,20 +164,20 @@ type ChatWrapperProps = {
   messagesProps: {
     loaderComponent:
       | ((
-          props: ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+          props: ChatComponentPropsWithContext<ChatMessageLoaderProps>
         ) => JSX.Element)
       | undefined;
     errorComponent:
       | ((
-          props: ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+          props: ChatComponentPropsWithContext<ChatMessageErrorProps>
         ) => JSX.Element)
       | undefined;
     emptyComponent:
-      | ((props: ChatComponentPropsWithMetadata<{}>) => JSX.Element)
+      | ((props: ChatComponentPropsWithContext<{}>) => JSX.Element)
       | undefined;
     actionsComponent:
       | ((
-          props: ChatComponentPropsWithMetadata<{
+          props: ChatComponentPropsWithContext<{
             actions: ChatMessageActionProps[];
           }>
         ) => JSX.Element)
@@ -437,11 +437,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     : undefined;
   const stableMessagesErrorComponent = templates.messages?.error
     ? createStableTemplateComponent<
-        ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+        ChatComponentPropsWithContext<ChatMessageErrorProps>
       >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatComponentPropsWithMetadata<{}>>(
+    ? createStableTemplateComponent<ChatComponentPropsWithContext<{}>>(
         emptyTemplateRef,
         'empty',
         'div'
@@ -500,7 +500,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     : undefined;
   const stableActionsComponent = templates.actions
     ? (
-        actionsProps: ChatComponentPropsWithMetadata<{
+        actionsProps: ChatComponentPropsWithContext<{
           actions: ChatMessageActionProps[];
         }>
       ) => (
@@ -514,7 +514,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     : undefined;
   const stableLoaderComponent = templates.loader
     ? createStableTemplateComponent<
-        ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+        ChatComponentPropsWithContext<ChatMessageLoaderProps>
       >(loaderTemplateRef, 'loader', 'div')
     : undefined;
   const stableSuggestionsComponent = templates.suggestions
@@ -862,7 +862,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Custom loader template for the chat widget.
      */
-    loader: Template<ChatComponentPropsWithMetadata<ChatMessageLoaderProps>>;
+    loader: Template<ChatComponentPropsWithContext<ChatMessageLoaderProps>>;
 
     /**
      * Text to display in the loader
@@ -922,7 +922,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       /**
        * Template to use when there is an error loading messages
        */
-      error: Template<ChatComponentPropsWithMetadata<ChatMessageErrorProps>>;
+      error: Template<ChatComponentPropsWithContext<ChatMessageErrorProps>>;
       /**
        * Label for the scroll to bottom button
        */
@@ -1029,7 +1029,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for the message actions.
      */
     actions: Template<
-      ChatComponentPropsWithMetadata<{
+      ChatComponentPropsWithContext<{
         actions: ChatMessageActionProps[];
         message: ChatMessageBase;
       }>
@@ -1038,7 +1038,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatComponentPropsWithMetadata<{}>>;
+    empty?: Template<ChatComponentPropsWithContext<{}>>;
 
     /**
      * Template to use for prompt suggestions.

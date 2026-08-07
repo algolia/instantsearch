@@ -4,7 +4,7 @@ import { createButtonComponent } from '../Button';
 
 import { ReloadIcon } from './icons';
 
-import type { ChatComponentPropsWithMetadata } from './types';
+import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageErrorTranslations = {
@@ -60,7 +60,7 @@ export function createChatMessageErrorComponent({
   const Button = createButtonComponent({ createElement });
 
   return function ChatMessageError(
-    userProps: ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+    userProps: ChatComponentPropsWithContext<ChatMessageErrorProps>
   ) {
     const {
       errorMessage,
@@ -68,7 +68,7 @@ export function createChatMessageErrorComponent({
       onNewConversation,
       actions,
       translations: userTranslations,
-      metadata,
+      context,
       ...props
     } = userProps;
     const defaultErrorMessage =

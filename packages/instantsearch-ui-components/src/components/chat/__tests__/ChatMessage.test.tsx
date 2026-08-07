@@ -13,16 +13,16 @@ import {
 } from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
-import type { ChatComponentMetadata } from '../types';
+import type { ChatComponentContext } from '../types';
 
 const ChatMessage = createChatMessageComponent({
   createElement,
   Fragment,
 });
 
-const createMetadata = (
-  overrides: Partial<ChatComponentMetadata> = {}
-): ChatComponentMetadata => ({
+const createContext = (
+  overrides: Partial<ChatComponentContext> = {}
+): ChatComponentContext => ({
   messages: [],
   status: 'ready',
   isClearing: false,
@@ -75,7 +75,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -118,7 +118,7 @@ describe('ChatMessage', () => {
           message: 'message',
           actions: 'actions',
         }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -154,7 +154,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
-          metadata={createMetadata()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -164,7 +164,7 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
-          metadata={createMetadata()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -174,7 +174,7 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
-          metadata={createMetadata()}
+          context={createContext()}
         />
       </div>
     );
@@ -268,7 +268,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -296,7 +296,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -324,7 +324,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Private reasoning' }],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
 
@@ -348,7 +348,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'reasoning', text, state: 'done' }],
           }}
-          metadata={createMetadata({ status })}
+          context={createContext({ status })}
           showReasoning={true}
         />
       );
@@ -369,7 +369,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -404,7 +404,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Final answer' },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           tools: {
             test_tool: {
               layoutComponent: () => <div>Tool result</div>,
@@ -451,7 +451,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={message}
-        metadata={createMetadata({ status: 'streaming', messages: [message] })}
+        context={createContext({ status: 'streaming', messages: [message] })}
         showReasoning={true}
       />
     );
@@ -480,7 +480,7 @@ describe('ChatMessage', () => {
           ...message,
           parts: [message.parts[0], { ...message.parts[1], state: 'done' }],
         }}
-        metadata={createMetadata({ status: 'ready', messages: [message] })}
+        context={createContext({ status: 'ready', messages: [message] })}
         showReasoning={true}
       />
     );
@@ -509,7 +509,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [
             {
@@ -558,7 +558,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [
             {
@@ -612,7 +612,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -665,7 +665,7 @@ describe('ChatMessage', () => {
             indexUiState={{}}
             setIndexUiState={jest.fn()}
             message={message}
-            metadata={createMetadata({ status: 'streaming', messages })}
+            context={createContext({ status: 'streaming', messages })}
             showReasoning={true}
           />
         ))}
@@ -698,7 +698,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -734,7 +734,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -757,7 +757,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text, state: 'streaming' }],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status: 'streaming',
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -805,7 +805,7 @@ describe('ChatMessage', () => {
               : []),
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           status,
           messages: [{ role: 'assistant', id: '1', parts: [] }],
         })}
@@ -848,7 +848,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         showReasoning={true}
         translations={{ reasoningLabel: 'Raisonnement' }}
       />
@@ -874,7 +874,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         showReasoning={true}
         parseMarkdown={false}
       />
@@ -898,7 +898,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
 
@@ -919,7 +919,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -941,7 +941,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'Use * and _ literally' }],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -984,7 +984,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'line one\nline two' }],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1010,7 +1010,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1039,7 +1039,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
 
@@ -1066,7 +1066,7 @@ describe('ChatMessage', () => {
             },
           },
         }}
-        metadata={createMetadata()}
+        context={createContext()}
       />
     );
 
@@ -1076,8 +1076,8 @@ describe('ChatMessage', () => {
   });
 
   test('renders with tools', () => {
-    const layoutComponent = jest.fn(({ message }) => (
-      <div className="wrapper">{JSON.stringify(message.output)}</div>
+    const layoutComponent = jest.fn(({ context }) => (
+      <div className="wrapper">{JSON.stringify(context.message.output)}</div>
     ));
     const { container } = render(
       <ChatMessage
@@ -1096,7 +1096,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           tools: {
             test_tool: {
               layoutComponent,
@@ -1110,7 +1110,7 @@ describe('ChatMessage', () => {
     );
     expect(layoutComponent.mock.calls[0][0]).toEqual(
       expect.objectContaining({
-        metadata: expect.objectContaining({ status: 'ready' }),
+        context: expect.objectContaining({ status: 'ready' }),
       })
     );
     expect(container).toMatchInlineSnapshot(`
@@ -1170,10 +1170,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           tools: {
             test_tool: {
-              layoutComponent: ({ sendEvent: toolSendEvent }) => {
+              layoutComponent: ({ context: { sendEvent: toolSendEvent } }) => {
                 toolSendEvent('click', hit, 'Product Clicked', {
                   customField: 'custom value',
                 });
@@ -1211,7 +1211,7 @@ describe('ChatMessage', () => {
         params: Parameters<AddToolResult>[0]
       ) => ReturnType<AddToolResult>;
     } = {
-      layoutComponent: ({ addToolResult: submit }) => {
+      layoutComponent: ({ context: { addToolResult: submit } }) => {
         submitResult = submit;
         return <div />;
       },
@@ -1236,7 +1236,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           tools: {
             test_tool: tool,
           },
@@ -1277,10 +1277,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        metadata={createMetadata({
+        context={createContext({
           tools: {
             test_tool: {
-              layoutComponent: ({ addToolResult: submit }) => {
+              layoutComponent: ({ context: { addToolResult: submit } }) => {
                 submitResult = submit;
                 return <div />;
               },

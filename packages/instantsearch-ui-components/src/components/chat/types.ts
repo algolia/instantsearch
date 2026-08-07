@@ -517,7 +517,7 @@ export type ChatLayoutOwnProps<
  * system's `params` argument: a single, consistent object every component can
  * read, regardless of which override point it plugs into.
  */
-export type ChatComponentMetadata<
+export type ChatComponentContext<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = {
   /**
@@ -583,25 +583,36 @@ export type ChatComponentMetadata<
 };
 
 /**
- * Augments a chat component's own props with the metadata the widget always
- * injects. `TOwnProps` is the per-component data; `metadata` is the shared bag.
+ * Augments a chat component's own props with the shared `context` the widget
+ * always injects. `TOwnProps` is the per-component presentational config that
+ * stays at the root; `context` is the shared chat state and callbacks.
  */
-export type ChatComponentPropsWithMetadata<
+export type ChatComponentPropsWithContext<
   TOwnProps = {},
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = TOwnProps & {
-  metadata: ChatComponentMetadata<TMessage>;
+  context: ChatComponentContext<TMessage>;
 };
 
-export type ClientSideToolComponentProps = ChatComponentPropsWithMetadata<{
-  message: ChatToolMessage;
-  insightsEventContext?: ChatInsightsEventContext;
-  indexUiState: object;
-  setIndexUiState: (state: object) => void;
-  addToolResult: AddToolResultWithOutput;
-  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-  sendEvent: SendEventForHits;
-}>;
+/**
+ * Tool layout components receive a single `context` object: the shared chat
+ * `ChatComponentContext` merged with the tool's own injected data (the tool
+ * `message`, event/filter callbacks, and index UI state). There are no
+ * root-level props — everything a tool renders from lives under `context`.
+ */
+export type ClientSideToolComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  context: ChatComponentContext<TMessage> & {
+    message: ChatToolMessage;
+    insightsEventContext?: ChatInsightsEventContext;
+    indexUiState: object;
+    setIndexUiState: (state: object) => void;
+    addToolResult: AddToolResultWithOutput;
+    applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+    sendEvent: SendEventForHits;
+  };
+};
 
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps

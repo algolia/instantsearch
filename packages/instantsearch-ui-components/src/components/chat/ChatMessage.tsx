@@ -15,7 +15,7 @@ import { MenuIcon } from './icons';
 import type {
   AddToolResult,
   AddToolResultWithOutput,
-  ChatComponentPropsWithMetadata,
+  ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatToolMessage,
   ClientSideTool,
@@ -127,7 +127,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * Custom actions renderer
    */
   actionsComponent?: (
-    props: ChatComponentPropsWithMetadata<{
+    props: ChatComponentPropsWithContext<{
       actions: ChatMessageActionProps[];
       message: ChatMessageBase;
     }>
@@ -183,7 +183,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
   });
 
   return function ChatMessage(
-    userProps: ChatComponentPropsWithMetadata<ChatMessageProps>
+    userProps: ChatComponentPropsWithContext<ChatMessageProps>
   ) {
     const {
       classNames = {},
@@ -201,11 +201,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       suggestionsElement,
       showReasoning = false,
       parseMarkdown = true,
-      metadata,
+      context,
       ...props
     } = userProps;
 
-    const { status, tools, messages } = metadata;
+    const { status, tools, messages } = context;
 
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
@@ -411,14 +411,16 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               className="ais-ChatMessage-tool"
             >
               <ToolLayoutComponent
-                message={toolMessage}
-                insightsEventContext={tool.insightsEventContext}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
-                addToolResult={boundAddToolResult}
-                applyFilters={tool.applyFilters}
-                sendEvent={sendEvent}
-                metadata={metadata}
+                context={{
+                  ...context,
+                  message: toolMessage,
+                  insightsEventContext: tool.insightsEventContext,
+                  indexUiState,
+                  setIndexUiState,
+                  addToolResult: boundAddToolResult,
+                  applyFilters: tool.applyFilters,
+                  sendEvent,
+                }}
               />
             </div>
           );
@@ -456,7 +458,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                   <ActionsComponent
                     actions={actions}
                     message={message}
-                    metadata={metadata}
+                    context={context}
                   />
                 ) : (
                   actions.map((action, index) => (

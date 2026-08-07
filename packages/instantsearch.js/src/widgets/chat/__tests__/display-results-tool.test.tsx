@@ -8,7 +8,7 @@ import { h, render } from 'preact';
 import { createDisplayResultsTool } from '../display-results-tool';
 
 import type {
-  ChatComponentMetadata,
+  ChatComponentContext,
   ClientSideToolComponentProps,
 } from 'instantsearch-ui-components';
 import type { ComponentType } from 'preact';
@@ -30,11 +30,10 @@ const createToolProps = (
         },
       ],
     },
-  } as ClientSideToolComponentProps['message'];
+  } as ClientSideToolComponentProps['context']['message'];
 
   return {
-    message,
-    metadata: {
+    context: {
       messages: [
         {
           id: 'assistant-message-id',
@@ -55,7 +54,7 @@ const createToolProps = (
             message,
           ],
         },
-      ] as ChatComponentMetadata['messages'],
+      ] as ChatComponentContext['messages'],
       status: 'ready',
       isClearing: false,
       open: true,
@@ -65,12 +64,13 @@ const createToolProps = (
       stop: jest.fn(),
       onReload: jest.fn(),
       onClose: jest.fn(),
+      message,
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      addToolResult: jest.fn(),
+      applyFilters: jest.fn(),
+      sendEvent: jest.fn(),
     },
-    indexUiState: {},
-    setIndexUiState: jest.fn(),
-    addToolResult: jest.fn(),
-    applyFilters: jest.fn(),
-    sendEvent: jest.fn(),
   };
 };
 

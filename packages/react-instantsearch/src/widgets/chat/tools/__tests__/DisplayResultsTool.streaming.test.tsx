@@ -14,7 +14,7 @@ import React from 'react';
 import { createDisplayResultsTool } from '../DisplayResultsTool';
 
 import type {
-  ChatComponentMetadata,
+  ChatComponentContext,
   ClientSideToolComponentProps,
 } from 'instantsearch-ui-components';
 import type { UIMessageChunk } from 'instantsearch.js/es/lib/ai-lite';
@@ -48,7 +48,7 @@ function chunkStream(chunks: UIMessageChunk[]) {
  * frame is still `input-streaming`, the state that must already render.
  */
 async function streamDisplayInput(deltas: string[]) {
-  const frames: Array<ClientSideToolComponentProps['message']> = [];
+  const frames: Array<ClientSideToolComponentProps['context']['message']> = [];
   const chat = new Chat<UIMessage>({
     persistence: false,
     transport: {
@@ -81,7 +81,9 @@ async function streamDisplayInput(deltas: string[]) {
       candidate.type.startsWith('tool-algolia_display_results')
     );
     if (part) {
-      frames.push({ ...part } as ClientSideToolComponentProps['message']);
+      frames.push({
+        ...part,
+      } as ClientSideToolComponentProps['context']['message']);
     }
   });
 
@@ -89,7 +91,7 @@ async function streamDisplayInput(deltas: string[]) {
   return frames;
 }
 
-function renderFrame(part: ClientSideToolComponentProps['message']) {
+function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
   const tool = createDisplayResultsTool<TestResult>(itemComponent);
   const LayoutComponent = tool.layoutComponent!;
   const messages = [
@@ -107,12 +109,11 @@ function renderFrame(part: ClientSideToolComponentProps['message']) {
         part,
       ],
     },
-  ] as unknown as ChatComponentMetadata['messages'];
+  ] as unknown as ChatComponentContext['messages'];
 
   const { unmount } = render(
     <LayoutComponent
-      message={part}
-      metadata={{
+      context={{
         messages,
         status: 'streaming',
         isClearing: false,
@@ -123,12 +124,13 @@ function renderFrame(part: ClientSideToolComponentProps['message']) {
         stop: jest.fn(),
         onReload: jest.fn(),
         onClose: jest.fn(),
+        message: part,
+        applyFilters: jest.fn(),
+        indexUiState: {},
+        addToolResult: jest.fn(),
+        setIndexUiState: jest.fn(),
+        sendEvent: jest.fn(),
       }}
-      applyFilters={jest.fn()}
-      indexUiState={{}}
-      addToolResult={jest.fn()}
-      setIndexUiState={jest.fn()}
-      sendEvent={jest.fn()}
     />
   );
   const visible = HITS.filter((hit) =>
@@ -139,7 +141,7 @@ function renderFrame(part: ClientSideToolComponentProps['message']) {
 }
 
 const renderAllFrames = (
-  frames: Array<ClientSideToolComponentProps['message']>
+  frames: Array<ClientSideToolComponentProps['context']['message']>
 ) => frames.map(renderFrame);
 
 describe('display results, streamed identifier completeness', () => {
@@ -232,7 +234,7 @@ describe('display results, streamed identifier completeness', () => {
     // here is restored verbatim, `rawInput` included.
     const restored = JSON.parse(
       JSON.stringify(last)
-    ) as ClientSideToolComponentProps['message'];
+    ) as ClientSideToolComponentProps['context']['message'];
 
     expect((restored as any).input.groups[0].results[0].objectID).toBe('12');
     expect(renderFrame(restored)).toEqual([]);

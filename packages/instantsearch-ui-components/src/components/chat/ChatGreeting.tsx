@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import type { ChatComponentPropsWithMetadata } from './types';
+import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatGreetingTranslations = {
@@ -54,12 +54,12 @@ export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatGreeting(
-    userProps: ChatComponentPropsWithMetadata<ChatGreetingProps>
+    userProps: ChatComponentPropsWithContext<ChatGreetingProps>
   ) {
     const {
       translations: userTranslations,
       classNames = {},
-      metadata,
+      context,
       banner,
       ...props
     } = userProps;

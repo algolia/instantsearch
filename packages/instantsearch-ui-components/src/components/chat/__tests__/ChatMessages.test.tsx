@@ -11,7 +11,7 @@ import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithMetadata } from '../types';
+import type { ChatComponentPropsWithContext } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -1209,7 +1209,7 @@ describe('ChatMessages', () => {
 
   test('allows error translation to use raw error message', () => {
     const CustomError = (
-      props: ChatComponentPropsWithMetadata<ChatMessageErrorProps>
+      props: ChatComponentPropsWithContext<ChatMessageErrorProps>
     ) => (
       <ChatMessageError
         {...props}
@@ -1295,7 +1295,7 @@ describe('ChatMessages', () => {
     `);
   });
 
-  test('forwards metadata to overridable components', () => {
+  test('forwards context to overridable components', () => {
     const Loader = jest.fn(() => <span>Loader</span>);
     const setIndexUiState = jest.fn();
     const onClose = jest.fn();
@@ -1326,7 +1326,7 @@ describe('ChatMessages', () => {
 
     expect(Loader).toHaveBeenCalledWith(
       expect.objectContaining({
-        metadata: expect.objectContaining({
+        context: expect.objectContaining({
           messages,
           status: 'submitted',
           error: undefined,

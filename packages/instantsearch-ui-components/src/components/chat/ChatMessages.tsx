@@ -33,8 +33,8 @@ import type {
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
-  ChatComponentMetadata,
-  ChatComponentPropsWithMetadata,
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
   ChatLayoutOwnProps,
   ChatMessageBase,
   ChatStatus,
@@ -117,25 +117,25 @@ export type ChatMessagesProps<
    * Custom message renderer
    */
   messageComponent?: (
-    props: ChatComponentPropsWithMetadata<{ message: TMessage }, TMessage>
+    props: ChatComponentPropsWithContext<{ message: TMessage }, TMessage>
   ) => JSX.Element;
   /**
    * Custom loader component
    */
   loaderComponent?: (
-    props: ChatComponentPropsWithMetadata<ChatMessageLoaderProps, TMessage>
+    props: ChatComponentPropsWithContext<ChatMessageLoaderProps, TMessage>
   ) => JSX.Element;
   /**
    * Custom error component
    */
   errorComponent?: (
-    props: ChatComponentPropsWithMetadata<ChatMessageErrorProps, TMessage>
+    props: ChatComponentPropsWithContext<ChatMessageErrorProps, TMessage>
   ) => JSX.Element;
   /**
    * Custom empty component shown when there are no messages
    */
   emptyComponent?: (
-    props: ChatComponentPropsWithMetadata<{}, TMessage>
+    props: ChatComponentPropsWithContext<{}, TMessage>
   ) => JSX.Element;
   /**
    * Custom actions component
@@ -301,7 +301,7 @@ function createDefaultMessageComponent<
     messageTranslations,
     translations,
     suggestionsElement,
-    metadata,
+    context,
   }: {
     key: string;
     message: TMessage;
@@ -319,7 +319,7 @@ function createDefaultMessageComponent<
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
     suggestionsElement?: VNode;
-    metadata: ChatComponentMetadata<TMessage>;
+    context: ChatComponentContext<TMessage>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -400,7 +400,7 @@ function createDefaultMessageComponent<
         classNames={classNames}
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
-        metadata={metadata}
+        context={context}
         {...messageProps}
       />
     );
@@ -425,7 +425,7 @@ export function createChatMessagesComponent({
     props: Parameters<typeof DefaultMessageComponent>[0]
   ) {
     const messageFeedback = props.feedbackState?.[props.message.id];
-    const instantSearchStatus = getInstantSearchStatus(props.metadata.tools);
+    const instantSearchStatus = getInstantSearchStatus(props.context.tools);
     // Read the row's own side, mirroring `DefaultMessage`, so one role's change
     // neither invalidates the other's completed rows nor goes unnoticed here.
     const messageProps =
@@ -568,10 +568,10 @@ export function createChatMessagesComponent({
       hasActiveReasoning
     );
 
-    // The shared bag handed to every overridable chat component, so custom
+    // The shared context handed to every overridable chat component, so custom
     // components can read the current chat state and common callbacks from a
     // single, consistent place.
-    const metadata: ChatComponentMetadata<TMessage> = {
+    const context: ChatComponentContext<TMessage> = {
       messages,
       status,
       error,
@@ -621,7 +621,7 @@ export function createChatMessagesComponent({
             }}
           >
             {showEmpty && EmptyComponent && (
-              <EmptyComponent metadata={metadata} />
+              <EmptyComponent context={context} />
             )}
 
             {messages.map((message, index) => (
@@ -641,7 +641,7 @@ export function createChatMessagesComponent({
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
-                metadata={metadata}
+                context={context}
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
@@ -655,7 +655,7 @@ export function createChatMessagesComponent({
             {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
-                metadata={metadata}
+                context={context}
               />
             )}
 
@@ -676,7 +676,7 @@ export function createChatMessagesComponent({
                       }
                     : undefined
                 }
-                metadata={metadata}
+                context={context}
               />
             )}
           </div>

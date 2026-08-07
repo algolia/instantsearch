@@ -1557,7 +1557,7 @@ export function createOptionsTests(
               tools: {
                 hello: {
                   templates: {
-                    layout: ({ applyFilters }, { html }) =>
+                    layout: ({ context: { applyFilters } }, { html }) =>
                       html`<button
                         class="ais-ChatToolHelloViewAll"
                         onclick="${() => {
@@ -1581,7 +1581,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               tools: {
                 hello: {
-                  layoutComponent: ({ applyFilters }) => {
+                  layoutComponent: ({ context: { applyFilters } }) => {
                     return (
                       <button
                         className="ais-ChatToolHelloViewAll"

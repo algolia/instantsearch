@@ -2,7 +2,7 @@
 
 import { LoadingSpinnerIcon } from './icons';
 
-import type { ChatComponentPropsWithMetadata } from './types';
+import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageLoaderTranslations = {
@@ -23,9 +23,9 @@ export function createChatMessageLoaderComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatMessageLoader(
-    userProps: ChatComponentPropsWithMetadata<ChatMessageLoaderProps>
+    userProps: ChatComponentPropsWithContext<ChatMessageLoaderProps>
   ) {
-    const { translations: userTranslations, metadata, ...props } = userProps;
+    const { translations: userTranslations, context, ...props } = userProps;
     const translations: Required<ChatMessageLoaderTranslations> = {
       loaderText: '',
       ...userTranslations,

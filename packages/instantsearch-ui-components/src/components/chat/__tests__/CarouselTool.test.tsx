@@ -52,7 +52,7 @@ function renderTool(
   message: ChatToolMessage,
   overrides: Partial<{
     showViewAll: boolean;
-    applyFilters: ClientSideToolComponentProps['applyFilters'];
+    applyFilters: ClientSideToolComponentProps['context']['applyFilters'];
     onClose: () => void;
     getSearchPageURL: (params: any) => string;
   }> = {}
@@ -68,13 +68,7 @@ function renderTool(
         headerProps={{ showViewAll: overrides.showViewAll ?? false }}
         itemComponent={ItemComponent}
         toolProps={{
-          message,
-          indexUiState: {},
-          setIndexUiState: jest.fn(),
-          addToolResult: jest.fn(),
-          applyFilters,
-          sendEvent: jest.fn(),
-          metadata: {
+          context: {
             messages: [],
             status: 'ready',
             isClearing: false,
@@ -85,6 +79,12 @@ function renderTool(
             stop: jest.fn(),
             onReload: jest.fn(),
             onClose,
+            message,
+            indexUiState: {},
+            setIndexUiState: jest.fn(),
+            addToolResult: jest.fn(),
+            applyFilters,
+            sendEvent: jest.fn(),
           },
         }}
       />
@@ -249,16 +249,7 @@ describe('CarouselTool', () => {
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
           toolProps={{
-            message: buildMessage(
-              { query: 'tv' },
-              { hits: makeHits(2), nbHits: 100, queryID: 'abc' }
-            ),
-            indexUiState: {},
-            setIndexUiState: jest.fn(),
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({}) as any) as any,
-            sendEvent: jest.fn(),
-            metadata: {
+            context: {
               messages: [],
               status: 'ready',
               isClearing: false,
@@ -269,6 +260,15 @@ describe('CarouselTool', () => {
               stop: jest.fn(),
               onReload: jest.fn(),
               onClose: jest.fn(),
+              message: buildMessage(
+                { query: 'tv' },
+                { hits: makeHits(2), nbHits: 100, queryID: 'abc' }
+              ),
+              indexUiState: {},
+              setIndexUiState: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(() => ({}) as any) as any,
+              sendEvent: jest.fn(),
             },
           }}
         />
@@ -295,16 +295,7 @@ describe('CarouselTool', () => {
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
           toolProps={{
-            message: buildMessage(
-              { query: 'tv' },
-              { hits: makeHits(1), nbHits: 1 }
-            ),
-            indexUiState: {},
-            setIndexUiState: jest.fn(),
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(() => ({}) as any) as any,
-            sendEvent: jest.fn(),
-            metadata: {
+            context: {
               messages: [],
               status: 'ready',
               isClearing: false,
@@ -315,6 +306,15 @@ describe('CarouselTool', () => {
               stop: jest.fn(),
               onReload: jest.fn(),
               onClose: jest.fn(),
+              message: buildMessage(
+                { query: 'tv' },
+                { hits: makeHits(1), nbHits: 1 }
+              ),
+              indexUiState: {},
+              setIndexUiState: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(() => ({}) as any) as any,
+              sendEvent: jest.fn(),
             },
           }}
         />
