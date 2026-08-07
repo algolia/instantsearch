@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.6.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.61...create-instantsearch-app@7.6.0) (2026-08-06)
+
+
+### Features
+
+* **examples:** modernize and expand the React Native example with Recommend, query suggestions, routing & insights adapters ([#7150](https://github.com/algolia/instantsearch/issues/7150)) ([2cdbd68](https://github.com/algolia/instantsearch/commit/2cdbd6829323459233bb277d05d9debab8df1717))
+
+
+
+
+
 ## [7.5.61](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.60...create-instantsearch-app@7.5.61) (2026-07-23)
 
 **Note:** Version bump only for package create-instantsearch-app

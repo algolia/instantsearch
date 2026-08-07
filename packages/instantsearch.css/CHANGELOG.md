@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.19.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.18.0...instantsearch.css@8.19.0) (2026-08-06)
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+* **chat:** render reasoning parts ([#7139](https://github.com/algolia/instantsearch/issues/7139)) ([415313c](https://github.com/algolia/instantsearch/commit/415313cd85df1f7aad92cc9d0726189368c98115))
+
+
+
+
+
 # [8.18.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.17.0...instantsearch.css@8.18.0) (2026-06-19)
 
 

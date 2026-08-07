@@ -105,7 +105,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -116,7 +116,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '   ' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -127,7 +127,7 @@ describe('openChat', () => {
     const sent = openChat(chat);
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });

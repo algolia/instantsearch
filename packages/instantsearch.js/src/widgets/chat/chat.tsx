@@ -202,6 +202,7 @@ type ChatWrapperProps = {
     footerComponent: ChatPromptProps['footerComponent'];
     translations: Partial<ChatPromptTranslations>;
     promptRef: { current: HTMLTextAreaElement | null };
+    autoFocus: boolean;
   };
   suggestionsProps: {
     suggestions?: string[];
@@ -325,6 +326,7 @@ function ChatWrapper({
         headerComponent: promptProps.headerComponent,
         footerComponent: promptProps.footerComponent,
         translations: promptProps.translations,
+        autoFocus: promptProps.autoFocus,
       }}
       suggestionsProps={{
         onSuggestionClick: suggestionsProps.onSuggestionClick,
@@ -341,6 +343,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates,
   tools,
   showReasoning,
+  isInlineLayoutTemplate,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -350,10 +353,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
   showReasoning: boolean;
+  isInlineLayoutTemplate: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
-  let wasOpen = false;
 
   // Template wrappers are rendered as component types downstream. Recreating
   // them each render would make Preact remount the chat subtree (and drop
@@ -579,6 +582,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       suggestions,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
+      '~consumeInputFocus': consumeInputFocus,
+      '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
     } = props;
 
     if (__DEV__ && error) {
@@ -786,6 +791,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             footerComponent: stablePromptFooterComponent,
             translations: promptTranslations,
             promptRef,
+            autoFocus: !isOpenStatePersistenceEnabled || isInlineLayoutTemplate,
           }}
           state={state}
           suggestionsProps={{
@@ -800,7 +806,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       );
     }
 
-    const shouldFocusPrompt = !wasOpen && open;
+    const shouldFocusPrompt = consumeInputFocus?.() ?? false;
 
     rerender();
 
@@ -809,8 +815,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         promptRef.current?.focus();
       });
     }
-
-    wasOpen = open;
   };
 };
 
@@ -1148,6 +1152,7 @@ export default (function chat<
     templates,
     tools,
     showReasoning,
+    isInlineLayoutTemplate,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>

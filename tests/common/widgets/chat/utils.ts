@@ -1,13 +1,11 @@
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
-import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import type { Act } from '../../common';
+import type { Chat } from 'instantsearch.js/es/lib/chat';
 
-export const createDefaultWidgetParams = (chat?: Chat<any>) => ({
-  agentId: 'agentId',
-  chat: chat ?? new Chat({}),
-});
+export const createDefaultWidgetParams = (chat?: Chat<any>) =>
+  chat === undefined ? { agentId: 'agentId' } : { chat };
 
 // The chat is opened by clicking the `chatTrigger` widget's button; tests
 // using this helper must mount a `chatTrigger`/`<ChatTrigger />` alongside the
