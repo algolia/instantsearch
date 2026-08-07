@@ -2631,7 +2631,6 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id',
-            agentId: 'agentId',
             toolCallId: 'search-call-id',
           }),
           expect.objectContaining({
@@ -2716,7 +2715,6 @@ export function createOptionsTests(
               eventName: 'items_shown',
               objectIDs: ['123'],
               queryID: 'message_assistant-message-id',
-              agentId: 'agentId',
               toolCallId,
             }),
             expect.any(Object)
@@ -2803,7 +2801,6 @@ export function createOptionsTests(
             objectIDs: ['123'],
             positions: [1],
             queryID: 'message_assistant-message-id',
-            agentId: 'agentId',
             toolCallId: 'display-call-id',
           }),
           expect.objectContaining({
@@ -2893,7 +2890,6 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id',
-            agentId: 'agentId',
             toolCallId: 'display-call-id',
           }),
           expect.objectContaining({
@@ -2963,7 +2959,6 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id-1',
-            agentId: 'agentId',
             toolCallId: 'display-call-id-assistant-message-id-1',
           }),
           expect.any(Object)
@@ -2974,7 +2969,6 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id-2',
-            agentId: 'agentId',
             toolCallId: 'display-call-id-assistant-message-id-2',
           }),
           expect.any(Object)

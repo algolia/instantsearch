@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { act, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { CACHE_KEY, Chat } from 'instantsearch.js/es/lib/chat/chat';
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
@@ -11,6 +11,9 @@ import { renderToString } from 'react-dom/server';
 
 import { InstantSearch } from '../../components/InstantSearch';
 import { InstantSearchSSRProvider } from '../../components/InstantSearchSSRProvider';
+import * as serverContext from '../../lib/useInstantSearchServerContext';
+import * as ssrContext from '../../lib/useInstantSearchSSRContext';
+import * as hydration from '../../lib/useIsHydrated';
 import { getServerState } from '../../server/getServerState';
 import { useChat } from '../useChat';
 
@@ -33,18 +36,23 @@ function createHydrationContainer(html: string) {
   return container;
 }
 
-function createApp(props: Record<string, unknown>) {
+function createApp(
+  props: Record<string, unknown>,
+  onRender?: (open: boolean) => void
+) {
   function ChatProbe() {
-    const { messages, status, suggestions, id, error } = useChat<any>({
+    const { messages, status, suggestions, id, error, open } = useChat<any>({
       agentId,
       disableTriggerValidation: true,
       requiresSearch: false,
       ...props,
     } as any);
+    onRender?.(open);
 
     return (
       <span
         data-testid="probe"
+        data-open={String(open)}
         data-status={status}
         data-chat-id={id}
         data-error={error ? error.message : ''}
@@ -58,8 +66,10 @@ function createApp(props: Record<string, unknown>) {
 
   return function App({
     serverState,
+    showChat = true,
   }: {
     serverState?: InstantSearchServerState;
+    showChat?: boolean;
   }) {
     return (
       <InstantSearchSSRProvider {...serverState}>
@@ -67,11 +77,32 @@ function createApp(props: Record<string, unknown>) {
           searchClient={createSearchClient({})}
           indexName="indexName"
         >
-          <ChatProbe />
+          {showChat ? <ChatProbe /> : null}
         </InstantSearch>
       </InstantSearchSSRProvider>
     );
   };
+}
+
+function requireWithoutSyncExternalStore(): typeof hydration.useIsHydrated {
+  const legacyReact: Record<string, unknown> = { ...React };
+  delete legacyReact.useSyncExternalStore;
+  jest.doMock('react', () => legacyReact);
+  jest.doMock('../../lib/useInstantSearchSSRContext', () => ssrContext);
+  jest.doMock('../../lib/useInstantSearchServerContext', () => serverContext);
+
+  try {
+    let legacy!: typeof hydration.useIsHydrated;
+    jest.isolateModules(() => {
+      ({ useIsHydrated: legacy } = require('../../lib/useIsHydrated'));
+    });
+
+    return legacy;
+  } finally {
+    jest.dontMock('react');
+    jest.dontMock('../../lib/useInstantSearchSSRContext');
+    jest.dontMock('../../lib/useInstantSearchServerContext');
+  }
 }
 
 async function renderServerMarkup(App: ReturnType<typeof createApp>) {
@@ -86,6 +117,10 @@ async function renderServerMarkup(App: ReturnType<typeof createApp>) {
 describe('useChat server rendering', () => {
   beforeEach(() => {
     sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('renders no messages passed as a connector option', async () => {
@@ -234,5 +269,91 @@ describe('useChat server rendering', () => {
       root.unmount();
     });
     container.remove();
+  });
+
+  it('hydrates closed before exposing persisted open state', async () => {
+    const renderedOpenStates: boolean[] = [];
+    const App = createApp({ persistence: true }, (open) => {
+      renderedOpenStates.push(open);
+    });
+    const { serverState, html } = await renderServerMarkup(App);
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+    expect(html).toContain('data-open="false"');
+    renderedOpenStates.length = 0;
+
+    const container = createHydrationContainer(html);
+    const recoverableErrors: string[] = [];
+    let root!: ReturnType<typeof hydrateRoot>;
+
+    await act(async () => {
+      root = hydrateRoot(container, <App serverState={serverState} />, {
+        onRecoverableError: (error) => {
+          recoverableErrors.push(String(error));
+        },
+      });
+    });
+
+    expect(renderedOpenStates[0]).toBe(false);
+    expect(recoverableErrors).toEqual([]);
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-testid="probe"]')).toHaveAttribute(
+        'data-open',
+        'true'
+      );
+    });
+
+    await act(async () => {
+      root.unmount();
+    });
+    container.remove();
+  });
+
+  it('restores persisted open state on the first late render with legacy hydration', async () => {
+    const legacyUseIsHydrated = requireWithoutSyncExternalStore();
+    jest
+      .spyOn(hydration, 'useIsHydrated')
+      .mockImplementation(legacyUseIsHydrated);
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const serverState = { initialResults: {} };
+
+    const initialStates: boolean[] = [];
+    const InitialApp = createApp({ persistence: true }, (open) => {
+      initialStates.push(open);
+    });
+    const initial = render(<InitialApp serverState={serverState} />);
+
+    await waitFor(() => {
+      expect(initialStates).toContain(true);
+    });
+    expect(initialStates[0]).toBe(false);
+    initial.unmount();
+
+    const lateStates: boolean[] = [];
+    const LateApp = createApp({ persistence: true }, (open) => {
+      lateStates.push(open);
+    });
+    const late = render(<LateApp serverState={serverState} showChat={false} />);
+
+    late.rerender(<LateApp serverState={serverState} showChat={true} />);
+
+    await waitFor(() => {
+      expect(
+        late.container.querySelector('[data-testid="probe"]')
+      ).toHaveAttribute('data-open', 'true');
+    });
+    expect(lateStates[0]).toBe(true);
+    expect(lateStates).not.toContain(false);
+    late.unmount();
+
+    const clientStates: boolean[] = [];
+    const ClientApp = createApp({ persistence: true }, (open) => {
+      clientStates.push(open);
+    });
+    const client = render(<ClientApp />);
+
+    expect(clientStates[0]).toBe(true);
+    client.unmount();
   });
 });

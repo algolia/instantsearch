@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.41.0...react-instantsearch-core@7.42.0) (2026-08-06)
+
+
+### Bug Fixes
+
+* **chat:** make Chat server renderable ([#7138](https://github.com/algolia/instantsearch/issues/7138)) ([8f16877](https://github.com/algolia/instantsearch/commit/8f168775adc245ee72863e5963fbae537c4a76ec))
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+
+
+
+
+
 ## [7.41.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.40.0...react-instantsearch-core@7.41.0) (2026-07-23)
 
 **Note:** Version bump only for package react-instantsearch-core
