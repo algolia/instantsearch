@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.41.0...react-instantsearch@7.42.0) (2026-08-06)
+
+
+### Bug Fixes
+
+* **chat:** make Chat server renderable ([#7138](https://github.com/algolia/instantsearch/issues/7138)) ([8f16877](https://github.com/algolia/instantsearch/commit/8f168775adc245ee72863e5963fbae537c4a76ec))
+* **chat:** update query extraction in search index tool ([#7149](https://github.com/algolia/instantsearch/issues/7149)) ([62a45e5](https://github.com/algolia/instantsearch/commit/62a45e54686f4c61af3f2d14e243e7ba8e5747b5))
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+* **chat:** built in support for agentic insights events [CEC-1465] ([#7114](https://github.com/algolia/instantsearch/issues/7114)) ([f7c7f52](https://github.com/algolia/instantsearch/commit/f7c7f52aac694f2346c9433e3f43cb8bb18840e3))
+* **chat:** render reasoning parts ([#7139](https://github.com/algolia/instantsearch/issues/7139)) ([415313c](https://github.com/algolia/instantsearch/commit/415313cd85df1f7aad92cc9d0726189368c98115))
+* **chat:** render v1 display results from tool input ([#7137](https://github.com/algolia/instantsearch/issues/7137)) ([4f777dc](https://github.com/algolia/instantsearch/commit/4f777dce22025ca0ab2f7c93f10a13b8634ff86c))
+
+
+
+
+
 # [7.41.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.40.0...react-instantsearch@7.41.0) (2026-07-23)
 
 

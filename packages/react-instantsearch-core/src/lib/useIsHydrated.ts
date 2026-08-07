@@ -7,6 +7,10 @@ const subscribe = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
+type InternalInstantSearchSSRContext = {
+  hydrationCompleteRef?: { current: boolean };
+};
+
 function useNativeIsHydrated() {
   return React.useSyncExternalStore(
     subscribe,
@@ -21,17 +25,18 @@ function useNativeIsHydrated() {
 // `InstantSearchSSRProvider` flow: the server context covers state collection,
 // and the SSR context covers HTML rendering and hydration.
 //
-// This can cost an extra render: a mount inside a provider that carries server
-// state is withheld once even when there is no server markup to reproduce. A
-// mount outside both contexts is never withheld.
-//
 // The shim's React 16 and 17 fallback ignores the server snapshot, so using it
-// here would not change this limitation.
+// here would not distinguish initial hydration from later provider children.
 function useLegacyIsHydrated() {
   const serverContext = useInstantSearchServerContext();
   const ssrContext = useInstantSearchSSRContext();
   const isServerRendered = serverContext !== null || ssrContext !== null;
-  const [isHydrated, setIsHydrated] = React.useState(!isServerRendered);
+  const isProviderHydrated =
+    (ssrContext as InternalInstantSearchSSRContext | null)?.hydrationCompleteRef
+      ?.current === true;
+  const [isHydrated, setIsHydrated] = React.useState(
+    !isServerRendered || isProviderHydrated
+  );
 
   React.useEffect(() => {
     setIsHydrated(true);

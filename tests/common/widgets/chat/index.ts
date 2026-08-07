@@ -9,18 +9,20 @@ import { createTemplatesTests } from './templates';
 import { createTranslationsTests } from './translations';
 
 import type { TestOptions, TestSetup } from '../../common';
-import type { ChatConnectorParams } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ChatWidget } from 'instantsearch.js/es/widgets/chat/chat';
 import type { ChatProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<ChatWidget>[0];
-// Explicitly adding ChatConnectorParams back. For some reason
-// ChatConnectorParams are not inferred when Omit is used with WidgetParams.
-export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
-  ChatConnectorParams & {
-    renderChat?: boolean;
-    renderRefinements?: boolean;
-  };
+type DistributiveOmit<TValue, TKey extends PropertyKey> = TValue extends unknown
+  ? Omit<TValue, TKey>
+  : never;
+export type JSChatWidgetParams = DistributiveOmit<
+  JSBaseWidgetParams,
+  'container'
+> & {
+  renderChat?: boolean;
+  renderRefinements?: boolean;
+};
 export type ReactChatWidgetParams = ChatProps<unknown> & {
   renderChat?: boolean;
   renderRefinements?: boolean;
@@ -48,6 +50,7 @@ export function createChatWidgetTests(
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
+    sessionStorage.clear();
   });
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {
