@@ -82,16 +82,26 @@ function readGitLines(args) {
     .filter(Boolean);
 }
 
+// `--changed` covers everything CI's full lint would see on this branch: files
+// committed since `origin/master`, plus staged, unstaged and untracked work.
+// Restricting it to the committed diff makes in-progress edits invisible, so it
+// reports clean on files that the full lint fails on.
 function getChangedFiles() {
   const mergeBase = readGitLines(['merge-base', 'HEAD', 'origin/master'])[0];
 
-  return readGitLines([
-    'diff',
-    '--name-only',
-    '--diff-filter=ACMR',
-    mergeBase,
-    'HEAD',
-  ]).filter(lintableFile);
+  return dedupe([
+    ...readGitLines([
+      'diff',
+      '--name-only',
+      '--diff-filter=ACMR',
+      mergeBase,
+      'HEAD',
+    ]),
+    ...readGitLines(['diff', '--name-only', '--diff-filter=ACMR', 'HEAD']),
+    ...readGitLines(['ls-files', '--others', '--exclude-standard']),
+  ])
+    .filter(lintableFile)
+    .filter((filePath) => existsSync(path.join(repoRoot, filePath)));
 }
 
 function getStagedFiles() {
