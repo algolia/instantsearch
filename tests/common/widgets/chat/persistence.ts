@@ -1,5 +1,8 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import { openChat } from './utils';
 
@@ -12,8 +15,183 @@ export function createPersistenceTests(
   { act }: Required<TestOptions>
 ) {
   describe('persistence', () => {
+    const openStateKey = 'instantsearch-chat-open-state-chat';
+
+    afterEach(() => {
+      sessionStorage.removeItem(openStateKey);
+    });
+
+    test.each([
+      ['omitted', undefined],
+      ['true', true],
+    ])(
+      'enables message and open persistence when %s',
+      async (_, persistence) => {
+        const previousMessages: UIMessage[] = [
+          {
+            id: 'previous',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'Previous persisted answer' }],
+          },
+        ];
+        sessionStorage.clear();
+        sessionStorage.setItem(openStateKey, 'true');
+        sessionStorage.setItem(
+          'instantsearch-chat-initial-messages-agentId',
+          JSON.stringify(previousMessages)
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient: createSearchClient(),
+          },
+          widgetParams: {
+            javascript: { agentId: 'agentId', persistence },
+            react: { agentId: 'agentId', persistence },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+          'ais-Chat-container--open'
+        );
+        expect(document.body).toHaveTextContent('Previous persisted answer');
+      }
+    );
+
+    test('persists open state without restoring messages', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'agentId',
+            persistence: { messages: false, open: true },
+          },
+          react: {
+            agentId: 'agentId',
+            persistence: { messages: false, open: true },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+
+      await act(async () => {
+        userEvent.click(document.querySelector('.ais-ChatHeader-close')!);
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(sessionStorage.getItem(openStateKey)).toBe('false');
+    });
+
+    test('restores messages without restoring open state', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Previous persisted answer' }],
+        },
+      ];
+      sessionStorage.setItem(
+        'instantsearch-chat-initial-messages-agentId',
+        JSON.stringify(previousMessages)
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'agentId',
+            persistence: { messages: true, open: false },
+          },
+          react: {
+            agentId: 'agentId',
+            persistence: { messages: true, open: false },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
+
+      await openChat(act);
+
+      expect(document.body).toHaveTextContent('Previous persisted answer');
+    });
+
+    test('restores open state with a caller-owned Chat', async () => {
+      sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
+      const customChat = new Chat({
+        persistence: false,
+        transport: {} as any,
+      });
+      customChat.messages = [
+        {
+          id: 'owned',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Caller-owned message' }],
+        },
+      ];
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        },
+        widgetParams: {
+          javascript: { chat: customChat, persistence: { open: true } },
+          react: { chat: customChat, persistence: { open: true } },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).toHaveClass(
+        'ais-Chat-container--open'
+      );
+      expect(document.body).toHaveTextContent('Caller-owned message');
+      expect(customChat.messages).toHaveLength(1);
+    });
+
     test('does not restore persisted messages when persistence is disabled', async () => {
       sessionStorage.clear();
+      sessionStorage.setItem(openStateKey, 'true');
       const searchClient = createSearchClient();
       const cacheKey = 'instantsearch-chat-initial-messages';
       const previousMessages: UIMessage[] = [
@@ -55,6 +233,14 @@ export function createPersistenceTests(
           vue: {},
         },
       });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.querySelector('.ais-Chat-container')).not.toHaveClass(
+        'ais-Chat-container--open'
+      );
 
       await openChat(act);
 

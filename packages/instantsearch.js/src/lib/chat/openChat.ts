@@ -46,13 +46,17 @@ export function openChat(
     return false;
   }
 
-  chatRenderState.setOpen?.(true);
-
   const trimmed = message?.trim() ?? '';
   if (!trimmed) {
-    chatRenderState.focusInput?.();
+    if (chatRenderState.focusInput) {
+      chatRenderState.focusInput();
+    } else {
+      chatRenderState.setOpen?.(true);
+    }
     return false;
   }
+
+  chatRenderState.setOpen?.(true);
 
   if (isChatBusy(chatRenderState) || !chatRenderState.sendMessage) {
     return false;

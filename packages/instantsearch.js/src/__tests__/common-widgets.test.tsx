@@ -6,6 +6,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
+import { Chat as InstantSearchChat } from '../lib/chat';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -42,6 +43,7 @@ import {
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -689,22 +691,36 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       );
     }
 
+    const createChatWidget = () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+
+      if (chatWidgetParams.chat === undefined) {
+        return chat<RecordWithObjectID>({
+          container,
+          ...chatWidgetParams,
+        });
+      }
+
+      if (!(chatWidgetParams.chat instanceof InstantSearchChat)) {
+        throw new Error('Expected the caller-supplied Chat instance.');
+      }
+
+      return chat<RecordWithObjectID>({
+        container,
+        ...chatWidgetParams,
+        chat: chatWidgetParams.chat,
+      });
+    };
+
     instantsearch(instantSearchOptions)
       .addWidgets([
         ...refinementsWidgets,
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
-        ...(renderChat
-          ? [
-              chat({
-                container: document.body.appendChild(
-                  document.createElement('div')
-                ),
-                ...chatWidgetParams,
-              }),
-            ]
-          : []),
+        ...(renderChat ? [createChatWidget()] : []),
       ])
       .on('error', () => {
         /*
