@@ -241,8 +241,7 @@ export function createDisplayResultsToolComponent<
 
       const items = results.reduce<Array<DisplayResultsItem<TObject>>>(
         (renderedItems, result) => {
-          // The backend sends this tool object IDs only; the records come from
-          // whichever tool of the conversation fetched them.
+          // The backend sends this tool object IDs only.
           const hydrated = records?.get(result.objectID) as
             | RecordWithObjectID<TObject>
             | undefined;

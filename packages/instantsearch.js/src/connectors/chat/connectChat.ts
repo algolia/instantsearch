@@ -93,13 +93,9 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   tools: ClientSideTools;
   /**
-   * The records the chat's tools have fetched, keyed by `objectID`.
-   *
-   * Tools that search return full records while the tools that present them are
-   * handed only object IDs, so this is the shared lookup between the two. Every
-   * tool call that returned `hits` contributes them, merged into one map with the
-   * last write winning per `objectID`. It is attached to every tool as `records`
-   * too, which is how a tool's `layoutComponent` reads it.
+   * The records the chat's tools have fetched, keyed by `objectID`: every tool
+   * call that returned `hits` contributes them, last write winning. Attached to
+   * every tool too, which is how a `layoutComponent` reads it.
    */
   records: ChatRecordsStore;
   /**
@@ -403,11 +399,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
-    // One store per chat widget, outliving every render: tools read records from
-    // it, and it is fed as messages arrive rather than derived per render. It has
-    // to be collected here rather than by the tool that searched, because that
-    // tool renders nothing when the display-results tool is presenting its
-    // records — and because a record has to outlive the render that produced it.
+    // Collected here rather than by the tool that searched: that tool renders
+    // nothing while display-results presents its records, and a record has to
+    // outlive the render that produced it.
     const records = createChatRecordsStore();
     const collectRecords = () =>
       collectChatRecords(_chatInstance.messages, records);
@@ -765,8 +759,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         safelyRunOnBrowser(() => {
           _chatInstance['~registerErrorCallback'](render);
-          // Registered before `render` so a delta's records are collected by the
-          // time the tools of that delta render.
+          // Before `render`, so a delta's records are collected by the time the
+          // tools of that delta render.
           _chatInstance['~registerMessagesCallback'](collectRecords);
           _chatInstance['~registerMessagesCallback'](render);
           _chatInstance['~registerStatusCallback'](render);
@@ -837,10 +831,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return updateStateFromSearchToolInput(params, helper);
         }
 
-        // A conversation restored from storage, or one a server render was
-        // handed, never emitted the messages callback above. Collecting here as
-        // well covers it: merging is idempotent, so a second pass over records
-        // already collected changes nothing.
+        // A restored or server-rendered conversation never emitted the messages
+        // callback above; collecting is idempotent, so covering it here is free.
         collectRecords();
 
         const insightsEventContext: ChatInsightsEventContext = {

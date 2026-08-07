@@ -834,8 +834,7 @@ describe('connectChat', () => {
       });
       const { getRenderState } = getInitializedWidget({
         persistence: false,
-        // A restored conversation: the store is collected from it, which is what
-        // keeps a rehydrated chat resolving the same records.
+        // A restored conversation, collected without a messages callback.
         initialMessages: [
           {
             id: '1',
@@ -879,7 +878,7 @@ describe('connectChat', () => {
       expect(records.get('4')).toEqual({ objectID: '4', name: 'Boot' });
       expect(records.get('1')).toEqual({ objectID: '1', name: 'Runner Pro' });
 
-      // The store outlives every render rather than being derived per render.
+      // The store outlives renders rather than being derived per render.
       expect(getRenderState().records).toBe(records);
     });
 

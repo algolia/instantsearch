@@ -55,7 +55,7 @@ const createMessages = (
     },
   ] as ClientSideToolComponentProps['messages'];
 
-// The search tool fetched the records; this tool only consumes them.
+// This tool only consumes records; the search tool fetched them.
 const conversationOf = (
   messages: ClientSideToolComponentProps['messages']
 ) => ({
@@ -867,8 +867,8 @@ describe('createDisplayResultsTool', () => {
     );
 
     expect(screen.getAllByTestId('name-1')).toHaveLength(2);
-    // Every search of the conversation feeds one map, so the newest copy of a
-    // record wins even when its search ran after this tool.
+    // One map for the whole conversation, so the newest copy of a record wins
+    // even when its search ran after this tool.
     expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent(
       'Future Runner'
     );

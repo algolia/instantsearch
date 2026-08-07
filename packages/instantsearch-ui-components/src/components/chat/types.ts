@@ -516,9 +516,8 @@ export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   messages?: ChatMessageBase[];
   /**
-   * The records the chat's search tools have fetched, keyed by `objectID`. Any
-   * tool the backend hands plain object IDs to hydrates them from here:
-   * `records.get(objectID)`.
+   * The records the chat's tools have fetched. A tool handed plain object IDs
+   * hydrates them with `records.get(objectID)`.
    */
   records?: ChatRecordsStore;
   insightsEventContext?: ChatInsightsEventContext;
@@ -544,10 +543,7 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
-  /**
-   * The chat's record store, attached by the connector. Shared by every tool of
-   * a chat, and forwarded to `layoutComponent` as `records`.
-   */
+  /** Attached by the connector, one per chat; reaches `layoutComponent`. */
   records?: ChatRecordsStore;
   sendEvent?: SendEventForHits;
   insightsEventContext?: ChatInsightsEventContext;

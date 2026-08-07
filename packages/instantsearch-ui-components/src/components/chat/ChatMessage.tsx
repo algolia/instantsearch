@@ -232,9 +232,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       ...userTranslations,
     };
 
-    // The connector owns one store per chat and attaches it to every tool. A
-    // message rendered without one (standalone, or a hand-built `tools`) falls
-    // back to collecting from the conversation it was handed.
+    // A message rendered without a connector-attached store falls back to
+    // collecting from the conversation it was handed.
     let fallbackRecords: ChatRecordsStore | undefined;
     const getFallbackRecords = () => {
       fallbackRecords = fallbackRecords || collectChatRecords(messages);

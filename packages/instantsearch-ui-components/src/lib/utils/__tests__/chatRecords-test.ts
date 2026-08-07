@@ -203,8 +203,8 @@ describe('collectChatRecords', () => {
   });
 
   test('collects by output shape, so any tool name contributes', () => {
-    // Covers the recommend tool and the Algolia MCP Server's suffixed search
-    // tool name alike: what matters is that the call returned hits.
+    // Recommend and the MCP Server's suffixed search name alike: what matters
+    // is that the call returned hits.
     const store = collectChatRecords([
       assistantMessage('1', [
         searchPart(
@@ -258,8 +258,8 @@ describe('collectChatRecords', () => {
   });
 
   test('keeps records of a message that is no longer in the conversation', () => {
-    // A regenerated turn drops its search call; anything still referring to that
-    // record resolves until a newer call replaces it.
+    // A regenerated turn drops its search call, but the record stays resolvable
+    // until a newer call replaces it.
     const store = createChatRecordsStore();
 
     collectChatRecords(
@@ -279,8 +279,7 @@ describe('collectChatRecords', () => {
   });
 
   test('collects a conversation restored from storage', () => {
-    // The rehydration path: the same collection over restored messages resolves
-    // the records the session that produced them did.
+    // The rehydration path: restored messages resolve the same records.
     const restored = JSON.parse(
       JSON.stringify([
         assistantMessage('1', [

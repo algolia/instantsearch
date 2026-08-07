@@ -1189,7 +1189,6 @@ describe('ChatMessage', () => {
         messages={[message]}
         status="ready"
         tools={{
-          // The search tool fetched the records; the custom tool consumes them.
           algolia_search_index: {
             addToolResult: jest.fn(),
             applyFilters: jest.fn(),
