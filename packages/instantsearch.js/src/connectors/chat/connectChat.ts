@@ -25,7 +25,7 @@ import {
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
 
-import type { ResponseScopedOnToolCallCallback } from '../../lib/ai-lite/abstract-chat';
+import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -502,6 +502,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
+    let chatSubscriptionUnsubscribers: Array<() => void> = [];
+
+    const unsubscribeChatCallbacks = () => {
+      chatSubscriptionUnsubscribers
+        .splice(0)
+        .forEach((unsubscribe) => unsubscribe());
+    };
 
     // Extract suggestions from the last assistant message's data-suggestions part
     const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
@@ -761,7 +768,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           return Promise.resolve();
-        }) satisfies ResponseScopedOnToolCallCallback<TUiMessage>,
+        }) satisfies ChatOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
     };
 
@@ -853,22 +860,25 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         const hasExistingMessages = _chatInstance.messages.length > 0;
 
-        // Set initialMessages before registering callbacks to avoid
-        // triggering re-renders during init. A server render owns no
-        // conversation, so it leaves the instance empty.
+        // Unsubscribe previous callbacks before setting initialMessages, then
+        // register the current callbacks after to avoid re-renders during init.
+        // A server render owns no conversation, so it leaves the instance empty.
         safelyRunOnBrowser(() => {
+          unsubscribeChatCallbacks();
           if (initialMessages?.length && !resume && !hasExistingMessages) {
             _chatInstance.messages = initialMessages;
           }
         });
 
         safelyRunOnBrowser(() => {
-          _chatInstance['~registerErrorCallback'](render);
-          // Before `render`, so a delta's records are collected by the time the
-          // tools of that delta render.
-          _chatInstance['~registerMessagesCallback'](collectRecords);
-          _chatInstance['~registerMessagesCallback'](render);
-          _chatInstance['~registerStatusCallback'](render);
+          chatSubscriptionUnsubscribers = [
+            _chatInstance['~registerErrorCallback'](render),
+            // Before `render`, so a delta's records are collected by the time
+            // the tools of that delta render.
+            _chatInstance['~registerMessagesCallback'](collectRecords),
+            _chatInstance['~registerMessagesCallback'](render),
+            _chatInstance['~registerStatusCallback'](render),
+          ];
         });
 
         // Resuming and sending reach the network, which a server render must
@@ -1037,6 +1047,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       dispose() {
         feedbackAbortController?.abort();
+        unsubscribeChatCallbacks();
         unmountFn();
       },
 

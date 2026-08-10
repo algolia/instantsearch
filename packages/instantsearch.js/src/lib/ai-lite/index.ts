@@ -74,6 +74,7 @@ export type {
   ChatInit,
   IdGenerator,
   ChatOnErrorCallback,
+  ToolResultSubmission,
   ChatOnToolCallCallback,
   ChatOnFinishCallback,
   ChatOnDataCallback,
