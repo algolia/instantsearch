@@ -161,7 +161,7 @@ export function createDisplayResultsToolComponent<
   Fragment,
   useEffect,
   useRef,
-}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useEffect' | 'useRef'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {

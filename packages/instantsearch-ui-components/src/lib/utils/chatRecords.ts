@@ -14,7 +14,7 @@ export type ChatRecords = Record<string, ChatRecord>;
 export type ChatRecordsStore = {
   get: (objectID: string) => ChatRecord | undefined;
   has: (objectID: string) => boolean;
-  /** The live map, not a copy — treat it as read-only. */
+  /** The current map, not a copy — read-only, and replaced by `clear()`. */
   getAll: () => ChatRecords;
   /** Last write wins per `objectID`; records without one are skipped. */
   merge: (records: Array<ChatRecord | null | undefined>) => void;
