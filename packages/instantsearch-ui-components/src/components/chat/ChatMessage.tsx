@@ -20,6 +20,7 @@ import type {
   ChatToolMessage,
   ClientSideTool,
   ClientSideTools,
+  TextUIPart,
 } from './types';
 import type {
   ComponentProps,
@@ -99,6 +100,29 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
+export type ChatMessageTextComponentProps = {
+  /**
+   * The text part to render
+   */
+  part: TextUIPart;
+  /**
+   * The message containing the text part
+   */
+  message: ChatMessageBase;
+  /**
+   * The full conversation, when available
+   */
+  messages?: ChatMessageBase[];
+  /**
+   * The current chat status
+   */
+  status: ChatStatus;
+  /**
+   * The text part's index within the message
+   */
+  partIndex: number;
+};
+
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
@@ -139,6 +163,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * Footer content
    */
   footerComponent?: () => JSX.Element;
+  /**
+   * Custom text part renderer
+   */
+  textComponent?: (props: ChatMessageTextComponentProps) => JSX.Element;
   /**
    * The index UI state
    */
@@ -193,7 +221,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
-export function createChatMessageComponent({ createElement }: Renderer) {
+export function createChatMessageComponent({
+  createElement,
+  Fragment,
+}: Renderer) {
   const Button = createButtonComponent({ createElement });
   const ChatMessageReasoning = createChatMessageReasoningComponent({
     createElement,
@@ -211,6 +242,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
+      textComponent: TextComponent,
       tools = {},
       indexUiState,
       setIndexUiState,
@@ -329,6 +361,19 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           part.text.endsWith('</context>')
         ) {
           return null;
+        }
+        if (TextComponent) {
+          return (
+            <Fragment key={`${message.id}-${index}`}>
+              <TextComponent
+                part={part}
+                message={message}
+                messages={messages}
+                status={status}
+                partIndex={index}
+              />
+            </Fragment>
+          );
         }
         if (!parseMarkdown) {
           // Render the literal text. The `ais-ChatMessage-text` class applies

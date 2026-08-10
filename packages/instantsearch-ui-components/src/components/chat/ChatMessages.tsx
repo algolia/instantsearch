@@ -417,6 +417,10 @@ export function createChatMessagesComponent({
         : props.assistantMessageProps;
     const showReasoning = messageProps?.showReasoning;
     const parseMarkdown = messageProps?.parseMarkdown;
+    const textComponent = messageProps?.textComponent;
+    // Custom text components receive the conversation, so their completed rows
+    // must update with it. Keep the default renderer's streaming optimization.
+    const textComponentMessages = textComponent ? props.messages : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
     // are why this resolves by own-key presence rather than key by key.
@@ -448,6 +452,8 @@ export function createChatMessagesComponent({
         messageFeedback,
         showReasoning,
         parseMarkdown,
+        textComponent,
+        textComponentMessages,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,

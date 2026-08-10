@@ -13,6 +13,7 @@ import {
 } from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
+import type { ChatMessageTextComponentProps } from 'instantsearch-ui-components';
 
 const ChatMessage = createChatMessageComponent({
   createElement,
@@ -383,7 +384,10 @@ describe('ChatMessage', () => {
     );
   });
 
-  test('keeps reasoning disclosures in message part order', () => {
+  test('keeps reasoning and tool renderers in message part order with a custom text component', () => {
+    const textComponent = jest.fn(({ part }: ChatMessageTextComponentProps) => (
+      <span data-testid="custom-text">{part.text}</span>
+    ));
     const { container, getAllByRole, getByText, queryAllByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -414,6 +418,7 @@ describe('ChatMessage', () => {
         }}
         onClose={jest.fn()}
         showReasoning={true}
+        textComponent={textComponent}
       />
     );
 
@@ -426,6 +431,10 @@ describe('ChatMessage', () => {
     expect(children[1]).toContainElement(getByText('Tool result'));
     expect(children[2]).toBe(disclosures[1]);
     expect(children[3]).toContainElement(getByText('Final answer'));
+    expect(children[3]).toContainElement(
+      container.querySelector('[data-testid="custom-text"]')
+    );
+    expect(textComponent).toHaveBeenCalledTimes(1);
     expect(queryAllByRole('region')).toHaveLength(0);
   });
 
@@ -911,6 +920,65 @@ describe('ChatMessage', () => {
     expect(container.querySelector('em')).not.toBeNull();
     expect(container.querySelector('em')!.textContent).toBe('b');
     expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
+  });
+
+  test('renders each text part with a custom component and its message context', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        { type: 'text' as const, text: 'First answer' },
+        { type: 'step-start' as const },
+        { type: 'text' as const, text: 'Second answer' },
+      ],
+    };
+    const textComponent = jest.fn(
+      ({ part, partIndex }: ChatMessageTextComponentProps) => (
+        <p data-part-index={partIndex}>{part.text}</p>
+      )
+    );
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        status="streaming"
+        tools={{}}
+        onClose={jest.fn()}
+        textComponent={textComponent}
+      />
+    );
+
+    expect(
+      textComponent.mock.calls.map(([props]) => ({
+        part: props.part,
+        message: props.message,
+        messages: props.messages,
+        status: props.status,
+        partIndex: props.partIndex,
+      }))
+    ).toEqual([
+      {
+        part: message.parts[0],
+        message,
+        messages: undefined,
+        status: 'streaming',
+        partIndex: 0,
+      },
+      {
+        part: message.parts[2],
+        message,
+        messages: undefined,
+        status: 'streaming',
+        partIndex: 2,
+      },
+    ]);
+    expect(
+      Array.from(container.querySelectorAll('[data-part-index]')).map(
+        (element) => element.textContent
+      )
+    ).toEqual(['First answer', 'Second answer']);
   });
 
   test('renders text parts as plain text when parseMarkdown is false', () => {
