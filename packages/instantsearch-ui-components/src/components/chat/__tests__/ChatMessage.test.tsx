@@ -9,11 +9,11 @@ import { Fragment, createElement } from 'preact';
 import {
   createChatMessageComponent,
   type ChatMessageClassNames,
+  type ChatMessageTextComponentProps,
   type ChatMessageTranslations,
 } from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
-import type { ChatMessageTextComponentProps } from 'instantsearch-ui-components';
 
 const ChatMessage = createChatMessageComponent({
   createElement,

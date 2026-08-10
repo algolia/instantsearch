@@ -276,7 +276,7 @@ test('exposes Chat text component types from the public entry point', () => {
       void status;
       void partIndex;
       void context;
-      return null as never;
+      return null;
     };
     void textComponent;
   `;

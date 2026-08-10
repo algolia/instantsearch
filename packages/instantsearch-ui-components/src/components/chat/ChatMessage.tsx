@@ -166,7 +166,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Custom text part renderer
    */
-  textComponent?: (props: ChatMessageTextComponentProps) => JSX.Element;
+  textComponent?: (props: ChatMessageTextComponentProps) => JSX.Element | null;
   /**
    * The index UI state
    */
