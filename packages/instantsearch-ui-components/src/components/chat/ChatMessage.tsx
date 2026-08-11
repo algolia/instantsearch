@@ -120,7 +120,7 @@ export type ChatMessageTextComponentProps<
    */
   status: ChatStatus;
   /**
-   * The text part's index within the message
+   * The text part's index in the full `message.parts` array
    */
   partIndex: number;
 };
