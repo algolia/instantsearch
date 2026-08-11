@@ -6,6 +6,7 @@ test('preserves custom message types in Chat text component props', () => {
   const fileName = path.join(__dirname, 'chat-text-component-generic.ts');
   const source = `
     import type { ChatProps } from '../dist/es';
+    import type { ChatMessageProps } from 'instantsearch-ui-components';
     import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
     type AppMetadata = { sourceIds: string[] };
@@ -13,6 +14,30 @@ test('preserves custom message types in Chat text component props', () => {
     type MessagesProps = NonNullable<
       ChatProps<unknown, AppMessage>['messagesProps']
     >;
+    type BaseMessagesProps = NonNullable<
+      ChatProps<unknown>['messagesProps']
+    >;
+    type BaseRoleMessageProps = NonNullable<
+      BaseMessagesProps['assistantMessageProps']
+    >;
+
+    const reusableRoleMessageProps: BaseRoleMessageProps = {
+      parseMarkdown: false,
+    };
+    const baseMessage = {
+      role: 'assistant' as const,
+      id: 'base',
+      parts: [],
+    };
+    const legacyRoleMessageProps: BaseRoleMessageProps = {
+      message: baseMessage,
+      messages: [baseMessage],
+    };
+    const reusableMessageProps: Partial<
+      Omit<ChatMessageProps, 'ref' | 'key'>
+    > = {
+      parseMarkdown: false,
+    };
 
     const textComponent: NonNullable<
       NonNullable<MessagesProps['assistantMessageProps']>['textComponent']
@@ -35,6 +60,21 @@ test('preserves custom message types in Chat text component props', () => {
       userMessageProps: { textComponent },
     };
     void messagesProps;
+
+    const compatibleMessagesProps: MessagesProps = {
+      onClose() {},
+      onReload() {},
+      assistantMessageProps: reusableMessageProps,
+      userMessageProps: reusableRoleMessageProps,
+    };
+    void compatibleMessagesProps;
+
+    const legacyMessagesProps: MessagesProps = {
+      onClose() {},
+      onReload() {},
+      assistantMessageProps: legacyRoleMessageProps,
+    };
+    void legacyMessagesProps;
 
     const baseMessagesProps: NonNullable<
       ChatProps<unknown>['messagesProps']

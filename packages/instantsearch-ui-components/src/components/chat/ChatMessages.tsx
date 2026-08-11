@@ -105,6 +105,12 @@ export type ChatMessagesClassNames = {
   scrollToBottomHidden: string | string[];
 };
 
+type ChatMessageRoleProps<TMessage extends ChatMessageBase = ChatMessageBase> =
+  Partial<
+    Omit<ChatMessageProps<TMessage>, 'ref' | 'key' | 'message' | 'messages'>
+  > &
+    Partial<Pick<ChatMessageProps, 'message' | 'messages'>>;
+
 export type ChatMessagesProps<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'div'> & {
@@ -201,13 +207,11 @@ export type ChatMessagesProps<
   /**
    * Optional user message props
    */
-  userMessageProps?: Partial<Omit<ChatMessageProps<TMessage>, 'ref' | 'key'>>;
+  userMessageProps?: ChatMessageRoleProps<TMessage>;
   /**
    * Optional assistant message props
    */
-  assistantMessageProps?: Partial<
-    Omit<ChatMessageProps<TMessage>, 'ref' | 'key'>
-  >;
+  assistantMessageProps?: ChatMessageRoleProps<TMessage>;
   /**
    * Whether the scroll is at the bottom (controlled state)
    */
@@ -287,8 +291,8 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     message: TMessage;
     isCurrentMessage: boolean;
     status: ChatStatus;
-    userMessageProps?: Partial<ChatMessageProps<TMessage>>;
-    assistantMessageProps?: Partial<ChatMessageProps<TMessage>>;
+    userMessageProps?: ChatMessageRoleProps<TMessage>;
+    assistantMessageProps?: ChatMessageRoleProps<TMessage>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
     messages?: TMessage[];
@@ -373,12 +377,10 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
       <ChatMessage
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
-        message={message}
         status={status}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
-        messages={messages}
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
@@ -387,6 +389,8 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
         {...messageProps}
+        message={message}
+        messages={messages}
       />
     );
   };

@@ -1001,6 +1001,50 @@ describe('ChatMessages', () => {
         screen.getByTestId('conversation-length-assistant-3')
       ).toHaveTextContent('3');
     });
+
+    test('keeps the conversation owned by ChatMessages', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [message];
+      const textComponent = ({
+        messages: currentMessages,
+      }: ChatMessageTextComponentProps) => (
+        <span data-testid="conversation-id">{currentMessages?.[0].id}</span>
+      );
+      const createProps = (conversationId: string) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          textComponent,
+          messages: [
+            {
+              ...message,
+              id: conversationId,
+            },
+          ],
+        },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps('override-a')} />
+      );
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+
+      rerender(<MemoizedChatMessages {...createProps('override-b')} />);
+
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+    });
   });
 
   describe('parseMarkdown', () => {

@@ -312,12 +312,34 @@ test('preserves custom message types in Chat text component props', () => {
   );
   const source = `
     import type {
+      ChatMessageProps,
       ChatMessagesProps,
       UIMessage,
     } from '../dist/es';
 
     type AppMetadata = { sourceIds: string[] };
     type AppMessage = UIMessage<AppMetadata>;
+    type BaseRoleMessageProps = NonNullable<
+      ChatMessagesProps['assistantMessageProps']
+    >;
+
+    const reusableRoleMessageProps: BaseRoleMessageProps = {
+      parseMarkdown: false,
+    };
+    const baseMessage = {
+      role: 'assistant' as const,
+      id: 'base',
+      parts: [],
+    };
+    const legacyRoleMessageProps: BaseRoleMessageProps = {
+      message: baseMessage,
+      messages: [baseMessage],
+    };
+    const reusableMessageProps: Partial<
+      Omit<ChatMessageProps, 'ref' | 'key'>
+    > = {
+      parseMarkdown: false,
+    };
 
     const assistantMessageProps: NonNullable<
       ChatMessagesProps<AppMessage>['assistantMessageProps']
@@ -335,6 +357,24 @@ test('preserves custom message types in Chat text component props', () => {
       },
     };
     void assistantMessageProps;
+
+    const messagesProps: ChatMessagesProps<AppMessage> = {
+      messages: [],
+      indexUiState: {},
+      setIndexUiState() {},
+      tools: {},
+      onReload() {},
+      onClose() {},
+      assistantMessageProps: reusableMessageProps,
+      userMessageProps: reusableRoleMessageProps,
+    };
+    void messagesProps;
+
+    const legacyMessagesProps: ChatMessagesProps<AppMessage> = {
+      ...messagesProps,
+      assistantMessageProps: legacyRoleMessageProps,
+    };
+    void legacyMessagesProps;
   `;
   const compilerOptions: ts.CompilerOptions = {
     module: ts.ModuleKind.CommonJS,
