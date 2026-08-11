@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.43.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.42.0...react-instantsearch@7.43.0) (2026-08-10)
+
+
+### Features
+
+* **chat:** persist open state ([#7136](https://github.com/algolia/instantsearch/issues/7136)) ([50807b6](https://github.com/algolia/instantsearch/commit/50807b693cd300064f79e12e837cf3c21c06ef67))
+
+
+
+
+
 # [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.41.0...react-instantsearch@7.42.0) (2026-08-06)
 
 
