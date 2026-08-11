@@ -100,7 +100,9 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type ChatMessageTextComponentProps = {
+export type ChatMessageTextComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
   /**
    * The text part to render
    */
@@ -108,11 +110,11 @@ export type ChatMessageTextComponentProps = {
   /**
    * The message containing the text part
    */
-  message: ChatMessageBase;
+  message: TMessage;
   /**
    * The full conversation, when available
    */
-  messages?: ChatMessageBase[];
+  messages?: TMessage[];
   /**
    * The current chat status
    */
@@ -123,11 +125,13 @@ export type ChatMessageTextComponentProps = {
   partIndex: number;
 };
 
-export type ChatMessageProps = ComponentProps<'article'> & {
+export type ChatMessageProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
    */
-  message: ChatMessageBase;
+  message: TMessage;
   /**
    * The status of the message (e.g. whether it's still streaming)
    */
@@ -166,7 +170,9 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Custom text part renderer
    */
-  textComponent?: (props: ChatMessageTextComponentProps) => JSX.Element | null;
+  textComponent?: (
+    props: ChatMessageTextComponentProps<TMessage>
+  ) => JSX.Element | null;
   /**
    * The index UI state
    */
@@ -180,7 +186,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * receive object IDs (e.g. display results) can hydrate records from a
    * preceding search tool's hits.
    */
-  messages?: ChatMessageBase[];
+  messages?: TMessage[];
   /**
    * Close the chat
    */
@@ -230,7 +236,9 @@ export function createChatMessageComponent({
     createElement,
   });
 
-  return function ChatMessage(userProps: ChatMessageProps) {
+  return function ChatMessage<
+    TMessage extends ChatMessageBase = ChatMessageBase,
+  >(userProps: ChatMessageProps<TMessage>) {
     const {
       classNames = {},
       message,

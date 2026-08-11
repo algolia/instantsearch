@@ -304,3 +304,59 @@ test('exposes Chat text component types from the public entry point', () => {
 
   expect(errors).toEqual([]);
 });
+
+test('preserves custom message types in Chat text component props', () => {
+  const fileName = path.join(
+    __dirname,
+    'chat-message-text-component-generic.ts'
+  );
+  const source = `
+    import type {
+      ChatMessagesProps,
+      UIMessage,
+    } from '../dist/es';
+
+    type AppMetadata = { sourceIds: string[] };
+    type AppMessage = UIMessage<AppMetadata>;
+
+    const assistantMessageProps: NonNullable<
+      ChatMessagesProps<AppMessage>['assistantMessageProps']
+    > = {
+      textComponent({ message, messages }) {
+        if (message.metadata) {
+          const metadata: AppMetadata = message.metadata;
+          void metadata.sourceIds;
+        }
+        if (messages) {
+          const conversation: AppMessage[] = messages;
+          void conversation;
+        }
+        return null;
+      },
+    };
+    void assistantMessageProps;
+  `;
+  const compilerOptions: ts.CompilerOptions = {
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmit: true,
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2020,
+  };
+  const host = ts.createCompilerHost(compilerOptions);
+  const getSourceFile = host.getSourceFile.bind(host);
+  host.getSourceFile = (sourceName, languageVersion, onError) =>
+    sourceName === fileName
+      ? ts.createSourceFile(fileName, source, languageVersion, true)
+      : getSourceFile(sourceName, languageVersion, onError);
+
+  const program = ts.createProgram([fileName], compilerOptions, host);
+  const errors = ts
+    .getPreEmitDiagnostics(program)
+    .map((diagnostic) =>
+      ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+    );
+
+  expect(errors).toEqual([]);
+});
