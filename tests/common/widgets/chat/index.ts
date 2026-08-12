@@ -6,6 +6,7 @@ import { createPersistenceTests } from './persistence';
 import { createReasoningTests } from './reasoning';
 import { createStreamingTests } from './streaming';
 import { createTemplatesTests } from './templates';
+import { createToolCancellationTests } from './tool-cancellation';
 import { createTranslationsTests } from './translations';
 
 import type { TestOptions, TestSetup } from '../../common';
@@ -60,6 +61,7 @@ export function createChatWidgetTests(
     createReasoningTests(setup, { act, skippedTests, flavor });
     createStreamingTests(setup, { act, skippedTests, flavor });
     createTemplatesTests(setup, { act, skippedTests, flavor });
+    createToolCancellationTests(setup, { act, skippedTests, flavor });
     createTranslationsTests(setup, { act, skippedTests, flavor });
   });
 }

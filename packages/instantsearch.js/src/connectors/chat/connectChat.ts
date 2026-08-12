@@ -469,6 +469,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
+    // The Algolia MCP Server suffixes its search tool with the index name
+    // (`searchIndex_products`), so those names fall back to the base tool.
+    const resolveTool = (toolName: string) =>
+      tools[toolName] ||
+      (toolName.startsWith(`${SearchIndexToolType}_`)
+        ? tools[SearchIndexToolType]
+        : undefined);
+
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
@@ -702,23 +710,28 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         sendAutomaticallyWhen,
         transport,
         shouldRepairToolInput(toolName) {
-          let tool = tools[toolName];
-          if (!tool && toolName.startsWith(`${SearchIndexToolType}_`)) {
-            tool = tools[SearchIndexToolType];
-          }
+          const tool = resolveTool(toolName);
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
-        onToolCall: (({ toolCall }, submitToolResult) => {
-          let tool = tools[toolCall.toolName];
+        resolveCancelledToolOutput({ toolName, toolCallId, input }) {
+          const cancelOutput = resolveTool(toolName)?.cancelOutput;
+          if (!cancelOutput) return undefined;
 
-          // Compatibility shim with Algolia MCP Server search tool
-          if (
-            !tool &&
-            toolCall.toolName.startsWith(`${SearchIndexToolType}_`)
-          ) {
-            tool = tools[SearchIndexToolType];
+          try {
+            return { output: cancelOutput({ toolCallId, input }) };
+          } catch {
+            // A throwing `cancelOutput` must not block the request that
+            // triggered the cancellation; report the call as failed instead.
+            warning(
+              false,
+              `The \`cancelOutput\` of the "${toolName}" tool threw an error. The tool call is reported as failed instead.`
+            );
+            return undefined;
           }
+        },
+        onToolCall: (({ toolCall }, submitToolResult) => {
+          const tool = resolveTool(toolCall.toolName);
 
           if (!tool) {
             if (__DEV__) {

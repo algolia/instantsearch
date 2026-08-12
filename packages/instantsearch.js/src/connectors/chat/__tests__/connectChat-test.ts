@@ -1289,6 +1289,116 @@ describe('connectChat', () => {
       expect(widget.chatInstance.status).toBe('ready');
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
+
+    describe('cancelling a tool call the user never answered', () => {
+      const pendingToolCallResponse = () =>
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'confirm',
+            toolCallId: 'call-1',
+            input: { sku: 'A1' },
+          },
+          { type: 'finish' },
+        ]);
+      const emptyResponse = () =>
+        chatStream([
+          { type: 'start', messageId: 'assistant-2' },
+          { type: 'finish' },
+        ]);
+
+      // The tool renders a card and waits for the user, so `onToolCall`
+      // returns without submitting an output.
+      const awaitUser = jest.fn();
+
+      const toolPartsSentOn = (fetchMock: jest.Mock, callIndex: number) =>
+        JSON.parse(fetchMock.mock.calls[callIndex][1].body)
+          .messages.flatMap((message: { parts: unknown[] }) => message.parts)
+          .filter((part: object) => 'toolCallId' in part);
+
+      it('reports the call as failed when the tool has no cancelOutput', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-error',
+          }),
+        ]);
+        expect(widget.chatInstance.status).toBe('ready');
+      });
+
+      it('commits the output returned by the tool `cancelOutput`', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const cancelOutput = jest.fn(() => ({ confirmed: false }));
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(cancelOutput).toHaveBeenCalledWith({
+          toolCallId: 'call-1',
+          input: { sku: 'A1' },
+        });
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-available',
+            output: { confirmed: false },
+          }),
+        ]);
+      });
+
+      it('falls back to a failed call when `cancelOutput` throws', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const cancelOutput = jest.fn(() => {
+          throw new Error('boom');
+        });
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-error',
+          }),
+        ]);
+        // The send that triggered the cancellation still went out.
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(widget.chatInstance.status).toBe('ready');
+      });
+    });
   });
 
   describe('default chat instance', () => {
