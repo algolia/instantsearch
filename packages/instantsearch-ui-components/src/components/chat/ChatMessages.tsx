@@ -105,6 +105,12 @@ export type ChatMessagesClassNames = {
   scrollToBottomHidden: string | string[];
 };
 
+type ChatMessageRoleProps<TMessage extends ChatMessageBase = ChatMessageBase> =
+  Partial<
+    Omit<ChatMessageProps<TMessage>, 'ref' | 'key' | 'message' | 'messages'>
+  > &
+    Partial<Pick<ChatMessageProps, 'message' | 'messages'>>;
+
 export type ChatMessagesProps<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'div'> & {
@@ -201,11 +207,11 @@ export type ChatMessagesProps<
   /**
    * Optional user message props
    */
-  userMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  userMessageProps?: ChatMessageRoleProps<TMessage>;
   /**
    * Optional assistant message props
    */
-  assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  assistantMessageProps?: ChatMessageRoleProps<TMessage>;
   /**
    * Whether the scroll is at the bottom (controlled state)
    */
@@ -257,12 +263,12 @@ function getInstantSearchStatus(tools: ClientSideTools) {
 const hasOwnKey = (target: object | undefined, key: string) =>
   target !== undefined && Object.prototype.hasOwnProperty.call(target, key);
 
-function createDefaultMessageComponent<
-  TMessage extends ChatMessageBase = ChatMessageBase,
->({ createElement, Fragment }: Renderer) {
+function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
-  return function DefaultMessage({
+  return function DefaultMessage<
+    TMessage extends ChatMessageBase = ChatMessageBase,
+  >({
     message,
     status,
     userMessageProps,
@@ -285,11 +291,11 @@ function createDefaultMessageComponent<
     message: TMessage;
     isCurrentMessage: boolean;
     status: ChatStatus;
-    userMessageProps?: Partial<ChatMessageProps>;
-    assistantMessageProps?: Partial<ChatMessageProps>;
+    userMessageProps?: ChatMessageRoleProps<TMessage>;
+    assistantMessageProps?: ChatMessageRoleProps<TMessage>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    messages?: ChatMessageBase[];
+    messages?: TMessage[];
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
@@ -371,12 +377,10 @@ function createDefaultMessageComponent<
       <ChatMessage
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
-        message={message}
         status={status}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
-        messages={messages}
         onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
@@ -385,6 +389,8 @@ function createDefaultMessageComponent<
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
         {...messageProps}
+        message={message}
+        messages={messages}
       />
     );
   };
@@ -396,17 +402,19 @@ export function createChatMessagesComponent({
   useMemo,
 }: Renderer & Pick<Hooks, 'useMemo'>) {
   const Button = createButtonComponent({ createElement });
-  const DefaultMessageComponent =
-    createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+  const DefaultMessageComponent = createDefaultMessageComponent({
+    createElement,
+    Fragment,
+  });
   // Skip re-rendering (and re-compiling the markdown of) completed messages on
   // every streaming delta. The deps tuple matches the row's render inputs;
   // callbacks/`indexUiState` are intentionally excluded because `getUiState()`
   // returns a fresh object every render and would defeat the memo — completed
   // rows keep the callbacks/`indexUiState` they last rendered with until their
   // next genuine update.
-  function MemoizedDefaultMessage(
-    props: Parameters<typeof DefaultMessageComponent>[0]
-  ) {
+  function MemoizedDefaultMessage<
+    TMessage extends ChatMessageBase = ChatMessageBase,
+  >(props: Parameters<typeof DefaultMessageComponent<TMessage>>[0]) {
     const messageFeedback = props.feedbackState?.[props.message.id];
     const instantSearchStatus = getInstantSearchStatus(props.tools);
     // Read the row's own side, mirroring `DefaultMessage`, so one role's change
@@ -417,6 +425,10 @@ export function createChatMessagesComponent({
         : props.assistantMessageProps;
     const showReasoning = messageProps?.showReasoning;
     const parseMarkdown = messageProps?.parseMarkdown;
+    const textComponent = messageProps?.textComponent;
+    // Custom text components receive the conversation, so their completed rows
+    // must update with it. Keep the default renderer's streaming optimization.
+    const textComponentMessages = textComponent ? props.messages : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
     // are why this resolves by own-key presence rather than key by key.
@@ -448,6 +460,8 @@ export function createChatMessagesComponent({
         messageFeedback,
         showReasoning,
         parseMarkdown,
+        textComponent,
+        textComponentMessages,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,
