@@ -64,12 +64,8 @@ function getToolName(part: { type: string; toolName?: string }): string {
   return part.type.slice('tool-'.length);
 }
 
-/**
- * A tool call that has been announced but has no output yet, and whose output
- * the client owns. Provider-executed calls are resolved server-side, so
- * authoring a result for them here would contradict the provider's own
- * transcript.
- */
+// A tool call awaiting an output that the client owns. Provider-executed calls
+// are resolved server-side, so they are left alone.
 function isPendingToolPart<TPart>(
   part: TPart
 ): part is TPart & { toolCallId: string } {
@@ -89,11 +85,8 @@ function isPendingToolPart<TPart>(
   );
 }
 
-/**
- * Moves a tool part to a terminal state, dropping the fields that only belong
- * to the state being left behind (`output-error` forbids `output`, and a
- * committed output is no longer `preliminary`).
- */
+// Drops the fields that only belong to the state being left behind:
+// `output-error` forbids `output`, and a committed output is not `preliminary`.
 function withTerminalToolState<TPart>(
   part: TPart,
   terminalState: TerminalToolState
@@ -545,18 +538,13 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   }
 
   /**
-   * The transcript to send, with every tool call that is still awaiting an
-   * output reported as cancelled. A provider rejects a turn holding a tool call
-   * with no matching result, so a client-side tool the user walked away from —
-   * by sending another message instead of interacting with its card — would
-   * otherwise fail this request and every one after it, leaving clearing the
-   * conversation as the only way out of the error state.
+   * The transcript to send, with every tool call still awaiting an output
+   * reported as cancelled — a provider rejects a turn holding a tool call with
+   * no matching result.
    *
-   * The repair deliberately stays on this copy instead of being committed to
-   * `messages`: the card is still mounted, so the user can answer it after the
-   * send, and that late `addToolResult` must still land. Local state therefore
-   * keeps the call open, and every request reports it cancelled until it is
-   * answered.
+   * The repair stays on this copy rather than being committed to `messages`:
+   * the card is still mounted, so a result submitted after the send must still
+   * land, and is sent as the real output from then on.
    */
   private getOutboundMessages(): TUIMessage[] {
     let outboundMessages: TUIMessage[] | undefined;
@@ -841,7 +829,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     }
 
     // Resolved as late as possible, so a tool that submits its output in the
-    // meantime is sent as answered rather than cancelled.
+    // meantime is sent as answered.
     const messages = this.getOutboundMessages();
 
     return this.consume((abortSignal) =>

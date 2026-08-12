@@ -4670,8 +4670,7 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     finishChunk(),
   ];
 
-  // A client-side tool that renders a card and waits for the user: the call is
-  // announced, the callback returns, and no output is submitted.
+  // A client-side tool that waits for the user instead of submitting an output.
   const awaitUser = () => undefined;
 
   function toolPartsSentOn(
@@ -4697,8 +4696,6 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
 
     await chat.sendMessage({ text: 'actually, show me something else' });
 
-    // The turn the provider receives holds no tool call without a result, so
-    // the request is valid and the chat does not lock into an error state.
     expect(toolPartsSentOn(sendMessages, 1)).toEqual([
       expect.objectContaining({
         toolCallId: 'call-1',
@@ -4724,8 +4721,6 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     await chat.sendMessage({ text: 'buy the first one' });
     await chat.sendMessage({ text: 'actually, show me something else' });
 
-    // The card is still mounted: reporting the call as cancelled on the wire
-    // must not disable the button the user is about to press.
     expect(assistantToolPart(state, 'call-1')).toMatchObject({
       state: 'input-available',
     });
@@ -4741,7 +4736,6 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
       output: { confirmed: true },
     });
 
-    // Once answered, later requests carry the real output, not a cancellation.
     await chat.sendMessage({ text: 'anything else?' });
     expect(toolPartsSentOn(sendMessages, 2)).toEqual([
       expect.objectContaining({
@@ -4787,8 +4781,6 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
         emptyChunks('msg-3'),
       ],
       onToolCall: awaitUser,
-      // The predicate must not see the cancellation as a completed turn and
-      // fire a continuation alongside the send that reported it.
       sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     });
 
@@ -4820,8 +4812,7 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     });
 
     await chat.sendMessage({ text: 'buy the first one' });
-    // A second turn keeps the unanswered call in history instead of slicing it
-    // off when regenerating.
+    // The second turn keeps the unanswered call in history when regenerating.
     await chat.sendMessage({ text: 'and what about shipping?' });
     await chat.regenerate();
 

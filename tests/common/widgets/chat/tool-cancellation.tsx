@@ -20,8 +20,7 @@ function chunksToStream(
   });
 }
 
-// A turn that hands a client-side tool call to the frontend and stops there:
-// the output is the user's to provide, by interacting with the rendered card.
+// A turn that hands a client-side tool call to the frontend and stops there.
 const pendingToolCallChunks: UIMessageChunk[] = [
   { type: 'start', messageId: 'assistant-1' },
   { type: 'text-start', id: 'text-1' },
@@ -91,7 +90,6 @@ export function createToolCancellationTests(
 
       await submitPrompt('buy the first one', act);
 
-      // The tool call was handed over and is waiting for an output.
       expect(chat.messages[1].parts).toContainEqual(
         expect.objectContaining({
           toolCallId: 'tool-call-1',
@@ -111,16 +109,13 @@ export function createToolCancellationTests(
         .flatMap((message) => message.parts)
         .filter((part) => 'toolCallId' in part);
 
-      // Every tool call in the payload is answered, so the request is valid and
-      // the conversation stays usable instead of erroring out for good.
       expect(sentToolParts).toEqual([
         expect.objectContaining({
           toolCallId: 'tool-call-1',
           state: 'output-error',
         }),
       ]);
-      // The repair stays on the wire: the card is still mounted, so answering
-      // it after the send must still work.
+      // The repair stays on the wire; the local call is still answerable.
       expect(chat.messages[1].parts).toContainEqual(
         expect.objectContaining({
           toolCallId: 'tool-call-1',

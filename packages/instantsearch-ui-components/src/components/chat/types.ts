@@ -547,15 +547,12 @@ export type ClientSideTool = {
     }
   ) => void;
   /**
-   * Output reported for this tool call while it is still waiting for a result —
-   * for example when the user sends another message instead of interacting with
-   * the tool. Every tool call has to be answered for a request to be valid, so
-   * unanswered calls are reported as cancelled automatically; implement this to
-   * control what the model sees, for example `{ confirmed: false }` for a
-   * confirmation prompt. Without it, the call is reported as failed.
+   * Output reported for this tool call when a request is sent while it is still
+   * waiting for a result, for example `{ confirmed: false }` for a confirmation
+   * prompt. Without it, the call is reported as failed.
    *
    * This only affects what is sent: the tool keeps waiting locally, so a result
-   * submitted later still lands and is sent from then on.
+   * submitted later still lands.
    */
   cancelOutput?: (params: { toolCallId: string; input: unknown }) => unknown;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;

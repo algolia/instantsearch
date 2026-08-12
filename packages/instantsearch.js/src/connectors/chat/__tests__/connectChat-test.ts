@@ -1308,8 +1308,7 @@ describe('connectChat', () => {
           { type: 'finish' },
         ]);
 
-      // The tool renders a card and waits for the user, so `onToolCall`
-      // returns without submitting an output.
+      // `onToolCall` returns without submitting an output.
       const awaitUser = jest.fn();
 
       const toolPartsSentOn = (fetchMock: jest.Mock, callIndex: number) =>
@@ -1394,7 +1393,6 @@ describe('connectChat', () => {
             state: 'output-error',
           }),
         ]);
-        // The send that triggered the cancellation still went out.
         expect(fetchMock).toHaveBeenCalledTimes(2);
         expect(widget.chatInstance.status).toBe('ready');
       });

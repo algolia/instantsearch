@@ -469,8 +469,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // The Algolia MCP Server suffixes its search tool with the index name
-    // (`searchIndex_products`), so those names fall back to the base tool.
+    // Compatibility shim with Algolia MCP Server search tool, which suffixes
+    // the tool name with the index name (`searchIndex_products`).
     const resolveTool = (toolName: string) =>
       tools[toolName] ||
       (toolName.startsWith(`${SearchIndexToolType}_`)
@@ -721,8 +721,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           try {
             return { output: cancelOutput({ toolCallId, input }) };
           } catch {
-            // A throwing `cancelOutput` must not block the request that
-            // triggered the cancellation; report the call as failed instead.
             warning(
               false,
               `The \`cancelOutput\` of the "${toolName}" tool threw an error. The tool call is reported as failed instead.`
