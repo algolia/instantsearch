@@ -570,6 +570,11 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    // `activePart` means "the part currently being processed". Once the response
+    // settles (`ready`/`error`), nothing is in progress, so it must clear —
+    // otherwise overrides keep rendering the finished part as still streaming.
+    const isProcessing = status === 'submitted' || status === 'streaming';
+    const activePart = isProcessing ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
@@ -595,7 +600,7 @@ export function createChatMessagesComponent({
       isClearing,
       open,
       maximized,
-      activePart: lastPart,
+      activePart,
       tools,
       sendMessage,
       regenerate,

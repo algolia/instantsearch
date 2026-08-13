@@ -1544,4 +1544,38 @@ describe('ChatMessages', () => {
       {}
     );
   });
+
+  test('clears activePart once the response settles', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Done' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'ready',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
 });
