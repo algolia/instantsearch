@@ -577,11 +577,18 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private resolveToolCallCancellation(
     part: TUIMessage['parts'][number] & { toolCallId: string }
   ): TerminalToolState {
-    const cancellation = this.resolveCancelledToolOutput?.({
-      toolName: getToolName(part),
-      toolCallId: part.toolCallId,
-      input: 'input' in part ? part.input : undefined,
-    });
+    let cancellation;
+
+    // Repairing the outbound transcript must never fail the request build.
+    try {
+      cancellation = this.resolveCancelledToolOutput?.({
+        toolName: getToolName(part),
+        toolCallId: part.toolCallId,
+        input: 'input' in part ? part.input : undefined,
+      });
+    } catch {
+      cancellation = undefined;
+    }
 
     return cancellation
       ? { state: 'output-available', output: cancellation.output }

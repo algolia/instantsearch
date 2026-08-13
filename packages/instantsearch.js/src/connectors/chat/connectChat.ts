@@ -719,7 +719,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           if (!cancelOutput) return undefined;
 
           try {
-            return { output: cancelOutput({ toolCallId, input }) };
+            const output = cancelOutput({ toolCallId, input });
+            // `undefined` means the tool declined to provide an output.
+            return output === undefined ? undefined : { output };
           } catch {
             warning(
               false,

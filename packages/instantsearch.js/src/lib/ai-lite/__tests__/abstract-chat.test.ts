@@ -4773,6 +4773,30 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     expect(toolPart.errorText).toBeUndefined();
   });
 
+  it('reports the call as failed when the cancellation hook throws', async () => {
+    const resolveCancelledToolOutput = jest.fn(() => {
+      throw new Error('boom');
+    });
+    const { chat, state, sendMessages } = createTestSetup({
+      chunksByRequest: [pendingToolChunks(), emptyChunks('msg-2')],
+      onToolCall: awaitUser,
+      resolveCancelledToolOutput,
+    });
+
+    await chat.sendMessage({ text: 'buy the first one' });
+    await chat.sendMessage({ text: 'actually, show me something else' });
+
+    expect(toolPartsSentOn(sendMessages, 1)).toEqual([
+      expect.objectContaining({
+        toolCallId: 'call-1',
+        state: 'output-error',
+        errorText: expect.any(String),
+      }),
+    ]);
+    expect(state.status).toBe('ready');
+    expect(state.error).toBeUndefined();
+  });
+
   it('does not send a duplicate request for the cancelled turn', async () => {
     const { chat, sendMessages } = createTestSetup({
       chunksByRequest: [
