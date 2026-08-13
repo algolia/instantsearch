@@ -1048,6 +1048,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       dispose() {
         feedbackAbortController?.abort();
         unsubscribeChatCallbacks();
+        records.clear();
         unmountFn();
       },
 

@@ -1310,6 +1310,40 @@ describe('connectChat', () => {
       expect(records.getAll()).toEqual({});
     });
 
+    it('drops the records of a disposed widget', () => {
+      const { widget, helper, getRenderState } = getInitializedWidget({
+        persistence: false,
+      } as unknown as ChatConnectorParams);
+
+      getRenderState().setMessages([
+        {
+          id: '1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-algolia_search_index',
+              toolCallId: 'search',
+              state: 'output-available',
+              input: {},
+              output: { hits: [{ objectID: '1', name: 'Runner' }] },
+            },
+          ],
+        },
+      ] as unknown as UIMessage[]);
+
+      const { records } = getRenderState();
+      expect(records.has('1')).toBe(true);
+
+      widget.dispose();
+
+      // `init` starts a new conversation, whose tools must not hydrate from the
+      // records of the one before it.
+      expect(records.getAll()).toEqual({});
+
+      widget.init(createInitOptions({ helper }));
+      expect(getRenderState().records.getAll()).toEqual({});
+    });
+
     it('keeps the development diagnostic for an unknown tool', async () => {
       const fetchMock = jest.fn().mockResolvedValue(
         chatStream([
