@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.34.0...instantsearch-ui-components@0.35.0) (2026-08-12)
+
+
+### Features
+
+* **chat:** support custom text rendering ([#7160](https://github.com/algolia/instantsearch/issues/7160)) ([7eb2bf0](https://github.com/algolia/instantsearch/commit/7eb2bf0d4c4514985d54868df5a77e9a8af1eb92))
+
+
+
+
+
 # [0.34.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.2...instantsearch-ui-components@0.34.0) (2026-08-06)
 
 

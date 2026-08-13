@@ -11,7 +11,7 @@ import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
-import type { ChatLayoutOwnProps } from './types';
+import type { ChatLayoutOwnProps, ChatMessageBase } from './types';
 import type { Renderer, ComponentProps, Hooks } from '../../types';
 
 export type ChatClassNames = {
@@ -24,7 +24,10 @@ export type ChatClassNames = {
   suggestions?: ChatPromptSuggestionsOwnProps['classNames'];
 };
 
-export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
+export type ChatProps<TMessage extends ChatMessageBase = ChatMessageBase> =
+  Omit<ComponentProps<'div'>, 'onError' | 'title'> & ChatOwnProps<TMessage>;
+
+type ChatOwnProps<TMessage extends ChatMessageBase> = {
   /*
    * Whether the chat is open or closed.
    */
@@ -40,7 +43,7 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /*
    * Props for the ChatMessages component.
    */
-  messagesProps: ChatMessagesProps;
+  messagesProps: ChatMessagesProps<TMessage>;
   /*
    * Props for the ChatPrompt component.
    */
@@ -122,7 +125,9 @@ export function createChatComponent({
     Fragment,
   });
 
-  return function Chat(userProps: ChatProps) {
+  return function Chat<TMessage extends ChatMessageBase = ChatMessageBase>(
+    userProps: ChatProps<TMessage>
+  ) {
     const {
       open,
       maximized = false,

@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-nuxt",
-  "version": "1.117.0",
+  "version": "1.119.0",
   "description": "Vue InstantSearch & Nuxt",
   "private": true,
   "scripts": {
@@ -15,11 +15,11 @@
     "algoliasearch-helper": "3.29.3",
     "cross-env": "^5.2.0",
     "css-loader": "^4.3.0",
-    "instantsearch-ui-components": "0.34.0",
+    "instantsearch-ui-components": "0.35.0",
     "instantsearch.css": "8.19.0",
-    "instantsearch.js": "4.109.0",
+    "instantsearch.js": "4.111.0",
     "nuxt": "^2.4.5",
-    "vue-instantsearch": "4.29.0",
+    "vue-instantsearch": "4.29.2",
     "vue-server-renderer": "2.7.14"
   }
 }

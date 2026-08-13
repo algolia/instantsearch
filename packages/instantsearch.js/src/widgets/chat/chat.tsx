@@ -52,6 +52,7 @@ import type {
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
+  ChatMessageTextComponentProps,
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
@@ -184,11 +185,13 @@ type ChatWrapperProps = {
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
       showReasoning: ChatMessageProps['showReasoning'];
     };
     userMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
     };
     translations: Partial<ChatMessagesTranslations>;
@@ -458,6 +461,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         'fragment'
       )
     : undefined;
+  const stableAssistantMessageTextComponent = templates.assistantMessage?.text
+    ? createStableTemplateComponent<ChatMessageTextComponentProps>(
+        assistantMessageTemplateRef,
+        'text',
+        'fragment'
+      )
+    : undefined;
   const stableAssistantMessageFooterComponent = templates.assistantMessage
     ?.footer
     ? createStableTemplateComponent<Record<string, never>>(
@@ -470,6 +480,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     ? createStableTemplateComponent<Record<string, never>>(
         userMessageTemplateRef,
         'leading',
+        'fragment'
+      )
+    : undefined;
+  const stableUserMessageTextComponent = templates.userMessage?.text
+    ? createStableTemplateComponent<ChatMessageTextComponentProps>(
+        userMessageTemplateRef,
+        'text',
         'fragment'
       )
     : undefined;
@@ -773,11 +790,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             actionsComponent: stableActionsComponent,
             assistantMessageProps: {
               leadingComponent: stableAssistantMessageLeadingComponent,
+              textComponent: stableAssistantMessageTextComponent,
               footerComponent: stableAssistantMessageFooterComponent,
               showReasoning,
             },
             userMessageProps: {
               leadingComponent: stableUserMessageLeadingComponent,
+              textComponent: stableUserMessageTextComponent,
               footerComponent: stableUserMessageFooterComponent,
             },
             translations: messagesTranslations,
@@ -968,6 +987,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        */
       leading: Template;
       /**
+       * Template to use for assistant message text parts.
+       */
+      text: Template<ChatMessageTextComponentProps>;
+      /**
        * Template to use for the assistant message footer content.
        */
       footer: Template;
@@ -981,6 +1004,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for the user message leading content.
        */
       leading: Template;
+      /**
+       * Template to use for user message text parts.
+       */
+      text: Template<ChatMessageTextComponentProps>;
       /**
        * Template to use for the user message footer content.
        */
