@@ -37,6 +37,8 @@ export function createChatSidePanelLayoutComponent({
       error: _error,
       ...rest
     } = userProps;
+    // React versions before 19 preserve unknown boolean attributes as numbers.
+    const inert = open ? undefined : (1 as unknown as boolean);
 
     const element =
       typeof document !== 'undefined'
@@ -78,6 +80,7 @@ export function createChatSidePanelLayoutComponent({
         )}
       >
         <div
+          inert={inert}
           className={cx(
             'ais-Chat-container',
             open && 'ais-Chat-container--open',
