@@ -130,8 +130,8 @@ type UiProps = Pick<
 
 type UserHeaderProps = Omit<ChatUiProps['headerProps'], 'onClose'>;
 
-type UserMessagesProps = Omit<
-  ChatUiProps['messagesProps'],
+type UserMessagesProps<TUiMessage extends UIMessage = UIMessage> = Omit<
+  ChatUiProps<TUiMessage>['messagesProps'],
   | 'messages'
   | 'tools'
   | 'indexUiState'
@@ -163,7 +163,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     headerProps?: UserHeaderProps;
-    messagesProps?: UserMessagesProps;
+    messagesProps?: UserMessagesProps<TUiMessage>;
     promptProps?: UserPromptProps;
     layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
     headerComponent?: ChatUiProps['headerComponent'];

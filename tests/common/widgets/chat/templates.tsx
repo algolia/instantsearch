@@ -465,6 +465,172 @@ export function createTemplatesTests(
         expect(footerElements[0]).toHaveClass('MESSAGE-FOOTER');
         expect(footerElements[1]).toHaveClass('MESSAGE-FOOTER');
       });
+
+      test('renders text parts with their message context', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({
+          messages: [
+            {
+              id: 'user-1',
+              role: 'user',
+              parts: [
+                { type: 'text', text: 'User first' },
+                { type: 'step-start' },
+                { type: 'text', text: 'User second' },
+              ],
+            },
+            {
+              id: 'assistant-1',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Assistant first' },
+                { type: 'step-start' },
+                { type: 'text', text: 'Assistant second' },
+              ],
+            },
+          ],
+        });
+        Object.defineProperty(chat, 'status', {
+          get: () => 'streaming',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                assistantMessage: {
+                  text: (
+                    { part, message, messages, status, partIndex },
+                    { html }
+                  ) => html`<span
+                    class="custom-text-part"
+                    data-message-id="${message.id}"
+                    data-conversation="${messages
+                      ?.map(({ id }) => id)
+                      .join(',')}"
+                    data-status="${status}"
+                    data-part-index="${partIndex}"
+                    >${part.text}</span
+                  >`,
+                },
+                userMessage: {
+                  text: (
+                    { part, message, messages, status, partIndex },
+                    { html }
+                  ) => html`<span
+                    class="custom-text-part"
+                    data-message-id="${message.id}"
+                    data-conversation="${messages
+                      ?.map(({ id }) => id)
+                      .join(',')}"
+                    data-status="${status}"
+                    data-part-index="${partIndex}"
+                    >${part.text}</span
+                  >`,
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              messagesProps: {
+                onClose: () => {},
+                onReload: () => {},
+                assistantMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }) => (
+                    <span
+                      className="custom-text-part"
+                      data-message-id={message.id}
+                      data-conversation={messages
+                        ?.map(({ id }) => id)
+                        .join(',')}
+                      data-status={status}
+                      data-part-index={partIndex}
+                    >
+                      {part.text}
+                    </span>
+                  ),
+                },
+                userMessageProps: {
+                  textComponent: ({
+                    part,
+                    message,
+                    messages,
+                    status,
+                    partIndex,
+                  }) => (
+                    <span
+                      className="custom-text-part"
+                      data-message-id={message.id}
+                      data-conversation={messages
+                        ?.map(({ id }) => id)
+                        .join(',')}
+                      data-status={status}
+                      data-part-index={partIndex}
+                    >
+                      {part.text}
+                    </span>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          Array.from(document.querySelectorAll('.custom-text-part')).map(
+            (element) => ({
+              text: element.textContent,
+              messageId: element.getAttribute('data-message-id'),
+              conversation: element.getAttribute('data-conversation'),
+              status: element.getAttribute('data-status'),
+              partIndex: Number(element.getAttribute('data-part-index')),
+            })
+          )
+        ).toEqual([
+          {
+            text: 'User first',
+            messageId: 'user-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 0,
+          },
+          {
+            text: 'User second',
+            messageId: 'user-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 2,
+          },
+          {
+            text: 'Assistant first',
+            messageId: 'assistant-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 0,
+          },
+          {
+            text: 'Assistant second',
+            messageId: 'assistant-1',
+            conversation: 'user-1,assistant-1',
+            status: 'streaming',
+            partIndex: 2,
+          },
+        ]);
+      });
     });
 
     test('renders with custom actions', async () => {

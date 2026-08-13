@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.111.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.110.0...instantsearch.js@4.111.0) (2026-08-12)
+
+
+### Features
+
+* **chat:** support custom text rendering ([#7160](https://github.com/algolia/instantsearch/issues/7160)) ([7eb2bf0](https://github.com/algolia/instantsearch/commit/7eb2bf0d4c4514985d54868df5a77e9a8af1eb92))
+
+
+
+
+
+# [4.110.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.109.0...instantsearch.js@4.110.0) (2026-08-10)
+
+
+### Bug Fixes
+
+* **chat:** support caller-owned Chat reuse ([#7156](https://github.com/algolia/instantsearch/issues/7156)) ([a3ce794](https://github.com/algolia/instantsearch/commit/a3ce7947d9bad75cf594df0f690be50d4e4803d3))
+
+
+### Features
+
+* **chat:** persist open state ([#7136](https://github.com/algolia/instantsearch/issues/7136)) ([50807b6](https://github.com/algolia/instantsearch/commit/50807b693cd300064f79e12e837cf3c21c06ef67))
+* **insights:** send the user token with Recommend fallback queries ([#7157](https://github.com/algolia/instantsearch/issues/7157)) ([073ea5d](https://github.com/algolia/instantsearch/commit/073ea5d93643d67cf2a544fbb813dd84cb3edace))
+
+
+
+
+
 # [4.109.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.108.0...instantsearch.js@4.109.0) (2026-08-06)
 
 

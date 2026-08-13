@@ -10,6 +10,7 @@ import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
+import type { ChatMessageTextComponentProps } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
 
 const ChatMessages = createChatMessagesComponent({
@@ -842,6 +843,208 @@ describe('ChatMessages', () => {
     rerender(<MemoizedChatMessages {...createProps(true)} />);
 
     expect(container.querySelector('details')).not.toBeNull();
+  });
+
+  describe('textComponent', () => {
+    test('routes the ordered conversation through both message prop paths', () => {
+      const messages = [
+        {
+          role: 'user' as const,
+          id: 'user-1',
+          parts: [{ type: 'text' as const, text: 'Question' }],
+        },
+        {
+          role: 'assistant' as const,
+          id: 'assistant-1',
+          parts: [{ type: 'text' as const, text: 'Answer' }],
+        },
+      ];
+      const userTextComponent = jest.fn(
+        ({ part }: ChatMessageTextComponentProps) => (
+          <span data-testid="user-text">{part.text}</span>
+        )
+      );
+      const assistantTextComponent = jest.fn(
+        ({ part }: ChatMessageTextComponentProps) => (
+          <span data-testid="assistant-text">{part.text}</span>
+        )
+      );
+
+      render(
+        <ChatMessages
+          messages={messages}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="ready"
+          userMessageProps={{ textComponent: userTextComponent }}
+          assistantMessageProps={{ textComponent: assistantTextComponent }}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(userTextComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          part: messages[0].parts[0],
+          message: messages[0],
+          messages,
+          status: 'ready',
+          partIndex: 0,
+        })
+      );
+      expect(assistantTextComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          part: messages[1].parts[0],
+          message: messages[1],
+          messages,
+          status: 'ready',
+          partIndex: 0,
+        })
+      );
+      expect(screen.getByTestId('user-text')).toHaveTextContent('Question');
+      expect(screen.getByTestId('assistant-text')).toHaveTextContent('Answer');
+    });
+
+    test('updates completed messages when the text component changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [message];
+      const FirstTextComponent = ({ part }: ChatMessageTextComponentProps) => (
+        <span data-testid="first-text">{part.text}</span>
+      );
+      const SecondTextComponent = ({ part }: ChatMessageTextComponentProps) => (
+        <span data-testid="second-text">{part.text}</span>
+      );
+      const createProps = (
+        textComponent: (props: ChatMessageTextComponentProps) => JSX.Element
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: { textComponent },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(FirstTextComponent)} />
+      );
+      expect(screen.getByTestId('first-text')).toHaveTextContent('Answer');
+
+      rerender(<MemoizedChatMessages {...createProps(SecondTextComponent)} />);
+
+      expect(screen.queryByTestId('first-text')).not.toBeInTheDocument();
+      expect(screen.getByTestId('second-text')).toHaveTextContent('Answer');
+    });
+
+    test('keeps the ordered conversation current for completed messages', () => {
+      const firstMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'First answer' }],
+      };
+      const secondMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-2',
+        parts: [{ type: 'text' as const, text: 'Second answer' }],
+      };
+      const thirdMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-3',
+        parts: [{ type: 'text' as const, text: 'Third answer' }],
+      };
+      const textComponent = ({
+        message,
+        messages,
+      }: ChatMessageTextComponentProps) => (
+        <span data-testid={`conversation-length-${message.id}`}>
+          {messages?.length}
+        </span>
+      );
+      const createProps = (
+        messages: Array<typeof firstMessage | typeof secondMessage>
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: { textComponent },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps([firstMessage, secondMessage])} />
+      );
+      expect(
+        screen.getByTestId('conversation-length-assistant-1')
+      ).toHaveTextContent('2');
+
+      rerender(
+        <MemoizedChatMessages
+          {...createProps([firstMessage, secondMessage, thirdMessage])}
+        />
+      );
+
+      expect(
+        screen.getByTestId('conversation-length-assistant-1')
+      ).toHaveTextContent('3');
+      expect(
+        screen.getByTestId('conversation-length-assistant-2')
+      ).toHaveTextContent('3');
+      expect(
+        screen.getByTestId('conversation-length-assistant-3')
+      ).toHaveTextContent('3');
+    });
+
+    test('keeps the conversation owned by ChatMessages', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [message];
+      const textComponent = ({
+        messages: currentMessages,
+      }: ChatMessageTextComponentProps) => (
+        <span data-testid="conversation-id">{currentMessages?.[0].id}</span>
+      );
+      const createProps = (conversationId: string) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          textComponent,
+          messages: [
+            {
+              ...message,
+              id: conversationId,
+            },
+          ],
+        },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps('override-a')} />
+      );
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+
+      rerender(<MemoizedChatMessages {...createProps('override-b')} />);
+
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+    });
   });
 
   describe('parseMarkdown', () => {

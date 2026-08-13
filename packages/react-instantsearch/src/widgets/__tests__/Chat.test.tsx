@@ -13,7 +13,7 @@ import { ChatInlineLayout } from '../../components/ChatInlineLayout';
 import { Chat } from '../Chat';
 import { ChatTrigger } from '../ChatTrigger';
 
-import type { ChatHandle } from '../Chat';
+import type { ChatHandle, ChatProps } from '../Chat';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
 const searchClient = createSearchClient();
@@ -464,6 +464,72 @@ describe('Chat', () => {
     expect(
       screen.getByRole('group', { name: 'Reasoning' }).textContent
     ).toContain('Check the **catalog**.');
+  });
+
+  test('routes an assistant text component through messagesProps', async () => {
+    const chat = new ChatInstance<UIMessage>({
+      persistence: false,
+      messages: [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Custom answer' }],
+        },
+      ],
+    });
+    const calls: Array<{
+      partText: string;
+      messageId: string;
+      messageCount: number | undefined;
+      status: string;
+      partIndex: number;
+    }> = [];
+    const messagesProps = {
+      onClose: () => {},
+      onReload: () => {},
+      assistantMessageProps: {
+        textComponent: ({ part, message, messages, status, partIndex }) => {
+          calls.push({
+            partText: part.text,
+            messageId: message.id,
+            messageCount: messages?.length,
+            status,
+            partIndex,
+          });
+          return <span data-testid="assistant-text">{part.text}</span>;
+        },
+      },
+    } satisfies NonNullable<ChatProps<unknown>['messagesProps']>;
+
+    render(
+      <InstantSearch
+        searchClient={searchClient}
+        indexName="indexName"
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
+        <Chat
+          chat={chat}
+          transport={{ api: 'http://unused' }}
+          layoutComponent={ChatInlineLayout}
+          requiresSearch={false}
+          messagesProps={messagesProps}
+        />
+      </InstantSearch>
+    );
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.getByTestId('assistant-text')).toHaveTextContent(
+      'Custom answer'
+    );
+    expect(calls[calls.length - 1]).toEqual({
+      partText: 'Custom answer',
+      messageId: 'assistant-1',
+      messageCount: 1,
+      status: 'ready',
+      partIndex: 0,
+    });
   });
 
   test('updates reasoning on completed messages when parseMarkdown changes', async () => {
