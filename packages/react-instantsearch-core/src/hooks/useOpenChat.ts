@@ -29,6 +29,10 @@ export type UseOpenChatResult = {
   isChatBusy: boolean;
 };
 
+// `opensChat` isn't part of `Widget`, so it needs to be declared for the
+// object literal to type-check.
+type ChatOpenerWidget = Widget & { opensChat: true };
+
 const noop = () => {};
 
 const NO_PROPS = {};
@@ -46,15 +50,15 @@ export function useOpenChat(): UseOpenChatResult {
 
   // Marks the hook as a chat entry point for `connectChat`'s validation.
   // `dependsOn: 'none'` keeps it from making the index require a search.
+  // `init`/`dispose` are required by `addWidgets`/`removeWidgets`.
   const widget = useMemo(
-    () =>
-      ({
-        $$type: 'ais.chatOpener',
-        opensChat: true,
-        dependsOn: 'none',
-        init: noop,
-        dispose: noop,
-      }) as unknown as Widget,
+    (): ChatOpenerWidget => ({
+      $$type: 'ais.chatOpener',
+      opensChat: true,
+      dependsOn: 'none',
+      init: noop,
+      dispose: noop,
+    }),
     []
   );
 
