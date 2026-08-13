@@ -20,6 +20,7 @@ import type {
   ChatToolMessage,
   ClientSideTool,
   ClientSideTools,
+  TextUIPart,
 } from './types';
 import type {
   ComponentProps,
@@ -99,11 +100,38 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type ChatMessageProps = ComponentProps<'article'> & {
+export type ChatMessageTextComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  /**
+   * The text part to render
+   */
+  part: TextUIPart;
+  /**
+   * The message containing the text part
+   */
+  message: TMessage;
+  /**
+   * The full conversation, when available
+   */
+  messages?: TMessage[];
+  /**
+   * The current chat status
+   */
+  status: ChatStatus;
+  /**
+   * The text part's index in the full `message.parts` array
+   */
+  partIndex: number;
+};
+
+export type ChatMessageProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
    */
-  message: ChatMessageBase;
+  message: TMessage;
   /**
    * The status of the message (e.g. whether it's still streaming)
    */
@@ -140,6 +168,12 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   footerComponent?: () => JSX.Element;
   /**
+   * Custom text part renderer
+   */
+  textComponent?: (
+    props: ChatMessageTextComponentProps<TMessage>
+  ) => JSX.Element | null;
+  /**
    * The index UI state
    */
   indexUiState: object;
@@ -152,7 +186,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * receive object IDs (e.g. display results) can hydrate records from a
    * preceding search tool's hits.
    */
-  messages?: ChatMessageBase[];
+  messages?: TMessage[];
   /**
    * Close the chat
    */
@@ -193,13 +227,18 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 // Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
 const SearchIndexToolType = 'algolia_search_index';
 
-export function createChatMessageComponent({ createElement }: Renderer) {
+export function createChatMessageComponent({
+  createElement,
+  Fragment,
+}: Renderer) {
   const Button = createButtonComponent({ createElement });
   const ChatMessageReasoning = createChatMessageReasoningComponent({
     createElement,
   });
 
-  return function ChatMessage(userProps: ChatMessageProps) {
+  return function ChatMessage<
+    TMessage extends ChatMessageBase = ChatMessageBase,
+  >(userProps: ChatMessageProps<TMessage>) {
     const {
       classNames = {},
       message,
@@ -211,6 +250,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
+      textComponent: TextComponent,
       tools = {},
       indexUiState,
       setIndexUiState,
@@ -329,6 +369,19 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           part.text.endsWith('</context>')
         ) {
           return null;
+        }
+        if (TextComponent) {
+          return (
+            <Fragment key={`${message.id}-${index}`}>
+              <TextComponent
+                part={part}
+                message={message}
+                messages={messages}
+                status={status}
+                partIndex={index}
+              />
+            </Fragment>
+          );
         }
         if (!parseMarkdown) {
           // Render the literal text. The `ais-ChatMessage-text` class applies
