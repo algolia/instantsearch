@@ -431,6 +431,45 @@ describe('connectChat', () => {
       expect(renderFn).toHaveBeenCalledTimes(3);
     });
 
+    it('schedules a full render on status changes only, so sibling entry points see them', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const scheduleRender = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender:
+          scheduleRender as unknown as InstantSearch['scheduleRender'],
+      });
+      const widget = connectChat(jest.fn())({
+        chat,
+        disableTriggerValidation: true,
+      });
+
+      widget.init(createInitOptions({ instantSearchInstance }));
+      scheduleRender.mockClear();
+
+      chat._state.status = 'streaming';
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      // Re-writing the same status notifies subscribers, but nothing changed.
+      chat._state.status = 'streaming';
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      // Message deltas stay local.
+      chat.messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      chat._state.status = 'ready';
+      expect(scheduleRender).toHaveBeenCalledTimes(2);
+    });
+
     it('still sends the initial user message in a browser', () => {
       const chat = new Chat({ persistence: false, transport: {} as any });
       const sendMessage = jest.fn();
