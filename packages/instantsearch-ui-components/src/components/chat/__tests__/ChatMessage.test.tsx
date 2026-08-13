@@ -21,9 +21,9 @@ const ChatMessage = createChatMessageComponent({
   Fragment,
 });
 
-const createContext = (
-  overrides: Partial<ChatComponentContext> = {}
-): ChatComponentContext => ({
+const createContext = <TMessage extends ChatMessageBase = ChatMessageBase>(
+  overrides: Partial<ChatComponentContext<TMessage>> = {}
+): ChatComponentContext<TMessage> => ({
   messages: [],
   status: 'ready',
   isClearing: false,
