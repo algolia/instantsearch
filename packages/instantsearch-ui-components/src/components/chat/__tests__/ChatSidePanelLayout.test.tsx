@@ -75,6 +75,41 @@ describe('ChatSidePanelLayout', () => {
     );
   });
 
+  test('makes closed content inactive until reopened', () => {
+    const createElementSpy = jest.fn(createElement);
+    const CompatibleChatSidePanelLayout = createChatSidePanelLayoutComponent({
+      createElement: createElementSpy,
+      Fragment,
+    });
+    const { container, rerender } = render(
+      <CompatibleChatSidePanelLayout
+        {...defaultProps}
+        open={false}
+        promptComponent={<button>Send</button>}
+      />
+    );
+    const chatContainer = container.querySelector('.ais-Chat-container')!;
+
+    expect(chatContainer).toHaveAttribute('inert');
+    expect(chatContainer.querySelector('button')).toBeInTheDocument();
+    expect(
+      createElementSpy.mock.calls.some(
+        ([, props]) => (props as { inert?: unknown } | null)?.inert === 1
+      )
+    ).toBe(true);
+
+    rerender(
+      <CompatibleChatSidePanelLayout
+        {...defaultProps}
+        open={true}
+        promptComponent={<button>Send</button>}
+      />
+    );
+
+    expect(chatContainer).not.toHaveAttribute('inert');
+    expect(chatContainer.querySelector('button')).toBeInTheDocument();
+  });
+
   test('renders maximized state', () => {
     const { container } = render(
       <ChatSidePanelLayout {...defaultProps} maximized={true} />
