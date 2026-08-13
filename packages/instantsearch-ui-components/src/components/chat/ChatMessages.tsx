@@ -408,6 +408,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         context={context}
         {...messageProps}
         message={message}
+        messages={context.messages}
       />
     );
   };
