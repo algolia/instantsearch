@@ -50,6 +50,62 @@ type ResponseRecord = {
 const defaultGuardrailFallbackResponse =
   'Sorry, we are not able to generate a response at the moment.';
 
+const TOOL_CALL_CANCELLED_ERROR_TEXT =
+  'The tool call was cancelled: the conversation moved on before a result was provided.';
+
+type TerminalToolState =
+  | { state: 'output-available'; output: unknown }
+  | { state: 'output-error'; errorText: string };
+
+function getToolName(part: { type: string; toolName?: string }): string {
+  if (part.type === 'dynamic-tool') {
+    return part.toolName ?? part.type;
+  }
+  return part.type.slice('tool-'.length);
+}
+
+// A tool call awaiting an output that the client owns. Provider-executed calls
+// are resolved server-side, so they are left alone.
+function isPendingToolPart<TPart>(
+  part: TPart
+): part is TPart & { toolCallId: string } {
+  const candidate = part as {
+    type?: unknown;
+    toolCallId?: unknown;
+    state?: unknown;
+    providerExecuted?: unknown;
+  };
+
+  return (
+    typeof candidate.type === 'string' &&
+    typeof candidate.toolCallId === 'string' &&
+    (candidate.state === 'input-streaming' ||
+      candidate.state === 'input-available') &&
+    candidate.providerExecuted !== true
+  );
+}
+
+// Drops the fields that only belong to the state being left behind:
+// `output-error` forbids `output`, and a committed output is not `preliminary`.
+function withTerminalToolState<TPart>(
+  part: TPart,
+  terminalState: TerminalToolState
+): TPart {
+  const {
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    preliminary: _ignoredPreliminary,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    rawOutput: _ignoredRawOutput,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    output: _ignoredOutput,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    errorText: _ignoredErrorText,
+    ...retainedPart
+  } = part as any;
+
+  return { ...retainedPart, ...terminalState } as TPart;
+}
+
 /**
  * Abstract base class for chat implementations.
  */
@@ -71,6 +127,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
+  private resolveCancelledToolOutput?: ChatInit<TUIMessage>['resolveCancelledToolOutput'];
 
   private activeResponse: ResponseRecord | null = null;
   private latestResponse: ResponseRecord | null = null;
@@ -92,6 +149,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onData,
     sendAutomaticallyWhen,
     shouldRepairToolInput,
+    resolveCancelledToolOutput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
   }) {
@@ -105,6 +163,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
     this.shouldRepairToolInput = shouldRepairToolInput;
+    this.resolveCancelledToolOutput = resolveCancelledToolOutput;
   }
 
   /**
@@ -464,19 +523,11 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     ) {
       return false;
     }
-    const {
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      preliminary: _ignoredPreliminary,
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      rawOutput: _ignoredRawOutput,
-      ...committedPart
-    } = part as any;
     const updatedParts = [...message.parts];
-    updatedParts[partIndex] = {
-      ...committedPart,
-      state: 'output-available' as const,
+    updatedParts[partIndex] = withTerminalToolState(part, {
+      state: 'output-available',
       output,
-    };
+    });
 
     const updatedMessage = {
       ...message,
@@ -484,6 +535,64 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     } as TUIMessage;
     this.replaceMessage(messageIndex, updatedMessage, response);
     return true;
+  }
+
+  /**
+   * The transcript to send, with every tool call still awaiting an output
+   * reported as cancelled — a provider rejects a turn holding a tool call with
+   * no matching result.
+   *
+   * The repair stays on this copy rather than being committed to `messages`:
+   * the card is still mounted, so a result submitted after the send must still
+   * land, and is sent as the real output from then on.
+   */
+  private getOutboundMessages(): TUIMessage[] {
+    let outboundMessages: TUIMessage[] | undefined;
+
+    this.messages.forEach((message, messageIndex) => {
+      let repairedParts: TUIMessage['parts'] | undefined;
+
+      message.parts.forEach((part, partIndex) => {
+        if (!isPendingToolPart(part)) return;
+
+        repairedParts = repairedParts || [...message.parts];
+        repairedParts[partIndex] = withTerminalToolState(
+          part,
+          this.resolveToolCallCancellation(part)
+        );
+      });
+
+      if (repairedParts) {
+        outboundMessages = outboundMessages || [...this.messages];
+        outboundMessages[messageIndex] = {
+          ...message,
+          parts: repairedParts,
+        } as TUIMessage;
+      }
+    });
+
+    return outboundMessages || this.messages;
+  }
+
+  private resolveToolCallCancellation(
+    part: TUIMessage['parts'][number] & { toolCallId: string }
+  ): TerminalToolState {
+    let cancellation;
+
+    // Repairing the outbound transcript must never fail the request build.
+    try {
+      cancellation = this.resolveCancelledToolOutput?.({
+        toolName: getToolName(part),
+        toolCallId: part.toolCallId,
+        input: 'input' in part ? part.input : undefined,
+      });
+    } catch {
+      cancellation = undefined;
+    }
+
+    return cancellation
+      ? { state: 'output-available', output: cancellation.output }
+      : { state: 'output-error', errorText: TOOL_CALL_CANCELLED_ERROR_TEXT };
   }
 
   private continueResponse(response?: ResponseRecord): Promise<void> {
@@ -726,10 +835,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
     }
 
+    // Resolved as late as possible, so a tool that submits its output in the
+    // meantime is sent as answered.
+    const messages = this.getOutboundMessages();
+
     return this.consume((abortSignal) =>
       this.transport!.sendMessages({
         chatId: this.id,
-        messages: this.messages,
+        messages,
         abortSignal,
         trigger: options.trigger,
         messageId: options.messageId,
