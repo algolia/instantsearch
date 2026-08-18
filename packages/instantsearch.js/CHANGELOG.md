@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.112.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.1...instantsearch.js@4.112.0) (2026-08-18)
+
+
+### Bug Fixes
+
+* **chat:** warn on unmatched tool results ([#7168](https://github.com/algolia/instantsearch/issues/7168)) ([739161b](https://github.com/algolia/instantsearch/commit/739161b00644cf686bda3280744c255263d54751))
+
+
+### Features
+
+* **chat:** allow client side tool calls to cancel automatically if output not given before a new message ([#7162](https://github.com/algolia/instantsearch/issues/7162)) ([bdc5a5c](https://github.com/algolia/instantsearch/commit/bdc5a5cb17a1006146fcf86e57151881df2ed1d1))
+
+
+
+
+
 ## [4.111.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.0...instantsearch.js@4.111.1) (2026-08-13)
 
 **Note:** Version bump only for package instantsearch.js
