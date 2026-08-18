@@ -65,7 +65,7 @@ export function createToolResultTests(
                 templates: {
                   layout(data) {
                     captureSubmission(data);
-                    return `<span data-tool-call-id="${data.message.toolCallId}"></span>`;
+                    return '<span></span>';
                   },
                 },
               },
