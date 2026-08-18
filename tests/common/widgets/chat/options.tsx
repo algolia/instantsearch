@@ -15,6 +15,7 @@ import {
   chatInlineLayout,
   chatSidePanelLayout,
 } from 'instantsearch.js/es/templates';
+import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
@@ -2013,10 +2014,11 @@ export function createOptionsTests(
                 ...createDefaultWidgetParams(chat),
                 templates: {
                   item: (hit) =>
-                    `<img src="${
-                      (hit as typeof hit & { thumbnail_url: string })
-                        .thumbnail_url
-                    }" alt="" />`,
+                    createPreactElement('img', {
+                      src: (hit as typeof hit & { thumbnail_url: string })
+                        .thumbnail_url,
+                      alt: '',
+                    }),
                 },
               },
               react: {
