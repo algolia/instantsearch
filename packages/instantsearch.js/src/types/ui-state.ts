@@ -37,8 +37,10 @@ type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
 
 type WidgetUiStates = PlacesWidgetDescription['indexUiState'];
 
-export type IndexUiState = Partial<ConnectorUiStates & WidgetUiStates>;
+export type IndexUiState<TExtraUiState = unknown> = Partial<
+  ConnectorUiStates & WidgetUiStates & TExtraUiState
+>;
 
-export type UiState = {
-  [indexId: string]: IndexUiState;
+export type UiState<TExtraUiState = unknown> = {
+  [indexId: string]: IndexUiState<TExtraUiState>;
 };
