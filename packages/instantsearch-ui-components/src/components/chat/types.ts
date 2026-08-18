@@ -636,6 +636,15 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
+  /**
+   * Output reported for this tool call when a request is sent while it is still
+   * waiting for a result, for example `{ confirmed: false }` for a confirmation
+   * prompt. Without it, the call is reported as failed.
+   *
+   * This only affects what is sent: the tool keeps waiting locally, so a result
+   * submitted later still lands.
+   */
+  cancelOutput?: (params: { toolCallId: string; input: unknown }) => unknown;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;

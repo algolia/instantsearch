@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.35.0...instantsearch-ui-components@0.35.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **chat:** make closed layouts non-interactive ([#7164](https://github.com/algolia/instantsearch/issues/7164)) ([d3869f7](https://github.com/algolia/instantsearch/commit/d3869f710fce3d8fcf4f5c19856c1389750597b3))
+
+
+
+
+
 # [0.35.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.34.0...instantsearch-ui-components@0.35.0) (2026-08-12)
 
 

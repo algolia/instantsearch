@@ -149,8 +149,6 @@ export function createReasoningTests(
             ...createDefaultWidgetParams(createChatWithReasoning()),
             showReasoning: true,
             messagesProps: {
-              onClose: () => {},
-              onReload: () => {},
               assistantMessageProps: {
                 autoHideActions: true,
               },

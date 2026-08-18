@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.44.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.44.0...react-instantsearch@7.44.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **chat:** omit widget-owned message callbacks ([#7163](https://github.com/algolia/instantsearch/issues/7163)) ([5895688](https://github.com/algolia/instantsearch/commit/589568857f4c66f6b08a3d96bbbb9d524fb57193))
+
+
+
+
+
 # [7.44.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.43.0...react-instantsearch@7.44.0) (2026-08-12)
 
 
