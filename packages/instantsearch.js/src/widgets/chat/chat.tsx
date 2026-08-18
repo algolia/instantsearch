@@ -2,7 +2,7 @@
 
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -53,6 +53,7 @@ import type {
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessageTextComponentProps,
+  ChatMessagesProps,
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
@@ -71,6 +72,8 @@ const Chat = createChatComponent({
   Fragment,
   useMemo,
   useState,
+  useEffect,
+  useRef,
 });
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
@@ -166,6 +169,10 @@ type ChatWrapperProps = {
     loaderComponent:
       | ((props: ChatMessageLoaderProps) => JSX.Element)
       | undefined;
+    loaderPosition: ChatMessagesProps['loaderPosition'];
+    shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
+    loaderShowDelay: ChatMessagesProps['loaderShowDelay'];
+    loaderMinDuration: ChatMessagesProps['loaderMinDuration'];
     errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
     emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
     actionsComponent:
@@ -197,6 +204,7 @@ type ChatWrapperProps = {
   };
   suggestionsProps: {
     suggestions?: string[];
+    isLoading?: boolean;
     onSuggestionClick: (suggestion: string) => void;
     suggestionsComponent: ComponentProps<typeof Chat>['suggestionsComponent'];
   };
@@ -290,6 +298,10 @@ function ChatWrapper({
         setIndexUiState,
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
+        loaderPosition: messagesProps.loaderPosition,
+        shouldShowLoader: messagesProps.shouldShowLoader,
+        loaderShowDelay: messagesProps.loaderShowDelay,
+        loaderMinDuration: messagesProps.loaderMinDuration,
         errorComponent: messagesProps.errorComponent,
         emptyComponent: messagesProps.emptyComponent,
         actionsComponent: messagesProps.actionsComponent,
@@ -322,6 +334,7 @@ function ChatWrapper({
       suggestionsProps={{
         onSuggestionClick: suggestionsProps.onSuggestionClick,
         suggestions: suggestionsProps.suggestions,
+        isLoading: suggestionsProps.isLoading,
       }}
     />
   );
@@ -334,6 +347,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates,
   tools,
   showReasoning,
+  loaderPosition,
+  shouldShowLoader,
+  loaderShowDelay,
+  loaderMinDuration,
   isInlineLayoutTemplate,
 }: {
   containerNode: HTMLElement;
@@ -344,6 +361,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
   showReasoning: boolean;
+  loaderPosition: ChatMessagesProps['loaderPosition'];
+  shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
+  loaderShowDelay: ChatMessagesProps['loaderShowDelay'];
+  loaderMinDuration: ChatMessagesProps['loaderMinDuration'];
   isInlineLayoutTemplate: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
@@ -528,6 +549,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const stableSuggestionsComponent = templates.suggestions
     ? (suggestionsProps: {
         suggestions?: string[];
+        isLoading?: boolean;
         onSuggestionClick: (suggestion: string) => void;
       }) => (
         <TemplateComponent
@@ -585,6 +607,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       clearMessages,
       tools: toolsFromConnector,
       suggestions,
+      suggestionsStatus,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
       '~consumeInputFocus': consumeInputFocus,
@@ -773,6 +796,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           }}
           messagesProps={{
             loaderComponent: stableLoaderComponent,
+            loaderPosition,
+            shouldShowLoader,
+            loaderShowDelay,
+            loaderMinDuration,
             errorComponent: stableMessagesErrorComponent,
             emptyComponent: stableMessagesEmptyComponent,
             actionsComponent: stableActionsComponent,
@@ -803,6 +830,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           state={state}
           suggestionsProps={{
             suggestions,
+            isLoading: suggestionsStatus === 'loading',
             onSuggestionClick: (message: string) => {
               sendMessage({ text: message });
             },
@@ -876,9 +904,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     loader: Template<ChatMessageLoaderProps>;
 
     /**
-     * Text to display in the loader
+     * Text to display in the loader. Pass a function to label the wait by what
+     * the turn is doing, e.g. `({ phase }) => phase === 'tool' ? 'Searching…' : 'Thinking…'`.
      */
-    loaderText: string;
+    loaderText: ChatMessagesTranslations['loaderText'];
 
     /**
      * Templates to use for the header.
@@ -1062,6 +1091,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     suggestions: Template<{
       suggestions: string[];
+      isLoading?: boolean;
       onSuggestionClick: (suggestion: string) => void;
     }>;
   }>;
@@ -1104,6 +1134,31 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * Whether to render reasoning parts
    */
   showReasoning?: boolean;
+
+  /**
+   * Where the loader renders: as its own row after the last message
+   * (`messages-end`, the default) or inside the streaming assistant message
+   * (`message-inline`).
+   */
+  loaderPosition?: ChatMessagesProps['loaderPosition'];
+
+  /**
+   * Overrides when the loader shows. Receives the turn context plus the
+   * built-in decision as `defaultValue`.
+   */
+  shouldShowLoader?: ChatMessagesProps['shouldShowLoader'];
+
+  /**
+   * How long (ms) a renewed loading state must hold before the loader comes back
+   * after having been hidden in the same turn.
+   */
+  loaderShowDelay?: ChatMessagesProps['loaderShowDelay'];
+
+  /**
+   * Minimum time (ms) the loader stays on screen once shown, while the turn is
+   * still running.
+   */
+  loaderMinDuration?: ChatMessagesProps['loaderMinDuration'];
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1130,6 +1185,10 @@ export default (function chat<
     getSearchPageURL,
     disableTriggerValidation = false,
     showReasoning = false,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     ...options
   } = widgetParams || {};
 
@@ -1165,6 +1224,10 @@ export default (function chat<
     templates,
     tools,
     showReasoning,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     isInlineLayoutTemplate,
   });
 

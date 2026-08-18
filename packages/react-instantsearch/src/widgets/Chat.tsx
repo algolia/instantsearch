@@ -51,6 +51,8 @@ const ChatUiComponent = createChatComponent({
   Fragment,
   useMemo,
   useState,
+  useEffect,
+  useRef,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -176,6 +178,27 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     loaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    /**
+     * Where the loader renders: as its own row after the last message
+     * (`messages-end`, the default) or inside the streaming assistant message
+     * (`message-inline`).
+     */
+    loaderPosition?: ChatUiProps['messagesProps']['loaderPosition'];
+    /**
+     * Overrides when the loader shows. Receives the turn context plus the
+     * built-in decision as `defaultValue`.
+     */
+    shouldShowLoader?: ChatUiProps['messagesProps']['shouldShowLoader'];
+    /**
+     * How long (ms) a renewed loading state must hold before the loader comes
+     * back after having been hidden in the same turn.
+     */
+    loaderShowDelay?: ChatUiProps['messagesProps']['loaderShowDelay'];
+    /**
+     * Minimum time (ms) the loader stays on screen once shown, while the turn is
+     * still running.
+     */
+    loaderMinDuration?: ChatUiProps['messagesProps']['loaderMinDuration'];
     emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
@@ -218,6 +241,10 @@ function ChatInner<
     headerMinimizeIconComponent,
     headerMaximizeIconComponent,
     loaderComponent,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     messagesErrorComponent,
     promptComponent,
     promptHeaderComponent,
@@ -293,6 +320,7 @@ function ChatInner<
     clearMessages,
     tools: toolsFromConnector,
     suggestions,
+    suggestionsStatus,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
     '~consumeInputFocus': consumeInputFocus,
@@ -382,6 +410,10 @@ function ChatInner<
         contentRef,
         onScrollToBottom: scrollToBottom,
         loaderComponent,
+        loaderPosition,
+        shouldShowLoader,
+        loaderShowDelay,
+        loaderMinDuration,
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
@@ -428,6 +460,7 @@ function ChatInner<
       }}
       suggestionsProps={{
         suggestions,
+        isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
           sendMessage({ text: suggestion });
         },

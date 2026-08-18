@@ -54,6 +54,53 @@ export function isReasoningPartActive(
   );
 }
 
+/**
+ * Whether a text part renders nothing. `text-start` creates the part before its
+ * first delta, and `<context>` wrappers are a shim `ChatMessage` also drops.
+ */
+export const isPartTextEmpty = (
+  part: Extract<ChatMessageBase['parts'][number], { type: 'text' }>
+): boolean => {
+  return (
+    part.text.trim().length === 0 ||
+    (part.text.startsWith('<context>') && part.text.endsWith('</context>'))
+  );
+};
+
+/**
+ * Whether a part says something about the turn's progress. Data parts and
+ * unwritten text parts render nothing, so reading them would answer "what is
+ * this turn doing" with a part that changed nothing on screen.
+ */
+export const isPartProgressSignal = (
+  part: ChatMessageBase['parts'][number]
+): boolean => {
+  if (startsWith(part.type, 'data-')) {
+    return false;
+  }
+  if (isPartText(part)) {
+    return !isPartTextEmpty(part);
+  }
+  return true;
+};
+
+export const findLastProgressPart = (
+  parts: ChatMessageBase['parts'] | undefined
+): ChatMessageBase['parts'][number] | undefined => {
+  if (!parts) {
+    return undefined;
+  }
+
+  for (let index = parts.length - 1; index >= 0; index--) {
+    const part = parts[index];
+    if (isPartProgressSignal(part)) {
+      return part;
+    }
+  }
+
+  return undefined;
+};
+
 export const findTool = (
   partType: string,
   tools: ClientSideTools

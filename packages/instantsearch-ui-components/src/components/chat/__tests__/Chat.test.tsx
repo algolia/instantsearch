@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { fireEvent, render } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import { createChatComponent } from '../Chat';
 
@@ -15,6 +15,8 @@ const Chat = createChatComponent({
   Fragment,
   useMemo,
   useState,
+  useEffect,
+  useRef,
 });
 
 describe('Chat', () => {

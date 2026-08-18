@@ -200,6 +200,11 @@ export type ChatMessageProps<
    */
   suggestionsElement?: VNode;
   /**
+   * Optional loader element, rendered under the message's parts. Set by
+   * `ChatMessages` when `loaderPosition` is `message-inline`.
+   */
+  loaderElement?: VNode;
+  /**
    * Whether to render reasoning parts
    */
   showReasoning?: boolean;
@@ -258,6 +263,7 @@ export function createChatMessageComponent({
       onClose,
       translations: userTranslations,
       suggestionsElement,
+      loaderElement,
       showReasoning = false,
       parseMarkdown = true,
       ...props
@@ -514,6 +520,7 @@ export function createChatMessageComponent({
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.parts.map(renderMessagePart)}
+              {loaderElement}
             </div>
 
             {suggestionsElement}
