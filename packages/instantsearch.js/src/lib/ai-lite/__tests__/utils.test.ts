@@ -8,9 +8,9 @@ import {
 
 import type { UIMessage } from '../types';
 
-const assistantMessage = (parts: UIMessage['parts']): UIMessage[] => [
+const assistantMessage = (parts: unknown[]): UIMessage[] => [
   { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
-  { id: 'a1', role: 'assistant', parts },
+  { id: 'a1', role: 'assistant', parts: parts as UIMessage['parts'] },
 ];
 
 const resolvedToolPart = (
