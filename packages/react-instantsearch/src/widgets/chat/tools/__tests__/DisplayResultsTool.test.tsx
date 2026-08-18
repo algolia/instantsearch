@@ -4,6 +4,7 @@
 
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -70,6 +71,17 @@ const createMessages = (
     },
   ] as ChatComponentContext['messages'];
 
+// This tool only consumes records; the search tool fetched them.
+const conversationOf = (messages: ChatComponentContext['messages']) => ({
+  messages,
+  records: collectChatRecords(messages),
+});
+
+const conversation = (
+  message: ClientSideToolComponentProps['context']['message'],
+  hits: Array<{ objectID: string; name?: string; why?: string }>
+) => conversationOf(createMessages(message, hits));
+
 describe('createDisplayResultsTool', () => {
   test('opts into tool input streaming', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
@@ -96,15 +108,11 @@ describe('createDisplayResultsTool', () => {
       },
     };
 
-    const messages = createMessages(message, [
-      { objectID: '1', name: 'Air Runner' },
-    ]);
-
     render(
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversation(message, [{ objectID: '1', name: 'Air Runner' }]),
           status: 'streaming',
           message,
           applyFilters: jest.fn(),
@@ -144,12 +152,14 @@ describe('createDisplayResultsTool', () => {
       return {
         context: {
           ...metadata,
-          messages: createMessages(
-            message,
-            objectIDs.map((objectID) => ({
-              objectID,
-              name: `Product ${objectID}`,
-            }))
+          ...conversationOf(
+            createMessages(
+              message,
+              objectIDs.map((objectID) => ({
+                objectID,
+                name: `Product ${objectID}`,
+              }))
+            )
           ),
           status: 'streaming' as const,
           message,
@@ -199,9 +209,9 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: '1', name: 'Runner' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Runner' }])
+          ),
           status: 'streaming',
           message,
           applyFilters: jest.fn(),
@@ -251,10 +261,12 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: '1', name: 'Air Runner' },
-            { objectID: '2', name: 'Street Runner' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: '1', name: 'Air Runner' },
+              { objectID: '2', name: 'Street Runner' },
+            ])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -296,7 +308,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [{ objectID: '1' }]),
+          ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -361,7 +373,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [{ objectID: '1' }]),
+          ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -415,7 +427,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversationOf(messages),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -458,7 +470,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversationOf(messages),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -509,10 +521,12 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: '1', name: 'Air Runner' },
-            { objectID: '2', name: 'Trail Runner' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: '1', name: 'Air Runner' },
+              { objectID: '2', name: 'Trail Runner' },
+            ])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -561,10 +575,12 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: 'known', name: 'Known record' },
-            { objectID: 'known-2', name: 'Second known record' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: 'known', name: 'Known record' },
+              { objectID: 'known-2', name: 'Second known record' },
+            ])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -623,10 +639,12 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: 'constructor', name: 'Constructor record' },
-            { objectID: '__proto__', name: 'Prototype record' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: 'constructor', name: 'Constructor record' },
+              { objectID: '__proto__', name: 'Prototype record' },
+            ])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -699,9 +717,9 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: '1', name: 'Air Runner' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -766,9 +784,9 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, [
-            { objectID: '1', name: 'Air Runner' },
-          ]),
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
+          ),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -799,7 +817,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages: createMessages(message, []),
+          ...conversationOf(createMessages(message, [])),
           status: 'streaming',
           message,
           applyFilters: jest.fn(),
@@ -841,7 +859,7 @@ describe('createDisplayResultsTool', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  test('preserves duplicate result order and uses the latest preceding hit', () => {
+  test('preserves duplicate result order and uses the latest hit of the conversation', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
@@ -896,7 +914,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversationOf(messages),
           message,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -908,7 +926,11 @@ describe('createDisplayResultsTool', () => {
     );
 
     expect(screen.getAllByTestId('name-1')).toHaveLength(2);
-    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent('New Runner');
+    // One map for the whole conversation, so the newest copy of a record wins
+    // even when its search ran after this tool.
+    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent(
+      'Future Runner'
+    );
     expect(screen.getAllByTestId('position-1')[0]).toHaveTextContent('1');
     expect(screen.getAllByTestId('position-1')[1]).toHaveTextContent('2');
     expect(screen.getAllByTestId('why-1')[0]).toHaveTextContent('first');
@@ -981,7 +1003,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversationOf(messages),
           message: firstDisplayMessage,
           applyFilters: jest.fn(),
           indexUiState: {},
@@ -1002,7 +1024,7 @@ describe('createDisplayResultsTool', () => {
       <LayoutComponent
         context={{
           ...metadata,
-          messages,
+          ...conversationOf(messages),
           message: secondDisplayMessage,
           applyFilters: jest.fn(),
           indexUiState: {},

@@ -8,6 +8,7 @@
  * mid-delta identifier reach `input` looking complete.
  */
 import { render, screen } from '@testing-library/react';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
@@ -125,6 +126,7 @@ function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
         onReload: jest.fn(),
         onClose: jest.fn(),
         message: part,
+        records: collectChatRecords(messages),
         applyFilters: jest.fn(),
         indexUiState: {},
         addToolResult: jest.fn(),

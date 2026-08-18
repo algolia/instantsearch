@@ -3,6 +3,7 @@ import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
 import { isReasoningPartActive } from '../../lib/utils/chat';
+import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -22,6 +23,7 @@ import type {
   ClientSideTool,
   TextUIPart,
 } from './types';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   ComponentProps,
   Renderer,
@@ -268,6 +270,14 @@ export function createChatMessageComponent({
       ...userTranslations,
     };
 
+    // A message rendered without a connector-attached store falls back to
+    // collecting from the conversation it was handed.
+    let fallbackRecords: ChatRecordsStore | undefined;
+    const getFallbackRecords = () => {
+      fallbackRecords = fallbackRecords || collectChatRecords(messages);
+      return fallbackRecords;
+    };
+
     const hasLeading = Boolean(LeadingComponent);
     const isCurrentMessage =
       messages === undefined ||
@@ -483,6 +493,7 @@ export function createChatMessageComponent({
                   // `...context` would restore `context.messages`; re-apply the
                   // resolved `messages` so an explicit override reaches tools too.
                   messages,
+                  records: tool.records || getFallbackRecords(),
                   message: toolMessage,
                   insightsEventContext: tool.insightsEventContext,
                   indexUiState,
