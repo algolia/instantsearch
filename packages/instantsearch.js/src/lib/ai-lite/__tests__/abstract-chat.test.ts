@@ -2,6 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { ChatState as RuntimeChatState } from '../../chat/chat';
+import { warning } from '../../utils/logger';
 import { AbstractChat } from '../abstract-chat';
 import { parseJsonEventStream } from '../stream-parser';
 import { lastAssistantMessageIsCompleteWithToolCalls } from '../utils';
@@ -2863,6 +2864,74 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       ]);
     });
 
+    it('warns when queued global routing becomes unsafe before commit', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
+      const responseStarted = deferred<undefined>();
+      const releaseResponse = deferred<undefined>();
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        streamFactory: () =>
+          new ReadableStream<UIMessageChunk>({
+            start(controller) {
+              controller.enqueue(startChunk('assistant-active'));
+              responseStarted.resolve(undefined);
+              releaseResponse.promise.then(() => {
+                controller.enqueue(finishChunk());
+                controller.close();
+              });
+            },
+          }),
+        sendAutomaticallyWhen,
+      });
+      setup.chat.messages = [
+        {
+          id: 'assistant-restored',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      try {
+        const send = setup.chat.sendMessage({ text: 'keep working' });
+        await responseStarted.promise;
+        const result = setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { ok: true },
+        });
+        setup.chat.messages = setup.chat.messages.filter(
+          (message) => message.id !== 'assistant-restored'
+        );
+
+        releaseResponse.resolve(undefined);
+        await send;
+        await result;
+
+        expect(warn).toHaveBeenCalledWith(
+          '[InstantSearch.js]: addToolResult ignored because toolCallId "call-1" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.'
+        );
+        expect(
+          setup.state.messages.some((message) =>
+            message.parts.some((part) => 'output' in part)
+          )
+        ).toBe(false);
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
+    });
+
     it('ignores a public result when restored messages share a call id', async () => {
       const setup = createTestSetup({
         sendAutomaticallyWhen: () => false,
@@ -4052,19 +4121,245 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.state.status).toBe('ready');
     });
 
-    it('quietly ignores an unknown toolCallId', async () => {
+    it('warns when an unknown global toolCallId is ignored', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
       const sendAutomaticallyWhen = jest.fn(() => true);
       const setup = createTestSetup({ sendAutomaticallyWhen });
+      setup.chat.messages = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'expected',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
 
-      await setup.chat.addToolResult({
-        tool: 'search',
-        toolCallId: 'missing',
-        output: { ok: true },
+      try {
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'missing',
+          output: { privateValue: 'do not log' },
+        });
+
+        expect(warn).toHaveBeenCalledWith(
+          '[InstantSearch.js]: addToolResult ignored because toolCallId "missing" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.'
+        );
+        expect(warn.mock.calls.join(' ')).not.toContain('do not log');
+        expect(setup.state.messages[0].parts[0]).toMatchObject({
+          toolCallId: 'expected',
+          state: 'input-available',
+        });
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).not.toHaveBeenCalled();
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
+    });
+
+    it('warns when global identifier-only routing is disabled', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({ sendAutomaticallyWhen });
+      setup.chat.messages = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      setup.chat.resetConversationId();
+
+      try {
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { ok: true },
+        });
+
+        expect(warn).toHaveBeenCalledWith(
+          '[InstantSearch.js]: addToolResult ignored because toolCallId "call-1" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.'
+        );
+        expect(setup.state.messages[0].parts[0]).toMatchObject({
+          state: 'input-available',
+        });
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).not.toHaveBeenCalled();
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
+    });
+
+    it('warns once when a global toolCallId has ambiguous owners', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
+      const sendAutomaticallyWhen = jest.fn(() => false);
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'shared-call',
+              input: { owner: 'first' },
+            },
+            finishChunk(),
+          ],
+          [
+            startChunk('assistant-2'),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'shared-call',
+              input: { owner: 'second' },
+            },
+            finishChunk(),
+          ],
+        ],
+        onToolCall: () => undefined,
+        sendAutomaticallyWhen,
       });
 
-      expect(setup.state.messages).toEqual([]);
-      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
-      expect(setup.sendMessages).not.toHaveBeenCalled();
+      try {
+        await setup.chat.sendMessage({ text: 'first search' });
+        await setup.chat.sendMessage({ text: 'second search' });
+        const messagesBeforeResults = setup.chat.messages;
+
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'shared-call',
+          output: { privateValue: 'first ignored output' },
+        });
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'shared-call',
+          output: { privateValue: 'second ignored output' },
+        });
+
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn).toHaveBeenCalledWith(
+          '[InstantSearch.js]: addToolResult ignored because toolCallId "shared-call" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.'
+        );
+        expect(warn.mock.calls.join(' ')).not.toContain('ignored output');
+        expect(setup.chat.messages).toBe(messagesBeforeResults);
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
+    });
+
+    it('silently ignores an already-settled global duplicate', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
+      const sendAutomaticallyWhen = jest.fn(() => false);
+      const setup = createTestSetup({ sendAutomaticallyWhen });
+      setup.chat.messages = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-search',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      try {
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { accepted: true },
+        });
+        await setup.chat.addToolResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { accepted: false },
+        });
+
+        expect(warn).not.toHaveBeenCalled();
+        expect(setup.state.messages[0].parts[0]).toMatchObject({
+          state: 'output-available',
+          output: { accepted: true },
+        });
+        expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+        expect(setup.sendMessages).not.toHaveBeenCalled();
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
+    });
+
+    it('silently ignores a response-scoped result after retirement', async () => {
+      warning.cache = {};
+      const warn = jest.spyOn(global.console, 'warn');
+      warn.mockImplementation(() => {});
+      let submitResult!: TestChat['addToolResult'];
+      const sendAutomaticallyWhen = jest.fn(() => true);
+      const setup = createTestSetup({
+        chunks: [
+          startChunk('assistant-1'),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: (_options, addToolResult) => {
+          submitResult = addToolResult!;
+        },
+        sendAutomaticallyWhen,
+      });
+
+      try {
+        await setup.chat.sendMessage({ text: 'search' });
+        setup.chat.messages = setup.chat.messages.filter(
+          (message) => message.id !== 'assistant-1'
+        );
+        await submitResult({
+          tool: 'search',
+          toolCallId: 'call-1',
+          output: { privateValue: 'retired output' },
+        });
+
+        expect(warn).not.toHaveBeenCalled();
+        expect(
+          setup.chat.messages.some((message) => message.id === 'assistant-1')
+        ).toBe(false);
+        expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+        expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+      } finally {
+        warn.mockRestore();
+        warning.cache = {};
+      }
     });
 
     it('settles an unknown public result returned from onToolCall', async () => {
