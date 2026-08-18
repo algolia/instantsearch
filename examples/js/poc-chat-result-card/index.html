@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>POC — Chat as a Result Card (InstantSearch + Agent Studio)</title>
+
+<!--
+  ============================================================================
+  POC: "chat result card" injected into a PLP hits grid.
+
+  Questions this page tries to answer (see also README.md + Findings section):
+    1. Is the result card the same widget as chat, or a different one?
+       -> Approach A reuses the `chat` widget (config + CSS only).
+       -> Approach B is a bespoke card built on `connectChat` (custom UI code).
+    2. Follow-up button that opens a chat?
+       -> Both cards have "Continue in full chat" that hands the conversation
+          off to the standard overlay chat widget.
+    3. Condition defined on the backend?
+       -> Trigger engine supports Rules `userData` (real, if the index has a
+          matching Rule) and a simulated backend rules table, plus heuristic /
+          always / manual modes.
+    4. Is the "instant response" better with PLP context?
+       -> A/B compare lab sends the same question with and without
+          `turnContext` (query, filters, top results) and streams both.
+
+  Standalone: no build step. Open via any static server (or file://).
+  Uses the public Algolia demo app (latency / instant_search) and the shared
+  demo Agent Studio agent used across the instantsearch examples.
+  ============================================================================
+-->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@8.18.0/themes/satellite-min.css" />
+
+<style>
+  :root {
+    --accent: #5468ff;
+    --accent-soft: #eef0ff;
+    --ink: #21243d;
+    --ink-soft: #5a5e9a;
+    --line: #e3e5ec;
+    --bg: #f5f6fa;
+    --card-bg: #ffffff;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  /* ---------- page chrome ---------- */
+  .page-header {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 18px 28px;
+  }
+  .page-header h1 { margin: 0 0 4px; font-size: 19px; }
+  .page-header p { margin: 0; color: var(--ink-soft); font-size: 13px; }
+  .page-header code { background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 24px;
+    padding: 24px 28px;
+    max-width: 1500px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+  /* ---------- control panel ---------- */
+  .controls {
+    position: sticky;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .panel {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .panel h3 {
+    margin: 0 0 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .panel label { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; padding: 4px 0; cursor: pointer; }
+  .panel label small { display: block; color: var(--ink-soft); font-size: 11px; }
+  .panel input[type="number"] { width: 60px; padding: 3px 6px; border: 1px solid var(--line); border-radius: 6px; }
+  .seg {
+    display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 6px;
+  }
+  .seg button {
+    flex: 1; border: 0; background: #fff; padding: 7px 4px; font-size: 12.5px; cursor: pointer; color: var(--ink-soft);
+  }
+  .seg button.active { background: var(--accent); color: #fff; font-weight: 600; }
+  .btn {
+    display: inline-block; border: 1px solid var(--line); background: #fff; border-radius: 8px;
+    padding: 7px 12px; font-size: 13px; cursor: pointer; color: var(--ink);
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn--primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn--primary:hover { background: #4356e0; color: #fff; }
+  .btn--sm { padding: 4px 9px; font-size: 12px; border-radius: 6px; }
+
+  .readout {
+    font-size: 12px; line-height: 1.5; background: var(--bg); border-radius: 8px; padding: 10px 12px;
+    color: var(--ink-soft); word-break: break-word;
+  }
+  .readout b { color: var(--ink); }
+  .readout .ok { color: #0d8050; font-weight: 600; }
+  .readout .no { color: #c23030; font-weight: 600; }
+  pre.ctx-preview {
+    margin: 8px 0 0; font-size: 10.5px; background: #272945; color: #cdd2ff; border-radius: 8px;
+    padding: 10px; overflow: auto; max-height: 160px; white-space: pre-wrap; word-break: break-all;
+  }
+
+  /* ---------- results area ---------- */
+  .results-toolbar { display: flex; align-items: center; gap: 14px; margin: 14px 2px 12px; flex-wrap: wrap; }
+  .results-toolbar .ais-Stats-text { font-size: 12.5px; color: var(--ink-soft); }
+
+  #hits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 14px;
+  }
+
+  .poc-hit {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 230px;
+  }
+  .poc-hit img { height: 110px; object-fit: contain; align-self: center; max-width: 100%; }
+  .poc-hit .hit-name { font-size: 13px; line-height: 1.35; margin: 0; font-weight: 500; flex: 1; }
+  .poc-hit .hit-name em { background: #fff3c4; font-style: normal; border-radius: 2px; }
+  .poc-hit .hit-meta { font-size: 11px; color: var(--ink-soft); }
+  .poc-hit .hit-price { font-weight: 700; font-size: 14px; }
+
+  /* ---------- injected chat cards ---------- */
+  .poc-card {
+    grid-column: span 2;
+    background: linear-gradient(180deg, #fbfbff 0%, #ffffff 30%);
+    border: 1.5px solid var(--accent);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(84, 104, 255, 0.12);
+  }
+  @media (max-width: 560px) { .poc-card { grid-column: span 1; } }
+
+  .poc-card-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--accent-soft);
+  }
+  .poc-card-head .spark { font-size: 14px; }
+  .poc-card-head .ttl { font-size: 12.5px; font-weight: 700; }
+  .poc-card-head .impl-tag {
+    font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 999px;
+    background: #fff; border: 1px solid var(--line); color: var(--ink-soft);
+  }
+  .poc-card-head .reason-badge {
+    font-size: 10px; padding: 2px 7px; border-radius: 999px; background: #21243d; color: #fff;
+    max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .poc-card-head .dismiss {
+    margin-left: auto; border: 0; background: transparent; cursor: pointer; font-size: 15px;
+    color: var(--ink-soft); line-height: 1; padding: 2px 4px;
+  }
+  .poc-card-foot {
+    display: flex; justify-content: flex-end; padding: 8px 12px; border-top: 1px solid var(--line); background: #fff;
+  }
+
+  /* Approach A: constrain the embedded `chat` widget into card size */
+  .poc-a-layout { display: flex; flex-direction: column; height: 340px; }
+  .poc-card-a .ais-ChatMessages { flex: 1; min-height: 0; }
+  .poc-card-a .ais-ChatPrompt textarea { font-size: 13px; }
+
+  /* Approach B: bespoke card UI */
+  .poc-b-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; min-height: 260px; }
+  .poc-b-q { font-size: 12px; color: var(--ink-soft); font-style: italic; }
+  .poc-b-q:empty { display: none; }
+  .poc-b-answer { font-size: 13.5px; line-height: 1.55; flex: 1; overflow-y: auto; max-height: 210px; }
+  .poc-b-answer .ph { color: var(--ink-soft); }
+  .poc-b-answer code { background: var(--bg); padding: 1px 4px; border-radius: 4px; font-size: 12px; }
+  .poc-b-status { font-size: 11px; color: var(--ink-soft); min-height: 14px; }
+  .poc-b-status .dots::after { content: '…'; animation: pocdots 1.2s infinite; }
+  @keyframes pocdots { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } }
+
+  .poc-b-products { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+  .poc-b-products:empty { display: none; }
+  .poc-b-product {
+    flex: 0 0 120px; border: 1px solid var(--line); border-radius: 8px; padding: 8px;
+    font-size: 10.5px; line-height: 1.3; background: #fff; display: flex; flex-direction: column; gap: 4px;
+  }
+  .poc-b-product img { height: 48px; object-fit: contain; }
+  .poc-b-product b { font-size: 11px; color: var(--accent); }
+
+  .poc-b-suggestions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .poc-b-suggestions:empty { display: none; }
+  .poc-b-suggestions button {
+    border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 10px;
+    font-size: 11px; cursor: pointer; color: var(--ink-soft);
+  }
+  .poc-b-suggestions button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .poc-b-form { display: flex; gap: 8px; }
+  .poc-b-form input {
+    flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; font-size: 13px;
+  }
+  .poc-b-form input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+
+  /* ---------- compare lab dialog ---------- */
+  dialog#compare-dialog {
+    border: 0; border-radius: 14px; padding: 0; width: min(1000px, 94vw); box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  dialog#compare-dialog::backdrop { background: rgba(20, 22, 50, 0.5); }
+  .cmp-head { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .cmp-head h2 { margin: 0; font-size: 15px; flex: 1; }
+  .cmp-body { padding: 16px 20px 20px; }
+  .cmp-qrow { display: flex; gap: 10px; margin-bottom: 16px; }
+  .cmp-qrow input { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-size: 13.5px; }
+  .cmp-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .cmp-panes { grid-template-columns: 1fr; } }
+  .cmp-pane { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .cmp-pane-head {
+    padding: 8px 12px; font-size: 12px; font-weight: 700; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .cmp-pane-head .t { font-weight: 400; color: var(--ink-soft); font-size: 11px; }
+  .cmp-pane--ctx .cmp-pane-head { background: #e7f7ef; color: #0d8050; }
+  .cmp-pane--noctx .cmp-pane-head { background: #fdeeee; color: #c23030; }
+  .cmp-pane-body { padding: 12px; font-size: 13px; line-height: 1.55; min-height: 140px; max-height: 320px; overflow-y: auto; }
+  .cmp-ctx-used {
+    margin: 0 0 10px; font-size: 10.5px; background: var(--bg); border-radius: 6px; padding: 8px;
+    color: var(--ink-soft); white-space: pre-wrap; word-break: break-all;
+  }
+
+  /* ---------- findings ---------- */
+  .findings { max-width: 1500px; margin: 10px auto 60px; padding: 0 28px; }
+  .findings details {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; padding: 14px 18px;
+  }
+  .findings summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+  .findings .body { font-size: 13.5px; line-height: 1.6; color: #33365a; }
+  .findings code { background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .findings table { border-collapse: collapse; width: 100%; font-size: 12.5px; margin: 8px 0; }
+  .findings th, .findings td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  .findings th { background: var(--bg); }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>POC — Chat as a Result Card</h1>
+  <p>
+    A chat "instant answer" card injected into the PLP hits grid, built two ways on top of
+    <code>instantsearch.js</code> + Agent Studio. Use the left panel to switch implementations,
+    trigger conditions, and PLP context. Demo data: <code>latency / instant_search</code>.
+  </p>
+</header>
+
+<div class="layout">
+  <!-- ====================== control panel ====================== -->
+  <aside class="controls">
+    <div class="panel">
+      <h3>1 · Card implementation</h3>
+      <div class="seg" id="approach-seg">
+        <button data-v="A" class="active">A · reuse chat widget</button>
+        <button data-v="B">B · custom card</button>
+        <button data-v="both">Both</button>
+      </div>
+      <div class="readout" id="approach-note"></div>
+    </div>
+
+    <div class="panel">
+      <h3>2 · Trigger condition</h3>
+      <label><input type="radio" name="trigger" value="heuristic" checked />
+        <span>Frontend heuristic<small>query looks like a question</small></span></label>
+      <label><input type="radio" name="trigger" value="backend" />
+        <span>Backend rule<small>Rules → <code>results.userData</code> (real if present, simulated otherwise)</small></span></label>
+      <label><input type="radio" name="trigger" value="always" />
+        <span>Always<small>card always shown</small></span></label>
+      <label><input type="radio" name="trigger" value="manual" />
+        <span>Manual<small>only via the button below</small></span></label>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="btn btn--sm" id="trigger-now">Show card now</button>
+        <button class="btn btn--sm" id="ask-again">Ask again</button>
+      </div>
+      <div class="readout" id="trigger-readout" style="margin-top:10px;">waiting for first search…</div>
+    </div>
+
+    <div class="panel">
+      <h3>3 · Behavior</h3>
+      <label><input type="checkbox" id="opt-context" checked />
+        <span>Send PLP context (<code>turnContext</code>)<small>query, filters, result count, top results</small></span></label>
+      <label><input type="checkbox" id="opt-autoask" checked />
+        <span>Auto-ask on trigger<small>instant response from the search query</small></span></label>
+      <label style="align-items:center;">
+        <span>Card position in grid</span>
+        <input type="number" id="opt-position" value="2" min="0" max="11" />
+      </label>
+      <pre class="ctx-preview" id="ctx-preview">{ }</pre>
+    </div>
+
+    <div class="panel">
+      <h3>4 · Context A/B lab</h3>
+      <p style="font-size:12px; color:var(--ink-soft); margin:0 0 10px;">
+        Same question, streamed twice: with vs without PLP context. Judge which instant response is better.
+      </p>
+      <button class="btn btn--primary" id="open-compare" style="width:100%;">Open compare lab</button>
+    </div>
+
+    <div class="panel">
+      <h3>Filters (feed the context)</h3>
+      <div id="brand-filter"></div>
+    </div>
+  </aside>
+
+  <!-- ====================== results ====================== -->
+  <main>
+    <div id="searchbox"></div>
+    <div class="results-toolbar">
+      <div id="stats"></div>
+    </div>
+    <div id="hits-grid"></div>
+    <div id="pagination" style="margin-top:20px; display:flex; justify-content:center;"></div>
+  </main>
+</div>
+
+<!-- ====================== findings ====================== -->
+<section class="findings">
+  <details open>
+    <summary>Findings — same widget or a different one?</summary>
+    <div class="body">
+      <table>
+        <tr><th></th><th>A · reuse <code>chat</code> widget</th><th>B · custom card on <code>connectChat</code></th></tr>
+        <tr><td><b>Code</b></td>
+          <td>~30 lines of config + ~10 lines of CSS. Custom <code>layout</code> template drops the header, keeps messages + prompt. <code>type: 'chatCard'</code> + <code>persistence: false</code> isolate it from the main chat.</td>
+          <td>~200 lines: bespoke DOM, streaming text rendering, tool-output product chips, suggestion chips, its own input. Full visual freedom.</td></tr>
+        <tr><td><b>Gets for free</b></td>
+          <td>Markdown, message actions, feedback, tool carousels, error/retry, loader, suggestions, stick-to-bottom scrolling.</td>
+          <td>Streaming state machine, transport, persistence, context, suggestions extraction (all from <code>connectChat</code>). Everything visual is DIY.</td></tr>
+        <tr><td><b>Looks like</b></td>
+          <td>A mini chat panel in the grid.</td>
+          <td>An "answer card" (closer to the product vision).</td></tr>
+        <tr><td><b>Verdict</b></td>
+          <td colspan="2">The <em>engine</em> is definitely the same (<code>connectChat</code>). The open question is only the UI shell: recommendation is a new compact <b>layout preset / card component</b> in instantsearch built on the same widget & connector — not a separate widget, and not per-customer copy-paste.</td></tr>
+      </table>
+    </div>
+  </details>
+  <details>
+    <summary>Findings — trigger, backend condition, handoff, context</summary>
+    <div class="body">
+      <ul>
+        <li><b>Backend condition:</b> the idiomatic Algolia mechanism already exists — a Rule with a <code>userData</code> consequence, read from <code>results.userData</code> on the frontend. The demo index has no such Rule, so this POC evaluates a simulated rules table in the same shape (and honors real <code>userData.chatResultCard</code> if the index ever returns it, including a <code>position</code> override). No new backend API needed for a first version.</li>
+        <li><b>Follow-up → full chat:</b> works today with public APIs: copy the card's <code>messages</code> into the main chat via <code>setMessages()</code>, then <code>setOpen(true)</code>. Two caveats found while building: (1) <code>renderState[…].messages</code> is stale during streaming (chat re-renders don't refresh the shared snapshot), so the POC captures live messages from the card's own render callback — a productized handoff API should hide this; (2) conversation ids differ between the two instances — the stateless transport makes it work anyway, but analytics/feedback attribution would want a proper "transfer conversation" concept.</li>
+        <li><b>PLP context:</b> <code>connectChat</code> already supports it via the <code>context</code> option → <code>metadata.turnContext</code> on the user turn. The Agent Studio backend accepts it and demonstrably uses it (try the compare lab). Caching note: identical questions may be served from the completion cache; the compare lab bypasses it with <code>cache=false</code>.</li>
+        <li><b>Is auto-trigger good enough?</b> Search-as-you-type means the trigger must be debounced (700&nbsp;ms here) and deduplicated per question, or you spam the agent. A backend condition (Rule) is the cleanest gate because merchandisers control it per query/context, and it can also carry the card position.</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ====================== compare lab ====================== -->
+<dialog id="compare-dialog">
+  <div class="cmp-head">
+    <h2>Context A/B lab — is the instant response better with PLP context?</h2>
+    <button class="btn btn--sm" id="compare-close">Close</button>
+  </div>
+  <div class="cmp-body">
+    <div class="cmp-qrow">
+      <input id="compare-q" type="text" placeholder="Question to ask the agent…" />
+      <button class="btn btn--primary" id="compare-run">Run both</button>
+    </div>
+    <div class="cmp-panes">
+      <div class="cmp-pane cmp-pane--ctx">
+        <div class="cmp-pane-head"><span>WITH PLP context</span><span class="t" id="cmp-ctx-time"></span></div>
+        <div class="cmp-pane-body">
+          <pre class="cmp-ctx-used" id="cmp-ctx-used"></pre>
+          <div id="cmp-ctx-out"><span style="color:var(--ink-soft)">—</span></div>
+        </div>
+      </div>
+      <div class="cmp-pane cmp-pane--noctx">
+        <div class="cmp-pane-head"><span>WITHOUT context</span><span class="t" id="cmp-noctx-time"></span></div>
+        <div class="cmp-pane-body"><div id="cmp-noctx-out"><span style="color:var(--ink-soft)">—</span></div></div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- mount point for the floating chatTrigger button; main chat renders as overlay -->
+<div id="chat-trigger-mount"></div>
+<div id="chat-mount"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.1.1/dist/lite/lite.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.106.0/dist/instantsearch.production.min.js"></script>
+
+<script>
+/* eslint-disable */
+(function () {
+  'use strict';
+
+  // ==========================================================================
+  // Config — shared Algolia demo credentials + the demo Agent Studio agent
+  // used across the instantsearch examples.
+  // ==========================================================================
+  var APP_ID = 'latency';
+  var API_KEY = '6be0576ff61c053d5f9a3225e2a90f76';
+  var INDEX_NAME = 'instant_search';
+  var AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
+
+  var liteClient = window['algoliasearch/lite'].liteClient;
+  var widgets = instantsearch.widgets;
+  var connectors = instantsearch.connectors;
+
+  // ==========================================================================
+  // POC state (driven by the control panel)
+  // ==========================================================================
+  var pocState = {
+    approach: 'A',            // 'A' | 'B' | 'both'
+    triggerMode: 'heuristic', // 'heuristic' | 'backend' | 'always' | 'manual'
+    includeContext: true,
+    autoAsk: true,
+    cardPosition: 2,
+    effectivePosition: 2,     // backend rule consequence can override
+    visible: false,
+    dismissed: false,
+    manualVisible: false,
+    reason: null,
+    lastQuery: null,
+    lastResults: null,
+    lastHits: [],
+    lastAsked: {},            // per card type: last auto-asked question
+    askStartedAt: {},         // per card type: timing for the status line
+  };
+
+  var $ = function (sel) { return document.querySelector(sel); };
+
+  // ==========================================================================
+  // Small utilities
+  // ==========================================================================
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Minimal markdown renderer for approach B / compare lab (bold, em, code,
+  // links, paragraphs). The real chat widget uses markdown-to-jsx — one of the
+  // things approach B has to re-implement.
+  function mdLite(text) {
+    var out = escapeHtml(text);
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    out = out.replace(/\*([^*\n]+)\*/g, '<i>$1</i>');
+    out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
+    out = out.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    out = out.replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br/>');
+    return '<p>' + out + '</p>';
+  }
+
+  function textOfMessage(message) {
+    return (message.parts || [])
+      .filter(function (p) { return p.type === 'text'; })
+      .map(function (p) { return p.text; })
+      .join('\n\n');
+  }
+
+  function toolHitsOfMessage(message) {
+    var hits = [];
+    (message.parts || []).forEach(function (p) {
+      if (p.type && p.type.indexOf('tool-') === 0 && p.state === 'output-available' &&
+          p.output && Array.isArray(p.output.hits)) {
+        hits = hits.concat(p.output.hits);
+      }
+    });
+    return hits.slice(0, 4);
+  }
+
+  function looksLikeQuestion(q) {
+    var t = q.trim().toLowerCase();
+    if (!t) return false;
+    if (t.slice(-1) === '?') return true;
+    var words = t.split(/\s+/);
+    var qwords = ['what', 'which', 'how', 'why', 'should', 'can', 'is', 'are',
+                  'best', 'good', 'recommend', 'vs', 'versus', 'help', 'need', 'for'];
+    return words.length >= 3 && qwords.some(function (w) { return words.indexOf(w) !== -1; });
+  }
+
+  function questionFromQuery(q) {
+    var t = (q || '').trim();
+    if (!t) return 'What are the most popular products in this store?';
+    if (looksLikeQuestion(t)) return t;
+    return 'I\'m looking for "' + t + '". Which of these results would you recommend and why?';
+  }
+
+  // ==========================================================================
+  // PLP context — this is the payload sent as `turnContext` metadata
+  // ==========================================================================
+  function buildPLPContext() {
+    var res = pocState.lastResults;
+    var filters = [];
+    try {
+      var st = search.helper && search.helper.state;
+      if (st) {
+        var refits = st.disjunctiveFacetsRefinements || {};
+        Object.keys(refits).forEach(function (attr) {
+          (refits[attr] || []).forEach(function (v) { filters.push(attr + ':' + v); });
+        });
+      }
+    } catch (e) { /* context is best-effort */ }
+    var top = res ? res.hits.slice(0, 5).map(function (h) { return h.name; }).join(' | ') : '';
+    return {
+      page: 'product-listing-page',
+      query: (res && res.query) || '',
+      activeFilters: filters.join(', ') || 'none',
+      resultCount: String(res ? res.nbHits : 0),
+      topResults: top.slice(0, 400) || 'none',
+    };
+  }
+
+  function contextFn() {
+    // Resolved once per sent message by connectChat.
+    return pocState.includeContext
+      ? buildPLPContext()
+      : { page: 'product-listing-page' };
+  }
+
+  function updateContextPreview() {
+    $('#ctx-preview').textContent = JSON.stringify(contextFn(), null, 1);
+  }
+
+  // ==========================================================================
+  // Trigger engine
+  // ==========================================================================
+
+  // Shape mirrors what a real Algolia Rule consequence would return in
+  // `results.userData` — i.e. this table conceptually lives on the backend.
+  var SIMULATED_BACKEND_RULES = [
+    {
+      id: 'question-intent',
+      description: 'query contains buying-question intent',
+      test: function (q) {
+        return q.trim().split(/\s+/).length >= 2 &&
+          /(best|which|what|how|recommend|vs|versus|good|for|\?)/i.test(q);
+      },
+      consequence: { chatResultCard: { position: 2, mode: 'instant-answer' } },
+    },
+    {
+      id: 'sparse-results',
+      description: 'fewer than 3 results — offer assistance',
+      test: function (q, res) { return !!res && res.nbHits > 0 && res.nbHits < 3; },
+      consequence: { chatResultCard: { position: 0, mode: 'assist' } },
+    },
+  ];
+
+  var TRIGGERS = {
+    always: function () {
+      return { trigger: true, reason: { kind: 'always', label: 'always on' } };
+    },
+    heuristic: function (q) {
+      return looksLikeQuestion(q)
+        ? { trigger: true, reason: { kind: 'heuristic', label: 'query looks like a question' } }
+        : { trigger: false, reason: { kind: 'heuristic', label: 'query is not question-like' } };
+    },
+    backend: function (q, res) {
+      // 1) A real Rule on the index (consequence.userData) wins.
+      var real = res && res.userData && res.userData.filter(function (d) { return d && d.chatResultCard; })[0];
+      if (real) {
+        return {
+          trigger: true,
+          consequence: real.chatResultCard,
+          reason: { kind: 'backend', label: 'REAL Rule userData', detail: JSON.stringify(real.chatResultCard) },
+        };
+      }
+      // 2) Simulated backend rules (same shape).
+      for (var i = 0; i < SIMULATED_BACKEND_RULES.length; i++) {
+        var rule = SIMULATED_BACKEND_RULES[i];
+        if (rule.test(q, res)) {
+          return {
+            trigger: true,
+            consequence: rule.consequence.chatResultCard,
+            reason: { kind: 'backend', label: 'simulated rule "' + rule.id + '"', detail: rule.description },
+          };
+        }
+      }
+      return { trigger: false, reason: { kind: 'backend', label: 'no backend rule matched' } };
+    },
+    manual: function () {
+      return {
+        trigger: pocState.manualVisible,
+        reason: { kind: 'manual', label: pocState.manualVisible ? 'manually shown' : 'hidden — press "Show card now"' },
+      };
+    },
+  };
+
+  var triggerTimer = null;
+  function scheduleTriggerEvaluation() {
+    clearTimeout(triggerTimer);
+    // Debounce: search-as-you-type fires a render per keystroke.
+    triggerTimer = setTimeout(evaluateTrigger, 700);
+  }
+
+  function evaluateTrigger() {
+    var res = pocState.lastResults;
+    var query = (res && res.query) || '';
+    if (query !== pocState.lastQuery) {
+      pocState.dismissed = false; // new query, new chance
+    }
+    pocState.lastQuery = query;
+
+    var verdict = TRIGGERS[pocState.triggerMode](query, res);
+    pocState.visible = verdict.trigger;
+    pocState.reason = verdict.reason;
+    pocState.effectivePosition =
+      (verdict.consequence && typeof verdict.consequence.position === 'number')
+        ? verdict.consequence.position
+        : pocState.cardPosition;
+
+    updateTriggerReadout(verdict, query);
+    updateCardBadges();
+    renderGrid();
+    updateContextPreview();
+
+    if (verdict.trigger && !pocState.dismissed && pocState.autoAsk) {
+      askCards(questionFromQuery(query));
+    }
+  }
+
+  function updateTriggerReadout(verdict, query) {
+    var el = $('#trigger-readout');
+    el.innerHTML =
+      'query: <b>' + (escapeHtml(query) || '<i>empty</i>') + '</b><br/>' +
+      'verdict: ' + (verdict.trigger ? '<span class="ok">SHOW CARD</span>' : '<span class="no">no card</span>') + '<br/>' +
+      'reason: <b>' + escapeHtml(verdict.reason.label) + '</b>' +
+      (verdict.reason.detail ? '<br/><small>' + escapeHtml(verdict.reason.detail) + '</small>' : '');
+  }
+
+  // ==========================================================================
+  // Ask helpers (instant response + follow-ups)
+  // ==========================================================================
+  function activeCardTypes() {
+    if (pocState.approach === 'A') return ['chatCard'];
+    if (pocState.approach === 'B') return ['chatCardCustom'];
+    return ['chatCard', 'chatCardCustom'];
+  }
+
+  function askCards(question, force) {
+    if (!question) return;
+    var rs = search.renderState[INDEX_NAME] || {};
+    activeCardTypes().forEach(function (type) {
+      if (!force && pocState.lastAsked[type] === question) return;
+      var st = rs[type];
+      if (!st || !st.sendMessage) return;
+      pocState.lastAsked[type] = question;
+      pocState.askStartedAt[type] = Date.now();
+      st.clearMessages(); // also stops an in-flight stream
+      st.sendMessage({ text: question });
+    });
+  }
+
+  // Follow-up button: hand the card conversation off to the full overlay chat.
+  //
+  // Note: `search.renderState` snapshots only refresh on full InstantSearch
+  // renders, while chat streaming re-renders happen inside the widget — so
+  // `renderState[...].messages` can be stale. Both cards therefore capture
+  // their live messages on every render (layout template for A, connector
+  // renderer for B). A productized handoff would want a first-class API.
+  var liveCardMessages = { chatCard: [], chatCardCustom: [] };
+
+  function handoffToFullChat(fromType) {
+    var main = (search.renderState[INDEX_NAME] || {}).chat;
+    if (!main) return;
+    var msgs = liveCardMessages[fromType] || [];
+    if (msgs.length) {
+      main.setMessages(msgs.map(function (m) { return Object.assign({}, m); }));
+    }
+    main.setOpen(true);
+  }
+
+  // ==========================================================================
+  // InstantSearch setup
+  // ==========================================================================
+  var searchClient = liteClient(APP_ID, API_KEY);
+  var search = instantsearch({
+    indexName: INDEX_NAME,
+    searchClient: searchClient,
+    // Pre-filled question so the card triggers immediately on load (demo!)
+    initialUiState: {
+      instant_search: { query: 'which laptop is best for a student?' },
+    },
+    future: { preserveSharedStateOnUnmount: true },
+  });
+
+  // ---------- hits grid with card injection (custom connectHits renderer) ----
+  var grid = $('#hits-grid');
+  var cardSlotA = buildCardShell('A', 'chatCard', 'reuses the `chat` widget');
+  var cardSlotB = buildCardShell('B', 'chatCardCustom', 'custom UI on `connectChat`');
+
+  function buildCardShell(letter, type, implLabel) {
+    var el = document.createElement('div');
+    el.className = 'poc-card poc-card-' + letter.toLowerCase();
+    el.innerHTML =
+      '<div class="poc-card-head">' +
+        '<span class="spark">✨</span>' +
+        '<span class="ttl">Instant answer</span>' +
+        '<span class="impl-tag">' + escapeHtml(letter + ' · ' + implLabel) + '</span>' +
+        '<span class="reason-badge" data-role="reason"></span>' +
+        '<button class="dismiss" title="Dismiss" data-role="dismiss">✕</button>' +
+      '</div>' +
+      '<div data-role="body"></div>' +
+      '<div class="poc-card-foot">' +
+        '<button class="btn btn--sm btn--primary" data-role="followup">Continue in full chat →</button>' +
+      '</div>';
+    el.querySelector('[data-role=dismiss]').addEventListener('click', function () {
+      pocState.dismissed = true;
+      if (pocState.triggerMode === 'manual') pocState.manualVisible = false;
+      renderGrid();
+    });
+    el.querySelector('[data-role=followup]').addEventListener('click', function () {
+      handoffToFullChat(type);
+    });
+    return el;
+  }
+
+  function updateCardBadges() {
+    [cardSlotA, cardSlotB].forEach(function (slot) {
+      var badge = slot.querySelector('[data-role=reason]');
+      badge.textContent = pocState.reason ? 'trigger: ' + pocState.reason.label : '';
+      badge.title = (pocState.reason && pocState.reason.detail) || '';
+    });
+  }
+
+  function hitCardEl(hit) {
+    var el = document.createElement('article');
+    el.className = 'poc-hit';
+    var nameHtml = (hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) || escapeHtml(hit.name);
+    el.innerHTML =
+      '<img src="' + escapeHtml(hit.image) + '" alt="" loading="lazy" />' +
+      '<h2 class="hit-name">' + nameHtml + '</h2>' +
+      '<div class="hit-meta">' + escapeHtml(hit.brand || '') + '</div>' +
+      '<div class="hit-price">$' + escapeHtml(String(hit.price)) + '</div>';
+    return el;
+  }
+
+  function insertAt(parent, node, index) {
+    var ref = parent.children[Math.min(index, parent.children.length)];
+    parent.insertBefore(node, ref || null);
+  }
+
+  function renderGrid() {
+    // Detach persistent card slots first so grid rebuild doesn't destroy the
+    // mounted chat widget (moving a live DOM node keeps its Preact tree).
+    cardSlotA.remove();
+    cardSlotB.remove();
+    grid.innerHTML = '';
+    pocState.lastHits.forEach(function (hit) { grid.appendChild(hitCardEl(hit)); });
+
+    var show = pocState.visible && !pocState.dismissed;
+    if (!show) return;
+    var pos = pocState.effectivePosition;
+    if (pocState.approach === 'A') {
+      insertAt(grid, cardSlotA, pos);
+    } else if (pocState.approach === 'B') {
+      insertAt(grid, cardSlotB, pos);
+    } else {
+      insertAt(grid, cardSlotA, pos);
+      insertAt(grid, cardSlotB, pos + 4);
+    }
+  }
+
+  var pocHits = connectors.connectHits(function (renderOptions, isFirstRender) {
+    if (isFirstRender) return;
+    pocState.lastResults = renderOptions.results;
+    pocState.lastHits = renderOptions.hits;
+    renderGrid();
+    scheduleTriggerEvaluation();
+  });
+
+  // ==========================================================================
+  // APPROACH A — the existing `chat` widget rendered as a result card.
+  // All it takes: a compact custom layout template (messages + prompt, no
+  // header), `type` so its renderState doesn't clash with the main chat,
+  // `persistence: false` so it doesn't share sessionStorage with it, and CSS.
+  // ==========================================================================
+  var cardAMount = cardSlotA.querySelector('[data-role=body]');
+
+  var carouselItemTemplate = function (item, helpers) {
+    var html = helpers.html;
+    return html`<div style="padding:6px; font-size:11px; line-height:1.3; text-align:center;">
+      <img src="${item.image}" style="height:60px; object-fit:contain;" />
+      <div>${item.name}</div>
+      <b>$${String(item.price)}</b>
+    </div>`;
+  };
+
+  var cardAWidget = widgets.chat({
+    container: cardAMount,
+    agentId: AGENT_ID,
+    type: 'chatCard',
+    persistence: false,
+    disableTriggerValidation: true,
+    context: contextFn,
+    templates: {
+      item: carouselItemTemplate,
+      loaderText: 'Thinking…',
+      prompt: { textareaPlaceholderText: 'Ask a follow-up…' },
+      // Compact layout: no header — just the transcript and the prompt.
+      layout: function (data, params) {
+        liveCardMessages.chatCard = data.messages || [];
+        var html = params.html;
+        return html`<div class="poc-a-layout">
+          ${data.templates.messages()}
+          ${data.templates.prompt()}
+        </div>`;
+      },
+    },
+  });
+
+  // ==========================================================================
+  // APPROACH B — bespoke "answer card" on the headless `connectChat`.
+  // Same engine (streaming, agent transport, context, suggestions), fully
+  // custom UI: streamed answer text, product chips from tool outputs,
+  // suggestion chips, its own one-line input.
+  // ==========================================================================
+  var cardBMount = cardSlotB.querySelector('[data-role=body]');
+  cardBMount.innerHTML =
+    '<div class="poc-b-body">' +
+      '<div class="poc-b-q" data-role="q"></div>' +
+      '<div class="poc-b-answer" data-role="answer"><span class="ph">Ask me anything about these results…</span></div>' +
+      '<div class="poc-b-status" data-role="status"></div>' +
+      '<div class="poc-b-products" data-role="products"></div>' +
+      '<div class="poc-b-suggestions" data-role="suggestions"></div>' +
+      '<form class="poc-b-form" data-role="form">' +
+        '<input type="text" placeholder="Ask a follow-up…" data-role="input" />' +
+        '<button class="btn btn--sm" type="submit">Send</button>' +
+      '</form>' +
+    '</div>';
+
+  var bEls = {
+    q: cardBMount.querySelector('[data-role=q]'),
+    answer: cardBMount.querySelector('[data-role=answer]'),
+    status: cardBMount.querySelector('[data-role=status]'),
+    products: cardBMount.querySelector('[data-role=products]'),
+    suggestions: cardBMount.querySelector('[data-role=suggestions]'),
+    form: cardBMount.querySelector('[data-role=form]'),
+    input: cardBMount.querySelector('[data-role=input]'),
+  };
+
+  var cardBRenderState = null;
+  bEls.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = bEls.input.value.trim();
+    if (!text || !cardBRenderState) return;
+    cardBRenderState.sendMessage({ text: text });
+    bEls.input.value = '';
+  });
+
+  function renderCardB(state, isFirstRender) {
+    cardBRenderState = state;
+    liveCardMessages.chatCardCustom = state.messages || [];
+    if (isFirstRender) return;
+
+    var messages = state.messages || [];
+    var lastUser = null;
+    var lastAssistant = null;
+    for (var i = messages.length - 1; i >= 0; i--) {
+      if (!lastUser && messages[i].role === 'user') lastUser = messages[i];
+      if (!lastAssistant && messages[i].role === 'assistant') lastAssistant = messages[i];
+      if (lastUser && lastAssistant) break;
+    }
+
+    bEls.q.textContent = lastUser ? '“' + textOfMessage(lastUser) + '”' : '';
+
+    var answerText = lastAssistant ? textOfMessage(lastAssistant) : '';
+    if (answerText) {
+      bEls.answer.innerHTML = mdLite(answerText);
+      bEls.answer.scrollTop = bEls.answer.scrollHeight;
+    } else if (state.status === 'submitted' || state.status === 'streaming') {
+      bEls.answer.innerHTML = '<span class="ph">…</span>';
+    } else if (!messages.length) {
+      bEls.answer.innerHTML = '<span class="ph">Ask me anything about these results…</span>';
+    }
+
+    if (state.status === 'submitted' || state.status === 'streaming') {
+      bEls.status.innerHTML = '<span class="dots">thinking</span>';
+    } else if (state.status === 'error') {
+      bEls.status.innerHTML = '<span style="color:#c23030">error: ' + escapeHtml(String(state.error || 'unknown')) + '</span>';
+    } else if (lastAssistant && pocState.askStartedAt.chatCardCustom) {
+      var secs = ((Date.now() - pocState.askStartedAt.chatCardCustom) / 1000).toFixed(1);
+      bEls.status.textContent = 'answered · first ask took ~' + secs + 's';
+    } else {
+      bEls.status.textContent = '';
+    }
+
+    var hits = lastAssistant ? toolHitsOfMessage(lastAssistant) : [];
+    bEls.products.innerHTML = hits.map(function (h) {
+      return '<div class="poc-b-product">' +
+        '<img src="' + escapeHtml(h.image || '') + '" alt=""/>' +
+        '<span>' + escapeHtml(h.name || '') + '</span>' +
+        '<b>$' + escapeHtml(String(h.price || '')) + '</b>' +
+      '</div>';
+    }).join('');
+
+    var sugg = state.suggestions || [];
+    bEls.suggestions.innerHTML = '';
+    sugg.slice(0, 3).forEach(function (s) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = s;
+      btn.addEventListener('click', function () { state.sendMessage({ text: s }); });
+      bEls.suggestions.appendChild(btn);
+    });
+  }
+
+  var cardBWidget = connectors.connectChat(renderCardB)({
+    agentId: AGENT_ID,
+    type: 'chatCardCustom',
+    persistence: false,
+    disableTriggerValidation: true,
+    context: contextFn,
+  });
+
+  // ==========================================================================
+  // Main full-size chat (overlay) + floating trigger — the handoff target.
+  // ==========================================================================
+  var mainChatWidget = widgets.chat({
+    container: '#chat-mount',
+    agentId: AGENT_ID,
+    feedback: true,
+    context: contextFn,
+    templates: {
+      item: carouselItemTemplate,
+      header: { titleText: 'Shopping assistant' },
+    },
+  });
+
+  // ==========================================================================
+  // Mount everything
+  // ==========================================================================
+  search.addWidgets([
+    widgets.configure({ hitsPerPage: 12 }),
+    widgets.searchBox({
+      container: '#searchbox',
+      placeholder: 'Search products… (try: which laptop is best for a student?)',
+    }),
+    widgets.stats({ container: '#stats' }),
+    widgets.refinementList({ container: '#brand-filter', attribute: 'brand', limit: 6, showMore: true }),
+    pocHits({}),
+    widgets.pagination({ container: '#pagination' }),
+    mainChatWidget,
+    widgets.chatTrigger({ container: '#chat-trigger-mount' }),
+    cardAWidget,
+    cardBWidget,
+  ]);
+
+  search.start();
+
+  // Exposed for tinkering in the devtools console.
+  window.pocSearch = search;
+  window.pocState = pocState;
+
+  // ==========================================================================
+  // Control panel wiring
+  // ==========================================================================
+  var APPROACH_NOTES = {
+    A: 'Approach A mounts the standard <code>chat</code> widget in the card with a compact custom <code>layout</code> template. ~30 lines of config.',
+    B: 'Approach B renders a bespoke card from <code>connectChat</code> render state. Full design freedom, ~200 lines of UI code.',
+    both: 'Both cards are mounted side by side (A first, B four cells later) — each holds its own conversation.',
+  };
+  function setApproach(v) {
+    pocState.approach = v;
+    document.querySelectorAll('#approach-seg button').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.v === v);
+    });
+    $('#approach-note').innerHTML = APPROACH_NOTES[v];
+    renderGrid();
+    // A card that just became active should get the current question too.
+    if (pocState.visible && !pocState.dismissed && pocState.autoAsk) {
+      askCards(questionFromQuery(pocState.lastQuery || ''));
+    }
+  }
+  document.querySelectorAll('#approach-seg button').forEach(function (b) {
+    b.addEventListener('click', function () { setApproach(b.dataset.v); });
+  });
+  $('#approach-note').innerHTML = APPROACH_NOTES.A;
+
+  document.querySelectorAll('input[name=trigger]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      pocState.triggerMode = r.value;
+      pocState.dismissed = false;
+      evaluateTrigger();
+    });
+  });
+
+  $('#trigger-now').addEventListener('click', function () {
+    pocState.manualVisible = true;
+    pocState.dismissed = false;
+    if (pocState.triggerMode !== 'manual') {
+      document.querySelector('input[name=trigger][value=manual]').checked = true;
+      pocState.triggerMode = 'manual';
+    }
+    evaluateTrigger();
+  });
+
+  $('#ask-again').addEventListener('click', function () {
+    pocState.lastAsked = {};
+    askCards(questionFromQuery(pocState.lastQuery || ''), true);
+  });
+
+  $('#opt-context').addEventListener('change', function (e) {
+    pocState.includeContext = e.target.checked;
+    updateContextPreview();
+  });
+  $('#opt-autoask').addEventListener('change', function (e) {
+    pocState.autoAsk = e.target.checked;
+  });
+  $('#opt-position').addEventListener('change', function (e) {
+    pocState.cardPosition = Math.max(0, parseInt(e.target.value, 10) || 0);
+    pocState.effectivePosition = pocState.cardPosition;
+    renderGrid();
+  });
+
+  // ==========================================================================
+  // Context A/B compare lab — raw calls to the Agent Studio completions
+  // endpoint (`cache=false` to dodge the completion cache), streamed into two
+  // panes: one with `turnContext`, one without.
+  // ==========================================================================
+  var dialog = $('#compare-dialog');
+  $('#open-compare').addEventListener('click', function () {
+    $('#compare-q').value = questionFromQuery(pocState.lastQuery || '');
+    dialog.showModal();
+  });
+  $('#compare-close').addEventListener('click', function () { dialog.close(); });
+
+  function streamCompletion(question, context, onDelta) {
+    var url = 'https://' + APP_ID + '.algolia.net/agent-studio/1/agents/' + AGENT_ID +
+      '/completions?compatibilityMode=ai-sdk-5&cache=false';
+    var message = {
+      id: 'm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      role: 'user',
+      parts: [{ type: 'text', text: question }],
+    };
+    if (context) message.metadata = { turnContext: context };
+
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-algolia-application-id': APP_ID,
+        'x-algolia-api-key': API_KEY,
+      },
+      body: JSON.stringify({
+        id: 'poc-compare-' + (context ? 'ctx' : 'noctx') + '-' + Date.now(),
+        messages: [message],
+      }),
+    }).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var buf = '';
+      function pump() {
+        return reader.read().then(function (step) {
+          if (step.done) return;
+          buf += decoder.decode(step.value, { stream: true });
+          var idx;
+          while ((idx = buf.indexOf('\n\n')) >= 0) {
+            var chunk = buf.slice(0, idx);
+            buf = buf.slice(idx + 2);
+            chunk.split('\n').forEach(function (line) {
+              if (line.indexOf('data: ') !== 0) return;
+              var payload = line.slice(6);
+              if (payload === '[DONE]') return;
+              try {
+                var ev = JSON.parse(payload);
+                if (ev.type === 'text-delta' && ev.delta) onDelta(ev.delta);
+              } catch (e) { /* ignore malformed keep-alives */ }
+            });
+          }
+          return pump();
+        });
+      }
+      return pump();
+    });
+  }
+
+  function runComparePane(question, context, outEl, timeEl) {
+    var acc = '';
+    outEl.innerHTML = '<span style="color:var(--ink-soft)">…</span>';
+    timeEl.textContent = '';
+    var t0 = Date.now();
+    return streamCompletion(question, context, function (delta) {
+      acc += delta;
+      outEl.innerHTML = mdLite(acc);
+    }).then(function () {
+      timeEl.textContent = ((Date.now() - t0) / 1000).toFixed(1) + 's';
+      if (!acc) outEl.innerHTML = '<span style="color:var(--ink-soft)">(empty response)</span>';
+    }).catch(function (err) {
+      timeEl.textContent = 'failed';
+      outEl.innerHTML = '<span style="color:#c23030">' + escapeHtml(String(err)) + '</span>';
+    });
+  }
+
+  $('#compare-run').addEventListener('click', function () {
+    var q = $('#compare-q').value.trim();
+    if (!q) return;
+    var ctx = buildPLPContext();
+    $('#cmp-ctx-used').textContent = JSON.stringify(ctx, null, 1);
+    runComparePane(q, ctx, $('#cmp-ctx-out'), $('#cmp-ctx-time'));
+    runComparePane(q, null, $('#cmp-noctx-out'), $('#cmp-noctx-time'));
+  });
+
+  updateContextPreview();
+})();
+</script>
+</body>
+</html>
