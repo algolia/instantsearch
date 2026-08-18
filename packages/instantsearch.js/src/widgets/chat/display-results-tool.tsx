@@ -7,7 +7,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useEffect, useMemo, useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import { carousel } from '../../templates';
@@ -31,7 +31,6 @@ export function createDisplayResultsTool<
     createElement: h,
     Fragment,
     useEffect,
-    useMemo,
     useRef,
   });
 

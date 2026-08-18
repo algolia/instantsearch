@@ -6,6 +6,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
@@ -14,6 +15,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
@@ -1216,8 +1218,145 @@ describe('connectChat', () => {
             agentId: 'agentId',
             instantSearchStatus: 'idle',
           },
+          records: renderState.records,
         },
       });
+      // Every tool shares the chat's one store.
+      expect(renderState.records.getAll()).toEqual({});
+    });
+
+    it('combines the records of every search into the chat store', () => {
+      const searchPart = (toolCallId: string, hits: unknown[]) => ({
+        type: 'tool-algolia_search_index',
+        toolCallId,
+        state: 'output-available',
+        input: {},
+        output: { hits },
+      });
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        // A restored conversation, collected without a messages callback.
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
+              searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
+            ],
+          },
+          {
+            id: '2',
+            role: 'assistant',
+            parts: [
+              searchPart('search-3', [
+                { objectID: '1', name: 'Runner Pro' },
+                { objectID: '3', name: 'Trail' },
+              ]),
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records } = getRenderState();
+
+      // Every search contributes, and the newest copy of a record wins.
+      expect(records.getAll()).toEqual({
+        1: { objectID: '1', name: 'Runner Pro' },
+        2: { objectID: '2', name: 'Sneaker' },
+        3: { objectID: '3', name: 'Trail' },
+      });
+
+      // A new search of a later turn joins the same map.
+      getRenderState().setMessages((messages) =>
+        messages.concat({
+          id: '3',
+          role: 'assistant',
+          parts: [searchPart('search-4', [{ objectID: '4', name: 'Boot' }])],
+        } as unknown as (typeof messages)[number])
+      );
+
+      expect(records.get('4')).toEqual({ objectID: '4', name: 'Boot' });
+      expect(records.get('1')).toEqual({ objectID: '1', name: 'Runner Pro' });
+
+      // The store outlives renders rather than being derived per render.
+      expect(getRenderState().records).toBe(records);
+    });
+
+    it('drops the records of a cleared conversation', () => {
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'tool-algolia_search_index',
+                toolCallId: 'search',
+                state: 'output-available',
+                input: {},
+                output: { hits: [{ objectID: '1', name: 'Runner' }] },
+              },
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records, clearMessages } = getRenderState();
+
+      expect(records.has('1')).toBe(true);
+
+      clearMessages();
+
+      expect(records.getAll()).toEqual({});
+    });
+
+    it('starts a re-added widget with an empty store', async () => {
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        persistence: false,
+      } as ChatConnectorParams);
+      const getChatRenderState = () => search.renderState.indexName.chat!;
+
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      getChatRenderState().setMessages([
+        {
+          id: '1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-algolia_search_index',
+              toolCallId: 'search',
+              state: 'output-available',
+              input: {},
+              output: { hits: [{ objectID: '1', name: 'Runner' }] },
+            },
+          ],
+        },
+      ] as unknown as UIMessage[]);
+
+      expect(getChatRenderState().records.has('1')).toBe(true);
+
+      // `dispose` leaves the instance in place, so the render it schedules
+      // collects that conversation once more: only starting the next one over
+      // keeps its records out of the widget that replaces this one.
+      search.removeWidgets([widget]);
+      await wait(0);
+
+      search.addWidgets([widget]);
+      await wait(0);
+
+      expect(getChatRenderState().records.getAll()).toEqual({});
+      expect(getChatRenderState().messages).toEqual([]);
     });
 
     it('keeps the development diagnostic for an unknown tool', async () => {

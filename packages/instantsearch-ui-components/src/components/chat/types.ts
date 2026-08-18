@@ -1,3 +1,4 @@
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
@@ -514,6 +515,11 @@ export type ChatLayoutOwnProps<
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   messages?: ChatMessageBase[];
+  /**
+   * The records the chat's tools have fetched. A tool handed plain object IDs
+   * hydrates them with `records.get(objectID)`.
+   */
+  records?: ChatRecordsStore;
   insightsEventContext?: ChatInsightsEventContext;
   status?: ChatStatus;
   indexUiState: object;
@@ -537,6 +543,8 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   addToolResult: AddToolResult;
+  /** Attached by the connector, one per chat; reaches `layoutComponent`. */
+  records?: ChatRecordsStore;
   sendEvent?: SendEventForHits;
   insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
@@ -561,7 +569,11 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
+  | 'addToolResult'
+  | 'applyFilters'
+  | 'sendEvent'
+  | 'insightsEventContext'
+  | 'records'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
 
