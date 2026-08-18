@@ -184,6 +184,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
             endpoint: resolved.endpoint,
             headers: resolved.headers,
             task,
+            fetch: resolved.fetch,
             stream,
             prepareRequest: resolved.prepareSendMessagesRequest,
           });

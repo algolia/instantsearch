@@ -5,6 +5,8 @@ export type TaskPrepareRequest = (body: Record<string, unknown>) => {
 export type TaskTransport = {
   api: string;
   headers?: Record<string, string>;
+  /** Custom fetch implementation. Defaults to the global `fetch`. */
+  fetch?: typeof fetch;
   prepareSendMessagesRequest?: TaskPrepareRequest;
 };
 
@@ -21,6 +23,7 @@ export type TaskEndpoint =
 export type ResolvedEndpoint = {
   endpoint: string;
   headers: Record<string, string>;
+  fetch?: TaskTransport['fetch'];
   prepareSendMessagesRequest?: TaskTransport['prepareSendMessagesRequest'];
 };
 
@@ -45,6 +48,7 @@ export function resolveEndpoint(params: {
     return {
       endpoint: params.transport.api,
       headers: params.transport.headers || {},
+      fetch: params.transport.fetch,
       prepareSendMessagesRequest: params.transport.prepareSendMessagesRequest,
     };
   }

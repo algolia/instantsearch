@@ -76,6 +76,7 @@ export type FetchTaskOptions = {
   endpoint: string;
   headers: Record<string, string>;
   payload: Record<string, unknown>;
+  fetch?: typeof fetch;
   onData?: (data: unknown) => void;
   stream?: boolean;
 };
@@ -84,10 +85,13 @@ export function fetchTask({
   endpoint,
   headers,
   payload,
+  fetch: customFetch,
   onData,
   stream = true,
 }: FetchTaskOptions): Promise<unknown> {
-  return fetch(stream ? withStreamParam(endpoint) : endpoint, {
+  const fetchFn = customFetch ?? fetch;
+
+  return fetchFn(stream ? withStreamParam(endpoint) : endpoint, {
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -111,6 +115,7 @@ export type TaskRunnerOptions = {
   endpoint: string;
   headers: Record<string, string>;
   task: string;
+  fetch?: typeof fetch;
   stream?: boolean;
   prepareRequest?: TaskPrepareRequest;
 };
@@ -130,6 +135,7 @@ export function createTaskRunner({
   endpoint,
   headers,
   task,
+  fetch: customFetch,
   stream = true,
   prepareRequest,
 }: TaskRunnerOptions): TaskRunner {
@@ -144,6 +150,7 @@ export function createTaskRunner({
         endpoint,
         headers,
         payload,
+        fetch: customFetch,
         stream,
         onData: onData ? (partial) => onData(unwrap(partial)) : undefined,
       }).then(unwrap);

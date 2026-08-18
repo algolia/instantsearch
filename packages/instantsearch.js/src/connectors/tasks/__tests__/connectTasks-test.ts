@@ -6,7 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createInitOptions } from '../../../../test/createWidget';
-import connectTasks from '../connectTasks';
+import { connectTasks } from '../../index';
 
 import type { TasksConnectorParams } from '../connectTasks';
 
@@ -245,6 +245,99 @@ describe('connectTasks', () => {
       const [[url, request]] = (global.fetch as jest.Mock).mock.calls;
       expect(url).toContain('https://custom.test/tasks');
       expect(request.headers).toMatchObject({ 'x-custom': '1' });
+    });
+
+    it('preserves an error thrown by a custom fetch', async () => {
+      class TaskRequestError extends Error {
+        constructor(
+          message: string,
+          readonly code: string,
+          readonly details: { category: string }
+        ) {
+          super(message);
+        }
+      }
+
+      const networkFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              message: 'Task request blocked',
+              code: 'TASK_BLOCKED',
+              details: { category: 'restricted_content' },
+            }),
+            { status: 422, headers: { 'Content-Type': 'application/json' } }
+          )
+        )
+      );
+      let requestError: TaskRequestError | undefined;
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(async (...args) => {
+        const response = await networkFetch(...args);
+        const body: {
+          message: string;
+          code: string;
+          details: { category: string };
+        } = await response.json();
+        requestError = new TaskRequestError(
+          body.message,
+          body.code,
+          body.details
+        );
+        throw requestError;
+      });
+      const prepareSendMessagesRequest = jest.fn(
+        (body: Record<string, unknown>) => ({
+          body: { ...body, configuration: { name: 'preview' } },
+        })
+      );
+      const { lastState } = init({
+        transport: {
+          api: 'https://custom.test/tasks',
+          headers: { 'x-custom': '1' },
+          fetch: customFetch,
+          prepareSendMessagesRequest,
+        },
+        task: 'generate_suggestions',
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toBe(
+        undefined
+      );
+
+      expect(lastState().error).toBe(requestError);
+      expect(lastState().error).toMatchObject({
+        message: 'Task request blocked',
+        code: 'TASK_BLOCKED',
+        details: { category: 'restricted_content' },
+      });
+      expect(prepareSendMessagesRequest).toHaveBeenCalledWith({
+        task: 'generate_suggestions',
+        input: { query: 'shoes' },
+      });
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(networkFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith(
+        'https://custom.test/tasks?stream=true',
+        {
+          method: 'POST',
+          headers: {
+            'x-custom': '1',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            task: 'generate_suggestions',
+            input: { query: 'shoes' },
+            configuration: { name: 'preview' },
+          }),
+        }
+      );
+      expect(global.fetch).not.toHaveBeenCalled();
     });
   });
 
