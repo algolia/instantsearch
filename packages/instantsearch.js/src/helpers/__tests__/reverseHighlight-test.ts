@@ -1,3 +1,4 @@
+/* oxlint-disable typescript-eslint/no-deprecated -- tests intentionally exercise the deprecated helper this file covers */
 import reverseHighlight from '../reverseHighlight';
 
 const NONE = 'none' as const;
