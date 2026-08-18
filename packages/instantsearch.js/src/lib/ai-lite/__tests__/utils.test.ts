@@ -8,11 +8,10 @@ import {
 
 import type { UIMessage } from '../types';
 
-const assistantMessage = (parts: unknown[]) =>
-  [
-    { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
-    { id: 'a1', role: 'assistant', parts },
-  ] as unknown as UIMessage[];
+const assistantMessage = (parts: UIMessage['parts']): UIMessage[] => [
+  { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+  { id: 'a1', role: 'assistant', parts },
+];
 
 const resolvedToolPart = (
   extra: Record<string, unknown> = {},
