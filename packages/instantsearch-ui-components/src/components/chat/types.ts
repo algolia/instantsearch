@@ -536,6 +536,15 @@ export type ChatInsightsEventContext = {
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
+  /**
+   * Whether this tool call should render, for a given message and tool part.
+   *
+   * Returning `false` skips the part entirely and keeps the loader visible, so
+   * a tool can defer to another one that renders the same turn — for example a
+   * search tool stepping aside for a richer display tool. Omitted means always
+   * render.
+   */
+  shouldRender?: (message: ChatMessageBase, part: ChatToolMessage) => boolean;
   addToolResult: AddToolResult;
   sendEvent?: SendEventForHits;
   insightsEventContext?: ChatInsightsEventContext;

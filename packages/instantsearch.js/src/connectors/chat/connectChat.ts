@@ -2,7 +2,7 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat, SearchIndexToolType } from '../../lib/chat';
+import { Chat } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -469,13 +469,19 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // Compatibility shim with Algolia MCP Server search tool, which suffixes
-    // the tool name with the index name (`searchIndex_products`).
-    const resolveTool = (toolName: string) =>
-      tools[toolName] ||
-      (toolName.startsWith(`${SearchIndexToolType}_`)
-        ? tools[SearchIndexToolType]
-        : undefined);
+    // Compatibility shim with tool names suffixed by the index name, as the
+    // Algolia MCP Server does (`algolia_search_index_products`).
+    const resolveTool = (toolName: string) => {
+      if (tools[toolName]) {
+        return tools[toolName];
+      }
+
+      const prefixedKey = Object.keys(tools).find((toolKey) =>
+        toolName.startsWith(`${toolKey}_`)
+      );
+
+      return prefixedKey ? tools[prefixedKey] : undefined;
+    };
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';

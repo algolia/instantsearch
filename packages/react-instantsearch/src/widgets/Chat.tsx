@@ -34,6 +34,7 @@ export {
 
 import type {
   Pragma,
+  ChatMessageBase,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
@@ -58,11 +59,12 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      itemComponent,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, itemComponent, getSearchPageURL),
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
+    },
     [RecommendToolType]: createCarouselTool(
       false,
       itemComponent,
@@ -75,9 +77,21 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   };
 }
 
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn to the display-results tool. Set on the message by the backend.
+ */
+function isDisplayResultsDisabled(message: ChatMessageBase) {
+  return (
+    (message.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
+  );
+}
+
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    shouldRender?: unknown;
     layoutComponent?: unknown;
   },
 >(
@@ -92,7 +106,8 @@ function mergeToolOptions<
 
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
-    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
 
     if (
       userTool.layoutComponent !== undefined &&
@@ -100,8 +115,17 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
+      };
+    }
+
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
       };
     }
   });

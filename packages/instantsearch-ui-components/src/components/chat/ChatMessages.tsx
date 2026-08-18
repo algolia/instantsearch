@@ -545,7 +545,6 @@ export function createChatMessagesComponent({
     };
 
     const lastMessage = messages[messages.length - 1];
-    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
@@ -555,7 +554,7 @@ export function createChatMessagesComponent({
       : false;
     const showLoader = getShowLoader(
       status,
-      lastPart,
+      lastMessage,
       tools,
       assistantMessageProps?.showReasoning,
       hasActiveReasoning
@@ -681,7 +680,7 @@ export function createChatMessagesComponent({
 
 const getShowLoader = (
   status: ChatStatus,
-  lastPart: ChatMessageBase['parts'][number] | undefined,
+  lastMessage: ChatMessageBase | undefined,
   tools: ClientSideTools,
   showReasoning: boolean | undefined,
   hasActiveReasoning: boolean
@@ -689,15 +688,27 @@ const getShowLoader = (
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
+  const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+
   if (!lastPart) return true;
   // An active disclosure carries its own progress affordance, so the loader would
   // double it. Settled reasoning still shows it: the answer has not started.
   if (showReasoning && hasActiveReasoning) return false;
   if (isPartText(lastPart)) return false;
 
-  if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
+  if (isPartTool(lastPart)) {
     const tool = findTool(lastPart.type, tools);
-    return !tool?.streamInput;
+
+    // A part the tool declines to render leaves nothing on screen, so the turn
+    // still reads as in progress — keep the loader up rather than letting a
+    // settled-but-hidden part terminate it.
+    if (lastMessage && tool?.shouldRender?.(lastMessage, lastPart) === false) {
+      return true;
+    }
+
+    if (lastPart.state === 'input-streaming') {
+      return !tool?.streamInput;
+    }
   }
 
   return true;

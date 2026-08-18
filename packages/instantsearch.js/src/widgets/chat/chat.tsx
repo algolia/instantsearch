@@ -81,9 +81,21 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn to the display-results tool. Set on the message by the backend.
+ */
+function isDisplayResultsDisabled(message: ChatMessageBase) {
+  return (
+    (message.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
+  );
+}
+
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    shouldRender?: unknown;
     templates?: { layout?: unknown };
   },
 >(
@@ -98,7 +110,8 @@ function mergeToolOptions<
 
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
-    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
 
     if (
       userTool.templates?.layout !== undefined &&
@@ -106,8 +119,17 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
+      };
+    }
+
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
       };
     }
   });
@@ -122,11 +144,12 @@ function createDefaultTools<
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      templates,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, templates, getSearchPageURL),
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
+    },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
@@ -608,9 +631,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
       let widgetTool = tools[key];
 
-      // Compatibility shim with Algolia MCP Server search tool
-      if (!widgetTool && key.startsWith(`${SearchIndexToolType}_`)) {
-        widgetTool = tools[SearchIndexToolType];
+      // Compatibility shim with tool names suffixed by the index name, as the
+      // Algolia MCP Server does (`algolia_search_index_products`).
+      if (!widgetTool) {
+        const prefixedKey = Object.keys(tools).find((toolKey) =>
+          key.startsWith(`${toolKey}_`)
+        );
+        if (prefixedKey) {
+          widgetTool = tools[prefixedKey];
+        }
       }
 
       let layoutComponent:
