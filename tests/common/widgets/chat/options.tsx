@@ -1182,6 +1182,218 @@ export function createOptionsTests(
           document.querySelector('.ais-ChatMessageLoader')
         ).not.toBeInTheDocument();
       });
+
+      test('does not show loader when a data part trails the answer', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              // Renders nothing, so it must not bring the loader back.
+              parts: [
+                { type: 'text', text: 'Here you go.' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Cheaper options?'] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
+      });
+
+      test('renders the loader inside the message with loaderPosition', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              loaderPosition: 'message-inline',
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              loaderPosition: 'message-inline',
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [{ type: 'step-start' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        const message = document.querySelector(
+          '.ais-ChatMessage[data-role="assistant"] .ais-ChatMessage-message'
+        );
+
+        expect(
+          message?.querySelector('.ais-ChatMessageLoader--inline')
+        ).toBeInTheDocument();
+      });
+
+      test('lets shouldShowLoader override the loader', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+        const shouldShowLoader = jest.fn(() => false);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              shouldShowLoader,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              shouldShowLoader,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(shouldShowLoader).toHaveBeenCalledWith(
+          expect.objectContaining({ status: 'submitted', defaultValue: true })
+        );
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('suggestions', () => {
+      test('holds placeholders until the turn produces its suggestions', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hi' }] },
+            {
+              id: '2',
+              role: 'assistant',
+              // An earlier turn's suggestions are what make this one expect them.
+              parts: [
+                { type: 'text', text: 'Hello!' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Cheaper options?'] },
+                },
+              ],
+            },
+            { id: '3', role: 'user', parts: [{ type: 'text', text: 'More' }] },
+            {
+              id: '4',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Sure, here you go.' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
+        ).toBeInTheDocument();
+
+        await act(async () => {
+          chat._state.messages = [
+            ...chat._state.messages.slice(0, 3),
+            {
+              id: '4',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Sure, here you go.' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Anything cheaper?'] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'ready';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-suggestion')
+        ).toHaveTextContent('Anything cheaper?');
+      });
     });
 
     describe('tools', () => {
