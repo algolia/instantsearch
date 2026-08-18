@@ -1211,6 +1211,59 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('passes the explicit messages override to tool components', () => {
+    const layoutComponent = jest.fn(({ context }) => (
+      <div>{context.messages?.length}</div>
+    ));
+    const overrideMessages: ChatMessageBase[] = [
+      {
+        role: 'assistant',
+        id: 'override',
+        parts: [{ type: 'text', text: 'Override' }],
+      },
+    ];
+    const sharedMessages: ChatMessageBase[] = [
+      { role: 'user', id: 'shared', parts: [{ type: 'text', text: 'Shared' }] },
+    ];
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        messages={overrideMessages}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: '123',
+              input: {},
+              state: 'output-available',
+              output: { data: 'Test data' },
+            },
+          ],
+        }}
+        context={createContext({
+          messages: sharedMessages,
+          tools: {
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(layoutComponent.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        context: expect.objectContaining({ messages: overrideMessages }),
+      })
+    );
+  });
+
   test('adds assistant message attribution to tool result events', () => {
     const sendEvent = jest.fn();
     const hit = {

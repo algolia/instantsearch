@@ -480,6 +480,9 @@ export function createChatMessageComponent({
               <ToolLayoutComponent
                 context={{
                   ...context,
+                  // `...context` would restore `context.messages`; re-apply the
+                  // resolved `messages` so an explicit override reaches tools too.
+                  messages,
                   message: toolMessage,
                   insightsEventContext: tool.insightsEventContext,
                   indexUiState,

@@ -467,7 +467,10 @@ export function createChatMessagesComponent({
     const reasoningBodyClassName = cx(reasoningClassNames?.reasoningBody);
     const reasoningTextClassName = cx(reasoningClassNames?.reasoningText);
     // The row comparator. The full props object would recompile every completed
-    // message on each streaming update.
+    // message on each streaming update, and `props.context` is a fresh object
+    // every render — so track the specific context fields a completed row can
+    // render from (panel display state read by tool components) rather than the
+    // object itself, which would defeat the memo.
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -475,6 +478,8 @@ export function createChatMessagesComponent({
         props.message,
         props.isCurrentMessage,
         props.status,
+        props.context.maximized,
+        props.context.open,
         instantSearchStatus,
         props.suggestionsElement,
         messageFeedback,
@@ -570,11 +575,14 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    // `activePart` means "the part currently being processed". Once the response
-    // settles (`ready`/`error`), nothing is in progress, so it must clear —
-    // otherwise overrides keep rendering the finished part as still streaming.
+    // `activePart` means "the part currently being processed". It must clear
+    // when nothing is in progress: once the response settles (`ready`/`error`),
+    // and while `submitted` still shows the user's own message (the assistant
+    // hasn't produced a part yet). Otherwise overrides render a part that isn't
+    // actually streaming.
     const isProcessing = status === 'submitted' || status === 'streaming';
-    const activePart = isProcessing ? lastPart : undefined;
+    const activePart =
+      isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning

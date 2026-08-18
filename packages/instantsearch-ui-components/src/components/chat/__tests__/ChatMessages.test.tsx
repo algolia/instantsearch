@@ -943,6 +943,64 @@ describe('ChatMessages', () => {
       expect(screen.getByTestId('second-text')).toHaveTextContent('Answer');
     });
 
+    test('updates completed tool rows when the panel is maximized', () => {
+      // A completed (non-current) tool row: the memo must still track
+      // `context.maximized` so tool components see the panel state change.
+      const toolMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'tool-test_tool' as const,
+            toolCallId: '123',
+            input: {},
+            state: 'output-available' as const,
+            output: {},
+          },
+        ],
+      };
+      const trailingMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-2',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [toolMessage, trailingMessage];
+      const tools = {
+        test_tool: {
+          layoutComponent: ({
+            context,
+          }: {
+            context: { maximized?: boolean };
+          }) => (
+            <span data-testid="tool-maximized">
+              {String(context.maximized)}
+            </span>
+          ),
+          addToolResult: jest.fn(),
+          onToolCall: jest.fn(),
+          applyFilters: jest.fn(),
+        },
+      };
+      const createProps = (maximized: boolean) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        tools,
+        maximized,
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false)} />
+      );
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('false');
+
+      rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('true');
+    });
+
     test('keeps the ordered conversation current for completed messages', () => {
       const firstMessage = {
         role: 'assistant' as const,
@@ -1572,6 +1630,40 @@ describe('ChatMessages', () => {
       expect.objectContaining({
         context: expect.objectContaining({
           status: 'ready',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('leaves activePart unset until the assistant produces a part', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'user' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Find me shoes' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'submitted',
           activePart: undefined,
         }),
       }),
