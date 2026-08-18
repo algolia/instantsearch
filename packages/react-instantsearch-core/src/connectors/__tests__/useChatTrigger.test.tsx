@@ -8,8 +8,8 @@ import { Chat } from 'instantsearch.js/es/lib/chat/chat';
 import React from 'react';
 
 import { InstantSearch } from '../../components/InstantSearch';
-import { useChat } from '../../connectors/useChat';
-import { useOpenChat } from '../useOpenChat';
+import { useChat } from '../useChat';
+import { useChatTrigger } from '../useChatTrigger';
 
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
@@ -25,7 +25,7 @@ function ChatProbe({ chat }: { chat: Chat<UIMessage> }) {
 }
 
 function Entrypoint() {
-  const { open, openChat, isChatBusy } = useOpenChat();
+  const { open, openChat, isChatBusy } = useChatTrigger();
 
   return (
     <button
@@ -46,12 +46,16 @@ function App({ chat }: { chat: Chat<UIMessage> }) {
   );
 }
 
-describe('useOpenChat', () => {
+function createChat() {
+  return new Chat<UIMessage>({
+    persistence: false,
+    transport: {} as any,
+  });
+}
+
+describe('useChatTrigger', () => {
   test('opens the chat and submits the message', async () => {
-    const chat = new Chat<UIMessage>({
-      persistence: false,
-      transport: {} as any,
-    });
+    const chat = createChat();
     const sendMessage = jest.fn();
     (chat as any).sendMessage = sendMessage;
 
@@ -76,11 +80,8 @@ describe('useOpenChat', () => {
     );
   });
 
-  test('disables itself while the chat is busy', async () => {
-    const chat = new Chat<UIMessage>({
-      persistence: false,
-      transport: {} as any,
-    });
+  test('reports the chat as busy while it is streaming', async () => {
+    const chat = createChat();
 
     render(<App chat={chat} />);
 
@@ -100,18 +101,15 @@ describe('useOpenChat', () => {
   });
 
   test('submits to the chat mounted when it is called, not when it rendered', async () => {
-    const chat = new Chat<UIMessage>({
-      persistence: false,
-      transport: {} as any,
-    });
+    const chat = createChat();
     const sendMessage = jest.fn();
     (chat as any).sendMessage = sendMessage;
-    let openChat: ReturnType<typeof useOpenChat>['openChat'] | undefined;
+    let openChat: ReturnType<typeof useChatTrigger>['openChat'] | undefined;
 
     function CaptureCallback() {
-      // Only the first callback, so the assertion fails if the hook resolves
-      // the chat from the render it was created in.
-      const { openChat: current } = useOpenChat();
+      // Only the first callback, so the assertion fails if the connector
+      // resolves the chat from the render the callback was created in.
+      const { openChat: current } = useChatTrigger();
       openChat = openChat || current;
       return null;
     }
@@ -138,10 +136,7 @@ describe('useOpenChat', () => {
   });
 
   test('counts as an entry point for the chat trigger validation', async () => {
-    const chat = new Chat<UIMessage>({
-      persistence: false,
-      transport: {} as any,
-    });
+    const chat = createChat();
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     render(<App chat={chat} />);
