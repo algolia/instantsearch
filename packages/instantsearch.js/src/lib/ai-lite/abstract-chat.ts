@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { isEqual } from '../utils/isEqual';
+import { warning } from '../utils/logger';
 
 import { parsePartialJson } from './parse-partial-json';
 import { processStream } from './stream-parser';
@@ -62,6 +63,13 @@ function getToolName(part: { type: string; toolName?: string }): string {
     return part.toolName ?? part.type;
   }
   return part.type.slice('tool-'.length);
+}
+
+function warnInvalidGlobalToolResult(toolCallId: string): void {
+  warning(
+    false,
+    `addToolResult ignored because toolCallId "${toolCallId}" does not identify one pending tool call. Use the scoped addToolResult callback when call IDs may be reused.`
+  );
 }
 
 // A tool call awaiting an output that the client owns. Provider-executed calls
@@ -728,6 +736,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
    */
   addToolResult: ToolResultSubmission<TUIMessage> = (options) => {
     if (!this.acceptsIdentifierOnlyToolResults) {
+      warnInvalidGlobalToolResult(options.toolCallId);
       return Promise.resolve();
     }
 
@@ -745,14 +754,23 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       );
       return matchingMessages.length === 1 ? matchingMessages[0] : undefined;
     };
-    if (!findMatchingMessage()) return Promise.resolve();
+    if (!findMatchingMessage()) {
+      warnInvalidGlobalToolResult(options.toolCallId);
+      return Promise.resolve();
+    }
 
     return this.jobExecutor.run(() => {
-      if (!this.acceptsIdentifierOnlyToolResults) return Promise.resolve();
+      if (!this.acceptsIdentifierOnlyToolResults) {
+        warnInvalidGlobalToolResult(options.toolCallId);
+        return Promise.resolve();
+      }
 
       const message = findMatchingMessage();
+      if (!message) {
+        warnInvalidGlobalToolResult(options.toolCallId);
+        return Promise.resolve();
+      }
       if (
-        !message ||
         !this.commit(
           options.toolCallId,
           options.output,
