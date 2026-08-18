@@ -538,8 +538,6 @@ export function createTemplatesTests(
             react: {
               ...createDefaultWidgetParams(chat),
               messagesProps: {
-                onClose: () => {},
-                onReload: () => {},
                 assistantMessageProps: {
                   textComponent: ({
                     part,

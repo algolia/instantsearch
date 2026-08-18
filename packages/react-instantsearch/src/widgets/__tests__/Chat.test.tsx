@@ -398,8 +398,6 @@ describe('Chat', () => {
             <span data-testid="assistant-leading" />
           )}
           messagesProps={{
-            onClose: () => {},
-            onReload: () => {},
             assistantMessageProps: { autoHideActions: true },
           }}
         />
@@ -449,8 +447,6 @@ describe('Chat', () => {
           requiresSearch={false}
           showReasoning={true}
           messagesProps={{
-            onClose: () => {},
-            onReload: () => {},
             assistantMessageProps: { parseMarkdown: false },
           }}
         />
@@ -485,8 +481,6 @@ describe('Chat', () => {
       partIndex: number;
     }> = [];
     const messagesProps = {
-      onClose: () => {},
-      onReload: () => {},
       assistantMessageProps: {
         textComponent: ({ part, message, messages, status, partIndex }) => {
           calls.push({
@@ -577,8 +571,6 @@ describe('Chat', () => {
             requiresSearch={false}
             showReasoning={true}
             messagesProps={{
-              onClose: () => {},
-              onReload: () => {},
               assistantMessageProps: { parseMarkdown },
             }}
           />

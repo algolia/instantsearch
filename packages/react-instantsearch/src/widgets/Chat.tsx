@@ -140,6 +140,8 @@ type UserMessagesProps<TUiMessage extends UIMessage = UIMessage> = Omit<
   | 'setIndexUiState'
   | 'scrollRef'
   | 'contentRef'
+  | 'onClose'
+  | 'onReload'
   | 'messageComponent'
   | 'leadingComponent'
   | 'footerComponent'
