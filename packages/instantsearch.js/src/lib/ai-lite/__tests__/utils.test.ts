@@ -51,7 +51,7 @@ describe('lastAssistantMessageIsCompleteWithToolCalls', () => {
     ).toBe(false);
   });
 
-  it('still continues when the last step holds an unanswered client tool call', () => {
+  it('still continues when the last step includes a non-provider-executed tool call', () => {
     expect(
       lastAssistantMessageIsCompleteWithToolCalls({
         messages: assistantMessage([
