@@ -1284,6 +1284,142 @@ export function createOptionsTests(
         );
       });
 
+      test('skips a tool part its own `shouldRender` opts out of', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              metadata: { hideHello: true },
+              parts: [
+                {
+                  type: 'tool-hello',
+                  toolCallId: '1',
+                  input: { text: 'hello' },
+                  state: 'output-available',
+                  output: 'hello',
+                },
+              ],
+            },
+          ] as any,
+          id: 'chat-id',
+        });
+
+        const shouldRender = (message: any) =>
+          message.metadata?.hideHello !== true;
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  templates: {
+                    layout:
+                      '<div id="tool-content">The message said hello!</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  layoutComponent: () => (
+                    <div id="tool-content">The message said hello!</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when the last part is a tool that does not render', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        // `streamInput` alone would hide the loader, but the part renders
+        // nothing, so the turn must still read as in progress.
+        const tool = { shouldRender: () => false, streamInput: true };
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  ...tool,
+                  templates: {
+                    layout: '<div id="tool-content">streaming...</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  ...tool,
+                  layoutComponent: () => (
+                    <div id="tool-content">streaming...</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'tool-hello',
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+      });
+
       test('renders with custom algolia search tool', async () => {
         const searchClient = createSearchClient();
 
@@ -2155,6 +2291,80 @@ export function createOptionsTests(
             document.querySelector(
               '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
             )
+          ).not.toBeInTheDocument();
+        });
+
+        test('keeps skipping an overridden search index tool when the display results tool needs to be rendered', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { displayResultsEnabled: true },
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${DisplayResultsToolType}`,
+                    toolCallId: '2',
+                    input: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                    state: 'output-available',
+                    output: { status: 'success' },
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    templates: {
+                      layout: '<div id="tool-content">custom search</div>',
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    layoutComponent: () => (
+                      <div id="tool-content">custom search</div>
+                    ),
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolDisplayResults')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('#tool-content')
           ).not.toBeInTheDocument();
         });
 
