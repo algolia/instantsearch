@@ -782,6 +782,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         validateEntryPoints(instantSearchInstance);
 
         open = normalizedPersistence.open ? readPersistedOpen(type) : false;
+        records.clear();
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -1048,7 +1049,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       dispose() {
         feedbackAbortController?.abort();
         unsubscribeChatCallbacks();
-        records.clear();
         unmountFn();
       },
 

@@ -6,6 +6,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
@@ -14,6 +15,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
@@ -1310,12 +1312,23 @@ describe('connectChat', () => {
       expect(records.getAll()).toEqual({});
     });
 
-    it('drops the records of a disposed widget', () => {
-      const { widget, helper, getRenderState } = getInitializedWidget({
+    it('starts a re-added widget with an empty store', async () => {
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
         persistence: false,
-      } as unknown as ChatConnectorParams);
+      } as ChatConnectorParams);
+      const getChatRenderState = () => search.renderState.indexName.chat!;
 
-      getRenderState().setMessages([
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      getChatRenderState().setMessages([
         {
           id: '1',
           role: 'assistant',
@@ -1331,17 +1344,19 @@ describe('connectChat', () => {
         },
       ] as unknown as UIMessage[]);
 
-      const { records } = getRenderState();
-      expect(records.has('1')).toBe(true);
+      expect(getChatRenderState().records.has('1')).toBe(true);
 
-      widget.dispose();
+      // `dispose` leaves the instance in place, so the render it schedules
+      // collects that conversation once more: only starting the next one over
+      // keeps its records out of the widget that replaces this one.
+      search.removeWidgets([widget]);
+      await wait(0);
 
-      // `init` starts a new conversation, whose tools must not hydrate from the
-      // records of the one before it.
-      expect(records.getAll()).toEqual({});
+      search.addWidgets([widget]);
+      await wait(0);
 
-      widget.init(createInitOptions({ helper }));
-      expect(getRenderState().records.getAll()).toEqual({});
+      expect(getChatRenderState().records.getAll()).toEqual({});
+      expect(getChatRenderState().messages).toEqual([]);
     });
 
     it('keeps the development diagnostic for an unknown tool', async () => {
