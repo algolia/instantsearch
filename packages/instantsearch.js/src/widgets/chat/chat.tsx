@@ -44,6 +44,7 @@ import type {
 import type {
   ChatClassNames,
   ChatComponentPropsWithContext,
+  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
@@ -174,7 +175,9 @@ type ChatWrapperProps = {
         ) => JSX.Element)
       | undefined;
     emptyComponent:
-      | ((props: ChatComponentPropsWithContext<{}>) => JSX.Element)
+      // The deprecated root props are still passed alongside `context`.
+      // eslint-disable-next-line typescript/no-deprecated
+      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
       | undefined;
     actionsComponent:
       | ((
@@ -447,11 +450,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatComponentPropsWithContext<{}>>(
-        emptyTemplateRef,
-        'empty',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        // The deprecated root props are still passed alongside `context`.
+        // eslint-disable-next-line typescript/no-deprecated
+        ChatComponentPropsWithContext<ChatEmptyProps>
+      >(emptyTemplateRef, 'empty', 'div')
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
@@ -1069,7 +1072,9 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatComponentPropsWithContext<{}>>;
+    // The deprecated root props are still passed alongside `context`.
+    // eslint-disable-next-line typescript/no-deprecated
+    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
 
     /**
      * Template to use for prompt suggestions.

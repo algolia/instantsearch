@@ -596,29 +596,73 @@ export type ChatComponentPropsWithContext<
 };
 
 /**
- * Tool layout components receive a single `context` object: the shared chat
+ * The `context` a tool layout component receives: the shared
  * `ChatComponentContext` merged with the tool's own injected data (the tool
- * `message`, event/filter callbacks, and index UI state). There are no
- * root-level props — everything a tool renders from lives under `context`.
+ * `message`, event/filter callbacks, and index UI state).
+ */
+export type ClientSideToolContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage> & {
+  message: ChatToolMessage;
+  /**
+   * The records the chat's tools have fetched. A tool handed plain object IDs
+   * hydrates them with `records.get(objectID)`.
+   */
+  records?: ChatRecordsStore;
+  insightsEventContext?: ChatInsightsEventContext;
+  indexUiState: object;
+  setIndexUiState: (state: object) => void;
+  addToolResult: AddToolResultWithOutput;
+  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  sendEvent: SendEventForHits;
+};
+
+/**
+ * The root-level props tool layout components received before everything moved
+ * under `context`. Still passed alongside `context` so components written
+ * against the previous API keep working; they are removed in the next major.
+ *
+ * These are spelled out rather than derived with `Pick` so that `@deprecated`
+ * reaches each property at the point of use in editors.
+ */
+type DeprecatedClientSideToolRootProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  /** @deprecated Read `context.message` instead. */
+  message: ChatToolMessage;
+  /** @deprecated Read `context.messages` instead. */
+  messages: TMessage[];
+  /** @deprecated Read `context.records` instead. */
+  records?: ChatRecordsStore;
+  /** @deprecated Read `context.insightsEventContext` instead. */
+  insightsEventContext?: ChatInsightsEventContext;
+  /** @deprecated Read `context.status` instead. */
+  status: ChatStatus;
+  /** @deprecated Read `context.indexUiState` instead. */
+  indexUiState: object;
+  /** @deprecated Read `context.setIndexUiState` instead. */
+  setIndexUiState: (state: object) => void;
+  /** @deprecated Read `context.onClose` instead. */
+  onClose: () => void;
+  /** @deprecated Read `context.addToolResult` instead. */
+  addToolResult: AddToolResultWithOutput;
+  /** @deprecated Read `context.applyFilters` instead. */
+  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  /** @deprecated Read `context.sendEvent` instead. */
+  sendEvent: SendEventForHits;
+};
+
+/**
+ * Tool layout components receive a single `context` object holding everything
+ * they render from. The deprecated root-level props are kept required (rather
+ * than optional) so existing components that destructure them keep
+ * type-checking under `strict`; the widget always supplies both.
  */
 export type ClientSideToolComponentProps<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = {
-  context: ChatComponentContext<TMessage> & {
-    message: ChatToolMessage;
-    /**
-     * The records the chat's tools have fetched. A tool handed plain object IDs
-     * hydrates them with `records.get(objectID)`.
-     */
-    records?: ChatRecordsStore;
-    insightsEventContext?: ChatInsightsEventContext;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-    addToolResult: AddToolResultWithOutput;
-    applyFilters: (params: ApplyFiltersParams) => SearchParameters;
-    sendEvent: SendEventForHits;
-  };
-};
+  context: ClientSideToolContext<TMessage>;
+} & DeprecatedClientSideToolRootProps<TMessage>;
 
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
@@ -666,3 +710,11 @@ export type UserClientSideTool = Omit<
   | 'records'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
+
+/**
+ * @deprecated Use `ChatComponentPropsWithContext` instead — an empty/greeting
+ * component now reads shared chat state from its `context` prop.
+ */
+export type ChatEmptyProps = Partial<
+  Pick<ChatComponentContext, 'sendMessage' | 'status' | 'onClose' | 'setInput'>
+>;
