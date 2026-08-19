@@ -64,6 +64,9 @@ describe('chat', () => {
         search.start();
       }).not.toThrow();
 
+      // The entry-point check is deferred to a microtask.
+      await wait(0);
+
       expect(warnSpy).toHaveBeenCalledWith(
         expect.stringContaining('The `chat` widget has no way to be opened.')
       );
@@ -71,7 +74,7 @@ describe('chat', () => {
       warnSpy.mockRestore();
     });
 
-    test('does not warn when a `chatTrigger` widget is present', () => {
+    test('does not warn when a `chatTrigger` widget is present', async () => {
       const chatContainer = document.createElement('div');
       document.body.appendChild(chatContainer);
       const triggerContainer = document.createElement('div');
@@ -98,6 +101,8 @@ describe('chat', () => {
         search.start();
       }).not.toThrow();
 
+      await wait(0);
+
       expect(warnSpy).not.toHaveBeenCalledWith(
         expect.stringContaining('The `chat` widget has no way to be opened.')
       );
@@ -105,7 +110,7 @@ describe('chat', () => {
       warnSpy.mockRestore();
     });
 
-    test('does not warn when `disableTriggerValidation` is true', () => {
+    test('does not warn when `disableTriggerValidation` is true', async () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
 
@@ -127,6 +132,8 @@ describe('chat', () => {
       expect(() => {
         search.start();
       }).not.toThrow();
+
+      await wait(0);
 
       expect(warnSpy).not.toHaveBeenCalledWith(
         expect.stringContaining('The `chat` widget has no way to be opened.')

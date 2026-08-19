@@ -23,6 +23,7 @@ import {
   walkIndex,
   warning,
 } from '../../lib/utils';
+import { defer } from '../../lib/utils/defer';
 import { flat } from '../../lib/utils/flat';
 
 import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
@@ -600,6 +601,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       hasValidatedEntryPoints = true;
     };
 
+    // Deferred because entry points can be registered after the chat itself:
+    // React adds widgets in mount order, so a trigger further down the tree
+    // only lands after this widget's `init` has run.
+    const deferredValidateEntryPoints = defer(validateEntryPoints);
+
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       // A caller supplied `chat` already owns its transport, so it bypasses the
       // connector's transport construction and validation below.
@@ -792,7 +798,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
-        validateEntryPoints(instantSearchInstance);
+        deferredValidateEntryPoints(instantSearchInstance);
 
         open = normalizedPersistence.open ? readPersistedOpen(type) : false;
         records.clear();
@@ -884,6 +890,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         });
 
+        // Sibling entry points read `status` through the shared `renderState` to
+        // disable themselves, so a transition has to escape this widget's own
+        // render. Message deltas deliberately don't: they stay local to keep
+        // streaming cheap. The `status` setter notifies on every write, hence
+        // the comparison.
+        let lastStatus = _chatInstance.status;
+        const renderOnStatusChange = () => {
+          const statusChanged = _chatInstance.status !== lastStatus;
+          lastStatus = _chatInstance.status;
+          render();
+          if (statusChanged) {
+            initOptions.instantSearchInstance.scheduleRender();
+          }
+        };
+
         safelyRunOnBrowser(() => {
           chatSubscriptionUnsubscribers = [
             _chatInstance['~registerErrorCallback'](render),
@@ -891,7 +912,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             // the tools of that delta render.
             _chatInstance['~registerMessagesCallback'](collectRecords),
             _chatInstance['~registerMessagesCallback'](render),
-            _chatInstance['~registerStatusCallback'](render),
+            _chatInstance['~registerStatusCallback'](renderOnStatusChange),
           ];
         });
 
@@ -1060,6 +1081,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       dispose() {
+        deferredValidateEntryPoints.cancel();
         feedbackAbortController?.abort();
         unsubscribeChatCallbacks();
         unmountFn();
