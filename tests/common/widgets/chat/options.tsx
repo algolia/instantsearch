@@ -3084,6 +3084,11 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatInlineLayout')
         ).not.toBeInTheDocument();
+        await waitFor(() => {
+          expect(document.activeElement).toBe(
+            document.querySelector('.ais-ChatPrompt-textarea')
+          );
+        });
       });
 
       test('exposes sendMessage to custom layout component', async () => {

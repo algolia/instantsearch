@@ -199,6 +199,77 @@ describe('Chat', () => {
     externalButton.remove();
   });
 
+  test('does not focus after a reveal is interrupted by closing', async () => {
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+    const chatRef = React.createRef<ChatHandle>();
+
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          ref={chatRef}
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          persistence={true}
+          requiresSearch={false}
+        />
+        <ChatTrigger floating={false} />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    let finishReveal!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishReveal = resolve;
+    });
+    Object.defineProperty(
+      container.querySelector('.ais-Chat-container'),
+      'getAnimations',
+      {
+        configurable: true,
+        value: () => [{ playState: 'running', finished }],
+      }
+    );
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    externalButton.focus();
+    await act(async () => {
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    await act(async () => {
+      finishReveal();
+      await finished;
+    });
+
+    expect(focusSpy).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(externalButton);
+
+    externalButton.remove();
+  });
+
   test('does not move focus when openChat submits to an open panel', async () => {
     sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
     const externalButton = document.createElement('button');

@@ -489,6 +489,67 @@ describe('chat', () => {
       );
     });
 
+    test('does not focus after a reveal is interrupted by closing', async () => {
+      const container = document.createElement('div');
+      const externalButton = document.createElement('button');
+      document.body.append(container, externalButton);
+
+      const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+      jest
+        .spyOn(window, 'requestAnimationFrame')
+        .mockImplementation((callback) => {
+          callback(0);
+          return 0;
+        });
+      sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          persistence: true,
+          requiresSearch: false,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      let finishReveal!: () => void;
+      const finished = new Promise<void>((resolve) => {
+        finishReveal = resolve;
+      });
+      Object.defineProperty(
+        container.querySelector('.ais-Chat-container'),
+        'getAnimations',
+        {
+          configurable: true,
+          value: () => [{ playState: 'running', finished }],
+        }
+      );
+
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      externalButton.focus();
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      finishReveal();
+      await finished;
+
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(externalButton);
+    });
+
     test('does not move focus when openChat submits to an open panel', async () => {
       const container = document.createElement('div');
       const externalButton = document.createElement('button');
