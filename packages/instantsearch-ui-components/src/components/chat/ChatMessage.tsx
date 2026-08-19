@@ -3,6 +3,7 @@ import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
 import { isReasoningPartActive } from '../../lib/utils/chat';
+import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -22,6 +23,7 @@ import type {
   ClientSideTools,
   TextUIPart,
 } from './types';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   ComponentProps,
   Renderer,
@@ -270,6 +272,14 @@ export function createChatMessageComponent({
       ...userTranslations,
     };
 
+    // A message rendered without a connector-attached store falls back to
+    // collecting from the conversation it was handed.
+    let fallbackRecords: ChatRecordsStore | undefined;
+    const getFallbackRecords = () => {
+      fallbackRecords = fallbackRecords || collectChatRecords(messages);
+      return fallbackRecords;
+    };
+
     const hasLeading = Boolean(LeadingComponent);
     const isCurrentMessage =
       messages === undefined ||
@@ -486,6 +496,7 @@ export function createChatMessageComponent({
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 messages={messages}
+                records={tool.records || getFallbackRecords()}
                 addToolResult={boundAddToolResult}
                 applyFilters={tool.applyFilters}
                 sendEvent={sendEvent}

@@ -4,6 +4,7 @@
 
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
@@ -54,6 +55,19 @@ const createMessages = (
     },
   ] as ClientSideToolComponentProps['messages'];
 
+// This tool only consumes records; the search tool fetched them.
+const conversationOf = (
+  messages: ClientSideToolComponentProps['messages']
+) => ({
+  messages,
+  records: collectChatRecords(messages),
+});
+
+const conversation = (
+  message: ClientSideToolComponentProps['message'],
+  hits: Array<{ objectID: string; name?: string; why?: string }>
+) => conversationOf(createMessages(message, hits));
+
 describe('createDisplayResultsTool', () => {
   test('opts into tool input streaming', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
@@ -80,14 +94,10 @@ describe('createDisplayResultsTool', () => {
       },
     };
 
-    const messages = createMessages(message, [
-      { objectID: '1', name: 'Air Runner' },
-    ]);
-
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
+        {...conversation(message, [{ objectID: '1', name: 'Air Runner' }])}
         status="streaming"
         applyFilters={jest.fn()}
         onClose={jest.fn()}
@@ -125,7 +135,7 @@ describe('createDisplayResultsTool', () => {
 
       return {
         message,
-        messages: createMessages(
+        ...conversation(
           message,
           objectIDs.map((objectID) => ({
             objectID,
@@ -178,7 +188,7 @@ describe('createDisplayResultsTool', () => {
     const { container } = render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [{ objectID: '1', name: 'Runner' }])}
+        {...conversation(message, [{ objectID: '1', name: 'Runner' }])}
         status="streaming"
         applyFilters={jest.fn()}
         onClose={jest.fn()}
@@ -226,7 +236,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
+        {...conversation(message, [
           { objectID: '1', name: 'Air Runner' },
           { objectID: '2', name: 'Street Runner' },
         ])}
@@ -269,7 +279,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [{ objectID: '1' }])}
+        {...conversation(message, [{ objectID: '1' }])}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -332,7 +342,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [{ objectID: '1' }])}
+        {...conversation(message, [{ objectID: '1' }])}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -384,7 +394,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
+        {...conversationOf(messages)}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -425,7 +435,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
+        {...conversationOf(messages)}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -474,7 +484,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
+        {...conversation(message, [
           { objectID: '1', name: 'Air Runner' },
           { objectID: '2', name: 'Trail Runner' },
         ])}
@@ -524,7 +534,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
+        {...conversation(message, [
           { objectID: 'known', name: 'Known record' },
           { objectID: 'known-2', name: 'Second known record' },
         ])}
@@ -584,7 +594,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
+        {...conversation(message, [
           { objectID: 'constructor', name: 'Constructor record' },
           { objectID: '__proto__', name: 'Prototype record' },
         ])}
@@ -659,9 +669,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-        ])}
+        {...conversation(message, [{ objectID: '1', name: 'Air Runner' }])}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -724,9 +732,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-        ])}
+        {...conversation(message, [{ objectID: '1', name: 'Air Runner' }])}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -755,7 +761,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={createMessages(message, [])}
+        {...conversation(message, [])}
         status="streaming"
         applyFilters={jest.fn()}
         onClose={jest.fn()}
@@ -796,7 +802,7 @@ describe('createDisplayResultsTool', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  test('preserves duplicate result order and uses the latest preceding hit', () => {
+  test('preserves duplicate result order and uses the latest hit of the conversation', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
@@ -850,7 +856,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={message}
-        messages={messages}
+        {...conversationOf(messages)}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -861,7 +867,11 @@ describe('createDisplayResultsTool', () => {
     );
 
     expect(screen.getAllByTestId('name-1')).toHaveLength(2);
-    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent('New Runner');
+    // One map for the whole conversation, so the newest copy of a record wins
+    // even when its search ran after this tool.
+    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent(
+      'Future Runner'
+    );
     expect(screen.getAllByTestId('position-1')[0]).toHaveTextContent('1');
     expect(screen.getAllByTestId('position-1')[1]).toHaveTextContent('2');
     expect(screen.getAllByTestId('why-1')[0]).toHaveTextContent('first');
@@ -931,7 +941,7 @@ describe('createDisplayResultsTool', () => {
     const firstRender = render(
       <LayoutComponent
         message={firstDisplayMessage}
-        messages={messages}
+        {...conversationOf(messages)}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
@@ -950,7 +960,7 @@ describe('createDisplayResultsTool', () => {
     render(
       <LayoutComponent
         message={secondDisplayMessage}
-        messages={messages}
+        {...conversationOf(messages)}
         applyFilters={jest.fn()}
         onClose={jest.fn()}
         indexUiState={{}}
