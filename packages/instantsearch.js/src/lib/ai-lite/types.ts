@@ -122,6 +122,11 @@ export type DynamicToolUIPart = {
   type: 'dynamic-tool';
   toolName: string;
   toolCallId: string;
+  /**
+   * Whether the tool call was executed by the provider. Carried by the
+   * `dynamic: true` tool chunks, like on `ToolUIPart`.
+   */
+  providerExecuted?: boolean;
 } & (
   | {
       state: 'input-streaming';

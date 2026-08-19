@@ -624,6 +624,110 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
     });
 
+    // Agent Studio runs its tools server-side and streams the call, its output
+    // and the closing text in one turn, without flagging the call
+    // `providerExecuted`. The turn is complete, so resending it duplicates the
+    // answer (or gets rejected by the backend and surfaces as an error).
+    it('does not auto-continue when the server answers its own tool call', async () => {
+      const sendAutomaticallyWhen = jest.fn(
+        lastAssistantMessageIsCompleteWithToolCalls
+      );
+      const { chat, state, sendMessages } = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'algolia_search_index_products',
+              toolCallId: 'call-1',
+              input: { query: 'shirt' },
+            },
+            {
+              type: 'tool-output-available',
+              toolName: 'algolia_search_index_products',
+              toolCallId: 'call-1',
+              output: { hits: [{ objectID: '1' }] },
+            },
+            { type: 'text-start', id: 'text-1' },
+            {
+              type: 'text-delta',
+              id: 'text-1',
+              delta: 'Here are some shirts.',
+            },
+            { type: 'text-end', id: 'text-1' },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        // The widget always registers display-only tools for the built-in
+        // `algolia_*` tools, so `onToolCall` is always set — it just has
+        // nothing to submit for a server-executed call.
+        onToolCall: () => Promise.resolve(),
+        sendAutomaticallyWhen,
+      });
+
+      await chat.sendMessage({ text: 'I need a shirt' });
+
+      expect(sendMessages).toHaveBeenCalledTimes(1);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(assistantToolPart(state, 'call-1')).toMatchObject({
+        state: 'output-available',
+        output: { hits: [{ objectID: '1' }] },
+      });
+    });
+
+    it('still auto-continues for the client tool call in a mixed turn', async () => {
+      let chat!: TestChat;
+      let submitClientResult!: () => Promise<void>;
+      const sendAutomaticallyWhen = jest.fn(
+        lastAssistantMessageIsCompleteWithToolCalls
+      );
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk('assistant-1'),
+            {
+              type: 'tool-input-available',
+              toolName: 'algolia_search_index_products',
+              toolCallId: 'call-server',
+              input: { query: 'shirt' },
+            },
+            {
+              type: 'tool-output-available',
+              toolName: 'algolia_search_index_products',
+              toolCallId: 'call-server',
+              output: { hits: [{ objectID: '1' }] },
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'addToCart',
+              toolCallId: 'call-client',
+              input: { objectID: '1' },
+            },
+            finishChunk(),
+          ],
+          [startChunk('assistant-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }) => {
+          submitClientResult = () =>
+            chat.addToolResult({
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+              output: { ok: true },
+            });
+        },
+        sendAutomaticallyWhen,
+      });
+      chat = setup.chat;
+
+      await chat.sendMessage({ text: 'add the first shirt to my cart' });
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
+
+      await submitClientResult();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
+    });
+
     it('keeps response ownership when the same messages are restored', async () => {
       let chat!: TestChat;
       const submitResults = new Map<string, () => Promise<void>>();
@@ -3795,6 +3899,9 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(setup.state.status).toBe('ready');
     });
 
+    // The server answering the call first makes it server-owned: the awaited
+    // client submission must still settle, but it no longer continues the turn
+    // on the server's behalf.
     it('settles an awaited client result after a server result for the same call', async () => {
       const toolCallStarted = deferred<undefined>();
       const releaseToolResult = deferred<undefined>();
@@ -3850,8 +3957,8 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         state: 'output-available',
         output: { owner: 'server' },
       });
-      expect(sendAutomaticallyWhen).toHaveBeenCalledTimes(1);
-      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+      expect(sendAutomaticallyWhen).not.toHaveBeenCalled();
+      expect(setup.sendMessages).toHaveBeenCalledTimes(1);
       expect(setup.state.status).toBe('ready');
     });
 

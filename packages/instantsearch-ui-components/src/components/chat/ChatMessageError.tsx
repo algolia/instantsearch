@@ -4,6 +4,7 @@ import { createButtonComponent } from '../Button';
 
 import { ReloadIcon } from './icons';
 
+import type { ChatComponentPropsWithContext } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatMessageErrorTranslations = {
@@ -58,13 +59,16 @@ export function createChatMessageErrorComponent({
 }: Pick<Renderer, 'createElement'>) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatMessageError(userProps: ChatMessageErrorProps) {
+  return function ChatMessageError(
+    userProps: ChatComponentPropsWithContext<ChatMessageErrorProps>
+  ) {
     const {
       errorMessage,
       onReload,
       onNewConversation,
       actions,
       translations: userTranslations,
+      context,
       ...props
     } = userProps;
     const defaultErrorMessage =

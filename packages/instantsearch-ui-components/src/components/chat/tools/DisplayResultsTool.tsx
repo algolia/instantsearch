@@ -1,7 +1,5 @@
 /** @jsx createElement */
 
-import { getHitsByObjectID } from '../../../lib/utils/chat';
-
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
@@ -135,7 +133,7 @@ export type DisplayResultsItem<THit extends RecordWithObjectID> =
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
     items: Array<DisplayResultsItem<THit>>;
-    sendEvent: ClientSideToolComponentProps['sendEvent'];
+    sendEvent: ClientSideToolComponentProps['context']['sendEvent'];
   };
 
 export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
@@ -162,9 +160,8 @@ export function createDisplayResultsToolComponent<
   createElement,
   Fragment,
   useEffect,
-  useMemo,
   useRef,
-}: Renderer & Pick<Hooks, 'useEffect' | 'useMemo' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useEffect' | 'useRef'>) {
   return function DisplayResultsTool(
     userProps: DisplayResultsToolProps<TObject>
   ) {
@@ -173,8 +170,15 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
-    const { message, messages, insightsEventContext, sendEvent, status } =
-      toolProps;
+    const { context } = toolProps;
+    const {
+      message,
+      insightsEventContext,
+      sendEvent,
+      messages,
+      status,
+      records,
+    } = context;
     const instantSearchStatus =
       insightsEventContext?.instantSearchStatus ?? 'idle';
 
@@ -182,11 +186,6 @@ export function createDisplayResultsToolComponent<
       ...DEFAULT_TRANSLATIONS,
       ...userTranslations,
     };
-
-    const hitsByObjectID = useMemo(
-      () => (messages ? getHitsByObjectID(messages, message) : undefined),
-      [messages, message]
-    );
 
     const inputClaimsPayload = claimsDisplayResultsPayload(message?.input);
     const legacyOutput =
@@ -243,13 +242,14 @@ export function createDisplayResultsToolComponent<
 
       const items = results.reduce<Array<DisplayResultsItem<TObject>>>(
         (renderedItems, result) => {
-          if (!hitsByObjectID || !hasOwn(hitsByObjectID, result.objectID)) {
+          // The backend sends this tool object IDs only.
+          const hydrated = records?.get(result.objectID) as
+            | RecordWithObjectID<TObject>
+            | undefined;
+
+          if (!hydrated) {
             return renderedItems;
           }
-
-          const hydrated = hitsByObjectID[
-            result.objectID
-          ] as RecordWithObjectID<TObject>;
 
           renderedItems.push({
             ...hydrated,

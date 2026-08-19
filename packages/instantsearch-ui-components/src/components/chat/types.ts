@@ -1,3 +1,4 @@
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
@@ -511,18 +512,157 @@ export type ChatLayoutOwnProps<
   > &
   ComponentProps<'div'>;
 
-export type ClientSideToolComponentProps = {
+/**
+ * Shared chat state and callbacks injected into every overridable chat
+ * component by the widget. This is the component-layer analog of the templates
+ * system's `params` argument: a single, consistent object every component can
+ * read, regardless of which override point it plugs into.
+ */
+export type ChatComponentContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  /**
+   * The messages currently in the chat.
+   */
+  messages: TMessage[];
+  /**
+   * Current chat status.
+   */
+  status: ChatStatus;
+  /**
+   * The current error, when the chat is in an error state.
+   */
+  error?: Error;
+  /**
+   * Whether the messages are being cleared (drives the clearing animation).
+   */
+  isClearing: boolean;
+  /**
+   * Whether the chat panel is open.
+   */
+  open: boolean;
+  /**
+   * Whether the chat panel is maximized.
+   */
+  maximized: boolean;
+  /**
+   * The message part currently being processed by the assistant, if any.
+   */
+  activePart?: TMessage['parts'][number];
+  /**
+   * Tools registered for the assistant.
+   */
+  tools: ClientSideTools;
+  /**
+   * Send a message to the chat.
+   */
+  sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Regenerate the last assistant response.
+   */
+  regenerate: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Stop the current streaming response.
+   */
+  stop: ChatLayoutOwnProps['stop'];
+  /**
+   * Set the prompt input value.
+   */
+  setInput?: (input: string) => void;
+  /**
+   * Reload (regenerate) a message, optionally targeting a specific message id.
+   */
+  onReload: (messageId?: string) => void;
+  /**
+   * Clear the conversation and start a new one, when available.
+   */
+  onNewConversation?: () => void;
+  /**
+   * Close the chat.
+   */
+  onClose: () => void;
+};
+
+/**
+ * Augments a chat component's own props with the shared `context` the widget
+ * always injects. `TOwnProps` is the per-component presentational config that
+ * stays at the root; `context` is the shared chat state and callbacks.
+ */
+export type ChatComponentPropsWithContext<
+  TOwnProps = {},
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = TOwnProps & {
+  context: ChatComponentContext<TMessage>;
+};
+
+/**
+ * The `context` a tool layout component receives: the shared
+ * `ChatComponentContext` merged with the tool's own injected data (the tool
+ * `message`, event/filter callbacks, and index UI state).
+ */
+export type ClientSideToolContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage> & {
   message: ChatToolMessage;
-  messages?: ChatMessageBase[];
+  /**
+   * The records the chat's tools have fetched. A tool handed plain object IDs
+   * hydrates them with `records.get(objectID)`.
+   */
+  records?: ChatRecordsStore;
   insightsEventContext?: ChatInsightsEventContext;
-  status?: ChatStatus;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
-  onClose: () => void;
   addToolResult: AddToolResultWithOutput;
   applyFilters: (params: ApplyFiltersParams) => SearchParameters;
   sendEvent: SendEventForHits;
 };
+
+/**
+ * The root-level props tool layout components received before everything moved
+ * under `context`. Still passed alongside `context` so components written
+ * against the previous API keep working; they are removed in the next major.
+ *
+ * These are spelled out rather than derived with `Pick` so that `@deprecated`
+ * reaches each property at the point of use in editors.
+ */
+type DeprecatedClientSideToolRootProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  /** @deprecated Read `context.message` instead. */
+  message: ChatToolMessage;
+  /** @deprecated Read `context.messages` instead. */
+  messages: TMessage[];
+  /** @deprecated Read `context.records` instead. */
+  records?: ChatRecordsStore;
+  /** @deprecated Read `context.insightsEventContext` instead. */
+  insightsEventContext?: ChatInsightsEventContext;
+  /** @deprecated Read `context.status` instead. */
+  status: ChatStatus;
+  /** @deprecated Read `context.indexUiState` instead. */
+  indexUiState: object;
+  /** @deprecated Read `context.setIndexUiState` instead. */
+  setIndexUiState: (state: object) => void;
+  /** @deprecated Read `context.onClose` instead. */
+  onClose: () => void;
+  /** @deprecated Read `context.addToolResult` instead. */
+  addToolResult: AddToolResultWithOutput;
+  /** @deprecated Read `context.applyFilters` instead. */
+  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
+  /** @deprecated Read `context.sendEvent` instead. */
+  sendEvent: SendEventForHits;
+};
+
+/**
+ * Tool layout components receive a single `context` object holding everything
+ * they render from. The deprecated root-level props are kept required (rather
+ * than optional) so existing components that destructure them keep
+ * type-checking under `strict`; the widget always supplies both.
+ */
+export type ClientSideToolComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  context: ClientSideToolContext<TMessage>;
+} & DeprecatedClientSideToolRootProps<TMessage>;
 
 export type ClientSideToolComponent = (
   props: ClientSideToolComponentProps
@@ -546,6 +686,8 @@ export type ClientSideTool = {
    */
   shouldRender?: (message: ChatMessageBase, part: ChatToolMessage) => boolean;
   addToolResult: AddToolResult;
+  /** Attached by the connector, one per chat; reaches `layoutComponent`. */
+  records?: ChatRecordsStore;
   sendEvent?: SendEventForHits;
   insightsEventContext?: ChatInsightsEventContext;
   onToolCall?: (
@@ -570,25 +712,18 @@ export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<
   ClientSideTool,
-  'addToolResult' | 'applyFilters' | 'sendEvent' | 'insightsEventContext'
+  | 'addToolResult'
+  | 'applyFilters'
+  | 'sendEvent'
+  | 'insightsEventContext'
+  | 'records'
 >;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
 
-export type ChatEmptyProps = {
-  /**
-   * Function to send a message to the chat
-   */
-  sendMessage?: ChatLayoutOwnProps['sendMessage'];
-  /**
-   * Current chat status
-   */
-  status?: ChatStatus;
-  /**
-   * Callback to close the chat
-   */
-  onClose?: () => void;
-  /**
-   * Function to set the prompt input value
-   */
-  setInput?: (input: string) => void;
-};
+/**
+ * @deprecated Use `ChatComponentPropsWithContext` instead — an empty/greeting
+ * component now reads shared chat state from its `context` prop.
+ */
+export type ChatEmptyProps = Partial<
+  Pick<ChatComponentContext, 'sendMessage' | 'status' | 'onClose' | 'setInput'>
+>;

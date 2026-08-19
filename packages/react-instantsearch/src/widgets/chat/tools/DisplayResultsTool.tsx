@@ -4,13 +4,7 @@ import {
   createButtonComponent,
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
-import React, {
-  createElement,
-  Fragment,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { createElement, Fragment, useEffect, useRef } from 'react';
 
 import { Carousel } from '../../../components';
 
@@ -32,7 +26,6 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
     createElement: createElement as Pragma,
     Fragment,
     useEffect,
-    useMemo,
     useRef,
   });
 

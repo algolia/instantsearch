@@ -2,13 +2,30 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { createCarouselTool } from '../SearchIndexTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentContext,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+const metadata: ChatComponentContext = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+};
 
 type TestHit = {
   objectID: string;
@@ -26,7 +43,7 @@ describe('createCarouselTool', () => {
       const tool = createCarouselTool<TestHit>(false, mockItemComponent);
       const LayoutComponent = tool.layoutComponent!;
 
-      const message: ClientSideToolComponentProps['message'] = {
+      const message: ClientSideToolComponentProps['context']['message'] = {
         type: 'tool-algolia_search_index',
         state: 'output-available',
         toolCallId: 'test-call-id',
@@ -42,13 +59,15 @@ describe('createCarouselTool', () => {
 
       render(
         <LayoutComponent
-          message={message}
-          applyFilters={jest.fn()}
-          onClose={jest.fn()}
-          indexUiState={{}}
-          addToolResult={jest.fn()}
-          setIndexUiState={jest.fn()}
-          sendEvent={jest.fn()}
+          {...chatToolProps({
+            ...metadata,
+            message,
+            applyFilters: jest.fn(),
+            indexUiState: {},
+            addToolResult: jest.fn(),
+            setIndexUiState: jest.fn(),
+            sendEvent: jest.fn(),
+          })}
         />
       );
 
@@ -60,7 +79,7 @@ describe('createCarouselTool', () => {
       const tool = createCarouselTool<TestHit>(false, mockItemComponent);
       const LayoutComponent = tool.layoutComponent!;
 
-      const message: ClientSideToolComponentProps['message'] = {
+      const message: ClientSideToolComponentProps['context']['message'] = {
         type: 'tool-algolia_search_index_products',
         state: 'output-available',
         toolCallId: 'test-call-id',
@@ -76,13 +95,15 @@ describe('createCarouselTool', () => {
 
       render(
         <LayoutComponent
-          message={message}
-          applyFilters={jest.fn()}
-          onClose={jest.fn()}
-          indexUiState={{}}
-          addToolResult={jest.fn()}
-          setIndexUiState={jest.fn()}
-          sendEvent={jest.fn()}
+          {...chatToolProps({
+            ...metadata,
+            message,
+            applyFilters: jest.fn(),
+            indexUiState: {},
+            addToolResult: jest.fn(),
+            setIndexUiState: jest.fn(),
+            sendEvent: jest.fn(),
+          })}
         />
       );
 
@@ -148,7 +169,7 @@ describe('createCarouselTool', () => {
         const tool = createCarouselTool<TestHit>(true, mockItemComponent);
         const LayoutComponent = tool.layoutComponent!;
 
-        const message: ClientSideToolComponentProps['message'] = {
+        const message: ClientSideToolComponentProps['context']['message'] = {
           type: 'tool-algolia_search_index_products',
           state: 'output-available',
           toolCallId: 'test-call-id',
@@ -161,13 +182,15 @@ describe('createCarouselTool', () => {
 
         render(
           <LayoutComponent
-            message={message}
-            applyFilters={applyFilters}
-            onClose={jest.fn()}
-            indexUiState={{}}
-            addToolResult={jest.fn()}
-            setIndexUiState={jest.fn()}
-            sendEvent={jest.fn()}
+            {...chatToolProps({
+              ...metadata,
+              message,
+              applyFilters,
+              indexUiState: {},
+              addToolResult: jest.fn(),
+              setIndexUiState: jest.fn(),
+              sendEvent: jest.fn(),
+            })}
           />
         );
 

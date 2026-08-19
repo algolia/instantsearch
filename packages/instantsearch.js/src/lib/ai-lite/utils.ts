@@ -33,7 +33,21 @@ export function lastAssistantMessageIsCompleteWithToolCalls({
 
   if (!lastMessage.parts || lastMessage.parts.length === 0) return false;
 
-  const toolParts = lastMessage.parts.filter(isToolOrDynamicToolUIPart);
+  // Only the last step of the message counts: earlier steps were answered
+  // before the model was called again, so their resolved tool calls must not
+  // continue the turn a second time.
+  const lastStepStartIndex = lastMessage.parts.reduce(
+    (lastIndex, part, index) =>
+      part.type === 'step-start' ? index : lastIndex,
+    -1
+  );
+
+  const toolParts = lastMessage.parts
+    .slice(lastStepStartIndex + 1)
+    .filter(isToolOrDynamicToolUIPart)
+    // A provider-executed tool call is the provider's to answer, so a turn
+    // made of them is already complete — continuing would resend it.
+    .filter((part) => !part.providerExecuted);
 
   if (toolParts.length === 0) return false;
 

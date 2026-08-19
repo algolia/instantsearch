@@ -1,4 +1,9 @@
 import {
+  collectChatRecords,
+  createChatRecordsStore,
+} from 'instantsearch-ui-components';
+
+import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
@@ -18,6 +23,7 @@ import {
   walkIndex,
   warning,
 } from '../../lib/utils';
+import { defer } from '../../lib/utils/defer';
 import { flat } from '../../lib/utils/flat';
 
 import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
@@ -47,6 +53,7 @@ import type {
   ClientSideTools,
   ClientSideTool,
   ChatInsightsEventContext,
+  ChatRecordsStore,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -90,6 +97,12 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * The records the chat's tools have fetched, keyed by `objectID`: every tool
+   * call that returned `hits` contributes them, last write winning. Attached to
+   * every tool too, which is how a `layoutComponent` reads it.
+   */
+  records: ChatRecordsStore;
   /**
    * Suggestions received from the AI model.
    */
@@ -495,6 +508,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let hasValidatedEntryPoints = false;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
+    // Collected here rather than by the tool that searched: that tool renders
+    // nothing while display-results presents its records, and a record has to
+    // outlive the render that produced it.
+    const records = createChatRecordsStore();
+    const collectRecords = () =>
+      collectChatRecords(_chatInstance.messages, records);
     let feedbackState: ChatRenderState<TUiMessage>['feedbackState'] = {};
     let _sendChatMessageFeedback: ChatRenderState<TUiMessage>['sendChatMessageFeedback'];
     let feedbackAbortController: AbortController | undefined;
@@ -554,6 +573,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // ChatState callbacks that synchronously re-render, so they must run last
       // for that render to see the cleared feedback and rotated conversation id.
       feedbackState = {};
+      records.clear();
       _chatInstance.resetConversationId();
       setMessages([]);
       _chatInstance.clearError();
@@ -586,6 +606,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       hasValidatedEntryPoints = true;
     };
+
+    // Deferred because entry points can be registered after the chat itself:
+    // React adds widgets in mount order, so a trigger further down the tree
+    // only lands after this widget's `init` has run.
+    const deferredValidateEntryPoints = defer(validateEntryPoints);
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       // A caller supplied `chat` already owns its transport, so it bypasses the
@@ -779,9 +804,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
-        validateEntryPoints(instantSearchInstance);
+        deferredValidateEntryPoints(instantSearchInstance);
 
         open = normalizedPersistence.open ? readPersistedOpen(type) : false;
+        records.clear();
         _chatInstance = makeChatInstance(instantSearchInstance);
 
         const render = () => {
@@ -870,11 +896,29 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         });
 
+        // Sibling entry points read `status` through the shared `renderState` to
+        // disable themselves, so a transition has to escape this widget's own
+        // render. Message deltas deliberately don't: they stay local to keep
+        // streaming cheap. The `status` setter notifies on every write, hence
+        // the comparison.
+        let lastStatus = _chatInstance.status;
+        const renderOnStatusChange = () => {
+          const statusChanged = _chatInstance.status !== lastStatus;
+          lastStatus = _chatInstance.status;
+          render();
+          if (statusChanged) {
+            initOptions.instantSearchInstance.scheduleRender();
+          }
+        };
+
         safelyRunOnBrowser(() => {
           chatSubscriptionUnsubscribers = [
             _chatInstance['~registerErrorCallback'](render),
+            // Before `render`, so a delta's records are collected by the time
+            // the tools of that delta render.
+            _chatInstance['~registerMessagesCallback'](collectRecords),
             _chatInstance['~registerMessagesCallback'](render),
-            _chatInstance['~registerStatusCallback'](render),
+            _chatInstance['~registerStatusCallback'](renderOnStatusChange),
           ];
         });
 
@@ -952,6 +996,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return updateStateFromSearchToolInput(params, helper);
         }
 
+        // A restored or server-rendered conversation never emitted the messages
+        // callback above; collecting is idempotent, so covering it here is free.
+        collectRecords();
+
         const insightsEventContext: ChatInsightsEventContext = {
           agentId,
           instantSearchStatus: instantSearchInstance.status,
@@ -966,6 +1014,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             applyFilters,
             sendEvent,
             insightsEventContext,
+            records,
           } satisfies ClientSideTool & {
             '~addToolResultForMessage': (typeof _chatInstance)['~addToolResultForMessage'];
           };
@@ -1016,6 +1065,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,
           tools: toolsWithAddToolResult,
+          records,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,
           widgetParams,
@@ -1037,6 +1087,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       dispose() {
+        deferredValidateEntryPoints.cancel();
         feedbackAbortController?.abort();
         unsubscribeChatCallbacks();
         unmountFn();

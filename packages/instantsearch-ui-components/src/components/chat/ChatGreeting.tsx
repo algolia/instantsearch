@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import type { ChatEmptyProps } from './types';
+import type { ChatComponentPropsWithContext, ChatEmptyProps } from './types';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatGreetingTranslations = {
@@ -35,34 +35,40 @@ export type ChatGreetingClassNames = {
   banner?: string | string[];
 };
 
-export type ChatGreetingProps = ChatEmptyProps &
-  ComponentProps<'div'> & {
-    /**
-     * Optional translations
-     */
-    translations?: Partial<ChatGreetingTranslations>;
-    /**
-     * Optional class names
-     */
-    classNames?: ChatGreetingClassNames;
-    /**
-     * Optional banner image URL
-     */
-    banner?: string;
-  };
+export type ChatGreetingProps = ComponentProps<'div'> & {
+  /**
+   * Optional translations
+   */
+  translations?: Partial<ChatGreetingTranslations>;
+  /**
+   * Optional class names
+   */
+  classNames?: ChatGreetingClassNames;
+  /**
+   * Optional banner image URL
+   */
+  banner?: string;
+};
 
 export function createChatGreetingComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function ChatGreeting(userProps: ChatGreetingProps) {
+  return function ChatGreeting(
+    // The deprecated root props are still accepted for back compat.
+    // eslint-disable-next-line typescript/no-deprecated
+    userProps: ChatComponentPropsWithContext<ChatGreetingProps & ChatEmptyProps>
+  ) {
     const {
       translations: userTranslations,
       classNames = {},
+      context,
+      banner,
+      // Read from `context` instead. Destructured only to keep the deprecated
+      // root-level props out of the DOM spread below; remove in the next major.
       sendMessage: _sendMessage,
       status: _status,
       onClose: _onClose,
       setInput: _setInput,
-      banner,
       ...props
     } = userProps;
     const translations: Required<ChatGreetingTranslations> = {
