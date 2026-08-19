@@ -470,7 +470,13 @@ export function createChatMessageComponent({
           | MessageScopedClientSideTool
           | undefined;
 
-        if (tool?.shouldRender?.(message, part as ChatToolMessage) === false) {
+        if (
+          tool?.shouldRender?.({
+            ...context,
+            message: part as ChatToolMessage,
+            parentMessage: message,
+          }) === false
+        ) {
           return null;
         }
 

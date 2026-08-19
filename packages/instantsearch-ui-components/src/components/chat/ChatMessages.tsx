@@ -593,14 +593,6 @@ export function createChatMessagesComponent({
           isReasoningPartActive(parts, index)
         ) ?? false)
       : false;
-    const showLoader = getShowLoader(
-      status,
-      lastMessage,
-      tools,
-      assistantMessageProps?.showReasoning,
-      hasActiveReasoning
-    );
-
     // The shared context handed to every overridable chat component, so custom
     // components can read the current chat state and common callbacks from a
     // single, consistent place.
@@ -621,6 +613,12 @@ export function createChatMessagesComponent({
       onNewConversation,
       onClose,
     };
+
+    const showLoader = getShowLoader(
+      context,
+      assistantMessageProps?.showReasoning,
+      hasActiveReasoning
+    );
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -744,16 +742,17 @@ export function createChatMessagesComponent({
   };
 }
 
-const getShowLoader = (
-  status: ChatStatus,
-  lastMessage: ChatMessageBase | undefined,
-  tools: ClientSideTools,
+const getShowLoader = <TMessage extends ChatMessageBase>(
+  context: ChatComponentContext<TMessage>,
   showReasoning: boolean | undefined,
   hasActiveReasoning: boolean
 ): boolean => {
+  const { status, messages, tools } = context;
+
   if (status !== 'submitted' && status !== 'streaming') return false;
   if (status === 'submitted') return true;
 
+  const lastMessage = messages[messages.length - 1];
   const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
 
   if (!lastPart) return true;
@@ -768,7 +767,14 @@ const getShowLoader = (
     // A part the tool declines to render leaves nothing on screen, so the turn
     // still reads as in progress — keep the loader up rather than letting a
     // settled-but-hidden part terminate it.
-    if (lastMessage && tool?.shouldRender?.(lastMessage, lastPart) === false) {
+    if (
+      lastMessage &&
+      tool?.shouldRender?.({
+        ...context,
+        message: lastPart,
+        parentMessage: lastMessage,
+      }) === false
+    ) {
       return true;
     }
 

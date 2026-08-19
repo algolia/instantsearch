@@ -50,6 +50,7 @@ import type {
   ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
+  ClientSideToolShouldRenderContext,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
   ChatMessageProps,
@@ -86,9 +87,11 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
  * Whether the search tool renders its own results, i.e. the agent did not hand
  * the turn to the display-results tool. Set on the message by the backend.
  */
-function isDisplayResultsDisabled(message: ChatMessageBase) {
+function isDisplayResultsDisabled({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) {
   return (
-    (message.metadata as { displayResultsEnabled?: boolean } | undefined)
+    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
       ?.displayResultsEnabled !== true
   );
 }

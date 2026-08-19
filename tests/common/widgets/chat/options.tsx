@@ -1308,8 +1308,9 @@ export function createOptionsTests(
           id: 'chat-id',
         });
 
-        const shouldRender = (message: any) =>
-          message.metadata?.hideHello !== true;
+        const shouldRender = jest.fn(
+          ({ parentMessage }: any) => parentMessage.metadata?.hideHello !== true
+        );
 
         await setup({
           instantSearchOptions: {
@@ -1347,6 +1348,20 @@ export function createOptionsTests(
         await openChat(act);
 
         expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+        // The predicate reads from the same shared `context` every other
+        // overridable chat component receives, plus the tool part and the
+        // message it belongs to.
+        expect(shouldRender).toHaveBeenCalledWith(
+          expect.objectContaining({
+            messages: expect.any(Array),
+            status: expect.any(String),
+            tools: expect.any(Object),
+            message: expect.objectContaining({ type: 'tool-hello' }),
+            parentMessage: expect.objectContaining({
+              metadata: { hideHello: true },
+            }),
+          })
+        );
       });
 
       test('shows loader during streaming when the last part is a tool that does not render', async () => {
