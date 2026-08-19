@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.45.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.44.1...react-instantsearch@7.45.0) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** correct deprecation-suppression rule name and tool test fixtures ([a6c8d57](https://github.com/algolia/instantsearch/commit/a6c8d57537bb9b544daad44a8507af9fd7528213))
+
+
+### Features
+
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
 ## [7.44.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.44.0...react-instantsearch@7.44.1) (2026-08-13)
 
 
