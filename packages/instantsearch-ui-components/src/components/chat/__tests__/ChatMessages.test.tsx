@@ -12,6 +12,7 @@ import { createChatMessagesComponent } from '../ChatMessages';
 
 import type { ChatMessageTextComponentProps } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
+import type { ChatComponentPropsWithContext } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -942,6 +943,64 @@ describe('ChatMessages', () => {
       expect(screen.getByTestId('second-text')).toHaveTextContent('Answer');
     });
 
+    test('updates completed tool rows when the panel is maximized', () => {
+      // A completed (non-current) tool row: the memo must still track
+      // `context.maximized` so tool components see the panel state change.
+      const toolMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'tool-test_tool' as const,
+            toolCallId: '123',
+            input: {},
+            state: 'output-available' as const,
+            output: {},
+          },
+        ],
+      };
+      const trailingMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-2',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [toolMessage, trailingMessage];
+      const tools = {
+        test_tool: {
+          layoutComponent: ({
+            context,
+          }: {
+            context: { maximized?: boolean };
+          }) => (
+            <span data-testid="tool-maximized">
+              {String(context.maximized)}
+            </span>
+          ),
+          addToolResult: jest.fn(),
+          onToolCall: jest.fn(),
+          applyFilters: jest.fn(),
+        },
+      };
+      const createProps = (maximized: boolean) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        tools,
+        maximized,
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false)} />
+      );
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('false');
+
+      rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('true');
+    });
+
     test('keeps the ordered conversation current for completed messages', () => {
       const firstMessage = {
         role: 'assistant' as const,
@@ -1410,7 +1469,9 @@ describe('ChatMessages', () => {
   });
 
   test('allows error translation to use raw error message', () => {
-    const CustomError = (props: ChatMessageErrorProps) => (
+    const CustomError = (
+      props: ChatComponentPropsWithContext<ChatMessageErrorProps>
+    ) => (
       <ChatMessageError
         {...props}
         translations={{
@@ -1493,5 +1554,155 @@ describe('ChatMessages', () => {
         </div>
       </div>
     `);
+  });
+
+  test('forwards context to overridable components', () => {
+    const Loader = jest.fn(() => <span>Loader</span>);
+    const setIndexUiState = jest.fn();
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Working on it' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{ query: 'shoes' }}
+        setIndexUiState={setIndexUiState}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        loaderComponent={Loader}
+      />
+    );
+
+    expect(Loader).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          messages,
+          status: 'submitted',
+          error: undefined,
+          isClearing: false,
+          activePart: { type: 'text', text: 'Working on it' },
+          tools: {},
+          sendMessage,
+          setInput,
+          onClose,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('clears activePart once the response settles', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Done' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'ready',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('leaves activePart unset until the assistant produces a part', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'user' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Find me shoes' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'submitted',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('still passes the pre-`context` root props to a custom empty component', () => {
+    const Empty = jest.fn(() => <span>Empty</span>);
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+
+    render(
+      <ChatMessages
+        messages={[]}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        emptyComponent={Empty}
+      />
+    );
+
+    // An empty/greeting component written against the previous API reads these
+    // from the root rather than from `context`.
+    expect(Empty).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sendMessage,
+        setInput,
+        status: 'ready',
+        onClose,
+        context: expect.objectContaining({ status: 'ready' }),
+      }),
+      {}
+    );
   });
 });

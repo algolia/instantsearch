@@ -33,6 +33,8 @@ import type {
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
   ChatEmptyProps,
   ChatLayoutOwnProps,
   ChatMessageBase,
@@ -121,19 +123,29 @@ export type ChatMessagesProps<
   /**
    * Custom message renderer
    */
-  messageComponent?: (props: { message: TMessage }) => JSX.Element;
+  messageComponent?: (
+    props: ChatComponentPropsWithContext<{ message: TMessage }, TMessage>
+  ) => JSX.Element;
   /**
    * Custom loader component
    */
-  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
+  loaderComponent?: (
+    props: ChatComponentPropsWithContext<ChatMessageLoaderProps, TMessage>
+  ) => JSX.Element;
   /**
    * Custom error component
    */
-  errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
+  errorComponent?: (
+    props: ChatComponentPropsWithContext<ChatMessageErrorProps, TMessage>
+  ) => JSX.Element;
   /**
    * Custom empty component shown when there are no messages
    */
-  emptyComponent?: (props: ChatEmptyProps) => JSX.Element;
+  emptyComponent?: (
+    // The deprecated root props are still passed alongside `context`.
+    // eslint-disable-next-line typescript/no-deprecated
+    props: ChatComponentPropsWithContext<ChatEmptyProps, TMessage>
+  ) => JSX.Element;
   /**
    * Custom actions component
    */
@@ -184,6 +196,22 @@ export type ChatMessagesProps<
    * Function to send a message to the chat
    */
   sendMessage?: ChatLayoutOwnProps['sendMessage'];
+  /**
+   * Function to regenerate the last assistant response
+   */
+  regenerate?: ChatLayoutOwnProps['regenerate'];
+  /**
+   * Function to stop the current streaming response
+   */
+  stop?: ChatLayoutOwnProps['stop'];
+  /**
+   * Whether the chat panel is open
+   */
+  open?: boolean;
+  /**
+   * Whether the chat panel is maximized
+   */
+  maximized?: boolean;
   /**
    * Function to set the prompt input value
    */
@@ -270,15 +298,11 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     TMessage extends ChatMessageBase = ChatMessageBase,
   >({
     message,
-    status,
     userMessageProps,
     assistantMessageProps,
-    tools,
     indexUiState,
     setIndexUiState,
-    messages,
     onReload,
-    onClose,
     onFeedback,
     feedbackState,
     actionsComponent,
@@ -286,6 +310,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     messageTranslations,
     translations,
     suggestionsElement,
+    context,
   }: {
     key: string;
     message: TMessage;
@@ -295,10 +320,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     assistantMessageProps?: ChatMessageRoleProps<TMessage>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    messages?: TMessage[];
-    tools: ClientSideTools;
     onReload: (messageId?: string) => void;
-    onClose: () => void;
     onFeedback?: (messageId: string, vote: 0 | 1) => void;
     feedbackState?: Record<string, 'sending' | 0 | 1>;
     actionsComponent?: ChatMessageProps['actionsComponent'];
@@ -306,6 +328,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
     suggestionsElement?: VNode;
+    context: ChatComponentContext<TMessage>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -377,20 +400,18 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
       <ChatMessage
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
-        status={status}
-        tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
-        onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
         classNames={classNames}
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
+        context={context}
         {...messageProps}
         message={message}
-        messages={messages}
+        messages={context.messages}
       />
     );
   };
@@ -416,7 +437,7 @@ export function createChatMessagesComponent({
     TMessage extends ChatMessageBase = ChatMessageBase,
   >(props: Parameters<typeof DefaultMessageComponent<TMessage>>[0]) {
     const messageFeedback = props.feedbackState?.[props.message.id];
-    const instantSearchStatus = getInstantSearchStatus(props.tools);
+    const instantSearchStatus = getInstantSearchStatus(props.context.tools);
     // Read the row's own side, mirroring `DefaultMessage`, so one role's change
     // neither invalidates the other's completed rows nor goes unnoticed here.
     const messageProps =
@@ -428,7 +449,9 @@ export function createChatMessagesComponent({
     const textComponent = messageProps?.textComponent;
     // Custom text components receive the conversation, so their completed rows
     // must update with it. Keep the default renderer's streaming optimization.
-    const textComponentMessages = textComponent ? props.messages : undefined;
+    const textComponentMessages = textComponent
+      ? props.context.messages
+      : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
     // are why this resolves by own-key presence rather than key by key.
@@ -447,7 +470,10 @@ export function createChatMessagesComponent({
     const reasoningBodyClassName = cx(reasoningClassNames?.reasoningBody);
     const reasoningTextClassName = cx(reasoningClassNames?.reasoningText);
     // The row comparator. The full props object would recompile every completed
-    // message on each streaming update.
+    // message on each streaming update, and `props.context` is a fresh object
+    // every render — so track the specific context fields a completed row can
+    // render from (panel display state read by tool components) rather than the
+    // object itself, which would defeat the memo.
     return useMemo(
       () => <DefaultMessageComponent {...props} />,
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -455,6 +481,8 @@ export function createChatMessagesComponent({
         props.message,
         props.isCurrentMessage,
         props.status,
+        props.context.maximized,
+        props.context.open,
         instantSearchStatus,
         props.suggestionsElement,
         messageFeedback,
@@ -503,6 +531,10 @@ export function createChatMessagesComponent({
       onNewConversation,
       onClose,
       sendMessage,
+      regenerate = () => Promise.resolve(),
+      stop = () => Promise.resolve(),
+      open = false,
+      maximized = false,
       setInput,
       translations: userTranslations,
       userMessageProps,
@@ -546,6 +578,14 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    // `activePart` means "the part currently being processed". It must clear
+    // when nothing is in progress: once the response settles (`ready`/`error`),
+    // and while `submitted` still shows the user's own message (the assistant
+    // hasn't produced a part yet). Otherwise overrides render a part that isn't
+    // actually streaming.
+    const isProcessing = status === 'submitted' || status === 'streaming';
+    const activePart =
+      isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
     const hasActiveReasoning = assistantMessageProps?.showReasoning
@@ -560,6 +600,27 @@ export function createChatMessagesComponent({
       assistantMessageProps?.showReasoning,
       hasActiveReasoning
     );
+
+    // The shared context handed to every overridable chat component, so custom
+    // components can read the current chat state and common callbacks from a
+    // single, consistent place.
+    const context: ChatComponentContext<TMessage> = {
+      messages,
+      status,
+      error,
+      isClearing,
+      open,
+      maximized,
+      activePart,
+      tools,
+      sendMessage,
+      regenerate,
+      stop,
+      setInput,
+      onReload,
+      onNewConversation,
+      onClose,
+    };
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -594,10 +655,14 @@ export function createChatMessagesComponent({
           >
             {showEmpty && EmptyComponent && (
               <EmptyComponent
+                // Deprecated root-level props, kept alongside `context` for
+                // empty/greeting components written against the previous API.
+                // Remove in the next major.
                 sendMessage={sendMessage}
                 setInput={setInput}
                 status={status}
                 onClose={onClose}
+                context={context}
               />
             )}
 
@@ -609,18 +674,16 @@ export function createChatMessagesComponent({
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
-                tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
-                messages={messages}
                 onReload={onReload}
                 onFeedback={onFeedback}
                 feedbackState={feedbackState}
                 actionsComponent={ActionsComponent}
-                onClose={onClose}
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
+                context={context}
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
@@ -634,6 +697,7 @@ export function createChatMessagesComponent({
             {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
+                context={context}
               />
             )}
 
@@ -654,6 +718,7 @@ export function createChatMessagesComponent({
                       }
                     : undefined
                 }
+                context={context}
               />
             )}
           </div>

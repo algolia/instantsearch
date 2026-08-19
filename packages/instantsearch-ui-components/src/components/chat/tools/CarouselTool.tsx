@@ -23,7 +23,7 @@ type HeaderProps = {
   nbHits?: number;
   input?: SearchToolInput;
   nbItems: number;
-  applyFilters: ClientSideToolComponentProps['applyFilters'];
+  applyFilters: ClientSideToolComponentProps['context']['applyFilters'];
   getSearchPageURL?: (params: SearchParameters) => string;
   onClose: () => void;
 };
@@ -150,15 +150,11 @@ export function createCarouselToolComponent<
       itemComponent: ItemComponent,
       headerComponent: HeaderComponent,
       getSearchPageURL,
-      toolProps: {
-        message,
-        applyFilters,
-        onClose,
-        insightsEventContext,
-        sendEvent,
-      },
+      toolProps: { context },
       headerProps: { showViewAll },
     } = userProps;
+    const { message, applyFilters, insightsEventContext, sendEvent, onClose } =
+      context;
     const instantSearchStatus =
       insightsEventContext?.instantSearchStatus ?? 'idle';
 

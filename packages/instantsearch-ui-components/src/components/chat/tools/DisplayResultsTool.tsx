@@ -133,7 +133,7 @@ export type DisplayResultsItem<THit extends RecordWithObjectID> =
 export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
     items: Array<DisplayResultsItem<THit>>;
-    sendEvent: ClientSideToolComponentProps['sendEvent'];
+    sendEvent: ClientSideToolComponentProps['context']['sendEvent'];
   };
 
 export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
@@ -170,14 +170,15 @@ export function createDisplayResultsToolComponent<
       groupCarouselComponent: renderGroupCarousel,
       translations: userTranslations,
     } = userProps;
+    const { context } = toolProps;
     const {
       message,
-      messages,
-      records,
       insightsEventContext,
       sendEvent,
+      messages,
       status,
-    } = toolProps;
+      records,
+    } = context;
     const instantSearchStatus =
       insightsEventContext?.instantSearchStatus ?? 'idle';
 

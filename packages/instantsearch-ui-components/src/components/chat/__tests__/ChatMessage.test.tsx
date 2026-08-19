@@ -14,10 +14,27 @@ import {
 } from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
+import type { ChatComponentContext } from '../types';
 
 const ChatMessage = createChatMessageComponent({
   createElement,
   Fragment,
+});
+
+const createContext = <TMessage extends ChatMessageBase = ChatMessageBase>(
+  overrides: Partial<ChatComponentContext<TMessage>> = {}
+): ChatComponentContext<TMessage> => ({
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+  ...overrides,
 });
 
 describe('ChatMessage', () => {
@@ -59,9 +76,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -96,7 +111,6 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [],
         }}
-        status="ready"
         classNames={{
           root: 'root',
           container: 'container',
@@ -105,8 +119,7 @@ describe('ChatMessage', () => {
           message: 'message',
           actions: 'actions',
         }}
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -142,9 +155,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -154,9 +165,7 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -166,9 +175,7 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
       </div>
     );
@@ -262,9 +269,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -292,9 +297,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -322,9 +325,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Private reasoning' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -348,9 +349,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'reasoning', text, state: 'done' }],
           }}
-          status={status}
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext({ status })}
           showReasoning={true}
         />
       );
@@ -371,9 +370,10 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -408,15 +408,15 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Final answer' },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: () => <div>Tool result</div>,
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(),
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: () => <div>Tool result</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-        }}
-        onClose={jest.fn()}
+        })}
         showReasoning={true}
         textComponent={textComponent}
       />
@@ -460,9 +460,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={message}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({ status: 'streaming', messages: [message] })}
         showReasoning={true}
       />
     );
@@ -491,9 +489,7 @@ describe('ChatMessage', () => {
           ...message,
           parts: [message.parts[0], { ...message.parts[1], state: 'done' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({ status: 'ready', messages: [message] })}
         showReasoning={true}
       />
     );
@@ -522,16 +518,18 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        messages={[
-          {
-            role: 'assistant',
-            id: '1',
-            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
-          },
-        ]}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [
+            {
+              role: 'assistant',
+              id: '1',
+              parts: [
+                { type: 'reasoning', text: 'Working', state: 'streaming' },
+              ],
+            },
+          ],
+        })}
         showReasoning={true}
         translations={{
           reasoningLabel: 'Raisonnement de la demande en cours',
@@ -569,16 +567,18 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        messages={[
-          {
-            role: 'assistant',
-            id: '1',
-            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
-          },
-        ]}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [
+            {
+              role: 'assistant',
+              id: '1',
+              parts: [
+                { type: 'reasoning', text: 'Working', state: 'streaming' },
+              ],
+            },
+          ],
+        })}
         showReasoning={true}
         classNames={{
           reasoningHeader: 'custom-header',
@@ -621,9 +621,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -673,10 +674,7 @@ describe('ChatMessage', () => {
             indexUiState={{}}
             setIndexUiState={jest.fn()}
             message={message}
-            messages={messages}
-            status="streaming"
-            tools={{}}
-            onClose={jest.fn()}
+            context={createContext({ status: 'streaming', messages })}
             showReasoning={true}
           />
         ))}
@@ -709,9 +707,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -744,9 +743,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -766,9 +766,10 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text, state: 'streaming' }],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -813,9 +814,10 @@ describe('ChatMessage', () => {
               : []),
           ],
         }}
-        status={status}
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status,
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -855,9 +857,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
         translations={{ reasoningLabel: 'Raisonnement' }}
       />
@@ -883,9 +883,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
         parseMarkdown={false}
       />
@@ -909,9 +907,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -943,9 +939,7 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={message}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({ status: 'streaming', messages: [message] })}
         textComponent={textComponent}
       />
     );
@@ -962,14 +956,14 @@ describe('ChatMessage', () => {
       {
         part: message.parts[0],
         message,
-        messages: undefined,
+        messages: [message],
         status: 'streaming',
         partIndex: 0,
       },
       {
         part: message.parts[2],
         message,
-        messages: undefined,
+        messages: [message],
         status: 'streaming',
         partIndex: 2,
       },
@@ -991,9 +985,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1015,9 +1007,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'Use * and _ literally' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1060,9 +1050,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'line one\nline two' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1088,9 +1076,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1119,9 +1105,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -1148,9 +1132,7 @@ describe('ChatMessage', () => {
             },
           },
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -1160,8 +1142,8 @@ describe('ChatMessage', () => {
   });
 
   test('renders with tools', () => {
-    const layoutComponent = jest.fn(({ message }) => (
-      <div className="wrapper">{JSON.stringify(message.output)}</div>
+    const layoutComponent = jest.fn(({ context }) => (
+      <div className="wrapper">{JSON.stringify(context.message.output)}</div>
     ));
     const { container } = render(
       <ChatMessage
@@ -1180,20 +1162,22 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent,
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
     expect(layoutComponent.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ status: 'ready' })
+      expect.objectContaining({
+        context: expect.objectContaining({ status: 'ready' }),
+      })
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -1227,6 +1211,59 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('passes the explicit messages override to tool components', () => {
+    const layoutComponent = jest.fn(({ context }) => (
+      <div>{context.messages?.length}</div>
+    ));
+    const overrideMessages: ChatMessageBase[] = [
+      {
+        role: 'assistant',
+        id: 'override',
+        parts: [{ type: 'text', text: 'Override' }],
+      },
+    ];
+    const sharedMessages: ChatMessageBase[] = [
+      { role: 'user', id: 'shared', parts: [{ type: 'text', text: 'Shared' }] },
+    ];
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        messages={overrideMessages}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: '123',
+              input: {},
+              state: 'output-available',
+              output: { data: 'Test data' },
+            },
+          ],
+        }}
+        context={createContext({
+          messages: sharedMessages,
+          tools: {
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(layoutComponent.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        context: expect.objectContaining({ messages: overrideMessages }),
+      })
+    );
+  });
+
   test('hands any tool the records the conversation searched for', () => {
     const searchPart = {
       type: 'tool-algolia_search_index',
@@ -1255,26 +1292,31 @@ describe('ChatMessage', () => {
         setIndexUiState={jest.fn()}
         message={message}
         messages={[message]}
-        status="ready"
-        tools={{
-          algolia_search_index: {
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(),
+        context={createContext({
+          status: 'ready',
+          tools: {
+            algolia_search_index: {
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            custom_tool: {
+              layoutComponent: ({ context }) => {
+                const { message: part, records } = context;
+                return (
+                  <div className="custom">
+                    {
+                      records?.get(
+                        (part.input as { objectID: string }).objectID
+                      )?.name as string
+                    }
+                  </div>
+                );
+              },
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-          custom_tool: {
-            layoutComponent: ({ message: part, records }) => (
-              <div className="custom">
-                {
-                  records?.get((part.input as { objectID: string }).objectID)
-                    ?.name as string
-                }
-              </div>
-            ),
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(),
-          },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
 
@@ -1306,26 +1348,26 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: ({ sendEvent: toolSendEvent }) => {
-              toolSendEvent('click', hit, 'Product Clicked', {
-                customField: 'custom value',
-              });
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: ({ context: { sendEvent: toolSendEvent } }) => {
+                toolSendEvent('click', hit, 'Product Clicked', {
+                  customField: 'custom value',
+                });
 
-              return <div>Tool result</div>;
-            },
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
-            sendEvent,
-            insightsEventContext: {
-              agentId: 'agent-id',
+                return <div>Tool result</div>;
+              },
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+              sendEvent,
+              insightsEventContext: {
+                agentId: 'agent-id',
+              },
             },
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
 
@@ -1347,7 +1389,7 @@ describe('ChatMessage', () => {
         params: Parameters<AddToolResult>[0]
       ) => ReturnType<AddToolResult>;
     } = {
-      layoutComponent: ({ addToolResult: submit }) => {
+      layoutComponent: ({ context: { addToolResult: submit } }) => {
         submitResult = submit;
         return <div />;
       },
@@ -1372,11 +1414,11 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: tool,
-        }}
-        onClose={jest.fn()}
+        context={createContext({
+          tools: {
+            test_tool: tool,
+          },
+        })}
       />
     );
 
@@ -1413,18 +1455,18 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: ({ addToolResult: submit }) => {
-              submitResult = submit;
-              return <div />;
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: ({ context: { addToolResult: submit } }) => {
+                submitResult = submit;
+                return <div />;
+              },
+              addToolResult,
+              applyFilters: jest.fn(),
             },
-            addToolResult,
-            applyFilters: jest.fn(),
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
 
@@ -1436,4 +1478,156 @@ describe('ChatMessage', () => {
       output: { owner: 'public' },
     });
   });
+
+  /* eslint-disable typescript/no-deprecated -- these tests exist to
+     pin the deprecated root-level props until they are removed. */
+  describe('deprecated root-level props', () => {
+    const toolMessage: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [
+        {
+          type: 'tool-test_tool',
+          toolCallId: '123',
+          input: {},
+          state: 'output-available',
+          output: { data: 'Test data' },
+        },
+      ],
+    };
+
+    test('still passes the pre-`context` root props to tool components', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const setIndexUiState = jest.fn();
+      const onClose = jest.fn();
+      const applyFilters = jest.fn();
+      const messages = [toolMessage];
+
+      render(
+        <ChatMessage
+          indexUiState={{ query: 'shoes' }}
+          setIndexUiState={setIndexUiState}
+          message={toolMessage}
+          context={createContext({
+            messages,
+            status: 'streaming',
+            onClose,
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters,
+              },
+            },
+          })}
+        />
+      );
+
+      // A tool component written against the previous API reads these from the
+      // root; they must stay in lockstep with `context`.
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({ toolCallId: '123' }),
+          messages,
+          status: 'streaming',
+          indexUiState: { query: 'shoes' },
+          setIndexUiState,
+          onClose,
+          applyFilters,
+          addToolResult: expect.any(Function),
+          sendEvent: expect.any(Function),
+          records: expect.anything(),
+        }),
+        {}
+      );
+    });
+
+    test('root `status` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          status="streaming"
+          context={createContext({
+            status: 'ready',
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'streaming',
+          context: expect.objectContaining({ status: 'streaming' }),
+        }),
+        {}
+      );
+    });
+
+    test('root `tools` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          tools={{
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          }}
+          // The context registers no tools, so the part only renders if the
+          // root-level override wins.
+          context={createContext({ tools: {} })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledTimes(1);
+    });
+
+    test('root `onClose` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const onClose = jest.fn();
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          onClose={onClose}
+          context={createContext({
+            onClose: jest.fn(),
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          onClose,
+          context: expect.objectContaining({ onClose }),
+        }),
+        {}
+      );
+    });
+  });
+  /* eslint-enable typescript/no-deprecated */
 });
