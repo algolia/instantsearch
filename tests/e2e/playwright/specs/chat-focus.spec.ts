@@ -31,10 +31,6 @@ test.describe('Chat focus', () => {
       )
       .toBe('0');
 
-    const focusAfterReveal = page.waitForEvent('console', {
-      predicate: (message) => message.type() === 'debug',
-    });
-
     await page.evaluate(() => {
       document.addEventListener(
         'focusin',
@@ -50,12 +46,11 @@ test.describe('Chat focus', () => {
           }
 
           const style = getComputedStyle(chatContainer);
-          console.debug(
+          document.documentElement.dataset.chatFocusAfterRevealStyle =
             JSON.stringify({
               opacity: style.opacity,
               transform: style.transform,
-            })
-          );
+            });
         },
         { capture: true }
       );
@@ -63,7 +58,22 @@ test.describe('Chat focus', () => {
 
     await trigger.click();
 
-    const focusStyle = JSON.parse((await focusAfterReveal).text()) as {
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            () =>
+              document.documentElement.dataset.chatFocusAfterRevealStyle ?? null
+          ),
+        { timeout: 2000 }
+      )
+      .not.toBeNull();
+
+    const focusStyle = JSON.parse(
+      (await page.evaluate(
+        () => document.documentElement.dataset.chatFocusAfterRevealStyle
+      ))!
+    ) as {
       opacity: string;
       transform: string;
     };
