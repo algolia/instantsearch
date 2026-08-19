@@ -1,17 +1,22 @@
+export { DefaultTaskTransport } from './transport';
 export { resolveEndpoint } from './endpoint';
-export { buildTaskPayload, createTaskRunner, fetchTask } from './fetchTask';
+export { buildTaskPayload, fetchTask } from './fetchTask';
+export { createTaskRunner } from './taskRunner';
 
 export type {
   ResolvedEndpoint,
-  TaskPrepareRequest,
-  TaskTransport,
   TaskCredentials,
   TaskEndpoint,
+  TaskPrepareRequest,
 } from './endpoint';
+export type { BuildTaskPayloadOptions, FetchTaskOptions } from './fetchTask';
 export type {
-  BuildTaskPayloadOptions,
-  FetchTaskOptions,
+  TaskPrepareSendMessagesRequest,
+  TaskSendOptions,
+  TaskTransport,
+} from './transport';
+export type {
   TaskRunner,
   TaskRunnerOptions,
   TaskSubmitOptions,
-} from './fetchTask';
+} from './taskRunner';

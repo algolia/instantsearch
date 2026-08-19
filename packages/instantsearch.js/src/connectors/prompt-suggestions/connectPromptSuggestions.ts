@@ -90,10 +90,10 @@ export type PromptSuggestionsSource =
   | {
       /** ID of the agent configured in the Algolia dashboard. */
       agentId: string;
-      transport?: never;
+      transport?: PromptSuggestionsTransport;
     }
   | {
-      /** Custom transport. When set, `agentId` and client credentials are ignored. */
+      /** Custom task transport options. */
       transport: PromptSuggestionsTransport;
       agentId?: never;
     };
@@ -412,14 +412,29 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         renderOutward(latestRenderOptions);
       };
 
-      const tasksWidget = connectTasks(
-        handleInnerRender,
-        noop
-      )({
-        ...(transport ? { transport } : { agentId }),
-        task: configurationId,
-        stream: true,
-      } as TasksConnectorParams);
+      let tasksParams: TasksConnectorParams;
+      if (agentId) {
+        tasksParams = {
+          agentId,
+          transport,
+          task: configurationId,
+          stream: true,
+        };
+      } else if (transport) {
+        tasksParams = {
+          transport,
+          task: configurationId,
+          stream: true,
+        };
+      } else {
+        throw new Error(
+          withUsage(
+            'The `agentId` option is required unless a custom `transport` is provided.'
+          )
+        );
+      }
+
+      const tasksWidget = connectTasks(handleInnerRender, noop)(tasksParams);
 
       return {
         $$type: 'ais.promptSuggestions',
