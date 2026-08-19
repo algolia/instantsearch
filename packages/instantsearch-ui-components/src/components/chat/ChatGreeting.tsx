@@ -55,7 +55,7 @@ export function createChatGreetingComponent({
 }: Pick<Renderer, 'createElement'>) {
   return function ChatGreeting(
     // The deprecated root props are still accepted for back compat.
-    // eslint-disable-next-line typescript-eslint/no-deprecated
+    // eslint-disable-next-line typescript/no-deprecated
     userProps: ChatComponentPropsWithContext<ChatGreetingProps & ChatEmptyProps>
   ) {
     const {

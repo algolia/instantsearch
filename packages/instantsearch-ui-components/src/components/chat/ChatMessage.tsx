@@ -296,13 +296,13 @@ export function createChatMessageComponent({
       showReasoning = false,
       parseMarkdown = true,
       messages: ownMessages,
-      /* eslint-disable typescript-eslint/no-deprecated -- reading the
+      /* eslint-disable typescript/no-deprecated -- reading the
          deprecated aliases is the point: they are resolved into `context`
          below so callers on the previous API keep working. */
       status: ownStatus,
       tools: ownTools,
       onClose: ownOnClose,
-      /* eslint-enable typescript-eslint/no-deprecated */
+      /* eslint-enable typescript/no-deprecated */
       context: sharedContext,
       ...props
     } = userProps;

@@ -2,6 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { collectChatRecords } from 'instantsearch-ui-components';
@@ -110,7 +111,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversation(message, [{ objectID: '1', name: 'Air Runner' }]),
           status: 'streaming',
@@ -120,7 +121,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -149,27 +150,25 @@ describe('createDisplayResultsTool', () => {
         },
       };
 
-      return {
-        context: {
-          ...metadata,
-          ...conversationOf(
-            createMessages(
-              message,
-              objectIDs.map((objectID) => ({
-                objectID,
-                name: `Product ${objectID}`,
-              }))
-            )
-          ),
-          status: 'streaming' as const,
-          message,
-          applyFilters: jest.fn(),
-          indexUiState: {},
-          addToolResult: jest.fn(),
-          setIndexUiState: jest.fn(),
-          sendEvent: jest.fn(),
-        },
-      };
+      return chatToolProps({
+        ...metadata,
+        ...conversationOf(
+          createMessages(
+            message,
+            objectIDs.map((objectID) => ({
+              objectID,
+              name: `Product ${objectID}`,
+            }))
+          )
+        ),
+        status: 'streaming' as const,
+        message,
+        applyFilters: jest.fn(),
+        indexUiState: {},
+        addToolResult: jest.fn(),
+        setIndexUiState: jest.fn(),
+        sendEvent: jest.fn(),
+      });
     };
     const { container, rerender } = render(
       <LayoutComponent {...createToolProps('Original intro', ['1'])} />
@@ -207,7 +206,7 @@ describe('createDisplayResultsTool', () => {
     };
     const { container } = render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Runner' }])
@@ -219,7 +218,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -259,7 +258,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -273,7 +272,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -306,7 +305,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
@@ -315,7 +314,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        }}
+        })}
       />
     );
 
@@ -371,7 +370,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(createMessages(message, [{ objectID: '1' }])),
           message,
@@ -380,7 +379,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        }}
+        })}
       />
     );
 
@@ -425,7 +424,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -434,7 +433,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -468,7 +467,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -477,7 +476,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -519,7 +518,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -533,7 +532,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -573,7 +572,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -587,7 +586,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent,
-        }}
+        })}
       />
     );
 
@@ -637,7 +636,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [
@@ -651,7 +650,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -669,7 +668,7 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           message: {
             type: 'tool-algolia_display_results',
@@ -687,7 +686,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -715,7 +714,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
@@ -726,7 +725,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -741,7 +740,7 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           message: {
             type: 'tool-algolia_display_results',
@@ -755,7 +754,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -782,7 +781,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(
             createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
@@ -793,7 +792,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -815,7 +814,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(createMessages(message, [])),
           status: 'streaming',
@@ -825,7 +824,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -838,7 +837,7 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           message: {
             type: 'tool-algolia_display_results',
@@ -852,7 +851,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -912,7 +911,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(messages),
           message,
@@ -921,7 +920,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -1001,7 +1000,7 @@ describe('createDisplayResultsTool', () => {
 
     const firstRender = render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(messages),
           message: firstDisplayMessage,
@@ -1010,7 +1009,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 
@@ -1022,7 +1021,7 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        context={{
+        {...chatToolProps({
           ...metadata,
           ...conversationOf(messages),
           message: secondDisplayMessage,
@@ -1031,7 +1030,7 @@ describe('createDisplayResultsTool', () => {
           addToolResult: jest.fn(),
           setIndexUiState: jest.fn(),
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
 

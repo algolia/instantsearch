@@ -1479,7 +1479,7 @@ describe('ChatMessage', () => {
     });
   });
 
-  /* eslint-disable typescript-eslint/no-deprecated -- these tests exist to
+  /* eslint-disable typescript/no-deprecated -- these tests exist to
      pin the deprecated root-level props until they are removed. */
   describe('deprecated root-level props', () => {
     const toolMessage: ChatMessageBase = {
@@ -1629,5 +1629,5 @@ describe('ChatMessage', () => {
       );
     });
   });
-  /* eslint-enable typescript-eslint/no-deprecated */
+  /* eslint-enable typescript/no-deprecated */
 });

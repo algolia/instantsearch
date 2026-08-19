@@ -143,7 +143,7 @@ export type ChatMessagesProps<
    */
   emptyComponent?: (
     // The deprecated root props are still passed alongside `context`.
-    // eslint-disable-next-line typescript-eslint/no-deprecated
+    // eslint-disable-next-line typescript/no-deprecated
     props: ChatComponentPropsWithContext<ChatEmptyProps, TMessage>
   ) => JSX.Element;
   /**
