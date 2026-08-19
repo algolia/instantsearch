@@ -16,7 +16,7 @@ shell.exec(
 );
 
 const taskEndpointDeclaration = fs.readFileSync(
-  path.join(__dirname, '../../es/lib/tasks/endpoint.d.ts'),
+  'es/lib/tasks/endpoint.d.ts',
   'utf8'
 );
 assert.doesNotMatch(
