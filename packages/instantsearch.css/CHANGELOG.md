@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.19.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.0...instantsearch.css@8.19.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** keep the maximized overlay panel inside the viewport ([#7177](https://github.com/algolia/instantsearch/issues/7177)) ([10966a5](https://github.com/algolia/instantsearch/commit/10966a5362a96cc45295fa2a2becc5cc9489f297))
+
+
+
+
+
 # [8.19.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.18.0...instantsearch.css@8.19.0) (2026-08-06)
 
 
