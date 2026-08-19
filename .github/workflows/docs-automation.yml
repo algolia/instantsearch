@@ -40,12 +40,31 @@ jobs:
         with:
           path: instantsearch
 
-      - name: Clone docs-new repository
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.FX_BOT_APP_ID }}
+          private-key: ${{ secrets.FX_BOT_PRIVATE_KEY }}
+          owner: algolia
+          repositories: docs-new
+
+      - name: Checkout docs-new
+        uses: actions/checkout@v4
+        with:
+          repository: algolia/docs-new
+          token: ${{ steps.app-token.outputs.token }}
+          path: docs-new
+
+      - name: Configure git identity
+        working-directory: docs-new
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
         run: |
-          git clone https://x-access-token:${{ secrets.DOCS_REPO_PAT }}@github.com/algolia/docs-new.git docs-new
-          cd docs-new
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          USER_ID=$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
@@ -143,7 +162,7 @@ jobs:
       - name: Create Pull Request
         if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
         env:
-          GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         working-directory: docs-new
         run: |
           # Read the body from the file
