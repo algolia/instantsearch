@@ -1,6 +1,6 @@
-import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
+import { createWidgetLifecycleController } from '../util/widgetLifecycleController';
 
 export const createWidgetMixin = (
   { connector } = {},
@@ -30,27 +30,19 @@ export const createWidgetMixin = (
   },
   created() {
     if (typeof connector === 'function') {
-      this.factory = connector(this.updateState, () => {});
-      this.widget = _objectSpread(
-        this.factory(this.widgetParams),
-        additionalProperties
-      );
-      this.getParentIndex().addWidgets([this.widget]);
-
-      if (
-        this.instantSearchInstance._initialResults &&
-        !this.instantSearchInstance.started
-      ) {
-        if (typeof this.instantSearchInstance.__forceRender !== 'function') {
-          throw new Error(
-            'You are using server side rendering with <ais-instant-search> instead of <ais-instant-search-ssr>.'
-          );
-        }
-        this.instantSearchInstance.__forceRender(
-          this.widget,
-          this.getParentIndex()
-        );
-      }
+      this.lifecycle = createWidgetLifecycleController({
+        connector,
+        additionalWidgetProperties: additionalProperties,
+        instantSearchInstance: this.instantSearchInstance,
+        getParentIndex: this.getParentIndex,
+        renderCallback: this.updateState,
+        // `this.widget` must be set before `addWidgets`: on a started
+        // instance `init` runs synchronously and `updateState` reads it.
+        onWidgetCreated: (widget) => {
+          this.widget = widget;
+        },
+      });
+      this.lifecycle.mount(this.widgetParams);
     } else if (connector !== true) {
       warn(
         `You are using the InstantSearch widget mixin, but didn't provide a connector.
@@ -64,20 +56,15 @@ Read more on using connectors: https://alg.li/vue-custom`
     }
   },
   [isVue3 ? 'beforeUnmount' : 'beforeDestroy']() {
-    if (this.widget) {
-      this.getParentIndex().removeWidgets([this.widget]);
+    if (this.lifecycle) {
+      this.lifecycle.unmount();
     }
   },
   watch: {
     widgetParams: {
       handler(nextWidgetParams) {
         this.state = null;
-        this.getParentIndex().removeWidgets([this.widget]);
-        this.widget = _objectSpread(
-          this.factory(nextWidgetParams),
-          additionalProperties
-        );
-        this.getParentIndex().addWidgets([this.widget]);
+        this.lifecycle.update(nextWidgetParams);
       },
       deep: true,
     },
