@@ -1670,4 +1670,39 @@ describe('ChatMessages', () => {
       {}
     );
   });
+
+  test('still passes the pre-`context` root props to a custom empty component', () => {
+    const Empty = jest.fn(() => <span>Empty</span>);
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+
+    render(
+      <ChatMessages
+        messages={[]}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        emptyComponent={Empty}
+      />
+    );
+
+    // An empty/greeting component written against the previous API reads these
+    // from the root rather than from `context`.
+    expect(Empty).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sendMessage,
+        setInput,
+        status: 'ready',
+        onClose,
+        context: expect.objectContaining({ status: 'ready' }),
+      }),
+      {}
+    );
+  });
 });

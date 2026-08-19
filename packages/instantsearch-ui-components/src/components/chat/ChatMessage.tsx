@@ -16,11 +16,14 @@ import { MenuIcon } from './icons';
 import type {
   AddToolResult,
   AddToolResultWithOutput,
+  ChatComponentContext,
   ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
   ClientSideTool,
+  ClientSideToolContext,
+  ClientSideTools,
   TextUIPart,
 } from './types';
 import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
@@ -30,6 +33,30 @@ import type {
   SendEventForHits,
   VNode,
 } from '../../types';
+
+/**
+ * The root-level props tool layout components received before everything moved
+ * under `context`. Passed alongside `context` so components written against the
+ * previous API keep working. Remove together with
+ * `DeprecatedClientSideToolRootProps` in the next major.
+ */
+function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
+  context: ClientSideToolContext<TMessage>
+) {
+  return {
+    message: context.message,
+    messages: context.messages,
+    records: context.records,
+    insightsEventContext: context.insightsEventContext,
+    status: context.status,
+    indexUiState: context.indexUiState,
+    setIndexUiState: context.setIndexUiState,
+    onClose: context.onClose,
+    addToolResult: context.addToolResult,
+    applyFilters: context.applyFilters,
+    sendEvent: context.sendEvent,
+  };
+}
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (
@@ -188,6 +215,21 @@ export type ChatMessageProps<
    */
   messages?: TMessage[];
   /**
+   * @deprecated Read `context.status` instead. Overrides `context.status` when
+   * provided, for callers written against the previous API.
+   */
+  status?: ChatStatus;
+  /**
+   * @deprecated Read `context.tools` instead. Overrides `context.tools` when
+   * provided, for callers written against the previous API.
+   */
+  tools?: ClientSideTools;
+  /**
+   * @deprecated Read `context.onClose` instead. Overrides `context.onClose`
+   * when provided, for callers written against the previous API.
+   */
+  onClose?: () => void;
+  /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
@@ -254,14 +296,30 @@ export function createChatMessageComponent({
       showReasoning = false,
       parseMarkdown = true,
       messages: ownMessages,
-      context,
+      /* eslint-disable typescript-eslint/no-deprecated -- reading the
+         deprecated aliases is the point: they are resolved into `context`
+         below so callers on the previous API keep working. */
+      status: ownStatus,
+      tools: ownTools,
+      onClose: ownOnClose,
+      /* eslint-enable typescript-eslint/no-deprecated */
+      context: sharedContext,
       ...props
     } = userProps;
 
-    const { status, tools } = context;
-    // The explicit `messages` prop lets a caller override the conversation for
-    // a single message; otherwise the shared `context` is the source of truth.
-    const messages = ownMessages ?? context.messages;
+    // Root-level overrides win over the shared context, so a caller can scope
+    // these to a single message. `messages` is supported going forward; the
+    // other three are deprecated aliases kept for callers written against the
+    // pre-`context` API. Resolving them into one object up front means every
+    // consumer below (tools, actions, text) reads consistent values.
+    const context: ChatComponentContext<TMessage> = {
+      ...sharedContext,
+      messages: ownMessages ?? sharedContext.messages,
+      status: ownStatus ?? sharedContext.status,
+      tools: ownTools ?? sharedContext.tools,
+      onClose: ownOnClose ?? sharedContext.onClose,
+    };
+    const { messages, status, tools } = context;
 
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
@@ -482,26 +540,26 @@ export function createChatMessageComponent({
             });
           }) as SendEventForHits;
 
+          const toolContext: ClientSideToolContext<TMessage> = {
+            ...context,
+            records: tool.records || getFallbackRecords(),
+            message: toolMessage,
+            insightsEventContext: tool.insightsEventContext,
+            indexUiState,
+            setIndexUiState,
+            addToolResult: boundAddToolResult,
+            applyFilters: tool.applyFilters,
+            sendEvent,
+          };
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
               <ToolLayoutComponent
-                context={{
-                  ...context,
-                  // `...context` would restore `context.messages`; re-apply the
-                  // resolved `messages` so an explicit override reaches tools too.
-                  messages,
-                  records: tool.records || getFallbackRecords(),
-                  message: toolMessage,
-                  insightsEventContext: tool.insightsEventContext,
-                  indexUiState,
-                  setIndexUiState,
-                  addToolResult: boundAddToolResult,
-                  applyFilters: tool.applyFilters,
-                  sendEvent,
-                }}
+                {...getDeprecatedToolRootProps(toolContext)}
+                context={toolContext}
               />
             </div>
           );

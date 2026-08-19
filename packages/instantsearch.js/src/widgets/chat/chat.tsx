@@ -44,6 +44,7 @@ import type {
 import type {
   ChatClassNames,
   ChatComponentPropsWithContext,
+  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
@@ -174,7 +175,7 @@ type ChatWrapperProps = {
         ) => JSX.Element)
       | undefined;
     emptyComponent:
-      | ((props: ChatComponentPropsWithContext<{}>) => JSX.Element)
+      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
       | undefined;
     actionsComponent:
       | ((
@@ -447,11 +448,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatComponentPropsWithContext<{}>>(
-        emptyTemplateRef,
-        'empty',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        ChatComponentPropsWithContext<ChatEmptyProps>
+      >(emptyTemplateRef, 'empty', 'div')
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
@@ -1069,7 +1068,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatComponentPropsWithContext<{}>>;
+    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
 
     /**
      * Template to use for prompt suggestions.

@@ -1478,4 +1478,156 @@ describe('ChatMessage', () => {
       output: { owner: 'public' },
     });
   });
+
+  /* eslint-disable typescript-eslint/no-deprecated -- these tests exist to
+     pin the deprecated root-level props until they are removed. */
+  describe('deprecated root-level props', () => {
+    const toolMessage: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [
+        {
+          type: 'tool-test_tool',
+          toolCallId: '123',
+          input: {},
+          state: 'output-available',
+          output: { data: 'Test data' },
+        },
+      ],
+    };
+
+    test('still passes the pre-`context` root props to tool components', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const setIndexUiState = jest.fn();
+      const onClose = jest.fn();
+      const applyFilters = jest.fn();
+      const messages = [toolMessage];
+
+      render(
+        <ChatMessage
+          indexUiState={{ query: 'shoes' }}
+          setIndexUiState={setIndexUiState}
+          message={toolMessage}
+          context={createContext({
+            messages,
+            status: 'streaming',
+            onClose,
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters,
+              },
+            },
+          })}
+        />
+      );
+
+      // A tool component written against the previous API reads these from the
+      // root; they must stay in lockstep with `context`.
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({ toolCallId: '123' }),
+          messages,
+          status: 'streaming',
+          indexUiState: { query: 'shoes' },
+          setIndexUiState,
+          onClose,
+          applyFilters,
+          addToolResult: expect.any(Function),
+          sendEvent: expect.any(Function),
+          records: expect.anything(),
+        }),
+        {}
+      );
+    });
+
+    test('root `status` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          status="streaming"
+          context={createContext({
+            status: 'ready',
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'streaming',
+          context: expect.objectContaining({ status: 'streaming' }),
+        }),
+        {}
+      );
+    });
+
+    test('root `tools` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          tools={{
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          }}
+          // The context registers no tools, so the part only renders if the
+          // root-level override wins.
+          context={createContext({ tools: {} })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledTimes(1);
+    });
+
+    test('root `onClose` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const onClose = jest.fn();
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          onClose={onClose}
+          context={createContext({
+            onClose: jest.fn(),
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          onClose,
+          context: expect.objectContaining({ onClose }),
+        }),
+        {}
+      );
+    });
+  });
+  /* eslint-enable typescript-eslint/no-deprecated */
 });

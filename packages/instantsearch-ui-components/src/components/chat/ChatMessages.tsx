@@ -35,6 +35,7 @@ import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type {
   ChatComponentContext,
   ChatComponentPropsWithContext,
+  ChatEmptyProps,
   ChatLayoutOwnProps,
   ChatMessageBase,
   ChatStatus,
@@ -141,7 +142,9 @@ export type ChatMessagesProps<
    * Custom empty component shown when there are no messages
    */
   emptyComponent?: (
-    props: ChatComponentPropsWithContext<{}, TMessage>
+    // The deprecated root props are still passed alongside `context`.
+    // eslint-disable-next-line typescript-eslint/no-deprecated
+    props: ChatComponentPropsWithContext<ChatEmptyProps, TMessage>
   ) => JSX.Element;
   /**
    * Custom actions component
@@ -651,7 +654,16 @@ export function createChatMessagesComponent({
             }}
           >
             {showEmpty && EmptyComponent && (
-              <EmptyComponent context={context} />
+              <EmptyComponent
+                // Deprecated root-level props, kept alongside `context` for
+                // empty/greeting components written against the previous API.
+                // Remove in the next major.
+                sendMessage={sendMessage}
+                setInput={setInput}
+                status={status}
+                onClose={onClose}
+                context={context}
+              />
             )}
 
             {messages.map((message, index) => (
