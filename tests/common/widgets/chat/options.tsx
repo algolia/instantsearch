@@ -1364,6 +1364,93 @@ export function createOptionsTests(
         );
       });
 
+      test('re-evaluates `shouldRender` of an older message when the chat changes', async () => {
+        const searchClient = createSearchClient();
+
+        const helloMessage = {
+          id: '1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-hello',
+              toolCallId: '1',
+              input: { text: 'hello' },
+              state: 'output-available',
+              output: 'hello',
+            },
+          ],
+        };
+
+        const followUp = {
+          id: '2',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Hi' }],
+        };
+
+        const chat = new Chat({
+          messages: [helloMessage, followUp] as any,
+          id: 'chat-id',
+        });
+
+        // Reads the conversation rather than its own message, so the verdict
+        // flips while the message — and its position in the list — stay put.
+        const shouldRender = ({ messages }: any) => messages.length < 3;
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  templates: {
+                    layout:
+                      '<div id="tool-content">The message said hello!</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  shouldRender,
+                  layoutComponent: () => (
+                    <div id="tool-content">The message said hello!</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('#tool-content')).toBeInTheDocument();
+
+        // The same message objects, so only the conversation around them changed —
+        // a row memoized on its own message alone would stay visible.
+        await act(async () => {
+          chat._state.messages = [
+            helloMessage,
+            followUp,
+            {
+              id: '3',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Hi there' }],
+            },
+          ] as any;
+          await wait(0);
+        });
+
+        expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+      });
+
       test('shows loader during streaming when the last part is a tool that does not render', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});

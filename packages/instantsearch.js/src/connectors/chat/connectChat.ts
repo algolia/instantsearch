@@ -1,6 +1,7 @@
 import {
   collectChatRecords,
   createChatRecordsStore,
+  findTool,
 } from 'instantsearch-ui-components';
 
 import {
@@ -482,20 +483,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // Compatibility shim with tool names suffixed by the index name, as the
-    // Algolia MCP Server does (`algolia_search_index_products`).
-    const resolveTool = (toolName: string) => {
-      if (tools[toolName]) {
-        return tools[toolName];
-      }
-
-      const prefixedKey = Object.keys(tools).find((toolKey) =>
-        toolName.startsWith(`${toolKey}_`)
-      );
-
-      return prefixedKey ? tools[prefixedKey] : undefined;
-    };
-
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
@@ -741,12 +728,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         sendAutomaticallyWhen,
         transport,
         shouldRepairToolInput(toolName) {
-          const tool = resolveTool(toolName);
+          const tool = findTool(toolName, tools);
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
         resolveCancelledToolOutput({ toolName, toolCallId, input }) {
-          const cancelOutput = resolveTool(toolName)?.cancelOutput;
+          const cancelOutput = findTool(toolName, tools)?.cancelOutput;
           if (!cancelOutput) return undefined;
 
           try {
@@ -762,7 +749,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         },
         onToolCall: (({ toolCall }, submitToolResult) => {
-          const tool = resolveTool(toolCall.toolName);
+          const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
             if (__DEV__) {
