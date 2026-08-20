@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { createChatComponent } from 'instantsearch-ui-components';
+import { createChatComponent, findTool } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
@@ -647,18 +647,10 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
-      let widgetTool = tools[key];
-
-      // Compatibility shim with tool names suffixed by the index name, as the
-      // Algolia MCP Server does (`algolia_search_index_products`).
-      if (!widgetTool) {
-        const prefixedKey = Object.keys(tools).find((toolKey) =>
-          key.startsWith(`${toolKey}_`)
-        );
-        if (prefixedKey) {
-          widgetTool = tools[prefixedKey];
-        }
-      }
+      // The connector keys its tools the same way the widget does, so this is
+      // an exact hit today. Going through `findTool` keeps the widget on the
+      // same resolution rule as the renderer, the loader and the connector.
+      const widgetTool = findTool(key, tools);
 
       let layoutComponent:
         | ((props: ClientSideToolComponentProps) => JSX.Element)
