@@ -8,7 +8,6 @@ import type { Renderer } from '../../types';
 export type ChatPromptSuggestionsClassNames = {
   root?: string | string[];
   suggestion?: string | string[];
-  skeleton?: string | string[];
   skeletonItem?: string | string[];
 };
 

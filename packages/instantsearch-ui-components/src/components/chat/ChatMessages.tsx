@@ -523,7 +523,10 @@ export function createChatMessagesComponent({
     if (isVisible && !state.isVisible) {
       state.shownAt = now;
     }
-    if (!isVisible && state.isVisible) {
+    // Only a hide *within* the turn arms the delay. The turn ending hides the
+    // loader too, and arming on that would delay the next turn's first loader,
+    // which has to be immediate.
+    if (!isVisible && state.isVisible && isTurnActive) {
       state.hasHiddenInTurn = true;
     }
     state.isVisible = isVisible;

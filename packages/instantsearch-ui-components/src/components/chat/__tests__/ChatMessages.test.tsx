@@ -1759,6 +1759,47 @@ describe('ChatMessages', () => {
         expect(loader(container)).not.toBeNull();
       });
 
+      test("starts the next turn's loader immediately", () => {
+        const answer = {
+          role: 'assistant' as const,
+          id: '1',
+          parts: [
+            { type: 'text' as const, text: 'Done.', state: 'done' as const },
+          ],
+        };
+
+        // The loader is still up when the turn ends, so the turn's end is what
+        // hides it. That hide must not arm the delay for the next turn.
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages {...baseProps} status="ready" messages={[answer]} />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[
+              answer,
+              {
+                role: 'user' as const,
+                id: '2',
+                parts: [{ type: 'text' as const, text: 'More?' }],
+              },
+            ]}
+          />
+        );
+
+        expect(loader(container)).not.toBeNull();
+      });
+
       test('hides the loader as soon as the turn ends', () => {
         const { container, rerender } = render(
           <ChatMessages {...baseProps} status="submitted" messages={[]} />
