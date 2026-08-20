@@ -263,9 +263,7 @@ jobs:
   helper-docs:
     name: helper docs
     needs: build
-    # TEMPORARY(ci-migration): also run on the migration branch so the
-    # master-only path is validated in the PR. Revert before requesting review.
-    if: github.ref == 'refs/heads/master' || github.head_ref == 'ci/github-actions-migration'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -293,16 +291,12 @@ jobs:
 
   e2e:
     name: e2e
-    # TEMPORARY(ci-migration): also run on the migration branch so the
-    # master-only path is validated in the PR. Revert before requesting review.
-    if: github.ref == 'refs/heads/master' || github.head_ref == 'ci/github-actions-migration'
+    if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/e2e.yml
     with:
       # IE11 and the Next.js suites report but never block, matching the
       # CircleCI release gate, which only required `e2e tests playwright`.
-      # TEMPORARY(ci-migration): plain `true` once the shim above is reverted;
-      # the PR run keeps honest red so every e2e job is actually validated.
-      soft-fail-secondary: ${{ github.ref == 'refs/heads/master' }}
+      soft-fail-secondary: true
     secrets: inherit
 
   release-if-needed:
