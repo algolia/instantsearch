@@ -1,3 +1,5 @@
+import { isStatusBusy } from 'instantsearch-ui-components';
+
 import type { ChatRenderState } from '../../connectors/chat/connectChat';
 
 /**
@@ -77,8 +79,9 @@ export function openChat(
 export function isChatBusy(
   chatRenderState: Partial<ChatRenderState> | undefined
 ): boolean {
-  return (
-    chatRenderState?.status === 'submitted' ||
-    chatRenderState?.status === 'streaming'
-  );
+  // Deliberately read from `status` rather than `turnState.isBusy`, even though
+  // the latter is the chat instance's own answer: entry points routinely pass a
+  // render state with an overridden `status`, and deriving from anything else
+  // would silently ignore it. Both come from the same definition either way.
+  return isStatusBusy(chatRenderState?.status);
 }

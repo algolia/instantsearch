@@ -1,6 +1,8 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
+import { isStatusBusy } from '../../lib/utils/chat';
+
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
@@ -108,12 +110,17 @@ export function createChatComponent({
   Fragment,
   useMemo,
   useState,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useState'>) {
+  useEffect,
+  useRef,
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({
     createElement,
     Fragment,
     useMemo,
+    useState,
+    useEffect,
+    useRef,
   });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
@@ -164,8 +171,8 @@ export function createChatComponent({
       }
       // Stop streaming now so the assistant stops immediately, not after the fade.
       if (
-        messagesProps.status === 'submitted' ||
-        messagesProps.status === 'streaming'
+        messagesProps.turnState?.isBusy ??
+        isStatusBusy(messagesProps.status)
       ) {
         stop();
       }
@@ -200,6 +207,7 @@ export function createChatComponent({
         error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
+        suggestionsLoading={suggestionsProps.isLoading}
         suggestionsElement={createElement(
           SuggestionsComponent || ChatPromptSuggestions,
           {

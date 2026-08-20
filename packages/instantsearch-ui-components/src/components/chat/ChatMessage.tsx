@@ -2,7 +2,11 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { findTool, isReasoningPartActive } from '../../lib/utils/chat';
+import {
+  createClientSideToolContextExtras,
+  findTool,
+  isReasoningPartActive,
+} from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
@@ -14,25 +18,18 @@ import {
 import { MenuIcon } from './icons';
 
 import type {
-  AddToolResult,
-  AddToolResultWithOutput,
   ChatComponentContext,
   ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
-  ClientSideTool,
   ClientSideToolContext,
   ClientSideTools,
   TextUIPart,
 } from './types';
+import type { MessageScopedClientSideTool } from '../../lib/utils/chat';
 import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
-import type {
-  ComponentProps,
-  Renderer,
-  SendEventForHits,
-  VNode,
-} from '../../types';
+import type { ComponentProps, Renderer, VNode } from '../../types';
 
 /**
  * The root-level props tool layout components received before everything moved
@@ -57,13 +54,6 @@ function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
     sendEvent: context.sendEvent,
   };
 }
-
-type MessageScopedClientSideTool = ClientSideTool & {
-  '~addToolResultForMessage'?: (
-    message: ChatMessageBase,
-    params: Parameters<AddToolResult>[0]
-  ) => ReturnType<AddToolResult>;
-};
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -234,6 +224,11 @@ export type ChatMessageProps<
    */
   suggestionsElement?: VNode;
   /**
+   * Optional loader element, rendered under the message's parts. Set by
+   * `ChatMessages` when `loaderPosition` is `message-inline`.
+   */
+  loaderElement?: VNode;
+  /**
    * Whether to render reasoning parts
    */
   showReasoning?: boolean;
@@ -290,6 +285,7 @@ export function createChatMessageComponent({
       setIndexUiState,
       translations: userTranslations,
       suggestionsElement,
+      loaderElement,
       showReasoning = false,
       parseMarkdown = true,
       messages: ownMessages,
@@ -312,6 +308,12 @@ export function createChatMessageComponent({
     const context: ChatComponentContext<TMessage> = {
       ...sharedContext,
       messages: ownMessages ?? sharedContext.messages,
+      // A root-level `messages` override redefines what "last" means, so the
+      // turn state's answer has to follow it rather than describe the
+      // conversation the override replaced.
+      lastMessage: ownMessages
+        ? ownMessages[ownMessages.length - 1]
+        : sharedContext.lastMessage,
       status: ownStatus ?? sharedContext.status,
       tools: ownTools ?? sharedContext.tools,
       onClose: ownOnClose ?? sharedContext.onClose,
@@ -334,9 +336,10 @@ export function createChatMessageComponent({
     };
 
     const hasLeading = Boolean(LeadingComponent);
+    // `context.lastMessage` comes from the chat instance; scanning `messages`
+    // here would be a second, drifting answer to the same question.
     const isCurrentMessage =
-      messages === undefined ||
-      messages[messages.length - 1]?.id === message.id;
+      messages === undefined || context.lastMessage?.id === message.id;
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
@@ -470,6 +473,8 @@ export function createChatMessageComponent({
           | MessageScopedClientSideTool
           | undefined;
 
+        // Asked before the state and layout checks below: a tool that stands
+        // aside for the turn renders nothing regardless of its own progress.
         if (
           tool?.shouldRender?.({
             ...context,
@@ -484,18 +489,17 @@ export function createChatMessageComponent({
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
 
-          const boundAddToolResult: AddToolResultWithOutput = (params) =>
-            tool['~addToolResultForMessage']
-              ? tool['~addToolResultForMessage'](message, {
-                  output: params.output,
-                  tool: part.type,
-                  toolCallId: toolMessage.toolCallId,
-                })
-              : tool.addToolResult({
-                  output: params.output,
-                  tool: part.type,
-                  toolCallId: toolMessage.toolCallId,
-                });
+          const toolContext: ClientSideToolContext<TMessage> = {
+            ...context,
+            ...createClientSideToolContextExtras({
+              tool,
+              parentMessage: message,
+              part: toolMessage,
+              indexUiState,
+              setIndexUiState,
+              getFallbackRecords,
+            }),
+          };
 
           if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;
@@ -504,42 +508,6 @@ export function createChatMessageComponent({
           if (!ToolLayoutComponent) {
             return null;
           }
-
-          const toolSendEvent = tool.sendEvent || (() => {});
-          const agentId = tool.insightsEventContext?.agentId;
-          const sendEvent = ((
-            eventType: any,
-            hits?: any,
-            eventName?: any,
-            additionalData?: any
-          ) => {
-            if (
-              hits === undefined &&
-              eventName === undefined &&
-              additionalData === undefined
-            ) {
-              return toolSendEvent(eventType);
-            }
-
-            return toolSendEvent(eventType, hits, eventName, {
-              ...(additionalData || {}),
-              queryID: 'message_' + message.id,
-              ...(agentId ? { agentId } : {}),
-              toolCallId: toolMessage.toolCallId,
-            });
-          }) as SendEventForHits;
-
-          const toolContext: ClientSideToolContext<TMessage> = {
-            ...context,
-            records: tool.records || getFallbackRecords(),
-            message: toolMessage,
-            insightsEventContext: tool.insightsEventContext,
-            indexUiState,
-            setIndexUiState,
-            addToolResult: boundAddToolResult,
-            applyFilters: tool.applyFilters,
-            sendEvent,
-          };
 
           return (
             <div
@@ -573,6 +541,7 @@ export function createChatMessageComponent({
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.parts.map(renderMessagePart)}
+              {loaderElement}
             </div>
 
             {suggestionsElement}

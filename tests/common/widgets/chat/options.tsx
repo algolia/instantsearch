@@ -23,6 +23,7 @@ import { createDefaultWidgetParams, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { ClientSideToolShouldRenderContext } from 'instantsearch-ui-components';
 
 export function createOptionsTests(
   setup: ChatWidgetSetup,
@@ -1112,6 +1113,95 @@ export function createOptionsTests(
         ).not.toBeInTheDocument();
       });
 
+      test('keeps the loader visible when the last tool part opts out of rendering', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+        // Renders only for the turn the agent kept on the search tool, which
+        // this message is not.
+        const shouldRender = jest.fn(
+          (context: ClientSideToolShouldRenderContext) =>
+            (
+              context.parentMessage.metadata as
+                | { displayResultsEnabled?: boolean }
+                | undefined
+            )?.displayResultsEnabled !== true
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  shouldRender,
+                  templates: {
+                    layout: '<div id="tool-content">streaming...</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  shouldRender,
+                  layoutComponent: () => (
+                    <div id="tool-content">streaming...</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              metadata: { displayResultsEnabled: true },
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+        const { calls } = shouldRender.mock;
+        expect(calls[calls.length - 1][0]).toEqual(
+          expect.objectContaining({
+            status: 'streaming',
+            parentMessage: expect.objectContaining({ id: '2' }),
+            message: expect.objectContaining({ toolCallId: '1' }),
+          })
+        );
+      });
+
       test('does not show loader during streaming when last part is text', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
@@ -1182,6 +1272,218 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatMessageLoader')
         ).not.toBeInTheDocument();
+      });
+
+      test('does not show loader when a data part trails the answer', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              // Renders nothing, so it must not bring the loader back.
+              parts: [
+                { type: 'text', text: 'Here you go.' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Cheaper options?'] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
+      });
+
+      test('renders the loader inside the message with loaderPosition', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              loaderPosition: 'message-inline',
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              loaderPosition: 'message-inline',
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [{ type: 'step-start' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        const message = document.querySelector(
+          '.ais-ChatMessage[data-role="assistant"] .ais-ChatMessage-message'
+        );
+
+        expect(
+          message?.querySelector('.ais-ChatMessageLoader--inline')
+        ).toBeInTheDocument();
+      });
+
+      test('lets shouldShowLoader override the loader', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+        const shouldShowLoader = jest.fn(() => false);
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              shouldShowLoader,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              shouldShowLoader,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.status = 'submitted';
+          await wait(0);
+        });
+
+        expect(shouldShowLoader).toHaveBeenCalledWith(
+          expect.objectContaining({ status: 'submitted', defaultValue: true })
+        );
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('suggestions', () => {
+      test('holds placeholders until the turn produces its suggestions', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hi' }] },
+            {
+              id: '2',
+              role: 'assistant',
+              // An earlier turn's suggestions are what make this one expect them.
+              parts: [
+                { type: 'text', text: 'Hello!' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Cheaper options?'] },
+                },
+              ],
+            },
+            { id: '3', role: 'user', parts: [{ type: 'text', text: 'More' }] },
+            {
+              id: '4',
+              role: 'assistant',
+              parts: [{ type: 'text', text: 'Sure, here you go.' }],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
+        ).toBeInTheDocument();
+
+        await act(async () => {
+          chat._state.messages = [
+            ...chat._state.messages.slice(0, 3),
+            {
+              id: '4',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Sure, here you go.' },
+                {
+                  type: 'data-suggestions',
+                  data: { suggestions: ['Anything cheaper?'] },
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'ready';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatPromptSuggestions-suggestion')
+        ).toHaveTextContent('Anything cheaper?');
       });
     });
 

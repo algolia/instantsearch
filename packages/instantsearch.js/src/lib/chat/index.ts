@@ -5,6 +5,7 @@ export { ChatState } from './chat';
 export { Chat } from './chat';
 
 export { openChat, isChatBusy } from './openChat';
+export { getChatTurnState } from './turnState';
 export type { OpenChatOptions } from './openChat';
 
 export const SearchIndexToolType = 'algolia_search_index';

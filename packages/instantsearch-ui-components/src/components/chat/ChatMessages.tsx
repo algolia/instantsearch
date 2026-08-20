@@ -5,9 +5,8 @@ import {
   findTool,
   getTextContent,
   hasTextContent,
-  isReasoningPartActive,
-  isPartText,
   isPartTool,
+  isStatusBusy,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -31,14 +30,17 @@ import type {
   ChatMessageTranslations,
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
-import type { ChatMessageLoaderProps } from './ChatMessageLoader';
+import type { ChatMessageLoaderPropsWithContext } from './ChatMessageLoader';
 import type {
   ChatComponentContext,
   ChatComponentPropsWithContext,
   ChatEmptyProps,
   ChatLayoutOwnProps,
+  ChatLoaderContext,
+  ChatLoaderPosition,
   ChatMessageBase,
   ChatStatus,
+  ChatTurnState,
   ClientSideTools,
 } from './types';
 import type {
@@ -55,9 +57,10 @@ export type ChatMessagesTranslations = {
    */
   scrollToBottomLabel: string;
   /**
-   * Text to display in the loader
+   * Text to display in the loader. A function can label the wait by what the
+   * turn is doing (`context.phase`).
    */
-  loaderText?: string;
+  loaderText?: string | ((context: ChatLoaderContext) => string);
   /**
    * Label for the copy to clipboard action
    */
@@ -127,11 +130,38 @@ export type ChatMessagesProps<
     props: ChatComponentPropsWithContext<{ message: TMessage }, TMessage>
   ) => JSX.Element;
   /**
-   * Custom loader component
+   * Custom loader component. Receives the turn context alongside the resolved
+   * `translations`.
    */
   loaderComponent?: (
-    props: ChatComponentPropsWithContext<ChatMessageLoaderProps, TMessage>
+    props: ChatMessageLoaderPropsWithContext<TMessage>
   ) => JSX.Element;
+  /**
+   * Where the loader renders.
+   * @default 'messages-end'
+   */
+  loaderPosition?: ChatLoaderPosition;
+  /**
+   * Overrides when the loader shows. Receives the turn context plus the
+   * built-in decision as `defaultValue`, so it can be narrowed or widened
+   * instead of reimplemented. Smoothing still applies to the result.
+   */
+  shouldShowLoader?: (
+    context: ChatLoaderContext<TMessage> & { defaultValue: boolean }
+  ) => boolean;
+  /**
+   * How long (ms) a renewed loading state must hold before the loader comes
+   * back after having been hidden in the same turn. The turn's first loader is
+   * never delayed.
+   * @default 250
+   */
+  loaderShowDelay?: number;
+  /**
+   * Minimum time (ms) the loader stays on screen once shown, while the turn is
+   * still running. Guards against a one-frame flash.
+   * @default 200
+   */
+  loaderMinDuration?: number;
   /**
    * Custom error component
    */
@@ -166,6 +196,16 @@ export type ChatMessagesProps<
    * Current chat status
    */
   status?: ChatStatus;
+  /**
+   * The turn state reported by the chat instance — phase, active part, active
+   * reasoning, busy, last message, and whether the loader shows.
+   *
+   * Passed as one object because it is one thing: the chat's own account of
+   * what it is doing, derived where the messages live and forwarded into
+   * `context` untouched. Omitted fields fall back to what `status` alone can
+   * say, which is only "something is in flight".
+   */
+  turnState?: Partial<ChatTurnState<TMessage>>;
   /**
    * Error from the last failed request, if any. When set, its `message` is
    * available to custom error components or translation functions (for example
@@ -269,6 +309,11 @@ export type ChatMessagesProps<
    */
   suggestionsElement?: VNode;
   /**
+   * Whether the suggestions for the current turn are still on their way. Mounts
+   * `suggestionsElement` early so it can render its own loading state.
+   */
+  suggestionsLoading?: boolean;
+  /**
    * Callback for feedback (thumbs up/down) on a message.
    */
   onFeedback?: (messageId: string, vote: 0 | 1) => void;
@@ -281,6 +326,10 @@ export type ChatMessagesProps<
 const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
+
+const DEFAULT_LOADER_SHOW_DELAY = 250;
+// Short enough that it never lingers over the content that replaced it.
+const DEFAULT_LOADER_MIN_DURATION = 200;
 
 function getInstantSearchStatus(tools: ClientSideTools) {
   return Object.values(tools).find((tool) => tool.insightsEventContext)
@@ -310,6 +359,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     messageTranslations,
     translations,
     suggestionsElement,
+    loaderElement,
     context,
   }: {
     key: string;
@@ -328,6 +378,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
     suggestionsElement?: VNode;
+    loaderElement?: VNode;
     context: ChatComponentContext<TMessage>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
@@ -408,6 +459,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         classNames={classNames}
         translations={messageTranslations}
         suggestionsElement={suggestionsElement}
+        loaderElement={loaderElement}
         context={context}
         {...messageProps}
         message={message}
@@ -421,8 +473,95 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo,
-}: Renderer & Pick<Hooks, 'useMemo'>) {
+  useState,
+  useEffect,
+  useRef,
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
   const Button = createButtonComponent({ createElement });
+
+  /**
+   * Smooths the loading state into a visibility. Several transitions in a turn
+   * flip it twice within a few frames, which reads as the loader popping in and
+   * out, so a loader coming back mid-turn waits out `showDelay` and a visible
+   * one holds for `minDuration`.
+   */
+  function useLoaderVisibility({
+    isLoading,
+    isTurnActive,
+    showDelay,
+    minDuration,
+  }: {
+    isLoading: boolean;
+    isTurnActive: boolean;
+    showDelay: number;
+    minDuration: number;
+  }) {
+    // Derived during render, not committed from an effect: an effect-driven
+    // show lands a frame late. State is only here to wake on a deadline.
+    const [, scheduleRerender] = useState(0);
+    const stateRef = useRef({
+      isVisible: false,
+      shownAt: 0,
+      pendingSince: 0,
+      hasHiddenInTurn: false,
+    });
+
+    const state = stateRef.current;
+    const now = Date.now();
+
+    if (!isTurnActive) {
+      state.hasHiddenInTurn = false;
+    }
+
+    let isVisible = state.isVisible;
+
+    if (isLoading) {
+      state.pendingSince = state.pendingSince || now;
+      // Only a loader coming *back* waits; the first one must be immediate.
+      const delay = state.hasHiddenInTurn ? showDelay : 0;
+      isVisible = now - state.pendingSince >= delay;
+    } else {
+      state.pendingSince = 0;
+      // The minimum only applies while the turn is still running.
+      if (isVisible) {
+        isVisible = isTurnActive && now - state.shownAt < minDuration;
+      }
+    }
+
+    if (isVisible && !state.isVisible) {
+      state.shownAt = now;
+    }
+    // Only a hide *within* the turn arms the delay. The turn ending hides the
+    // loader too, and arming on that would delay the next turn's first loader,
+    // which has to be immediate.
+    if (!isVisible && state.isVisible && isTurnActive) {
+      state.hasHiddenInTurn = true;
+    }
+    state.isVisible = isVisible;
+
+    let deadline = 0;
+    if (isLoading && !isVisible) {
+      deadline = state.pendingSince + showDelay;
+    } else if (!isLoading && isVisible) {
+      deadline = state.shownAt + minDuration;
+    }
+
+    useEffect(() => {
+      if (!deadline) {
+        return undefined;
+      }
+
+      const timer = setTimeout(
+        () => scheduleRerender((tick) => tick + 1),
+        Math.max(0, deadline - Date.now())
+      );
+
+      return () => clearTimeout(timer);
+    }, [deadline]);
+
+    return isVisible;
+  }
+
   const DefaultMessageComponent = createDefaultMessageComponent({
     createElement,
     Fragment,
@@ -495,6 +634,7 @@ export function createChatMessagesComponent({
         props.context.open,
         instantSearchStatus,
         props.suggestionsElement,
+        props.loaderElement,
         messageFeedback,
         showReasoning,
         parseMarkdown,
@@ -528,6 +668,10 @@ export function createChatMessagesComponent({
       messages = [],
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
+      loaderPosition = 'messages-end',
+      shouldShowLoader,
+      loaderShowDelay = DEFAULT_LOADER_SHOW_DELAY,
+      loaderMinDuration = DEFAULT_LOADER_MIN_DURATION,
       errorComponent: ErrorComponent,
       emptyComponent: EmptyComponent,
       actionsComponent: ActionsComponent,
@@ -535,6 +679,7 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      turnState,
       error,
       hideScrollToBottom = false,
       onReload,
@@ -556,6 +701,7 @@ export function createChatMessagesComponent({
       contentRef,
       onScrollToBottom,
       suggestionsElement,
+      suggestionsLoading = false,
       onFeedback,
       feedbackState,
       ...props
@@ -586,26 +732,10 @@ export function createChatMessagesComponent({
       ),
     };
 
-    const lastMessage = messages[messages.length - 1];
-    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    // `activePart` means "the part currently being processed". It must clear
-    // when nothing is in progress: once the response settles (`ready`/`error`),
-    // and while `submitted` still shows the user's own message (the assistant
-    // hasn't produced a part yet). Otherwise overrides render a part that isn't
-    // actually streaming.
-    const isProcessing = status === 'submitted' || status === 'streaming';
-    const activePart =
-      isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
-    // The scan slices the remaining parts per candidate, and only the loader reads
-    // it, so skip it entirely while the opt-in is off.
-    const hasActiveReasoning = assistantMessageProps?.showReasoning
-      ? (lastMessage?.parts?.some((_, index, parts) =>
-          isReasoningPartActive(parts, index)
-        ) ?? false)
-      : false;
     // The shared context handed to every overridable chat component, so custom
     // components can read the current chat state and common callbacks from a
     // single, consistent place.
+    const isBusy = turnState?.isBusy ?? isStatusBusy(status);
     const context: ChatComponentContext<TMessage> = {
       messages,
       status,
@@ -613,7 +743,15 @@ export function createChatMessagesComponent({
       isClearing,
       open,
       maximized,
-      activePart,
+      // The chat instance is the authority on all of these; the fallbacks only
+      // cover callers that render `ChatMessages` on its own, outside a widget.
+      phase: 'idle',
+      activePart: undefined,
+      hasActiveReasoning: false,
+      isBusy,
+      lastMessage: messages[messages.length - 1],
+      showLoader: isBusy,
+      ...turnState,
       tools,
       sendMessage,
       regenerate,
@@ -624,11 +762,25 @@ export function createChatMessagesComponent({
       onClose,
     };
 
-    const showLoader = getShowLoader(
-      context,
-      assistantMessageProps?.showReasoning,
-      hasActiveReasoning
-    );
+    // The loader reads `phase` and `lastMessage` off the shared context, so it
+    // gets that context as-is.
+    const loaderContext: ChatLoaderContext<TMessage> = context;
+
+    // Whether the turn *is* loading is the chat's answer, decided where the
+    // messages and the tool registry are. Whether the loader is *visible* is
+    // this component's, because it is a question about time on screen.
+    const isLoading = shouldShowLoader
+      ? shouldShowLoader({
+          ...loaderContext,
+          defaultValue: context.showLoader,
+        })
+      : context.showLoader;
+    const showLoader = useLoaderVisibility({
+      isLoading,
+      isTurnActive: context.isBusy,
+      showDelay: loaderShowDelay,
+      minDuration: loaderMinDuration,
+    });
 
     const showEmpty =
       messages.length === 0 && !showLoader && !isClearing && status !== 'error';
@@ -637,12 +789,38 @@ export function createChatMessagesComponent({
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
 
+    // An inline loader needs an assistant message to live in; before the first
+    // response part there is none, so it falls back to its own row.
+    const isLoaderInline =
+      loaderPosition === 'message-inline' &&
+      context.lastMessage?.role === 'assistant';
+    const loaderText =
+      typeof translations.loaderText === 'function'
+        ? translations.loaderText(loaderContext)
+        : translations.loaderText;
+    const loaderElement = showLoader ? (
+      <DefaultLoader
+        context={loaderContext}
+        inline={isLoaderInline}
+        translations={{ loaderText }}
+      />
+    ) : undefined;
+
+    // Waits for the answer's text and for the loader to step aside, so two
+    // progress affordances never stack up.
+    const showPendingSuggestions =
+      suggestionsLoading &&
+      !showLoader &&
+      context.lastMessage !== undefined &&
+      hasTextContent(context.lastMessage);
+
     return (
       <div
         {...props}
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
+        aria-busy={showLoader ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
@@ -674,11 +852,11 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
-                isCurrentMessage={index === messages.length - 1}
+                isCurrentMessage={context.lastMessage?.id === message.id}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
@@ -693,21 +871,21 @@ export function createChatMessagesComponent({
                 messageTranslations={messageTranslations}
                 context={context}
                 suggestionsElement={
-                  status === 'ready' &&
+                  (status === 'ready' || showPendingSuggestions) &&
                   message.role === 'assistant' &&
-                  index === messages.length - 1
+                  context.lastMessage?.id === message.id
                     ? suggestionsElement
+                    : undefined
+                }
+                loaderElement={
+                  isLoaderInline && context.lastMessage?.id === message.id
+                    ? loaderElement
                     : undefined
                 }
               />
             ))}
 
-            {showLoader && (
-              <DefaultLoader
-                translations={{ loaderText: translations.loaderText }}
-                context={context}
-              />
-            )}
+            {!isLoaderInline && loaderElement}
 
             {status === 'error' && (
               <DefaultError
@@ -782,48 +960,4 @@ const getShouldRenderVerdicts = <TMessage extends ChatMessageBase>(
   });
 
   return verdicts;
-};
-
-const getShowLoader = <TMessage extends ChatMessageBase>(
-  context: ChatComponentContext<TMessage>,
-  showReasoning: boolean | undefined,
-  hasActiveReasoning: boolean
-): boolean => {
-  const { status, messages, tools } = context;
-
-  if (status !== 'submitted' && status !== 'streaming') return false;
-  if (status === 'submitted') return true;
-
-  const lastMessage = messages[messages.length - 1];
-  const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-
-  if (!lastPart) return true;
-  // An active disclosure carries its own progress affordance, so the loader would
-  // double it. Settled reasoning still shows it: the answer has not started.
-  if (showReasoning && hasActiveReasoning) return false;
-  if (isPartText(lastPart)) return false;
-
-  if (isPartTool(lastPart)) {
-    const tool = findTool(lastPart.type, tools);
-
-    // A part the tool declines to render leaves nothing on screen, so the turn
-    // still reads as in progress — keep the loader up rather than letting a
-    // settled-but-hidden part terminate it.
-    if (
-      lastMessage &&
-      tool?.shouldRender?.({
-        ...context,
-        message: lastPart,
-        parentMessage: lastMessage,
-      }) === false
-    ) {
-      return true;
-    }
-
-    if (lastPart.state === 'input-streaming') {
-      return !tool?.streamInput;
-    }
-  }
-
-  return true;
 };

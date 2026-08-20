@@ -3,6 +3,22 @@ import type { ComponentProps, SendEventForHits } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
+
+/**
+ * What the current turn is doing, as reported by the chat itself.
+ *
+ * Where `ChatStatus` describes the request, this describes the response being
+ * assembled. It is derived from the messages by the chat instance, not here —
+ * mirrored from `instantsearch.js`'s `ai-lite` the same way `ChatStatus` is.
+ */
+export type ChatPhase =
+  | 'idle'
+  | 'awaiting-response'
+  | 'answering'
+  | 'reasoning'
+  | 'calling-tool'
+  | 'ran-tool'
+  | 'thinking';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
 
 /**
@@ -513,6 +529,57 @@ export type ChatLayoutOwnProps<
   ComponentProps<'div'>;
 
 /**
+ * Where the chat loader renders: as its own row after the last message
+ * (`messages-end`, the default), or inside the streaming assistant message
+ * (`message-inline`, falling back to a row when there is none to host it).
+ */
+export type ChatLoaderPosition = 'messages-end' | 'message-inline';
+
+/**
+ * The turn state the chat instance reports about itself, derived once from
+ * `messages` and `status` outside the view and forwarded verbatim.
+ *
+ * Everything here is a pure function of state the chat already owns, which is
+ * why it is computed by the chat instance rather than re-derived by whichever
+ * component happens to need it. Components read these off `context`; none of
+ * them should be inspecting `messages` or comparing `status` to work the same
+ * answers out again.
+ */
+export type ChatTurnState<TMessage extends ChatMessageBase = ChatMessageBase> =
+  {
+    /**
+     * What the current turn is doing.
+     */
+    phase: ChatPhase;
+    /**
+     * The message part currently being produced, if any.
+     */
+    activePart?: TMessage['parts'][number];
+    /**
+     * Whether the turn is mid-reasoning: a reasoning part is still streaming and
+     * nothing settled has followed it.
+     */
+    hasActiveReasoning: boolean;
+    /**
+     * Whether a request is in flight — the `phase !== 'idle'` shorthand, so no
+     * component has to re-test `status` against its two in-flight values.
+     */
+    isBusy: boolean;
+    /**
+     * The last message in the conversation, for components asking "is this row
+     * the current one?".
+     */
+    lastMessage?: TMessage;
+    /**
+     * Whether to show the progress loader below the transcript.
+     *
+     * Decided outside the view, by the layer that owns the messages, the turn
+     * phase and the tool registry the decision reads.
+     */
+    showLoader: boolean;
+  };
+
+/**
  * Shared chat state and callbacks injected into every overridable chat
  * component by the widget. This is the component-layer analog of the templates
  * system's `params` argument: a single, consistent object every component can
@@ -520,7 +587,7 @@ export type ChatLayoutOwnProps<
  */
 export type ChatComponentContext<
   TMessage extends ChatMessageBase = ChatMessageBase,
-> = {
+> = ChatTurnState<TMessage> & {
   /**
    * The messages currently in the chat.
    */
@@ -545,10 +612,6 @@ export type ChatComponentContext<
    * Whether the chat panel is maximized.
    */
   maximized: boolean;
-  /**
-   * The message part currently being processed by the assistant, if any.
-   */
-  activePart?: TMessage['parts'][number];
   /**
    * Tools registered for the assistant.
    */
@@ -584,6 +647,19 @@ export type ChatComponentContext<
 };
 
 /**
+ * The `context` the loader receives.
+ *
+ * The loader needs to know what the turn is doing and which message it belongs
+ * to, but both are `phase` and `lastMessage` on the shared context now, so this
+ * adds nothing. The alias stays because the loader's signatures read better for
+ * naming what they want, and because it is the documented type of the
+ * `loaderText` argument.
+ */
+export type ChatLoaderContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage>;
+
+/**
  * Augments a chat component's own props with the shared `context` the widget
  * always injects. `TOwnProps` is the per-component presentational config that
  * stays at the root; `context` is the shared chat state and callbacks.
@@ -604,6 +680,12 @@ export type ClientSideToolContext<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = ChatComponentContext<TMessage> & {
   message: ChatToolMessage;
+  /**
+   * The chat message the tool call belongs to. `message` is the tool part
+   * itself, which carries no metadata of its own; per-turn decisions the
+   * backend records on the message are read from here.
+   */
+  parentMessage: TMessage;
   /**
    * The records the chat's tools have fetched. A tool handed plain object IDs
    * hydrates them with `records.get(objectID)`.
@@ -681,10 +763,20 @@ export type ChatInsightsEventContext = {
  * Narrower than `ClientSideToolContext` on purpose. The predicate decides
  * whether anything renders at all, and it also runs from the loader, which has
  * none of the render-time callbacks a layout component is handed.
+ *
+ * Three fields of the shared context are withheld too, because the predicate
+ * runs where the messages and the tools live rather than in the view.
+ * `maximized` is per-flavor panel state and `isClearing` drives a fade-out
+ * transition, so only a renderer knows them; `showLoader` is withheld for the
+ * opposite reason — it partly *depends* on this predicate, so reading it here
+ * would be circular.
  */
 export type ClientSideToolShouldRenderContext<
   TMessage extends ChatMessageBase = ChatMessageBase,
-> = ChatComponentContext<TMessage> & {
+> = Omit<
+  ChatComponentContext<TMessage>,
+  'isClearing' | 'maximized' | 'showLoader'
+> & {
   /**
    * The tool part being considered for rendering.
    */
