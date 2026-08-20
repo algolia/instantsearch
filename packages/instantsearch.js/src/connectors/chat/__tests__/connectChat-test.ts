@@ -1739,6 +1739,98 @@ data: [DONE]`,
       });
     });
 
+    it('lets a tool claim the names a server derives from it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        tools: {
+          my_tool: {
+            onToolCall,
+            matchesToolName: (toolName: string) =>
+              toolName.startsWith('my_tool_'),
+          },
+        },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      await waitFor(() => {
+        expect(onToolCall).toHaveBeenCalledWith(
+          expect.objectContaining({ toolName: 'my_tool_movies' })
+        );
+      });
+    });
+
+    it('does not resolve a derived name for a tool that does not claim it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        // `my_tool` and `my_tool_movies` are two different tools as far as the
+        // registry is concerned, so registration order can't decide this.
+        tools: { my_tool: { onToolCall } },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      expect(onToolCall).not.toHaveBeenCalled();
+    });
+
     it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
