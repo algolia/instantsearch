@@ -5,6 +5,7 @@
 import {
   createTaskRunner,
   DefaultTaskTransport,
+  resolveEndpoint,
   type TaskRunnerOptions,
 } from 'instantsearch.js/es/lib/tasks';
 
@@ -86,6 +87,47 @@ describe('createTaskRunner', () => {
     });
 
     expect(customFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('forwards resolved custom fetch with the endpoint options shape', async () => {
+    const customFetch = jest.fn<
+      ReturnType<typeof fetch>,
+      Parameters<typeof fetch>
+    >(() => Promise.resolve(jsonResponse({ output: { ok: true } })));
+    const globalFetch = jest.fn<
+      ReturnType<typeof fetch>,
+      Parameters<typeof fetch>
+    >(() => Promise.resolve(jsonResponse({ output: { ok: false } })));
+    global.fetch = globalFetch;
+    const runner = createTaskRunner({
+      ...resolveEndpoint({
+        transport: {
+          api: 'https://example.test/tasks',
+          headers: { 'x-custom': '1' },
+          fetch: customFetch,
+        },
+      }),
+      task: 'recommend',
+      stream: false,
+    });
+
+    await expect(runner.submit({ query: 'shoes' })).resolves.toEqual({
+      ok: true,
+    });
+
+    expect(customFetch).toHaveBeenCalledTimes(1);
+    expect(customFetch).toHaveBeenCalledWith('https://example.test/tasks', {
+      method: 'POST',
+      headers: {
+        'x-custom': '1',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        task: 'recommend',
+        input: { query: 'shoes' },
+      }),
+    });
+    expect(globalFetch).not.toHaveBeenCalled();
   });
 
   it('accepts the current transport options shape', async () => {

@@ -1,5 +1,6 @@
 import {
   buildTaskPayload,
+  createTaskRunner,
   DefaultTaskTransport,
   fetchTask,
   resolveEndpoint,
@@ -121,5 +122,35 @@ describe('tasks public types', () => {
     expect(resolvedTransport.endpoint).toBe('https://example.test/tasks');
     void runnerOptions;
     expect(fetchTask).toEqual(expect.any(Function));
+  });
+
+  it('keeps published task runner option fields readable', () => {
+    function readOptions(options: TaskRunnerOptions) {
+      const endpoint: string = options.endpoint;
+      const headers: Record<string, string> = options.headers;
+      const prepareRequest: TaskPrepareRequest | undefined =
+        options.prepareRequest;
+
+      return { endpoint, headers, prepareRequest };
+    }
+
+    const prepareRequest: TaskPrepareRequest = (body) => ({ body });
+    const options: TaskRunnerOptions = {
+      endpoint: 'https://example.test/tasks',
+      headers: { 'x-custom': '1' },
+      task: 'recommend',
+      prepareRequest,
+    };
+    const transportRunner = createTaskRunner({
+      transport: new DefaultTaskTransport(),
+      task: 'recommend',
+    });
+
+    expect(readOptions(options)).toEqual({
+      endpoint: 'https://example.test/tasks',
+      headers: { 'x-custom': '1' },
+      prepareRequest,
+    });
+    void transportRunner;
   });
 });
