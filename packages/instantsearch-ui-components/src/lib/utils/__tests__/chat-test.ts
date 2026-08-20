@@ -216,7 +216,16 @@ describe('findTool', () => {
   test('points at `matchesToolName` when a registered name is a prefix', () => {
     expect(findTool('tool-foo_products', { foo })).toBeUndefined();
     expect(global.console.warn).toHaveBeenCalledWith(
-      '[instantsearch-ui-components] No tool is registered for "foo_products". The registered "foo" is a prefix of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on it to also handle "foo_products".'
+      '[instantsearch-ui-components] No tool is registered for "foo_products". The registered tool "foo" is a prefix of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on the tool that should handle "foo_products".'
+    );
+  });
+
+  test('lists every registered prefix of an unresolved name', () => {
+    expect(
+      findTool('tool-foo_bar_products', { foo_bar: fooBar, foo })
+    ).toBeUndefined();
+    expect(global.console.warn).toHaveBeenCalledWith(
+      '[instantsearch-ui-components] No tool is registered for "foo_bar_products". The registered tools "foo", "foo_bar" are prefixes of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on the tool that should handle "foo_bar_products".'
     );
   });
 });
