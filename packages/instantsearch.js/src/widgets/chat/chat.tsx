@@ -17,6 +17,8 @@ import {
 import {
   focusAfterReveal,
   getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
 } from '../../lib/chat/focusAfterReveal';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
@@ -840,20 +842,32 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     rerender();
 
+    if (open) {
+      restoreContainerInertUntilReveal(promptRef.current);
+    }
+
     if (!open) {
       focusRequestId++;
     }
 
     if (shouldFocusPrompt) {
       const currentFocusRequestId = ++focusRequestId;
+      holdContainerInertUntilReveal(promptRef.current);
       window.requestAnimationFrame(() => {
         const prompt = promptRef.current;
-        focusAfterReveal(prompt, animationsBeforeReveal, () => {
-          return (
-            focusRequestId === currentFocusRequestId &&
-            promptRef.current === prompt
-          );
-        });
+        focusAfterReveal(
+          prompt,
+          animationsBeforeReveal,
+          () => {
+            return (
+              focusRequestId === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId === currentFocusRequestId;
+          }
+        );
       });
     }
   };

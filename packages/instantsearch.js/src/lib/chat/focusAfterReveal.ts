@@ -1,16 +1,42 @@
+export type ContainerAnimationSnapshot = Array<{
+  animation: Animation;
+  currentTime: CSSNumberish | null;
+  playState: AnimationPlayState;
+  startTime: CSSNumberish | null;
+}>;
+
+const containersHeldInert = new WeakSet<HTMLElement>();
+const revealAnimationsHeldByContainer = new WeakMap<
+  HTMLElement,
+  Set<Animation>
+>();
+
+function getContainer(prompt: HTMLTextAreaElement | null): HTMLElement | null {
+  return prompt?.closest<HTMLElement>('.ais-Chat-container') ?? null;
+}
+
 export function getActiveContainerAnimations(
   prompt: HTMLTextAreaElement | null
-): Animation[] {
-  if (!prompt) {
+): ContainerAnimationSnapshot {
+  return getActiveAnimations(getContainer(prompt));
+}
+
+function getActiveAnimations(
+  container: HTMLElement | null
+): ContainerAnimationSnapshot {
+  if (!container || typeof container.getAnimations !== 'function') {
     return [];
   }
 
-  const container = prompt.closest<HTMLElement>('.ais-Chat-container');
-  return container && typeof container.getAnimations === 'function'
-    ? container
-        .getAnimations()
-        .filter((animation) => animation.playState !== 'finished')
-    : [];
+  return container
+    .getAnimations()
+    .filter((animation) => animation.playState !== 'finished')
+    .map((animation) => ({
+      animation,
+      currentTime: animation.currentTime,
+      playState: animation.playState,
+      startTime: animation.startTime,
+    }));
 }
 
 const revealProperties = [
@@ -68,10 +94,8 @@ function isRevealed(
 }
 
 function getPendingRevealProperties(
-  prompt: HTMLTextAreaElement | null
+  container: HTMLElement | null
 ): Set<RevealProperty> {
-  const container = prompt?.closest<HTMLElement>('.ais-Chat-container');
-
   if (!container || typeof getComputedStyle !== 'function') {
     return new Set(revealProperties);
   }
@@ -105,31 +129,156 @@ function affectsReveal(
     );
 }
 
-export function focusAfterReveal(
-  prompt: HTMLTextAreaElement | null,
-  animationsBeforeReveal: Animation[],
-  shouldFocus: () => boolean
-): void {
-  const pendingRevealProperties = getPendingRevealProperties(prompt);
-  const revealAnimations = getActiveContainerAnimations(prompt).filter(
-    (animation) =>
-      !animationsBeforeReveal.includes(animation) &&
-      animation.effect?.getTiming().iterations !== Infinity &&
-      affectsReveal(animation, pendingRevealProperties)
+function startedDuringReveal(
+  current: ContainerAnimationSnapshot[number],
+  animationsBeforeReveal: ContainerAnimationSnapshot
+): boolean {
+  const previous = animationsBeforeReveal.find(
+    ({ animation }) => animation === current.animation
   );
 
-  const focus = () => {
+  if (!previous) {
+    return true;
+  }
+
+  if (previous.playState !== current.playState) {
+    return true;
+  }
+
+  if (current.startTime !== null && previous.startTime !== current.startTime) {
+    return true;
+  }
+
+  return (
+    typeof previous.currentTime === 'number' &&
+    typeof current.currentTime === 'number' &&
+    current.currentTime < previous.currentTime
+  );
+}
+
+export function holdContainerInertUntilReveal(
+  prompt: HTMLTextAreaElement | null
+): void {
+  const container = getContainer(prompt);
+
+  if (
+    !container?.classList.contains('ais-Chat-container--open') ||
+    container.hasAttribute('inert')
+  ) {
+    return;
+  }
+
+  container.setAttribute('inert', '');
+  containersHeldInert.add(container);
+}
+
+export function restoreContainerInertUntilReveal(
+  prompt: HTMLTextAreaElement | null
+): void {
+  const container = getContainer(prompt);
+
+  if (
+    container &&
+    containersHeldInert.has(container) &&
+    getPendingRevealProperties(container).size > 0
+  ) {
+    container.setAttribute('inert', '');
+  }
+}
+
+function requestAnimationFrameOrRun(callback: () => void): void {
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(callback);
+  } else {
+    callback();
+  }
+}
+
+export function focusAfterReveal(
+  prompt: HTMLTextAreaElement | null,
+  animationsBeforeReveal: ContainerAnimationSnapshot,
+  shouldFocus: () => boolean,
+  shouldRelease: () => boolean = shouldFocus
+): void {
+  const container = getContainer(prompt);
+
+  const settle = () => {
+    if (!shouldRelease()) {
+      return;
+    }
+
+    if (container) {
+      revealAnimationsHeldByContainer.delete(container);
+    }
+
+    if (
+      container &&
+      containersHeldInert.has(container) &&
+      container.classList.contains('ais-Chat-container--open')
+    ) {
+      container.removeAttribute('inert');
+      containersHeldInert.delete(container);
+    }
+
     if (prompt && shouldFocus()) {
       prompt.focus();
     }
   };
 
-  if (revealAnimations.length === 0) {
-    focus();
-    return;
-  }
+  const waitForReveal = () => {
+    const requestIsCurrent = shouldRelease();
+    const pendingRevealProperties = getPendingRevealProperties(container);
+    const heldRevealAnimations = container
+      ? revealAnimationsHeldByContainer.get(container)
+      : undefined;
+    const activeAnimations = getActiveAnimations(container);
+    const heldRevealIsActive = activeAnimations.some(({ animation }) =>
+      heldRevealAnimations?.has(animation)
+    );
+    const replacesInactiveHeldReveal =
+      heldRevealAnimations !== undefined && !heldRevealIsActive;
+    const revealAnimations = activeAnimations.filter(
+      (current) =>
+        (startedDuringReveal(current, animationsBeforeReveal) ||
+          heldRevealAnimations?.has(current.animation) ||
+          replacesInactiveHeldReveal) &&
+        current.animation.effect?.getTiming().iterations !== Infinity &&
+        affectsReveal(current.animation, pendingRevealProperties)
+    );
 
-  Promise.all(
-    revealAnimations.map((animation) => animation.finished.catch(() => {}))
-  ).then(focus);
+    if (
+      container &&
+      revealAnimations.length > 0 &&
+      (!heldRevealAnimations || requestIsCurrent || !heldRevealIsActive)
+    ) {
+      revealAnimationsHeldByContainer.set(
+        container,
+        new Set(revealAnimations.map(({ animation }) => animation))
+      );
+    }
+
+    if (!requestIsCurrent) {
+      if (
+        container &&
+        !container.classList.contains('ais-Chat-container--open')
+      ) {
+        revealAnimationsHeldByContainer.delete(container);
+        containersHeldInert.delete(container);
+      }
+      return;
+    }
+
+    if (revealAnimations.length === 0) {
+      settle();
+      return;
+    }
+
+    Promise.all(
+      revealAnimations.map(({ animation }) =>
+        animation.finished.catch(() => {})
+      )
+    ).then(() => requestAnimationFrameOrRun(waitForReveal));
+  };
+
+  waitForReveal();
 }

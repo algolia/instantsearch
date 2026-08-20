@@ -10,6 +10,8 @@ import {
 import {
   focusAfterReveal,
   getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
 } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import React, {
   createElement,
@@ -48,6 +50,7 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
@@ -209,7 +212,8 @@ export type ChatHandle = {
 
 type AnimationSnapshotProps = {
   promptRef: React.RefObject<HTMLTextAreaElement | null>;
-  animationsBeforeReveal: React.RefObject<Animation[]>;
+  animationsBeforeReveal: React.RefObject<ContainerAnimationSnapshot>;
+  open: boolean;
 };
 
 class AnimationSnapshot extends React.Component<AnimationSnapshotProps> {
@@ -220,9 +224,14 @@ class AnimationSnapshot extends React.Component<AnimationSnapshotProps> {
   componentDidUpdate(
     _previousProps: AnimationSnapshotProps,
     _previousState: unknown,
-    animationsBeforeReveal: Animation[]
+    animationsBeforeReveal: ContainerAnimationSnapshot
   ) {
     this.props.animationsBeforeReveal.current = animationsBeforeReveal;
+    if (!_previousProps.open && this.props.open) {
+      holdContainerInertUntilReveal(this.props.promptRef.current);
+    } else if (this.props.open) {
+      restoreContainerInertUntilReveal(this.props.promptRef.current);
+    }
   }
 
   render() {
@@ -281,7 +290,7 @@ function ChatInner<
 
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const focusRequestId = useRef(0);
-  const animationsBeforeReveal = useRef<Animation[]>([]);
+  const animationsBeforeReveal = useRef<ContainerAnimationSnapshot>([]);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -348,14 +357,22 @@ function ChatInner<
     if (consumeInputFocus?.()) {
       const currentFocusRequestId = ++focusRequestId.current;
       const previousAnimations = animationsBeforeReveal.current;
+      holdContainerInertUntilReveal(promptRef.current);
       window.requestAnimationFrame(() => {
         const prompt = promptRef.current;
-        focusAfterReveal(prompt, previousAnimations, () => {
-          return (
-            focusRequestId.current === currentFocusRequestId &&
-            promptRef.current === prompt
-          );
-        });
+        focusAfterReveal(
+          prompt,
+          previousAnimations,
+          () => {
+            return (
+              focusRequestId.current === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId.current === currentFocusRequestId;
+          }
+        );
       });
     }
   });
@@ -485,6 +502,7 @@ function ChatInner<
       <AnimationSnapshot
         promptRef={promptRef}
         animationsBeforeReveal={animationsBeforeReveal}
+        open={open}
       />
       {chat}
     </>

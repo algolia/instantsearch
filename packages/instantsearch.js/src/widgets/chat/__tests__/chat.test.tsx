@@ -550,6 +550,138 @@ describe('chat', () => {
       expect(document.activeElement).toBe(externalButton);
     });
 
+    test('keeps a newer focus request waiting for a replacement reveal', async () => {
+      const container = document.createElement('div');
+      const externalButton = document.createElement('button');
+      document.body.append(container, externalButton);
+
+      const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+      const animationFrames: Array<() => void> = [];
+      jest
+        .spyOn(window, 'requestAnimationFrame')
+        .mockImplementation((callback) => {
+          animationFrames.push(() => callback(0));
+          return animationFrames.length;
+        });
+      sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          persistence: true,
+          requiresSearch: false,
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      externalButton.focus();
+
+      let cancelSelectedReveal!: () => void;
+      let selectedRevealPlayState: AnimationPlayState = 'running';
+      let selectedRevealFinishedReads = 0;
+      const selectedRevealFinished = new Promise<void>((_resolve, reject) => {
+        cancelSelectedReveal = () => {
+          selectedRevealPlayState = 'idle';
+          reject();
+        };
+      });
+      let finishReplacementReveal!: () => void;
+      const replacementRevealFinished = new Promise<void>((resolve) => {
+        finishReplacementReveal = resolve;
+      });
+      const selectedReveal = {
+        currentTime: 10,
+        startTime: 0,
+        get playState() {
+          return selectedRevealPlayState;
+        },
+        effect: {
+          getKeyframes: () => [{ opacity: 0 }, { opacity: 1 }],
+          getTiming: () => ({ iterations: 1 }),
+        },
+        get finished() {
+          selectedRevealFinishedReads++;
+          return selectedRevealFinished;
+        },
+      } as unknown as Animation;
+      const replacementReveal = {
+        currentTime: 10,
+        startTime: 0,
+        playState: 'running',
+        effect: selectedReveal.effect,
+        finished: replacementRevealFinished,
+      } as unknown as Animation;
+      const chatContainer = container.querySelector<HTMLElement>(
+        '.ais-Chat-container'
+      )!;
+      let animations = [selectedReveal];
+      Object.defineProperty(chatContainer, 'getAnimations', {
+        configurable: true,
+        value: () =>
+          chatContainer.classList.contains('ais-Chat-container--open')
+            ? animations
+            : [],
+      });
+      jest.spyOn(window, 'getComputedStyle').mockImplementation(
+        () =>
+          ({
+            clipPath: 'none',
+            opacity: '0',
+            rotate: 'none',
+            scale: 'none',
+            transform: 'none',
+            translate: 'none',
+            visibility: 'visible',
+            getPropertyValue: () => 'auto',
+          }) as unknown as CSSStyleDeclaration
+      );
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+      while (selectedRevealFinishedReads === 0 && animationFrames.length > 0) {
+        animationFrames.shift()!();
+      }
+      expect(selectedRevealFinishedReads).toBeGreaterThan(0);
+      animationFrames.length = 0;
+
+      animations = [replacementReveal];
+      cancelSelectedReveal();
+      search.renderState.indexName.chat!.focusInput();
+      expect(animationFrames).toHaveLength(1);
+      await wait(0);
+      await wait(0);
+      expect(animationFrames).toHaveLength(2);
+      animationFrames.shift()!();
+
+      expect(document.activeElement).toBe(externalButton);
+      expect(chatContainer).toHaveAttribute('inert');
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      animationFrames.shift()!();
+
+      animations = [];
+      finishReplacementReveal();
+      await replacementRevealFinished;
+      await wait(0);
+      animationFrames.shift()!();
+
+      expect(chatContainer).not.toHaveAttribute('inert');
+      expect(focusSpy).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).toBe(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      );
+    });
+
     test('does not move focus when openChat submits to an open panel', async () => {
       const container = document.createElement('div');
       const externalButton = document.createElement('button');
@@ -593,9 +725,16 @@ describe('chat', () => {
       expect(focusSpy).not.toHaveBeenCalled();
     });
 
-    test('keeps prompt autofocus for an inline layout with open persistence', async () => {
+    test('keeps inline prompt focus available with open persistence', async () => {
       const container = document.createElement('div');
-      document.body.appendChild(container);
+      const externalButton = document.createElement('button');
+      document.body.append(container, externalButton);
+      jest
+        .spyOn(window, 'requestAnimationFrame')
+        .mockImplementation((callback) => {
+          callback(0);
+          return 0;
+        });
 
       const search = instantsearch({
         indexName: 'indexName',
@@ -618,6 +757,17 @@ describe('chat', () => {
       expect(
         container.querySelector('.ais-ChatPrompt-textarea')
       ).toHaveAttribute('autofocus');
+
+      externalButton.focus();
+      search.renderState.indexName.chat!.focusInput();
+      await wait(0);
+
+      expect(
+        container.querySelector('.ais-Chat-container')
+      ).not.toHaveAttribute('inert');
+      expect(document.activeElement).toBe(
+        container.querySelector('.ais-ChatPrompt-textarea')
+      );
     });
 
     // A fresh `layoutComponent` per render would remount the chat subtree

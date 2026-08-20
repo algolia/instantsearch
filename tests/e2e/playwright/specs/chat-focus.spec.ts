@@ -523,4 +523,295 @@ test.describe('Chat focus', () => {
       focusStyle.transform
     );
   });
+
+  test('keeps opening content out of the keyboard order until the reveal finishes', async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      !['js', 'react'].includes(String(testInfo.project.metadata.flavor)),
+      'Chat is only available in the JavaScript and React examples'
+    );
+
+    await page.goto('../default-theme/');
+
+    const container = page.locator('.ais-Chat-container');
+    const trigger = page.locator('.ais-ChatToggleButton');
+    const prompt = page.locator('.ais-ChatPrompt-textarea');
+
+    await trigger.click();
+    await page.locator('.ais-ChatHeader-close').click();
+    await expect(container).toHaveAttribute('inert', '');
+    await expect(container).toHaveCSS('opacity', '0');
+
+    await page.addStyleTag({
+      content: `
+        @keyframes chat-keyboard-reveal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .ais-Chat-container--open {
+          animation: chat-keyboard-reveal 10s linear paused;
+        }
+      `,
+    });
+
+    await trigger.click();
+    await expect(container).toHaveClass(/ais-Chat-container--open/);
+    await expect(container).toHaveCSS('opacity', '0');
+    await expect(trigger).toBeFocused();
+    await expect(container).toHaveAttribute('inert', '');
+
+    await page.keyboard.press('Shift+Tab');
+
+    expect(
+      await container.evaluate((element) =>
+        element.contains(document.activeElement)
+      )
+    ).toBe(false);
+
+    await container.evaluate((element) => {
+      const reveal = element
+        .getAnimations()
+        .find(
+          (animation) =>
+            animation instanceof CSSAnimation &&
+            animation.animationName === 'chat-keyboard-reveal'
+        );
+
+      if (!reveal) {
+        throw new Error('Expected the paused keyboard reveal animation');
+      }
+
+      reveal.finish();
+    });
+
+    await expect(container).toHaveCSS('opacity', '1');
+    await expect(container).not.toHaveAttribute('inert', '');
+    await expect(prompt).toBeFocused();
+  });
+
+  test('waits when an existing reveal animation resumes', async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      !['js', 'react'].includes(String(testInfo.project.metadata.flavor)),
+      'Chat is only available in the JavaScript and React examples'
+    );
+
+    await page.goto('../default-theme/');
+
+    const container = page.locator('.ais-Chat-container');
+    const trigger = page.locator('.ais-ChatToggleButton');
+    const prompt = page.locator('.ais-ChatPrompt-textarea');
+
+    await trigger.click();
+    await page.locator('.ais-ChatHeader-close').click();
+    await expect(container).toHaveAttribute('inert', '');
+    await expect(container).toHaveCSS('opacity', '0');
+
+    await page.addStyleTag({
+      content: `
+        @keyframes chat-resumed-reveal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .ais-Chat-container {
+          animation: chat-resumed-reveal 10s linear both paused;
+        }
+
+        .ais-Chat-container--open {
+          animation-play-state: running;
+        }
+      `,
+    });
+
+    await expect
+      .poll(() =>
+        container.evaluate((element) => {
+          const animation = element
+            .getAnimations()
+            .find(
+              (candidate) =>
+                candidate instanceof CSSAnimation &&
+                candidate.animationName === 'chat-resumed-reveal'
+            );
+
+          if (animation) {
+            (
+              animation as Animation & { observedBeforeOpen?: boolean }
+            ).observedBeforeOpen = true;
+          }
+
+          return animation?.playState;
+        })
+      )
+      .toBe('paused');
+
+    await trigger.click();
+    await expect(container).toHaveClass(/ais-Chat-container--open/);
+    await expect
+      .poll(() =>
+        container.evaluate((element) => {
+          const animation = element
+            .getAnimations()
+            .find(
+              (candidate) =>
+                candidate instanceof CSSAnimation &&
+                candidate.animationName === 'chat-resumed-reveal'
+            ) as (Animation & { observedBeforeOpen?: boolean }) | undefined;
+
+          return {
+            sameAnimation: animation?.observedBeforeOpen === true,
+            playState: animation?.playState,
+          };
+        })
+      )
+      .toEqual({ sameAnimation: true, playState: 'running' });
+    await expect
+      .poll(() =>
+        container.evaluate((element) => getComputedStyle(element).transform)
+      )
+      .toBe('matrix(1, 0, 0, 1, 0, 0)');
+    await expect(container).not.toHaveCSS('opacity', '1');
+    await expect(trigger).toBeFocused();
+
+    await container.evaluate((element) => {
+      const reveal = element
+        .getAnimations()
+        .find(
+          (animation) =>
+            animation instanceof CSSAnimation &&
+            animation.animationName === 'chat-resumed-reveal'
+        );
+
+      if (!reveal) {
+        throw new Error('Expected the resumed reveal animation');
+      }
+
+      reveal.finish();
+    });
+
+    await expect(container).toHaveCSS('opacity', '1');
+    await expect(prompt).toBeFocused();
+  });
+
+  test('waits for a replacement reveal animation', async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      !['js', 'react'].includes(String(testInfo.project.metadata.flavor)),
+      'Chat is only available in the JavaScript and React examples'
+    );
+
+    await page.goto('../default-theme/');
+
+    const container = page.locator('.ais-Chat-container');
+    const trigger = page.locator('.ais-ChatToggleButton');
+    const prompt = page.locator('.ais-ChatPrompt-textarea');
+
+    await trigger.click();
+    await page.locator('.ais-ChatHeader-close').click();
+    await expect(container).toHaveAttribute('inert', '');
+    await expect(container).toHaveCSS('opacity', '0');
+
+    const initialRevealStyles = await page.addStyleTag({
+      content: `
+        @keyframes chat-initial-reveal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .ais-Chat-container--open {
+          animation: chat-initial-reveal 10s linear paused;
+        }
+      `,
+    });
+
+    await trigger.click();
+    await expect(container).toHaveClass(/ais-Chat-container--open/);
+    await expect(container).toHaveCSS('opacity', '0');
+    await expect(trigger).toBeFocused();
+    await expect
+      .poll(() =>
+        container.evaluate((element) =>
+          element
+            .getAnimations()
+            .some(
+              (animation) =>
+                animation instanceof CSSAnimation &&
+                animation.animationName === 'chat-initial-reveal' &&
+                animation.playState === 'paused'
+            )
+        )
+      )
+      .toBe(true);
+    await expect
+      .poll(() =>
+        container.evaluate((element) => getComputedStyle(element).transform)
+      )
+      .toBe('matrix(1, 0, 0, 1, 0, 0)');
+
+    await container.evaluate((element) => {
+      const replacement = element.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 10000,
+        fill: 'both',
+      });
+      replacement.pause();
+      (
+        replacement as Animation & { replacementReveal?: boolean }
+      ).replacementReveal = true;
+    });
+    await initialRevealStyles.evaluate((element) => element.remove());
+
+    await expect
+      .poll(() =>
+        container.evaluate((element) =>
+          element
+            .getAnimations()
+            .every(
+              (animation) =>
+                !(animation instanceof CSSAnimation) ||
+                animation.animationName !== 'chat-initial-reveal'
+            )
+        )
+      )
+      .toBe(true);
+    await expect(container).toHaveCSS('opacity', '0');
+    await expect
+      .poll(() =>
+        container.evaluate((element) =>
+          element
+            .getAnimations()
+            .some(
+              (animation) =>
+                (animation as Animation & { replacementReveal?: boolean })
+                  .replacementReveal === true &&
+                animation.playState === 'paused'
+            )
+        )
+      )
+      .toBe(true);
+    await expect(trigger).toBeFocused();
+
+    await container.evaluate((element) => {
+      const replacement = element
+        .getAnimations()
+        .find(
+          (animation) =>
+            (animation as Animation & { replacementReveal?: boolean })
+              .replacementReveal === true
+        );
+
+      if (!replacement) {
+        throw new Error('Expected the replacement reveal animation');
+      }
+
+      replacement.finish();
+    });
+
+    await expect(container).toHaveCSS('opacity', '1');
+    await expect(prompt).toBeFocused();
+  });
 });
