@@ -101,13 +101,15 @@ export const findTool = <TTool>(
         .filter((key) => startsWith(toolName, `${key}_`))
         .sort();
 
+      const registered = prefixes.map((key) => `"${key}"`).join(', ');
+
       warn(
         prefixes.length === 0,
-        `No tool is registered for "${toolName}". The registered ${prefixes
-          .map((key) => `"${key}"`)
-          .join(
-            ', '
-          )} is a prefix of it, but a prefix alone doesn't resolve: declare \`matchesToolName\` on it to also handle "${toolName}".`
+        `No tool is registered for "${toolName}". ${
+          prefixes.length > 1
+            ? `The registered tools ${registered} are prefixes of it`
+            : `The registered tool ${registered} is a prefix of it`
+        }, but a prefix alone doesn't resolve: declare \`matchesToolName\` on the tool that should handle "${toolName}".`
       );
     }
 
