@@ -6,12 +6,16 @@ import { parsePartialJson } from './parse-partial-json';
 import { processStream } from './stream-parser';
 import {
   generateId as defaultGenerateId,
+  isProgressPart,
+  isReasoningPartActive,
+  isToolPart,
   SerialJobExecutor,
   tryParseErrorMessage,
 } from './utils';
 
 import type {
   ChatInit,
+  ChatPhase,
   ChatRequestOptions,
   ChatState,
   ChatStatus,
@@ -201,6 +205,131 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   get error(): Error | undefined {
     return this.state.error;
+  }
+
+  /**
+   * Whether a request is in flight, i.e. `phase !== 'idle'`.
+   *
+   * The shorthand exists because callers kept re-testing `status` against the
+   * two in-flight values; there is one definition of "busy" and it lives here.
+   */
+  get isBusy(): boolean {
+    return this.status === 'submitted' || this.status === 'streaming';
+  }
+
+  /**
+   * What the current turn is doing, derived from `messages` and `status`.
+   *
+   * This is the chat's own account of its progress, independent of any UI: a
+   * renderer decides what to *show* for a phase, but not what the phase is.
+   *
+   * - `idle`: nothing in flight.
+   * - `awaiting-response`: request sent, no assistant part has arrived yet.
+   * - `answering`: the assistant is streaming prose.
+   * - `calling-tool`: a tool call's input is still streaming in.
+   * - `ran-tool`: the last thing the assistant produced is a settled tool call,
+   *   so more of the turn is still to come.
+   */
+  get phase(): ChatPhase {
+    if (!this.isBusy) {
+      return 'idle';
+    }
+    if (this.status === 'submitted') {
+      return 'awaiting-response';
+    }
+
+    const lastPart = this.lastProgressPart;
+
+    if (!lastPart) {
+      return 'awaiting-response';
+    }
+    if (lastPart.type === 'text') {
+      return 'answering';
+    }
+    if (isToolPart(lastPart)) {
+      return lastPart.state === 'input-streaming' ? 'calling-tool' : 'ran-tool';
+    }
+    if (lastPart.type === 'reasoning') {
+      return 'reasoning';
+    }
+
+    // A step boundary, a file, a source: the turn is producing, but the part
+    // says nothing about what comes next.
+    return 'thinking';
+  }
+
+  /**
+   * The part currently being produced, or `undefined` when nothing is.
+   *
+   * Notably empty while `submitted` still shows only the user's own message —
+   * the assistant has not produced a part yet, so nothing is active.
+   */
+  get activePart(): TUIMessage['parts'][number] | undefined {
+    if (this.phase === 'idle' || this.lastMessage?.role !== 'assistant') {
+      return undefined;
+    }
+
+    return this.lastPart;
+  }
+
+  /**
+   * Whether the turn is mid-reasoning, i.e. a reasoning part is still streaming
+   * and nothing settled has followed it.
+   */
+  get hasActiveReasoning(): boolean {
+    return (
+      this.lastMessage?.parts?.some((_, index, parts) =>
+        isReasoningPartActive(parts, index)
+      ) ?? false
+    );
+  }
+
+  /**
+   * The last part of the last message, whether or not the turn is still
+   * producing it. Use `activePart` for "what is being produced right now".
+   */
+  get lastPart(): TUIMessage['parts'][number] | undefined {
+    const parts = this.lastMessage?.parts;
+
+    return parts?.[parts.length - 1];
+  }
+
+  /**
+   * The last part that says something about the turn's progress, skipping the
+   * ones that render nothing. This — not `lastPart` — is what "what is this
+   * turn doing" has to read, or an invisible trailing part answers for it.
+   */
+  get lastProgressPart(): TUIMessage['parts'][number] | undefined {
+    const parts = this.lastMessage?.parts;
+
+    if (!parts) {
+      return undefined;
+    }
+
+    for (let index = parts.length - 1; index >= 0; index--) {
+      if (isProgressPart(parts[index])) {
+        return parts[index];
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * The most recent assistant message, or `undefined` when the assistant has
+   * not spoken yet. Per-turn data the backend attaches to a message is read
+   * from here rather than by scanning `messages` at each call site.
+   */
+  get lastAssistantMessage(): TUIMessage | undefined {
+    for (let index = this.messages.length - 1; index >= 0; index--) {
+      const message = this.messages[index];
+
+      if (message.role === 'assistant') {
+        return message;
+      }
+    }
+
+    return undefined;
   }
 
   /**

@@ -1,4 +1,11 @@
-export { getApplyFiltersParamsFromToolInput } from './chat';
+export {
+  createClientSideToolContextExtras,
+  findTool,
+  getApplyFiltersParamsFromToolInput,
+  isStatusBusy,
+  type ClientSideToolContextExtras,
+  type MessageScopedClientSideTool,
+} from './chat';
 export {
   collectChatRecords,
   createChatRecordsStore,

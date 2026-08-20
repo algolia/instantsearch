@@ -23,6 +23,7 @@ import { createDefaultWidgetParams, openChat } from './utils';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { ClientSideToolStateContext } from 'instantsearch-ui-components';
 
 export function createOptionsTests(
   setup: ChatWidgetSetup,
@@ -1110,6 +1111,95 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatMessageLoader')
         ).not.toBeInTheDocument();
+      });
+
+      test('keeps the loader visible when the last tool part opts out of rendering', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+        // Renders only for the turn the agent kept on the search tool, which
+        // this message is not.
+        const shouldRender = jest.fn(
+          (context: ClientSideToolStateContext) =>
+            (
+              context.parentMessage.metadata as
+                | { displayResultsEnabled?: boolean }
+                | undefined
+            )?.displayResultsEnabled !== true
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  shouldRender,
+                  templates: {
+                    layout: '<div id="tool-content">streaming...</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                [SearchIndexToolType]: {
+                  streamInput: true,
+                  shouldRender,
+                  layoutComponent: () => (
+                    <div id="tool-content">streaming...</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              metadata: { displayResultsEnabled: true },
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(document.querySelector('#tool-content')).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
+        const { calls } = shouldRender.mock;
+        expect(calls[calls.length - 1][0]).toEqual(
+          expect.objectContaining({
+            status: 'streaming',
+            parentMessage: expect.objectContaining({ id: '2' }),
+            message: expect.objectContaining({ toolCallId: '1' }),
+          })
+        );
       });
 
       test('does not show loader during streaming when last part is text', async () => {

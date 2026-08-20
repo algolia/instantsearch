@@ -8,6 +8,23 @@
  */
 export type ChatStatus = 'submitted' | 'streaming' | 'ready' | 'error';
 
+/**
+ * What the current turn is doing. Unlike `ChatStatus`, which describes the
+ * request, this describes the response being assembled.
+ *
+ * `reasoning` and `thinking` both mean "no answer text yet": the turn's last
+ * visible progress was a reasoning part, or was something that says nothing
+ * about what comes next (a step boundary, a file, a source).
+ */
+export type ChatPhase =
+  | 'idle'
+  | 'awaiting-response'
+  | 'answering'
+  | 'reasoning'
+  | 'calling-tool'
+  | 'ran-tool'
+  | 'thinking';
+
 export type UIDataTypes = Record<string, unknown>;
 
 export type UITool = {

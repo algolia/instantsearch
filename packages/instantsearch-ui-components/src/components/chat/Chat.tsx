@@ -1,6 +1,8 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
+import { isStatusBusy } from '../../lib/utils/chat';
+
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
@@ -169,8 +171,8 @@ export function createChatComponent({
       }
       // Stop streaming now so the assistant stops immediately, not after the fade.
       if (
-        messagesProps.status === 'submitted' ||
-        messagesProps.status === 'streaming'
+        messagesProps.turnState?.isBusy ??
+        isStatusBusy(messagesProps.status)
       ) {
         stop();
       }

@@ -175,8 +175,8 @@ export function createDisplayResultsToolComponent<
       message,
       insightsEventContext,
       sendEvent,
-      messages,
-      status,
+      lastMessage,
+      isBusy,
       records,
     } = context;
     const instantSearchStatus =
@@ -206,11 +206,10 @@ export function createDisplayResultsToolComponent<
     const groups = Array.isArray(payload?.groups)
       ? payload.groups.filter(isObject)
       : [];
-    const latestMessage = messages?.[messages.length - 1];
     const isStreaming =
-      status === 'streaming' &&
+      isBusy &&
       message?.state === 'input-streaming' &&
-      latestMessage?.parts.some((part) => part === message) === true;
+      lastMessage?.parts.some((part) => part === message) === true;
 
     // Only the last result of the last group can still be mid-delta, so it is
     // the only one ever withheld.

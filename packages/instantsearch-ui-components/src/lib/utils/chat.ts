@@ -1,14 +1,30 @@
 import { startsWith } from './startsWith';
 
+import type { ChatRecordsStore } from './chatRecords';
 import type { ChatMessageBase } from '../../components';
 import type {
+  AddToolResult,
+  AddToolResultWithOutput,
   ApplyFiltersParams,
+  ChatStatus,
   ChatToolMessage,
   ClientSideTool,
+  ClientSideToolContext,
   ClientSideTools,
   SearchToolInput,
   SearchToolQuery,
 } from '../../components/chat/types';
+import type { SendEventForHits } from '../../types';
+
+/**
+ * The status-only fallback for "a request is in flight".
+ *
+ * `context.isBusy` — the chat instance's own answer — is what components should
+ * read. This exists so the one place that has to guess from `status` alone,
+ * when no widget supplied the turn state, still has a single definition.
+ */
+export const isStatusBusy = (status: ChatStatus | undefined) =>
+  status === 'submitted' || status === 'streaming';
 
 export const getTextContent = (message: ChatMessageBase) => {
   return message.parts
@@ -50,53 +66,6 @@ export function isReasoningPartActive(
   );
 }
 
-/**
- * Whether a text part renders nothing. `text-start` creates the part before its
- * first delta, and `<context>` wrappers are a shim `ChatMessage` also drops.
- */
-export const isPartTextEmpty = (
-  part: Extract<ChatMessageBase['parts'][number], { type: 'text' }>
-): boolean => {
-  return (
-    part.text.trim().length === 0 ||
-    (part.text.startsWith('<context>') && part.text.endsWith('</context>'))
-  );
-};
-
-/**
- * Whether a part says something about the turn's progress. Data parts and
- * unwritten text parts render nothing, so reading them would answer "what is
- * this turn doing" with a part that changed nothing on screen.
- */
-export const isPartProgressSignal = (
-  part: ChatMessageBase['parts'][number]
-): boolean => {
-  if (startsWith(part.type, 'data-')) {
-    return false;
-  }
-  if (isPartText(part)) {
-    return !isPartTextEmpty(part);
-  }
-  return true;
-};
-
-export const findLastProgressPart = (
-  parts: ChatMessageBase['parts'] | undefined
-): ChatMessageBase['parts'][number] | undefined => {
-  if (!parts) {
-    return undefined;
-  }
-
-  for (let index = parts.length - 1; index >= 0; index--) {
-    const part = parts[index];
-    if (isPartProgressSignal(part)) {
-      return part;
-    }
-  }
-
-  return undefined;
-};
-
 export const findTool = (
   partType: string,
   tools: ClientSideTools
@@ -110,6 +79,116 @@ export const findTool = (
   }
   return tool;
 };
+
+/**
+ * A tool whose results are submitted through the message that owns the call,
+ * rather than through the chat-wide channel. The connector attaches the
+ * message-scoped variant; tools registered by hand may not have it.
+ */
+/** The tool-scoped half of a tool context, on top of the shared chat context. */
+export type ClientSideToolContextExtras<TMessage extends ChatMessageBase> =
+  Pick<
+    ClientSideToolContext<TMessage>,
+    | 'addToolResult'
+    | 'applyFilters'
+    | 'indexUiState'
+    | 'insightsEventContext'
+    | 'message'
+    | 'parentMessage'
+    | 'records'
+    | 'sendEvent'
+    | 'setIndexUiState'
+  >;
+
+export type MessageScopedClientSideTool = ClientSideTool & {
+  '~addToolResultForMessage'?: (
+    message: ChatMessageBase,
+    params: Parameters<AddToolResult>[0]
+  ) => ReturnType<AddToolResult>;
+};
+
+/**
+ * Builds the `context` a tool call is rendered from. Shared by the renderer and
+ * by the loader's visibility check so that `shouldRender` is evaluated against
+ * exactly the data `layoutComponent` would receive.
+ */
+/**
+ * Builds the tool-scoped half of a tool context: the fields that depend on
+ * which tool call is in play, rather than on the chat as a whole.
+ *
+ * Spread over a chat context to get a full one. The renderer spreads it over
+ * `ChatComponentContext` for `layoutComponent`; the connector spreads it over
+ * the same context minus `maximized`/`isClearing`, which it does not own, for
+ * `shouldRender`. Sharing this builder is what guarantees the decision and the
+ * rendering read identical data.
+ */
+export function createClientSideToolContextExtras<
+  TMessage extends ChatMessageBase,
+>({
+  tool,
+  parentMessage,
+  part,
+  indexUiState,
+  setIndexUiState,
+  getFallbackRecords,
+}: {
+  tool: MessageScopedClientSideTool;
+  parentMessage: TMessage;
+  part: ChatToolMessage;
+  indexUiState: object;
+  setIndexUiState: (state: object) => void;
+  getFallbackRecords: () => ChatRecordsStore;
+}): ClientSideToolContextExtras<TMessage> {
+  const addToolResult: AddToolResultWithOutput = (params) => {
+    const resultParams = {
+      output: params.output,
+      tool: part.type,
+      toolCallId: part.toolCallId,
+    };
+
+    return tool['~addToolResultForMessage']
+      ? tool['~addToolResultForMessage'](parentMessage, resultParams)
+      : tool.addToolResult(resultParams);
+  };
+
+  const toolSendEvent = tool.sendEvent || (() => {});
+  const agentId = tool.insightsEventContext?.agentId;
+  // Hits rendered by a tool have no `queryID` of their own, so events are
+  // attributed to the message that produced them.
+  const sendEvent = ((
+    eventType: any,
+    hits?: any,
+    eventName?: any,
+    additionalData?: any
+  ) => {
+    if (
+      hits === undefined &&
+      eventName === undefined &&
+      additionalData === undefined
+    ) {
+      return toolSendEvent(eventType);
+    }
+
+    return toolSendEvent(eventType, hits, eventName, {
+      ...(additionalData || {}),
+      queryID: 'message_' + parentMessage.id,
+      ...(agentId ? { agentId } : {}),
+      toolCallId: part.toolCallId,
+    });
+  }) as SendEventForHits;
+
+  return {
+    records: tool.records || getFallbackRecords(),
+    message: part,
+    parentMessage,
+    insightsEventContext: tool.insightsEventContext,
+    indexUiState,
+    setIndexUiState,
+    addToolResult,
+    applyFilters: tool.applyFilters,
+    sendEvent,
+  };
+}
 
 const FACET_KEY_PREFIX = 'facet_';
 

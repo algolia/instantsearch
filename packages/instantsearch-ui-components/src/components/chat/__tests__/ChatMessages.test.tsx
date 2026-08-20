@@ -12,7 +12,12 @@ import { createChatMessagesComponent } from '../ChatMessages';
 
 import type { ChatMessageTextComponentProps } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext } from '../types';
+import type {
+  ChatComponentPropsWithContext,
+  ClientSideTool,
+  ClientSideToolComponentProps,
+  ClientSideToolStateContext,
+} from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -209,6 +214,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool', showLoader: false }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -241,6 +247,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool' }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -310,6 +317,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool', showLoader: false }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -321,6 +329,109 @@ describe('ChatMessages', () => {
       screen.getAllByRole('group', { name: 'Reasoning' })[0]
     ).toHaveAttribute('aria-busy', 'true');
     expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
+  describe('tools opting out of rendering', () => {
+    const toolMessage = {
+      role: 'assistant' as const,
+      id: '1',
+      metadata: { displayResultsEnabled: true },
+      parts: [
+        {
+          type: 'tool-test_tool' as const,
+          toolCallId: 'call-1',
+          state: 'input-streaming' as const,
+          input: {},
+        },
+      ],
+    };
+
+    const createTool = (
+      shouldRender?: ClientSideTool['shouldRender']
+    ): ClientSideTool => ({
+      layoutComponent: () => <div className="tool">Tool</div>,
+      streamInput: true,
+      addToolResult: jest.fn(),
+      applyFilters: jest.fn(),
+      ...(shouldRender && { shouldRender }),
+    });
+
+    // Whether opting out keeps the loader up is the connector's call; here it
+    // only has to stop the part from rendering. `showLoader` is passed
+    // explicitly so the two concerns stay visibly separate.
+    test('renders nothing for a tool that declines the turn', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool', showLoader: true }}
+          tools={{ test_tool: createTool(() => false) }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('.tool')).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('renders the tool when it declines nothing', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool', showLoader: false }}
+          tools={{ test_tool: createTool() }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('.tool')).not.toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+    });
+
+    test('decides from the same context the layout component receives', () => {
+      const shouldRender = jest.fn<boolean, [ClientSideToolStateContext]>(
+        () => true
+      );
+      const layoutComponent = jest.fn<
+        JSX.Element,
+        [ClientSideToolComponentProps]
+      >(() => <div className="tool">Tool</div>);
+      const indexUiState = { query: 'shoes' };
+
+      render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={indexUiState}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool' }}
+          tools={{
+            test_tool: { ...createTool(shouldRender), layoutComponent },
+          }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      const expected = expect.objectContaining({
+        status: 'streaming',
+        message: toolMessage.parts[0],
+        parentMessage: toolMessage,
+        indexUiState,
+      });
+
+      expect(shouldRender.mock.calls[0][0]).toEqual(expected);
+      expect(layoutComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ context: expected })
+      );
+    });
   });
 
   test('updates nested reasoning labels for every completed message', () => {
@@ -1585,47 +1696,23 @@ describe('ChatMessages', () => {
     const loader = (container: Element) =>
       container.querySelector('.ais-ChatMessageLoader');
 
-    test('ignores a trailing data part after the answer', () => {
-      // Renders nothing, so it must not bring the loader back.
-      const { container } = render(
-        <ChatMessages
-          {...baseProps}
-          status="streaming"
-          messages={assistant([
-            { type: 'text', text: 'Here you go.', state: 'done' },
-            { type: 'data-suggestions', data: { suggestions: ['More?'] } },
-          ])}
-        />
-      );
-
-      expect(loader(container)).toBeNull();
-    });
-
-    test('keeps the loader while a text part has no content yet', () => {
-      // `text-start` creates the part before the first delta.
-      const { container } = render(
-        <ChatMessages
-          {...baseProps}
-          status="streaming"
-          messages={assistant([
-            {
-              type: 'tool-some_tool',
-              toolCallId: '1',
-              input: {},
-              state: 'output-available',
-              output: {},
-            },
-            { type: 'text', text: '', state: 'streaming' },
-          ])}
-        />
-      );
-
-      expect(loader(container)).not.toBeNull();
+    // Whether the turn is loading is the chat's answer, so these tests state it
+    // rather than re-deriving it from messages. What is under test is the step
+    // after: how a sequence of loading states becomes a visibility over time.
+    // The decision itself is covered in `instantsearch.js`'s `turnState` tests.
+    const turn = (showLoader: boolean, isBusy = true) => ({
+      isBusy,
+      showLoader,
     });
 
     test('sets aria-busy while loading', () => {
       const { container } = render(
-        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[]}
+          turnState={turn(true)}
+        />
       );
 
       expect(container.querySelector('[role="log"]')).toHaveAttribute(
@@ -1646,7 +1733,12 @@ describe('ChatMessages', () => {
       // Arms the delay; the turn's first loader is always immediate.
       function renderAfterFirstCycle() {
         const utils = render(
-          <ChatMessages {...baseProps} status="streaming" messages={[]} />
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={[]}
+            turnState={turn(true)}
+          />
         );
 
         expect(loader(utils.container)).not.toBeNull();
@@ -1658,6 +1750,7 @@ describe('ChatMessages', () => {
             messages={assistant([
               { type: 'text', text: 'Working on it.', state: 'done' },
             ])}
+            turnState={turn(false)}
           />
         );
         act(() => {
@@ -1671,7 +1764,12 @@ describe('ChatMessages', () => {
 
       test('holds the loader briefly so it cannot flash', () => {
         const { container, rerender } = render(
-          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[]}
+            turnState={turn(true)}
+          />
         );
 
         expect(loader(container)).not.toBeNull();
@@ -1684,6 +1782,7 @@ describe('ChatMessages', () => {
             messages={assistant([
               { type: 'text', text: 'H', state: 'streaming' },
             ])}
+            turnState={turn(false)}
           />
         );
 
@@ -1709,6 +1808,7 @@ describe('ChatMessages', () => {
               { type: 'step-start' },
               pendingTool,
             ])}
+            turnState={turn(true)}
           />
         );
 
@@ -1727,6 +1827,7 @@ describe('ChatMessages', () => {
               { ...pendingTool, state: 'output-available', output: {} },
               { type: 'text', text: 'Found it.', state: 'streaming' },
             ])}
+            turnState={turn(false)}
           />
         );
         act(() => {
@@ -1747,6 +1848,7 @@ describe('ChatMessages', () => {
               { type: 'text', text: 'Working on it.', state: 'done' },
               pendingTool,
             ])}
+            turnState={turn(true)}
           />
         );
 
@@ -1771,13 +1873,23 @@ describe('ChatMessages', () => {
         // The loader is still up when the turn ends, so the turn's end is what
         // hides it. That hide must not arm the delay for the next turn.
         const { container, rerender } = render(
-          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[]}
+            turnState={turn(true)}
+          />
         );
 
         expect(loader(container)).not.toBeNull();
 
         rerender(
-          <ChatMessages {...baseProps} status="ready" messages={[answer]} />
+          <ChatMessages
+            {...baseProps}
+            status="ready"
+            messages={[answer]}
+            turnState={turn(false, false)}
+          />
         );
 
         expect(loader(container)).toBeNull();
@@ -1786,6 +1898,7 @@ describe('ChatMessages', () => {
           <ChatMessages
             {...baseProps}
             status="submitted"
+            turnState={turn(true)}
             messages={[
               answer,
               {
@@ -1802,7 +1915,12 @@ describe('ChatMessages', () => {
 
       test('hides the loader as soon as the turn ends', () => {
         const { container, rerender } = render(
-          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[]}
+            turnState={turn(true)}
+          />
         );
 
         expect(loader(container)).not.toBeNull();
@@ -1812,6 +1930,7 @@ describe('ChatMessages', () => {
             {...baseProps}
             status="ready"
             messages={assistant([{ type: 'text', text: 'Done.' }])}
+            turnState={turn(false, false)}
           />
         );
 
@@ -1844,6 +1963,15 @@ describe('ChatMessages', () => {
       },
     ];
 
+    // What the widget would derive for `searchingMessages`: a tool call is
+    // streaming its input, so the turn is calling a tool and the loader shows.
+    const searchingTurnState = {
+      phase: 'calling-tool' as const,
+      isBusy: true,
+      lastMessage: searchingMessages[0],
+      showLoader: true,
+    };
+
     test('passes the turn context to a custom loader', () => {
       const LoaderComponent = jest.fn(() => <span>Loading</span>);
 
@@ -1852,6 +1980,7 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={searchingMessages}
+          turnState={searchingTurnState}
           loaderComponent={LoaderComponent}
         />
       );
@@ -1860,8 +1989,8 @@ describe('ChatMessages', () => {
         expect.objectContaining({
           context: expect.objectContaining({
             status: 'streaming',
-            phase: 'tool',
-            message: searchingMessages[0],
+            phase: 'calling-tool',
+            lastMessage: searchingMessages[0],
             messages: searchingMessages,
           }),
         }),
@@ -1875,9 +2004,10 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={searchingMessages}
+          turnState={searchingTurnState}
           translations={{
             loaderText: ({ phase }) =>
-              phase === 'tool' ? 'Searching…' : 'Thinking…',
+              phase === 'calling-tool' ? 'Searching…' : 'Thinking…',
           }}
         />
       );
@@ -1887,7 +2017,7 @@ describe('ChatMessages', () => {
 
     test('lets shouldShowLoader narrow the built-in decision', () => {
       const shouldShowLoader = jest.fn(({ defaultValue, phase }) => {
-        return defaultValue && phase !== 'tool';
+        return defaultValue && phase !== 'calling-tool';
       });
 
       const { container } = render(
@@ -1895,12 +2025,13 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={searchingMessages}
+          turnState={searchingTurnState}
           shouldShowLoader={shouldShowLoader}
         />
       );
 
       expect(shouldShowLoader).toHaveBeenCalledWith(
-        expect.objectContaining({ defaultValue: true, phase: 'tool' })
+        expect.objectContaining({ defaultValue: true, phase: 'calling-tool' })
       );
       expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
     });
@@ -1911,6 +2042,7 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={searchingMessages}
+          turnState={searchingTurnState}
           loaderPosition="message-inline"
         />
       );
@@ -1972,6 +2104,11 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={answered}
+          turnState={{
+            isBusy: true,
+            showLoader: false,
+            lastMessage: answered[0],
+          }}
           suggestionsLoading
           suggestionsElement={<span className="suggestions" />}
         />
@@ -1986,6 +2123,7 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={[{ role: 'assistant', id: '1', parts: [] }]}
+          turnState={{ isBusy: true, showLoader: false }}
           suggestionsLoading
           suggestionsElement={<span className="suggestions" />}
         />
@@ -2013,6 +2151,10 @@ describe('ChatMessages', () => {
       <ChatMessages
         messages={messages}
         status="submitted"
+        turnState={{
+          phase: 'awaiting-response',
+          activePart: { type: 'text', text: 'Working on it' },
+        }}
         indexUiState={{ query: 'shoes' }}
         setIndexUiState={setIndexUiState}
         tools={{}}
