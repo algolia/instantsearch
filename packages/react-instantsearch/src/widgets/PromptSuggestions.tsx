@@ -60,16 +60,16 @@ export function PromptSuggestions({
   transformItems,
   ...props
 }: PromptSuggestionsProps) {
+  const source = agentId !== undefined ? { agentId, transport } : { transport };
   const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
     usePromptSuggestions(
       {
-        agentId,
-        transport,
+        ...source,
         configurationId,
         transformHits,
         context,
         transformItems,
-      } as UsePromptSuggestionsProps,
+      },
       {
         $$widgetType: 'ais.promptSuggestions',
       }

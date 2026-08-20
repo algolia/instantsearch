@@ -285,6 +285,70 @@ export function createOptionsTests(
       );
     });
 
+    test('composes agent identity with a custom fetch transport', async () => {
+      const searchClient = Object.assign(
+        createResultsClient([{ objectID: '1', name: 'Product 1' }]),
+        { _ua: 'instantsearch.js (test)' }
+      );
+      const fetchMock = jest.fn(
+        (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+          Promise.resolve(
+            new Response(
+              JSON.stringify({ output: { suggestions: SUGGESTIONS } }),
+              {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+              }
+            )
+          )
+      );
+      const transport = {
+        fetch: fetchMock,
+        headers: {
+          'x-custom-header': 'custom-value',
+          'X-Algolia-Application-ID': 'custom-app',
+          'X-Algolia-API-Key': 'custom-key',
+          'X-Algolia-Agent': 'custom-agent',
+        },
+      };
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://appId.algolia.net/agent-studio/1/agents/test-agent-id/tasks?stream=true',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'x-custom-header': 'custom-value',
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-agent': 'instantsearch.js (test); tasks',
+            'Content-Type': 'application/json',
+          },
+        })
+      );
+    });
+
     test('sends only the provided context and skips auto-extraction', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
