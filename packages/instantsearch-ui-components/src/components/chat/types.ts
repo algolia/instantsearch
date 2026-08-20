@@ -700,24 +700,6 @@ export type ClientSideToolContext<
 };
 
 /**
- * A tool context minus the fields a `shouldRender` decision cannot see.
- *
- * `maximized` is per-flavor panel state and `isClearing` drives a fade-out
- * transition, so only a renderer knows them. `showLoader` is withheld for the
- * opposite reason: the answer partly *depends* on whether this tool renders,
- * so reading it here would be circular.
- *
- * Everything else is known outside the view, which is what lets decisions
- * typed against this be made where the messages and the tools live.
- */
-export type ClientSideToolStateContext<
-  TMessage extends ChatMessageBase = ChatMessageBase,
-> = Omit<
-  ClientSideToolContext<TMessage>,
-  'isClearing' | 'maximized' | 'showLoader'
->;
-
-/**
  * The root-level props tool layout components received before everything moved
  * under `context`. Still passed alongside `context` so components written
  * against the previous API keep working; they are removed in the next major.
@@ -773,22 +755,50 @@ export type ChatInsightsEventContext = {
   instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
 };
 
+/**
+ * The `context` a tool's `shouldRender` predicate receives: the shared
+ * `ChatComponentContext`, the tool part under consideration, and the chat
+ * message that part belongs to.
+ *
+ * Narrower than `ClientSideToolContext` on purpose. The predicate decides
+ * whether anything renders at all, and it also runs from the loader, which has
+ * none of the render-time callbacks a layout component is handed.
+ *
+ * Three fields of the shared context are withheld too, because the predicate
+ * runs where the messages and the tools live rather than in the view.
+ * `maximized` is per-flavor panel state and `isClearing` drives a fade-out
+ * transition, so only a renderer knows them; `showLoader` is withheld for the
+ * opposite reason — it partly *depends* on this predicate, so reading it here
+ * would be circular.
+ */
+export type ClientSideToolShouldRenderContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = Omit<
+  ChatComponentContext<TMessage>,
+  'isClearing' | 'maximized' | 'showLoader'
+> & {
+  /**
+   * The tool part being considered for rendering.
+   */
+  message: ChatToolMessage;
+  /**
+   * The chat message the tool part belongs to.
+   */
+  parentMessage: TMessage;
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   /**
-   * Whether this tool call renders anything for the turn it belongs to.
+   * Whether this tool call should render.
    *
-   * Receives the same `context` as `layoutComponent` minus `maximized` and
-   * `isClearing`, so the decision and the rendering read identical data while
-   * the connector — which owns neither of those — can still make the call.
-   *
-   * Returning `false` skips the part and keeps the loader up, since a part that
-   * renders nothing leaves the turn looking unfinished — that lets a tool stand
-   * aside for another one covering the same turn, as the search tool does for
-   * the richer display-results tool. Omitted means always render.
+   * Returning `false` skips the part entirely and keeps the loader visible, so
+   * a tool can defer to another one that renders the same turn — for example a
+   * search tool stepping aside for a richer display tool. Omitted means always
+   * render.
    */
-  shouldRender?: (context: ClientSideToolStateContext) => boolean;
+  shouldRender?: (context: ClientSideToolShouldRenderContext) => boolean;
   addToolResult: AddToolResult;
   /** Attached by the connector, one per chat; reaches `layoutComponent`. */
   records?: ChatRecordsStore;

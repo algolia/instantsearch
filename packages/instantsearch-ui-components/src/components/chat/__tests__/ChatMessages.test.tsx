@@ -16,7 +16,7 @@ import type {
   ChatComponentPropsWithContext,
   ClientSideTool,
   ClientSideToolComponentProps,
-  ClientSideToolStateContext,
+  ClientSideToolShouldRenderContext,
 } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
@@ -395,10 +395,15 @@ describe('ChatMessages', () => {
       expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
     });
 
-    test('decides from the same context the layout component receives', () => {
-      const shouldRender = jest.fn<boolean, [ClientSideToolStateContext]>(
-        () => true
-      );
+    // The predicate also runs from the connector, which has neither the panel
+    // state nor the render-time callbacks a layout component is handed. So it
+    // sees the shared turn state plus the part and its message, and nothing a
+    // renderer would have to supply.
+    test('decides from the turn state, the part and its message', () => {
+      const shouldRender = jest.fn<
+        boolean,
+        [ClientSideToolShouldRenderContext]
+      >(() => true);
       const layoutComponent = jest.fn<
         JSX.Element,
         [ClientSideToolComponentProps]
@@ -420,16 +425,28 @@ describe('ChatMessages', () => {
         />
       );
 
-      const expected = expect.objectContaining({
-        status: 'streaming',
-        message: toolMessage.parts[0],
-        parentMessage: toolMessage,
-        indexUiState,
-      });
+      const context = shouldRender.mock.calls[0][0];
 
-      expect(shouldRender.mock.calls[0][0]).toEqual(expected);
-      expect(layoutComponent.mock.calls[0][0]).toEqual(
-        expect.objectContaining({ context: expected })
+      expect(context).toEqual(
+        expect.objectContaining({
+          status: 'streaming',
+          phase: 'calling-tool',
+          message: toolMessage.parts[0],
+          parentMessage: toolMessage,
+        })
+      );
+      expect(context).not.toHaveProperty('indexUiState');
+      expect(context).not.toHaveProperty('addToolResult');
+
+      // The layout component still gets the render-time half on top.
+      expect(layoutComponent.mock.calls[0][0].context).toEqual(
+        expect.objectContaining({
+          status: 'streaming',
+          phase: 'calling-tool',
+          message: toolMessage.parts[0],
+          parentMessage: toolMessage,
+          indexUiState,
+        })
       );
     });
   });

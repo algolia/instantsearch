@@ -50,6 +50,7 @@ import type {
   ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
+  ClientSideToolShouldRenderContext,
   ChatMessageErrorProps,
   ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
@@ -60,7 +61,6 @@ import type {
   ChatPromptTranslations,
   ChatStatus,
   ClientSideToolComponentProps,
-  ClientSideToolStateContext,
   ClientSideTools,
   RecordWithObjectID,
   UserClientSideTool,
@@ -88,16 +88,14 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
 
 /**
  * Whether the search tool renders its own results, i.e. the agent did not hand
- * the turn over to the richer display-results tool. Decided per turn by the
- * agent and recorded on the message.
+ * the turn to the display-results tool. Set on the message by the backend.
  */
-function shouldRenderSearchResults(context: ClientSideToolStateContext) {
+function isDisplayResultsDisabled({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) {
   return (
-    (
-      context.parentMessage.metadata as
-        | { displayResultsEnabled?: boolean }
-        | undefined
-    )?.displayResultsEnabled !== true
+    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
   );
 }
 
@@ -155,7 +153,9 @@ function createDefaultTools<
   return {
     [SearchIndexToolType]: {
       ...createCarouselTool(true, templates, getSearchPageURL),
-      shouldRender: shouldRenderSearchResults,
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
     },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
@@ -676,9 +676,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
       let widgetTool = tools[key];
 
-      // Compatibility shim with Algolia MCP Server search tool
-      if (!widgetTool && key.startsWith(`${SearchIndexToolType}_`)) {
-        widgetTool = tools[SearchIndexToolType];
+      // Compatibility shim with tool names suffixed by the index name, as the
+      // Algolia MCP Server does (`algolia_search_index_products`).
+      if (!widgetTool) {
+        const prefixedKey = Object.keys(tools).find((toolKey) =>
+          key.startsWith(`${toolKey}_`)
+        );
+        if (prefixedKey) {
+          widgetTool = tools[prefixedKey];
+        }
       }
 
       let layoutComponent:

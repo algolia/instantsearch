@@ -473,6 +473,18 @@ export function createChatMessageComponent({
           | MessageScopedClientSideTool
           | undefined;
 
+        // Asked before the state and layout checks below: a tool that stands
+        // aside for the turn renders nothing regardless of its own progress.
+        if (
+          tool?.shouldRender?.({
+            ...context,
+            message: part as ChatToolMessage,
+            parentMessage: message,
+          }) === false
+        ) {
+          return null;
+        }
+
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
@@ -488,12 +500,6 @@ export function createChatMessageComponent({
               getFallbackRecords,
             }),
           };
-
-          // Asked before the state and layout checks below: a tool that stands
-          // aside for the turn renders nothing regardless of its own progress.
-          if (tool.shouldRender?.(toolContext) === false) {
-            return null;
-          }
 
           if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;

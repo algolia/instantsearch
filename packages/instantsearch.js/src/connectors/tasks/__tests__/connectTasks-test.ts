@@ -6,9 +6,10 @@ import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createInitOptions } from '../../../../test/createWidget';
-import connectTasks from '../connectTasks';
+import { connectTasks } from '../../index';
 
 import type { TasksConnectorParams } from '../connectTasks';
+import type { TaskTransport } from 'instantsearch.js/es/lib/tasks';
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -245,6 +246,277 @@ describe('connectTasks', () => {
       const [[url, request]] = (global.fetch as jest.Mock).mock.calls;
       expect(url).toContain('https://custom.test/tasks');
       expect(request.headers).toMatchObject({ 'x-custom': '1' });
+    });
+
+    it('preserves body-only request preparation when spreading its argument', async () => {
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() => Promise.resolve(jsonResponse({ output: { ok: true } })));
+      const transport: TaskTransport = {
+        api: 'https://custom.test/tasks',
+        fetch: customFetch,
+        prepareSendMessagesRequest: (body) => ({
+          body: { ...body, locale: 'en' },
+        }),
+      };
+      const { lastState } = init({
+        transport,
+        task: 'generate',
+        stream: false,
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toEqual({
+        ok: true,
+      });
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith('https://custom.test/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'generate',
+          input: { query: 'shoes' },
+          locale: 'en',
+        }),
+      });
+    });
+
+    it('serializes in-place body preparation assignments to reserved field names', async () => {
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() => Promise.resolve(jsonResponse({ output: { ok: true } })));
+      const transport: TaskTransport = {
+        api: 'https://custom.test/tasks',
+        fetch: customFetch,
+        prepareSendMessagesRequest: (body) => {
+          body.locale = 'en';
+          body.stream = 'payload-stream';
+          body.headers = { audience: 'internal' };
+          body.body = { source: 'suggestions' };
+          return { body };
+        },
+      };
+      const { lastState } = init({
+        transport,
+        task: 'generate',
+        stream: false,
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toEqual({
+        ok: true,
+      });
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith('https://custom.test/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'generate',
+          input: { query: 'shoes' },
+          locale: 'en',
+          stream: 'payload-stream',
+          headers: { audience: 'internal' },
+          body: { source: 'suggestions' },
+        }),
+      });
+    });
+
+    it('composes agent defaults with explicit transport options', async () => {
+      const customFetch = jest.fn(() =>
+        Promise.resolve(jsonResponse({ output: { ok: true } }))
+      ) as unknown as typeof fetch;
+      const prepareSendMessagesRequest = jest.fn(
+        (request: {
+          task: string;
+          input: Record<string, unknown>;
+          stream: boolean;
+          body: Record<string, unknown> | undefined;
+          credentials: RequestCredentials | undefined;
+          headers: HeadersInit | undefined;
+          api: string;
+        }) => ({
+          body: {
+            task: request.task,
+            input: request.input,
+            ...request.body,
+            prepared: true,
+          },
+          headers: {
+            'x-prepared': 'yes',
+            'x-algolia-application-id': 'spoofed-app',
+          },
+        })
+      );
+      const { lastState } = init({
+        agentId: 'my-agent',
+        transport: {
+          api: 'https://custom.test/tasks',
+          credentials: 'include',
+          headers: { 'x-custom': '1' },
+          body: { locale: 'en' },
+          fetch: customFetch,
+          prepareSendMessagesRequest,
+        },
+        task: 'generate',
+        stream: false,
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toEqual({
+        ok: true,
+      });
+
+      expect(prepareSendMessagesRequest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          task: 'generate',
+          input: { query: 'shoes' },
+          stream: false,
+          body: { locale: 'en' },
+          credentials: 'include',
+          api: 'https://custom.test/tasks',
+          headers: expect.objectContaining({
+            'x-custom': '1',
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+          }),
+        })
+      );
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith(
+        'https://custom.test/tasks',
+        expect.objectContaining({
+          credentials: 'include',
+          headers: {
+            'x-prepared': 'yes',
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'Content-Type': 'application/json',
+          },
+        })
+      );
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('preserves an error thrown by a custom fetch', async () => {
+      class TaskRequestError extends Error {
+        constructor(
+          message: string,
+          readonly code: string,
+          readonly details: { category: string }
+        ) {
+          super(message);
+        }
+      }
+
+      const networkFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              message: 'Task request blocked',
+              code: 'TASK_BLOCKED',
+              details: { category: 'restricted_content' },
+            }),
+            { status: 422, headers: { 'Content-Type': 'application/json' } }
+          )
+        )
+      );
+      let requestError: TaskRequestError | undefined;
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(async (...args) => {
+        const response = await networkFetch(...args);
+        const body: {
+          message: string;
+          code: string;
+          details: { category: string };
+        } = await response.json();
+        requestError = new TaskRequestError(
+          body.message,
+          body.code,
+          body.details
+        );
+        throw requestError;
+      });
+      const prepareSendMessagesRequest = jest.fn(
+        (request: {
+          task: string;
+          input: Record<string, unknown>;
+          stream: boolean;
+          body: Record<string, unknown> | undefined;
+          credentials: RequestCredentials | undefined;
+          headers: HeadersInit | undefined;
+          api: string;
+        }) => ({
+          body: {
+            task: request.task,
+            input: request.input,
+            ...request.body,
+            configuration: { name: 'preview' },
+          },
+        })
+      );
+      const { lastState } = init({
+        transport: {
+          api: 'https://custom.test/tasks',
+          headers: { 'x-custom': '1' },
+          fetch: customFetch,
+          prepareSendMessagesRequest,
+        },
+        task: 'generate_suggestions',
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toBe(
+        undefined
+      );
+
+      expect(lastState().error).toBe(requestError);
+      expect(lastState().error).toMatchObject({
+        message: 'Task request blocked',
+        code: 'TASK_BLOCKED',
+        details: { category: 'restricted_content' },
+      });
+      const preparedRequest = prepareSendMessagesRequest.mock.calls[0][0];
+      expect({
+        task: preparedRequest.task,
+        input: preparedRequest.input,
+        stream: preparedRequest.stream,
+        body: preparedRequest.body,
+        credentials: preparedRequest.credentials,
+        headers: preparedRequest.headers,
+        api: preparedRequest.api,
+      }).toEqual({
+        task: 'generate_suggestions',
+        input: { query: 'shoes' },
+        stream: true,
+        body: undefined,
+        credentials: undefined,
+        headers: { 'x-custom': '1' },
+        api: 'https://custom.test/tasks',
+      });
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(networkFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith(
+        'https://custom.test/tasks?stream=true',
+        {
+          method: 'POST',
+          credentials: undefined,
+          headers: {
+            'x-custom': '1',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            task: 'generate_suggestions',
+            input: { query: 'shoes' },
+            configuration: { name: 'preview' },
+          }),
+        }
+      );
+      expect(global.fetch).not.toHaveBeenCalled();
     });
   });
 

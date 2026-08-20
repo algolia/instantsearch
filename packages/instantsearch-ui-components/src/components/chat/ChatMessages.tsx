@@ -2,8 +2,10 @@
 
 import { cx } from '../../lib';
 import {
+  findTool,
   getTextContent,
   hasTextContent,
+  isPartTool,
   isStatusBusy,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
@@ -584,6 +586,15 @@ export function createChatMessagesComponent({
     const showReasoning = messageProps?.showReasoning;
     const parseMarkdown = messageProps?.parseMarkdown;
     const textComponent = messageProps?.textComponent;
+    // A completed row is memoized against its own message, but `shouldRender`
+    // reads the whole `context`: a predicate can hide an older tool result once a
+    // newer message arrives. Track the verdicts themselves rather than
+    // `context.messages`, so the row re-renders exactly when one flips instead of
+    // on every streaming delta.
+    const shouldRenderVerdicts = getShouldRenderVerdicts(
+      props.context,
+      props.message
+    );
     // Custom text components receive the conversation, so their completed rows
     // must update with it. Keep the default renderer's streaming optimization.
     const textComponentMessages = textComponent
@@ -618,6 +629,7 @@ export function createChatMessagesComponent({
         props.message,
         props.isCurrentMessage,
         props.status,
+        shouldRenderVerdicts,
         props.context.maximized,
         props.context.open,
         instantSearchStatus,
@@ -917,3 +929,35 @@ export function createChatMessagesComponent({
     );
   };
 }
+
+/**
+ * A stable signature of every `shouldRender` verdict in a message, so a memoized
+ * row can be invalidated when a verdict changes. `undefined` when no tool part
+ * in the message declares the predicate.
+ */
+const getShouldRenderVerdicts = <TMessage extends ChatMessageBase>(
+  context: ChatComponentContext<TMessage>,
+  message: TMessage
+): string | undefined => {
+  let verdicts: string | undefined;
+
+  message.parts?.forEach((part, index) => {
+    if (!isPartTool(part)) {
+      return;
+    }
+
+    const shouldRender = findTool(part.type, context.tools)?.shouldRender;
+
+    if (!shouldRender) {
+      return;
+    }
+
+    verdicts = `${verdicts ?? ''}${index}:${shouldRender({
+      ...context,
+      message: part,
+      parentMessage: message,
+    })};`;
+  });
+
+  return verdicts;
+};

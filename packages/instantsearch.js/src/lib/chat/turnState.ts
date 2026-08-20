@@ -1,26 +1,19 @@
-import {
-  createClientSideToolContextExtras,
-  findTool,
-} from 'instantsearch-ui-components';
+import { findTool } from 'instantsearch-ui-components';
 
 import type { AbstractChat, UIMessage } from '../ai-lite';
 import type {
   ChatMessageBase,
-  ChatRecordsStore,
   ChatToolMessage,
   ChatTurnState,
+  ClientSideTool,
   ClientSideTools,
-  ClientSideToolStateContext,
-  MessageScopedClientSideTool,
+  ClientSideToolShouldRenderContext,
 } from 'instantsearch-ui-components';
 
 type ChatTurnStateOptions<TUiMessage extends UIMessage> = {
   chat: AbstractChat<TUiMessage>;
   tools: ClientSideTools;
   showReasoning: boolean;
-  indexUiState: object;
-  setIndexUiState: (state: object) => void;
-  getFallbackRecords: () => ChatRecordsStore;
   onReload: (messageId?: string) => void;
   onClose: () => void;
   onNewConversation?: () => void;
@@ -66,9 +59,6 @@ function getShowLoader<TUiMessage extends UIMessage>({
   chat,
   tools,
   showReasoning,
-  indexUiState,
-  setIndexUiState,
-  getFallbackRecords,
   onReload,
   onClose,
   onNewConversation,
@@ -99,17 +89,16 @@ function getShowLoader<TUiMessage extends UIMessage>({
   // nothing must not be the thing that decides the loader is done.
   const lastPart = chat.lastProgressPart;
   const tool = lastPart
-    ? (findTool(lastPart.type, tools) as
-        | MessageScopedClientSideTool
-        | undefined)
+    ? findTool<ClientSideTool>(lastPart.type, tools)
     : undefined;
 
   // A part its tool declines to render leaves nothing on screen, so the turn
   // still reads as in progress: keep the loader up rather than letting a
   // settled-but-invisible part terminate it. Building the context is only
-  // worth it for a tool that actually declares an opinion.
+  // worth it for a tool that actually declares an opinion. It is the same
+  // `context` the renderer passes, minus the three fields only a view knows.
   if (tool?.shouldRender && lastPart && lastMessage) {
-    const context: ClientSideToolStateContext<ChatMessageBase> = {
+    const context: ClientSideToolShouldRenderContext<ChatMessageBase> = {
       messages: chat.messages,
       status: chat.status,
       phase,
@@ -121,21 +110,15 @@ function getShowLoader<TUiMessage extends UIMessage>({
       lastMessage,
       tools,
       sendMessage:
-        chat.sendMessage as ClientSideToolStateContext<ChatMessageBase>['sendMessage'],
+        chat.sendMessage as ClientSideToolShouldRenderContext<ChatMessageBase>['sendMessage'],
       regenerate: chat.regenerate,
       stop: chat.stop,
       setInput,
       onReload,
       onNewConversation,
       onClose,
-      ...createClientSideToolContextExtras<ChatMessageBase>({
-        tool,
-        parentMessage: lastMessage,
-        part: lastPart as ChatToolMessage,
-        indexUiState,
-        setIndexUiState,
-        getFallbackRecords,
-      }),
+      message: lastPart as ChatToolMessage,
+      parentMessage: lastMessage,
     };
 
     if (tool.shouldRender(context) === false) {

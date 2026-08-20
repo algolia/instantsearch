@@ -1,4 +1,6 @@
-import { createTaskRunner, resolveEndpoint } from '../../lib/tasks';
+import { createTaskRunner } from '../../lib/tasks';
+// This connector-only helper is intentionally excluded from public declarations.
+import { createTaskTransport } from '../../lib/tasks/endpoint';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -7,7 +9,7 @@ import {
   noop,
 } from '../../lib/utils';
 
-import type { TaskRunner, TaskTransport } from '../../lib/tasks';
+import type { TaskRunner, TaskTransportOptions } from '../../lib/tasks';
 import type { Renderer, Unmounter, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -51,10 +53,10 @@ export type TasksRenderState<TOutput = unknown> = {
 export type TasksSource =
   | {
       agentId: string;
-      transport?: never;
+      transport?: TaskTransportOptions;
     }
   | {
-      transport: TaskTransport;
+      transport: TaskTransportOptions;
       agentId?: never;
     };
 
@@ -178,16 +180,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
 
-        if (transport) {
-          const resolved = resolveEndpoint({ transport });
-          runner = createTaskRunner({
-            endpoint: resolved.endpoint,
-            headers: resolved.headers,
-            task,
-            stream,
-            prepareRequest: resolved.prepareSendMessagesRequest,
-          });
-        } else {
+        if (agentId) {
           const [appId, apiKey] = getAppIdAndApiKey(
             instantSearchInstance.client
           );
@@ -200,15 +193,21 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
             );
           }
 
-          const resolved = resolveEndpoint({
+          const taskTransport = createTaskTransport({
+            transport,
             appId,
             apiKey,
             agentId,
             algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
           });
           runner = createTaskRunner({
-            endpoint: resolved.endpoint,
-            headers: resolved.headers,
+            transport: taskTransport,
+            task,
+            stream,
+          });
+        } else {
+          runner = createTaskRunner({
+            transport: createTaskTransport({ transport }),
             task,
             stream,
           });

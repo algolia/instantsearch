@@ -1,13 +1,14 @@
 import {
   collectChatRecords,
   createChatRecordsStore,
+  findTool,
 } from 'instantsearch-ui-components';
 
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat, getChatTurnState, SearchIndexToolType } from '../../lib/chat';
+import { Chat, getChatTurnState } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -507,14 +508,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // Compatibility shim with Algolia MCP Server search tool, which suffixes
-    // the tool name with the index name (`searchIndex_products`).
-    const resolveTool = (toolName: string) =>
-      tools[toolName] ||
-      (toolName.startsWith(`${SearchIndexToolType}_`)
-        ? tools[SearchIndexToolType]
-        : undefined);
-
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
@@ -782,12 +775,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         sendAutomaticallyWhen,
         transport,
         shouldRepairToolInput(toolName) {
-          const tool = resolveTool(toolName);
+          const tool = findTool(toolName, tools);
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
         resolveCancelledToolOutput({ toolName, toolCallId, input }) {
-          const cancelOutput = resolveTool(toolName)?.cancelOutput;
+          const cancelOutput = findTool(toolName, tools)?.cancelOutput;
           if (!cancelOutput) return undefined;
 
           try {
@@ -803,7 +796,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         },
         onToolCall: (({ toolCall }, submitToolResult) => {
-          const tool = resolveTool(toolCall.toolName);
+          const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
             if (__DEV__) {
@@ -1066,10 +1059,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           chat: _chatInstance,
           tools: toolsWithAddToolResult,
           showReasoning,
-          indexUiState:
-            instantSearchInstance.getUiState()[parent.getIndexId()] || {},
-          setIndexUiState: parent.setIndexUiState.bind(parent),
-          getFallbackRecords: () => records,
           open,
           setInput,
           onReload: (messageId?: string) =>

@@ -1,7 +1,6 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
-import { createChatRecordsStore } from 'instantsearch-ui-components';
 
 import { AbstractChat } from '../../ai-lite';
 import { getChatTurnState } from '../turnState';
@@ -64,9 +63,6 @@ function turnState(
     chat,
     tools,
     showReasoning,
-    indexUiState: {},
-    setIndexUiState: jest.fn(),
-    getFallbackRecords: () => createChatRecordsStore(),
     onReload: jest.fn(),
     onClose: jest.fn(),
     onNewConversation: jest.fn(),

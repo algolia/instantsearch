@@ -34,9 +34,9 @@ export {
 
 import type {
   Pragma,
+  ClientSideToolShouldRenderContext,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
-  ClientSideToolStateContext,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -63,7 +63,9 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   return {
     [SearchIndexToolType]: {
       ...createCarouselTool(true, itemComponent, getSearchPageURL),
-      shouldRender: shouldRenderSearchResults,
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
     },
     [RecommendToolType]: createCarouselTool(
       false,
@@ -79,16 +81,14 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
 
 /**
  * Whether the search tool renders its own results, i.e. the agent did not hand
- * the turn over to the richer display-results tool. Decided per turn by the
- * agent and recorded on the message.
+ * the turn to the display-results tool. Set on the message by the backend.
  */
-function shouldRenderSearchResults(context: ClientSideToolStateContext) {
+function isDisplayResultsDisabled({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) {
   return (
-    (
-      context.parentMessage.metadata as
-        | { displayResultsEnabled?: boolean }
-        | undefined
-    )?.displayResultsEnabled !== true
+    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
   );
 }
 
