@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.45.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.44.1...react-instantsearch@7.45.0) (2026-08-19)
+
+
+### Features
+
+* **chat:** consolidate overridable-component props into a single `context` object ([#7123](https://github.com/algolia/instantsearch/issues/7123)) ([33eae92](https://github.com/algolia/instantsearch/commit/33eae92d39acda73b923998551f6b1672c9b3392))
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
 ## [7.44.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.44.0...react-instantsearch@7.44.1) (2026-08-13)
 
 
