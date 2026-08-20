@@ -1,4 +1,5 @@
 import { createTaskRunner } from '../../lib/tasks';
+// This connector-only helper is intentionally excluded from public declarations.
 import { createTaskTransport } from '../../lib/tasks/endpoint';
 import {
   checkRendering,

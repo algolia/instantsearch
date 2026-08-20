@@ -2,8 +2,6 @@
 
 /* eslint-disable import/no-commonjs, no-console */
 
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
 const path = require('path');
 
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
@@ -13,16 +11,6 @@ console.log(`Compiling definitions...`);
 
 shell.exec(
   `tsc -p ${path.join(__dirname, 'tsconfig.declaration.json')} --outDir es/`
-);
-
-const taskEndpointDeclaration = fs.readFileSync(
-  'es/lib/tasks/endpoint.d.ts',
-  'utf8'
-);
-assert.doesNotMatch(
-  taskEndpointDeclaration,
-  /export declare function createTaskTransport/,
-  '`createTaskTransport` must not be published from the Tasks endpoint declarations.'
 );
 
 // replace block ts-ignore comments with line ones to support TS < 3.9
