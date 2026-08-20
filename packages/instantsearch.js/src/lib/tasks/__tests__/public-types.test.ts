@@ -125,7 +125,9 @@ describe('tasks public types', () => {
   });
 
   it('keeps published task runner option fields readable', () => {
-    function readOptions(options: TaskRunnerOptions) {
+    type ReflectedTaskRunnerOptions = Parameters<typeof createTaskRunner>[0];
+
+    function readOptions(options: ReflectedTaskRunnerOptions) {
       const endpoint: string = options.endpoint;
       const headers: Record<string, string> = options.headers;
       const prepareRequest: TaskPrepareRequest | undefined =
@@ -135,7 +137,7 @@ describe('tasks public types', () => {
     }
 
     const prepareRequest: TaskPrepareRequest = (body) => ({ body });
-    const options: TaskRunnerOptions = {
+    const options: ReflectedTaskRunnerOptions = {
       endpoint: 'https://example.test/tasks',
       headers: { 'x-custom': '1' },
       task: 'recommend',

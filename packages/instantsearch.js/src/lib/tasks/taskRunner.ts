@@ -23,6 +23,12 @@ export type TaskRunner = {
   ) => Promise<unknown>;
 };
 
+export function createTaskRunner(options: {
+  transport: DefaultTaskTransport;
+  task: string;
+  stream?: boolean;
+}): TaskRunner;
+export function createTaskRunner(options: TaskRunnerOptions): TaskRunner;
 export function createTaskRunner(
   options:
     | TaskRunnerOptions
