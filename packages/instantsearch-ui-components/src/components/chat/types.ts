@@ -704,9 +704,40 @@ export type ChatInsightsEventContext = {
   instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
 };
 
+/**
+ * The `context` a tool's `shouldRender` predicate receives: the shared
+ * `ChatComponentContext`, the tool part under consideration, and the chat
+ * message that part belongs to.
+ *
+ * Narrower than `ClientSideToolContext` on purpose. The predicate decides
+ * whether anything renders at all, and it also runs from the loader, which has
+ * none of the render-time callbacks a layout component is handed.
+ */
+export type ClientSideToolShouldRenderContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage> & {
+  /**
+   * The tool part being considered for rendering.
+   */
+  message: ChatToolMessage;
+  /**
+   * The chat message the tool part belongs to.
+   */
+  parentMessage: TMessage;
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
+  /**
+   * Whether this tool call should render.
+   *
+   * Returning `false` skips the part entirely and keeps the loader visible, so
+   * a tool can defer to another one that renders the same turn — for example a
+   * search tool stepping aside for a richer display tool. Omitted means always
+   * render.
+   */
+  shouldRender?: (context: ClientSideToolShouldRenderContext) => boolean;
   addToolResult: AddToolResult;
   /** Attached by the connector, one per chat; reaches `layoutComponent`. */
   records?: ChatRecordsStore;
