@@ -1634,6 +1634,25 @@ describe('ChatMessages', () => {
       );
     });
 
+    test('keeps aria-busy set while a suppressed loader hides progress', () => {
+      // The log keeps updating even when the loader is overridden away, so the
+      // busy state follows the turn rather than the loader.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([pendingTool])}
+          shouldShowLoader={() => false}
+        />
+      );
+
+      expect(loader(container)).toBeNull();
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
+    });
+
     describe('with timers', () => {
       beforeEach(() => {
         jest.useFakeTimers();
@@ -1843,6 +1862,37 @@ describe('ChatMessages', () => {
         ],
       },
     ];
+
+    test('leaves the loader message unset while the turn has none', () => {
+      const LoaderComponent = jest.fn(() => <span>Loading</span>);
+
+      // `submitted` still shows the user's own message, which the loader does
+      // not belong to.
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[
+            {
+              role: 'user' as const,
+              id: '1',
+              parts: [{ type: 'text' as const, text: 'Hi' }],
+            },
+          ]}
+          loaderComponent={LoaderComponent}
+        />
+      );
+
+      expect(LoaderComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            phase: 'submitted',
+            message: undefined,
+          }),
+        }),
+        {}
+      );
+    });
 
     test('passes the turn context to a custom loader', () => {
       const LoaderComponent = jest.fn(() => <span>Loading</span>);

@@ -129,7 +129,21 @@ export type ChatMessagesProps<
    * Custom message renderer
    */
   messageComponent?: (
-    props: ChatComponentPropsWithContext<{ message: TMessage }, TMessage>
+    props: ChatComponentPropsWithContext<
+      {
+        message: TMessage;
+        /**
+         * The loader, on the row hosting it while `loaderPosition` is
+         * `'message-inline'`. Render it to keep the loader inside the message.
+         */
+        loaderElement?: VNode;
+        /**
+         * The prompt suggestions, on the row they belong to.
+         */
+        suggestionsElement?: VNode;
+      },
+      TMessage
+    >
   ) => JSX.Element;
   /**
    * Custom loader component. Receives the turn context alongside the resolved
@@ -488,8 +502,9 @@ export function createChatMessagesComponent({
     showDelay: number;
     minDuration: number;
   }) {
-    // Derived during render, not committed from an effect: an effect-driven
-    // show lands a frame late. State is only here to wake on a deadline.
+    // The visibility is derived during render rather than committed from an
+    // effect, because an effect-driven show lands a frame late. State is only
+    // here to wake on a deadline.
     const [, scheduleRerender] = useState(0);
     const stateRef = useRef({
       isVisible: false,
@@ -498,45 +513,51 @@ export function createChatMessagesComponent({
       hasHiddenInTurn: false,
     });
 
-    const state = stateRef.current;
+    // Read-only during render. React can start a render and throw it away, so a
+    // render that wrote here would let a discarded pass decide a later one's
+    // timing — the next turn's first loader waiting out `showDelay` it never
+    // earned. Everything below is a local derivation; the commit happens in the
+    // effect, once the render is real.
+    const committed = stateRef.current;
     const now = Date.now();
 
-    if (!isTurnActive) {
-      state.hasHiddenInTurn = false;
-    }
+    const hasHiddenInTurn = isTurnActive ? committed.hasHiddenInTurn : false;
+    const pendingSince = isLoading ? committed.pendingSince || now : 0;
 
-    let isVisible = state.isVisible;
+    let isVisible = committed.isVisible;
 
     if (isLoading) {
-      state.pendingSince = state.pendingSince || now;
       // Only a loader coming *back* waits; the first one must be immediate.
-      const delay = state.hasHiddenInTurn ? showDelay : 0;
-      isVisible = now - state.pendingSince >= delay;
-    } else {
-      state.pendingSince = 0;
+      const delay = hasHiddenInTurn ? showDelay : 0;
+      isVisible = now - pendingSince >= delay;
+    } else if (isVisible) {
       // The minimum only applies while the turn is still running.
-      if (isVisible) {
-        isVisible = isTurnActive && now - state.shownAt < minDuration;
-      }
+      isVisible = isTurnActive && now - committed.shownAt < minDuration;
     }
 
-    if (isVisible && !state.isVisible) {
-      state.shownAt = now;
-    }
-    // Only a hide *within* the turn arms the delay. The turn ending hides the
-    // loader too, and arming on that would delay the next turn's first loader,
-    // which has to be immediate.
-    if (!isVisible && state.isVisible && isTurnActive) {
-      state.hasHiddenInTurn = true;
-    }
-    state.isVisible = isVisible;
+    const shownAt = isVisible && !committed.isVisible ? now : committed.shownAt;
 
     let deadline = 0;
     if (isLoading && !isVisible) {
-      deadline = state.pendingSince + showDelay;
+      deadline = pendingSince + showDelay;
     } else if (!isLoading && isVisible) {
-      deadline = state.shownAt + minDuration;
+      deadline = shownAt + minDuration;
     }
+
+    useEffect(() => {
+      // Only a hide *within* the turn arms the delay. The turn ending hides the
+      // loader too, and arming on that would delay the next turn's first
+      // loader, which has to be immediate.
+      if (!isTurnActive) {
+        committed.hasHiddenInTurn = false;
+      } else if (!isVisible && committed.isVisible) {
+        committed.hasHiddenInTurn = true;
+      }
+
+      committed.isVisible = isVisible;
+      committed.shownAt = shownAt;
+      committed.pendingSince = pendingSince;
+    });
 
     useEffect(() => {
       if (!deadline) {
@@ -736,6 +757,11 @@ export function createChatMessagesComponent({
       isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
     // it, so skip it entirely while the opt-in is off.
+    // The loader reports on the assistant's turn, so it only ever belongs to an
+    // assistant message. While `submitted` the last message is still the user's
+    // own, and the loader belongs to no message at all.
+    const loaderMessage =
+      lastMessage?.role === 'assistant' ? lastMessage : undefined;
     const hasActiveReasoning = showReasoning
       ? (lastMessage?.parts?.some((_, index, parts) =>
           isReasoningPartActive(parts, index)
@@ -766,8 +792,8 @@ export function createChatMessagesComponent({
     // needs, so its context extends the shared one.
     const loaderContext: ChatLoaderContext<TMessage> = {
       ...context,
-      phase: getLoaderPhase(status, lastMessage, showReasoning),
-      message: lastMessage,
+      phase: getLoaderPhase(status, loaderMessage, showReasoning),
+      message: loaderMessage,
     };
 
     const defaultShowLoader = getShowLoader(
@@ -780,7 +806,7 @@ export function createChatMessagesComponent({
       : defaultShowLoader;
     const showLoader = useLoaderVisibility({
       isLoading,
-      isTurnActive: status === 'submitted' || status === 'streaming',
+      isTurnActive: isProcessing,
       showDelay: loaderShowDelay,
       minDuration: loaderMinDuration,
     });
@@ -795,7 +821,7 @@ export function createChatMessagesComponent({
     // An inline loader needs an assistant message to live in; before the first
     // response part there is none, so it falls back to its own row.
     const isLoaderInline =
-      loaderPosition === 'message-inline' && lastMessage?.role === 'assistant';
+      loaderPosition === 'message-inline' && loaderMessage !== undefined;
     const loaderText =
       typeof translations.loaderText === 'function'
         ? translations.loaderText(loaderContext)
@@ -822,7 +848,7 @@ export function createChatMessagesComponent({
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-busy={showLoader ? 'true' : undefined}
+        aria-busy={isProcessing ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
