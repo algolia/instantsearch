@@ -1,3 +1,5 @@
+import { warn } from '../../warn';
+
 import { startsWith } from './startsWith';
 
 import type { ChatMessageBase } from '../../components';
@@ -97,13 +99,30 @@ export const findLastProgressPart = (
 
 const TOOL_PART_PREFIX = 'tool-';
 
+type ToolNameMatcher = {
+  matchesToolName?: (toolName: string) => boolean;
+};
+
 /**
  * Resolves the tool a message part belongs to, from either a part type
  * (`tool-algolia_search_index`) or a bare tool name.
  *
- * Generic over the tool shape so the renderer, the loader and the connector —
- * which hold different subsets of the tool contract — all resolve names the same
- * way.
+ * A tool registered under the exact name always wins. Failing that, only tools
+ * that opted in through `matchesToolName` can claim the name, which is how a
+ * server that derives the name it sends from the registered one is supported —
+ * the Algolia MCP Server exposes the search tool once per index and appends the
+ * index name (`algolia_search_index_products`).
+ *
+ * Claiming is explicit rather than inferred from the name because `a_b` is
+ * genuinely ambiguous between the tool `a_b` and the tool `a` addressing `b`.
+ * No naming rule tells those apart, so guessing picks the wrong tool for
+ * somebody: preferring the shorter key breaks `foo_bar` when `foo` is also
+ * registered, preferring the longer one breaks `search_index` on the `products`
+ * index when `search_index_products` is also registered.
+ *
+ * Generic over the tool shape so the renderer, the loader, the widget and the
+ * connector — which hold different subsets of the tool contract — all resolve
+ * names the same way.
  */
 export const findTool = <TTool>(
   partType: string,
@@ -117,22 +136,45 @@ export const findTool = <TTool>(
     return tools[toolName];
   }
 
-  // Compatibility shim for tool names suffixed by the index name, as the Algolia
-  // MCP Server does (`algolia_search_index_products`). The longest matching key
-  // wins, so registering both `foo` and `foo_bar` resolves `foo_bar_products` to
-  // `foo_bar` — otherwise the winner would depend on registration order.
-  let match: string | undefined;
+  const claimants = Object.keys(tools).filter((key) =>
+    Boolean(
+      (tools[key] as ToolNameMatcher | undefined)?.matchesToolName?.(toolName)
+    )
+  );
 
-  Object.keys(tools).forEach((key) => {
-    if (
-      startsWith(toolName, `${key}_`) &&
-      (match === undefined || key.length > match.length)
-    ) {
-      match = key;
+  if (claimants.length === 0) {
+    if (__DEV__) {
+      const prefixes = Object.keys(tools)
+        .filter((key) => startsWith(toolName, `${key}_`))
+        .sort();
+
+      warn(
+        prefixes.length === 0,
+        `No tool is registered for "${toolName}". The registered ${prefixes
+          .map((key) => `"${key}"`)
+          .join(
+            ', '
+          )} is a prefix of it, but a prefix alone doesn't resolve: declare \`matchesToolName\` on it to also handle "${toolName}".`
+      );
     }
-  });
 
-  return match === undefined ? undefined : tools[match];
+    return undefined;
+  }
+
+  // Sorted rather than first-found, so the winner never depends on the order
+  // tools were registered in: the most specific claim wins, ties by name.
+  claimants.sort((a, b) => b.length - a.length || (a < b ? -1 : 1));
+
+  if (__DEV__) {
+    warn(
+      claimants.length === 1,
+      `Multiple tools claim "${toolName}" through \`matchesToolName\`: ${claimants
+        .map((key) => `"${key}"`)
+        .join(', ')}. "${claimants[0]}" handles it.`
+    );
+  }
+
+  return tools[claimants[0]];
 };
 
 const FACET_KEY_PREFIX = 'facet_';

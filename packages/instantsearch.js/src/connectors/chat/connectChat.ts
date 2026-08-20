@@ -8,7 +8,11 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat } from '../../lib/chat';
+import {
+  Chat,
+  matchesSearchIndexToolName,
+  SearchIndexToolType,
+} from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -474,7 +478,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const {
       resume = false,
-      tools = {},
+      tools: tools_ = {},
       type = 'chat',
       persistence,
       context,
@@ -489,6 +493,24 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       persistence,
       'chat' in options
     );
+
+    // The Algolia MCP Server exposes the search tool once per index and names it
+    // after the index (`algolia_search_index_products`). That naming convention
+    // is Algolia's, so it's declared here rather than guessed by the resolver:
+    // `findTool` only lets a tool answer to a name it claims. An explicit
+    // `matchesToolName` wins, and so does a tool registered under the derived
+    // name itself.
+    const tools =
+      tools_[SearchIndexToolType] &&
+      tools_[SearchIndexToolType].matchesToolName === undefined
+        ? {
+            ...tools_,
+            [SearchIndexToolType]: {
+              ...tools_[SearchIndexToolType],
+              matchesToolName: matchesSearchIndexToolName,
+            },
+          }
+        : tools_;
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
