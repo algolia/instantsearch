@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.112.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.1...instantsearch.js@4.112.0) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** skip provider-executed tool calls when auto-continuing ([#7174](https://github.com/algolia/instantsearch/issues/7174)) ([0581e3d](https://github.com/algolia/instantsearch/commit/0581e3df6e8f743fcc9e0a27360b277ab8e2be3e)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880) [vercel/ai#9944](https://github.com/vercel/ai/issues/9944)
+* **chat:** stop resending server-executed tool turns ([#7173](https://github.com/algolia/instantsearch/issues/7173)) ([4a4c84a](https://github.com/algolia/instantsearch/commit/4a4c84abb1e286b1f0df1a120e60834ae71f99e9))
+* **chat:** warn on unmatched tool results ([#7168](https://github.com/algolia/instantsearch/issues/7168)) ([739161b](https://github.com/algolia/instantsearch/commit/739161b00644cf686bda3280744c255263d54751))
+
+
+### Features
+
+* **chat:** allow client side tool calls to cancel automatically if output not given before a new message ([#7162](https://github.com/algolia/instantsearch/issues/7162)) ([bdc5a5c](https://github.com/algolia/instantsearch/commit/bdc5a5cb17a1006146fcf86e57151881df2ed1d1))
+* **chat:** consolidate overridable-component props into a single `context` object ([#7123](https://github.com/algolia/instantsearch/issues/7123)) ([33eae92](https://github.com/algolia/instantsearch/commit/33eae92d39acda73b923998551f6b1672c9b3392))
+* **chat:** let the chat trigger open the chat with a message ([#7166](https://github.com/algolia/instantsearch/issues/7166)) ([39bc620](https://github.com/algolia/instantsearch/commit/39bc62057d27fbe73f6eb88aafdf35b49fcca1a4))
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
 ## [4.111.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.0...instantsearch.js@4.111.1) (2026-08-13)
 
 **Note:** Version bump only for package instantsearch.js
