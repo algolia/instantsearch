@@ -8,14 +8,16 @@ import {
   type ResolvedEndpoint,
   type TaskEndpoint,
   type TaskPrepareRequest,
+  type TaskRunnerOptions,
   type TaskTransport,
+  type TaskTransportOptions,
 } from 'instantsearch.js/es/lib/tasks';
 
 import type { TasksConnectorParams } from 'instantsearch.js/es/connectors/tasks/connectTasks';
 
 describe('tasks public types', () => {
   it('supports default, custom, prepared, and combined agent configuration', () => {
-    const transport: TaskTransport = {
+    const transport: TaskTransportOptions = {
       api: '/custom/tasks',
       credentials: () => Promise.resolve<RequestCredentials>('include'),
       headers: async () => new Headers({ 'x-custom': '1' }),
@@ -40,15 +42,45 @@ describe('tasks public types', () => {
       transport,
       task: 'generate',
     };
+    const releasedTransport: TaskTransport = {
+      api: '/custom/tasks',
+      prepareSendMessagesRequest: (body) => ({ body: { ...body } }),
+    };
+    const releasedPreparation: TasksConnectorParams = {
+      transport: releasedTransport,
+      task: 'generate',
+    };
+    // @ts-expect-error Rich options are resolved asynchronously by DefaultTaskTransport.
+    const endpointWithRichTransport: TaskEndpoint = { transport };
+    type ResolveEndpointOptions = Parameters<typeof resolveEndpoint>[0];
+    // @ts-expect-error Rich options are not accepted by the synchronous endpoint helper.
+    const resolvedRichTransport: ResolveEndpointOptions = { transport };
+    void endpointWithRichTransport;
+    void resolvedRichTransport;
 
-    expect([defaultTransport, customTransport, combined.transport]).toEqual([
+    expect([
+      defaultTransport,
+      customTransport,
+      combined.transport,
+      releasedPreparation.transport,
+    ]).toEqual([
       expect.any(DefaultTaskTransport),
       expect.any(DefaultTaskTransport),
       transport,
+      releasedTransport,
     ]);
   });
 
   it('preserves the published task helper surface', () => {
+    const endpointTransport: TaskTransport = {
+      api: 'https://example.test/tasks',
+    };
+    const transportEndpoint: TaskEndpoint = {
+      transport: endpointTransport,
+    };
+    const resolvedTransport = resolveEndpoint({
+      transport: endpointTransport,
+    });
     const prepareRequest: TaskPrepareRequest = (body) => ({
       body: { ...body, locale: 'en' },
     });
@@ -73,12 +105,21 @@ describe('tasks public types', () => {
       payload: buildTaskPayload(payloadOptions),
       stream: false,
     };
+    const runnerOptions: TaskRunnerOptions = {
+      endpoint: resolved.endpoint,
+      headers: resolved.headers,
+      task: 'recommend',
+      transport: undefined,
+    };
 
     expect(fetchOptions.payload).toEqual({
       task: 'recommend',
       input: { query: 'shoes' },
       locale: 'en',
     });
+    expect(transportEndpoint.transport).toBe(endpointTransport);
+    expect(resolvedTransport.endpoint).toBe('https://example.test/tasks');
+    void runnerOptions;
     expect(fetchTask).toEqual(expect.any(Function));
   });
 });

@@ -809,7 +809,16 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(prepare).toHaveBeenCalledTimes(1);
-      expect(prepare).toHaveBeenCalledWith({
+      const preparedRequest = prepare.mock.calls[0][0];
+      expect({
+        task: preparedRequest.task,
+        input: preparedRequest.input,
+        stream: preparedRequest.stream,
+        body: preparedRequest.body,
+        credentials: preparedRequest.credentials,
+        headers: preparedRequest.headers,
+        api: preparedRequest.api,
+      }).toEqual({
         task: 'prompt-suggestions',
         input: expect.any(Object),
         stream: true,

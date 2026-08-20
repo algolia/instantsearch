@@ -8,7 +8,7 @@ import {
   noop,
 } from '../../lib/utils';
 
-import type { TaskRunner, TaskTransport } from '../../lib/tasks';
+import type { TaskRunner, TaskTransportOptions } from '../../lib/tasks';
 import type { Renderer, Unmounter, Widget } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -52,10 +52,10 @@ export type TasksRenderState<TOutput = unknown> = {
 export type TasksSource =
   | {
       agentId: string;
-      transport?: TaskTransport;
+      transport?: TaskTransportOptions;
     }
   | {
-      transport: TaskTransport;
+      transport: TaskTransportOptions;
       agentId?: never;
     };
 

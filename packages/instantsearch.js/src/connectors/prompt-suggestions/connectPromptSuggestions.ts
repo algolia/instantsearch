@@ -8,7 +8,7 @@ import {
 } from '../../lib/utils';
 import connectTasks from '../tasks/connectTasks';
 
-import type { TaskTransport } from '../../lib/tasks';
+import type { TaskTransportOptions } from '../../lib/tasks';
 import type {
   Connector,
   DisposeOptions,
@@ -49,8 +49,8 @@ function buildSuggestionMessage(suggestion: string): string {
   return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
 }
 
-/** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
-export type PromptSuggestionsTransport = TaskTransport;
+/** Custom transport for the task request. Alias of the generic `TaskTransportOptions`, kept for API stability. */
+export type PromptSuggestionsTransport = TaskTransportOptions;
 
 /** Metadata passed to `transformItems`. */
 export type PromptSuggestionsTransformItemsMetadata = {

@@ -29,7 +29,7 @@ export type TaskPrepareSendMessagesRequest = (options: {
       api?: string;
     }>;
 
-export type TaskTransport = {
+export type TaskTransportOptions = {
   api?: string;
   credentials?: Resolvable<RequestCredentials>;
   headers?: Resolvable<Record<string, string> | Headers>;
@@ -83,6 +83,38 @@ function withStreamParam(url: string): string {
 
 function resolveStreamedOutput(data: unknown, previous: unknown): unknown {
   return typeof data === 'string' ? parsePartialJson(data, previous) : data;
+}
+
+function createTaskPreparationContext(
+  context: Parameters<TaskPrepareSendMessagesRequest>[0]
+): Parameters<TaskPrepareSendMessagesRequest>[0] {
+  type Context = Parameters<TaskPrepareSendMessagesRequest>[0];
+
+  function hideProperty<TKey extends keyof Context>(key: TKey) {
+    const value = context[key];
+    Object.defineProperty(context, key, {
+      configurable: true,
+      enumerable: false,
+      get: () => value,
+      set(nextValue: Context[TKey]) {
+        Reflect.deleteProperty(context, key);
+        Object.defineProperty(context, key, {
+          configurable: true,
+          enumerable: true,
+          value: nextValue,
+          writable: true,
+        });
+      },
+    });
+  }
+
+  // Rich metadata stays out of legacy body spreads until assigned as payload.
+  hideProperty('stream');
+  hideProperty('body');
+  hideProperty('credentials');
+  hideProperty('headers');
+  hideProperty('api');
+  return context;
 }
 
 function unwrap(envelope: unknown): unknown {
@@ -144,7 +176,7 @@ export class DefaultTaskTransport {
     body,
     fetch: customFetch,
     prepareSendMessagesRequest,
-  }: TaskTransport = {}) {
+  }: TaskTransportOptions = {}) {
     this.api = api;
     this.credentials = credentials;
     this.headers = headers;
@@ -187,15 +219,17 @@ export class DefaultTaskTransport {
       const preparedBody = resolvedBody ? { ...resolvedBody } : undefined;
       const preparePromise = this.prepareSendMessagesRequest
         ? Promise.resolve(
-            this.prepareSendMessagesRequest({
-              task,
-              input,
-              stream,
-              body: preparedBody,
-              credentials: resolvedCredentials,
-              headers: resolvedHeaders,
-              api: this.api,
-            })
+            this.prepareSendMessagesRequest(
+              createTaskPreparationContext({
+                task,
+                input,
+                stream,
+                body: preparedBody,
+                credentials: resolvedCredentials,
+                headers: resolvedHeaders,
+                api: this.api,
+              })
+            )
           )
         : Promise.resolve(null);
 

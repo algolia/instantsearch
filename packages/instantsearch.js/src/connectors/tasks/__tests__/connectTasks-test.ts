@@ -9,6 +9,7 @@ import { createInitOptions } from '../../../../test/createWidget';
 import { connectTasks } from '../../index';
 
 import type { TasksConnectorParams } from '../connectTasks';
+import type { TaskTransport } from 'instantsearch.js/es/lib/tasks';
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -247,6 +248,81 @@ describe('connectTasks', () => {
       expect(request.headers).toMatchObject({ 'x-custom': '1' });
     });
 
+    it('preserves body-only request preparation when spreading its argument', async () => {
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() => Promise.resolve(jsonResponse({ output: { ok: true } })));
+      const transport: TaskTransport = {
+        api: 'https://custom.test/tasks',
+        fetch: customFetch,
+        prepareSendMessagesRequest: (body) => ({
+          body: { ...body, locale: 'en' },
+        }),
+      };
+      const { lastState } = init({
+        transport,
+        task: 'generate',
+        stream: false,
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toEqual({
+        ok: true,
+      });
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith('https://custom.test/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'generate',
+          input: { query: 'shoes' },
+          locale: 'en',
+        }),
+      });
+    });
+
+    it('serializes in-place body preparation assignments to reserved field names', async () => {
+      const customFetch = jest.fn<
+        ReturnType<typeof fetch>,
+        Parameters<typeof fetch>
+      >(() => Promise.resolve(jsonResponse({ output: { ok: true } })));
+      const transport: TaskTransport = {
+        api: 'https://custom.test/tasks',
+        fetch: customFetch,
+        prepareSendMessagesRequest: (body) => {
+          body.locale = 'en';
+          body.stream = 'payload-stream';
+          body.headers = { audience: 'internal' };
+          body.body = { source: 'suggestions' };
+          return { body };
+        },
+      };
+      const { lastState } = init({
+        transport,
+        task: 'generate',
+        stream: false,
+      });
+
+      await expect(lastState().submit({ query: 'shoes' })).resolves.toEqual({
+        ok: true,
+      });
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith('https://custom.test/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: 'generate',
+          input: { query: 'shoes' },
+          locale: 'en',
+          stream: 'payload-stream',
+          headers: { audience: 'internal' },
+          body: { source: 'suggestions' },
+        }),
+      });
+    });
+
     it('composes agent defaults with explicit transport options', async () => {
       const customFetch = jest.fn(() =>
         Promise.resolve(jsonResponse({ output: { ok: true } }))
@@ -404,7 +480,16 @@ describe('connectTasks', () => {
         code: 'TASK_BLOCKED',
         details: { category: 'restricted_content' },
       });
-      expect(prepareSendMessagesRequest).toHaveBeenCalledWith({
+      const preparedRequest = prepareSendMessagesRequest.mock.calls[0][0];
+      expect({
+        task: preparedRequest.task,
+        input: preparedRequest.input,
+        stream: preparedRequest.stream,
+        body: preparedRequest.body,
+        credentials: preparedRequest.credentials,
+        headers: preparedRequest.headers,
+        api: preparedRequest.api,
+      }).toEqual({
         task: 'generate_suggestions',
         input: { query: 'shoes' },
         stream: true,

@@ -4,7 +4,7 @@ import { DefaultTaskTransport } from './transport';
 
 import type {
   TaskPrepareSendMessagesRequest,
-  TaskTransport,
+  TaskTransportOptions,
 } from './transport';
 
 export type TaskCredentials = {
@@ -17,7 +17,7 @@ export type TaskPrepareRequest = (body: Record<string, unknown>) => {
   body: Record<string, unknown>;
 };
 
-type TaskEndpointTransport = {
+export type TaskTransport = {
   api: string;
   headers?: Record<string, string>;
   fetch?: typeof fetch;
@@ -25,7 +25,7 @@ type TaskEndpointTransport = {
 };
 
 export type TaskEndpoint =
-  | { transport: TaskEndpointTransport; credentials?: never }
+  | { transport: TaskTransport; credentials?: never }
   | { transport?: never; credentials: TaskCredentials };
 
 export type ResolvedEndpoint = {
@@ -46,7 +46,7 @@ function buildEndpoint({
 }
 
 export function resolveEndpoint(params: {
-  transport?: TaskEndpointTransport;
+  transport?: TaskTransport;
   appId?: string;
   apiKey?: string;
   agentId?: string;
@@ -126,7 +126,7 @@ export function createTaskTransport({
   agentId,
   algoliaAgent,
 }: {
-  transport?: TaskTransport;
+  transport?: TaskTransportOptions;
   appId?: string;
   apiKey?: string;
   agentId?: string;

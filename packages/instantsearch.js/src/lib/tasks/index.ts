@@ -8,12 +8,13 @@ export type {
   TaskCredentials,
   TaskEndpoint,
   TaskPrepareRequest,
+  TaskTransport,
 } from './endpoint';
 export type { BuildTaskPayloadOptions, FetchTaskOptions } from './fetchTask';
 export type {
   TaskPrepareSendMessagesRequest,
   TaskSendOptions,
-  TaskTransport,
+  TaskTransportOptions,
 } from './transport';
 export type {
   TaskRunner,

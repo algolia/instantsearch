@@ -86,7 +86,16 @@ describe('DefaultTaskTransport', () => {
       })
     ).resolves.toEqual({ suggestions: ['a'] });
 
-    expect(prepareSendMessagesRequest).toHaveBeenCalledWith({
+    const preparedRequest = prepareSendMessagesRequest.mock.calls[0][0];
+    expect({
+      task: preparedRequest.task,
+      input: preparedRequest.input,
+      stream: preparedRequest.stream,
+      body: preparedRequest.body,
+      credentials: preparedRequest.credentials,
+      headers: preparedRequest.headers,
+      api: preparedRequest.api,
+    }).toEqual({
       task: 'generate_suggestions',
       input: { query: 'shoes' },
       stream: true,
