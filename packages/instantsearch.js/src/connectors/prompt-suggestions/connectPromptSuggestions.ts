@@ -8,7 +8,7 @@ import {
 } from '../../lib/utils';
 import connectTasks from '../tasks/connectTasks';
 
-import type { TaskTransport } from '../../lib/tasks';
+import type { TaskTransportOptions } from '../../lib/tasks';
 import type {
   Connector,
   DisposeOptions,
@@ -49,8 +49,8 @@ function buildSuggestionMessage(suggestion: string): string {
   return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
 }
 
-/** Custom transport for the task request. Alias of the generic `TaskTransport`, kept for API stability. */
-export type PromptSuggestionsTransport = TaskTransport;
+/** Custom transport for the task request. Alias of the generic `TaskTransportOptions`, kept for API stability. */
+export type PromptSuggestionsTransport = TaskTransportOptions;
 
 /** Metadata passed to `transformItems`. */
 export type PromptSuggestionsTransformItemsMetadata = {
@@ -90,10 +90,10 @@ export type PromptSuggestionsSource =
   | {
       /** ID of the agent configured in the Algolia dashboard. */
       agentId: string;
-      transport?: never;
+      transport?: PromptSuggestionsTransport;
     }
   | {
-      /** Custom transport. When set, `agentId` and client credentials are ignored. */
+      /** Custom task transport options. */
       transport: PromptSuggestionsTransport;
       agentId?: never;
     };
@@ -412,14 +412,29 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         renderOutward(latestRenderOptions);
       };
 
-      const tasksWidget = connectTasks(
-        handleInnerRender,
-        noop
-      )({
-        ...(transport ? { transport } : { agentId }),
-        task: configurationId,
-        stream: true,
-      } as TasksConnectorParams);
+      let tasksParams: TasksConnectorParams;
+      if (agentId) {
+        tasksParams = {
+          agentId,
+          transport,
+          task: configurationId,
+          stream: true,
+        };
+      } else if (transport) {
+        tasksParams = {
+          transport,
+          task: configurationId,
+          stream: true,
+        };
+      } else {
+        throw new Error(
+          withUsage(
+            'The `agentId` option is required unless a custom `transport` is provided.'
+          )
+        );
+      }
+
+      const tasksWidget = connectTasks(handleInnerRender, noop)(tasksParams);
 
       return {
         $$type: 'ais.promptSuggestions',

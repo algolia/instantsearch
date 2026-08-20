@@ -2,7 +2,7 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { isReasoningPartActive } from '../../lib/utils/chat';
+import { findTool, isReasoningPartActive } from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
@@ -258,9 +258,6 @@ export type ChatMessageProps<
   parseMarkdown?: boolean;
 };
 
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
-const SearchIndexToolType = 'algolia_search_index';
-
 export function createChatMessageComponent({
   createElement,
   Fragment,
@@ -469,24 +466,16 @@ export function createChatMessageComponent({
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const toolName = part.type.replace('tool-', '');
-        let tool = tools[toolName] as MessageScopedClientSideTool | undefined;
-
-        // Compatibility shim with Algolia MCP Server search tool
-        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
-          tool = tools[SearchIndexToolType] as
-            | MessageScopedClientSideTool
-            | undefined;
-        }
-
-        const displayResultsEnabled =
-          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
-            ?.displayResultsEnabled === true;
+        const tool = findTool(part.type, tools) as
+          | MessageScopedClientSideTool
+          | undefined;
 
         if (
-          displayResultsEnabled &&
-          tool &&
-          tool === tools[SearchIndexToolType]
+          tool?.shouldRender?.({
+            ...context,
+            message: part as ChatToolMessage,
+            parentMessage: message,
+          }) === false
         ) {
           return null;
         }
