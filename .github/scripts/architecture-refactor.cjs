@@ -41,7 +41,7 @@ const stageConfig = {
       'Write',
       'Bash(git status *)',
       'Bash(git diff *)',
-      'Bash(yarn install --frozen-lockfile)',
+      'Bash(yarn install --immutable)',
       'Bash(yarn lint:changed)',
       'Bash(yarn type-check)',
       'Bash(yarn jest --findRelatedTests *)',

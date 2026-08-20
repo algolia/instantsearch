@@ -48,10 +48,10 @@
     "vue-server-renderer": "^2.6.11"
   },
   "peerDependenciesMeta": {
-    "vue-server-renderer": {
+    "@vue/server-renderer": {
       "optional": true
     },
-    "@vue/server-renderer": {
+    "vue-server-renderer": {
       "optional": true
     }
   },
@@ -71,7 +71,7 @@
     "vue-autosuggest": "1.8.1",
     "vue-i18n": "8.24.4",
     "vue-i18n-vue3": "npm:vue-i18n@^9.2.2",
-    "vue-loader": "14.2.2",
+    "vue-loader": "15.11.1",
     "vue-router": "3.4.3",
     "vue-router4": "npm:vue-router@4.0.0",
     "vue-server-renderer": "2.7.14",

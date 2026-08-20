@@ -10,9 +10,7 @@
   "repository": "algolia/instantsearch",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
-  "bin": {
-    "create-instantsearch-app": "src/cli/index.js"
-  },
+  "bin": "src/cli/index.js",
   "scripts": {
     "start": "node src/cli/index.js",
     "test": "jest --no-color src && yarn run test:e2e",
