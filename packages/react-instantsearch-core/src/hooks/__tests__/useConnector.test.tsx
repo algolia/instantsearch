@@ -621,6 +621,8 @@ describe('useConnector', () => {
   test('rerenders the widget on prop change', async () => {
     const searchClient = createSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+    const warn = jest.mocked(global.console.warn);
+    warn.mockClear();
 
     function App({ attribute }: { attribute: string }) {
       return (
@@ -644,6 +646,9 @@ describe('useConnector', () => {
     expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
     expect(getByTestId('attribute')).toHaveTextContent('categories');
+    expect(warn).not.toHaveBeenCalledWith(
+      expect.stringContaining('React <Chat> widget')
+    );
   });
 
   test('replaces the widget when additional widget properties change', async () => {

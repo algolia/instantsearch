@@ -17,12 +17,14 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   props,
   shouldSsr,
   skipSuspense,
+  onWidgetReplacement,
 }: {
   widget: TWidget;
   parentIndex: IndexWidget;
   props: TProps;
   shouldSsr: boolean;
   skipSuspense: boolean;
+  onWidgetReplacement?: () => void;
 }) {
   const { waitForResultsRef, countRef, ignoreMultipleHooksWarning } =
     useRSCContext();
@@ -75,6 +77,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
       // waiting for the scheduled cleanup function to finish (that we canceled
       // above).
       if (!arePropsEqual) {
+        onWidgetReplacement?.();
         parentIndex.removeWidgets([previousWidget]);
         parentIndex.addWidgets([widget]);
       }
@@ -90,7 +93,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
         });
       });
     };
-  }, [parentIndex, widget, shouldSsr, search, props]);
+  }, [parentIndex, widget, shouldSsr, search, props, onWidgetReplacement]);
 
   if (
     shouldAddWidgetEarly ||

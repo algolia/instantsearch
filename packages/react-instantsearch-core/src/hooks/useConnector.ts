@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { dequal } from '../lib/dequal';
 import { getIndexSearchResults } from '../lib/getIndexSearchResults';
@@ -8,6 +8,7 @@ import { useInstantSearchServerContext } from '../lib/useInstantSearchServerCont
 import { useInstantSearchSSRContext } from '../lib/useInstantSearchSSRContext';
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
+import { warn } from '../lib/warn';
 
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
@@ -20,6 +21,10 @@ import type {
 export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>> & {
   skipSuspense?: boolean;
   opensChat?: boolean;
+};
+
+type WidgetReplacementRenderState = {
+  '~hasStateToLoseOnWidgetReplacement'?: boolean;
 };
 
 export function useConnector<
@@ -46,6 +51,18 @@ export function useConnector<
     null
   );
   const previousStatusRef = useRef(search.status);
+
+  const onWidgetReplacement = useCallback(() => {
+    const previousRenderState =
+      previousRenderStateRef.current as WidgetReplacementRenderState | null;
+
+    if (previousRenderState?.['~hasStateToLoseOnWidgetReplacement'] === true) {
+      warn(
+        false,
+        'Changing the props of the React <Chat> widget replaces its internal Chat instance and clears open state or non-persisted messages. Use stable prop references or provide your own Chat instance to preserve the conversation.'
+      );
+    }
+  }, []);
 
   const widget = useMemo(() => {
     const createWidget = connector(
@@ -144,6 +161,9 @@ export function useConnector<
         error: search.error,
       });
 
+      previousRenderStateRef.current = renderState;
+      previousStatusRef.current = search.status;
+
       return renderState;
     }
 
@@ -156,6 +176,7 @@ export function useConnector<
     props: [stableProps, stableAdditionalWidgetProperties],
     shouldSsr: Boolean(serverContext),
     skipSuspense,
+    onWidgetReplacement,
   });
 
   return state;

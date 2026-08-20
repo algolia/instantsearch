@@ -6,6 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Chat as ChatInstance, openChat } from 'instantsearch.js/es/lib/chat';
+import { CACHE_KEY } from 'instantsearch.js/es/lib/chat/chat';
 import React from 'react';
 import { InstantSearch, useInstantSearch } from 'react-instantsearch-core';
 
@@ -17,6 +18,25 @@ import type { ChatHandle, ChatProps } from '../Chat';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
 const searchClient = createSearchClient();
+
+const CHAT_PROPS_REPLACEMENT_WARNING =
+  '[InstantSearch] Changing the props of the React <Chat> widget replaces its internal Chat instance and clears open state or non-persisted messages. Use stable prop references or provide your own Chat instance to preserve the conversation.';
+
+const existingMessage: UIMessage = {
+  id: 'assistant-message',
+  role: 'assistant',
+  parts: [{ type: 'text', text: 'An existing answer' }],
+};
+
+function getChatPropsReplacementWarnings(warn: jest.SpyInstance) {
+  return warn.mock.calls.filter(
+    ([message]) => message === CHAT_PROPS_REPLACEMENT_WARNING
+  );
+}
+
+function getConsoleWarnMock() {
+  return jest.mocked(global.console.warn);
+}
 
 function CaptureChatRenderState({
   capture,
@@ -591,5 +611,345 @@ describe('Chat', () => {
 
     // Earlier rows are memoized, so the prop has to take part in the comparator.
     expect(container.querySelectorAll('strong')).toHaveLength(0);
+  });
+
+  test('warns before changed connector props replace an open internal Chat', async () => {
+    const chatRef = React.createRef<ChatHandle>();
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            ref={chatRef}
+            context={context}
+            disableTriggerValidation={true}
+            persistence={false}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { container, rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
+  test('warns only when a suspended prop change commits the Chat replacement', async () => {
+    const chatRef = React.createRef<ChatHandle>();
+    const contexts = [
+      () => ({ page: 'committed' }),
+      () => ({ page: 'suspended' }),
+      () => ({ page: 'replacement' }),
+    ];
+    const suspended = new Promise<never>(() => {});
+    let setPhase!: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
+
+    function SuspendWhen({ active }: { active: boolean }) {
+      if (active) {
+        throw suspended;
+      }
+
+      return null;
+    }
+
+    function Subject() {
+      const [phase, setCurrentPhase] = React.useState<0 | 1 | 2>(0);
+      setPhase = setCurrentPhase;
+
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <React.Suspense fallback={<div>Loading</div>}>
+            <Chat
+              ref={chatRef}
+              context={contexts[phase]}
+              disableTriggerValidation={true}
+              persistence={false}
+              requiresSearch={false}
+              transport={{ api: 'http://unused' }}
+            />
+            <SuspendWhen active={phase === 1} />
+          </React.Suspense>
+        </InstantSearch>
+      );
+    }
+
+    const { container } = render(<Subject />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    await act(async () => {
+      React.startTransition(() => setPhase(1));
+    });
+
+    expect(container).not.toHaveTextContent('Loading');
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+
+    await act(async () => {
+      setPhase(2);
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-Chat-container')).not.toHaveClass(
+      'ais-Chat-container--open'
+    );
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
+  test('warns before changed connector props replace non-persisted messages', async () => {
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            context={context}
+            disableTriggerValidation={true}
+            initialMessages={[existingMessage]}
+            persistence={false}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
+  test('does not warn or replace an open internal Chat for equal props', async () => {
+    const chatRef = React.createRef<ChatHandle>();
+
+    function Subject({ context }: { context: { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            ref={chatRef}
+            context={context}
+            disableTriggerValidation={true}
+            persistence={false}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const context = { page: 'same' };
+    const { container, rerender } = render(<Subject context={context} />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={context} />);
+    rerender(<Subject context={{ page: 'same' }} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+  });
+
+  test('does not warn when changed connector props replace closed empty state', async () => {
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            context={context}
+            disableTriggerValidation={true}
+            persistence={false}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+  });
+
+  test('does not warn when changed connector props replace persisted closed messages', async () => {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify([existingMessage]));
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            context={context}
+            disableTriggerValidation={true}
+            id="persisted-chat"
+            persistence={{ messages: true, open: false }}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+  });
+
+  test('does not warn or lose messages when changed props reuse a caller-owned Chat', async () => {
+    const chat = new ChatInstance<UIMessage>({
+      messages: [existingMessage],
+      persistence: false,
+    });
+
+    function Subject({ requiresSearch }: { requiresSearch: boolean }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            chat={chat}
+            disableTriggerValidation={true}
+            requiresSearch={requiresSearch}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject requiresSearch={true} />);
+    await act(async () => {
+      await wait(0);
+    });
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject requiresSearch={false} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+    expect(chat.messages).toEqual([existingMessage]);
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+  });
+
+  test('does not warn in production before replacing lossy Chat state', async () => {
+    const originalDev = (globalThis as { __DEV__?: boolean }).__DEV__;
+    const chatRef = React.createRef<ChatHandle>();
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            ref={chatRef}
+            context={context}
+            disableTriggerValidation={true}
+            persistence={false}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+    (globalThis as { __DEV__?: boolean }).__DEV__ = false;
+
+    try {
+      rerender(<Subject context={secondContext} />);
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+    } finally {
+      (globalThis as { __DEV__?: boolean }).__DEV__ = originalDev;
+    }
   });
 });
