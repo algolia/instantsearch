@@ -25,8 +25,14 @@ const createContext = <TMessage extends ChatMessageBase = ChatMessageBase>(
   overrides: Partial<ChatComponentContext<TMessage>> = {}
 ): ChatComponentContext<TMessage> => ({
   messages: [],
+  // Mirrors the widget, which always derives this from the same conversation.
+  lastMessage: overrides.messages?.[overrides.messages.length - 1],
   status: 'ready',
   isClearing: false,
+  phase: 'idle' as const,
+  hasActiveReasoning: false,
+  isBusy: false,
+  showLoader: false,
   open: true,
   maximized: false,
   tools: {},

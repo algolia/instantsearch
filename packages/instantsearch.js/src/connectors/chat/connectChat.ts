@@ -7,7 +7,7 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat, SearchIndexToolType } from '../../lib/chat';
+import { Chat, getChatTurnState, SearchIndexToolType } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -54,6 +54,7 @@ import type {
   ClientSideTool,
   ChatInsightsEventContext,
   ChatRecordsStore,
+  ChatTurnState,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -118,6 +119,15 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * 'sending' means the request is in flight, 0/1 means the vote was recorded.
    */
   feedbackState: Record<string, 'sending' | 0 | 1>;
+  /**
+   * The chat's own account of the current turn — phase, active part, active
+   * reasoning, busy, last message, and whether the progress loader shows.
+   *
+   * Forwarded verbatim into every chat component's `context`. Most of it is a
+   * read of the chat instance; `showLoader` is decided here rather than by the
+   * renderer because it also reads the tool registry, which the connector owns.
+   */
+  turnState: ChatTurnState<TUiMessage>;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -225,6 +235,13 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Disable validation that requires either a dedicated trigger or AI mode.
    */
   disableTriggerValidation?: boolean;
+  /**
+   * Whether reasoning parts are rendered as a disclosure.
+   *
+   * The connector only reads it to decide the loader: an open, streaming
+   * disclosure already shows progress, so the loader would double it.
+   */
+  showReasoning?: boolean;
   /**
    * Whether to resume an ongoing chat generation stream.
    * This option has no effect during server rendering.
@@ -473,6 +490,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       initialUserMessage,
       initialMessages,
       disableTriggerValidation = false,
+      showReasoning = false,
       sendAutomaticallyWhen = lastAssistantMessageIsCompleteWithToolCalls,
       requiresSearch = true,
       ...options
@@ -520,11 +538,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     // Extract suggestions from the last assistant message's data-suggestions part
-    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
-      // Find the last assistant message (iterate from end)
-      const lastAssistantMessage = [...messages]
-        .reverse()
-        .find((message) => message.role === 'assistant' && message.parts);
+    const getSuggestions = () => {
+      const lastAssistantMessage = _chatInstance?.lastAssistantMessage;
 
       if (!lastAssistantMessage?.parts) {
         return undefined;
@@ -559,8 +574,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      const status = _chatInstance.status;
-      if (status === 'submitted' || status === 'streaming') {
+      if (_chatInstance.isBusy) {
         _chatInstance.stop();
       }
       // Reset the non-reactive state first: `setMessages` and `clearError` emit
@@ -1015,6 +1029,22 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
 
+        const turnState = getChatTurnState({
+          chat: _chatInstance,
+          tools: toolsWithAddToolResult,
+          showReasoning,
+          indexUiState:
+            instantSearchInstance.getUiState()[parent.getIndexId()] || {},
+          setIndexUiState: parent.setIndexUiState.bind(parent),
+          getFallbackRecords: () => records,
+          open,
+          setInput,
+          onReload: (messageId?: string) =>
+            _chatInstance.regenerate({ messageId }),
+          onNewConversation: clearMessages,
+          onClose: () => setOpen(false),
+        });
+
         const sendMessageWithContext: typeof _chatInstance.sendMessage = (
           message,
           ...rest
@@ -1056,12 +1086,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
           '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
           setMessages,
-          suggestions: getSuggestionsFromMessages(_chatInstance.messages),
+          suggestions: getSuggestions(),
           clearMessages,
           tools: toolsWithAddToolResult,
           records,
           sendChatMessageFeedback: _sendChatMessageFeedback,
           feedbackState,
+          turnState,
           widgetParams,
 
           // Chat instance render state

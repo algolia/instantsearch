@@ -59,6 +59,7 @@ import type {
   ChatPromptTranslations,
   ChatStatus,
   ClientSideToolComponentProps,
+  ClientSideToolStateContext,
   ClientSideTools,
   RecordWithObjectID,
   UserClientSideTool,
@@ -82,9 +83,25 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn over to the richer display-results tool. Decided per turn by the
+ * agent and recorded on the message.
+ */
+function shouldRenderSearchResults(context: ClientSideToolStateContext) {
+  return (
+    (
+      context.parentMessage.metadata as
+        | { displayResultsEnabled?: boolean }
+        | undefined
+    )?.displayResultsEnabled !== true
+  );
+}
+
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    shouldRender?: unknown;
     templates?: { layout?: unknown };
   },
 >(
@@ -99,7 +116,8 @@ function mergeToolOptions<
 
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
-    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
 
     if (
       userTool.templates?.layout !== undefined &&
@@ -107,8 +125,17 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
+      };
+    }
+
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
       };
     }
   });
@@ -123,11 +150,10 @@ function createDefaultTools<
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      templates,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, templates, getSearchPageURL),
+      shouldRender: shouldRenderSearchResults,
+    },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
@@ -145,6 +171,7 @@ type ChatWrapperProps = {
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
+  chatTurnState: ChatRenderState['turnState'];
   chatInput: ChatRenderState['input'];
   setChatInput: ChatRenderState['setInput'];
   sendMessage: ChatRenderState['sendMessage'];
@@ -227,6 +254,7 @@ function ChatWrapper({
   indexUiState,
   setIndexUiState,
   chatStatus,
+  chatTurnState,
   chatInput,
   setChatInput,
   sendMessage,
@@ -256,10 +284,10 @@ function ChatWrapper({
   // `preserveScrollPosition` reuses the existing "only if already at the
   // bottom" gate, so this never fights a user who has scrolled up to read.
   useEffect(() => {
-    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+    if (chatTurnState.isBusy) {
       scrollToBottom({ preserveScrollPosition: true });
     }
-  }, [chatMessages, chatStatus, scrollToBottom]);
+  }, [chatMessages, chatTurnState.isBusy, scrollToBottom]);
 
   state.init();
 
@@ -292,6 +320,7 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
+        turnState: chatTurnState,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
         onFeedback,
@@ -594,6 +623,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       setInput,
       setOpen,
       status,
+      turnState,
       error,
       regenerate,
       stop,
@@ -768,6 +798,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           indexUiState={indexUiState}
           setIndexUiState={setIndexUiState}
           chatStatus={status}
+          chatTurnState={turnState}
           chatInput={input}
           setChatInput={setInput}
           sendMessage={sendMessage}
@@ -1195,6 +1226,7 @@ export default (function chat<
     ...makeWidget({
       resume,
       tools,
+      showReasoning,
       disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),

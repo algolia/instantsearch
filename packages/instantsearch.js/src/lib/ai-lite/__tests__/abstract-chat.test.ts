@@ -5301,3 +5301,139 @@ describe('AbstractChat unanswered tool calls in outbound requests', () => {
     ]);
   });
 });
+
+describe('AbstractChat turn phase', () => {
+  function createChat(
+    status: ChatState<UIMessage>['status'],
+    parts: UIMessage['parts'],
+    role: UIMessage['role'] = 'assistant'
+  ) {
+    const state = new InMemoryChatState();
+    state.status = status;
+    state.messages = [{ id: '1', role, parts }];
+
+    return new TestChat({ state });
+  }
+
+  const textPart: UIMessage['parts'][number] = {
+    type: 'text',
+    text: 'Here you go',
+    state: 'streaming',
+  };
+
+  describe('phase', () => {
+    it.each([['ready'], ['error']] as const)(
+      'is idle when the request has settled (%s)',
+      (status) => {
+        expect(createChat(status, [textPart]).phase).toBe('idle');
+      }
+    );
+
+    it('awaits the response while only the user message exists', () => {
+      expect(
+        createChat('submitted', [{ type: 'text', text: 'hi' }], 'user').phase
+      ).toBe('awaiting-response');
+    });
+
+    it('awaits the response while the assistant has produced no part', () => {
+      expect(createChat('streaming', []).phase).toBe('awaiting-response');
+    });
+
+    it('is answering while prose streams', () => {
+      expect(createChat('streaming', [textPart]).phase).toBe('answering');
+    });
+
+    it('is calling a tool while its input streams', () => {
+      expect(
+        createChat('streaming', [
+          {
+            type: 'tool-search',
+            toolCallId: 'call-1',
+            state: 'input-streaming',
+            input: {},
+          },
+        ] as UIMessage['parts']).phase
+      ).toBe('calling-tool');
+    });
+
+    it.each([['input-available'], ['output-available']] as const)(
+      'has run the tool once its input settles (%s)',
+      (state) => {
+        expect(
+          createChat('streaming', [
+            { type: 'tool-search', toolCallId: 'call-1', state, input: {} },
+          ] as UIMessage['parts']).phase
+        ).toBe('ran-tool');
+      }
+    );
+
+    it('treats a dynamic tool call the same as a static one', () => {
+      expect(
+        createChat('streaming', [
+          {
+            type: 'dynamic-tool',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            state: 'input-streaming',
+            input: {},
+          },
+        ] as UIMessage['parts']).phase
+      ).toBe('calling-tool');
+    });
+  });
+
+  describe('activePart', () => {
+    it('is the last part while the turn is in flight', () => {
+      expect(createChat('streaming', [textPart]).activePart).toEqual(textPart);
+    });
+
+    it('clears once the response settles', () => {
+      expect(createChat('ready', [textPart]).activePart).toBeUndefined();
+    });
+
+    // `submitted` still shows the user's own message: the assistant has not
+    // produced a part yet, so nothing is active.
+    it('clears while the last message is the user’s own', () => {
+      expect(
+        createChat('submitted', [{ type: 'text', text: 'hi' }], 'user')
+          .activePart
+      ).toBeUndefined();
+    });
+  });
+
+  describe('hasActiveReasoning', () => {
+    it('is true while a reasoning part streams', () => {
+      expect(
+        createChat('streaming', [
+          { type: 'reasoning', text: 'Thinking', state: 'streaming' },
+        ]).hasActiveReasoning
+      ).toBe(true);
+    });
+
+    it('stays true when only more reasoning follows', () => {
+      expect(
+        createChat('streaming', [
+          { type: 'reasoning', text: 'Thinking', state: 'streaming' },
+          { type: 'reasoning', text: 'Still', state: 'streaming' },
+        ]).hasActiveReasoning
+      ).toBe(true);
+    });
+
+    it('is false once a non-reasoning part follows', () => {
+      expect(
+        createChat('streaming', [
+          { type: 'reasoning', text: 'Thinking', state: 'streaming' },
+          textPart,
+        ]).hasActiveReasoning
+      ).toBe(false);
+    });
+
+    it('is false when reasoning is done', () => {
+      expect(
+        createChat('streaming', [
+          { type: 'reasoning', text: 'Thought', state: 'done' },
+        ]).hasActiveReasoning
+      ).toBe(false);
+    });
+  });
+});

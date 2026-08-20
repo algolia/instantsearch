@@ -12,7 +12,12 @@ import { createChatMessagesComponent } from '../ChatMessages';
 
 import type { ChatMessageTextComponentProps } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext } from '../types';
+import type {
+  ChatComponentPropsWithContext,
+  ClientSideTool,
+  ClientSideToolComponentProps,
+  ClientSideToolStateContext,
+} from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -203,6 +208,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool', showLoader: false }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -235,6 +241,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool' }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -304,6 +311,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        turnState={{ phase: 'ran-tool', showLoader: false }}
         assistantMessageProps={{ showReasoning: true }}
         tools={{}}
         onReload={jest.fn()}
@@ -315,6 +323,109 @@ describe('ChatMessages', () => {
       screen.getAllByRole('group', { name: 'Reasoning' })[0]
     ).toHaveAttribute('aria-busy', 'true');
     expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+  });
+
+  describe('tools opting out of rendering', () => {
+    const toolMessage = {
+      role: 'assistant' as const,
+      id: '1',
+      metadata: { displayResultsEnabled: true },
+      parts: [
+        {
+          type: 'tool-test_tool' as const,
+          toolCallId: 'call-1',
+          state: 'input-streaming' as const,
+          input: {},
+        },
+      ],
+    };
+
+    const createTool = (
+      shouldRender?: ClientSideTool['shouldRender']
+    ): ClientSideTool => ({
+      layoutComponent: () => <div className="tool">Tool</div>,
+      streamInput: true,
+      addToolResult: jest.fn(),
+      applyFilters: jest.fn(),
+      ...(shouldRender && { shouldRender }),
+    });
+
+    // Whether opting out keeps the loader up is the connector's call; here it
+    // only has to stop the part from rendering. `showLoader` is passed
+    // explicitly so the two concerns stay visibly separate.
+    test('renders nothing for a tool that declines the turn', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool', showLoader: true }}
+          tools={{ test_tool: createTool(() => false) }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('.tool')).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('renders the tool when it declines nothing', () => {
+      const { container } = render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool', showLoader: false }}
+          tools={{ test_tool: createTool() }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector('.tool')).not.toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+    });
+
+    test('decides from the same context the layout component receives', () => {
+      const shouldRender = jest.fn<boolean, [ClientSideToolStateContext]>(
+        () => true
+      );
+      const layoutComponent = jest.fn<
+        JSX.Element,
+        [ClientSideToolComponentProps]
+      >(() => <div className="tool">Tool</div>);
+      const indexUiState = { query: 'shoes' };
+
+      render(
+        <ChatMessages
+          messages={[toolMessage]}
+          indexUiState={indexUiState}
+          setIndexUiState={jest.fn()}
+          status="streaming"
+          turnState={{ phase: 'calling-tool' }}
+          tools={{
+            test_tool: { ...createTool(shouldRender), layoutComponent },
+          }}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      const expected = expect.objectContaining({
+        status: 'streaming',
+        message: toolMessage.parts[0],
+        parentMessage: toolMessage,
+        indexUiState,
+      });
+
+      expect(shouldRender.mock.calls[0][0]).toEqual(expected);
+      expect(layoutComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ context: expected })
+      );
+    });
   });
 
   test('updates nested reasoning labels for every completed message', () => {
@@ -1574,6 +1685,10 @@ describe('ChatMessages', () => {
       <ChatMessages
         messages={messages}
         status="submitted"
+        turnState={{
+          phase: 'awaiting-response',
+          activePart: { type: 'text', text: 'Working on it' },
+        }}
         indexUiState={{ query: 'shoes' }}
         setIndexUiState={setIndexUiState}
         tools={{}}

@@ -2,7 +2,11 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { isReasoningPartActive } from '../../lib/utils/chat';
+import {
+  createClientSideToolContextExtras,
+  findTool,
+  isReasoningPartActive,
+} from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
@@ -14,25 +18,18 @@ import {
 import { MenuIcon } from './icons';
 
 import type {
-  AddToolResult,
-  AddToolResultWithOutput,
   ChatComponentContext,
   ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
-  ClientSideTool,
   ClientSideToolContext,
   ClientSideTools,
   TextUIPart,
 } from './types';
+import type { MessageScopedClientSideTool } from '../../lib/utils/chat';
 import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
-import type {
-  ComponentProps,
-  Renderer,
-  SendEventForHits,
-  VNode,
-} from '../../types';
+import type { ComponentProps, Renderer, VNode } from '../../types';
 
 /**
  * The root-level props tool layout components received before everything moved
@@ -57,13 +54,6 @@ function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
     sendEvent: context.sendEvent,
   };
 }
-
-type MessageScopedClientSideTool = ClientSideTool & {
-  '~addToolResultForMessage'?: (
-    message: ChatMessageBase,
-    params: Parameters<AddToolResult>[0]
-  ) => ReturnType<AddToolResult>;
-};
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -258,9 +248,6 @@ export type ChatMessageProps<
   parseMarkdown?: boolean;
 };
 
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
-const SearchIndexToolType = 'algolia_search_index';
-
 export function createChatMessageComponent({
   createElement,
   Fragment,
@@ -315,6 +302,12 @@ export function createChatMessageComponent({
     const context: ChatComponentContext<TMessage> = {
       ...sharedContext,
       messages: ownMessages ?? sharedContext.messages,
+      // A root-level `messages` override redefines what "last" means, so the
+      // turn state's answer has to follow it rather than describe the
+      // conversation the override replaced.
+      lastMessage: ownMessages
+        ? ownMessages[ownMessages.length - 1]
+        : sharedContext.lastMessage,
       status: ownStatus ?? sharedContext.status,
       tools: ownTools ?? sharedContext.tools,
       onClose: ownOnClose ?? sharedContext.onClose,
@@ -337,9 +330,10 @@ export function createChatMessageComponent({
     };
 
     const hasLeading = Boolean(LeadingComponent);
+    // `context.lastMessage` comes from the chat instance; scanning `messages`
+    // here would be a second, drifting answer to the same question.
     const isCurrentMessage =
-      messages === undefined ||
-      messages[messages.length - 1]?.id === message.id;
+      messages === undefined || context.lastMessage?.id === message.id;
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
@@ -469,44 +463,31 @@ export function createChatMessageComponent({
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const toolName = part.type.replace('tool-', '');
-        let tool = tools[toolName] as MessageScopedClientSideTool | undefined;
-
-        // Compatibility shim with Algolia MCP Server search tool
-        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
-          tool = tools[SearchIndexToolType] as
-            | MessageScopedClientSideTool
-            | undefined;
-        }
-
-        const displayResultsEnabled =
-          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
-            ?.displayResultsEnabled === true;
-
-        if (
-          displayResultsEnabled &&
-          tool &&
-          tool === tools[SearchIndexToolType]
-        ) {
-          return null;
-        }
+        const tool = findTool(part.type, tools) as
+          | MessageScopedClientSideTool
+          | undefined;
 
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
 
-          const boundAddToolResult: AddToolResultWithOutput = (params) =>
-            tool['~addToolResultForMessage']
-              ? tool['~addToolResultForMessage'](message, {
-                  output: params.output,
-                  tool: part.type,
-                  toolCallId: toolMessage.toolCallId,
-                })
-              : tool.addToolResult({
-                  output: params.output,
-                  tool: part.type,
-                  toolCallId: toolMessage.toolCallId,
-                });
+          const toolContext: ClientSideToolContext<TMessage> = {
+            ...context,
+            ...createClientSideToolContextExtras({
+              tool,
+              parentMessage: message,
+              part: toolMessage,
+              indexUiState,
+              setIndexUiState,
+              getFallbackRecords,
+            }),
+          };
+
+          // Asked before the state and layout checks below: a tool that stands
+          // aside for the turn renders nothing regardless of its own progress.
+          if (tool.shouldRender?.(toolContext) === false) {
+            return null;
+          }
 
           if (toolMessage.state === 'input-streaming' && !tool.streamInput) {
             return null;
@@ -515,42 +496,6 @@ export function createChatMessageComponent({
           if (!ToolLayoutComponent) {
             return null;
           }
-
-          const toolSendEvent = tool.sendEvent || (() => {});
-          const agentId = tool.insightsEventContext?.agentId;
-          const sendEvent = ((
-            eventType: any,
-            hits?: any,
-            eventName?: any,
-            additionalData?: any
-          ) => {
-            if (
-              hits === undefined &&
-              eventName === undefined &&
-              additionalData === undefined
-            ) {
-              return toolSendEvent(eventType);
-            }
-
-            return toolSendEvent(eventType, hits, eventName, {
-              ...(additionalData || {}),
-              queryID: 'message_' + message.id,
-              ...(agentId ? { agentId } : {}),
-              toolCallId: toolMessage.toolCallId,
-            });
-          }) as SendEventForHits;
-
-          const toolContext: ClientSideToolContext<TMessage> = {
-            ...context,
-            records: tool.records || getFallbackRecords(),
-            message: toolMessage,
-            insightsEventContext: tool.insightsEventContext,
-            indexUiState,
-            setIndexUiState,
-            addToolResult: boundAddToolResult,
-            applyFilters: tool.applyFilters,
-            sendEvent,
-          };
 
           return (
             <div

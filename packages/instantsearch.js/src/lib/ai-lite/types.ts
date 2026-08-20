@@ -8,6 +8,17 @@
  */
 export type ChatStatus = 'submitted' | 'streaming' | 'ready' | 'error';
 
+/**
+ * What the current turn is doing. Unlike `ChatStatus`, which describes the
+ * request, this describes the response being assembled.
+ */
+export type ChatPhase =
+  | 'idle'
+  | 'awaiting-response'
+  | 'answering'
+  | 'calling-tool'
+  | 'ran-tool';
+
 export type UIDataTypes = Record<string, unknown>;
 
 export type UITool = {

@@ -36,6 +36,7 @@ import type {
   Pragma,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
+  ClientSideToolStateContext,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -58,11 +59,10 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      itemComponent,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, itemComponent, getSearchPageURL),
+      shouldRender: shouldRenderSearchResults,
+    },
     [RecommendToolType]: createCarouselTool(
       false,
       itemComponent,
@@ -75,9 +75,25 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   };
 }
 
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn over to the richer display-results tool. Decided per turn by the
+ * agent and recorded on the message.
+ */
+function shouldRenderSearchResults(context: ClientSideToolStateContext) {
+  return (
+    (
+      context.parentMessage.metadata as
+        | { displayResultsEnabled?: boolean }
+        | undefined
+    )?.displayResultsEnabled !== true
+  );
+}
+
 function mergeToolOptions<
   TTool extends {
     streamInput?: boolean;
+    shouldRender?: unknown;
     layoutComponent?: unknown;
   },
 >(
@@ -92,7 +108,8 @@ function mergeToolOptions<
 
   Object.keys(userTools).forEach((toolName) => {
     const userTool = userTools[toolName];
-    const defaultStreamInput = defaultTools[toolName]?.streamInput;
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
 
     if (
       userTool.layoutComponent !== undefined &&
@@ -100,8 +117,17 @@ function mergeToolOptions<
       defaultStreamInput !== undefined
     ) {
       tools[toolName] = {
-        ...userTool,
+        ...tools[toolName],
         streamInput: defaultStreamInput,
+      };
+    }
+
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
       };
     }
   });
@@ -285,6 +311,7 @@ function ChatInner<
     messages,
     sendMessage,
     status,
+    turnState,
     regenerate,
     stop,
     error,
@@ -325,10 +352,10 @@ function ChatInner<
   // `preserveScrollPosition` reuses the existing "only if already at the
   // bottom" gate, so this never fights a user who has scrolled up to read.
   useEffect(() => {
-    if (status === 'streaming' || status === 'submitted') {
+    if (turnState.isBusy) {
       scrollToBottom({ preserveScrollPosition: true });
     }
-  }, [messages, status, scrollToBottom]);
+  }, [messages, turnState.isBusy, scrollToBottom]);
 
   if (__DEV__ && error) {
     throw error;
@@ -368,6 +395,7 @@ function ChatInner<
       }}
       messagesProps={{
         status,
+        turnState,
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),

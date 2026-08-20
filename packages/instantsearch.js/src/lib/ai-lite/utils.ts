@@ -5,6 +5,34 @@ import type {
   UITools,
 } from './types';
 
+export function isToolPart(
+  part: UIMessage['parts'][number]
+): part is UIMessage['parts'][number] & { state: string } {
+  return part.type.indexOf('tool-') === 0 || part.type === 'dynamic-tool';
+}
+
+/**
+ * Whether the reasoning part at `index` is the one still being produced, i.e.
+ * it is streaming and nothing settled has followed it.
+ */
+export function isReasoningPartActive(
+  parts: UIMessage['parts'],
+  index: number
+): boolean {
+  const part = parts[index];
+
+  return (
+    part?.type === 'reasoning' &&
+    part.state === 'streaming' &&
+    !parts
+      .slice(index + 1)
+      .some(
+        (laterPart) =>
+          laterPart.type !== 'reasoning' || laterPart.state === 'streaming'
+      )
+  );
+}
+
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 9);
 }

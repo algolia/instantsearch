@@ -2,12 +2,9 @@
 
 import { cx } from '../../lib';
 import {
-  findTool,
   getTextContent,
   hasTextContent,
-  isReasoningPartActive,
-  isPartText,
-  isPartTool,
+  isStatusBusy,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -39,6 +36,7 @@ import type {
   ChatLayoutOwnProps,
   ChatMessageBase,
   ChatStatus,
+  ChatTurnState,
   ClientSideTools,
 } from './types';
 import type {
@@ -166,6 +164,16 @@ export type ChatMessagesProps<
    * Current chat status
    */
   status?: ChatStatus;
+  /**
+   * The turn state reported by the chat instance — phase, active part, active
+   * reasoning, busy, last message, and whether the loader shows.
+   *
+   * Passed as one object because it is one thing: the chat's own account of
+   * what it is doing, derived where the messages live and forwarded into
+   * `context` untouched. Omitted fields fall back to what `status` alone can
+   * say, which is only "something is in flight".
+   */
+  turnState?: Partial<ChatTurnState<TMessage>>;
   /**
    * Error from the last failed request, if any. When set, its `message` is
    * available to custom error components or translation functions (for example
@@ -525,6 +533,7 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      turnState,
       error,
       hideScrollToBottom = false,
       onReload,
@@ -576,34 +585,10 @@ export function createChatMessagesComponent({
       ),
     };
 
-    const lastMessage = messages[messages.length - 1];
-    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    // `activePart` means "the part currently being processed". It must clear
-    // when nothing is in progress: once the response settles (`ready`/`error`),
-    // and while `submitted` still shows the user's own message (the assistant
-    // hasn't produced a part yet). Otherwise overrides render a part that isn't
-    // actually streaming.
-    const isProcessing = status === 'submitted' || status === 'streaming';
-    const activePart =
-      isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
-    // The scan slices the remaining parts per candidate, and only the loader reads
-    // it, so skip it entirely while the opt-in is off.
-    const hasActiveReasoning = assistantMessageProps?.showReasoning
-      ? (lastMessage?.parts?.some((_, index, parts) =>
-          isReasoningPartActive(parts, index)
-        ) ?? false)
-      : false;
-    const showLoader = getShowLoader(
-      status,
-      lastPart,
-      tools,
-      assistantMessageProps?.showReasoning,
-      hasActiveReasoning
-    );
-
     // The shared context handed to every overridable chat component, so custom
     // components can read the current chat state and common callbacks from a
     // single, consistent place.
+    const isBusy = turnState?.isBusy ?? isStatusBusy(status);
     const context: ChatComponentContext<TMessage> = {
       messages,
       status,
@@ -611,7 +596,15 @@ export function createChatMessagesComponent({
       isClearing,
       open,
       maximized,
-      activePart,
+      // The chat instance is the authority on all of these; the fallbacks only
+      // cover callers that render `ChatMessages` on its own, outside a widget.
+      phase: 'idle',
+      activePart: undefined,
+      hasActiveReasoning: false,
+      isBusy,
+      lastMessage: messages[messages.length - 1],
+      showLoader: isBusy,
+      ...turnState,
       tools,
       sendMessage,
       regenerate,
@@ -623,7 +616,10 @@ export function createChatMessagesComponent({
     };
 
     const showEmpty =
-      messages.length === 0 && !showLoader && !isClearing && status !== 'error';
+      messages.length === 0 &&
+      !context.showLoader &&
+      !isClearing &&
+      status !== 'error';
 
     const DefaultMessage = MessageComponent || MemoizedDefaultMessage;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
@@ -666,11 +662,11 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
-                isCurrentMessage={index === messages.length - 1}
+                isCurrentMessage={context.lastMessage?.id === message.id}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
@@ -687,14 +683,14 @@ export function createChatMessagesComponent({
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
-                  index === messages.length - 1
+                  context.lastMessage?.id === message.id
                     ? suggestionsElement
                     : undefined
                 }
               />
             ))}
 
-            {showLoader && (
+            {context.showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
                 context={context}
@@ -743,27 +739,3 @@ export function createChatMessagesComponent({
     );
   };
 }
-
-const getShowLoader = (
-  status: ChatStatus,
-  lastPart: ChatMessageBase['parts'][number] | undefined,
-  tools: ClientSideTools,
-  showReasoning: boolean | undefined,
-  hasActiveReasoning: boolean
-): boolean => {
-  if (status !== 'submitted' && status !== 'streaming') return false;
-  if (status === 'submitted') return true;
-
-  if (!lastPart) return true;
-  // An active disclosure carries its own progress affordance, so the loader would
-  // double it. Settled reasoning still shows it: the answer has not started.
-  if (showReasoning && hasActiveReasoning) return false;
-  if (isPartText(lastPart)) return false;
-
-  if (isPartTool(lastPart) && lastPart.state === 'input-streaming') {
-    const tool = findTool(lastPart.type, tools);
-    return !tool?.streamInput;
-  }
-
-  return true;
-};
