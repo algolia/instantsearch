@@ -80,11 +80,6 @@ export const findTool = (
   return tool;
 };
 
-/**
- * A tool whose results are submitted through the message that owns the call,
- * rather than through the chat-wide channel. The connector attaches the
- * message-scoped variant; tools registered by hand may not have it.
- */
 /** The tool-scoped half of a tool context, on top of the shared chat context. */
 export type ClientSideToolContextExtras<TMessage extends ChatMessageBase> =
   Pick<
@@ -100,6 +95,11 @@ export type ClientSideToolContextExtras<TMessage extends ChatMessageBase> =
     | 'setIndexUiState'
   >;
 
+/**
+ * A tool whose results are submitted through the message that owns the call,
+ * rather than through the chat-wide channel. The connector attaches the
+ * message-scoped variant; tools registered by hand may not have it.
+ */
 export type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (
     message: ChatMessageBase,
@@ -107,11 +107,6 @@ export type MessageScopedClientSideTool = ClientSideTool & {
   ) => ReturnType<AddToolResult>;
 };
 
-/**
- * Builds the `context` a tool call is rendered from. Shared by the renderer and
- * by the loader's visibility check so that `shouldRender` is evaluated against
- * exactly the data `layoutComponent` would receive.
- */
 /**
  * Builds the tool-scoped half of a tool context: the fields that depend on
  * which tool call is in play, rather than on the chat as a whole.
