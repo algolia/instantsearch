@@ -2,13 +2,31 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createDisplayResultsTool } from '../DisplayResultsTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentContext,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+const metadata: ChatComponentContext = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+};
 
 type TestResult = {
   objectID: string;
@@ -34,9 +52,9 @@ const mockItemComponent = ({ item }: { item: TestResult }) => (
 );
 
 const createMessages = (
-  message: ClientSideToolComponentProps['message'],
+  message: ClientSideToolComponentProps['context']['message'],
   hits: Array<{ objectID: string; name?: string; why?: string }>
-): ClientSideToolComponentProps['messages'] =>
+): ChatComponentContext['messages'] =>
   [
     {
       id: '1',
@@ -52,7 +70,18 @@ const createMessages = (
         message,
       ],
     },
-  ] as ClientSideToolComponentProps['messages'];
+  ] as ChatComponentContext['messages'];
+
+// This tool only consumes records; the search tool fetched them.
+const conversationOf = (messages: ChatComponentContext['messages']) => ({
+  messages,
+  records: collectChatRecords(messages),
+});
+
+const conversation = (
+  message: ClientSideToolComponentProps['context']['message'],
+  hits: Array<{ objectID: string; name?: string; why?: string }>
+) => conversationOf(createMessages(message, hits));
 
 describe('createDisplayResultsTool', () => {
   test('opts into tool input streaming', () => {
@@ -65,7 +94,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'input-streaming',
       toolCallId: 'display',
@@ -80,21 +109,19 @@ describe('createDisplayResultsTool', () => {
       },
     };
 
-    const messages = createMessages(message, [
-      { objectID: '1', name: 'Air Runner' },
-    ]);
-
     render(
       <LayoutComponent
-        message={message}
-        messages={messages}
-        status="streaming"
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversation(message, [{ objectID: '1', name: 'Air Runner' }]),
+          status: 'streaming',
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -108,7 +135,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const createToolProps = (intro: string, objectIDs: string[]) => {
-      const message: ClientSideToolComponentProps['message'] = {
+      const message: ClientSideToolComponentProps['context']['message'] = {
         type: 'tool-algolia_display_results',
         state: 'input-streaming',
         toolCallId: 'display',
@@ -123,23 +150,25 @@ describe('createDisplayResultsTool', () => {
         },
       };
 
-      return {
-        message,
-        messages: createMessages(
-          message,
-          objectIDs.map((objectID) => ({
-            objectID,
-            name: `Product ${objectID}`,
-          }))
+      return chatToolProps({
+        ...metadata,
+        ...conversationOf(
+          createMessages(
+            message,
+            objectIDs.map((objectID) => ({
+              objectID,
+              name: `Product ${objectID}`,
+            }))
+          )
         ),
         status: 'streaming' as const,
+        message,
         applyFilters: jest.fn(),
-        onClose: jest.fn(),
         indexUiState: {},
         addToolResult: jest.fn(),
         setIndexUiState: jest.fn(),
         sendEvent: jest.fn(),
-      };
+      });
     };
     const { container, rerender } = render(
       <LayoutComponent {...createToolProps('Original intro', ['1'])} />
@@ -166,7 +195,7 @@ describe('createDisplayResultsTool', () => {
   test('names the carousel scroll controls', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'input-streaming',
       toolCallId: 'display',
@@ -177,15 +206,19 @@ describe('createDisplayResultsTool', () => {
     };
     const { container } = render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [{ objectID: '1', name: 'Runner' }])}
-        status="streaming"
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Runner' }])
+          ),
+          status: 'streaming',
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -202,7 +235,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -225,17 +258,21 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-          { objectID: '2', name: 'Street Runner' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: '1', name: 'Air Runner' },
+              { objectID: '2', name: 'Street Runner' },
+            ])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -252,7 +289,7 @@ describe('createDisplayResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
     const sendEvent = jest.fn();
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -268,14 +305,16 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [{ objectID: '1' }])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={sendEvent}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(createMessages(message, [{ objectID: '1' }])),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent,
+        })}
       />
     );
 
@@ -299,7 +338,7 @@ describe('createDisplayResultsTool', () => {
       sendEvent: sendItemEvent,
     }: {
       item: TestResult;
-      sendEvent: ClientSideToolComponentProps['sendEvent'];
+      sendEvent: ClientSideToolComponentProps['context']['sendEvent'];
     }) => (
       <button
         type="button"
@@ -315,7 +354,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(conversionItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -331,14 +370,16 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [{ objectID: '1' }])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={sendEvent}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(createMessages(message, [{ objectID: '1' }])),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent,
+        })}
       />
     );
 
@@ -358,7 +399,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -383,14 +424,16 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(messages),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -406,7 +449,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -424,14 +467,16 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(messages),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -444,7 +489,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -473,17 +518,21 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-          { objectID: '2', name: 'Trail Runner' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: '1', name: 'Air Runner' },
+              { objectID: '2', name: 'Trail Runner' },
+            ])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -502,7 +551,7 @@ describe('createDisplayResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
     const sendEvent = jest.fn();
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -523,17 +572,21 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: 'known', name: 'Known record' },
-          { objectID: 'known-2', name: 'Second known record' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={sendEvent}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: 'known', name: 'Known record' },
+              { objectID: 'known-2', name: 'Second known record' },
+            ])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent,
+        })}
       />
     );
 
@@ -566,7 +619,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -583,17 +636,21 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: 'constructor', name: 'Constructor record' },
-          { objectID: '__proto__', name: 'Prototype record' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [
+              { objectID: 'constructor', name: 'Constructor record' },
+              { objectID: '__proto__', name: 'Prototype record' },
+            ])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -611,8 +668,9 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        message={
-          {
+        {...chatToolProps({
+          ...metadata,
+          message: {
             type: 'tool-algolia_display_results',
             state: 'output-available',
             toolCallId: 'display',
@@ -622,15 +680,13 @@ describe('createDisplayResultsTool', () => {
               groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
             },
             preliminary: true,
-          } as ClientSideToolComponentProps['message']
-        }
-        messages={[]}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+          } as ClientSideToolComponentProps['context']['message'],
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -654,20 +710,22 @@ describe('createDisplayResultsTool', () => {
         ],
       },
       output: { status: 'success' },
-    } as ClientSideToolComponentProps['message'];
+    } as ClientSideToolComponentProps['context']['message'];
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -682,21 +740,21 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        message={
-          {
+        {...chatToolProps({
+          ...metadata,
+          message: {
             type: 'tool-algolia_display_results',
             state: 'output-available',
             toolCallId: 'display',
             input: {},
             output: { groups: [] },
-          } as ClientSideToolComponentProps['message']
-        }
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+          } as ClientSideToolComponentProps['context']['message'],
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -707,7 +765,7 @@ describe('createDisplayResultsTool', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -723,16 +781,18 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [
-          { objectID: '1', name: 'Air Runner' },
-        ])}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(
+            createMessages(message, [{ objectID: '1', name: 'Air Runner' }])
+          ),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -750,19 +810,21 @@ describe('createDisplayResultsTool', () => {
       state: 'input-streaming',
       toolCallId: 'display',
       input: {},
-    } as ClientSideToolComponentProps['message'];
+    } as ClientSideToolComponentProps['context']['message'];
 
     render(
       <LayoutComponent
-        message={message}
-        messages={createMessages(message, [])}
-        status="streaming"
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(createMessages(message, [])),
+          status: 'streaming',
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -775,32 +837,32 @@ describe('createDisplayResultsTool', () => {
 
     const { container } = render(
       <LayoutComponent
-        message={
-          {
+        {...chatToolProps({
+          ...metadata,
+          message: {
             type: 'tool-algolia_display_results',
             state: 'output-available',
             toolCallId: 'display',
             input: { groups: 'invalid' },
             output: { intro: 'Legacy output' },
-          } as ClientSideToolComponentProps['message']
-        }
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+          } as ClientSideToolComponentProps['context']['message'],
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
     expect(container).toBeEmptyDOMElement();
   });
 
-  test('preserves duplicate result order and uses the latest preceding hit', () => {
+  test('preserves duplicate result order and uses the latest hit of the conversation', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
-    const message: ClientSideToolComponentProps['message'] = {
+    const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display',
@@ -845,23 +907,29 @@ describe('createDisplayResultsTool', () => {
           },
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentContext['messages'];
 
     render(
       <LayoutComponent
-        message={message}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(messages),
+          message,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
     expect(screen.getAllByTestId('name-1')).toHaveLength(2);
-    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent('New Runner');
+    // One map for the whole conversation, so the newest copy of a record wins
+    // even when its search ran after this tool.
+    expect(screen.getAllByTestId('name-1')[0]).toHaveTextContent(
+      'Future Runner'
+    );
     expect(screen.getAllByTestId('position-1')[0]).toHaveTextContent('1');
     expect(screen.getAllByTestId('position-1')[1]).toHaveTextContent('2');
     expect(screen.getAllByTestId('why-1')[0]).toHaveTextContent('first');
@@ -871,28 +939,30 @@ describe('createDisplayResultsTool', () => {
   test('hydrates reused tool call IDs within their owning messages', () => {
     const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
-    const firstDisplayMessage: ClientSideToolComponentProps['message'] = {
-      type: 'tool-algolia_display_results',
-      state: 'output-available',
-      toolCallId: 'display',
-      input: {
-        groups: [
-          { title: 'First turn', results: [{ objectID: 'old-product' }] },
-        ],
-      },
-      output: { status: 'success' },
-    };
-    const secondDisplayMessage: ClientSideToolComponentProps['message'] = {
-      type: 'tool-algolia_display_results',
-      state: 'output-available',
-      toolCallId: 'display',
-      input: {
-        groups: [
-          { title: 'Second turn', results: [{ objectID: 'new-product' }] },
-        ],
-      },
-      output: { status: 'success' },
-    };
+    const firstDisplayMessage: ClientSideToolComponentProps['context']['message'] =
+      {
+        type: 'tool-algolia_display_results',
+        state: 'output-available',
+        toolCallId: 'display',
+        input: {
+          groups: [
+            { title: 'First turn', results: [{ objectID: 'old-product' }] },
+          ],
+        },
+        output: { status: 'success' },
+      };
+    const secondDisplayMessage: ClientSideToolComponentProps['context']['message'] =
+      {
+        type: 'tool-algolia_display_results',
+        state: 'output-available',
+        toolCallId: 'display',
+        input: {
+          groups: [
+            { title: 'Second turn', results: [{ objectID: 'new-product' }] },
+          ],
+        },
+        output: { status: 'success' },
+      };
     const messages = [
       {
         id: 'first-message',
@@ -926,18 +996,20 @@ describe('createDisplayResultsTool', () => {
           secondDisplayMessage,
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentContext['messages'];
 
     const firstRender = render(
       <LayoutComponent
-        message={firstDisplayMessage}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(messages),
+          message: firstDisplayMessage,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 
@@ -949,14 +1021,16 @@ describe('createDisplayResultsTool', () => {
 
     render(
       <LayoutComponent
-        message={secondDisplayMessage}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
+        {...chatToolProps({
+          ...metadata,
+          ...conversationOf(messages),
+          message: secondDisplayMessage,
+          applyFilters: jest.fn(),
+          indexUiState: {},
+          addToolResult: jest.fn(),
+          setIndexUiState: jest.fn(),
+          sendEvent: jest.fn(),
+        })}
       />
     );
 

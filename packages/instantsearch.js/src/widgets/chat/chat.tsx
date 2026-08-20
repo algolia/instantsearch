@@ -43,14 +43,15 @@ import type {
 } from '../../types';
 import type {
   ChatClassNames,
+  ChatComponentPropsWithContext,
+  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
-  ChatEmptyProps,
-  ChatMessageLoaderProps,
+  ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
   ChatMessageTextComponentProps,
   ChatMessagesProps,
@@ -167,16 +168,28 @@ type ChatWrapperProps = {
   };
   messagesProps: {
     loaderComponent:
-      | ((props: ChatMessageLoaderProps) => JSX.Element)
+      | ((props: ChatMessageLoaderPropsWithContext) => JSX.Element)
+      | undefined;
+    errorComponent:
+      | ((
+          props: ChatComponentPropsWithContext<ChatMessageErrorProps>
+        ) => JSX.Element)
+      | undefined;
+    emptyComponent:
+      // The deprecated root props are still passed alongside `context`.
+      // eslint-disable-next-line typescript/no-deprecated
+      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
       | undefined;
     loaderPosition: ChatMessagesProps['loaderPosition'];
     shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
     loaderShowDelay: ChatMessagesProps['loaderShowDelay'];
     loaderMinDuration: ChatMessagesProps['loaderMinDuration'];
-    errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
     actionsComponent:
-      | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
+      | ((
+          props: ChatComponentPropsWithContext<{
+            actions: ChatMessageActionProps[];
+          }>
+        ) => JSX.Element)
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
@@ -451,18 +464,16 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableMessagesErrorComponent = templates.messages?.error
-    ? createStableTemplateComponent<ChatMessageErrorProps>(
-        messagesTemplateRef,
-        'error',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        ChatComponentPropsWithContext<ChatMessageErrorProps>
+      >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatEmptyProps>(
-        emptyTemplateRef,
-        'empty',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        // The deprecated root props are still passed alongside `context`.
+        // eslint-disable-next-line typescript/no-deprecated
+        ChatComponentPropsWithContext<ChatEmptyProps>
+      >(emptyTemplateRef, 'empty', 'div')
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
@@ -530,7 +541,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableActionsComponent = templates.actions
-    ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
+    ? (
+        actionsProps: ChatComponentPropsWithContext<{
+          actions: ChatMessageActionProps[];
+        }>
+      ) => (
         <TemplateComponent
           {...renderState.templateProps}
           templateKey="actions"
@@ -540,7 +555,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableLoaderComponent = templates.loader
-    ? createStableTemplateComponent<ChatMessageLoaderProps>(
+    ? createStableTemplateComponent<ChatMessageLoaderPropsWithContext>(
         loaderTemplateRef,
         'loader',
         'div'
@@ -901,7 +916,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Custom loader template for the chat widget.
      */
-    loader: Template<ChatMessageLoaderProps>;
+    loader: Template<ChatMessageLoaderPropsWithContext>;
 
     /**
      * Text to display in the loader. Pass a function to label the wait by what
@@ -962,7 +977,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       /**
        * Template to use when there is an error loading messages
        */
-      error: Template<ChatMessageErrorProps>;
+      error: Template<ChatComponentPropsWithContext<ChatMessageErrorProps>>;
       /**
        * Label for the scroll to bottom button
        */
@@ -1076,15 +1091,19 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the message actions.
      */
-    actions: Template<{
-      actions: ChatMessageActionProps[];
-      message: ChatMessageBase;
-    }>;
+    actions: Template<
+      ChatComponentPropsWithContext<{
+        actions: ChatMessageActionProps[];
+        message: ChatMessageBase;
+      }>
+    >;
 
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatEmptyProps>;
+    // The deprecated root props are still passed alongside `context`.
+    // eslint-disable-next-line typescript/no-deprecated
+    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
 
     /**
      * Template to use for prompt suggestions.

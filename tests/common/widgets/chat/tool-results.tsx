@@ -19,13 +19,10 @@ export function createToolResultTests(
       const searchClient = createSearchClient();
       const submissions = new Map<
         string,
-        ClientSideToolTemplateData['addToolResult']
+        ClientSideToolTemplateData['context']['addToolResult']
       >();
-      const captureSubmission = ({
-        message,
-        addToolResult,
-      }: ClientSideToolTemplateData) => {
-        submissions.set(message.toolCallId, addToolResult);
+      const captureSubmission = ({ context }: ClientSideToolTemplateData) => {
+        submissions.set(context.message.toolCallId, context.addToolResult);
       };
       const chat = new Chat({
         id: 'chat-id',
@@ -78,7 +75,9 @@ export function createToolResultTests(
                 layoutComponent(data) {
                   captureSubmission(data);
                   return (
-                    <span data-tool-call-id={data.message.toolCallId}></span>
+                    <span
+                      data-tool-call-id={data.context.message.toolCallId}
+                    ></span>
                   );
                 },
               },

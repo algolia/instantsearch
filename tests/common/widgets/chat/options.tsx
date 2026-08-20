@@ -15,6 +15,7 @@ import {
   chatInlineLayout,
   chatSidePanelLayout,
 } from 'instantsearch.js/es/templates';
+import { createElement as createPreactElement } from 'preact';
 import React from 'react';
 import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
@@ -1769,7 +1770,7 @@ export function createOptionsTests(
               tools: {
                 hello: {
                   templates: {
-                    layout: ({ applyFilters }, { html }) =>
+                    layout: ({ context: { applyFilters } }, { html }) =>
                       html`<button
                         class="ais-ChatToolHelloViewAll"
                         onclick="${() => {
@@ -1793,7 +1794,7 @@ export function createOptionsTests(
               ...createDefaultWidgetParams(chat),
               tools: {
                 hello: {
-                  layoutComponent: ({ applyFilters }) => {
+                  layoutComponent: ({ context: { applyFilters } }) => {
                     return (
                       <button
                         className="ais-ChatToolHelloViewAll"
@@ -2072,9 +2073,13 @@ export function createOptionsTests(
           {
             state = 'output-available',
             output = { status: 'success' },
+            hits = ['1', '2', '3', '4', '5'].map((objectID) => ({
+              objectID,
+            })),
           }: {
             state?: 'input-streaming' | 'input-available' | 'output-available';
             output?: unknown;
+            hits?: Array<Record<string, unknown> & { objectID: string }>;
           } = {}
         ) =>
           ({
@@ -2087,9 +2092,7 @@ export function createOptionsTests(
                 input: { query: 'test' },
                 state: 'output-available',
                 output: {
-                  hits: ['1', '2', '3', '4', '5'].map((objectID) => ({
-                    objectID,
-                  })),
+                  hits,
                 },
               },
               {
@@ -2193,6 +2196,66 @@ export function createOptionsTests(
               )
             ).toHaveLength(2);
           });
+        });
+
+        test('renders a non-default image attribute in display results', async () => {
+          const searchClient = createSearchClient();
+          const thumbnailUrl = 'https://example.com/shoe.jpg';
+
+          const chat = new Chat({
+            messages: [
+              displayResultsMessage(
+                {
+                  groups: [{ results: [{ objectID: '1' }] }],
+                },
+                {
+                  hits: [{ objectID: '1', thumbnail_url: thumbnailUrl }],
+                }
+              ),
+            ],
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                templates: {
+                  item: (hit) =>
+                    createPreactElement('img', {
+                      src: (hit as typeof hit & { thumbnail_url: string })
+                        .thumbnail_url,
+                      alt: '',
+                    }),
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                itemComponent: ({ item }) => (
+                  <img
+                    src={
+                      (item as typeof item & { thumbnail_url: string })
+                        .thumbnail_url
+                    }
+                    alt=""
+                  />
+                ),
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector(
+              '.ais-ChatToolDisplayResults .ais-Carousel-item img'
+            )
+          ).toHaveAttribute('src', thumbnailUrl);
         });
 
         test('shows the streaming caption only for the active response', async () => {

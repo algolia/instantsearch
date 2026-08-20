@@ -193,6 +193,10 @@ export function createChatComponent({
     const messagesComponent = (
       <ChatMessages
         {...messagesProps}
+        open={open}
+        maximized={maximized}
+        regenerate={regenerate}
+        stop={stop}
         isClearing={isClearing}
         onClearTransitionEnd={finishClear}
         onNewConversation={

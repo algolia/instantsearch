@@ -3,6 +3,7 @@ import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
 import { isReasoningPartActive } from '../../lib/utils/chat';
+import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -15,19 +16,47 @@ import { MenuIcon } from './icons';
 import type {
   AddToolResult,
   AddToolResultWithOutput,
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
   ClientSideTool,
+  ClientSideToolContext,
   ClientSideTools,
   TextUIPart,
 } from './types';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   ComponentProps,
   Renderer,
   SendEventForHits,
   VNode,
 } from '../../types';
+
+/**
+ * The root-level props tool layout components received before everything moved
+ * under `context`. Passed alongside `context` so components written against the
+ * previous API keep working. Remove together with
+ * `DeprecatedClientSideToolRootProps` in the next major.
+ */
+function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
+  context: ClientSideToolContext<TMessage>
+) {
+  return {
+    message: context.message,
+    messages: context.messages,
+    records: context.records,
+    insightsEventContext: context.insightsEventContext,
+    status: context.status,
+    indexUiState: context.indexUiState,
+    setIndexUiState: context.setIndexUiState,
+    onClose: context.onClose,
+    addToolResult: context.addToolResult,
+    applyFilters: context.applyFilters,
+    sendEvent: context.sendEvent,
+  };
+}
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (
@@ -133,10 +162,6 @@ export type ChatMessageProps<
    */
   message: TMessage;
   /**
-   * The status of the message (e.g. whether it's still streaming)
-   */
-  status: ChatStatus;
-  /**
    * The side of the message
    */
   side?: ChatMessageSide;
@@ -159,10 +184,12 @@ export type ChatMessageProps<
   /**
    * Custom actions renderer
    */
-  actionsComponent?: (props: {
-    actions: ChatMessageActionProps[];
-    message: ChatMessageBase;
-  }) => JSX.Element | null;
+  actionsComponent?: (
+    props: ChatComponentPropsWithContext<{
+      actions: ChatMessageActionProps[];
+      message: ChatMessageBase;
+    }>
+  ) => JSX.Element | null;
   /**
    * Footer content
    */
@@ -182,19 +209,26 @@ export type ChatMessageProps<
    */
   setIndexUiState: (state: object) => void;
   /**
-   * The full conversation. Forwarded to tool components so those that only
-   * receive object IDs (e.g. display results) can hydrate records from a
-   * preceding search tool's hits.
+   * The full conversation. Forwarded to tool and text components so those that
+   * only receive object IDs (e.g. display results) can hydrate records from a
+   * preceding search tool's hits. Defaults to `context.messages` when omitted.
    */
   messages?: TMessage[];
   /**
-   * Close the chat
+   * @deprecated Read `context.status` instead. Overrides `context.status` when
+   * provided, for callers written against the previous API.
    */
-  onClose: () => void;
+  status?: ChatStatus;
   /**
-   * Array of tools available for the assistant (for tool messages)
+   * @deprecated Read `context.tools` instead. Overrides `context.tools` when
+   * provided, for callers written against the previous API.
    */
-  tools: ClientSideTools;
+  tools?: ClientSideTools;
+  /**
+   * @deprecated Read `context.onClose` instead. Overrides `context.onClose`
+   * when provided, for callers written against the previous API.
+   */
+  onClose?: () => void;
   /**
    * Optional suggestions element
    */
@@ -243,11 +277,15 @@ export function createChatMessageComponent({
 
   return function ChatMessage<
     TMessage extends ChatMessageBase = ChatMessageBase,
-  >(userProps: ChatMessageProps<TMessage>) {
+  >(
+    userProps: ChatComponentPropsWithContext<
+      ChatMessageProps<TMessage>,
+      TMessage
+    >
+  ) {
     const {
       classNames = {},
       message,
-      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -256,24 +294,52 @@ export function createChatMessageComponent({
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
       textComponent: TextComponent,
-      tools = {},
       indexUiState,
       setIndexUiState,
-      messages,
-      onClose,
       translations: userTranslations,
       suggestionsElement,
       loaderElement,
       showReasoning = false,
       parseMarkdown = true,
+      messages: ownMessages,
+      /* eslint-disable typescript/no-deprecated -- reading the
+         deprecated aliases is the point: they are resolved into `context`
+         below so callers on the previous API keep working. */
+      status: ownStatus,
+      tools: ownTools,
+      onClose: ownOnClose,
+      /* eslint-enable typescript/no-deprecated */
+      context: sharedContext,
       ...props
     } = userProps;
+
+    // Root-level overrides win over the shared context, so a caller can scope
+    // these to a single message. `messages` is supported going forward; the
+    // other three are deprecated aliases kept for callers written against the
+    // pre-`context` API. Resolving them into one object up front means every
+    // consumer below (tools, actions, text) reads consistent values.
+    const context: ChatComponentContext<TMessage> = {
+      ...sharedContext,
+      messages: ownMessages ?? sharedContext.messages,
+      status: ownStatus ?? sharedContext.status,
+      tools: ownTools ?? sharedContext.tools,
+      onClose: ownOnClose ?? sharedContext.onClose,
+    };
+    const { messages, status, tools } = context;
 
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
       actionsLabel: 'Message actions',
       reasoningLabel: 'Reasoning',
       ...userTranslations,
+    };
+
+    // A message rendered without a connector-attached store falls back to
+    // collecting from the conversation it was handed.
+    let fallbackRecords: ChatRecordsStore | undefined;
+    const getFallbackRecords = () => {
+      fallbackRecords = fallbackRecords || collectChatRecords(messages);
+      return fallbackRecords;
     };
 
     const hasLeading = Boolean(LeadingComponent);
@@ -480,22 +546,26 @@ export function createChatMessageComponent({
             });
           }) as SendEventForHits;
 
+          const toolContext: ClientSideToolContext<TMessage> = {
+            ...context,
+            records: tool.records || getFallbackRecords(),
+            message: toolMessage,
+            insightsEventContext: tool.insightsEventContext,
+            indexUiState,
+            setIndexUiState,
+            addToolResult: boundAddToolResult,
+            applyFilters: tool.applyFilters,
+            sendEvent,
+          };
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
               <ToolLayoutComponent
-                message={toolMessage}
-                insightsEventContext={tool.insightsEventContext}
-                status={status}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
-                messages={messages}
-                addToolResult={boundAddToolResult}
-                applyFilters={tool.applyFilters}
-                sendEvent={sendEvent}
-                onClose={onClose}
+                {...getDeprecatedToolRootProps(toolContext)}
+                context={toolContext}
               />
             </div>
           );
@@ -531,7 +601,11 @@ export function createChatMessageComponent({
                 aria-label={translations.actionsLabel}
               >
                 {ActionsComponent ? (
-                  <ActionsComponent actions={actions} message={message} />
+                  <ActionsComponent
+                    actions={actions}
+                    message={message}
+                    context={context}
+                  />
                 ) : (
                   actions.map((action, index) => (
                     <Button

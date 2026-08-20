@@ -2,12 +2,17 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
+import { chatToolProps } from '@instantsearch/testutils';
 import { fireEvent, screen, within } from '@testing-library/dom';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import { createDisplayResultsTool } from '../display-results-tool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentContext,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
 import type { ComponentType } from 'preact';
 
 const createToolProps = (
@@ -27,38 +32,49 @@ const createToolProps = (
         },
       ],
     },
-  } as ClientSideToolComponentProps['message'];
+  } as ClientSideToolComponentProps['context']['message'];
 
-  return {
-    message,
-    messages: [
-      {
-        id: 'assistant-message-id',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'products' },
-            output: {
-              hits: objectIDs.map((objectID) => ({
-                objectID,
-                name: `Product ${objectID}`,
-              })),
-            },
+  const messages = [
+    {
+      id: 'assistant-message-id',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-algolia_search_index',
+          toolCallId: 'search',
+          state: 'output-available',
+          input: { query: 'products' },
+          output: {
+            hits: objectIDs.map((objectID) => ({
+              objectID,
+              name: `Product ${objectID}`,
+            })),
           },
-          message,
-        ],
-      },
-    ] as ClientSideToolComponentProps['messages'],
+        },
+        message,
+      ],
+    },
+  ] as ChatComponentContext['messages'];
+
+  return chatToolProps({
+    messages,
+    status: 'ready',
+    isClearing: false,
+    open: true,
+    maximized: false,
+    tools: {},
+    regenerate: jest.fn(),
+    stop: jest.fn(),
+    onReload: jest.fn(),
+    onClose: jest.fn(),
+    message,
+    records: collectChatRecords(messages),
     indexUiState: {},
     setIndexUiState: jest.fn(),
-    onClose: jest.fn(),
     addToolResult: jest.fn(),
     applyFilters: jest.fn(),
     sendEvent: jest.fn(),
-  };
+  });
 };
 
 describe('createDisplayResultsTool', () => {

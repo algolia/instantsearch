@@ -14,37 +14,40 @@ export type ChatMessageLoaderTranslations = {
   loaderText?: string;
 };
 
-export type ChatMessageLoaderProps<
+export type ChatMessageLoaderProps = ComponentProps<'article'> & {
+  /**
+   * Translations for loader component texts
+   */
+  translations?: Partial<ChatMessageLoaderTranslations>;
+  /**
+   * Whether the loader renders inside a message rather than as its own row.
+   * Inline loaders drop the message chrome the host already provides.
+   */
+  inline?: boolean;
+};
+
+/**
+ * The loader reads the turn context, so it takes `ChatLoaderContext` rather than
+ * the plain `ChatComponentContext` every other overridable component gets.
+ */
+export type ChatMessageLoaderPropsWithContext<
   TMessage extends ChatMessageBase = ChatMessageBase,
-> = Omit<ComponentProps<'article'>, 'status'> &
-  Partial<ChatLoaderContext<TMessage>> & {
-    /**
-     * Translations for loader component texts
-     */
-    translations?: Partial<ChatMessageLoaderTranslations>;
-    /**
-     * Whether the loader renders inside a message rather than as its own row.
-     * Inline loaders drop the message chrome the host already provides.
-     */
-    inline?: boolean;
-  };
+> = ChatMessageLoaderProps & {
+  context: ChatLoaderContext<TMessage>;
+};
 
 export function createChatMessageLoaderComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function ChatMessageLoader<
     TMessage extends ChatMessageBase = ChatMessageBase,
-  >(userProps: ChatMessageLoaderProps<TMessage>) {
+  >(userProps: ChatMessageLoaderPropsWithContext<TMessage>) {
     const {
       translations: userTranslations,
       inline = false,
       className,
       // The turn context is for custom loaders, not for the DOM.
-      status: _status,
-      phase: _phase,
-      message: _message,
-      messages: _messages,
-      tools: _tools,
+      context: _context,
       ...props
     } = userProps;
     const translations: Required<ChatMessageLoaderTranslations> = {

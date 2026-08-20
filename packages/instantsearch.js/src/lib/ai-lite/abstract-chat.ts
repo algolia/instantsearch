@@ -1017,8 +1017,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
         allowRetired: !wasRetired,
       });
     };
+    // A tool call the server answers itself is server-owned, even when the
+    // stream omits `providerExecuted`: nothing is left for the client to
+    // submit, so the response must stop requiring a result for it. Dropping it
+    // from `requiredToolCallIds` also keeps the turn from auto-continuing on
+    // the server's behalf — a turn made of server-executed tool calls is
+    // already complete, and resending it would repeat the whole answer.
     const acceptServerToolResult = (toolCallId: string): void => {
-      if (response.requiredToolCallIds.has(toolCallId)) {
+      if (response.requiredToolCallIds.delete(toolCallId)) {
         response.resolvedToolCallIds.add(toolCallId);
       }
     };
