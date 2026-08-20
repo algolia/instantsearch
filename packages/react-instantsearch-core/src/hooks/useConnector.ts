@@ -23,8 +23,10 @@ export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>> & {
   opensChat?: boolean;
 };
 
-type WidgetReplacementRenderState = {
-  '~hasStateToLoseOnWidgetReplacement'?: boolean;
+type WidgetReplacementRenderState<TWidgetParams> = {
+  '~hasStateToLoseOnWidgetReplacement'?: (
+    nextWidgetParams: TWidgetParams
+  ) => boolean;
 };
 
 export function useConnector<
@@ -54,15 +56,17 @@ export function useConnector<
 
   const onWidgetReplacement = useCallback(() => {
     const previousRenderState =
-      previousRenderStateRef.current as WidgetReplacementRenderState | null;
+      previousRenderStateRef.current as WidgetReplacementRenderState<TProps> | null;
+    const hasStateToLose =
+      previousRenderState?.['~hasStateToLoseOnWidgetReplacement'];
 
-    if (previousRenderState?.['~hasStateToLoseOnWidgetReplacement'] === true) {
+    if (hasStateToLose?.(stableProps) === true) {
       warn(
         false,
         'Changing the props of the React <Chat> widget replaces its internal Chat instance and clears open state or non-persisted messages. Use stable prop references or provide your own Chat instance to preserve the conversation.'
       );
     }
-  }, []);
+  }, [stableProps]);
 
   const widget = useMemo(() => {
     const createWidget = connector(

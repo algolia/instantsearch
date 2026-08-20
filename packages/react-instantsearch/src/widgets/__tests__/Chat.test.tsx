@@ -655,6 +655,92 @@ describe('Chat', () => {
     ]);
   });
 
+  test('does not warn when changed connector props preserve persisted open state', async () => {
+    const chatRef = React.createRef<ChatHandle>();
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            ref={chatRef}
+            context={context}
+            disableTriggerValidation={true}
+            persistence={{ messages: false, open: true }}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { container, rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+  });
+
+  test('warns when changed connector props lose open state under a new type', async () => {
+    const chatRef = React.createRef<ChatHandle>();
+
+    function Subject({ type }: { type: string }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            ref={chatRef}
+            disableTriggerValidation={true}
+            persistence={{ messages: false, open: true }}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+            type={type}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { container, rerender } = render(<Subject type="chat" />);
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    expect(container.querySelector('.ais-Chat-container')).toHaveClass(
+      'ais-Chat-container--open'
+    );
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject type="support" />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-Chat-container')).not.toHaveClass(
+      'ais-Chat-container--open'
+    );
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
   test('warns only when a suspended prop change commits the Chat replacement', async () => {
     const chatRef = React.createRef<ChatHandle>();
     const contexts = [
