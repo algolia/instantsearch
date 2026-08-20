@@ -1,4 +1,4 @@
-export { getApplyFiltersParamsFromToolInput } from './chat';
+export { findTool, getApplyFiltersParamsFromToolInput } from './chat';
 export {
   collectChatRecords,
   createChatRecordsStore,

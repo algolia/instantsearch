@@ -4,8 +4,6 @@ import type { ChatMessageBase } from '../../components';
 import type {
   ApplyFiltersParams,
   ChatToolMessage,
-  ClientSideTool,
-  ClientSideTools,
   SearchToolInput,
   SearchToolQuery,
 } from '../../components/chat/types';
@@ -50,18 +48,44 @@ export function isReasoningPartActive(
   );
 }
 
-export const findTool = (
+const TOOL_PART_PREFIX = 'tool-';
+
+/**
+ * Resolves the tool a message part belongs to, from either a part type
+ * (`tool-algolia_search_index`) or a bare tool name.
+ *
+ * Generic over the tool shape so the renderer, the loader and the connector —
+ * which hold different subsets of the tool contract — all resolve names the same
+ * way.
+ */
+export const findTool = <TTool>(
   partType: string,
-  tools: ClientSideTools
-): ClientSideTool | undefined => {
-  const toolName = partType.replace('tool-', '');
-  let tool: ClientSideTool | undefined = tools[toolName];
-  if (!tool) {
-    tool = Object.entries(tools).find(([key]) =>
-      startsWith(toolName, `${key}_`)
-    )?.[1];
+  tools: Record<string, TTool>
+): TTool | undefined => {
+  const toolName = startsWith(partType, TOOL_PART_PREFIX)
+    ? partType.slice(TOOL_PART_PREFIX.length)
+    : partType;
+
+  if (tools[toolName]) {
+    return tools[toolName];
   }
-  return tool;
+
+  // Compatibility shim for tool names suffixed by the index name, as the Algolia
+  // MCP Server does (`algolia_search_index_products`). The longest matching key
+  // wins, so registering both `foo` and `foo_bar` resolves `foo_bar_products` to
+  // `foo_bar` — otherwise the winner would depend on registration order.
+  let match: string | undefined;
+
+  Object.keys(tools).forEach((key) => {
+    if (
+      startsWith(toolName, `${key}_`) &&
+      (match === undefined || key.length > match.length)
+    ) {
+      match = key;
+    }
+  });
+
+  return match === undefined ? undefined : tools[match];
 };
 
 const FACET_KEY_PREFIX = 'facet_';
