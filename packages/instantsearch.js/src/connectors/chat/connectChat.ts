@@ -80,10 +80,6 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   '~consumeInputFocus'?: () => boolean;
   /** @internal */
   '~isOpenStatePersistenceEnabled'?: boolean;
-  /** @internal */
-  '~hasStateToLoseOnWidgetReplacement'?: (
-    nextWidgetParams: ChatConnectorParams<TUiMessage>
-  ) => boolean;
   /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
@@ -1059,23 +1055,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return shouldFocus;
           },
           '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
-          '~hasStateToLoseOnWidgetReplacement': (
-            nextWidgetParams: ChatConnectorParams<TUiMessage>
-          ) => {
-            const nextPersistence = normalizePersistence(
-              nextWidgetParams.persistence,
-              'chat' in nextWidgetParams
-            );
-            const nextType = nextWidgetParams.type ?? 'chat';
-
-            return (
-              !('chat' in options) &&
-              ((open &&
-                (!nextPersistence.open || !readPersistedOpen(nextType))) ||
-                (!normalizedPersistence.messages &&
-                  _chatInstance.messages.length > 0))
-            );
-          },
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,

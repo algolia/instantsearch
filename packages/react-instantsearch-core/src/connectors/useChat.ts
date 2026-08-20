@@ -1,7 +1,11 @@
 import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
+import { useRef } from 'react';
 
 import { useConnector } from '../hooks/useConnector';
+import { dequal } from '../lib/dequal';
 import { useIsHydrated } from '../lib/useIsHydrated';
+import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
+import { warn } from '../lib/warn';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
@@ -14,11 +18,75 @@ import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 export type UseChatProps<TUiMessage extends UIMessage = UIMessage> =
   ChatConnectorParams<TUiMessage>;
 
+const OPEN_STATE_CACHE_KEY = 'instantsearch-chat-open-state';
+
+function isOpenStatePersistenceEnabled<TUiMessage extends UIMessage>(
+  props: UseChatProps<TUiMessage>
+) {
+  return (
+    props.persistence === undefined ||
+    props.persistence === true ||
+    (typeof props.persistence === 'object' && props.persistence.open === true)
+  );
+}
+
+function isMessagePersistenceEnabled<TUiMessage extends UIMessage>(
+  props: UseChatProps<TUiMessage>
+) {
+  return (
+    props.persistence === undefined ||
+    props.persistence === true ||
+    (typeof props.persistence === 'object' &&
+      props.persistence.messages === true)
+  );
+}
+
+function hasPersistedOpenState(type: string) {
+  try {
+    return sessionStorage.getItem(`${OPEN_STATE_CACHE_KEY}-${type}`) === 'true';
+  } catch {
+    return false;
+  }
+}
+
 export function useChat<TUiMessage extends UIMessage = UIMessage>(
   props: UseChatProps<TUiMessage>,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ): ChatWidgetDescription<TUiMessage>['renderState'] {
   const isHydrated = useIsHydrated();
+  const previousPropsRef = useRef(props);
+  const previousChatStateRef = useRef<Pick<
+    ChatWidgetDescription<TUiMessage>['renderState'],
+    'messages' | 'open'
+  > | null>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    const previousProps = previousPropsRef.current;
+    const previousChatState = previousChatStateRef.current;
+
+    if (
+      previousChatState &&
+      !dequal(previousProps, props) &&
+      !('chat' in previousProps)
+    ) {
+      const nextType = props.type ?? 'chat';
+      const losesOpenState =
+        previousChatState.open &&
+        (!isOpenStatePersistenceEnabled(props) ||
+          !hasPersistedOpenState(nextType));
+      const losesMessages =
+        previousChatState.messages.length > 0 &&
+        !isMessagePersistenceEnabled(previousProps);
+
+      warn(
+        !losesOpenState && !losesMessages,
+        'Changing the props of the React <Chat> widget replaces its internal Chat instance and clears open state or non-persisted messages. Use stable prop references or provide your own Chat instance to preserve the conversation.'
+      );
+    }
+
+    previousPropsRef.current = props;
+  });
+
   const chatState = useConnector<
     ChatConnectorParams<TUiMessage>,
     ChatWidgetDescription<TUiMessage>
@@ -27,6 +95,10 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>(
     props,
     additionalWidgetProperties
   );
+
+  useIsomorphicLayoutEffect(() => {
+    previousChatStateRef.current = chatState;
+  });
 
   if (isHydrated) {
     return chatState;
