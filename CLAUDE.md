@@ -67,6 +67,7 @@ yarn website:examples && E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 - **Commits: Conventional Commits** — `type(scope): description`, scope = widget/connector or topic (`deps`, `ci`). e.g. `fix(searchbox): increase magnifying glass size`, `feat(hits): add custom rendering`. Reference issues with `fix #1234` in the body.
 - **Branches:** target `master`; `vX` branches are critical-fix-only. Branch names: `fix/<issue>`, `feat/<name>`.
 - **Releases** are automated via Ship.js (`yarn release`); changelogs are generated from commits — don't hand-edit them.
+- **Agent workflows that write to another repo** (`.github/workflows/docs-*.yml`) must run with the working directory _inside_ that repo. A `CLAUDE.md`/`AGENTS.md` in a workspace subdirectory is never loaded, so the target repo's conventions get silently ignored — reach the source of this repo via `--add-dir` instead. Same for `--allowedTools`: `Bash(git diff:*)` matches, `Bash(git diff *)` matches nothing, and every denied call burns a turn.
 
 ## Keep these docs alive
 
