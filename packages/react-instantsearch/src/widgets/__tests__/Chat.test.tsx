@@ -199,6 +199,227 @@ describe('Chat', () => {
     externalButton.remove();
   });
 
+  test('does not focus after a reveal is interrupted by closing', async () => {
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+    const chatRef = React.createRef<ChatHandle>();
+
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          ref={chatRef}
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          persistence={true}
+          requiresSearch={false}
+        />
+        <ChatTrigger floating={false} />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+    });
+
+    let finishReveal!: () => void;
+    const finished = new Promise<void>((resolve) => {
+      finishReveal = resolve;
+    });
+    Object.defineProperty(
+      container.querySelector('.ais-Chat-container'),
+      'getAnimations',
+      {
+        configurable: true,
+        value: () => [{ playState: 'running', finished }],
+      }
+    );
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    externalButton.focus();
+    await act(async () => {
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    await act(async () => {
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    await act(async () => {
+      finishReveal();
+      await finished;
+    });
+
+    expect(focusSpy).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(externalButton);
+
+    externalButton.remove();
+  });
+
+  test('keeps a newer focus request waiting for a replacement reveal', async () => {
+    sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
+    const externalButton = document.createElement('button');
+    document.body.appendChild(externalButton);
+
+    const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    const animationFrames: Array<() => void> = [];
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        animationFrames.push(() => callback(0));
+        return animationFrames.length;
+      });
+    const chatRef = React.createRef<ChatHandle>();
+    let chatRenderState: Parameters<typeof openChat>[0];
+
+    const { container } = render(
+      <InstantSearch searchClient={searchClient} indexName="indexName">
+        <Chat
+          ref={chatRef}
+          agentId="test-agent-id"
+          disableTriggerValidation={true}
+          persistence={true}
+          requiresSearch={false}
+        />
+        <CaptureChatRenderState
+          capture={(renderState) => {
+            chatRenderState = renderState;
+          }}
+        />
+      </InstantSearch>
+    );
+
+    await act(async () => {
+      await wait(0);
+      chatRef.current!.setOpen(false);
+      await wait(0);
+    });
+    externalButton.focus();
+
+    let cancelSelectedReveal!: () => void;
+    let selectedRevealPlayState: AnimationPlayState = 'running';
+    let selectedRevealFinishedReads = 0;
+    const selectedRevealFinished = new Promise<void>((_resolve, reject) => {
+      cancelSelectedReveal = () => {
+        selectedRevealPlayState = 'idle';
+        reject();
+      };
+    });
+    let finishReplacementReveal!: () => void;
+    const replacementRevealFinished = new Promise<void>((resolve) => {
+      finishReplacementReveal = resolve;
+    });
+    const selectedReveal = {
+      currentTime: 10,
+      startTime: 0,
+      get playState() {
+        return selectedRevealPlayState;
+      },
+      effect: {
+        getKeyframes: () => [{ opacity: 0 }, { opacity: 1 }],
+        getTiming: () => ({ iterations: 1 }),
+      },
+      get finished() {
+        selectedRevealFinishedReads++;
+        return selectedRevealFinished;
+      },
+    } as unknown as Animation;
+    const replacementReveal = {
+      currentTime: 10,
+      startTime: 0,
+      playState: 'running',
+      effect: selectedReveal.effect,
+      finished: replacementRevealFinished,
+    } as unknown as Animation;
+    const chatContainer = container.querySelector<HTMLElement>(
+      '.ais-Chat-container'
+    )!;
+    let animations = [selectedReveal];
+    Object.defineProperty(chatContainer, 'getAnimations', {
+      configurable: true,
+      value: () =>
+        chatContainer.classList.contains('ais-Chat-container--open')
+          ? animations
+          : [],
+    });
+    jest.spyOn(window, 'getComputedStyle').mockImplementation(
+      () =>
+        ({
+          clipPath: 'none',
+          opacity: '0',
+          rotate: 'none',
+          scale: 'none',
+          transform: 'none',
+          translate: 'none',
+          visibility: 'visible',
+          getPropertyValue: () => 'auto',
+        }) as unknown as CSSStyleDeclaration
+    );
+
+    await act(async () => {
+      chatRef.current!.setOpen(true);
+      await wait(0);
+    });
+    while (selectedRevealFinishedReads === 0 && animationFrames.length > 0) {
+      await act(async () => {
+        animationFrames.shift()!();
+      });
+    }
+    expect(selectedRevealFinishedReads).toBeGreaterThan(0);
+    animationFrames.length = 0;
+
+    expect(document.activeElement).toBe(externalButton);
+    expect(chatContainer).toHaveAttribute('inert');
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    animations = [replacementReveal];
+    cancelSelectedReveal();
+    await act(async () => {
+      await wait(0);
+      chatRenderState!.focusInput!();
+      await wait(0);
+    });
+    expect(animationFrames).toHaveLength(2);
+    await act(async () => {
+      animationFrames.shift()!();
+      animationFrames.shift()!();
+    });
+
+    expect(document.activeElement).toBe(externalButton);
+    expect(chatContainer).toHaveAttribute('inert');
+    expect(focusSpy).not.toHaveBeenCalled();
+
+    animations = [];
+    await act(async () => {
+      finishReplacementReveal();
+      await replacementRevealFinished;
+      await wait(0);
+      animationFrames.shift()!();
+    });
+
+    expect(chatContainer).not.toHaveAttribute('inert');
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.remove();
+  });
+
   test('does not move focus when openChat submits to an open panel', async () => {
     sessionStorage.setItem('instantsearch-chat-open-state-chat', 'true');
     const externalButton = document.createElement('button');
@@ -278,12 +499,19 @@ describe('Chat', () => {
     externalButton.remove();
   });
 
-  test('keeps prompt autofocus for an inline layout with open persistence', async () => {
+  test('keeps inline prompt focus available with open persistence', async () => {
     const externalButton = document.createElement('button');
     document.body.appendChild(externalButton);
     externalButton.focus();
 
     const focusSpy = jest.spyOn(HTMLTextAreaElement.prototype, 'focus');
+    jest
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+    let chatRenderState: Parameters<typeof openChat>[0];
     const { container } = render(
       <InstantSearch searchClient={searchClient} indexName="indexName">
         <Chat
@@ -291,6 +519,11 @@ describe('Chat', () => {
           layoutComponent={ChatInlineLayout}
           persistence={true}
           requiresSearch={false}
+        />
+        <CaptureChatRenderState
+          capture={(renderState) => {
+            chatRenderState = renderState;
+          }}
         />
       </InstantSearch>
     );
@@ -300,6 +533,19 @@ describe('Chat', () => {
     });
 
     expect(focusSpy).toHaveBeenCalled();
+    expect(document.activeElement).toBe(
+      container.querySelector('.ais-ChatPrompt-textarea')
+    );
+
+    externalButton.focus();
+    await act(async () => {
+      chatRenderState!.focusInput!();
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-Chat-container')).not.toHaveAttribute(
+      'inert'
+    );
     expect(document.activeElement).toBe(
       container.querySelector('.ais-ChatPrompt-textarea')
     );

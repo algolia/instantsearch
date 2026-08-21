@@ -14,6 +14,12 @@ import {
   PonderToolType,
   DisplayResultsToolType,
 } from '../../lib/chat';
+import {
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from '../../lib/chat/focusAfterReveal';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
@@ -408,6 +414,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
+  let focusRequestId = 0;
 
   // Template wrappers are rendered as component types downstream. Recreating
   // them each render would make Preact remount the chat subtree (and drop
@@ -889,12 +896,38 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }
 
     const shouldFocusPrompt = consumeInputFocus?.() ?? false;
+    const animationsBeforeReveal = shouldFocusPrompt
+      ? getActiveContainerAnimations(promptRef.current)
+      : [];
 
     rerender();
 
+    if (open) {
+      restoreContainerInertUntilReveal(promptRef.current);
+    }
+
+    if (!open) {
+      focusRequestId++;
+    }
+
     if (shouldFocusPrompt) {
+      const currentFocusRequestId = ++focusRequestId;
+      holdContainerInertUntilReveal(promptRef.current);
       window.requestAnimationFrame(() => {
-        promptRef.current?.focus();
+        const prompt = promptRef.current;
+        focusAfterReveal(
+          prompt,
+          animationsBeforeReveal,
+          () => {
+            return (
+              focusRequestId === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId === currentFocusRequestId;
+          }
+        );
       });
     }
   };
