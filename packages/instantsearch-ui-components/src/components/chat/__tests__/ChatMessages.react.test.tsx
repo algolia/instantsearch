@@ -7,7 +7,6 @@ import React, {
   createElement,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
@@ -21,7 +20,6 @@ const ChatMessages = createChatMessagesComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
 });
 
 describe('ChatMessages with React', () => {

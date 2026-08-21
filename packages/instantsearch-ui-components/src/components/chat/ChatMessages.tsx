@@ -481,7 +481,7 @@ export function createChatMessagesComponent({
   useMemo,
   useState,
   useEffect,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect'>) {
   const Button = createButtonComponent({ createElement });
 
   /**

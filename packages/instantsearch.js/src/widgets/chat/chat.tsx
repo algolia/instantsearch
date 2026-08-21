@@ -2,7 +2,7 @@
 
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -75,7 +75,6 @@ const Chat = createChatComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
 });
 
 export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
