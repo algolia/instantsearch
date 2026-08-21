@@ -1,0 +1,375 @@
+name: E2E
+
+on:
+  workflow_call:
+    inputs:
+      soft-fail-secondary:
+        description: 'Report IE11 and Next.js failures without failing the workflow.'
+        type: boolean
+        default: false
+  workflow_dispatch:
+  schedule:
+    # Weekdays at 21:00 UTC
+    - cron: '0 21 * * 1-5'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build library
+        run: yarn run build:ci
+
+      - name: Package build outputs
+        run: |
+          tar -cf build-outputs.tar \
+            packages/algolia-experiences/dist \
+            packages/algoliasearch-helper/dist \
+            packages/instantsearch.js/es \
+            packages/instantsearch.js/cjs \
+            packages/instantsearch.js/dist \
+            packages/react-instantsearch/dist \
+            packages/react-instantsearch-core/dist \
+            packages/react-instantsearch-router-nextjs/dist \
+            packages/react-instantsearch-nextjs/dist \
+            packages/vue-instantsearch/vue2 \
+            packages/vue-instantsearch/vue3 \
+            packages/instantsearch-ui-components/dist
+
+      - name: Upload build outputs
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-build-outputs
+          path: build-outputs.tar
+          retention-days: 1
+          overwrite: true
+
+  examples:
+    name: examples
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build-outputs
+
+      - name: Unpack build outputs
+        run: tar -xf build-outputs.tar && rm build-outputs.tar
+
+      - name: Build examples
+        run: yarn run website:examples --concurrency=1
+
+      - name: Package examples
+        run: tar -cf examples.tar website/examples
+
+      - name: Upload examples
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-examples
+          path: examples.tar
+          retention-days: 1
+          overwrite: true
+
+  e2e-tests-playwright:
+    name: e2e tests playwright
+    needs: examples
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build-outputs
+
+      - name: Download examples
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-examples
+
+      - name: Unpack artifacts
+        run: |
+          tar -xf build-outputs.tar && rm build-outputs.tar
+          tar -xf examples.tar && rm examples.tar
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: End-to-end tests (Playwright)
+        run: yarn run test:e2e:playwright
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: tests/e2e/playwright/playwright-report/
+          retention-days: 7
+          overwrite: true
+
+      - name: Notify Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v4
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_ACCESS_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ vars.SLACK_E2E_NOTIF_CHANNEL }}",
+              "text": ":warning: End-to-end tests failed",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":warning: End-to-end tests failed",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: ${{ github.repository }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Framework*: Playwright"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "GitHub Actions"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+
+  e2e-tests-ie11:
+    name: e2e tests ie11
+    needs: examples
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: ${{ inputs.soft-fail-secondary == true }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build-outputs
+
+      - name: Download examples
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-examples
+
+      - name: Unpack artifacts
+        run: |
+          tar -xf build-outputs.tar && rm build-outputs.tar
+          tar -xf examples.tar && rm examples.tar
+
+      - name: End-to-end tests (IE11)
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        run: yarn run test:e2e:ie11
+
+      - name: Notify Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v4
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_ACCESS_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ vars.SLACK_E2E_NOTIF_CHANNEL }}",
+              "text": ":warning: End-to-end tests failed",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":warning: End-to-end tests failed",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: ${{ github.repository }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Browser*: Internet Explorer 11"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "GitHub Actions"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "SauceLabs"
+                      },
+                      "url": "https://app.saucelabs.com/dashboard/tests/vdc"
+                    }
+                  ]
+                }
+              ]
+            }
+
+  e2e-tests-router-nextjs:
+    name: e2e tests router nextjs
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: ${{ inputs.soft-fail-secondary == true }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build-outputs
+
+      - name: Unpack build outputs
+        run: tar -xf build-outputs.tar && rm build-outputs.tar
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: End-to-end tests (Playwright)
+        run: yarn workspace react-instantsearch-router-nextjs run test:e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-router-nextjs
+          path: packages/react-instantsearch-router-nextjs/playwright-report/
+          retention-days: 7
+          overwrite: true
+
+  e2e-tests-app-router-nextjs:
+    name: e2e tests app router nextjs
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: ${{ inputs.soft-fail-secondary == true }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download build outputs
+        uses: actions/download-artifact@v8
+        with:
+          name: e2e-build-outputs
+
+      - name: Unpack build outputs
+        run: tar -xf build-outputs.tar && rm build-outputs.tar
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: End-to-end tests (Playwright)
+        run: yarn workspace react-instantsearch-nextjs run test:e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-app-router-nextjs
+          path: packages/react-instantsearch-nextjs/playwright-report/
+          retention-days: 7
+          overwrite: true
