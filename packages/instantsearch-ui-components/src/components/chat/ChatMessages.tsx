@@ -481,8 +481,7 @@ export function createChatMessagesComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect'>) {
   const Button = createButtonComponent({ createElement });
 
   /**
@@ -502,75 +501,144 @@ export function createChatMessagesComponent({
     showDelay: number;
     minDuration: number;
   }) {
-    // The visibility is derived during render rather than committed from an
-    // effect, because an effect-driven show lands a frame late. State is only
-    // here to wake on a deadline.
-    const [, scheduleRerender] = useState(0);
-    const stateRef = useRef({
-      isVisible: false,
-      shownAt: 0,
-      pendingSince: 0,
-      hasHiddenInTurn: false,
+    type LoaderState =
+      | { phase: 'idle' }
+      | { phase: 'visible'; shownAt: number; elapsedDuration: number }
+      | { phase: 'hidden' }
+      | { phase: 'ready'; shownAt: number; elapsedDuration: number }
+      | { phase: 'waiting'; pendingSince: number };
+
+    const [loaderState, setLoaderState] = useState<LoaderState>({
+      phase: 'idle',
     });
 
-    // Read-only during render. React can start a render and throw it away, so a
-    // render that wrote here would let a discarded pass decide a later one's
-    // timing — the next turn's first loader waiting out `showDelay` it never
-    // earned. Everything below is a local derivation; the commit happens in the
-    // effect, once the render is real.
-    const committed = stateRef.current;
-    const now = Date.now();
-
-    const hasHiddenInTurn = isTurnActive ? committed.hasHiddenInTurn : false;
-    const pendingSince = isLoading ? committed.pendingSince || now : 0;
-
-    let isVisible = committed.isVisible;
-
-    if (isLoading) {
-      // Only a loader coming *back* waits; the first one must be immediate.
-      const delay = hasHiddenInTurn ? showDelay : 0;
-      isVisible = now - pendingSince >= delay;
-    } else if (isVisible) {
-      // The minimum only applies while the turn is still running.
-      isVisible = isTurnActive && now - committed.shownAt < minDuration;
-    }
-
-    const shownAt = isVisible && !committed.isVisible ? now : committed.shownAt;
-
-    let deadline = 0;
-    if (isLoading && !isVisible) {
-      deadline = pendingSince + showDelay;
-    } else if (!isLoading && isVisible) {
-      deadline = shownAt + minDuration;
-    }
+    const isVisible =
+      isTurnActive &&
+      ((isLoading &&
+        (loaderState.phase === 'idle' ||
+          loaderState.phase === 'ready' ||
+          (loaderState.phase === 'hidden' && showDelay <= 0))) ||
+        (loaderState.phase === 'visible' &&
+          (isLoading || minDuration > loaderState.elapsedDuration)));
 
     useEffect(() => {
-      // Only a hide *within* the turn arms the delay. The turn ending hides the
-      // loader too, and arming on that would delay the next turn's first
-      // loader, which has to be immediate.
       if (!isTurnActive) {
-        committed.hasHiddenInTurn = false;
-      } else if (!isVisible && committed.isVisible) {
-        committed.hasHiddenInTurn = true;
-      }
-
-      committed.isVisible = isVisible;
-      committed.shownAt = shownAt;
-      committed.pendingSince = pendingSince;
-    });
-
-    useEffect(() => {
-      if (!deadline) {
+        if (loaderState.phase !== 'idle') {
+          setLoaderState({ phase: 'idle' });
+        }
         return undefined;
       }
 
-      const timer = setTimeout(
-        () => scheduleRerender((tick) => tick + 1),
-        Math.max(0, deadline - Date.now())
+      if (loaderState.phase === 'idle') {
+        if (isLoading) {
+          setLoaderState({
+            phase: 'visible',
+            shownAt: Date.now(),
+            elapsedDuration: 0,
+          });
+        }
+        return undefined;
+      }
+
+      if (loaderState.phase === 'visible') {
+        if (!isLoading && minDuration <= loaderState.elapsedDuration) {
+          setLoaderState({ phase: 'hidden' });
+          return undefined;
+        }
+
+        if (minDuration <= loaderState.elapsedDuration) {
+          return undefined;
+        }
+
+        const remaining = Math.max(
+          0,
+          loaderState.shownAt + minDuration - Date.now()
+        );
+        if (remaining === 0) {
+          setLoaderState({ ...loaderState, elapsedDuration: minDuration });
+          return undefined;
+        }
+
+        const timer = setTimeout(() => {
+          setLoaderState((current) =>
+            current.phase === 'visible' &&
+            current.shownAt === loaderState.shownAt
+              ? {
+                  ...current,
+                  elapsedDuration: Math.max(
+                    current.elapsedDuration,
+                    minDuration
+                  ),
+                }
+              : current
+          );
+        }, remaining);
+
+        return () => clearTimeout(timer);
+      }
+
+      if (loaderState.phase === 'hidden') {
+        if (isLoading) {
+          const now = Date.now();
+          setLoaderState(
+            showDelay <= 0
+              ? {
+                  phase: 'visible',
+                  shownAt: now,
+                  elapsedDuration: 0,
+                }
+              : { phase: 'waiting', pendingSince: now }
+          );
+        }
+        return undefined;
+      }
+
+      if (loaderState.phase === 'ready') {
+        setLoaderState(
+          isLoading
+            ? {
+                phase: 'visible',
+                shownAt: loaderState.shownAt,
+                elapsedDuration: loaderState.elapsedDuration,
+              }
+            : { phase: 'hidden' }
+        );
+        return undefined;
+      }
+
+      if (!isLoading) {
+        setLoaderState({ phase: 'hidden' });
+        return undefined;
+      }
+
+      const remaining = Math.max(
+        0,
+        loaderState.pendingSince + showDelay - Date.now()
       );
+      if (remaining === 0) {
+        setLoaderState({
+          phase: 'visible',
+          shownAt: Date.now(),
+          elapsedDuration: 0,
+        });
+        return undefined;
+      }
+
+      const timer = setTimeout(() => {
+        setLoaderState((current) =>
+          current.phase === 'waiting' &&
+          current.pendingSince === loaderState.pendingSince
+            ? {
+                phase: 'ready',
+                shownAt: Date.now(),
+                elapsedDuration: 0,
+              }
+            : current
+        );
+      }, remaining);
 
       return () => clearTimeout(timer);
-    }, [deadline]);
+    }, [isLoading, isTurnActive, loaderState, minDuration, showDelay]);
 
     return isVisible;
   }
