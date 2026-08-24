@@ -4,7 +4,7 @@
 /** @jsx createElement */
 import { act, render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
@@ -20,7 +20,6 @@ const ChatMessages = createChatMessagesComponent({
   useMemo: (factory) => factory(),
   useState,
   useEffect,
-  useRef,
 });
 const MemoizedChatMessages = createChatMessagesComponent({
   createElement,
@@ -28,7 +27,6 @@ const MemoizedChatMessages = createChatMessagesComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 

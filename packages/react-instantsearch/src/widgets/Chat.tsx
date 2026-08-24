@@ -53,7 +53,6 @@ const ChatUiComponent = createChatComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
