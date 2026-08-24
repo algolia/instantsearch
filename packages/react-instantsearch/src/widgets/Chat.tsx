@@ -7,6 +7,12 @@ import {
   PonderToolType,
   DisplayResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
+import {
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import React, {
   createElement,
   Fragment,
@@ -45,6 +51,7 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
@@ -251,6 +258,35 @@ export type ChatHandle = {
   setInput: (input: string) => void;
 };
 
+type AnimationSnapshotProps = {
+  promptRef: React.RefObject<HTMLTextAreaElement | null>;
+  animationsBeforeReveal: React.RefObject<ContainerAnimationSnapshot>;
+  open: boolean;
+};
+
+class AnimationSnapshot extends React.Component<AnimationSnapshotProps> {
+  getSnapshotBeforeUpdate() {
+    return getActiveContainerAnimations(this.props.promptRef.current);
+  }
+
+  componentDidUpdate(
+    _previousProps: AnimationSnapshotProps,
+    _previousState: unknown,
+    animationsBeforeReveal: ContainerAnimationSnapshot
+  ) {
+    this.props.animationsBeforeReveal.current = animationsBeforeReveal;
+    if (!_previousProps.open && this.props.open) {
+      holdContainerInertUntilReveal(this.props.promptRef.current);
+    } else if (this.props.open) {
+      restoreContainerInertUntilReveal(this.props.promptRef.current);
+    }
+  }
+
+  render() {
+    return null;
+  }
+}
+
 function ChatInner<
   TObject extends RecordWithObjectID,
   TUiMessage extends UIMessage,
@@ -305,6 +341,8 @@ function ChatInner<
   const [maximized, setMaximized] = useState(false);
 
   const promptRef = useRef<HTMLTextAreaElement>(null);
+  const focusRequestId = useRef(0);
+  const animationsBeforeReveal = useRef<ContainerAnimationSnapshot>([]);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -364,9 +402,30 @@ function ChatInner<
   }));
 
   useEffect(() => {
+    if (!open) {
+      focusRequestId.current++;
+      return;
+    }
+
     if (consumeInputFocus?.()) {
+      const currentFocusRequestId = ++focusRequestId.current;
+      const previousAnimations = animationsBeforeReveal.current;
+      holdContainerInertUntilReveal(promptRef.current);
       window.requestAnimationFrame(() => {
-        promptRef.current?.focus();
+        const prompt = promptRef.current;
+        focusAfterReveal(
+          prompt,
+          previousAnimations,
+          () => {
+            return (
+              focusRequestId.current === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId.current === currentFocusRequestId;
+          }
+        );
       });
     }
   });
@@ -393,7 +452,7 @@ function ChatInner<
     ...restMessagesProps
   } = messagesProps ?? {};
 
-  return (
+  const chat = (
     <ChatUiComponent
       title={title}
       open={open}
@@ -494,6 +553,17 @@ function ChatInner<
       }}
       classNames={classNames}
     />
+  );
+
+  return (
+    <>
+      <AnimationSnapshot
+        promptRef={promptRef}
+        animationsBeforeReveal={animationsBeforeReveal}
+        open={open}
+      />
+      {chat}
+    </>
   );
 }
 
