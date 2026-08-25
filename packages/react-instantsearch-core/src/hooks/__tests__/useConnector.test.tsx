@@ -239,6 +239,54 @@ const connectCustomWidget: Connector<
     };
   };
 
+type FunctionOnlyUpdateWidgetDescription = {
+  $$type: 'test.functionOnlyUpdate';
+  renderState: {
+    readPhase: () => string;
+  };
+};
+
+const connectFunctionOnlyUpdate: Connector<
+  FunctionOnlyUpdateWidgetDescription,
+  Record<string, never>
+> = (renderFn) => (widgetParams) => {
+  let phase = 'before-init';
+
+  const getWidgetRenderState = () => {
+    const capturedPhase = phase;
+
+    return {
+      readPhase: () => capturedPhase,
+      widgetParams,
+    };
+  };
+
+  return {
+    $$type: 'test.functionOnlyUpdate',
+    init(params) {
+      phase = 'after-init';
+      renderFn(
+        {
+          ...getWidgetRenderState(),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        true
+      );
+    },
+    render(params) {
+      renderFn(
+        {
+          ...getWidgetRenderState(),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        false
+      );
+    },
+    dispose() {},
+    getWidgetRenderState,
+  };
+};
+
 describe('useConnector', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
@@ -315,6 +363,20 @@ describe('useConnector', () => {
     );
 
     expect(result.current).toEqual({});
+  });
+
+  test('returns a callback updated after the connector initializes', async () => {
+    const wrapper = createInstantSearchTestWrapper();
+    const { result } = renderHook(
+      () => useConnector(connectFunctionOnlyUpdate),
+      {
+        wrapper,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.readPhase()).toBe('after-init');
+    });
   });
 
   test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {

@@ -2,9 +2,9 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render, screen } from '@testing-library/preact';
+import { act, render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
@@ -18,11 +18,15 @@ const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo: (factory) => factory(),
+  useState,
+  useEffect,
 });
 const MemoizedChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo,
+  useState,
+  useEffect,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 
@@ -1554,6 +1558,489 @@ describe('ChatMessages', () => {
         </div>
       </div>
     `);
+  });
+
+  describe('loader visibility', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const pendingTool = {
+      type: 'tool-some_tool' as const,
+      toolCallId: '1',
+      input: undefined,
+      state: 'input-streaming' as const,
+    };
+
+    const assistant = (parts: any[]) => [
+      { role: 'assistant' as const, id: '1', parts },
+    ];
+
+    const loader = (container: Element) =>
+      container.querySelector('.ais-ChatMessageLoader');
+
+    test('ignores a trailing data part after the answer', () => {
+      // Renders nothing, so it must not bring the loader back.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([
+            { type: 'text', text: 'Here you go.', state: 'done' },
+            { type: 'data-suggestions', data: { suggestions: ['More?'] } },
+          ])}
+        />
+      );
+
+      expect(loader(container)).toBeNull();
+    });
+
+    test('keeps the loader while a text part has no content yet', () => {
+      // `text-start` creates the part before the first delta.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([
+            {
+              type: 'tool-some_tool',
+              toolCallId: '1',
+              input: {},
+              state: 'output-available',
+              output: {},
+            },
+            { type: 'text', text: '', state: 'streaming' },
+          ])}
+        />
+      );
+
+      expect(loader(container)).not.toBeNull();
+    });
+
+    test('sets aria-busy while loading', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
+    });
+
+    test('keeps aria-busy set while a suppressed loader hides progress', () => {
+      // The log keeps updating even when the loader is overridden away, so the
+      // busy state follows the turn rather than the loader.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([pendingTool])}
+          shouldShowLoader={() => false}
+        />
+      );
+
+      expect(loader(container)).toBeNull();
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
+    });
+
+    describe('with timers', () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      // Arms the delay; the turn's first loader is always immediate.
+      function renderAfterFirstCycle() {
+        const utils = render(
+          <ChatMessages {...baseProps} status="streaming" messages={[]} />
+        );
+
+        expect(loader(utils.container)).not.toBeNull();
+
+        utils.rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+            ])}
+          />
+        );
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(utils.container)).toBeNull();
+
+        return utils;
+      }
+
+      test('holds the loader briefly so it cannot flash', () => {
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        // Without the hold this is a one-frame flash.
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'H', state: 'streaming' },
+            ])}
+          />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(container)).toBeNull();
+      });
+
+      test('does not bring the loader back for a gap between steps', () => {
+        const { container, rerender } = renderAfterFirstCycle();
+
+        // All within the delay, so the loader never returns.
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              { type: 'step-start' },
+              pendingTool,
+            ])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(100);
+        });
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              { type: 'step-start' },
+              { ...pendingTool, state: 'output-available', output: {} },
+              { type: 'text', text: 'Found it.', state: 'streaming' },
+            ])}
+          />
+        );
+        act(() => {
+          jest.advanceTimersByTime(1000);
+        });
+
+        expect(loader(container)).toBeNull();
+      });
+
+      test('brings the loader back for a wait that lasts', () => {
+        const { container, rerender } = renderAfterFirstCycle();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              pendingTool,
+            ])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(250);
+        });
+
+        expect(loader(container)).not.toBeNull();
+      });
+
+      test("starts the next turn's loader immediately", () => {
+        const answer = {
+          role: 'assistant' as const,
+          id: '1',
+          parts: [
+            { type: 'text' as const, text: 'Done.', state: 'done' as const },
+          ],
+        };
+
+        // The loader is still up when the turn ends, so the turn's end is what
+        // hides it. That hide must not arm the delay for the next turn.
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages {...baseProps} status="ready" messages={[answer]} />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[
+              answer,
+              {
+                role: 'user' as const,
+                id: '2',
+                parts: [{ type: 'text' as const, text: 'More?' }],
+              },
+            ]}
+          />
+        );
+
+        expect(loader(container)).not.toBeNull();
+      });
+
+      test('hides the loader as soon as the turn ends', () => {
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="ready"
+            messages={assistant([{ type: 'text', text: 'Done.' }])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+      });
+    });
+  });
+
+  describe('loader customization', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const searchingMessages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'tool-some_tool' as const,
+            toolCallId: '1',
+            input: undefined,
+            state: 'input-streaming' as const,
+          },
+        ],
+      },
+    ];
+
+    test('leaves the loader message unset while the turn has none', () => {
+      const LoaderComponent = jest.fn(() => <span>Loading</span>);
+
+      // `submitted` still shows the user's own message, which the loader does
+      // not belong to.
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[
+            {
+              role: 'user' as const,
+              id: '1',
+              parts: [{ type: 'text' as const, text: 'Hi' }],
+            },
+          ]}
+          loaderComponent={LoaderComponent}
+        />
+      );
+
+      expect(LoaderComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            phase: 'submitted',
+            message: undefined,
+          }),
+        }),
+        {}
+      );
+    });
+
+    test('passes the turn context to a custom loader', () => {
+      const LoaderComponent = jest.fn(() => <span>Loading</span>);
+
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          loaderComponent={LoaderComponent}
+        />
+      );
+
+      expect(LoaderComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            status: 'streaming',
+            phase: 'tool',
+            message: searchingMessages[0],
+            messages: searchingMessages,
+          }),
+        }),
+        {}
+      );
+    });
+
+    test('resolves loaderText against the turn context', () => {
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          translations={{
+            loaderText: ({ phase }) =>
+              phase === 'tool' ? 'Searching…' : 'Thinking…',
+          }}
+        />
+      );
+
+      expect(screen.getByText('Searching…')).toBeInTheDocument();
+    });
+
+    test('lets shouldShowLoader narrow the built-in decision', () => {
+      const shouldShowLoader = jest.fn(({ defaultValue, phase }) => {
+        return defaultValue && phase !== 'tool';
+      });
+
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          shouldShowLoader={shouldShowLoader}
+        />
+      );
+
+      expect(shouldShowLoader).toHaveBeenCalledWith(
+        expect.objectContaining({ defaultValue: true, phase: 'tool' })
+      );
+      expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+    });
+
+    test('renders the loader inside the streaming message when inline', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          loaderPosition="message-inline"
+        />
+      );
+
+      const message = container.querySelector('.ais-ChatMessage-message')!;
+
+      expect(
+        message.querySelector('.ais-ChatMessageLoader--inline')
+      ).not.toBeNull();
+      expect(container.querySelectorAll('.ais-ChatMessageLoader')).toHaveLength(
+        1
+      );
+    });
+
+    test('falls back to its own row when there is no message to host it', () => {
+      // Right after submitting there is no assistant message to host it.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[{ role: 'user', id: '1', parts: [] }]}
+          loaderPosition="message-inline"
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessageLoader--inline')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+  });
+
+  describe('pending suggestions', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const answered = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'text' as const,
+            text: 'Here you go.',
+            state: 'done' as const,
+          },
+        ],
+      },
+    ];
+
+    test('mounts the suggestions element before the turn settles', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={answered}
+          suggestionsLoading
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
+
+    test('waits for the answer to have text', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[{ role: 'assistant', id: '1', parts: [] }]}
+          suggestionsLoading
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(container.querySelector('.suggestions')).toBeNull();
+    });
   });
 
   test('forwards context to overridable components', () => {

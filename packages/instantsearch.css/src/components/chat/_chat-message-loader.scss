@@ -1,4 +1,7 @@
 .ais-ChatMessageLoader {
+  // No exit animation: the loader goes away because content replaced it.
+  animation: ais-chat-loader-enter 0.2s ease-out;
+
   .ais-ChatMessage-content {
     width: 100%;
   }
@@ -59,6 +62,34 @@
     &:nth-child(2) {
       width: 40%;
     }
+  }
+}
+
+// Inline loaders sit inside the streaming message, so they carry no chrome.
+.ais-ChatMessageLoader--inline {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--ais-spacing) * 0.5);
+  margin-top: calc(var(--ais-spacing) * 0.5);
+
+  .ais-ChatMessageLoader-spinner {
+    flex: none;
+    margin-top: calc(var(--ais-spacing) * 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ais-ChatMessageLoader {
+    animation: none;
+  }
+}
+
+@keyframes ais-chat-loader-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

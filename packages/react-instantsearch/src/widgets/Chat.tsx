@@ -7,6 +7,12 @@ import {
   PonderToolType,
   DisplayResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
+import {
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import React, {
   createElement,
   Fragment,
@@ -45,6 +51,7 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
@@ -52,6 +59,7 @@ const ChatUiComponent = createChatComponent({
   Fragment,
   useMemo,
   useState,
+  useEffect,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -204,6 +212,27 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     loaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    /**
+     * Where the loader renders: as its own row after the last message
+     * (`messages-end`, the default) or inside the streaming assistant message
+     * (`message-inline`).
+     */
+    loaderPosition?: ChatUiProps['messagesProps']['loaderPosition'];
+    /**
+     * Overrides when the loader shows. Receives the turn context plus the
+     * built-in decision as `defaultValue`.
+     */
+    shouldShowLoader?: ChatUiProps['messagesProps']['shouldShowLoader'];
+    /**
+     * How long (ms) a renewed loading state must hold before the loader comes
+     * back after having been hidden in the same turn.
+     */
+    loaderShowDelay?: ChatUiProps['messagesProps']['loaderShowDelay'];
+    /**
+     * Minimum time (ms) the loader stays on screen once shown, while the turn is
+     * still running.
+     */
+    loaderMinDuration?: ChatUiProps['messagesProps']['loaderMinDuration'];
     emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
@@ -229,6 +258,35 @@ export type ChatHandle = {
   setInput: (input: string) => void;
 };
 
+type AnimationSnapshotProps = {
+  promptRef: React.RefObject<HTMLTextAreaElement | null>;
+  animationsBeforeReveal: React.RefObject<ContainerAnimationSnapshot>;
+  open: boolean;
+};
+
+class AnimationSnapshot extends React.Component<AnimationSnapshotProps> {
+  getSnapshotBeforeUpdate() {
+    return getActiveContainerAnimations(this.props.promptRef.current);
+  }
+
+  componentDidUpdate(
+    _previousProps: AnimationSnapshotProps,
+    _previousState: unknown,
+    animationsBeforeReveal: ContainerAnimationSnapshot
+  ) {
+    this.props.animationsBeforeReveal.current = animationsBeforeReveal;
+    if (!_previousProps.open && this.props.open) {
+      holdContainerInertUntilReveal(this.props.promptRef.current);
+    } else if (this.props.open) {
+      restoreContainerInertUntilReveal(this.props.promptRef.current);
+    }
+  }
+
+  render() {
+    return null;
+  }
+}
+
 function ChatInner<
   TObject extends RecordWithObjectID,
   TUiMessage extends UIMessage,
@@ -246,6 +304,10 @@ function ChatInner<
     headerMinimizeIconComponent,
     headerMaximizeIconComponent,
     loaderComponent,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     messagesErrorComponent,
     promptComponent,
     promptHeaderComponent,
@@ -279,6 +341,8 @@ function ChatInner<
   const [maximized, setMaximized] = useState(false);
 
   const promptRef = useRef<HTMLTextAreaElement>(null);
+  const focusRequestId = useRef(0);
+  const animationsBeforeReveal = useRef<ContainerAnimationSnapshot>([]);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -321,6 +385,7 @@ function ChatInner<
     clearMessages,
     tools: toolsFromConnector,
     suggestions,
+    suggestionsStatus,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
     '~consumeInputFocus': consumeInputFocus,
@@ -337,9 +402,30 @@ function ChatInner<
   }));
 
   useEffect(() => {
+    if (!open) {
+      focusRequestId.current++;
+      return;
+    }
+
     if (consumeInputFocus?.()) {
+      const currentFocusRequestId = ++focusRequestId.current;
+      const previousAnimations = animationsBeforeReveal.current;
+      holdContainerInertUntilReveal(promptRef.current);
       window.requestAnimationFrame(() => {
-        promptRef.current?.focus();
+        const prompt = promptRef.current;
+        focusAfterReveal(
+          prompt,
+          previousAnimations,
+          () => {
+            return (
+              focusRequestId.current === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId.current === currentFocusRequestId;
+          }
+        );
       });
     }
   });
@@ -366,7 +452,7 @@ function ChatInner<
     ...restMessagesProps
   } = messagesProps ?? {};
 
-  return (
+  const chat = (
     <ChatUiComponent
       title={title}
       open={open}
@@ -410,6 +496,10 @@ function ChatInner<
         contentRef,
         onScrollToBottom: scrollToBottom,
         loaderComponent,
+        loaderPosition,
+        shouldShowLoader,
+        loaderShowDelay,
+        loaderMinDuration,
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
@@ -456,12 +546,24 @@ function ChatInner<
       }}
       suggestionsProps={{
         suggestions,
+        isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
           sendMessage({ text: suggestion });
         },
       }}
       classNames={classNames}
     />
+  );
+
+  return (
+    <>
+      <AnimationSnapshot
+        promptRef={promptRef}
+        animationsBeforeReveal={animationsBeforeReveal}
+        open={open}
+      />
+      {chat}
+    </>
   );
 }
 
