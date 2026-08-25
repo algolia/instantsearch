@@ -21,6 +21,7 @@ const searchClient = createSearchClient();
 
 const CHAT_PROPS_REPLACEMENT_WARNING =
   '[InstantSearch] Changing the props of the React <Chat> widget replaces its internal Chat instance and clears open state or non-persisted messages. Use stable prop references or provide your own Chat instance to preserve the conversation.';
+const CHAT_OPEN_STATE_CACHE_KEY = 'instantsearch-chat-open-state-chat';
 
 const existingMessage: UIMessage = {
   id: 'assistant-message',
@@ -851,6 +852,157 @@ describe('Chat', () => {
     ]);
   });
 
+  test('warns when changing agentId replaces persisted messages', async () => {
+    sessionStorage.setItem(
+      `${CACHE_KEY}-first-agent`,
+      JSON.stringify([existingMessage])
+    );
+
+    function Subject({ agentId }: { agentId: string }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            agentId={agentId}
+            disableTriggerValidation={true}
+            persistence={{ messages: true, open: false }}
+            requiresSearch={false}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject agentId="first-agent" />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject agentId="second-agent" />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.queryByText('An existing answer')).not.toBeInTheDocument();
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
+  test('warns when disabling persistence replaces persisted messages', async () => {
+    sessionStorage.setItem(
+      `${CACHE_KEY}-same-agent`,
+      JSON.stringify([existingMessage])
+    );
+
+    function Subject({ persistence }: { persistence: boolean }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            agentId="same-agent"
+            disableTriggerValidation={true}
+            persistence={persistence}
+            requiresSearch={false}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject persistence={true} />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject persistence={false} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.queryByText('An existing answer')).not.toBeInTheDocument();
+    expect(getChatPropsReplacementWarnings(warn)).toEqual([
+      [CHAT_PROPS_REPLACEMENT_WARNING],
+    ]);
+  });
+
+  test('does not warn when changed props reuse the persisted message key', async () => {
+    sessionStorage.setItem(
+      `${CACHE_KEY}-same-agent`,
+      JSON.stringify([existingMessage])
+    );
+    const firstContext = () => ({ page: 'first' });
+    const secondContext = () => ({ page: 'second' });
+
+    function Subject({ context }: { context: () => { page: string } }) {
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            agentId="same-agent"
+            context={context}
+            disableTriggerValidation={true}
+            persistence={{ messages: true, open: false }}
+            requiresSearch={false}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject context={firstContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject context={secondContext} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+  });
+
+  test('treats missing and empty agentId as the same persisted message key', async () => {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify([existingMessage]));
+
+    function Subject({ emptyAgentId }: { emptyAgentId: boolean }) {
+      const agent = emptyAgentId ? { agentId: '' } : {};
+
+      return (
+        <InstantSearch searchClient={searchClient} indexName="indexName">
+          <Chat
+            {...agent}
+            disableTriggerValidation={true}
+            persistence={{ messages: true, open: false }}
+            requiresSearch={false}
+            transport={{ api: 'http://unused' }}
+          />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<Subject emptyAgentId={false} />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    const warn = getConsoleWarnMock();
+    warn.mockClear();
+
+    rerender(<Subject emptyAgentId={true} />);
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.getByText('An existing answer')).toBeInTheDocument();
+    expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+  });
+
   test('does not warn or replace an open internal Chat for equal props', async () => {
     const chatRef = React.createRef<ChatHandle>();
 
@@ -996,20 +1148,23 @@ describe('Chat', () => {
     expect(screen.getByText('An existing answer')).toBeInTheDocument();
   });
 
-  test('does not warn in production before replacing lossy Chat state', async () => {
+  test('does not run replacement warning checks in production', async () => {
     const originalDev = (globalThis as { __DEV__?: boolean }).__DEV__;
-    const chatRef = React.createRef<ChatHandle>();
-    const firstContext = () => ({ page: 'first' });
-    const secondContext = () => ({ page: 'second' });
+    const contexts = [
+      () => ({ page: 'first' }),
+      () => ({ page: 'development' }),
+      () => ({ page: 'production' }),
+    ];
+    sessionStorage.setItem(CHAT_OPEN_STATE_CACHE_KEY, 'true');
+    const getItem = jest.spyOn(Storage.prototype, 'getItem');
 
     function Subject({ context }: { context: () => { page: string } }) {
       return (
         <InstantSearch searchClient={searchClient} indexName="indexName">
           <Chat
-            ref={chatRef}
             context={context}
             disableTriggerValidation={true}
-            persistence={false}
+            persistence={{ messages: false, open: true }}
             requiresSearch={false}
             transport={{ api: 'http://unused' }}
           />
@@ -1017,23 +1172,38 @@ describe('Chat', () => {
       );
     }
 
-    const { rerender } = render(<Subject context={firstContext} />);
+    const { rerender } = render(<Subject context={contexts[0]} />);
     await act(async () => {
-      await wait(0);
-      chatRef.current!.setOpen(true);
       await wait(0);
     });
     const warn = getConsoleWarnMock();
     warn.mockClear();
+    getItem.mockClear();
+
+    rerender(<Subject context={contexts[1]} />);
+    await act(async () => {
+      await wait(0);
+    });
+    expect(
+      getItem.mock.calls.filter(([key]) => key === CHAT_OPEN_STATE_CACHE_KEY)
+    ).toEqual([
+      [CHAT_OPEN_STATE_CACHE_KEY],
+      [CHAT_OPEN_STATE_CACHE_KEY],
+      [CHAT_OPEN_STATE_CACHE_KEY],
+    ]);
+    getItem.mockClear();
     (globalThis as { __DEV__?: boolean }).__DEV__ = false;
 
     try {
-      rerender(<Subject context={secondContext} />);
+      rerender(<Subject context={contexts[2]} />);
       await act(async () => {
         await wait(0);
       });
 
       expect(getChatPropsReplacementWarnings(warn)).toHaveLength(0);
+      expect(
+        getItem.mock.calls.filter(([key]) => key === CHAT_OPEN_STATE_CACHE_KEY)
+      ).toEqual([[CHAT_OPEN_STATE_CACHE_KEY], [CHAT_OPEN_STATE_CACHE_KEY]]);
     } finally {
       (globalThis as { __DEV__?: boolean }).__DEV__ = originalDev;
     }
