@@ -14,30 +14,25 @@
 .ais-ChatMessageReasoning {
   box-sizing: border-box;
   width: 100%;
-  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.25);
-  border-radius: var(--ais-border-radius-sm);
-  background-color: rgba(
-    var(--ais-background-color-rgb),
-    var(--ais-background-color-alpha)
-  );
-  overflow: hidden;
+  color: rgba(var(--ais-muted-color-rgb), 0.95);
 }
 
 .ais-ChatMessageReasoning-header {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: calc(var(--ais-spacing) * 0.25);
+  min-width: 0;
+  gap: calc(var(--ais-spacing) * 0.375);
   width: 100%;
-  padding: calc(var(--ais-spacing) * 0.125) calc(var(--ais-spacing) * 0.5);
+  padding: calc(var(--ais-spacing) * 0.125) 0;
+  border-radius: var(--ais-border-radius-sm);
   cursor: pointer;
   list-style: none;
   user-select: none;
 
   // On the header rather than the label so `reasoningHeader` restyles the whole
-  // row while `reasoningLabel` reaches the label alone. The icon and chevron set
-  // their own colour and are sized in px.
-  color: rgba(var(--ais-muted-color-rgb), 0.95);
+  // row while `reasoningLabel` reaches the label alone.
+  color: inherit;
   font-size: calc(var(--ais-spacing) * 0.75);
   line-height: var(--ais-spacing);
 
@@ -56,7 +51,7 @@
   &:focus-visible {
     outline: 2px solid
       rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
-    outline-offset: -2px;
+    outline-offset: 2px;
   }
 }
 
@@ -80,15 +75,37 @@
   }
 }
 
-.ais-ChatMessageReasoning-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.ais-ChatMessageReasoning-icon--streaming {
+  animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.ais-ChatMessageReasoning-label--streaming {
-  animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.ais-ChatMessageReasoning-label {
+  flex-shrink: 0;
+  color: rgba(var(--ais-text-color-rgb), 0.9);
+  font-weight: var(--ais-font-weight-semibold);
+}
+
+.ais-ChatMessageReasoning-status {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.375);
+}
+
+.ais-ChatMessageReasoning-separator {
+  flex-shrink: 0;
+  color: rgba(var(--ais-muted-color-rgb), 0.55);
+}
+
+.ais-ChatMessageReasoning-hint {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: rgba(var(--ais-muted-color-rgb), 0.78);
+  opacity: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ais-ChatMessageReasoning-chevron {
@@ -98,8 +115,7 @@
   color: rgba(var(--ais-muted-color-rgb), 0.9);
   flex-shrink: 0;
 
-  // The label is the only header item that shrinks, so this absorbs the free space
-  // and keeps the chevron at the end.
+  // Keep the chevron at the end when the active hint is absent.
   margin-inline-start: auto;
   transition: transform var(--ais-transition-duration)
     var(--ais-transition-timing-function);
@@ -120,24 +136,29 @@
   transform: rotate(180deg);
 }
 
+.ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-status {
+  display: none;
+}
+
 .ais-ChatMessageReasoning-body {
-  max-height: 9rem;
-  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 0.75);
-  border-block-start: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
-  background-color: rgba(var(--ais-muted-color-rgb), 0.06);
+  padding: calc(var(--ais-spacing) * 0.5) 0 0 calc(var(--ais-spacing) * 0.375);
   color: rgba(var(--ais-text-color-rgb), 0.7);
   font-size: calc(var(--ais-spacing) * 0.875);
   line-height: calc(var(--ais-spacing) * 1.25);
-  overflow-y: auto;
 
   &:focus-visible {
     outline: 2px solid
       rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
-    outline-offset: -2px;
+    outline-offset: 2px;
   }
 }
 
 .ais-ChatMessageReasoning-text {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: calc(var(--ais-spacing) * 0.625);
+  list-style: none;
   overflow-wrap: anywhere;
 
   // Block margins collapse through padding-free ancestors, so the one meeting the
@@ -154,6 +175,44 @@
   }
 }
 
+.ais-ChatMessageReasoning-item {
+  position: relative;
+  min-width: 0;
+  padding-inline-start: calc(var(--ais-spacing) * 1.25);
+
+  &::before {
+    position: absolute;
+    inset-block-start: calc(var(--ais-spacing) * 0.375);
+    inset-inline-start: calc(var(--ais-spacing) * 0.25);
+    width: calc(var(--ais-spacing) * 0.375);
+    height: calc(var(--ais-spacing) * 0.375);
+    border-radius: var(--ais-border-radius-full);
+    background-color: rgba(var(--ais-muted-color-rgb), 0.45);
+    content: '';
+  }
+
+  &:not(:last-child)::after {
+    position: absolute;
+    inset-block: calc(var(--ais-spacing) * 0.75)
+      calc(var(--ais-spacing) * -0.625);
+    inset-inline-start: calc(var(--ais-spacing) * 0.40625);
+    width: 1px;
+    background-color: rgba(var(--ais-muted-color-rgb), 0.18);
+    content: '';
+  }
+
+  &[aria-current='step'] {
+    color: rgba(var(--ais-text-color-rgb), 0.82);
+
+    &::before {
+      background-color: rgba(
+        var(--ais-primary-color-rgb),
+        var(--ais-primary-color-alpha)
+      );
+    }
+  }
+}
+
 @keyframes ais-chat-reasoning-pulse {
   50% {
     opacity: 0.5;
@@ -161,7 +220,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ais-ChatMessageReasoning-label,
+  .ais-ChatMessageReasoning-icon--streaming,
   .ais-ChatMessageReasoning-chevron {
     animation: none;
     transition: none;

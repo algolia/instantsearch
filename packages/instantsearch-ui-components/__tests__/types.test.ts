@@ -305,6 +305,62 @@ test('exposes Chat text component types from the public entry point', () => {
   expect(errors).toEqual([]);
 });
 
+test('exposes Chat reasoning component types from the public entry point', () => {
+  const fileName = path.join(__dirname, 'chat-message-reasoning-component.ts');
+  const source = `
+    import type {
+      ChatComponentContext,
+      ChatMessageBase,
+      ChatMessageProps,
+      ChatMessageReasoningComponentProps,
+      ChatMessageReasoningPart,
+      ReasoningUIPart,
+    } from '../dist/es';
+
+    const reasoningComponent: ChatMessageProps['reasoningComponent'] = (props) => {
+      const parts: ChatMessageReasoningPart[] = props.parts;
+      const part: ReasoningUIPart = props.parts[0].part;
+      const partIndex: number = props.parts[0].partIndex;
+      const isStreaming: boolean = props.parts[0].isStreaming;
+      const message: ChatMessageBase = props.message;
+      const context: ChatComponentContext = props.context;
+      const exactProps: ChatMessageReasoningComponentProps = props;
+      void parts;
+      void part;
+      void partIndex;
+      void isStreaming;
+      void message;
+      void context;
+      void exactProps;
+      return null;
+    };
+    void reasoningComponent;
+  `;
+  const compilerOptions: ts.CompilerOptions = {
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmit: true,
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2020,
+  };
+  const host = ts.createCompilerHost(compilerOptions);
+  const getSourceFile = host.getSourceFile.bind(host);
+  host.getSourceFile = (sourceName, languageVersion, onError) =>
+    sourceName === fileName
+      ? ts.createSourceFile(fileName, source, languageVersion, true)
+      : getSourceFile(sourceName, languageVersion, onError);
+
+  const program = ts.createProgram([fileName], compilerOptions, host);
+  const errors = ts
+    .getPreEmitDiagnostics(program)
+    .map((diagnostic) =>
+      ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+    );
+
+  expect(errors).toEqual([]);
+});
+
 test('preserves custom message types in Chat text component props', () => {
   const fileName = path.join(
     __dirname,
@@ -353,6 +409,15 @@ test('preserves custom message types in Chat text component props', () => {
           const conversation: AppMessage[] = messages;
           void conversation;
         }
+        return null;
+      },
+      reasoningComponent({ parts, message, context }) {
+        const typedMessage: AppMessage = message;
+        const typedConversation: AppMessage[] = context.messages;
+        const partIndex: number = parts[0].partIndex;
+        void typedMessage.metadata?.sourceIds;
+        void typedConversation;
+        void partIndex;
         return null;
       },
     };

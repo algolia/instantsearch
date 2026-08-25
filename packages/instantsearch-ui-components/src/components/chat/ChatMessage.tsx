@@ -9,6 +9,7 @@ import { createButtonComponent } from '../Button';
 import {
   createChatMessageReasoningComponent,
   type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningPart,
   type ChatMessageReasoningTranslations,
 } from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
@@ -154,6 +155,24 @@ export type ChatMessageTextComponentProps<
   partIndex: number;
 };
 
+export type { ChatMessageReasoningPart } from './ChatMessageReasoning';
+
+export type ChatMessageReasoningComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentPropsWithContext<
+  {
+    /**
+     * The framework-eligible reasoning parts in message order
+     */
+    parts: ChatMessageReasoningPart[];
+    /**
+     * The message containing the reasoning parts
+     */
+    message: TMessage;
+  },
+  TMessage
+>;
+
 export type ChatMessageProps<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'article'> & {
@@ -199,6 +218,12 @@ export type ChatMessageProps<
    */
   textComponent?: (
     props: ChatMessageTextComponentProps<TMessage>
+  ) => JSX.Element | null;
+  /**
+   * Custom reasoning renderer
+   */
+  reasoningComponent?: (
+    props: ChatMessageReasoningComponentProps<TMessage>
   ) => JSX.Element | null;
   /**
    * The index UI state
@@ -291,6 +316,7 @@ export function createChatMessageComponent({
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
       textComponent: TextComponent,
+      reasoningComponent: ReasoningComponent,
       indexUiState,
       setIndexUiState,
       translations: userTranslations,
@@ -344,6 +370,43 @@ export function createChatMessageComponent({
       messages === undefined ||
       messages[messages.length - 1]?.id === message.id;
 
+    const reasoningParts = showReasoning
+      ? message.parts.reduce<ChatMessageReasoningPart[]>(
+          (receivedParts, part, partIndex) => {
+            if (part.type !== 'reasoning') {
+              return receivedParts;
+            }
+
+            const isStreaming =
+              status === 'streaming' &&
+              isCurrentMessage &&
+              isReasoningPartActive(message.parts, partIndex);
+
+            if (!isStreaming && part.text.trim().length === 0) {
+              return receivedParts;
+            }
+
+            receivedParts.push({ part, partIndex, isStreaming });
+            return receivedParts;
+          },
+          []
+        )
+      : [];
+    const firstReasoningPartIndex = reasoningParts[0]?.partIndex;
+    // Keep the built-in native disclosure mounted through a temporary
+    // eligibility gap so its reader-owned state survives resumed reasoning.
+    const reasoningPartIndex =
+      firstReasoningPartIndex ??
+      (showReasoning &&
+      !ReasoningComponent &&
+      status === 'streaming' &&
+      isCurrentMessage
+        ? message.parts.findIndex((part) => part.type === 'reasoning')
+        : -1);
+    const isReasoningStreaming = reasoningParts.some(
+      (part) => part.isStreaming
+    );
+
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
 
@@ -396,33 +459,40 @@ export function createChatMessageComponent({
         return null;
       }
       if (part.type === 'reasoning') {
-        if (!showReasoning) {
+        if (index !== reasoningPartIndex) {
           return null;
         }
 
-        const isReasoningStreaming =
-          status === 'streaming' &&
-          isCurrentMessage &&
-          isReasoningPartActive(message.parts, index);
-
-        if (!isReasoningStreaming && part.text.trim().length === 0) {
-          return null;
+        if (ReasoningComponent) {
+          return (
+            <Fragment key={`${message.id}-reasoning`}>
+              <ReasoningComponent
+                parts={reasoningParts}
+                message={message}
+                context={context}
+              />
+            </Fragment>
+          );
         }
 
         return (
           <ChatMessageReasoning
-            key={`${message.id}-${index}`}
-            part={part}
-            isStreaming={isReasoningStreaming}
+            key={`${message.id}-reasoning`}
+            parts={reasoningParts}
+            hidden={reasoningParts.length === 0}
             parseMarkdown={parseMarkdown}
             translations={translations}
             classNames={{
               ...cssClasses,
-              reasoningLabel: cx(
-                'ais-ChatMessageReasoning-label',
+              reasoningIcon: cx(
+                cssClasses.reasoningIcon,
                 isReasoningStreaming &&
-                  'ais-ChatMessageReasoning-label--streaming',
-                classNames.reasoningLabel
+                  'ais-ChatMessageReasoning-icon--streaming'
+              ),
+              reasoningLabel: cx(
+                cssClasses.reasoningLabel,
+                isReasoningStreaming &&
+                  'ais-ChatMessageReasoning-label--streaming'
               ),
             }}
           />

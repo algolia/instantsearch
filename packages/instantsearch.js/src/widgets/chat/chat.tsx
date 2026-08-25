@@ -60,6 +60,7 @@ import type {
   ChatMessageErrorProps,
   ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
+  ChatMessageReasoningComponentProps,
   ChatMessageTextComponentProps,
   ChatMessagesProps,
   ChatMessagesTranslations,
@@ -224,6 +225,7 @@ type ChatWrapperProps = {
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      reasoningComponent: ChatMessageProps['reasoningComponent'];
       textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
       showReasoning: ChatMessageProps['showReasoning'];
@@ -530,6 +532,14 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     ? createStableTemplateComponent<ChatMessageTextComponentProps>(
         assistantMessageTemplateRef,
         'text',
+        'fragment'
+      )
+    : undefined;
+  const stableAssistantMessageReasoningComponent = templates.assistantMessage
+    ?.reasoning
+    ? createStableTemplateComponent<ChatMessageReasoningComponentProps>(
+        assistantMessageTemplateRef,
+        'reasoning',
         'fragment'
       )
     : undefined;
@@ -860,6 +870,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             actionsComponent: stableActionsComponent,
             assistantMessageProps: {
               leadingComponent: stableAssistantMessageLeadingComponent,
+              reasoningComponent: stableAssistantMessageReasoningComponent,
               textComponent: stableAssistantMessageTextComponent,
               footerComponent: stableAssistantMessageFooterComponent,
               showReasoning,
@@ -1088,6 +1099,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for assistant message text parts.
        */
       text: Template<ChatMessageTextComponentProps>;
+      /**
+       * Template to use for assistant message reasoning.
+       */
+      reasoning: Template<ChatMessageReasoningComponentProps>;
       /**
        * Template to use for the assistant message footer content.
        */

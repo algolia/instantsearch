@@ -245,6 +245,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
      * Whether to render reasoning parts
      */
     showReasoning?: boolean;
+    /**
+     * Custom reasoning renderer
+     */
+    reasoningComponent?: ChatMessageProps<TUiMessage>['reasoningComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -326,6 +330,7 @@ function ChatInner<
     getSearchPageURL,
     disableTriggerValidation = false,
     showReasoning,
+    reasoningComponent,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -523,6 +528,7 @@ function ChatInner<
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
           showReasoning,
+          reasoningComponent,
           ...callerAssistantMessageProps,
         },
         userMessageProps: {

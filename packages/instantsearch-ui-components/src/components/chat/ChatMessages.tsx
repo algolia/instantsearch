@@ -667,6 +667,7 @@ export function createChatMessagesComponent({
     const showReasoning = messageProps?.showReasoning;
     const parseMarkdown = messageProps?.parseMarkdown;
     const textComponent = messageProps?.textComponent;
+    const reasoningComponent = messageProps?.reasoningComponent;
     // A completed row is memoized against its own message, but `shouldRender`
     // reads the whole `context`: a predicate can hide an older tool result once a
     // newer message arrives. Track the verdicts themselves rather than
@@ -680,6 +681,11 @@ export function createChatMessagesComponent({
     // must update with it. Keep the default renderer's streaming optimization.
     const textComponentMessages = textComponent
       ? props.context.messages
+      : undefined;
+    // A custom reasoning component receives the full context, so all context
+    // changes are observable inputs. Default rows keep the narrower memo.
+    const reasoningComponentContext = reasoningComponent
+      ? props.context
       : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
@@ -721,6 +727,8 @@ export function createChatMessagesComponent({
         parseMarkdown,
         textComponent,
         textComponentMessages,
+        reasoningComponent,
+        reasoningComponentContext,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,

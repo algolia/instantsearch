@@ -10,7 +10,10 @@ import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
-import type { ChatMessageTextComponentProps } from '../ChatMessage';
+import type {
+  ChatMessageReasoningComponentProps,
+  ChatMessageTextComponentProps,
+} from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
 import type { ChatComponentPropsWithContext } from '../types';
 
@@ -945,6 +948,113 @@ describe('ChatMessages', () => {
 
       expect(screen.queryByTestId('first-text')).not.toBeInTheDocument();
       expect(screen.getByTestId('second-text')).toHaveTextContent('Answer');
+    });
+
+    test('updates completed messages when the reasoning component changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const FirstReasoningComponent = ({
+        parts,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="first-reasoning">{parts[0].part.text}</span>
+      );
+      const SecondReasoningComponent = ({
+        parts,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="second-reasoning">{parts[0].part.text}</span>
+      );
+      const createProps = (
+        reasoningComponent: (
+          props: ChatMessageReasoningComponentProps
+        ) => JSX.Element
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent,
+        },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(FirstReasoningComponent)} />
+      );
+      expect(screen.getByTestId('first-reasoning')).toHaveTextContent(
+        'Thought'
+      );
+
+      rerender(
+        <MemoizedChatMessages {...createProps(SecondReasoningComponent)} />
+      );
+
+      expect(screen.queryByTestId('first-reasoning')).not.toBeInTheDocument();
+      expect(screen.getByTestId('second-reasoning')).toHaveTextContent(
+        'Thought'
+      );
+    });
+
+    test('keeps the full reasoning component context current for completed messages', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const ReasoningComponent = ({
+        context,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="reasoning-state">
+          {context.isClearing ? 'clearing' : 'idle'}:
+          {context.open ? 'open' : 'closed'}
+        </span>
+      );
+      const createProps = (isClearing: boolean) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent: ReasoningComponent,
+        },
+        tools: {},
+        isClearing,
+        open: true,
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false)} />
+      );
+      expect(screen.getByTestId('reasoning-state')).toHaveTextContent(
+        'idle:open'
+      );
+
+      rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+      expect(screen.getByTestId('reasoning-state')).toHaveTextContent(
+        'clearing:open'
+      );
     });
 
     test('updates completed tool rows when the panel is maximized', () => {

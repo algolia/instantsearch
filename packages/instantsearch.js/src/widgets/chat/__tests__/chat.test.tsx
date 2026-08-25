@@ -192,6 +192,104 @@ describe('chat', () => {
     });
   });
 
+  describe('templates', () => {
+    test('renders aggregate reasoning with the assistant message template', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const calls: Array<{
+        messageId: string;
+        messageCount: number;
+        parts: Array<{
+          text: string;
+          partIndex: number;
+          isStreaming: boolean;
+        }>;
+      }> = [];
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          requiresSearch: false,
+          showReasoning: true,
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              parts: [
+                { type: 'reasoning', text: 'First thought', state: 'done' },
+                { type: 'reasoning', text: 'Second thought', state: 'done' },
+              ],
+            },
+          ],
+          templates: {
+            assistantMessage: {
+              reasoning: ({ parts, message, context }, { html }) => {
+                calls.push({
+                  messageId: message.id,
+                  messageCount: context.messages.length,
+                  parts: parts.map(({ part, partIndex, isStreaming }) => ({
+                    text: part.text,
+                    partIndex,
+                    isStreaming,
+                  })),
+                });
+                return html`<div data-testid="custom-reasoning">
+                  Custom reasoning
+                </div>`;
+              },
+            },
+          },
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(screen.getByTestId('custom-reasoning')).toHaveTextContent(
+        'Custom reasoning'
+      );
+      expect(calls[calls.length - 1]).toEqual({
+        messageId: 'assistant-message-id',
+        messageCount: 1,
+        parts: [
+          { text: 'First thought', partIndex: 0, isStreaming: false },
+          { text: 'Second thought', partIndex: 1, isStreaming: false },
+        ],
+      });
+
+      const reasoningBefore = screen.getByTestId('custom-reasoning');
+      search.renderState.indexName.chat!.setMessages([
+        {
+          id: 'assistant-message-id',
+          role: 'assistant',
+          parts: [
+            { type: 'reasoning', text: 'First thought', state: 'done' },
+            { type: 'reasoning', text: 'Second thought', state: 'done' },
+            { type: 'reasoning', text: 'Third thought', state: 'done' },
+          ],
+        },
+      ]);
+      await wait(0);
+
+      expect(screen.getByTestId('custom-reasoning')).toBe(reasoningBefore);
+      expect(calls[calls.length - 1]).toEqual({
+        messageId: 'assistant-message-id',
+        messageCount: 1,
+        parts: [
+          { text: 'First thought', partIndex: 0, isStreaming: false },
+          { text: 'Second thought', partIndex: 1, isStreaming: false },
+          { text: 'Third thought', partIndex: 2, isStreaming: false },
+        ],
+      });
+    });
+  });
+
   describe('search tool compatibility', () => {
     test('renders search results from Agent Studio', async () => {
       const container = document.createElement('div');

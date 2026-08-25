@@ -132,7 +132,7 @@ export function createReasoningTests(
       ).not.toBeInTheDocument();
     });
 
-    test('renders each reasoning part in a collapsed disclosure when enabled', async () => {
+    test('renders received reasoning in one collapsed timeline when enabled', async () => {
       const searchClient = createSearchClient();
 
       await setup({
@@ -163,14 +163,18 @@ export function createReasoningTests(
       const disclosures = within(document.body).getAllByRole('group', {
         name: 'Reasoning',
       });
-      expect(disclosures).toHaveLength(2);
+      expect(disclosures).toHaveLength(1);
       expect(disclosures[0]).not.toHaveAttribute('open');
-      expect(disclosures[1]).not.toHaveAttribute('open');
       expect(disclosures[0]).toHaveTextContent('Check the catalog.');
       expect(disclosures[0].querySelector('strong')).toHaveTextContent(
         'catalog'
       );
-      expect(disclosures[1]).toHaveTextContent('Compare release dates.');
+      expect(disclosures[0]).toHaveTextContent('Compare release dates.');
+      expect(
+        within(disclosures[0])
+          .getAllByRole('listitem')
+          .map((entry) => entry.textContent)
+      ).toEqual(['Check the catalog.', 'Compare release dates.']);
     });
 
     test('keeps an active reasoning disclosure collapsed until the reader opens it', async () => {
@@ -394,7 +398,7 @@ export function createReasoningTests(
         within(document.body).getAllByRole('group', {
           name: 'Raisonnement',
         })
-      ).toHaveLength(2);
+      ).toHaveLength(1);
     });
   });
 }
