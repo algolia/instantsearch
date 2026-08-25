@@ -24,7 +24,8 @@ export const EXPERIMENTAL_dynamicWidgets = deprecate(
 );
 export { dynamicWidgets };
 
-// export { default as analytics } from './analytics/analytics';
+// test comment
+export { default as analytics } from './analytics/analytics';
 export { autocomplete };
 /** @deprecated use autocomplete instead */
 export const EXPERIMENTAL_autocomplete = deprecate(
