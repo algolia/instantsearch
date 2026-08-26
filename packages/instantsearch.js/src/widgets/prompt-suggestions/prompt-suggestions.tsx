@@ -42,6 +42,7 @@ export type PromptSuggestionsCSSClasses = Partial<PromptSuggestionsClassNames>;
 export type PromptSuggestionsLayoutTemplateProps = {
   suggestions: string[];
   isLoading: boolean;
+  error: Error | undefined;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
 };
@@ -117,6 +118,7 @@ const createRenderer =
     {
       suggestions,
       isLoading,
+      error,
       onSuggestionClick,
       isChatBusy,
       sendToChat,
@@ -147,6 +149,7 @@ const createRenderer =
           data={{
             suggestions,
             isLoading,
+            error,
             onSuggestionClick: handleClick,
             isChatBusy,
           }}
