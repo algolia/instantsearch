@@ -20,6 +20,7 @@ const PromptSuggestionsUi = createPromptSuggestionsComponent({
 export type PromptSuggestionsLayoutComponentProps = {
   suggestions: string[];
   isLoading: boolean;
+  error: Error | undefined;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
 };
@@ -61,19 +62,25 @@ export function PromptSuggestions({
   ...props
 }: PromptSuggestionsProps) {
   const source = agentId !== undefined ? { agentId, transport } : { transport };
-  const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
-    usePromptSuggestions(
-      {
-        ...source,
-        configurationId,
-        transformHits,
-        context,
-        transformItems,
-      },
-      {
-        $$widgetType: 'ais.promptSuggestions',
-      }
-    );
+  const {
+    suggestions,
+    isLoading,
+    error,
+    onSuggestionClick,
+    isChatBusy,
+    sendToChat,
+  } = usePromptSuggestions(
+    {
+      ...source,
+      configurationId,
+      transformHits,
+      context,
+      transformItems,
+    },
+    {
+      $$widgetType: 'ais.promptSuggestions',
+    }
+  );
 
   const handleClick = onSuggestionClickOverride
     ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
@@ -84,6 +91,7 @@ export function PromptSuggestions({
       <LayoutComponent
         suggestions={suggestions}
         isLoading={isLoading}
+        error={error}
         onSuggestionClick={handleClick}
         isChatBusy={isChatBusy}
       />

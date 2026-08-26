@@ -1,9 +1,6 @@
-import {
-  parseJsonEventStream,
-  parsePartialJson,
-  processStream,
-} from '../ai-lite';
+import { parsePartialJson } from '../ai-lite';
 import { resolveValue } from '../ai-lite/utils';
+import { isEqual } from '../utils/isEqual';
 
 import type { Resolvable } from '../ai-lite';
 
@@ -81,10 +78,6 @@ function withStreamParam(url: string): string {
   return url.includes('?') ? `${url}&stream=true` : `${url}?stream=true`;
 }
 
-function resolveStreamedOutput(data: unknown, previous: unknown): unknown {
-  return typeof data === 'string' ? parsePartialJson(data, previous) : data;
-}
-
 function createTaskPreparationContext(
   context: Parameters<TaskPrepareSendMessagesRequest>[0]
 ): Parameters<TaskPrepareSendMessagesRequest>[0] {
@@ -128,33 +121,59 @@ function unwrap(envelope: unknown): unknown {
   return undefined;
 }
 
-function consumeTaskStream(
+function consumeTaskTextStream(
   body: ReadableStream<Uint8Array>,
   onData?: (data: unknown) => void
 ): Promise<unknown> {
   return new Promise<unknown>((resolve, reject) => {
-    const chunkStream = parseJsonEventStream(body);
+    const decoder = new TextDecoder();
+    const reader = body.getReader();
+    let accumulatedText = '';
     let latest: unknown;
-    processStream(
-      chunkStream,
-      (chunk) => {
-        if (!chunk) {
-          return;
+
+    const publish = (output: unknown) => {
+      if (!isEqual(output, latest)) {
+        latest = output;
+        onData?.({ output });
+      }
+    };
+
+    const read = (): void => {
+      reader.read().then(
+        ({ done, value }) => {
+          if (done) {
+            accumulatedText += decoder.decode();
+            reader.releaseLock();
+            try {
+              const output = JSON.parse(accumulatedText);
+              publish(output);
+              resolve({ output });
+            } catch (error) {
+              reject(error);
+            }
+            return;
+          }
+
+          try {
+            accumulatedText += decoder.decode(value, { stream: true });
+            const partial = parsePartialJson(accumulatedText, latest);
+            if (partial !== undefined) {
+              publish(partial);
+            }
+            read();
+          } catch (error) {
+            reader.releaseLock();
+            reject(error);
+          }
+        },
+        (error) => {
+          reader.releaseLock();
+          reject(error);
         }
-        if (chunk.type === 'error') {
-          throw new Error(chunk.errorText || 'Task stream error');
-        }
-        if (chunk.type !== 'data-task-output') {
-          return;
-        }
-        latest = resolveStreamedOutput(chunk.data, latest);
-        if (onData) {
-          onData(latest);
-        }
-      },
-      () => resolve(latest),
-      reject
-    );
+      );
+    };
+
+    read();
   });
 }
 
@@ -262,12 +281,11 @@ export class DefaultTaskTransport {
               throw new Error(`HTTP error ${response.status}`);
             }
             const contentType = response.headers?.get?.('content-type') || '';
-            if (
-              stream &&
-              response.body &&
-              contentType.includes('text/event-stream')
-            ) {
-              return consumeTaskStream(response.body, onData);
+            if (stream && contentType.includes('text/plain')) {
+              if (!response.body) {
+                throw new Error('Response body is empty');
+              }
+              return consumeTaskTextStream(response.body, onData);
             }
             return response.json();
           }

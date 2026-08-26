@@ -72,6 +72,8 @@ export type PromptSuggestionsRenderState = {
   suggestions: string[];
   /** Whether suggestions are currently being fetched. */
   isLoading: boolean;
+  /** The error thrown by the latest suggestions request, or `undefined`. */
+  error: Error | undefined;
   /** Default click handler, calling `sendToChat(prompt)`. Override via the `onSuggestionClick` prop. */
   onSuggestionClick: (prompt: string) => void;
   /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
@@ -217,6 +219,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       let tasksState: TasksRenderState | undefined;
       let suggestions: string[] = [];
       let isLoading = false;
+      let error: Error | undefined;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
       let latestRenderOptions: RenderOptions | null = null;
@@ -384,6 +387,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         return {
           suggestions: transformed,
           isLoading,
+          error,
           onSuggestionClick: send,
           sendToChat: send,
           refresh,
@@ -397,10 +401,10 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       const handleInnerRender = (renderState: TasksRenderState) => {
         tasksState = renderState;
         if (refetchPending) return;
+        error = renderState.error;
         if (renderState.error) {
           // A failed task (including a mid-stream `error` event) must not leave
-          // any streamed partial visible. There's no error UI for now, so fall
-          // back to a blank suggestions state.
+          // any streamed partial visible.
           suggestions = [];
         } else if (renderState.isLoading || renderState.output !== undefined) {
           // Only adopt the inner output once a request is loading or has
@@ -474,6 +478,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           if (stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;
             refetchPending = true;
+            error = undefined;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
               if (latestRenderOptions?.results) {

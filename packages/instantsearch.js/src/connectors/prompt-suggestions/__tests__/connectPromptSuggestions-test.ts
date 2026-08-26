@@ -42,24 +42,19 @@ function makeResults(
   return new algoliasearchHelper.SearchResults(helper.state, [response]);
 }
 
-function jsonResponse(body: unknown): Response {
-  return new Response(JSON.stringify(body), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-// Builds a fake `text/event-stream` response whose body replays `events` as
-// SSE `data:` lines. Kept as a plain object (not a real `Response`) so the test
-// doesn't depend on `Response.body` support in the jsdom environment.
-function sseResponse(events: string[]): Response {
+function textStreamResponse(chunks: string[], error?: Error): Response {
   const encoder = new TextEncoder();
+  let index = 0;
   const body = new ReadableStream<Uint8Array>({
-    start(controller) {
-      events.forEach((event) => {
-        controller.enqueue(encoder.encode(`data: ${event}\n\n`));
-      });
-      controller.close();
+    pull(controller) {
+      const chunk = chunks[index++];
+      if (chunk !== undefined) {
+        controller.enqueue(encoder.encode(chunk));
+      } else if (error) {
+        controller.error(error);
+      } else {
+        controller.close();
+      }
     },
   });
   return {
@@ -67,17 +62,12 @@ function sseResponse(events: string[]): Response {
     status: 200,
     headers: {
       get: (name: string) =>
-        name.toLowerCase() === 'content-type' ? 'text/event-stream' : null,
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
     },
     body,
   } as unknown as Response;
-}
-
-function taskOutputEvent(suggestions: string[]): string {
-  return JSON.stringify({
-    type: 'data-task-output',
-    data: { output: { suggestions } },
-  });
 }
 
 function flush(ms = 0) {
@@ -89,11 +79,7 @@ describe('connectPromptSuggestions', () => {
 
   beforeEach(() => {
     global.fetch = jest.fn(() =>
-      Promise.resolve(
-        jsonResponse({
-          output: { suggestions: ['a', 'b', 'c'] },
-        })
-      )
+      Promise.resolve(textStreamResponse(['{"suggestions":["a","b","c"]}']))
     ) as unknown as typeof fetch;
   });
 
@@ -162,6 +148,7 @@ describe('connectPromptSuggestions', () => {
       const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(lastCall.suggestions).toEqual(['a', 'b', 'c']);
       expect(lastCall.isLoading).toBe(false);
+      expect(lastCall.error).toBeUndefined();
     });
 
     it('skips the request when there are no hits', async () => {
@@ -222,9 +209,7 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       // The now-stale request resolves late; its suggestions must be ignored.
-      resolveFetch(
-        jsonResponse({ output: { suggestions: ['stale', 'pills'] } })
-      );
+      resolveFetch(textStreamResponse(['{"suggestions":["stale","pills"]}']));
       await flush(10);
 
       const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
@@ -449,7 +434,7 @@ describe('connectPromptSuggestions', () => {
       expect(midFlight.isLoading).toBe(true);
       expect(midFlight.suggestions).toEqual([]);
 
-      resolveSecond(jsonResponse({ output: { suggestions: ['x', 'y'] } }));
+      resolveSecond(textStreamResponse(['{"suggestions":["x","y"]}']));
       await flush(0);
       const afterSecond =
         renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
@@ -491,7 +476,7 @@ describe('connectPromptSuggestions', () => {
       );
 
       // The stale 'a' response arrives during the debounce window.
-      resolveFirst(jsonResponse({ output: { suggestions: ['stale'] } }));
+      resolveFirst(textStreamResponse(['{"suggestions":["stale"]}']));
       await flush(0);
 
       // It must not paint stale pills.
@@ -536,7 +521,7 @@ describe('connectPromptSuggestions', () => {
       const callsAfterDispose = renderFn.mock.calls.length;
 
       // The late resolution must not trigger a render into the torn-down tree.
-      resolveFetch(jsonResponse({ output: { suggestions: ['x', 'y'] } }));
+      resolveFetch(textStreamResponse(['{"suggestions":["x","y"]}']));
       await flush(0);
       expect(renderFn).toHaveBeenCalledTimes(callsAfterDispose);
     });
@@ -836,7 +821,7 @@ describe('connectPromptSuggestions', () => {
 
     it('forwards combined agent and transport options to one task request', async () => {
       const customFetch = jest.fn(() =>
-        Promise.resolve(jsonResponse({ output: { suggestions: ['combined'] } }))
+        Promise.resolve(textStreamResponse(['{"suggestions":["combined"]}']))
       ) as unknown as typeof fetch;
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'agent',
@@ -873,7 +858,7 @@ describe('connectPromptSuggestions', () => {
   describe('streaming', () => {
     it('requests the streaming endpoint with `stream=true`', async () => {
       global.fetch = jest.fn(() =>
-        Promise.resolve(sseResponse([taskOutputEvent(['a', 'b'])]))
+        Promise.resolve(textStreamResponse(['{"suggestions":["a","b"]}']))
       ) as unknown as typeof fetch;
 
       const widget = connectPromptSuggestions(jest.fn())({
@@ -893,15 +878,11 @@ describe('connectPromptSuggestions', () => {
     it('renders each accumulated snapshot and resolves with the final list', async () => {
       global.fetch = jest.fn(() =>
         Promise.resolve(
-          sseResponse([
-            JSON.stringify({ type: 'start' }),
-            // Early partial while the model is still streaming the first item.
-            taskOutputEvent(['']),
-            taskOutputEvent(['What']),
-            taskOutputEvent(['What phones?']),
-            taskOutputEvent(['What phones?', 'Any deals?']),
-            JSON.stringify({ type: 'finish' }),
-            '[DONE]',
+          textStreamResponse([
+            '{"suggestions":["',
+            'What',
+            ' phones?',
+            '","Any deals?"]}',
           ])
         )
       ) as unknown as typeof fetch;
@@ -928,23 +909,9 @@ describe('connectPromptSuggestions', () => {
       expect(last.isLoading).toBe(false);
     });
 
-    it('repairs a raw partial-JSON output payload while streaming', async () => {
-      // Here `data` is the raw (still-incomplete) JSON text the model emits,
-      // not a pre-parsed object — exercising the shared repair logic.
+    it('repairs partial JSON while streaming', async () => {
       global.fetch = jest.fn(() =>
-        Promise.resolve(
-          sseResponse([
-            JSON.stringify({
-              type: 'data-task-output',
-              data: '{"output":{"suggestions":["Wh',
-            }),
-            JSON.stringify({
-              type: 'data-task-output',
-              data: '{"output":{"suggestions":["What?"]}}',
-            }),
-            '[DONE]',
-          ])
-        )
+        Promise.resolve(textStreamResponse(['{"suggestions":["Wh', 'at?"]}']))
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
@@ -966,13 +933,10 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('clears streamed partials when the stream emits a terminal error', async () => {
+      const streamError = new Error('stream failed');
       global.fetch = jest.fn(() =>
         Promise.resolve(
-          sseResponse([
-            taskOutputEvent(['What phones?']),
-            JSON.stringify({ type: 'error', errorText: 'stream failed' }),
-            '[DONE]',
-          ])
+          textStreamResponse(['{"suggestions":["What phones?"]}'], streamError)
         )
       ) as unknown as typeof fetch;
 
@@ -991,18 +955,29 @@ describe('connectPromptSuggestions', () => {
       const snapshots = renderFn.mock.calls.map((c) => c[0].suggestions);
       expect(snapshots).toContainEqual(['What phones?']);
 
-      // ...but the terminal error clears it. There's no error UI, so a blank
-      // state is the intended outcome — no partial pills survive.
+      // ...but the terminal error clears it and is exposed to consumers.
       const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(last.suggestions).toEqual([]);
       expect(last.isLoading).toBe(false);
+      expect(last.error).toBe(streamError);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ hits: [], query: '' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      const afterInvalidation =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterInvalidation.error).toBeUndefined();
     });
 
-    it('falls back to a buffered JSON body when the response is not a stream', async () => {
-      // A custom transport / non-streaming backend ignores `stream=true` and
-      // returns a plain JSON body; the connector must still parse it.
+    it('clears the previous error when the search state changes', async () => {
+      const streamError = new Error('stream failed');
       global.fetch = jest.fn(() =>
-        Promise.resolve(jsonResponse({ output: { suggestions: ['a', 'b'] } }))
+        Promise.resolve(textStreamResponse([], streamError))
       ) as unknown as typeof fetch;
 
       const renderFn = jest.fn();
@@ -1012,13 +987,26 @@ describe('connectPromptSuggestions', () => {
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
-      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
+      );
       await flush(DEBOUNCE_WAIT);
       await flush(10);
 
-      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-      expect(last.suggestions).toEqual(['a', 'b']);
-      expect(last.isLoading).toBe(false);
+      expect(renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error).toBe(
+        streamError
+      );
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'b' }) })
+      );
+
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error
+      ).toBeUndefined();
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.dispose!(createDisposeOptions({ helper }));
     });
   });
 

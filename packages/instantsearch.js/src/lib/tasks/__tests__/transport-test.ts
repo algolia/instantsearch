@@ -11,14 +11,24 @@ function jsonResponse(body: unknown): Response {
   });
 }
 
-function sseResponse(events: string[]): Response {
+function textStreamResponse(
+  chunks: Array<string | Uint8Array>,
+  error?: Error
+): Response {
   const encoder = new TextEncoder();
+  let index = 0;
   const body = new ReadableStream<Uint8Array>({
-    start(controller) {
-      events.forEach((event) => {
-        controller.enqueue(encoder.encode(`data: ${event}\n\n`));
-      });
-      controller.close();
+    pull(controller) {
+      const chunk = chunks[index++];
+      if (chunk !== undefined) {
+        controller.enqueue(
+          typeof chunk === 'string' ? encoder.encode(chunk) : chunk
+        );
+      } else if (error) {
+        controller.error(error);
+      } else {
+        controller.close();
+      }
     },
   });
   return {
@@ -26,14 +36,12 @@ function sseResponse(events: string[]): Response {
     status: 200,
     headers: {
       get: (name: string) =>
-        name.toLowerCase() === 'content-type' ? 'text/event-stream' : null,
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
     },
     body,
   } as unknown as Response;
-}
-
-function outputEvent(output: unknown): string {
-  return JSON.stringify({ type: 'data-task-output', data: { output } });
 }
 
 describe('DefaultTaskTransport', () => {
@@ -46,7 +54,7 @@ describe('DefaultTaskTransport', () => {
   it('owns async request preparation and performs exactly one request', async () => {
     const customFetch = jest.fn(
       (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
-        Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
+        Promise.resolve(textStreamResponse(['{"suggestions":["a"]}']))
     );
     const prepareSendMessagesRequest = jest.fn(
       async (request: {
@@ -180,7 +188,7 @@ describe('DefaultTaskTransport', () => {
   it('appends streaming to an API that already has query parameters', async () => {
     const customFetch = jest.fn(
       (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
-        Promise.resolve(jsonResponse({ output: { ok: true } }))
+        Promise.resolve(textStreamResponse(['{"ok":true}']))
     );
     const transport = new DefaultTaskTransport({
       api: 'https://example.test/tasks?version=1',
@@ -195,17 +203,23 @@ describe('DefaultTaskTransport', () => {
     );
   });
 
-  it('streams unwrapped snapshots and resolves the final output', async () => {
+  it('uses buffered JSON when a streaming request receives JSON', async () => {
+    const customFetch = jest.fn(
+      (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+        Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
+    );
+    const onData = jest.fn();
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await expect(
+      transport.sendTask({ task: 't', input: {}, stream: true, onData })
+    ).resolves.toEqual({ suggestions: ['a'] });
+    expect(onData).not.toHaveBeenCalled();
+  });
+
+  it('streams unwrapped partial outputs and resolves the final output', async () => {
     const customFetch = jest.fn(() =>
-      Promise.resolve(
-        sseResponse([
-          JSON.stringify({ type: 'start' }),
-          outputEvent({ value: 'a' }),
-          outputEvent({ value: 'ab' }),
-          JSON.stringify({ type: 'finish' }),
-          '[DONE]',
-        ])
-      )
+      Promise.resolve(textStreamResponse(['{"value":"a', 'b"}']))
     ) as unknown as typeof fetch;
     const onData = jest.fn();
     const transport = new DefaultTaskTransport({ fetch: customFetch });
@@ -218,19 +232,7 @@ describe('DefaultTaskTransport', () => {
 
   it('repairs partial JSON while streaming', async () => {
     const customFetch = jest.fn(() =>
-      Promise.resolve(
-        sseResponse([
-          JSON.stringify({
-            type: 'data-task-output',
-            data: '{"output":{"suggestions":["Wh',
-          }),
-          JSON.stringify({
-            type: 'data-task-output',
-            data: '{"output":{"suggestions":["What?"]}}',
-          }),
-          '[DONE]',
-        ])
-      )
+      Promise.resolve(textStreamResponse(['{"suggestions":["Wh', 'at?"]}']))
     ) as unknown as typeof fetch;
     const onData = jest.fn();
     const transport = new DefaultTaskTransport({ fetch: customFetch });
@@ -239,6 +241,49 @@ describe('DefaultTaskTransport', () => {
       transport.sendTask({ task: 't', input: {}, stream: true, onData })
     ).resolves.toEqual({ suggestions: ['What?'] });
     expect(onData.mock.calls[0][0]).toEqual({ suggestions: ['Wh'] });
+  });
+
+  it('ignores keepalive whitespace that does not change the output', async () => {
+    const customFetch = jest.fn(() =>
+      Promise.resolve(textStreamResponse([' ', '{"value":"complete"}', ' ']))
+    ) as unknown as typeof fetch;
+    const onData = jest.fn();
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await expect(
+      transport.sendTask({ task: 't', input: {}, stream: true, onData })
+    ).resolves.toEqual({ value: 'complete' });
+    expect(onData).toHaveBeenCalledTimes(1);
+    expect(onData).toHaveBeenCalledWith({ value: 'complete' });
+  });
+
+  it('decodes multi-byte characters split across chunks', async () => {
+    const bytes = new TextEncoder().encode('{"value":"café"}');
+    const splitIndex = bytes.indexOf(0xc3) + 1;
+    const customFetch = jest.fn(() =>
+      Promise.resolve(
+        textStreamResponse([
+          bytes.slice(0, splitIndex),
+          bytes.slice(splitIndex),
+        ])
+      )
+    ) as unknown as typeof fetch;
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await expect(
+      transport.sendTask({ task: 't', input: {}, stream: true })
+    ).resolves.toEqual({ value: 'café' });
+  });
+
+  it('rejects a stream that closes with incomplete JSON', async () => {
+    const customFetch = jest.fn(() =>
+      Promise.resolve(textStreamResponse(['{"value":']))
+    ) as unknown as typeof fetch;
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await expect(
+      transport.sendTask({ task: 't', input: {}, stream: true })
+    ).rejects.toBeInstanceOf(SyntaxError);
   });
 
   it('uses buffered JSON and does not emit partial data when streaming is disabled', async () => {
@@ -266,25 +311,17 @@ describe('DefaultTaskTransport', () => {
     ).rejects.toThrow('HTTP error 503');
   });
 
-  it('streams unwrapped partial outputs and rejects terminal errors', async () => {
+  it('streams unwrapped partial outputs and rejects stream errors', async () => {
     const onData = jest.fn();
+    const streamError = new Error('stream failed');
     const customFetch = jest.fn(() =>
-      Promise.resolve(
-        sseResponse([
-          JSON.stringify({
-            type: 'data-task-output',
-            data: { output: { value: 'partial' } },
-          }),
-          JSON.stringify({ type: 'error', errorText: 'stream failed' }),
-          '[DONE]',
-        ])
-      )
+      Promise.resolve(textStreamResponse(['{"value":"partial"}'], streamError))
     ) as unknown as typeof fetch;
     const transport = new DefaultTaskTransport({ fetch: customFetch });
 
     await expect(
       transport.sendTask({ task: 't', input: {}, stream: true, onData })
-    ).rejects.toThrow('stream failed');
+    ).rejects.toBe(streamError);
     expect(onData).toHaveBeenCalledWith({ value: 'partial' });
   });
 });
