@@ -12,6 +12,29 @@ const DEBOUNCE_MS = 300;
 
 const SUGGESTIONS = ['Suggestion A', 'Suggestion B', 'Suggestion C'];
 
+function textStreamResponse(): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(
+        encoder.encode(JSON.stringify({ suggestions: SUGGESTIONS }))
+      );
+      controller.close();
+    },
+  });
+  return {
+    ok: true,
+    status: 200,
+    headers: {
+      get: (name: string) =>
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
+    },
+    body,
+  } as unknown as Response;
+}
+
 function createResultsClient() {
   return createSearchClient({
     search: jest.fn(() =>
@@ -36,10 +59,7 @@ function createResultsClient() {
 
 function mockAgentFetch() {
   global.fetch = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve({ output: { suggestions: SUGGESTIONS } }),
-    } as Response)
+    Promise.resolve(textStreamResponse())
   ) as unknown as typeof fetch;
 }
 

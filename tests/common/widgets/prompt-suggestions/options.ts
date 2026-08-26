@@ -12,6 +12,27 @@ const DEBOUNCE_MS = 300;
 
 const SUGGESTIONS = ['Suggestion A', 'Suggestion B', 'Suggestion C'];
 
+function textStreamResponse(suggestions: string[]): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(encoder.encode(JSON.stringify({ suggestions })));
+      controller.close();
+    },
+  });
+  return {
+    ok: true,
+    status: 200,
+    headers: {
+      get: (name: string) =>
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
+    },
+    body,
+  } as unknown as Response;
+}
+
 function createResultsClient(hits: Array<Record<string, unknown>>) {
   return createSearchClient({
     search: jest.fn(() =>
@@ -36,14 +57,11 @@ function createResultsClient(hits: Array<Record<string, unknown>>) {
 
 /**
  * Mocks `global.fetch` (the agent-studio transport, not the search client)
- * with the Agent Studio `tasks` response shape `{ output: { suggestions } }`.
+ * with the Agent Studio streaming `tasks` response.
  */
 function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
   const fetchMock = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve({ output: { suggestions } }),
-    } as Response)
+    Promise.resolve(textStreamResponse(suggestions))
   );
   global.fetch = fetchMock as unknown as typeof fetch;
   return fetchMock;
@@ -130,12 +148,7 @@ export function createOptionsTests(
       global.fetch = jest.fn(
         () =>
           new Promise<Response>((resolve) => {
-            resolveFetch = () =>
-              resolve({
-                ok: true,
-                json: () =>
-                  Promise.resolve({ output: { suggestions: SUGGESTIONS } }),
-              } as Response);
+            resolveFetch = () => resolve(textStreamResponse(SUGGESTIONS));
           })
       ) as unknown as typeof fetch;
 
@@ -292,15 +305,7 @@ export function createOptionsTests(
       );
       const fetchMock = jest.fn(
         (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
-          Promise.resolve(
-            new Response(
-              JSON.stringify({ output: { suggestions: SUGGESTIONS } }),
-              {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-              }
-            )
-          )
+          Promise.resolve(textStreamResponse(SUGGESTIONS))
       );
       const transport = {
         fetch: fetchMock,
