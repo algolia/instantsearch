@@ -595,6 +595,29 @@ describe('connectTasks', () => {
       expect(lastState().isLoading).toBe(false);
     });
 
+    it('invalidate() clears output and error from previous submits', async () => {
+      global.fetch = jest
+        .fn()
+        .mockResolvedValueOnce(textStreamResponse(['{"done":true}']))
+        .mockResolvedValueOnce(
+          new Response('nope', { status: 500 })
+        ) as unknown as typeof fetch;
+
+      const { lastState } = init({ agentId: 'a', task: 't' });
+
+      await lastState().submit({});
+      expect(lastState().output).toEqual({ done: true });
+
+      lastState().invalidate();
+      expect(lastState().output).toBeUndefined();
+
+      await lastState().submit({});
+      expect(lastState().error).toBeInstanceOf(Error);
+
+      lastState().invalidate();
+      expect(lastState().error).toBeUndefined();
+      expect(lastState().isLoading).toBe(false);
+    });
   });
 
   describe('dispose', () => {
