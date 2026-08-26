@@ -1576,6 +1576,88 @@ export function createOptionsTests(
         );
       });
 
+      test('renders a tool part under a name the tool claims with `matchesToolName`', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'tool-hello_products',
+                  toolCallId: '1',
+                  input: { text: 'hello' },
+                  state: 'output-available',
+                  output: 'hello',
+                },
+                {
+                  type: 'tool-goodbye_products',
+                  toolCallId: '2',
+                  input: {},
+                  state: 'output-available',
+                  output: 'goodbye',
+                },
+              ],
+            },
+          ] as any,
+          id: 'chat-id',
+        });
+
+        // `goodbye_products` stays unresolved: `goodbye` is a prefix of it
+        // but claims nothing.
+        const matchesToolName = (toolName: string) =>
+          toolName.startsWith('hello_');
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  matchesToolName,
+                  templates: {
+                    layout: '<div id="tool-content">Hello!</div>',
+                  },
+                },
+                goodbye: {
+                  templates: {
+                    layout: '<div id="other-tool-content">Goodbye!</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  matchesToolName,
+                  layoutComponent: () => <div id="tool-content">Hello!</div>,
+                },
+                goodbye: {
+                  layoutComponent: () => (
+                    <div id="other-tool-content">Goodbye!</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('#tool-content')).toBeInTheDocument();
+        expect(
+          document.querySelector('#other-tool-content')
+        ).not.toBeInTheDocument();
+      });
+
       test('re-evaluates `shouldRender` of an older message when the chat changes', async () => {
         const searchClient = createSearchClient();
 

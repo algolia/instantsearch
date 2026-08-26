@@ -8,7 +8,11 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat } from '../../lib/chat';
+import {
+  Chat,
+  matchesSearchIndexToolName,
+  SearchIndexToolType,
+} from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -474,7 +478,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const {
       resume = false,
-      tools = {},
+      tools: tools_ = {},
       type = 'chat',
       persistence,
       context,
@@ -489,6 +493,21 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       persistence,
       'chat' in options
     );
+
+    // The Algolia MCP Server exposes the search tool once per index and names
+    // it after the index (`algolia_search_index_products`). A `matchesToolName`
+    // set by the user wins, as does a tool registered under the derived name.
+    const tools =
+      tools_[SearchIndexToolType] &&
+      tools_[SearchIndexToolType].matchesToolName === undefined
+        ? {
+            ...tools_,
+            [SearchIndexToolType]: {
+              ...tools_[SearchIndexToolType],
+              matchesToolName: matchesSearchIndexToolName,
+            },
+          }
+        : tools_;
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';

@@ -730,6 +730,17 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   /**
+   * Whether this tool also handles a call sent under `toolName`.
+   *
+   * Consulted only when no tool is registered under that exact name, so it
+   * can't shadow another registration. Needed when the server names a call
+   * after the registered tool: the Algolia MCP Server appends the index name,
+   * so `algolia_search_index` has to answer to `algolia_search_index_products`.
+   *
+   * Omitted means the tool only handles its own name.
+   */
+  matchesToolName?: (toolName: string) => boolean;
+  /**
    * Whether this tool call should render.
    *
    * Returning `false` skips the part entirely and keeps the loader visible, so
