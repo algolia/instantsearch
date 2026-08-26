@@ -79,6 +79,10 @@
   animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+.ais-ChatMessageReasoning-label--streaming {
+  animation: ais-chat-reasoning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .ais-ChatMessageReasoning-label {
   flex-shrink: 0;
   color: rgba(var(--ais-text-color-rgb), 0.9);
@@ -117,6 +121,7 @@
 
   // Keep the chevron at the end when the active hint is absent.
   margin-inline-start: auto;
+  transform: rotate(-90deg);
   transition: transform var(--ais-transition-duration)
     var(--ais-transition-timing-function);
 
@@ -133,7 +138,7 @@
 }
 
 .ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-chevron {
-  transform: rotate(180deg);
+  transform: none;
 }
 
 .ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-status {
@@ -160,12 +165,16 @@
   gap: calc(var(--ais-spacing) * 0.625);
   list-style: none;
   overflow-wrap: anywhere;
+}
 
-  // Block margins collapse through padding-free ancestors, so the one meeting the
-  // body's padding box can sit at any depth. Reset the whole leading (trailing)
-  // chain; the `:not()` spares gaps between siblings that are not themselves first
-  // (last). `#{&}` is required: a literal `&` inside `:where()` makes Sass drop the
-  // parent prefix, and the selector then matches the document.
+.ais-ChatMessageReasoning-item {
+  position: relative;
+  min-width: 0;
+  padding-inline-start: calc(var(--ais-spacing) * 1.25);
+
+  // Markdown can wrap multiple blocks in a `div`. Reset the leading and
+  // trailing child chains inside each item so every marker aligns with its own
+  // first visible block without removing margins between sibling blocks.
   :first-child:not(:where(#{&} :not(:first-child) *)) {
     margin-block-start: 0;
   }
@@ -173,12 +182,6 @@
   :last-child:not(:where(#{&} :not(:last-child) *)) {
     margin-block-end: 0;
   }
-}
-
-.ais-ChatMessageReasoning-item {
-  position: relative;
-  min-width: 0;
-  padding-inline-start: calc(var(--ais-spacing) * 1.25);
 
   &::before {
     position: absolute;
@@ -221,6 +224,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ais-ChatMessageReasoning-icon--streaming,
+  .ais-ChatMessageReasoning-label--streaming,
   .ais-ChatMessageReasoning-chevron {
     animation: none;
     transition: none;
