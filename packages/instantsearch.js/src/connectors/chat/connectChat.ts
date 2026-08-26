@@ -1,13 +1,14 @@
 import {
   collectChatRecords,
   createChatRecordsStore,
+  findTool,
 } from 'instantsearch-ui-components';
 
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat, SearchIndexToolType } from '../../lib/chat';
+import { Chat } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -61,6 +62,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type ChatSuggestionsStatus = 'idle' | 'loading';
+
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
   input: string;
@@ -107,6 +110,11 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Suggestions received from the AI model.
    */
   suggestions?: string[];
+  /**
+   * Whether suggestions for the current turn are still expected: `loading` while
+   * a turn that should end with suggestions hasn't received them yet.
+   */
+  suggestionsStatus: ChatSuggestionsStatus;
   /**
    * Sends feedback (thumbs up/down) for an assistant message.
    * Only available when using `agentId` and `feedback` is true.
@@ -482,14 +490,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // Compatibility shim with Algolia MCP Server search tool, which suffixes
-    // the tool name with the index name (`searchIndex_products`).
-    const resolveTool = (toolName: string) =>
-      tools[toolName] ||
-      (toolName.startsWith(`${SearchIndexToolType}_`)
-        ? tools[SearchIndexToolType]
-        : undefined);
-
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
@@ -519,19 +519,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         .forEach((unsubscribe) => unsubscribe());
     };
 
-    // Extract suggestions from the last assistant message's data-suggestions part
-    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
-      // Find the last assistant message (iterate from end)
-      const lastAssistantMessage = [...messages]
-        .reverse()
-        .find((message) => message.role === 'assistant' && message.parts);
-
-      if (!lastAssistantMessage?.parts) {
-        return undefined;
-      }
-
-      // Find the data-suggestions part
-      const suggestionsPart = lastAssistantMessage.parts.find(
+    const findSuggestionsPart = (message: TUiMessage | undefined) =>
+      message?.parts?.find(
         (
           part
         ): part is {
@@ -546,7 +535,51 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           )
       );
 
-      return suggestionsPart?.data.suggestions;
+    const findLastAssistantMessage = (messages: TUiMessage[]) =>
+      [...messages]
+        .reverse()
+        .find((message) => message.role === 'assistant' && message.parts);
+
+    // Extract suggestions from the last assistant message's data-suggestions part
+    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
+      return findSuggestionsPart(findLastAssistantMessage(messages))?.data
+        .suggestions;
+    };
+
+    // "Still coming" has to be inferred: the turn is running and has no
+    // `data-suggestions` part yet. Expecting any at all needs evidence, or an
+    // agent that never sends them would sit under a placeholder forever.
+    const getSuggestionsStatus = (
+      messages: TUiMessage[]
+    ): ChatSuggestionsStatus => {
+      const status = _chatInstance.status;
+      if (status !== 'submitted' && status !== 'streaming') {
+        return 'idle';
+      }
+
+      const lastAssistantMessage = findLastAssistantMessage(messages);
+      if (findSuggestionsPart(lastAssistantMessage)) {
+        return 'idle';
+      }
+
+      const declaresSuggestions =
+        (
+          lastAssistantMessage?.metadata as
+            | { suggestionsEnabled?: boolean }
+            | undefined
+        )?.suggestionsEnabled === true;
+      if (declaresSuggestions) {
+        return 'loading';
+      }
+
+      const hasSuggestionsHistory = messages.some(
+        (message) =>
+          message !== lastAssistantMessage &&
+          message.role === 'assistant' &&
+          Boolean(findSuggestionsPart(message))
+      );
+
+      return hasSuggestionsHistory ? 'loading' : 'idle';
     };
 
     const setMessages = (
@@ -735,12 +768,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         sendAutomaticallyWhen,
         transport,
         shouldRepairToolInput(toolName) {
-          const tool = resolveTool(toolName);
+          const tool = findTool(toolName, tools);
           if (!tool) return true;
           return Boolean(tool.streamInput);
         },
         resolveCancelledToolOutput({ toolName, toolCallId, input }) {
-          const cancelOutput = resolveTool(toolName)?.cancelOutput;
+          const cancelOutput = findTool(toolName, tools)?.cancelOutput;
           if (!cancelOutput) return undefined;
 
           try {
@@ -756,7 +789,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
         },
         onToolCall: (({ toolCall }, submitToolResult) => {
-          const tool = resolveTool(toolCall.toolName);
+          const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
             if (__DEV__) {
@@ -1057,6 +1090,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
+          suggestionsStatus: getSuggestionsStatus(_chatInstance.messages),
           clearMessages,
           tools: toolsWithAddToolResult,
           records,

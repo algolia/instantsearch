@@ -513,6 +513,20 @@ export type ChatLayoutOwnProps<
   ComponentProps<'div'>;
 
 /**
+ * Where the chat loader renders: as its own row after the last message
+ * (`messages-end`, the default), or inside the streaming assistant message
+ * (`message-inline`, falling back to a row when there is none to host it).
+ */
+export type ChatLoaderPosition = 'messages-end' | 'message-inline';
+
+/**
+ * What the turn is doing while the loader shows: the request is `submitted` with
+ * nothing back yet, a `tool` call is in flight, `reasoning` settled before the
+ * answer started, or `thinking` for anything else.
+ */
+export type ChatLoaderPhase = 'submitted' | 'tool' | 'reasoning' | 'thinking';
+
+/**
  * Shared chat state and callbacks injected into every overridable chat
  * component by the widget. This is the component-layer analog of the templates
  * system's `params` argument: a single, consistent object every component can
@@ -581,6 +595,23 @@ export type ChatComponentContext<
    * Close the chat.
    */
   onClose: () => void;
+};
+
+/**
+ * The `context` the loader receives: the shared `ChatComponentContext` plus what
+ * the current turn is doing.
+ */
+export type ChatLoaderContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage> & {
+  /**
+   * What the turn is doing right now.
+   */
+  phase: ChatLoaderPhase;
+  /**
+   * The message the loader belongs to, when there is one.
+   */
+  message?: TMessage;
 };
 
 /**
@@ -673,9 +704,40 @@ export type ChatInsightsEventContext = {
   instantSearchStatus?: 'idle' | 'loading' | 'stalled' | 'error';
 };
 
+/**
+ * The `context` a tool's `shouldRender` predicate receives: the shared
+ * `ChatComponentContext`, the tool part under consideration, and the chat
+ * message that part belongs to.
+ *
+ * Narrower than `ClientSideToolContext` on purpose. The predicate decides
+ * whether anything renders at all, and it also runs from the loader, which has
+ * none of the render-time callbacks a layout component is handed.
+ */
+export type ClientSideToolShouldRenderContext<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentContext<TMessage> & {
+  /**
+   * The tool part being considered for rendering.
+   */
+  message: ChatToolMessage;
+  /**
+   * The chat message the tool part belongs to.
+   */
+  parentMessage: TMessage;
+};
+
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
+  /**
+   * Whether this tool call should render.
+   *
+   * Returning `false` skips the part entirely and keeps the loader visible, so
+   * a tool can defer to another one that renders the same turn — for example a
+   * search tool stepping aside for a richer display tool. Omitted means always
+   * render.
+   */
+  shouldRender?: (context: ClientSideToolShouldRenderContext) => boolean;
   addToolResult: AddToolResult;
   /** Attached by the connector, one per chat; reaches `layoutComponent`. */
   records?: ChatRecordsStore;

@@ -258,6 +258,115 @@ describe('connectChat', () => {
         })
       );
     });
+
+    describe('suggestionsStatus', () => {
+      const suggestionsPart = {
+        type: 'data-suggestions',
+        data: { suggestions: ['Cheaper options?'] },
+      };
+
+      function getSuggestionsStatus({
+        messages,
+        status,
+      }: {
+        messages: unknown[];
+        status?: string;
+      }) {
+        const chat = new Chat<any>({
+          persistence: false,
+          transport: {} as any,
+        });
+        const widget = connectChat(jest.fn())({
+          chat,
+          disableTriggerValidation: true,
+        });
+        const helper = algoliasearchHelper(createSearchClient(), '');
+
+        widget.init(createInitOptions({ helper }));
+        chat.messages = messages as any;
+        if (status) {
+          chat._state.status = status as any;
+        }
+
+        return widget.getWidgetRenderState(createInitOptions({ helper }))
+          .suggestionsStatus;
+      }
+
+      it('is idle when no turn is running', () => {
+        expect(
+          getSuggestionsStatus({
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+            ],
+          })
+        ).toBe('idle');
+      });
+
+      it('is idle for a turn with no reason to expect suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('idle');
+      });
+
+      it('is loading when the agent declared suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { suggestionsEnabled: true },
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('loading');
+      });
+
+      it('is loading when an earlier turn produced suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+              { id: '2', role: 'user', parts: [] },
+              {
+                id: '3',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('loading');
+      });
+
+      it('is idle once the suggestions arrive', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+              { id: '2', role: 'user', parts: [] },
+              {
+                id: '3',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }, suggestionsPart],
+              },
+            ],
+          })
+        ).toBe('idle');
+      });
+    });
   });
 
   describe('getRenderState', () => {

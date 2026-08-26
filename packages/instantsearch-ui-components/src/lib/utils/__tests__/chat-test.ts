@@ -1,4 +1,4 @@
-import { getApplyFiltersParamsFromToolInput } from '../chat';
+import { findTool, getApplyFiltersParamsFromToolInput } from '../chat';
 
 describe('getApplyFiltersParamsFromToolInput', () => {
   test('returns nothing to refine when input is undefined', () => {
@@ -115,5 +115,46 @@ describe('getApplyFiltersParamsFromToolInput', () => {
         facet_type: [],
       }).facetFilters
     ).toBeUndefined();
+  });
+});
+
+describe('findTool', () => {
+  const foo = { name: 'foo' };
+  const fooBar = { name: 'foo_bar' };
+
+  test('resolves an exact match from a part type or a bare tool name', () => {
+    expect(findTool('tool-foo', { foo })).toBe(foo);
+    expect(findTool('foo', { foo })).toBe(foo);
+  });
+
+  test('resolves a name suffixed by the index name', () => {
+    expect(findTool('tool-foo_products', { foo })).toBe(foo);
+  });
+
+  test('prefers the longest match over registration order', () => {
+    expect(findTool('tool-foo_bar_products', { foo, foo_bar: fooBar })).toBe(
+      fooBar
+    );
+    expect(findTool('tool-foo_bar_products', { foo_bar: fooBar, foo })).toBe(
+      fooBar
+    );
+  });
+
+  test('prefers an exact match over a shorter prefix', () => {
+    expect(findTool('tool-foo_bar', { foo, foo_bar: fooBar })).toBe(fooBar);
+  });
+
+  test('only strips a leading `tool-`', () => {
+    const tool = { name: 'my-tool-thing' };
+
+    expect(findTool('tool-my-tool-thing', { 'my-tool-thing': tool })).toBe(
+      tool
+    );
+  });
+
+  test('returns undefined when nothing matches', () => {
+    expect(findTool('tool-other', { foo })).toBeUndefined();
+    // A shared prefix is not a match without the `_` separator.
+    expect(findTool('tool-foobar', { foo })).toBeUndefined();
   });
 });

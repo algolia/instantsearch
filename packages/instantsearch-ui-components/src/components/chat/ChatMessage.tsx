@@ -2,7 +2,7 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { isReasoningPartActive } from '../../lib/utils/chat';
+import { findTool, isReasoningPartActive } from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
@@ -234,6 +234,11 @@ export type ChatMessageProps<
    */
   suggestionsElement?: VNode;
   /**
+   * Optional loader element, rendered under the message's parts. Set by
+   * `ChatMessages` when `loaderPosition` is `message-inline`.
+   */
+  loaderElement?: VNode;
+  /**
    * Whether to render reasoning parts
    */
   showReasoning?: boolean;
@@ -257,9 +262,6 @@ export type ChatMessageProps<
    */
   parseMarkdown?: boolean;
 };
-
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
-const SearchIndexToolType = 'algolia_search_index';
 
 export function createChatMessageComponent({
   createElement,
@@ -293,6 +295,7 @@ export function createChatMessageComponent({
       setIndexUiState,
       translations: userTranslations,
       suggestionsElement,
+      loaderElement,
       showReasoning = false,
       parseMarkdown = true,
       messages: ownMessages,
@@ -469,24 +472,16 @@ export function createChatMessageComponent({
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const toolName = part.type.replace('tool-', '');
-        let tool = tools[toolName] as MessageScopedClientSideTool | undefined;
-
-        // Compatibility shim with Algolia MCP Server search tool
-        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
-          tool = tools[SearchIndexToolType] as
-            | MessageScopedClientSideTool
-            | undefined;
-        }
-
-        const displayResultsEnabled =
-          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
-            ?.displayResultsEnabled === true;
+        const tool = findTool(part.type, tools) as
+          | MessageScopedClientSideTool
+          | undefined;
 
         if (
-          displayResultsEnabled &&
-          tool &&
-          tool === tools[SearchIndexToolType]
+          tool?.shouldRender?.({
+            ...context,
+            message: part as ChatToolMessage,
+            parentMessage: message,
+          }) === false
         ) {
           return null;
         }
@@ -584,6 +579,7 @@ export function createChatMessageComponent({
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.parts.map(renderMessagePart)}
+              {loaderElement}
             </div>
 
             {suggestionsElement}

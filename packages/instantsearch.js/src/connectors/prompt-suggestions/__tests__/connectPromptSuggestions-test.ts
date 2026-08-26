@@ -777,9 +777,24 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('lets transport.prepareSendMessagesRequest mutate the body', async () => {
-      const prepare = jest.fn((body: Record<string, unknown>) => ({
-        body: { ...body, injected: true },
-      }));
+      const prepare = jest.fn(
+        (request: {
+          task: string;
+          input: Record<string, unknown>;
+          stream: boolean;
+          body: Record<string, unknown> | undefined;
+          credentials: RequestCredentials | undefined;
+          headers: HeadersInit | undefined;
+          api: string;
+        }) => ({
+          body: {
+            task: request.task,
+            input: request.input,
+            ...request.body,
+            injected: true,
+          },
+        })
+      );
       const widget = connectPromptSuggestions(jest.fn())({
         transport: {
           api: 'https://example.test/agents',
@@ -794,11 +809,64 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(prepare).toHaveBeenCalledTimes(1);
+      const preparedRequest = prepare.mock.calls[0][0];
+      expect({
+        task: preparedRequest.task,
+        input: preparedRequest.input,
+        stream: preparedRequest.stream,
+        body: preparedRequest.body,
+        credentials: preparedRequest.credentials,
+        headers: preparedRequest.headers,
+        api: preparedRequest.api,
+      }).toEqual({
+        task: 'prompt-suggestions',
+        input: expect.any(Object),
+        stream: true,
+        body: undefined,
+        credentials: undefined,
+        headers: { 'x-foo': 'bar' },
+        api: 'https://example.test/agents',
+      });
       const [[url, init]] = (global.fetch as jest.Mock).mock.calls;
       expect(url).toBe('https://example.test/agents?stream=true');
       const parsed = JSON.parse((init as RequestInit).body as string);
       expect(parsed.injected).toBe(true);
       expect((init as RequestInit).headers).toMatchObject({ 'x-foo': 'bar' });
+    });
+
+    it('forwards combined agent and transport options to one task request', async () => {
+      const customFetch = jest.fn(() =>
+        Promise.resolve(jsonResponse({ output: { suggestions: ['combined'] } }))
+      ) as unknown as typeof fetch;
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'agent',
+        transport: {
+          api: 'https://custom.test/tasks',
+          credentials: 'include',
+          headers: { 'x-custom': '1' },
+          fetch: customFetch,
+        },
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect(customFetch).toHaveBeenCalledWith(
+        'https://custom.test/tasks?stream=true',
+        expect.objectContaining({
+          credentials: 'include',
+          headers: {
+            'x-custom': '1',
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'Content-Type': 'application/json',
+          },
+        })
+      );
+      expect(global.fetch).not.toHaveBeenCalled();
     });
   });
 
