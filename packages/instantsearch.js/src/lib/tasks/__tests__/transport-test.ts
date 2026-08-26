@@ -124,6 +124,28 @@ describe('DefaultTaskTransport', () => {
     );
   });
 
+  it('omits the task when none is specified', async () => {
+    const customFetch = jest.fn(
+      (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+        Promise.resolve(jsonResponse({ output: { ok: true } }))
+    );
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await transport.sendTask({
+      input: { query: 'shoes' },
+      stream: false,
+    });
+
+    expect(customFetch).toHaveBeenCalledWith('/api/tasks', {
+      method: 'POST',
+      credentials: undefined,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: { query: 'shoes' },
+      }),
+    });
+  });
+
   it('preserves the exact error thrown by a custom fetch', async () => {
     class StructuredTaskError extends Error {
       constructor(

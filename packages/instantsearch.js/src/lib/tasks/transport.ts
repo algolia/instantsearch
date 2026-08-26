@@ -212,7 +212,7 @@ export class DefaultTaskTransport {
       let credentials = resolvedCredentials;
       let headers: HeadersInit = withJsonContentType(resolvedHeaders);
       let body: object = {
-        task,
+        ...(task === undefined ? {} : { task }),
         input,
         ...resolvedBody,
       };

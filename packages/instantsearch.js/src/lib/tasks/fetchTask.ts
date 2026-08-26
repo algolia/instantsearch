@@ -13,7 +13,10 @@ export function buildTaskPayload({
   input,
   prepareRequest,
 }: BuildTaskPayloadOptions): Record<string, unknown> {
-  const payload: Record<string, unknown> = { task, input };
+  const payload: Record<string, unknown> = {
+    ...(task === undefined ? {} : { task }),
+    input,
+  };
 
   return prepareRequest ? prepareRequest(payload).body : payload;
 }
