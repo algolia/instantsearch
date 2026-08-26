@@ -973,6 +973,41 @@ describe('connectPromptSuggestions', () => {
         renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       expect(afterInvalidation.error).toBeUndefined();
     });
+
+    it('clears the previous error when the search state changes', async () => {
+      const streamError = new Error('stream failed');
+      global.fetch = jest.fn(() =>
+        Promise.resolve(textStreamResponse([], streamError))
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'a' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+
+      expect(renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error).toBe(
+        streamError
+      );
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'b' }) })
+      );
+
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error
+      ).toBeUndefined();
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.dispose!(createDisposeOptions({ helper }));
+    });
   });
 
   describe('handoff', () => {

@@ -478,6 +478,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           if (stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;
             refetchPending = true;
+            error = undefined;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
               if (latestRenderOptions?.results) {
