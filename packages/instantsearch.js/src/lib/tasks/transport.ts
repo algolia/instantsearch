@@ -280,7 +280,8 @@ export class DefaultTaskTransport {
             if (!response.ok) {
               throw new Error(`HTTP error ${response.status}`);
             }
-            if (stream) {
+            const contentType = response.headers?.get?.('content-type') || '';
+            if (stream && contentType.includes('text/plain')) {
               if (!response.body) {
                 throw new Error('Response body is empty');
               }

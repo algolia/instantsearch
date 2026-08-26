@@ -203,6 +203,20 @@ describe('DefaultTaskTransport', () => {
     );
   });
 
+  it('uses buffered JSON when a streaming request receives JSON', async () => {
+    const customFetch = jest.fn(
+      (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+        Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
+    );
+    const onData = jest.fn();
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await expect(
+      transport.sendTask({ task: 't', input: {}, stream: true, onData })
+    ).resolves.toEqual({ suggestions: ['a'] });
+    expect(onData).not.toHaveBeenCalled();
+  });
+
   it('streams unwrapped partial outputs and resolves the final output', async () => {
     const customFetch = jest.fn(() =>
       Promise.resolve(textStreamResponse(['{"value":"a', 'b"}']))
