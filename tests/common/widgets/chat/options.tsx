@@ -1605,10 +1605,8 @@ export function createOptionsTests(
           id: 'chat-id',
         });
 
-        // Only `hello` opts in to the names a server derives from it, so
-        // `goodbye_products` stays unresolved even though `goodbye` is a prefix
-        // of it. Which of two overlapping names wins is the registration
-        // site's call, not the resolver's guess.
+        // `goodbye_products` stays unresolved: `goodbye` is a prefix of it
+        // but claims nothing.
         const matchesToolName = (toolName: string) =>
           toolName.startsWith('hello_');
 

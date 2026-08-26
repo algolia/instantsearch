@@ -1926,8 +1926,7 @@ data: [DONE]`,
               )
             ),
         },
-        // `my_tool` and `my_tool_movies` are two different tools as far as the
-        // registry is concerned, so registration order can't decide this.
+        // `my_tool` and `my_tool_movies` are separate tools to the registry.
         tools: { my_tool: { onToolCall } },
       });
 

@@ -494,12 +494,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       'chat' in options
     );
 
-    // The Algolia MCP Server exposes the search tool once per index and names it
-    // after the index (`algolia_search_index_products`). That naming convention
-    // is Algolia's, so it's declared here rather than guessed by the resolver:
-    // `findTool` only lets a tool answer to a name it claims. An explicit
-    // `matchesToolName` wins, and so does a tool registered under the derived
-    // name itself.
+    // The Algolia MCP Server exposes the search tool once per index and names
+    // it after the index (`algolia_search_index_products`). A `matchesToolName`
+    // set by the user wins, as does a tool registered under the derived name.
     const tools =
       tools_[SearchIndexToolType] &&
       tools_[SearchIndexToolType].matchesToolName === undefined

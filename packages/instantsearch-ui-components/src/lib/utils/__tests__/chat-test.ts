@@ -123,8 +123,7 @@ describe('getApplyFiltersParamsFromToolInput', () => {
 describe('findTool', () => {
   const foo = { name: 'foo' };
   const fooBar = { name: 'foo_bar' };
-  // Opts in to the names a server derives from `foo`, the way the MCP Server
-  // suffixes the search tool with the index name.
+  // Claims index-suffixed names, like the MCP Server's search tool.
   const suffixedFoo = {
     name: 'foo',
     matchesToolName: (toolName: string) => startsWith(toolName, 'foo_'),
@@ -165,8 +164,7 @@ describe('findTool', () => {
   });
 
   test('registering overlapping names is unambiguous', () => {
-    // Neither `foo` nor `foo_bar` claims names beyond its own, so registration
-    // order cannot decide which one renders `foo_bar_products`.
+    // Neither claims beyond its own name, so neither renders it.
     expect(
       findTool('tool-foo_bar_products', { foo, foo_bar: fooBar })
     ).toBeUndefined();
@@ -197,8 +195,7 @@ describe('findTool', () => {
       matchesToolName: (toolName: string) => startsWith(toolName, 'foo_'),
     };
 
-    // A conflict the resolver cannot arbitrate: it settles it deterministically
-    // and says so, rather than letting registration order decide silently.
+    // Settled deterministically, and warned about.
     expect(findTool('tool-foo_products', { foo: suffixedFoo, other })).toBe(
       other
     );

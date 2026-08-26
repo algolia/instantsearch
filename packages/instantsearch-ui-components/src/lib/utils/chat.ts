@@ -107,22 +107,13 @@ type ToolNameMatcher = {
  * Resolves the tool a message part belongs to, from either a part type
  * (`tool-algolia_search_index`) or a bare tool name.
  *
- * A tool registered under the exact name always wins. Failing that, only tools
- * that opted in through `matchesToolName` can claim the name, which is how a
- * server that derives the name it sends from the registered one is supported —
- * the Algolia MCP Server exposes the search tool once per index and appends the
- * index name (`algolia_search_index_products`).
+ * An exact registration wins. Otherwise only tools whose `matchesToolName`
+ * claims the name are considered, most specific first, for servers that name a
+ * call after the registered tool: the Algolia MCP Server appends the index name
+ * (`algolia_search_index_products`).
  *
- * Claiming is explicit rather than inferred from the name because `a_b` is
- * genuinely ambiguous between the tool `a_b` and the tool `a` addressing `b`.
- * No naming rule tells those apart, so guessing picks the wrong tool for
- * somebody: preferring the shorter key breaks `foo_bar` when `foo` is also
- * registered, preferring the longer one breaks `search_index` on the `products`
- * index when `search_index_products` is also registered.
- *
- * Generic over the tool shape so the renderer, the loader, the widget and the
- * connector — which hold different subsets of the tool contract — all resolve
- * names the same way.
+ * Generic over the tool shape: the renderer, the loader, the widget and the
+ * connector hold different subsets of the tool contract.
  */
 export const findTool = <TTool>(
   partType: string,
@@ -163,8 +154,8 @@ export const findTool = <TTool>(
     return undefined;
   }
 
-  // Sorted rather than first-found, so the winner never depends on the order
-  // tools were registered in: the most specific claim wins, ties by name.
+  // Most specific claim wins, ties by name, so the winner doesn't depend on
+  // registration order.
   claimants.sort((a, b) => b.length - a.length || (a < b ? -1 : 1));
 
   if (__DEV__) {

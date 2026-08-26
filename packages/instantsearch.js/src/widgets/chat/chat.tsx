@@ -676,9 +676,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
-      // The connector keys its tools the same way the widget does, so this is
-      // an exact hit today. Going through `findTool` keeps the widget on the
-      // same resolution rule as the renderer, the loader and the connector.
+      // The connector keys its tools the way the widget does, so this is an
+      // exact hit; `findTool` keeps one resolution rule across the flavors.
       const widgetTool = findTool(key, tools);
 
       let layoutComponent:

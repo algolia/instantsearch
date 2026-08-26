@@ -730,19 +730,14 @@ export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
   streamInput?: boolean;
   /**
-   * Whether this tool also handles a tool call sent under `toolName`.
+   * Whether this tool also handles a call sent under `toolName`.
    *
-   * Only consulted when no tool is registered under that exact name, so it can
-   * never shadow another registration. Declare it when the server derives the
-   * name it sends from the registered one: the Algolia MCP Server exposes the
-   * search tool once per index and appends the index name, so
-   * `algolia_search_index` has to answer to `algolia_search_index_products`
-   * too.
+   * Consulted only when no tool is registered under that exact name, so it
+   * can't shadow another registration. Needed when the server names a call
+   * after the registered tool: the Algolia MCP Server appends the index name,
+   * so `algolia_search_index` has to answer to `algolia_search_index_products`.
    *
-   * Omitted means the tool only handles its own name. That is deliberate —
-   * `a_b` is ambiguous between the tool `a_b` and the tool `a` addressing `b`,
-   * so which of two overlapping names wins is the registration site's call, not
-   * something the resolver can infer.
+   * Omitted means the tool only handles its own name.
    */
   matchesToolName?: (toolName: string) => boolean;
   /**
