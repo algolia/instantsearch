@@ -89,6 +89,7 @@ export function createChatMessageReasoningComponent({
     } = userProps;
     const activePart = parts.find(({ isStreaming }) => isStreaming);
     const isStreaming = Boolean(activePart);
+    const hasActiveHint = Boolean(activePart?.part.text.trim());
 
     const renderPart = ({ part }: ChatMessageReasoningPart) =>
       parseMarkdown ? (
@@ -134,7 +135,7 @@ export function createChatMessageReasoningComponent({
           <span className={cx(classNames.reasoningLabel)}>
             {translations.reasoningLabel}
           </span>
-          {activePart && (
+          {activePart && hasActiveHint && (
             <span className="ais-ChatMessageReasoning-status">
               <span
                 className="ais-ChatMessageReasoning-separator"

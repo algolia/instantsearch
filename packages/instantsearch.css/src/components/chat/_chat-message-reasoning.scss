@@ -121,7 +121,7 @@
 
   // Keep the chevron at the end when the active hint is absent.
   margin-inline-start: auto;
-  transform: rotate(-90deg);
+  transform: none;
   transition: transform var(--ais-transition-duration)
     var(--ais-transition-timing-function);
 
@@ -138,7 +138,7 @@
 }
 
 .ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-chevron {
-  transform: none;
+  transform: rotate(180deg);
 }
 
 .ais-ChatMessageReasoning[open] .ais-ChatMessageReasoning-status {

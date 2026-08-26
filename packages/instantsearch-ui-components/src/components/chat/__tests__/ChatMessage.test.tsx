@@ -389,29 +389,45 @@ describe('ChatMessage', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('renders empty reasoning while the response is active', () => {
-    const { getByRole } = render(
-      <ChatMessage
-        indexUiState={{}}
-        setIndexUiState={jest.fn()}
-        message={{
-          role: 'assistant',
-          id: '1',
-          parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
-        }}
-        context={createContext({
-          status: 'streaming',
-          messages: [{ role: 'assistant', id: '1', parts: [] }],
-        })}
-        showReasoning={true}
-      />
-    );
+  test.each(['', ' \n '])(
+    'keeps blank reasoning active without rendering an empty status',
+    (text) => {
+      const { getByRole } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={{
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text, state: 'streaming' }],
+          }}
+          context={createContext({
+            status: 'streaming',
+            messages: [{ role: 'assistant', id: '1', parts: [] }],
+          })}
+          showReasoning={true}
+        />
+      );
 
-    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
-      'aria-busy',
-      'true'
-    );
-  });
+      const disclosure = getByRole('group', { name: 'Reasoning' });
+      expect(disclosure).toHaveAttribute('aria-busy', 'true');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-icon')
+      ).toHaveClass('ais-ChatMessageReasoning-icon--streaming');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-label')
+      ).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-status')
+      ).not.toBeInTheDocument();
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-separator')
+      ).not.toBeInTheDocument();
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-hint')
+      ).not.toBeInTheDocument();
+    }
+  );
 
   test('aggregates reasoning around a tool without absorbing the tool', () => {
     const textComponent = jest.fn(({ part }: ChatMessageTextComponentProps) => (

@@ -1007,6 +1007,63 @@ describe('ChatMessages', () => {
       );
     });
 
+    test('does not rerender completed custom reasoning for scroll or callback-only changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const tools = {};
+      const ReasoningComponent = jest.fn(
+        ({ parts }: ChatMessageReasoningComponentProps) => (
+          <span data-testid="reasoning-render">{parts[0].part.text}</span>
+        )
+      );
+      const firstCallbacks = {
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      };
+      const secondCallbacks = {
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      };
+      const createProps = (
+        isScrollAtBottom: boolean,
+        callbacks: typeof firstCallbacks
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent: ReasoningComponent,
+        },
+        tools,
+        isScrollAtBottom,
+        ...callbacks,
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false, firstCallbacks)} />
+      );
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+
+      rerender(<MemoizedChatMessages {...createProps(true, firstCallbacks)} />);
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+
+      rerender(
+        <MemoizedChatMessages {...createProps(true, secondCallbacks)} />
+      );
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+    });
+
     test('keeps the full reasoning component context current for completed messages', () => {
       const message = {
         role: 'assistant' as const,

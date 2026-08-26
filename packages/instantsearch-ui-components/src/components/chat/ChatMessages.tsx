@@ -682,10 +682,32 @@ export function createChatMessagesComponent({
     const textComponentMessages = textComponent
       ? props.context.messages
       : undefined;
-    // A custom reasoning component receives the full context, so all context
-    // changes are observable inputs. Default rows keep the narrower memo.
-    const reasoningComponentContext = reasoningComponent
-      ? props.context
+    // A custom reasoning component receives the full context, but completed
+    // rows only need to update for its semantic state. Callback identity and
+    // scroll-only changes are intentionally excluded from the memo.
+    const reasoningComponentMessages = reasoningComponent
+      ? props.context.messages
+      : undefined;
+    const reasoningComponentStatus = reasoningComponent
+      ? props.context.status
+      : undefined;
+    const reasoningComponentError = reasoningComponent
+      ? props.context.error
+      : undefined;
+    const reasoningComponentIsClearing = reasoningComponent
+      ? props.context.isClearing
+      : undefined;
+    const reasoningComponentOpen = reasoningComponent
+      ? props.context.open
+      : undefined;
+    const reasoningComponentMaximized = reasoningComponent
+      ? props.context.maximized
+      : undefined;
+    const reasoningComponentActivePart = reasoningComponent
+      ? props.context.activePart
+      : undefined;
+    const reasoningComponentTools = reasoningComponent
+      ? props.context.tools
       : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
@@ -728,7 +750,14 @@ export function createChatMessagesComponent({
         textComponent,
         textComponentMessages,
         reasoningComponent,
-        reasoningComponentContext,
+        reasoningComponentMessages,
+        reasoningComponentStatus,
+        reasoningComponentError,
+        reasoningComponentIsClearing,
+        reasoningComponentOpen,
+        reasoningComponentMaximized,
+        reasoningComponentActivePart,
+        reasoningComponentTools,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,
