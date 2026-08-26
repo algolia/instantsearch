@@ -18,17 +18,17 @@ function jsonResponse(body: unknown): Response {
   });
 }
 
-// Builds a fake `text/event-stream` response whose body replays `events` as SSE
-// `data:` lines. Kept as a plain object (not a real `Response`) so the test
-// doesn't depend on `Response.body` support in the jsdom environment.
-function sseResponse(events: string[]): Response {
+function textStreamResponse(chunks: string[]): Response {
   const encoder = new TextEncoder();
+  let index = 0;
   const body = new ReadableStream<Uint8Array>({
-    start(controller) {
-      events.forEach((event) => {
-        controller.enqueue(encoder.encode(`data: ${event}\n\n`));
-      });
-      controller.close();
+    pull(controller) {
+      const chunk = chunks[index++];
+      if (chunk === undefined) {
+        controller.close();
+      } else {
+        controller.enqueue(encoder.encode(chunk));
+      }
     },
   });
   return {
@@ -36,14 +36,12 @@ function sseResponse(events: string[]): Response {
     status: 200,
     headers: {
       get: (name: string) =>
-        name.toLowerCase() === 'content-type' ? 'text/event-stream' : null,
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
     },
     body,
   } as unknown as Response;
-}
-
-function outputEvent(output: unknown): string {
-  return JSON.stringify({ type: 'data-task-output', data: { output } });
 }
 
 function flush(ms = 0) {
@@ -65,7 +63,7 @@ describe('connectTasks', () => {
 
   beforeEach(() => {
     global.fetch = jest.fn(() =>
-      Promise.resolve(jsonResponse({ output: { suggestions: ['a'] } }))
+      Promise.resolve(textStreamResponse(['{"suggestions":["a"]}']))
     ) as unknown as typeof fetch;
   });
 
@@ -156,15 +154,7 @@ describe('connectTasks', () => {
 
     it('surfaces streamed partial outputs through the render state', async () => {
       global.fetch = jest.fn(() =>
-        Promise.resolve(
-          sseResponse([
-            JSON.stringify({ type: 'start' }),
-            outputEvent({ value: 'a' }),
-            outputEvent({ value: 'ab' }),
-            JSON.stringify({ type: 'finish' }),
-            '[DONE]',
-          ])
-        )
+        Promise.resolve(textStreamResponse(['{"value":"a', 'b"}']))
       ) as unknown as typeof fetch;
 
       const { renderFn, lastState } = init({ agentId: 'a', task: 't' });
@@ -540,9 +530,9 @@ describe('connectTasks', () => {
       await flush(0);
 
       // Resolve the newer request (2) first, then the stale one (1).
-      resolvers[1](jsonResponse({ output: { winner: 2 } }));
+      resolvers[1](textStreamResponse(['{"winner":2}']));
       await flush(0);
-      resolvers[0](jsonResponse({ output: { winner: 1 } }));
+      resolvers[0](textStreamResponse(['{"winner":1}']));
       await flush(0);
 
       // The stale (first) response must not overwrite the latest output.
@@ -566,8 +556,8 @@ describe('connectTasks', () => {
       const second = lastState().submit({ n: 2 });
       await flush(0);
 
-      resolvers[1](jsonResponse({ output: { winner: 2 } }));
-      resolvers[0](jsonResponse({ output: { winner: 1 } }));
+      resolvers[1](textStreamResponse(['{"winner":2}']));
+      resolvers[0](textStreamResponse(['{"winner":1}']));
 
       // Each promise resolves with its own output — the stale (first) call must
       // not adopt the newer call's result just because it settled later.
@@ -598,12 +588,13 @@ describe('connectTasks', () => {
       expect(lastState().isLoading).toBe(false);
 
       // The now-stale request resolves late; its output must be ignored.
-      resolveFetch(jsonResponse({ output: { late: true } }));
+      resolveFetch(textStreamResponse(['{"late":true}']));
       await flush(0);
 
       expect(lastState().output).toBeUndefined();
       expect(lastState().isLoading).toBe(false);
     });
+
   });
 
   describe('dispose', () => {
@@ -622,7 +613,7 @@ describe('connectTasks', () => {
       const callsBeforeDispose = renderFn.mock.calls.length;
       widget.dispose!({} as any);
 
-      resolveFetch(jsonResponse({ output: { late: true } }));
+      resolveFetch(textStreamResponse(['{"late":true}']));
       await flush(0);
 
       // The post-dispose resolution must not trigger another render.
