@@ -100,10 +100,10 @@ export type PromptSuggestionsSource =
 
 export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
-   * Agent Studio configuration to invoke, sent as the `task` field. Identifies
-   * the prompt-suggestions configuration created in the dashboard.
+   * Agent Studio configuration to invoke, sent as the `task` field. Defaults
+   * to the agent's first configured task.
    */
-  configurationId: string;
+  configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
   /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
@@ -208,10 +208,6 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             'The `agentId` option is required unless a custom `transport` is provided.'
           )
         );
-      }
-
-      if (!configurationId) {
-        throw new Error(withUsage('The `configurationId` option is required.'));
       }
 
       let tasksState: TasksRenderState | undefined;

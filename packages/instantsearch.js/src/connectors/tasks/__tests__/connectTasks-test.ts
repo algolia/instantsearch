@@ -88,11 +88,13 @@ describe('connectTasks', () => {
       ).toThrowError(/agentId.*transport/);
     });
 
-    it('throws when task is missing', () => {
-      const makeWidget = connectTasks(jest.fn());
-      expect(() =>
-        makeWidget({ agentId: 'a' } as TasksConnectorParams)
-      ).toThrowError(/task/);
+    it('accepts a missing task to use the agent default', () => {
+      const widget = connectTasks(jest.fn())({ agentId: 'a' });
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.tasks',
+        })
+      );
     });
 
     it('returns the widget descriptor', () => {
@@ -150,6 +152,18 @@ describe('connectTasks', () => {
       expect(url).toContain('stream=true');
       expect(JSON.parse(request.body)).toEqual({
         task: 'my_task',
+        input: { query: 'shoes' },
+      });
+    });
+
+    it('omits the task to use the agent default', async () => {
+      const { lastState } = init({ agentId: 'my-agent' });
+
+      lastState().submit({ query: 'shoes' });
+      await flush(0);
+
+      const [[, request]] = (global.fetch as jest.Mock).mock.calls;
+      expect(JSON.parse(request.body)).toEqual({
         input: { query: 'shoes' },
       });
     });
@@ -329,7 +343,7 @@ describe('connectTasks', () => {
       ) as unknown as typeof fetch;
       const prepareSendMessagesRequest = jest.fn(
         (request: {
-          task: string;
+          task?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;
@@ -444,7 +458,7 @@ describe('connectTasks', () => {
       });
       const prepareSendMessagesRequest = jest.fn(
         (request: {
-          task: string;
+          task?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;

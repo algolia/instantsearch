@@ -7,7 +7,7 @@ export type TaskRunnerOptions = {
   endpoint: string;
   headers: Record<string, string>;
   fetch?: typeof fetch;
-  task: string;
+  task?: string;
   stream?: boolean;
   prepareRequest?: TaskPrepareRequest;
 };
@@ -25,7 +25,7 @@ export type TaskRunner = {
 
 export function createTaskRunner(options: {
   transport: DefaultTaskTransport;
-  task: string;
+  task?: string;
   stream?: boolean;
 }): TaskRunner;
 export function createTaskRunner(options: TaskRunnerOptions): TaskRunner;
@@ -34,7 +34,7 @@ export function createTaskRunner(
     | TaskRunnerOptions
     | {
         transport: DefaultTaskTransport;
-        task: string;
+        task?: string;
         stream?: boolean;
       }
 ): TaskRunner {

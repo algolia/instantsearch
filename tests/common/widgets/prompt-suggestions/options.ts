@@ -391,22 +391,30 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('throws without configurationId', () => {
-      const searchClient = createSearchClient({});
+    test('omits the task to use the agent default without configurationId', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
 
-      expect(() =>
-        setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: { agentId: 'test-agent-id' } as any,
-            react: { agentId: 'test-agent-id' } as any,
-            vue: {},
-          },
-        })
-      ).toThrow('The `configurationId` option is required.');
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { agentId: 'test-agent-id' },
+          react: { agentId: 'test-agent-id' },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      expect(JSON.parse(init.body as string)).not.toHaveProperty('task');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {

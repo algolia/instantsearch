@@ -3,7 +3,7 @@ import { DefaultTaskTransport } from './transport';
 import type { TaskPrepareRequest } from './endpoint';
 
 export type BuildTaskPayloadOptions = {
-  task: string;
+  task?: string;
   input: Record<string, unknown>;
   prepareRequest?: TaskPrepareRequest;
 };

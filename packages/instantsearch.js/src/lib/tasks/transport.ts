@@ -8,7 +8,7 @@ import { resolveValue } from '../ai-lite/utils';
 import type { Resolvable } from '../ai-lite';
 
 export type TaskPrepareSendMessagesRequest = (options: {
-  task: string;
+  task?: string;
   input: Record<string, unknown>;
   stream: boolean;
   body: Record<string, unknown> | undefined;
@@ -39,7 +39,7 @@ export type TaskTransportOptions = {
 };
 
 export type TaskSendOptions = {
-  task: string;
+  task?: string;
   input: Record<string, unknown>;
   stream: boolean;
   onData?: (output: unknown) => void;

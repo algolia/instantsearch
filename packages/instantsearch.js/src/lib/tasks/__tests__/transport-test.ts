@@ -50,7 +50,7 @@ describe('DefaultTaskTransport', () => {
     );
     const prepareSendMessagesRequest = jest.fn(
       async (request: {
-        task: string;
+        task?: string;
         input: Record<string, unknown>;
         stream: boolean;
         body: Record<string, unknown> | undefined;

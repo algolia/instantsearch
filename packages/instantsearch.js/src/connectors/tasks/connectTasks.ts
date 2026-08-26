@@ -61,7 +61,8 @@ export type TasksSource =
     };
 
 export type TasksConnectorParams = TasksSource & {
-  task: string;
+  /** ID of the configured task to run. Defaults to the first configured task. */
+  task?: string;
   stream?: boolean;
 };
 
@@ -94,10 +95,6 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
           'The `agentId` option is required unless a custom `transport` is provided.'
         )
       );
-    }
-
-    if (!task) {
-      throw new Error(withUsage('The `task` option is required.'));
     }
 
     let runner: TaskRunner;
