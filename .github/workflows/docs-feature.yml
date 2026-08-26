@@ -1,0 +1,212 @@
+name: Documentation (per change)
+
+# Documenting a week of releases in one shot is what made the old workflow
+# fragile: one huge, unfocused run that either finished or lost everything.
+# This runs once per user-facing change instead, while its diff is small and
+# unambiguous, and accumulates onto this project's staging branch in docs-new.
+# The release workflow only has to sweep for gaps and open the pull request.
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+env:
+  # docs-new is shared across Algolia products, so keep the staging branch
+  # namespaced rather than claiming something generic like `docs/next`.
+  # Both docs workflows must agree on this value.
+  DOCS_BRANCH_NAME: instantsearch/staging
+
+concurrency:
+  # The staging branch is shared mutable state - serialize everything that writes it
+  group: instantsearch-docs-staging
+  cancel-in-progress: false
+
+jobs:
+  document:
+    name: Document the merged change
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: >-
+      startsWith(github.event.head_commit.message, 'feat') || startsWith(github.event.head_commit.message, 'fix')
+
+
+    steps:
+      - name: Checkout instantsearch
+        uses: actions/checkout@v4
+        with:
+          path: instantsearch
+          fetch-depth: 5
+
+      - name: Build change context
+        id: context
+        working-directory: instantsearch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT=/tmp/change-context.md
+
+          SUBJECT=$(git log -1 --format=%s)
+          SCOPE=$(printf '%s' "$SUBJECT" | sed -n 's/^[a-z]*(\([a-z0-9-]*\)).*/\1/p')
+
+          # Scopes that never reach a reader. Cheaper to filter here than to
+          # pay for a run that correctly concludes "nothing to document".
+          case "$SCOPE" in
+            ci|deps|deps-dev|e2e|tests|test|build|examples|website|scripts)
+              echo "::notice::Scope '${SCOPE}' is never user-facing; skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+
+          # No pipelines into `head`/`awk`: an early exit SIGPIPEs git and
+          # pipefail turns that into a failed step.
+          git show --name-only --format= HEAD -- 'packages/*/src/*' ':(exclude)*__tests__*' > /tmp/changed.txt
+          if [ ! -s /tmp/changed.txt ]; then
+            echo "::notice::No library source files touched; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PRNUM=$(printf '%s' "$SUBJECT" | grep -oE '#[0-9]+' | head -n 1 | tr -d '#' || true)
+
+          {
+            echo "## The change to consider"
+            echo
+            echo "### Commit"
+            echo
+            echo '```'
+            git log -1 --format='%s%n%n%b'
+            echo '```'
+            echo
+
+            if [ -n "${PRNUM:-}" ]; then
+              echo "### Pull request #${PRNUM}"
+              echo
+              gh pr view "$PRNUM" --json title,body \
+                --jq '"**" + .title + "**\n\n" + (.body // "_No description._")' \
+                || echo "_Could not fetch the pull request._"
+              echo
+            fi
+
+            echo "### Library source files touched ($(wc -l < /tmp/changed.txt))"
+            echo
+            echo '```'
+            head -n 100 /tmp/changed.txt
+            echo '```'
+            echo
+
+            echo "### Diff"
+            echo
+            git show --format= HEAD -- 'packages/*/src/*' ':(exclude)*__tests__*' > /tmp/diff.txt
+            if [ "$(wc -c < /tmp/diff.txt)" -gt 60000 ]; then
+              echo "_Truncated to the first 60 KB; read the files directly for the rest._"
+              echo
+            fi
+            echo '```diff'
+            head -c 60000 /tmp/diff.txt
+            echo
+            echo '```'
+          } > "$OUT"
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "pr=${PRNUM:-}" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "Built $(wc -l < "$OUT") lines of change context."
+
+      - name: Mint GitHub App token
+        id: app-token
+        if: steps.context.outputs.skip == 'false'
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.FX_BOT_APP_ID }}
+          private-key: ${{ secrets.FX_BOT_PRIVATE_KEY }}
+          owner: algolia
+          repositories: docs-new
+
+      - name: Checkout docs-new
+        if: steps.context.outputs.skip == 'false'
+        uses: actions/checkout@v4
+        with:
+          repository: algolia/docs-new
+          token: ${{ steps.app-token.outputs.token }}
+          path: docs-new
+          # The staging branch lifecycle needs merge-base and cherry-pick
+          # across branches, so shallow history is not enough.
+          fetch-depth: 0
+
+      - name: Prepare the staging branch
+        if: steps.context.outputs.skip == 'false'
+        env:
+          DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: bash instantsearch/.github/scripts/docs-staging-prepare.sh
+
+      # Which existing pages talk about what this change touches. Deterministic,
+      # and it turns "check the guides" into a list the agent can work through.
+      - name: Add affected pages to the context
+        if: steps.context.outputs.skip == 'false'
+        run: bash instantsearch/.github/scripts/docs-guide-impact.sh /tmp/changed.txt /tmp/change-context.md
+
+      - name: Install Claude Code CLI
+        if: steps.context.outputs.skip == 'false'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install docs-new dependencies
+        if: steps.context.outputs.skip == 'false'
+        working-directory: docs-new
+        run: npm ci
+
+      - name: Document the change
+        id: agent
+        if: steps.context.outputs.skip == 'false'
+        # A partial result still beats nothing: it lands on the staging branch
+        # and the release sweep or a human picks it up.
+        continue-on-error: true
+        uses: ./instantsearch/.github/actions/docs-agent
+        with:
+          prompt-file: ${{ github.workspace }}/instantsearch/.github/prompts/docs-feature.md
+          context-file: /tmp/change-context.md
+          max-turns: 60
+          max-passes: 2
+          deadline-minutes: 18
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Commit to the staging branch
+        id: commit
+        if: always() && steps.agent.conclusion != 'skipped' && steps.agent.outputs.changed == 'true'
+        env:
+          DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
+          DOCS_FALLBACK_TITLE: 'fix(ui-libraries): update the InstantSearch documentation'
+          # Recorded as commit trailers so the release run can tell released
+          # documentation from documentation of something not yet published.
+          SOURCE_PR: ${{ steps.context.outputs.pr }}
+          SOURCE_COMMIT: ${{ steps.context.outputs.sha }}
+        run: bash instantsearch/.github/scripts/docs-staging-commit.sh
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Documentation (per change)"
+            echo
+            if [[ "${{ steps.context.outputs.skip }}" == "true" ]]; then
+              echo "Skipped: this commit cannot affect the documentation."
+            elif [[ "${{ steps.commit.outputs.committed }}" == "true" ]]; then
+              echo "Committed to \`${DOCS_BRANCH_NAME}\`: \`${{ steps.commit.outputs.title }}\`"
+              echo
+              echo "It ships in the next release pull request."
+            elif [[ "${{ steps.agent.conclusion }}" == "skipped" ]]; then
+              echo "The agent did not run."
+            else
+              echo "The agent found nothing to document."
+            fi
+            if [[ "${{ steps.agent.outputs.status }}" == "incomplete" ]]; then
+              echo
+              echo ":warning: The agent ran out of budget. Whatever it finished is on \`${DOCS_BRANCH_NAME}\`; the release sweep will look for the rest."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

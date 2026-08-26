@@ -1,35 +1,53 @@
-name: Documentation Automation
+name: Documentation (release pull request)
+
+# Per-change runs (see docs-feature.yml) document each user-facing change as it
+# merges, onto this project's staging branch in docs-new. This workflow is the safety
+# net and the shipper: sweep for anything those runs missed, then open one
+# draft pull request for the release.
 
 on:
-  # Trigger on push to master (for release commits)
   push:
     branches:
       - master
 
-  # Manual trigger for testing
   workflow_dispatch:
     inputs:
       run_claude:
-        description: 'Run Claude Code'
-        default: false
+        description: 'Run the sweep (off = just open the PR for whatever is already staged)'
+        default: true
         type: boolean
       create_pr:
-        description: 'Create PR'
+        description: 'Create or update the pull request'
         default: false
         type: boolean
       max_turns:
-        description: 'Max Claude turns (increase if hitting limit)'
-        default: 50
+        description: 'Turn budget per pass'
+        default: 80
+        type: number
+      max_passes:
+        description: 'Continuation passes before giving up'
+        default: 3
         type: number
 
 permissions:
   contents: read
 
+env:
+  # docs-new is shared across Algolia products, so keep the staging branch
+  # namespaced rather than claiming something generic like `docs/next`.
+  # Both docs workflows must agree on this value.
+  DOCS_BRANCH_NAME: instantsearch/staging
+
+concurrency:
+  # The staging branch is shared mutable state - serialize everything that writes it
+  group: instantsearch-docs-staging
+  cancel-in-progress: false
+
 jobs:
-  update-docs:
-    name: Update Documentation
+  release-docs:
+    name: Sweep and open the release pull request
     runs-on: ubuntu-latest
-    # Only run on release commits (chore: release) or manual triggers
+    timeout-minutes: 45
     if: >-
       github.event_name == 'workflow_dispatch' || (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
 
@@ -39,6 +57,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: instantsearch
+          # Enough history to find the previous `chore: release` commit
+          fetch-depth: 200
 
       - name: Mint GitHub App token
         id: app-token
@@ -55,16 +75,15 @@ jobs:
           repository: algolia/docs-new
           token: ${{ steps.app-token.outputs.token }}
           path: docs-new
+          # The staging branch lifecycle needs merge-base and cherry-pick
+          # across branches, so shallow history is not enough.
+          fetch-depth: 0
 
-      - name: Configure git identity
-        working-directory: docs-new
+      - name: Prepare the staging branch
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
           APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-        run: |
-          USER_ID=$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)
-          git config user.name "${APP_SLUG}[bot]"
-          git config user.email "${USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+        run: bash instantsearch/.github/scripts/docs-staging-prepare.sh
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
@@ -73,145 +92,283 @@ jobs:
         working-directory: docs-new
         run: npm ci
 
-      - name: Run Claude Code
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
-        timeout-minutes: 15
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Deterministic and free. Every fact assembled here is a turn the agent
+      # does not spend rediscovering it.
+      - name: Build release context
         run: |
-          claude -p "$(cat instantsearch/.github/prompts/docs-automation.md)" \
-            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(cd docs-new && npm run check:links),Bash(git diff *),Bash(git status *)" \
-            --max-turns ${{ inputs.max_turns || 50 }} \
-            --verbose \
-            --output-format stream-json
+          set -euo pipefail
+          OUT=/tmp/release-context.md
+          SRC="${GITHUB_WORKSPACE}/instantsearch"
+          DOCS="${GITHUB_WORKSPACE}/docs-new"
+          : > /tmp/released-prs.txt
 
-      - name: Show what Claude would do (dry run)
-        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == false
-        run: |
-          echo "## Dry Run Mode"
-          echo ""
-          echo "Would run Claude with prompt to:"
-          echo "1. Read changelogs from instantsearch packages"
-          echo "2. Explore docs-new structure"
-          echo "3. Update documentation for new features/changes"
-          echo "4. Run link check to catch broken links"
-          echo ""
-          echo "Trigger with run_claude=true to actually run Claude."
+          {
+            echo "## Release context (precomputed - do not re-read the changelogs)"
+            echo
+            echo "### Latest changelog entry per package"
+            echo
+
+            for pkg in instantsearch.js react-instantsearch react-instantsearch-core vue-instantsearch instantsearch-ui-components; do
+              file="${SRC}/packages/${pkg}/CHANGELOG.md"
+              [ -f "$file" ] || continue
+              # From the first version heading up to, but not including, the next
+              section=$(awk '/^#+ \[/ { n++ } n == 1' "$file")
+              [ -n "$section" ] || continue
+              echo "#### ${pkg}"
+              echo
+              echo "$section"
+              echo
+              # The first [#N] on a changelog bullet is its pull request; later
+              # ones are the "closes" issue refs. `[^(]*` stops at the first
+              # paren so those are not picked up.
+              printf '%s\n' "$section" \
+                | sed -nE 's/^\*[^(]*\(\[#([0-9]+)\].*/\1/p' >> /tmp/released-prs.txt
+            done
+
+            echo "### Library source files changed since the previous release"
+            echo
+            # No pipelines: an early `head`/`awk` exit SIGPIPEs git, and
+            # pipefail turns that into a failed step.
+            git -C "$SRC" log --format='%H %s' -n 200 > /tmp/git-log.txt
+            prev=$(awk 'NR > 1 && /chore: release/ { print $1; exit }' /tmp/git-log.txt)
+            if [ -n "${prev:-}" ]; then
+              git -C "$SRC" diff --name-only "${prev}..HEAD" -- 'packages/*/src/*' ':(exclude)*__tests__*' > /tmp/changed-files.txt
+              echo "Comparing \`${prev}\`..HEAD ($(wc -l < /tmp/changed-files.txt) files):"
+              echo
+              echo '```'
+              head -n 300 /tmp/changed-files.txt
+              echo '```'
+            else
+              echo "_Could not determine the previous release commit; rely on the changelogs above._"
+            fi
+            echo
+
+            echo "## What the docs branch already covers"
+            echo
+            echo "Each entry below is one per-change documentation run that already landed"
+            echo "on \`${DOCS_BRANCH}\`. Do not redo this work."
+            echo
+            git -C "$DOCS" log "origin/${DOCS_DEFAULT_BRANCH}..HEAD" --format='- %s' > /tmp/docs-log.txt
+            if [ -s /tmp/docs-log.txt ]; then
+              cat /tmp/docs-log.txt
+            else
+              echo "_Nothing yet - the per-change runs produced no documentation this cycle, so treat this as a full sweep._"
+            fi
+            echo
+            echo "### Files the branch has already changed"
+            echo
+            git -C "$DOCS" diff --stat "origin/${DOCS_DEFAULT_BRANCH}...HEAD" > /tmp/docs-diffstat.txt
+            if [ -s /tmp/docs-diffstat.txt ]; then
+              echo '```'
+              head -n 60 /tmp/docs-diffstat.txt
+              echo '```'
+            else
+              echo "_No changes on the branch yet._"
+            fi
+          } > "$OUT"
+
+          sort -u -o /tmp/released-prs.txt /tmp/released-prs.txt
+          echo "Built $(wc -l < "$OUT") lines of release context."
+          echo "This release publishes $(wc -l < /tmp/released-prs.txt) pull request(s)."
+          cat "$OUT"
+
+      - name: Add affected pages to the context
+        run: bash instantsearch/.github/scripts/docs-guide-impact.sh /tmp/changed-files.txt /tmp/release-context.md
+
+      - name: Sweep for undocumented changes
+        id: agent
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
+        # A partial sweep still ships: the pull request gets marked incomplete.
+        continue-on-error: true
+        uses: ./instantsearch/.github/actions/docs-agent
+        with:
+          prompt-file: ${{ github.workspace }}/instantsearch/.github/prompts/docs-release.md
+          context-file: /tmp/release-context.md
+          max-turns: ${{ inputs.max_turns || 80 }}
+          max-passes: ${{ inputs.max_passes || 3 }}
+          deadline-minutes: 25
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Commit the sweep to the staging branch
+        id: commit
+        if: >-
+          always() && steps.agent.outputs.changed == 'true' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+
+
+        env:
+          DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
+          DOCS_FALLBACK_TITLE: 'fix(ui-libraries): update the InstantSearch docs for this release'
+        run: bash instantsearch/.github/scripts/docs-staging-commit.sh
 
       - name: Show changes (no PR)
-        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == true && inputs.create_pr == false
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.create_pr == false
         working-directory: docs-new
         run: |
-          echo "## Changes made by Claude"
+          echo "## Preview mode - no pull request created"
           echo ""
-          if [[ -f ../CHANGES_SUMMARY.md ]]; then
-            echo "### Summary"
-            cat ../CHANGES_SUMMARY.md
-            echo ""
+          if [[ -f ../agent-state/PROGRESS.md ]]; then
+            echo "### Progress"; cat ../agent-state/PROGRESS.md; echo ""
           fi
-          echo "### Git Status"
-          git status
-          echo ""
-          echo "### Diff"
+          if [[ -f ../agent-state/CHANGES_SUMMARY.md ]]; then
+            echo "### Summary"; cat ../agent-state/CHANGES_SUMMARY.md; echo ""
+          fi
+          echo "### Uncommitted changes"
+          git status --short
           git diff || true
           echo ""
-          echo "---"
-          echo "To create a PR, trigger the workflow with create_pr=true"
+          echo "### Already on the branch"
+          git log "origin/${DOCS_DEFAULT_BRANCH}..HEAD" --oneline || true
 
-      - name: Create branch and commit
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true)
+      - name: Open or update the release pull request
+        id: pr
+        if: >-
+          always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+
+
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          AGENT_STATUS: ${{ steps.agent.outputs.status }}
+          AGENT_VERIFY: ${{ steps.agent.outputs.verify }}
+          AGENT_COST: ${{ steps.agent.outputs.cost }}
         working-directory: docs-new
         run: |
-          DATE=$(date +%Y%m%d)
-          BRANCH="docs/release-${DATE}"
+          set -euo pipefail
 
-          # Check if there are changes
-          if git diff --quiet && git diff --staged --quiet; then
-            echo "No changes to commit"
+          if [ -z "$(git log "origin/${DOCS_DEFAULT_BRANCH}..HEAD" --oneline)" ]; then
+            echo "::notice::${DOCS_BRANCH} has no commits beyond ${DOCS_DEFAULT_BRANCH}; nothing to open a pull request for."
+            echo "opened=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Read the summary file Claude created
-          if [[ -f ../CHANGES_SUMMARY.md ]]; then
-            TITLE=$(head -n 1 ../CHANGES_SUMMARY.md)
-            BODY=$(tail -n +3 ../CHANGES_SUMMARY.md)
-          else
-            TITLE="Update documentation for release"
-            BODY="Auto-generated documentation update."
+          # The branch title comes from the sweep when it made changes, and
+          # otherwise from the accumulated per-change commits.
+          TITLE="${{ steps.commit.outputs.title }}"
+          if [ -z "$TITLE" ]; then
+            COUNT=$(git log "origin/${DOCS_DEFAULT_BRANCH}..HEAD" --oneline | wc -l | tr -d ' ')
+            if [ "$COUNT" -eq 1 ]; then
+              TITLE=$(git log -1 --format=%s)
+            else
+              TITLE="fix(ui-libraries): update the InstantSearch docs for this release"
+            fi
           fi
 
-          # Create branch and commit
-          git checkout -b "$BRANCH"
-          git add -A
-          git commit -m "docs: ${TITLE}
+          BODY=$(mktemp)
+          {
+            echo "## Summary"
+            echo
+            echo "Documentation for the latest InstantSearch release, accumulated on"
+            echo "\`${DOCS_BRANCH}\` as each change merged."
+            echo
+            git log "origin/${DOCS_DEFAULT_BRANCH}..HEAD" --format='- %s'
+            echo
 
-          ${BODY}
+            if [ "${AGENT_STATUS:-}" = "incomplete" ]; then
+              echo "## :warning: The release sweep did not finish"
+              echo
+              echo "It ran out of budget. What is here is worth reviewing, but the release"
+              echo "may not be fully documented."
+              echo
+              echo "To finish locally:"
+              echo
+              echo '```bash'
+              echo "gh pr checkout <this PR>"
+              echo "claude \"Finish this docs update. Read PROGRESS.md below for what is left.\""
+              echo '```'
+              echo
+              if [ -f ../agent-state/PROGRESS.md ]; then
+                echo "<details><summary>PROGRESS.md</summary>"
+                echo
+                echo '```markdown'
+                cat ../agent-state/PROGRESS.md
+                echo '```'
+                echo
+                echo "</details>"
+                echo
+              fi
+            fi
 
-          Co-Authored-By: Claude <noreply@anthropic.com>"
+            if [ "${AGENT_VERIFY:-}" = "issues" ]; then
+              echo "## :x: Checks are still failing"
+              echo
+              echo "Vale, link, tag-balance or navigation checks did not pass after the"
+              echo "fix-up pass. docs-new's \`AGENTS.md\` asks that this stay in draft until"
+              echo "they do. See the workflow run summary for the details."
+              echo
+            fi
 
-          # Push branch
-          git push origin "$BRANCH"
+            echo "## Source"
+            echo "- [Release workflow](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})"
+            if [ -n "${AGENT_COST:-}" ]; then
+              echo "- Agent cost for the sweep: \$${AGENT_COST}"
+            fi
+            echo
+            echo "## Review checklist"
+            echo "- [ ] Every documented prop, default and signature matches the source"
+            echo "- [ ] Code examples run"
+            echo "- [ ] All affected flavors are covered (js, react, vue)"
+            echo "- [ ] Vale and link checks pass"
+            echo
+            echo "---"
+            echo "*Generated by [InstantSearch docs automation](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY})*"
+          } > "$BODY"
 
-          # Save for PR step
-          echo "branch=$BRANCH" >> $GITHUB_ENV
-          echo "pr_title=${TITLE}" >> $GITHUB_ENV
+          EXISTING=$(gh pr list --repo algolia/docs-new --head "${DOCS_BRANCH}" --state open --json number --jq '.[0].number // ""')
 
-          # Save body to file for multi-line support
-          echo "$BODY" > /tmp/pr_body.md
+          if [ -n "$EXISTING" ]; then
+            gh pr edit "$EXISTING" --repo algolia/docs-new --title "$TITLE" --body-file "$BODY"
+            echo "Updated pull request #${EXISTING}."
+            echo "number=${EXISTING}" >> "$GITHUB_OUTPUT"
+          else
+            URL=$(gh pr create \
+              --repo algolia/docs-new \
+              --base "${DOCS_DEFAULT_BRANCH}" \
+              --head "${DOCS_BRANCH}" \
+              --title "$TITLE" \
+              --body-file "$BODY" \
+              --draft \
+              --reviewer algolia/frontend-experiences-web)
+            echo "Opened ${URL}"
+            echo "url=${URL}" >> "$GITHUB_OUTPUT"
+            echo "number=${URL##*/}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "opened=true" >> "$GITHUB_OUTPUT"
 
-      - name: Create Pull Request
-        if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
+      # A documentation pull request can sit in review across several releases and
+      # keep collecting commits, so it can come to document an API that is not
+      # published yet. Say so on the pull request instead of leaving reviewers to
+      # work it out.
+      - name: Report release status on the docs pull request
+        if: always() && steps.pr.outputs.number != ''
+        continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        working-directory: docs-new
+          DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
+          AGENT_STATUS: ${{ steps.agent.outputs.status }}
+          AGENT_VERIFY: ${{ steps.agent.outputs.verify }}
         run: |
-          # Read the body from the file
-          if [[ -f /tmp/pr_body.md ]]; then
-            CHANGES=$(cat /tmp/pr_body.md)
-          else
-            CHANGES="Auto-generated documentation update."
-          fi
-
-          gh pr create \
-            --repo algolia/docs-new \
-            --title "docs: ${{ env.pr_title }}" \
-            --body "## Summary
-
-          ${CHANGES}
-
-          ## Source
-          - [Release workflow](https://github.com/algolia/instantsearch/actions/runs/${{ github.run_id }})
-
-          ## Review Checklist
-          - [ ] Content is accurate and complete
-          - [ ] Code examples work correctly
-          - [ ] Links are valid
-          - [ ] Formatting follows documentation style guide
-
-          ---
-          *Generated by [InstantSearch Docs Automation](https://github.com/algolia/instantsearch)*" \
-            --draft \
-            --reviewer algolia/frontend-experiences-web
+          bash instantsearch/.github/scripts/docs-release-status.sh \
+            "${{ steps.pr.outputs.number }}" /tmp/released-prs.txt
 
       - name: Summary
+        if: always()
         run: |
-          echo "## Documentation Update" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "### Manual Run Settings" >> $GITHUB_STEP_SUMMARY
-            echo "- **Run Claude:** ${{ inputs.run_claude }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Create PR:** ${{ inputs.create_pr }}" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [[ -n "${{ env.branch }}" ]]; then
-            echo "### Result" >> $GITHUB_STEP_SUMMARY
-            echo "- **Branch:** ${{ env.branch }}" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "A draft PR has been created in algolia/docs-new." >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.run_claude }}" == "false" ]]; then
-            echo "**Dry run mode.** Check the logs to see what would happen." >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_pr }}" == "false" ]]; then
-            echo "**Preview mode.** Claude ran but no PR was created. Check the logs to see changes." >> $GITHUB_STEP_SUMMARY
-          fi
+          {
+            echo "## Release documentation"
+            echo
+            echo "- **Branch:** \`${DOCS_BRANCH:-${DOCS_BRANCH_NAME}}\`"
+            echo "- **Sweep status:** \`${{ steps.agent.outputs.status || 'not run' }}\`"
+            echo "- **Checks:** \`${{ steps.agent.outputs.verify || 'not run' }}\`"
+            echo
+            if [[ "${{ steps.pr.outputs.opened }}" == "true" ]]; then
+              if [[ -n "${{ steps.pr.outputs.number }}" ]]; then
+                echo "Updated the existing draft pull request in algolia/docs-new."
+              else
+                echo "Opened a draft pull request in algolia/docs-new: ${{ steps.pr.outputs.url }}"
+              fi
+            else
+              echo "No pull request: nothing was documented this cycle."
+            fi
+            if [[ "${{ steps.agent.outputs.status }}" == "incomplete" ]]; then
+              echo
+              echo ":warning: The sweep was cut short. The pull request is marked accordingly."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
