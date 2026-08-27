@@ -3,6 +3,7 @@
  */
 
 import {
+  createControlledSearchClient,
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
@@ -3139,6 +3140,185 @@ data: [DONE]`,
       // all. This is the escape hatch for the runaway auto-continuation loop: a
       // resolved tool no longer forces another completions request.
       expect(fetchMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('main search status', () => {
+    const openStateKey = 'instantsearch-chat-open-state-chat';
+
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    const startFailingSearch = (widgetParams: ChatConnectorParams) => {
+      const { searches, searchClient } = createControlledSearchClient();
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const errorEvent = new Promise<void>((resolve) => {
+        search.on('error', () => resolve());
+      });
+      const widget = connectChat(jest.fn())({
+        disableTriggerValidation: true,
+        persistence: false,
+        ...widgetParams,
+      } as ChatConnectorParams);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      return { errorEvent, search, searchClient, searches, widget };
+    };
+
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    it('schedules sibling renders that never reset the main search status', () => {
+      sessionStorage.setItem(openStateKey, 'true');
+      const scheduleRender = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender:
+          scheduleRender as unknown as InstantSearch['scheduleRender'],
+      });
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        persistence: { messages: false, open: true },
+      } as ChatConnectorParams);
+
+      // `init`, with the open panel restored from the previous session.
+      widget.init(createInitOptions({ instantSearchInstance }));
+
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+
+      // `updateOpen`.
+      widget
+        .getWidgetRenderState(createInitOptions({ instantSearchInstance }))
+        .setOpen(false);
+
+      expect(scheduleRender).toHaveBeenCalledTimes(2);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+
+      // `renderOnStatusChange`.
+      widget.chatInstance._state.status = 'streaming';
+
+      expect(scheduleRender).toHaveBeenCalledTimes(3);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+    });
+
+    it('leaves a failed main search in error when the chat opens', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams
+      );
+
+      await wait(0);
+      searches[0].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves a failed main search in error across a chat turn', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'text-start', id: 'text-1' },
+            { type: 'text-delta', id: 'text-1', delta: 'Hello' },
+            { type: 'text-end', id: 'text-1' },
+            { type: 'finish' },
+          ])
+        );
+      const { errorEvent, search, searchClient, searches, widget } =
+        startFailingSearch({
+          agentId: undefined,
+          transport: { fetch: fetchMock },
+        } as ChatConnectorParams);
+
+      await wait(0);
+      searches[0].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+      await widget.chatInstance.sendMessage({ text: 'hello' });
+      await wait(0);
+
+      expect(widget.chatInstance.messages).toHaveLength(2);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps the error state stable when the chat renders after a late failure', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams
+      );
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      expect(search.status).toBe('idle');
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // The index restores the last valid search parameters while the status is
+      // `error`, and it now sees that status on a chat render too. Restoring
+      // them must not turn into another request.
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
+
+    it('still settles the main search once its results arrive after a chat render', async () => {
+      const { search, searches, widget } = startFailingSearch({
+        agentId: 'agentId',
+      } as ChatConnectorParams);
+
+      await wait(0);
+
+      expect(search.status).toBe('loading');
+
+      // A chat render lands while the search it knows nothing about is still
+      // in flight. Suppressing the status reset must not strand it on
+      // `loading`.
+      widget.chatInstance._state.status = 'streaming';
+      searches[0].resolver();
+      await wait(0);
+
+      expect(search.status).toBe('idle');
+      expect(search.error).toBeUndefined();
     });
   });
 });

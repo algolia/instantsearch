@@ -1769,6 +1769,147 @@ describe('scheduleRender', () => {
     expect(renderSpy).toHaveBeenNthCalledWith(1, { widgetRenderTimes: 0 });
     expect(renderSpy).toHaveBeenNthCalledWith(2, { widgetRenderTimes: 1 });
   });
+
+  it('keeps the status and the error when the render is not search-driven', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
+  it('clears the stalled timer even when the render is not search-driven', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].resolver();
+    await wait(0);
+
+    search.scheduleStalledRender();
+    expect(search._searchStalledTimer).not.toBeNull();
+
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search._searchStalledTimer).toBeNull();
+    expect(search.status).toBe('idle');
+  });
+
+  it('resets the status when a search-driven render shares the deferred window', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    // Both renders collapse into one run, and the caller opting out of the
+    // reset must not decide for the search-driven one next to it.
+    search.scheduleRender(false);
+    search.scheduleRender();
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('resets the status whichever render fills the deferred window first', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    search.scheduleRender();
+    search.scheduleRender(false);
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('clears a previous error once new results arrive', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([virtualSearchBox({})]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(search.status).toBe('error');
+
+    search.mainHelper!.search();
+    expect(search.status).toBe('loading');
+
+    searches[1].resolver();
+    await wait(0);
+
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
 });
 
 describe('scheduleStalledRender', () => {
