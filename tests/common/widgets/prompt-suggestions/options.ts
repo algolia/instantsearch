@@ -391,7 +391,7 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('omits the task to use the agent default without configurationId', async () => {
+    test('selects the Prompt Suggestions task kind without configurationId', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -414,7 +414,9 @@ export function createOptionsTests(
         string,
         RequestInit,
       ];
-      expect(JSON.parse(init.body as string)).not.toHaveProperty('task');
+      const body = JSON.parse(init.body as string);
+      expect(body).toMatchObject({ kind: 'prompt_suggestions' });
+      expect(body).not.toHaveProperty('task');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {
@@ -449,6 +451,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       expect(body.task).toBe('my_custom_task');
+      expect(body.kind).toBe('prompt_suggestions');
     });
 
     test('applies transformItems to the rendered suggestions', async () => {

@@ -124,7 +124,7 @@ describe('DefaultTaskTransport', () => {
     );
   });
 
-  it('omits the task when none is specified', async () => {
+  it('forwards the kind without a task ID', async () => {
     const customFetch = jest.fn(
       (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
         Promise.resolve(jsonResponse({ output: { ok: true } }))
@@ -132,6 +132,7 @@ describe('DefaultTaskTransport', () => {
     const transport = new DefaultTaskTransport({ fetch: customFetch });
 
     await transport.sendTask({
+      kind: 'prompt_suggestions',
       input: { query: 'shoes' },
       stream: false,
     });
@@ -141,6 +142,7 @@ describe('DefaultTaskTransport', () => {
       credentials: undefined,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        kind: 'prompt_suggestions',
         input: { query: 'shoes' },
       }),
     });

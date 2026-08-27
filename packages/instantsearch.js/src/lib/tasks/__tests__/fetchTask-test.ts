@@ -11,8 +11,14 @@ describe('fetchTask compatibility', () => {
     global.fetch = originalFetch;
   });
 
-  it('omits the task from a payload when none is specified', () => {
-    expect(buildTaskPayload({ input: { query: 'shoes' } })).toEqual({
+  it('builds a kind-only payload when no task ID is specified', () => {
+    expect(
+      buildTaskPayload({
+        kind: 'prompt_suggestions',
+        input: { query: 'shoes' },
+      })
+    ).toEqual({
+      kind: 'prompt_suggestions',
       input: { query: 'shoes' },
     });
   });

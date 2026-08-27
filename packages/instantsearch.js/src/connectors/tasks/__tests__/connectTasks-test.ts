@@ -88,8 +88,18 @@ describe('connectTasks', () => {
       ).toThrowError(/agentId.*transport/);
     });
 
-    it('accepts a missing task to use the agent default', () => {
-      const widget = connectTasks(jest.fn())({ agentId: 'a' });
+    it('throws when neither task nor kind is provided', () => {
+      const makeWidget = connectTasks(jest.fn());
+      expect(() => makeWidget({ agentId: 'a' })).toThrowError(
+        /Either the `task` or `kind` option is required/
+      );
+    });
+
+    it('accepts a kind without a task ID', () => {
+      const widget = connectTasks(jest.fn())({
+        agentId: 'a',
+        kind: 'prompt_suggestions',
+      });
       expect(widget).toEqual(
         expect.objectContaining({
           $$type: 'ais.tasks',
@@ -156,14 +166,18 @@ describe('connectTasks', () => {
       });
     });
 
-    it('omits the task to use the agent default', async () => {
-      const { lastState } = init({ agentId: 'my-agent' });
+    it('selects a task by kind without sending a task ID', async () => {
+      const { lastState } = init({
+        agentId: 'my-agent',
+        kind: 'prompt_suggestions',
+      });
 
       lastState().submit({ query: 'shoes' });
       await flush(0);
 
       const [[, request]] = (global.fetch as jest.Mock).mock.calls;
       expect(JSON.parse(request.body)).toEqual({
+        kind: 'prompt_suggestions',
         input: { query: 'shoes' },
       });
     });

@@ -9,6 +9,7 @@ import type { Resolvable } from '../ai-lite';
 
 export type TaskPrepareSendMessagesRequest = (options: {
   task?: string;
+  kind?: string;
   input: Record<string, unknown>;
   stream: boolean;
   body: Record<string, unknown> | undefined;
@@ -40,6 +41,7 @@ export type TaskTransportOptions = {
 
 export type TaskSendOptions = {
   task?: string;
+  kind?: string;
   input: Record<string, unknown>;
   stream: boolean;
   onData?: (output: unknown) => void;
@@ -185,9 +187,16 @@ export class DefaultTaskTransport {
     this.prepareSendMessagesRequest = prepareSendMessagesRequest;
   }
 
-  sendTask({ task, input, stream, onData }: TaskSendOptions): Promise<unknown> {
+  sendTask({
+    task,
+    kind,
+    input,
+    stream,
+    onData,
+  }: TaskSendOptions): Promise<unknown> {
     return this.sendTaskRequest({
       task,
+      kind,
       input,
       stream,
       onData: onData ? (data) => onData(unwrap(data)) : undefined,
@@ -197,6 +206,7 @@ export class DefaultTaskTransport {
   /** @internal */
   sendTaskRequest({
     task,
+    kind,
     input,
     stream,
     onData,
@@ -213,6 +223,7 @@ export class DefaultTaskTransport {
       let headers: HeadersInit = withJsonContentType(resolvedHeaders);
       let body: object = {
         ...(task === undefined ? {} : { task }),
+        ...(kind === undefined ? {} : { kind }),
         input,
         ...resolvedBody,
       };
@@ -222,6 +233,7 @@ export class DefaultTaskTransport {
             this.prepareSendMessagesRequest(
               createTaskPreparationContext({
                 task,
+                kind,
                 input,
                 stream,
                 body: preparedBody,

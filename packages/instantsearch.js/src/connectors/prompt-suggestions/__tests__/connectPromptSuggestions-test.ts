@@ -780,6 +780,7 @@ describe('connectPromptSuggestions', () => {
       const prepare = jest.fn(
         (request: {
           task?: string;
+          kind?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;
@@ -789,6 +790,7 @@ describe('connectPromptSuggestions', () => {
         }) => ({
           body: {
             task: request.task,
+            kind: request.kind,
             input: request.input,
             ...request.body,
             injected: true,
@@ -812,6 +814,7 @@ describe('connectPromptSuggestions', () => {
       const preparedRequest = prepare.mock.calls[0][0];
       expect({
         task: preparedRequest.task,
+        kind: preparedRequest.kind,
         input: preparedRequest.input,
         stream: preparedRequest.stream,
         body: preparedRequest.body,
@@ -820,6 +823,7 @@ describe('connectPromptSuggestions', () => {
         api: preparedRequest.api,
       }).toEqual({
         task: 'prompt-suggestions',
+        kind: 'prompt_suggestions',
         input: expect.any(Object),
         stream: true,
         body: undefined,
