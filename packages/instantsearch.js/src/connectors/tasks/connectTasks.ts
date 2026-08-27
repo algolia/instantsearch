@@ -100,7 +100,9 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
     }
 
     if (!task && !kind) {
-      throw new Error(withUsage('Either the `task` or `kind` option is required.'));
+      throw new Error(
+        withUsage('Either the `task` or `kind` option is required.')
+      );
     }
 
     let runner: TaskRunner;
