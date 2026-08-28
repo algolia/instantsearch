@@ -51,7 +51,11 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
@@ -224,6 +228,15 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
 export type ApplyFiltersParams = {
   query?: string;
   facetFilters?: string[][];
+  /**
+   * Numeric refinements, in the Algolia `numericFilters` format
+   * (e.g. `['price <= 1500']`). Only the search tool's resolved search params
+   * can express these; the raw `facet_<attribute>` keys cannot.
+   *
+   * Kept in sync with `ApplyFiltersParams` in `instantsearch-ui-components`,
+   * which declares the same contract for the component layer.
+   */
+  numericFilters?: string[];
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
@@ -388,6 +401,13 @@ function getAttributesToClear({
   );
 }
 
+/**
+ * One Algolia `numericFilters` entry: `'price <= 1500'`. The operators are
+ * exactly the set `helper.addNumericRefinement` accepts, and exactly the set
+ * the Algolia MCP Server emits.
+ */
+const NUMERIC_FILTER = /^(.+?)\s*(<=|>=|!=|=|<|>)\s*(-?\d+(?:\.\d+)?)$/;
+
 function updateStateFromSearchToolInput(
   params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
@@ -453,6 +473,24 @@ function updateStateFromSearchToolInput(
 
     hierarchicalRefinements.forEach((value, name) => {
       helper.toggleFacetRefinement(name, value);
+    });
+  }
+
+  if (params.numericFilters) {
+    params.numericFilters.forEach((filter) => {
+      const match = filter.match(NUMERIC_FILTER);
+
+      if (!match) {
+        return;
+      }
+
+      const [, attribute, operator, value] = match;
+
+      helper.addNumericRefinement(
+        attribute,
+        operator as SearchParameters.Operator,
+        Number(value)
+      );
     });
   }
 

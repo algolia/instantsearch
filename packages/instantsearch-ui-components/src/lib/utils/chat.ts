@@ -6,9 +6,20 @@ import type { ChatMessageBase } from '../../components';
 import type {
   ApplyFiltersParams,
   ChatToolMessage,
+  ResolvedSearchParams,
   SearchToolInput,
   SearchToolQuery,
 } from '../../components/chat/types';
+
+/**
+ * The shape `getResolvedSearchParams` needs from a chat message: just its
+ * parts, structurally. Kept local so the lookup works against any message
+ * list, including one whose data-part registry does not declare
+ * `tool-output-metadata`.
+ */
+type ChatMessageWithParts = {
+  parts?: ReadonlyArray<{ type: string; data?: unknown }>;
+};
 
 export const getTextContent = (message: ChatMessageBase) => {
   return message.parts
@@ -182,6 +193,93 @@ const NUMERIC_FACET_VALUE = /^(<=|>=|=|!=|<|>)\s*(-?\d+(\.\d+)?)$/;
 const isNumericFacetValues = (values: string[]): boolean =>
   values.length > 0 && values.every((value) => NUMERIC_FACET_VALUE.test(value));
 
+/**
+ * The key the Algolia MCP Server attaches its resolved search parameters under,
+ * on the tool result's `_meta`. Agent Studio forwards this one key to the
+ * browser by allowlist, as a `data-tool-output-metadata` part correlated by
+ * `toolCallId`.
+ *
+ * These params are the filters the server actually searched with, after
+ * defaults, clamping and the allow-list — including ones the model never saw.
+ * That makes them exact where the raw `facet_` keys are ambiguous.
+ */
+const RESOLVED_SEARCH_PARAMS_META_KEY = 'com.algolia/resolved-search-params';
+
+const TOOL_OUTPUT_METADATA_PART_TYPE = 'data-tool-output-metadata';
+
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((item) => typeof item === 'string');
+
+/**
+ * Reads the resolved search params a search tool call was answered with.
+ *
+ * The metadata arrives as a transient data part next to the tool call. It is
+ * read from `messages` rather than through `onData` because the chat retains
+ * every `data-*` part on the message, which covers the live and the replayed
+ * conversation with one path. Returns `undefined` when the part is absent,
+ * which is the case whenever the server does not emit `_meta`.
+ */
+export const getResolvedSearchParams = (
+  messages: readonly ChatMessageWithParts[] | undefined,
+  toolCallId: string | undefined
+): ResolvedSearchParams | undefined => {
+  if (!messages || !toolCallId) {
+    return undefined;
+  }
+
+  // Newest first: a re-answered tool call should win over its earlier result.
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const parts = messages[i]?.parts;
+
+    if (!Array.isArray(parts)) {
+      continue;
+    }
+
+    for (let j = parts.length - 1; j >= 0; j--) {
+      const part = parts[j];
+
+      if (!part || part.type !== TOOL_OUTPUT_METADATA_PART_TYPE) {
+        continue;
+      }
+
+      const data = part.data as
+        | { toolCallId?: string; metadata?: Record<string, unknown> }
+        | undefined;
+
+      if (data?.toolCallId !== toolCallId) {
+        continue;
+      }
+
+      const resolved = data.metadata?.[RESOLVED_SEARCH_PARAMS_META_KEY] as
+        | Record<string, unknown>
+        | undefined;
+
+      if (!resolved) {
+        continue;
+      }
+
+      const facetFilters = Array.isArray(resolved.facetFilters)
+        ? resolved.facetFilters.filter(isStringArray)
+        : undefined;
+      const numericFilters = isStringArray(resolved.numericFilters)
+        ? resolved.numericFilters
+        : undefined;
+
+      return {
+        query: typeof resolved.query === 'string' ? resolved.query : undefined,
+        facetFilters:
+          facetFilters && facetFilters.length > 0 ? facetFilters : undefined,
+        numericFilters:
+          numericFilters && numericFilters.length > 0
+            ? numericFilters
+            : undefined,
+      };
+    }
+  }
+
+  return undefined;
+};
+
 const hasQueries = (
   input: SearchToolInput
 ): input is { queries: SearchToolQuery[] } => Array.isArray(input.queries);
@@ -264,11 +362,28 @@ const getFacetFilters = (
  * Algolia MCP Server search tool instead expresses refinements as individual
  * `facet_<attribute>` keys (e.g. `facet_categories: ['Books', 'Toys']`), which
  * are converted here into `[['attribute:value']]`.
+ *
+ * Pass `resolved` (from `getResolvedSearchParams`) to use the filters the
+ * server actually searched with instead of re-deriving them from the raw keys.
+ * That is the only way to apply a numeric refinement.
  */
 export const getApplyFiltersParamsFromToolInput = (
-  input: SearchToolInput | undefined
+  input: SearchToolInput | undefined,
+  resolved?: ResolvedSearchParams
 ): ApplyFiltersParams => {
   const query = getSearchToolQuery(input);
+
+  // The resolved params are what the server actually searched with, so they win
+  // wherever they exist. Only they can express a numeric refinement: a numeric
+  // facet and a string facet whose value is literally `'<=1500'` are identical
+  // in the raw `facet_` keys.
+  if (resolved) {
+    return {
+      query: resolved.query ?? query?.query,
+      facetFilters: resolved.facetFilters,
+      numericFilters: resolved.numericFilters,
+    };
+  }
 
   return {
     query: query?.query,

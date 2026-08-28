@@ -1,5 +1,9 @@
 import { warnCache } from '../../../warn';
-import { findTool, getApplyFiltersParamsFromToolInput } from '../chat';
+import {
+  findTool,
+  getApplyFiltersParamsFromToolInput,
+  getResolvedSearchParams,
+} from '../chat';
 import { startsWith } from '../startsWith';
 
 describe('getApplyFiltersParamsFromToolInput', () => {
@@ -156,6 +160,52 @@ describe('getApplyFiltersParamsFromToolInput', () => {
     });
   });
 
+  test('prefers the resolved search params over the raw facet keys', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput(
+        {
+          query: 'phone',
+          facet_brand: ['Apple'],
+          facet_price: ['<=1500'],
+        },
+        {
+          query: 'phone',
+          facetFilters: [['brand:Apple']],
+          numericFilters: ['price <= 1500'],
+        }
+      )
+    ).toEqual({
+      query: 'phone',
+      facetFilters: [['brand:Apple']],
+      numericFilters: ['price <= 1500'],
+    });
+  });
+
+  test('keeps the tool input query when the resolved params omit it', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput(
+        { query: 'phone', facet_price: ['<=1500'] },
+        { numericFilters: ['price <= 1500'] }
+      )
+    ).toEqual({
+      query: 'phone',
+      facetFilters: undefined,
+      numericFilters: ['price <= 1500'],
+    });
+  });
+
+  test('falls back to skipping numeric facets when resolved params are absent', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        query: 'phone',
+        facet_price: ['<=1500'],
+      })
+    ).toEqual({
+      query: 'phone',
+      facetFilters: undefined,
+    });
+  });
+
   // Payload copied from the Algolia MCP Server's own test:
   // mcp-server/src/tools/search/__tests__/algoliaSearchSingleIndexTool.test.ts:135-170
   test('maps the MCP payload, dropping what this shape cannot express', () => {
@@ -175,6 +225,105 @@ describe('getApplyFiltersParamsFromToolInput', () => {
         ['category:Electronics'],
         ['inStock:true'],
       ],
+    });
+  });
+});
+
+describe('getResolvedSearchParams', () => {
+  const metadataPart = (toolCallId: string, resolved: unknown) => ({
+    type: 'data-tool-output-metadata',
+    data: {
+      toolCallId,
+      metadata: { 'com.algolia/resolved-search-params': resolved },
+    },
+  });
+
+  test('reads the params matching the tool call', () => {
+    const messages = [
+      {
+        parts: [
+          { type: 'text', text: 'here you go' },
+          metadataPart('call-1', {
+            query: 'shoes',
+            facetFilters: [['brand:Nike']],
+            numericFilters: ['price <= 100'],
+          }),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toEqual({
+      query: 'shoes',
+      facetFilters: [['brand:Nike']],
+      numericFilters: ['price <= 100'],
+    });
+  });
+
+  test('ignores metadata belonging to another tool call', () => {
+    const messages = [
+      {
+        parts: [metadataPart('call-other', { numericFilters: ['price <= 1'] })],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toBeUndefined();
+  });
+
+  test('prefers the newest metadata for a re-answered tool call', () => {
+    const messages = [
+      { parts: [metadataPart('call-1', { numericFilters: ['price <= 100'] })] },
+      { parts: [metadataPart('call-1', { numericFilters: ['price <= 50'] })] },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')?.numericFilters).toEqual(
+      ['price <= 50']
+    );
+  });
+
+  test('returns nothing without messages or a tool call id', () => {
+    expect(getResolvedSearchParams(undefined, 'call-1')).toBeUndefined();
+    expect(getResolvedSearchParams([], 'call-1')).toBeUndefined();
+    expect(
+      getResolvedSearchParams(
+        [{ parts: [metadataPart('call-1', { query: 'x' })] }],
+        undefined
+      )
+    ).toBeUndefined();
+  });
+
+  test('drops values that are not the expected shape', () => {
+    const messages = [
+      {
+        parts: [
+          metadataPart('call-1', {
+            query: 42,
+            facetFilters: [['brand:Nike'], 'not-a-group'],
+            numericFilters: 'price <= 100',
+          }),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toEqual({
+      query: undefined,
+      facetFilters: [['brand:Nike']],
+      numericFilters: undefined,
+    });
+  });
+
+  test('treats an empty resolved list as absent', () => {
+    const messages = [
+      {
+        parts: [
+          metadataPart('call-1', { facetFilters: [], numericFilters: [] }),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toEqual({
+      query: undefined,
+      facetFilters: undefined,
+      numericFilters: undefined,
     });
   });
 });

@@ -2046,6 +2046,98 @@ export function createOptionsTests(
         );
       });
 
+      test('applies numeric filters from the MCP search tool resolved search params on view all', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    // Cannot be expressed as a facet refinement; only the
+                    // resolved params below can apply it.
+                    facet_price: ['<=1500'],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+                // Agent Studio forwards the MCP result `_meta` as this part.
+                {
+                  type: 'data-tool-output-metadata',
+                  data: {
+                    toolCallId: '1',
+                    metadata: {
+                      'com.algolia/resolved-search-params': {
+                        query: 'test',
+                        facetFilters: [['brand:Apple']],
+                        numericFilters: ['price <= 1500'],
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple']],
+                numericFilters: ['price<=1500'],
+              }),
+            }),
+          ])
+        );
+      });
+
       test('applies filters for custom tools', async () => {
         const searchClient = createSearchClient();
 
