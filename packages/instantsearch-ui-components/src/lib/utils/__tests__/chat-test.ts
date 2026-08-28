@@ -297,7 +297,7 @@ describe('getResolvedSearchParams', () => {
         parts: [
           metadataPart('call-1', {
             query: 42,
-            facetFilters: [['brand:Nike'], 'not-a-group'],
+            facetFilters: [['brand:Nike'], 42],
             numericFilters: 'price <= 100',
           }),
         ],
@@ -309,6 +309,52 @@ describe('getResolvedSearchParams', () => {
       facetFilters: [['brand:Nike']],
       numericFilters: undefined,
     });
+  });
+
+  test('reads a plain string facet entry as its own group', () => {
+    const messages = [
+      {
+        parts: [
+          metadataPart('call-1', {
+            facetFilters: ['brand:Nike', ['category:Books', 'category:Toys']],
+          }),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')?.facetFilters).toEqual([
+      ['brand:Nike'],
+      ['category:Books', 'category:Toys'],
+    ]);
+  });
+
+  test('ignores the bulk array shape so the raw keys still apply', () => {
+    const messages = [
+      {
+        parts: [
+          metadataPart('call-1', [
+            { query: 'shoes', facetFilters: [['brand:Nike']] },
+            { query: 'boots', facetFilters: [['brand:Adidas']] },
+          ]),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toBeUndefined();
+  });
+
+  test('ignores the multi-index map shape', () => {
+    const messages = [
+      {
+        parts: [
+          metadataPart('call-1', {
+            products: [{ query: 'shoes', facetFilters: [['brand:Nike']] }],
+          }),
+        ],
+      },
+    ];
+
+    expect(getResolvedSearchParams(messages, 'call-1')).toBeUndefined();
   });
 
   test('treats an empty resolved list as absent', () => {

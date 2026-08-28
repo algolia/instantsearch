@@ -210,14 +210,40 @@ const TOOL_OUTPUT_METADATA_PART_TYPE = 'data-tool-output-metadata';
 const isStringArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === 'string');
 
+const RESOLVED_SEARCH_PARAMS_KEYS = [
+  'query',
+  'facetFilters',
+  'numericFilters',
+] as const;
+
+/**
+ * Recognizes a single resolved-params bag by shape.
+ *
+ * The server attaches the same `_meta` key in three shapes: one bag for a
+ * single-index search, one bag per variation (an array) for a bulk search, and
+ * a per-index map for a multi-index search. Only the single bag can be read
+ * here. An array or a map parses to nothing, and an empty bag would still beat
+ * the raw `facet_` keys and search with the query alone — so the other two
+ * shapes are left to the fallback path instead.
+ */
+const isResolvedSearchParamsBag = (
+  value: unknown
+): value is Record<string, unknown> =>
+  typeof value === 'object' &&
+  value !== null &&
+  !Array.isArray(value) &&
+  RESOLVED_SEARCH_PARAMS_KEYS.some((key) => key in value);
+
 /**
  * Reads the resolved search params a search tool call was answered with.
  *
  * The metadata arrives as a transient data part next to the tool call. It is
  * read from `messages` rather than through `onData` because the chat retains
  * every `data-*` part on the message, which covers the live and the replayed
- * conversation with one path. Returns `undefined` when the part is absent,
- * which is the case whenever the server does not emit `_meta`.
+ * conversation with one path. Returns `undefined` when the part is absent —
+ * the case whenever the server does not emit `_meta` — or when its value is
+ * not a single params bag, so that the caller falls back to the raw
+ * `facet_` keys instead of searching with no filters at all.
  */
 export const getResolvedSearchParams = (
   messages: readonly ChatMessageWithParts[] | undefined,
@@ -250,16 +276,20 @@ export const getResolvedSearchParams = (
         continue;
       }
 
-      const resolved = data.metadata?.[RESOLVED_SEARCH_PARAMS_META_KEY] as
-        | Record<string, unknown>
-        | undefined;
+      const resolved = data.metadata?.[RESOLVED_SEARCH_PARAMS_META_KEY];
 
-      if (!resolved) {
+      if (!isResolvedSearchParamsBag(resolved)) {
         continue;
       }
 
+      // Algolia reads a plain string entry as its own group, and the search
+      // tool's schema accepts that mixed form
+      // (`['category:Books', ['author:Alice', 'author:Bob']]`), so a flat
+      // entry is a normal producer output.
       const facetFilters = Array.isArray(resolved.facetFilters)
-        ? resolved.facetFilters.filter(isStringArray)
+        ? resolved.facetFilters
+            .map((entry) => (typeof entry === 'string' ? [entry] : entry))
+            .filter(isStringArray)
         : undefined;
       const numericFilters = isStringArray(resolved.numericFilters)
         ? resolved.numericFilters
@@ -338,8 +368,9 @@ const getFacetFilters = (
       // A numeric facet needs a numeric refinement, which this shape cannot
       // express. `price:<=1500` would refine on a value no record holds, so the
       // search would quietly return the wrong results. Dropping it loses the
-      // filter instead, which the user can see. Track 2 applies it properly
-      // from the tool's resolved search params.
+      // filter instead, which the user can see. Where the tool's resolved
+      // search params are available, `getResolvedSearchParams` applies the
+      // numeric refinement properly and this path is not reached.
       if (isNumericFacetValues(values)) {
         return acc;
       }

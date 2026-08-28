@@ -2138,6 +2138,108 @@ export function createOptionsTests(
         );
       });
 
+      test('falls back to the raw facet keys on view all when the resolved search params are not a single bag', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    facet_price: ['<=1500'],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: 'data-tool-output-metadata',
+                  data: {
+                    toolCallId: '1',
+                    metadata: {
+                      // A bulk search resolves one bag per variation, so this
+                      // value is an array. Nothing can be read out of it, and
+                      // an empty bag would drop every refinement.
+                      'com.algolia/resolved-search-params': [
+                        {
+                          query: 'test',
+                          facetFilters: [['brand:Apple']],
+                          numericFilters: ['price <= 1500'],
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple']],
+              }),
+            }),
+          ])
+        );
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.not.objectContaining({
+                numericFilters: expect.anything(),
+              }),
+            }),
+          ])
+        );
+      });
+
       test('applies filters for custom tools', async () => {
         const searchClient = createSearchClient();
 
