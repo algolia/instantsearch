@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+            write
 
 env:
   # docs-new is shared across Algolia products, so keep the staging branch
@@ -23,13 +24,13 @@ env:
 concurrency:
   # The staging branch is shared mutable state - serialize everything that writes it
   group: instantsearch-docs-staging
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   document:
     name: Document the merged change
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 56
     if: >-
       startsWith(github.event.head_commit.message, 'feat') || startsWith(github.event.head_commit.message, 'fix')
 
@@ -39,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: instantsearch
-          fetch-depth: 5
+          fetch-depth: 9
 
       - name: Build change context
         id: context
