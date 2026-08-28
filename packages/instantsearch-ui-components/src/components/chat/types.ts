@@ -459,7 +459,7 @@ type FacetFiltersSearchToolQuery = SearchToolQueryBase & {
 
 type FacetKeysSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: undefined;
-  [facetKey: `facet_${string}`]: string[] | undefined;
+  [facetKey: `facet_${string}`]: string[] | boolean | undefined;
 };
 
 /**

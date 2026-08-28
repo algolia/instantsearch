@@ -172,6 +172,16 @@ export const findTool = <TTool>(
 
 const FACET_KEY_PREFIX = 'facet_';
 
+/**
+ * A numeric facet value as the Algolia MCP Server emits it: an operator
+ * followed by a number (`'<=1500'`). Mirrors that server's own
+ * `NUMERIC_FILTER_REGEX` so the two sides cannot drift.
+ */
+const NUMERIC_FACET_VALUE = /^(<=|>=|=|!=|<|>)\s*(-?\d+(\.\d+)?)$/;
+
+const isNumericFacetValues = (values: string[]): boolean =>
+  values.length > 0 && values.every((value) => NUMERIC_FACET_VALUE.test(value));
+
 const hasQueries = (
   input: SearchToolInput
 ): input is { queries: SearchToolQuery[] } => Array.isArray(input.queries);
@@ -199,18 +209,44 @@ const getFacetFilters = (
 
   const facetFilters = Object.entries(query).reduce<string[][]>(
     (acc, [key, value]) => {
-      if (!startsWith(key, FACET_KEY_PREFIX) || !Array.isArray(value)) {
+      if (!startsWith(key, FACET_KEY_PREFIX)) {
         return acc;
       }
 
       const attribute = key.slice(FACET_KEY_PREFIX.length);
+
+      if (!attribute) {
+        return acc;
+      }
+
+      // A boolean facet arrives as a primitive, not an array.
+      if (typeof value === 'boolean') {
+        acc.push([`${attribute}:${value}`]);
+        return acc;
+      }
+
+      if (!Array.isArray(value)) {
+        return acc;
+      }
+
       const values = value.filter(
         (item): item is string => typeof item === 'string'
       );
 
-      if (attribute && values.length > 0) {
-        acc.push(values.map((item) => `${attribute}:${item}`));
+      if (values.length === 0) {
+        return acc;
       }
+
+      // A numeric facet needs a numeric refinement, which this shape cannot
+      // express. `price:<=1500` would refine on a value no record holds, so the
+      // search would quietly return the wrong results. Dropping it loses the
+      // filter instead, which the user can see. Track 2 applies it properly
+      // from the tool's resolved search params.
+      if (isNumericFacetValues(values)) {
+        return acc;
+      }
+
+      acc.push(values.map((item) => `${attribute}:${item}`));
 
       return acc;
     },

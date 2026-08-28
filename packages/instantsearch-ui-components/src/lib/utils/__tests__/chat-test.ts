@@ -118,6 +118,65 @@ describe('getApplyFiltersParamsFromToolInput', () => {
       }).facetFilters
     ).toBeUndefined();
   });
+
+  test('builds a facet filter from an MCP boolean facet', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        query: 'phone',
+        facet_inStock: true,
+      })
+    ).toEqual({
+      query: 'phone',
+      facetFilters: [['inStock:true']],
+    });
+  });
+
+  test('skips a numeric facet instead of refining on the operator string', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        query: 'phone',
+        facet_brand: ['Apple'],
+        facet_price: ['<=1500', '>=500'],
+      })
+    ).toEqual({
+      query: 'phone',
+      facetFilters: [['brand:Apple']],
+    });
+  });
+
+  test('keeps a string facet whose values are not numeric operators', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        query: '',
+        facet_size: ['XL', 'L'],
+      })
+    ).toEqual({
+      query: '',
+      facetFilters: [['size:XL', 'size:L']],
+    });
+  });
+
+  // Payload copied from the Algolia MCP Server's own test:
+  // mcp-server/src/tools/search/__tests__/algoliaSearchSingleIndexTool.test.ts:135-170
+  test('maps the MCP payload, dropping what this shape cannot express', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        query: 'phone',
+        facet_brand: ['Samsung', 'Apple'],
+        facet_price: ['<=1500', '>=500'],
+        facet_rating: ['>=3', '<=5'],
+        facet_category: ['Electronics'],
+        facet_inStock: true,
+      })
+    ).toEqual({
+      query: 'phone',
+      facetFilters: [
+        ['brand:Samsung', 'brand:Apple'],
+        ['category:Electronics'],
+        ['inStock:true'],
+      ],
+    });
+  });
 });
 
 describe('findTool', () => {
