@@ -18,6 +18,7 @@ import {
 } from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
+import connectSearchBox from '../../search-box/connectSearchBox';
 import connectChat from '../connectChat';
 
 import type {
@@ -25,7 +26,7 @@ import type {
   UIMessageChunk,
   ChatTransport,
 } from '../../../lib/ai-lite';
-import type { InstantSearch, IndexWidget } from '../../../types';
+import type { InstantSearch, IndexWidget, Widget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
@@ -3154,7 +3155,10 @@ data: [DONE]`,
         { headers: { 'Content-Type': 'text/event-stream' } }
       );
 
-    const startFailingSearch = (widgetParams: ChatConnectorParams) => {
+    const startFailingSearch = (
+      widgetParams: ChatConnectorParams,
+      extraWidgets: Widget[] = []
+    ) => {
       const { searches, searchClient } = createControlledSearchClient();
       const search = instantsearch({ indexName: 'indexName', searchClient });
       const errorEvent = new Promise<void>((resolve) => {
@@ -3166,7 +3170,7 @@ data: [DONE]`,
         ...widgetParams,
       } as ChatConnectorParams);
 
-      search.addWidgets([widget]);
+      search.addWidgets([widget, ...extraWidgets]);
       search.start();
 
       return { errorEvent, search, searchClient, searches, widget };
@@ -3290,15 +3294,83 @@ data: [DONE]`,
 
       expect(search.status).toBe('error');
 
-      // The index restores the last valid search parameters while the status is
-      // `error`, and it now sees that status on a chat render too. Restoring
-      // them must not turn into another request.
+      // A chat render now sees the `error` status, which is what the index
+      // reads to restore the last valid search parameters. Neither the render
+      // nor that restore may turn into another request.
       search.renderState.indexName.chat!.setOpen(true);
       await wait(0);
 
       expect(search.status).toBe('error');
       expect(search.error).toEqual(new Error('SERVER_ERROR'));
       expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
+
+    it('keeps a refinement made after a failure that a chat render shares a tick with', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams,
+        [connectSearchBox(jest.fn())({})]
+      );
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // A chat render and a refinement land in the same tick. The chat render
+      // runs before the search `setUiState` defers, so the index must not roll
+      // the refinement back on it.
+      search.renderState.indexName.chat!.setOpen(false);
+      search.setUiState({ indexName: { query: 'shoes' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'shoes' } });
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(
+        (searchClient.search as jest.Mock).mock.calls[2][0][0].params.query
+      ).toBe('shoes');
+    });
+
+    it('does not restore the previous search parameters again on later chat renders', async () => {
+      const { errorEvent, search, searches } = startFailingSearch({
+        agentId: 'agentId',
+      } as ChatConnectorParams);
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // The failed search already rolled the parameters back. Repeated chat
+      // renders must not keep re-emitting that write, or every middleware
+      // `onStateChange` fires for chat panel activity.
+      const onChange = jest.fn();
+      search.mainIndex.getHelper()!.on('change', onChange);
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it('still settles the main search once its results arrive after a chat render', async () => {
