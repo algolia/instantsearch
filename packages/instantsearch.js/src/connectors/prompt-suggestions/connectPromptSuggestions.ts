@@ -130,6 +130,10 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
    *
    * Read once per widget instance: changing it at runtime takes effect through
    * the remount that any widget-params change already causes.
+   *
+   * `refresh` reaches a custom layout only (`layoutComponent` in React,
+   * `templates.layout` in JS). The default layout has no trigger, so pairing
+   * `autoFetch: false` with it gives a widget that never fetches.
    */
   autoFetch?: boolean;
 };
