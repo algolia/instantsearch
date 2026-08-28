@@ -368,8 +368,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       ) => {
         if (disposed || !tasksState) return;
         refetchPending = false;
-        const hasContext = context !== undefined;
-        if (!hasContext && !results?.hits?.length) {
+        const input = buildInput(results);
+        // Two ways there is nothing worth sending: no explicit `context` and no
+        // hits to derive one from, or a `context` that resolved to nothing with
+        // no results to fall back on. The second is reachable because `context`
+        // may be a function, so receiving one says nothing about what it
+        // returns. Sending an empty input spends a model call on no information.
+        const hasNothingToSend =
+          (context === undefined && !results?.hits?.length) ||
+          Object.keys(input).length === 0;
+        if (hasNothingToSend) {
           tasksState.invalidate();
           suggestions = [];
           isLoading = false;
@@ -377,7 +385,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           return;
         }
 
-        tasksState.submit(buildInput(results));
+        tasksState.submit(input);
       };
 
       const refresh = () => {

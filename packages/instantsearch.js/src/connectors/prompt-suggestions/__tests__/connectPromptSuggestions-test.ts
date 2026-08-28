@@ -840,6 +840,63 @@ describe('connectPromptSuggestions', () => {
       expect(body.input).toEqual({ focalProduct: { id: '42' } });
     });
 
+    it('does not fetch when a `context` function resolves to nothing and there are no results', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+        // The playground models "nothing selected yet" as `undefined`.
+        context: () => undefined as unknown as Record<string, unknown>,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch on an empty resolved context even when `autoFetch` is on', async () => {
+      // `autoFetch` is never read by `refresh()`, so the default path reaches
+      // this too whenever `refresh()` runs before any results exist.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => undefined as unknown as Record<string, unknown>,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('still fetches when a `context` function resolves to nothing but results exist', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => undefined as unknown as Record<string, unknown>,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      // Falls back to auto-extraction, so there is still something to send.
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const body = JSON.parse(
+        (global.fetch as jest.Mock).mock.calls[0][1].body as string
+      );
+      expect(body.input).toHaveProperty('hitsSample');
+    });
+
     it('still auto-fetches when `autoFetch` is omitted', async () => {
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
