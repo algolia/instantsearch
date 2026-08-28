@@ -959,6 +959,251 @@ describe('connectPromptSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
+    it('supersedes an in-flight fetch instead of queueing behind it', async () => {
+      // Regression: `refresh()` used to return early while a fetch was in
+      // flight, so a surface whose inputs changed mid-fetch had to wait out the
+      // call it had already abandoned before the replacement could leave. Both
+      // requests are observed here without ever releasing the first.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      // Hold the first fetch open for the whole test.
+      let resolveFirst: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFirst = resolve;
+          })
+      );
+
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // The replacement leaves without the first one settling and without any
+      // debounce window elapsing.
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // The replacement's own pills paint.
+      const afterSecond =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterSecond.suggestions).toEqual(['a', 'b', 'c']);
+      expect(afterSecond.isLoading).toBe(false);
+
+      // The abandoned response can never paint, however late it arrives.
+      resolveFirst(textStreamResponse(['{"suggestions":["stale"]}']));
+      await flush(0);
+      const afterStale = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterStale.suggestions).toEqual(['a', 'b', 'c']);
+      expect(afterStale.isLoading).toBe(false);
+    });
+
+    it('keeps the loading state on across a superseding `refresh()`', async () => {
+      // The swap must not flicker `isLoading` to `false`, or a consumer's
+      // spinner blinks between the abandoned call and its replacement.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      let resolveFirst: (response: Response) => void = () => {};
+      let resolveSecond: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock)
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              resolveFirst = resolve;
+            })
+        )
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              resolveSecond = resolve;
+            })
+        );
+
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].isLoading
+      ).toBe(true);
+
+      const before = renderFn.mock.calls.length;
+      renderFn.mock.calls[before - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // Every render emitted across the swap still reports loading.
+      const acrossSwap = renderFn.mock.calls
+        .slice(before)
+        .map((call) => call[0].isLoading);
+      expect(acrossSwap).not.toContain(false);
+
+      // The abandoned call settling must not clear it either.
+      resolveFirst(textStreamResponse(['{"suggestions":["stale"]}']));
+      await flush(0);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].isLoading
+      ).toBe(true);
+
+      resolveSecond(textStreamResponse(['{"suggestions":["x"]}']));
+      await flush(0);
+      const settled = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(settled.isLoading).toBe(false);
+      expect(settled.suggestions).toEqual(['x']);
+    });
+
+    it('schedules no duplicate after a superseding `refresh()` with results', async () => {
+      // The superseding fetch re-records the state signature, so the render
+      // that follows it reads as unchanged and adds no third request.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () => new Promise<Response>(() => {})
+      );
+
+      const results = makeResults();
+      widget.render!(createRenderOptions({ helper, results }));
+      await flush(DEBOUNCE_WAIT);
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      widget.render!(createRenderOptions({ helper, results }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('abandons an in-flight fetch when a superseding `refresh()` has nothing to send', async () => {
+      // Newly reachable: the inputs became empty while a call was out, so the
+      // pending result is stale and the widget clears rather than painting it.
+      const renderFn = jest.fn();
+      let pageContext: Record<string, unknown> | undefined = {
+        focalProduct: { id: '42' },
+      };
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+        context: () => pageContext,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      let resolveFirst: (response: Response) => void = () => {};
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFirst = resolve;
+          })
+      );
+
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].isLoading
+      ).toBe(true);
+
+      // Nothing selected any more: no second request, and the in-flight one is
+      // dropped rather than left to paint.
+      pageContext = {};
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const afterEmpty = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterEmpty.isLoading).toBe(false);
+      expect(afterEmpty.suggestions).toEqual([]);
+
+      resolveFirst(textStreamResponse(['{"suggestions":["stale"]}']));
+      await flush(0);
+      const afterStale = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(afterStale.suggestions).toEqual([]);
+      expect(afterStale.isLoading).toBe(false);
+    });
+
+    it('arms the auto-fetch skip once across two `refresh()` calls before results', async () => {
+      // Each pre-results fetch arms `skipNextAutoFetch`; arming it twice must
+      // still be consumed by one render, not leave a suppression behind.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      (global.fetch as jest.Mock).mockImplementationOnce(
+        () => new Promise<Response>(() => {})
+      );
+
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // The first render with results is the one the skip covers.
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'one' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      // A later, genuinely new state still fetches.
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'two' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('does not loop when `refresh()` re-enters from its own render', async () => {
+      // `submit` renders synchronously, so a consumer that calls `refresh()`
+      // from a layout body instead of an event handler re-enters it. That must
+      // stay bounded: one request, not one per render.
+      const renderFn = jest.fn((renderState: { refresh: () => void }) => {
+        if (renderFn.mock.calls.length > 200) return;
+        renderState.refresh();
+      });
+      const widget = connectPromptSuggestions(
+        renderFn as unknown as Parameters<typeof connectPromptSuggestions>[0]
+      )({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      (global.fetch as jest.Mock).mockImplementation(
+        () => new Promise<Response>(() => {})
+      );
+
+      widget.init!(createInitOptions({ helper }));
+      await flush(0);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(renderFn.mock.calls.length).toBeLessThan(10);
+    });
+
     it('still auto-fetches when `autoFetch` is omitted', async () => {
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',

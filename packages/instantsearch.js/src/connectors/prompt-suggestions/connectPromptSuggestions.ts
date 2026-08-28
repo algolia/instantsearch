@@ -80,8 +80,12 @@ export type PromptSuggestionsRenderState = {
   sendToChat: (prompt: string) => boolean;
   /**
    * Imperative refetch that bypasses the debounce. Usable from `init()` onwards,
-   * including in a mount that never produces search results, as long as
-   * `context` is set. No-op while a fetch is in flight.
+   * including in a mount that never produces search results.
+   *
+   * Supersedes a fetch that is still in flight rather than queueing behind it:
+   * the earlier response is discarded and the replacement request leaves in the
+   * same tick, so a surface whose inputs changed never waits out the call it
+   * already abandoned. Still sends nothing when there is nothing to send.
    */
   refresh: () => void;
   /**
@@ -114,8 +118,12 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   transformHits?: PromptSuggestionsTransformHits;
   /**
    * Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`.
-   * Object or per-fetch function. A function that returns `undefined` falls back
-   * to auto-extraction, so a surface with nothing selected yet can say so.
+   * Object or per-fetch function.
+   *
+   * A function returning `undefined` falls back to auto-extraction, which needs
+   * results carrying at least one hit: before those arrive, or on a page with no
+   * hits, nothing is sent. An empty object sends nothing even when there are
+   * hits, so `() => ({})` is how a surface says it has nothing to describe yet.
    */
   context?:
     | Record<string, unknown>
@@ -262,6 +270,13 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
       let disposed = false;
+      // Guards against a `refresh()` that re-enters from inside its own render
+      // cascade: `submit` renders synchronously, so a consumer calling
+      // `refresh()` from a layout body rather than an event handler would
+      // otherwise loop, spending a model call per iteration. The `isLoading`
+      // check this replaced bounded that by accident. Only synchronous
+      // re-entry is blocked; a later call still supersedes.
+      let refreshing = false;
       // True between a state-signature change and the debounced refetch that
       // follows it. While pending, the search state has already moved on, so a
       // still-in-flight request from the previous state must not paint its
@@ -415,7 +430,12 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       };
 
       const refresh = () => {
-        if (isLoading || !latestRenderOptions) return;
+        // Deliberately not gated on `isLoading`. `tasksState.submit` bumps its
+        // own request id, so an in-flight call is abandoned by the new one: it
+        // can neither paint suggestions nor clear the loading state. Returning
+        // early instead would force the caller to wait out a response it has
+        // already discarded.
+        if (refreshing || !latestRenderOptions) return;
         const results = getLatestResults();
         clearTimeout(debounceTimer);
         // Only meaningful with results; without them there is no signature to
@@ -423,7 +443,12 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         if (results) {
           lastStateSignature = getStateSignature(results);
         }
-        fetchAndRender(results, latestRenderOptions);
+        refreshing = true;
+        try {
+          fetchAndRender(results, latestRenderOptions);
+        } finally {
+          refreshing = false;
+        }
       };
 
       const getWidgetRenderState = (

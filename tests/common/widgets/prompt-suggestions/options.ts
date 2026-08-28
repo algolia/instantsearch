@@ -559,6 +559,109 @@ export function createOptionsTests(
       );
     });
 
+    test('a second `refresh()` from the layout supersedes the first fetch', async () => {
+      // Public-seam proof for the connector's supersede behaviour: a surface
+      // whose inputs changed mid-fetch must be able to send the replacement
+      // straight away, and the abandoned response must never paint.
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      let releaseFirst: (response: Response) => void = () => {};
+      const fetchMock = jest
+        .fn()
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              releaseFirst = resolve;
+            })
+        )
+        .mockImplementation(() =>
+          Promise.resolve(textStreamResponse(SUGGESTIONS))
+        );
+      global.fetch = fetchMock as unknown as typeof fetch;
+
+      const layoutParams = {
+        agentId: 'test-agent-id',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+      };
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            ...layoutParams,
+            templates: {
+              layout: ({ suggestions, refresh }, { html }) =>
+                html`<div>
+                  <button
+                    type="button"
+                    class="generate"
+                    onClick=${() => refresh()}
+                  >
+                    Generate
+                  </button>
+                  <span class="output">${suggestions.join(', ')}</span>
+                </div>`,
+            },
+          },
+          react: {
+            ...layoutParams,
+            layoutComponent: ({ suggestions, refresh }) =>
+              createElement('div', null, [
+                createElement(
+                  'button',
+                  {
+                    key: 'generate',
+                    type: 'button',
+                    className: 'generate',
+                    onClick: () => refresh(),
+                  },
+                  'Generate'
+                ),
+                createElement(
+                  'span',
+                  { key: 'output', className: 'output' },
+                  suggestions.join(', ')
+                ),
+              ]),
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      // First ask: the request goes out and stays open.
+      await act(async () => {
+        userEvent.click(document.querySelector('.generate')!);
+        await wait(0);
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(document.querySelector('.output')!.textContent).toBe('');
+
+      // Second ask while the first is still open: it leaves without waiting.
+      await act(async () => {
+        userEvent.click(document.querySelector('.generate')!);
+        await wait(0);
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(document.querySelector('.output')!.textContent).toBe(
+        SUGGESTIONS.join(', ')
+      );
+
+      // The abandoned response arrives last and is discarded.
+      await act(async () => {
+        releaseFirst(textStreamResponse(['stale suggestion']));
+        await wait(0);
+      });
+      expect(document.querySelector('.output')!.textContent).toBe(
+        SUGGESTIONS.join(', ')
+      );
+    });
+
     test('runs the onSuggestionClick override when a pill is clicked', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
