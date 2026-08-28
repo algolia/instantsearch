@@ -313,11 +313,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           });
         };
 
-      const resolvePageContext = (
+      // `context` may be a function, so the option alone says nothing about
+      // what a given fetch actually has. Resolve it once per fetch and let
+      // callers read the value rather than the option.
+      const resolveContext = (): Record<string, unknown> | undefined =>
+        typeof context === 'function' ? context() : context;
+
+      const buildPageContext = (
+        resolvedContext: Record<string, unknown> | undefined,
         results: SearchResults | null
       ): Record<string, unknown> | undefined => {
-        const resolvedContext =
-          typeof context === 'function' ? context() : context;
         // Explicit context replaces auto-extraction; otherwise derive it from
         // the current search state. The task's server-owned instructions decide
         // how to interpret the shape — the client doesn't label it.
@@ -335,17 +340,13 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         };
       };
 
-      const buildInput = (
-        results: SearchResults | null
-      ): Record<string, unknown> => resolvePageContext(results) ?? {};
-
       // The same page context, flattened for the chat handoff: `turnContext` is
       // a flat `Record<string, string>` per the Agent Studio contract, so
       // non-string values (e.g. `hitsSample`) are serialized.
       const buildTurnContext = (
         results: SearchResults | null
       ): Record<string, string> | undefined => {
-        const pageContext = resolvePageContext(results);
+        const pageContext = buildPageContext(resolveContext(), results);
         if (!pageContext) {
           return undefined;
         }
@@ -384,14 +385,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       ) => {
         if (disposed || !tasksState) return;
         refetchPending = false;
-        const input = buildInput(results);
-        // Two ways there is nothing worth sending: no explicit `context` and no
-        // hits to derive one from, or a `context` that resolved to nothing with
-        // no results to fall back on. The second is reachable because `context`
-        // may be a function, so receiving one says nothing about what it
-        // returns. Sending an empty input spends a model call on no information.
+        const resolvedContext = resolveContext();
+        const input = buildPageContext(resolvedContext, results) ?? {};
+        // Two ways there is nothing worth sending: no context for this fetch
+        // and no hits to derive one from, or a context that resolved to
+        // something empty. The first reads the resolved value, not the option,
+        // so `context: () => undefined` is gated exactly like an omitted
+        // `context`. Sending an empty input spends a model call on no
+        // information.
         const hasNothingToSend =
-          (context === undefined && !results?.hits?.length) ||
+          (resolvedContext === undefined && !results?.hits?.length) ||
           Object.keys(input).length === 0;
         if (hasNothingToSend) {
           tasksState.invalidate();

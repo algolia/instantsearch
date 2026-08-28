@@ -897,6 +897,25 @@ describe('connectPromptSuggestions', () => {
       expect(body.input).toHaveProperty('hitsSample');
     });
 
+    it('does not fetch when a `context` function resolves to nothing and there are no hits', async () => {
+      // A `context` that resolved to nothing is not an explicit context, so the
+      // "no hits to derive one from" rule has to apply to it exactly as it does
+      // to an omitted `context`.
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => undefined,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ hits: [] }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
     it('does not fetch on an empty `context` object, even with results', async () => {
       // Asymmetry with `context: () => undefined`, which falls back to
       // auto-extraction and does send. Pinned deliberately: an explicit context
