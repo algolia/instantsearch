@@ -78,7 +78,11 @@ export type PromptSuggestionsRenderState = {
   onSuggestionClick: (prompt: string) => void;
   /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
   sendToChat: (prompt: string) => boolean;
-  /** Imperative refetch that bypasses the debounce. No-op with no results or a fetch in-flight. */
+  /**
+   * Imperative refetch that bypasses the debounce. Usable from `init()` onwards,
+   * including in a mount that never produces search results, as long as
+   * `context` is set. No-op while a fetch is in flight.
+   */
   refresh: () => void;
   /**
    * Whether the chat widget is currently busy (mid-stream) — surface as `disabled` on the pills.
@@ -112,6 +116,16 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   context?: Record<string, unknown> | (() => Record<string, unknown>);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: PromptSuggestionsTransformItems;
+  /**
+   * Whether a change in the search state automatically triggers a debounced
+   * fetch (default: `true`). Set to `false` to make `refresh()` the only
+   * trigger — every fetch is a model call, so this lets the surface spend one
+   * only when the user asks for it.
+   *
+   * Read once per widget instance: changing it at runtime takes effect through
+   * the remount that any widget-params change already causes.
+   */
+  autoFetch?: boolean;
 };
 
 export type PromptSuggestionsWidgetDescription = {
@@ -202,6 +216,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         context,
         transformItems = (items) => items,
         transport,
+        autoFetch = true,
       } = widgetParams;
 
       if (!agentId && !transport) {
@@ -222,7 +237,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       let error: Error | undefined;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
-      let latestRenderOptions: RenderOptions | null = null;
+      let latestRenderOptions: InitOptions | RenderOptions | null = null;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
@@ -304,8 +319,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         };
       };
 
-      const buildInput = (results: SearchResults): Record<string, unknown> =>
-        resolvePageContext(results) ?? {};
+      const buildInput = (
+        results: SearchResults | null
+      ): Record<string, unknown> => resolvePageContext(results) ?? {};
 
       // The same page context, flattened for the chat handoff: `turnContext` is
       // a flat `Record<string, string>` per the Agent Studio contract, so
@@ -337,9 +353,18 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         );
       };
 
+      // `latestRenderOptions` may be the `init()` options, which carry no
+      // results at all, so the read has to be narrowed rather than optional.
+      const getLatestResults = (): SearchResults | null => {
+        if (!latestRenderOptions || !('results' in latestRenderOptions)) {
+          return null;
+        }
+        return latestRenderOptions.results ?? null;
+      };
+
       const fetchAndRender = (
-        results: SearchResults,
-        renderOptions: RenderOptions
+        results: SearchResults | null,
+        renderOptions: InitOptions | RenderOptions
       ) => {
         if (disposed || !tasksState) return;
         refetchPending = false;
@@ -356,11 +381,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       };
 
       const refresh = () => {
-        if (isLoading) return;
-        const results = latestRenderOptions?.results;
-        if (!results || !latestRenderOptions) return;
+        if (isLoading || !latestRenderOptions) return;
+        const results = getLatestResults();
         clearTimeout(debounceTimer);
-        lastStateSignature = getStateSignature(results);
+        // Only meaningful with results; without them there is no signature to
+        // suppress a later automatic fetch against.
+        if (results) {
+          lastStateSignature = getStateSignature(results);
+        }
         fetchAndRender(results, latestRenderOptions);
       };
 
@@ -448,6 +476,11 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
           tasksWidget.init!(initOptions);
 
+          // Set after the inner init so its initial no-op render is still
+          // ignored, and before the first outward render so `refresh()` has a
+          // render target even when `render()` never runs with results.
+          latestRenderOptions = initOptions;
+
           renderFn(
             {
               ...getWidgetRenderState(initOptions),
@@ -475,17 +508,15 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
           const stateSignature = getStateSignature(results);
 
-          if (stateSignature !== lastStateSignature) {
+          if (autoFetch && stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;
             refetchPending = true;
             error = undefined;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-              if (latestRenderOptions?.results) {
-                fetchAndRender(
-                  latestRenderOptions.results,
-                  latestRenderOptions
-                );
+              const latestResults = getLatestResults();
+              if (latestResults && latestRenderOptions) {
+                fetchAndRender(latestResults, latestRenderOptions);
               }
             }, DEBOUNCE_MS);
           }

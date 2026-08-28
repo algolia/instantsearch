@@ -45,6 +45,8 @@ export type PromptSuggestionsLayoutTemplateProps = {
   error: Error | undefined;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
+  /** Triggers a fetch. The only trigger when `autoFetch` is `false`. */
+  refresh: () => void;
 };
 
 export type PromptSuggestionsTemplates = {
@@ -122,6 +124,7 @@ const createRenderer =
       onSuggestionClick,
       isChatBusy,
       sendToChat,
+      refresh,
       instantSearchInstance,
     },
     isFirstRendering
@@ -152,6 +155,7 @@ const createRenderer =
             error,
             onSuggestionClick: handleClick,
             isChatBusy,
+            refresh,
           }}
         />,
         containerNode

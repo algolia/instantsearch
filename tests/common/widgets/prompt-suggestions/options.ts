@@ -1,6 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
+import { createElement } from 'react';
 
 import type { PromptSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -483,6 +484,79 @@ export function createOptionsTests(
         expect.objectContaining({ query: expect.any(String) })
       );
       expect(document.body.textContent).toContain('Custom Suggestion A');
+    });
+
+    test('with `autoFetch: false`, only `refresh()` from the layout fetches', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            autoFetch: false,
+            templates: {
+              layout: ({ suggestions, refresh }, { html }) =>
+                html`<div>
+                  <button
+                    type="button"
+                    class="generate"
+                    onClick=${() => refresh()}
+                  >
+                    Generate
+                  </button>
+                  <span class="output">${suggestions.join(', ')}</span>
+                </div>`,
+            },
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            autoFetch: false,
+            layoutComponent: ({ suggestions, refresh }) =>
+              createElement('div', null, [
+                createElement(
+                  'button',
+                  {
+                    key: 'generate',
+                    type: 'button',
+                    className: 'generate',
+                    onClick: () => refresh(),
+                  },
+                  'Generate'
+                ),
+                createElement(
+                  'span',
+                  { key: 'output', className: 'output' },
+                  suggestions.join(', ')
+                ),
+              ]),
+          },
+          vue: {},
+        },
+      });
+
+      // Results have arrived and the debounce window has passed, but nothing
+      // asked for suggestions, so no model call was spent.
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(document.querySelector('.output')!.textContent).toBe('');
+
+      await act(async () => {
+        userEvent.click(document.querySelector('.generate')!);
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(document.querySelector('.output')!.textContent).toBe(
+        SUGGESTIONS.join(', ')
+      );
     });
 
     test('runs the onSuggestionClick override when a pill is clicked', async () => {

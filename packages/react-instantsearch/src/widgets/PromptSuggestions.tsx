@@ -23,6 +23,8 @@ export type PromptSuggestionsLayoutComponentProps = {
   error: Error | undefined;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
+  /** Triggers a fetch. The only trigger when `autoFetch` is `false`. */
+  refresh: () => void;
 };
 
 export type PromptSuggestionsOnSuggestionClick = (
@@ -59,6 +61,7 @@ export function PromptSuggestions({
   transformHits,
   context,
   transformItems,
+  autoFetch,
   ...props
 }: PromptSuggestionsProps) {
   const source = agentId !== undefined ? { agentId, transport } : { transport };
@@ -69,6 +72,7 @@ export function PromptSuggestions({
     onSuggestionClick,
     isChatBusy,
     sendToChat,
+    refresh,
   } = usePromptSuggestions(
     {
       ...source,
@@ -76,6 +80,7 @@ export function PromptSuggestions({
       transformHits,
       context,
       transformItems,
+      autoFetch,
     },
     {
       $$widgetType: 'ais.promptSuggestions',
@@ -94,6 +99,7 @@ export function PromptSuggestions({
         error={error}
         onSuggestionClick={handleClick}
         isChatBusy={isChatBusy}
+        refresh={refresh}
       />
     );
   }

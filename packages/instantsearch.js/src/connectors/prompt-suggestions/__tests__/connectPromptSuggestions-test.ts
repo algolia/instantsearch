@@ -761,6 +761,98 @@ describe('connectPromptSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
+    it('does not fetch on a state change when `autoFetch` is false', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch on a later query change when `autoFetch` is false', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'one' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ query: 'two' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('fires exactly one request from `refresh()` when `autoFetch` is false', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).not.toHaveBeenCalled();
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('refreshes after `init()` alone, with no `render()` and no results', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        autoFetch: false,
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      // No `render()` at all: this is the no-search-index mount, where the
+      // widget never receives results.
+      widget.init!(createInitOptions({ helper }));
+      expect(global.fetch).not.toHaveBeenCalled();
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const body = JSON.parse(
+        (global.fetch as jest.Mock).mock.calls[0][1].body as string
+      );
+      expect(body.input).toEqual({ focalProduct: { id: '42' } });
+    });
+
+    it('still auto-fetches when `autoFetch` is omitted', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
     it('lets transport.prepareSendMessagesRequest mutate the body', async () => {
       const prepare = jest.fn(
         (request: {
