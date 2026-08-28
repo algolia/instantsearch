@@ -112,8 +112,14 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   configurationId: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
-  /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  /**
+   * Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`.
+   * Object or per-fetch function. A function that returns `undefined` falls back
+   * to auto-extraction, so a surface with nothing selected yet can say so.
+   */
+  context?:
+    | Record<string, unknown>
+    | (() => Record<string, unknown> | undefined);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: PromptSuggestionsTransformItems;
   /**
@@ -238,6 +244,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
       let latestRenderOptions: InitOptions | RenderOptions | null = null;
+      // Set when a fetch goes out before any results exist, which is only
+      // reachable through `refresh()`. Such a fetch has no state signature to
+      // record, so the first render that does carry results would otherwise
+      // read as a change and schedule a second request on top of it.
+      //
+      // Two accepted consequences: a function `context` that changes value in
+      // that window has its newer value dropped until the next `refresh()`, and
+      // a failed pre-results fetch is not retried by the first render — the
+      // error stays on screen instead.
+      let skipNextAutoFetch = false;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
@@ -385,6 +401,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           return;
         }
 
+        if (!results) {
+          skipNextAutoFetch = true;
+        }
         tasksState.submit(input);
       };
 
@@ -515,6 +534,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           }
 
           const stateSignature = getStateSignature(results);
+
+          if (skipNextAutoFetch) {
+            // A `refresh()` already sent this mount's request before any
+            // results existed. Adopt the first signature instead of spending a
+            // second call on it.
+            skipNextAutoFetch = false;
+            lastStateSignature = stateSignature;
+          }
 
           if (autoFetch && stateSignature !== lastStateSignature) {
             lastStateSignature = stateSignature;

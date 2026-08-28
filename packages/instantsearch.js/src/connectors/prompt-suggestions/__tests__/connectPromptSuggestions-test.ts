@@ -847,7 +847,7 @@ describe('connectPromptSuggestions', () => {
         configurationId: 'prompt-suggestions',
         autoFetch: false,
         // The playground models "nothing selected yet" as `undefined`.
-        context: () => undefined as unknown as Record<string, unknown>,
+        context: () => undefined,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -866,7 +866,7 @@ describe('connectPromptSuggestions', () => {
       const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
         configurationId: 'prompt-suggestions',
-        context: () => undefined as unknown as Record<string, unknown>,
+        context: () => undefined,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -882,7 +882,7 @@ describe('connectPromptSuggestions', () => {
       const widget = connectPromptSuggestions(jest.fn())({
         agentId: 'a',
         configurationId: 'prompt-suggestions',
-        context: () => undefined as unknown as Record<string, unknown>,
+        context: () => undefined,
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
@@ -895,6 +895,49 @@ describe('connectPromptSuggestions', () => {
         (global.fetch as jest.Mock).mock.calls[0][1].body as string
       );
       expect(body.input).toHaveProperty('hitsSample');
+    });
+
+    it('does not fetch on an empty `context` object, even with results', async () => {
+      // Asymmetry with `context: () => undefined`, which falls back to
+      // auto-extraction and does send. Pinned deliberately: an explicit context
+      // is a mode opt-out, so substituting search-state input would hand the
+      // task a shape it was not configured for. Unifying the two spellings is a
+      // separate decision for the task-contract owner.
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => ({}),
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not double-fetch when `refresh()` runs before the first results', async () => {
+      // `refresh()` without results cannot record a state signature, so the
+      // first render carrying results used to read as a change and schedule a
+      // second, identical request.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     it('still auto-fetches when `autoFetch` is omitted', async () => {
@@ -1214,6 +1257,55 @@ describe('connectPromptSuggestions', () => {
             },
           },
         },
+        { headers: { 'x-algolia-referer': 'prompt-suggestions-widget' } }
+      );
+    });
+
+    it('still hands the query to the chat on a page with no hits', async () => {
+      // The suggestions themselves are gated on having something worth a model
+      // call, but the chat handoff is not — a zero-hit page is exactly when the
+      // agent needs to know what the user searched for.
+      const sendMessage = jest.fn();
+      const setOpen = jest.fn();
+      const search = createInstantSearch();
+      search.renderState = {
+        [search.helper!.state.index]: {
+          chat: { sendMessage, setOpen, status: 'ready' },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+          results: makeResults({ hits: [], query: 'shoes' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.sendToChat('try this');
+
+      expect(sendMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: {
+            turnContext: { query: 'shoes', hitsSample: JSON.stringify([]) },
+          },
+        }),
         { headers: { 'x-algolia-referer': 'prompt-suggestions-widget' } }
       );
     });
