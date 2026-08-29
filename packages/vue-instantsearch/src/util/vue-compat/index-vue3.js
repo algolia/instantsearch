@@ -5,7 +5,22 @@ const isVue3 = true;
 const Vue2 = undefined;
 
 export { createApp, createSSRApp, h, version, nextTick } from 'vue';
+// Composition APIs available in both Vue 2.7 and Vue 3 with compatible
+// signatures (PoC: consumed by the composables).
+export {
+  computed,
+  inject,
+  onBeforeUnmount,
+  shallowRef,
+  unref,
+  watch,
+} from 'vue';
 export { Vue, Vue2, isVue2, isVue3 };
+
+// `toValue` is Vue 3.3+ only; local shim keeps 2.7/3.0-3.2 parity.
+export function toValue(source) {
+  return typeof source === 'function' ? source() : Vue.unref(source);
+}
 
 export function renderCompat(fn) {
   function h(tag, props, ...childrenArray) {
