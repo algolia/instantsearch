@@ -39,7 +39,7 @@ function WidgetPromptSuggestions({
 export function WidgetPromptSuggestionsPlp() {
   return (
     <WidgetPromptSuggestions
-      configurationId="algolia_prompt_suggestions_c567a834-c9f6-48af-8d7d-38e4741ff9c6"
+      configurationId="algolia_prompt_suggestions_553c8924-df38-403e-a302-f977a8963700"
       contextDescription="current query, filters, and first five search results"
       transformHits={(hits) =>
         hits.slice(0, 5).map((hit) => ({
@@ -58,7 +58,7 @@ export function WidgetPromptSuggestionsPlp() {
 export function WidgetPromptSuggestionsPdp() {
   return (
     <WidgetPromptSuggestions
-      configurationId="algolia_prompt_suggestions_df9c9163-926d-4d41-959f-1f31aa37fa8c"
+      configurationId="algolia_prompt_suggestions_15a040ea-25ed-41ac-9615-3184383c57d4"
       contextDescription="Amazon Fire TV Stick product details"
       context={{
         focalProduct: {
@@ -78,7 +78,7 @@ export function WidgetPromptSuggestionsPdp() {
 export function WidgetPromptSuggestionsCustom() {
   return (
     <WidgetPromptSuggestions
-      configurationId="algolia_prompt_suggestions_8e802b98-8610-490f-96d8-17ce3d2be306"
+      configurationId="algolia_prompt_suggestions_b31fd5dd-0d44-4567-b2a0-f6891c5b71a1"
       contextDescription="Home entertainment buying guide for budget-conscious shoppers"
       context={{
         pageTitle: 'Home entertainment buying guide',
