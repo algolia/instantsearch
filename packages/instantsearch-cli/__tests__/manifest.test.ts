@@ -108,9 +108,9 @@ describe('manifest', () => {
       expect(writeResult).toEqual({ ok: true, path: filePath });
 
       const writtenBytes = fs.readFileSync(filePath);
-      expect(writtenBytes.equals(Buffer.from(serializeManifest(manifest)))).toBe(
-        true
-      );
+      expect(
+        writtenBytes.equals(Buffer.from(serializeManifest(manifest)))
+      ).toBe(true);
 
       const readResult = readManifest(filePath, { command: 'introspect' });
       expect(readResult).toEqual({ ok: true, manifest });
@@ -195,9 +195,7 @@ describe('manifest', () => {
 
     it('rejects malformed feature entries', () => {
       const manifest = validManifest({
-        features: [
-          { name: 'search', path: '', indexName: 'products' },
-        ],
+        features: [{ name: 'search', path: '', indexName: 'products' }],
       });
 
       const result = validateManifest(manifest, { command: 'add' });

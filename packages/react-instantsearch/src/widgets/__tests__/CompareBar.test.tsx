@@ -20,7 +20,7 @@ function CompareController({
   onRenderState: (renderState: CompareRenderState) => void;
 }) {
   const renderState = useCompare();
-  onRenderState(renderState as CompareRenderState);
+  onRenderState(renderState);
   return null;
 }
 
@@ -60,9 +60,7 @@ describe('CompareBar', () => {
     expect(screen.getByText('MacBook Pro 14')).toBeInTheDocument();
     expect(screen.getByText('MacBook Pro 16')).toBeInTheDocument();
     expect(screen.getByText('2 of 3')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Compare 2' })
-    ).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Compare 2' })).toBeEnabled();
   });
 
   test('disables the call-to-action below `minItems` and shows the hint', () => {
@@ -113,9 +111,7 @@ describe('CompareBar', () => {
       getCompareState().toggleItem({ objectID: 'A', name: 'MacBook Pro 14' });
     });
 
-    expect(container.querySelector('.ais-CompareBar')).toHaveClass(
-      'ROOTCLASS'
-    );
+    expect(container.querySelector('.ais-CompareBar')).toHaveClass('ROOTCLASS');
     expect(screen.getByText('Side by side')).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import { createComparisonTableToolComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment, useMemo } from 'react';
+import React, { createElement, Fragment } from 'react';
 
 import type {
   ClientSideToolComponentProps,
@@ -26,7 +26,6 @@ function createComparisonTableTool(
   const ComparisonTableUIComponent = createComparisonTableToolComponent({
     createElement: createElement as Pragma,
     Fragment,
-    useMemo,
   });
 
   const ComparisonTableLayoutComponent = (

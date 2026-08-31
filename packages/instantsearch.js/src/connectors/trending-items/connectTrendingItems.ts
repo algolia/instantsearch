@@ -30,7 +30,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type TrendingItemsRenderState<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   /**
    * The matched recommendations from the Algolia API.
@@ -44,7 +44,7 @@ export type TrendingItemsRenderState<
 };
 
 export type TrendingItemsConnectorParams<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = (
   | {
       /**
@@ -99,7 +99,7 @@ export type TrendingItemsConnectorParams<
 };
 
 export type TrendingItemsWidgetDescription<
-  THit extends NonNullable<object> = BaseHit
+  THit extends NonNullable<object> = BaseHit,
 > = {
   $$type: 'ais.trendingItems';
   renderState: TrendingItemsRenderState<THit>;
@@ -112,7 +112,7 @@ export type TrendingItemsConnector<THit extends NonNullable<object> = BaseHit> =
   >;
 
 export default (function connectTrendingItems<
-  TWidgetParams extends UnknownWidgetParams
+  TWidgetParams extends UnknownWidgetParams,
 >(
   renderFn: Renderer<
     TrendingItemsRenderState,

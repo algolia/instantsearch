@@ -3,6 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.46.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.45.0...react-instantsearch-core@7.46.0) (2026-08-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+# [7.45.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.44.1...react-instantsearch-core@7.45.0) (2026-08-19)
+
+
+### Features
+
+* **chat:** let the chat trigger open the chat with a message ([#7166](https://github.com/algolia/instantsearch/issues/7166)) ([39bc620](https://github.com/algolia/instantsearch/commit/39bc62057d27fbe73f6eb88aafdf35b49fcca1a4))
+
+
+
+
+
+## [7.44.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.44.0...react-instantsearch-core@7.44.1) (2026-08-13)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.44.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.43.0...react-instantsearch-core@7.44.0) (2026-08-12)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+# [7.43.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.42.0...react-instantsearch-core@7.43.0) (2026-08-10)
+
+
+### Features
+
+* **chat:** persist open state ([#7136](https://github.com/algolia/instantsearch/issues/7136)) ([50807b6](https://github.com/algolia/instantsearch/commit/50807b693cd300064f79e12e837cf3c21c06ef67))
+
+
+
+
+
+# [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.41.0...react-instantsearch-core@7.42.0) (2026-08-06)
+
+
+### Bug Fixes
+
+* **chat:** make Chat server renderable ([#7138](https://github.com/algolia/instantsearch/issues/7138)) ([8f16877](https://github.com/algolia/instantsearch/commit/8f168775adc245ee72863e5963fbae537c4a76ec))
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+
+
+
+
+
+## [7.41.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.40.0...react-instantsearch-core@7.41.0) (2026-07-23)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+# [7.40.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.39.1...react-instantsearch-core@7.40.0) (2026-07-21)
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
+## [7.39.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.39.0...react-instantsearch-core@7.39.1) (2026-07-14)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.39.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.38.0...react-instantsearch-core@7.39.0) (2026-07-07)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+
+## [7.38.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.37.1...react-instantsearch-core@7.38.0) (2026-06-30)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.37.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.36.0...react-instantsearch-core@7.37.1) (2026-06-30)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.37.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.36.0...react-instantsearch-core@7.37.0) (2026-06-25)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
 ## [7.36.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.35.2...react-instantsearch-core@7.36.0) (2026-06-19)
 
 **Note:** Version bump only for package react-instantsearch-core

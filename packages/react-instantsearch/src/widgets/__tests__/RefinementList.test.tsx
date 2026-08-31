@@ -196,4 +196,25 @@ describe('RefinementList', () => {
       ).toHaveTextContent('Zero results');
     });
   });
+
+  test('sets the aria-label on the show more button', async () => {
+    const searchClient = createMockedSearchClient();
+    const { container } = render(
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <RefinementList
+          attribute="brand"
+          showMore
+          translations={{ showMoreButtonLabel: 'Show more brands' }}
+        />
+      </InstantSearchTestWrapper>
+    );
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('.ais-RefinementList-showMore')
+      ).toHaveAttribute('aria-label', 'Show more brands');
+    });
+  });
 });

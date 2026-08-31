@@ -47,8 +47,15 @@ export function CompareBar({
   itemComponent,
   ...props
 }: CompareBarProps) {
-  const { items, minItems, maxItems, canCompare, removeItem, clearItems, compare } =
-    useCompare(props, { $$widgetType: 'ais.compareBar' });
+  const {
+    items,
+    minItems,
+    maxItems,
+    canCompare,
+    removeItem,
+    clearItems,
+    compare,
+  } = useCompare(props, { $$widgetType: 'ais.compareBar' });
 
   return (
     <CompareBarUiComponent

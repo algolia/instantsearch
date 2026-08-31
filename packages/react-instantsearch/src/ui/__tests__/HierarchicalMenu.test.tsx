@@ -310,6 +310,7 @@ describe('HierarchicalMenu', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-HierarchicalMenu-showMore"
             >
               Show more
@@ -467,6 +468,7 @@ describe('HierarchicalMenu', () => {
             </li>
           </ul>
           <button
+            aria-expanded="false"
             class="ais-HierarchicalMenu-showMore SHOWMORE ais-HierarchicalMenu-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >

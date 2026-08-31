@@ -1,5 +1,5 @@
 import { createCompareProductsToolComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment, useMemo } from 'react';
+import React, { createElement, Fragment } from 'react';
 
 import type {
   ClientSideToolComponentProps,
@@ -24,7 +24,6 @@ function createCompareProductsTool(
   const CompareProductsUIComponent = createCompareProductsToolComponent({
     createElement: createElement as Pragma,
     Fragment,
-    useMemo,
   });
 
   const CompareProductsLayoutComponent = (

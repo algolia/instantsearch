@@ -164,6 +164,7 @@ describe('Menu', () => {
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-Menu-showMore"
             >
               Show more
@@ -254,6 +255,7 @@ describe('Menu', () => {
             </li>
           </ul>
           <button
+            aria-expanded="false"
             class="ais-Menu-showMore SHOWMORE ais-Menu-showMore--disabled DISABLEDSHOWMORE"
             disabled=""
           >

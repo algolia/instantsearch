@@ -8,9 +8,10 @@
  * This pins the "render the table from product IDs, not model text" fix from the
  * agentic-evals comparison study (`comparison-eval/README.md`). The agent emits a
  * v2 `markdownTable` block that names only the product objectIDs and the
- * attribute *keys* to compare — never the values. Every cell is hydrated from the
- * preceding `algolia_search_index` hits (via `getHitsByObjectID`). That makes a
- * fabricated price/spec structurally impossible: the model never types one.
+ * attribute *keys* to compare — never the values. Every cell is hydrated from
+ * the chat records store (the hits the search tools actually fetched). That
+ * makes a fabricated price/spec structurally impossible: the model never types
+ * one.
  *
  * The eval (offline, LLM-judged) showed hallucination collapses as a comparison
  * table grows wider (to ~4% grounded at 4 items) precisely because the model
@@ -18,12 +19,32 @@
  * catalog-sourced values, no matter what the model emits.
  */
 
+import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen, within } from '@testing-library/react';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createComparisonTableTool } from '../ComparisonTableTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentContext,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+type ToolMessage = ClientSideToolComponentProps['context']['message'];
+
+const metadata: ChatComponentContext = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+};
 
 type CatalogHit = {
   objectID: string;
@@ -48,7 +69,7 @@ function buildComparisonTurn(
     intro?: string;
   }
 ) {
-  const displayMessage: ClientSideToolComponentProps['message'] = {
+  const displayMessage = {
     type: 'tool-algolia_display_results',
     state: 'output-available',
     toolCallId: 'display',
@@ -65,7 +86,7 @@ function buildComparisonTurn(
         },
       ],
     },
-  };
+  } as ToolMessage;
 
   const messages = [
     {
@@ -82,28 +103,32 @@ function buildComparisonTurn(
         displayMessage,
       ],
     },
-  ] as ClientSideToolComponentProps['messages'];
+  ] as ChatComponentContext['messages'];
 
   return { displayMessage, messages };
 }
 
 function renderComparison(
-  message: ClientSideToolComponentProps['message'],
-  messages: ClientSideToolComponentProps['messages']
+  message: ToolMessage,
+  messages: ChatComponentContext['messages']
 ) {
   const tool = createComparisonTableTool();
   const LayoutComponent = tool.layoutComponent!;
 
   return render(
     <LayoutComponent
-      message={message}
-      messages={messages}
-      applyFilters={jest.fn()}
-      onClose={jest.fn()}
-      indexUiState={{}}
-      addToolResult={jest.fn()}
-      setIndexUiState={jest.fn()}
-      sendEvent={jest.fn()}
+      {...chatToolProps({
+        ...metadata,
+        messages,
+        // The tool only consumes records; the search tool fetched them.
+        records: collectChatRecords(messages),
+        message,
+        applyFilters: jest.fn(),
+        indexUiState: {},
+        addToolResult: jest.fn(),
+        setIndexUiState: jest.fn(),
+        sendEvent: jest.fn(),
+      })}
     />
   );
 }
@@ -160,14 +185,15 @@ describe('ComparisonTable grounding', () => {
     renderComparison(displayMessage, messages);
 
     expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
-    // B has no hit: product label AND attribute cell are the missing marker.
+    // B has no record: product label AND attribute cell are the missing marker.
     expect(screen.getByTestId('product-B')).toHaveTextContent('—');
     expect(screen.getByTestId('cell-B-price')).toHaveTextContent('—');
   });
 
   test('values are never sourced from the display output (model cannot smuggle them)', () => {
     // Defense-in-depth: even if the display block tried to ship attribute values,
-    // there is no schema field for them and the renderer only reads search hits.
+    // there is no schema field for them and the renderer only reads the records
+    // store.
     const searchHits = [{ objectID: 'A', name: 'Real Name', price: 10 }];
     const displayMessage = {
       type: 'tool-algolia_display_results',
@@ -184,7 +210,7 @@ describe('ComparisonTable grounding', () => {
           },
         ],
       },
-    } as ClientSideToolComponentProps['message'];
+    } as ToolMessage;
 
     const messages = [
       {
@@ -201,7 +227,7 @@ describe('ComparisonTable grounding', () => {
           displayMessage,
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentContext['messages'];
 
     renderComparison(displayMessage, messages);
 
@@ -212,11 +238,11 @@ describe('ComparisonTable grounding', () => {
     expect(screen.queryByText('9999')).not.toBeInTheDocument();
   });
 
-  test('a row is only hydrated from its OWN turn, not a later search', () => {
-    const tool = createComparisonTableTool();
-    const LayoutComponent = tool.layoutComponent!;
-
-    const displayMessage: ClientSideToolComponentProps['message'] = {
+  test('hydrates from the shared conversation records store, last write winning', () => {
+    // The records store is conversation-level: a later re-fetch of the same
+    // objectID updates the record every table reads from. Cells still can only
+    // ever hold catalog-sourced values — never model-typed ones.
+    const displayMessage = {
       type: 'tool-algolia_display_results',
       state: 'output-available',
       toolCallId: 'display-turn-1',
@@ -230,7 +256,7 @@ describe('ComparisonTable grounding', () => {
           },
         ],
       },
-    };
+    } as ToolMessage;
 
     const messages = [
       {
@@ -257,29 +283,18 @@ describe('ComparisonTable grounding', () => {
             toolCallId: 'search-turn-2',
             state: 'output-available',
             input: {},
-            // A later turn re-fetched A WITH a price — must not leak backwards.
-            output: { hits: [{ objectID: 'A', name: 'Galaxy A50', price: 999 }] },
+            // A later turn re-fetched A WITH a price: last write wins.
+            output: {
+              hits: [{ objectID: 'A', name: 'Galaxy A50', price: 999 }],
+            },
           },
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentContext['messages'];
 
-    render(
-      <LayoutComponent
-        message={displayMessage}
-        messages={messages}
-        applyFilters={jest.fn()}
-        onClose={jest.fn()}
-        indexUiState={{}}
-        addToolResult={jest.fn()}
-        setIndexUiState={jest.fn()}
-        sendEvent={jest.fn()}
-      />
-    );
+    renderComparison(displayMessage, messages);
 
     expect(screen.getByTestId('product-A')).toHaveTextContent('Galaxy A50');
-    // The price from turn 2 must not appear in turn 1's table.
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('—');
-    expect(screen.queryByText('999')).not.toBeInTheDocument();
+    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('999');
   });
 });

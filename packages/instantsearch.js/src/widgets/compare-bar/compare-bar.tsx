@@ -88,8 +88,7 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
   const templates: CompareBarTemplates = { ...userTemplates };
 
   function renderCompareBar(
-    renderState: CompareRenderState &
-      RendererOptions<CompareConnectorParams>,
+    renderState: CompareRenderState & RendererOptions<CompareConnectorParams>,
     _isFirstRender: boolean
   ) {
     const {

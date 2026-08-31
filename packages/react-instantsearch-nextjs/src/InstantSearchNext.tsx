@@ -1,5 +1,5 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -7,7 +7,6 @@ import {
 } from 'react-instantsearch-core';
 
 import { InitializePromise } from './InitializePromise';
-import { RefreshOnClientNavigation } from './RefreshOnClientNavigation';
 import { TriggerSearch } from './TriggerSearch';
 import { useDynamicRouteWarning } from './useDynamicRouteWarning';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
@@ -42,7 +41,7 @@ export type InstantSearchNextRouting<TUiState, TRouteState> = {
 
 export type InstantSearchNextProps<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
   instance?: InstantSearchNextInstance;
@@ -51,7 +50,7 @@ export type InstantSearchNextProps<
 
 export function InstantSearchNext<
   TUiState extends UiState = UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >({
   children,
   routing: passedRouting,
@@ -85,8 +84,7 @@ export function InstantSearchNext<
       <InstantSearch {...instantSearchProps} routing={routing!}>
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
-        {isServer && <TriggerSearch nonce={nonce} />}
-        {!isServer && <RefreshOnClientNavigation />}
+        {isServer && <TriggerSearch />}
       </InstantSearch>
     </ServerOrHydrationProvider>
   );
@@ -104,15 +102,34 @@ function ServerOrHydrationProvider({
   ignoreMultipleHooksWarning: boolean;
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
+  const resolvePromiseRef = useRef<(() => void) | null>(null);
   const countRef = useRef(0);
-  const initialResults = safelyRunOnBrowser(
-    () => window[InstantSearchInitialResults]
+  // Capture once on first render. Side-effect-free read keeps hydration
+  // deterministic across StrictMode double-invocation and React 19 / Next.js
+  // metadata streaming re-renders.
+  const [initialResults] = useState<InitialResults | undefined>(() =>
+    safelyRunOnBrowser(({ window }) => window[InstantSearchInitialResults])
   );
+  // After commit, clear the global so a later <InstantSearchNext> mount —
+  // typically the destination of an App Router <Link> click — does not
+  // recycle this mount's serialized state.
+  useEffect(() => {
+    safelyRunOnBrowser(({ window }) => {
+      if (window[InstantSearchInitialResults] !== undefined) {
+        window[InstantSearchInitialResults] = undefined;
+      }
+    });
+  }, []);
+  // `useInstantSearchApi` reads a truthy `waitForResultsRef` as "SSR results
+  // are arriving" and skips the initial search. On client mounts without
+  // results (typical for SPA navigation) we must let it fall through.
+  const rscWaitRef = !isServer && !initialResults ? null : promiseRef;
 
   return (
     <InstantSearchRSCContext.Provider
       value={{
-        waitForResultsRef: promiseRef,
+        waitForResultsRef: rscWaitRef,
+        resolveWaitForResultsRef: resolvePromiseRef,
         countRef,
         ignoreMultipleHooksWarning,
       }}

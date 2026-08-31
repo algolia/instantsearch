@@ -38,7 +38,11 @@ describe('reverseHighlightedParts', () => {
         value: ' - Fire HD8 - 8&quot; - Tablet - 16GB - Wi-',
       },
       { isHighlighted: true, value: 'Fi' },
-      { isHighlighted: false, value: ' - ' },
+      // The separator sits between two non-highlighted parts ('Fi' and
+      // 'Black'), so its siblings agree and it inherits their state — keeping
+      // the reversed "Fi - Black" run contiguously highlighted. Previously the
+      // `|| true` bug broke this run with a gap here.
+      { isHighlighted: true, value: ' - ' },
       { isHighlighted: true, value: 'Black' },
     ]);
   });

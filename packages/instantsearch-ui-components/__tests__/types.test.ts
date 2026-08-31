@@ -251,3 +251,152 @@ describe('Exposes correct types', () => {
     });
   });
 });
+
+test('exposes Chat text component types from the public entry point', () => {
+  const fileName = path.join(__dirname, 'chat-message-text-component.ts');
+  const source = `
+    import type {
+      ChatMessageBase,
+      ChatMessageProps,
+      ChatMessageTextComponentProps,
+      ChatStatus,
+      TextUIPart,
+    } from '../dist/es';
+
+    const textComponent: ChatMessageProps['textComponent'] = (props) => {
+      const part: TextUIPart = props.part;
+      const message: ChatMessageBase = props.message;
+      const messages: ChatMessageBase[] | undefined = props.messages;
+      const status: ChatStatus = props.status;
+      const partIndex: number = props.partIndex;
+      const context: ChatMessageTextComponentProps = props;
+      void part;
+      void message;
+      void messages;
+      void status;
+      void partIndex;
+      void context;
+      return null;
+    };
+    void textComponent;
+  `;
+  const compilerOptions: ts.CompilerOptions = {
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmit: true,
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2020,
+  };
+  const host = ts.createCompilerHost(compilerOptions);
+  const getSourceFile = host.getSourceFile.bind(host);
+  host.getSourceFile = (sourceName, languageVersion, onError) =>
+    sourceName === fileName
+      ? ts.createSourceFile(fileName, source, languageVersion, true)
+      : getSourceFile(sourceName, languageVersion, onError);
+
+  const program = ts.createProgram([fileName], compilerOptions, host);
+  const errors = ts
+    .getPreEmitDiagnostics(program)
+    .map((diagnostic) =>
+      ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+    );
+
+  expect(errors).toEqual([]);
+});
+
+test('preserves custom message types in Chat text component props', () => {
+  const fileName = path.join(
+    __dirname,
+    'chat-message-text-component-generic.ts'
+  );
+  const source = `
+    import type {
+      ChatMessageProps,
+      ChatMessagesProps,
+      UIMessage,
+    } from '../dist/es';
+
+    type AppMetadata = { sourceIds: string[] };
+    type AppMessage = UIMessage<AppMetadata>;
+    type BaseRoleMessageProps = NonNullable<
+      ChatMessagesProps['assistantMessageProps']
+    >;
+
+    const reusableRoleMessageProps: BaseRoleMessageProps = {
+      parseMarkdown: false,
+    };
+    const baseMessage = {
+      role: 'assistant' as const,
+      id: 'base',
+      parts: [],
+    };
+    const legacyRoleMessageProps: BaseRoleMessageProps = {
+      message: baseMessage,
+      messages: [baseMessage],
+    };
+    const reusableMessageProps: Partial<
+      Omit<ChatMessageProps, 'ref' | 'key'>
+    > = {
+      parseMarkdown: false,
+    };
+
+    const assistantMessageProps: NonNullable<
+      ChatMessagesProps<AppMessage>['assistantMessageProps']
+    > = {
+      textComponent({ message, messages }) {
+        if (message.metadata) {
+          const metadata: AppMetadata = message.metadata;
+          void metadata.sourceIds;
+        }
+        if (messages) {
+          const conversation: AppMessage[] = messages;
+          void conversation;
+        }
+        return null;
+      },
+    };
+    void assistantMessageProps;
+
+    const messagesProps: ChatMessagesProps<AppMessage> = {
+      messages: [],
+      indexUiState: {},
+      setIndexUiState() {},
+      tools: {},
+      onReload() {},
+      onClose() {},
+      assistantMessageProps: reusableMessageProps,
+      userMessageProps: reusableRoleMessageProps,
+    };
+    void messagesProps;
+
+    const legacyMessagesProps: ChatMessagesProps<AppMessage> = {
+      ...messagesProps,
+      assistantMessageProps: legacyRoleMessageProps,
+    };
+    void legacyMessagesProps;
+  `;
+  const compilerOptions: ts.CompilerOptions = {
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
+    noEmit: true,
+    skipLibCheck: true,
+    strict: true,
+    target: ts.ScriptTarget.ES2020,
+  };
+  const host = ts.createCompilerHost(compilerOptions);
+  const getSourceFile = host.getSourceFile.bind(host);
+  host.getSourceFile = (sourceName, languageVersion, onError) =>
+    sourceName === fileName
+      ? ts.createSourceFile(fileName, source, languageVersion, true)
+      : getSourceFile(sourceName, languageVersion, onError);
+
+  const program = ts.createProgram([fileName], compilerOptions, host);
+  const errors = ts
+    .getPreEmitDiagnostics(program)
+    .map((diagnostic) =>
+      ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+    );
+
+  expect(errors).toEqual([]);
+});

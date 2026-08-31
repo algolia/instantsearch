@@ -138,9 +138,10 @@ describe('connectCompare', () => {
       getRenderState().addItem({ objectID: 'B' });
       getRenderState().addItem({ objectID: 'C' });
 
-      expect(getRenderState().items.map((item: any) => item.objectID)).toEqual(
-        ['A', 'B']
-      );
+      expect(getRenderState().items.map((item: any) => item.objectID)).toEqual([
+        'A',
+        'B',
+      ]);
       expect(getRenderState().canAddItems).toBe(false);
     });
 
@@ -293,9 +294,12 @@ describe('connectCompare', () => {
     it('exposes the render state under the `compare` key', () => {
       const { widget, initOptions } = setup();
 
-      const renderState = widget.getRenderState!({}, createRenderOptions({
-        instantSearchInstance: initOptions.instantSearchInstance,
-      }));
+      const renderState = widget.getRenderState(
+        {},
+        createRenderOptions({
+          instantSearchInstance: initOptions.instantSearchInstance,
+        })
+      );
 
       expect(renderState.compare).toEqual(
         expect.objectContaining({

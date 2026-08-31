@@ -9,9 +9,9 @@
  * study (`comparison-eval/README.md`), promoted from the display-block prototype
  * to a first-class builtin tool: the agent triggers the tool with ONLY the
  * product objectIDs and the attribute *keys* to compare — never the values.
- * Every cell is hydrated from the preceding `algolia_search_index` hits (via
- * `getHitsByObjectID`), so a fabricated price/spec is structurally impossible:
- * the model never types one.
+ * Every cell is hydrated from the chat records store (the hits the search
+ * tools actually fetched), so a fabricated price/spec is structurally
+ * impossible: the model never types one.
  *
  * The eval showed hallucination worsens as comparison tables grow wider
  * (~4% grounded at 4 items when the model types every cell). These tests
@@ -19,12 +19,32 @@
  * arguments the model sends.
  */
 
+import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
+import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { createCompareProductsTool } from '../CompareProductsTool';
 
-import type { ClientSideToolComponentProps } from 'instantsearch-ui-components';
+import type {
+  ChatComponentContext,
+  ClientSideToolComponentProps,
+} from 'instantsearch-ui-components';
+
+type ToolMessage = ClientSideToolComponentProps['context']['message'];
+
+const metadata: ChatComponentContext = {
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+};
 
 type CatalogHit = {
   objectID: string;
@@ -49,7 +69,7 @@ function buildCompareTurn(
     state,
     toolCallId: 'compare',
     input,
-  } as ClientSideToolComponentProps['message'];
+  } as ToolMessage;
 
   const messages = [
     {
@@ -66,28 +86,32 @@ function buildCompareTurn(
         compareMessage,
       ],
     },
-  ] as ClientSideToolComponentProps['messages'];
+  ] as ChatComponentContext['messages'];
 
   return { compareMessage, messages };
 }
 
 function renderCompare(
-  message: ClientSideToolComponentProps['message'],
-  messages: ClientSideToolComponentProps['messages']
+  message: ToolMessage,
+  messages: ChatComponentContext['messages']
 ) {
   const tool = createCompareProductsTool();
   const LayoutComponent = tool.layoutComponent!;
 
   return render(
     <LayoutComponent
-      message={message}
-      messages={messages}
-      applyFilters={jest.fn()}
-      onClose={jest.fn()}
-      indexUiState={{}}
-      addToolResult={jest.fn()}
-      setIndexUiState={jest.fn()}
-      sendEvent={jest.fn()}
+      {...chatToolProps({
+        ...metadata,
+        messages,
+        // The tool only consumes records; the search tool fetched them.
+        records: collectChatRecords(messages),
+        message,
+        applyFilters: jest.fn(),
+        indexUiState: {},
+        addToolResult: jest.fn(),
+        setIndexUiState: jest.fn(),
+        sendEvent: jest.fn(),
+      })}
     />
   );
 }
@@ -147,7 +171,7 @@ describe('CompareProductsTool grounding', () => {
     renderCompare(compareMessage, messages);
 
     expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
-    // B has no hit: product label AND attribute cell are the missing marker.
+    // B has no record: product label AND attribute cell are the missing marker.
     expect(screen.getByTestId('product-B')).toHaveTextContent('—');
     expect(screen.getByTestId('cell-B-price')).toHaveTextContent('—');
   });
@@ -155,7 +179,7 @@ describe('CompareProductsTool grounding', () => {
   test('values smuggled into the tool arguments are ignored', () => {
     // Defense-in-depth: even if the model ships attribute values in its
     // arguments, there is no schema field for them — the renderer only reads
-    // objectIDs/attributes off the input and values off the search hits.
+    // objectIDs/attributes off the input and values off the records store.
     const { compareMessage, messages } = buildCompareTurn(
       [{ objectID: 'A', name: 'Real Name', price: 10 }],
       {
@@ -186,13 +210,16 @@ describe('CompareProductsTool grounding', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  test('a table is only hydrated from its OWN turn, not a later search', () => {
+  test('hydrates from the shared conversation records store, last write winning', () => {
+    // The records store is conversation-level: a later re-fetch of the same
+    // objectID updates the record every table reads from. Cells still can only
+    // ever hold catalog-sourced values — never model-typed ones.
     const compareMessage = {
       type: 'tool-algolia_compare_products',
       state: 'input-available',
       toolCallId: 'compare-turn-1',
       input: { objectIDs: ['A'], attributes: ['price'] },
-    } as ClientSideToolComponentProps['message'];
+    } as ToolMessage;
 
     const messages = [
       {
@@ -219,18 +246,19 @@ describe('CompareProductsTool grounding', () => {
             toolCallId: 'search-turn-2',
             state: 'output-available',
             input: {},
-            // A later turn re-fetched A WITH a price — must not leak backwards.
-            output: { hits: [{ objectID: 'A', name: 'Galaxy A50', price: 999 }] },
+            // A later turn re-fetched A WITH a price: last write wins.
+            output: {
+              hits: [{ objectID: 'A', name: 'Galaxy A50', price: 999 }],
+            },
           },
         ],
       },
-    ] as ClientSideToolComponentProps['messages'];
+    ] as ChatComponentContext['messages'];
 
     renderCompare(compareMessage, messages);
 
     expect(screen.getByTestId('product-A')).toHaveTextContent('Galaxy A50');
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('—');
-    expect(screen.queryByText('999')).not.toBeInTheDocument();
+    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('999');
   });
 
   test('acknowledges the client-side tool call so the agent turn completes', () => {

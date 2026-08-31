@@ -1,4 +1,10 @@
-import { createESMConfig, createCJSConfig, createJsxPragmaFixPlugins, collectSourceEntries } from '../../scripts/build/rollup.base.mjs';
+import {
+  createESMConfig,
+  createCJSConfig,
+  createJsxPragmaFixPlugins,
+  collectSourceEntries,
+} from '../../scripts/build/rollup.base.mjs';
+
 import pkg from './package.json' with { type: 'json' };
 
 const input = collectSourceEntries();

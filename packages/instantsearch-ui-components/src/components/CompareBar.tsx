@@ -74,8 +74,7 @@ const DEFAULT_TRANSLATIONS: CompareBarTranslations = {
   removeItemLabel: (itemLabel) => `Remove ${itemLabel} from comparison`,
   minItemsHint: (minItems) =>
     `Select at least ${minItems} products to compare.`,
-  limitReachedHint:
-    'Compare limit reached — remove a product to add another.',
+  limitReachedHint: 'Compare limit reached — remove a product to add another.',
 };
 
 export type CompareBarItemComponentProps = {
@@ -139,8 +138,8 @@ export function createCompareBarComponent({ createElement }: Renderer) {
       items.length < minItems
         ? translations.minItemsHint(minItems)
         : items.length >= maxItems
-        ? translations.limitReachedHint
-        : undefined;
+          ? translations.limitReachedHint
+          : undefined;
 
     return (
       <section

@@ -182,6 +182,7 @@ function PaginationLink({
           rootProps={{
             className: cssClasses.link,
             'aria-label': ariaLabel,
+            'aria-current': isSelected ? 'page' : undefined,
             href: createURL(pageNumber),
             onClick: createClickHandler(pageNumber),
           }}

@@ -1,13 +1,11 @@
 /** @jsx createElement */
 
-import { getHitsByObjectID } from '../../../lib/utils/chat';
-
 import {
   createGroundedComparisonTableComponent,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { Hooks, Renderer } from '../../../types';
+import type { Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 import type { ComparisonTableTranslations } from './createGroundedComparisonTable';
 
@@ -16,9 +14,9 @@ import type { ComparisonTableTranslations } from './createGroundedComparisonTabl
  *
  * The agent emits a v2 `markdownTable` display block that names only the
  * product objectIDs and the attribute *keys* to compare — never the values.
- * Every cell is hydrated from the actual `algolia_search_index` hits via
- * `getHitsByObjectID`, so the model physically cannot type (and therefore
- * cannot hallucinate) a price or spec.
+ * Every cell is hydrated from the chat records store (`context.records`,
+ * filled by the search tools), so the model physically cannot type (and
+ * therefore cannot hallucinate) a price or spec.
  *
  * Wire shape it consumes (a v2 `markdownTable` display block):
  *
@@ -83,8 +81,7 @@ function firstMarkdownTable(
 export function createComparisonTableToolComponent({
   createElement,
   Fragment,
-  useMemo,
-}: Renderer & Pick<Hooks, 'useMemo'>) {
+}: Renderer) {
   const GroundedComparisonTable = createGroundedComparisonTableComponent({
     createElement,
     Fragment,
@@ -92,18 +89,12 @@ export function createComparisonTableToolComponent({
 
   return function ComparisonTableTool(userProps: ComparisonTableToolProps) {
     const { toolProps, translations: userTranslations } = userProps;
-    const { message, messages } = toolProps;
+    const { message, records } = toolProps.context;
 
     const translations: ComparisonTableTranslations = {
       ...defaultComparisonTableTranslations,
       ...userTranslations,
     };
-
-    const toolCallId = message?.toolCallId;
-    const hitsByObjectID = useMemo(
-      () => (messages ? getHitsByObjectID(messages, toolCallId) : {}),
-      [messages, toolCallId]
-    );
 
     const output = message?.output as ComparisonTableOutput | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;
@@ -119,7 +110,7 @@ export function createComparisonTableToolComponent({
         objectIDs={table.rows.map((row) => row.objectID)}
         attributes={table.attributes ?? []}
         columns={table.columns}
-        hitsByObjectID={hitsByObjectID}
+        records={records}
         translations={translations}
       />
     );

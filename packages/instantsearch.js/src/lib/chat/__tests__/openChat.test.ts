@@ -25,10 +25,17 @@ describe('openChat', () => {
 
     expect(sent).toBe(true);
     expect(chat.setOpen).toHaveBeenCalledWith(true);
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
-  test.each(['prompt-suggestions', 'ai-mode'] as const)(
+  test.each([
+    'ai-mode',
+    'prompt-suggestions-widget',
+    'prompt-suggestions-autocomplete',
+  ] as const)(
     'forwards the `%s` referer as the x-algolia-referer header',
     (referer) => {
       const chat = createChatRenderState();
@@ -42,12 +49,43 @@ describe('openChat', () => {
     }
   );
 
+  test('attaches turnContext to the message metadata when provided', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, {
+      message: 'macbook',
+      turnContext: { query: 'macbook', page: 'plp' },
+    });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      {
+        text: 'macbook',
+        metadata: { turnContext: { query: 'macbook', page: 'plp' } },
+      },
+      undefined
+    );
+  });
+
+  test('omits the metadata key entirely when no turnContext is provided', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, { message: 'macbook' });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
+  });
+
   test('does not add the x-algolia-referer header when no referer is provided', () => {
     const chat = createChatRenderState();
 
     openChat(chat, { message: 'macbook' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test('trims whitespace before sending', () => {
@@ -55,7 +93,10 @@ describe('openChat', () => {
 
     openChat(chat, { message: '  macbook  ' });
 
-    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'macbook' }, undefined);
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      { text: 'macbook' },
+      undefined
+    );
   });
 
   test('opens the chat and focuses the composer when message is empty', () => {
@@ -64,7 +105,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -75,7 +116,7 @@ describe('openChat', () => {
     const sent = openChat(chat, { message: '   ' });
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });
@@ -86,7 +127,7 @@ describe('openChat', () => {
     const sent = openChat(chat);
 
     expect(sent).toBe(false);
-    expect(chat.setOpen).toHaveBeenCalledWith(true);
+    expect(chat.setOpen).not.toHaveBeenCalled();
     expect(chat.focusInput).toHaveBeenCalledTimes(1);
     expect(chat.sendMessage).not.toHaveBeenCalled();
   });

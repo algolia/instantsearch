@@ -21,7 +21,7 @@ export type InstantSearchSSRProviderProps =
  */
 export function InstantSearchSSRProvider<
   TUiState extends UiState,
-  TRouteState = TUiState
+  TRouteState = TUiState,
 >({ children, ...props }: InstantSearchSSRProviderProps) {
   // This is used in `useInstantSearchApi()` to avoid creating and starting multiple instances of
   // `InstantSearch` on mount.
@@ -32,6 +32,11 @@ export function InstantSearchSSRProvider<
 
   // This is used to re-map the result index to the requesting widget
   const recommendIdx = React.useRef(0);
+  const hydrationCompleteRef = React.useRef(false);
+
+  React.useEffect(() => {
+    hydrationCompleteRef.current = true;
+  }, []);
 
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.
@@ -41,10 +46,15 @@ export function InstantSearchSSRProvider<
     return <>{children}</>;
   }
 
+  const contextValue = {
+    ...props,
+    ssrSearchRef,
+    recommendIdx,
+    hydrationCompleteRef,
+  };
+
   return (
-    <InstantSearchSSRContext.Provider
-      value={{ ...props, ssrSearchRef, recommendIdx }}
-    >
+    <InstantSearchSSRContext.Provider value={contextValue}>
       {children}
     </InstantSearchSSRContext.Provider>
   );

@@ -122,6 +122,11 @@ export type DynamicToolUIPart = {
   type: 'dynamic-tool';
   toolName: string;
   toolCallId: string;
+  /**
+   * Whether the tool call was executed by the provider. Carried by the
+   * `dynamic: true` tool chunks, like on `ToolUIPart`.
+   */
+  providerExecuted?: boolean;
 } & (
   | {
       state: 'input-streaming';
@@ -157,7 +162,7 @@ export type DynamicToolUIPart = {
 
 export type UIMessagePart<
   DATA_TYPES extends UIDataTypes = UIDataTypes,
-  TOOLS extends UITools = UITools
+  TOOLS extends UITools = UITools,
 > =
   | TextUIPart
   | ReasoningUIPart
@@ -172,7 +177,7 @@ export type UIMessagePart<
 export interface UIMessage<
   METADATA = unknown,
   DATA_PARTS extends UIDataTypes = UIDataTypes,
-  TOOLS extends UITools = UITools
+  TOOLS extends UITools = UITools,
 > {
   id: string;
   role: 'system' | 'user' | 'assistant';
@@ -180,26 +185,14 @@ export interface UIMessage<
   parts: Array<UIMessagePart<DATA_PARTS, TOOLS>>;
 }
 
-export type InferUIMessageMetadata<T extends UIMessage> = T extends UIMessage<
-  infer METADATA
->
-  ? METADATA
-  : unknown;
+export type InferUIMessageMetadata<T extends UIMessage> =
+  T extends UIMessage<infer METADATA> ? METADATA : unknown;
 
-export type InferUIMessageData<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  infer DATA_TYPES
->
-  ? DATA_TYPES
-  : UIDataTypes;
+export type InferUIMessageData<T extends UIMessage> =
+  T extends UIMessage<unknown, infer DATA_TYPES> ? DATA_TYPES : UIDataTypes;
 
-export type InferUIMessageTools<T extends UIMessage> = T extends UIMessage<
-  unknown,
-  any,
-  infer TOOLS
->
-  ? TOOLS
-  : UITools;
+export type InferUIMessageTools<T extends UIMessage> =
+  T extends UIMessage<unknown, any, infer TOOLS> ? TOOLS : UITools;
 
 export type InferUIMessageToolCall<UI_MESSAGE extends UIMessage> =
   | ValueOf<{
@@ -336,7 +329,7 @@ type ToolUIMessageChunk<TOOLS extends UITools> =
 export type UIMessageChunk<
   METADATA = unknown,
   DATA_TYPES extends UIDataTypes = UIDataTypes,
-  TOOLS extends UITools = UITools
+  TOOLS extends UITools = UITools,
 > =
   | { type: 'text-start'; id: string; providerMetadata?: ProviderMetadata }
   | {
@@ -368,8 +361,7 @@ export type UIMessageChunk<
   | {
       // Emitted by the agent when a guardrail intercepts the request or the
       // response. The `fallbackResponse` is authored for end-user display and
-      // is surfaced verbatim by the chat error UI (see
-      // `GuardrailViolationError`).
+      // is surfaced as the assistant message for the blocked turn.
       type: 'data-guardrail-violation';
       data: {
         fallbackResponse?: string;
@@ -497,10 +489,20 @@ export type IdGenerator = () => string;
 
 export type ChatOnErrorCallback = (error: Error) => void;
 
-export type ChatOnToolCallCallback<UI_MESSAGE extends UIMessage = UIMessage> =
-  (options: {
+export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
+  TOOL extends keyof InferUIMessageTools<UI_MESSAGE>,
+>(options: {
+  tool: TOOL;
+  toolCallId: string;
+  output: InferUIMessageTools<UI_MESSAGE>[TOOL]['output'];
+}) => Promise<void>;
+
+export type ChatOnToolCallCallback<UI_MESSAGE extends UIMessage = UIMessage> = (
+  options: {
     toolCall: InferUIMessageToolCall<UI_MESSAGE>;
-  }) => void | PromiseLike<void>;
+  },
+  addToolResult: ToolResultSubmission<UI_MESSAGE>
+) => void | PromiseLike<void>;
 
 export type ChatOnFinishCallback<UI_MESSAGE extends UIMessage> = (options: {
   message: UI_MESSAGE;
@@ -527,6 +529,15 @@ export interface ChatInit<UI_MESSAGE extends UIMessage> {
     messages: UI_MESSAGE[];
   }) => boolean | PromiseLike<boolean>;
   shouldRepairToolInput?: (toolName: string) => boolean;
+  /**
+   * Output to report for a tool call a request carries while it is still
+   * awaiting its result. Return `undefined` to report the call as failed.
+   */
+  resolveCancelledToolOutput?: (params: {
+    toolName: string;
+    toolCallId: string;
+    input: unknown;
+  }) => { output: unknown } | undefined;
 }
 
 export type CreateUIMessage<UI_MESSAGE extends UIMessage> = Omit<

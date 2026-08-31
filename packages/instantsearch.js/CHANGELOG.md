@@ -3,6 +3,204 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.113.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.112.0...instantsearch.js@4.113.0) (2026-08-24)
+
+
+### Bug Fixes
+
+* **chat:** focus prompt after reveal ([#7180](https://github.com/algolia/instantsearch/issues/7180)) ([cd306d8](https://github.com/algolia/instantsearch/commit/cd306d8db0ee0568d71ed89ccaf725d8fef3e17f))
+* **chat:** keep loader timing stable across React renders ([#7187](https://github.com/algolia/instantsearch/issues/7187)) ([44f0dd1](https://github.com/algolia/instantsearch/commit/44f0dd18674f3ab70e02d1db57bac3c42cf128d2))
+
+
+### Features
+
+* **chat:** customizable loader placement, rendering and timing ([#7171](https://github.com/algolia/instantsearch/issues/7171)) ([073abbd](https://github.com/algolia/instantsearch/commit/073abbd159aee6772a55c3f244688cdbe62750d4))
+* **chat:** let tools control their own rendering ([#7172](https://github.com/algolia/instantsearch/issues/7172)) ([3b35274](https://github.com/algolia/instantsearch/commit/3b35274f097ab250497717df9c24345893d7ea0f))
+* **tasks:** add transport option ([#7175](https://github.com/algolia/instantsearch/issues/7175)) ([5e24f58](https://github.com/algolia/instantsearch/commit/5e24f5853d8e9f19d9f84c8c31e17e6f68b95d2e))
+
+
+
+
+
+# [4.112.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.1...instantsearch.js@4.112.0) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** skip provider-executed tool calls when auto-continuing ([#7174](https://github.com/algolia/instantsearch/issues/7174)) ([0581e3d](https://github.com/algolia/instantsearch/commit/0581e3df6e8f743fcc9e0a27360b277ab8e2be3e)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880) [vercel/ai#9944](https://github.com/vercel/ai/issues/9944)
+* **chat:** stop resending server-executed tool turns ([#7173](https://github.com/algolia/instantsearch/issues/7173)) ([4a4c84a](https://github.com/algolia/instantsearch/commit/4a4c84abb1e286b1f0df1a120e60834ae71f99e9))
+* **chat:** warn on unmatched tool results ([#7168](https://github.com/algolia/instantsearch/issues/7168)) ([739161b](https://github.com/algolia/instantsearch/commit/739161b00644cf686bda3280744c255263d54751))
+
+
+### Features
+
+* **chat:** allow client side tool calls to cancel automatically if output not given before a new message ([#7162](https://github.com/algolia/instantsearch/issues/7162)) ([bdc5a5c](https://github.com/algolia/instantsearch/commit/bdc5a5cb17a1006146fcf86e57151881df2ed1d1))
+* **chat:** consolidate overridable-component props into a single `context` object ([#7123](https://github.com/algolia/instantsearch/issues/7123)) ([33eae92](https://github.com/algolia/instantsearch/commit/33eae92d39acda73b923998551f6b1672c9b3392))
+* **chat:** let the chat trigger open the chat with a message ([#7166](https://github.com/algolia/instantsearch/issues/7166)) ([39bc620](https://github.com/algolia/instantsearch/commit/39bc62057d27fbe73f6eb88aafdf35b49fcca1a4))
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
+## [4.111.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.111.0...instantsearch.js@4.111.1) (2026-08-13)
+
+**Note:** Version bump only for package instantsearch.js
+
+
+
+
+
+# [4.111.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.110.0...instantsearch.js@4.111.0) (2026-08-12)
+
+
+### Features
+
+* **chat:** support custom text rendering ([#7160](https://github.com/algolia/instantsearch/issues/7160)) ([7eb2bf0](https://github.com/algolia/instantsearch/commit/7eb2bf0d4c4514985d54868df5a77e9a8af1eb92))
+
+
+
+
+
+# [4.110.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.109.0...instantsearch.js@4.110.0) (2026-08-10)
+
+
+### Bug Fixes
+
+* **chat:** support caller-owned Chat reuse ([#7156](https://github.com/algolia/instantsearch/issues/7156)) ([a3ce794](https://github.com/algolia/instantsearch/commit/a3ce7947d9bad75cf594df0f690be50d4e4803d3))
+
+
+### Features
+
+* **chat:** persist open state ([#7136](https://github.com/algolia/instantsearch/issues/7136)) ([50807b6](https://github.com/algolia/instantsearch/commit/50807b693cd300064f79e12e837cf3c21c06ef67))
+* **insights:** send the user token with Recommend fallback queries ([#7157](https://github.com/algolia/instantsearch/issues/7157)) ([073ea5d](https://github.com/algolia/instantsearch/commit/073ea5d93643d67cf2a544fbb813dd84cb3edace))
+
+
+
+
+
+# [4.109.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.108.0...instantsearch.js@4.109.0) (2026-08-06)
+
+
+### Bug Fixes
+
+* **chat:** make Chat server renderable ([#7138](https://github.com/algolia/instantsearch/issues/7138)) ([8f16877](https://github.com/algolia/instantsearch/commit/8f168775adc245ee72863e5963fbae537c4a76ec))
+* **chat:** update query extraction in search index tool ([#7149](https://github.com/algolia/instantsearch/issues/7149)) ([62a45e5](https://github.com/algolia/instantsearch/commit/62a45e54686f4c61af3f2d14e243e7ba8e5747b5))
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+* **chat:** built in support for agentic insights events [CEC-1465] ([#7114](https://github.com/algolia/instantsearch/issues/7114)) ([f7c7f52](https://github.com/algolia/instantsearch/commit/f7c7f52aac694f2346c9433e3f43cb8bb18840e3))
+* **chat:** render reasoning parts ([#7139](https://github.com/algolia/instantsearch/issues/7139)) ([415313c](https://github.com/algolia/instantsearch/commit/415313cd85df1f7aad92cc9d0726189368c98115))
+* **chat:** render v1 display results from tool input ([#7137](https://github.com/algolia/instantsearch/issues/7137)) ([4f777dc](https://github.com/algolia/instantsearch/commit/4f777dce22025ca0ab2f7c93f10a13b8634ff86c))
+* **examples:** modernize and expand the React Native example with Recommend, query suggestions, routing & insights adapters ([#7150](https://github.com/algolia/instantsearch/issues/7150)) ([2cdbd68](https://github.com/algolia/instantsearch/commit/2cdbd6829323459233bb277d05d9debab8df1717))
+* **insights:** send the user token with Recommend requests ([#7153](https://github.com/algolia/instantsearch/issues/7153)) ([a06c6ae](https://github.com/algolia/instantsearch/commit/a06c6aee0a66320fab4d50fa9911a1b6cd656352))
+
+
+
+
+
+# [4.108.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.107.0...instantsearch.js@4.108.0) (2026-07-23)
+
+
+### Bug Fixes
+
+* **chat:** allow tool result submission during response streaming ([#7118](https://github.com/algolia/instantsearch/issues/7118)) ([2d196b3](https://github.com/algolia/instantsearch/commit/2d196b3c003c616e2a0a0fd57b800cef7125f641))
+
+
+### Features
+
+* **autocomplete:** autocomplete widget and isolated index are stable ([#7117](https://github.com/algolia/instantsearch/issues/7117)) ([8fd77dc](https://github.com/algolia/instantsearch/commit/8fd77dce8dbb9a641facfe1639cb678f968cdd46))
+
+
+
+
+
+# [4.107.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.106.0...instantsearch.js@4.107.0) (2026-07-21)
+
+
+### Bug Fixes
+
+* **chat:** allow user to override `sendAutomaticallyWhen` in the Chat widget ([#7116](https://github.com/algolia/instantsearch/issues/7116)) ([1c82852](https://github.com/algolia/instantsearch/commit/1c82852ae4ff874f35c4ac82724d59952b71cd7d))
+* **index:** clear parent only on removed widgets ([#7115](https://github.com/algolia/instantsearch/issues/7115)) ([c8e392c](https://github.com/algolia/instantsearch/commit/c8e392c23faa45e810757338380770811692c16b))
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
+# [4.106.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.105.0...instantsearch.js@4.106.0) (2026-07-14)
+
+
+### Features
+
+* **chat:** add persistence opt-out ([#7107](https://github.com/algolia/instantsearch/issues/7107)) ([ad04f65](https://github.com/algolia/instantsearch/commit/ad04f65c4ddfbebc58cf35f0b8cc483821b61458))
+* **chat:** render guardrail fallback as assistant message ([#7108](https://github.com/algolia/instantsearch/issues/7108)) ([f0f4e41](https://github.com/algolia/instantsearch/commit/f0f4e416b5cff94981a6e01885ba1e224d0f0e0b))
+
+
+
+
+
+# [4.105.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.104.0...instantsearch.js@4.105.0) (2026-07-07)
+
+
+### Bug Fixes
+
+* **pagination:** mark the current page with aria-current ([#7103](https://github.com/algolia/instantsearch/issues/7103)) ([f3db948](https://github.com/algolia/instantsearch/commit/f3db948b884e64c1b121fbb3801b10959ddb07ea)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **refinement-list:** expose show more/less state via aria-expanded ([#7102](https://github.com/algolia/instantsearch/issues/7102)) ([7d82c2f](https://github.com/algolia/instantsearch/commit/7d82c2f101b4a69b3d613d9cfb9be44e0881a4ea)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **searchbox:** give submit and reset buttons a reliable accessible name ([#7100](https://github.com/algolia/instantsearch/issues/7100)) ([59aba4f](https://github.com/algolia/instantsearch/commit/59aba4f7cf422e814ac3df35fbe8eada434ef30a)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098) [#7098](https://github.com/algolia/instantsearch/issues/7098)
+
+
+### Features
+
+* **metadata:** send meta events via insights ([#6974](https://github.com/algolia/instantsearch/issues/6974)) ([a0924da](https://github.com/algolia/instantsearch/commit/a0924da15456b36ad267ca2cf1681a5be6ca5056)), closes [/github.com/algolia/instantsearch/pull/6974#discussion_r3491492793](https://github.com//github.com/algolia/instantsearch/pull/6974/issues/discussion_r3491492793)
+* **refinement-list:** allow a custom accessible name for the show more button ([#7101](https://github.com/algolia/instantsearch/issues/7101)) ([cf04cb7](https://github.com/algolia/instantsearch/commit/cf04cb758b7e2ba2c8e0c07c9ec8157491bcaee5)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+* **stats:** announce result changes to screen readers ([#7099](https://github.com/algolia/instantsearch/issues/7099)) ([0821eb8](https://github.com/algolia/instantsearch/commit/0821eb846b9bbf6ec3740b39050798eaec133855)), closes [#7098](https://github.com/algolia/instantsearch/issues/7098)
+
+
+
+
+
+# [4.104.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.102.0...instantsearch.js@4.104.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **chat:** handle tool-input-error and tool-output-error stream chunks ([#7081](https://github.com/algolia/instantsearch/issues/7081)) ([80ce90f](https://github.com/algolia/instantsearch/commit/80ce90f3f3b68539dfef12ff52c25be0684f4b45))
+* **chat:** move clear-animation lifecycle to the view layer ([#7092](https://github.com/algolia/instantsearch/issues/7092)) ([bf5857e](https://github.com/algolia/instantsearch/commit/bf5857e28d19e084b6ef283d9dc7ddebd588ebf4))
+* **highlight:** keep separator state when reverse-highlight siblings disagree ([#7079](https://github.com/algolia/instantsearch/issues/7079)) ([b7a0f60](https://github.com/algolia/instantsearch/commit/b7a0f60c7eb407a0145eb4186c72306965c735be))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+* **chat:** add request options to agent requests ([#7088](https://github.com/algolia/instantsearch/issues/7088)) ([d3ad7ca](https://github.com/algolia/instantsearch/commit/d3ad7ca04e5d17e77a8c7f2548b7fbdf8b3ee9d7))
+
+
+
+
+
+# [4.103.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.102.0...instantsearch.js@4.103.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* **chat:** handle tool-input-error and tool-output-error stream chunks ([#7081](https://github.com/algolia/instantsearch/issues/7081)) ([80ce90f](https://github.com/algolia/instantsearch/commit/80ce90f3f3b68539dfef12ff52c25be0684f4b45))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
 # [4.102.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.101.1...instantsearch.js@4.102.0) (2026-06-19)
 
 

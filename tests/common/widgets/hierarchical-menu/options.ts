@@ -847,6 +847,7 @@ export function createOptionsTests(
               </li>
             </ul>
             <button
+              aria-expanded="false"
               class="ais-HierarchicalMenu-showMore"
             >
               Show more

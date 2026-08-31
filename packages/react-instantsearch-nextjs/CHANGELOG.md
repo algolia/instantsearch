@@ -3,6 +3,111 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.4...react-instantsearch-nextjs@1.4.5) (2026-08-24)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.4.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.3...react-instantsearch-nextjs@1.4.4) (2026-08-19)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.4.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.2...react-instantsearch-nextjs@1.4.3) (2026-08-13)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.4.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.1...react-instantsearch-nextjs@1.4.2) (2026-08-12)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.4.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.0...react-instantsearch-nextjs@1.4.1) (2026-08-10)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+# [1.4.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.3.1...react-instantsearch-nextjs@1.4.0) (2026-08-06)
+
+
+### Features
+
+* **examples:** modernize and expand the React Native example with Recommend, query suggestions, routing & insights adapters ([#7150](https://github.com/algolia/instantsearch/issues/7150)) ([2cdbd68](https://github.com/algolia/instantsearch/commit/2cdbd6829323459233bb277d05d9debab8df1717))
+
+
+
+
+
+## [1.3.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.3.0...react-instantsearch-nextjs@1.3.1) (2026-07-23)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+# [1.3.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.13...react-instantsearch-nextjs@1.3.0) (2026-07-21)
+
+
+### Features
+
+* allow chat and autocomplete to opt out of main search ([#7111](https://github.com/algolia/instantsearch/issues/7111)) ([997a511](https://github.com/algolia/instantsearch/commit/997a511f7ca034c92fcc53bd707c6448cf1bfdcf))
+
+
+
+
+
+## [1.2.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.12...react-instantsearch-nextjs@1.2.13) (2026-07-14)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.2.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.11...react-instantsearch-nextjs@1.2.12) (2026-07-07)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.2.11](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.9...react-instantsearch-nextjs@1.2.11) (2026-06-30)
+
+
+### Bug Fixes
+
+* **react-instantsearch-nextjs:** trigger client search on App Router SPA navigation ([#7019](https://github.com/algolia/instantsearch/issues/7019)) ([7dc4f73](https://github.com/algolia/instantsearch/commit/7dc4f73ec6f7b391a1f272db7c37bb7b080fa0cc))
+
+
+
+
+
+## [1.2.10](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.9...react-instantsearch-nextjs@1.2.10) (2026-06-25)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
 ## [1.2.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.2.8...react-instantsearch-nextjs@1.2.9) (2026-06-19)
 
 

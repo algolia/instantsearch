@@ -30,7 +30,8 @@
 .ais-RangeSlider .slider-handle {
   background-image: linear-gradient(to top, #f5f5fa, #fff);
   border-radius: 50%;
-  box-shadow: 0 4px 11px 0 rgba(37, 44, 97, 0.15),
+  box-shadow:
+    0 4px 11px 0 rgba(37, 44, 97, 0.15),
     0 2px 3px 0 rgba(93, 100, 148, 0.2);
   cursor: grab;
   height: 16px;

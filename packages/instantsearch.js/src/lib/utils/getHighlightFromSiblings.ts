@@ -6,8 +6,8 @@ const hasAlphanumeric = new RegExp(/\w/i);
 
 export function getHighlightFromSiblings(parts: HighlightedParts[], i: number) {
   const current = parts[i];
-  const isNextHighlighted = parts[i + 1]?.isHighlighted || true;
-  const isPreviousHighlighted = parts[i - 1]?.isHighlighted || true;
+  const isNextHighlighted = parts[i + 1]?.isHighlighted ?? true;
+  const isPreviousHighlighted = parts[i - 1]?.isHighlighted ?? true;
 
   if (
     !hasAlphanumeric.test(unescape(current.value)) &&

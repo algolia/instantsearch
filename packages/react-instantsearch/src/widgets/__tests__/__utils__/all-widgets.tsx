@@ -18,6 +18,8 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  // Deprecated alias of `Autocomplete`, covered separately.
+  'EXPERIMENTAL_Autocomplete',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -27,7 +29,7 @@ const NON_WIDGETS = [
   'DisplayResultsToolType',
   'CompareProductsToolType',
 ] as const;
-type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
+type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
 
 // Non-components that should be excluded from SingleWidget type
 const NON_COMPONENTS = [
@@ -48,8 +50,10 @@ const NON_COMPONENTS = [
   // className/root-attribute assertions don't apply. Covered by a dedicated
   // test in `CompareBar.test.tsx` instead.
   'CompareBar',
+  // Deprecated alias of `Autocomplete`, covered separately.
+  'EXPERIMENTAL_Autocomplete',
 ] as const;
-type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
+type ComponentWidgets = Omit<typeof widgets, (typeof NON_COMPONENTS)[number]>;
 
 export type SingleWidget = {
   [name in keyof ComponentWidgets]: {
@@ -82,6 +86,16 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
+    case 'PromptSuggestions': {
+      // The connector requires `agentId` unless a custom `transport` is given.
+      return (
+        <widget.Component
+          agentId="test-agent-id"
+          configurationId="prompt-suggestions"
+          {...props}
+        />
+      );
+    }
     case 'Breadcrumb': {
       return <widget.Component attributes={['']} {...props} />;
     }
@@ -144,7 +158,7 @@ function Widget<TWidget extends SingleWidget>({
     case 'TrendingFacets': {
       return <widget.Component facetName="brand" {...props} />;
     }
-    case 'EXPERIMENTAL_Autocomplete': {
+    case 'Autocomplete': {
       // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
     }
@@ -168,7 +182,7 @@ export function getAllInstantSearchWidgets() {
         regularWidget
       ): regularWidget is [
         keyof RegularWidgets,
-        RegularWidgets[keyof RegularWidgets]
+        RegularWidgets[keyof RegularWidgets],
       ] =>
         (NON_WIDGETS as readonly string[]).includes(regularWidget[0]) === false
     )

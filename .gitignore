@@ -39,7 +39,6 @@ scripts/*/CHANGELOG.md
 .vscode/
 
 # Caches
-.eslintcache
 .parcel-cache
 .nuxt
 

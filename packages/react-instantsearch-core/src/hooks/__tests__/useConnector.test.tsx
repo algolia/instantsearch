@@ -239,6 +239,54 @@ const connectCustomWidget: Connector<
     };
   };
 
+type FunctionOnlyUpdateWidgetDescription = {
+  $$type: 'test.functionOnlyUpdate';
+  renderState: {
+    readPhase: () => string;
+  };
+};
+
+const connectFunctionOnlyUpdate: Connector<
+  FunctionOnlyUpdateWidgetDescription,
+  Record<string, never>
+> = (renderFn) => (widgetParams) => {
+  let phase = 'before-init';
+
+  const getWidgetRenderState = () => {
+    const capturedPhase = phase;
+
+    return {
+      readPhase: () => capturedPhase,
+      widgetParams,
+    };
+  };
+
+  return {
+    $$type: 'test.functionOnlyUpdate',
+    init(params) {
+      phase = 'after-init';
+      renderFn(
+        {
+          ...getWidgetRenderState(),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        true
+      );
+    },
+    render(params) {
+      renderFn(
+        {
+          ...getWidgetRenderState(),
+          instantSearchInstance: params.instantSearchInstance,
+        },
+        false
+      );
+    },
+    dispose() {},
+    getWidgetRenderState,
+  };
+};
+
 describe('useConnector', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
@@ -315,6 +363,20 @@ describe('useConnector', () => {
     );
 
     expect(result.current).toEqual({});
+  });
+
+  test('returns a callback updated after the connector initializes', async () => {
+    const wrapper = createInstantSearchTestWrapper();
+    const { result } = renderHook(
+      () => useConnector(connectFunctionOnlyUpdate),
+      {
+        wrapper,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.readPhase()).toBe('after-init');
+    });
   });
 
   test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {
@@ -644,6 +706,44 @@ describe('useConnector', () => {
     expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
     expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
     expect(getByTestId('attribute')).toHaveTextContent('categories');
+  });
+
+  test('replaces the widget when additional widget properties change', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
+
+    function CustomWidgetWithDependency({
+      dependsOn,
+    }: {
+      dependsOn: 'search' | 'none';
+    }) {
+      useConnector(connectCustomWidget, { attribute: 'brands' }, { dependsOn });
+
+      return null;
+    }
+
+    function App({ dependsOn }: { dependsOn: 'search' | 'none' }) {
+      return (
+        <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+          <CustomWidgetWithDependency dependsOn={dependsOn} />
+        </InstantSearchSpy>
+      );
+    }
+
+    const { rerender } = render(<App dependsOn="search" />);
+
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
+      expect.objectContaining({ dependsOn: 'search' }),
+    ]);
+
+    rerender(<App dependsOn="none" />);
+
+    await waitFor(() =>
+      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1)
+    );
+    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
+      expect.objectContaining({ dependsOn: 'none' }),
+    ]);
   });
 
   test('rerenders the widget on state change', async () => {

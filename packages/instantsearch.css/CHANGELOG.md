@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.20.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.1...instantsearch.css@8.20.0) (2026-08-24)
+
+
+### Features
+
+* **chat:** customizable loader placement, rendering and timing ([#7171](https://github.com/algolia/instantsearch/issues/7171)) ([073abbd](https://github.com/algolia/instantsearch/commit/073abbd159aee6772a55c3f244688cdbe62750d4))
+
+
+
+
+
+## [8.19.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.0...instantsearch.css@8.19.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** keep the maximized overlay panel inside the viewport ([#7177](https://github.com/algolia/instantsearch/issues/7177)) ([10966a5](https://github.com/algolia/instantsearch/commit/10966a5362a96cc45295fa2a2becc5cc9489f297))
+
+
+
+
+
+# [8.19.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.18.0...instantsearch.css@8.19.0) (2026-08-06)
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+* **chat:** render reasoning parts ([#7139](https://github.com/algolia/instantsearch/issues/7139)) ([415313c](https://github.com/algolia/instantsearch/commit/415313cd85df1f7aad92cc9d0726189368c98115))
+
+
+
+
+
 # [8.18.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.17.0...instantsearch.css@8.18.0) (2026-06-19)
 
 

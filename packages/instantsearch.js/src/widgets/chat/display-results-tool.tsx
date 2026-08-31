@@ -7,7 +7,7 @@ import {
   createDisplayResultsToolComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import { carousel } from '../../templates';
@@ -17,20 +17,78 @@ import type {
   ClientSideToolTemplateData,
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
-import type { RecordWithObjectID } from 'instantsearch-ui-components';
+import type {
+  CarouselProps,
+  RecordWithObjectID,
+} from 'instantsearch-ui-components';
 
 export function createDisplayResultsTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(templates: ChatTemplates<THit>): UserClientSideToolWithTemplate {
   const DisplayResultsUIComponent = createDisplayResultsToolComponent<
     RecordWithObjectID<THit>
   >({
     createElement: h,
     Fragment,
-    useMemo,
+    useEffect,
+    useRef,
   });
 
   const Button = createButtonComponent({ createElement: h });
+
+  const displayResultsCarousel = carousel<RecordWithObjectID<THit>>({
+    showNavigation: false,
+    templates: {
+      header: ({
+        nbItems,
+        canScrollLeft,
+        canScrollRight,
+        scrollLeft,
+        scrollRight,
+      }) => (
+        <div className="ais-ChatToolDisplayResultsCarouselHeader">
+          <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
+            {nbItems} result{nbItems > 1 ? 's' : ''}
+          </div>
+          <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
+              aria-label="Previous"
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+            >
+              <ChevronLeftIcon createElement={h} />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
+              aria-label="Next"
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+            >
+              <ChevronRightIcon createElement={h} />
+            </Button>
+          </div>
+        </div>
+      ),
+    },
+  });
+
+  const itemComponent: NonNullable<
+    CarouselProps<RecordWithObjectID<THit>>['itemComponent']
+  > = ({ item }) => (
+    <TemplateComponent
+      templates={templates}
+      templateKey="item"
+      data={item}
+      rootTagName="fragment"
+    />
+  );
 
   function DisplayResultsLayoutComponent(
     toolProps: ClientSideToolTemplateData
@@ -39,55 +97,10 @@ export function createDisplayResultsTool<
       <DisplayResultsUIComponent
         toolProps={toolProps}
         groupCarouselComponent={({ items, sendEvent }) =>
-          carousel({
-            showNavigation: false,
-            templates: {
-              header: ({
-                canScrollLeft,
-                canScrollRight,
-                scrollLeft,
-                scrollRight,
-              }) => (
-                <div className="ais-ChatToolDisplayResultsCarouselHeader">
-                  <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
-                    {items.length} result{items.length > 1 ? 's' : ''}
-                  </div>
-                  <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      iconOnly
-                      onClick={scrollLeft}
-                      disabled={!canScrollLeft}
-                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                    >
-                      <ChevronLeftIcon createElement={h} />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      iconOnly
-                      onClick={scrollRight}
-                      disabled={!canScrollRight}
-                      className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
-                    >
-                      <ChevronRightIcon createElement={h} />
-                    </Button>
-                  </div>
-                </div>
-              ),
-            },
-          })({
+          displayResultsCarousel({
             items,
             templates: {
-              item: ({ item }) => (
-                <TemplateComponent
-                  templates={templates}
-                  templateKey="item"
-                  data={item}
-                  rootTagName="fragment"
-                />
-              ),
+              item: itemComponent,
             },
             sendEvent,
           })
@@ -98,5 +111,6 @@ export function createDisplayResultsTool<
 
   return {
     templates: { layout: DisplayResultsLayoutComponent },
+    streamInput: true,
   };
 }

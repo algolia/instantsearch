@@ -18,8 +18,7 @@ const STUBS = [
     name: 'add',
     description:
       'Add a widget or capability to an existing InstantSearch project.',
-    humanSummary:
-      'add: stub command — no files were created in this slice.',
+    humanSummary: 'add: stub command — no files were created in this slice.',
     nextSteps: [
       "Run 'instantsearch add --help' once the add command is implemented.",
     ],

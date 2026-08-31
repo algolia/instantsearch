@@ -8,10 +8,15 @@ import {
   DisplayResultsToolType,
   CompareProductsToolType,
 } from 'instantsearch.js/es/lib/chat';
+import {
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import React, {
   createElement,
   Fragment,
-  memo,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -38,6 +43,7 @@ export {
 
 import type {
   Pragma,
+  ClientSideToolShouldRenderContext,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
@@ -48,12 +54,15 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { ContainerAnimationSnapshot } from 'instantsearch.js/es/lib/chat/focusAfterReveal';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
-  memo: memo as Parameters<typeof createChatComponent>[0]['memo'],
+  useMemo,
+  useState,
+  useEffect,
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
@@ -61,11 +70,12 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      itemComponent,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, itemComponent, getSearchPageURL),
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
+    },
     [RecommendToolType]: createCarouselTool(
       false,
       itemComponent,
@@ -77,6 +87,64 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
   };
+}
+
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn to the display-results tool. Set on the message by the backend.
+ */
+function isDisplayResultsDisabled({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) {
+  return (
+    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
+  );
+}
+
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    shouldRender?: unknown;
+    layoutComponent?: unknown;
+  },
+>(
+  defaultTools: Record<string, TTool>,
+  userTools?: Record<string, TTool>
+): Record<string, TTool> {
+  if (!userTools) {
+    return defaultTools;
+  }
+
+  const tools = { ...defaultTools, ...userTools };
+
+  Object.keys(userTools).forEach((toolName) => {
+    const userTool = userTools[toolName];
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
+
+    if (
+      userTool.layoutComponent !== undefined &&
+      userTool.streamInput === undefined &&
+      defaultStreamInput !== undefined
+    ) {
+      tools[toolName] = {
+        ...tools[toolName],
+        streamInput: defaultStreamInput,
+      };
+    }
+
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
+      };
+    }
+  });
+
+  return tools;
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -100,14 +168,16 @@ type UiProps = Pick<
 
 type UserHeaderProps = Omit<ChatUiProps['headerProps'], 'onClose'>;
 
-type UserMessagesProps = Omit<
-  ChatUiProps['messagesProps'],
+type UserMessagesProps<TUiMessage extends UIMessage = UIMessage> = Omit<
+  ChatUiProps<TUiMessage>['messagesProps'],
   | 'messages'
   | 'tools'
   | 'indexUiState'
   | 'setIndexUiState'
   | 'scrollRef'
   | 'contentRef'
+  | 'onClose'
+  | 'onReload'
   | 'messageComponent'
   | 'leadingComponent'
   | 'footerComponent'
@@ -133,7 +203,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     headerProps?: UserHeaderProps;
-    messagesProps?: UserMessagesProps;
+    messagesProps?: UserMessagesProps<TUiMessage>;
     promptProps?: UserPromptProps;
     layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
     headerComponent?: ChatUiProps['headerComponent'];
@@ -146,6 +216,27 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     loaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    /**
+     * Where the loader renders: as its own row after the last message
+     * (`messages-end`, the default) or inside the streaming assistant message
+     * (`message-inline`).
+     */
+    loaderPosition?: ChatUiProps['messagesProps']['loaderPosition'];
+    /**
+     * Overrides when the loader shows. Receives the turn context plus the
+     * built-in decision as `defaultValue`.
+     */
+    shouldShowLoader?: ChatUiProps['messagesProps']['shouldShowLoader'];
+    /**
+     * How long (ms) a renewed loading state must hold before the loader comes
+     * back after having been hidden in the same turn.
+     */
+    loaderShowDelay?: ChatUiProps['messagesProps']['loaderShowDelay'];
+    /**
+     * Minimum time (ms) the loader stays on screen once shown, while the turn is
+     * still running.
+     */
+    loaderMinDuration?: ChatUiProps['messagesProps']['loaderMinDuration'];
     emptyComponent?: ChatUiProps['messagesProps']['emptyComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
@@ -153,6 +244,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
+    /**
+     * Whether to render reasoning parts
+     */
+    showReasoning?: boolean;
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -167,9 +262,38 @@ export type ChatHandle = {
   setInput: (input: string) => void;
 };
 
+type AnimationSnapshotProps = {
+  promptRef: React.RefObject<HTMLTextAreaElement | null>;
+  animationsBeforeReveal: React.RefObject<ContainerAnimationSnapshot>;
+  open: boolean;
+};
+
+class AnimationSnapshot extends React.Component<AnimationSnapshotProps> {
+  getSnapshotBeforeUpdate() {
+    return getActiveContainerAnimations(this.props.promptRef.current);
+  }
+
+  componentDidUpdate(
+    _previousProps: AnimationSnapshotProps,
+    _previousState: unknown,
+    animationsBeforeReveal: ContainerAnimationSnapshot
+  ) {
+    this.props.animationsBeforeReveal.current = animationsBeforeReveal;
+    if (!_previousProps.open && this.props.open) {
+      holdContainerInertUntilReveal(this.props.promptRef.current);
+    } else if (this.props.open) {
+      restoreContainerInertUntilReveal(this.props.promptRef.current);
+    }
+  }
+
+  render() {
+    return null;
+  }
+}
+
 function ChatInner<
   TObject extends RecordWithObjectID,
-  TUiMessage extends UIMessage
+  TUiMessage extends UIMessage,
 >(
   {
     tools: userTools,
@@ -184,6 +308,10 @@ function ChatInner<
     headerMinimizeIconComponent,
     headerMaximizeIconComponent,
     loaderComponent,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     messagesErrorComponent,
     promptComponent,
     promptHeaderComponent,
@@ -200,6 +328,7 @@ function ChatInner<
     title,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -216,6 +345,8 @@ function ChatInner<
   const [maximized, setMaximized] = useState(false);
 
   const promptRef = useRef<HTMLTextAreaElement>(null);
+  const focusRequestId = useRef(0);
+  const animationsBeforeReveal = useRef<ContainerAnimationSnapshot>([]);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -226,7 +357,7 @@ function ChatInner<
   const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
-    return { ...defaults, ...userTools };
+    return mergeToolOptions(defaults, userTools);
   }, [getSearchPageURL, itemComponent, userTools]);
 
   // Inline layouts are always visible, so they don't require a `<ChatTrigger />`
@@ -255,14 +386,18 @@ function ChatInner<
     setInput,
     open,
     setOpen,
-    isClearing,
     clearMessages,
-    onClearTransitionEnd,
     tools: toolsFromConnector,
     suggestions,
+    suggestionsStatus,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
-  } = chatState;
+    '~consumeInputFocus': consumeInputFocus,
+    '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
+  } = chatState as typeof chatState & {
+    '~consumeInputFocus'?: () => boolean;
+    '~isOpenStatePersistenceEnabled'?: boolean;
+  };
 
   useImperativeHandle(ref, () => ({
     setOpen,
@@ -270,18 +405,34 @@ function ChatInner<
     setInput,
   }));
 
-  const wasOpenRef = useRef(false);
   useEffect(() => {
-    const shouldFocusPrompt = !wasOpenRef.current && open;
-
-    if (shouldFocusPrompt) {
-      window.requestAnimationFrame(() => {
-        promptRef.current?.focus();
-      });
+    if (!open) {
+      focusRequestId.current++;
+      return;
     }
 
-    wasOpenRef.current = open;
-  }, [open]);
+    if (consumeInputFocus?.()) {
+      const currentFocusRequestId = ++focusRequestId.current;
+      const previousAnimations = animationsBeforeReveal.current;
+      holdContainerInertUntilReveal(promptRef.current);
+      window.requestAnimationFrame(() => {
+        const prompt = promptRef.current;
+        focusAfterReveal(
+          prompt,
+          previousAnimations,
+          () => {
+            return (
+              focusRequestId.current === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId.current === currentFocusRequestId;
+          }
+        );
+      });
+    }
+  });
 
   // Keep the conversation pinned to the bottom while streaming. The stick-to-
   // bottom ResizeObserver only reacts to content *height* changes, but tool
@@ -299,7 +450,13 @@ function ChatInner<
     throw error;
   }
 
-  return (
+  const {
+    assistantMessageProps: callerAssistantMessageProps,
+    userMessageProps: callerUserMessageProps,
+    ...restMessagesProps
+  } = messagesProps ?? {};
+
+  const chat = (
     <ChatUiComponent
       title={title}
       open={open}
@@ -317,7 +474,7 @@ function ChatInner<
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(messages?.length) && !isClearing,
+        canClear: Boolean(messages?.length),
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
         minimizeIconComponent: headerMinimizeIconComponent,
@@ -338,29 +495,35 @@ function ChatInner<
         tools: toolsFromConnector,
         indexUiState,
         setIndexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
         onScrollToBottom: scrollToBottom,
         loaderComponent,
+        loaderPosition,
+        shouldShowLoader,
+        loaderShowDelay,
+        loaderMinDuration,
         errorComponent: messagesErrorComponent,
         emptyComponent: emptyComponent,
         actionsComponent,
+        translations: messagesTranslations,
+        messageTranslations,
+        // The message props merge key by key rather than replace, so the dedicated
+        // top-level props still apply for keys the caller leaves unset. Spread
+        // explicitly so the merge does not depend on key order in the literal.
+        ...restMessagesProps,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
-          ...messagesProps?.assistantMessageProps,
+          showReasoning,
+          ...callerAssistantMessageProps,
         },
         userMessageProps: {
           leadingComponent: userMessageLeadingComponent,
           footerComponent: userMessageFooterComponent,
-          ...messagesProps?.userMessageProps,
+          ...callerUserMessageProps,
         },
-        translations: messagesTranslations,
-        messageTranslations,
-        ...messagesProps,
         error,
       }}
       promptProps={{
@@ -381,9 +544,13 @@ function ChatInner<
         headerComponent: promptHeaderComponent,
         footerComponent: promptFooterComponent,
         ...promptProps,
+        autoFocus:
+          promptProps?.autoFocus ??
+          (!isOpenStatePersistenceEnabled || isInlineLayoutComponent),
       }}
       suggestionsProps={{
         suggestions,
+        isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
           sendMessage({ text: suggestion });
         },
@@ -391,11 +558,22 @@ function ChatInner<
       classNames={classNames}
     />
   );
+
+  return (
+    <>
+      <AnimationSnapshot
+        promptRef={promptRef}
+        animationsBeforeReveal={animationsBeforeReveal}
+        open={open}
+      />
+      {chat}
+    </>
+  );
 }
 
 export const Chat = React.forwardRef(ChatInner) as <
   TObject extends RecordWithObjectID = RecordWithObjectID,
-  TUiMessage extends UIMessage = UIMessage
+  TUiMessage extends UIMessage = UIMessage,
 >(
   props: ChatProps<TObject, TUiMessage> & { ref?: React.Ref<ChatHandle> }
 ) => React.ReactElement | null;

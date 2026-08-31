@@ -1,12 +1,21 @@
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
+import {
+  getInsightsAnonymousUserTokenInternal,
+  getUsageSessionId,
+} from '../helpers';
 import {
   warning,
   noop,
+  buildWidgetTree,
+  serializeWidgetParams,
+  getAlgoliaAgent,
   getAppIdAndApiKey,
   find,
+  now,
+  omit,
   safelyRunOnBrowser,
 } from '../lib/utils';
 import { createUUID } from '../lib/utils/uuid';
+import version from '../lib/version';
 
 import type {
   InsightsClient,
@@ -27,7 +36,7 @@ export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> =
   _InsightsEvent<TMethod>;
 
 export type InsightsProps<
-  TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
+  TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient,
 > = {
   insightsClient?: TInsightsClient;
   insightsInitParams?: Partial<InsightsMethodMap['init'][0][0]>;
@@ -45,6 +54,14 @@ export type InsightsProps<
 const ALGOLIA_INSIGHTS_VERSION = '2.17.2';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
+// InstantSearch options that must never be sent in usage events because
+// they carry credentials or end-user data. Everything else is reported as-is.
+const SENSITIVE_OPTIONS = [
+  'searchClient',
+  'insightsClient',
+  'initialUiState',
+] as const;
+
 export type InsightsClientWithGlobals = InsightsClient & {
   shouldAddScript?: boolean;
   version?: string;
@@ -53,7 +70,7 @@ export type InsightsClientWithGlobals = InsightsClient & {
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
 export function createInsightsMiddleware<
-  TInsightsClient extends ProvidedInsightsClient
+  TInsightsClient extends ProvidedInsightsClient,
 >(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
   const {
     insightsClient: _insightsClient,
@@ -162,6 +179,7 @@ export function createInsightsMiddleware<
 
     let initialParameters: PlainSearchParameters;
     let helper: AlgoliaSearchHelper;
+    let removeStartEventListener: (() => void) | null = null;
 
     return {
       $$type: 'ais.insights',
@@ -243,7 +261,9 @@ export function createInsightsMiddleware<
               userToken: normalizedUserToken,
             });
 
-            if (existingToken && existingToken !== userToken) {
+            if (existingToken && existingToken !== normalizedUserToken) {
+              helper._recommendCache = {};
+
               instantSearchInstance.scheduleSearch();
             }
           }
@@ -321,7 +341,7 @@ export function createInsightsMiddleware<
         );
 
         type InsightsClientWithLocalCredentials = <
-          TMethod extends InsightsMethod
+          TMethod extends InsightsMethod,
         >(
           method: TMethod,
           payload: InsightsMethodMap[TMethod][0][0]
@@ -372,14 +392,19 @@ export function createInsightsMiddleware<
             if (event.insightsMethod === 'viewedObjectIDs') {
               const payload = event.payload as {
                 objectIDs: string[];
+                queryID?: string;
               };
+              const getViewEventKey = (objectID: string) =>
+                payload.queryID ? `${payload.queryID}:${objectID}` : objectID;
               const difference = payload.objectIDs.filter(
-                (objectID) => !viewedObjectIDs.has(objectID)
+                (objectID) => !viewedObjectIDs.has(getViewEventKey(objectID))
               );
               if (difference.length === 0) {
                 return;
               }
-              difference.forEach((objectID) => viewedObjectIDs.add(objectID));
+              difference.forEach((objectID) =>
+                viewedObjectIDs.add(getViewEventKey(objectID))
+              );
               payload.objectIDs = difference;
             }
 
@@ -416,8 +441,81 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             );
           }
         };
+
+        // usage tracking (browser-only)
+        safelyRunOnBrowser(() => {
+          const usageSessionId = getUsageSessionId();
+
+          function sendUsageEvent(event: any) {
+            const userToken = helper.state?.userToken;
+
+            (insightsClientWithLocalCredentials as any)('sendEvents', [
+              {
+                eventType: 'instantsearch',
+                timestamp: Date.now(),
+                sessionID: usageSessionId,
+                userToken: userToken ? String(userToken) : undefined,
+                ...event,
+              },
+            ]);
+          }
+
+          // Send the start event on the first `render`, by which point every
+          // flavor has registered its widgets. `bootstrapMs` then measures the
+          // time between the constructor running and that point, so for flavors
+          // that register widgets right at start (e.g. React) it captures the
+          // cost of adding them.
+          const sendStartEvent = () => {
+            try {
+              const bootstrapMs = Math.round(
+                now() - instantSearchInstance._createdAt
+              );
+
+              sendUsageEvent({
+                eventName: '__start__',
+                algoliaAgent: getAlgoliaAgent(instantSearchInstance.client),
+                version,
+                applicationId: appId,
+                performance: {
+                  bootstrapMs,
+                },
+                widgets: [
+                  {
+                    type: 'ais.instantSearch',
+                    // The options the instance was created with, serialized the
+                    // same way every widget's params are. Derived dynamically from
+                    // `_initialOptions` so new options are reported automatically,
+                    // minus the keys that carry credentials or user data. Functions
+                    // (`onStateChange`, `searchFunction`) report their `fn.name`
+                    // when present, tagged `type: 'function'`.
+                    params: instantSearchInstance._initialOptions
+                      ? serializeWidgetParams(
+                          omit(instantSearchInstance._initialOptions, [
+                            ...SENSITIVE_OPTIONS,
+                          ]) as Record<string, unknown>
+                        )
+                      : [],
+                    children: buildWidgetTree(
+                      instantSearchInstance.mainIndex.getWidgets(),
+                      instantSearchInstance
+                    ),
+                  },
+                ],
+              });
+            } catch {
+              // usage tracking must never crash the host app
+            }
+          };
+
+          instantSearchInstance.once('render', sendStartEvent);
+          removeStartEventListener = () =>
+            instantSearchInstance.removeListener('render', sendStartEvent);
+        });
       },
       unsubscribe() {
+        if (removeStartEventListener) {
+          removeStartEventListener();
+        }
         insightsClient('onUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
@@ -465,11 +563,11 @@ function saveTokenAsCookie(token: string, cookieDuration?: number) {
 function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   const [major, minor] = (client.version || '').split('.').map(Number);
 
-  /* eslint-disable instantsearch/naming-convention */
+  /* oxlint-disable instantsearch/naming-convention */
   const v3 = major >= 3;
   const v2_6 = major === 2 && minor >= 6;
   const v1_10 = major === 1 && minor >= 10;
-  /* eslint-enable instantsearch/naming-convention */
+  /* oxlint-enable instantsearch/naming-convention */
 
   return v3 || v2_6 || v1_10;
 }

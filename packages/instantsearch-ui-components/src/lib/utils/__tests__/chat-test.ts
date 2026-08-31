@@ -1,27 +1,30 @@
-import { getFacetFiltersFromToolInput, getHitsByObjectID } from '../chat';
+import { warnCache } from '../../../warn';
+import { findTool, getApplyFiltersParamsFromToolInput } from '../chat';
+import { startsWith } from '../startsWith';
 
-import type { ChatMessageBase } from '../../../components';
-
-describe('getFacetFiltersFromToolInput', () => {
-  test('returns undefined when input is undefined', () => {
-    expect(getFacetFiltersFromToolInput(undefined)).toBeUndefined();
+describe('getApplyFiltersParamsFromToolInput', () => {
+  test('returns nothing to refine when input is undefined', () => {
+    expect(getApplyFiltersParamsFromToolInput(undefined)).toEqual({
+      query: undefined,
+      facetFilters: undefined,
+    });
   });
 
-  test('returns the standard `facet_filters` array when present', () => {
+  test('returns the query and the standard `facet_filters` array', () => {
     const facetFilters = [['brand:Apple'], ['type:book']];
 
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: 'phone',
         facet_filters: facetFilters,
       })
-    ).toBe(facetFilters);
+    ).toEqual({ query: 'phone', facetFilters });
   });
 
   test('builds facet filters from MCP `facet_<attribute>` keys', () => {
     expect(
-      getFacetFiltersFromToolInput({
-        query: '',
+      getApplyFiltersParamsFromToolInput({
+        query: 'book',
         clickAnalytics: true,
         facet_type: ['book'],
         facet_brand: [],
@@ -35,259 +38,191 @@ describe('getFacetFiltersFromToolInput', () => {
         facet__collections: [],
         facet_price: [],
         userIntent: 'irrelevant',
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
-    ).toEqual([
-      ['type:book'],
-      [
-        'categories:Literature & Fiction',
-        'categories:Mystery, Thriller & Suspense',
-        'categories:Teen & Young Adult',
+      })
+    ).toEqual({
+      query: 'book',
+      facetFilters: [
+        ['type:book'],
+        [
+          'categories:Literature & Fiction',
+          'categories:Mystery, Thriller & Suspense',
+          'categories:Teen & Young Adult',
+        ],
       ],
-    ]);
+    });
+  });
+
+  test('reads the query and the facets of the first entry of a `queries` input', () => {
+    expect(
+      getApplyFiltersParamsFromToolInput({
+        queries: [
+          {
+            query: 'laptop',
+            facet_free_shipping: null,
+            facet_brand: null,
+            facet_categories: ['Laptops'],
+            'facet_hierarchicalCategories.lvl0': ['Computers & Tablets'],
+            'facet_hierarchicalCategories.lvl1': [
+              'Computers & Tablets > Laptops',
+            ],
+            'facet_hierarchicalCategories.lvl2': null,
+            facet_price: null,
+          },
+          { query: 'ignored', facet_brand: ['Apple'] },
+        ],
+        clickAnalytics: true,
+        originalQuery: 'give me some laptops',
+      })
+    ).toEqual({
+      query: 'laptop',
+      facetFilters: [
+        ['categories:Laptops'],
+        ['hierarchicalCategories.lvl0:Computers & Tablets'],
+        ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+      ],
+    });
+  });
+
+  test('returns nothing to refine when `queries` is empty', () => {
+    expect(getApplyFiltersParamsFromToolInput({ queries: [] })).toEqual({
+      query: undefined,
+      facetFilters: undefined,
+    });
   });
 
   test('preserves the attribute name including leading underscores', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: '',
         facet__collections: ['summer'],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+      }).facetFilters
     ).toEqual([['_collections:summer']]);
   });
 
   test('ignores non-string and empty facet values', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: '',
         facet_brand: [],
-        facet_type: [42, 'book', null] as unknown as string[],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+        facet_type: [42, 'book', null],
+      }).facetFilters
     ).toEqual([['type:book']]);
   });
 
-  test('returns undefined when there are no facet refinements', () => {
+  test('returns no facet filters when there are no refinements', () => {
     expect(
-      getFacetFiltersFromToolInput({
+      getApplyFiltersParamsFromToolInput({
         query: 'phone',
         facet_brand: [],
         facet_type: [],
-      } as Parameters<typeof getFacetFiltersFromToolInput>[0])
+      }).facetFilters
     ).toBeUndefined();
   });
 });
 
-describe('getHitsByObjectID', () => {
-  test('collects hits from a search tool output keyed by objectID', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: {
-              hits: [
-                { objectID: '1', name: 'Runner' },
-                { objectID: '2', name: 'Sneaker' },
-              ],
-            },
-          },
-        ],
-      },
-    ];
+describe('findTool', () => {
+  const foo = { name: 'foo' };
+  const fooBar = { name: 'foo_bar' };
+  // Claims index-suffixed names, like the MCP Server's search tool.
+  const suffixedFoo = {
+    name: 'foo',
+    matchesToolName: (toolName: string) => startsWith(toolName, 'foo_'),
+  };
 
-    expect(getHitsByObjectID(messages)).toEqual({
-      1: { objectID: '1', name: 'Runner' },
-      2: { objectID: '2', name: 'Sneaker' },
-    });
+  beforeEach(() => {
+    warnCache.current = {};
+    (global.console.warn as jest.Mock).mockClear();
   });
 
-  test('supports the MCP server search tool name shim', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index_products',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: { hits: [{ objectID: '1', name: 'Runner' }] },
-          },
-        ],
-      },
-    ];
-
-    expect(getHitsByObjectID(messages)).toEqual({
-      1: { objectID: '1', name: 'Runner' },
-    });
+  test('resolves an exact match from a part type or a bare tool name', () => {
+    expect(findTool('tool-foo', { foo })).toBe(foo);
+    expect(findTool('foo', { foo })).toBe(foo);
   });
 
-  test('merges hits across several messages, last write wins per objectID', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search-1',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: { hits: [{ objectID: '1', name: 'Runner' }] },
-          },
-        ],
-      },
-      {
-        id: '2',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search-2',
-            state: 'output-available',
-            input: { query: 'running shoes' },
-            output: {
-              hits: [
-                { objectID: '1', name: 'Runner Pro' },
-                { objectID: '3', name: 'Trail' },
-              ],
-            },
-          },
-        ],
-      },
-    ];
+  test('only strips a leading `tool-`', () => {
+    const tool = { name: 'my-tool-thing' };
 
-    expect(getHitsByObjectID(messages)).toEqual({
-      1: { objectID: '1', name: 'Runner Pro' },
-      3: { objectID: '3', name: 'Trail' },
-    });
+    expect(findTool('tool-my-tool-thing', { 'my-tool-thing': tool })).toBe(
+      tool
+    );
   });
 
-  test('ignores non-search tools, pending states, and invalid hits', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          { type: 'text', text: 'Here you go' },
-          {
-            type: 'tool-algolia_display_results',
-            toolCallId: 'display',
-            state: 'output-available',
-            input: {},
-            output: { groups: [{ results: [{ objectID: '9' }] }] },
-          },
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'streaming',
-            state: 'input-available',
-            input: { query: 'shoes' },
-          },
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: {
-              hits: [{ objectID: '1', name: 'Runner' }, { objectID: '' }, null],
-            },
-          },
-        ],
-      },
-    ] as ChatMessageBase[];
-
-    expect(getHitsByObjectID(messages)).toEqual({
-      1: { objectID: '1', name: 'Runner' },
-    });
+  test('resolves a derived name only for a tool that claims it', () => {
+    expect(findTool('tool-foo_products', { foo: suffixedFoo })).toBe(
+      suffixedFoo
+    );
+    expect(findTool('tool-foo_products', { foo })).toBeUndefined();
   });
 
-  test('scopes collection to the turn containing `untilToolCallId`, ignoring later searches', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search-1',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: {
-              hits: [{ objectID: '1', name: 'Runner', __queryID: 'q1' }],
-            },
-          },
-          {
-            type: 'tool-algolia_display_results',
-            toolCallId: 'display-1',
-            state: 'output-available',
-            input: {},
-            output: { groups: [{ results: [{ objectID: '1' }] }] },
-          },
-        ],
-      },
-      {
-        id: '2',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search-2',
-            state: 'output-available',
-            input: { query: 'running shoes' },
-            output: {
-              hits: [{ objectID: '1', name: 'Runner Pro', __queryID: 'q2' }],
-            },
-          },
-        ],
-      },
-    ] as ChatMessageBase[];
-
-    // Scoped to the first turn: the later search (with `q2`) must not leak in.
-    expect(getHitsByObjectID(messages, 'display-1')).toEqual({
-      1: { objectID: '1', name: 'Runner', __queryID: 'q1' },
-    });
-
-    // Without a boundary, last write across the whole conversation wins.
-    expect(getHitsByObjectID(messages)).toEqual({
-      1: { objectID: '1', name: 'Runner Pro', __queryID: 'q2' },
-    });
+  test('prefers an exact registration over a claim', () => {
+    expect(
+      findTool('tool-foo_bar', { foo: suffixedFoo, foo_bar: fooBar })
+    ).toBe(fooBar);
+    expect(
+      findTool('tool-foo_bar', { foo_bar: fooBar, foo: suffixedFoo })
+    ).toBe(fooBar);
   });
 
-  test('includes the search in the same message as `untilToolCallId`', () => {
-    const messages: ChatMessageBase[] = [
-      {
-        id: '1',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'tool-algolia_search_index',
-            toolCallId: 'search',
-            state: 'output-available',
-            input: { query: 'shoes' },
-            output: { hits: [{ objectID: '1', name: 'Runner' }] },
-          },
-          {
-            type: 'tool-algolia_display_results',
-            toolCallId: 'display',
-            state: 'output-available',
-            input: {},
-            output: { groups: [{ results: [{ objectID: '1' }] }] },
-          },
-        ],
-      },
-    ] as ChatMessageBase[];
-
-    expect(getHitsByObjectID(messages, 'display')).toEqual({
-      1: { objectID: '1', name: 'Runner' },
-    });
+  test('registering overlapping names is unambiguous', () => {
+    // Neither claims beyond its own name, so neither renders it.
+    expect(
+      findTool('tool-foo_bar_products', { foo, foo_bar: fooBar })
+    ).toBeUndefined();
+    expect(
+      findTool('tool-foo_bar_products', { foo_bar: fooBar, foo })
+    ).toBeUndefined();
   });
 
-  test('returns an empty map when there are no search outputs', () => {
-    expect(getHitsByObjectID([])).toEqual({});
+  test('resolves the most specific claim, whatever the registration order', () => {
+    const suffixedFooBar = {
+      name: 'foo_bar',
+      matchesToolName: (toolName: string) => startsWith(toolName, 'foo_bar_'),
+    };
+    const tools = { foo: suffixedFoo, foo_bar: suffixedFooBar };
+
+    expect(findTool('tool-foo_bar_products', tools)).toBe(suffixedFooBar);
+    expect(
+      findTool('tool-foo_bar_products', {
+        foo_bar: suffixedFooBar,
+        foo: suffixedFoo,
+      })
+    ).toBe(suffixedFooBar);
+  });
+
+  test('warns when several unrelated tools claim the same name', () => {
+    const other = {
+      name: 'other',
+      matchesToolName: (toolName: string) => startsWith(toolName, 'foo_'),
+    };
+
+    // Settled deterministically, and warned about.
+    expect(findTool('tool-foo_products', { foo: suffixedFoo, other })).toBe(
+      other
+    );
+    expect(global.console.warn).toHaveBeenCalledWith(
+      '[instantsearch-ui-components] Multiple tools claim "foo_products" through `matchesToolName`: "other", "foo". "other" handles it.'
+    );
+  });
+
+  test('returns undefined when nothing matches', () => {
+    expect(findTool('tool-other', { foo })).toBeUndefined();
+    // A shared prefix is not a match without the `_` separator.
+    expect(findTool('tool-foobar', { foo: suffixedFoo })).toBeUndefined();
+  });
+
+  test('points at `matchesToolName` when a registered name is a prefix', () => {
+    expect(findTool('tool-foo_products', { foo })).toBeUndefined();
+    expect(global.console.warn).toHaveBeenCalledWith(
+      '[instantsearch-ui-components] No tool is registered for "foo_products". The registered tool "foo" is a prefix of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on the tool that should handle "foo_products".'
+    );
+  });
+
+  test('lists every registered prefix of an unresolved name', () => {
+    expect(
+      findTool('tool-foo_bar_products', { foo_bar: fooBar, foo })
+    ).toBeUndefined();
+    expect(global.console.warn).toHaveBeenCalledWith(
+      '[instantsearch-ui-components] No tool is registered for "foo_bar_products". The registered tools "foo", "foo_bar" are prefixes of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on the tool that should handle "foo_bar_products".'
+    );
   });
 });

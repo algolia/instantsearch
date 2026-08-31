@@ -520,7 +520,9 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
       </a>
     </li>
   </ul>
-  <button class="ais-HierarchicalMenu-showMore">
+  <button aria-expanded="false"
+          class="ais-HierarchicalMenu-showMore"
+  >
     <span>
       Voir plus
     </span>
@@ -658,7 +660,9 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
       </a>
     </li>
   </ul>
-  <button class="ais-HierarchicalMenu-showMore">
+  <button aria-expanded="true"
+          class="ais-HierarchicalMenu-showMore"
+  >
     <span>
       Voir moins
     </span>

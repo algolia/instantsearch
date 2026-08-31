@@ -34,7 +34,8 @@ import {
   DynamicWidgets,
   Chat,
   ChatTrigger,
-  EXPERIMENTAL_Autocomplete,
+  PromptSuggestions,
+  Autocomplete,
   FilterSuggestions,
 } from '..';
 
@@ -409,7 +410,11 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
@@ -427,7 +432,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
           </>
         )}
         <ChatTrigger />
-        <Chat {...chatWidgetParams} />
+        {renderChat && <Chat {...chatWidgetParams} />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -435,7 +440,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <Autocomplete {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -444,6 +449,14 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(
       <InstantSearch {...instantSearchOptions}>
         <FilterSuggestions {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <PromptSuggestions {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -502,6 +515,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
+  createPromptSuggestionsWidgetTests: { act },
 };
 
 /**

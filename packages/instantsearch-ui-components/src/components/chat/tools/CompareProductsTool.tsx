@@ -1,13 +1,11 @@
 /** @jsx createElement */
 
-import { getHitsByObjectID } from '../../../lib/utils/chat';
-
 import {
   createGroundedComparisonTableComponent,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { Hooks, Renderer } from '../../../types';
+import type { Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 import type { ComparisonTableTranslations } from './createGroundedComparisonTable';
 
@@ -16,11 +14,11 @@ import type { ComparisonTableTranslations } from './createGroundedComparisonTabl
  *
  * The agent triggers this client-side tool when it detects a comparison
  * request. Its arguments name ONLY the products (by objectID) and the attribute
- * *keys* to compare — never the values. Every cell is hydrated from the real
- * `algolia_search_index` hits of the same turn via `getHitsByObjectID`, so the
- * model physically cannot type (and therefore cannot hallucinate) a price or
- * spec. This is the "grounded table" fix from the agentic-evals comparison
- * study, promoted from the display-block prototype to a first-class tool.
+ * *keys* to compare — never the values. Every cell is hydrated from the chat
+ * records store (`context.records`, filled by the search tools), so the model
+ * physically cannot type (and therefore cannot hallucinate) a price or spec.
+ * This is the "grounded table" fix from the agentic-evals comparison study,
+ * promoted from the display-block prototype to a first-class tool.
  *
  * Tool-call input it consumes:
  *
@@ -60,8 +58,7 @@ function stringList(value: unknown): string[] {
 export function createCompareProductsToolComponent({
   createElement,
   Fragment,
-  useMemo,
-}: Renderer & Pick<Hooks, 'useMemo'>) {
+}: Renderer) {
   const GroundedComparisonTable = createGroundedComparisonTableComponent({
     createElement,
     Fragment,
@@ -69,18 +66,12 @@ export function createCompareProductsToolComponent({
 
   return function CompareProductsTool(userProps: CompareProductsToolProps) {
     const { toolProps, translations: userTranslations } = userProps;
-    const { message, messages } = toolProps;
+    const { message, records } = toolProps.context;
 
     const translations: ComparisonTableTranslations = {
       ...defaultComparisonTableTranslations,
       ...userTranslations,
     };
-
-    const toolCallId = message?.toolCallId;
-    const hitsByObjectID = useMemo(
-      () => (messages ? getHitsByObjectID(messages, toolCallId) : {}),
-      [messages, toolCallId]
-    );
 
     // Wait for the agent's arguments to be complete before rendering.
     if (
@@ -109,7 +100,7 @@ export function createCompareProductsToolComponent({
         objectIDs={objectIDs}
         attributes={attributes}
         columns={columns}
-        hitsByObjectID={hitsByObjectID}
+        records={records}
         translations={translations}
       />
     );

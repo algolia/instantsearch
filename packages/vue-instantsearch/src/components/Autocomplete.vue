@@ -44,11 +44,17 @@ export default {
       required: false,
       default: true,
     },
+    requiresSearch: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   computed: {
     widgetParams() {
       return {
         escapeHTML: this.escapeHTML,
+        requiresSearch: this.requiresSearch,
       };
     },
   },

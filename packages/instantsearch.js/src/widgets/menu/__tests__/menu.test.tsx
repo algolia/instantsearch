@@ -70,97 +70,99 @@ describe('menu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Menu"
-  >
-    <ul
-      class="ais-Menu-list"
-    >
-      <li
-        class="ais-Menu-item ais-Menu-item--selected"
-      >
         <div>
-          <a
-            class="ais-Menu-link"
-            href="#"
+          <div
+            class="ais-Menu"
           >
-            <span
-              class="ais-Menu-label"
+            <ul
+              class="ais-Menu-list"
             >
-              Apple
-            </span>
-            <span
-              class="ais-Menu-count"
+              <li
+                class="ais-Menu-item ais-Menu-item--selected"
+              >
+                <div>
+                  <a
+                    class="ais-Menu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-Menu-label"
+                    >
+                      Apple
+                    </span>
+                    <span
+                      class="ais-Menu-count"
+                    >
+                      442
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <a
+                    class="ais-Menu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-Menu-label"
+                    >
+                      Canon
+                    </span>
+                    <span
+                      class="ais-Menu-count"
+                    >
+                      287
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <a
+                    class="ais-Menu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-Menu-label"
+                    >
+                      Dell
+                    </span>
+                    <span
+                      class="ais-Menu-count"
+                    >
+                      174
+                    </span>
+                  </a>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-Menu-showMore"
             >
-              442
-            </span>
-          </a>
+              Show more
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <a
-            class="ais-Menu-link"
-            href="#"
-          >
-            <span
-              class="ais-Menu-label"
-            >
-              Canon
-            </span>
-            <span
-              class="ais-Menu-count"
-            >
-              287
-            </span>
-          </a>
-        </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <a
-            class="ais-Menu-link"
-            href="#"
-          >
-            <span
-              class="ais-Menu-label"
-            >
-              Dell
-            </span>
-            <span
-              class="ais-Menu-count"
-            >
-              174
-            </span>
-          </a>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-Menu-showMore"
-    >
-      Show more
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const toggleButton = within(container).getByRole('button');
 
       fireEvent.click(toggleButton);
 
       expect(toggleButton).toMatchInlineSnapshot(`
-<button
-  class="ais-Menu-showMore"
->
-  Show less
-</button>
-`);
+        <button
+          aria-expanded="true"
+          class="ais-Menu-showMore"
+        >
+          Show less
+        </button>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -207,83 +209,85 @@ describe('menu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Menu"
-  >
-    <ul
-      class="ais-Menu-list"
-    >
-      <li
-        class="ais-Menu-item ais-Menu-item--selected"
-      >
         <div>
-          <span
-            style="font-weight: bold;"
-            title="Apple"
+          <div
+            class="ais-Menu"
           >
-            Apple
-             - (
-            442
-            )
-          </span>
+            <ul
+              class="ais-Menu-list"
+            >
+              <li
+                class="ais-Menu-item ais-Menu-item--selected"
+              >
+                <div>
+                  <span
+                    style="font-weight: bold;"
+                    title="Apple"
+                  >
+                    Apple
+                     - (
+                    442
+                    )
+                  </span>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <span
+                    style="font-weight: normal;"
+                    title="Canon"
+                  >
+                    Canon
+                     - (
+                    287
+                    )
+                  </span>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <span
+                    style="font-weight: normal;"
+                    title="Dell"
+                  >
+                    Dell
+                     - (
+                    174
+                    )
+                  </span>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-Menu-showMore"
+            >
+              <span>
+                Show more
+              </span>
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <span
-            style="font-weight: normal;"
-            title="Canon"
-          >
-            Canon
-             - (
-            287
-            )
-          </span>
-        </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <span
-            style="font-weight: normal;"
-            title="Dell"
-          >
-            Dell
-             - (
-            174
-            )
-          </span>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-Menu-showMore"
-    >
-      <span>
-        Show more
-      </span>
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const toggleButton = within(container).getByRole('button');
 
       fireEvent.click(toggleButton);
 
       expect(toggleButton).toMatchInlineSnapshot(`
-<button
-  class="ais-Menu-showMore"
->
-  <span>
-    Show less
-  </span>
-</button>
-`);
+        <button
+          aria-expanded="true"
+          class="ais-Menu-showMore"
+        >
+          <span>
+            Show less
+          </span>
+        </button>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -331,83 +335,85 @@ describe('menu', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Menu"
-  >
-    <ul
-      class="ais-Menu-list"
-    >
-      <li
-        class="ais-Menu-item ais-Menu-item--selected"
-      >
         <div>
-          <span
-            style="font-weight: bold;"
-            title="Apple"
+          <div
+            class="ais-Menu"
           >
-            Apple
-             - (
-            442
-            )
-          </span>
+            <ul
+              class="ais-Menu-list"
+            >
+              <li
+                class="ais-Menu-item ais-Menu-item--selected"
+              >
+                <div>
+                  <span
+                    style="font-weight: bold;"
+                    title="Apple"
+                  >
+                    Apple
+                     - (
+                    442
+                    )
+                  </span>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <span
+                    style="font-weight: normal;"
+                    title="Canon"
+                  >
+                    Canon
+                     - (
+                    287
+                    )
+                  </span>
+                </div>
+              </li>
+              <li
+                class="ais-Menu-item"
+              >
+                <div>
+                  <span
+                    style="font-weight: normal;"
+                    title="Dell"
+                  >
+                    Dell
+                     - (
+                    174
+                    )
+                  </span>
+                </div>
+              </li>
+            </ul>
+            <button
+              aria-expanded="false"
+              class="ais-Menu-showMore"
+            >
+              <span>
+                Show more
+              </span>
+            </button>
+          </div>
         </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <span
-            style="font-weight: normal;"
-            title="Canon"
-          >
-            Canon
-             - (
-            287
-            )
-          </span>
-        </div>
-      </li>
-      <li
-        class="ais-Menu-item"
-      >
-        <div>
-          <span
-            style="font-weight: normal;"
-            title="Dell"
-          >
-            Dell
-             - (
-            174
-            )
-          </span>
-        </div>
-      </li>
-    </ul>
-    <button
-      class="ais-Menu-showMore"
-    >
-      <span>
-        Show more
-      </span>
-    </button>
-  </div>
-</div>
-`);
+      `);
 
       const toggleButton = within(container).getByRole('button');
 
       fireEvent.click(toggleButton);
 
       expect(toggleButton).toMatchInlineSnapshot(`
-<button
-  class="ais-Menu-showMore"
->
-  <span>
-    Show less
-  </span>
-</button>
-`);
+        <button
+          aria-expanded="true"
+          class="ais-Menu-showMore"
+        >
+          <span>
+            Show less
+          </span>
+        </button>
+      `);
     });
 
     function createMockedSearchClient() {

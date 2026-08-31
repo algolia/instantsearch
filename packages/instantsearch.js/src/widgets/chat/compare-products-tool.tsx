@@ -2,7 +2,6 @@
 
 import { createCompareProductsToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useMemo } from 'preact/hooks';
 
 import type {
   ClientSideToolTemplateData,
@@ -26,7 +25,6 @@ export function createCompareProductsTool(
   const CompareProductsUIComponent = createCompareProductsToolComponent({
     createElement: h,
     Fragment,
-    useMemo,
   });
 
   function CompareProductsLayoutComponent(

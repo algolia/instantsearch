@@ -109,6 +109,116 @@ export function createOptionsTests(
       expect(indicesItems[1]).toHaveTextContent('hello');
     });
 
+    test('triggers the main search by default', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {},
+          react: {},
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not trigger the main search when requiresSearch is false', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            requiresSearch: false,
+          },
+          react: {
+            requiresSearch: false,
+          },
+          vue: {
+            requiresSearch: false,
+          },
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
+
+    test('does not trigger the main search after activation when requiresSearch is false', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'main',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            requiresSearch: false,
+            indices: [
+              {
+                indexName: 'suggestions',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            requiresSearch: false,
+            indices: [
+              {
+                indexName: 'suggestions',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'hello');
+        await wait(0);
+      });
+
+      await act(async () => {
+        userEvent.click(screen.getByRole('button', { name: /clear/i }));
+        await wait(0);
+      });
+
+      const requests = (searchClient.search as jest.Mock).mock.calls.flatMap(
+        ([request]) => request
+      );
+      expect(requests).not.toContainEqual(
+        expect.objectContaining({ indexName: 'main' })
+      );
+      expect(requests).toContainEqual(
+        expect.objectContaining({ indexName: 'suggestions' })
+      );
+    });
+
     test('renders suggestions', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(

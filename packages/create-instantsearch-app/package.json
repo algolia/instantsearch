@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "7.5.55",
+  "version": "7.6.5",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
   "keywords": [
@@ -19,7 +19,6 @@
     "test:e2e:templates": "jest e2e/templates.test.js",
     "test:e2e:installs": "jest e2e/installs.test.js",
     "test:e2e": "yarn run test:e2e:templates && yarn run test:e2e:installs",
-    "format": "prettier --write *.{js,md,json}",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release-templates": "node ./scripts/release-templates",
     "release": "shipjs prepare"
@@ -49,7 +48,7 @@
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.97.0",
+    "@instantsearch/testutils": "1.109.0",
     "jest-image-snapshot": "2.12.0",
     "walk-sync": "2.0.2"
   }

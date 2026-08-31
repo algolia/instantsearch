@@ -1,3 +1,4 @@
+export * from './addInsightsToRecommendParameters';
 export * from './addWidgetId';
 export * from './capitalize';
 export * from './checkIndexUiState';
@@ -43,7 +44,10 @@ export * from './isTwoPassWidget';
 export * from './logger';
 export * from './mergeSearchParameters';
 export * from './omit';
+export * from './buildWidgetTree';
+export * from './extractWidgetPayload';
 export * from './noop';
+export * from './now';
 export * from './range';
 export * from './render-args';
 export * from './resolveSearchParameters';

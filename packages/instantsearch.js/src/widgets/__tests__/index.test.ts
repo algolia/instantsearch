@@ -158,11 +158,11 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
+      case 'autocomplete':
       case 'EXPERIMENTAL_autocomplete': {
-        const EXPERIMENTAL_autocomplete =
-          widget as Widgets['EXPERIMENTAL_autocomplete'];
+        const autocompleteWidget = widget as Widgets['autocomplete'];
 
-        const instance = EXPERIMENTAL_autocomplete({ container, indices: [] });
+        const instance = autocompleteWidget({ container, indices: [] });
         const autocomplete = instance.find(
           (w) => w.$$type === 'ais.autocomplete'
         );
@@ -172,6 +172,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         }
 
         return autocomplete;
+      }
+      case 'promptSuggestions': {
+        const promptSuggestions = widget as Widgets['promptSuggestions'];
+        return promptSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          configurationId: 'prompt-suggestions',
+        });
       }
       case 'filterSuggestions': {
         const filterSuggestions = widget as Widgets['filterSuggestions'];
@@ -189,7 +197,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       }
       case 'trendingFacets': {
         const trendingFacets = widget as Widgets['trendingFacets'];
-        return trendingFacets({container, facetName: 'brand'});
+        return trendingFacets({ container, facetName: 'brand' });
       }
       case 'feeds': {
         const feedsWidget = widget as Widgets['feeds'];

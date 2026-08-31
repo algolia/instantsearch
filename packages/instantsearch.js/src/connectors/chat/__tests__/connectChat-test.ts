@@ -2,19 +2,28 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { waitFor } from '@testing-library/dom';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
 import connectChat from '../connectChat';
 
-import type { UIMessage, ChatTransport } from '../../../lib/ai-lite';
+import type {
+  UIMessage,
+  UIMessageChunk,
+  ChatTransport,
+} from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
 
@@ -23,16 +32,17 @@ jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
 }));
 
 describe('connectChat', () => {
-  const getInitializedWidget = (widgetParams: ChatConnectorParams = {}) => {
+  const getInitializedWidget = (
+    widgetParams: ChatConnectorParams = {},
+    helper = algoliasearchHelper(createSearchClient(), '')
+  ) => {
     const renderFn = jest.fn();
     const makeWidget = connectChat(renderFn);
     const widget = makeWidget({
       ...(!('agentId' in widgetParams) ? { agentId: 'agentId' } : {}),
       disableTriggerValidation: true,
       ...widgetParams,
-    });
-
-    const helper = algoliasearchHelper(createSearchClient(), '');
+    } as ChatConnectorParams);
 
     widget.init(createInitOptions({ helper }));
 
@@ -70,6 +80,126 @@ describe('connectChat', () => {
         })
       );
     });
+
+    it('depends on search by default', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+      });
+
+      expect(widget.dependsOn).toBe('search');
+    });
+
+    it('can be configured to depend on no backend request', () => {
+      const customChat = connectChat(jest.fn());
+      const widget = customChat({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        requiresSearch: false,
+      });
+
+      expect(widget.dependsOn).toBe('none');
+    });
+
+    it('types requestOptions as agentId-only', () => {
+      const assertChatConnectorParams = <TParams extends ChatConnectorParams>(
+        params: TParams
+      ) => params;
+      const customChat = undefined as unknown as Chat<UIMessage>;
+
+      const agentParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        requestOptions: {
+          queryParameters: { cache: false },
+          headers: { 'x-algolia-referer': 'chat-widget' },
+        },
+      });
+
+      const legacyAgentWithTransportParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+      });
+      const agentPersistenceParams = assertChatConnectorParams({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const transportPersistenceParams = assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        persistence: { messages: false, open: true },
+      });
+      const customChatParams = assertChatConnectorParams({
+        chat: customChat,
+      });
+      const customChatOpenPersistenceParams = assertChatConnectorParams({
+        chat: customChat,
+        persistence: { open: true },
+      });
+      const customChatPersistenceParams = assertChatConnectorParams({
+        chat: customChat,
+        persistence: { open: false },
+      });
+
+      // @ts-expect-error requestOptions is only valid with agentId
+      assertChatConnectorParams({
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      // @ts-expect-error requestOptions is not valid when a custom transport is provided
+      assertChatConnectorParams({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      // @ts-expect-error requestOptions is not valid with a custom chat instance
+      assertChatConnectorParams({
+        chat: customChat,
+        requestOptions: {
+          queryParameters: { cache: false },
+        },
+      });
+
+      // @ts-expect-error boolean shorthand would imply control over message persistence
+      assertChatConnectorParams({
+        chat: customChat,
+        persistence: false,
+      });
+
+      // @ts-expect-error message persistence is owned by custom chat instances
+      assertChatConnectorParams({
+        chat: customChat,
+        persistence: {
+          messages: true,
+        },
+      });
+
+      expect(agentParams.requestOptions?.queryParameters).toEqual({
+        cache: false,
+      });
+      expect(agentParams.requestOptions?.headers).toEqual({
+        'x-algolia-referer': 'chat-widget',
+      });
+      expect(legacyAgentWithTransportParams).toEqual({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api' },
+      });
+      expect(agentPersistenceParams.persistence).toBe(false);
+      expect(transportPersistenceParams.persistence).toEqual({
+        messages: false,
+        open: true,
+      });
+      expect(customChatParams.chat).toBe(customChat);
+      expect(customChatOpenPersistenceParams.persistence).toEqual({
+        open: true,
+      });
+      expect(customChatPersistenceParams.persistence).toEqual({ open: false });
+    });
   });
 
   describe('getWidgetRenderState', () => {
@@ -101,13 +231,13 @@ describe('connectChat', () => {
         expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           feedbackState: {},
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
+          focusInput: expect.any(Function),
+          '~consumeInputFocus': expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -127,6 +257,115 @@ describe('connectChat', () => {
           }),
         })
       );
+    });
+
+    describe('suggestionsStatus', () => {
+      const suggestionsPart = {
+        type: 'data-suggestions',
+        data: { suggestions: ['Cheaper options?'] },
+      };
+
+      function getSuggestionsStatus({
+        messages,
+        status,
+      }: {
+        messages: unknown[];
+        status?: string;
+      }) {
+        const chat = new Chat<any>({
+          persistence: false,
+          transport: {} as any,
+        });
+        const widget = connectChat(jest.fn())({
+          chat,
+          disableTriggerValidation: true,
+        });
+        const helper = algoliasearchHelper(createSearchClient(), '');
+
+        widget.init(createInitOptions({ helper }));
+        chat.messages = messages as any;
+        if (status) {
+          chat._state.status = status as any;
+        }
+
+        return widget.getWidgetRenderState(createInitOptions({ helper }))
+          .suggestionsStatus;
+      }
+
+      it('is idle when no turn is running', () => {
+        expect(
+          getSuggestionsStatus({
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+            ],
+          })
+        ).toBe('idle');
+      });
+
+      it('is idle for a turn with no reason to expect suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('idle');
+      });
+
+      it('is loading when the agent declared suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: { suggestionsEnabled: true },
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('loading');
+      });
+
+      it('is loading when an earlier turn produced suggestions', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+              { id: '2', role: 'user', parts: [] },
+              {
+                id: '3',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }],
+              },
+            ],
+          })
+        ).toBe('loading');
+      });
+
+      it('is idle once the suggestions arrive', () => {
+        expect(
+          getSuggestionsStatus({
+            status: 'streaming',
+            messages: [
+              { id: '1', role: 'assistant', parts: [suggestionsPart] },
+              { id: '2', role: 'user', parts: [] },
+              {
+                id: '3',
+                role: 'assistant',
+                parts: [{ type: 'text', text: 'Hello' }, suggestionsPart],
+              },
+            ],
+          })
+        ).toBe('idle');
+      });
     });
   });
 
@@ -166,12 +405,12 @@ describe('connectChat', () => {
         chat: expect.objectContaining({
           input: '',
           open: false,
-          isClearing: false,
           setInput: expect.any(Function),
           setOpen: expect.any(Function),
+          focusInput: expect.any(Function),
+          '~consumeInputFocus': expect.any(Function),
           setMessages: expect.any(Function),
           clearMessages: expect.any(Function),
-          onClearTransitionEnd: expect.any(Function),
           sendEvent: expect.any(Function),
           setIndexUiState: expect.any(Function),
           indexUiState: {},
@@ -258,7 +497,274 @@ describe('connectChat', () => {
     );
   });
 
+  describe('browser side effects', () => {
+    // Positive controls for the negative assertions in `connectChat-ssr.test.ts`.
+    it('registers callbacks that render chat updates', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      renderFn.mockClear();
+
+      const messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      chat.messages = messages;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ messages }),
+        false
+      );
+
+      chat._state.status = 'streaming';
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ status: 'streaming' }),
+        false
+      );
+
+      const error = new Error('Failed');
+      chat._state.error = error;
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({ error }),
+        false
+      );
+      expect(renderFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('schedules a full render on status changes only, so sibling entry points see them', () => {
+      const chat = new Chat<any>({
+        persistence: false,
+        transport: {} as any,
+      });
+      const scheduleRender = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender:
+          scheduleRender as unknown as InstantSearch['scheduleRender'],
+      });
+      const widget = connectChat(jest.fn())({
+        chat,
+        disableTriggerValidation: true,
+      });
+
+      widget.init(createInitOptions({ instantSearchInstance }));
+      scheduleRender.mockClear();
+
+      chat._state.status = 'streaming';
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      // Re-writing the same status notifies subscribers, but nothing changed.
+      chat._state.status = 'streaming';
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      // Message deltas stay local.
+      chat.messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+
+      chat._state.status = 'ready';
+      expect(scheduleRender).toHaveBeenCalledTimes(2);
+    });
+
+    it('still sends the initial user message in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const sendMessage = jest.fn();
+      (chat as any).sendMessage = sendMessage;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialUserMessage: 'Hello',
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(sendMessage).toHaveBeenCalledWith({ text: 'Hello' });
+    });
+
+    it('still resumes a stream in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const resumeStream = jest.fn();
+      (chat as any).resumeStream = resumeStream;
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        resume: true,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(resumeStream).toHaveBeenCalled();
+    });
+
+    it('still applies initial messages in a browser', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'INITIAL IN BROWSER' }],
+        },
+      ];
+      const widget = connectChat(jest.fn())({
+        chat,
+        transport: {},
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+
+      expect(chat.messages).toEqual(initialMessages);
+    });
+
+    it('renders restored initial messages only with the current init options', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const initialMessages = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome' }],
+        },
+      ];
+      const renderFn = jest.fn();
+      const widget = connectChat(renderFn)({
+        chat,
+        initialMessages,
+        disableTriggerValidation: true,
+      } as any);
+      const firstInstantSearchInstance = createInstantSearch();
+      const secondInstantSearchInstance = createInstantSearch();
+
+      widget.init(
+        createInitOptions({ instantSearchInstance: firstInstantSearchInstance })
+      );
+      chat.messages = [];
+      renderFn.mockClear();
+
+      widget.init(
+        createInitOptions({
+          instantSearchInstance: secondInstantSearchInstance,
+        })
+      );
+
+      expect(
+        renderFn.mock.calls.map(([renderState, isFirstRendering]) => ({
+          init:
+            renderState.instantSearchInstance === firstInstantSearchInstance
+              ? 'previous'
+              : 'current',
+          isFirstRendering,
+          messages: renderState.messages,
+        }))
+      ).toEqual([
+        {
+          init: 'current',
+          isFirstRendering: true,
+          messages: initialMessages,
+        },
+      ]);
+    });
+  });
+
   describe('dispose', () => {
+    it('unsubscribes each Chat callback once across lifecycle cycles', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const unsubscribeErrors = [jest.fn(), jest.fn()];
+      const unsubscribeMessages = [jest.fn(), jest.fn()];
+      const unsubscribeStatuses = [jest.fn(), jest.fn()];
+      jest
+        .spyOn(chat, '~registerErrorCallback')
+        .mockReturnValueOnce(unsubscribeErrors[0])
+        .mockReturnValueOnce(unsubscribeErrors[1]);
+      jest
+        .spyOn(chat, '~registerMessagesCallback')
+        .mockReturnValueOnce(unsubscribeMessages[0])
+        .mockReturnValueOnce(unsubscribeMessages[1]);
+      jest
+        .spyOn(chat, '~registerStatusCallback')
+        .mockReturnValueOnce(unsubscribeStatuses[0])
+        .mockReturnValueOnce(unsubscribeStatuses[1]);
+      const unmountFn = jest.fn();
+      const widget = connectChat(
+        jest.fn(),
+        unmountFn
+      )({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      widget.init(createInitOptions({ helper }));
+      widget.dispose();
+      widget.init(createInitOptions({ helper }));
+      widget.dispose();
+      widget.dispose();
+
+      [
+        ...unsubscribeErrors,
+        ...unsubscribeMessages,
+        ...unsubscribeStatuses,
+      ].forEach((unsubscribe) => expect(unsubscribe).toHaveBeenCalledTimes(1));
+      expect(unmountFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('reuses a caller-owned Chat across connector replacement', () => {
+      const chat = new Chat({ persistence: false, transport: {} as any });
+      const firstRender = jest.fn();
+      const secondRender = jest.fn();
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      const firstWidget = connectChat(firstRender)({
+        chat,
+        disableTriggerValidation: true,
+      });
+      const secondWidget = connectChat(secondRender)({
+        chat,
+        disableTriggerValidation: true,
+      });
+
+      firstWidget.init(createInitOptions({ helper }));
+      firstWidget.dispose();
+      firstRender.mockClear();
+      secondWidget.init(createInitOptions({ helper }));
+      secondRender.mockClear();
+
+      chat.messages = [
+        {
+          id: 'assistant-message',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Hello' }],
+        },
+      ];
+
+      expect(firstRender).not.toHaveBeenCalled();
+      expect(secondRender).toHaveBeenCalledTimes(1);
+
+      secondWidget.dispose();
+      secondRender.mockClear();
+      chat._state.status = 'streaming';
+      expect(secondRender).not.toHaveBeenCalled();
+    });
+
     it('calls the unmount function', () => {
       const unmountFn = jest.fn();
       const makeWidget = connectChat(() => {}, unmountFn);
@@ -286,6 +792,10 @@ describe('connectChat', () => {
   });
 
   describe('state management', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
     it('updates input state', () => {
       const { getRenderState } = getInitializedWidget();
 
@@ -310,42 +820,248 @@ describe('connectChat', () => {
       expect(updatedRenderState.open).toBe(true);
     });
 
-    it('updates clearing state when clearMessages is called', () => {
+    it('requests focus only for an open transition or explicit focus', () => {
+      const { getRenderState } = getInitializedWidget();
+      const consumeInputFocus = () => getRenderState()['~consumeInputFocus']!();
+
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(true);
+      expect(consumeInputFocus()).toBe(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().focusInput();
+      expect(consumeInputFocus()).toBe(true);
+      expect(consumeInputFocus()).toBe(false);
+
+      getRenderState().setOpen(false);
+      expect(consumeInputFocus()).toBe(false);
+    });
+
+    it('opens and requests focus once when focusInput is called while closed', () => {
       const { getRenderState } = getInitializedWidget();
 
-      const renderState = getRenderState();
+      expect(getRenderState().open).toBe(false);
 
-      const message: UIMessage = {
-        id: '1',
-        role: 'user',
-        parts: [{ type: 'text', text: 'Hello' }],
-      };
-      renderState.setMessages([message]);
+      getRenderState().focusInput();
 
-      expect(renderState.isClearing).toBe(false);
-
-      renderState.clearMessages();
-
-      const updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
+      expect(getRenderState().open).toBe(true);
+      expect(getRenderState()['~consumeInputFocus']!()).toBe(true);
+      expect(getRenderState()['~consumeInputFocus']!()).toBe(false);
     });
 
-    it('does not change state when clearing empty messages', () => {
-      const { getRenderState, renderFn } = getInitializedWidget();
+    describe('open state persistence', () => {
+      const openStateKey = 'instantsearch-chat-open-state-chat';
+      const messageKey = 'instantsearch-chat-initial-messages-agentId';
+      const persistedMessages: UIMessage[] = [
+        {
+          id: 'persisted',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Persisted message' }],
+        },
+      ];
 
-      const renderState = getRenderState();
+      beforeEach(() => {
+        sessionStorage.clear();
+      });
 
-      if (renderState.messages.length > 0) {
-        renderState.setMessages([]);
-      }
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
 
-      const callCountBeforeClear = renderFn.mock.calls.length;
-      renderState.clearMessages();
+      it.each([
+        ['omitted', undefined, true, true],
+        ['true', true, true, true],
+        ['false', false, false, false],
+        ['messages only', { messages: true, open: false }, true, false],
+        ['open only', { messages: false, open: true }, false, true],
+        ['empty object', {}, false, false],
+      ])(
+        'normalizes %s persistence for messages and open state',
+        (_, persistence, persistsMessages, persistsOpen) => {
+          sessionStorage.setItem(messageKey, JSON.stringify(persistedMessages));
+          sessionStorage.setItem(openStateKey, 'true');
+          const getItem = jest.spyOn(Storage.prototype, 'getItem');
+          const setItem = jest.spyOn(Storage.prototype, 'setItem');
+          const { getRenderState } = getInitializedWidget({
+            agentId: 'agentId',
+            persistence,
+          });
 
-      expect(renderFn.mock.calls.length).toBe(callCountBeforeClear);
+          expect(getRenderState().messages).toEqual(
+            persistsMessages ? persistedMessages : []
+          );
+          expect(getRenderState().open).toBe(persistsOpen);
+          expect(getItem.mock.calls.some(([key]) => key === messageKey)).toBe(
+            persistsMessages
+          );
+          expect(getItem.mock.calls.some(([key]) => key === openStateKey)).toBe(
+            persistsOpen
+          );
+
+          getItem.mockClear();
+          setItem.mockClear();
+
+          getRenderState().setMessages([
+            {
+              id: 'next',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Next message' }],
+            },
+          ]);
+          getRenderState().setOpen(false);
+
+          expect(setItem.mock.calls.some(([key]) => key === messageKey)).toBe(
+            persistsMessages
+          );
+          expect(setItem.mock.calls.some(([key]) => key === openStateKey)).toBe(
+            persistsOpen
+          );
+        }
+      );
+
+      it.each([
+        ['true', true],
+        ['false', false],
+      ] as const)('restores the exact stored %s value', (stored, expected) => {
+        sessionStorage.setItem(openStateKey, stored);
+
+        const { renderFn, getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+        });
+
+        expect(renderFn).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ open: expected }),
+          true
+        );
+        expect(getRenderState().open).toBe(expected);
+      });
+
+      it.each([
+        ['omitted', undefined, true],
+        ['open disabled', { open: false }, false],
+        ['empty object', {}, false],
+      ])(
+        'uses %s persistence with a caller supplied Chat',
+        (_, persistence, expectedOpen) => {
+          sessionStorage.setItem(openStateKey, 'true');
+          const chat = new Chat<UIMessage>({
+            persistence: false,
+            transport: {} as any,
+          });
+          chat.messages = persistedMessages;
+
+          const { getRenderState } = getInitializedWidget({
+            chat,
+            persistence,
+          });
+
+          expect(getRenderState().open).toBe(expectedOpen);
+          expect(getRenderState().messages).toEqual(persistedMessages);
+        }
+      );
+
+      it.each([null, '', 'TRUE', '1'])('fails closed for %s', (stored) => {
+        if (stored !== null) {
+          sessionStorage.setItem(openStateKey, stored);
+        }
+
+        const { getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+        });
+
+        expect(getRenderState().open).toBe(false);
+      });
+
+      it('fails closed when accessing sessionStorage throws', () => {
+        const descriptor = Object.getOwnPropertyDescriptor(
+          window,
+          'sessionStorage'
+        )!;
+        let initialized: ReturnType<typeof getInitializedWidget>;
+        Object.defineProperty(window, 'sessionStorage', {
+          configurable: true,
+          get() {
+            throw new Error('STORAGE_UNAVAILABLE');
+          },
+        });
+
+        try {
+          expect(() => {
+            initialized = getInitializedWidget({
+              persistence: { messages: false, open: true },
+            });
+          }).not.toThrow();
+        } finally {
+          Object.defineProperty(window, 'sessionStorage', descriptor);
+        }
+
+        expect(initialized!.getRenderState().open).toBe(false);
+      });
+
+      it('fails closed when reading storage throws', () => {
+        jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+          throw new Error('READ_FAILED');
+        });
+
+        const { getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+        });
+
+        expect(getRenderState().open).toBe(false);
+      });
+
+      it('writes every explicit open state', () => {
+        const setItem = jest.spyOn(Storage.prototype, 'setItem');
+        const { getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+        });
+
+        getRenderState().setOpen(true);
+        getRenderState().setOpen(false);
+
+        expect(setItem).toHaveBeenNthCalledWith(1, openStateKey, 'true');
+        expect(setItem).toHaveBeenNthCalledWith(2, openStateKey, 'false');
+      });
+
+      it('updates visible state when writing storage throws', () => {
+        jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+          throw new Error('WRITE_FAILED');
+        });
+        const { renderFn, getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+        });
+
+        expect(() => getRenderState().setOpen(true)).not.toThrow();
+
+        expect(getRenderState().open).toBe(true);
+        expect(renderFn).toHaveBeenLastCalledWith(
+          expect.objectContaining({ open: true }),
+          false
+        );
+      });
+
+      it('scopes storage by type', () => {
+        const setItem = jest.spyOn(Storage.prototype, 'setItem');
+        const { getRenderState } = getInitializedWidget({
+          persistence: { messages: false, open: true },
+          type: 'support',
+        });
+
+        getRenderState().setOpen(true);
+
+        expect(setItem).toHaveBeenCalledWith(
+          'instantsearch-chat-open-state-support',
+          'true'
+        );
+      });
     });
 
-    it('clears messages and resets state on transition end', () => {
+    it('clears messages and resets the conversation when clearMessages is called', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -357,21 +1073,54 @@ describe('connectChat', () => {
         parts: [{ type: 'text', text: 'Hello' }],
       };
       renderState.setMessages([message]);
+
       renderState.clearMessages();
 
-      let updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(true);
-      expect(updatedRenderState.id).toBe(conversationIdBeforeClear);
-
-      renderState.onClearTransitionEnd();
-
-      updatedRenderState = getRenderState();
-      expect(updatedRenderState.isClearing).toBe(false);
+      const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toHaveLength(0);
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
     });
 
-    it('regenerates the chat id on transition end so the server starts a fresh conversation', () => {
+    it('renders the rotated conversation id when clearing', () => {
+      const { getRenderState, renderFn } = getInitializedWidget();
+
+      const renderState = getRenderState();
+      renderState.setMessages([
+        { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+      ]);
+      const idBeforeClear = getRenderState().id;
+
+      renderFn.mockClear();
+      renderState.clearMessages();
+
+      // The render emitted while clearing must observe the rotated id, not the
+      // stale one (state that doesn't emit a callback is reset first).
+      const lastRenderState =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastRenderState.id).not.toBe(idBeforeClear);
+    });
+
+    it('exits the error state and resets the conversation even with no messages', () => {
+      // An error/stream can be set with no messages (e.g. a failed resume), so
+      // clearing must not shortcut out on an empty message list.
+      const { getRenderState, widget } = getInitializedWidget();
+
+      let renderState = getRenderState();
+      renderState.setMessages([]);
+      // Simulate an error state with no messages (e.g. a failed resume).
+      widget.chatInstance._state.status = 'error';
+      widget.chatInstance._state.error = new Error('boom');
+      const idBeforeClear = getRenderState().id;
+
+      renderState.clearMessages();
+
+      renderState = getRenderState();
+      expect(renderState.messages).toHaveLength(0);
+      expect(renderState.status).toBe('ready');
+      expect(renderState.id).not.toBe(idBeforeClear);
+    });
+
+    it('regenerates the chat id on clear so the server starts a fresh conversation', () => {
       const { getRenderState } = getInitializedWidget();
 
       const renderState = getRenderState();
@@ -385,7 +1134,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.id).toEqual(expect.any(String));
@@ -421,7 +1169,6 @@ describe('connectChat', () => {
         },
       ]);
       renderState.clearMessages();
-      renderState.onClearTransitionEnd();
 
       expect(chatInstance.id).toEqual(expect.any(String));
       expect(chatInstance.id).not.toBe(initialId);
@@ -503,7 +1250,101 @@ describe('connectChat', () => {
     });
   });
 
+  describe('applyFilters', () => {
+    const getApplyFilters = () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'index', {
+        hierarchicalFacets: [
+          {
+            name: 'hierarchicalCategories.lvl0',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+            ],
+            separator: ' > ',
+          },
+        ],
+      });
+      helper.lastResults = new SearchResults(helper.state, [
+        createSingleSearchResponse(),
+      ]);
+
+      const { getRenderState } = getInitializedWidget(
+        { tools: { testTool: {} } },
+        helper
+      );
+
+      return {
+        helper,
+        applyFilters: getRenderState().tools.testTool.applyFilters,
+      };
+    };
+
+    it('refines the query and the facets of the search tool', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        query: 'laptop',
+        facetFilters: [['categories:Laptops'], ['brand:Apple']],
+      });
+
+      expect(helper.state.query).toBe('laptop');
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        categories: ['Laptops'],
+        brand: ['Apple'],
+      });
+    });
+
+    it('keeps the value after the first colon in a facet filter', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({ facetFilters: [['brand:Bang & Olufsen: Beoplay']] });
+
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+        brand: ['Bang & Olufsen: Beoplay'],
+      });
+    });
+
+    it('refines a hierarchical facet from its deepest level', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
+      expect(helper.state.disjunctiveFacetsRefinements).toEqual({});
+    });
+
+    it('refines a hierarchical facet regardless of the level order', () => {
+      const { helper, applyFilters } = getApplyFilters();
+
+      applyFilters({
+        facetFilters: [
+          ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+          ['hierarchicalCategories.lvl0:Computers & Tablets'],
+        ],
+      });
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        'hierarchicalCategories.lvl0': ['Computers & Tablets > Laptops'],
+      });
+    });
+  });
+
   describe('tool handling', () => {
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
     it('provides tools in render state', () => {
       const mockTool = {};
 
@@ -518,14 +1359,445 @@ describe('connectChat', () => {
         testTool: {
           ...mockTool,
           addToolResult: expect.any(Function),
+          '~addToolResultForMessage': expect.any(Function),
           applyFilters: expect.any(Function),
           sendEvent: expect.any(Function),
+          insightsEventContext: {
+            agentId: 'agentId',
+            instantSearchStatus: 'idle',
+          },
+          records: renderState.records,
         },
+      });
+      // Every tool shares the chat's one store.
+      expect(renderState.records.getAll()).toEqual({});
+    });
+
+    it('combines the records of every search into the chat store', () => {
+      const searchPart = (toolCallId: string, hits: unknown[]) => ({
+        type: 'tool-algolia_search_index',
+        toolCallId,
+        state: 'output-available',
+        input: {},
+        output: { hits },
+      });
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        // A restored conversation, collected without a messages callback.
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              searchPart('search-1', [{ objectID: '1', name: 'Runner' }]),
+              searchPart('search-2', [{ objectID: '2', name: 'Sneaker' }]),
+            ],
+          },
+          {
+            id: '2',
+            role: 'assistant',
+            parts: [
+              searchPart('search-3', [
+                { objectID: '1', name: 'Runner Pro' },
+                { objectID: '3', name: 'Trail' },
+              ]),
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records } = getRenderState();
+
+      // Every search contributes, and the newest copy of a record wins.
+      expect(records.getAll()).toEqual({
+        1: { objectID: '1', name: 'Runner Pro' },
+        2: { objectID: '2', name: 'Sneaker' },
+        3: { objectID: '3', name: 'Trail' },
+      });
+
+      // A new search of a later turn joins the same map.
+      getRenderState().setMessages((messages) =>
+        messages.concat({
+          id: '3',
+          role: 'assistant',
+          parts: [searchPart('search-4', [{ objectID: '4', name: 'Boot' }])],
+        } as unknown as (typeof messages)[number])
+      );
+
+      expect(records.get('4')).toEqual({ objectID: '4', name: 'Boot' });
+      expect(records.get('1')).toEqual({ objectID: '1', name: 'Runner Pro' });
+
+      // The store outlives renders rather than being derived per render.
+      expect(getRenderState().records).toBe(records);
+    });
+
+    it('drops the records of a cleared conversation', () => {
+      const { getRenderState } = getInitializedWidget({
+        persistence: false,
+        initialMessages: [
+          {
+            id: '1',
+            role: 'assistant',
+            parts: [
+              {
+                type: 'tool-algolia_search_index',
+                toolCallId: 'search',
+                state: 'output-available',
+                input: {},
+                output: { hits: [{ objectID: '1', name: 'Runner' }] },
+              },
+            ],
+          },
+        ],
+      } as unknown as ChatConnectorParams);
+
+      const { records, clearMessages } = getRenderState();
+
+      expect(records.has('1')).toBe(true);
+
+      clearMessages();
+
+      expect(records.getAll()).toEqual({});
+    });
+
+    it('starts a re-added widget with an empty store', async () => {
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        persistence: false,
+      } as ChatConnectorParams);
+      const getChatRenderState = () => search.renderState.indexName.chat!;
+
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      getChatRenderState().setMessages([
+        {
+          id: '1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-algolia_search_index',
+              toolCallId: 'search',
+              state: 'output-available',
+              input: {},
+              output: { hits: [{ objectID: '1', name: 'Runner' }] },
+            },
+          ],
+        },
+      ] as unknown as UIMessage[]);
+
+      expect(getChatRenderState().records.has('1')).toBe(true);
+
+      // `dispose` leaves the instance in place, so the render it schedules
+      // collects that conversation once more: only starting the next one over
+      // keeps its records out of the widget that replaces this one.
+      search.removeWidgets([widget]);
+      await wait(0);
+
+      search.addWidgets([widget]);
+      await wait(0);
+
+      expect(getChatRenderState().records.getAll()).toEqual({});
+      expect(getChatRenderState().messages).toEqual([]);
+    });
+
+    it('keeps the development diagnostic for an unknown tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'missingTool',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      await widget.chatInstance.sendMessage({ text: 'use a missing tool' });
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(widget.chatInstance.error).toEqual(
+        new Error(
+          'No tool implementation found for "missingTool". Please provide a tool implementation in the `tools` prop.'
+        )
+      );
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('supports returning the injected addToolResult from a configured tool', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: { query: 'hello' },
+          },
+          { type: 'finish' },
+        ])
+      );
+      const onToolCall = jest.fn(({ addToolResult }) =>
+        addToolResult({ output: { hits: ['hello'] } })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen: () => false,
+        tools: { search: { onToolCall } },
+      });
+
+      await expect(
+        widget.chatInstance.sendMessage({ text: 'search for hello' })
+      ).resolves.toBeUndefined();
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.role === 'assistant'
+      );
+      expect(onToolCall).toHaveBeenCalledTimes(1);
+      expect(assistant?.parts[0]).toMatchObject({
+        type: 'tool-search',
+        toolCallId: 'call-1',
+        state: 'output-available',
+        output: { hits: ['hello'] },
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    describe('cancelling a tool call the user never answered', () => {
+      const pendingToolCallResponse = () =>
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'confirm',
+            toolCallId: 'call-1',
+            input: { sku: 'A1' },
+          },
+          { type: 'finish' },
+        ]);
+      const emptyResponse = () =>
+        chatStream([
+          { type: 'start', messageId: 'assistant-2' },
+          { type: 'finish' },
+        ]);
+
+      // `onToolCall` returns without submitting an output.
+      const awaitUser = jest.fn();
+
+      const toolPartsSentOn = (fetchMock: jest.Mock, callIndex: number) =>
+        JSON.parse(fetchMock.mock.calls[callIndex][1].body)
+          .messages.flatMap((message: { parts: unknown[] }) => message.parts)
+          .filter((part: object) => 'toolCallId' in part);
+
+      it('reports the call as failed when the tool has no cancelOutput', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-error',
+          }),
+        ]);
+        expect(widget.chatInstance.status).toBe('ready');
+      });
+
+      it('commits the output returned by the tool `cancelOutput`', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const cancelOutput = jest.fn(() => ({ confirmed: false }));
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(cancelOutput).toHaveBeenCalledWith({
+          toolCallId: 'call-1',
+          input: { sku: 'A1' },
+        });
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-available',
+            output: { confirmed: false },
+          }),
+        ]);
+      });
+
+      it('reports the call as failed when `cancelOutput` returns nothing', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const cancelOutput = jest.fn(() => undefined);
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-error',
+          }),
+        ]);
+        expect(widget.chatInstance.status).toBe('ready');
+      });
+
+      it('falls back to a failed call when `cancelOutput` throws', async () => {
+        const fetchMock = jest
+          .fn()
+          .mockResolvedValueOnce(pendingToolCallResponse())
+          .mockResolvedValueOnce(emptyResponse());
+        const cancelOutput = jest.fn(() => {
+          throw new Error('boom');
+        });
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'buy the first one' });
+        await widget.chatInstance.sendMessage({ text: 'never mind' });
+
+        expect(toolPartsSentOn(fetchMock, 1)).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-error',
+          }),
+        ]);
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(widget.chatInstance.status).toBe('ready');
       });
     });
   });
 
   describe('default chat instance', () => {
+    const cacheKey = 'instantsearch-chat-initial-messages';
+
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    it('does not restore messages from sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+
+      expect(getRenderState().messages).toEqual([]);
+    });
+
+    it('does not save messages to sessionStorage when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const storageKey = `${cacheKey}-agentId`;
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+      });
+      const nextMessages: UIMessage[] = [
+        {
+          id: 'next',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Next message' }],
+        },
+      ];
+
+      getRenderState().setMessages(nextMessages);
+
+      expect(sessionStorage.getItem(storageKey)).toBe(
+        JSON.stringify(previousMessages)
+      );
+    });
+
+    it('applies initialMessages when persistence is disabled', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'previous',
+          role: 'user',
+          parts: [{ type: 'text', text: 'Previous message' }],
+        },
+      ];
+      const initialMessages: UIMessage[] = [
+        {
+          id: 'initial',
+          role: 'assistant',
+          parts: [{ type: 'text', text: 'Welcome' }],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        persistence: false,
+        initialMessages,
+      });
+
+      expect(getRenderState().messages).toEqual(initialMessages);
+    });
+
     it('adds a compatibility layer for Algolia MCP Server search tool', async () => {
       const onSearchToolCall = jest.fn();
 
@@ -574,6 +1846,97 @@ data: [DONE]`,
           })
         );
       });
+    });
+
+    it('lets a tool claim the names a server derives from it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        tools: {
+          my_tool: {
+            onToolCall,
+            matchesToolName: (toolName: string) =>
+              toolName.startsWith('my_tool_'),
+          },
+        },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      await waitFor(() => {
+        expect(onToolCall).toHaveBeenCalledWith(
+          expect.objectContaining({ toolName: 'my_tool_movies' })
+        );
+      });
+    });
+
+    it('does not resolve a derived name for a tool that does not claim it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        // `my_tool` and `my_tool_movies` are separate tools to the registry.
+        tools: { my_tool: { onToolCall } },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      expect(onToolCall).not.toHaveBeenCalled();
     });
 
     it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
@@ -908,16 +2271,16 @@ data: [DONE]`,
       });
     });
 
-    it('surfaces a guardrail-violation fallbackResponse via the error state', async () => {
+    it('renders a guardrail-violation fallbackResponse as assistant history', async () => {
       const fallbackResponse =
         "I'm sorry I couldn't respond to that, please try again with another message.";
-      const { widget } = getInitializedWidget({
-        agentId: undefined,
-        transport: {
-          fetch: () =>
-            Promise.resolve(
-              new Response(
-                `data: {"type": "start", "messageId": "test-id"}
+      const onError = jest.fn();
+      const onFinish = jest.fn();
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(
+            `data: {"type": "start", "messageId": "test-id"}
 
 data: {"type": "start-step"}
 
@@ -930,18 +2293,29 @@ data: {"type": "text-end", "id": "msg-1"}
 data: {"type": "finish-step"}
 
 data: {"type": "data-guardrail-violation", "data": {"category": "product_returns", "guardrailType": "input", "fallbackResponse": ${JSON.stringify(
-                  fallbackResponse
-                )}}}
+              fallbackResponse
+            )}}}
 
 data: {"type": "finish"}
 
 data: [DONE]`,
-                {
-                  headers: { 'Content-Type': 'text/event-stream' },
-                }
-              )
-            ),
+            {
+              headers: { 'Content-Type': 'text/event-stream' },
+            }
+          )
+        )
+        .mockResolvedValueOnce(
+          new Response(`data: {"type":"finish"}\n\ndata: [DONE]`, {
+            headers: { 'Content-Type': 'text/event-stream' },
+          })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: fetchMock,
         },
+        onError,
+        onFinish,
       });
 
       const { chatInstance } = widget;
@@ -954,24 +2328,58 @@ data: [DONE]`,
       });
 
       await waitFor(() => {
-        expect(chatInstance.status).toBe('error');
-        expect(chatInstance.error?.message).toBe(fallbackResponse);
-        // Tagged so the UI can branch on it and render the fallback verbatim
-        // instead of the generic friendly default used for cost-control
-        // errors.
-        expect(chatInstance.error?.name).toBe('GuardrailViolationError');
-        // The in-progress assistant message produced for this request is
-        // stripped so only the user message added by `sendMessage` remains
-        // beyond what was already there. This matches cost-control errors
-        // where no assistant message is appended on failure.
-        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 1);
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(onError).not.toHaveBeenCalled();
+        expect(chatInstance.messages.length).toBe(messagesBeforeSend + 2);
         expect(
-          chatInstance.messages[chatInstance.messages.length - 1].role
-        ).toBe('user');
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+        });
+        expect(JSON.stringify(chatInstance.messages)).not.toContain(
+          'If you need help'
+        );
       });
+
+      const assistant = chatInstance.messages[chatInstance.messages.length - 1];
+
+      expect(onFinish).toHaveBeenCalledWith({
+        message: assistant,
+        messages: chatInstance.messages,
+        isAbort: false,
+        isDisconnect: false,
+        isError: false,
+      });
+
+      await chatInstance.sendMessage({
+        id: 'follow-up-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'what can you help with?' }],
+      });
+
+      await waitFor(() => {
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+      });
+
+      const [, secondRequest] = fetchMock.mock.calls[1];
+      const secondRequestBody = JSON.parse(
+        (secondRequest as RequestInit).body as string
+      );
+      expect(secondRequestBody.messages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'test-id',
+            role: 'assistant',
+            parts: [{ type: 'text', text: fallbackResponse, state: 'done' }],
+          }),
+        ])
+      );
     });
 
-    it('falls back to a generic message when fallbackResponse is missing', async () => {
+    it('renders a generic assistant message when fallbackResponse is missing', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
         transport: {
@@ -1004,10 +2412,21 @@ data: [DONE]`,
       });
 
       await waitFor(() => {
-        expect(chatInstance.status).toBe('error');
-        expect(chatInstance.error?.message).toBe(
-          'Sorry, we are not able to generate a response at the moment.'
-        );
+        expect(chatInstance.status).toBe('ready');
+        expect(chatInstance.error).toBeUndefined();
+        expect(
+          chatInstance.messages[chatInstance.messages.length - 1]
+        ).toMatchObject({
+          id: 'test-id',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'text',
+              text: 'Sorry, we are not able to generate a response at the moment.',
+              state: 'done',
+            },
+          ],
+        });
       });
     });
   });
@@ -1060,8 +2479,9 @@ data: [DONE]`,
       });
 
       function getRequestPayload() {
-        const [, init] = fetchMock.mock.calls[0];
+        const [url, init] = fetchMock.mock.calls[0];
         return {
+          url: String(url),
           headers: init.headers as Record<string, string>,
           body: JSON.parse(init.body as string),
         };
@@ -1108,6 +2528,120 @@ data: [DONE]`,
         );
       });
 
+      it('sends persistent query parameters on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: false,
+              hitsPerPage: 4,
+              explain: true,
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('cache')).toBe('false');
+        expect(searchParams.get('hitsPerPage')).toBe('4');
+        expect(searchParams.get('explain')).toBe('true');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
+      it('keeps the built-in compatibility mode on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              compatibilityMode: 'custom',
+              userToken: 'user-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { url } = getRequestPayload();
+        const searchParams = new URL(url).searchParams;
+        expect(searchParams.get('compatibilityMode')).toBe('ai-sdk-5');
+        expect(searchParams.get('userToken')).toBe('user-1');
+      });
+
+      it('sends persistent headers on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
+      it('sends persistent Headers instance on agent requests', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: new Headers({
+              'x-algolia-referer': 'chat-widget',
+              'x-session-id': 'session-1',
+            }),
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers).toEqual(
+          expect.objectContaining({
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-referer': 'chat-widget',
+            'x-session-id': 'session-1',
+          })
+        );
+      });
+
+      it('keeps the x-algolia-agent chat marker even when requestOptions tries to override it', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-application-id': 'spoofed-app',
+              'x-algolia-api-key': 'spoofed-key',
+              'x-algolia-agent': 'spoofed-agent',
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-application-id']).toBe('appId');
+        expect(headers['x-algolia-api-key']).toBe('apiKey');
+        expect(headers['x-algolia-agent']).toContain('; chat');
+        expect(headers['x-algolia-agent']).not.toBe('spoofed-agent');
+        expect(headers['x-algolia-referer']).toBe('chat-widget');
+      });
+
       it('does not register `chat` on the search client user-agent', () => {
         const addAlgoliaAgent = jest.fn();
         const client = Object.assign(createSearchClient(), {
@@ -1147,6 +2681,41 @@ data: [DONE]`,
         });
       });
 
+      it('lets per-call headers override persistent headers for one request', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            headers: {
+              'x-algolia-referer': 'chat-widget',
+            },
+          },
+        });
+
+        await widget.chatInstance.sendMessage(
+          { text: 'hello' },
+          { headers: { 'x-algolia-referer': 'prompt-suggestions' } }
+        );
+        await widget.chatInstance.sendMessage({ text: 'follow-up' });
+
+        const firstHeaders = fetchMock.mock.calls[0][1].headers as Record<
+          string,
+          string
+        >;
+        const secondHeaders = fetchMock.mock.calls[1][1].headers as Record<
+          string,
+          string
+        >;
+
+        expect(firstHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'prompt-suggestions'
+        );
+        expect(secondHeaders).toHaveProperty(
+          'x-algolia-referer',
+          'chat-widget'
+        );
+      });
+
       it('does not carry over the x-algolia-referer to follow-up messages', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
@@ -1172,13 +2741,33 @@ data: [DONE]`,
         expect(secondHeaders).not.toHaveProperty('x-algolia-referer');
       });
 
+      it('forces cache=false when regenerating with persistent cache query parameter', async () => {
+        const { widget } = getInitializedWidget({
+          agentId: 'agentId',
+          requestOptions: {
+            queryParameters: {
+              cache: true,
+            },
+          },
+        });
+
+        await widget.chatInstance.regenerate();
+
+        const { url } = getRequestPayload();
+        expect(new URL(url).searchParams.get('cache')).toBe('false');
+      });
+
       it('does not duplicate transport metadata in the request body', async () => {
         const { widget } = getInitializedWidget({ agentId: 'agentId' });
 
         await widget.chatInstance.sendMessage({ text: 'hello' });
 
         const { body } = getRequestPayload();
-        expect(Object.keys(body).sort()).toEqual(['id', 'messageId', 'messages']);
+        expect(Object.keys(body).sort()).toEqual([
+          'id',
+          'messageId',
+          'messages',
+        ]);
         expect(body).not.toHaveProperty('headers');
         expect(body).not.toHaveProperty('api');
         expect(body).not.toHaveProperty('credentials');
@@ -1250,11 +2839,10 @@ data: [DONE]`,
       return new Chat<UIMessage>({ transport: createMockTransport() });
     }
 
-    function createChatWidgetWithContext(
-      params: Omit<ChatConnectorParams<UIMessage>, 'transport' | 'agentId'> & {
-        chat: Chat<UIMessage>;
-      }
-    ) {
+    function createChatWidgetWithContext(params: {
+      chat: Chat<UIMessage>;
+      context?: ChatConnectorParams<UIMessage>['context'];
+    }) {
       const renderFn = jest.fn();
       const makeWidget = connectChat(renderFn);
       const widget = makeWidget({
@@ -1451,6 +3039,106 @@ data: [DONE]`,
       // of silently sending the message without context.
       expect(() => sendMessage({ text: 'Hello' })).toThrow('boom');
       expect(sendMessageSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendAutomaticallyWhen', () => {
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    // A minimal, immediately-terminating assistant turn — enough for the
+    // automatic follow-up request's stream to settle.
+    const terminalStream = () =>
+      new Response(
+        `data: {"type": "start", "messageId": "assistant-2"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    // An assistant message with a single, still-unresolved tool call. Assigning
+    // it directly (rather than streaming it in) keeps the test deterministic:
+    // the only request that can fire is the auto-continuation from
+    // `addToolResult`.
+    const assistantWithPendingTool = () =>
+      [
+        { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+        {
+          id: 'a1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-myTool',
+              toolCallId: 'call_1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ] as unknown as UIMessage[];
+
+    it('auto-continues by default once a resolved tool completes the assistant message', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      // Resolving the tool result flips the last assistant message's tool part
+      // to `output-available`; the default
+      // `lastAssistantMessageIsCompleteWithToolCalls` then resubmits. Awaiting
+      // `addToolResult` waits for that follow-up to complete, so the assertion
+      // is deterministic.
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: false },
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(widget.chatInstance.messages[1].parts[0]).toMatchObject({
+        output: { ok: true },
+      });
+    });
+
+    it('does not auto-continue when a user `sendAutomaticallyWhen` returns false', async () => {
+      const fetchMock = jest.fn(() => Promise.resolve(terminalStream()));
+      const sendAutomaticallyWhen = jest.fn(() => false);
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        sendAutomaticallyWhen,
+      } as ChatConnectorParams);
+
+      widget.chatInstance.messages = assistantWithPendingTool();
+
+      await widget.chatInstance.addToolResult({
+        tool: 'myTool',
+        toolCallId: 'call_1',
+        output: { ok: true },
+      });
+
+      // The user predicate was consulted with the resolved messages...
+      expect(sendAutomaticallyWhen).toHaveBeenCalledWith(
+        expect.objectContaining({ messages: expect.any(Array) })
+      );
+      // ...and because it returned `false`, no automatic follow-up fired at
+      // all. This is the escape hatch for the runaway auto-continuation loop: a
+      // resolved tool no longer forces another completions request.
+      expect(fetchMock).not.toHaveBeenCalled();
     });
   });
 });

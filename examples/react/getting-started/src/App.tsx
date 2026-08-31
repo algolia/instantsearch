@@ -13,7 +13,6 @@ import {
   Carousel,
   Chat,
   ChatTrigger,
-  FilterSuggestions,
   CurrentRefinements,
 } from 'react-instantsearch';
 
@@ -69,13 +68,6 @@ export function App() {
                 }
               >
                 <CurrentRefinements />
-              </Panel>
-              <Panel header="Filter Suggestions">
-                <FilterSuggestions
-                  agentId="3123062d-d611-4d4f-8ab2-4fa39302dc64"
-                  attributes={['brand', 'categories']}
-                  headerComponent={false}
-                />
               </Panel>
               <Hits hitComponent={HitComponent} />
 

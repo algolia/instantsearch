@@ -15,7 +15,11 @@ import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
 import { createRenderOptions, createWidget } from '../../../test/createWidget';
-import { connectSearchBox, connectPagination } from '../../connectors';
+import {
+  connectAutocomplete,
+  connectSearchBox,
+  connectPagination,
+} from '../../connectors';
 import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
 import InstantSearch from '../InstantSearch';
@@ -70,6 +74,7 @@ jest.mock('algoliasearch-helper', () => {
 });
 
 const virtualSearchBox = connectSearchBox(() => {});
+const virtualAutocomplete = connectAutocomplete(() => {});
 
 beforeEach(() => {
   algoliasearchHelper.mockClear();
@@ -139,6 +144,20 @@ describe('Usage', () => {
           searchClient: createSearchClient(),
         });
 
+        search.start();
+        await wait(0);
+      }).not.toWarnDev(
+        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
+    });
+
+    it('does not warn if no widget requires a search or recommend request', async () => {
+      await expect(async () => {
+        const search = new InstantSearch({
+          searchClient: createSearchClient(),
+        });
+
+        search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
         search.start();
         await wait(0);
       }).not.toWarnDev(
@@ -266,6 +285,21 @@ describe('Usage', () => {
 
       See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
     `);
+  });
+
+  it('recomputes search widget flags when widgets are removed before start', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+    const searchBox = virtualSearchBox({});
+
+    search.addWidgets([searchBox]);
+    search.removeWidgets([searchBox]);
+    search.start();
+
+    expect(search.mainIndex.getWidgets()).toHaveLength(0);
+    expect(search._hasSearchWidget).toBe(false);
   });
 
   it('throws if createURL is called before start', () => {
@@ -522,6 +556,47 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       await wait(0);
 
       expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('does not add automatic insights when no widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([virtualAutocomplete({ requiresSearch: false })]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('keeps automatic insights when another widget requires a search', async () => {
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
+      const search = new InstantSearch({
+        indexName: 'indexNameWithAutomaticInsights',
+        searchClient,
+      });
+
+      search.addWidgets([
+        virtualAutocomplete({ requiresSearch: false }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(mapMiddlewares(search.middleware)).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+          $$automatic: true,
+        },
+      ]);
     });
 
     test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {
@@ -1200,6 +1275,67 @@ describe('start', () => {
       expect(event.error).toEqual(new Error('SERVER_ERROR'));
       done();
     });
+  });
+
+  it('clears a search error when the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+
+    expect(search.status).toBe('error');
+    expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
+  });
+
+  it('clears a late search error after the final search widget is removed', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const searchBox = virtualSearchBox({});
+    const errorEvent = new Promise<void>((resolve) => {
+      search.on('error', () => resolve());
+    });
+
+    search.addWidgets([
+      virtualAutocomplete({ requiresSearch: false }),
+      searchBox,
+    ]);
+    search.start();
+    await wait(0);
+
+    search.removeWidgets([searchBox]);
+    await wait(0);
+    searches[0].rejecter(new Error('SERVER_ERROR'));
+    await errorEvent;
+    await wait(0);
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(search.status).toBe('idle');
+    expect(search.error).toBeUndefined();
   });
 
   it('does not trigger a search with initial results', async () => {

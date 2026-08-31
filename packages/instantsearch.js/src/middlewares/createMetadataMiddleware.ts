@@ -1,77 +1,16 @@
 import {
-  createInitArgs,
+  extractWidgetPayload,
   getAlgoliaAgent,
-  isIndexWidget,
   safelyRunOnBrowser,
 } from '../lib/utils';
 
-import type {
-  InstantSearch,
-  InternalMiddleware,
-  Widget,
-  IndexWidget,
-} from '../types';
-
-type WidgetMetadata =
-  | {
-      type: string | undefined;
-      widgetType: string | undefined;
-      params: string[];
-    }
-  | {
-      type: string;
-      middleware: true;
-      internal: boolean;
-    };
+import type { WidgetMetadata } from '../lib/utils/extractWidgetPayload';
+import type { InternalMiddleware } from '../types';
 
 type Payload = {
   widgets: WidgetMetadata[];
   ua?: string;
 };
-
-function extractWidgetPayload(
-  widgets: Array<Widget | IndexWidget>,
-  instantSearchInstance: InstantSearch,
-  payload: Payload
-) {
-  const initOptions = createInitArgs(
-    instantSearchInstance,
-    instantSearchInstance.mainIndex,
-    instantSearchInstance._initialUiState
-  );
-
-  widgets.forEach((widget) => {
-    let widgetParams: Record<string, unknown> = {};
-
-    if (widget.getWidgetRenderState) {
-      const renderState = widget.getWidgetRenderState(initOptions);
-
-      if (renderState && renderState.widgetParams) {
-        // casting, as we just earlier checked widgetParams exists, and thus an object
-        widgetParams = renderState.widgetParams as Record<string, unknown>;
-      }
-    }
-
-    // since we destructure in all widgets, the parameters with defaults are set to "undefined"
-    const params = Object.keys(widgetParams).filter(
-      (key) => widgetParams[key] !== undefined
-    );
-
-    payload.widgets.push({
-      type: widget.$$type,
-      widgetType: widget.$$widgetType,
-      params,
-    });
-
-    if (isIndexWidget(widget)) {
-      extractWidgetPayload(
-        widget.getWidgets(),
-        instantSearchInstance,
-        payload
-      );
-    }
-  });
-}
 
 export function isMetadataEnabled() {
   return safelyRunOnBrowser(

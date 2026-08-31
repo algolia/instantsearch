@@ -11,9 +11,11 @@
 @use 'chat/chat-header';
 @use 'chat/chat-messages';
 @use 'chat/chat-message';
+@use 'chat/chat-message-reasoning';
 @use 'chat/chat-message-loader';
 @use 'chat/chat-greeting';
 @use 'chat/chat-prompt';
 @use 'chat/chat-tool-results';
 @use 'chat/chat-suggestions';
+@use 'chat/prompt-suggestions';
 @use 'chat/compare-bar';

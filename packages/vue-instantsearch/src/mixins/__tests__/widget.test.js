@@ -174,6 +174,29 @@ describe('on root index', () => {
 
     expect(wrapper.vm.state).toEqual(state);
   });
+
+  it('keeps initial state when the widget requires no request', () => {
+    const instance = createFakeInstance();
+    const widget = { render: () => {}, dependsOn: 'none' };
+    const factory = jest.fn(() => widget);
+    const connector = jest.fn(() => factory);
+    const Test = createFakeComponent({
+      mixins: [createWidgetMixin({ connector })],
+    });
+    const state = {
+      items: [],
+    };
+
+    const wrapper = mount(Test, {
+      provide: {
+        $_ais_instantSearchInstance: instance,
+      },
+    });
+
+    connector.mock.calls[0][0](state, true);
+
+    expect(wrapper.vm.state).toEqual(state);
+  });
 });
 
 describe('on child index', () => {

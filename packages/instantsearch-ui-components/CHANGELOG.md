@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.36.0...instantsearch-ui-components@0.37.0) (2026-08-24)
+
+
+### Bug Fixes
+
+* **chat:** keep loader timing stable across React renders ([#7187](https://github.com/algolia/instantsearch/issues/7187)) ([44f0dd1](https://github.com/algolia/instantsearch/commit/44f0dd18674f3ab70e02d1db57bac3c42cf128d2))
+
+
+### Features
+
+* **chat:** customizable loader placement, rendering and timing ([#7171](https://github.com/algolia/instantsearch/issues/7171)) ([073abbd](https://github.com/algolia/instantsearch/commit/073abbd159aee6772a55c3f244688cdbe62750d4))
+* **chat:** let tools control their own rendering ([#7172](https://github.com/algolia/instantsearch/issues/7172)) ([3b35274](https://github.com/algolia/instantsearch/commit/3b35274f097ab250497717df9c24345893d7ea0f))
+
+
+
+
+
+# [0.36.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.35.1...instantsearch-ui-components@0.36.0) (2026-08-19)
+
+
+### Features
+
+* **chat:** allow client side tool calls to cancel automatically if output not given before a new message ([#7162](https://github.com/algolia/instantsearch/issues/7162)) ([bdc5a5c](https://github.com/algolia/instantsearch/commit/bdc5a5cb17a1006146fcf86e57151881df2ed1d1))
+* **chat:** consolidate overridable-component props into a single `context` object ([#7123](https://github.com/algolia/instantsearch/issues/7123)) ([33eae92](https://github.com/algolia/instantsearch/commit/33eae92d39acda73b923998551f6b1672c9b3392))
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
+## [0.35.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.35.0...instantsearch-ui-components@0.35.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **chat:** make closed layouts non-interactive ([#7164](https://github.com/algolia/instantsearch/issues/7164)) ([d3869f7](https://github.com/algolia/instantsearch/commit/d3869f710fce3d8fcf4f5c19856c1389750597b3))
+
+
+
+
+
+# [0.35.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.34.0...instantsearch-ui-components@0.35.0) (2026-08-12)
+
+
+### Features
+
+* **chat:** support custom text rendering ([#7160](https://github.com/algolia/instantsearch/issues/7160)) ([7eb2bf0](https://github.com/algolia/instantsearch/commit/7eb2bf0d4c4514985d54868df5a77e9a8af1eb92))
+
+
+
+
+
+# [0.34.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.2...instantsearch-ui-components@0.34.0) (2026-08-06)
+
+
+### Bug Fixes
+
+* **chat:** update query extraction in search index tool ([#7149](https://github.com/algolia/instantsearch/issues/7149)) ([62a45e5](https://github.com/algolia/instantsearch/commit/62a45e54686f4c61af3f2d14e243e7ba8e5747b5))
+
+
+### Features
+
+* **agent studio:** add prompt suggestions widget ([#7054](https://github.com/algolia/instantsearch/issues/7054)) ([0eb1ca7](https://github.com/algolia/instantsearch/commit/0eb1ca7eb7fd90faf428b0bbe553cbefe327ea97))
+* **chat:** built in support for agentic insights events [CEC-1465] ([#7114](https://github.com/algolia/instantsearch/issues/7114)) ([f7c7f52](https://github.com/algolia/instantsearch/commit/f7c7f52aac694f2346c9433e3f43cb8bb18840e3))
+* **chat:** render reasoning parts ([#7139](https://github.com/algolia/instantsearch/issues/7139)) ([415313c](https://github.com/algolia/instantsearch/commit/415313cd85df1f7aad92cc9d0726189368c98115))
+* **chat:** render v1 display results from tool input ([#7137](https://github.com/algolia/instantsearch/issues/7137)) ([4f777dc](https://github.com/algolia/instantsearch/commit/4f777dce22025ca0ab2f7c93f10a13b8634ff86c))
+* **examples:** modernize and expand the React Native example with Recommend, query suggestions, routing & insights adapters ([#7150](https://github.com/algolia/instantsearch/issues/7150)) ([2cdbd68](https://github.com/algolia/instantsearch/commit/2cdbd6829323459233bb277d05d9debab8df1717))
+
+
+
+
+
+## [0.33.2](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.1...instantsearch-ui-components@0.33.2) (2026-07-23)
+
+
+### Bug Fixes
+
+* **chat:** allow tool result submission during response streaming ([#7118](https://github.com/algolia/instantsearch/issues/7118)) ([2d196b3](https://github.com/algolia/instantsearch/commit/2d196b3c003c616e2a0a0fd57b800cef7125f641))
+
+
+
+
+
+## [0.33.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.0...instantsearch-ui-components@0.33.1) (2026-07-07)
+
+**Note:** Version bump only for package instantsearch-ui-components
+
+
+
+
+
+# [0.33.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.31.0...instantsearch-ui-components@0.33.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **chat:** move clear-animation lifecycle to the view layer ([#7092](https://github.com/algolia/instantsearch/issues/7092)) ([bf5857e](https://github.com/algolia/instantsearch/commit/bf5857e28d19e084b6ef283d9dc7ddebd588ebf4))
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
+# [0.32.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.31.0...instantsearch-ui-components@0.32.0) (2026-06-25)
+
+
+### Features
+
+* **autocomplete:** defer index registration until first user focus ([#7077](https://github.com/algolia/instantsearch/issues/7077)) ([6444d87](https://github.com/algolia/instantsearch/commit/6444d87a92441ebc3bea3e296313a4091a5c6642))
+
+
+
+
+
 # [0.31.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.30.1...instantsearch-ui-components@0.31.0) (2026-06-19)
 
 

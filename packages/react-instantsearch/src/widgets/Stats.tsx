@@ -40,6 +40,11 @@ export function Stats({ translations, ...props }: StatsProps) {
             : getResultsSentence(options)
         } found in ${options.processingTimeMS.toLocaleString()}ms`;
       },
+      announcementText(options: StatsTranslationOptions) {
+        return options.areHitsSorted
+          ? getSortedResultsSentence(options)
+          : getResultsSentence(options);
+      },
       ...translations,
     },
   };

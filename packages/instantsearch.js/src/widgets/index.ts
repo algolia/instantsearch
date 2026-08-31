@@ -1,6 +1,7 @@
 import { deprecate } from '../lib/utils';
 
 import answers from './answers/answers';
+import { autocomplete } from './autocomplete/autocomplete';
 import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
@@ -24,7 +25,12 @@ export const EXPERIMENTAL_dynamicWidgets = deprecate(
 export { dynamicWidgets };
 
 export { default as analytics } from './analytics/analytics';
-export { EXPERIMENTAL_autocomplete } from './autocomplete/autocomplete';
+export { autocomplete };
+/** @deprecated use autocomplete instead */
+export const EXPERIMENTAL_autocomplete = deprecate(
+  autocomplete,
+  'EXPERIMENTAL_autocomplete is no longer experimental. Please use autocomplete instead.'
+);
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
@@ -62,6 +68,7 @@ export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
+export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';
 export { default as chatTrigger } from './chat-trigger/chat-trigger';
 export { default as compareBar } from './compare-bar/compare-bar';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';

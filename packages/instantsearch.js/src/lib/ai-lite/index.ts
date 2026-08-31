@@ -20,6 +20,12 @@ export {
 // Stream parsing
 export { parseJsonEventStream, processStream } from './stream-parser';
 
+export {
+  parsePartialJson,
+  repairPartialJson,
+  tryParseJson,
+} from './parse-partial-json';
+
 // Types
 export type {
   // Status
@@ -68,6 +74,7 @@ export type {
   ChatInit,
   IdGenerator,
   ChatOnErrorCallback,
+  ToolResultSubmission,
   ChatOnToolCallCallback,
   ChatOnFinishCallback,
   ChatOnDataCallback,

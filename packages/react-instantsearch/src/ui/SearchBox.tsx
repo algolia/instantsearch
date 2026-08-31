@@ -266,6 +266,7 @@ export function SearchBox({
           className={cx('ais-SearchBox-submit', classNames.submit)}
           type="submit"
           title={translations.submitButtonTitle}
+          aria-label={translations.submitButtonTitle}
         >
           <SubmitIcon classNames={classNames} />
         </button>
@@ -273,16 +274,14 @@ export function SearchBox({
           className={cx('ais-SearchBox-reset', classNames.reset)}
           type="reset"
           title={translations.resetButtonTitle}
+          aria-label={translations.resetButtonTitle}
           hidden={value.length === 0 || isSearchStalled}
         >
           <ResetIcon classNames={classNames} />
         </button>
         {onAiModeClick && (
           <button
-            className={cx(
-              'ais-AiModeButton',
-              classNames.aiModeButton
-            )}
+            className={cx('ais-AiModeButton', classNames.aiModeButton)}
             type="button"
             title={translations.aiModeButtonTitle || 'AI Mode'}
             disabled={aiModeButtonDisabled}

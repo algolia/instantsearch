@@ -6,6 +6,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
+import { Chat as InstantSearchChat } from '../lib/chat';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -36,11 +37,13 @@ import {
   dynamicWidgets,
   chat,
   chatTrigger,
-  EXPERIMENTAL_autocomplete,
+  promptSuggestions,
+  autocomplete,
   filterSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -656,7 +659,11 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    const {
+      renderChat = true,
+      renderRefinements,
+      ...chatWidgetParams
+    } = widgetParams;
 
     const refinementsWidgets = [];
     if (renderRefinements) {
@@ -684,16 +691,36 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       );
     }
 
+    const createChatWidget = () => {
+      const container = document.body.appendChild(
+        document.createElement('div')
+      );
+
+      if (chatWidgetParams.chat === undefined) {
+        return chat<RecordWithObjectID>({
+          container,
+          ...chatWidgetParams,
+        });
+      }
+
+      if (!(chatWidgetParams.chat instanceof InstantSearchChat)) {
+        throw new Error('Expected the caller-supplied Chat instance.');
+      }
+
+      return chat<RecordWithObjectID>({
+        container,
+        ...chatWidgetParams,
+        chat: chatWidgetParams.chat,
+      });
+    };
+
     instantsearch(instantSearchOptions)
       .addWidgets([
         ...refinementsWidgets,
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),
         }),
-        chat({
-          container: document.body.appendChild(document.createElement('div')),
-          ...chatWidgetParams,
-        }),
+        ...(renderChat ? [createChatWidget()] : []),
       ])
       .on('error', () => {
         /*
@@ -706,10 +733,10 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
-        EXPERIMENTAL_autocomplete({
+        autocomplete({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
-        } as Parameters<typeof EXPERIMENTAL_autocomplete>[0]),
+        } as Parameters<typeof autocomplete>[0]),
       ])
       .on('error', () => {
         /*
@@ -723,6 +750,22 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
     instantsearch(instantSearchOptions)
       .addWidgets([
         filterSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        promptSuggestions({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -772,6 +815,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

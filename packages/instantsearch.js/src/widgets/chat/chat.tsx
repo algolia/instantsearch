@@ -1,15 +1,8 @@
 /** @jsx h */
 
-import {
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  createButtonComponent,
-  createChatComponent,
-  getFacetFiltersFromToolInput,
-} from 'instantsearch-ui-components';
-import { Component, Fragment, h, render } from 'preact';
-import { useEffect, useMemo } from 'preact/hooks';
+import { createChatComponent, findTool } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -22,18 +15,22 @@ import {
   DisplayResultsToolType,
   CompareProductsToolType,
 } from '../../lib/chat';
+import {
+  focusAfterReveal,
+  getActiveContainerAnimations,
+  holdContainerInertUntilReveal,
+  restoreContainerInertUntilReveal,
+} from '../../lib/chat/focusAfterReveal';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
-  addAbsolutePosition,
-  addQueryID,
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { carousel } from '../../templates';
 
 import { createCompareProductsTool } from './compare-products-tool';
 import { createDisplayResultsTool } from './display-results-tool';
+import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
 import type {
@@ -52,18 +49,21 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
+  ChatComponentPropsWithContext,
+  ChatEmptyProps,
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
+  ClientSideToolShouldRenderContext,
   ChatMessageErrorProps,
-  ChatEmptyProps,
-  ChatMessageLoaderProps,
+  ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
+  ChatMessageTextComponentProps,
+  ChatMessagesProps,
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
@@ -71,35 +71,19 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-// Lightweight `memo` for the Preact flavor. `preact/compat` is intentionally
-// avoided across this package (it bloats the bundle and patches Preact
-// globally); a class component with `shouldComponentUpdate` is all the chat
-// message memoization needs.
-const memo: NonNullable<Parameters<typeof createChatComponent>[0]['memo']> = (
-  FunctionComponent,
-  propsAreEqual
-) => {
-  class Memoized extends Component<Record<string, unknown>> {
-    shouldComponentUpdate(nextProps: Record<string, unknown>) {
-      return propsAreEqual
-        ? !propsAreEqual(this.props as never, nextProps as never)
-        : true;
-    }
-    render() {
-      return h(FunctionComponent as never, this.props);
-    }
-  }
-  return (props) => h(Memoized, props as Record<string, unknown>);
-};
-
-const Chat = createChatComponent({ createElement: h, Fragment, memo });
+const Chat = createChatComponent({
+  createElement: h,
+  Fragment,
+  useMemo,
+  useState,
+  useEffect,
+});
 
 export {
   SearchIndexToolType,
@@ -114,192 +98,77 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
-function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
+/**
+ * Whether the search tool renders its own results, i.e. the agent did not hand
+ * the turn to the display-results tool. Set on the message by the backend.
+ */
+function isDisplayResultsDisabled({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) {
+  return (
+    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
+      ?.displayResultsEnabled !== true
+  );
+}
+
+function mergeToolOptions<
+  TTool extends {
+    streamInput?: boolean;
+    shouldRender?: unknown;
+    templates?: { layout?: unknown };
+  },
 >(
-  showViewAll: boolean,
-  templates: ChatTemplates<THit>,
-  getSearchPageURL?: (params: SearchParameters) => string
-): UserClientSideToolWithTemplate {
-  const Button = createButtonComponent({
-    createElement: h,
-  });
-
-  function SearchLayoutComponent({
-    message,
-    applyFilters,
-    onClose,
-    sendEvent,
-  }: ClientSideToolTemplateData) {
-    const input = message?.input as SearchToolInput | undefined;
-
-    const output = message?.output as
-      | {
-          hits?: Array<RecordWithObjectID<THit>>;
-          nbHits?: number;
-          queryID?: string;
-        }
-      | undefined;
-    const hitsWithAbsolutePosition = addAbsolutePosition(
-      output?.hits || [],
-      0,
-      (input?.number_of_results ?? output?.hits?.length) || 5 // defaulting to 5 if number_of_results is not provided
-    );
-    const items = addQueryID(hitsWithAbsolutePosition, output?.queryID);
-
-    const MemoedHeaderComponent = useMemo(() => {
-      return (
-        props: Omit<
-          ComponentProps<typeof HeaderComponent>,
-          | 'nbHits'
-          | 'query'
-          | 'hitsPerPage'
-          | 'setIndexUiState'
-          | 'indexUiState'
-          | 'getSearchPageURL'
-          | 'onClose'
-        >
-      ) => (
-        <HeaderComponent
-          nbHits={output?.nbHits}
-          input={input}
-          hitsPerPage={items.length}
-          applyFilters={applyFilters}
-          onClose={onClose}
-          {...props}
-        />
-      );
-    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
-
-    return carousel({
-      showNavigation: false,
-      templates: {
-        header: MemoedHeaderComponent,
-      },
-    })({
-      items,
-      templates: {
-        item: ({ item }) => (
-          <TemplateComponent
-            templates={templates}
-            templateKey="item"
-            data={item}
-            rootTagName="fragment"
-          />
-        ),
-      },
-      sendEvent,
-    });
+  defaultTools: Record<string, TTool>,
+  userTools?: Record<string, TTool>
+): Record<string, TTool> {
+  if (!userTools) {
+    return defaultTools;
   }
 
-  function HeaderComponent({
-    canScrollLeft,
-    canScrollRight,
-    scrollLeft,
-    scrollRight,
-    nbHits,
-    input,
-    hitsPerPage,
-    applyFilters,
-    onClose,
-  }: {
-    canScrollLeft: boolean;
-    canScrollRight: boolean;
-    scrollLeft: () => void;
-    scrollRight: () => void;
-    nbHits?: number;
-    input?: SearchToolInput;
-    hitsPerPage?: number;
-    applyFilters?: ClientSideToolComponentProps['applyFilters'];
-    onClose: () => void;
-  }) {
-    if ((hitsPerPage ?? 0) < 1) {
-      return null;
+  const tools = { ...defaultTools, ...userTools };
+
+  Object.keys(userTools).forEach((toolName) => {
+    const userTool = userTools[toolName];
+    const defaultTool = defaultTools[toolName];
+    const defaultStreamInput = defaultTool?.streamInput;
+
+    if (
+      userTool.templates?.layout !== undefined &&
+      userTool.streamInput === undefined &&
+      defaultStreamInput !== undefined
+    ) {
+      tools[toolName] = {
+        ...tools[toolName],
+        streamInput: defaultStreamInput,
+      };
     }
 
-    return (
-      <div className="ais-ChatToolSearchIndexCarouselHeader">
-        <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
-          {nbHits && (
-            <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
-              {nbHits > 1 ? 's' : ''}
-            </div>
-          )}
-          {showViewAll && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (!input || !applyFilters) return;
-                const params = applyFilters({
-                  query: input.query,
-                  facetFilters: getFacetFiltersFromToolInput(input),
-                });
+    // Overriding a tool's rendering shouldn't opt it out of the conditions
+    // under which the default renders at all.
+    if (userTool.shouldRender === undefined && defaultTool?.shouldRender) {
+      tools[toolName] = {
+        ...tools[toolName],
+        shouldRender: defaultTool.shouldRender,
+      };
+    }
+  });
 
-                if (
-                  getSearchPageURL &&
-                  new URL(getSearchPageURL(params)).pathname !==
-                    window.location.pathname
-                ) {
-                  window.location.href = getSearchPageURL(params);
-                }
-
-                onClose();
-              }}
-              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-            >
-              View all
-              <ArrowRightIcon createElement={h} />
-            </Button>
-          )}
-        </div>
-
-        {(hitsPerPage ?? 0) > 2 && (
-          <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronLeftIcon createElement={h} />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollRight}
-              disabled={!canScrollRight}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronRightIcon createElement={h} />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return {
-    templates: { layout: SearchLayoutComponent },
-  };
+  return tools;
 }
 
 function createDefaultTools<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
   return {
-    [SearchIndexToolType]: createCarouselTool(
-      true,
-      templates,
-      getSearchPageURL
-    ),
+    [SearchIndexToolType]: {
+      ...createCarouselTool(true, templates, getSearchPageURL),
+      // The agent decides per turn whether the richer display-results tool
+      // takes over the rendering of the search results.
+      shouldRender: isDisplayResultsDisabled,
+    },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
     [CompareProductsToolType]: createCompareProductsTool(),
@@ -324,9 +193,7 @@ type ChatWrapperProps = {
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
   error: ChatRenderState['error'];
-  isClearing: boolean;
   clearMessages: () => void;
-  onClearTransitionEnd: () => void;
   onFeedback?: ChatRenderState['sendChatMessageFeedback'];
   feedbackState: ChatRenderState['feedbackState'];
   toolsForUi: ClientSideTools;
@@ -340,19 +207,38 @@ type ChatWrapperProps = {
   };
   messagesProps: {
     loaderComponent:
-      | ((props: ChatMessageLoaderProps) => JSX.Element)
+      | ((props: ChatMessageLoaderPropsWithContext) => JSX.Element)
       | undefined;
-    errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
-    emptyComponent: ((props: ChatEmptyProps) => JSX.Element) | undefined;
+    errorComponent:
+      | ((
+          props: ChatComponentPropsWithContext<ChatMessageErrorProps>
+        ) => JSX.Element)
+      | undefined;
+    emptyComponent:
+      // The deprecated root props are still passed alongside `context`.
+      // eslint-disable-next-line typescript/no-deprecated
+      | ((props: ChatComponentPropsWithContext<ChatEmptyProps>) => JSX.Element)
+      | undefined;
+    loaderPosition: ChatMessagesProps['loaderPosition'];
+    shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
+    loaderShowDelay: ChatMessagesProps['loaderShowDelay'];
+    loaderMinDuration: ChatMessagesProps['loaderMinDuration'];
     actionsComponent:
-      | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
+      | ((
+          props: ChatComponentPropsWithContext<{
+            actions: ChatMessageActionProps[];
+          }>
+        ) => JSX.Element)
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
+      showReasoning: ChatMessageProps['showReasoning'];
     };
     userMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
     };
     translations: Partial<ChatMessagesTranslations>;
@@ -366,9 +252,11 @@ type ChatWrapperProps = {
     footerComponent: ChatPromptProps['footerComponent'];
     translations: Partial<ChatPromptTranslations>;
     promptRef: { current: HTMLTextAreaElement | null };
+    autoFocus: boolean;
   };
   suggestionsProps: {
     suggestions?: string[];
+    isLoading?: boolean;
     onSuggestionClick: (suggestion: string) => void;
     suggestionsComponent: ComponentProps<typeof Chat>['suggestionsComponent'];
   };
@@ -390,9 +278,7 @@ function ChatWrapper({
   regenerate,
   stop,
   error,
-  isClearing,
   clearMessages,
-  onClearTransitionEnd,
   onFeedback,
   feedbackState,
   toolsForUi,
@@ -442,7 +328,7 @@ function ChatWrapper({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: clearMessages,
-        canClear: Boolean(chatMessages?.length) && !isClearing,
+        canClear: Boolean(chatMessages?.length),
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
         maximizeIconComponent: headerProps.maximizeIconComponent,
@@ -451,16 +337,12 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
-        error,
         onReload: (messageId) => regenerate({ messageId }),
-        onNewConversation: clearMessages,
         onClose: () => setChatOpen(false),
         onFeedback,
         feedbackState,
         messages: chatMessages,
         indexUiState,
-        isClearing,
-        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -468,6 +350,10 @@ function ChatWrapper({
         setIndexUiState,
         tools: toolsForUi,
         loaderComponent: messagesProps.loaderComponent,
+        loaderPosition: messagesProps.loaderPosition,
+        shouldShowLoader: messagesProps.shouldShowLoader,
+        loaderShowDelay: messagesProps.loaderShowDelay,
+        loaderMinDuration: messagesProps.loaderMinDuration,
         errorComponent: messagesProps.errorComponent,
         emptyComponent: messagesProps.emptyComponent,
         actionsComponent: messagesProps.actionsComponent,
@@ -495,10 +381,12 @@ function ChatWrapper({
         headerComponent: promptProps.headerComponent,
         footerComponent: promptProps.footerComponent,
         translations: promptProps.translations,
+        autoFocus: promptProps.autoFocus,
       }}
       suggestionsProps={{
         onSuggestionClick: suggestionsProps.onSuggestionClick,
         suggestions: suggestionsProps.suggestions,
+        isLoading: suggestionsProps.isLoading,
       }}
     />
   );
@@ -510,6 +398,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode,
   templates,
   tools,
+  showReasoning,
+  loaderPosition,
+  shouldShowLoader,
+  loaderShowDelay,
+  loaderMinDuration,
+  isInlineLayoutTemplate,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -518,10 +412,16 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
+  showReasoning: boolean;
+  loaderPosition: ChatMessagesProps['loaderPosition'];
+  shouldShowLoader: ChatMessagesProps['shouldShowLoader'];
+  loaderShowDelay: ChatMessagesProps['loaderShowDelay'];
+  loaderMinDuration: ChatMessagesProps['loaderMinDuration'];
+  isInlineLayoutTemplate: boolean;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
-  let wasOpen = false;
+  let focusRequestId = 0;
 
   // Template wrappers are rendered as component types downstream. Recreating
   // them each render would make Preact remount the chat subtree (and drop
@@ -540,6 +440,19 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const promptTemplateRef = makeTemplateRef();
   const layoutTemplateRef = makeTemplateRef();
 
+  // Per-tool layout components must be stable across renders or Preact will
+  // remount each tool subtree on every streaming update (e.g. resetting
+  // carousel scroll). One component per tool key reads its latest templates
+  // from a mutable ref refreshed on each render.
+  const toolTemplatesByKey = new Map<
+    string,
+    { current: UserClientSideToolWithTemplate['templates'] }
+  >();
+  const toolLayoutComponentByKey = new Map<
+    string,
+    (props: ClientSideToolComponentProps) => JSX.Element
+  >();
+
   function createStableTemplateComponent<TProps>(
     templateRef: TemplateRef,
     templateKey: string,
@@ -553,35 +466,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         data={props as unknown as Record<string, unknown>}
       />
     );
-  }
-
-  // Tool layout components are rendered as component types downstream, exactly
-  // like the chat templates above. Recreating them each render makes Preact see
-  // a new component type and remount the whole tool subtree on every streaming
-  // delta — which re-mounts e.g. a carousel's `<ol>` and resets its scroll
-  // position. `tools` is created once per widget, so cache one stable component
-  // per tool key and reuse it across renders.
-  const toolLayoutComponentCache = new Map<
-    string,
-    (props: ClientSideToolComponentProps) => JSX.Element
-  >();
-  function getStableToolLayoutComponent(
-    key: string,
-    widgetTool: NonNullable<(typeof tools)[string]>
-  ): (props: ClientSideToolComponentProps) => JSX.Element {
-    let component = toolLayoutComponentCache.get(key);
-    if (!component) {
-      component = (layoutComponentProps: ClientSideToolComponentProps) => (
-        <TemplateComponent
-          templates={widgetTool.templates}
-          rootTagName="fragment"
-          templateKey="layout"
-          data={layoutComponentProps}
-        />
-      );
-      toolLayoutComponentCache.set(key, component);
-    }
-    return component;
   }
 
   const stableHeaderLayoutComponent = templates.header?.layout
@@ -620,24 +504,29 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableMessagesErrorComponent = templates.messages?.error
-    ? createStableTemplateComponent<ChatMessageErrorProps>(
-        messagesTemplateRef,
-        'error',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        ChatComponentPropsWithContext<ChatMessageErrorProps>
+      >(messagesTemplateRef, 'error', 'div')
     : undefined;
   const stableMessagesEmptyComponent = templates.empty
-    ? createStableTemplateComponent<ChatEmptyProps>(
-        emptyTemplateRef,
-        'empty',
-        'div'
-      )
+    ? createStableTemplateComponent<
+        // The deprecated root props are still passed alongside `context`.
+        // eslint-disable-next-line typescript/no-deprecated
+        ChatComponentPropsWithContext<ChatEmptyProps>
+      >(emptyTemplateRef, 'empty', 'div')
     : undefined;
   const stableAssistantMessageLeadingComponent = templates.assistantMessage
     ?.leading
     ? createStableTemplateComponent<Record<string, never>>(
         assistantMessageTemplateRef,
         'leading',
+        'fragment'
+      )
+    : undefined;
+  const stableAssistantMessageTextComponent = templates.assistantMessage?.text
+    ? createStableTemplateComponent<ChatMessageTextComponentProps>(
+        assistantMessageTemplateRef,
+        'text',
         'fragment'
       )
     : undefined;
@@ -653,6 +542,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     ? createStableTemplateComponent<Record<string, never>>(
         userMessageTemplateRef,
         'leading',
+        'fragment'
+      )
+    : undefined;
+  const stableUserMessageTextComponent = templates.userMessage?.text
+    ? createStableTemplateComponent<ChatMessageTextComponentProps>(
+        userMessageTemplateRef,
+        'text',
         'fragment'
       )
     : undefined;
@@ -685,7 +581,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableActionsComponent = templates.actions
-    ? (actionsProps: { actions: ChatMessageActionProps[] }) => (
+    ? (
+        actionsProps: ChatComponentPropsWithContext<{
+          actions: ChatMessageActionProps[];
+        }>
+      ) => (
         <TemplateComponent
           {...renderState.templateProps}
           templateKey="actions"
@@ -695,7 +595,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       )
     : undefined;
   const stableLoaderComponent = templates.loader
-    ? createStableTemplateComponent<ChatMessageLoaderProps>(
+    ? createStableTemplateComponent<ChatMessageLoaderPropsWithContext>(
         loaderTemplateRef,
         'loader',
         'div'
@@ -704,6 +604,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const stableSuggestionsComponent = templates.suggestions
     ? (suggestionsProps: {
         suggestions?: string[];
+        isLoading?: boolean;
         onSuggestionClick: (suggestion: string) => void;
       }) => (
         <TemplateComponent
@@ -758,13 +659,14 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       error,
       regenerate,
       stop,
-      isClearing,
       clearMessages,
-      onClearTransitionEnd,
       tools: toolsFromConnector,
       suggestions,
+      suggestionsStatus,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
+      '~consumeInputFocus': consumeInputFocus,
+      '~isOpenStatePersistenceEnabled': isOpenStatePersistenceEnabled,
     } = props;
 
     if (__DEV__ && error) {
@@ -782,18 +684,42 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
-      let widgetTool = tools[key];
+      // The connector keys its tools the way the widget does, so this is an
+      // exact hit; `findTool` keeps one resolution rule across the flavors.
+      const widgetTool = findTool(key, tools);
 
-      // Compatibility shim with Algolia MCP Server search tool
-      if (!widgetTool && key.startsWith(`${SearchIndexToolType}_`)) {
-        widgetTool = tools[SearchIndexToolType];
+      let layoutComponent:
+        | ((props: ClientSideToolComponentProps) => JSX.Element)
+        | undefined;
+      if (widgetTool?.templates?.layout) {
+        let templatesRef = toolTemplatesByKey.get(key);
+        if (!templatesRef) {
+          templatesRef = { current: widgetTool.templates };
+          toolTemplatesByKey.set(key, templatesRef);
+        } else {
+          templatesRef.current = widgetTool.templates;
+        }
+
+        layoutComponent = toolLayoutComponentByKey.get(key);
+        if (!layoutComponent) {
+          const ref = templatesRef;
+          layoutComponent = (
+            layoutComponentProps: ClientSideToolComponentProps
+          ) => (
+            <TemplateComponent
+              templates={ref.current}
+              rootTagName="fragment"
+              templateKey="layout"
+              data={layoutComponentProps}
+            />
+          );
+          toolLayoutComponentByKey.set(key, layoutComponent);
+        }
       }
 
       toolsForUi[key] = {
         ...connectorTool,
-        ...(widgetTool?.templates?.layout && {
-          layoutComponent: getStableToolLayoutComponent(key, widgetTool),
-        }),
+        ...(layoutComponent && { layoutComponent }),
       };
     });
 
@@ -853,6 +779,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
+      reasoningLabel: templates.message?.reasoningLabelText,
     });
 
     userMessageTemplateRef.current = prepareTemplateProps({
@@ -907,9 +834,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           regenerate={regenerate}
           stop={stop}
           error={error}
-          isClearing={isClearing}
           clearMessages={clearMessages}
-          onClearTransitionEnd={onClearTransitionEnd}
           onFeedback={onFeedback}
           feedbackState={feedbackState}
           toolsForUi={toolsForUi}
@@ -923,15 +848,22 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           }}
           messagesProps={{
             loaderComponent: stableLoaderComponent,
+            loaderPosition,
+            shouldShowLoader,
+            loaderShowDelay,
+            loaderMinDuration,
             errorComponent: stableMessagesErrorComponent,
             emptyComponent: stableMessagesEmptyComponent,
             actionsComponent: stableActionsComponent,
             assistantMessageProps: {
               leadingComponent: stableAssistantMessageLeadingComponent,
+              textComponent: stableAssistantMessageTextComponent,
               footerComponent: stableAssistantMessageFooterComponent,
+              showReasoning,
             },
             userMessageProps: {
               leadingComponent: stableUserMessageLeadingComponent,
+              textComponent: stableUserMessageTextComponent,
               footerComponent: stableUserMessageFooterComponent,
             },
             translations: messagesTranslations,
@@ -945,10 +877,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             footerComponent: stablePromptFooterComponent,
             translations: promptTranslations,
             promptRef,
+            autoFocus: !isOpenStatePersistenceEnabled || isInlineLayoutTemplate,
           }}
           state={state}
           suggestionsProps={{
             suggestions,
+            isLoading: suggestionsStatus === 'loading',
             onSuggestionClick: (message: string) => {
               sendMessage({ text: message });
             },
@@ -959,17 +893,41 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       );
     }
 
-    const shouldFocusPrompt = !wasOpen && open;
+    const shouldFocusPrompt = consumeInputFocus?.() ?? false;
+    const animationsBeforeReveal = shouldFocusPrompt
+      ? getActiveContainerAnimations(promptRef.current)
+      : [];
 
     rerender();
 
-    if (shouldFocusPrompt) {
-      window.requestAnimationFrame(() => {
-        promptRef.current?.focus();
-      });
+    if (open) {
+      restoreContainerInertUntilReveal(promptRef.current);
     }
 
-    wasOpen = open;
+    if (!open) {
+      focusRequestId++;
+    }
+
+    if (shouldFocusPrompt) {
+      const currentFocusRequestId = ++focusRequestId;
+      holdContainerInertUntilReveal(promptRef.current);
+      window.requestAnimationFrame(() => {
+        const prompt = promptRef.current;
+        focusAfterReveal(
+          prompt,
+          animationsBeforeReveal,
+          () => {
+            return (
+              focusRequestId === currentFocusRequestId &&
+              promptRef.current === prompt
+            );
+          },
+          () => {
+            return focusRequestId === currentFocusRequestId;
+          }
+        );
+      });
+    }
   };
 };
 
@@ -1021,12 +979,13 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Custom loader template for the chat widget.
      */
-    loader: Template<ChatMessageLoaderProps>;
+    loader: Template<ChatMessageLoaderPropsWithContext>;
 
     /**
-     * Text to display in the loader
+     * Text to display in the loader. Pass a function to label the wait by what
+     * the turn is doing, e.g. `({ phase }) => phase === 'tool' ? 'Searching…' : 'Thinking…'`.
      */
-    loaderText: string;
+    loaderText: ChatMessagesTranslations['loaderText'];
 
     /**
      * Templates to use for the header.
@@ -1081,7 +1040,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       /**
        * Template to use when there is an error loading messages
        */
-      error: Template<ChatMessageErrorProps>;
+      error: Template<ChatComponentPropsWithContext<ChatMessageErrorProps>>;
       /**
        * Label for the scroll to bottom button
        */
@@ -1108,6 +1067,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the message container
        */
       messageLabelText?: string;
+      /**
+       * Label for reasoning disclosures
+       */
+      reasoningLabelText?: string;
     }>;
 
     /**
@@ -1118,6 +1081,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for the assistant message leading content.
        */
       leading: Template;
+      /**
+       * Template to use for assistant message text parts.
+       */
+      text: Template<ChatMessageTextComponentProps>;
       /**
        * Template to use for the assistant message footer content.
        */
@@ -1132,6 +1099,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for the user message leading content.
        */
       leading: Template;
+      /**
+       * Template to use for user message text parts.
+       */
+      text: Template<ChatMessageTextComponentProps>;
       /**
        * Template to use for the user message footer content.
        */
@@ -1183,21 +1154,26 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for the message actions.
      */
-    actions: Template<{
-      actions: ChatMessageActionProps[];
-      message: ChatMessageBase;
-    }>;
+    actions: Template<
+      ChatComponentPropsWithContext<{
+        actions: ChatMessageActionProps[];
+        message: ChatMessageBase;
+      }>
+    >;
 
     /**
      * Template to use for the empty screen shown when there are no messages
      */
-    empty?: Template<ChatEmptyProps>;
+    // The deprecated root props are still passed alongside `context`.
+    // eslint-disable-next-line typescript/no-deprecated
+    empty?: Template<ChatComponentPropsWithContext<ChatEmptyProps>>;
 
     /**
      * Template to use for prompt suggestions.
      */
     suggestions: Template<{
       suggestions: string[];
+      isLoading?: boolean;
       onSuggestionClick: (suggestion: string) => void;
     }>;
   }>;
@@ -1235,6 +1211,36 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * Disable validation that requires either `chatTrigger` or AI mode.
    */
   disableTriggerValidation?: boolean;
+
+  /**
+   * Whether to render reasoning parts
+   */
+  showReasoning?: boolean;
+
+  /**
+   * Where the loader renders: as its own row after the last message
+   * (`messages-end`, the default) or inside the streaming assistant message
+   * (`message-inline`).
+   */
+  loaderPosition?: ChatMessagesProps['loaderPosition'];
+
+  /**
+   * Overrides when the loader shows. Receives the turn context plus the
+   * built-in decision as `defaultValue`.
+   */
+  shouldShowLoader?: ChatMessagesProps['shouldShowLoader'];
+
+  /**
+   * How long (ms) a renewed loading state must hold before the loader comes back
+   * after having been hidden in the same turn.
+   */
+  loaderShowDelay?: ChatMessagesProps['loaderShowDelay'];
+
+  /**
+   * Minimum time (ms) the loader stays on screen once shown, while the turn is
+   * still running.
+   */
+  loaderMinDuration?: ChatMessagesProps['loaderMinDuration'];
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1250,7 +1256,7 @@ const defaultTemplates: ChatTemplates = {
 };
 
 export default (function chat<
-  THit extends RecordWithObjectID = RecordWithObjectID
+  THit extends RecordWithObjectID = RecordWithObjectID,
 >(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,
@@ -1260,6 +1266,11 @@ export default (function chat<
     tools: userTools,
     getSearchPageURL,
     disableTriggerValidation = false,
+    showReasoning = false,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
     ...options
   } = widgetParams || {};
 
@@ -1276,7 +1287,7 @@ export default (function chat<
 
   const defaultTools = createDefaultTools(templates, getSearchPageURL);
 
-  const tools = { ...defaultTools, ...userTools };
+  const tools = mergeToolOptions(defaultTools, userTools);
 
   // Inline layouts are always visible, so they don't require a `chatTrigger`
   // (or AI mode) to be present. We detect this via a `$$inlineLayout` marker
@@ -1294,6 +1305,12 @@ export default (function chat<
     renderState: {},
     templates,
     tools,
+    showReasoning,
+    loaderPosition,
+    shouldShowLoader,
+    loaderShowDelay,
+    loaderMinDuration,
+    isInlineLayoutTemplate,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>
@@ -1307,7 +1324,7 @@ export default (function chat<
       disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),
-    $$widgetType: 'ais.chat' as const,
+    $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
 

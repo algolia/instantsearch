@@ -29,7 +29,7 @@ type ControlledCompositionClient = {
 };
 
 export const createControlledCompositionClient = <
-  T extends Record<string, unknown>
+  T extends Record<string, unknown>,
 >(
   args: Partial<CompositionClient & T> = {},
   createResponse = (..._params: Parameters<CompositionClient['search']>) =>
