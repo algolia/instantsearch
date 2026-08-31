@@ -961,6 +961,194 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
   });
 
+  describe('updateWidget', () => {
+    it('throws an error with a widget that does not implement `dispose`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const widget = createWidget();
+      delete (widget as any).dispose;
+
+      expect(() => {
+        instance.updateWidget(widget, virtualSearchBox({}));
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The widget definition expects a \`dispose\` method.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      `);
+    });
+
+    it('throws an error with a widget that implements neither `init` nor `render`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+
+      instance.addWidgets([searchBox]);
+
+      expect(() => {
+        instance.updateWidget(searchBox, { dispose() {} } as any);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The widget definition expects a \`render\` and/or an \`init\` method.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+      `);
+    });
+
+    it('replaces the widget in place, keeping its position', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, pagination, refinementList]);
+      instance.updateWidget(pagination, nextPagination);
+
+      expect(instance.getWidgets()).toEqual([
+        searchBox,
+        nextPagination,
+        refinementList,
+      ]);
+    });
+
+    it('appends the next widget when the previous one is not mounted', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([searchBox]);
+      instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+      expect(instance.getWidgets()).toHaveLength(2);
+    });
+
+    it('moves the parent over to the next widget', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+
+      instance.addWidgets([pagination]);
+      instance.updateWidget(pagination, nextPagination);
+
+      expect(pagination.parent).toBeUndefined();
+      expect(nextPagination.parent).toBe(instance);
+    });
+
+    it('returns the instance to be able to chain the calls', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+
+      expect(
+        instance
+          .addWidgets([pagination])
+          .updateWidget(pagination, virtualPagination({ padding: 4 }))
+      ).toBe(instance);
+    });
+
+    it('does not throw an error without the `init` step', () => {
+      const instance = index({ indexName: 'indexName' });
+      const pagination = virtualPagination({});
+
+      instance.addWidgets([pagination]);
+
+      expect(() => {
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+      }).not.toThrow();
+    });
+
+    describe('with a started instance', () => {
+      it('keeps the `uiState` the next widget still claims', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([virtualSearchBox({}), pagination]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: { indexName: { page: 4 } },
+          })
+        );
+
+        expect(instance.getHelper()!.state.page).toEqual(3);
+
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(instance.getHelper()!.state.page).toEqual(3);
+        expect(instance.getWidgetUiState({})).toEqual({
+          indexName: { page: 4 },
+        });
+      });
+
+      it('forgets the `uiState` the next widget no longer claims', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+        instance.addWidgets([virtualSearchBox({}), refinementList]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: { indexName: { refinementList: { brand: ['Apple'] } } },
+          })
+        );
+
+        expect(
+          instance.getHelper()!.state.disjunctiveFacetsRefinements
+        ).toEqual({ brand: ['Apple'] });
+
+        instance.updateWidget(
+          refinementList,
+          virtualRefinementList({ attribute: 'categories' })
+        );
+
+        expect(
+          instance.getHelper()!.state.disjunctiveFacetsRefinements
+        ).toEqual({ categories: [] });
+        expect(instance.getWidgetUiState({})).toEqual({ indexName: {} });
+      });
+
+      it('disposes the previous widget and inits the next one', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const previousWidget = createWidget();
+        const nextWidget = createWidget();
+
+        instance.addWidgets([previousWidget]);
+        instance.init(
+          createIndexInitOptions({ instantSearchInstance, parent: null })
+        );
+
+        instance.updateWidget(previousWidget, nextWidget);
+
+        expect(previousWidget.dispose).toHaveBeenCalledTimes(1);
+        expect(nextWidget.init).toHaveBeenCalledTimes(1);
+        // The previous widget was only initialized by the `init` step above.
+        expect(previousWidget.init).toHaveBeenCalledTimes(1);
+      });
+
+      it('notifies the instance of the `uiState` change only once', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([virtualSearchBox({}), pagination]);
+        instance.init(
+          createIndexInitOptions({ instantSearchInstance, parent: null })
+        );
+
+        castToJestMock(instantSearchInstance.onInternalStateChange).mockClear();
+
+        // A `removeWidgets` + `addWidgets` pair writes to the helper twice, and
+        // therefore notifies twice.
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   describe('createURL', () => {
     it('default url returns #', () => {
       const instance = index({ indexName: 'indexName' });
