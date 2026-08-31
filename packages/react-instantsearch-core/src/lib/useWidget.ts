@@ -64,8 +64,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
 
       // Warning: if an unstable function prop is provided, `dequal` is not able
       // to keep its reference and therefore will consider that props did change.
-      // This unsollicitely replaces the widget, which is wasteful (it causes a
-      // search), even though `updateWidget` below keeps its state.
+      // This unintentionally replaces the widget, which is wasteful (it causes
+      // a search), even though `updateWidget` below keeps its state.
       // If users face this issue, we should advise them to provide stable function
       // references.
       const arePropsEqual = dequal(props, prevPropsRef.current);
