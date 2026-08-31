@@ -319,14 +319,18 @@ jobs:
             echo "Updated pull request #${EXISTING}."
             echo "number=${EXISTING}" >> "$GITHUB_OUTPUT"
           else
+            # TODO: restore `--reviewer algolia/frontend-experiences-web` once the
+            # frontend-experiences-bot app is granted (and an org owner approves)
+            # the `Members: Read` permission it needs to resolve a team. Without
+            # it the API returns 422 and fails the step after the pull request
+            # has already been created.
             URL=$(gh pr create \
               --repo algolia/docs-new \
               --base "${DOCS_DEFAULT_BRANCH}" \
               --head "${DOCS_BRANCH}" \
               --title "$TITLE" \
               --body-file "$BODY" \
-              --draft \
-              --reviewer algolia/frontend-experiences-web)
+              --draft)
             echo "Opened ${URL}"
             echo "url=${URL}" >> "$GITHUB_OUTPUT"
             echo "number=${URL##*/}" >> "$GITHUB_OUTPUT"
