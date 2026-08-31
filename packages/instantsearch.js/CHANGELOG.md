@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.114.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.113.0...instantsearch.js@4.114.0) (2026-08-31)
+
+
+### Bug Fixes
+
+* **chat:** apply MCP boolean and numeric facets on view all ([#7197](https://github.com/algolia/instantsearch/issues/7197)) ([3406263](https://github.com/algolia/instantsearch/commit/3406263da649958be08d9286e25e8ca35d4ddc34))
+* **chat:** keep the search status when the chat re-renders ([#7195](https://github.com/algolia/instantsearch/issues/7195)) ([268c85c](https://github.com/algolia/instantsearch/commit/268c85c8ec768ac9ffbf0a09fd204bd0868a4ccd))
+* **index:** keep widget uiState when its parameters change ([#7206](https://github.com/algolia/instantsearch/issues/7206)) ([2afe171](https://github.com/algolia/instantsearch/commit/2afe171a896adcfacdd3ba5f52dc73972cce75e5)), closes [#7201](https://github.com/algolia/instantsearch/issues/7201) [#6635](https://github.com/algolia/instantsearch/issues/6635)
+
+
+### Features
+
+* **chat:** let tools claim the names a server derives from them ([#7185](https://github.com/algolia/instantsearch/issues/7185)) ([02fc09f](https://github.com/algolia/instantsearch/commit/02fc09f182a86774962ea40304a4f6fbf2b58784))
+* **prompt-suggestions:** make configuration ID optional ([#7193](https://github.com/algolia/instantsearch/issues/7193)) ([2e2c023](https://github.com/algolia/instantsearch/commit/2e2c023c11040c3ced9beffaedbb00820275026d))
+* **prompt-suggestions:** support plain JSON task streams ([#7192](https://github.com/algolia/instantsearch/issues/7192)) ([9a3de5d](https://github.com/algolia/instantsearch/commit/9a3de5d07ce5ec95d71c14b7ead3778ef550cc9b))
+
+
+
+
+
 # [4.113.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.112.0...instantsearch.js@4.113.0) (2026-08-24)
 
 

@@ -196,6 +196,23 @@ describe('fixMismatchesIn', () => {
     expect(example.dependencies['pkg-b']).toBe('1.2.0');
   });
 
+  it('keeps dependency fixes when a later package in the group is bumped', () => {
+    // Regression: pkg-c is both bumped itself and a consumer of pkg-b. The
+    // snapshot taken before pkg-b's dependency rewrite used to be written back
+    // over it, leaving pkg-c pointing at an unpublished pkg-b version.
+    writePackage(tmpDir, 'pkg-a', '1.2.0');
+    writePackage(tmpDir, 'pkg-b', '1.1.0');
+    writePackage(tmpDir, 'pkg-c', '1.1.0', {
+      dependencies: { 'pkg-b': '1.1.0' },
+    });
+
+    runFix(tmpDir, { group: ['pkg-a', 'pkg-b', 'pkg-c'] });
+
+    const pkgC = readJson(path.join(tmpDir, 'packages/pkg-c/package.json'));
+    expect(pkgC.version).toBe('1.2.0');
+    expect(pkgC.dependencies['pkg-b']).toBe('1.2.0');
+  });
+
   it('skips node_modules when scanning for dependency references', () => {
     writePackage(tmpDir, 'pkg-a', '1.2.0');
     writePackage(tmpDir, 'pkg-b', '1.1.0');
