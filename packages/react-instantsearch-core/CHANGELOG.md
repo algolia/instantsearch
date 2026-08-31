@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.47.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.46.1...react-instantsearch-core@7.47.0) (2026-08-31)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.46.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.46.0...react-instantsearch-core@7.46.1) (2026-08-31)
+
+
+### Bug Fixes
+
+* **chat:** warn before prop changes reset state ([#7183](https://github.com/algolia/instantsearch/issues/7183)) ([bf379c6](https://github.com/algolia/instantsearch/commit/bf379c69894db6869fbeee4ddb7e880e3ab8529e))
+* **index:** keep widget uiState when its parameters change ([#7206](https://github.com/algolia/instantsearch/issues/7206)) ([2afe171](https://github.com/algolia/instantsearch/commit/2afe171a896adcfacdd3ba5f52dc73972cce75e5)), closes [#7201](https://github.com/algolia/instantsearch/issues/7201) [#6635](https://github.com/algolia/instantsearch/issues/6635)
+
+
+
+
+
 ## [7.46.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.45.0...react-instantsearch-core@7.46.0) (2026-08-24)
 
 **Note:** Version bump only for package react-instantsearch-core

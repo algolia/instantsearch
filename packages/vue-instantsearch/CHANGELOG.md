@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.29.6](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.5...vue-instantsearch@4.29.6) (2026-08-31)
+
+
+### Bug Fixes
+
+* **index:** keep widget uiState when its parameters change ([#7206](https://github.com/algolia/instantsearch/issues/7206)) ([2afe171](https://github.com/algolia/instantsearch/commit/2afe171a896adcfacdd3ba5f52dc73972cce75e5)), closes [#7201](https://github.com/algolia/instantsearch/issues/7201) [#6635](https://github.com/algolia/instantsearch/issues/6635)
+
+
+
+
+
 ## [4.29.5](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.4...vue-instantsearch@4.29.5) (2026-08-24)
 
 **Note:** Version bump only for package vue-instantsearch
