@@ -808,23 +808,35 @@ See documentation: ${createDocumentationLink({
     }
   });
 
-  public scheduleRender = defer((shouldResetStatus: boolean = true) => {
-    if (!this.mainHelper?.hasPendingRequests()) {
-      clearTimeout(this._searchStalledTimer);
-      this._searchStalledTimer = null;
+  public scheduleRender = defer(
+    (shouldResetStatus: boolean = true) => {
+      if (!this.mainHelper?.hasPendingRequests()) {
+        clearTimeout(this._searchStalledTimer);
+        this._searchStalledTimer = null;
 
-      if (shouldResetStatus) {
-        this.status = 'idle';
-        this.error = undefined;
+        if (shouldResetStatus) {
+          this.status = 'idle';
+          this.error = undefined;
+        }
       }
-    }
 
-    this.mainIndex.render({
-      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
-    });
+      this.mainIndex.render({
+        instantSearchInstance: this as unknown as InstantSearch<
+          UiState,
+          UiState
+        >,
+      });
 
-    this.emit('render');
-  });
+      this.emit('render');
+    },
+    // Renders scheduled in the same microtask collapse into one run, so the
+    // status reset accumulates instead of letting the first caller decide: a
+    // render scheduled for a reason unrelated to the search must not cancel the
+    // one a search result asks for, or it would strand the status on `loading`.
+    ([shouldResetStatus = true], [nextShouldResetStatus = true]): [boolean] => [
+      shouldResetStatus || nextShouldResetStatus,
+    ]
+  );
 
   public scheduleStalledRender() {
     if (!this._searchStalledTimer) {

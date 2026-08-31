@@ -431,6 +431,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
+  // The error this index has already rolled back for. Renders also happen for
+  // reasons unrelated to a search (a chat panel opening, a recommend result,
+  // the stalled timer), and rolling back on every one of them would discard
+  // state written after the failed search.
+  let restoredForError: Error | undefined;
 
   const recomputeLocalRequestDependencies = () => {
     if (localInstantSearchInstance) {
@@ -978,11 +983,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     render({ instantSearchInstance }: IndexRenderOptions) {
       // we can't attach a listener to the error event of search, as the error
       // then would no longer be thrown for global handlers.
-      if (
-        instantSearchInstance.status === 'error' &&
+      if (instantSearchInstance.status !== 'error') {
+        restoredForError = undefined;
+      } else if (
+        instantSearchInstance.error !== restoredForError &&
         !instantSearchInstance.mainHelper!.hasPendingRequests() &&
         lastValidSearchParameters
       ) {
+        restoredForError = instantSearchInstance.error;
         helper!.setState(lastValidSearchParameters);
       }
 

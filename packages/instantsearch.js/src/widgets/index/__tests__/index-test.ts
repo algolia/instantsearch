@@ -4137,5 +4137,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // state has reverted
       expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
     });
+
+    it('resets the state again when a second search fails', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([virtualSearchBox({})]);
+
+      search.start();
+      // suppress global error
+      search.on('error', () => {});
+
+      search.setUiState({ indexName: { query: 'iphone' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      castToJestMock(searchClient.search).mockRejectedValue(
+        new Error('search error')
+      );
+
+      search.setUiState({ indexName: { query: 'iphone 2' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+
+      // The roll-back runs once per failed search, not once per error state, so
+      // the next failure reverts too.
+      search.setUiState({ indexName: { query: 'iphone 3' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'iphone' } });
+    });
   });
 });

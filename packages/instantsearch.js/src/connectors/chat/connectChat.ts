@@ -915,7 +915,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
           // shared `renderState`. Schedule a full re-render so they pick up
           // the new value instead of staying frozen on their initial state.
-          initOptions.instantSearchInstance.scheduleRender();
+          // No search runs here, so it must not settle the main search.
+          initOptions.instantSearchInstance.scheduleRender(false);
         };
 
         setOpen = (nextOpen) => {
@@ -984,14 +985,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         // disable themselves, so a transition has to escape this widget's own
         // render. Message deltas deliberately don't: they stay local to keep
         // streaming cheap. The `status` setter notifies on every write, hence
-        // the comparison.
+        // the comparison. A chat turn is not a search, so the render it
+        // schedules must not settle the main search.
         let lastStatus = _chatInstance.status;
         const renderOnStatusChange = () => {
           const statusChanged = _chatInstance.status !== lastStatus;
           lastStatus = _chatInstance.status;
           render();
           if (statusChanged) {
-            initOptions.instantSearchInstance.scheduleRender();
+            initOptions.instantSearchInstance.scheduleRender(false);
           }
         };
 
@@ -1028,8 +1030,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           true
         );
 
+        // A restored open panel is new to the sibling entry points, but it is
+        // not a search result.
         if (open) {
-          instantSearchInstance.scheduleRender();
+          instantSearchInstance.scheduleRender(false);
         }
       },
 
