@@ -2,11 +2,14 @@
 
 import { getHitsByObjectID } from '../../../lib/utils/chat';
 
-import { createGroundedComparisonTableComponent } from './ComparisonTableTool';
+import {
+  createGroundedComparisonTableComponent,
+  defaultComparisonTableTranslations,
+} from './createGroundedComparisonTable';
 
 import type { Hooks, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
-import type { ComparisonTableTranslations } from './ComparisonTableTool';
+import type { ComparisonTableTranslations } from './createGroundedComparisonTable';
 
 /**
  * Builtin comparison tool (`algolia_compare_products`).
@@ -44,11 +47,6 @@ export type CompareProductsToolProps = {
   translations?: Partial<ComparisonTableTranslations>;
 };
 
-const DEFAULT_TRANSLATIONS: ComparisonTableTranslations = {
-  missingValueLabel: '—',
-  productColumnLabel: 'Product',
-};
-
 /** Keeps only non-empty string entries, dropping anything else the model sent. */
 function stringList(value: unknown): string[] {
   if (!Array.isArray(value)) {
@@ -74,7 +72,7 @@ export function createCompareProductsToolComponent({
     const { message, messages } = toolProps;
 
     const translations: ComparisonTableTranslations = {
-      ...DEFAULT_TRANSLATIONS,
+      ...defaultComparisonTableTranslations,
       ...userTranslations,
     };
 

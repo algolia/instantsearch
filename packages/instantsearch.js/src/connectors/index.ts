@@ -58,4 +58,5 @@ export { default as connectLookingSimilar } from './looking-similar/connectLooki
 export { default as connectChat } from './chat/connectChat';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectChatTrigger } from './chat/connectChatTrigger';
+export { default as connectCompare } from './compare/connectCompare';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

@@ -79,6 +79,11 @@ describe('widgets', () => {
           "name": "ChatTrigger",
         },
         {
+          "$$type": "ais.compare",
+          "$$widgetType": "ais.compareBar",
+          "name": "CompareBar",
+        },
+        {
           "$$type": "ais.clearRefinements",
           "$$widgetType": "ais.clearRefinements",
           "name": "ClearRefinements",

@@ -5,7 +5,7 @@ import type { ChatRenderState } from '../../connectors/chat/connectChat';
  * Forwarded to the agent backend as the `x-algolia-referer` header and used
  * as a correlation tag for attribution.
  */
-export type ChatReferer = 'prompt-suggestions' | 'ai-mode';
+export type ChatReferer = 'prompt-suggestions' | 'ai-mode' | 'compare';
 
 export type OpenChatOptions = {
   /**

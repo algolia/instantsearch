@@ -25,6 +25,7 @@ const NON_WIDGETS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  'CompareProductsToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
@@ -37,11 +38,16 @@ const NON_COMPONENTS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  'CompareProductsToolType',
   // `ChatTrigger`'s permissive `ComponentProps<'button'>` base widens the
   // `SingleWidget` union enough that TS can't narrow `widget.Component` in
   // the switch below, breaking other cases. Covered by a dedicated test in
   // `ChatTrigger.test.tsx` instead.
   'ChatTrigger',
+  // `CompareBar` renders nothing until items are selected, so the shared
+  // className/root-attribute assertions don't apply. Covered by a dedicated
+  // test in `CompareBar.test.tsx` instead.
+  'CompareBar',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
