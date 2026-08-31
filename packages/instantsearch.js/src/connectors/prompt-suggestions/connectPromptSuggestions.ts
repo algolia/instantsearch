@@ -46,6 +46,39 @@ function parseSuggestions(data: unknown): string[] {
   return suggestions.filter((s: unknown): s is string => typeof s === 'string');
 }
 
+// Key order is not significant to the request, so a plain `JSON.stringify` would
+// report two identical payloads as different.
+function stableKey(value: unknown): string {
+  if (value === null || typeof value !== 'object') {
+    return JSON.stringify(value) ?? 'null';
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map(stableKey).join(',')}]`;
+  }
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${stableKey(record[key])}`)
+    .join(',')}}`;
+}
+
+/**
+ * Comparable identity of a task payload, or `null` when it cannot be compared.
+ */
+function taskPayloadKey(payload: Record<string, unknown>): string | null {
+  try {
+    // Round-trip first so the comparison sees what the request will actually
+    // carry: `JSON.stringify` applies `toJSON` (a `Date` becomes its ISO string)
+    // and drops the values the wire drops. Walking the raw object instead would
+    // read a `Date` as a key-less object and call two different instants equal.
+    return stableKey(JSON.parse(JSON.stringify(payload)));
+  } catch {
+    // Circular or otherwise unserializable. Never claim a match on a payload we
+    // could not read; let the request go out and fail where it does today.
+    return null;
+  }
+}
+
 function buildSuggestionMessage(suggestion: string): string {
   return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
 }
@@ -219,6 +252,10 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       let error: Error | undefined;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
+      // The payload of the last request that was actually sent. The automatic
+      // trigger keys on the search state, which is only a proxy for the payload,
+      // so this is what decides whether a request would ask anything new.
+      let lastSubmittedPayload: string | null = null;
       let latestRenderOptions: RenderOptions | null = null;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
@@ -229,6 +266,10 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // still-in-flight request from the previous state must not paint its
       // suggestions, its inner render is ignored until the new `submit` starts.
       let refetchPending = false;
+      // True when `refetchPending` made an inner render be dropped. The fetch
+      // that dropped it was expected to render in its place; if that fetch turns
+      // out to send nothing, it has to reconcile the dropped state instead.
+      let droppedInnerRender = false;
 
       const getStateSignature = (results: SearchResults): string => {
         if (results.queryID) {
@@ -334,22 +375,68 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         );
       };
 
+      // Copies an inner render's state into this widget's and re-renders on the
+      // client.
+      const adoptInnerState = (renderState: TasksRenderState) => {
+        error = renderState.error;
+        if (renderState.error) {
+          // A failed task (including a mid-stream `error` event) must not leave
+          // any streamed partial visible.
+          suggestions = [];
+        } else if (renderState.isLoading || renderState.output !== undefined) {
+          // Only adopt the inner output once a request is loading or has
+          // produced one, so the initial no-op render doesn't clobber pills.
+          suggestions = parseSuggestions(renderState.output);
+        }
+        isLoading = renderState.isLoading;
+        if (!latestRenderOptions) return;
+        renderOutward(latestRenderOptions);
+      };
+
       const fetchAndRender = (
         results: SearchResults,
-        renderOptions: RenderOptions
+        renderOptions: RenderOptions,
+        { force = false }: { force?: boolean } = {}
       ) => {
         if (disposed || !tasksState) return;
+        const hadDroppedInnerRender = droppedInnerRender;
         refetchPending = false;
+        droppedInnerRender = false;
         const hasContext = context !== undefined;
         if (!hasContext && !results?.hits?.length) {
           tasksState.invalidate();
           suggestions = [];
           isLoading = false;
+          // The output is gone, so the same payload must be allowed to rebuild it.
+          lastSubmittedPayload = null;
           renderOutward(renderOptions);
           return;
         }
 
-        tasksState.submit(buildInput(results));
+        const input = buildInput(results);
+        const payload = taskPayloadKey(input);
+
+        // A moved search state does not always mean a different question: with an
+        // explicit `context` the payload ignores the results entirely, so a new
+        // `queryID` or a new hit order produces a byte-identical request. Sending
+        // it again spends a model call on an answer already on screen. Leave the
+        // current suggestions alone and send nothing. `force` is the explicit
+        // path (`refresh()`), which must always reach the network.
+        if (!force && payload !== null && payload === lastSubmittedPayload) {
+          // Nothing goes out, so nothing will render — but the state change that
+          // scheduled this fetch also made `handleInnerRender` drop the render
+          // that was carrying the previous request's result. Reconcile it here or
+          // the widget keeps that request's `isLoading: true` with no
+          // suggestions, and nothing later clears it: `refresh()` is blocked by
+          // its own `isLoading` guard and an unchanged payload keeps skipping.
+          if (hadDroppedInnerRender) {
+            adoptInnerState(tasksState);
+          }
+          return;
+        }
+
+        lastSubmittedPayload = payload;
+        tasksState.submit(input);
       };
 
       const refresh = () => {
@@ -358,7 +445,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         if (!results || !latestRenderOptions) return;
         clearTimeout(debounceTimer);
         lastStateSignature = getStateSignature(results);
-        fetchAndRender(results, latestRenderOptions);
+        fetchAndRender(results, latestRenderOptions, { force: true });
       };
 
       const getWidgetRenderState = (
@@ -397,20 +484,18 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // resolve/error) into this widget's state and re-renders on the client.
       const handleInnerRender = (renderState: TasksRenderState) => {
         tasksState = renderState;
-        if (refetchPending) return;
-        error = renderState.error;
         if (renderState.error) {
-          // A failed task (including a mid-stream `error` event) must not leave
-          // any streamed partial visible.
-          suggestions = [];
-        } else if (renderState.isLoading || renderState.output !== undefined) {
-          // Only adopt the inner output once a request is loading or has
-          // produced one, so the initial no-op render doesn't clobber pills.
-          suggestions = parseSuggestions(renderState.output);
+          // Keep a failed payload retryable: without this the next automatic
+          // attempt with the same payload would be skipped as a duplicate and
+          // the error would have no way to clear. Set before the `refetchPending`
+          // return so a failure that lands mid-refetch is not swallowed.
+          lastSubmittedPayload = null;
         }
-        isLoading = renderState.isLoading;
-        if (!latestRenderOptions) return;
-        renderOutward(latestRenderOptions);
+        if (refetchPending) {
+          droppedInnerRender = true;
+          return;
+        }
+        adoptInnerState(renderState);
       };
 
       let tasksParams: TasksConnectorParams;
