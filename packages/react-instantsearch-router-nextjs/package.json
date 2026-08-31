@@ -48,7 +48,7 @@
   "dependencies": {
     "@swc/helpers": "0.5.18",
     "instantsearch.js": "4.114.0",
-    "react-instantsearch-core": "7.46.1"
+    "react-instantsearch-core": "7.47.0"
   },
   "devDependencies": {
     "@playwright/test": "1.49.1"
