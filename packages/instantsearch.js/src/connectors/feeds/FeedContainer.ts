@@ -297,6 +297,13 @@ export function createFeedContainer(
       );
     },
 
+    updateWidget(previousWidget, nextWidget) {
+      // FeedContainer doesn't own UI state, so there's nothing to hand over
+      // from the previous widget to the next one.
+      container.removeWidgets([previousWidget]);
+      return container.addWidgets([nextWidget]);
+    },
+
     refreshUiState() {
       // no-op: FeedContainer doesn't own UI state
     },
