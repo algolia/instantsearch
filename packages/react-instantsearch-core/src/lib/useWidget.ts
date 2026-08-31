@@ -64,19 +64,19 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
 
       // Warning: if an unstable function prop is provided, `dequal` is not able
       // to keep its reference and therefore will consider that props did change.
-      // This could unsollicitely remove/add the widget, therefore forget its state,
-      // and could be a source of confusion.
+      // This unintentionally replaces the widget, which is wasteful (it causes
+      // a search), even though `updateWidget` below keeps its state.
       // If users face this issue, we should advise them to provide stable function
       // references.
       const arePropsEqual = dequal(props, prevPropsRef.current);
 
-      // If props did change, then we execute the cleanup function instantly
-      // and then add the widget back. This lets us add the widget without
+      // If props did change, then we replace the widget instantly instead of
       // waiting for the scheduled cleanup function to finish (that we canceled
-      // above).
+      // above). `updateWidget` hands the previous widget's `uiState` over to the
+      // new one, so that a parameter change doesn't reset the state the widget
+      // still owns — which would otherwise break routing.
       if (!arePropsEqual) {
-        parentIndex.removeWidgets([previousWidget]);
-        parentIndex.addWidgets([widget]);
+        parentIndex.updateWidget(previousWidget, widget);
       }
     }
 

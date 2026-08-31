@@ -32,6 +32,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 const RENDER_STATE_KEY = 'promptSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
+const PROMPT_SUGGESTIONS_TASK_KIND = 'prompt_suggestions';
 const DEBOUNCE_MS = 300;
 
 function parseSuggestions(data: unknown): string[] {
@@ -102,10 +103,10 @@ export type PromptSuggestionsSource =
 
 export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
-   * Agent Studio configuration to invoke, sent as the `task` field. Identifies
-   * the prompt-suggestions configuration created in the dashboard.
+   * Agent Studio configuration to invoke, sent as the `task` field. When
+   * omitted, the agent's enabled Prompt Suggestions configuration is used.
    */
-  configurationId: string;
+  configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
   /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
@@ -210,10 +211,6 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             'The `agentId` option is required unless a custom `transport` is provided.'
           )
         );
-      }
-
-      if (!configurationId) {
-        throw new Error(withUsage('The `configurationId` option is required.'));
       }
 
       let tasksState: TasksRenderState | undefined;
@@ -422,12 +419,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           agentId,
           transport,
           task: configurationId,
+          kind: PROMPT_SUGGESTIONS_TASK_KIND,
           stream: true,
         };
       } else if (transport) {
         tasksParams = {
           transport,
           task: configurationId,
+          kind: PROMPT_SUGGESTIONS_TASK_KIND,
           stream: true,
         };
       } else {

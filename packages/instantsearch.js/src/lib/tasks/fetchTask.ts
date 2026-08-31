@@ -3,17 +3,23 @@ import { DefaultTaskTransport } from './transport';
 import type { TaskPrepareRequest } from './endpoint';
 
 export type BuildTaskPayloadOptions = {
-  task: string;
+  task?: string;
+  kind?: string;
   input: Record<string, unknown>;
   prepareRequest?: TaskPrepareRequest;
 };
 
 export function buildTaskPayload({
   task,
+  kind,
   input,
   prepareRequest,
 }: BuildTaskPayloadOptions): Record<string, unknown> {
-  const payload: Record<string, unknown> = { task, input };
+  const payload: Record<string, unknown> = {
+    ...(task === undefined ? {} : { task }),
+    ...(kind === undefined ? {} : { kind }),
+    input,
+  };
 
   return prepareRequest ? prepareRequest(payload).body : payload;
 }

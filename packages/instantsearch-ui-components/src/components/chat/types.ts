@@ -459,7 +459,7 @@ type FacetFiltersSearchToolQuery = SearchToolQueryBase & {
 
 type FacetKeysSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: undefined;
-  [facetKey: `facet_${string}`]: string[] | undefined;
+  [facetKey: `facet_${string}`]: string[] | boolean | undefined;
 };
 
 /**
@@ -488,6 +488,26 @@ export type SearchToolInput =
 export type ApplyFiltersParams = {
   query?: string;
   facetFilters?: string[][];
+  /**
+   * Numeric refinements, in the Algolia `numericFilters` format
+   * (e.g. `['price <= 1500']`). Only the search tool's resolved search params
+   * can express these; the raw `facet_<attribute>` keys cannot.
+   */
+  numericFilters?: string[];
+};
+
+/**
+ * The search parameters a search tool call was actually answered with, as the
+ * Algolia MCP Server resolved them: after defaults, clamping and the
+ * allow-list, and including parameters the model never sent.
+ *
+ * Read with `getResolvedSearchParams`. Absent whenever the server emits no
+ * `_meta` for the tool result.
+ */
+export type ResolvedSearchParams = {
+  query?: string;
+  facetFilters?: string[][];
+  numericFilters?: string[];
 };
 
 export type ChatLayoutOwnProps<

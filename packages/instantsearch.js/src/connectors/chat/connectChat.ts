@@ -51,7 +51,11 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
@@ -224,6 +228,15 @@ export type ChatCustomInstance<TUiMessage extends UIMessage> = {
 export type ApplyFiltersParams = {
   query?: string;
   facetFilters?: string[][];
+  /**
+   * Numeric refinements, in the Algolia `numericFilters` format
+   * (e.g. `['price <= 1500']`). Only the search tool's resolved search params
+   * can express these; the raw `facet_<attribute>` keys cannot.
+   *
+   * Kept in sync with `ApplyFiltersParams` in `instantsearch-ui-components`,
+   * which declares the same contract for the component layer.
+   */
+  numericFilters?: string[];
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
@@ -388,6 +401,13 @@ function getAttributesToClear({
   );
 }
 
+/**
+ * One Algolia `numericFilters` entry: `'price <= 1500'`. The operators are
+ * exactly the set `helper.addNumericRefinement` accepts, and exactly the set
+ * the Algolia MCP Server emits.
+ */
+const NUMERIC_FILTER = /^(.+?)\s*(<=|>=|!=|=|<|>)\s*(-?\d+(?:\.\d+)?)$/;
+
 function updateStateFromSearchToolInput(
   params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
@@ -453,6 +473,24 @@ function updateStateFromSearchToolInput(
 
     hierarchicalRefinements.forEach((value, name) => {
       helper.toggleFacetRefinement(name, value);
+    });
+  }
+
+  if (params.numericFilters) {
+    params.numericFilters.forEach((filter) => {
+      const match = filter.match(NUMERIC_FILTER);
+
+      if (!match) {
+        return;
+      }
+
+      const [, attribute, operator, value] = match;
+
+      helper.addNumericRefinement(
+        attribute,
+        operator as SearchParameters.Operator,
+        Number(value)
+      );
     });
   }
 
@@ -877,7 +915,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           // `open` is read by sibling widgets (e.g. `chatTrigger`) via the
           // shared `renderState`. Schedule a full re-render so they pick up
           // the new value instead of staying frozen on their initial state.
-          initOptions.instantSearchInstance.scheduleRender();
+          // No search runs here, so it must not settle the main search.
+          initOptions.instantSearchInstance.scheduleRender(false);
         };
 
         setOpen = (nextOpen) => {
@@ -946,14 +985,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         // disable themselves, so a transition has to escape this widget's own
         // render. Message deltas deliberately don't: they stay local to keep
         // streaming cheap. The `status` setter notifies on every write, hence
-        // the comparison.
+        // the comparison. A chat turn is not a search, so the render it
+        // schedules must not settle the main search.
         let lastStatus = _chatInstance.status;
         const renderOnStatusChange = () => {
           const statusChanged = _chatInstance.status !== lastStatus;
           lastStatus = _chatInstance.status;
           render();
           if (statusChanged) {
-            initOptions.instantSearchInstance.scheduleRender();
+            initOptions.instantSearchInstance.scheduleRender(false);
           }
         };
 
@@ -990,8 +1030,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           true
         );
 
+        // A restored open panel is new to the sibling entry points, but it is
+        // not a search result.
         if (open) {
-          instantSearchInstance.scheduleRender();
+          instantSearchInstance.scheduleRender(false);
         }
       },
 
