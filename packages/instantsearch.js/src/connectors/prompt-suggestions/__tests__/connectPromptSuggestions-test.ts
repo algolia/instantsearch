@@ -335,7 +335,10 @@ describe('connectPromptSuggestions', () => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
-    it('refetches whenever the results `queryID` changes', async () => {
+    it('does not refetch when only the results `queryID` changes', async () => {
+      // The payload carries the query, the filters and the hits — never the
+      // `queryID`. A new `queryID` over otherwise identical results asks the
+      // agent the same question, so it must not spend a second model call.
       const renderFn = jest.fn();
       const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
@@ -360,7 +363,381 @@ describe('connectPromptSuggestions', () => {
         })
       );
       await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('refetches when the `queryID` and the hits both change', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'shoes', queryID: 'q1' }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({
+            query: 'shoes',
+            queryID: 'q2',
+            hits: [{ objectID: '9' }],
+          }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
       expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('sends nothing when the search state moves but the `context` payload does not', async () => {
+      // The waste this exists to remove: with an explicit `context` the payload
+      // ignores the results, so every search-state change used to bill a model
+      // call for a byte-identical request.
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves the current suggestions in place when a request is skipped', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].suggestions
+      ).toEqual(['a', 'b', 'c']);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+
+      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(last.suggestions).toEqual(['a', 'b', 'c']);
+      expect(last.isLoading).toBe(false);
+      expect(last.error).toBeUndefined();
+    });
+
+    it('`refresh()` sends even when the payload is unchanged', async () => {
+      // Regenerate is the same control as Generate: it resends identical inputs
+      // on purpose and expects a new answer. The skip covers the automatic path
+      // only.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      renderFn.mock.calls[renderFn.mock.calls.length - 1][0].refresh();
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('still sends when a `context` value serializes differently', async () => {
+      // Regression: comparing the raw object read a `Date` as a key-less object,
+      // so two different instants compared equal and the second request was
+      // dropped even though its body differed.
+      let viewedAt = new Date('2026-01-01T00:00:00.000Z');
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => ({ viewedAt }),
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      viewedAt = new Date('2026-06-01T00:00:00.000Z');
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      const bodies = (global.fetch as jest.Mock).mock.calls.map(
+        ([, init]) => JSON.parse((init as RequestInit).body as string).input
+      );
+      expect(bodies[0].viewedAt).toBe('2026-01-01T00:00:00.000Z');
+      expect(bodies[1].viewedAt).toBe('2026-06-01T00:00:00.000Z');
+    });
+
+    it('does not skip when the payload cannot be serialized', async () => {
+      // An unserializable payload has no comparable identity, so it must never
+      // claim a match: two identical uncomparable payloads both attempt a
+      // request rather than one being dropped as a duplicate.
+      const circular: Record<string, unknown> = {};
+      circular.self = circular;
+      // A circular payload can't be stringified, so the request itself can't be
+      // built. `prepareSendMessagesRequest` runs on every attempt before the body
+      // is serialized, which is what counts attempts here.
+      const prepare = jest.fn(() => ({ body: { sent: true } }));
+      const widget = connectPromptSuggestions(jest.fn())({
+        configurationId: 'prompt-suggestions',
+        transport: {
+          api: 'https://example.test/agents',
+          prepareSendMessagesRequest: prepare,
+        },
+        context: () => ({ circular }),
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(prepare).toHaveBeenCalledTimes(1);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(prepare).toHaveBeenCalledTimes(2);
+    });
+
+    it('skips when only the `context` key order changes', async () => {
+      // `stableKey` sorts keys because key order is not part of the question
+      // being asked. Without the sort a re-ordered payload reads as new and bills
+      // a model call for an answer already on screen.
+      let pageContext: Record<string, unknown> = { brand: 'acme', id: '42' };
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: () => pageContext,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      pageContext = { id: '42', brand: 'acme' };
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('rebuilds the suggestions after the hits empty and come back identical', async () => {
+      // Emptying the hits throws the output away, so the same payload has to be
+      // allowed to rebuild it. Without the memo reset in that branch the
+      // identical follow-up is skipped as a duplicate and the pills never return.
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'q', hits: [{ objectID: '1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].suggestions
+      ).toEqual(['a', 'b', 'c']);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'q', hits: [] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].suggestions
+      ).toEqual([]);
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'q', hits: [{ objectID: '1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0].suggestions
+      ).toEqual(['a', 'b', 'c']);
+    });
+
+    it('reconciles a render dropped while a refetch was pending', async () => {
+      // A search-state change while a request is in flight makes
+      // `handleInnerRender` drop the render that delivers the output. Before the
+      // memo the debounced refetch always repainted it; a skip sends nothing, so
+      // the skip itself has to reconcile — otherwise `isLoading` stays true with
+      // no suggestions, and the state is terminal, because `refresh()` is blocked
+      // by its own `isLoading` guard and an unchanged payload keeps skipping.
+      global.fetch = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(
+              () =>
+                resolve(textStreamResponse(['{"suggestions":["a","b","c"]}'])),
+              60
+            );
+          })
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        // A static object, so the payload can never change again.
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ queryID: 'q1' }) })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // Supersede the in-flight request and restart the debounce, so its result
+      // arrives while the render is being dropped.
+      widget.render!(
+        createRenderOptions({ helper, results: makeResults({ queryID: 'q2' }) })
+      );
+      await flush(DEBOUNCE_WAIT + 80);
+
+      const last = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(last.isLoading).toBe(false);
+      expect(last.suggestions).toEqual(['a', 'b', 'c']);
+      expect(last.error).toBeUndefined();
+    });
+
+    it('retries the same payload after a failed request', async () => {
+      // A skipped duplicate must never strand an error on screen: the failed
+      // payload was never answered, so the next attempt has to go out.
+      const streamError = new Error('stream failed');
+      global.fetch = jest.fn(() =>
+        Promise.resolve(textStreamResponse([], streamError))
+      ) as unknown as typeof fetch;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+        context: { focalProduct: { id: '42' } },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'a', hits: [{ objectID: 'h1' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      await flush(10);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error).toBe(
+        streamError
+      );
+
+      widget.render!(
+        createRenderOptions({
+          helper,
+          results: makeResults({ query: 'b', hits: [{ objectID: 'h2' }] }),
+        })
+      );
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      widget.dispose!(createDisposeOptions({ helper }));
     });
 
     it('does not refetch when the `queryID` is unchanged', async () => {
