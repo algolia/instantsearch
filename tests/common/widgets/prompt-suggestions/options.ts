@@ -396,22 +396,32 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('throws without configurationId', () => {
-      const searchClient = createSearchClient({});
+    test('selects the Prompt Suggestions task kind without configurationId', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
 
-      expect(() =>
-        setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: { agentId: 'test-agent-id' } as any,
-            react: { agentId: 'test-agent-id' } as any,
-            vue: {},
-          },
-        })
-      ).toThrow('The `configurationId` option is required.');
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { agentId: 'test-agent-id' },
+          react: { agentId: 'test-agent-id' },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(body).toMatchObject({ kind: 'prompt_suggestions' });
+      expect(body).not.toHaveProperty('task');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {
@@ -446,6 +456,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       expect(body.task).toBe('my_custom_task');
+      expect(body.kind).toBe('prompt_suggestions');
     });
 
     test('applies transformItems to the rendered suggestions', async () => {

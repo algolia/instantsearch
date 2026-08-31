@@ -86,11 +86,23 @@ describe('connectTasks', () => {
       ).toThrowError(/agentId.*transport/);
     });
 
-    it('throws when task is missing', () => {
+    it('throws when neither task nor kind is provided', () => {
       const makeWidget = connectTasks(jest.fn());
-      expect(() =>
-        makeWidget({ agentId: 'a' } as TasksConnectorParams)
-      ).toThrowError(/task/);
+      expect(() => makeWidget({ agentId: 'a' })).toThrowError(
+        /Either the `task` or `kind` option is required/
+      );
+    });
+
+    it('accepts a kind without a task ID', () => {
+      const widget = connectTasks(jest.fn())({
+        agentId: 'a',
+        kind: 'prompt_suggestions',
+      });
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.tasks',
+        })
+      );
     });
 
     it('returns the widget descriptor', () => {
@@ -148,6 +160,22 @@ describe('connectTasks', () => {
       expect(url).toContain('stream=true');
       expect(JSON.parse(request.body)).toEqual({
         task: 'my_task',
+        input: { query: 'shoes' },
+      });
+    });
+
+    it('selects a task by kind without sending a task ID', async () => {
+      const { lastState } = init({
+        agentId: 'my-agent',
+        kind: 'prompt_suggestions',
+      });
+
+      lastState().submit({ query: 'shoes' });
+      await flush(0);
+
+      const [[, request]] = (global.fetch as jest.Mock).mock.calls;
+      expect(JSON.parse(request.body)).toEqual({
+        kind: 'prompt_suggestions',
         input: { query: 'shoes' },
       });
     });
@@ -319,7 +347,7 @@ describe('connectTasks', () => {
       ) as unknown as typeof fetch;
       const prepareSendMessagesRequest = jest.fn(
         (request: {
-          task: string;
+          task?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;
@@ -434,7 +462,7 @@ describe('connectTasks', () => {
       });
       const prepareSendMessagesRequest = jest.fn(
         (request: {
-          task: string;
+          task?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;
