@@ -1,6 +1,7 @@
 {
   "name": "algolia-experiences",
   "license": "MIT",
+  "repository": "algolia/instantsearch",
   "version": "1.8.23",
   "main": "src/index.ts",
   "jsdelivr": "dist/algolia-experiences.production.min.js",
