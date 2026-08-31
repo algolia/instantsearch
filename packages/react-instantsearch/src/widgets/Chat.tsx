@@ -16,6 +16,7 @@ import {
 import React, {
   createElement,
   Fragment,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -395,9 +396,18 @@ function ChatInner<
     '~isOpenStatePersistenceEnabled'?: boolean;
   };
 
+  const sendMessageAndScrollToBottom = useCallback<typeof sendMessage>(
+    (...args) => {
+      scrollToBottom();
+      return sendMessage(...args);
+    },
+    [scrollToBottom, sendMessage]
+  );
+
   useImperativeHandle(ref, () => ({
     setOpen,
-    sendMessage: (params: { text: string }) => sendMessage(params),
+    sendMessage: (params: { text: string }) =>
+      sendMessageAndScrollToBottom(params),
     setInput,
   }));
 
@@ -457,7 +467,7 @@ function ChatInner<
       title={title}
       open={open}
       maximized={maximized}
-      sendMessage={sendMessage as ChatUiProps['sendMessage']}
+      sendMessage={sendMessageAndScrollToBottom as ChatUiProps['sendMessage']}
       regenerate={regenerate}
       stop={stop}
       error={error}
@@ -483,7 +493,7 @@ function ChatInner<
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),
-        sendMessage: sendMessage as ChatUiProps['sendMessage'],
+        sendMessage: sendMessageAndScrollToBottom as ChatUiProps['sendMessage'],
         setInput,
         onFeedback,
         feedbackState,
@@ -531,7 +541,7 @@ function ChatInner<
           setInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
-          sendMessage({ text: input });
+          sendMessageAndScrollToBottom({ text: input });
           setInput('');
         },
         onStop: () => {
@@ -548,7 +558,7 @@ function ChatInner<
         suggestions,
         isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
-          sendMessage({ text: suggestion });
+          sendMessageAndScrollToBottom({ text: suggestion });
         },
       }}
       classNames={classNames}

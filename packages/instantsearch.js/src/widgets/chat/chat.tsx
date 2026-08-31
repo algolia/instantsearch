@@ -2,7 +2,7 @@
 
 import { createChatComponent, findTool } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -285,6 +285,15 @@ function ChatWrapper({
       initial: 'smooth',
       resize: 'smooth',
     });
+  const sendMessageAndScrollToBottom = useCallback<
+    ChatRenderState['sendMessage']
+  >(
+    (...args) => {
+      scrollToBottom();
+      return sendMessage(...args);
+    },
+    [scrollToBottom, sendMessage]
+  );
 
   // Keep the conversation pinned to the bottom while streaming. The stick-to-
   // bottom ResizeObserver only reacts to content *height* changes, but tool
@@ -308,7 +317,7 @@ function ChatWrapper({
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
-      sendMessage={sendMessage}
+      sendMessage={sendMessageAndScrollToBottom}
       regenerate={regenerate}
       stop={stop}
       error={error}
@@ -353,7 +362,7 @@ function ChatWrapper({
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
-        sendMessage: messagesProps.sendMessage,
+        sendMessage: sendMessageAndScrollToBottom,
         setInput: messagesProps.setInput,
       }}
       promptProps={{
@@ -364,7 +373,7 @@ function ChatWrapper({
           setChatInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
-          sendMessage({ text: chatInput });
+          sendMessageAndScrollToBottom({ text: chatInput });
           setChatInput('');
         },
         onStop: () => {
@@ -376,7 +385,9 @@ function ChatWrapper({
         autoFocus: promptProps.autoFocus,
       }}
       suggestionsProps={{
-        onSuggestionClick: suggestionsProps.onSuggestionClick,
+        onSuggestionClick: (suggestion) => {
+          sendMessageAndScrollToBottom({ text: suggestion });
+        },
         suggestions: suggestionsProps.suggestions,
         isLoading: suggestionsProps.isLoading,
       }}
