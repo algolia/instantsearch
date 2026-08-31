@@ -1,5 +1,6 @@
 import { promptSuggestions } from 'instantsearch.js/es/widgets';
 
+import { SHOWCASE_AGENT_ID } from '../../constants';
 import { useWidget } from '../../hooks/useWidget';
 
 type Props = Pick<
@@ -8,8 +9,6 @@ type Props = Pick<
 > & {
   contextDescription: string;
 };
-
-const AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
 
 function WidgetPromptSuggestions({
   configurationId,
@@ -20,7 +19,7 @@ function WidgetPromptSuggestions({
   const ref = useWidget((el) =>
     promptSuggestions({
       container: el,
-      agentId: AGENT_ID,
+      agentId: SHOWCASE_AGENT_ID,
       configurationId,
       context,
       transformHits,
