@@ -1115,9 +1115,13 @@ const getShowLoader = <TMessage extends ChatMessageBase>(
   if (status === 'submitted') return true;
 
   const lastMessage = messages[messages.length - 1];
+  // `processStream` sets `streaming` before the `start` chunk pushes the
+  // assistant. Until then the last message is still the user's, and its text
+  // must not be read as the answer or the loader hides and comes back.
+  if (lastMessage?.role !== 'assistant') return true;
   // Parts that render nothing must not answer for the turn's progress, or the
   // loader flips on a part that changed nothing on screen.
-  const lastPart = findLastProgressPart(lastMessage?.parts);
+  const lastPart = findLastProgressPart(lastMessage.parts);
 
   if (!lastPart) return true;
   // An active disclosure carries its own progress affordance, so the loader would
