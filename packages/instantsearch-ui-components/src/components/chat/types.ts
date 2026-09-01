@@ -452,9 +452,9 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
 }
 export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
 
-export type AddToolResultWithOutput = (
-  params: { output: unknown }
-) => ReturnType<AddToolResult>;
+export type AddToolResultWithOutput = (params: {
+  output: unknown;
+}) => ReturnType<AddToolResult>;
 
 export type AddToolResultForToolCall = (
   params:
