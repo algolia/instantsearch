@@ -667,18 +667,6 @@ export function createChatMessageComponent({
     const renderedParts = message.parts.map(renderMessagePart);
     const hasRenderedParts = renderedParts.some((part) => part != null);
 
-    // AbstractChat pushes an assistant message with no parts on the stream
-    // `start` chunk. An empty article still occupies a flex gap above the
-    // messages-end loader, so skip the row until something is visible.
-    //
-    // The default actions are chrome rather than content: a turn that ends
-    // without renderable content (aborted, or answered only by a tool hidden
-    // through `shouldRender`) would otherwise keep an empty row on screen for
-    // good, holding a Regenerate button for an answer that isn't there. A
-    // custom `actionsComponent` is the consumer's own content and does keep the
-    // row, but only while it is actually shown. The suggestions are hoisted out of the row instead of keeping it:
-    // `ChatMessages` passes an element for every settled turn, whether or not
-    // it has suggestions to show.
     if (
       !hasRenderedParts &&
       !loaderElement &&
