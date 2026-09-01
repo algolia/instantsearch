@@ -489,13 +489,30 @@ export type IdGenerator = () => string;
 
 export type ChatOnErrorCallback = (error: Error) => void;
 
-export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
+export type ToolResultSubmissionOptions<
+  UI_MESSAGE extends UIMessage,
   TOOL extends keyof InferUIMessageTools<UI_MESSAGE>,
->(options: {
+> = {
   tool: TOOL;
   toolCallId: string;
-  output: InferUIMessageTools<UI_MESSAGE>[TOOL]['output'];
-}) => Promise<void>;
+} & (
+  | {
+      state?: 'output-available';
+      output: InferUIMessageTools<UI_MESSAGE>[TOOL]['output'];
+      errorText?: never;
+    }
+  | {
+      state: 'output-error';
+      output?: never;
+      errorText: string;
+    }
+);
+
+export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
+  TOOL extends keyof InferUIMessageTools<UI_MESSAGE>,
+>(
+  options: ToolResultSubmissionOptions<UI_MESSAGE, TOOL>
+) => Promise<void>;
 
 export type ChatOnToolCallCallback<UI_MESSAGE extends UIMessage = UIMessage> = (
   options: {

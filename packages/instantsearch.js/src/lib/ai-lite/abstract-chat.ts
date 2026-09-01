@@ -25,6 +25,7 @@ import type {
   InferUIMessageTools,
   ProviderMetadata,
   ToolResultSubmission,
+  ToolResultSubmissionOptions,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -57,6 +58,16 @@ const TOOL_CALL_CANCELLED_ERROR_TEXT =
 type TerminalToolState =
   | { state: 'output-available'; output: unknown }
   | { state: 'output-error'; errorText: string };
+
+function getTerminalToolState(
+  options:
+    | { state?: 'output-available'; output: unknown }
+    | { state: 'output-error'; errorText: string }
+): TerminalToolState {
+  return options.state === 'output-error'
+    ? { state: 'output-error', errorText: options.errorText }
+    : { state: 'output-available', output: options.output };
+}
 
 function getToolName(part: { type: string; toolName?: string }): string {
   if (part.type === 'dynamic-tool') {
@@ -505,7 +516,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private commit(
     toolCallId: string,
-    output: unknown,
+    terminalState: TerminalToolState,
     messageId?: string,
     response?: ResponseRecord,
     expectedMessage?: TUIMessage
@@ -532,10 +543,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       return false;
     }
     const updatedParts = [...message.parts];
-    updatedParts[partIndex] = withTerminalToolState(part, {
-      state: 'output-available',
-      output,
-    });
+    updatedParts[partIndex] = withTerminalToolState(part, terminalState);
 
     const updatedMessage = {
       ...message,
@@ -691,14 +699,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private submitToolResult<TTool extends keyof InferUIMessageTools<TUIMessage>>(
     response: ResponseRecord | undefined,
-    {
-      toolCallId,
-      output,
-    }: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    },
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>,
     messageId = response?.messageId,
     expectedMessage = messageId
       ? this.messages.find((message) => message.id === messageId)
@@ -708,13 +709,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const commitResult = (): Promise<void> => {
       if (
-        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+        !this.commit(
+          options.toolCallId,
+          getTerminalToolState(options),
+          messageId,
+          response,
+          expectedMessage
+        )
       ) {
         return Promise.resolve();
       }
 
-      if (response?.requiredToolCallIds.has(toolCallId)) {
-        response.resolvedToolCallIds.add(toolCallId);
+      if (response?.requiredToolCallIds.has(options.toolCallId)) {
+        response.resolvedToolCallIds.add(options.toolCallId);
       }
       return this.continueResponse(response);
     };
@@ -773,7 +780,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       if (
         !this.commit(
           options.toolCallId,
-          options.output,
+          getTerminalToolState(options),
           message.id,
           undefined,
           message
@@ -790,11 +797,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     TTool extends keyof InferUIMessageTools<TUIMessage>,
   >(
     message: TUIMessage,
-    options: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    }
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>
   ): Promise<void> => {
     const hasToolCall = (candidate: TUIMessage): boolean =>
       candidate.parts?.some(

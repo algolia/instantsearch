@@ -954,6 +954,41 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
+    it('accepts an explicit tool error and continues the response', async () => {
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          [startChunk('msg-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) =>
+          addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            state: 'output-error',
+            errorText: 'The operation may have completed.',
+          }),
+        sendAutomaticallyWhen: () => true,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-error',
+        errorText: 'The operation may have completed.',
+      });
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+    });
+
     it('keeps a successful onFinish and reports a rejected continuation predicate once', async () => {
       let chat!: TestChat;
       const onError = jest.fn();
