@@ -160,7 +160,7 @@ describe('ChatMessages', () => {
     `);
   });
 
-  test('shows the loader while streaming reasoning is hidden', () => {
+  test('shows the loader while streaming reasoning is suppressed', () => {
     const { container } = render(
       <ChatMessages
         messages={[
@@ -179,6 +179,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        assistantMessageProps={{ showReasoning: false }}
         tools={{}}
         onReload={jest.fn()}
         onClose={jest.fn()}
@@ -770,7 +771,7 @@ describe('ChatMessages', () => {
     );
   });
 
-  test('does not scan for active reasoning while the disclosure is off', () => {
+  test('does not scan for active reasoning once the disclosure is off', () => {
     const isReasoningPartActive = jest.spyOn(
       chatUtils,
       'isReasoningPartActive'
@@ -801,19 +802,19 @@ describe('ChatMessages', () => {
       onClose: jest.fn(),
     };
 
-    const { unmount } = render(<ChatMessages {...props} />);
+    const { unmount } = render(
+      <ChatMessages
+        {...props}
+        assistantMessageProps={{ showReasoning: false }}
+      />
+    );
 
-    // The scan slices the remaining parts per candidate, so it must not run while
-    // the opt-in is off.
+    // The scan slices the remaining parts per candidate, so it must not run once
+    // reasoning is suppressed.
     expect(isReasoningPartActive).not.toHaveBeenCalled();
 
     unmount();
-    render(
-      <ChatMessages
-        {...props}
-        assistantMessageProps={{ showReasoning: true }}
-      />
-    );
+    render(<ChatMessages {...props} />);
 
     expect(isReasoningPartActive).toHaveBeenCalled();
     isReasoningPartActive.mockRestore();

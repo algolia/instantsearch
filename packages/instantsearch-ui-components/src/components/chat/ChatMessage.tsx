@@ -230,9 +230,9 @@ export type ChatMessageProps<
   ) => JSX.Element | null;
   /**
    * Custom reasoning renderer, called once per reasoning part at that part's own
-   * stream position. It changes how reasoning renders, not whether: parts are
-   * only collected when `showReasoning` is `true`, so a renderer set on its own
-   * is never called.
+   * stream position. It changes how reasoning renders, not whether: reasoning
+   * renders by default, and `showReasoning: false` suppresses this renderer
+   * along with it.
    */
   reasoningComponent?: (
     props: ChatMessageReasoningComponentProps<TMessage>
@@ -276,7 +276,10 @@ export type ChatMessageProps<
    */
   loaderElement?: VNode;
   /**
-   * Whether to render reasoning parts
+   * Whether to render the reasoning an agent sends. `true` by default, so
+   * reasoning that arrives is shown. Pass `false` to suppress it in this
+   * widget. It cannot make an agent send reasoning: whether reasoning reaches
+   * the client at all is the agent's own `sendReasoning` setting.
    */
   showReasoning?: boolean;
   /**
@@ -334,7 +337,7 @@ export function createChatMessageComponent({
       translations: userTranslations,
       suggestionsElement,
       loaderElement,
-      showReasoning = false,
+      showReasoning = true,
       parseMarkdown = true,
       messages: ownMessages,
       /* eslint-disable typescript/no-deprecated -- reading the

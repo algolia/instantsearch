@@ -664,7 +664,7 @@ export function createChatMessagesComponent({
       props.message.role === 'user'
         ? props.userMessageProps
         : props.assistantMessageProps;
-    const showReasoning = messageProps?.showReasoning;
+    const showReasoning = messageProps?.showReasoning !== false;
     const parseMarkdown = messageProps?.parseMarkdown;
     const textComponent = messageProps?.textComponent;
     const reasoningComponent = messageProps?.reasoningComponent;
@@ -844,7 +844,7 @@ export function createChatMessagesComponent({
     };
 
     const lastMessage = messages[messages.length - 1];
-    const showReasoning = assistantMessageProps?.showReasoning;
+    const showReasoning = assistantMessageProps?.showReasoning !== false;
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     // `activePart` means "the part currently being processed". It must clear
     // when nothing is in progress: once the response settles (`ready`/`error`),
@@ -855,7 +855,7 @@ export function createChatMessagesComponent({
     const activePart =
       isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
-    // it, so skip it entirely while the opt-in is off.
+    // it, so skip it entirely once `showReasoning` is off.
     // The loader reports on the assistant's turn, so it only ever belongs to an
     // assistant message. While `submitted` the last message is still the user's
     // own, and the loader belongs to no message at all.
@@ -1060,7 +1060,7 @@ export function createChatMessagesComponent({
 const getLoaderPhase = (
   status: ChatStatus,
   message: ChatMessageBase | undefined,
-  showReasoning: boolean | undefined
+  showReasoning: boolean
 ): ChatLoaderPhase => {
   if (status === 'submitted') return 'submitted';
 
@@ -1106,7 +1106,7 @@ const getShouldRenderVerdicts = <TMessage extends ChatMessageBase>(
 
 const getShowLoader = <TMessage extends ChatMessageBase>(
   context: ChatComponentContext<TMessage>,
-  showReasoning: boolean | undefined,
+  showReasoning: boolean,
   hasActiveReasoning: boolean
 ): boolean => {
   const { status, messages, tools } = context;

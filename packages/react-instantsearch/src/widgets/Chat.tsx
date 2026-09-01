@@ -242,13 +242,16 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
     /**
-     * Whether to render reasoning parts
+     * Whether to render the reasoning an agent sends. `true` by default, so
+     * reasoning that arrives is shown. Pass `false` to suppress it in this
+     * widget. It cannot make an agent send reasoning: whether reasoning reaches
+     * the client at all is the agent's own `sendReasoning` setting.
      */
     showReasoning?: boolean;
     /**
      * Custom reasoning renderer. It replaces the built-in disclosure rather than
-     * enabling reasoning, so it also needs `showReasoning`; on its own it is
-     * never called.
+     * enabling reasoning: reasoning renders by default, and
+     * `showReasoning: false` suppresses this renderer along with it.
      */
     reasoningComponent?: ChatMessageProps<TUiMessage>['reasoningComponent'];
     translations?: Partial<{

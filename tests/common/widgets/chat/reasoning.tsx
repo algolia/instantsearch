@@ -40,7 +40,7 @@ export function createReasoningTests(
   { act }: Required<TestOptions>
 ) {
   describe('reasoning', () => {
-    test('does not render reasoning by default', async () => {
+    test('renders reasoning by default', async () => {
       const searchClient = createSearchClient();
 
       await setup({
@@ -51,6 +51,36 @@ export function createReasoningTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(createChatWithReasoning()),
           react: createDefaultWidgetParams(createChatWithReasoning()),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      const disclosure = within(document.body).getByRole('group', {
+        name: 'Reasoning',
+      });
+      expect(disclosure).toHaveTextContent('Check the catalog.');
+      expect(disclosure).toHaveTextContent('Compare release dates.');
+    });
+
+    test('does not render reasoning when suppressed', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
           vue: {},
         },
       });
@@ -77,8 +107,14 @@ export function createReasoningTests(
           searchClient,
         },
         widgetParams: {
-          javascript: createDefaultWidgetParams(createChatWithReasoning()),
-          react: createDefaultWidgetParams(createChatWithReasoning()),
+          javascript: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
           vue: {},
         },
       });
@@ -118,8 +154,14 @@ export function createReasoningTests(
           searchClient,
         },
         widgetParams: {
-          javascript: createDefaultWidgetParams(chat),
-          react: createDefaultWidgetParams(chat),
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: false,
+          },
           vue: {},
         },
       });

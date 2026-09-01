@@ -1101,8 +1101,8 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
       text: Template<ChatMessageTextComponentProps>;
       /**
        * Template to use for assistant message reasoning. It replaces the
-       * built-in disclosure rather than enabling reasoning, so it also needs
-       * `showReasoning`; on its own it is never used.
+       * built-in disclosure rather than enabling reasoning: reasoning renders by
+       * default, and `showReasoning: false` suppresses this template too.
        */
       reasoning: Template<ChatMessageReasoningComponentProps>;
       /**
@@ -1233,7 +1233,10 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
   disableTriggerValidation?: boolean;
 
   /**
-   * Whether to render reasoning parts
+   * Whether to render the reasoning an agent sends. `true` by default, so
+   * reasoning that arrives is shown. Pass `false` to suppress it in this
+   * widget. It cannot make an agent send reasoning: whether reasoning reaches
+   * the client at all is the agent's own `sendReasoning` setting.
    */
   showReasoning?: boolean;
 
@@ -1286,7 +1289,7 @@ export default (function chat<
     tools: userTools,
     getSearchPageURL,
     disableTriggerValidation = false,
-    showReasoning = false,
+    showReasoning = true,
     loaderPosition,
     shouldShowLoader,
     loaderShowDelay,

@@ -317,7 +317,25 @@ describe('ChatMessage', () => {
     expect(body).not.toHaveFocus();
   });
 
-  test('does not render reasoning unless it is enabled', () => {
+  test('renders reasoning without being asked to', () => {
+    const { getByRole, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: 'Public reasoning' }],
+        }}
+        context={createContext()}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Reasoning' })).toBeInTheDocument();
+    expect(getByText('Public reasoning')).toBeInTheDocument();
+  });
+
+  test('does not render reasoning once it is suppressed', () => {
     const { queryByRole, queryByText } = render(
       <ChatMessage
         indexUiState={{}}
@@ -328,6 +346,7 @@ describe('ChatMessage', () => {
           parts: [{ type: 'reasoning', text: 'Private reasoning' }],
         }}
         context={createContext()}
+        showReasoning={false}
       />
     );
 
@@ -563,7 +582,7 @@ describe('ChatMessage', () => {
     });
   });
 
-  test('does not call a custom reasoning renderer without `showReasoning`', () => {
+  test('does not call a custom reasoning renderer once reasoning is suppressed', () => {
     const message = {
       role: 'assistant' as const,
       id: '1',
@@ -582,9 +601,9 @@ describe('ChatMessage', () => {
       )
     );
 
-    // The renderer replaces the built-in disclosure; it does not enable
-    // reasoning. `showReasoning` stays the single opt-in, and the JSDoc on all
-    // three public surfaces says so.
+    // The renderer replaces the built-in disclosure; it does not decide whether
+    // reasoning renders at all. `showReasoning` stays the single switch, and
+    // the JSDoc on all three public surfaces says so.
     const { queryByTestId, getByText } = render(
       <ChatMessage
         indexUiState={{}}
@@ -592,6 +611,7 @@ describe('ChatMessage', () => {
         message={message}
         context={createContext({ messages: [message] })}
         reasoningComponent={reasoningComponent}
+        showReasoning={false}
       />
     );
 
