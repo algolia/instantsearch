@@ -1854,6 +1854,33 @@ describe('ChatMessages', () => {
         return utils;
       }
 
+      test('keeps the loader up after streaming starts before the assistant message exists', () => {
+        // `processStream` sets `streaming` before the `start` chunk pushes the
+        // assistant. The last message is still the user's, and its text must
+        // not be read as the answer.
+        const user = {
+          role: 'user' as const,
+          id: '1',
+          parts: [{ type: 'text' as const, text: 'hello' }],
+        };
+
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[user]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages {...baseProps} status="streaming" messages={[user]} />
+        );
+
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(container)).not.toBeNull();
+      });
+
       test('holds the loader briefly so it cannot flash', () => {
         const { container, rerender } = render(
           <ChatMessages {...baseProps} status="submitted" messages={[]} />
