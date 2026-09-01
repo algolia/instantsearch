@@ -76,7 +76,11 @@ describe('ChatMessage', () => {
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        message={{ role: 'user', id: '1', parts: [] }}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'Hello' }],
+        }}
         context={createContext()}
       />
     );
@@ -94,12 +98,48 @@ describe('ChatMessage', () => {
             >
               <div
                 class="ais-ChatMessage-message"
-              />
+              >
+                <span>
+                  <span>
+                    Hello
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </article>
       </div>
     `);
+  });
+
+  test('does not render an empty message', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{ role: 'assistant', id: '1', parts: [] }}
+        context={createContext()}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  test('does not render a text part that has no content yet', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'text', text: '', state: 'streaming' }],
+        }}
+        context={createContext({ status: 'streaming' })}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
   });
 
   test('renders with custom class names', () => {
@@ -110,7 +150,7 @@ describe('ChatMessage', () => {
         message={{
           role: 'user',
           id: '1',
-          parts: [],
+          parts: [{ type: 'text', text: 'Hello' }],
         }}
         classNames={{
           root: 'root',
@@ -137,7 +177,13 @@ describe('ChatMessage', () => {
             >
               <div
                 class="ais-ChatMessage-message message"
-              />
+              >
+                <span>
+                  <span>
+                    Hello
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </article>

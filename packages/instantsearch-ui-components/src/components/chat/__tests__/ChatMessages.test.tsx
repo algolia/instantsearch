@@ -2157,6 +2157,57 @@ describe('ChatMessages', () => {
       ).toBeNull();
       expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
     });
+
+    test('does not render an empty assistant placeholder next to the loader', () => {
+      // AbstractChat pushes `{ role: 'assistant', parts: [] }` on the stream
+      // `start` chunk, before any part exists. That row must not sit above
+      // the messages-end loader — it is an empty article plus a flex gap.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            { role: 'assistant', id: '2', parts: [] },
+          ]}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('does not render an assistant row for an unwritten text part next to the loader', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            {
+              role: 'assistant',
+              id: '2',
+              parts: [{ type: 'text', text: '', state: 'streaming' }],
+            },
+          ]}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
   });
 
   describe('pending suggestions', () => {
