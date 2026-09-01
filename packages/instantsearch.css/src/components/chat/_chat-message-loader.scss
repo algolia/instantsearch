@@ -70,7 +70,6 @@
   display: flex;
   align-items: flex-start;
   gap: calc(var(--ais-spacing) * 0.5);
-  margin-top: calc(var(--ais-spacing) * 0.5);
 
   .ais-ChatMessageLoader-spinner {
     flex: none;

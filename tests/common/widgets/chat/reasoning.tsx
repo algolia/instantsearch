@@ -3,6 +3,7 @@ import { wait } from '@instantsearch/testutils';
 import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { Chat } from 'instantsearch.js/es/lib/chat';
+import React from 'react';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -39,7 +40,7 @@ export function createReasoningTests(
   { act }: Required<TestOptions>
 ) {
   describe('reasoning', () => {
-    test('does not render reasoning by default', async () => {
+    test('renders reasoning by default', async () => {
       const searchClient = createSearchClient();
 
       await setup({
@@ -50,6 +51,36 @@ export function createReasoningTests(
         widgetParams: {
           javascript: createDefaultWidgetParams(createChatWithReasoning()),
           react: createDefaultWidgetParams(createChatWithReasoning()),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      const disclosure = within(document.body).getByRole('group', {
+        name: 'Reasoning',
+      });
+      expect(disclosure).toHaveTextContent('Check the catalog.');
+      expect(disclosure).toHaveTextContent('Compare release dates.');
+    });
+
+    test('does not render reasoning when suppressed', async () => {
+      const searchClient = createSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
           vue: {},
         },
       });
@@ -76,8 +107,14 @@ export function createReasoningTests(
           searchClient,
         },
         widgetParams: {
-          javascript: createDefaultWidgetParams(createChatWithReasoning()),
-          react: createDefaultWidgetParams(createChatWithReasoning()),
+          javascript: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(createChatWithReasoning()),
+            showReasoning: false,
+          },
           vue: {},
         },
       });
@@ -117,8 +154,14 @@ export function createReasoningTests(
           searchClient,
         },
         widgetParams: {
-          javascript: createDefaultWidgetParams(chat),
-          react: createDefaultWidgetParams(chat),
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: false,
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: false,
+          },
           vue: {},
         },
       });
@@ -132,7 +175,7 @@ export function createReasoningTests(
       ).not.toBeInTheDocument();
     });
 
-    test('renders each reasoning part in a collapsed disclosure when enabled', async () => {
+    test('renders received reasoning in one collapsed timeline when enabled', async () => {
       const searchClient = createSearchClient();
 
       await setup({
@@ -163,14 +206,18 @@ export function createReasoningTests(
       const disclosures = within(document.body).getAllByRole('group', {
         name: 'Reasoning',
       });
-      expect(disclosures).toHaveLength(2);
+      expect(disclosures).toHaveLength(1);
       expect(disclosures[0]).not.toHaveAttribute('open');
-      expect(disclosures[1]).not.toHaveAttribute('open');
       expect(disclosures[0]).toHaveTextContent('Check the catalog.');
       expect(disclosures[0].querySelector('strong')).toHaveTextContent(
         'catalog'
       );
-      expect(disclosures[1]).toHaveTextContent('Compare release dates.');
+      expect(disclosures[0]).toHaveTextContent('Compare release dates.');
+      expect(
+        within(disclosures[0])
+          .getAllByRole('listitem')
+          .map((entry) => entry.textContent)
+      ).toEqual(['Check the catalog.', 'Compare release dates.']);
     });
 
     test('keeps an active reasoning disclosure collapsed until the reader opens it', async () => {
@@ -394,7 +441,184 @@ export function createReasoningTests(
         within(document.body).getAllByRole('group', {
           name: 'Raisonnement',
         })
-      ).toHaveLength(2);
+      ).toHaveLength(1);
+    });
+
+    test('renders a custom reasoning renderer once per part, in stream order', async () => {
+      const searchClient = createSearchClient();
+      // Reasoning and text alternate, so a renderer that received the whole
+      // array at the first reasoning position would produce
+      // `R1, R2, T1, T2` instead of the stream's own order.
+      const chat = new Chat({
+        messages: [
+          {
+            id: 'assistant-1',
+            role: 'assistant',
+            parts: [
+              { type: 'reasoning', text: 'R1', state: 'done' },
+              { type: 'text', text: 'T1' },
+              { type: 'reasoning', text: 'R2', state: 'done' },
+              { type: 'text', text: 'T2' },
+            ],
+          },
+        ],
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            templates: {
+              assistantMessage: {
+                reasoning: ({ part, partIndex }, { html }) =>
+                  html`<span
+                    class="custom-reasoning-part"
+                    data-part-index="${partIndex}"
+                    >${part.text}</span
+                  >`,
+              },
+            },
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            messagesProps: {
+              assistantMessageProps: {
+                reasoningComponent: ({ part, partIndex }) => (
+                  <span
+                    className="custom-reasoning-part"
+                    data-part-index={partIndex}
+                  >
+                    {part.text}
+                  </span>
+                ),
+              },
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      expect(
+        Array.from(document.querySelectorAll('.custom-reasoning-part')).map(
+          (element) => ({
+            text: element.textContent,
+            partIndex: Number(element.getAttribute('data-part-index')),
+          })
+        )
+      ).toEqual([
+        { text: 'R1', partIndex: 0 },
+        { text: 'R2', partIndex: 2 },
+      ]);
+
+      // The built-in disclosure must not also render.
+      expect(
+        within(document.body).queryAllByRole('group', { name: 'Reasoning' })
+      ).toHaveLength(0);
+
+      const message = document.querySelector('.ais-ChatMessage-message')!;
+      expect(
+        Array.from(message.children).map((child) => child.textContent)
+      ).toEqual(['R1', 'T1', 'R2', 'T2']);
+    });
+
+    test('keeps a custom renderer disclosure state across a part ending', async () => {
+      const searchClient = createSearchClient();
+      const firstPart = {
+        type: 'reasoning' as const,
+        text: 'R1',
+        state: 'done' as const,
+      };
+      const chat = new Chat({
+        messages: [
+          { id: 'assistant-1', role: 'assistant' as const, parts: [firstPart] },
+        ],
+      });
+
+      // A consumer rendering its own disclosure owns the open state. The library
+      // must not remount an earlier step when a later one arrives.
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            templates: {
+              assistantMessage: {
+                reasoning: ({ part, partIndex }, { html }) =>
+                  html`<details
+                    class="custom-reasoning-disclosure"
+                    data-part-index="${partIndex}"
+                  >
+                    <summary>Step</summary>
+                    ${part.text}
+                  </details>`,
+              },
+            },
+          },
+          react: {
+            ...createDefaultWidgetParams(chat),
+            showReasoning: true,
+            messagesProps: {
+              assistantMessageProps: {
+                reasoningComponent: ({ part, partIndex }) => (
+                  <details
+                    className="custom-reasoning-disclosure"
+                    data-part-index={partIndex}
+                  >
+                    <summary>Step</summary>
+                    {part.text}
+                  </details>
+                ),
+              },
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      const opened = document.querySelector<HTMLDetailsElement>(
+        '.custom-reasoning-disclosure'
+      )!;
+      await act(async () => {
+        await userEvent.click(within(opened).getByText('Step'));
+        await wait(0);
+      });
+      expect(opened.open).toBe(true);
+
+      await act(async () => {
+        chat.messages = [
+          {
+            id: 'assistant-1',
+            role: 'assistant',
+            parts: [
+              firstPart,
+              { type: 'reasoning', text: 'R2', state: 'done' },
+            ],
+          },
+        ];
+        await wait(0);
+      });
+
+      const disclosures = document.querySelectorAll<HTMLDetailsElement>(
+        '.custom-reasoning-disclosure'
+      );
+      expect(disclosures).toHaveLength(2);
+      expect(disclosures[0]).toBe(opened);
+      expect(disclosures[0].open).toBe(true);
+      expect(disclosures[1].open).toBe(false);
     });
   });
 }

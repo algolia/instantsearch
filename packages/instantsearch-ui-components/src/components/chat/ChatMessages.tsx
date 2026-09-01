@@ -664,9 +664,10 @@ export function createChatMessagesComponent({
       props.message.role === 'user'
         ? props.userMessageProps
         : props.assistantMessageProps;
-    const showReasoning = messageProps?.showReasoning;
+    const showReasoning = messageProps?.showReasoning !== false;
     const parseMarkdown = messageProps?.parseMarkdown;
     const textComponent = messageProps?.textComponent;
+    const reasoningComponent = messageProps?.reasoningComponent;
     // A completed row is memoized against its own message, but `shouldRender`
     // reads the whole `context`: a predicate can hide an older tool result once a
     // newer message arrives. Track the verdicts themselves rather than
@@ -680,6 +681,29 @@ export function createChatMessagesComponent({
     // must update with it. Keep the default renderer's streaming optimization.
     const textComponentMessages = textComponent
       ? props.context.messages
+      : undefined;
+    // A custom reasoning component receives the full context, but completed
+    // rows only need to update for its semantic state, so the memo tracks those
+    // fields rather than `props.context`. The context's callback identities and
+    // its scroll-only changes stay out. `reasoningComponent` is tracked, so
+    // replacing the component still takes effect.
+    const reasoningComponentMessages = reasoningComponent
+      ? props.context.messages
+      : undefined;
+    const reasoningComponentStatus = reasoningComponent
+      ? props.context.status
+      : undefined;
+    const reasoningComponentError = reasoningComponent
+      ? props.context.error
+      : undefined;
+    const reasoningComponentIsClearing = reasoningComponent
+      ? props.context.isClearing
+      : undefined;
+    const reasoningComponentActivePart = reasoningComponent
+      ? props.context.activePart
+      : undefined;
+    const reasoningComponentTools = reasoningComponent
+      ? props.context.tools
       : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
@@ -721,6 +745,13 @@ export function createChatMessagesComponent({
         parseMarkdown,
         textComponent,
         textComponentMessages,
+        reasoningComponent,
+        reasoningComponentMessages,
+        reasoningComponentStatus,
+        reasoningComponentError,
+        reasoningComponentIsClearing,
+        reasoningComponentActivePart,
+        reasoningComponentTools,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,
@@ -813,7 +844,7 @@ export function createChatMessagesComponent({
     };
 
     const lastMessage = messages[messages.length - 1];
-    const showReasoning = assistantMessageProps?.showReasoning;
+    const showReasoning = assistantMessageProps?.showReasoning !== false;
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     // `activePart` means "the part currently being processed". It must clear
     // when nothing is in progress: once the response settles (`ready`/`error`),
@@ -824,7 +855,7 @@ export function createChatMessagesComponent({
     const activePart =
       isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
-    // it, so skip it entirely while the opt-in is off.
+    // it, so skip it entirely once `showReasoning` is off.
     // The loader reports on the assistant's turn, so it only ever belongs to an
     // assistant message. While `submitted` the last message is still the user's
     // own, and the loader belongs to no message at all.
@@ -1029,7 +1060,7 @@ export function createChatMessagesComponent({
 const getLoaderPhase = (
   status: ChatStatus,
   message: ChatMessageBase | undefined,
-  showReasoning: boolean | undefined
+  showReasoning: boolean
 ): ChatLoaderPhase => {
   if (status === 'submitted') return 'submitted';
 
@@ -1075,7 +1106,7 @@ const getShouldRenderVerdicts = <TMessage extends ChatMessageBase>(
 
 const getShowLoader = <TMessage extends ChatMessageBase>(
   context: ChatComponentContext<TMessage>,
-  showReasoning: boolean | undefined,
+  showReasoning: boolean,
   hasActiveReasoning: boolean
 ): boolean => {
   const { status, messages, tools } = context;
