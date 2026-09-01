@@ -313,6 +313,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+    outputs:
+      released: ${{ steps.release-commit.outputs.released }}
     steps:
       - name: Mint GitHub App token
         id: app-token
@@ -352,3 +354,25 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           SLACK_INCOMING_HOOK: ${{ secrets.SLACK_INCOMING_HOOK }}
         run: yarn shipjs trigger
+
+      # The same signal `shipjs trigger` uses to decide whether to release, so
+      # the gate and the release agree by construction. A prefix match and not
+      # an equality check: the squash merge appends the pull request number, so
+      # the real subject reads `chore: release (#7209)`.
+      - name: Report whether a release happened
+        id: release-commit
+        run: |
+          case "$(git log -1 --pretty=%s)" in
+            "chore: release"*) printf 'released=true\n' >> "$GITHUB_OUTPUT" ;;
+            *) printf 'released=false\n' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  # Called from here, and no longer triggered by the release tags: a Ship.js
+  # release pushes one tag per changed package, and a tag trigger starts one run
+  # per matched tag, so the templates used to build twice per release.
+  release-templates:
+    name: release templates
+    needs: release-if-needed
+    if: needs.release-if-needed.outputs.released == 'true'
+    uses: ./.github/workflows/release-templates.yml
+    secrets: inherit
