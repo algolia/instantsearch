@@ -532,8 +532,6 @@ export function createChatMessageComponent({
         );
       }
       if (part.type === 'text') {
-        // `text-start` creates the part before the first delta; rendering it
-        // would leave an empty assistant row next to the loader.
         if (isPartTextEmpty(part)) {
           return null;
         }
@@ -664,9 +662,6 @@ export function createChatMessageComponent({
     const renderedParts = message.parts.map(renderMessagePart);
     const hasRenderedParts = renderedParts.some((part) => part != null);
 
-    // AbstractChat pushes an assistant message with no parts on the stream
-    // `start` chunk. An empty article still occupies a flex gap above the
-    // messages-end loader, so skip the row until something is visible.
     if (
       !hasRenderedParts &&
       !loaderElement &&
