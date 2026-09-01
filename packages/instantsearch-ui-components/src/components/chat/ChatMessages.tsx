@@ -683,8 +683,10 @@ export function createChatMessagesComponent({
       ? props.context.messages
       : undefined;
     // A custom reasoning component receives the full context, but completed
-    // rows only need to update for its semantic state. Callback identity and
-    // scroll-only changes are intentionally excluded from the memo.
+    // rows only need to update for its semantic state, so the memo tracks those
+    // fields rather than `props.context`. The context's callback identities and
+    // its scroll-only changes stay out. `reasoningComponent` is tracked, so
+    // replacing the component still takes effect.
     const reasoningComponentMessages = reasoningComponent
       ? props.context.messages
       : undefined;
