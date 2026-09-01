@@ -189,6 +189,60 @@ describe('ChatMessage', () => {
     });
   });
 
+  describe('a row with nothing to render', () => {
+    // A turn that ended without renderable content: aborted, or answered only
+    // by a tool hidden through `shouldRender`.
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [{ type: 'step-start' }],
+    };
+
+    test('is not kept alive by the default actions', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={[{ title: 'Regenerate', onClick: jest.fn() }]}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    test('is kept by a custom actions component', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actionsComponent={() => <span className="custom-action" />}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('.custom-action')).not.toBeNull();
+    });
+
+    test('hands its suggestions on rather than keeping the row', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={[{ title: 'Regenerate', onClick: jest.fn() }]}
+          suggestionsElement={<span className="suggestions" />}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('article')).toBeNull();
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
+  });
+
   test('renders with custom class names', () => {
     const { container } = render(
       <ChatMessage

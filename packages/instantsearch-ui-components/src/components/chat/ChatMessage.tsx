@@ -670,11 +670,10 @@ export function createChatMessageComponent({
     if (
       !hasRenderedParts &&
       !loaderElement &&
-      !suggestionsElement &&
-      !showActions &&
+      !(ActionsComponent && showActions) &&
       !FooterComponent
     ) {
-      return null;
+      return suggestionsElement ?? null;
     }
 
     return (
