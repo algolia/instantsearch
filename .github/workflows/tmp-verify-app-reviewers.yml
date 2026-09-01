@@ -1,0 +1,83 @@
+# Throwaway: verifies that the frontend-experiences-bot app token can resolve an
+# org team and request that team as a reviewer. Delete this file once answered.
+# Trigger is `push` because `workflow_dispatch` only fires for a workflow file
+# that exists on the default branch.
+name: tmp verify app reviewers
+
+on:
+  push:
+    branches:
+      - ci/verify-app-reviewers
+
+permissions: {}
+
+env:
+  ORG: algolia
+  REPO: instantsearch
+  TEAM: frontend-experiences-web
+
+jobs:
+  verify:
+    name: verify reviewer access
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.FX_BOT_APP_ID }}
+          private-key: ${{ secrets.FX_BOT_PRIVATE_KEY }}
+          owner: algolia
+          repositories: instantsearch
+
+      - name: Probe reviewer access
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          summary() {
+            printf '%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          probe() {
+            label="$1"
+            shift
+            printf '::group::%s\n' "$label"
+            if out=$("$@" 2>&1); then
+              printf 'PASS\n%s\n' "$out" | head -40
+              summary "| $label | PASS |"
+            else
+              printf 'FAIL\n%s\n' "$out" | head -40
+              summary "| $label | FAIL |"
+            fi
+            printf '::endgroup::\n'
+          }
+
+          summary '| check | result |'
+          summary '| --- | --- |'
+
+          probe 'installation repositories' \
+            gh api /installation/repositories \
+              --jq '{total: .total_count, repositories: [.repositories[].full_name]}'
+
+          probe 'resolve team (needs Members: Read)' \
+            gh api "/orgs/$ORG/teams/$TEAM" --jq '{id, node_id, slug}'
+
+          probe 'team access to repository' \
+            gh api "/orgs/$ORG/teams/$TEAM/repos/$ORG/$REPO" \
+              --jq '{full_name, permissions}'
+
+          pr=$(gh api "/repos/$ORG/$REPO/pulls?head=$ORG:$BRANCH&state=open" \
+            --jq '.[0].number // empty')
+
+          if [ -z "$pr" ]; then
+            summary '| request team reviewer | SKIPPED (no open pull request for this branch) |'
+            exit 0
+          fi
+
+          printf '{"team_reviewers":["%s"]}\n' "$TEAM" > reviewers.json
+          probe "request team reviewer on pull request $pr" \
+            gh api --method POST \
+              "/repos/$ORG/$REPO/pulls/$pr/requested_reviewers" \
+              --input reviewers.json \
+              --jq '{requested_teams: [.requested_teams[].slug]}'
