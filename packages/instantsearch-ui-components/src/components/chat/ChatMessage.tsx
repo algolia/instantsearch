@@ -426,8 +426,13 @@ export function createChatMessageComponent({
       (part) => part.isStreaming
     );
 
+    // `status` is the chat's, not the row's: gating every row on it took the
+    // actions off completed answers the moment a follow-up turn started,
+    // reflowing rows the turn hasn't touched. Only the row the turn is
+    // producing waits for the status to settle.
     const showActions =
-      Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
+      Boolean(actions.length > 0 || ActionsComponent) &&
+      (status === 'ready' || !isCurrentMessage);
 
     const cssClasses: Required<ChatMessageClassNames> = {
       root: cx(
