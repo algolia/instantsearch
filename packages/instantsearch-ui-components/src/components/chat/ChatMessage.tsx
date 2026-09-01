@@ -2,13 +2,18 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { findTool, isReasoningPartActive } from '../../lib/utils/chat';
+import {
+  findTool,
+  isPartTextEmpty,
+  isReasoningPartActive,
+} from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
   createChatMessageReasoningComponent,
   type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningPart,
   type ChatMessageReasoningTranslations,
 } from './ChatMessageReasoning';
 import { MenuIcon } from './icons';
@@ -24,6 +29,7 @@ import type {
   ClientSideTool,
   ClientSideToolContext,
   ClientSideTools,
+  ReasoningUIPart,
   TextUIPart,
 } from './types';
 import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
@@ -154,6 +160,32 @@ export type ChatMessageTextComponentProps<
   partIndex: number;
 };
 
+export type { ChatMessageReasoningPart } from './ChatMessageReasoning';
+
+export type ChatMessageReasoningComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentPropsWithContext<
+  {
+    /**
+     * The reasoning part to render
+     */
+    part: ReasoningUIPart;
+    /**
+     * The reasoning part's index in the full `message.parts` array
+     */
+    partIndex: number;
+    /**
+     * Whether this reasoning part is currently being produced
+     */
+    isStreaming: boolean;
+    /**
+     * The message containing the reasoning part
+     */
+    message: TMessage;
+  },
+  TMessage
+>;
+
 export type ChatMessageProps<
   TMessage extends ChatMessageBase = ChatMessageBase,
 > = ComponentProps<'article'> & {
@@ -201,6 +233,15 @@ export type ChatMessageProps<
     props: ChatMessageTextComponentProps<TMessage>
   ) => JSX.Element | null;
   /**
+   * Custom reasoning renderer, called once per reasoning part at that part's own
+   * stream position. It changes how reasoning renders, not whether: reasoning
+   * renders by default, and `showReasoning: false` suppresses this renderer
+   * along with it.
+   */
+  reasoningComponent?: (
+    props: ChatMessageReasoningComponentProps<TMessage>
+  ) => JSX.Element | null;
+  /**
    * The index UI state
    */
   indexUiState: object;
@@ -239,7 +280,10 @@ export type ChatMessageProps<
    */
   loaderElement?: VNode;
   /**
-   * Whether to render reasoning parts
+   * Whether to render the reasoning an agent sends. `true` by default, so
+   * reasoning that arrives is shown. Pass `false` to suppress it in this
+   * widget. It cannot make an agent send reasoning: whether reasoning reaches
+   * the client at all is the agent's own `sendReasoning` setting.
    */
   showReasoning?: boolean;
   /**
@@ -291,12 +335,13 @@ export function createChatMessageComponent({
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
       textComponent: TextComponent,
+      reasoningComponent: ReasoningComponent,
       indexUiState,
       setIndexUiState,
       translations: userTranslations,
       suggestionsElement,
       loaderElement,
-      showReasoning = false,
+      showReasoning = true,
       parseMarkdown = true,
       messages: ownMessages,
       /* eslint-disable typescript/no-deprecated -- reading the
@@ -343,6 +388,43 @@ export function createChatMessageComponent({
     const isCurrentMessage =
       messages === undefined ||
       messages[messages.length - 1]?.id === message.id;
+
+    const reasoningParts = showReasoning
+      ? message.parts.reduce<ChatMessageReasoningPart[]>(
+          (receivedParts, part, partIndex) => {
+            if (part.type !== 'reasoning') {
+              return receivedParts;
+            }
+
+            const isStreaming =
+              status === 'streaming' &&
+              isCurrentMessage &&
+              isReasoningPartActive(message.parts, partIndex);
+
+            if (!isStreaming && part.text.trim().length === 0) {
+              return receivedParts;
+            }
+
+            receivedParts.push({ part, partIndex, isStreaming });
+            return receivedParts;
+          },
+          []
+        )
+      : [];
+    const firstReasoningPartIndex = reasoningParts[0]?.partIndex;
+    // Keep the built-in native disclosure mounted through a temporary
+    // eligibility gap so its reader-owned state survives resumed reasoning.
+    const reasoningPartIndex =
+      firstReasoningPartIndex ??
+      (showReasoning &&
+      !ReasoningComponent &&
+      status === 'streaming' &&
+      isCurrentMessage
+        ? message.parts.findIndex((part) => part.type === 'reasoning')
+        : -1);
+    const isReasoningStreaming = reasoningParts.some(
+      (part) => part.isStreaming
+    );
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
@@ -396,47 +478,61 @@ export function createChatMessageComponent({
         return null;
       }
       if (part.type === 'reasoning') {
-        if (!showReasoning) {
-          return null;
+        // A custom component renders each step where it arrived, so the rendered
+        // order matches the stream. The built-in disclosure below aggregates the
+        // whole message into a single row, which is why only it is placed by
+        // index.
+        if (ReasoningComponent) {
+          const receivedPart = reasoningParts.find(
+            (candidate) => candidate.partIndex === index
+          );
+
+          if (!receivedPart) {
+            return null;
+          }
+
+          return (
+            <Fragment key={`${message.id}-reasoning-${index}`}>
+              <ReasoningComponent
+                part={receivedPart.part}
+                partIndex={index}
+                isStreaming={receivedPart.isStreaming}
+                message={message}
+                context={context}
+              />
+            </Fragment>
+          );
         }
 
-        const isReasoningStreaming =
-          status === 'streaming' &&
-          isCurrentMessage &&
-          isReasoningPartActive(message.parts, index);
-
-        if (!isReasoningStreaming && part.text.trim().length === 0) {
+        if (index !== reasoningPartIndex) {
           return null;
         }
 
         return (
           <ChatMessageReasoning
-            key={`${message.id}-${index}`}
-            part={part}
-            isStreaming={isReasoningStreaming}
+            key={`${message.id}-reasoning`}
+            parts={reasoningParts}
+            hidden={reasoningParts.length === 0}
             parseMarkdown={parseMarkdown}
             translations={translations}
             classNames={{
               ...cssClasses,
-              reasoningLabel: cx(
-                'ais-ChatMessageReasoning-label',
+              reasoningIcon: cx(
+                cssClasses.reasoningIcon,
                 isReasoningStreaming &&
-                  'ais-ChatMessageReasoning-label--streaming',
-                classNames.reasoningLabel
+                  'ais-ChatMessageReasoning-icon--streaming'
+              ),
+              reasoningLabel: cx(
+                cssClasses.reasoningLabel,
+                isReasoningStreaming &&
+                  'ais-ChatMessageReasoning-label--streaming'
               ),
             }}
           />
         );
       }
       if (part.type === 'text') {
-        // Back-compat shim for sessions started before the move from a
-        // `<context>{...}</context>` text part to `metadata.turnContext`.
-        // Safe to remove once existing sessionStorage transcripts have
-        // rolled over (~2 weeks after release).
-        if (
-          part.text.startsWith('<context>') &&
-          part.text.endsWith('</context>')
-        ) {
+        if (isPartTextEmpty(part)) {
           return null;
         }
         if (TextComponent) {
@@ -563,6 +659,19 @@ export function createChatMessageComponent({
       return null;
     }
 
+    const renderedParts = message.parts.map(renderMessagePart);
+    const hasRenderedParts = renderedParts.some((part) => part != null);
+
+    if (
+      !hasRenderedParts &&
+      !loaderElement &&
+      !suggestionsElement &&
+      !showActions &&
+      !FooterComponent
+    ) {
+      return null;
+    }
+
     return (
       <article
         {...props}
@@ -578,7 +687,7 @@ export function createChatMessageComponent({
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
-              {message.parts.map(renderMessagePart)}
+              {renderedParts}
               {loaderElement}
             </div>
 

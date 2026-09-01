@@ -43,6 +43,12 @@
   font-size: calc(var(--ais-spacing) * 0.875);
   line-height: calc(var(--ais-spacing) * 1.25);
 
+  // Space the message parts here rather than on each part, so a part replaced by
+  // a custom renderer is spaced without the consumer having to know to do it.
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+
   img {
     max-width: 100%;
     height: auto;
