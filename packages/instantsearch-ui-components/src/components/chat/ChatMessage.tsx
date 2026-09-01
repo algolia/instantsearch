@@ -2,7 +2,11 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { findTool, isReasoningPartActive } from '../../lib/utils/chat';
+import {
+  findTool,
+  isPartTextEmpty,
+  isReasoningPartActive,
+} from '../../lib/utils/chat';
 import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
@@ -528,14 +532,7 @@ export function createChatMessageComponent({
         );
       }
       if (part.type === 'text') {
-        // Back-compat shim for sessions started before the move from a
-        // `<context>{...}</context>` text part to `metadata.turnContext`.
-        // Safe to remove once existing sessionStorage transcripts have
-        // rolled over (~2 weeks after release).
-        if (
-          part.text.startsWith('<context>') &&
-          part.text.endsWith('</context>')
-        ) {
+        if (isPartTextEmpty(part)) {
           return null;
         }
         if (TextComponent) {
@@ -662,6 +659,19 @@ export function createChatMessageComponent({
       return null;
     }
 
+    const renderedParts = message.parts.map(renderMessagePart);
+    const hasRenderedParts = renderedParts.some((part) => part != null);
+
+    if (
+      !hasRenderedParts &&
+      !loaderElement &&
+      !suggestionsElement &&
+      !showActions &&
+      !FooterComponent
+    ) {
+      return null;
+    }
+
     return (
       <article
         {...props}
@@ -677,7 +687,7 @@ export function createChatMessageComponent({
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
-              {message.parts.map(renderMessagePart)}
+              {renderedParts}
               {loaderElement}
             </div>
 
