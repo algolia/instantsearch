@@ -1100,7 +1100,9 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        */
       text: Template<ChatMessageTextComponentProps>;
       /**
-       * Template to use for assistant message reasoning.
+       * Template to use for assistant message reasoning. It replaces the
+       * built-in disclosure rather than enabling reasoning, so it also needs
+       * `showReasoning`; on its own it is never used.
        */
       reasoning: Template<ChatMessageReasoningComponentProps>;
       /**

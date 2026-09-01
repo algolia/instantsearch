@@ -246,7 +246,9 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
      */
     showReasoning?: boolean;
     /**
-     * Custom reasoning renderer
+     * Custom reasoning renderer. It replaces the built-in disclosure rather than
+     * enabling reasoning, so it also needs `showReasoning`; on its own it is
+     * never called.
      */
     reasoningComponent?: ChatMessageProps<TUiMessage>['reasoningComponent'];
     translations?: Partial<{

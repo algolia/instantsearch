@@ -229,7 +229,10 @@ export type ChatMessageProps<
     props: ChatMessageTextComponentProps<TMessage>
   ) => JSX.Element | null;
   /**
-   * Custom reasoning renderer
+   * Custom reasoning renderer, called once per reasoning part at that part's own
+   * stream position. It changes how reasoning renders, not whether: parts are
+   * only collected when `showReasoning` is `true`, so a renderer set on its own
+   * is never called.
    */
   reasoningComponent?: (
     props: ChatMessageReasoningComponentProps<TMessage>

@@ -699,12 +699,6 @@ export function createChatMessagesComponent({
     const reasoningComponentIsClearing = reasoningComponent
       ? props.context.isClearing
       : undefined;
-    const reasoningComponentOpen = reasoningComponent
-      ? props.context.open
-      : undefined;
-    const reasoningComponentMaximized = reasoningComponent
-      ? props.context.maximized
-      : undefined;
     const reasoningComponentActivePart = reasoningComponent
       ? props.context.activePart
       : undefined;
@@ -756,8 +750,6 @@ export function createChatMessagesComponent({
         reasoningComponentStatus,
         reasoningComponentError,
         reasoningComponentIsClearing,
-        reasoningComponentOpen,
-        reasoningComponentMaximized,
         reasoningComponentActivePart,
         reasoningComponentTools,
         reasoningLabel,

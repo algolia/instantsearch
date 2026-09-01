@@ -563,6 +563,43 @@ describe('ChatMessage', () => {
     });
   });
 
+  test('does not call a custom reasoning renderer without `showReasoning`', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        { type: 'text' as const, text: 'Answer', state: 'done' as const },
+      ],
+    };
+    const reasoningComponent = jest.fn(
+      ({ part }: ChatMessageReasoningComponentProps) => (
+        <div data-testid="custom-reasoning">{part.text}</div>
+      )
+    );
+
+    // The renderer replaces the built-in disclosure; it does not enable
+    // reasoning. `showReasoning` stays the single opt-in, and the JSDoc on all
+    // three public surfaces says so.
+    const { queryByTestId, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({ messages: [message] })}
+        reasoningComponent={reasoningComponent}
+      />
+    );
+
+    expect(reasoningComponent).not.toHaveBeenCalled();
+    expect(queryByTestId('custom-reasoning')).not.toBeInTheDocument();
+    expect(getByText('Answer')).toBeInTheDocument();
+  });
+
   test('keeps custom reasoning in stream order around tool calls', () => {
     const message = {
       role: 'assistant' as const,
