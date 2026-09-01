@@ -794,6 +794,9 @@ describe('ChatMessage', () => {
     expect(summary).toHaveTextContent(
       /^Raisonnement de la demande en cours·Working$/
     );
+    // The hint is visible but must stay out of the toggle's accessible name,
+    // which would otherwise change on every streamed delta.
+    expect(summary).toHaveAccessibleName('Raisonnement de la demande en cours');
   });
 
   test('renders the current Markdown hint without exposing markup', () => {

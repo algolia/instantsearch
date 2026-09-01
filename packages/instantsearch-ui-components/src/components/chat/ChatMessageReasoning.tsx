@@ -135,14 +135,16 @@ export function createChatMessageReasoningComponent({
           <span className={cx(classNames.reasoningLabel)}>
             {translations.reasoningLabel}
           </span>
+          {/* A `<summary>` takes its accessible name from its own contents, so
+              leaving the hint exposed would rewrite the toggle's name on every
+              streamed delta. `aria-busy` on the `<details>` carries the
+              activity, and the reasoning text itself stays in the body. */}
           {activePart && hasActiveHint && (
-            <span className="ais-ChatMessageReasoning-status">
-              <span
-                className="ais-ChatMessageReasoning-separator"
-                aria-hidden="true"
-              >
-                ·
-              </span>
+            <span
+              className="ais-ChatMessageReasoning-status"
+              aria-hidden="true"
+            >
+              <span className="ais-ChatMessageReasoning-separator">·</span>
               <span className="ais-ChatMessageReasoning-hint">
                 {renderHint(activePart.part)}
               </span>
