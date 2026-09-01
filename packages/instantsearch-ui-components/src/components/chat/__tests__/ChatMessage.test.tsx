@@ -142,6 +142,53 @@ describe('ChatMessage', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
+  describe('actions visibility', () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [{ type: 'text', text: 'The answer is 2001.' }],
+    };
+    const actions = [{ title: 'Regenerate', onClick: jest.fn() }];
+
+    test('keeps them on a completed row while a new turn runs', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={actions}
+          context={createContext({
+            status: 'streaming',
+            messages: [
+              message,
+              {
+                role: 'user',
+                id: '2',
+                parts: [{ type: 'text', text: 'And?' }],
+              },
+            ],
+          })}
+        />
+      );
+
+      expect(container.querySelector('.ais-ChatMessage-action')).not.toBeNull();
+    });
+
+    test('hides them on the row the turn is producing', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={actions}
+          context={createContext({ status: 'streaming', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('.ais-ChatMessage-action')).toBeNull();
+    });
+  });
+
   test('renders with custom class names', () => {
     const { container } = render(
       <ChatMessage
