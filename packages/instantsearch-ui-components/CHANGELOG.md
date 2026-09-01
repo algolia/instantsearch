@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.38.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.38.0...instantsearch-ui-components@0.38.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **chat:** restore automatic scrolling ([#7211](https://github.com/algolia/instantsearch/issues/7211)) ([4fc1e19](https://github.com/algolia/instantsearch/commit/4fc1e19c77531c53aa966cf65da0ed04922d24c9))
+
+
+
+
+
 # [0.38.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.37.0...instantsearch-ui-components@0.38.0) (2026-08-31)
 
 

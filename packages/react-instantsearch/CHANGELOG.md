@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.47.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.47.0...react-instantsearch@7.47.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **chat:** restore automatic scrolling ([#7211](https://github.com/algolia/instantsearch/issues/7211)) ([4fc1e19](https://github.com/algolia/instantsearch/commit/4fc1e19c77531c53aa966cf65da0ed04922d24c9))
+
+
+
+
+
 # [7.47.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.46.0...react-instantsearch@7.47.0) (2026-08-31)
 
 
