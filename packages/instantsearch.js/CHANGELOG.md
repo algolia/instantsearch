@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.115.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.114.0...instantsearch.js@4.115.0) (2026-09-01)
+
+
+### Bug Fixes
+
+* **chat:** restore automatic scrolling ([#7211](https://github.com/algolia/instantsearch/issues/7211)) ([4fc1e19](https://github.com/algolia/instantsearch/commit/4fc1e19c77531c53aa966cf65da0ed04922d24c9))
+* **prompt-suggestions:** skip a duplicate task request ([#7212](https://github.com/algolia/instantsearch/issues/7212)) ([a7bc328](https://github.com/algolia/instantsearch/commit/a7bc3280c3696811cd739b176d2ce4ca625bca7a))
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
 # [4.114.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.113.0...instantsearch.js@4.114.0) (2026-08-31)
 
 

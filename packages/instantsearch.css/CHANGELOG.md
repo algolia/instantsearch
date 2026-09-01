@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.21.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.20.0...instantsearch.css@8.21.0) (2026-09-01)
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
 # [8.20.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.1...instantsearch.css@8.20.0) (2026-08-24)
 
 
