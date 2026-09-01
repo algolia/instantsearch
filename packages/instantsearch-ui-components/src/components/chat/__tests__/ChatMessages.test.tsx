@@ -964,14 +964,14 @@ describe('ChatMessages', () => {
       };
       const messages = [message];
       const FirstReasoningComponent = ({
-        parts,
+        part,
       }: ChatMessageReasoningComponentProps) => (
-        <span data-testid="first-reasoning">{parts[0].part.text}</span>
+        <span data-testid="first-reasoning">{part.text}</span>
       );
       const SecondReasoningComponent = ({
-        parts,
+        part,
       }: ChatMessageReasoningComponentProps) => (
-        <span data-testid="second-reasoning">{parts[0].part.text}</span>
+        <span data-testid="second-reasoning">{part.text}</span>
       );
       const createProps = (
         reasoningComponent: (
@@ -1022,8 +1022,8 @@ describe('ChatMessages', () => {
       const messages = [message];
       const tools = {};
       const ReasoningComponent = jest.fn(
-        ({ parts }: ChatMessageReasoningComponentProps) => (
-          <span data-testid="reasoning-render">{parts[0].part.text}</span>
+        ({ part }: ChatMessageReasoningComponentProps) => (
+          <span data-testid="reasoning-render">{part.text}</span>
         )
       );
       const firstCallbacks = {

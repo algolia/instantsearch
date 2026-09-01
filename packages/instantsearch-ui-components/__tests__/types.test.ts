@@ -318,14 +318,18 @@ test('exposes Chat reasoning component types from the public entry point', () =>
     } from '../dist/es';
 
     const reasoningComponent: ChatMessageProps['reasoningComponent'] = (props) => {
-      const parts: ChatMessageReasoningPart[] = props.parts;
-      const part: ReasoningUIPart = props.parts[0].part;
-      const partIndex: number = props.parts[0].partIndex;
-      const isStreaming: boolean = props.parts[0].isStreaming;
+      const part: ReasoningUIPart = props.part;
+      const partIndex: number = props.partIndex;
+      const isStreaming: boolean = props.isStreaming;
       const message: ChatMessageBase = props.message;
       const context: ChatComponentContext = props.context;
       const exactProps: ChatMessageReasoningComponentProps = props;
-      void parts;
+      const receivedPart: ChatMessageReasoningPart = {
+        part,
+        partIndex,
+        isStreaming,
+      };
+      void receivedPart;
       void part;
       void partIndex;
       void isStreaming;
@@ -411,13 +415,14 @@ test('preserves custom message types in Chat text component props', () => {
         }
         return null;
       },
-      reasoningComponent({ parts, message, context }) {
+      reasoningComponent({ part, partIndex, message, context }) {
         const typedMessage: AppMessage = message;
         const typedConversation: AppMessage[] = context.messages;
-        const partIndex: number = parts[0].partIndex;
+        const typedIndex: number = partIndex;
         void typedMessage.metadata?.sourceIds;
         void typedConversation;
-        void partIndex;
+        void part.text;
+        void typedIndex;
         return null;
       },
     };

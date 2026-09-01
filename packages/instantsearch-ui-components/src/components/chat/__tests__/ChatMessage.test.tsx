@@ -488,7 +488,7 @@ describe('ChatMessage', () => {
     expect(queryAllByRole('region')).toHaveLength(0);
   });
 
-  test('routes one eligible aggregate to a custom reasoning component', () => {
+  test('renders a custom reasoning component once per eligible part', () => {
     const message = {
       role: 'assistant' as const,
       id: '1',
@@ -525,14 +525,12 @@ describe('ChatMessage', () => {
       },
     });
     const reasoningComponent = jest.fn(
-      ({ parts }: ChatMessageReasoningComponentProps) => (
-        <div data-testid="custom-reasoning">
-          {parts.map(({ part }) => part.text).join(' / ')}
-        </div>
+      ({ part }: ChatMessageReasoningComponentProps) => (
+        <div data-testid="custom-reasoning">{part.text}</div>
       )
     );
 
-    const { getByTestId, getByText } = render(
+    const { getAllByTestId, getByText } = render(
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
@@ -543,19 +541,105 @@ describe('ChatMessage', () => {
       />
     );
 
-    expect(getByTestId('custom-reasoning')).toHaveTextContent(
-      'First thought / Current thought'
-    );
+    // The blank part at index 2 stays ineligible, so it gets no call.
+    expect(
+      getAllByTestId('custom-reasoning').map((node) => node.textContent)
+    ).toEqual(['First thought', 'Current thought']);
     expect(getByText('Tool result')).toBeInTheDocument();
-    expect(reasoningComponent).toHaveBeenCalledTimes(1);
+    expect(reasoningComponent).toHaveBeenCalledTimes(2);
     expect(reasoningComponent.mock.calls[0][0]).toEqual({
-      parts: [
-        { part: message.parts[0], partIndex: 0, isStreaming: false },
-        { part: message.parts[3], partIndex: 3, isStreaming: true },
-      ],
+      part: message.parts[0],
+      partIndex: 0,
+      isStreaming: false,
       message,
       context,
     });
+    expect(reasoningComponent.mock.calls[1][0]).toEqual({
+      part: message.parts[3],
+      partIndex: 3,
+      isStreaming: true,
+      message,
+      context,
+    });
+  });
+
+  test('keeps custom reasoning in stream order around tool calls', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'tool-first_tool' as const,
+          toolCallId: 'a',
+          input: {},
+          state: 'output-available' as const,
+          output: {},
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Second thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'tool-second_tool' as const,
+          toolCallId: 'b',
+          input: {},
+          state: 'output-available' as const,
+          output: {},
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Third thought',
+          state: 'done' as const,
+        },
+        { type: 'text' as const, text: 'Final answer' },
+      ],
+    };
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({
+          messages: [message],
+          tools: {
+            first_tool: {
+              layoutComponent: () => <div>TOOL a</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            second_tool: {
+              layoutComponent: () => <div>TOOL b</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+        showReasoning={true}
+        reasoningComponent={({ part }: ChatMessageReasoningComponentProps) => (
+          <div>{part.text}</div>
+        )}
+      />
+    );
+
+    const rendered = container.querySelector('.ais-ChatMessage-message')!;
+
+    expect(
+      Array.from(rendered.children).map((child) => child.textContent)
+    ).toEqual([
+      'First thought',
+      'TOOL a',
+      'Second thought',
+      'TOOL b',
+      'Third thought',
+      'Final answer',
+    ]);
   });
 
   test('marks the aggregate disclosure busy while reasoning streams', () => {

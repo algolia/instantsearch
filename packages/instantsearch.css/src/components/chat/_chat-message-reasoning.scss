@@ -3,10 +3,9 @@
     flex-grow: 1;
   }
 
+  // Part spacing lives unconditionally in `_chat-message.scss`; the disclosure
+  // only needs the row to span the message.
   .ais-ChatMessage-message {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--ais-spacing) * 0.5);
     width: 100%;
   }
 }

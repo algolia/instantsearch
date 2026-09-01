@@ -647,16 +647,14 @@ describe('Chat', () => {
     );
   });
 
-  test('routes the top-level reasoning component with aggregate context', async () => {
+  test('routes the top-level reasoning component per part with context', async () => {
     const chat = createChat();
     const calls: Array<{
       messageId: string;
       messageCount: number;
-      parts: Array<{
-        text: string;
-        partIndex: number;
-        isStreaming: boolean;
-      }>;
+      text: string;
+      partIndex: number;
+      isStreaming: boolean;
     }> = [];
 
     render(
@@ -671,15 +669,19 @@ describe('Chat', () => {
           layoutComponent={ChatInlineLayout}
           requiresSearch={false}
           showReasoning={true}
-          reasoningComponent={({ parts, message, context }) => {
+          reasoningComponent={({
+            part,
+            partIndex,
+            isStreaming,
+            message,
+            context,
+          }) => {
             calls.push({
               messageId: message.id,
               messageCount: context.messages.length,
-              parts: parts.map(({ part, partIndex, isStreaming }) => ({
-                text: part.text,
-                partIndex,
-                isStreaming,
-              })),
+              text: part.text,
+              partIndex,
+              isStreaming,
             });
             return <div data-testid="custom-reasoning">Custom reasoning</div>;
           }}
@@ -691,16 +693,14 @@ describe('Chat', () => {
     });
 
     expect(screen.getAllByTestId('custom-reasoning')).toHaveLength(2);
+    // React can re-render a completed row, so assert the shape of a call
+    // rather than the number of them.
     expect(calls.find(({ messageId }) => messageId === 'assistant-1')).toEqual({
       messageId: 'assistant-1',
       messageCount: 4,
-      parts: [
-        {
-          text: 'Check the catalog.',
-          partIndex: 0,
-          isStreaming: false,
-        },
-      ],
+      text: 'Check the catalog.',
+      partIndex: 0,
+      isStreaming: false,
     });
   });
 

@@ -25,6 +25,7 @@ import type {
   ClientSideTool,
   ClientSideToolContext,
   ClientSideTools,
+  ReasoningUIPart,
   TextUIPart,
 } from './types';
 import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
@@ -162,11 +163,19 @@ export type ChatMessageReasoningComponentProps<
 > = ChatComponentPropsWithContext<
   {
     /**
-     * The framework-eligible reasoning parts in message order
+     * The reasoning part to render
      */
-    parts: ChatMessageReasoningPart[];
+    part: ReasoningUIPart;
     /**
-     * The message containing the reasoning parts
+     * The reasoning part's index in the full `message.parts` array
+     */
+    partIndex: number;
+    /**
+     * Whether this reasoning part is currently being produced
+     */
+    isStreaming: boolean;
+    /**
+     * The message containing the reasoning part
      */
     message: TMessage;
   },
@@ -459,20 +468,34 @@ export function createChatMessageComponent({
         return null;
       }
       if (part.type === 'reasoning') {
-        if (index !== reasoningPartIndex) {
-          return null;
-        }
-
+        // A custom component renders each step where it arrived, so the rendered
+        // order matches the stream. The built-in disclosure below aggregates the
+        // whole message into a single row, which is why only it is placed by
+        // index.
         if (ReasoningComponent) {
+          const receivedPart = reasoningParts.find(
+            (candidate) => candidate.partIndex === index
+          );
+
+          if (!receivedPart) {
+            return null;
+          }
+
           return (
-            <Fragment key={`${message.id}-reasoning`}>
+            <Fragment key={`${message.id}-reasoning-${index}`}>
               <ReasoningComponent
-                parts={reasoningParts}
+                part={receivedPart.part}
+                partIndex={index}
+                isStreaming={receivedPart.isStreaming}
                 message={message}
                 context={context}
               />
             </Fragment>
           );
+        }
+
+        if (index !== reasoningPartIndex) {
+          return null;
         }
 
         return (
