@@ -106,7 +106,7 @@
     "jest-vue-preprocessor": "1.7.1",
     "jest-watch-typeahead": "1.0.0",
     "jsdom-global": "3.0.2",
-    "lerna": "6.0.3",
+    "lerna": "9.0.7",
     "patch-package": "6.2.2",
     "places.js": "1.17.1",
     "prop-types": "15.6.2",
