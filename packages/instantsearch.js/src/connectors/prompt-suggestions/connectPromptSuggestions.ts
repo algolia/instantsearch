@@ -583,10 +583,18 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           // use — and a page that triggers no search (a `searchFunction` query
           // gate, or a mount made only for the widgets) would wait forever.
           // Fetch here instead, after the first render so the `isFirstRender`
-          // one still arrives first. `fetchAndRender` sends nothing when the
-          // context resolves to nothing, which is what keeps the auto-extracted
-          // path — the one that does need results — on `render()` alone.
-          fetchAndRender(null, initOptions);
+          // one still arrives first.
+          //
+          // There are no results yet by definition, so "is there anything to
+          // send" reduces to "did the context resolve to something". Checking it
+          // here rather than letting `fetchAndRender` reject the call keeps init
+          // out of the "nothing to send" branch, whose `invalidate()` would add
+          // two outward renders to every mount that has no context — leaving the
+          // auto-extracted path, the one that does need results, untouched.
+          const initialContext = resolveContext();
+          if (initialContext && Object.keys(initialContext).length > 0) {
+            fetchAndRender(null, initOptions);
+          }
         },
 
         render(renderOptions) {

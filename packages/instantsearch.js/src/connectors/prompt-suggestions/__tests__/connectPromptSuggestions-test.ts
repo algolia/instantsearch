@@ -1178,7 +1178,8 @@ describe('connectPromptSuggestions', () => {
     });
 
     it('does not fetch on init without a `context`', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
@@ -1186,10 +1187,15 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(global.fetch).not.toHaveBeenCalled();
+      // The auto-extracted path is left entirely on `render()`: init must not
+      // reach the "nothing to send" branch, whose `invalidate()` would add two
+      // outward renders on top of the first one.
+      expect(renderFn.mock.calls.map((call) => call[1])).toEqual([true]);
     });
 
     it('does not fetch on init when a function `context` returns undefined', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
         context: () => undefined,
       });
@@ -1198,10 +1204,12 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(global.fetch).not.toHaveBeenCalled();
+      expect(renderFn.mock.calls.map((call) => call[1])).toEqual([true]);
     });
 
     it('does not fetch on init when the `context` resolves to an empty object', async () => {
-      const widget = connectPromptSuggestions(jest.fn())({
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
         agentId: 'a',
         context: () => ({}),
       });
@@ -1210,6 +1218,7 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(global.fetch).not.toHaveBeenCalled();
+      expect(renderFn.mock.calls.map((call) => call[1])).toEqual([true]);
     });
 
     it('does not fetch a second time when results arrive after the init fetch', async () => {
