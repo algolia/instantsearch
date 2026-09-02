@@ -16,7 +16,7 @@ import {
   type ChatMessageReasoningPart,
   type ChatMessageReasoningTranslations,
 } from './ChatMessageReasoning';
-import { MenuIcon } from './icons';
+import { MenuIcon, ReloadIcon } from './icons';
 
 import type {
   AddToolResult,
@@ -83,6 +83,10 @@ export type ChatMessageTranslations = {
    * The label for message actions
    */
   actionsLabel: string;
+  /**
+   * The retry button text for failed tools
+   */
+  toolErrorRetryText?: string;
 } & Partial<ChatMessageReasoningTranslations>;
 
 export type ChatMessageClassNames = {
@@ -372,6 +376,7 @@ export function createChatMessageComponent({
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
       actionsLabel: 'Message actions',
+      toolErrorRetryText: 'Retry',
       reasoningLabel: 'Reasoning',
       ...userTranslations,
     };
@@ -609,14 +614,43 @@ export function createChatMessageComponent({
           }
 
           if (!ToolLayoutComponent) {
-            return toolMessage.state === 'output-error' ? (
+            if (toolMessage.state !== 'output-error') {
+              return null;
+            }
+
+            const messageIndex = messages.findIndex(
+              (candidate) => candidate.id === message.id
+            );
+            const canRetry =
+              tool.retryOnError === true &&
+              Boolean(tool.onToolCall) &&
+              status === 'ready' &&
+              messageIndex >= 0 &&
+              !messages
+                .slice(messageIndex + 1)
+                .some((candidate) => candidate.role === 'user');
+
+            return (
               <div
                 key={`${message.id}-${index}`}
                 className="ais-ChatMessage-tool ais-ChatMessage-toolError"
               >
-                {toolMessage.errorText || 'Tool call failed.'}
+                <span className="ais-ChatMessage-toolError-message">
+                  {toolMessage.errorText || 'Tool call failed.'}
+                </span>
+                {canRetry && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="ais-ChatMessage-toolError-action"
+                    onClick={() => context.onReload(message.id)}
+                  >
+                    <ReloadIcon createElement={createElement} />
+                    {translations.toolErrorRetryText}
+                  </Button>
+                )}
               </div>
-            ) : null;
+            );
           }
 
           const toolSendEvent = tool.sendEvent || (() => {});

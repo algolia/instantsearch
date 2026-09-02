@@ -1896,6 +1896,98 @@ describe('ChatMessage', () => {
       }),
       {}
     );
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError-action')
+    ).toBeNull();
+  });
+
+  test('reloads a failed tool response when retry is enabled', async () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: 'assistant-1',
+      parts: [
+        {
+          type: 'tool-save',
+          toolCallId: 'call-1',
+          input: {},
+          state: 'output-error',
+          errorText: 'The operation may have completed.',
+        },
+      ],
+    };
+    const onReload = jest.fn();
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        translations={{ toolErrorRetryText: 'Try again' }}
+        context={createContext({
+          messages: [message],
+          onReload,
+          tools: {
+            save: {
+              retryOnError: true,
+              onToolCall: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    const retry = container.querySelector('.ais-ChatMessage-toolError-action')!;
+    expect(retry).toHaveTextContent('Try again');
+
+    await userEvent.click(retry);
+
+    expect(onReload).toHaveBeenCalledWith('assistant-1');
+  });
+
+  test('does not offer retry after a later user message', () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: 'assistant-1',
+      parts: [
+        {
+          type: 'tool-save',
+          toolCallId: 'call-1',
+          input: {},
+          state: 'output-error',
+          errorText: 'The operation may have completed.',
+        },
+      ],
+    };
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({
+          messages: [
+            message,
+            {
+              role: 'user',
+              id: 'user-2',
+              parts: [{ type: 'text', text: 'What happened?' }],
+            },
+          ],
+          tools: {
+            save: {
+              retryOnError: true,
+              onToolCall: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError-action')
+    ).toBeNull();
   });
 
   test('passes the explicit messages override to tool components', () => {
