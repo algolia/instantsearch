@@ -58,6 +58,7 @@ export class ChatState<
   _messagesCallbacks = new Set<() => void>();
   _statusCallbacks = new Set<() => void>();
   _errorCallbacks = new Set<() => void>();
+  private persistenceKey: string | undefined;
 
   constructor(
     id: string | undefined = undefined,
@@ -76,22 +77,14 @@ export class ChatState<
       return;
     }
 
-    const saveMessagesInLocalStorage = () => {
+    this.persistenceKey = CACHE_KEY + (id ? `-${id}` : '');
+    const saveMessagesInSessionStorage = () => {
       if (this.status === 'ready') {
-        safelyRunOnBrowser(() => {
-          try {
-            sessionStorage.setItem(
-              CACHE_KEY + (id ? `-${id}` : ''),
-              JSON.stringify(this.messages)
-            );
-          } catch (e) {
-            // Do nothing if sessionStorage is not available or full
-          }
-        });
+        this['~persistMessages']();
       }
     };
-    this['~registerMessagesCallback'](saveMessagesInLocalStorage);
-    this['~registerStatusCallback'](saveMessagesInLocalStorage);
+    this['~registerMessagesCallback'](saveMessagesInSessionStorage);
+    this['~registerStatusCallback'](saveMessagesInSessionStorage);
   }
 
   get status(): ChatStatus {
@@ -143,6 +136,19 @@ export class ChatState<
 
   snapshot = <T>(thing: T): T => {
     return JSON.parse(JSON.stringify(thing)) as T;
+  };
+
+  '~persistMessages' = (): void => {
+    const persistenceKey = this.persistenceKey;
+    if (!persistenceKey) return;
+
+    safelyRunOnBrowser(() => {
+      try {
+        sessionStorage.setItem(persistenceKey, JSON.stringify(this.messages));
+      } catch (e) {
+        // Do nothing if sessionStorage is not available or full
+      }
+    });
   };
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) => {
@@ -206,6 +212,7 @@ export class Chat<
 
     this.hasRestoredMessages = false;
     this.repairRestoredPendingToolParts();
+    this._state['~persistMessages']();
   };
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>

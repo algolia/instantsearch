@@ -2204,6 +2204,49 @@ describe('connectChat', () => {
       );
     });
 
+    it('persists repaired tools after a failed resume attempt', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(new Response(null, { status: 500 }));
+
+      const { getRenderState, widget } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts[0]).toMatchObject({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(JSON.parse(sessionStorage.getItem(cacheKey)!)[0].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+    });
+
     it('repairs only the tools left pending by a resumed stream', async () => {
       const previousMessages: UIMessage[] = [
         {
