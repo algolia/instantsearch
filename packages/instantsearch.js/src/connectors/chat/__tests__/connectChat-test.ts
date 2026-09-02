@@ -2025,6 +2025,139 @@ describe('connectChat', () => {
       expect(getRenderState().messages).toEqual([]);
     });
 
+    it('settles restored auto-executed tool calls without rerunning them', () => {
+      const storageKey = `${cacheKey}-agentId`;
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { value: 'static' },
+            },
+            {
+              type: 'dynamic-tool',
+              toolName: 'save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: { value: 'dynamic' },
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-streaming',
+              input: { value: 'partial' },
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+      const onToolCall = jest.fn();
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: { save: { onToolCall } },
+      });
+
+      expect(getRenderState().messages[0].parts).toEqual([
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-3',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+      ]);
+      expect(onToolCall).not.toHaveBeenCalled();
+      expect(JSON.parse(sessionStorage.getItem(storageKey)!)[0].parts).toEqual(
+        getRenderState().messages[0].parts
+      );
+    });
+
+    it('keeps restored timeout-disabled, interactive, and provider-executed tools pending', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-approve',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-confirm',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-available',
+              input: {},
+              providerExecuted: true,
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: {
+          approve: {},
+          confirm: { onToolCall: jest.fn(), timeout: false },
+          save: { onToolCall: jest.fn() },
+        },
+      });
+
+      expect(getRenderState().messages).toEqual(previousMessages);
+    });
+
+    it('does not repair explicitly provided pending messages', () => {
+      const messages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        messages,
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      expect(getRenderState().messages).toEqual(messages);
+    });
+
     it('does not save messages to sessionStorage when persistence is disabled', () => {
       const previousMessages: UIMessage[] = [
         {

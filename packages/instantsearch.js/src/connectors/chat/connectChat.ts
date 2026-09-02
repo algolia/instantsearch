@@ -31,7 +31,11 @@ import {
 import { defer } from '../../lib/utils/defer';
 import { flat } from '../../lib/utils/flat';
 
-import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
+import type {
+  ChatOnToolCallCallback,
+  DynamicToolUIPart,
+  ToolUIPart,
+} from '../../lib/ai-lite';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -75,6 +79,55 @@ const TOOL_TIMEOUT_ERROR_TEXT =
   'The tool call timed out before a result was received. The operation may have completed.';
 const TOOL_ABORTED_ERROR_TEXT =
   'The tool call was cancelled before a result was received.';
+const RESTORED_TOOL_ERROR_TEXT =
+  'The page was reloaded before a tool result was received. The operation may have completed.';
+
+function isToolPart(
+  part: UIMessage['parts'][number]
+): part is ToolUIPart | DynamicToolUIPart {
+  return part.type === 'dynamic-tool' || part.type.startsWith('tool-');
+}
+
+function repairRestoredToolCalls<TUiMessage extends UIMessage>(
+  messages: TUiMessage[],
+  tools: Record<string, UserClientSideTool>
+): TUiMessage[] {
+  let didRepair = false;
+  const repairedMessages = messages.map((message) => {
+    if (message.role !== 'assistant') return message;
+
+    let didRepairMessage = false;
+    const parts = message.parts.map((part) => {
+      if (
+        !isToolPart(part) ||
+        part.providerExecuted ||
+        (part.state !== 'input-streaming' && part.state !== 'input-available')
+      ) {
+        return part;
+      }
+
+      const tool = findTool(
+        part.type === 'dynamic-tool' ? part.toolName : part.type,
+        tools
+      );
+      if (!tool?.onToolCall || tool.timeout === false) {
+        return part;
+      }
+
+      didRepair = true;
+      didRepairMessage = true;
+      return {
+        ...part,
+        state: 'output-error' as const,
+        errorText: RESTORED_TOOL_ERROR_TEXT,
+      };
+    });
+
+    return didRepairMessage ? { ...message, parts } : message;
+  });
+
+  return didRepair ? repairedMessages : messages;
+}
 
 export type ChatSuggestionsStatus = 'idle' | 'loading';
 
@@ -825,7 +878,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      return new Chat({
+      const chat = new Chat({
         ...options,
         persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
@@ -956,6 +1009,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return Promise.resolve();
         }) satisfies ChatOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
+
+      if (normalizedPersistence.messages && options.messages === undefined) {
+        const restoredMessages = repairRestoredToolCalls(chat.messages, tools);
+        if (restoredMessages !== chat.messages) {
+          chat.messages = restoredMessages;
+        }
+      }
+
+      return chat;
     };
 
     return {
