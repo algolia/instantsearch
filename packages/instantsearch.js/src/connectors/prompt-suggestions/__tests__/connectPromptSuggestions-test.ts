@@ -1529,6 +1529,88 @@ describe('connectPromptSuggestions', () => {
       expect(initCall.sendToChat('hello')).toBe(false);
     });
 
+    it('withholds sendToChat once the mount window closes with no chat', async () => {
+      const search = createInstantSearch();
+      // No chat in renderState.
+      search.renderState = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+
+      // A chat further down a React tree is only added after this widget's
+      // `init`, so the handler is still handed out at that point.
+      expect(renderFn.mock.calls[0][0].sendToChat).toEqual(
+        expect.any(Function)
+      );
+
+      // The deferred check has now settled the question: there is no chat, so
+      // there is nothing for a click to reach.
+      await flush(0);
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+          results: makeResults({ query: '' }),
+        })
+      );
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastCall.sendToChat).toBeUndefined();
+      expect(lastCall.onSuggestionClick).toEqual(expect.any(Function));
+      expect(() => lastCall.onSuggestionClick('try this')).not.toThrow();
+    });
+
+    it('keeps sendToChat when a chat is registered after init', async () => {
+      const sendMessage = jest.fn();
+      const search = createInstantSearch();
+      search.renderState = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        configurationId: 'prompt-suggestions',
+      });
+      widget.init!(
+        createInitOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+        })
+      );
+
+      // The chat lands after `init` but before the deferred check runs.
+      search.renderState = {
+        [search.helper!.state.index]: {
+          chat: { sendMessage, setOpen: jest.fn(), status: 'ready' },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
+
+      await flush(0);
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+          results: makeResults({ query: '' }),
+        })
+      );
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(lastCall.sendToChat).toEqual(expect.any(Function));
+    });
+
     it('isChatBusy is true while the chat is mid-stream', async () => {
       const search = createInstantSearch();
       search.renderState = {

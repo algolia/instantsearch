@@ -763,12 +763,31 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The widget hands clicked suggestions to a `chat` on the same index, and
+    // errors without one, so the default setup mounts both. `renderChat: false`
+    // is how a test asks for the unconfigured page.
+    const { renderChat = true, ...promptSuggestionsWidgetParams } =
+      widgetParams;
+
     instantsearch(instantSearchOptions)
       .addWidgets([
         promptSuggestions({
           container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
+          ...promptSuggestionsWidgetParams,
         }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                // A dedicated id: the `agentId` the chat suites use keys
+                // persisted messages in `localStorage` that leak across tests
+                // in this file.
+                agentId: 'promptSuggestionsChatAgentId',
+              }),
+            ]
+          : []),
       ])
       .on('error', () => {
         /*

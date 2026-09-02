@@ -9,12 +9,21 @@ import type { PromptSuggestionsWidget } from 'instantsearch.js/es/widgets/prompt
 import type { PromptSuggestionsProps } from 'react-instantsearch';
 
 type JSBaseWidgetParams = Parameters<PromptSuggestionsWidget>[0];
+/**
+ * Whether the setup also mounts a `chat` widget on the index. `true` by
+ * default: without one the widget errors, since a clicked suggestion has
+ * nowhere to go.
+ */
+type ChatPresenceParams = { renderChat?: boolean };
+
 export type JSPromptSuggestionsWidgetParams = Omit<
   JSBaseWidgetParams,
   'container'
 > &
-  PromptSuggestionsConnectorParams;
-export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps;
+  PromptSuggestionsConnectorParams &
+  ChatPresenceParams;
+export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps &
+  ChatPresenceParams;
 
 type PromptSuggestionsWidgetParams = {
   javascript: JSPromptSuggestionsWidgetParams;
@@ -38,6 +47,10 @@ export function createPromptSuggestionsWidgetTests(
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
+    // The setup mounts a `chat` alongside the widget, and a chat restores its
+    // conversation from `sessionStorage`: without this it inherits whatever the
+    // chat suites left behind in the same file.
+    sessionStorage.clear();
   });
 
   skippableDescribe(

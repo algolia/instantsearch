@@ -2,6 +2,7 @@ import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  defer,
   getRefinements,
   noop,
   warning,
@@ -110,8 +111,16 @@ export type PromptSuggestionsRenderState = {
   error: Error | undefined;
   /** Default click handler, calling `sendToChat(prompt)`. Override via the `onSuggestionClick` prop. */
   onSuggestionClick: (prompt: string) => void;
-  /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
-  sendToChat: (prompt: string) => boolean;
+  /**
+   * Hands the prompt to the `connectChat` widget on the same index. `true` if
+   * dispatched, else `false`.
+   *
+   * `undefined` once the widget has established that no chat widget is mounted
+   * on the same index — there is nothing to send to. The widget layer treats
+   * that as a misconfiguration unless an `onSuggestionClick` override owns the
+   * click.
+   */
+  sendToChat?: (prompt: string) => boolean;
   /** Imperative refetch that bypasses the debounce. No-op with no results or a fetch in-flight. */
   refresh: () => void;
   /**
@@ -261,6 +270,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
       let disposed = false;
+      // Whether the "is a chat widget mounted on this index?" question has been
+      // settled — see `validateChat`.
+      let hasValidatedChat = false;
       // True between a state-signature change and the debounced refetch that
       // follows it. While pending, the search state has already moved on, so a
       // still-in-flight request from the previous state must not paint its
@@ -301,12 +313,6 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         (prompt: string): boolean => {
           const chatRenderState = getChatRenderState(renderOptions);
           if (!chatRenderState || !chatRenderState.sendMessage) {
-            if (__DEV__) {
-              warning(
-                false,
-                `No chat widget found in render state. Make sure a \`connectChat\` widget is mounted on the same index, or pass an \`onSuggestionClick\` prop to handle the click yourself.`
-              );
-            }
             return false;
           }
           const results =
@@ -467,13 +473,19 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           : false;
 
         const send = sendToChat(renderOptions);
+        // `sendToChat` is withheld only once the mount window has closed: a chat
+        // widget further down a React tree is added after this widget's `init`,
+        // so until `validateChat` runs its absence is not yet conclusive and
+        // withholding the handler would make a valid setup look broken.
+        const canSendToChat =
+          Boolean(chatRenderState?.sendMessage) || !hasValidatedChat;
 
         return {
           suggestions: transformed,
           isLoading,
           error,
-          onSuggestionClick: send,
-          sendToChat: send,
+          onSuggestionClick: canSendToChat ? send : noop,
+          sendToChat: canSendToChat ? send : undefined,
           refresh,
           isChatBusy,
           widgetParams,
@@ -497,6 +509,22 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         }
         adoptInnerState(renderState);
       };
+
+      // Deferred because a chat widget can be registered after this one: React
+      // adds widgets in mount order, so a `chat` further down the tree only
+      // lands after this widget's `init` has run. Until this closes the window,
+      // `sendToChat` is handed out optimistically.
+      const validateChat = defer((renderOptions: InitOptions) => {
+        if (hasValidatedChat) return;
+        hasValidatedChat = true;
+        if (getChatRenderState(renderOptions)?.sendMessage) return;
+        // A render may already have gone out with the optimistic `sendToChat`;
+        // re-render so the widget layer sees the settled answer. When nothing
+        // has rendered yet, the first results render carries it.
+        if (latestRenderOptions) {
+          renderOutward(latestRenderOptions);
+        }
+      });
 
       let tasksParams: TasksConnectorParams;
       if (agentId) {
@@ -526,11 +554,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
       return {
         $$type: 'ais.promptSuggestions',
+        // Clicking a suggestion opens the chat, so this widget counts as an
+        // entry point for `connectChat`'s trigger validation.
+        opensChat: true as const,
 
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
 
           tasksWidget.init!(initOptions);
+
+          validateChat(initOptions);
 
           renderFn(
             {
@@ -586,6 +619,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         dispose(disposeOptions: DisposeOptions) {
           disposed = true;
           clearTimeout(debounceTimer);
+          validateChat.cancel();
           tasksWidget.dispose!(disposeOptions);
           unmountFn();
         },
