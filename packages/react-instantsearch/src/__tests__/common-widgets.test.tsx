@@ -465,7 +465,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
         <PromptSuggestions {...promptSuggestionsWidgetParams} />
         {/*
           A dedicated id: the `agentId` the chat suites use keys persisted
-          messages in `localStorage` that leak across tests in this file.
+          messages in `sessionStorage` that leak across tests in this file.
         */}
         {renderChat && <Chat agentId="promptSuggestionsChatAgentId" />}
         <GlobalErrorSwallower />

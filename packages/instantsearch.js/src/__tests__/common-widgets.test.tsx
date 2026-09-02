@@ -782,7 +782,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
                   document.createElement('div')
                 ),
                 // A dedicated id: the `agentId` the chat suites use keys
-                // persisted messages in `localStorage` that leak across tests
+                // persisted messages in `sessionStorage` that leak across tests
                 // in this file.
                 agentId: 'promptSuggestionsChatAgentId',
               }),
