@@ -1352,6 +1352,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         input: chunk.input,
                         dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
                       } as InferUIMessageToolCall<TUIMessage>,
+                      signal: response.abortController.signal,
                     },
                     (options) =>
                       response.isRetired

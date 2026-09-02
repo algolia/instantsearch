@@ -517,6 +517,7 @@ export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
 export type ChatOnToolCallCallback<UI_MESSAGE extends UIMessage = UIMessage> = (
   options: {
     toolCall: InferUIMessageToolCall<UI_MESSAGE>;
+    signal: AbortSignal;
   },
   addToolResult: ToolResultSubmission<UI_MESSAGE>
 ) => void | PromiseLike<void>;

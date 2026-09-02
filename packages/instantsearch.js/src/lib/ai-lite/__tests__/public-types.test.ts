@@ -21,9 +21,10 @@ describe('ai-lite public types', () => {
     const submitToolResult: ToolResultSubmission<SearchMessage> = () =>
       Promise.resolve();
     const onToolCall: ChatOnToolCallCallback<SearchMessage> = (
-      { toolCall },
+      { toolCall, signal },
       addToolResult
     ) => {
+      void signal;
       if (toolCall.dynamic) {
         return;
       }

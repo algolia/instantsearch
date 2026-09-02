@@ -28,6 +28,7 @@ import type {
 } from '../../../lib/ai-lite';
 import type { InstantSearch, IndexWidget, Widget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
+import type { AddToolResultForToolCall } from 'instantsearch-ui-components';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
@@ -1669,6 +1670,193 @@ describe('connectChat', () => {
       expect(fetchMock).toHaveBeenCalledTimes(2);
     });
 
+    it.each([
+      ['default timeout', undefined, 20_000],
+      ['configured timeout', 10, 10],
+    ] as const)(
+      'uses the %s for an unsettled tool and aborts its signal',
+      async (_name, timeout, timeoutDelay) => {
+        jest.useFakeTimers();
+
+        try {
+          let toolSignal!: AbortSignal;
+          let markToolStarted!: () => void;
+          const toolStarted = new Promise<void>((resolve) => {
+            markToolStarted = resolve;
+          });
+          const fetchMock = jest
+            .fn()
+            .mockResolvedValueOnce(
+              chatStream([
+                { type: 'start', messageId: 'assistant-1' },
+                {
+                  type: 'tool-input-available',
+                  toolName: 'save',
+                  toolCallId: 'call-1',
+                  input: {},
+                },
+                { type: 'finish' },
+              ])
+            )
+            .mockResolvedValueOnce(
+              chatStream([
+                { type: 'start', messageId: 'assistant-2' },
+                { type: 'finish' },
+              ])
+            );
+          const { widget } = getInitializedWidget({
+            agentId: undefined,
+            persistence: false,
+            transport: { fetch: fetchMock },
+            tools: {
+              save: {
+                timeout,
+                onToolCall({ signal }) {
+                  toolSignal = signal;
+                  markToolStarted();
+                },
+              },
+            },
+          });
+
+          const send = widget.chatInstance.sendMessage({ text: 'save this' });
+          await toolStarted;
+          await Promise.resolve();
+
+          jest.advanceTimersByTime(timeoutDelay - 1);
+          expect(toolSignal.aborted).toBe(false);
+
+          jest.advanceTimersByTime(1);
+          await send;
+
+          const assistant = widget.chatInstance.messages.find(
+            (message) => message.id === 'assistant-1'
+          );
+          expect(toolSignal.aborted).toBe(true);
+          expect(assistant?.parts[0]).toMatchObject({
+            state: 'output-error',
+            errorText:
+              'The tool call timed out before a result was received. The operation may have completed.',
+          });
+          expect(widget.chatInstance.status).toBe('ready');
+          expect(fetchMock).toHaveBeenCalledTimes(2);
+        } finally {
+          jest.useRealTimers();
+        }
+      }
+    );
+
+    it('allows a configured tool timeout to be disabled', async () => {
+      jest.useFakeTimers();
+
+      try {
+        let toolSignal!: AbortSignal;
+        let addToolResult!: AddToolResultForToolCall;
+        let markToolStarted!: () => void;
+        const toolStarted = new Promise<void>((resolve) => {
+          markToolStarted = resolve;
+        });
+        const fetchMock = jest.fn().mockResolvedValue(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'save',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            { type: 'finish' },
+          ])
+        );
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          sendAutomaticallyWhen: () => false,
+          tools: {
+            save: {
+              timeout: false,
+              onToolCall(params) {
+                toolSignal = params.signal;
+                addToolResult = params.addToolResult;
+                markToolStarted();
+              },
+            },
+          },
+        });
+
+        const send = widget.chatInstance.sendMessage({ text: 'save this' });
+        await toolStarted;
+        await Promise.resolve();
+
+        jest.advanceTimersByTime(20_000);
+        expect(toolSignal.aborted).toBe(false);
+
+        await addToolResult({ output: { saved: true } });
+        await send;
+
+        const assistant = widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        );
+        expect(assistant?.parts[0]).toMatchObject({
+          state: 'output-available',
+          output: { saved: true },
+        });
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('aborts and settles a configured tool when the response is stopped', async () => {
+      let toolSignal!: AbortSignal;
+      let markToolStarted!: () => void;
+      const toolStarted = new Promise<void>((resolve) => {
+        markToolStarted = resolve;
+      });
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'save',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+        tools: {
+          save: {
+            timeout: false,
+            onToolCall({ signal }) {
+              toolSignal = signal;
+              markToolStarted();
+              return new Promise<void>(() => {});
+            },
+          },
+        },
+      });
+
+      const send = widget.chatInstance.sendMessage({ text: 'save this' });
+      await toolStarted;
+      await widget.chatInstance.stop();
+      await send;
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.id === 'assistant-1'
+      );
+      expect(toolSignal.aborted).toBe(true);
+      expect(assistant?.parts[0]).toMatchObject({
+        state: 'output-error',
+        errorText: 'The tool call was cancelled before a result was received.',
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+    });
+
     describe('cancelling a tool call the user never answered', () => {
       const pendingToolCallResponse = () =>
         chatStream([
@@ -1704,7 +1892,7 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser } },
+          tools: { confirm: { onToolCall: awaitUser, timeout: false } },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1729,7 +1917,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1758,7 +1948,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1785,7 +1977,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1918,7 +2112,12 @@ data: [DONE]`,
               )
             ),
         },
-        tools: { algolia_search_index: { onToolCall: onSearchToolCall } },
+        tools: {
+          algolia_search_index: {
+            onToolCall: onSearchToolCall,
+            timeout: false,
+          },
+        },
       });
 
       const { chatInstance } = widget;
@@ -1973,6 +2172,7 @@ data: [DONE]`,
             onToolCall,
             matchesToolName: (toolName: string) =>
               toolName.startsWith('my_tool_'),
+            timeout: false,
           },
         },
       });
