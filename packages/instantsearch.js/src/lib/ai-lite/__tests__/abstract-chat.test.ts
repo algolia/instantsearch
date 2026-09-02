@@ -954,7 +954,7 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
-    it('accepts an explicit tool error and continues the response', async () => {
+    it('accepts a tool error without state from JavaScript and continues the response', async () => {
       const setup = createTestSetup({
         chunksByRequest: [
           [
@@ -973,9 +973,8 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
           addToolResult!({
             tool: toolCall.toolName,
             toolCallId: toolCall.toolCallId,
-            state: 'output-error',
             errorText: 'The operation may have completed.',
-          }),
+          } as Parameters<NonNullable<typeof addToolResult>>[0]),
         sendAutomaticallyWhen: () => true,
       });
 

@@ -1582,15 +1582,39 @@ describe('connectChat', () => {
     it.each([
       [
         'throws',
-        () => {
-          throw new Error('The operation may have completed.');
+        {
+          onToolCall: () => {
+            throw new Error('The operation may have completed.');
+          },
+          errorText: 'The operation may have completed.',
         },
       ],
       [
         'rejects',
-        () => Promise.reject(new Error('The operation may have completed.')),
+        {
+          onToolCall: () =>
+            Promise.reject(new Error('The operation may have completed.')),
+          errorText: 'The operation may have completed.',
+        },
       ],
-    ])('settles a configured tool that %s', async (_name, onToolCall) => {
+      [
+        'throws undefined',
+        {
+          onToolCall: () => {
+            throw undefined;
+          },
+          errorText: 'Tool call failed.',
+        },
+      ],
+      [
+        'rejects null',
+        {
+          onToolCall: () => Promise.reject(null),
+          errorText: 'Tool call failed.',
+        },
+      ],
+    ])('settles a configured tool that %s', async (_name, toolCase) => {
+      const { onToolCall, errorText } = toolCase;
       const fetchMock = jest
         .fn()
         .mockResolvedValueOnce(
@@ -1634,7 +1658,7 @@ describe('connectChat', () => {
         type: 'tool-save',
         toolCallId: 'call-1',
         state: 'output-error',
-        errorText: 'The operation may have completed.',
+        errorText,
       });
       expect(widget.chatInstance.status).toBe('ready');
       expect(widget.chatInstance.error).toBeUndefined();

@@ -64,9 +64,17 @@ function getTerminalToolState(
     | { state?: 'output-available'; output: unknown }
     | { state: 'output-error'; errorText: string }
 ): TerminalToolState {
-  return options.state === 'output-error'
-    ? { state: 'output-error', errorText: options.errorText }
-    : { state: 'output-available', output: options.output };
+  if (options.state === 'output-error' || 'errorText' in options) {
+    return {
+      state: 'output-error',
+      errorText:
+        typeof options.errorText === 'string'
+          ? options.errorText
+          : 'Tool call failed.',
+    };
+  }
+
+  return { state: 'output-available', output: options.output };
 }
 
 function getToolName(part: { type: string; toolName?: string }): string {

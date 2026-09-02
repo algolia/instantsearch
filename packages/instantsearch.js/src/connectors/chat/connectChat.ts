@@ -869,13 +869,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               });
-            const addToolError = (error: unknown) =>
-              addToolResult({
+            const addToolError = (error: unknown) => {
+              const errorText =
+                error instanceof Error ? error.message : String(error ?? '');
+
+              return addToolResult({
                 state: 'output-error',
-                errorText:
-                  (error instanceof Error ? error.message : String(error)) ||
-                  'Tool call failed.',
+                errorText: errorText || 'Tool call failed.',
               });
+            };
 
             try {
               return Promise.resolve(
