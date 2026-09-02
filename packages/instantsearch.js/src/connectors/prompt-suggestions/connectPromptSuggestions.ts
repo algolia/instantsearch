@@ -112,7 +112,11 @@ export type PromptSuggestionsRenderState = {
   onSuggestionClick: (prompt: string) => void;
   /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
   sendToChat: (prompt: string) => boolean;
-  /** Imperative refetch that bypasses the debounce. No-op with no results or a fetch in-flight. */
+  /**
+   * Imperative refetch that bypasses the debounce. Usable from `init()` onwards,
+   * including on a mount that never produces search results. No-op while a fetch
+   * is in flight, or when there is nothing to send.
+   */
   refresh: () => void;
   /**
    * Whether the chat widget is currently busy (mid-stream) — surface as `disabled` on the pills.
@@ -142,8 +146,21 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
-  /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  /**
+   * Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`.
+   * Object or per-fetch function.
+   *
+   * Set, it makes the request independent of the search results, so the first
+   * fetch goes out on `init()` rather than waiting for a search to resolve.
+   *
+   * A function returning `undefined` falls back to auto-extraction, which needs
+   * results carrying at least one hit — so nothing is sent before those arrive.
+   * An empty object sends nothing at all, which is how a surface says it has
+   * nothing to describe yet.
+   */
+  context?:
+    | Record<string, unknown>
+    | (() => Record<string, unknown> | undefined);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: PromptSuggestionsTransformItems;
 };
@@ -256,7 +273,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // trigger keys on the search state, which is only a proxy for the payload,
       // so this is what decides whether a request would ask anything new.
       let lastSubmittedPayload: string | null = null;
-      let latestRenderOptions: RenderOptions | null = null;
+      let latestRenderOptions: InitOptions | RenderOptions | null = null;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
@@ -310,7 +327,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             return false;
           }
           const results =
-            latestRenderOptions?.results ??
+            getLatestResults() ??
             ('results' in renderOptions ? renderOptions.results : null) ??
             null;
           return openChat(chatRenderState, {
@@ -320,11 +337,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           });
         };
 
-      const resolvePageContext = (
+      // `context` may be a function, so the option alone says nothing about what
+      // a given fetch actually has to send. Resolve it once per fetch and let
+      // callers read the value rather than the option.
+      const resolveContext = (): Record<string, unknown> | undefined =>
+        typeof context === 'function' ? context() : context;
+
+      const buildPageContext = (
+        resolvedContext: Record<string, unknown> | undefined,
         results: SearchResults | null
       ): Record<string, unknown> | undefined => {
-        const resolvedContext =
-          typeof context === 'function' ? context() : context;
         // Explicit context replaces auto-extraction; otherwise derive it from
         // the current search state. The task's server-owned instructions decide
         // how to interpret the shape — the client doesn't label it.
@@ -342,16 +364,13 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         };
       };
 
-      const buildInput = (results: SearchResults): Record<string, unknown> =>
-        resolvePageContext(results) ?? {};
-
       // The same page context, flattened for the chat handoff: `turnContext` is
       // a flat `Record<string, string>` per the Agent Studio contract, so
       // non-string values (e.g. `hitsSample`) are serialized.
       const buildTurnContext = (
         results: SearchResults | null
       ): Record<string, string> | undefined => {
-        const pageContext = resolvePageContext(results);
+        const pageContext = buildPageContext(resolveContext(), results);
         if (!pageContext) {
           return undefined;
         }
@@ -362,6 +381,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           ])
           .filter(([, value]) => value.trim() !== '');
         return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+      };
+
+      // `latestRenderOptions` may be the `init()` options, which carry no
+      // `results` key at all, so the read has to be narrowed rather than
+      // optional-chained.
+      const getLatestResults = (): SearchResults | null => {
+        if (!latestRenderOptions || !('results' in latestRenderOptions)) {
+          return null;
+        }
+        return latestRenderOptions.results ?? null;
       };
 
       const renderOutward = (renderOptions: InitOptions | RenderOptions) => {
@@ -394,16 +423,25 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       };
 
       const fetchAndRender = (
-        results: SearchResults,
-        renderOptions: RenderOptions,
+        results: SearchResults | null,
+        renderOptions: InitOptions | RenderOptions,
         { force = false }: { force?: boolean } = {}
       ) => {
         if (disposed || !tasksState) return;
         const hadDroppedInnerRender = droppedInnerRender;
         refetchPending = false;
         droppedInnerRender = false;
-        const hasContext = context !== undefined;
-        if (!hasContext && !results?.hits?.length) {
+        const resolvedContext = resolveContext();
+        const input = buildPageContext(resolvedContext, results) ?? {};
+        // Two ways there is nothing worth sending: no context for this fetch and
+        // no hits to derive one from, or a context that resolved to something
+        // empty. The first reads the resolved value rather than the option, so
+        // `context: () => undefined` is gated exactly like an omitted `context`.
+        // Sending an empty input spends a model call on no information.
+        if (
+          (resolvedContext === undefined && !results?.hits?.length) ||
+          Object.keys(input).length === 0
+        ) {
           tasksState.invalidate();
           suggestions = [];
           isLoading = false;
@@ -413,7 +451,6 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           return;
         }
 
-        const input = buildInput(results);
         const payload = taskPayloadKey(input);
 
         // A moved search state does not always mean a different question: with an
@@ -441,10 +478,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
       const refresh = () => {
         if (isLoading) return;
-        const results = latestRenderOptions?.results;
-        if (!results || !latestRenderOptions) return;
+        if (!latestRenderOptions) return;
+        const results = getLatestResults();
         clearTimeout(debounceTimer);
-        lastStateSignature = getStateSignature(results);
+        // Only meaningful with results: without them there is no signature for a
+        // later automatic fetch to compare against.
+        if (results) {
+          lastStateSignature = getStateSignature(results);
+        }
         fetchAndRender(results, latestRenderOptions, { force: true });
       };
 
@@ -532,6 +573,11 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
           tasksWidget.init!(initOptions);
 
+          // Set after the inner init so its initial no-op render is still
+          // ignored, and before the first outward render so `refresh()` has a
+          // render target even on a mount where `render()` never sees results.
+          latestRenderOptions = initOptions;
+
           renderFn(
             {
               ...getWidgetRenderState(initOptions),
@@ -539,6 +585,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             },
             true
           );
+
+          // With an explicit `context` the payload never reads the results, so
+          // waiting for a search is waiting on something the request does not
+          // use — and a page that triggers no search (a `searchFunction` query
+          // gate, or a mount made only for the widgets) would wait forever.
+          // Fetch here instead, after the first render so the `isFirstRender`
+          // one still arrives first. `fetchAndRender` sends nothing when the
+          // context resolves to nothing, which is what keeps the auto-extracted
+          // path — the one that does need results — on `render()` alone.
+          fetchAndRender(null, initOptions);
         },
 
         render(renderOptions) {
@@ -565,11 +621,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             error = undefined;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-              if (latestRenderOptions?.results) {
-                fetchAndRender(
-                  latestRenderOptions.results,
-                  latestRenderOptions
-                );
+              const latestResults = getLatestResults();
+              if (latestResults && latestRenderOptions) {
+                fetchAndRender(latestResults, latestRenderOptions);
               }
             }, DEBOUNCE_MS);
           }

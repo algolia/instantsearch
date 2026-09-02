@@ -547,6 +547,9 @@ describe('connectPromptSuggestions', () => {
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
+      // A `context` fetches on init, so every count below includes that attempt.
+      await flush(0);
+      expect(prepare).toHaveBeenCalledTimes(1);
 
       widget.render!(
         createRenderOptions({
@@ -555,7 +558,7 @@ describe('connectPromptSuggestions', () => {
         })
       );
       await flush(DEBOUNCE_WAIT);
-      expect(prepare).toHaveBeenCalledTimes(1);
+      expect(prepare).toHaveBeenCalledTimes(2);
 
       widget.render!(
         createRenderOptions({
@@ -564,7 +567,7 @@ describe('connectPromptSuggestions', () => {
         })
       );
       await flush(DEBOUNCE_WAIT);
-      expect(prepare).toHaveBeenCalledTimes(2);
+      expect(prepare).toHaveBeenCalledTimes(3);
     });
 
     it('skips when only the `context` key order changes', async () => {
@@ -714,6 +717,10 @@ describe('connectPromptSuggestions', () => {
       });
       const helper = algoliasearchHelper(createSearchClient(), '');
       widget.init!(createInitOptions({ helper }));
+      // A `context` fetches on init, so every count below includes that
+      // attempt — which fails here like the rest.
+      await flush(10);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
 
       widget.render!(
         createRenderOptions({
@@ -723,7 +730,7 @@ describe('connectPromptSuggestions', () => {
       );
       await flush(DEBOUNCE_WAIT);
       await flush(10);
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
       expect(renderFn.mock.calls[renderFn.mock.calls.length - 1][0].error).toBe(
         streamError
       );
@@ -735,7 +742,7 @@ describe('connectPromptSuggestions', () => {
         })
       );
       await flush(DEBOUNCE_WAIT);
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(global.fetch).toHaveBeenCalledTimes(3);
 
       widget.dispose!(createDisposeOptions({ helper }));
     });
@@ -1118,6 +1125,143 @@ describe('connectPromptSuggestions', () => {
       await flush(DEBOUNCE_WAIT);
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetches on init with an explicit `context`, without any search', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        context: { productName: 'Sneakers' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const body = JSON.parse(
+        (global.fetch as jest.Mock).mock.calls[0][1].body as string
+      );
+      expect(body.input).toEqual({ productName: 'Sneakers' });
+    });
+
+    it('resolves a function `context` for the init fetch', async () => {
+      const context = jest.fn(() => ({ productName: 'Sneakers' }));
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        context,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const body = JSON.parse(
+        (global.fetch as jest.Mock).mock.calls[0][1].body as string
+      );
+      expect(body.input).toEqual({ productName: 'Sneakers' });
+    });
+
+    it('renders the first render before the init fetch starts', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        context: { productName: 'Sneakers' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      // The submit renders synchronously, so the `isFirstRender: true` render
+      // has to have gone out ahead of it.
+      expect(renderFn.mock.calls[0][1]).toBe(true);
+      expect(renderFn.mock.calls.length).toBeGreaterThan(1);
+      expect(renderFn.mock.calls[1][1]).toBe(false);
+      expect(renderFn.mock.calls[1][0].isLoading).toBe(true);
+    });
+
+    it('does not fetch on init without a `context`', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch on init when a function `context` returns undefined', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        context: () => undefined,
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch on init when the `context` resolves to an empty object', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        context: () => ({}),
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch a second time when results arrive after the init fetch', async () => {
+      const widget = connectPromptSuggestions(jest.fn())({
+        agentId: 'a',
+        context: { productName: 'Sneakers' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      await flush(0);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // The payload ignores the results, so the render that follows asks the
+      // same question and must be skipped as a duplicate.
+      widget.render!(createRenderOptions({ helper, results: makeResults() }));
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('`refresh()` sends with no results when a `context` is set', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+        context: { productName: 'Sneakers' },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+      // Wait out the init fetch so `refresh()` is not blocked by `isLoading`.
+      await flush(DEBOUNCE_WAIT);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(0);
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('`refresh()` sends nothing with no results and no `context`', async () => {
+      const renderFn = jest.fn();
+      const widget = connectPromptSuggestions(renderFn)({
+        agentId: 'a',
+      });
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init!(createInitOptions({ helper }));
+
+      const lastCall = renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      lastCall.refresh();
+      await flush(DEBOUNCE_WAIT);
+
+      expect(global.fetch).not.toHaveBeenCalled();
     });
 
     it('exposes `refresh()` which bypasses the debounce and refetches', async () => {
