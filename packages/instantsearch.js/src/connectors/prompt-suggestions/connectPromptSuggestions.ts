@@ -113,8 +113,7 @@ export type PromptSuggestionsRenderState = {
   /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
   sendToChat: (prompt: string) => boolean;
   /**
-   * Imperative refetch that bypasses the debounce. Usable from `init()` onwards,
-   * including on a mount that never produces search results. No-op while a fetch
+   * Imperative refetch that bypasses the debounce. No-op while a fetch
    * is in flight, or when there is nothing to send.
    */
   refresh: () => void;
@@ -148,15 +147,8 @@ export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   transformHits?: PromptSuggestionsTransformHits;
   /**
    * Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`.
-   * Object or per-fetch function.
-   *
-   * Set, it makes the request independent of the search results, so the first
-   * fetch goes out on `init()` rather than waiting for a search to resolve.
-   *
-   * A function returning `undefined` falls back to auto-extraction, which needs
-   * results carrying at least one hit — so nothing is sent before those arrive.
-   * An empty object sends nothing at all, which is how a surface says it has
-   * nothing to describe yet.
+   * Object or per-fetch function. If you return `undefined`, auto-extraction is used.
+   * An empty object return skips the fetch
    */
   context?:
     | Record<string, unknown>
