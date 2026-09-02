@@ -2235,6 +2235,33 @@ describe('ChatMessages', () => {
       ).toBeNull();
       expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
     });
+
+    test('does not render an assistant row for a turn that ended without content', () => {
+      // The widget passes a suggestions element for every settled turn, and the
+      // default actions come with every assistant row — neither is a reason to
+      // keep an empty article (and its avatar) on screen for good.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            { role: 'assistant', id: '2', parts: [{ type: 'step-start' }] },
+          ]}
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessage-action')).toBeNull();
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
   });
 
   describe('pending suggestions', () => {

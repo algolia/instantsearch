@@ -311,6 +311,10 @@ jobs:
       - e2e
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    environment: npm
     env:
       NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
     outputs:
