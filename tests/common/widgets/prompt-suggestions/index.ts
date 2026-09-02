@@ -11,8 +11,9 @@ import type { PromptSuggestionsProps } from 'react-instantsearch';
 type JSBaseWidgetParams = Parameters<PromptSuggestionsWidget>[0];
 /**
  * Whether the setup also mounts a `chat` widget on the index. `true` by
- * default: without one the widget errors, since a clicked suggestion has
- * nowhere to go.
+ * default: with no chat and no `onSuggestionClick` override the widget errors,
+ * since a clicked suggestion has nowhere to go. Set it to `false` for a test
+ * that passes its own `onSuggestionClick`, or one that asserts the error.
  */
 type ChatPresenceParams = { renderChat?: boolean };
 
