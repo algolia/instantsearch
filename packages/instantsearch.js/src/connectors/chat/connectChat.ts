@@ -825,7 +825,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      return new Chat({
+      let canRepairRestoredPendingToolParts = !resume;
+      const chat = new Chat({
         ...options,
         persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
@@ -837,7 +838,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         },
         shouldRepairRestoredPendingToolPart({ toolName }) {
           const tool = findTool(toolName, tools);
-          return Boolean(!resume && tool?.onToolCall && tool.timeout !== false);
+          return Boolean(
+            canRepairRestoredPendingToolParts &&
+            tool?.onToolCall &&
+            tool.timeout !== false
+          );
         },
         resolveCancelledToolOutput({ toolName, toolCallId, input }) {
           const cancelOutput = findTool(toolName, tools)?.cancelOutput;
@@ -960,6 +965,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return Promise.resolve();
         }) satisfies ChatOnToolCallCallback<TUiMessage>,
       } as ChatInitAi<TUiMessage> & { agentId?: string });
+
+      if (resume) {
+        const resumeStream = chat.resumeStream;
+        chat.resumeStream = (requestOptions) =>
+          resumeStream(requestOptions).finally(() => {
+            canRepairRestoredPendingToolParts = true;
+            chat['~repairRestoredPendingToolParts']();
+          });
+      }
+
+      return chat;
     };
 
     return {

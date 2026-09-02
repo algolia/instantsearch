@@ -56,6 +56,8 @@ const TOOL_CALL_CANCELLED_ERROR_TEXT =
   'The tool call was cancelled: the conversation moved on before a result was provided.';
 const RESTORED_TOOL_CALL_ERROR_TEXT =
   'The page was reloaded before a tool result was received. The operation may have completed.';
+const RESTORED_TOOL_INPUT_ERROR_TEXT =
+  'The page was reloaded before the tool input was complete. The operation was not started.';
 
 type TerminalToolState =
   | { state: 'output-available'; output: unknown }
@@ -103,9 +105,10 @@ function warnInvalidGlobalToolResult(toolCallId: string): void {
 
 // A tool call awaiting an output that the client owns. Provider-executed calls
 // are resolved server-side, so they are left alone.
-function isPendingToolPart<TPart>(
-  part: TPart
-): part is TPart & { toolCallId: string } {
+function isPendingToolPart<TPart>(part: TPart): part is TPart & {
+  toolCallId: string;
+  state: 'input-streaming' | 'input-available';
+} {
   const candidate = part as {
     type?: unknown;
     toolCallId?: unknown;
@@ -600,7 +603,10 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
           part.toolCallId,
           {
             state: 'output-error',
-            errorText: RESTORED_TOOL_CALL_ERROR_TEXT,
+            errorText:
+              part.state === 'input-streaming'
+                ? RESTORED_TOOL_INPUT_ERROR_TEXT
+                : RESTORED_TOOL_CALL_ERROR_TEXT,
           },
           message.id,
           undefined,

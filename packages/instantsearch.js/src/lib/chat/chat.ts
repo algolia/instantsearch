@@ -184,6 +184,7 @@ export class Chat<
   TUiMessage extends UIMessage,
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
+  private hasRestoredMessages = false;
 
   constructor({
     messages,
@@ -195,9 +196,17 @@ export class Chat<
     super({ ...init, state });
     this._state = state;
     if (messages === undefined && persistence) {
+      this.hasRestoredMessages = true;
       this.repairRestoredPendingToolParts();
     }
   }
+
+  '~repairRestoredPendingToolParts' = (): void => {
+    if (!this.hasRestoredMessages) return;
+
+    this.hasRestoredMessages = false;
+    this.repairRestoredPendingToolParts();
+  };
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
     this._state['~registerMessagesCallback'](onChange);
