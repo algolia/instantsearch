@@ -31,10 +31,7 @@
 
 .ais-CompareBar-title {
   font-weight: var(--ais-font-weight-semibold);
-  color: rgba(
-    var(--ais-text-color-rgb),
-    var(--ais-text-color-alpha)
-  );
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 }
 
 .ais-CompareBar-count {
@@ -56,8 +53,7 @@
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) * 0.25);
-  padding: calc(var(--ais-spacing) * 0.25)
-    calc(var(--ais-spacing) * 0.5);
+  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
   border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
   border-radius: calc(var(--ais-spacing) * 0.5);
   background-color: rgba(var(--ais-text-color-rgb), 0.04);
@@ -82,10 +78,7 @@
   color: rgba(var(--ais-text-color-rgb), 0.6);
 
   &:hover {
-    color: rgba(
-      var(--ais-text-color-rgb),
-      var(--ais-text-color-alpha)
-    );
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   }
 
   svg {

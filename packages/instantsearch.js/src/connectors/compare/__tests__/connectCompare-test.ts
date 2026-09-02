@@ -7,7 +7,10 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import connectCompare, { getDefaultComparisonMessage } from '../connectCompare';
+import connectCompare, {
+  getComparisonPlaceholderMessage,
+  getDefaultComparisonMessage,
+} from '../connectCompare';
 
 import type { ChatRenderState } from '../../chat/connectChat';
 
@@ -231,9 +234,65 @@ describe('connectCompare', () => {
       expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
         {
           text: 'Compare these products: "MacBook Pro 14" (objectID: A) vs "MacBook Pro 16" (objectID: B)',
+          metadata: {
+            turnContext: {
+              selected_products: JSON.stringify([
+                { objectID: 'A', name: 'MacBook Pro 14' },
+                { objectID: 'B', name: 'MacBook Pro 16' },
+              ]),
+            },
+          },
         },
         { headers: { 'x-algolia-referer': 'compare' } }
       );
+    });
+
+    it('sends the configuration placeholder when `configurationId` is set', () => {
+      const chatRenderState = createChatRenderState();
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: { configurationId: 'algolia_comparison_abc' },
+      });
+
+      getRenderState().addItem({ objectID: 'A', name: 'MacBook Pro 14' });
+      getRenderState().addItem({ objectID: 'B', name: 'MacBook Pro 16' });
+      getRenderState().compare();
+
+      expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
+        {
+          text: '__INSTANTSEARCH_COMPARISON_algolia_comparison_abc__',
+          metadata: {
+            turnContext: {
+              selected_products: JSON.stringify([
+                { objectID: 'A', name: 'MacBook Pro 14' },
+                { objectID: 'B', name: 'MacBook Pro 16' },
+              ]),
+              comparison_configuration_id: 'algolia_comparison_abc',
+            },
+          },
+        },
+        { headers: { 'x-algolia-referer': 'compare' } }
+      );
+    });
+
+    it('strips `_`-prefixed internal metadata from `selected_products`', () => {
+      const chatRenderState = createChatRenderState();
+      const { getRenderState } = setup({ chatRenderState });
+
+      getRenderState().addItem({
+        objectID: 'A',
+        name: 'MacBook Pro 14',
+        _highlightResult: { name: {} },
+        __position: 1,
+      });
+      getRenderState().addItem({ objectID: 'B' });
+      getRenderState().compare();
+
+      const [message] = (chatRenderState.sendMessage as jest.Mock).mock
+        .calls[0];
+      expect(
+        JSON.parse(message.metadata.turnContext.selected_products)
+      ).toEqual([{ objectID: 'A', name: 'MacBook Pro 14' }, { objectID: 'B' }]);
     });
 
     it('uses the `getComparisonMessage` option when provided', () => {
@@ -251,7 +310,17 @@ describe('connectCompare', () => {
       getRenderState().compare();
 
       expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
-        { text: 'Which is better? A or B' },
+        {
+          text: 'Which is better? A or B',
+          metadata: {
+            turnContext: {
+              selected_products: JSON.stringify([
+                { objectID: 'A' },
+                { objectID: 'B' },
+              ]),
+            },
+          },
+        },
         { headers: { 'x-algolia-referer': 'compare' } }
       );
     });
@@ -307,6 +376,14 @@ describe('connectCompare', () => {
           canCompare: false,
           compare: expect.any(Function),
         })
+      );
+    });
+  });
+
+  describe('getComparisonPlaceholderMessage', () => {
+    it('embeds the configuration id in the placeholder token', () => {
+      expect(getComparisonPlaceholderMessage('algolia_comparison_abc')).toBe(
+        '__INSTANTSEARCH_COMPARISON_algolia_comparison_abc__'
       );
     });
   });

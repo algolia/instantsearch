@@ -41,11 +41,22 @@ export type CompareConnectorParams = {
    */
   maxItems?: number;
   /**
+   * ID of the comparison configuration created in the Agent Studio dashboard
+   * (Components > Comparison). When set, the chat hand-off sends the
+   * `__INSTANTSEARCH_COMPARISON_<id>__` placeholder instead of a prose
+   * message: the backend replaces it with the configuration's instructions
+   * for the agent and a natural-language message for the transcript. Leave
+   * unset to send the default prose message, which works with the default
+   * shopping assistant prompt — no agent configuration required.
+   */
+  configurationId?: string;
+  /**
    * Builds the user message sent to the chat when the comparison starts.
-   * Defaults to a message that names each selected item (name/title and
-   * objectID) so the agent can retrieve them from the index and invoke the
-   * `algolia_compare_products` tool. Provide your own to change the initial
-   * prompt while keeping the rest of the flow.
+   * Defaults to the `configurationId` placeholder when one is set, and to a
+   * message that names each selected item (name/title and objectID) so the
+   * agent can retrieve them from the index and invoke the
+   * `algolia_compare_products` tool otherwise. Provide your own to change the
+   * initial prompt while keeping the rest of the flow.
    */
   getComparisonMessage?: (items: CompareItem[]) => string;
 };
@@ -115,6 +126,18 @@ export type CompareConnector = Connector<
 >;
 
 /**
+ * Builds the placeholder message for a dashboard-configured comparison. The
+ * Agent Studio backend resolves it against the agent's comparison
+ * configuration: the LLM gets the configured instructions and the transcript
+ * keeps a natural-language message naming the selection.
+ */
+export function getComparisonPlaceholderMessage(
+  configurationId: string
+): string {
+  return `__INSTANTSEARCH_COMPARISON_${configurationId}__`;
+}
+
+/**
  * Builds the default comparison message. It names each selected item so the
  * agent can ground the comparison: it re-retrieves the records with
  * `algolia_search_index` and renders them with the builtin
@@ -130,6 +153,33 @@ export function getDefaultComparisonMessage(items: CompareItem[]): string {
   });
 
   return `Compare these products: ${labels.join(' vs ')}`;
+}
+
+// Turn-context payload for the comparison hand-off, per the Agent Studio
+// contract: the selection rides `selected_products` (JSON-encoded records,
+// `_`-prefixed internal metadata stripped) so the agent grounds the comparison
+// in what the shopper actually selected, and `comparison_configuration_id`
+// identifies the dashboard configuration when one is set.
+function buildComparisonTurnContext(
+  items: CompareItem[],
+  configurationId: string | undefined
+): Record<string, string> {
+  const records = items.map((item) => {
+    const clean: Record<string, unknown> = {};
+    Object.keys(item).forEach((key) => {
+      if (!key.startsWith('_')) {
+        clean[key] = item[key];
+      }
+    });
+    return clean;
+  });
+
+  return {
+    selected_products: JSON.stringify(records),
+    ...(configurationId
+      ? { comparison_configuration_id: configurationId }
+      : {}),
+  };
 }
 
 type CompareStore = {
@@ -185,7 +235,10 @@ const connectCompare: CompareConnector = function connectCompare(
     const {
       minItems = 2,
       maxItems = 3,
-      getComparisonMessage = getDefaultComparisonMessage,
+      configurationId,
+      getComparisonMessage = configurationId
+        ? (): string => getComparisonPlaceholderMessage(configurationId)
+        : getDefaultComparisonMessage,
     } = widgetParams || {};
 
     if (minItems < 2) {
@@ -262,6 +315,7 @@ const connectCompare: CompareConnector = function connectCompare(
       return openChat(getChatRenderState(lastOptions), {
         message: getComparisonMessage(store.items),
         referer: 'compare',
+        turnContext: buildComparisonTurnContext(store.items, configurationId),
       });
     }
 
