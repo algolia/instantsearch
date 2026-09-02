@@ -8,6 +8,7 @@ import { createStreamingTests } from './streaming';
 import { createTemplatesTests } from './templates';
 import { createToolCancellationTests } from './tool-cancellation';
 import { createToolResultTests } from './tool-results';
+import { createToolRetryTests } from './tool-retry';
 import { createTranslationsTests } from './translations';
 
 import type { TestOptions, TestSetup } from '../../common';
@@ -64,6 +65,7 @@ export function createChatWidgetTests(
     createTemplatesTests(setup, { act, skippedTests, flavor });
     createToolCancellationTests(setup, { act, skippedTests, flavor });
     createToolResultTests(setup, { act, skippedTests, flavor });
+    createToolRetryTests(setup, { act, skippedTests, flavor });
     createTranslationsTests(setup, { act, skippedTests, flavor });
   });
 }
