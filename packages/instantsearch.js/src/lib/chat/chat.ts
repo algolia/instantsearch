@@ -194,6 +194,9 @@ export class Chat<
     const state = new ChatState(agentId, messages, persistence);
     super({ ...init, state });
     this._state = state;
+    if (messages === undefined && persistence) {
+      this.repairRestoredPendingToolParts();
+    }
   }
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>

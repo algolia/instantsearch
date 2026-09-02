@@ -547,6 +547,11 @@ export interface ChatInit<UI_MESSAGE extends UIMessage> {
     messages: UI_MESSAGE[];
   }) => boolean | PromiseLike<boolean>;
   shouldRepairToolInput?: (toolName: string) => boolean;
+  shouldRepairRestoredPendingToolPart?: (params: {
+    toolName: string;
+    toolCallId: string;
+    input: unknown;
+  }) => boolean;
   /**
    * Output to report for a tool call a request carries while it is still
    * awaiting its result. Return `undefined` to report the call as failed.

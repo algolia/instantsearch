@@ -54,6 +54,8 @@ const defaultGuardrailFallbackResponse =
 
 const TOOL_CALL_CANCELLED_ERROR_TEXT =
   'The tool call was cancelled: the conversation moved on before a result was provided.';
+const RESTORED_TOOL_CALL_ERROR_TEXT =
+  'The page was reloaded before a tool result was received. The operation may have completed.';
 
 type TerminalToolState =
   | { state: 'output-available'; output: unknown }
@@ -162,6 +164,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
+  private shouldRepairRestoredPendingToolPart?: ChatInit<TUIMessage>['shouldRepairRestoredPendingToolPart'];
   private resolveCancelledToolOutput?: ChatInit<TUIMessage>['resolveCancelledToolOutput'];
 
   private activeResponse: ResponseRecord | null = null;
@@ -184,6 +187,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onData,
     sendAutomaticallyWhen,
     shouldRepairToolInput,
+    shouldRepairRestoredPendingToolPart,
     resolveCancelledToolOutput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
@@ -198,6 +202,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
     this.shouldRepairToolInput = shouldRepairToolInput;
+    this.shouldRepairRestoredPendingToolPart =
+      shouldRepairRestoredPendingToolPart;
     this.resolveCancelledToolOutput = resolveCancelledToolOutput;
   }
 
@@ -567,6 +573,41 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     } as TUIMessage;
     this.replaceMessage(messageIndex, updatedMessage, response);
     return true;
+  }
+
+  protected repairRestoredPendingToolParts(): void {
+    const shouldRepairRestoredPendingToolPart =
+      this.shouldRepairRestoredPendingToolPart;
+    if (!shouldRepairRestoredPendingToolPart) return;
+
+    this.messages.forEach((message, messageIndex) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+
+        let shouldRepair = false;
+        try {
+          shouldRepair = shouldRepairRestoredPendingToolPart({
+            toolName: getToolName(part),
+            toolCallId: part.toolCallId,
+            input: 'input' in part ? part.input : undefined,
+          });
+        } catch {
+          return;
+        }
+        if (!shouldRepair) return;
+
+        this.commit(
+          part.toolCallId,
+          {
+            state: 'output-error',
+            errorText: RESTORED_TOOL_CALL_ERROR_TEXT,
+          },
+          message.id,
+          undefined,
+          this.messages[messageIndex]
+        );
+      });
+    });
   }
 
   /**

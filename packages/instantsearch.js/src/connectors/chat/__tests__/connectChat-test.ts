@@ -2158,6 +2158,37 @@ describe('connectChat', () => {
       expect(getRenderState().messages).toEqual(messages);
     });
 
+    it('does not repair pending tools while resuming a stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(new Response(null, { status: 404 }));
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      expect(getRenderState().messages).toEqual(previousMessages);
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    });
+
     it('does not save messages to sessionStorage when persistence is disabled', () => {
       const previousMessages: UIMessage[] = [
         {
