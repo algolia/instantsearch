@@ -954,7 +954,7 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
-    it('accepts a tool error without state from JavaScript and continues the response', async () => {
+    it('infers state-less JavaScript errors without overriding explicit success', async () => {
       const setup = createTestSetup({
         chunksByRequest: [
           [
@@ -965,16 +965,32 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
               toolCallId: 'call-1',
               input: {},
             },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-2',
+              input: {},
+            },
             finishChunk(),
           ],
           [startChunk('msg-2'), finishChunk()],
         ],
-        onToolCall: ({ toolCall }, addToolResult) =>
-          addToolResult!({
+        onToolCall: ({ toolCall }, addToolResult) => {
+          const result =
+            toolCall.toolCallId === 'call-1'
+              ? { errorText: 'The operation may have completed.' }
+              : {
+                  state: 'output-available' as const,
+                  output: 'result',
+                  errorText: undefined,
+                };
+
+          return addToolResult!({
             tool: toolCall.toolName,
             toolCallId: toolCall.toolCallId,
-            errorText: 'The operation may have completed.',
-          } as Parameters<NonNullable<typeof addToolResult>>[0]),
+            ...result,
+          } as Parameters<NonNullable<typeof addToolResult>>[0]);
+        },
         sendAutomaticallyWhen: () => true,
       });
 
@@ -983,6 +999,10 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
         state: 'output-error',
         errorText: 'The operation may have completed.',
+      });
+      expect(assistantToolPart(setup.state, 'call-2')).toMatchObject({
+        state: 'output-available',
+        output: 'result',
       });
       expect(setup.state.status).toBe('ready');
       expect(setup.sendMessages).toHaveBeenCalledTimes(2);
