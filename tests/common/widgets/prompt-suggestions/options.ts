@@ -354,6 +354,96 @@ export function createOptionsTests(
       );
     });
 
+    test('requests suggestions with an explicit context when no search is triggered', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+      const context = { title: 'A product', brand: 'A brand' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          // The common query gate: a page with no query never searches, so the
+          // widget never gets results. With an explicit `context` the request
+          // does not read them, so it must not wait for them either.
+          searchFunction(helper) {
+            if (helper.state.query) {
+              helper.search();
+            }
+          },
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      expect(JSON.parse(init.body as string).input).toEqual(context);
+
+      const pills = document.querySelectorAll(
+        '.ais-PromptSuggestions-suggestion'
+      );
+      expect(pills).toHaveLength(SUGGESTIONS.length);
+    });
+
+    test('requests nothing without a context when no search is triggered', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          searchFunction(helper) {
+            if (helper.state.query) {
+              helper.search();
+            }
+          },
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      // Auto-extraction has nothing to extract from, so nothing goes out.
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
     test('sends only the provided context and skips auto-extraction', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
