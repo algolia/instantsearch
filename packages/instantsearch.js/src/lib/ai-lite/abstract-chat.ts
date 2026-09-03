@@ -174,6 +174,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
   private latestResponse: ResponseRecord | null = null;
   private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
   private responseByMessage = new WeakMap<TUIMessage, ResponseRecord>();
+  private restoredToolCalls: Map<string, Set<string>> | undefined;
   // Once tool ownership is discarded, an identifier-only result cannot prove
   // which response generation submitted it. Scoped submissions remain safe.
   private acceptsIdentifierOnlyToolResults = true;
@@ -578,9 +579,26 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return true;
   }
 
-  protected repairRestoredPendingToolParts(
-    restoredToolCalls?: ReadonlyMap<string, ReadonlySet<string>>
-  ): void {
+  protected captureRestoredToolCalls(): void {
+    const restoredToolCalls = new Map<string, Set<string>>();
+    this.messages.forEach((message) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+
+        const toolCallIds =
+          restoredToolCalls.get(message.id) ?? new Set<string>();
+        toolCallIds.add(part.toolCallId);
+        restoredToolCalls.set(message.id, toolCallIds);
+      });
+    });
+    this.restoredToolCalls = restoredToolCalls;
+  }
+
+  protected clearRestoredToolCalls(): void {
+    this.restoredToolCalls = undefined;
+  }
+
+  protected repairRestoredPendingToolParts(): void {
     const shouldRepairRestoredPendingToolPart =
       this.shouldRepairRestoredPendingToolPart;
     if (!shouldRepairRestoredPendingToolPart) return;
@@ -589,8 +607,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       message.parts.forEach((part) => {
         if (!isPendingToolPart(part)) return;
         if (
-          restoredToolCalls &&
-          !restoredToolCalls.get(message.id)?.has(part.toolCallId)
+          this.restoredToolCalls &&
+          !this.restoredToolCalls.get(message.id)?.has(part.toolCallId)
         ) {
           return;
         }
@@ -1399,6 +1417,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 response.pendingToolCallbacks++;
 
                 try {
+                  this.restoredToolCalls
+                    ?.get(currentMessage.id)
+                    ?.delete(chunk.toolCallId);
                   const result = this.onToolCall(
                     {
                       toolCall: {
