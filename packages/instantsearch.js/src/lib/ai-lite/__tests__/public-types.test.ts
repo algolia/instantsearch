@@ -39,6 +39,18 @@ describe('ai-lite public types', () => {
     }) => {
       void toolCall;
     };
+    const onToolError: ChatOnToolCallCallback<SearchMessage> = (
+      { toolCall },
+      addToolResult
+    ) =>
+      toolCall.dynamic
+        ? undefined
+        : addToolResult({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            state: 'output-error',
+            errorText: 'Search failed.',
+          });
     const init: Pick<ChatInit<SearchMessage>, 'onToolCall'> = {
       onToolCall({ toolCall }, addToolResult) {
         if (toolCall.dynamic) {
@@ -62,9 +74,11 @@ describe('ai-lite public types', () => {
       submitToolResult,
       onToolCall,
       legacyOnToolCall,
+      onToolError,
       init.onToolCall,
       legacyInit.onToolCall,
     ]).toEqual([
+      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),

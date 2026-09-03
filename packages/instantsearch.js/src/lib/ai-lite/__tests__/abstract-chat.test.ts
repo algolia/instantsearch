@@ -954,6 +954,60 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
+    it('infers state-less JavaScript errors without overriding explicit success', async () => {
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-2',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          [startChunk('msg-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          const result =
+            toolCall.toolCallId === 'call-1'
+              ? { errorText: 'The operation may have completed.' }
+              : {
+                  state: 'output-available' as const,
+                  output: 'result',
+                  errorText: undefined,
+                };
+
+          return addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            ...result,
+          } as Parameters<NonNullable<typeof addToolResult>>[0]);
+        },
+        sendAutomaticallyWhen: () => true,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-error',
+        errorText: 'The operation may have completed.',
+      });
+      expect(assistantToolPart(setup.state, 'call-2')).toMatchObject({
+        state: 'output-available',
+        output: 'result',
+      });
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+    });
+
     it('keeps a successful onFinish and reports a rejected continuation predicate once', async () => {
       let chat!: TestChat;
       const onError = jest.fn();

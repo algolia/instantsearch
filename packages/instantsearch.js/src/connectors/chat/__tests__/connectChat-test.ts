@@ -1579,6 +1579,96 @@ describe('connectChat', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
+    it.each([
+      [
+        'throws',
+        {
+          onToolCall: () => {
+            throw new Error('The operation may have completed.');
+          },
+          errorText: 'The operation may have completed.',
+        },
+      ],
+      [
+        'rejects',
+        {
+          onToolCall: () =>
+            Promise.reject(new Error('The operation may have completed.')),
+          errorText: 'The operation may have completed.',
+        },
+      ],
+      [
+        'throws undefined',
+        {
+          onToolCall: () => {
+            throw undefined;
+          },
+          errorText: 'Tool call failed.',
+        },
+      ],
+      [
+        'rejects null',
+        {
+          onToolCall: () => Promise.reject(null),
+          errorText: 'Tool call failed.',
+        },
+      ],
+    ])('settles a configured tool that %s', async (_name, toolCase) => {
+      const { onToolCall, errorText } = toolCase;
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'save',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            { type: 'finish' },
+          ])
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'text-start', id: 'text-1' },
+            {
+              type: 'text-delta',
+              id: 'text-1',
+              delta: 'Please check whether the save completed.',
+            },
+            { type: 'text-end', id: 'text-1' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await widget.chatInstance.sendMessage({ text: 'save this' });
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.id === 'assistant-1'
+      );
+      expect(assistant?.parts[0]).toMatchObject({
+        type: 'tool-save',
+        toolCallId: 'call-1',
+        state: 'output-error',
+        errorText,
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(widget.chatInstance.error).toBeUndefined();
+      expect(widget.chatInstance.messages.at(-1)?.parts[0]).toMatchObject({
+        type: 'text',
+        text: 'Please check whether the save completed.',
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
     describe('cancelling a tool call the user never answered', () => {
       const pendingToolCallResponse = () =>
         chatStream([

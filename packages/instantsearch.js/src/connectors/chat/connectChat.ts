@@ -57,7 +57,7 @@ import type {
   SearchResults,
 } from 'algoliasearch-helper';
 import type {
-  AddToolResultWithOutput,
+  AddToolResultForToolCall,
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
@@ -863,17 +863,32 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           if (tool.onToolCall) {
-            const addToolResult: AddToolResultWithOutput = ({ output }) =>
+            const addToolResult: AddToolResultForToolCall = (options) =>
               submitToolResult({
-                output,
+                ...options,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               });
+            const addToolError = (error: unknown) => {
+              const errorText =
+                error instanceof Error ? error.message : String(error ?? '');
 
-            return tool.onToolCall({
-              ...toolCall,
-              addToolResult,
-            });
+              return addToolResult({
+                state: 'output-error',
+                errorText: errorText || 'Tool call failed.',
+              });
+            };
+
+            try {
+              return Promise.resolve(
+                tool.onToolCall({
+                  ...toolCall,
+                  addToolResult,
+                })
+              ).catch(addToolError);
+            } catch (error) {
+              return addToolError(error);
+            }
           }
 
           return Promise.resolve();

@@ -430,18 +430,44 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
 
   clearError: () => void;
 
-  addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(params: {
-    tool: TTool;
-    toolCallId: string;
-    output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-  }) => Promise<void>;
+  addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(
+    params: {
+      tool: TTool;
+      toolCallId: string;
+    } & (
+      | {
+          state?: 'output-available';
+          output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+          errorText?: never;
+        }
+      | {
+          state: 'output-error';
+          output?: never;
+          errorText: string;
+        }
+    )
+  ) => Promise<void>;
 
   stop: () => Promise<void>;
 }
 export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
 
-export type AddToolResultWithOutput = (
-  params: Pick<Parameters<AddToolResult>[0], 'output'>
+export type AddToolResultWithOutput = (params: {
+  output: unknown;
+}) => ReturnType<AddToolResult>;
+
+export type AddToolResultForToolCall = (
+  params:
+    | {
+        state?: 'output-available';
+        output: unknown;
+        errorText?: never;
+      }
+    | {
+        state: 'output-error';
+        output?: never;
+        errorText: string;
+      }
 ) => ReturnType<AddToolResult>;
 
 type SearchToolExtraFields = {
@@ -778,9 +804,9 @@ export type ClientSideTool = {
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
     >[0]['toolCall'] & {
-      addToolResult: AddToolResultWithOutput;
+      addToolResult: AddToolResultForToolCall;
     }
-  ) => void;
+  ) => void | PromiseLike<void>;
   /**
    * Output reported for this tool call when a request is sent while it is still
    * waiting for a result, for example `{ confirmed: false }` for a confirmation
