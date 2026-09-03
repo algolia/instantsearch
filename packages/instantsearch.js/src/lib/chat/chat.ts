@@ -191,6 +191,7 @@ export class Chat<
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
   private hasRestoredMessages = false;
+  private restoredToolCalls = new Map<string, Set<string>>();
 
   constructor({
     messages,
@@ -203,7 +204,17 @@ export class Chat<
     this._state = state;
     if (messages === undefined && persistence) {
       this.hasRestoredMessages = true;
-      this.repairRestoredPendingToolParts();
+      this.messages.forEach((message) => {
+        message.parts.forEach((part) => {
+          if (!('toolCallId' in part)) return;
+
+          const toolCallIds =
+            this.restoredToolCalls.get(message.id) ?? new Set<string>();
+          toolCallIds.add(part.toolCallId);
+          this.restoredToolCalls.set(message.id, toolCallIds);
+        });
+      });
+      this.repairRestoredPendingToolParts(this.restoredToolCalls);
     }
   }
 
@@ -211,7 +222,8 @@ export class Chat<
     if (!this.hasRestoredMessages) return;
 
     this.hasRestoredMessages = false;
-    this.repairRestoredPendingToolParts();
+    this.repairRestoredPendingToolParts(this.restoredToolCalls);
+    this.restoredToolCalls.clear();
     this._state['~persistMessages']();
   };
 

@@ -578,7 +578,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     return true;
   }
 
-  protected repairRestoredPendingToolParts(): void {
+  protected repairRestoredPendingToolParts(
+    restoredToolCalls?: ReadonlyMap<string, ReadonlySet<string>>
+  ): void {
     const shouldRepairRestoredPendingToolPart =
       this.shouldRepairRestoredPendingToolPart;
     if (!shouldRepairRestoredPendingToolPart) return;
@@ -586,6 +588,12 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.messages.forEach((message, messageIndex) => {
       message.parts.forEach((part) => {
         if (!isPendingToolPart(part)) return;
+        if (
+          restoredToolCalls &&
+          !restoredToolCalls.get(message.id)?.has(part.toolCallId)
+        ) {
+          return;
+        }
 
         let shouldRepair = false;
         try {

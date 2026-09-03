@@ -2306,6 +2306,89 @@ data: [DONE]`,
       );
     });
 
+    it('does not repair tool calls started by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const chunks = [
+        'data: {"type":"start","messageId":"assistant-2"}\n\n',
+        'data: {"type":"tool-input-available","toolName":"save","toolCallId":"call-2","input":{}}\n\n',
+      ].map((chunk) => new TextEncoder().encode(chunk));
+      let failResume!: () => void;
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                chunks.forEach((chunk) => controller.enqueue(chunk));
+                failResume = () =>
+                  controller.error(new Error('Resume failed.'));
+              },
+            }),
+            { headers: { 'Content-Type': 'text/event-stream' } }
+          )
+        )
+      );
+      let addToolResult!: AddToolResultForToolCall;
+      const onToolCall = jest.fn((options) => {
+        addToolResult = options.addToolResult;
+      });
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await waitFor(() => expect(onToolCall).toHaveBeenCalledTimes(1));
+      failResume();
+      await waitFor(() =>
+        expect(getRenderState().messages).toEqual([
+          expect.objectContaining({
+            id: 'assistant-1',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-1',
+                state: 'output-error',
+              }),
+            ],
+          }),
+          expect.objectContaining({
+            id: 'assistant-2',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-2',
+                state: 'input-available',
+              }),
+            ],
+          }),
+        ])
+      );
+
+      await addToolResult({ output: { saved: true } });
+
+      expect(getRenderState().messages[1].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-available',
+          output: { saved: true },
+        })
+      );
+    });
+
     it('does not save messages to sessionStorage when persistence is disabled', () => {
       const previousMessages: UIMessage[] = [
         {
