@@ -2264,7 +2264,7 @@ describe('ChatMessages', () => {
     });
   });
 
-  describe('pending suggestions', () => {
+  describe('suggestions visibility', () => {
     const baseProps = {
       indexUiState: {},
       setIndexUiState: jest.fn(),
@@ -2287,8 +2287,8 @@ describe('ChatMessages', () => {
       },
     ];
 
-    test('mounts the suggestions element before the turn settles', () => {
-      const { container } = render(
+    test('waits for the turn to settle before mounting suggestions', () => {
+      const { container, rerender } = render(
         <ChatMessages
           {...baseProps}
           status="streaming"
@@ -2298,21 +2298,18 @@ describe('ChatMessages', () => {
         />
       );
 
-      expect(container.querySelector('.suggestions')).not.toBeNull();
-    });
+      expect(container.querySelector('.suggestions')).toBeNull();
 
-    test('waits for the answer to have text', () => {
-      const { container } = render(
+      rerender(
         <ChatMessages
           {...baseProps}
-          status="streaming"
-          messages={[{ role: 'assistant', id: '1', parts: [] }]}
-          suggestionsLoading
+          status="ready"
+          messages={answered}
           suggestionsElement={<span className="suggestions" />}
         />
       );
 
-      expect(container.querySelector('.suggestions')).toBeNull();
+      expect(container.querySelector('.suggestions')).not.toBeNull();
     });
   });
 
