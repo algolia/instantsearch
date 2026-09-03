@@ -7,6 +7,11 @@ import { WidgetAiAutocomplete } from '../components/widgets/WidgetAiAutocomplete
 import { WidgetChat, type ChatLayout } from '../components/widgets/WidgetChat';
 import { WidgetChatTrigger } from '../components/widgets/WidgetChatTrigger';
 import { WidgetHits } from '../components/widgets/WidgetHits';
+import {
+  WidgetPromptSuggestionsCustom,
+  WidgetPromptSuggestionsPdp,
+  WidgetPromptSuggestionsPlp,
+} from '../components/widgets/WidgetPromptSuggestions';
 import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
 import { SearchContext } from '../context/search';
@@ -62,7 +67,30 @@ export function AgenticView() {
             ]}
           />
 
-          {/* Row 2: ChatTrigger | Chat (hosts the layout switcher; the
+          {/* Row 2: PromptSuggestions */}
+          <WidgetSwitcher
+            title="promptSuggestions"
+            destroy
+            widgets={[
+              {
+                title: 'PLP',
+                body: WidgetPromptSuggestionsPlp,
+                docs: ['promptSuggestions'],
+              },
+              {
+                title: 'PDP',
+                body: WidgetPromptSuggestionsPdp,
+                docs: ['promptSuggestions'],
+              },
+              {
+                title: 'custom',
+                body: WidgetPromptSuggestionsCustom,
+                docs: ['promptSuggestions'],
+              },
+            ]}
+          />
+
+          {/* Row 3: ChatTrigger | Chat (hosts the layout switcher; the
               chat renders inline inside this tile, or floats/docks to the
               viewport for overlay/sidePanel).
               `min-w-0` lets the chat's grid-based carousel scroll horizontally
@@ -81,7 +109,7 @@ export function AgenticView() {
             </ChatLayoutSwitcher>
           </div>
 
-          {/* Row 3: Hits */}
+          {/* Row 4: Hits */}
           <WidgetSwitcher widgets={[{ title: 'hits', body: WidgetHits }]} />
         </div>
       </ChatLayoutContext.Provider>

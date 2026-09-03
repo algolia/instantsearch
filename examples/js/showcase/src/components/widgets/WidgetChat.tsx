@@ -6,6 +6,7 @@ import {
 import { chat } from 'instantsearch.js/es/widgets';
 import { useEffect, useRef } from 'preact/hooks';
 
+import { SHOWCASE_AGENT_ID } from '../../constants';
 import { useSearch } from '../../context/search';
 
 import { renderCarouselHit } from './ProductCard';
@@ -13,8 +14,6 @@ import { renderCarouselHit } from './ProductCard';
 import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
 export type ChatLayout = 'inline' | 'overlay' | 'sidePanel';
-
-const CHAT_AGENT_ID = 'eedef238-5468-470d-bc37-f99fa741bd25';
 
 type Props = {
   layout: ChatLayout;
@@ -35,7 +34,7 @@ export function WidgetChat({ layout, indexName }: Props) {
     };
     const widget = chat({
       container: containerRef.current!,
-      agentId: CHAT_AGENT_ID,
+      agentId: SHOWCASE_AGENT_ID,
       feedback: true,
       templates: {
         layout: (data) => layouts[layoutRef.current](data),
@@ -46,7 +45,7 @@ export function WidgetChat({ layout, indexName }: Props) {
     return () => {
       search.removeWidgets([widget]);
     };
-  }, []);
+  }, [search]);
 
   useEffect(() => {
     // Trigger a chat re-render so the reactive `layout` template picks up

@@ -12,12 +12,14 @@ export interface Widget {
 }
 
 interface Props {
+  title?: string;
   widgets: Widget[];
   destroy?: boolean;
   class?: string;
 }
 
 export function WidgetSwitcher({
+  title,
   widgets,
   destroy = false,
   class: className,
@@ -34,6 +36,14 @@ export function WidgetSwitcher({
     >
       <header class="-mx-1 -mt-1 mb-3 flex items-start gap-1 text-xs">
         <span class="flex flex-wrap items-center">
+          {title && (
+            <>
+              <span class="mx-1 cursor-default font-mono leading-relaxed text-neutral-400 dark:text-neutral-500">
+                {title}
+              </span>
+              <span class="text-neutral-300 dark:text-neutral-600">·</span>
+            </>
+          )}
           {widgets.map((widget, index) => (
             <Fragment key={index}>
               {index > 0 && (
