@@ -1321,7 +1321,7 @@ export function createOptionsTests(
     });
 
     describe('suggestions', () => {
-      test('holds placeholders until the turn produces its suggestions', async () => {
+      test('shows suggestions after the turn settles', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -1366,8 +1366,8 @@ export function createOptionsTests(
         });
 
         expect(
-          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
-        ).toBeInTheDocument();
+          document.querySelector('.ais-ChatPromptSuggestions')
+        ).not.toBeInTheDocument();
 
         await act(async () => {
           chat._state.messages = [
