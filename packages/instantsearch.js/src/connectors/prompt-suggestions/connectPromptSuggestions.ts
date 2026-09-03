@@ -80,10 +80,6 @@ function taskPayloadKey(payload: Record<string, unknown>): string | null {
   }
 }
 
-function buildSuggestionMessage(suggestion: string): string {
-  return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
-}
-
 /** Custom transport for the task request. Alias of the generic `TaskTransportOptions`, kept for API stability. */
 export type PromptSuggestionsTransport = TaskTransportOptions;
 
@@ -329,7 +325,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             ('results' in renderOptions ? renderOptions.results : null) ??
             null;
           return openChat(chatRenderState, {
-            message: buildSuggestionMessage(prompt),
+            message: prompt,
             referer: 'prompt-suggestions-widget',
             turnContext: buildTurnContext(results),
           });

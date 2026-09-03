@@ -1585,11 +1585,9 @@ describe('connectPromptSuggestions', () => {
       lastCall.onSuggestionClick('try this');
 
       expect(setOpen).toHaveBeenCalledWith(true);
-      // The raw suggestion is wrapped in a grounding prompt, and the page
-      // context is attached as a flat `turnContext` (hitsSample serialized).
       expect(sendMessage).toHaveBeenCalledWith(
         {
-          text: expect.stringContaining('Suggestion: try this'),
+          text: 'try this',
           metadata: {
             turnContext: {
               hitsSample: JSON.stringify([
