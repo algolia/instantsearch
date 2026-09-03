@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.49.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.48.0...react-instantsearch@7.49.0) (2026-09-03)
+
+
+### Features
+
+* **prompt-suggestions:** error when no chat widget is mounted ([#7225](https://github.com/algolia/instantsearch/issues/7225)) ([1639501](https://github.com/algolia/instantsearch/commit/1639501432aca0a92d3e5997859533ed3480e7e7))
+
+
+
+
+
 # [7.48.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.47.0...react-instantsearch@7.48.0) (2026-09-01)
 
 

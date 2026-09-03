@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.116.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.115.0...instantsearch.js@4.116.0) (2026-09-03)
+
+
+### Bug Fixes
+
+* **chat:** settle failed client-side tools ([#7219](https://github.com/algolia/instantsearch/issues/7219)) ([5fb7790](https://github.com/algolia/instantsearch/commit/5fb779013519dbcf8d3d341816eb4e0749047be5))
+* **chat:** settle restored client-side tools ([#7223](https://github.com/algolia/instantsearch/issues/7223)) ([99b119f](https://github.com/algolia/instantsearch/commit/99b119fd33095a17d9b75363d7cc83a716d686a8))
+* **chat:** time out stalled client-side tools ([#7222](https://github.com/algolia/instantsearch/issues/7222)) ([471d5c7](https://github.com/algolia/instantsearch/commit/471d5c729884b06fd49574b31b0ba6a67acde079))
+* **prompt-suggestions:** fetch on init when a context is set ([#7224](https://github.com/algolia/instantsearch/issues/7224)) ([8737108](https://github.com/algolia/instantsearch/commit/8737108421dc719b2e204f4ea93b7e0034ff8c7e))
+* **prompt-suggestions:** send raw prompt to chat ([#7229](https://github.com/algolia/instantsearch/issues/7229)) ([32eae9f](https://github.com/algolia/instantsearch/commit/32eae9f72cffe41e46b785a3df9ab175c9e6434a))
+
+
+### Features
+
+* **chat:** add opt-in failed tool retry ([#7227](https://github.com/algolia/instantsearch/issues/7227)) ([5c37b66](https://github.com/algolia/instantsearch/commit/5c37b6641ad771a8ee38df69c07084d8bbf76b39))
+* **prompt-suggestions:** error when no chat widget is mounted ([#7225](https://github.com/algolia/instantsearch/issues/7225)) ([1639501](https://github.com/algolia/instantsearch/commit/1639501432aca0a92d3e5997859533ed3480e7e7))
+
+
+
+
+
 # [4.115.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.114.0...instantsearch.js@4.115.0) (2026-09-01)
 
 
