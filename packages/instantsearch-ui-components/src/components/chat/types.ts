@@ -313,6 +313,7 @@ export type InferUIMessageToolCall<TUIMessage extends UIMessage> =
 export type ChatOnToolCallCallback<TUIMessage extends UIMessage = UIMessage> =
   (options: {
     toolCall: InferUIMessageToolCall<TUIMessage>;
+    signal: AbortSignal;
   }) => void | PromiseLike<void>;
 
 /**
@@ -805,8 +806,16 @@ export type ClientSideTool = {
       NonNullable<ChatInit<UIMessage>['onToolCall']>
     >[0]['toolCall'] & {
       addToolResult: AddToolResultForToolCall;
+      signal: AbortSignal;
     }
   ) => void | PromiseLike<void>;
+  /**
+   * Maximum time in milliseconds for `onToolCall` to submit a result.
+   * Set to `false` to disable the timeout.
+   *
+   * @default 20000
+   */
+  timeout?: number | false;
   /**
    * Output reported for this tool call when a request is sent while it is still
    * waiting for a result, for example `{ confirmed: false }` for a confirmation

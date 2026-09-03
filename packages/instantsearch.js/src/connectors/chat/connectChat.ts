@@ -70,6 +70,12 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const DEFAULT_TOOL_TIMEOUT = 20_000;
+const TOOL_TIMEOUT_ERROR_TEXT =
+  'The tool call timed out before a result was received. The operation may have completed.';
+const TOOL_ABORTED_ERROR_TEXT =
+  'The tool call was cancelled before a result was received.';
+
 export type ChatSuggestionsStatus = 'idle' | 'loading';
 
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
@@ -845,7 +851,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             return undefined;
           }
         },
-        onToolCall: (({ toolCall }, submitToolResult) => {
+        onToolCall: (({ toolCall, signal }, submitToolResult) => {
           const tool = findTool(toolCall.toolName, tools);
 
           if (!tool) {
@@ -863,12 +869,34 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           if (tool.onToolCall) {
-            const addToolResult: AddToolResultForToolCall = (options) =>
-              submitToolResult({
+            const toolAbortController = new AbortController();
+            let timeoutId: ReturnType<typeof setTimeout> | undefined;
+            let settled = false;
+            let resolveExecution!: () => void;
+            let rejectExecution!: (error: unknown) => void;
+            const execution = new Promise<void>((resolve, reject) => {
+              resolveExecution = resolve;
+              rejectExecution = reject;
+            });
+            const cleanup = () => {
+              if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+              }
+              signal.removeEventListener('abort', abortToolCall);
+            };
+            const addToolResult: AddToolResultForToolCall = (options) => {
+              if (settled) return Promise.resolve();
+
+              settled = true;
+              cleanup();
+              const submission = submitToolResult({
                 ...options,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               });
+              submission.then(resolveExecution, rejectExecution);
+              return submission;
+            };
             const addToolError = (error: unknown) => {
               const errorText =
                 error instanceof Error ? error.message : String(error ?? '');
@@ -878,17 +906,51 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                 errorText: errorText || 'Tool call failed.',
               });
             };
+            function abortToolCall() {
+              const submission = addToolResult({
+                state: 'output-error',
+                errorText: TOOL_ABORTED_ERROR_TEXT,
+              });
+              toolAbortController.abort();
+              void submission.catch(() => undefined);
+            }
 
+            if (signal.aborted) {
+              abortToolCall();
+              return execution;
+            }
+
+            signal.addEventListener('abort', abortToolCall, { once: true });
+            if (tool.timeout !== false) {
+              timeoutId = setTimeout(() => {
+                const submission = addToolResult({
+                  state: 'output-error',
+                  errorText: TOOL_TIMEOUT_ERROR_TEXT,
+                });
+                toolAbortController.abort();
+                void submission.catch(() => undefined);
+              }, tool.timeout ?? DEFAULT_TOOL_TIMEOUT);
+            }
+
+            let toolExecution: void | PromiseLike<void>;
             try {
-              return Promise.resolve(
-                tool.onToolCall({
-                  ...toolCall,
-                  addToolResult,
-                })
-              ).catch(addToolError);
+              toolExecution = tool.onToolCall({
+                ...toolCall,
+                addToolResult,
+                signal: toolAbortController.signal,
+              });
             } catch (error) {
               return addToolError(error);
             }
+
+            const returnedExecution =
+              Promise.resolve(toolExecution).catch(addToolError);
+            if (tool.timeout === false) {
+              return Promise.race([returnedExecution.then(cleanup), execution]);
+            }
+
+            void returnedExecution.catch(() => undefined);
+            return execution;
           }
 
           return Promise.resolve();
