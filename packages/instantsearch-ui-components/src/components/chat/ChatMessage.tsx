@@ -609,7 +609,14 @@ export function createChatMessageComponent({
           }
 
           if (!ToolLayoutComponent) {
-            return null;
+            return toolMessage.state === 'output-error' ? (
+              <div
+                key={`${message.id}-${index}`}
+                className="ais-ChatMessage-tool ais-ChatMessage-toolError"
+              >
+                {toolMessage.errorText || 'Tool call failed.'}
+              </div>
+            ) : null;
           }
 
           const toolSendEvent = tool.sendEvent || (() => {});

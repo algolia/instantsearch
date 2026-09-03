@@ -1835,6 +1835,69 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('renders a default tool error only when no custom layout exists', () => {
+    const layoutComponent = jest.fn(() => (
+      <div className="custom-tool">Custom tool error</div>
+    ));
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'tool-default',
+              toolCallId: 'default',
+              input: {},
+              state: 'output-error',
+              errorText: 'The operation may have completed.',
+            },
+            {
+              type: 'tool-custom',
+              toolCallId: 'custom',
+              input: {},
+              state: 'output-error',
+              errorText: 'This should be handled by the custom layout.',
+            },
+          ],
+        }}
+        context={createContext({
+          tools: {
+            default: {
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            custom: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError')
+    ).toHaveTextContent('The operation may have completed.');
+    expect(container.querySelector('.custom-tool')).toHaveTextContent(
+      'Custom tool error'
+    );
+    expect(container).not.toHaveTextContent(
+      'This should be handled by the custom layout.'
+    );
+    expect(layoutComponent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          message: expect.objectContaining({ state: 'output-error' }),
+        }),
+      }),
+      {}
+    );
+  });
+
   test('passes the explicit messages override to tool components', () => {
     const layoutComponent = jest.fn(({ context }) => (
       <div>{context.messages?.length}</div>
