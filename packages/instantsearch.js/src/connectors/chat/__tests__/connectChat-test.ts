@@ -2025,6 +2025,449 @@ describe('connectChat', () => {
       expect(getRenderState().messages).toEqual([]);
     });
 
+    it('settles restored auto-executed tool calls without rerunning them', () => {
+      const storageKey = `${cacheKey}-agentId`;
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { value: 'static' },
+            },
+            {
+              type: 'dynamic-tool',
+              toolName: 'save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: { value: 'dynamic' },
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-streaming',
+              input: { value: 'partial' },
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+      const onToolCall = jest.fn();
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: { save: { onToolCall } },
+      });
+
+      expect(getRenderState().messages[0].parts).toEqual([
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-3',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before the tool input was complete. The operation was not started.',
+        }),
+      ]);
+      expect(onToolCall).not.toHaveBeenCalled();
+      expect(JSON.parse(sessionStorage.getItem(storageKey)!)[0].parts).toEqual(
+        getRenderState().messages[0].parts
+      );
+    });
+
+    it('keeps restored timeout-disabled, interactive, and provider-executed tools pending', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-approve',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-confirm',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-available',
+              input: {},
+              providerExecuted: true,
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: {
+          approve: {},
+          confirm: { onToolCall: jest.fn(), timeout: false },
+          save: { onToolCall: jest.fn() },
+        },
+      });
+
+      expect(getRenderState().messages).toEqual(previousMessages);
+    });
+
+    it('does not repair explicitly provided pending messages', () => {
+      const messages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        messages,
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      expect(getRenderState().messages).toEqual(messages);
+    });
+
+    it('repairs pending tools after a resume attempt finds no stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      let resolveFetch!: (response: Response) => void;
+      const fetchMock = jest.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFetch = resolve;
+          })
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+      expect(getRenderState().messages).toEqual(previousMessages);
+
+      resolveFetch(new Response(null, { status: 404 }));
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts[0]).toMatchObject({
+          toolCallId: 'call-1',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        })
+      );
+    });
+
+    it('persists repaired tools after a failed resume attempt', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(new Response(null, { status: 500 }));
+
+      const { getRenderState, widget } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts[0]).toMatchObject({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(JSON.parse(sessionStorage.getItem(cacheKey)!)[0].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+    });
+
+    it('repairs only the tools left pending by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest.fn().mockResolvedValue(
+        new Response(
+          `data: {"type":"start","messageId":"assistant-1"}
+
+data: {"type":"tool-output-available","toolCallId":"call-1","output":{"saved":true}}
+
+data: {"type":"finish"}
+
+data: [DONE]`,
+          { headers: { 'Content-Type': 'text/event-stream' } }
+        )
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-available',
+            output: { saved: true },
+          }),
+          expect.objectContaining({
+            toolCallId: 'call-2',
+            state: 'output-error',
+            errorText:
+              'The page was reloaded before a tool result was received. The operation may have completed.',
+          }),
+        ])
+      );
+    });
+
+    it('does not repair tool calls started by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const chunks = [
+        'data: {"type":"start","messageId":"assistant-2"}\n\n',
+        'data: {"type":"tool-input-available","toolName":"save","toolCallId":"call-2","input":{}}\n\n',
+      ].map((chunk) => new TextEncoder().encode(chunk));
+      let failResume!: () => void;
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                chunks.forEach((chunk) => controller.enqueue(chunk));
+                failResume = () =>
+                  controller.error(new Error('Resume failed.'));
+              },
+            }),
+            { headers: { 'Content-Type': 'text/event-stream' } }
+          )
+        )
+      );
+      let addToolResult!: AddToolResultForToolCall;
+      const onToolCall = jest.fn((options) => {
+        addToolResult = options.addToolResult;
+      });
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await waitFor(() => expect(onToolCall).toHaveBeenCalledTimes(1));
+      failResume();
+      await waitFor(() =>
+        expect(getRenderState().messages).toEqual([
+          expect.objectContaining({
+            id: 'assistant-1',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-1',
+                state: 'output-error',
+              }),
+            ],
+          }),
+          expect.objectContaining({
+            id: 'assistant-2',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-2',
+                state: 'input-available',
+              }),
+            ],
+          }),
+        ])
+      );
+
+      await addToolResult({ output: { saved: true } });
+
+      expect(getRenderState().messages[1].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-available',
+          output: { saved: true },
+        })
+      );
+    });
+
+    it('does not repair a restored tool call reactivated by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-streaming',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const chunks = [
+        'data: {"type":"start","messageId":"assistant-1"}\n\n',
+        'data: {"type":"tool-input-available","toolName":"save","toolCallId":"call-1","input":{}}\n\n',
+      ].map((chunk) => new TextEncoder().encode(chunk));
+      let failResume!: () => void;
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                chunks.forEach((chunk) => controller.enqueue(chunk));
+                failResume = () =>
+                  controller.error(new Error('Resume failed.'));
+              },
+            }),
+            { headers: { 'Content-Type': 'text/event-stream' } }
+          )
+        )
+      );
+      let addToolResult!: AddToolResultForToolCall;
+      const onToolCall = jest.fn((options) => {
+        addToolResult = options.addToolResult;
+      });
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await waitFor(() => expect(onToolCall).toHaveBeenCalledTimes(1));
+      failResume();
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'input-available',
+          }),
+          expect.objectContaining({
+            toolCallId: 'call-2',
+            state: 'output-error',
+          }),
+        ])
+      );
+
+      await addToolResult({ output: { saved: true } });
+
+      expect(getRenderState().messages[0].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: { saved: true },
+        })
+      );
+    });
+
     it('does not save messages to sessionStorage when persistence is disabled', () => {
       const previousMessages: UIMessage[] = [
         {
