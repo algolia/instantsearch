@@ -28,6 +28,9 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'prompt-suggestions',
 });
 
+const NO_CHAT_WIDGET_MESSAGE =
+  'No `chat` widget is mounted on this index, so there is nothing to send a clicked suggestion to. Mount a `chat` widget on the same index, or pass `onSuggestionClick` to handle the click yourself.';
+
 const PromptSuggestions = createPromptSuggestionsComponent({
   createElement: h,
   Fragment: 'fragment',
@@ -136,8 +139,17 @@ const createRenderer =
       return;
     }
 
+    if (!sendToChat && !onSuggestionClickOverride) {
+      throw new Error(withUsage(NO_CHAT_WIDGET_MESSAGE));
+    }
+
     const handleClick = onSuggestionClickOverride
-      ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
+      ? (prompt: string) =>
+          onSuggestionClickOverride(prompt, {
+            // `sendToChat` is only absent when the override above owns the
+            // click, in which case falling through to the chat is a no-op.
+            sendToChat: sendToChat ?? (() => false),
+          })
       : onSuggestionClick;
 
     if (templates?.layout) {

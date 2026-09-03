@@ -586,7 +586,10 @@ export function createOptionsTests(
       expect(document.body.textContent).toContain('Custom Suggestion A');
     });
 
-    test('runs the onSuggestionClick override when a pill is clicked', async () => {
+    // An `onSuggestionClick` override owns the click, so this setup needs no
+    // chat widget — and must not be reported as the misconfigured page that
+    // renders pills leading nowhere.
+    test('runs the onSuggestionClick override when a pill is clicked, with no chat widget mounted', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -600,11 +603,13 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
             onSuggestionClick,
+            renderChat: false,
           },
           react: {
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
             onSuggestionClick,
+            renderChat: false,
           },
           vue: {},
         },

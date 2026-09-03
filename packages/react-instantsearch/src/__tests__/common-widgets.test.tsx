@@ -454,9 +454,20 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The widget hands clicked suggestions to a <Chat> on the same index, and
+    // errors without one, so the default setup renders both. `renderChat: false`
+    // is how a test asks for the unconfigured page.
+    const { renderChat = true, ...promptSuggestionsWidgetParams } =
+      widgetParams;
+
     render(
       <InstantSearch {...instantSearchOptions}>
-        <PromptSuggestions {...widgetParams} />
+        <PromptSuggestions {...promptSuggestionsWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="promptSuggestionsChatAgentId" />}
         <GlobalErrorSwallower />
       </InstantSearch>
     );
