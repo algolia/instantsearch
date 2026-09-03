@@ -793,6 +793,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
       reasoningLabel: templates.message?.reasoningLabelText,
+      toolErrorRetryText: templates.message?.toolErrorRetryText,
     });
 
     userMessageTemplateRef.current = prepareTemplateProps({
@@ -1085,6 +1086,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for reasoning disclosures
        */
       reasoningLabelText?: string;
+      /**
+       * Retry button text for failed tools
+       */
+      toolErrorRetryText?: string;
     }>;
 
     /**

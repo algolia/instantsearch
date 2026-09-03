@@ -70,6 +70,17 @@
   display: none;
 }
 
+.ais-ChatMessage-toolError {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ChatMessage-toolError-action svg {
+  width: calc(var(--ais-icon-size) * 0.8);
+}
+
 .ais-ChatMessage--neutral .ais-ChatMessage-message {
   background-color: rgba(var(--ais-muted-color-rgb), 0.1);
   padding: calc(var(--ais-spacing) * 0.75);

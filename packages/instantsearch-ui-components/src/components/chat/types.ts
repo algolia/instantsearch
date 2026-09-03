@@ -817,6 +817,16 @@ export type ClientSideTool = {
    */
   timeout?: number | false;
   /**
+   * Whether the default failed state shows a retry action.
+   *
+   * Retrying regenerates the assistant response and may execute the tool
+   * again. Enable this only when repeating the operation is safe. Custom
+   * layouts can implement recovery with `context.onReload`.
+   *
+   * @default false
+   */
+  retryOnError?: boolean;
+  /**
    * Output reported for this tool call when a request is sent while it is still
    * waiting for a result, for example `{ confirmed: false }` for a confirmation
    * prompt. Without it, the call is reported as failed.
