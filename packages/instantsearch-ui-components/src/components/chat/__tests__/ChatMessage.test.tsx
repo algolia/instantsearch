@@ -1866,6 +1866,7 @@ describe('ChatMessage', () => {
         context={createContext({
           tools: {
             default: {
+              onToolCall: jest.fn(),
               addToolResult: jest.fn(),
               applyFilters: jest.fn(),
             },
@@ -1944,6 +1945,48 @@ describe('ChatMessage', () => {
 
     expect(onReload).toHaveBeenCalledWith('assistant-1');
   });
+
+  test.each(['submitted', 'streaming', 'error'] as const)(
+    'does not offer retry while the chat status is %s',
+    (status) => {
+      const message: ChatMessageBase = {
+        role: 'assistant',
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'tool-save',
+            toolCallId: 'call-1',
+            input: {},
+            state: 'output-error',
+            errorText: 'The operation may have completed.',
+          },
+        ],
+      };
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          context={createContext({
+            messages: [message],
+            status,
+            tools: {
+              save: {
+                retryOnError: true,
+                onToolCall: jest.fn(),
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessage-toolError-action')
+      ).toBeNull();
+    }
+  );
 
   test('does not offer retry after a later user message', () => {
     const message: ChatMessageBase = {
