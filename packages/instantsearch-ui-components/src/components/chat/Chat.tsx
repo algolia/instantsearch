@@ -203,7 +203,6 @@ export function createChatComponent({
         error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
-        suggestionsLoading={suggestionsProps.isLoading}
         suggestionsElement={createElement(
           SuggestionsComponent || ChatPromptSuggestions,
           {

@@ -315,10 +315,6 @@ export type ChatMessagesProps<
    */
   suggestionsElement?: VNode;
   /**
-   * Whether the suggestions for the current turn are still on their way.
-   */
-  suggestionsLoading?: boolean;
-  /**
    * Callback for feedback (thumbs up/down) on a message.
    */
   onFeedback?: (messageId: string, vote: 0 | 1) => void;
@@ -811,7 +807,6 @@ export function createChatMessagesComponent({
       contentRef,
       onScrollToBottom,
       suggestionsElement,
-      suggestionsLoading = false,
       onFeedback,
       feedbackState,
       ...props
@@ -938,7 +933,7 @@ export function createChatMessagesComponent({
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-busy={isProcessing || suggestionsLoading ? 'true' : undefined}
+        aria-busy={isProcessing ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
