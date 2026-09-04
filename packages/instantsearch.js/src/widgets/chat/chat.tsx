@@ -250,7 +250,6 @@ type ChatWrapperProps = {
   };
   suggestionsProps: {
     suggestions?: string[];
-    isLoading?: boolean;
     onSuggestionClick: (suggestion: string) => void;
     suggestionsComponent: ComponentProps<typeof Chat>['suggestionsComponent'];
   };
@@ -391,7 +390,6 @@ function ChatWrapper({
           sendMessageAndScrollToBottom({ text: suggestion });
         },
         suggestions: suggestionsProps.suggestions,
-        isLoading: suggestionsProps.isLoading,
       }}
     />
   );
@@ -617,7 +615,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const stableSuggestionsComponent = templates.suggestions
     ? (suggestionsProps: {
         suggestions?: string[];
-        isLoading?: boolean;
         onSuggestionClick: (suggestion: string) => void;
       }) => (
         <TemplateComponent
@@ -675,7 +672,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       clearMessages,
       tools: toolsFromConnector,
       suggestions,
-      suggestionsStatus,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
       '~consumeInputFocus': consumeInputFocus,
@@ -897,7 +893,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           state={state}
           suggestionsProps={{
             suggestions,
-            isLoading: suggestionsStatus === 'loading',
             onSuggestionClick: (message: string) => {
               sendMessage({ text: message });
             },
@@ -1198,7 +1193,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     suggestions: Template<{
       suggestions: string[];
-      isLoading?: boolean;
       onSuggestionClick: (suggestion: string) => void;
     }>;
   }>;

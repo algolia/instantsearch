@@ -396,7 +396,6 @@ function ChatInner<
     clearMessages,
     tools: toolsFromConnector,
     suggestions,
-    suggestionsStatus,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
     '~consumeInputFocus': consumeInputFocus,
@@ -567,7 +566,6 @@ function ChatInner<
       }}
       suggestionsProps={{
         suggestions,
-        isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
           sendMessageAndScrollToBottom({ text: suggestion });
         },

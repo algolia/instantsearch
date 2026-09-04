@@ -76,8 +76,6 @@ const TOOL_TIMEOUT_ERROR_TEXT =
 const TOOL_ABORTED_ERROR_TEXT =
   'The tool call was cancelled before a result was received.';
 
-export type ChatSuggestionsStatus = 'idle' | 'loading';
-
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   indexUiState: IndexUiState;
   input: string;
@@ -124,11 +122,6 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Suggestions received from the AI model.
    */
   suggestions?: string[];
-  /**
-   * Whether suggestions for the current turn are still expected: `loading` while
-   * a turn that should end with suggestions hasn't received them yet.
-   */
-  suggestionsStatus: ChatSuggestionsStatus;
   /**
    * Sends feedback (thumbs up/down) for an assistant message.
    * Only available when using `agentId` and `feedback` is true.
@@ -607,42 +600,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
       return findSuggestionsPart(findLastAssistantMessage(messages))?.data
         .suggestions;
-    };
-
-    // "Still coming" has to be inferred: the turn is running and has no
-    // `data-suggestions` part yet. Expecting any at all needs evidence, or an
-    // agent that never sends them would sit under a placeholder forever.
-    const getSuggestionsStatus = (
-      messages: TUiMessage[]
-    ): ChatSuggestionsStatus => {
-      const status = _chatInstance.status;
-      if (status !== 'submitted' && status !== 'streaming') {
-        return 'idle';
-      }
-
-      const lastAssistantMessage = findLastAssistantMessage(messages);
-      if (findSuggestionsPart(lastAssistantMessage)) {
-        return 'idle';
-      }
-
-      const declaresSuggestions =
-        (
-          lastAssistantMessage?.metadata as
-            | { suggestionsEnabled?: boolean }
-            | undefined
-        )?.suggestionsEnabled === true;
-      if (declaresSuggestions) {
-        return 'loading';
-      }
-
-      const hasSuggestionsHistory = messages.some(
-        (message) =>
-          message !== lastAssistantMessage &&
-          message.role === 'assistant' &&
-          Boolean(findSuggestionsPart(message))
-      );
-
-      return hasSuggestionsHistory ? 'loading' : 'idle';
     };
 
     const setMessages = (
@@ -1248,7 +1205,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           '~isOpenStatePersistenceEnabled': normalizedPersistence.open,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
-          suggestionsStatus: getSuggestionsStatus(_chatInstance.messages),
           clearMessages,
           tools: toolsWithAddToolResult,
           records,

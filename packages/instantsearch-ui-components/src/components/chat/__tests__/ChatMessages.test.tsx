@@ -2293,7 +2293,6 @@ describe('ChatMessages', () => {
           {...baseProps}
           status="streaming"
           messages={answered}
-          suggestionsLoading
           suggestionsElement={<span className="suggestions" />}
         />
       );

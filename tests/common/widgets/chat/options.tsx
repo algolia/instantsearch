@@ -1389,9 +1389,6 @@ export function createOptionsTests(
         });
 
         expect(
-          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
-        ).not.toBeInTheDocument();
-        expect(
           document.querySelector('.ais-ChatPromptSuggestions-suggestion')
         ).toHaveTextContent('Anything cheaper?');
       });
