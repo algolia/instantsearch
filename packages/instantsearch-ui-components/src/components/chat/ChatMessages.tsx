@@ -315,8 +315,7 @@ export type ChatMessagesProps<
    */
   suggestionsElement?: VNode;
   /**
-   * Whether the suggestions for the current turn are still on their way. Mounts
-   * `suggestionsElement` early so it can render its own loading state.
+   * Whether the suggestions for the current turn are still on their way.
    */
   suggestionsLoading?: boolean;
   /**
@@ -933,21 +932,13 @@ export function createChatMessagesComponent({
       />
     ) : undefined;
 
-    // Waits for the answer's text and for the loader to step aside, so two
-    // progress affordances never stack up.
-    const showPendingSuggestions =
-      suggestionsLoading &&
-      !showLoader &&
-      lastMessage !== undefined &&
-      hasTextContent(lastMessage);
-
     return (
       <div
         {...props}
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-busy={isProcessing ? 'true' : undefined}
+        aria-busy={isProcessing || suggestionsLoading ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
@@ -998,7 +989,7 @@ export function createChatMessagesComponent({
                 messageTranslations={messageTranslations}
                 context={context}
                 suggestionsElement={
-                  (status === 'ready' || showPendingSuggestions) &&
+                  status === 'ready' &&
                   message.role === 'assistant' &&
                   index === messages.length - 1
                     ? suggestionsElement
