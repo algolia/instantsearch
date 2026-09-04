@@ -3,6 +3,7 @@ export * from './Breadcrumb';
 export * from './Chat';
 export * from './PromptSuggestions';
 export * from './ChatTrigger';
+export * from './CompareBar';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
 export * from './FrequentlyBoughtTogether';

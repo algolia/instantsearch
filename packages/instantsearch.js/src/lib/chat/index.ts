@@ -13,6 +13,7 @@ export const MemorizeToolType = 'algolia_memorize';
 export const MemorySearchToolType = 'algolia_memory_search';
 export const PonderToolType = 'algolia_ponder';
 export const DisplayResultsToolType = 'algolia_display_results';
+export const CompareProductsToolType = 'algolia_compare_products';
 
 /**
  * Whether `toolName` is the search tool as the Algolia MCP Server exposes it:
