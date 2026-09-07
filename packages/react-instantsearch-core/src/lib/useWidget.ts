@@ -84,6 +84,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
       // We don't remove the widget right away, but rather schedule it so that
       // we're able to cancel it in the next effect.
       cleanupTimerRef.current = setTimeout(() => {
+        cleanupTimerRef.current = null;
         search._schedule(() => {
           if (search._preventWidgetCleanup) return;
           parentIndex.removeWidgets([previousWidget]);

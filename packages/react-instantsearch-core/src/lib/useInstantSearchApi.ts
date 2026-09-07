@@ -227,6 +227,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 
         function cleanup() {
           search.dispose();
+          cleanupTimerRef.current = null;
         }
         clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,
