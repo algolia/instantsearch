@@ -313,6 +313,7 @@ export type InferUIMessageToolCall<TUIMessage extends UIMessage> =
 export type ChatOnToolCallCallback<TUIMessage extends UIMessage = UIMessage> =
   (options: {
     toolCall: InferUIMessageToolCall<TUIMessage>;
+    signal: AbortSignal;
   }) => void | PromiseLike<void>;
 
 /**
@@ -430,18 +431,44 @@ export interface AbstractChat<TUIMessage extends UIMessage> {
 
   clearError: () => void;
 
-  addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(params: {
-    tool: TTool;
-    toolCallId: string;
-    output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-  }) => Promise<void>;
+  addToolResult: <TTool extends keyof InferUIMessageTools<TUIMessage>>(
+    params: {
+      tool: TTool;
+      toolCallId: string;
+    } & (
+      | {
+          state?: 'output-available';
+          output: InferUIMessageTools<TUIMessage>[TTool]['output'];
+          errorText?: never;
+        }
+      | {
+          state: 'output-error';
+          output?: never;
+          errorText: string;
+        }
+    )
+  ) => Promise<void>;
 
   stop: () => Promise<void>;
 }
 export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
 
-export type AddToolResultWithOutput = (
-  params: Pick<Parameters<AddToolResult>[0], 'output'>
+export type AddToolResultWithOutput = (params: {
+  output: unknown;
+}) => ReturnType<AddToolResult>;
+
+export type AddToolResultForToolCall = (
+  params:
+    | {
+        state?: 'output-available';
+        output: unknown;
+        errorText?: never;
+      }
+    | {
+        state: 'output-error';
+        output?: never;
+        errorText: string;
+      }
 ) => ReturnType<AddToolResult>;
 
 type SearchToolExtraFields = {
@@ -459,7 +486,7 @@ type FacetFiltersSearchToolQuery = SearchToolQueryBase & {
 
 type FacetKeysSearchToolQuery = SearchToolQueryBase & {
   facet_filters?: undefined;
-  [facetKey: `facet_${string}`]: string[] | undefined;
+  [facetKey: `facet_${string}`]: string[] | boolean | undefined;
 };
 
 /**
@@ -488,6 +515,26 @@ export type SearchToolInput =
 export type ApplyFiltersParams = {
   query?: string;
   facetFilters?: string[][];
+  /**
+   * Numeric refinements, in the Algolia `numericFilters` format
+   * (e.g. `['price <= 1500']`). Only the search tool's resolved search params
+   * can express these; the raw `facet_<attribute>` keys cannot.
+   */
+  numericFilters?: string[];
+};
+
+/**
+ * The search parameters a search tool call was actually answered with, as the
+ * Algolia MCP Server resolved them: after defaults, clamping and the
+ * allow-list, and including parameters the model never sent.
+ *
+ * Read with `getResolvedSearchParams`. Absent whenever the server emits no
+ * `_meta` for the tool result.
+ */
+export type ResolvedSearchParams = {
+  query?: string;
+  facetFilters?: string[][];
+  numericFilters?: string[];
 };
 
 export type ChatLayoutOwnProps<
@@ -758,9 +805,27 @@ export type ClientSideTool = {
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
     >[0]['toolCall'] & {
-      addToolResult: AddToolResultWithOutput;
+      addToolResult: AddToolResultForToolCall;
+      signal: AbortSignal;
     }
-  ) => void;
+  ) => void | PromiseLike<void>;
+  /**
+   * Maximum time in milliseconds for `onToolCall` to submit a result.
+   * Set to `false` to disable the timeout.
+   *
+   * @default 20000
+   */
+  timeout?: number | false;
+  /**
+   * Whether the default failed state shows a retry action.
+   *
+   * Retrying regenerates the assistant response and may execute the tool
+   * again. Enable this only when repeating the operation is safe. Custom
+   * layouts can implement recovery with `context.onReload`.
+   *
+   * @default false
+   */
+  retryOnError?: boolean;
   /**
    * Output reported for this tool call when a request is sent while it is still
    * waiting for a result, for example `{ confirmed: false }` for a confirmation

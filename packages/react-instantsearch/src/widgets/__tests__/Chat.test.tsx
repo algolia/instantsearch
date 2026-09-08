@@ -647,6 +647,63 @@ describe('Chat', () => {
     );
   });
 
+  test('routes the top-level reasoning component per part with context', async () => {
+    const chat = createChat();
+    const calls: Array<{
+      messageId: string;
+      messageCount: number;
+      text: string;
+      partIndex: number;
+      isStreaming: boolean;
+    }> = [];
+
+    render(
+      <InstantSearch
+        searchClient={searchClient}
+        indexName="indexName"
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
+        <Chat
+          chat={chat}
+          transport={{ api: 'http://unused' }}
+          layoutComponent={ChatInlineLayout}
+          requiresSearch={false}
+          showReasoning={true}
+          reasoningComponent={({
+            part,
+            partIndex,
+            isStreaming,
+            message,
+            context,
+          }) => {
+            calls.push({
+              messageId: message.id,
+              messageCount: context.messages.length,
+              text: part.text,
+              partIndex,
+              isStreaming,
+            });
+            return <div data-testid="custom-reasoning">Custom reasoning</div>;
+          }}
+        />
+      </InstantSearch>
+    );
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.getAllByTestId('custom-reasoning')).toHaveLength(2);
+    // React can re-render a completed row, so assert the shape of a call
+    // rather than the number of them.
+    expect(calls.find(({ messageId }) => messageId === 'assistant-1')).toEqual({
+      messageId: 'assistant-1',
+      messageCount: 4,
+      text: 'Check the catalog.',
+      partIndex: 0,
+      isStreaming: false,
+    });
+  });
+
   test('merges messagesProps.assistantMessageProps with the dedicated props', async () => {
     const chat = createChat();
     const { container } = render(
@@ -682,6 +739,46 @@ describe('Chat', () => {
     expect(
       container.querySelectorAll('.ais-ChatMessage--auto-hide-actions')
     ).toHaveLength(2);
+  });
+
+  test('lets the nested reasoning component override the dedicated prop', async () => {
+    const chat = createChat();
+    const dedicatedReasoning = jest.fn(() => (
+      <span data-testid="dedicated-reasoning" />
+    ));
+    const nestedReasoning = jest.fn(() => (
+      <span data-testid="nested-reasoning" />
+    ));
+
+    render(
+      <InstantSearch
+        searchClient={searchClient}
+        indexName="indexName"
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
+        <Chat
+          chat={chat}
+          transport={{ api: 'http://unused' }}
+          layoutComponent={ChatInlineLayout}
+          requiresSearch={false}
+          showReasoning={true}
+          reasoningComponent={dedicatedReasoning}
+          messagesProps={{
+            assistantMessageProps: {
+              reasoningComponent: nestedReasoning,
+            },
+          }}
+        />
+      </InstantSearch>
+    );
+    await act(async () => {
+      await wait(0);
+    });
+
+    expect(screen.getAllByTestId('nested-reasoning')).toHaveLength(2);
+    expect(screen.queryByTestId('dedicated-reasoning')).not.toBeInTheDocument();
+    expect(nestedReasoning).toHaveBeenCalled();
+    expect(dedicatedReasoning).not.toHaveBeenCalled();
   });
 
   test('routes parseMarkdown from messagesProps into reasoning', async () => {

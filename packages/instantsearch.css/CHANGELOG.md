@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.22.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.21.0...instantsearch.css@8.22.0) (2026-09-03)
+
+
+### Features
+
+* **chat:** add opt-in failed tool retry ([#7227](https://github.com/algolia/instantsearch/issues/7227)) ([5c37b66](https://github.com/algolia/instantsearch/commit/5c37b6641ad771a8ee38df69c07084d8bbf76b39))
+
+
+
+
+
+# [8.21.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.20.0...instantsearch.css@8.21.0) (2026-09-01)
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
 # [8.20.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.1...instantsearch.css@8.20.0) (2026-08-24)
 
 

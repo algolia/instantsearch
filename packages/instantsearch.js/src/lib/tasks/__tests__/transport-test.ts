@@ -58,7 +58,7 @@ describe('DefaultTaskTransport', () => {
     );
     const prepareSendMessagesRequest = jest.fn(
       async (request: {
-        task: string;
+        task?: string;
         input: Record<string, unknown>;
         stream: boolean;
         body: Record<string, unknown> | undefined;
@@ -130,6 +130,30 @@ describe('DefaultTaskTransport', () => {
         }),
       }
     );
+  });
+
+  it('forwards the kind without a task ID', async () => {
+    const customFetch = jest.fn(
+      (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+        Promise.resolve(jsonResponse({ output: { ok: true } }))
+    );
+    const transport = new DefaultTaskTransport({ fetch: customFetch });
+
+    await transport.sendTask({
+      kind: 'prompt_suggestions',
+      input: { query: 'shoes' },
+      stream: false,
+    });
+
+    expect(customFetch).toHaveBeenCalledWith('/api/tasks', {
+      method: 'POST',
+      credentials: undefined,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'prompt_suggestions',
+        input: { query: 'shoes' },
+      }),
+    });
   });
 
   it('preserves the exact error thrown by a custom fetch', async () => {

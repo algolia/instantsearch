@@ -17,6 +17,7 @@ import {
 import React, {
   createElement,
   Fragment,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -245,9 +246,18 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     suggestionsComponent?: ChatUiProps['suggestionsComponent'];
     /**
-     * Whether to render reasoning parts
+     * Whether to render the reasoning an agent sends. `true` by default, so
+     * reasoning that arrives is shown. Pass `false` to suppress it in this
+     * widget. It cannot make an agent send reasoning: whether reasoning reaches
+     * the client at all is the agent's own `sendReasoning` setting.
      */
     showReasoning?: boolean;
+    /**
+     * Custom reasoning renderer. It replaces the built-in disclosure rather than
+     * enabling reasoning: reasoning renders by default, and
+     * `showReasoning: false` suppresses this renderer along with it.
+     */
+    reasoningComponent?: ChatMessageProps<TUiMessage>['reasoningComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -329,6 +339,7 @@ function ChatInner<
     getSearchPageURL,
     disableTriggerValidation = false,
     showReasoning,
+    reasoningComponent,
     ...props
   }: ChatProps<TObject, TUiMessage>,
   ref: React.ForwardedRef<ChatHandle>
@@ -389,7 +400,6 @@ function ChatInner<
     clearMessages,
     tools: toolsFromConnector,
     suggestions,
-    suggestionsStatus,
     sendChatMessageFeedback: onFeedback,
     feedbackState,
     '~consumeInputFocus': consumeInputFocus,
@@ -399,9 +409,18 @@ function ChatInner<
     '~isOpenStatePersistenceEnabled'?: boolean;
   };
 
+  const sendMessageAndScrollToBottom = useCallback<typeof sendMessage>(
+    (...args) => {
+      scrollToBottom();
+      return sendMessage(...args);
+    },
+    [scrollToBottom, sendMessage]
+  );
+
   useImperativeHandle(ref, () => ({
     setOpen,
-    sendMessage: (params: { text: string }) => sendMessage(params),
+    sendMessage: (params: { text: string }) =>
+      sendMessageAndScrollToBottom(params),
     setInput,
   }));
 
@@ -461,7 +480,7 @@ function ChatInner<
       title={title}
       open={open}
       maximized={maximized}
-      sendMessage={sendMessage as ChatUiProps['sendMessage']}
+      sendMessage={sendMessageAndScrollToBottom as ChatUiProps['sendMessage']}
       regenerate={regenerate}
       stop={stop}
       error={error}
@@ -487,7 +506,7 @@ function ChatInner<
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),
-        sendMessage: sendMessage as ChatUiProps['sendMessage'],
+        sendMessage: sendMessageAndScrollToBottom as ChatUiProps['sendMessage'],
         setInput,
         onFeedback,
         feedbackState,
@@ -517,6 +536,7 @@ function ChatInner<
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
           showReasoning,
+          reasoningComponent,
           ...callerAssistantMessageProps,
         },
         userMessageProps: {
@@ -535,7 +555,7 @@ function ChatInner<
           setInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
-          sendMessage({ text: input });
+          sendMessageAndScrollToBottom({ text: input });
           setInput('');
         },
         onStop: () => {
@@ -550,9 +570,8 @@ function ChatInner<
       }}
       suggestionsProps={{
         suggestions,
-        isLoading: suggestionsStatus === 'loading',
         onSuggestionClick: (suggestion) => {
-          sendMessage({ text: suggestion });
+          sendMessageAndScrollToBottom({ text: suggestion });
         },
       }}
       classNames={classNames}

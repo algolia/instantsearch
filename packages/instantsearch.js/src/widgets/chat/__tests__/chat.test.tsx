@@ -192,6 +192,127 @@ describe('chat', () => {
     });
   });
 
+  describe('templates', () => {
+    test('renders reasoning per part with the assistant message template', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const calls: Array<{
+        messageId: string;
+        messageCount: number;
+        text: string;
+        partIndex: number;
+        isStreaming: boolean;
+      }> = [];
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      search.addWidgets([
+        chat({
+          container,
+          agentId: 'test-agent-id',
+          disableTriggerValidation: true,
+          requiresSearch: false,
+          showReasoning: true,
+          messages: [
+            {
+              id: 'assistant-message-id',
+              role: 'assistant',
+              parts: [
+                { type: 'reasoning', text: 'First thought', state: 'done' },
+                { type: 'reasoning', text: 'Second thought', state: 'done' },
+              ],
+            },
+          ],
+          templates: {
+            assistantMessage: {
+              reasoning: (
+                { part, partIndex, isStreaming, message, context },
+                { html }
+              ) => {
+                calls.push({
+                  messageId: message.id,
+                  messageCount: context.messages.length,
+                  text: part.text,
+                  partIndex,
+                  isStreaming,
+                });
+                return html`<div data-testid="custom-reasoning">
+                  Custom reasoning
+                </div>`;
+              },
+            },
+          },
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(screen.getAllByTestId('custom-reasoning')).toHaveLength(2);
+      expect(calls.slice(-2)).toEqual([
+        {
+          messageId: 'assistant-message-id',
+          messageCount: 1,
+          text: 'First thought',
+          partIndex: 0,
+          isStreaming: false,
+        },
+        {
+          messageId: 'assistant-message-id',
+          messageCount: 1,
+          text: 'Second thought',
+          partIndex: 1,
+          isStreaming: false,
+        },
+      ]);
+
+      const reasoningBefore = screen.getAllByTestId('custom-reasoning')[0];
+      search.renderState.indexName.chat!.setMessages([
+        {
+          id: 'assistant-message-id',
+          role: 'assistant',
+          parts: [
+            { type: 'reasoning', text: 'First thought', state: 'done' },
+            { type: 'reasoning', text: 'Second thought', state: 'done' },
+            { type: 'reasoning', text: 'Third thought', state: 'done' },
+          ],
+        },
+      ]);
+      await wait(0);
+
+      // A new step must not remount the steps already on screen.
+      expect(screen.getAllByTestId('custom-reasoning')[0]).toBe(
+        reasoningBefore
+      );
+      expect(screen.getAllByTestId('custom-reasoning')).toHaveLength(3);
+      expect(calls.slice(-3)).toEqual([
+        {
+          messageId: 'assistant-message-id',
+          messageCount: 1,
+          text: 'First thought',
+          partIndex: 0,
+          isStreaming: false,
+        },
+        {
+          messageId: 'assistant-message-id',
+          messageCount: 1,
+          text: 'Second thought',
+          partIndex: 1,
+          isStreaming: false,
+        },
+        {
+          messageId: 'assistant-message-id',
+          messageCount: 1,
+          text: 'Third thought',
+          partIndex: 2,
+          isStreaming: false,
+        },
+      ]);
+    });
+  });
+
   describe('search tool compatibility', () => {
     test('renders search results from Agent Studio', async () => {
       const container = document.createElement('div');

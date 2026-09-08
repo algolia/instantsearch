@@ -62,7 +62,10 @@ export type TasksSource =
     };
 
 export type TasksConnectorParams = TasksSource & {
-  task: string;
+  /** ID of the configured task to run. Either `task` or `kind` is required. */
+  task?: string;
+  /** Kind of configured task to run. Either `task` or `kind` is required. */
+  kind?: string;
   stream?: boolean;
 };
 
@@ -87,7 +90,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { agentId, transport, task, stream = true } = widgetParams;
+    const { agentId, transport, task, kind, stream = true } = widgetParams;
 
     if (!agentId && !transport) {
       throw new Error(
@@ -97,8 +100,10 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       );
     }
 
-    if (!task) {
-      throw new Error(withUsage('The `task` option is required.'));
+    if (!task && !kind) {
+      throw new Error(
+        withUsage('Either the `task` or `kind` option is required.')
+      );
     }
 
     let runner: TaskRunner;
@@ -206,12 +211,14 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
           runner = createTaskRunner({
             transport: taskTransport,
             task,
+            kind,
             stream,
           });
         } else {
           runner = createTaskRunner({
             transport: createTaskTransport({ transport }),
             task,
+            kind,
             stream,
           });
         }

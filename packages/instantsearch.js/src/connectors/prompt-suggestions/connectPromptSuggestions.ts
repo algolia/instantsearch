@@ -2,6 +2,7 @@ import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  defer,
   getRefinements,
   noop,
   warning,
@@ -32,6 +33,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 const RENDER_STATE_KEY = 'promptSuggestions' as const;
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
+const PROMPT_SUGGESTIONS_TASK_KIND = 'prompt_suggestions';
 const DEBOUNCE_MS = 300;
 
 function parseSuggestions(data: unknown): string[] {
@@ -45,8 +47,37 @@ function parseSuggestions(data: unknown): string[] {
   return suggestions.filter((s: unknown): s is string => typeof s === 'string');
 }
 
-function buildSuggestionMessage(suggestion: string): string {
-  return `The user clicked this on-page suggestion. Use the current page context first, then search only if needed.\n\nSuggestion: ${suggestion}`;
+// Key order is not significant to the request, so a plain `JSON.stringify` would
+// report two identical payloads as different.
+function stableKey(value: unknown): string {
+  if (value === null || typeof value !== 'object') {
+    return JSON.stringify(value) ?? 'null';
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map(stableKey).join(',')}]`;
+  }
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${stableKey(record[key])}`)
+    .join(',')}}`;
+}
+
+/**
+ * Comparable identity of a task payload, or `null` when it cannot be compared.
+ */
+function taskPayloadKey(payload: Record<string, unknown>): string | null {
+  try {
+    // Round-trip first so the comparison sees what the request will actually
+    // carry: `JSON.stringify` applies `toJSON` (a `Date` becomes its ISO string)
+    // and drops the values the wire drops. Walking the raw object instead would
+    // read a `Date` as a key-less object and call two different instants equal.
+    return stableKey(JSON.parse(JSON.stringify(payload)));
+  } catch {
+    // Circular or otherwise unserializable. Never claim a match on a payload we
+    // could not read; let the request go out and fail where it does today.
+    return null;
+  }
 }
 
 /** Custom transport for the task request. Alias of the generic `TaskTransportOptions`, kept for API stability. */
@@ -76,9 +107,20 @@ export type PromptSuggestionsRenderState = {
   error: Error | undefined;
   /** Default click handler, calling `sendToChat(prompt)`. Override via the `onSuggestionClick` prop. */
   onSuggestionClick: (prompt: string) => void;
-  /** Hands the prompt to the `connectChat` widget on the same index. `true` if dispatched, else `false`. */
-  sendToChat: (prompt: string) => boolean;
-  /** Imperative refetch that bypasses the debounce. No-op with no results or a fetch in-flight. */
+  /**
+   * Hands the prompt to the `connectChat` widget on the same index. `true` if
+   * dispatched, else `false`.
+   *
+   * `undefined` once the widget has established that no chat widget is mounted
+   * on the same index — there is nothing to send to. The widget layer treats
+   * that as a misconfiguration unless an `onSuggestionClick` override owns the
+   * click.
+   */
+  sendToChat?: (prompt: string) => boolean;
+  /**
+   * Imperative refetch that bypasses the debounce. No-op while a fetch
+   * is in flight, or when there is nothing to send.
+   */
   refresh: () => void;
   /**
    * Whether the chat widget is currently busy (mid-stream) — surface as `disabled` on the pills.
@@ -102,14 +144,20 @@ export type PromptSuggestionsSource =
 
 export type PromptSuggestionsConnectorParams = PromptSuggestionsSource & {
   /**
-   * Agent Studio configuration to invoke, sent as the `task` field. Identifies
-   * the prompt-suggestions configuration created in the dashboard.
+   * Agent Studio configuration to invoke, sent as the `task` field. When
+   * omitted, the agent's enabled Prompt Suggestions configuration is used.
    */
-  configurationId: string;
+  configurationId?: string;
   /** Transforms hits before use as context (default: first 5, metadata stripped). Ignored with `context`. */
   transformHits?: PromptSuggestionsTransformHits;
-  /** Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`. Object or per-fetch function. */
-  context?: Record<string, unknown> | (() => Record<string, unknown>);
+  /**
+   * Explicit context, replacing the auto-extracted `{ query, filters, hitsSample }`.
+   * Object or per-fetch function. If you return `undefined`, auto-extraction is used.
+   * An empty object return skips the fetch
+   */
+  context?:
+    | Record<string, unknown>
+    | (() => Record<string, unknown> | undefined);
   /** Transforms the parsed suggestions before exposing them. Receives `{ query, results }`. */
   transformItems?: PromptSuggestionsTransformItems;
 };
@@ -212,26 +260,33 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         );
       }
 
-      if (!configurationId) {
-        throw new Error(withUsage('The `configurationId` option is required.'));
-      }
-
       let tasksState: TasksRenderState | undefined;
       let suggestions: string[] = [];
       let isLoading = false;
       let error: Error | undefined;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null;
-      let latestRenderOptions: RenderOptions | null = null;
+      // The payload of the last request that was actually sent. The automatic
+      // trigger keys on the search state, which is only a proxy for the payload,
+      // so this is what decides whether a request would ask anything new.
+      let lastSubmittedPayload: string | null = null;
+      let latestRenderOptions: InitOptions | RenderOptions | null = null;
       // Set in `dispose()`. A debounced or in-flight `fetch()` can resolve after
       // the widget is unmounted; this guard stops those late callbacks from
       // calling `renderFn` into a torn-down container.
       let disposed = false;
+      // Whether the "is a chat widget mounted on this index?" question has been
+      // settled — see `validateChat`.
+      let hasValidatedChat = false;
       // True between a state-signature change and the debounced refetch that
       // follows it. While pending, the search state has already moved on, so a
       // still-in-flight request from the previous state must not paint its
       // suggestions, its inner render is ignored until the new `submit` starts.
       let refetchPending = false;
+      // True when `refetchPending` made an inner render be dropped. The fetch
+      // that dropped it was expected to render in its place; if that fetch turns
+      // out to send nothing, it has to reconcile the dropped state instead.
+      let droppedInnerRender = false;
 
       const getStateSignature = (results: SearchResults): string => {
         if (results.queryID) {
@@ -263,30 +318,29 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         (prompt: string): boolean => {
           const chatRenderState = getChatRenderState(renderOptions);
           if (!chatRenderState || !chatRenderState.sendMessage) {
-            if (__DEV__) {
-              warning(
-                false,
-                `No chat widget found in render state. Make sure a \`connectChat\` widget is mounted on the same index, or pass an \`onSuggestionClick\` prop to handle the click yourself.`
-              );
-            }
             return false;
           }
           const results =
-            latestRenderOptions?.results ??
+            getLatestResults() ??
             ('results' in renderOptions ? renderOptions.results : null) ??
             null;
           return openChat(chatRenderState, {
-            message: buildSuggestionMessage(prompt),
+            message: prompt,
             referer: 'prompt-suggestions-widget',
             turnContext: buildTurnContext(results),
           });
         };
 
-      const resolvePageContext = (
+      // `context` may be a function, so the option alone says nothing about what
+      // a given fetch actually has to send. Resolve it once per fetch and let
+      // callers read the value rather than the option.
+      const resolveContext = (): Record<string, unknown> | undefined =>
+        typeof context === 'function' ? context() : context;
+
+      const buildPageContext = (
+        resolvedContext: Record<string, unknown> | undefined,
         results: SearchResults | null
       ): Record<string, unknown> | undefined => {
-        const resolvedContext =
-          typeof context === 'function' ? context() : context;
         // Explicit context replaces auto-extraction; otherwise derive it from
         // the current search state. The task's server-owned instructions decide
         // how to interpret the shape — the client doesn't label it.
@@ -304,16 +358,13 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         };
       };
 
-      const buildInput = (results: SearchResults): Record<string, unknown> =>
-        resolvePageContext(results) ?? {};
-
       // The same page context, flattened for the chat handoff: `turnContext` is
       // a flat `Record<string, string>` per the Agent Studio contract, so
       // non-string values (e.g. `hitsSample`) are serialized.
       const buildTurnContext = (
         results: SearchResults | null
       ): Record<string, string> | undefined => {
-        const pageContext = resolvePageContext(results);
+        const pageContext = buildPageContext(resolveContext(), results);
         if (!pageContext) {
           return undefined;
         }
@@ -324,6 +375,16 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           ])
           .filter(([, value]) => value.trim() !== '');
         return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+      };
+
+      // `latestRenderOptions` may be the `init()` options, which carry no
+      // `results` key at all, so the read has to be narrowed rather than
+      // optional-chained.
+      const getLatestResults = (): SearchResults | null => {
+        if (!latestRenderOptions || !('results' in latestRenderOptions)) {
+          return null;
+        }
+        return latestRenderOptions.results ?? null;
       };
 
       const renderOutward = (renderOptions: InitOptions | RenderOptions) => {
@@ -337,31 +398,89 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         );
       };
 
+      // Copies an inner render's state into this widget's and re-renders on the
+      // client.
+      const adoptInnerState = (renderState: TasksRenderState) => {
+        error = renderState.error;
+        if (renderState.error) {
+          // A failed task (including a mid-stream `error` event) must not leave
+          // any streamed partial visible.
+          suggestions = [];
+        } else if (renderState.isLoading || renderState.output !== undefined) {
+          // Only adopt the inner output once a request is loading or has
+          // produced one, so the initial no-op render doesn't clobber pills.
+          suggestions = parseSuggestions(renderState.output);
+        }
+        isLoading = renderState.isLoading;
+        if (!latestRenderOptions) return;
+        renderOutward(latestRenderOptions);
+      };
+
       const fetchAndRender = (
-        results: SearchResults,
-        renderOptions: RenderOptions
+        results: SearchResults | null,
+        renderOptions: InitOptions | RenderOptions,
+        { force = false }: { force?: boolean } = {}
       ) => {
         if (disposed || !tasksState) return;
+        const hadDroppedInnerRender = droppedInnerRender;
         refetchPending = false;
-        const hasContext = context !== undefined;
-        if (!hasContext && !results?.hits?.length) {
+        droppedInnerRender = false;
+        const resolvedContext = resolveContext();
+        const input = buildPageContext(resolvedContext, results) ?? {};
+        // Two ways there is nothing worth sending: no context for this fetch and
+        // no hits to derive one from, or a context that resolved to something
+        // empty. The first reads the resolved value rather than the option, so
+        // `context: () => undefined` is gated exactly like an omitted `context`.
+        // Sending an empty input spends a model call on no information.
+        if (
+          (resolvedContext === undefined && !results?.hits?.length) ||
+          Object.keys(input).length === 0
+        ) {
           tasksState.invalidate();
           suggestions = [];
           isLoading = false;
+          // The output is gone, so the same payload must be allowed to rebuild it.
+          lastSubmittedPayload = null;
           renderOutward(renderOptions);
           return;
         }
 
-        tasksState.submit(buildInput(results));
+        const payload = taskPayloadKey(input);
+
+        // A moved search state does not always mean a different question: with an
+        // explicit `context` the payload ignores the results entirely, so a new
+        // `queryID` or a new hit order produces a byte-identical request. Sending
+        // it again spends a model call on an answer already on screen. Leave the
+        // current suggestions alone and send nothing. `force` is the explicit
+        // path (`refresh()`), which must always reach the network.
+        if (!force && payload !== null && payload === lastSubmittedPayload) {
+          // Nothing goes out, so nothing will render — but the state change that
+          // scheduled this fetch also made `handleInnerRender` drop the render
+          // that was carrying the previous request's result. Reconcile it here or
+          // the widget keeps that request's `isLoading: true` with no
+          // suggestions, and nothing later clears it: `refresh()` is blocked by
+          // its own `isLoading` guard and an unchanged payload keeps skipping.
+          if (hadDroppedInnerRender) {
+            adoptInnerState(tasksState);
+          }
+          return;
+        }
+
+        lastSubmittedPayload = payload;
+        tasksState.submit(input);
       };
 
       const refresh = () => {
         if (isLoading) return;
-        const results = latestRenderOptions?.results;
-        if (!results || !latestRenderOptions) return;
+        if (!latestRenderOptions) return;
+        const results = getLatestResults();
         clearTimeout(debounceTimer);
-        lastStateSignature = getStateSignature(results);
-        fetchAndRender(results, latestRenderOptions);
+        // Only meaningful with results: without them there is no signature for a
+        // later automatic fetch to compare against.
+        if (results) {
+          lastStateSignature = getStateSignature(results);
+        }
+        fetchAndRender(results, latestRenderOptions, { force: true });
       };
 
       const getWidgetRenderState = (
@@ -383,13 +502,19 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           : false;
 
         const send = sendToChat(renderOptions);
+        // `sendToChat` is withheld only once the mount window has closed: a chat
+        // widget further down a React tree is added after this widget's `init`,
+        // so until `validateChat` runs its absence is not yet conclusive and
+        // withholding the handler would make a valid setup look broken.
+        const canSendToChat =
+          Boolean(chatRenderState?.sendMessage) || !hasValidatedChat;
 
         return {
           suggestions: transformed,
           isLoading,
           error,
-          onSuggestionClick: send,
-          sendToChat: send,
+          onSuggestionClick: canSendToChat ? send : noop,
+          sendToChat: canSendToChat ? send : undefined,
           refresh,
           isChatBusy,
           widgetParams,
@@ -400,21 +525,37 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
       // resolve/error) into this widget's state and re-renders on the client.
       const handleInnerRender = (renderState: TasksRenderState) => {
         tasksState = renderState;
-        if (refetchPending) return;
-        error = renderState.error;
         if (renderState.error) {
-          // A failed task (including a mid-stream `error` event) must not leave
-          // any streamed partial visible.
-          suggestions = [];
-        } else if (renderState.isLoading || renderState.output !== undefined) {
-          // Only adopt the inner output once a request is loading or has
-          // produced one, so the initial no-op render doesn't clobber pills.
-          suggestions = parseSuggestions(renderState.output);
+          // Keep a failed payload retryable: without this the next automatic
+          // attempt with the same payload would be skipped as a duplicate and
+          // the error would have no way to clear. Set before the `refetchPending`
+          // return so a failure that lands mid-refetch is not swallowed.
+          lastSubmittedPayload = null;
         }
-        isLoading = renderState.isLoading;
-        if (!latestRenderOptions) return;
-        renderOutward(latestRenderOptions);
+        if (refetchPending) {
+          droppedInnerRender = true;
+          return;
+        }
+        adoptInnerState(renderState);
       };
+
+      // Deferred because a chat widget can be registered after this one: React
+      // adds widgets in mount order, so a `chat` further down the tree only
+      // lands after this widget's `init` has run. Until this closes the window,
+      // `sendToChat` is handed out optimistically.
+      const validateChat = defer((renderOptions: InitOptions) => {
+        if (hasValidatedChat) return;
+        hasValidatedChat = true;
+        if (getChatRenderState(renderOptions)?.sendMessage) return;
+        // A render may already have gone out with the optimistic `sendToChat`;
+        // re-render so the widget layer sees the settled answer. The `init()`
+        // options don't count: nothing has painted yet, so the next render
+        // carries it — and a mount that never renders results shows no pills
+        // to mislead anyone.
+        if (latestRenderOptions && 'results' in latestRenderOptions) {
+          renderOutward(latestRenderOptions);
+        }
+      });
 
       let tasksParams: TasksConnectorParams;
       if (agentId) {
@@ -422,12 +563,14 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           agentId,
           transport,
           task: configurationId,
+          kind: PROMPT_SUGGESTIONS_TASK_KIND,
           stream: true,
         };
       } else if (transport) {
         tasksParams = {
           transport,
           task: configurationId,
+          kind: PROMPT_SUGGESTIONS_TASK_KIND,
           stream: true,
         };
       } else {
@@ -442,11 +585,21 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
 
       return {
         $$type: 'ais.promptSuggestions',
+        // Clicking a suggestion opens the chat, so this widget counts as an
+        // entry point for `connectChat`'s trigger validation.
+        opensChat: true as const,
 
         init(initOptions) {
           const { instantSearchInstance } = initOptions;
 
           tasksWidget.init!(initOptions);
+
+          // Set after the inner init so its initial no-op render is still
+          // ignored, and before the first outward render so `refresh()` has a
+          // render target even on a mount where `render()` never sees results.
+          latestRenderOptions = initOptions;
+
+          validateChat(initOptions);
 
           renderFn(
             {
@@ -455,6 +608,24 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             },
             true
           );
+
+          // With an explicit `context` the payload never reads the results, so
+          // waiting for a search is waiting on something the request does not
+          // use — and a page that triggers no search (a `searchFunction` query
+          // gate, or a mount made only for the widgets) would wait forever.
+          // Fetch here instead, after the first render so the `isFirstRender`
+          // one still arrives first.
+          //
+          // There are no results yet by definition, so "is there anything to
+          // send" reduces to "did the context resolve to something". Checking it
+          // here rather than letting `fetchAndRender` reject the call keeps init
+          // out of the "nothing to send" branch, whose `invalidate()` would add
+          // two outward renders to every mount that has no context — leaving the
+          // auto-extracted path, the one that does need results, untouched.
+          const initialContext = resolveContext();
+          if (initialContext && Object.keys(initialContext).length > 0) {
+            fetchAndRender(null, initOptions);
+          }
         },
 
         render(renderOptions) {
@@ -481,11 +652,9 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
             error = undefined;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-              if (latestRenderOptions?.results) {
-                fetchAndRender(
-                  latestRenderOptions.results,
-                  latestRenderOptions
-                );
+              const latestResults = getLatestResults();
+              if (latestResults && latestRenderOptions) {
+                fetchAndRender(latestResults, latestRenderOptions);
               }
             }, DEBOUNCE_MS);
           }
@@ -502,6 +671,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         dispose(disposeOptions: DisposeOptions) {
           disposed = true;
           clearTimeout(debounceTimer);
+          validateChat.cancel();
           tasksWidget.dispose!(disposeOptions);
           unmountFn();
         },

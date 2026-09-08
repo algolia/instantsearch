@@ -40,6 +40,7 @@ describe('createTaskRunner', () => {
       endpoint: 'https://example.test/tasks',
       headers: { 'x-custom': '1' },
       task: 'recommend',
+      kind: 'prompt_suggestions',
       stream: false,
       prepareRequest,
     });
@@ -50,6 +51,7 @@ describe('createTaskRunner', () => {
 
     expect(prepareRequest).toHaveBeenCalledWith({
       task: 'recommend',
+      kind: 'prompt_suggestions',
       input: { query: 'shoes' },
     });
     expect(customFetch).toHaveBeenCalledTimes(1);
@@ -61,6 +63,7 @@ describe('createTaskRunner', () => {
       },
       body: JSON.stringify({
         task: 'recommend',
+        kind: 'prompt_suggestions',
         input: { query: 'shoes' },
         locale: 'en',
       }),

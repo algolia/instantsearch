@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.40.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.39.0...instantsearch-ui-components@0.40.0) (2026-09-03)
+
+
+### Bug Fixes
+
+* **chat:** drop the empty row a contentless turn leaves behind ([#7217](https://github.com/algolia/instantsearch/issues/7217)) ([5ba4284](https://github.com/algolia/instantsearch/commit/5ba428429047315d9958413361c0e0c5cd16bdbb))
+* **chat:** hide empty assistant placeholder ([#7215](https://github.com/algolia/instantsearch/issues/7215)) ([1e643e5](https://github.com/algolia/instantsearch/commit/1e643e5307d90f72026f8966f02139a3bf2a8083))
+* **chat:** keep loader until assistant message exists ([#7216](https://github.com/algolia/instantsearch/issues/7216)) ([0b6b451](https://github.com/algolia/instantsearch/commit/0b6b451a83845bb6aa3209f846d87addc773cbd8))
+* **chat:** keep the actions on completed answers during a turn ([#7218](https://github.com/algolia/instantsearch/issues/7218)) ([f1f09c2](https://github.com/algolia/instantsearch/commit/f1f09c28abef1018505c1bfc5828d4b73c6d1cb2))
+* **chat:** render failed tools by default ([#7226](https://github.com/algolia/instantsearch/issues/7226)) ([147040f](https://github.com/algolia/instantsearch/commit/147040f8ab3bcc9f206dd10e61a9352aaad59b15))
+* **chat:** settle failed client-side tools ([#7219](https://github.com/algolia/instantsearch/issues/7219)) ([5fb7790](https://github.com/algolia/instantsearch/commit/5fb779013519dbcf8d3d341816eb4e0749047be5))
+* **chat:** time out stalled client-side tools ([#7222](https://github.com/algolia/instantsearch/issues/7222)) ([471d5c7](https://github.com/algolia/instantsearch/commit/471d5c729884b06fd49574b31b0ba6a67acde079))
+
+
+### Features
+
+* **chat:** add opt-in failed tool retry ([#7227](https://github.com/algolia/instantsearch/issues/7227)) ([5c37b66](https://github.com/algolia/instantsearch/commit/5c37b6641ad771a8ee38df69c07084d8bbf76b39))
+
+
+
+
+
+# [0.39.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.38.0...instantsearch-ui-components@0.39.0) (2026-09-01)
+
+
+### Bug Fixes
+
+* **chat:** restore automatic scrolling ([#7211](https://github.com/algolia/instantsearch/issues/7211)) ([4fc1e19](https://github.com/algolia/instantsearch/commit/4fc1e19c77531c53aa966cf65da0ed04922d24c9))
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
+# [0.38.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.37.0...instantsearch-ui-components@0.38.0) (2026-08-31)
+
+
+### Bug Fixes
+
+* **chat:** apply MCP boolean and numeric facets on view all ([#7197](https://github.com/algolia/instantsearch/issues/7197)) ([3406263](https://github.com/algolia/instantsearch/commit/3406263da649958be08d9286e25e8ca35d4ddc34))
+
+
+### Features
+
+* **chat:** let tools claim the names a server derives from them ([#7185](https://github.com/algolia/instantsearch/issues/7185)) ([02fc09f](https://github.com/algolia/instantsearch/commit/02fc09f182a86774962ea40304a4f6fbf2b58784))
+
+
+
+
+
 # [0.37.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.36.0...instantsearch-ui-components@0.37.0) (2026-08-24)
 
 

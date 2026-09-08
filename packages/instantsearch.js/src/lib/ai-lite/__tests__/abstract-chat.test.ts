@@ -124,7 +124,7 @@ function createTestSetup(
       options: SendMessagesCall
     ) => Promise<ReadableStream<UIMessageChunk>>;
     onToolCall?: (
-      options: { toolCall: any },
+      options: { toolCall: any; signal: AbortSignal },
       addToolResult?: TestChat['addToolResult']
     ) => void | Promise<void>;
     onFinish?: ChatOnFinishCallback<UIMessage>;
@@ -954,6 +954,60 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       }
     );
 
+    it('infers state-less JavaScript errors without overriding explicit success', async () => {
+      const setup = createTestSetup({
+        chunksByRequest: [
+          [
+            startChunk(),
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            {
+              type: 'tool-input-available',
+              toolName: 'search',
+              toolCallId: 'call-2',
+              input: {},
+            },
+            finishChunk(),
+          ],
+          [startChunk('msg-2'), finishChunk()],
+        ],
+        onToolCall: ({ toolCall }, addToolResult) => {
+          const result =
+            toolCall.toolCallId === 'call-1'
+              ? { errorText: 'The operation may have completed.' }
+              : {
+                  state: 'output-available' as const,
+                  output: 'result',
+                  errorText: undefined,
+                };
+
+          return addToolResult!({
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+            ...result,
+          } as Parameters<NonNullable<typeof addToolResult>>[0]);
+        },
+        sendAutomaticallyWhen: () => true,
+      });
+
+      await setup.chat.sendMessage({ text: 'search' });
+
+      expect(assistantToolPart(setup.state, 'call-1')).toMatchObject({
+        state: 'output-error',
+        errorText: 'The operation may have completed.',
+      });
+      expect(assistantToolPart(setup.state, 'call-2')).toMatchObject({
+        state: 'output-available',
+        output: 'result',
+      });
+      expect(setup.state.status).toBe('ready');
+      expect(setup.sendMessages).toHaveBeenCalledTimes(2);
+    });
+
     it('keeps a successful onFinish and reports a rejected continuation predicate once', async () => {
       let chat!: TestChat;
       const onError = jest.fn();
@@ -1038,6 +1092,40 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
         expect(setup.sendMessages).toHaveBeenCalledTimes(1);
       }
     );
+
+    it('aborts the tool signal when the response is stopped', async () => {
+      let chat!: TestChat;
+      let toolSignal!: AbortSignal;
+      const toolCallStarted = deferred<undefined>();
+      const releaseToolCall = deferred<undefined>();
+      const setup = createTestSetup({
+        chunks: [
+          startChunk(),
+          {
+            type: 'tool-input-available',
+            toolName: 'search',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          finishChunk(),
+        ],
+        onToolCall: ({ signal }) => {
+          toolSignal = signal;
+          toolCallStarted.resolve(undefined);
+          return releaseToolCall.promise;
+        },
+      });
+      chat = setup.chat;
+
+      const send = chat.sendMessage({ text: 'search' });
+      await toolCallStarted.promise;
+      await chat.stop();
+
+      expect(toolSignal.aborted).toBe(true);
+
+      releaseToolCall.resolve(undefined);
+      await send;
+    });
 
     it('settles an awaited late result after stop without continuing', async () => {
       let chat!: TestChat;
@@ -4573,13 +4661,14 @@ describe('AbstractChat.processStreamWithCallbacks', () => {
       });
       expect(onToolCall).toHaveBeenCalledTimes(1);
       expect(onToolCall).toHaveBeenCalledWith(
-        {
+        expect.objectContaining({
+          signal: expect.any(AbortSignal),
           toolCall: expect.objectContaining({
             toolName: 'search',
             toolCallId: 'call-1',
             input: { q: 'hello' },
           }),
-        },
+        }),
         expect.any(Function)
       );
     });

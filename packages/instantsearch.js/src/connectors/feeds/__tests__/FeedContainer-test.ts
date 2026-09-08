@@ -6,6 +6,7 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { createWidget } from '../../../../test/createWidget';
+import { connectPagination, connectRefinementList } from '../../../connectors';
 import { index } from '../../../widgets';
 import { createFeedContainer } from '../FeedContainer';
 
@@ -362,6 +363,126 @@ describe('FeedContainer', () => {
       expect(container.getWidgets()).toEqual(
         expect.arrayContaining([widget1, widget2])
       );
+    });
+  });
+
+  describe('updateWidget', () => {
+    const virtualPagination = connectPagination(() => {});
+    const virtualRefinementList = connectRefinementList(() => {});
+
+    const createContainer = () => {
+      const instantSearchInstance = createInstantSearch();
+      const parent = index({ indexName: 'test' });
+      parent.getHelper = () => instantSearchInstance.helper!;
+
+      return {
+        instantSearchInstance,
+        container: createFeedContainer(
+          'products',
+          parent,
+          instantSearchInstance
+        ),
+      };
+    };
+
+    it('replaces the widget in place, keeping its position', () => {
+      const { container } = createContainer();
+      const first = createWidget();
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+      const last = createWidget();
+
+      container.addWidgets([first, pagination, last]);
+      container.updateWidget(pagination, nextPagination);
+
+      expect(container.getWidgets()).toEqual([first, nextPagination, last]);
+    });
+
+    it('moves the parent over to the next widget', () => {
+      const { container } = createContainer();
+      const pagination = virtualPagination({});
+      const nextPagination = virtualPagination({ padding: 4 });
+
+      container.addWidgets([pagination]);
+      container.updateWidget(pagination, nextPagination);
+
+      expect(pagination.parent).toBeUndefined();
+      expect(nextPagination.parent).toBe(container);
+    });
+
+    it('keeps the state the next widget still claims', () => {
+      const { container, instantSearchInstance } = createContainer();
+      const pagination = virtualPagination({});
+
+      container.addWidgets([pagination]);
+      container.init({} as any);
+
+      instantSearchInstance.helper!.setPage(3);
+
+      container.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+      expect(instantSearchInstance.helper!.state.page).toBe(3);
+    });
+
+    it('forgets the state the next widget no longer claims', () => {
+      const { container, instantSearchInstance } = createContainer();
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      // The container merges its children's search parameters into the parent
+      // helper only once initialized, so `brand` is declared as a facet.
+      container.init({} as any);
+      container.addWidgets([refinementList]);
+
+      instantSearchInstance.helper!.addDisjunctiveFacetRefinement(
+        'brand',
+        'Apple'
+      );
+
+      container.updateWidget(
+        refinementList,
+        virtualRefinementList({ attribute: 'categories' })
+      );
+
+      expect(
+        instantSearchInstance.helper!.state.disjunctiveFacetsRefinements
+      ).toEqual({ categories: [] });
+    });
+
+    it('disposes the previous widget and inits the next one', () => {
+      const { container } = createContainer();
+      const previousWidget = createWidget();
+      const nextWidget = createWidget();
+
+      container.addWidgets([previousWidget]);
+      container.init({} as any);
+
+      container.updateWidget(previousWidget, nextWidget);
+
+      expect(previousWidget.dispose).toHaveBeenCalledTimes(1);
+      expect(nextWidget.init).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not init the next widget before the container is initialized', () => {
+      const { container } = createContainer();
+      const previousWidget = createWidget();
+      const nextWidget = createWidget();
+
+      container.addWidgets([previousWidget]);
+      container.updateWidget(previousWidget, nextWidget);
+
+      expect(nextWidget.init).not.toHaveBeenCalled();
+      expect(container.getWidgets()).toEqual([nextWidget]);
+    });
+
+    it('returns the container for chaining', () => {
+      const { container } = createContainer();
+      const pagination = virtualPagination({});
+
+      container.addWidgets([pagination]);
+
+      expect(
+        container.updateWidget(pagination, virtualPagination({ padding: 4 }))
+      ).toBe(container);
     });
   });
 

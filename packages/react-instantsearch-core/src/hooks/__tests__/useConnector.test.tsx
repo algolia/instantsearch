@@ -12,7 +12,10 @@ import {
 } from '@instantsearch/testutils';
 import { render, waitFor, renderHook } from '@testing-library/react';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import connectConfigure from 'instantsearch.js/es/connectors/configure/connectConfigure';
 import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
+import connectPagination from 'instantsearch.js/es/connectors/pagination/connectPagination';
+import connectRefinementList from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';
@@ -24,6 +27,7 @@ import { noop } from '../../lib/noop';
 import { useConnector } from '../useConnector';
 
 import type { UseHitsProps } from '../../connectors/useHits';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { Connector } from 'instantsearch.js';
 import type {
   HitsConnectorParams,
@@ -703,8 +707,9 @@ describe('useConnector', () => {
     rerender(<App attribute="categories" />);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
-    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+    expect(indexContext.current!.updateWidget).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
     expect(getByTestId('attribute')).toHaveTextContent('categories');
   });
 
@@ -739,11 +744,12 @@ describe('useConnector', () => {
     rerender(<App dependsOn="none" />);
 
     await waitFor(() =>
-      expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1)
+      expect(indexContext.current!.updateWidget).toHaveBeenCalledTimes(1)
     );
-    expect(indexContext.current!.addWidgets).toHaveBeenLastCalledWith([
-      expect.objectContaining({ dependsOn: 'none' }),
-    ]);
+    expect(indexContext.current!.updateWidget).toHaveBeenLastCalledWith(
+      expect.objectContaining({ dependsOn: 'search' }),
+      expect.objectContaining({ dependsOn: 'none' })
+    );
   });
 
   test('rerenders the widget on state change', async () => {
@@ -776,13 +782,14 @@ describe('useConnector', () => {
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
     expect(getByTestId('attribute')).toHaveTextContent('categories');
-    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+    expect(indexContext.current!.updateWidget).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
   });
 
   // Ideally we would like to avoid this behavior, but we don't have any way
   // to memo function props, so they're always considered as new reference.
-  test('always removes/adds the widget on rerenders when using an unstable function prop', async () => {
+  test('always updates the widget on rerenders when using an unstable function prop', async () => {
     const searchClient = createSearchClient({});
     const { InstantSearchSpy, indexContext } = createInstantSearchSpy();
 
@@ -807,7 +814,140 @@ describe('useConnector', () => {
     // still be able to optimize this render count to `1`, but `2` is acceptable
     // for now compared to an infinite loop.
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
-    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(2);
+    expect(indexContext.current!.updateWidget).toHaveBeenCalledTimes(1);
+    expect(indexContext.current!.removeWidgets).toHaveBeenCalledTimes(0);
+    expect(indexContext.current!.addWidgets).toHaveBeenCalledTimes(1);
+  });
+
+  test.each([true, false])(
+    'keeps the widget uiState on a prop change (preserveSharedStateOnUnmount: %s)',
+    async (preserveSharedStateOnUnmount) => {
+      const searchClient = createSearchClient({});
+
+      function Pagination({ padding }: { padding: number }) {
+        const { currentRefinement } = useConnector(connectPagination, {
+          padding,
+        });
+
+        return <div data-testid="page">{currentRefinement}</div>;
+      }
+
+      function App({ padding }: { padding: number }) {
+        return (
+          <InstantSearch
+            searchClient={searchClient}
+            indexName="indexName"
+            initialUiState={{ indexName: { page: 4 } }}
+            future={{ preserveSharedStateOnUnmount }}
+          >
+            <Pagination padding={padding} />
+          </InstantSearch>
+        );
+      }
+
+      const { rerender, getByTestId } = render(<App padding={2} />);
+
+      await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+      expect(getByTestId('page')).toHaveTextContent('3');
+
+      rerender(<App padding={3} />);
+
+      await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+      expect(getByTestId('page')).toHaveTextContent('3');
+    }
+  );
+
+  test('forgets the uiState the new widget params no longer claim', async () => {
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy, searchContext } = createInstantSearchSpy();
+
+    function RefinementList({ attribute }: { attribute: string }) {
+      useConnector(connectRefinementList, { attribute });
+
+      return null;
+    }
+
+    function App({ attribute }: { attribute: string }) {
+      return (
+        <InstantSearchSpy
+          searchClient={searchClient}
+          indexName="indexName"
+          initialUiState={{
+            indexName: { refinementList: { brand: ['Apple'] } },
+          }}
+          future={{ preserveSharedStateOnUnmount: true }}
+        >
+          <RefinementList attribute={attribute} />
+        </InstantSearchSpy>
+      );
+    }
+
+    const { rerender } = render(<App attribute="brand" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(searchContext.current!.getUiState()).toEqual({
+      indexName: { refinementList: { brand: ['Apple'] } },
+    });
+
+    rerender(<App attribute="categories" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    // The refinement on `brand` is dropped: no mounted widget claims it anymore.
+    expect(searchContext.current!.getUiState()).toEqual({ indexName: {} });
+  });
+
+  test('keeps the widget in place among its siblings on a prop change', async () => {
+    const searchClient = createSearchClient({});
+
+    function Configure({
+      searchParameters,
+    }: {
+      searchParameters: PlainSearchParameters;
+    }) {
+      useConnector(connectConfigure, { searchParameters });
+
+      return null;
+    }
+
+    function App({ analyticsTag }: { analyticsTag: string }) {
+      return (
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="indexName"
+          future={{ preserveSharedStateOnUnmount: true }}
+        >
+          <Configure
+            searchParameters={{
+              hitsPerPage: 10,
+              analyticsTags: [analyticsTag],
+            }}
+          />
+          {/* This widget comes last, so it wins on `hitsPerPage`. */}
+          <Configure searchParameters={{ hitsPerPage: 20 }} />
+        </InstantSearch>
+      );
+    }
+
+    const { rerender } = render(<App analyticsTag="a" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.objectContaining({ hitsPerPage: 20 }),
+      }),
+    ]);
+
+    // Updating the first widget must not move it after the second one.
+    rerender(<App analyticsTag="b" />);
+
+    await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(2));
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.objectContaining({
+          hitsPerPage: 20,
+          analyticsTags: ['b'],
+        }),
+      }),
+    ]);
   });
 });

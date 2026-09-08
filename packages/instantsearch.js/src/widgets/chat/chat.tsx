@@ -2,7 +2,7 @@
 
 import { createChatComponent, findTool } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -62,6 +62,7 @@ import type {
   ChatMessageErrorProps,
   ChatMessageLoaderPropsWithContext,
   ChatMessageProps,
+  ChatMessageReasoningComponentProps,
   ChatMessageTextComponentProps,
   ChatMessagesProps,
   ChatMessagesTranslations,
@@ -232,6 +233,7 @@ type ChatWrapperProps = {
       | undefined;
     assistantMessageProps: {
       leadingComponent: ChatMessageProps['leadingComponent'];
+      reasoningComponent: ChatMessageProps['reasoningComponent'];
       textComponent: ChatMessageProps['textComponent'];
       footerComponent: ChatMessageProps['footerComponent'];
       showReasoning: ChatMessageProps['showReasoning'];
@@ -256,7 +258,6 @@ type ChatWrapperProps = {
   };
   suggestionsProps: {
     suggestions?: string[];
-    isLoading?: boolean;
     onSuggestionClick: (suggestion: string) => void;
     suggestionsComponent: ComponentProps<typeof Chat>['suggestionsComponent'];
   };
@@ -293,6 +294,15 @@ function ChatWrapper({
       initial: 'smooth',
       resize: 'smooth',
     });
+  const sendMessageAndScrollToBottom = useCallback<
+    ChatRenderState['sendMessage']
+  >(
+    (...args) => {
+      scrollToBottom();
+      return sendMessage(...args);
+    },
+    [scrollToBottom, sendMessage]
+  );
 
   // Keep the conversation pinned to the bottom while streaming. The stick-to-
   // bottom ResizeObserver only reacts to content *height* changes, but tool
@@ -316,7 +326,7 @@ function ChatWrapper({
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
-      sendMessage={sendMessage}
+      sendMessage={sendMessageAndScrollToBottom}
       regenerate={regenerate}
       stop={stop}
       error={error}
@@ -361,7 +371,7 @@ function ChatWrapper({
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
         messageTranslations: messagesProps.messageTranslations,
-        sendMessage: messagesProps.sendMessage,
+        sendMessage: sendMessageAndScrollToBottom,
         setInput: messagesProps.setInput,
       }}
       promptProps={{
@@ -372,7 +382,7 @@ function ChatWrapper({
           setChatInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
-          sendMessage({ text: chatInput });
+          sendMessageAndScrollToBottom({ text: chatInput });
           setChatInput('');
         },
         onStop: () => {
@@ -384,9 +394,10 @@ function ChatWrapper({
         autoFocus: promptProps.autoFocus,
       }}
       suggestionsProps={{
-        onSuggestionClick: suggestionsProps.onSuggestionClick,
+        onSuggestionClick: (suggestion) => {
+          sendMessageAndScrollToBottom({ text: suggestion });
+        },
         suggestions: suggestionsProps.suggestions,
-        isLoading: suggestionsProps.isLoading,
       }}
     />
   );
@@ -530,6 +541,14 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         'fragment'
       )
     : undefined;
+  const stableAssistantMessageReasoningComponent = templates.assistantMessage
+    ?.reasoning
+    ? createStableTemplateComponent<ChatMessageReasoningComponentProps>(
+        assistantMessageTemplateRef,
+        'reasoning',
+        'fragment'
+      )
+    : undefined;
   const stableAssistantMessageFooterComponent = templates.assistantMessage
     ?.footer
     ? createStableTemplateComponent<Record<string, never>>(
@@ -604,7 +623,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const stableSuggestionsComponent = templates.suggestions
     ? (suggestionsProps: {
         suggestions?: string[];
-        isLoading?: boolean;
         onSuggestionClick: (suggestion: string) => void;
       }) => (
         <TemplateComponent
@@ -662,7 +680,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       clearMessages,
       tools: toolsFromConnector,
       suggestions,
-      suggestionsStatus,
       sendChatMessageFeedback: onFeedback,
       feedbackState,
       '~consumeInputFocus': consumeInputFocus,
@@ -780,6 +797,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       actionsLabel: templates.message?.actionsLabelText,
       messageLabel: templates.message?.messageLabelText,
       reasoningLabel: templates.message?.reasoningLabelText,
+      toolErrorRetryText: templates.message?.toolErrorRetryText,
     });
 
     userMessageTemplateRef.current = prepareTemplateProps({
@@ -857,6 +875,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             actionsComponent: stableActionsComponent,
             assistantMessageProps: {
               leadingComponent: stableAssistantMessageLeadingComponent,
+              reasoningComponent: stableAssistantMessageReasoningComponent,
               textComponent: stableAssistantMessageTextComponent,
               footerComponent: stableAssistantMessageFooterComponent,
               showReasoning,
@@ -882,7 +901,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           state={state}
           suggestionsProps={{
             suggestions,
-            isLoading: suggestionsStatus === 'loading',
             onSuggestionClick: (message: string) => {
               sendMessage({ text: message });
             },
@@ -1071,6 +1089,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for reasoning disclosures
        */
       reasoningLabelText?: string;
+      /**
+       * Retry button text for failed tools
+       */
+      toolErrorRetryText?: string;
     }>;
 
     /**
@@ -1085,6 +1107,12 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for assistant message text parts.
        */
       text: Template<ChatMessageTextComponentProps>;
+      /**
+       * Template to use for assistant message reasoning. It replaces the
+       * built-in disclosure rather than enabling reasoning: reasoning renders by
+       * default, and `showReasoning: false` suppresses this template too.
+       */
+      reasoning: Template<ChatMessageReasoningComponentProps>;
       /**
        * Template to use for the assistant message footer content.
        */
@@ -1173,7 +1201,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     suggestions: Template<{
       suggestions: string[];
-      isLoading?: boolean;
       onSuggestionClick: (suggestion: string) => void;
     }>;
   }>;
@@ -1213,7 +1240,10 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
   disableTriggerValidation?: boolean;
 
   /**
-   * Whether to render reasoning parts
+   * Whether to render the reasoning an agent sends. `true` by default, so
+   * reasoning that arrives is shown. Pass `false` to suppress it in this
+   * widget. It cannot make an agent send reasoning: whether reasoning reaches
+   * the client at all is the agent's own `sendReasoning` setting.
    */
   showReasoning?: boolean;
 
@@ -1266,7 +1296,7 @@ export default (function chat<
     tools: userTools,
     getSearchPageURL,
     disableTriggerValidation = false,
-    showReasoning = false,
+    showReasoning = true,
     loaderPosition,
     shouldShowLoader,
     loaderShowDelay,
