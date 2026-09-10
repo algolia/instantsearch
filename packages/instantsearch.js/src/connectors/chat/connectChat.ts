@@ -511,8 +511,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
-    warning(false, 'Chat is not yet stable and will change in the future.');
-
     const {
       resume = false,
       tools: tools_ = {},
