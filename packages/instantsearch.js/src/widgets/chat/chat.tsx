@@ -94,7 +94,7 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
 
 /**
  * Whether the search tool renders its own results, i.e. the agent did not hand
- * the turn to the display-results tool. Set on the message by the backend.
+ * the turn to the Grouped Results tool. Set on the message by the backend.
  */
 function isDisplayResultsDisabled({
   parentMessage,
@@ -159,7 +159,7 @@ function createDefaultTools<
   return {
     [SearchIndexToolType]: {
       ...createCarouselTool(true, templates, getSearchPageURL),
-      // The agent decides per turn whether the richer display-results tool
+      // The agent decides per turn whether the richer Grouped Results tool
       // takes over the rendering of the search results.
       shouldRender: isDisplayResultsDisabled,
     },

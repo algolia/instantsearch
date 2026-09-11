@@ -1,7 +1,7 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  *
- * Streamed-identifier completeness for the Display Results tool.
+ * Streamed-identifier completeness for the Grouped Results tool.
  *
  * Driven through the production `Chat` reducer rather than hand-built parts,
  * because it is partial-JSON repair closing an open string literal that lets a
@@ -147,7 +147,7 @@ const renderAllFrames = (
   frames: Array<ClientSideToolComponentProps['context']['message']>
 ) => frames.map(renderFrame);
 
-describe('display results, streamed identifier completeness', () => {
+describe('Grouped Results, streamed identifier completeness', () => {
   test('a split identifier never renders the record its prefix matches', async () => {
     const frames = await streamDisplayInput([
       '{"intro":"Top picks","groups":[{"title":"Best value","results":[{"objectID":"12',

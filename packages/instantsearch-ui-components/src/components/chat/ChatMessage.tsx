@@ -255,7 +255,7 @@ export type ChatMessageProps<
   setIndexUiState: (state: object) => void;
   /**
    * The full conversation. Forwarded to tool and text components so those that
-   * only receive object IDs (e.g. display results) can hydrate records from a
+   * only receive object IDs (e.g. Grouped Results) can hydrate records from a
    * preceding search tool's hits. Defaults to `context.messages` when omitted.
    */
   messages?: TMessage[];
