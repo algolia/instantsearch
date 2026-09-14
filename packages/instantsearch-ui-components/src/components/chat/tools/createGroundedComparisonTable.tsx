@@ -47,6 +47,31 @@ function productLabel(hit: ChatRecord | undefined): unknown {
 }
 
 /**
+ * Catalog values are arbitrary JSON. Primitives (and arrays of them) have an
+ * obvious textual form; objects (e.g. `price: { value, currency }`) would
+ * stringify to `[object Object]`, so they render as the missing marker
+ * instead — an honest "no displayable value" beats a garbled cell.
+ */
+function formatCellValue(value: unknown): string | undefined {
+  if (value === undefined || value === null || value === '') {
+    return undefined;
+  }
+  if (Array.isArray(value)) {
+    const printable = value.filter(
+      (item): item is string | number | boolean =>
+        (typeof item === 'string' && item !== '') ||
+        typeof item === 'number' ||
+        typeof item === 'boolean'
+    );
+    return printable.length > 0 ? printable.join(', ') : undefined;
+  }
+  if (typeof value === 'object') {
+    return undefined;
+  }
+  return String(value);
+}
+
+/**
  * Everything the grounded table needs to render. Note there is deliberately no
  * field for attribute VALUES: they can only come from `records`.
  */
@@ -76,9 +101,16 @@ export function createGroundedComparisonTableComponent({
       return <Fragment />;
     }
 
+    // `columns` is model-authored and only trusted when it labels EVERY
+    // column (`[product, ...attributes]`). A shorter list would shift labels
+    // onto the wrong cells — `['Price', 'Rating']` over product/price/rating
+    // puts the product names under "Price". Misaligned input falls back to
+    // the attribute keys: correct data under plain headers.
+    const columnLabels =
+      columns && columns.length === attributes.length + 1 ? columns : undefined;
     const headerLabels = [
-      columns?.[0] ?? translations.productColumnLabel,
-      ...attributes.map((attr, index) => columns?.[index + 1] ?? attr),
+      columnLabels?.[0] ?? translations.productColumnLabel,
+      ...attributes.map((attr, index) => columnLabels?.[index + 1] ?? attr),
     ];
 
     return (
@@ -116,15 +148,13 @@ export function createGroundedComparisonTableComponent({
                     data-testid={`product-${objectID}`}
                     className="ais-ChatToolComparisonTable-product"
                   >
-                    {name === undefined
-                      ? translations.missingValueLabel
-                      : String(name)}
+                    {formatCellValue(name) ?? translations.missingValueLabel}
                   </th>
                   {attributes.map((attribute) => {
                     // The ONLY source of a cell value is the catalog record.
-                    const value = hit ? hit[attribute] : undefined;
-                    const isMissing =
-                      value === undefined || value === null || value === '';
+                    const value = formatCellValue(
+                      hit ? hit[attribute] : undefined
+                    );
 
                     return (
                       <td
@@ -132,9 +162,7 @@ export function createGroundedComparisonTableComponent({
                         data-testid={`cell-${objectID}-${attribute}`}
                         className="ais-ChatToolComparisonTable-cell"
                       >
-                        {isMissing
-                          ? translations.missingValueLabel
-                          : String(value)}
+                        {value ?? translations.missingValueLabel}
                       </td>
                     );
                   })}

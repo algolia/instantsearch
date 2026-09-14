@@ -160,6 +160,56 @@ describe('CompareProductsTool grounding', () => {
     expect(screen.getByTestId('cell-A-rating')).toHaveTextContent('—');
   });
 
+  test('object values render the missing marker, never [object Object]', () => {
+    // Catalog values are arbitrary JSON: a structured attribute like
+    // price: { value, currency } has no obvious textual form, so the cell
+    // shows the missing marker instead of a garbled String(value).
+    const { compareMessage, messages } = buildCompareTurn(
+      [
+        {
+          objectID: 'A',
+          name: 'Galaxy A50',
+          price: { value: 199, currency: 'USD' },
+          colors: ['black', 'blue'],
+        } as unknown as CatalogHit & { objectID: string },
+      ],
+      { objectIDs: ['A'], attributes: ['price', 'colors'] }
+    );
+
+    renderCompare(compareMessage, messages);
+
+    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('—');
+    expect(screen.queryByText(/object Object/)).not.toBeInTheDocument();
+    // Arrays of primitives keep their readable rendering.
+    expect(screen.getByTestId('cell-A-colors')).toHaveTextContent(
+      'black, blue'
+    );
+  });
+
+  test('misaligned columns fall back to attribute keys instead of shifting headers', () => {
+    // columns must label EVERY column ([product, ...attributes]). A short
+    // list (['Price', 'Rating'] for 2 attributes) would put the product names
+    // under "Price" — so it is ignored and the attribute keys label the table.
+    const { compareMessage, messages } = buildCompareTurn(
+      [{ objectID: 'A', name: 'Galaxy A50', price: 199, rating: 4 }],
+      {
+        objectIDs: ['A'],
+        attributes: ['price', 'rating'],
+        columns: ['Price', 'Rating'],
+      }
+    );
+
+    renderCompare(compareMessage, messages);
+
+    const headers = screen
+      .getAllByRole('columnheader')
+      .map((th) => th.textContent);
+    expect(headers).toEqual(['Product', 'price', 'rating']);
+    // The cells stay under the right attributes.
+    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
+    expect(screen.getByTestId('cell-A-rating')).toHaveTextContent('4');
+  });
+
   test('an item referenced without a backing search hit shows no fabricated cells', () => {
     // The model references objectID 'B', but only 'A' was retrieved — the
     // exact "one item not in the catalog" failure the eval penalizes.
