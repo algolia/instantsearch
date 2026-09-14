@@ -80,6 +80,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       getSearchPageURL
     ),
     [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
+    algolia_grouped_results: createDisplayResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},

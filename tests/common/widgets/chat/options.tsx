@@ -2578,7 +2578,8 @@ export function createOptionsTests(
         );
       });
 
-      describe('Grouped Results tool', () => {
+      const toolTypes = [DisplayResultsToolType, 'algolia_grouped_results'];
+      describe.each(toolTypes)('Grouped Results tool (%s)', (toolType) => {
         const displayResultsMessage = (
           input: unknown,
           {
@@ -2607,7 +2608,7 @@ export function createOptionsTests(
                 },
               },
               {
-                type: `tool-${DisplayResultsToolType}`,
+                type: `tool-${toolType}`,
                 toolCallId: 'display',
                 input,
                 state,
@@ -2904,7 +2905,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -2962,7 +2963,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -3036,7 +3037,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -3100,7 +3101,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
                     },
@@ -3110,7 +3111,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>
                     ),
@@ -3196,7 +3197,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {},
                     onToolCall: jest.fn(),
                   },
@@ -3205,7 +3206,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     onToolCall: jest.fn(),
                   },
                 },
@@ -3261,7 +3262,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
@@ -3272,7 +3273,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>

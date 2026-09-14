@@ -13,7 +13,7 @@ import { collectChatRecords } from 'instantsearch-ui-components';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import { createDisplayResultsTool } from '../DisplayResultsTool';
+import { createDefaultTools } from '../../../Chat';
 
 import type {
   ChatComponentContext,
@@ -49,7 +49,7 @@ function chunkStream(chunks: UIMessageChunk[]) {
  * frame of its message part. No `tool-input-available` is sent, so the final
  * frame is still `input-streaming`, the state that must already render.
  */
-async function streamDisplayInput(deltas: string[]) {
+async function streamToolInput(deltas: string[], toolName: string) {
   const frames: Array<ClientSideToolComponentProps['context']['message']> = [];
   const chat = new Chat<UIMessage>({
     persistence: false,
@@ -60,12 +60,12 @@ async function streamDisplayInput(deltas: string[]) {
             { type: 'start', messageId: 'msg-1' },
             {
               type: 'tool-input-start',
-              toolName: 'algolia_display_results',
+              toolName,
               toolCallId: 'display',
             },
             ...deltas.map((inputTextDelta) => ({
               type: 'tool-input-delta' as const,
-              toolName: 'algolia_display_results',
+              toolName,
               toolCallId: 'display',
               inputTextDelta,
             })),
@@ -79,8 +79,8 @@ async function streamDisplayInput(deltas: string[]) {
 
   chat._state._messagesCallbacks.add(() => {
     const parts = chat.messages[chat.messages.length - 1]?.parts ?? [];
-    const part = parts.find((candidate) =>
-      candidate.type.startsWith('tool-algolia_display_results')
+    const part = parts.find(
+      (candidate) => candidate.type === `tool-${toolName}`
     );
     if (part) {
       frames.push({
@@ -94,7 +94,8 @@ async function streamDisplayInput(deltas: string[]) {
 }
 
 function renderFrame(part: ClientSideToolComponentProps['context']['message']) {
-  const tool = createDisplayResultsTool<TestResult>(itemComponent);
+  const tools = createDefaultTools<TestResult>(itemComponent);
+  const tool = tools[part.type.slice('tool-'.length)];
   const LayoutComponent = tool.layoutComponent!;
   const messages = [
     {
@@ -147,7 +148,10 @@ const renderAllFrames = (
   frames: Array<ClientSideToolComponentProps['context']['message']>
 ) => frames.map(renderFrame);
 
-describe('Grouped Results, streamed identifier completeness', () => {
+const toolNames = ['algolia_display_results', 'algolia_grouped_results'];
+describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
+  const streamDisplayInput = (deltas: string[]) =>
+    streamToolInput(deltas, toolName);
   test('a split identifier never renders the record its prefix matches', async () => {
     const frames = await streamDisplayInput([
       '{"intro":"Top picks","groups":[{"title":"Best value","results":[{"objectID":"12',

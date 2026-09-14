@@ -165,6 +165,7 @@ function createDefaultTools<
     },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
+    algolia_grouped_results: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },
