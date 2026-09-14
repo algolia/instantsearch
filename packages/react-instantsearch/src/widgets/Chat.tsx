@@ -6,6 +6,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  GroupedResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import {
   focusAfterReveal,
@@ -37,6 +38,7 @@ export {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  GroupedResultsToolType,
 };
 
 import type {
@@ -80,7 +82,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       getSearchPageURL
     ),
     [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
-    algolia_grouped_results: createDisplayResultsTool(itemComponent),
+    [GroupedResultsToolType]: createDisplayResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},

@@ -13,6 +13,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  GroupedResultsToolType,
 } from '../../lib/chat';
 import {
   focusAfterReveal,
@@ -84,7 +85,12 @@ const Chat = createChatComponent({
   useEffect,
 });
 
-export { SearchIndexToolType, RecommendToolType, DisplayResultsToolType };
+export {
+  SearchIndexToolType,
+  RecommendToolType,
+  DisplayResultsToolType,
+  GroupedResultsToolType,
+};
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -165,7 +171,7 @@ function createDefaultTools<
     },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createDisplayResultsTool(templates),
-    algolia_grouped_results: createDisplayResultsTool(templates),
+    [GroupedResultsToolType]: createDisplayResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },
