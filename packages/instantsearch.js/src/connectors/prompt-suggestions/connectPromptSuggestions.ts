@@ -1,9 +1,13 @@
-import { isChatBusy as isChatStreaming, openChat } from '../../lib/chat';
+import {
+  buildFilters,
+  isChatBusy as isChatStreaming,
+  openChat,
+  stripInternalHitMetadata,
+} from '../../lib/chat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   defer,
-  getRefinements,
   noop,
   warning,
 } from '../../lib/utils';
@@ -178,60 +182,8 @@ export type PromptSuggestionsConnector = Connector<
   PromptSuggestionsConnectorParams
 >;
 
-function stripInternalHitMetadata(hit: Hit): Record<string, unknown> {
-  const clean: Record<string, unknown> = {};
-  Object.keys(hit).forEach((key) => {
-    // Strip internal metadata, which is `_`-prefixed
-    // (`_highlightResult`, `_rankingInfo`, `__position`, …).
-    if (!key.startsWith('_')) {
-      clean[key] = (hit as Record<string, unknown>)[key];
-    }
-  });
-  return clean;
-}
-
 const DEFAULT_TRANSFORM_HITS: PromptSuggestionsTransformHits = (hits) =>
   hits.slice(0, 5).map(stripInternalHitMetadata);
-
-function buildFilters(results: SearchResults): string[][] | undefined {
-  const state = results._state;
-  if (!state) {
-    return undefined;
-  }
-
-  const groups: string[][] = [];
-  const disjunctiveGroups: Record<string, string[]> = {};
-
-  getRefinements(results, state).forEach((refinement) => {
-    if (refinement.type === 'numeric') {
-      groups.push([
-        `${refinement.attribute}${refinement.operator}${refinement.numericValue}`,
-      ]);
-      return;
-    }
-
-    const value =
-      refinement.type === 'exclude'
-        ? `${refinement.attribute}:-${refinement.name}`
-        : `${refinement.attribute}:${refinement.name}`;
-
-    if (refinement.type === 'disjunctive') {
-      const group = disjunctiveGroups[refinement.attribute];
-      if (group) {
-        group.push(value);
-      } else {
-        const newGroup = [value];
-        disjunctiveGroups[refinement.attribute] = newGroup;
-        groups.push(newGroup);
-      }
-      return;
-    }
-
-    groups.push([value]);
-  });
-
-  return groups.length > 0 ? groups : undefined;
-}
 
 const connectPromptSuggestions: PromptSuggestionsConnector =
   function connectPromptSuggestions(renderFn, unmountFn = noop) {

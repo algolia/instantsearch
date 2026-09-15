@@ -5,7 +5,8 @@ export { ChatState } from './chat';
 export { Chat } from './chat';
 
 export { openChat, isChatBusy } from './openChat';
-export type { OpenChatOptions } from './openChat';
+export type { OpenChatOptions, ChatReferer } from './openChat';
+export { buildFilters, stripInternalHitMetadata } from './pageContext';
 
 export const SearchIndexToolType = 'algolia_search_index';
 export const RecommendToolType = 'algolia_recommend';
