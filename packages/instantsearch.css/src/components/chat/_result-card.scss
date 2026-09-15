@@ -48,13 +48,32 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  // The loader reserves room so the card does not jump when the answer lands.
-  .ais-ChatMessageLoader--inline {
-    min-height: calc(var(--ais-spacing) * 4);
-  }
-
   .ais-ChatMessage-container {
     width: 100%;
+  }
+}
+
+// Each line matches a line of answer text, so three lines are about the
+// height of a typical answer.
+.ais-ResultCard-loader {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+  padding: calc(var(--ais-spacing) * 0.25) 0;
+}
+
+.ais-ResultCard-loaderLine {
+  height: var(--ais-spacing);
+  border-radius: var(--ais-border-radius-sm);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+  animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  &:last-child {
+    width: 60%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 }
 

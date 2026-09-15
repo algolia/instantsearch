@@ -6,7 +6,6 @@ import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
-import { createChatMessageLoaderComponent } from './ChatMessageLoader';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 import {
   ChevronDownIcon,
@@ -17,7 +16,6 @@ import {
 
 import type {
   ChatComponentContext,
-  ChatLoaderContext,
   ChatMessageBase,
   ChatStatus,
   ClientSideTools,
@@ -38,6 +36,7 @@ export type ResultCardClassNames = {
   headerTitle: string | string[];
   dismissButton: string | string[];
   body: string | string[];
+  loader: string | string[];
   message: string | string[];
   footer: string | string[];
   suggestions: string | string[];
@@ -136,7 +135,6 @@ export function createResultCardComponent({
 }: Renderer & Pick<Hooks, 'useState' | 'useEffect'>) {
   const Button = createButtonComponent({ createElement });
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
-  const ChatMessageLoader = createChatMessageLoaderComponent({ createElement });
   const ChatMessageError = createChatMessageErrorComponent({ createElement });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
     createElement,
@@ -219,11 +217,6 @@ export function createResultCardComponent({
       onReload: onRetry,
       onClose: onDismiss,
     };
-    const loaderContext: ChatLoaderContext<TMessage> = {
-      ...context,
-      phase: 'submitted',
-    };
-
     return (
       <section
         {...props}
@@ -271,7 +264,13 @@ export function createResultCardComponent({
               translations={{ retryText: translations.retryText }}
             />
           ) : !hasVisibleAnswer ? (
-            <ChatMessageLoader context={loaderContext} inline />
+            // Skeleton only: the header already marks the card as AI, and
+            // three lines approximate the answer so the card barely resizes.
+            <div className={cx('ais-ResultCard-loader', classNames.loader)}>
+              <div className="ais-ResultCard-loaderLine" />
+              <div className="ais-ResultCard-loaderLine" />
+              <div className="ais-ResultCard-loaderLine" />
+            </div>
           ) : (
             assistantMessages.map((message) => (
               <ChatMessage

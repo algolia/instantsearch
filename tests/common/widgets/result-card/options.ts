@@ -130,7 +130,7 @@ export function createOptionsTests(
       expect(root).toHaveAttribute('aria-busy', 'true');
       expect(root).toHaveAttribute('aria-live', 'polite');
       expect(
-        document.querySelector('.ais-ChatMessageLoader')
+        document.querySelector('.ais-ResultCard-loader')
       ).toBeInTheDocument();
       expect(fetchMock).not.toHaveBeenCalled();
 

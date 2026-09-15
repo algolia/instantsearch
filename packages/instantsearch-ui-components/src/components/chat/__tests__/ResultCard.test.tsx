@@ -90,7 +90,7 @@ describe('ResultCard', () => {
       'true'
     );
     expect(
-      container.querySelector('.ais-ChatMessageLoader--inline')
+      container.querySelector('.ais-ResultCard-loader')
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Continue in chat' })
@@ -122,7 +122,7 @@ describe('ResultCard', () => {
     );
 
     expect(
-      container.querySelector('.ais-ChatMessageLoader--inline')
+      container.querySelector('.ais-ResultCard-loader')
     ).toBeInTheDocument();
     expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
 
@@ -146,7 +146,7 @@ describe('ResultCard', () => {
     ).toBeInTheDocument();
     expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
     expect(
-      container.querySelector('.ais-ChatMessageLoader--inline')
+      container.querySelector('.ais-ResultCard-loader')
     ).not.toBeInTheDocument();
   });
 
