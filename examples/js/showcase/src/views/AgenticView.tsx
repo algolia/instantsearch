@@ -13,6 +13,7 @@ import {
   WidgetPromptSuggestionsPlp,
 } from '../components/widgets/WidgetPromptSuggestions';
 import { WidgetResultCard } from '../components/widgets/WidgetResultCard';
+import { WidgetSearchBox } from '../components/widgets/WidgetSearchBox';
 import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
 import { SearchContext } from '../context/search';
@@ -75,14 +76,18 @@ export function AgenticView() {
     <SearchContext.Provider value={searchRef.current}>
       <ChatLayoutContext.Provider value={chatLayout}>
         <div class="flex flex-col gap-2">
-          {/* Row 1: AI autocomplete */}
+          {/* Row 1: AI autocomplete | searchBox. The autocomplete only sets
+              the page query on submit; searchBox does so as you type, which
+              is how the resultCard below reacts while typing. */}
           <WidgetSwitcher
+            destroy
             widgets={[
               {
                 title: 'autocomplete (showPromptSuggestions + aiMode)',
                 body: WidgetAiAutocomplete,
                 docs: ['autocomplete'],
               },
+              { title: 'searchBox', body: () => <WidgetSearchBox /> },
             ]}
           />
 
