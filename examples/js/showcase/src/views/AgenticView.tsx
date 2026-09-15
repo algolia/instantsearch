@@ -35,9 +35,16 @@ const searchClient: typeof algoliaClient = {
     algoliaClient.search(requests, requestOptions).then((response) => {
       response.results.forEach((result) => {
         if ('hits' in result && result.index === INDEX_NAME) {
+          // The client's `RenderingContent` type predates `widgets`.
+          const renderingContent = result.renderingContent as
+            | { widgets?: Record<string, unknown> }
+            | undefined;
           result.renderingContent = {
             ...result.renderingContent,
-            widgets: { resultCard: { enabled: true } },
+            widgets: {
+              ...renderingContent?.widgets,
+              resultCard: { enabled: true },
+            },
           } as typeof result.renderingContent;
         }
       });
