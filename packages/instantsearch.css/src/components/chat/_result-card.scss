@@ -118,8 +118,11 @@
   }
 }
 
-// Eases the answer in when it replaces the skeleton.
-.ais-ResultCard-message {
+// Eases in the answer when it replaces the skeleton, and the actions that
+// mount once the answer is complete.
+.ais-ResultCard-message,
+.ais-ResultCard-continueButton,
+.ais-ResultCard-expandButton {
   animation: ais-fadeIn var(--ais-transition-duration)
     var(--ais-transition-timing-function) both;
 }
