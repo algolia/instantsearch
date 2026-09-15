@@ -557,7 +557,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
     // Collected here rather than by the tool that searched: that tool renders
-    // nothing while display-results presents its records, and a record has to
+    // nothing while Grouped Results presents its records, and a record has to
     // outlive the render that produced it.
     const records = createChatRecordsStore();
     const collectRecords = () =>
