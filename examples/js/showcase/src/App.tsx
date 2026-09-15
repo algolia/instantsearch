@@ -1,27 +1,20 @@
-import { MapPin, Search, Sparkles, Wand2 } from 'lucide-preact';
+import { Blocks, MapPin, Search, Sparkles, Wand2 } from 'lucide-preact';
 import { useState } from 'preact/hooks';
 
 import { ColorModeSwitcher } from './components/ColorModeSwitcher';
-import { FlavorContext, type Flavor } from './context/flavor';
+import { FlavorContext } from './context/flavor';
+import { getFlavorFromURL, getIndexFromURL, setParams } from './utils/url';
 import { AgenticView } from './views/AgenticView';
 import { GeoSearchView } from './views/GeoSearchView';
 import { InstantSearchView } from './views/InstantSearchView';
 import { RecommendView } from './views/RecommendView';
+import { ReferenceView } from './views/ReferenceView';
 
 import type { LucideIcon } from 'lucide-preact';
 import type { ComponentType } from 'preact';
 
-const VALID_FLAVORS: Flavor[] = ['js', 'react', 'vue'];
-
-function getFlavorFromURL(): Flavor {
-  const param = new URLSearchParams(window.location.search).get('flavor');
-  if (param && VALID_FLAVORS.includes(param as Flavor)) {
-    return param as Flavor;
-  }
-  return 'js';
-}
-
 interface Experience {
+  slug: string;
   title: string;
   description: string;
   icon: LucideIcon;
@@ -30,33 +23,48 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
+    slug: 'instantsearch',
     title: 'InstantSearch',
     description: 'Full search interface',
     icon: Search,
     view: InstantSearchView,
   },
   {
+    slug: 'agentic',
     title: 'Agentic',
     description: 'AI-powered search and chat',
     icon: Sparkles,
     view: AgenticView,
   },
   {
+    slug: 'geosearch',
     title: 'GeoSearch',
     description: 'Search through locations',
     icon: MapPin,
     view: GeoSearchView,
   },
   {
+    slug: 'recommend',
     title: 'Recommend',
     description: 'Personalized recommendations',
     icon: Wand2,
     view: RecommendView,
   },
+  {
+    slug: 'reference',
+    title: 'Reference',
+    description: 'Options for all widgets',
+    icon: Blocks,
+    view: ReferenceView,
+  },
 ];
 
+const viewSlugs = experiences.map((experience) => experience.slug);
+
 export function App() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() =>
+    getIndexFromURL('view', viewSlugs)
+  );
   const flavor = getFlavorFromURL();
 
   return (
@@ -73,7 +81,10 @@ export function App() {
                     ? 'border-neutral-200 bg-white shadow-xs dark:border-neutral-700 dark:bg-neutral-800'
                     : 'border-transparent bg-neutral-50 hover:border-neutral-200 hover:bg-white hover:shadow-xs dark:bg-neutral-800/40 dark:hover:border-neutral-700 dark:hover:bg-neutral-800'
                 }`}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setParams({ view: experience.slug });
+                }}
               >
                 <experience.icon
                   size={20}
