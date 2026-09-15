@@ -133,8 +133,6 @@
 
 .ais-ResultCard-expandButton {
   align-self: flex-start;
-  // Offsets the `sm` padding so the label lines up with the answer text.
-  margin-left: calc(var(--ais-spacing) * -0.5);
 
   svg {
     width: var(--ais-spacing);
