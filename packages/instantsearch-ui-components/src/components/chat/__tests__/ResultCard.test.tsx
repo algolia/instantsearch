@@ -210,6 +210,20 @@ describe('ResultCard', () => {
     );
   });
 
+  test('shows at most two suggestions', () => {
+    render(
+      <ResultCard
+        {...createProps({
+          suggestions: ['First?', 'Second?', 'Third?'],
+        })}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: 'First?' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Second?' })).toBeInTheDocument();
+    expect(screen.queryByText('Third?')).not.toBeInTheDocument();
+  });
+
   test('hides the handoff and suggestions without a matching chat', () => {
     render(
       <ResultCard

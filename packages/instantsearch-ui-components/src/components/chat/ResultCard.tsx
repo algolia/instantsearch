@@ -116,6 +116,9 @@ export type ResultCardOwnProps<
   classNames?: Partial<ResultCardClassNames>;
 };
 
+// Suggestions share a row with the "continue" button; two fit on one line.
+const MAX_SUGGESTIONS = 2;
+
 const CHAT_STATUS: Record<ResultCardStatus, ChatStatus> = {
   hidden: 'ready',
   dismissed: 'ready',
@@ -317,7 +320,7 @@ export function createResultCardComponent({
               )}
               {showSuggestions && (
                 <ChatPromptSuggestions
-                  suggestions={suggestions}
+                  suggestions={suggestions?.slice(0, MAX_SUGGESTIONS)}
                   onSuggestionClick={onContinueInChat}
                   classNames={{
                     root: cx(
