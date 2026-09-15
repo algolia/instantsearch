@@ -1035,6 +1035,22 @@ describe('connectChat', () => {
         ]);
       });
 
+      it('skips messages already in the conversation on a repeated handoff', () => {
+        const { getRenderState } = getInitializedWidget();
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+        getRenderState().setMessages([
+          ...getRenderState().messages,
+          { id: 'u2', role: 'user', parts: [{ type: 'text', text: 'Why?' }] },
+        ]);
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+
+        expect(getRenderState().messages.map((message) => message.id)).toEqual(
+          ['u1', 'a1', 'u2']
+        );
+      });
+
       it('refuses while a response is in flight', () => {
         const { getRenderState, widget } = getInitializedWidget();
         widget.chatInstance._state.status = 'streaming';

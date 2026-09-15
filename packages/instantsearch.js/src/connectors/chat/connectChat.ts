@@ -656,7 +656,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           _chatInstance.setConversationId(id);
           setMessages(tagged);
         } else {
-          setMessages([..._chatInstance.messages, ...tagged]);
+          // The handing-off widget may still be mounted and hand off again
+          // (e.g. a second follow-up suggestion): only new turns are appended.
+          const existingIds = new Set(
+            _chatInstance.messages.map((message) => message.id)
+          );
+          setMessages([
+            ..._chatInstance.messages,
+            ...tagged.filter((message) => !existingIds.has(message.id)),
+          ]);
         }
         _chatInstance.clearError();
         return true;
