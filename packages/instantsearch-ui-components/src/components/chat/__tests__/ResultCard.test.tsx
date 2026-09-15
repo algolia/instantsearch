@@ -150,6 +150,32 @@ describe('ResultCard', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('renders nothing when the completed answer has no text', () => {
+    const toolOnly: ChatMessageBase = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-algolia_search_index_products',
+          toolCallId: 'call-1',
+          state: 'output-available',
+          input: {},
+          output: {},
+        },
+      ],
+    };
+    const { container } = render(
+      <ResultCard
+        {...createProps({
+          status: 'complete',
+          messages: [userMessage, toolOnly],
+        })}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
   test('renders the streamed text before completion', () => {
     render(<ResultCard {...createProps({ status: 'streaming' })} />);
 

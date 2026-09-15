@@ -196,11 +196,8 @@ export function createResultCardComponent({
       return () => window.removeEventListener('resize', measure);
     }, [body, latest, messages, status]);
 
-    if (status === 'hidden' || status === 'dismissed') {
-      return null;
-    }
-
     const isBusy = status === 'loading' || status === 'streaming';
+    const isComplete = status === 'complete';
     const assistantMessages = messages.filter(
       (message) => message.role === 'assistant'
     );
@@ -209,7 +206,16 @@ export function createResultCardComponent({
     const hasVisibleAnswer = assistantMessages.some((message) =>
       message.parts.some((part) => isPartText(part) && !isPartTextEmpty(part))
     );
-    const isComplete = status === 'complete';
+
+    if (
+      status === 'hidden' ||
+      status === 'dismissed' ||
+      // A finished answer with no text (tool output only) has nothing to show;
+      // the skeleton is reserved for busy states.
+      (isComplete && !hasVisibleAnswer)
+    ) {
+      return null;
+    }
     const showSuggestions =
       isComplete && canContinueInChat && Boolean(suggestions?.length);
     const showExpandToggle = isComplete && (overflowing || expanded);
