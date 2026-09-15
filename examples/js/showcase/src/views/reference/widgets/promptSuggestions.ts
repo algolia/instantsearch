@@ -3,7 +3,12 @@ import { promptSuggestions as fn } from 'instantsearch.js/es/widgets';
 import { SHOWCASE_AGENT_ID } from '../../../constants';
 import { defineWidget } from '../types';
 
-/** The three prompt configurations the Agentic view uses. */
+/**
+ * The three prompt configurations the Agentic view uses. The labels are
+ * abbreviated: they're interpolated into the printed source verbatim, so they
+ * stay valid string literals rather than carrying an annotation outside the
+ * quotes.
+ */
 const PLP = 'algolia_prompt_suggestions_553c8924-df38-403e-a302-f977a8963700';
 const PDP = 'algolia_prompt_suggestions_15a040ea-25ed-41ac-9615-3184383c57d4';
 const GUIDE = 'algolia_prompt_suggestions_b31fd5dd-0d44-4567-b2a0-f6891c5b71a1';
@@ -25,7 +30,7 @@ export const promptSuggestions = defineWidget({
       // Required. The PLP configuration reads the live query, filters and
       // results, so it's the one that suits this search frame.
       key: 'configurationId',
-      label: "'…553c8924' (PLP)",
+      label: "'…553c8924 (PLP)'",
       value: { configurationId: PLP },
     },
     {
@@ -39,7 +44,7 @@ export const promptSuggestions = defineWidget({
   toggles: [
     {
       key: 'configurationId',
-      label: "'…15a040ea' (PDP)",
+      label: "'…15a040ea (PDP)'",
       value: {
         configurationId: PDP,
         context: {
@@ -53,7 +58,7 @@ export const promptSuggestions = defineWidget({
     },
     {
       key: 'configurationId',
-      label: "'…b31fd5dd' (guide)",
+      label: "'…b31fd5dd (guide)'",
       value: {
         configurationId: GUIDE,
         context: {

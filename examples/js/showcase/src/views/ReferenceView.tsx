@@ -14,7 +14,12 @@ import { getFlavorFromURL, getIndexFromURL, setParams } from '../utils/url';
 
 import { widgets, widgetSections } from './reference/widgets';
 
-import type { Option, ReferenceWidget, Slot } from './reference/types';
+import type {
+  Option,
+  ReferenceWidget,
+  Slot,
+  WidgetNames,
+} from './reference/types';
 import type { ComponentChildren } from 'preact';
 
 const flavor = getFlavorFromURL();
@@ -98,9 +103,7 @@ const searchClient = algoliasearch(
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
-  const options = selectedOptions(widget, enabled);
-
+function formatCall(name: WidgetNames, options: Option[]): string {
   if (flavor === 'js') {
     const opts =
       options.length > 0
@@ -109,7 +112,7 @@ function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
             .join(',\n  ')}\n}`
         : '';
 
-    return `${widget.name.js}(${opts})`;
+    return `${name.js}(${opts})`;
   }
 
   if (flavor === 'react') {
@@ -128,7 +131,7 @@ function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
             .join('\n  ')}\n`
         : ' ';
 
-    return `<${widget.name.react}${opts}/>`;
+    return `<${name.react}${opts}/>`;
   }
 
   if (flavor === 'vue') {
@@ -146,10 +149,37 @@ function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
             .join('\n  ')}\n`
         : ' ';
 
-    return `<${widget.name.vue}${opts}/>`;
+    return `<${name.vue}${opts}/>`;
   }
 
   throw new Error(`Unsupported flavor: ${flavor}`);
+}
+
+function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
+  const options = selectedOptions(widget, enabled);
+
+  if (!widget.wraps) {
+    return formatCall(widget.name, options);
+  }
+
+  // A higher-order widget like `panel` isn't a widget on its own: it takes
+  // options, then a widget factory, then that widget's own options. Printing
+  // it like a plain call would show a snippet that renders nothing.
+  const { name, options: childOptions } = widget.wraps;
+
+  if (flavor === 'js') {
+    const wrapper = formatCall(widget.name, options);
+    const child = formatCall(name, childOptions);
+    const childCall = child.slice(child.indexOf('('));
+    return `${wrapper}(${name.js})${childCall}`;
+  }
+
+  // In React and Vue the wrapper is a component with the child inside it.
+  const wrapper = formatCall(widget.name, options).replace(/\s*\/>$/, '>');
+  const child = formatCall(name, childOptions).replace(/\n/g, '\n  ');
+  const close =
+    flavor === 'react' ? `</${widget.name.react}>` : `</${widget.name.vue}>`;
+  return `${wrapper}\n  ${child}\n${close}`;
 }
 
 function buildWidget(widget: ReferenceWidget, enabled: Set<string>) {
@@ -279,6 +309,7 @@ export function ReferenceView() {
       <aside class="flex w-full shrink-0 flex-col gap-3 lg:w-72">
         <div class="flex items-center gap-2">
           <select
+            aria-label="Widget"
             class="min-w-0 flex-1 cursor-pointer rounded-md border border-neutral-200 bg-white px-2 py-1.5 font-mono text-xs text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200"
             value={String(widgetIndex)}
             onChange={(event) => {
@@ -370,7 +401,13 @@ function FrameFacet() {
  * every widget placed near them off the screen. `configure` and `hitsPerPage`
  * under test take this over — see their `replaces`.
  */
-function FrameResults() {
+/**
+ * Caps the frame's results at a single row, so widgets placed near them stay
+ * on screen. Separate from the hits themselves: `configure` and `hitsPerPage`
+ * under test set the same parameter and must win, while `hits` and
+ * `infiniteHits` replace the list but should keep the cap.
+ */
+function FrameHitsCap() {
   const search = useSearch();
 
   useEffect(() => {
@@ -380,7 +417,7 @@ function FrameResults() {
     return () => search.removeWidgets([widget]);
   }, [search]);
 
-  return <WidgetHits />;
+  return null;
 }
 
 /**
@@ -463,15 +500,17 @@ function TestFrame({
           {!omit.has('refinementList') && <FrameFacet />}
         </div>
         <div class="flex min-w-0 flex-1 flex-col gap-3">
+          {!omit.has('configure') && <FrameHitsCap />}
           {at('toolbar')}
-          {!omit.has('hits') && <FrameResults />}
+          {!omit.has('hits') && <WidgetHits />}
           {at('results')}
         </div>
       </div>
 
-      {/* Companions with no slot inside the frame, like a chat panel. */}
+      {/* `standalone` widgets have no natural place in the frame — `configure`
+          renders nothing at all — but they still have to mount. */}
+      {at('standalone')}
       {extras.alone}
-      {extras.standalone}
     </section>
   );
 }

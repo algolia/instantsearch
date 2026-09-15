@@ -84,6 +84,12 @@ export interface ReferenceWidget {
    * rooted at the same one, or the trail describes a tree that isn't shown.
    */
   sharedOptions?: string[];
+  /**
+   * Set for a higher-order widget like `panel`, which takes options, then a
+   * widget factory, then that widget's options. Without it the printed source
+   * would be `panel({...})` — valid-looking but rendering nothing.
+   */
+  wraps?: { name: WidgetNames; options: Option[] };
   fn: (widgetParams: any) => any;
   toggles: Option[];
   defaults: Option[];
@@ -100,18 +106,23 @@ export function toKebabCase(name: string): string {
   return name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
+/** `refinementList` -> `RefinementList` / `ais-refinement-list`. */
+export function deriveNames(
+  name: string,
+  overrides?: Partial<WidgetNames>
+): WidgetNames {
+  return {
+    js: name,
+    react: name.charAt(0).toUpperCase() + name.slice(1),
+    vue: `ais-${toKebabCase(name)}`,
+    ...overrides,
+  };
+}
+
 export function defineWidget({
   name,
   names,
   ...rest
 }: WidgetDefinition): ReferenceWidget {
-  return {
-    name: {
-      js: name,
-      react: name.charAt(0).toUpperCase() + name.slice(1),
-      vue: `ais-${toKebabCase(name)}`,
-      ...names,
-    },
-    ...rest,
-  };
+  return { name: deriveNames(name, names), ...rest };
 }

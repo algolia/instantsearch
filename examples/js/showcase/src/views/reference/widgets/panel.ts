@@ -1,6 +1,6 @@
 import { panel, refinementList } from 'instantsearch.js/es/widgets';
 
-import { defineWidget } from '../types';
+import { defineWidget, deriveNames } from '../types';
 
 /**
  * panel is a higher-order widget — `panel(options)(widgetFactory)` — so it
@@ -14,12 +14,23 @@ function fn({ container, ...panelOptions }: Record<string, any>) {
       collapseButtonText: ({ collapsed }) => (collapsed ? 'Show' : 'Hide'),
     },
     ...panelOptions,
-  })(refinementList)({ container, attribute: 'categories' });
+  })(refinementList)({ container, ...wrappedAttribute.value });
 }
+
+const wrappedAttribute = {
+  key: 'attribute',
+  label: "'categories'",
+  value: { attribute: 'categories' },
+};
 
 export const panelWidget = defineWidget({
   name: 'panel',
   fn,
+  // panel(options)(refinementList)({ attribute: 'categories' })
+  wraps: {
+    name: deriveNames('refinementList'),
+    options: [wrappedAttribute],
+  },
   slot: 'facet',
   replaces: [],
   defaults: [],
