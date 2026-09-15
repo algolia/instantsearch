@@ -118,6 +118,12 @@
   }
 }
 
+// Eases the answer in when it replaces the skeleton.
+.ais-ResultCard-message {
+  animation: ais-fadeIn var(--ais-transition-duration)
+    var(--ais-transition-timing-function) both;
+}
+
 // One wrapping row of compact chips under the answer: the chat's stacked
 // layout is sized for a narrow panel and dwarfs the answer here.
 .ais-ResultCard-suggestions {
