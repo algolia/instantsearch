@@ -377,6 +377,17 @@ describe('connectResultCard', () => {
               toolCallId: 'call-1',
               output: { hits: [{ objectID: '1', name: 'Pegasus' }] },
             },
+            {
+              type: 'tool-input-available',
+              toolCallId: 'call-2',
+              toolName: 'algolia_ponder',
+              input: { thought: 'Compare cushioning.' },
+            },
+            {
+              type: 'tool-output-available',
+              toolCallId: 'call-2',
+              output: { ok: true },
+            },
             { type: 'finish-step' },
             { type: 'finish' },
           ])
@@ -393,6 +404,11 @@ describe('connectResultCard', () => {
             type: 'tool-algolia_search_index_indexName',
             state: 'output-available',
             output: { hits: [{ objectID: '1', name: 'Pegasus' }] },
+          }),
+          expect.objectContaining({
+            type: 'tool-algolia_ponder',
+            state: 'output-available',
+            output: { ok: true },
           }),
         ])
       );

@@ -2,7 +2,11 @@ import {
   buildFilters,
   DisplayResultsToolType,
   isChatBusy,
+  MemorizeToolType,
+  MemorySearchToolType,
   openChat,
+  PonderToolType,
+  RecommendToolType,
   SearchIndexToolType,
   stripInternalHitMetadata,
 } from '../../lib/chat';
@@ -281,7 +285,11 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       // hits the chat's display-results needs after the handoff.
       tools: {
         [SearchIndexToolType]: {},
+        [RecommendToolType]: {},
         [DisplayResultsToolType]: {},
+        [MemorizeToolType]: {},
+        [MemorySearchToolType]: {},
+        [PonderToolType]: {},
       },
     } as ChatConnectorParams;
 
