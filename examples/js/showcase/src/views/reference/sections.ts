@@ -20,7 +20,6 @@ export const DOC_SECTIONS: Array<{ title: string; slugs: string[] }> = [
       'chat',
       'chat-trigger',
       'prompt-suggestions',
-      'filter-suggestions',
       'feeds',
       'voice-search',
       'insights',
