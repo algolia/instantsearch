@@ -61,8 +61,9 @@
     content: '';
     position: absolute;
     inset: auto 0 0 0;
-    // About one line of text, so the fade shows text trailing off.
-    height: calc(var(--ais-spacing) * 2);
+    // Spans about three lines so the text dims progressively down to the
+    // toggle, and the line sliced by the clip ends up under the solid end.
+    height: calc(var(--ais-spacing) * 3);
     background: linear-gradient(
       to bottom,
       rgba(var(--ais-background-color-rgb), 0),
@@ -77,6 +78,12 @@
 
 .ais-ResultCard-body--clipped::after {
   opacity: 1;
+}
+
+// The toggle starts where the fade ends, so the dimmed text runs straight
+// into the button with no blank band in between.
+.ais-ResultCard-body--clipped + .ais-ResultCard-expandButton {
+  margin-top: calc(var(--ais-spacing) * -0.75);
 }
 
 // Fallback before the first measurement.
