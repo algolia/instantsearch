@@ -19,7 +19,7 @@ import type {
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
-function createDisplayResultsTool<TObject extends RecordWithObjectID>(
+function createGroupedResultsTool<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
 ): UserClientSideTool {
   const DisplayResultsUIComponent = createDisplayResultsToolComponent<TObject>({
@@ -96,4 +96,4 @@ function createDisplayResultsTool<TObject extends RecordWithObjectID>(
   };
 }
 
-export { createDisplayResultsTool };
+export { createGroupedResultsTool };

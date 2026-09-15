@@ -28,7 +28,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
-import { createDisplayResultsTool } from './chat/tools/DisplayResultsTool';
+import { createGroupedResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export {
@@ -81,8 +81,8 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
-    [DisplayResultsToolType]: createDisplayResultsTool(itemComponent),
-    [GroupedResultsToolType]: createDisplayResultsTool(itemComponent),
+    [DisplayResultsToolType]: createGroupedResultsTool(itemComponent),
+    [GroupedResultsToolType]: createGroupedResultsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},

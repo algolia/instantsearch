@@ -7,7 +7,7 @@ import { fireEvent, screen, within } from '@testing-library/dom';
 import { collectChatRecords } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
-import { createDisplayResultsTool } from '../display-results-tool';
+import { createGroupedResultsTool } from '../display-results-tool';
 
 import type {
   ChatComponentContext,
@@ -77,7 +77,7 @@ const createToolProps = (
   });
 };
 
-describe('createDisplayResultsTool', () => {
+describe('createGroupedResultsTool', () => {
   afterEach(() => {
     document.body.replaceChildren();
   });
@@ -86,7 +86,7 @@ describe('createDisplayResultsTool', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const tool = createDisplayResultsTool({
+    const tool = createGroupedResultsTool({
       item: (_item, { html }) =>
         html`<input
           aria-label="Display result item"
@@ -129,7 +129,7 @@ describe('createDisplayResultsTool', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const tool = createDisplayResultsTool({
+    const tool = createGroupedResultsTool({
       item: (item, { html }) => html`<span>${item.objectID}</span>`,
     });
     const LayoutComponent = tool.templates
@@ -164,7 +164,7 @@ describe('createDisplayResultsTool', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const tool = createDisplayResultsTool({
+    const tool = createGroupedResultsTool({
       item: (item, { html }) => html`<span>${item.objectID}</span>`,
     });
     const LayoutComponent = tool.templates

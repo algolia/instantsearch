@@ -28,7 +28,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import { createDisplayResultsTool } from './display-results-tool';
+import { createGroupedResultsTool } from './display-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
@@ -170,8 +170,8 @@ function createDefaultTools<
       shouldRender: isDisplayResultsDisabled,
     },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
-    [DisplayResultsToolType]: createDisplayResultsTool(templates),
-    [GroupedResultsToolType]: createDisplayResultsTool(templates),
+    [DisplayResultsToolType]: createGroupedResultsTool(templates),
+    [GroupedResultsToolType]: createGroupedResultsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },
