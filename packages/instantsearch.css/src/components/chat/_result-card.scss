@@ -20,16 +20,17 @@
     var(--ais-transition-timing-function) both;
 }
 
+// Title on the left; the handoff and dismiss buttons pack on the right.
 .ais-ResultCard-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
 .ais-ResultCard-headerTitle {
   display: inline-flex;
   align-items: center;
+  margin-right: auto;
   gap: calc(var(--ais-spacing) * 0.5);
   font-size: calc(var(--ais-font-size) * 0.875);
   font-weight: var(--ais-font-weight-medium);
@@ -103,20 +104,6 @@
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
-}
-
-.ais-ResultCard-footer {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--ais-spacing) * 0.75);
-}
-
-.ais-ResultCard-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: calc(var(--ais-spacing) * 0.5);
 }
 
 // One wrapping row of compact chips under the answer: the chat's stacked

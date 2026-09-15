@@ -38,9 +38,7 @@ export type ResultCardClassNames = {
   body: string | string[];
   loader: string | string[];
   message: string | string[];
-  footer: string | string[];
   suggestions: string | string[];
-  actions: string | string[];
   expandButton: string | string[];
   continueButton: string | string[];
 };
@@ -115,7 +113,7 @@ export type ResultCardOwnProps<
   classNames?: Partial<ResultCardClassNames>;
 };
 
-// Suggestions share a row with the "continue" button; two fit on one line.
+// Keeps the card compact: the chat shows the full list after the handoff.
 const MAX_SUGGESTIONS = 2;
 
 const CHAT_STATUS: Record<ResultCardStatus, ChatStatus> = {
@@ -247,6 +245,20 @@ export function createResultCardComponent({
             <SparklesIcon createElement={createElement} />
             {translations.headerTitle}
           </span>
+          {/* In the header so it stays reachable when the answer is clipped. */}
+          {isComplete && canContinueInChat && (
+            <Button
+              variant="outline"
+              size="sm"
+              className={cx(
+                'ais-ResultCard-continueButton',
+                classNames.continueButton
+              )}
+              onClick={() => onContinueInChat()}
+            >
+              {translations.continueInChatText}
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -322,7 +334,6 @@ export function createResultCardComponent({
           )}
         </div>
 
-        {/* Right under the content it reveals, apart from the handoff. */}
         {showExpandToggle && (
           <Button
             variant="ghost"
@@ -341,24 +352,6 @@ export function createResultCardComponent({
               <ChevronDownIcon createElement={createElement} />
             )}
           </Button>
-        )}
-
-        {isComplete && canContinueInChat && (
-          <div className={cx('ais-ResultCard-footer', classNames.footer)}>
-            <div className={cx('ais-ResultCard-actions', classNames.actions)}>
-              <Button
-                variant="outline"
-                size="sm"
-                className={cx(
-                  'ais-ResultCard-continueButton',
-                  classNames.continueButton
-                )}
-                onClick={() => onContinueInChat()}
-              >
-                {translations.continueInChatText}
-              </Button>
-            </div>
-          </div>
         )}
       </section>
     );
