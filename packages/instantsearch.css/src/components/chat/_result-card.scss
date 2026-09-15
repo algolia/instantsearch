@@ -2,8 +2,9 @@
 @use '../../shared/_variables';
 
 .ais-ResultCard {
-  // Height of the clipped body; `--expanded` lifts it.
-  --ais-result-card-max-height: 16rem;
+  // Height of the clipped body; `--expanded` lifts it. Fits the typical
+  // answer (a pick plus three or four alternatives and the suggestions).
+  --ais-result-card-max-height: 12rem;
 
   display: flex;
   flex-direction: column;
@@ -11,7 +12,7 @@
   padding: var(--ais-spacing);
   border: 1px solid
     rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
-  border-radius: var(--ais-border-radius-lg);
+  border-radius: var(--ais-border-radius-md);
   background-color: rgba(
     var(--ais-background-color-rgb),
     var(--ais-background-color-alpha)
