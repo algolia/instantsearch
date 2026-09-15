@@ -15,8 +15,9 @@ export function useMinimized(id: string) {
   return { minimized, toggle };
 }
 
-// Hover-only like the docs links, except a minimized card keeps it visible
-// so the collapsed header still reads as reopenable.
+// Hover-only like the docs links (revealed on keyboard focus too), except a
+// minimized card keeps it visible so the collapsed header still reads as
+// reopenable.
 export function MinimizeToggle({
   minimized,
   visible,
@@ -31,8 +32,7 @@ export function MinimizeToggle({
   return (
     <button
       type="button"
-      class={`cursor-pointer rounded p-0.5 text-neutral-400 transition-[opacity,color,background-color] hover:bg-neutral-200 hover:text-neutral-600 dark:text-neutral-500 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 ${shown ? 'opacity-100' : 'opacity-0'}`}
-      inert={!shown}
+      class={`cursor-pointer rounded p-0.5 text-neutral-400 transition-[opacity,color,background-color] hover:bg-neutral-200 hover:text-neutral-600 dark:text-neutral-500 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 ${shown ? 'opacity-100' : 'opacity-0 focus-visible:opacity-100'}`}
       title={minimized ? 'Expand' : 'Minimize'}
       aria-label={minimized ? 'Expand' : 'Minimize'}
       aria-expanded={!minimized}
