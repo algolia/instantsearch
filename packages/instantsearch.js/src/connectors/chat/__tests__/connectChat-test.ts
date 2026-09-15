@@ -1046,9 +1046,11 @@ describe('connectChat', () => {
 
         expect(getRenderState().adoptConversation(conversation)).toBe(true);
 
-        expect(getRenderState().messages.map((message) => message.id)).toEqual(
-          ['u1', 'a1', 'u2']
-        );
+        expect(getRenderState().messages.map((message) => message.id)).toEqual([
+          'u1',
+          'a1',
+          'u2',
+        ]);
       });
 
       it('refuses while a response is in flight', () => {
