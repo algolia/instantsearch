@@ -7,7 +7,6 @@ import { chatTrigger } from './chatTrigger';
 import { clearRefinements } from './clearRefinements';
 import { configureWidget } from './configure';
 import { currentRefinements } from './currentRefinements';
-import { filterSuggestions } from './filterSuggestions';
 import { hierarchicalMenu } from './hierarchicalMenu';
 import { hits } from './hits';
 import { hitsPerPage } from './hitsPerPage';
@@ -62,7 +61,6 @@ const allWidgets: ReferenceWidget[] = [
   chat,
   chatTrigger,
   promptSuggestions,
-  filterSuggestions,
   panelWidget,
   voiceSearch,
   hits,
