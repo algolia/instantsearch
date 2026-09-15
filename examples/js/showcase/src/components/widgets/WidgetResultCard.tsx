@@ -11,10 +11,8 @@ export function WidgetResultCard() {
   return (
     <div class="flex flex-col gap-3">
       <p class="text-xs text-neutral-500 dark:text-neutral-400">
-        Shows for queries of two words or more, once the page query changes (as
-        you type with <span class="font-mono">searchBox</span>, on submit with
-        the autocomplete). The Agent Studio Rule that enables it is simulated on
-        the search client until the backend ships.
+        Shows for queries of two words or more. The enabling Rule is mocked in
+        the search client.
       </p>
       <div ref={ref} />
     </div>
