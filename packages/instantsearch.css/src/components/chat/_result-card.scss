@@ -63,13 +63,15 @@
     inset: auto 0 0 0;
     // Spans about three lines so the text dims progressively down to the
     // toggle, and the line sliced by the clip ends up under the solid end.
-    height: calc(var(--ais-spacing) * 3);
+    height: calc(var(--ais-spacing) * 4);
     background: linear-gradient(
       to bottom,
       rgba(var(--ais-background-color-rgb), 0),
       rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha))
     );
     opacity: 0;
+    // Only the disappearance animates (with the height, on expand): the clip
+    // is detected after paint, so fading in would flash the hard cut first.
     transition: opacity var(--ais-transition-duration)
       var(--ais-transition-timing-function);
     pointer-events: none;
@@ -78,6 +80,7 @@
 
 .ais-ResultCard-body--clipped::after {
   opacity: 1;
+  transition: none;
 }
 
 // The toggle starts where the fade ends, so the dimmed text runs straight
