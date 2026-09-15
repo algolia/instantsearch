@@ -2,9 +2,9 @@
 @use '../../shared/_variables';
 
 .ais-ResultCard {
-  // Height of the clipped body; `--expanded` lifts it. Fits a pick plus a
-  // couple of alternatives; longer answers clip behind "Show more".
-  --ais-result-card-max-height: 10rem;
+  // Height of the clipped body; `--expanded` lifts it. About six lines: the
+  // pick and its rationale show, the alternatives clip behind "Show more".
+  --ais-result-card-max-height: 6rem;
 
   display: flex;
   flex-direction: column;
@@ -61,7 +61,8 @@
     content: '';
     position: absolute;
     inset: auto 0 0 0;
-    height: calc(var(--ais-spacing) * 3);
+    // About one line of text, so the fade shows text trailing off.
+    height: calc(var(--ais-spacing) * 2);
     background: linear-gradient(
       to bottom,
       rgba(var(--ais-background-color-rgb), 0),
