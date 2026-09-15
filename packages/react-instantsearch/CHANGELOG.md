@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.49.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.49.0...react-instantsearch@7.49.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **chat:** support both results tool names ([#7238](https://github.com/algolia/instantsearch/issues/7238)) ([3a5f924](https://github.com/algolia/instantsearch/commit/3a5f924cac5bc57559a2c2e33c35831876f0cae7))
+
+
+
+
+
 # [7.49.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.48.0...react-instantsearch@7.49.0) (2026-09-03)
 
 

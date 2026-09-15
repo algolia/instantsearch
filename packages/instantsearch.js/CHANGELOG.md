@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.117.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.116.0...instantsearch.js@4.117.0) (2026-09-15)
+
+
+### Bug Fixes
+
+* **chat:** support both results tool names ([#7238](https://github.com/algolia/instantsearch/issues/7238)) ([3a5f924](https://github.com/algolia/instantsearch/commit/3a5f924cac5bc57559a2c2e33c35831876f0cae7))
+
+
+### Features
+
+* **chat:** make chat widgets generally available ([#7236](https://github.com/algolia/instantsearch/issues/7236)) ([e33ae16](https://github.com/algolia/instantsearch/commit/e33ae16df60a637e53c2616b5298eea0b0b271b3))
+
+
+
+
+
 # [4.116.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.115.0...instantsearch.js@4.116.0) (2026-09-03)
 
 
