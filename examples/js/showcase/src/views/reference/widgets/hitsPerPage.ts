@@ -1,31 +1,31 @@
-import { hitsPerPage as fn } from 'instantsearch.js/es/widgets';
+import { hitsPerPage as fn } from "instantsearch.js/es/widgets";
 
-import { uppercaseLabels } from '../transforms';
-import { defineWidget } from '../types';
+import { uppercaseLabels } from "../transforms";
+import { defineWidget } from "../types";
 
 export const hitsPerPage = defineWidget({
-  name: 'hitsPerPage',
+  name: "hitsPerPage",
   fn,
-  slot: 'toolbar',
-  replaces: ['configure'],
+  slot: "toolbar",
+  replaces: ["configure"],
   defaults: [
     {
-      key: 'items',
+      key: "items",
       label:
-        "[\n    { label: '3 hits per page', value: 3 },\n    { label: '6 hits per page', value: 6 },\n    { label: '9 hits per page', value: 9, default: true },\n  ]",
+        "[\n    { label: '4 hits per page', value: 4, default: true },\n    { label: '8 hits per page', value: 8 },\n    { label: '12 hits per page', value: 12},\n  ]",
       value: {
         items: [
-          { label: '3 hits per page', value: 3 },
-          { label: '6 hits per page', value: 6 },
-          { label: '9 hits per page', value: 9, default: true },
+          { label: "4 hits per page", value: 4, default: true },
+          { label: "8 hits per page", value: 8 },
+          { label: "12 hits per page", value: 12 },
         ],
       },
     },
   ],
   toggles: [
     {
-      key: 'transformItems',
-      label: 'uppercaseLabels',
+      key: "transformItems",
+      label: "uppercaseLabels",
       value: { transformItems: uppercaseLabels },
     },
   ],
