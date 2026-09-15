@@ -294,6 +294,12 @@ export function createResultCardComponent({
               ? { maxHeight: `${contentHeight}px` }
               : undefined
           }
+          // Clipping is visual only: links and suggestions below the fold stay
+          // in the tab order, so reaching one reveals it. Capture phase because
+          // `focus` does not bubble in Preact.
+          onFocusCapture={() => {
+            if (overflowing && !expanded) onExpandedChange(true);
+          }}
         >
           {status === 'failed' ? (
             <ChatMessageError

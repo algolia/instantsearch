@@ -302,6 +302,28 @@ describe('ResultCard', () => {
     clientHeight.mockRestore();
   });
 
+  test('expands a clipped answer when focus reaches its content', async () => {
+    const onExpandedChange = jest.fn();
+    const scrollHeight = jest
+      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+      .mockReturnValue(400);
+    const clientHeight = jest
+      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
+      .mockReturnValue(200);
+
+    render(
+      <ResultCard
+        {...createProps({ onExpandedChange, suggestions: ['Waterproof?'] })}
+      />
+    );
+
+    screen.getByRole('button', { name: 'Waterproof?' }).focus();
+    expect(onExpandedChange).toHaveBeenCalledWith(true);
+
+    scrollHeight.mockRestore();
+    clientHeight.mockRestore();
+  });
+
   test('does not offer to expand a short answer', () => {
     render(<ResultCard {...createProps()} />);
 
