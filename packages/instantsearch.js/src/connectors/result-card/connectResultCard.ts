@@ -197,7 +197,7 @@ function computeActivation(
   }
 
   const hits = (results.hits as Hit[]).slice(0, HITS_SAMPLE_SIZE);
-  const hitIds = hits.map((hit) => hit.objectID).join(',');
+  const hitIds = JSON.stringify(hits.map((hit) => hit.objectID));
 
   return {
     base,
