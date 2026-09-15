@@ -77,6 +77,19 @@
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
+// One wrapping row of compact chips left of the "continue" button: the chat's
+// stacked layout is sized for a narrow panel and dwarfs the answer here.
+.ais-ResultCard-suggestions {
+  flex: 1 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .ais-ChatPromptSuggestions-suggestion {
+    font-size: calc(var(--ais-font-size) * 0.875);
+    padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.75);
+  }
+}
+
 .ais-ResultCard-expandButton {
   margin-right: auto;
 

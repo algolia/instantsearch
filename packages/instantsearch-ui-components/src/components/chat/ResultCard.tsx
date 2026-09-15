@@ -293,18 +293,6 @@ export function createResultCardComponent({
           showExpandToggle ||
           (isComplete && canContinueInChat)) && (
           <div className={cx('ais-ResultCard-footer', classNames.footer)}>
-            {showSuggestions && (
-              <ChatPromptSuggestions
-                suggestions={suggestions}
-                onSuggestionClick={onContinueInChat}
-                classNames={{
-                  root: cx(
-                    'ais-ResultCard-suggestions',
-                    classNames.suggestions
-                  ),
-                }}
-              />
-            )}
             <div className={cx('ais-ResultCard-actions', classNames.actions)}>
               {showExpandToggle && (
                 <Button
@@ -326,6 +314,18 @@ export function createResultCardComponent({
                     <ChevronDownIcon createElement={createElement} />
                   )}
                 </Button>
+              )}
+              {showSuggestions && (
+                <ChatPromptSuggestions
+                  suggestions={suggestions}
+                  onSuggestionClick={onContinueInChat}
+                  classNames={{
+                    root: cx(
+                      'ais-ResultCard-suggestions',
+                      classNames.suggestions
+                    ),
+                  }}
+                />
               )}
               {isComplete && canContinueInChat && (
                 <Button
