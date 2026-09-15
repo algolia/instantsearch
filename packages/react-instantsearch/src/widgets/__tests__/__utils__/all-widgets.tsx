@@ -27,6 +27,7 @@ const NON_WIDGETS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  'GroupedResultsToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
 
@@ -39,6 +40,7 @@ const NON_COMPONENTS = [
   'MemorySearchToolType',
   'PonderToolType',
   'DisplayResultsToolType',
+  'GroupedResultsToolType',
   // `ChatTrigger`'s permissive `ComponentProps<'button'>` base widens the
   // `SingleWidget` union enough that TS can't narrow `widget.Component` in
   // the switch below, breaking other cases. Covered by a dedicated test in

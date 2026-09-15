@@ -2578,7 +2578,8 @@ export function createOptionsTests(
         );
       });
 
-      describe('display results tool', () => {
+      const toolTypes = [DisplayResultsToolType, 'algolia_grouped_results'];
+      describe.each(toolTypes)('Grouped Results tool (%s)', (toolType) => {
         const displayResultsMessage = (
           input: unknown,
           {
@@ -2607,7 +2608,7 @@ export function createOptionsTests(
                 },
               },
               {
-                type: `tool-${DisplayResultsToolType}`,
+                type: `tool-${toolType}`,
                 toolCallId: 'display',
                 input,
                 state,
@@ -2709,7 +2710,7 @@ export function createOptionsTests(
           });
         });
 
-        test('renders a non-default image attribute in display results', async () => {
+        test('renders a non-default image attribute in Grouped Results', async () => {
           const searchClient = createSearchClient();
           const thumbnailUrl = 'https://example.com/shoe.jpg';
 
@@ -2886,7 +2887,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('skips the search index tool when the display results tool needs to be rendered', async () => {
+        test('skips the search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2904,7 +2905,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -2944,7 +2945,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('keeps skipping an overridden search index tool when the display results tool needs to be rendered', async () => {
+        test('keeps skipping an overridden search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2962,7 +2963,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -3018,7 +3019,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('skips the MCP-shimmed search index tool when the display results tool needs to be rendered', async () => {
+        test('skips the MCP-shimmed search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -3036,7 +3037,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -3076,7 +3077,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('streams input with a layout-only display results override', async () => {
+        test('streams input with a layout-only Grouped Results override', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -3100,7 +3101,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
                     },
@@ -3110,7 +3111,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>
                     ),
@@ -3183,7 +3184,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('shows the loader for a callback-only display results override', async () => {
+        test('shows the loader for a callback-only Grouped Results override', async () => {
           const searchClient = createSearchClient();
           const chat = new Chat({});
 
@@ -3196,7 +3197,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {},
                     onToolCall: jest.fn(),
                   },
@@ -3205,7 +3206,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     onToolCall: jest.fn(),
                   },
                 },
@@ -3237,7 +3238,7 @@ export function createOptionsTests(
           ).toBeInTheDocument();
         });
 
-        test('allows a display results override to disable input streaming', async () => {
+        test('allows a Grouped Results override to disable input streaming', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -3261,7 +3262,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
@@ -3272,7 +3273,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>

@@ -115,6 +115,8 @@ To run this project, you will need:
 - Node.js ≥ 20 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
 - [Yarn](https://yarnpkg.com)
 
+Install with a plain `yarn`. Don't use `yarn install --ignore-scripts`: the root `postinstall` script puts the `algoliasearch` dependency containers in place, and skipping it leaves the package unresolvable (`Can't resolve 'algoliasearch/lite'`). Run `yarn postinstall` to recover.
+
 ## Launch the dev environment
 
 Each flavor has a **getting-started** example which can be used for development purposes.
