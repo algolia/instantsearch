@@ -295,7 +295,7 @@ describe('connectResultCard', () => {
       );
     });
 
-    it('sends the query with the turn context and referer', async () => {
+    it('sends the query as a question with the turn context and referer', async () => {
       const { renderAndWait, getRequestBody } = setup();
       await renderAndWait(
         makeResults({
@@ -320,7 +320,10 @@ describe('connectResultCard', () => {
       expect(messages).toHaveLength(1);
       expect(messages[0].role).toBe('user');
       expect(messages[0].parts).toEqual([
-        { type: 'text', text: 'running shoes' },
+        {
+          type: 'text',
+          text: 'I\'m looking for "running shoes". Which of these results would you recommend and why?',
+        },
       ]);
 
       const { turnContext } = messages[0].metadata;
@@ -400,7 +403,9 @@ describe('connectResultCard', () => {
       await renderAndWait(makeResults({ query: 'trail shoes' }));
 
       expect(fetchMock).toHaveBeenCalledTimes(2);
-      expect(getRequestBody(1).messages[0].parts[0].text).toBe('trail shoes');
+      expect(getRequestBody(1).messages[0].parts[0].text).toContain(
+        '"trail shoes"'
+      );
     });
 
     it('requests again when the filters change', async () => {
@@ -428,7 +433,7 @@ describe('connectResultCard', () => {
 
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const body = JSON.parse(fetchMock.mock.calls[0][1].body as string);
-      expect(body.messages[0].parts[0].text).toBe('running shoes red');
+      expect(body.messages[0].parts[0].text).toContain('"running shoes red"');
     });
 
     it('hides again when the Rule stops matching', async () => {

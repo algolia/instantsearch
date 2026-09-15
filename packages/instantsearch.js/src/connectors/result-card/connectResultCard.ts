@@ -218,6 +218,14 @@ function buildTurnContext({
   };
 }
 
+// Sent as-is, the query reads as a search: the agent re-runs it and answers
+// "I found…", which the hits below already show. Framed as a question, it
+// answers from `hitsSample` without tools. Stopgap until the backend applies
+// a result-card instruction from the `x-algolia-referer` header.
+function buildQuestion(query: string): string {
+  return `I'm looking for "${query}". Which of these results would you recommend and why?`;
+}
+
 function hasAssistantMessage(messages: UIMessage[] | undefined): boolean {
   return Boolean(messages?.some((message) => message.role === 'assistant'));
 }
@@ -315,7 +323,7 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       chatState.clearMessages();
       chatState.sendMessage(
         {
-          text: context.query,
+          text: buildQuestion(context.query),
           metadata: { turnContext: buildTurnContext(context) },
         },
         { headers: { 'x-algolia-referer': RESULT_CARD_REFERER } }
