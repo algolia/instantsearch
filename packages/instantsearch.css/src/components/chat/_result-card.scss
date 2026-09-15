@@ -2,9 +2,9 @@
 @use '../../shared/_variables';
 
 .ais-ResultCard {
-  // Height of the clipped body; `--expanded` lifts it. Fits the typical
-  // answer (a pick plus three or four alternatives and the suggestions).
-  --ais-result-card-max-height: 12rem;
+  // Height of the clipped body; `--expanded` lifts it. Fits a pick plus a
+  // couple of alternatives; longer answers clip behind "Show more".
+  --ais-result-card-max-height: 10rem;
 
   display: flex;
   flex-direction: column;
