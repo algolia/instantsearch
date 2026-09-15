@@ -173,15 +173,30 @@ export function createResultCardComponent({
       ...userTranslations,
     };
 
-    // The clipped body is measured after each render; the toggle only shows
-    // when there is something to reveal. While expanded, the last measurement
-    // stands (an unclipped body never overflows).
+    // The body is measured when its content or the viewport changes: the toggle
+    // only shows when there is something to reveal, and the expanded height is
+    // set in pixels so `max-height` can transition. Toggling `expanded` does
+    // not re-measure: an unclipped body never overflows, and right after a
+    // collapse the height is still mid-transition.
     const [body, setBody] = useState<HTMLDivElement | null>(null);
     const [overflowing, setOverflowing] = useState(false);
+    const [contentHeight, setContentHeight] = useState<number | undefined>(
+      undefined
+    );
+    const latest = useState({ expanded })[0];
+    latest.expanded = expanded;
     useEffect(() => {
-      if (!body || expanded) return;
-      setOverflowing(body.scrollHeight > body.clientHeight);
-    }, [body, expanded, messages, status]);
+      if (!body) return undefined;
+      const measure = () => {
+        setContentHeight(body.scrollHeight);
+        if (!latest.expanded) {
+          setOverflowing(body.scrollHeight > body.clientHeight);
+        }
+      };
+      measure();
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }, [body, latest, messages, status]);
 
     if (status === 'hidden' || status === 'dismissed') {
       return null;
@@ -253,8 +268,14 @@ export function createResultCardComponent({
           className={cx(
             'ais-ResultCard-body',
             expanded && 'ais-ResultCard-body--expanded',
+            overflowing && !expanded && 'ais-ResultCard-body--clipped',
             classNames.body
           )}
+          style={
+            expanded && contentHeight !== undefined
+              ? { maxHeight: `${contentHeight}px` }
+              : undefined
+          }
         >
           {status === 'failed' ? (
             <ChatMessageError
@@ -289,59 +310,53 @@ export function createResultCardComponent({
               />
             ))
           )}
+          {/* In the flow after the answer, so a clipped card hides them too. */}
+          {showSuggestions && (
+            <ChatPromptSuggestions
+              suggestions={suggestions?.slice(0, MAX_SUGGESTIONS)}
+              onSuggestionClick={onContinueInChat}
+              classNames={{
+                root: cx('ais-ResultCard-suggestions', classNames.suggestions),
+              }}
+            />
+          )}
         </div>
 
-        {(showSuggestions ||
-          showExpandToggle ||
-          (isComplete && canContinueInChat)) && (
+        {/* Right under the content it reveals, apart from the handoff. */}
+        {showExpandToggle && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cx(
+              'ais-ResultCard-expandButton',
+              classNames.expandButton
+            )}
+            aria-expanded={expanded ? 'true' : 'false'}
+            onClick={() => onExpandedChange(!expanded)}
+          >
+            {expanded ? translations.collapseText : translations.expandText}
+            {expanded ? (
+              <ChevronUpIcon createElement={createElement} />
+            ) : (
+              <ChevronDownIcon createElement={createElement} />
+            )}
+          </Button>
+        )}
+
+        {isComplete && canContinueInChat && (
           <div className={cx('ais-ResultCard-footer', classNames.footer)}>
             <div className={cx('ais-ResultCard-actions', classNames.actions)}>
-              {showExpandToggle && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cx(
-                    'ais-ResultCard-expandButton',
-                    classNames.expandButton
-                  )}
-                  aria-expanded={expanded ? 'true' : 'false'}
-                  onClick={() => onExpandedChange(!expanded)}
-                >
-                  {expanded
-                    ? translations.collapseText
-                    : translations.expandText}
-                  {expanded ? (
-                    <ChevronUpIcon createElement={createElement} />
-                  ) : (
-                    <ChevronDownIcon createElement={createElement} />
-                  )}
-                </Button>
-              )}
-              {showSuggestions && (
-                <ChatPromptSuggestions
-                  suggestions={suggestions?.slice(0, MAX_SUGGESTIONS)}
-                  onSuggestionClick={onContinueInChat}
-                  classNames={{
-                    root: cx(
-                      'ais-ResultCard-suggestions',
-                      classNames.suggestions
-                    ),
-                  }}
-                />
-              )}
-              {isComplete && canContinueInChat && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cx(
-                    'ais-ResultCard-continueButton',
-                    classNames.continueButton
-                  )}
-                  onClick={() => onContinueInChat()}
-                >
-                  {translations.continueInChatText}
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                size="sm"
+                className={cx(
+                  'ais-ResultCard-continueButton',
+                  classNames.continueButton
+                )}
+                onClick={() => onContinueInChat()}
+              >
+                {translations.continueInChatText}
+              </Button>
             </div>
           </div>
         )}

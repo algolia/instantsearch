@@ -252,9 +252,11 @@ describe('ResultCard', () => {
       .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
       .mockReturnValue(200);
 
-    const { rerender } = render(
+    const { container, rerender } = render(
       <ResultCard {...createProps({ onExpandedChange })} />
     );
+    const body = container.querySelector('.ais-ResultCard-body')!;
+    expect(body).toHaveClass('ais-ResultCard-body--clipped');
 
     await userEvent.click(screen.getByRole('button', { name: 'Show more' }));
     expect(onExpandedChange).toHaveBeenCalledWith(true);
@@ -266,6 +268,9 @@ describe('ResultCard', () => {
       'aria-expanded',
       'true'
     );
+    // The measured height lets `max-height` transition instead of jumping.
+    expect(body).not.toHaveClass('ais-ResultCard-body--clipped');
+    expect(body).toHaveStyle({ maxHeight: '400px' });
 
     scrollHeight.mockRestore();
     clientHeight.mockRestore();
