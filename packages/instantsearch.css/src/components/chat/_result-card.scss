@@ -1,0 +1,87 @@
+@use '../../shared/_common';
+@use '../../shared/_variables';
+
+.ais-ResultCard {
+  // Height of the clipped body; `--expanded` lifts it.
+  --ais-result-card-max-height: 16rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.75);
+  padding: var(--ais-spacing);
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  border-radius: var(--ais-border-radius-lg);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  animation: ais-fadeIn var(--ais-transition-duration)
+    var(--ais-transition-timing-function) both;
+}
+
+.ais-ResultCard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ResultCard-headerTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+  font-size: calc(var(--ais-font-size) * 0.875);
+  font-weight: var(--ais-font-weight-medium);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+
+  svg {
+    width: var(--ais-spacing);
+    height: var(--ais-spacing);
+    color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  }
+}
+
+.ais-ResultCard-body {
+  position: relative;
+  max-height: var(--ais-result-card-max-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  // The loader reserves room so the card does not jump when the answer lands.
+  .ais-ChatMessageLoader--inline {
+    min-height: calc(var(--ais-spacing) * 4);
+  }
+
+  .ais-ChatMessage-container {
+    width: 100%;
+  }
+}
+
+.ais-ResultCard-body--expanded {
+  max-height: none;
+  overflow-y: visible;
+}
+
+.ais-ResultCard-footer {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.75);
+}
+
+.ais-ResultCard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ResultCard-expandButton {
+  margin-right: auto;
+
+  svg {
+    width: var(--ais-spacing);
+    height: var(--ais-spacing);
+  }
+}

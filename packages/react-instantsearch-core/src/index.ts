@@ -10,6 +10,7 @@ export * from './connectors/useAutocomplete';
 export * from './connectors/useBreadcrumb';
 export * from './connectors/useChat';
 export * from './connectors/usePromptSuggestions';
+export * from './connectors/useResultCard';
 export * from './connectors/useChatTrigger';
 export * from './connectors/useCompare';
 export * from './connectors/useClearRefinements';

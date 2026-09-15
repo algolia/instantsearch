@@ -79,6 +79,11 @@ describe('widgets', () => {
           "name": "PromptSuggestions",
         },
         {
+          "$$type": "ais.resultCard",
+          "$$widgetType": "ais.resultCard",
+          "name": "ResultCard",
+        },
+        {
           "$$type": "ais.chatTrigger",
           "$$widgetType": "ais.chatTrigger",
           "name": "ChatTrigger",
