@@ -1,7 +1,9 @@
 import {
   buildFilters,
+  DisplayResultsToolType,
   isChatBusy,
   openChat,
+  SearchIndexToolType,
   stripInternalHitMetadata,
 } from '../../lib/chat';
 import {
@@ -273,6 +275,14 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       persistence: false,
       type: 'resultCard',
       disableTriggerValidation: true,
+      // The agent runs its built-in tools server-side and streams their
+      // output. Registering them without `onToolCall` keeps that output; an
+      // unknown tool is answered with "No tool implemented", which drops the
+      // hits the chat's display-results needs after the handoff.
+      tools: {
+        [SearchIndexToolType]: {},
+        [DisplayResultsToolType]: {},
+      },
     } as ChatConnectorParams;
 
     const renderOutward = (renderOptions: InitOptions | RenderOptions) => {

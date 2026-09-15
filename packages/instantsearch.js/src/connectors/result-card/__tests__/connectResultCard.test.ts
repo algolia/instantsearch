@@ -360,6 +360,44 @@ describe('connectResultCard', () => {
       expect(renderState.error).toBeUndefined();
     });
 
+    it('keeps the output of the server-executed built-in tools', async () => {
+      fetchMock.mockImplementationOnce(() =>
+        Promise.resolve(
+          sseResponse([
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'start-step' },
+            {
+              type: 'tool-input-available',
+              toolCallId: 'call-1',
+              toolName: 'algolia_search_index_indexName',
+              input: { queries: [{ query: 'running shoes' }] },
+            },
+            {
+              type: 'tool-output-available',
+              toolCallId: 'call-1',
+              output: { hits: [{ objectID: '1', name: 'Pegasus' }] },
+            },
+            { type: 'finish-step' },
+            { type: 'finish' },
+          ])
+        )
+      );
+      const { renderFn, renderAndWait } = setup();
+      await renderAndWait(makeResults());
+      await wait(0);
+
+      const { messages } = lastRender(renderFn);
+      expect(messages[1].parts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'tool-algolia_search_index_indexName',
+            state: 'output-available',
+            output: { hits: [{ objectID: '1', name: 'Pegasus' }] },
+          }),
+        ])
+      );
+    });
+
     it('sends a view event for the sampled hits', async () => {
       const { renderAndWait, instantSearchInstance } = setup();
       await renderAndWait(makeResults());
