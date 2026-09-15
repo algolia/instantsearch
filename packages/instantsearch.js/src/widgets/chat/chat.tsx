@@ -14,6 +14,7 @@ import {
   PonderToolType,
   DisplayResultsToolType,
   CompareProductsToolType,
+  GroupedResultsToolType,
 } from '../../lib/chat';
 import {
   focusAfterReveal,
@@ -29,7 +30,7 @@ import {
 } from '../../lib/utils';
 
 import { createCompareProductsTool } from './compare-products-tool';
-import { createDisplayResultsTool } from './display-results-tool';
+import { createGroupedResultsTool } from './display-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
 import type { TemplateProps } from '../../components/Template/Template';
@@ -91,6 +92,7 @@ export {
   RecommendToolType,
   DisplayResultsToolType,
   CompareProductsToolType,
+  GroupedResultsToolType,
 };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
@@ -101,7 +103,7 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
 
 /**
  * Whether the search tool renders its own results, i.e. the agent did not hand
- * the turn to the display-results tool. Set on the message by the backend.
+ * the turn to the Grouped Results tool. Set on the message by the backend.
  */
 function isDisplayResultsDisabled({
   parentMessage,
@@ -166,12 +168,13 @@ function createDefaultTools<
   return {
     [SearchIndexToolType]: {
       ...createCarouselTool(true, templates, getSearchPageURL),
-      // The agent decides per turn whether the richer display-results tool
+      // The agent decides per turn whether the richer Grouped Results tool
       // takes over the rendering of the search results.
       shouldRender: isDisplayResultsDisabled,
     },
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
-    [DisplayResultsToolType]: createDisplayResultsTool(templates),
+    [DisplayResultsToolType]: createGroupedResultsTool(templates),
+    [GroupedResultsToolType]: createGroupedResultsTool(templates),
     [CompareProductsToolType]: createCompareProductsTool(),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },

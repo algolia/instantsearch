@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.40.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.40.0...instantsearch-ui-components@0.40.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **chat:** hide suggestions until response finishes ([#7231](https://github.com/algolia/instantsearch/issues/7231)) ([795f1de](https://github.com/algolia/instantsearch/commit/795f1de7d1dd9f5fe0debdc67d39e7ca567955b7))
+* **chat:** support both results tool names ([#7238](https://github.com/algolia/instantsearch/issues/7238)) ([3a5f924](https://github.com/algolia/instantsearch/commit/3a5f924cac5bc57559a2c2e33c35831876f0cae7))
+
+
+
+
+
 # [0.40.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.39.0...instantsearch-ui-components@0.40.0) (2026-09-03)
 
 

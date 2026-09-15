@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
-import { createDisplayResultsTool } from '../DisplayResultsTool';
+import { createGroupedResultsTool } from '../DisplayResultsTool';
 
 import type {
   ChatComponentContext,
@@ -83,15 +83,15 @@ const conversation = (
   hits: Array<{ objectID: string; name?: string; why?: string }>
 ) => conversationOf(createMessages(message, hits));
 
-describe('createDisplayResultsTool', () => {
+describe('createGroupedResultsTool', () => {
   test('opts into tool input streaming', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
 
     expect(tool.streamInput).toBe(true);
   });
 
   test('renders hydrated groups while tool input is streaming', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -132,7 +132,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('keeps carousel controls focused while tool input streams', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const createToolProps = (intro: string, objectIDs: string[]) => {
       const message: ClientSideToolComponentProps['context']['message'] = {
@@ -193,7 +193,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('names the carousel scroll controls', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message: ClientSideToolComponentProps['context']['message'] = {
       type: 'tool-algolia_display_results',
@@ -232,7 +232,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('renders completed legacy v1 output when input has no v1 fields', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -285,7 +285,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('sends a click event when a displayed result is selected', async () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const sendEvent = jest.fn();
 
@@ -351,7 +351,7 @@ describe('createDisplayResultsTool', () => {
       </button>
     );
 
-    const tool = createDisplayResultsTool<TestResult>(conversionItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(conversionItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -396,7 +396,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('hydrates results from the preceding search tool, keeping display fields', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -446,7 +446,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('omits results when no matching hit is available', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -486,7 +486,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('omits unresolved prototype-named object IDs', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -547,7 +547,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('uses dense rendered positions for click analytics after omissions', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const sendEvent = jest.fn();
 
@@ -616,7 +616,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('renders hydrated prototype-named object IDs', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -663,7 +663,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('does not render preliminary legacy output', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const { container } = render(
@@ -694,7 +694,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('drops results that are missing an objectID and skips groups with no valid results', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message = {
       type: 'tool-algolia_display_results',
@@ -735,7 +735,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('renders nothing when there are no groups and no intro', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const { container } = render(
@@ -762,7 +762,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('keeps input authoritative when output contains diagnostics', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -803,7 +803,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('shows the streaming caption before a renderable input field arrives', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message = {
       type: 'tool-algolia_display_results',
@@ -832,7 +832,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('does not expose legacy output when input claims malformed v1 fields', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const { container } = render(
@@ -859,7 +859,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('preserves duplicate result order and uses the latest hit of the conversation', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
@@ -937,7 +937,7 @@ describe('createDisplayResultsTool', () => {
   });
 
   test('hydrates reused tool call IDs within their owning messages', () => {
-    const tool = createDisplayResultsTool<TestResult>(mockItemComponent);
+    const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const firstDisplayMessage: ClientSideToolComponentProps['context']['message'] =
       {
