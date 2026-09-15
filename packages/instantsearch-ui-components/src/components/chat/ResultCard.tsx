@@ -166,7 +166,7 @@ export function createResultCardComponent({
     } = userProps;
 
     const translations: ResultCardTranslations = {
-      headerTitle: 'AI overview',
+      headerTitle: 'AI Overview',
       dismissLabel: 'Dismiss',
       expandText: 'Show more',
       collapseText: 'Show less',

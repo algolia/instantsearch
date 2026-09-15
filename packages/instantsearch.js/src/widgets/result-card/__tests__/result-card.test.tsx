@@ -65,7 +65,7 @@ describe('resultCard', () => {
     expect(root).toHaveAttribute('aria-busy', 'true');
     expect(
       container.querySelector('.ais-ResultCard-headerTitle')
-    ).toHaveTextContent('AI overview');
+    ).toHaveTextContent('AI Overview');
   });
 
   it('renders a custom `layout` template with the render state', () => {

@@ -70,7 +70,7 @@ describe('ResultCard', () => {
     expect(container.querySelector('.ais-ResultCard')).not.toHaveAttribute(
       'aria-busy'
     );
-    expect(screen.getByText('AI overview')).toBeInTheDocument();
+    expect(screen.getByText('AI Overview')).toBeInTheDocument();
     expect(
       screen.getByText('Pick the Pegasus for daily runs.')
     ).toBeInTheDocument();
