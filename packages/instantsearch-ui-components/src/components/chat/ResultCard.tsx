@@ -1,6 +1,7 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 import { cx } from '../../lib';
+import { isPartText, isPartTextEmpty } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -189,6 +190,11 @@ export function createResultCardComponent({
     const assistantMessages = messages.filter(
       (message) => message.role === 'assistant'
     );
+    // Reasoning is hidden and the card has no tool renderers, so only text
+    // shows: until the first text arrives the loader stands in for the answer.
+    const hasVisibleAnswer = assistantMessages.some((message) =>
+      message.parts.some((part) => isPartText(part) && !isPartTextEmpty(part))
+    );
     const isComplete = status === 'complete';
     const showSuggestions =
       isComplete && canContinueInChat && Boolean(suggestions?.length);
@@ -261,7 +267,7 @@ export function createResultCardComponent({
               onReload={onRetry}
               translations={{ retryText: translations.retryText }}
             />
-          ) : assistantMessages.length === 0 ? (
+          ) : !hasVisibleAnswer ? (
             <ChatMessageLoader context={loaderContext} inline />
           ) : (
             assistantMessages.map((message) => (
@@ -272,6 +278,7 @@ export function createResultCardComponent({
                 messages={messages}
                 side="left"
                 variant="subtle"
+                showReasoning={false}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 classNames={{

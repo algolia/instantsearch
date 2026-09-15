@@ -97,6 +97,59 @@ describe('ResultCard', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('hides reasoning and keeps the loader until the answer text starts', () => {
+    const reasoning: ChatMessageBase = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        { type: 'reasoning', text: 'Comparing the top hits.' },
+        {
+          type: 'tool-algolia_search_index_products',
+          toolCallId: 'call-1',
+          state: 'output-available',
+          input: {},
+          output: {},
+        },
+      ],
+    };
+    const { container, rerender } = render(
+      <ResultCard
+        {...createProps({
+          status: 'streaming',
+          messages: [userMessage, reasoning],
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessageLoader--inline')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
+
+    rerender(
+      <ResultCard
+        {...createProps({
+          status: 'complete',
+          messages: [
+            userMessage,
+            {
+              ...reasoning,
+              parts: [...reasoning.parts, ...assistantMessage.parts],
+            },
+          ],
+        })}
+      />
+    );
+
+    expect(
+      screen.getByText('Pick the Pegasus for daily runs.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ChatMessageLoader--inline')
+    ).not.toBeInTheDocument();
+  });
+
   test('renders the streamed text before completion', () => {
     render(<ResultCard {...createProps({ status: 'streaming' })} />);
 
