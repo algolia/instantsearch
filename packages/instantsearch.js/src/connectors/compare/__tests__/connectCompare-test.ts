@@ -260,7 +260,7 @@ describe('connectCompare', () => {
 
       expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
         {
-          text: '__INSTANTSEARCH_COMPARISON_algolia_comparison_abc__',
+          text: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
           metadata: {
             turnContext: {
               selected_products: JSON.stringify([
@@ -383,7 +383,7 @@ describe('connectCompare', () => {
   describe('getComparisonPlaceholderMessage', () => {
     it('embeds the configuration id in the placeholder token', () => {
       expect(getComparisonPlaceholderMessage('algolia_comparison_abc')).toBe(
-        '__INSTANTSEARCH_COMPARISON_algolia_comparison_abc__'
+        '__ALGOLIA_COMPARISON_algolia_comparison_abc__'
       );
     });
   });

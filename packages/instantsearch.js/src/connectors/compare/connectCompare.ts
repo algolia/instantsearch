@@ -43,7 +43,7 @@ export type CompareConnectorParams = {
   /**
    * ID of the comparison configuration created in the Agent Studio dashboard
    * (Components > Comparison). When set, the chat hand-off sends the
-   * `__INSTANTSEARCH_COMPARISON_<id>__` placeholder instead of a prose
+   * `__ALGOLIA_COMPARISON_<id>__` placeholder instead of a prose
    * message: the backend replaces it with the configuration's instructions
    * for the agent and a natural-language message for the transcript. Leave
    * unset to send the default prose message, which works with the default
@@ -134,7 +134,7 @@ export type CompareConnector = Connector<
 export function getComparisonPlaceholderMessage(
   configurationId: string
 ): string {
-  return `__INSTANTSEARCH_COMPARISON_${configurationId}__`;
+  return `__ALGOLIA_COMPARISON_${configurationId}__`;
 }
 
 /**
