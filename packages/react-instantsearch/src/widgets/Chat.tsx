@@ -1,4 +1,7 @@
-import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  createChatComponent,
+  shouldSearchToolRenderResults,
+} from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
@@ -30,7 +33,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 import { useStickToBottom } from '../lib/useStickToBottom';
 
 import { createCompareProductsTool } from './chat/tools/CompareProductsTool';
-import { createGroupedResultsTool } from './chat/tools/DisplayResultsTool';
+import { createGroupedResultsTool } from './chat/tools/GroupedResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export {
@@ -39,6 +42,7 @@ export {
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
+  // eslint-disable-next-line typescript/no-deprecated
   DisplayResultsToolType,
   CompareProductsToolType,
   GroupedResultsToolType,
@@ -46,7 +50,6 @@ export {
 
 import type {
   Pragma,
-  ClientSideToolShouldRenderContext,
   ChatProps as ChatUiProps,
   ChatLayoutOwnProps,
   RecommendComponentProps,
@@ -72,38 +75,29 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
+  const groupedResultsTool = createGroupedResultsTool(itemComponent);
+
   return {
     [SearchIndexToolType]: {
       ...createCarouselTool(true, itemComponent, getSearchPageURL),
       // The agent decides per turn whether the richer Grouped Results tool
       // takes over the rendering of the search results.
-      shouldRender: isDisplayResultsDisabled,
+      shouldRender: shouldSearchToolRenderResults,
     },
     [RecommendToolType]: createCarouselTool(
       false,
       itemComponent,
       getSearchPageURL
     ),
-    [DisplayResultsToolType]: createGroupedResultsTool(itemComponent),
-    [GroupedResultsToolType]: createGroupedResultsTool(itemComponent),
+    [GroupedResultsToolType]: groupedResultsTool,
+    // Agents configured before the rename still emit the legacy tool name.
+    // eslint-disable-next-line typescript/no-deprecated
+    [DisplayResultsToolType]: groupedResultsTool,
     [CompareProductsToolType]: createCompareProductsTool(),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
   };
-}
-
-/**
- * Whether the search tool renders its own results, i.e. the agent did not hand
- * the turn to the Grouped Results tool. Set on the message by the backend.
- */
-function isDisplayResultsDisabled({
-  parentMessage,
-}: ClientSideToolShouldRenderContext) {
-  return (
-    (parentMessage.metadata as { displayResultsEnabled?: boolean } | undefined)
-      ?.displayResultsEnabled !== true
-  );
 }
 
 function mergeToolOptions<

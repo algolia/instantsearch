@@ -2758,7 +2758,7 @@ data: [DONE]`,
       const { widget } = getInitializedWidget({
         agentId: undefined,
         tools: {
-          algolia_display_results: {},
+          algolia_grouped_results: {},
         },
         transport: {
           fetch: () =>
@@ -2768,13 +2768,13 @@ data: [DONE]`,
 
 data: {"type": "start-step"}
 
-data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_grouped_results"}
 
-data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_grouped_results", "input": {}}
 
-data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_grouped_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
 
-data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_grouped_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
 
 data: {"type": "finish-step"}
 
@@ -2803,7 +2803,7 @@ data: [DONE]`,
         const toolPart = lastMessage?.parts.find(
           (part) =>
             'type' in part &&
-            part.type === 'tool-algolia_display_results' &&
+            part.type === 'tool-algolia_grouped_results' &&
             'toolCallId' in part &&
             part.toolCallId === 'call_1'
         ) as
@@ -2827,6 +2827,9 @@ data: [DONE]`,
       });
     });
 
+    // Deliberately on the legacy tool name: the connector resolves tool parts by
+    // name off the wire, so this pins that an agent configured before the rename
+    // still streams. The canonical name is covered by the test above.
     it('finalizes a streamed tool output with tool-output-available', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,

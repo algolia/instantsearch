@@ -3,7 +3,7 @@
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
-export type DisplayResultsTranslations = {
+export type GroupedResultsTranslations = {
   /**
    * Caption shown under the groups while the tool is still streaming its
    * input. Defaults to "Curating results…".
@@ -11,15 +11,15 @@ export type DisplayResultsTranslations = {
   streamingLabel: string;
 };
 
-type DisplayResultsGroup<THit> = {
+type GroupedResultsGroup<THit> = {
   title?: string;
   why?: string;
   results?: Array<RecordWithObjectID<THit>>;
 };
 
-type DisplayResultsPayload<THit> = {
+type GroupedResultsPayload<THit> = {
   intro?: string;
-  groups?: Array<DisplayResultsGroup<THit>>;
+  groups?: Array<GroupedResultsGroup<THit>>;
 };
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
@@ -28,7 +28,7 @@ const isObject = (value: unknown): value is Record<string, unknown> =>
 const hasOwn = (value: Record<string, unknown>, key: string) =>
   Object.prototype.hasOwnProperty.call(value, key);
 
-const claimsDisplayResultsPayload = (
+const claimsGroupedResultsPayload = (
   value: unknown
 ): value is Record<string, unknown> =>
   isObject(value) && (hasOwn(value, 'intro') || hasOwn(value, 'groups'));
@@ -122,21 +122,21 @@ const endsInsideResultObjectId = (rawInput: string) => {
 /**
  * An item handed to a group's carousel: the record (hydrated from the search
  * tool) augmented with the display tool's own result object under a separate
- * `__displayToolResult` namespace, so the tool's curation fields (e.g. `why`)
+ * `__groupedToolResult` namespace, so the tool's curation fields (e.g. `why`)
  * can never collide with record fields in either direction.
  */
-export type DisplayResultsItem<THit extends RecordWithObjectID> =
+export type GroupedResultsItem<THit extends RecordWithObjectID> =
   RecordWithObjectID<THit> & {
-    __displayToolResult: RecordWithObjectID<THit>;
+    __groupedToolResult: RecordWithObjectID<THit>;
   };
 
-export type DisplayResultsGroupCarouselProps<THit extends RecordWithObjectID> =
+export type GroupedResultsGroupCarouselProps<THit extends RecordWithObjectID> =
   {
-    items: Array<DisplayResultsItem<THit>>;
+    items: Array<GroupedResultsItem<THit>>;
     sendEvent: ClientSideToolComponentProps['context']['sendEvent'];
   };
 
-export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
+export type GroupedResultsToolProps<THit extends RecordWithObjectID> = {
   toolProps: ClientSideToolComponentProps;
   /**
    * Renders a single group's carousel. The framework wrapper owns the
@@ -144,16 +144,16 @@ export type DisplayResultsToolProps<THit extends RecordWithObjectID> = {
    * just lays out the intro, per-group headers, and the streaming caption.
    */
   groupCarouselComponent: (
-    props: DisplayResultsGroupCarouselProps<THit>
+    props: GroupedResultsGroupCarouselProps<THit>
   ) => JSX.Element;
-  translations?: Partial<DisplayResultsTranslations>;
+  translations?: Partial<GroupedResultsTranslations>;
 };
 
-const DEFAULT_TRANSLATIONS: DisplayResultsTranslations = {
+const DEFAULT_TRANSLATIONS: GroupedResultsTranslations = {
   streamingLabel: 'Curating results…',
 };
 
-export function createDisplayResultsToolComponent<
+export function createGroupedResultsToolComponent<
   TObject extends RecordWithObjectID,
   // oxlint-disable-next-line no-unused-vars
 >({
@@ -162,8 +162,8 @@ export function createDisplayResultsToolComponent<
   useEffect,
   useRef,
 }: Renderer & Pick<Hooks, 'useEffect' | 'useRef'>) {
-  return function DisplayResultsTool(
-    userProps: DisplayResultsToolProps<TObject>
+  return function GroupedResultsTool(
+    userProps: GroupedResultsToolProps<TObject>
   ) {
     const {
       toolProps,
@@ -182,12 +182,12 @@ export function createDisplayResultsToolComponent<
     const instantSearchStatus =
       insightsEventContext?.instantSearchStatus ?? 'idle';
 
-    const translations: DisplayResultsTranslations = {
+    const translations: GroupedResultsTranslations = {
       ...DEFAULT_TRANSLATIONS,
       ...userTranslations,
     };
 
-    const inputClaimsPayload = claimsDisplayResultsPayload(message?.input);
+    const inputClaimsPayload = claimsGroupedResultsPayload(message?.input);
     const legacyOutput =
       message?.state === 'output-available' &&
       (message as { preliminary?: boolean }).preliminary !== true &&
@@ -197,10 +197,10 @@ export function createDisplayResultsToolComponent<
     const payload = (
       inputClaimsPayload
         ? message?.input
-        : claimsDisplayResultsPayload(legacyOutput)
+        : claimsGroupedResultsPayload(legacyOutput)
           ? legacyOutput
           : undefined
-    ) as DisplayResultsPayload<TObject> | undefined;
+    ) as GroupedResultsPayload<TObject> | undefined;
     const intro =
       typeof payload?.intro === 'string' ? payload.intro : undefined;
     const groups = Array.isArray(payload?.groups)
@@ -225,7 +225,7 @@ export function createDisplayResultsToolComponent<
         key: number;
         title?: string;
         why?: string;
-        items: Array<DisplayResultsItem<TObject>>;
+        items: Array<GroupedResultsItem<TObject>>;
       }>
     >((renderedGroups, group, groupIndex) => {
       const suppliedResults = Array.isArray(group.results)
@@ -240,7 +240,7 @@ export function createDisplayResultsToolComponent<
           result.objectID !== ''
       );
 
-      const items = results.reduce<Array<DisplayResultsItem<TObject>>>(
+      const items = results.reduce<Array<GroupedResultsItem<TObject>>>(
         (renderedItems, result) => {
           // The backend sends this tool object IDs only.
           const hydrated = records?.get(result.objectID) as
@@ -255,7 +255,7 @@ export function createDisplayResultsToolComponent<
             ...hydrated,
             objectID: result.objectID,
             __position: renderedItems.length + 1,
-            __displayToolResult: result,
+            __groupedToolResult: result,
           });
           return renderedItems;
         },
@@ -305,20 +305,20 @@ export function createDisplayResultsToolComponent<
     }
 
     return (
-      <div className="ais-ChatToolDisplayResults">
+      <div className="ais-ChatToolGroupedResults">
         {intro && (
-          <div className="ais-ChatToolDisplayResults-intro">{intro}</div>
+          <div className="ais-ChatToolGroupedResults-intro">{intro}</div>
         )}
 
         {renderableGroups.map((group) => (
-          <div key={group.key} className="ais-ChatToolDisplayResults-group">
+          <div key={group.key} className="ais-ChatToolGroupedResults-group">
             {group.title && (
-              <div className="ais-ChatToolDisplayResults-groupTitle">
+              <div className="ais-ChatToolGroupedResults-groupTitle">
                 {group.title}
               </div>
             )}
             {group.why && (
-              <div className="ais-ChatToolDisplayResults-groupWhy">
+              <div className="ais-ChatToolGroupedResults-groupWhy">
                 {group.why}
               </div>
             )}
@@ -327,7 +327,7 @@ export function createDisplayResultsToolComponent<
         ))}
 
         {isStreaming && (
-          <div className="ais-ChatToolDisplayResults-streaming">
+          <div className="ais-ChatToolGroupedResults-streaming">
             {translations.streamingLabel}
           </div>
         )}

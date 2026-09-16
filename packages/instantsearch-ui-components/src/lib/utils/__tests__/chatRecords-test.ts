@@ -164,8 +164,8 @@ describe('collectChatRecords', () => {
       ]),
       assistantMessage('2', [
         {
-          type: 'tool-algolia_display_results',
-          toolCallId: 'display',
+          type: 'tool-algolia_grouped_results',
+          toolCallId: 'grouped',
           state: 'output-available',
           input: { groups: [{ results: [{ objectID: '1' }] }] },
           output: {},

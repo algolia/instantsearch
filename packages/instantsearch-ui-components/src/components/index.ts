@@ -20,7 +20,7 @@ export * from './chat/icons';
 export * from './chat/tools/CompareProductsTool';
 export * from './chat/tools/ComparisonTableTool';
 export * from './chat/tools/createGroundedComparisonTable';
-export * from './chat/tools/DisplayResultsTool';
+export * from './chat/tools/GroupedResultsTool';
 export * from './chat/types';
 export * from './CompareBar';
 export * from './FrequentlyBoughtTogether';

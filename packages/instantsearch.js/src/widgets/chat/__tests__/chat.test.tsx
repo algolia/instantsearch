@@ -449,7 +449,7 @@ describe('chat', () => {
             {
               id: 'assistant-message-id',
               role: 'assistant',
-              metadata: { displayResultsEnabled: true },
+              metadata: { groupedResultsEnabled: true },
               parts: [
                 {
                   type: 'tool-algolia_search_index',
@@ -469,8 +469,8 @@ describe('chat', () => {
                   },
                 },
                 {
-                  type: 'tool-algolia_display_results',
-                  toolCallId: 'display-call-id',
+                  type: 'tool-algolia_grouped_results',
+                  toolCallId: 'grouped-call-id',
                   state: 'output-available',
                   input: {},
                   output: {
@@ -488,7 +488,7 @@ describe('chat', () => {
 
       fireEvent.click(
         container.querySelector<HTMLElement>(
-          '.ais-ChatToolDisplayResults .ais-Carousel-item'
+          '.ais-ChatToolGroupedResults .ais-Carousel-item'
         )!
       );
 
@@ -503,7 +503,7 @@ describe('chat', () => {
               name: 'Product 1',
               __position: 1,
               __queryID: 'search-query-id',
-              __displayToolResult: { objectID: '1' },
+              __groupedToolResult: { objectID: '1' },
             },
           ],
           insightsMethod: 'clickedObjectIDsAfterSearch',
@@ -514,7 +514,7 @@ describe('chat', () => {
             positions: [1],
             queryID: 'message_assistant-message-id',
             agentId: 'test-agent-id',
-            toolCallId: 'display-call-id',
+            toolCallId: 'grouped-call-id',
           },
           widgetType: 'ais.chat',
         },

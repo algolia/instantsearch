@@ -3,6 +3,8 @@ import {
   findTool,
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
+  isGroupedResultsEnabled,
+  shouldSearchToolRenderResults,
 } from '../chat';
 import { startsWith } from '../startsWith';
 
@@ -478,5 +480,55 @@ describe('findTool', () => {
     expect(global.console.warn).toHaveBeenCalledWith(
       '[instantsearch-ui-components] No tool is registered for "foo_bar_products". The registered tools "foo", "foo_bar" are prefixes of it, but a prefix alone doesn\'t resolve: declare `matchesToolName` on the tool that should handle "foo_bar_products".'
     );
+  });
+});
+
+describe('isGroupedResultsEnabled', () => {
+  test('reads the canonical flag', () => {
+    expect(isGroupedResultsEnabled({ groupedResultsEnabled: true })).toBe(true);
+    expect(isGroupedResultsEnabled({ groupedResultsEnabled: false })).toBe(
+      false
+    );
+  });
+
+  // Agents configured before the rename still emit the legacy flag.
+  test('reads the legacy flag', () => {
+    expect(isGroupedResultsEnabled({ displayResultsEnabled: true })).toBe(true);
+    expect(isGroupedResultsEnabled({ displayResultsEnabled: false })).toBe(
+      false
+    );
+  });
+
+  test('is false without metadata', () => {
+    expect(isGroupedResultsEnabled(undefined)).toBe(false);
+    expect(isGroupedResultsEnabled({})).toBe(false);
+  });
+
+  test('ignores truthy non-boolean values', () => {
+    expect(isGroupedResultsEnabled({ groupedResultsEnabled: 'yes' })).toBe(
+      false
+    );
+  });
+});
+
+describe('shouldSearchToolRenderResults', () => {
+  const context = (metadata: unknown) =>
+    ({ parentMessage: { metadata } }) as Parameters<
+      typeof shouldSearchToolRenderResults
+    >[0];
+
+  test('lets the search tool render when the turn is its own', () => {
+    expect(shouldSearchToolRenderResults(context(undefined))).toBe(true);
+    expect(shouldSearchToolRenderResults(context({}))).toBe(true);
+  });
+
+  test('holds the search tool back when Grouped Results owns the turn', () => {
+    expect(
+      shouldSearchToolRenderResults(context({ groupedResultsEnabled: true }))
+    ).toBe(false);
+    // Agents configured before the rename still emit the legacy flag.
+    expect(
+      shouldSearchToolRenderResults(context({ displayResultsEnabled: true }))
+    ).toBe(false);
   });
 });
