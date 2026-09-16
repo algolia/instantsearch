@@ -5,6 +5,7 @@ import { defineWidget } from '../types';
 export const rangeSlider = defineWidget({
   name: 'rangeSlider',
   fn,
+  flavors: ['js'],
   slot: 'facet',
   replaces: [],
   defaults: [

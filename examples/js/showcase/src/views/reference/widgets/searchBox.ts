@@ -22,36 +22,43 @@ export const searchBox = defineWidget({
     },
     {
       key: 'autofocus',
+      flavors: ['js', 'vue'],
       label: 'true',
       value: { autofocus: true },
     },
     {
       key: 'searchAsYouType',
+      flavors: ['js', 'react'],
       label: 'false',
       value: { searchAsYouType: false },
     },
     {
       key: 'showSubmit',
+      flavors: ['js'],
       label: 'false',
       value: { showSubmit: false },
     },
     {
       key: 'showReset',
+      flavors: ['js'],
       label: 'false',
       value: { showReset: false },
     },
     {
       key: 'showLoadingIndicator',
+      flavors: ['js', 'vue'],
       label: 'false',
       value: { showLoadingIndicator: false },
     },
     {
       key: 'submitTitle',
+      flavors: ['js', 'vue'],
       label: "'Go'",
       value: { submitTitle: 'Go' },
     },
     {
       key: 'resetTitle',
+      flavors: ['js', 'vue'],
       label: "'Clear'",
       value: { resetTitle: 'Clear' },
     },

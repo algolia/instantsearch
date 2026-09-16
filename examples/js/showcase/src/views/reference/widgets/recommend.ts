@@ -74,6 +74,7 @@ const commonToggles: Option[] = [
 export const frequentlyBoughtTogether = defineWidget({
   name: 'frequentlyBoughtTogether',
   fn: fbtFn,
+  flavors: ['js', 'react'],
   slot: 'alone',
   replaces: [],
   defaults: [objectIDs, itemTemplate],
@@ -84,6 +85,7 @@ export const frequentlyBoughtTogether = defineWidget({
 export const relatedProducts = defineWidget({
   name: 'relatedProducts',
   fn: relatedProductsFn,
+  flavors: ['js', 'react'],
   slot: 'alone',
   replaces: [],
   defaults: [objectIDs, itemTemplate],
@@ -93,6 +95,7 @@ export const relatedProducts = defineWidget({
 export const lookingSimilar = defineWidget({
   name: 'lookingSimilar',
   fn: lookingSimilarFn,
+  flavors: ['js', 'react'],
   slot: 'alone',
   replaces: [],
   defaults: [objectIDs, itemTemplate],
@@ -102,6 +105,7 @@ export const lookingSimilar = defineWidget({
 export const trendingItems = defineWidget({
   name: 'trendingItems',
   fn: trendingItemsFn,
+  flavors: ['js', 'react'],
   slot: 'alone',
   replaces: [],
   defaults: [itemTemplate],
@@ -129,6 +133,7 @@ export const trendingItems = defineWidget({
 export const trendingFacets = defineWidget({
   name: 'trendingFacets',
   fn: trendingFacetsFn,
+  flavors: ['js', 'react'],
   slot: 'alone',
   replaces: [],
   defaults: [
@@ -139,6 +144,7 @@ export const trendingFacets = defineWidget({
     },
     {
       key: 'templates',
+      flavors: ['js'],
       label: '{ item: renderFacetValue }',
       value: { templates: { item: renderFacetValue } },
     },

@@ -5,6 +5,7 @@ import { defineWidget } from '../types';
 export const voiceSearch = defineWidget({
   name: 'voiceSearch',
   fn,
+  flavors: ['js', 'vue'],
   slot: 'search',
   replaces: [],
   defaults: [],

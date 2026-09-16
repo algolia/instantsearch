@@ -26,6 +26,7 @@ const wrappedAttribute = {
 export const panelWidget = defineWidget({
   name: 'panel',
   fn,
+  flavors: ['js', 'vue'],
   // panel(options)(refinementList)({ attribute: 'categories' })
   wraps: {
     name: deriveNames('refinementList'),
@@ -37,11 +38,13 @@ export const panelWidget = defineWidget({
   toggles: [
     {
       key: 'collapsed',
+      flavors: ['js'],
       label: '() => true',
       value: { collapsed: () => true },
     },
     {
       key: 'hidden',
+      flavors: ['js'],
       label: '({ results }) => results.nbHits === 0',
       value: {
         hidden: ({ results }: { results: { nbHits: number } | null }) =>

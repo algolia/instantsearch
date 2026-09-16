@@ -6,6 +6,7 @@ import { defineWidget } from '../types';
 export const menuSelect = defineWidget({
   name: 'menuSelect',
   fn,
+  flavors: ['js', 'vue'],
   slot: 'facet',
   replaces: [],
   defaults: [

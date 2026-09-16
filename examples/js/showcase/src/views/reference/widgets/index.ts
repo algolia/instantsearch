@@ -1,3 +1,4 @@
+import { getFlavorFromURL } from '../../../utils/url';
 import { DOC_SECTIONS } from '../sections';
 import { toKebabCase } from '../types';
 
@@ -36,6 +37,8 @@ import { toggleRefinement } from './toggleRefinement';
 import { voiceSearch } from './voiceSearch';
 
 import type { ReferenceWidget } from '../types';
+
+const flavor = getFlavorFromURL();
 
 /**
  * Every widget this view carries, in no particular order: the select's
@@ -99,12 +102,17 @@ DOC_SECTIONS.forEach((section, sectionIndex) => {
   });
 });
 
+const inFlavor = (widget: ReferenceWidget) =>
+  !widget.flavors || widget.flavors.includes(flavor);
+
 /** Flat list in documentation order. Indices into this are what the URL uses. */
-export const widgets: ReferenceWidget[] = [...allWidgets].sort(
-  (a, b) =>
-    (docOrder.get(docSlug(a)) ?? Infinity) -
-    (docOrder.get(docSlug(b)) ?? Infinity)
-);
+export const widgets: ReferenceWidget[] = [...allWidgets]
+  .filter(inFlavor)
+  .sort(
+    (a, b) =>
+      (docOrder.get(docSlug(a)) ?? Infinity) -
+      (docOrder.get(docSlug(b)) ?? Infinity)
+  );
 
 /** The same widgets as the select's two levels, empty sections dropped. */
 export const widgetSections = DOC_SECTIONS.map((section) => ({

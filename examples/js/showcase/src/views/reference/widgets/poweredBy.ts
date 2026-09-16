@@ -16,6 +16,7 @@ export const poweredBy = defineWidget({
     },
     {
       key: 'url',
+      flavors: ['js'],
       label: "'https://www.algolia.com'",
       value: { url: 'https://www.algolia.com' },
     },

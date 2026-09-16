@@ -41,6 +41,7 @@ export const pagination = defineWidget({
     },
     {
       key: 'scrollTo',
+      flavors: ['js'],
       label: 'false',
       value: { scrollTo: false },
     },

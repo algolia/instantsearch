@@ -12,6 +12,7 @@ export const infiniteHits = defineWidget({
   defaults: [
     {
       key: 'templates',
+      flavors: ['js'],
       label: '{ item: renderProductCard }',
       value: { templates: { item: renderProductCard } },
     },

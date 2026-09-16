@@ -35,6 +35,11 @@ function optionId(option: Option): string {
   return `${option.key}: ${option.label}`;
 }
 
+/** Whether the current flavor's API has this option at all. */
+function inFlavor(option: Option): boolean {
+  return !option.flavors || option.flavors.includes(flavor);
+}
+
 /** Options sharing a group are mutually exclusive; `key` is the default. */
 function optionGroup(option: Option): string {
   return option.group ?? option.key;
@@ -156,7 +161,7 @@ function formatCall(name: WidgetNames, options: Option[]): string {
 }
 
 function formatWidget(widget: ReferenceWidget, enabled: Set<string>): string {
-  const options = selectedOptions(widget, enabled);
+  const options = selectedOptions(widget, enabled).filter(inFlavor);
 
   if (!widget.wraps) {
     return formatCall(widget.name, options);
@@ -335,7 +340,7 @@ export function ReferenceView() {
         </div>
 
         <div class="grid gap-1">
-          {widget.toggles.map((item: Option) => {
+          {widget.toggles.filter(inFlavor).map((item: Option) => {
             const isOn = enabled.has(optionId(item));
             const available = isSatisfied(widget, enabled, item);
             return (

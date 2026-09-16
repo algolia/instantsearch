@@ -31,6 +31,14 @@ export interface Option {
    */
   requiresRestart?: boolean;
   /**
+   * Flavors whose API actually has this option; all of them when unset. An
+   * option missing here isn't offered in that flavor and is left out of the
+   * printed source, so the snippet stays something you could paste. The
+   * rendered widget is always the JavaScript one, so a flavor-specific default
+   * still applies — it just isn't shown.
+   */
+  flavors?: Flavor[];
+  /**
    * Merged into the widget options. Deliberately loose: across all widgets this
    * is a union of every widget's option types.
    */
@@ -62,6 +70,8 @@ export type Slot =
 
 export interface ReferenceWidget {
   name: WidgetNames;
+  /** Flavors that ship this widget at all; all of them when unset. */
+  flavors?: Flavor[];
   /** Defaults to `standalone`, which is a box of its own beside the frame. */
   slot?: Slot;
   /**

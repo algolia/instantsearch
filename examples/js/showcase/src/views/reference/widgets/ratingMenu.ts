@@ -5,6 +5,7 @@ import { defineWidget } from '../types';
 export const ratingMenu = defineWidget({
   name: 'ratingMenu',
   fn,
+  flavors: ['js', 'vue'],
   slot: 'facet',
   replaces: [],
   defaults: [

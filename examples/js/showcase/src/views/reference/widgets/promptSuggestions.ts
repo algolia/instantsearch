@@ -16,6 +16,7 @@ const GUIDE = 'algolia_prompt_suggestions_b31fd5dd-0d44-4567-b2a0-f6891c5b71a1';
 export const promptSuggestions = defineWidget({
   name: 'promptSuggestions',
   fn,
+  flavors: ['js', 'react'],
   // Prompts belong under the search box, where a user starts.
   slot: 'search',
   requiresWidgets: ['chat'],

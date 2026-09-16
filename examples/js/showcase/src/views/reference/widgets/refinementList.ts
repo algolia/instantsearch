@@ -48,24 +48,28 @@ export const refinementList = defineWidget({
     },
     {
       key: 'searchableIsAlwaysActive',
+      flavors: ['js'],
       label: 'false',
       requires: 'searchable',
       value: { searchableIsAlwaysActive: false },
     },
     {
       key: 'searchableEscapeFacetValues',
+      flavors: ['js'],
       label: 'false',
       requires: 'searchable',
       value: { searchableEscapeFacetValues: false },
     },
     {
       key: 'searchableSelectOnSubmit',
+      flavors: ['js', 'react'],
       label: 'false',
       requires: 'searchable',
       value: { searchableSelectOnSubmit: false },
     },
     {
       key: 'showMoreButtonLabel',
+      flavors: ['js', 'vue'],
       label: "'More categories'",
       requires: 'showMore',
       value: { showMoreButtonLabel: 'More categories' },

@@ -8,6 +8,7 @@ import { defineWidget } from '../types';
 export const chat = defineWidget({
   name: 'chat',
   fn,
+  flavors: ['js', 'react'],
   // The chat is a whole conversational surface, not a piece of a search UI.
   slot: 'alone',
   replaces: [],
@@ -19,6 +20,7 @@ export const chat = defineWidget({
     },
     {
       key: 'templates',
+      flavors: ['js'],
       label: '{ layout: chatInlineLayout(), item: renderCarouselHit }',
       value: {
         templates: {

@@ -5,6 +5,7 @@ import { defineWidget } from '../types';
 export const chatTrigger = defineWidget({
   name: 'chatTrigger',
   fn,
+  flavors: ['js', 'react'],
   // A small button, so it sits with the other metadata controls.
   slot: 'meta',
   replaces: [],

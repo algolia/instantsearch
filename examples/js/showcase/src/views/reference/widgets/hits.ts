@@ -14,6 +14,7 @@ export const hits = defineWidget({
   defaults: [
     {
       key: 'templates',
+      flavors: ['js'],
       label: '{ item: renderProductCard }',
       value: { templates: { item: renderProductCard } },
     },
