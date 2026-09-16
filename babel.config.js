@@ -6,8 +6,6 @@
  * @returns {Object} Babel config.
  */
 module.exports = (api) => {
-  const isStorybook = api.env('storybook');
-
   api.cache(true);
 
   return {
@@ -16,20 +14,12 @@ module.exports = (api) => {
       ['@babel/preset-react', { runtime: 'classic' }],
       [
         '@babel/preset-env',
-        isStorybook
-          ? {
-              modules: false,
-              // Ensure optional chaining/nullish coalescing are transformed
-              targets: {
-                ie: 11,
-              },
-            }
-          : {
-              modules: 'commonjs',
-              targets: {
-                node: true,
-              },
-            },
+        {
+          modules: 'commonjs',
+          targets: {
+            node: true,
+          },
+        },
       ],
     ],
     plugins: [
