@@ -12,7 +12,13 @@ import {
   WidgetPromptSuggestionsPdp,
   WidgetPromptSuggestionsPlp,
 } from '../components/widgets/WidgetPromptSuggestions';
-import { WidgetResultCard } from '../components/widgets/WidgetResultCard';
+import {
+  WidgetResultCard,
+  WidgetResultCardFailsOnce,
+  WidgetResultCardLongAnswer,
+  WidgetResultCardSlowStream,
+  WidgetResultCardToolOnly,
+} from '../components/widgets/WidgetResultCard';
 import { WidgetSearchBox } from '../components/widgets/WidgetSearchBox';
 import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
@@ -141,9 +147,35 @@ export function AgenticView() {
           </div>
 
           {/* Row 4: ResultCard (the chat above is its "continue in chat"
-              target: same index, same agentId) */}
+              target: same index, same agentId). The scripted variants replace
+              the transport to reach each status on demand; `destroy` so
+              switching remounts the connector with the new transport. */}
           <WidgetSwitcher
-            widgets={[{ title: 'resultCard', body: WidgetResultCard }]}
+            title="resultCard"
+            destroy
+            widgets={[
+              { title: 'live', body: WidgetResultCard, docs: ['resultCard'] },
+              {
+                title: 'slow stream',
+                body: WidgetResultCardSlowStream,
+                docs: ['resultCard'],
+              },
+              {
+                title: 'long answer',
+                body: WidgetResultCardLongAnswer,
+                docs: ['resultCard'],
+              },
+              {
+                title: 'fails once',
+                body: WidgetResultCardFailsOnce,
+                docs: ['resultCard'],
+              },
+              {
+                title: 'tool only',
+                body: WidgetResultCardToolOnly,
+                docs: ['resultCard'],
+              },
+            ]}
           />
 
           {/* Row 5: Hits */}
