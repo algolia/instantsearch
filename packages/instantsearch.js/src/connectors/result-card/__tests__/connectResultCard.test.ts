@@ -338,7 +338,7 @@ describe('connectResultCard', () => {
       expect(messages[0].parts).toEqual([
         {
           type: 'text',
-          text: 'I\'m looking for "running shoes". Which of these results would you recommend and why?',
+          text: 'I\'m looking for "running shoes". Which of these results would you recommend and why? Prefer the results provided; if they don\'t answer the question, search for better ones. Always answer in two or three sentences and never display results.',
         },
       ]);
 

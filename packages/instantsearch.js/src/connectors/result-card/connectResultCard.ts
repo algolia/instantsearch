@@ -225,11 +225,15 @@ function buildTurnContext({
 }
 
 // Sent as-is, the query reads as a search: the agent re-runs it and answers
-// "I found…", which the hits below already show. Framed as a question, it
-// answers from `hitsSample` without tools. Stopgap until the backend applies
-// a result-card instruction from the `x-algolia-referer` header.
+// "I found…", which the hits below already show. Each clause of the question
+// heads off a failure mode: "prefer the results provided" answers from
+// `hitsSample`; "search for better ones" covers a natural-language query that
+// matched the wrong records; "never display results" stops an agent with that
+// tool from replying with a `display_results` call and no text, which the
+// card cannot show. Stopgap until the backend applies a result-card
+// instruction from the `x-algolia-referer` header.
 function buildQuestion(query: string): string {
-  return `I'm looking for "${query}". Which of these results would you recommend and why?`;
+  return `I'm looking for "${query}". Which of these results would you recommend and why? Prefer the results provided; if they don't answer the question, search for better ones. Always answer in two or three sentences and never display results.`;
 }
 
 function hasAssistantMessage(messages: UIMessage[] | undefined): boolean {
