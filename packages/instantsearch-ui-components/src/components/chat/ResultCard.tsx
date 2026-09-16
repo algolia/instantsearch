@@ -231,6 +231,7 @@ export function createResultCardComponent({
     }
     const showSuggestions =
       isComplete && canContinueInChat && Boolean(suggestions?.length);
+    const clipped = overflowing && !expanded;
     const showExpandToggle = isComplete && (overflowing || expanded);
 
     const context: ChatComponentContext<TMessage> = {
@@ -314,7 +315,7 @@ export function createResultCardComponent({
           className={cx(
             'ais-ResultCard-body',
             expanded && 'ais-ResultCard-body--expanded',
-            overflowing && !expanded && 'ais-ResultCard-body--clipped',
+            clipped && 'ais-ResultCard-body--clipped',
             classNames.body
           )}
           style={
@@ -322,11 +323,11 @@ export function createResultCardComponent({
               ? { maxHeight: `${contentHeight}px` }
               : undefined
           }
-          // Clipping is visual only: links and suggestions below the fold stay
-          // in the tab order, so reaching one reveals it. Capture phase because
-          // `focus` does not bubble in Preact.
+          // Clipping is visual only: links below the fold stay in the tab
+          // order, so reaching one reveals it. Capture phase because `focus`
+          // does not bubble in Preact.
           onFocusCapture={() => {
-            if (overflowing && !expanded) onExpandedChange(true);
+            if (clipped) onExpandedChange(true);
           }}
         >
           {status === 'failed' ? (
@@ -338,7 +339,7 @@ export function createResultCardComponent({
             />
           ) : !hasVisibleAnswer ? (
             // Skeleton only: the header already marks the card as AI, and
-            // three lines approximate the answer so the card barely resizes.
+            // three lines match the clipped body height (see the theme).
             <div className={cx('ais-ResultCard-loader', classNames.loader)}>
               <div className="ais-ResultCard-loaderLine" />
               <div className="ais-ResultCard-loaderLine" />
@@ -362,17 +363,19 @@ export function createResultCardComponent({
               />
             ))
           )}
-          {/* In the flow after the answer, so a clipped card hides them too. */}
-          {showSuggestions && (
-            <ChatPromptSuggestions
-              suggestions={suggestions?.slice(0, MAX_SUGGESTIONS)}
-              onSuggestionClick={onContinueInChat}
-              classNames={{
-                root: cx('ais-ResultCard-suggestions', classNames.suggestions),
-              }}
-            />
-          )}
         </div>
+
+        {/* Outside the clipped body so a row of chips is never cut through:
+            a clipped card hides them until "Show more". */}
+        {showSuggestions && !clipped && (
+          <ChatPromptSuggestions
+            suggestions={suggestions?.slice(0, MAX_SUGGESTIONS)}
+            onSuggestionClick={onContinueInChat}
+            classNames={{
+              root: cx('ais-ResultCard-suggestions', classNames.suggestions),
+            }}
+          />
+        )}
 
         {showExpandToggle && (
           <Button

@@ -315,60 +315,86 @@ describe('ResultCard', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('offers to expand a clipped answer', async () => {
-    const onExpandedChange = jest.fn();
+  describe('clipped answer', () => {
     // jsdom has no layout: fake a body taller than its clipped height.
-    const scrollHeight = jest
-      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
-      .mockReturnValue(400);
-    const clientHeight = jest
-      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
-      .mockReturnValue(200);
+    beforeEach(() => {
+      jest
+        .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+        .mockReturnValue(400);
+      jest
+        .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
+        .mockReturnValue(200);
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
-    const { container, rerender } = render(
-      <ResultCard {...createProps({ onExpandedChange })} />
-    );
-    const body = container.querySelector('.ais-ResultCard-body')!;
-    expect(body).toHaveClass('ais-ResultCard-body--clipped');
+    test('offers to expand', async () => {
+      const onExpandedChange = jest.fn();
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ onExpandedChange })} />
+      );
+      const body = container.querySelector('.ais-ResultCard-body')!;
+      expect(body).toHaveClass('ais-ResultCard-body--clipped');
 
-    await userEvent.click(screen.getByRole('button', { name: 'Show more' }));
-    expect(onExpandedChange).toHaveBeenCalledWith(true);
+      await userEvent.click(screen.getByRole('button', { name: 'Show more' }));
+      expect(onExpandedChange).toHaveBeenCalledWith(true);
 
-    rerender(
-      <ResultCard {...createProps({ onExpandedChange, expanded: true })} />
-    );
-    expect(screen.getByRole('button', { name: 'Show less' })).toHaveAttribute(
-      'aria-expanded',
-      'true'
-    );
-    // The measured height lets `max-height` transition instead of jumping.
-    expect(body).not.toHaveClass('ais-ResultCard-body--clipped');
-    expect(body).toHaveStyle({ maxHeight: '400px' });
+      rerender(
+        <ResultCard {...createProps({ onExpandedChange, expanded: true })} />
+      );
+      expect(screen.getByRole('button', { name: 'Show less' })).toHaveAttribute(
+        'aria-expanded',
+        'true'
+      );
+      // The measured height lets `max-height` transition instead of jumping.
+      expect(body).not.toHaveClass('ais-ResultCard-body--clipped');
+      expect(body).toHaveStyle({ maxHeight: '400px' });
+    });
 
-    scrollHeight.mockRestore();
-    clientHeight.mockRestore();
-  });
+    test('expands when focus reaches its content', () => {
+      const onExpandedChange = jest.fn();
+      render(
+        <ResultCard
+          {...createProps({
+            onExpandedChange,
+            messages: [
+              userMessage,
+              {
+                ...assistantMessage,
+                parts: [
+                  {
+                    type: 'text',
+                    text: 'See the [sizing guide](https://example.com/sizing).',
+                  },
+                ],
+              },
+            ],
+          })}
+        />
+      );
 
-  test('expands a clipped answer when focus reaches its content', async () => {
-    const onExpandedChange = jest.fn();
-    const scrollHeight = jest
-      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
-      .mockReturnValue(400);
-    const clientHeight = jest
-      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
-      .mockReturnValue(200);
+      screen.getByRole('link', { name: 'sizing guide' }).focus();
+      expect(onExpandedChange).toHaveBeenCalledWith(true);
+    });
 
-    render(
-      <ResultCard
-        {...createProps({ onExpandedChange, suggestions: ['Waterproof?'] })}
-      />
-    );
+    test('hides the suggestions until expanded', () => {
+      const { rerender } = render(
+        <ResultCard {...createProps({ suggestions: ['Waterproof?'] })} />
+      );
+      expect(
+        screen.queryByRole('button', { name: 'Waterproof?' })
+      ).not.toBeInTheDocument();
 
-    screen.getByRole('button', { name: 'Waterproof?' }).focus();
-    expect(onExpandedChange).toHaveBeenCalledWith(true);
-
-    scrollHeight.mockRestore();
-    clientHeight.mockRestore();
+      rerender(
+        <ResultCard
+          {...createProps({ suggestions: ['Waterproof?'], expanded: true })}
+        />
+      );
+      expect(
+        screen.getByRole('button', { name: 'Waterproof?' })
+      ).toBeInTheDocument();
+    });
   });
 
   test('does not offer to expand a short answer', () => {

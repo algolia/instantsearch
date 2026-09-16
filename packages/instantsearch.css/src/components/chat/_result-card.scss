@@ -2,9 +2,10 @@
 @use '../../shared/_variables';
 
 .ais-ResultCard {
-  // Height of the clipped body; `--expanded` lifts it. About six lines: the
-  // pick and its rationale show, the alternatives clip behind "Show more".
-  --ais-result-card-max-height: 6rem;
+  // Height of the clipped body; `--expanded` lifts it. Equals the skeleton
+  // (`.ais-ResultCard-loader`) so the card keeps its height from the skeleton
+  // to a clipped answer.
+  --ais-result-card-max-height: calc(var(--ais-spacing) * 4.5);
 
   display: flex;
   flex-direction: column;
@@ -93,6 +94,12 @@
   transition: none;
 }
 
+// The header icon pulses from the skeleton through streaming, so the answer
+// reads as in progress without anything in the body.
+.ais-ResultCard[aria-busy='true'] .ais-ResultCard-headerTitle svg {
+  animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 // The toggle starts where the fade ends, so the dimmed text runs straight
 // into the button with no blank band in between.
 .ais-ResultCard-body--clipped + .ais-ResultCard-expandButton {
@@ -104,8 +111,8 @@
   max-height: none;
 }
 
-// Each line matches a line of answer text, so three lines are about the
-// height of a typical answer.
+// Each line matches a line of answer text. The three lines, gaps and padding
+// add up to `--ais-result-card-max-height`: keep them in sync.
 .ais-ResultCard-loader {
   display: flex;
   flex-direction: column;
@@ -132,7 +139,8 @@
 // mount once the answer is complete.
 .ais-ResultCard-message,
 .ais-ResultCard-continueButton,
-.ais-ResultCard-expandButton {
+.ais-ResultCard-expandButton,
+.ais-ResultCard-suggestions {
   animation: ais-fadeIn var(--ais-transition-duration)
     var(--ais-transition-timing-function) both;
 }
@@ -142,7 +150,6 @@
 .ais-ResultCard-suggestions {
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: calc(var(--ais-spacing) * 0.75);
 
   .ais-ChatPromptSuggestions-suggestion {
     font-size: calc(var(--ais-font-size) * 0.875);
