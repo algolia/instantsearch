@@ -246,7 +246,7 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
-                    aria-aria-label="4 & up"
+                    aria-label="4 & up"
                     class="ais-RatingMenu-link"
                     href="#"
                   >
@@ -319,7 +319,7 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
-                    aria-aria-label="3 & up"
+                    aria-label="3 & up"
                     class="ais-RatingMenu-link"
                     href="#"
                   >
@@ -392,7 +392,7 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
-                    aria-aria-label="2 & up"
+                    aria-label="2 & up"
                     class="ais-RatingMenu-link"
                     href="#"
                   >
@@ -465,7 +465,7 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
-                    aria-aria-label="1 & up"
+                    aria-label="1 & up"
                     class="ais-RatingMenu-link"
                     href="#"
                   >
@@ -612,9 +612,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="4 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="4 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -649,9 +649,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="3 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="3 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -686,9 +686,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="2 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="2 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -723,9 +723,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="1 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="1 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -777,7 +777,7 @@ describe('ratingMenu', () => {
                 <a
                   href={url}
                   className={cx(cssClasses.link)}
-                  aria-aria-label={`${name} and up`}
+                  aria-label={`${name} and up`}
                 >
                   {stars.map((isFilled, index) => (
                     <svg
@@ -835,9 +835,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="4 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="4 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -872,9 +872,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="3 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="3 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -909,9 +909,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="2 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="2 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
@@ -946,9 +946,9 @@ describe('ratingMenu', () => {
               >
                 <div>
                   <a
+                    aria-label="1 and up"
                     class="ais-RatingMenu-link"
                     href="#"
-                    aria-label="1 and up"
                   >
                     <svg
                       class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
