@@ -6261,11 +6261,6 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
 
-"@types/scriptjs@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@types/scriptjs/-/scriptjs-0.0.2.tgz#09a2287221a7a341fc6b95b005e4bfb2a5403538"
-  integrity sha512-GFrUgzGYfNX3VWZwMyzr0JrBwzLv5Kes4BQBvo6hXdRy14/GBbpCiVwwB7v1o2xIEvFf+9GyznmYhuesQQjSag==
-
 "@types/selenium-standalone@^6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@types/selenium-standalone/-/selenium-standalone-6.15.0.tgz#daa3ba1c5d46be614f84aecfe975ff5af4837a43"
