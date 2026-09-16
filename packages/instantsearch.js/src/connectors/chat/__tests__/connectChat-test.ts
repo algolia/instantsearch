@@ -94,6 +94,23 @@ describe('connectChat', () => {
       expect(widget.dependsOn).toBe('search');
     });
 
+    it('uses the custom transport when given alongside agentId', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        new Response('data: {"type":"start"}\n\ndata: [DONE]', {
+          headers: { 'Content-Type': 'text/event-stream' },
+        })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api', fetch: fetchMock },
+      });
+
+      await widget.chatInstance.sendMessage({ text: 'hello' });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock.mock.calls[0][0]).toBe('https://custom.api');
+    });
+
     it('can be configured to depend on no backend request', () => {
       const customChat = connectChat(jest.fn());
       const widget = customChat({

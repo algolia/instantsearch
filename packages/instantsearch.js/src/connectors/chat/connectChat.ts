@@ -762,7 +762,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
         });
       }
-      if ('agentId' in options && options.agentId) {
+      // A custom `transport` wins: `agentId` alongside it only serves feedback
+      // (and, for the result card, the Rule context).
+      if (!transport && 'agentId' in options && options.agentId) {
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(

@@ -149,6 +149,22 @@ describe('connectResultCard', () => {
       ).toThrowError(/`agentId` option is required/);
     });
 
+    it('sends the request through a custom transport', async () => {
+      const customFetch = jest.fn(() => Promise.resolve(answerResponse()));
+      const { renderFn, renderAndWait } = setup({
+        transport: { api: 'https://custom.api', fetch: customFetch },
+      });
+      await renderAndWait(makeResults());
+      await wait(0);
+
+      expect(customFetch).toHaveBeenCalledTimes(1);
+      expect((customFetch.mock.calls[0] as unknown[])[0]).toBe(
+        'https://custom.api'
+      );
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(lastRender(renderFn).status).toBe('complete');
+    });
+
     it('throws when both transport and requestOptions are given', () => {
       expect(() =>
         connectResultCard(jest.fn())({
