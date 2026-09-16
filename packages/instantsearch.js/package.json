@@ -60,7 +60,6 @@
     "@instantsearch/testutils": "1.113.0",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "5.1.1",
-    "places.js": "1.17.1",
-    "scriptjs": "2.5.9"
+    "places.js": "1.17.1"
   }
 }

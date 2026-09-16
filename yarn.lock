@@ -24774,11 +24774,6 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
-scriptjs@2.5.9:
-  version "2.5.9"
-  resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.9.tgz#343915cd2ec2ed9bfdde2b9875cd28f59394b35f"
-  integrity sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==
-
 scule@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/scule/-/scule-0.2.1.tgz#0c1dc847b18e07219ae9a3832f2f83224e2079dc"
@@ -28188,11 +28183,6 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha512-qZKX4RnBzH2ugr8Lxa7x+0V6XD9Sb/ouARtiasEQCHB1EVU4NXtmHsDDrx1dO4ne5fc3J6EW05BP1Dl0z0iung==
 
-vue-autosuggest@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/vue-autosuggest/-/vue-autosuggest-1.8.1.tgz#580c9d55d4599f1833eef3eda67c35f69f9d6d86"
-  integrity sha512-6Nz5gwtMxkjTANZjLp3/w26cBQwtfveBFkIARXJ51MfzKrmmMAIIRI1hzcbACcf93ArjKeyOsFDOhWXEh17dQg==
-
 vue-class-component@^7.1.0:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
@@ -28322,13 +28312,6 @@ vue-server-renderer@^2.7.16:
     serialize-javascript "^6.0.0"
     source-map "0.5.6"
 
-vue-slider-component@3.0.15:
-  version "3.0.15"
-  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.15.tgz#1d9f0e7c51a3c87d13c0c76aa67a4a197a9a2869"
-  integrity sha512-slqTrdokRhJvuqHODwjZ27e5fUMvFuNzPV9DIxi9CAEABfapRNEJUljifvUfqcn6M2hTAWacodBddWX05C7HfQ==
-  dependencies:
-    vue-property-decorator "^8.0.0"
-
 vue-slider-component@3.0.32:
   version "3.0.32"
   resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.32.tgz#bc241280cd7371c24eb749c28088e2365e529aca"
@@ -28380,11 +28363,6 @@ vue@^2.7.16:
   dependencies:
     "@vue/compiler-sfc" "2.7.16"
     csstype "^3.1.0"
-
-vuetify@1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.5.3.tgz#4bdc0a72ade1cd3521dc0c08a363ea40b914443e"
-  integrity sha512-4V3i4HwKdt//1vAEiex3DpHsLwX3oHCIx/gpukSYvBGJUgHILUZ5JOEOAQJ1yvMV1w3P+dsmvlmRdthjci5VRg==
 
 "vuex4@npm:vuex@4.0.0":
   version "4.0.0"
