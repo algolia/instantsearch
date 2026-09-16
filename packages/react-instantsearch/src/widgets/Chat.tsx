@@ -6,6 +6,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
   GroupedResultsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import {
@@ -28,6 +29,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
+import { createCompareProductsTool } from './chat/tools/CompareProductsTool';
 import { createGroupedResultsTool } from './chat/tools/DisplayResultsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
@@ -38,6 +40,7 @@ export {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
   GroupedResultsToolType,
 };
 
@@ -83,6 +86,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
     ),
     [DisplayResultsToolType]: createGroupedResultsTool(itemComponent),
     [GroupedResultsToolType]: createGroupedResultsTool(itemComponent),
+    [CompareProductsToolType]: createCompareProductsTool(),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},

@@ -13,6 +13,7 @@ import {
   MemorySearchToolType,
   PonderToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
   GroupedResultsToolType,
 } from '../../lib/chat';
 import {
@@ -28,6 +29,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
+import { createCompareProductsTool } from './compare-products-tool';
 import { createGroupedResultsTool } from './display-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
@@ -89,6 +91,7 @@ export {
   SearchIndexToolType,
   RecommendToolType,
   DisplayResultsToolType,
+  CompareProductsToolType,
   GroupedResultsToolType,
 };
 
@@ -172,6 +175,7 @@ function createDefaultTools<
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [DisplayResultsToolType]: createGroupedResultsTool(templates),
     [GroupedResultsToolType]: createGroupedResultsTool(templates),
+    [CompareProductsToolType]: createCompareProductsTool(),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },

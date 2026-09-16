@@ -13,6 +13,7 @@ export const MemorizeToolType = 'algolia_memorize';
 export const MemorySearchToolType = 'algolia_memory_search';
 export const PonderToolType = 'algolia_ponder';
 export const DisplayResultsToolType = 'algolia_display_results';
+export const CompareProductsToolType = 'algolia_compare_products';
 export const GroupedResultsToolType = 'algolia_grouped_results';
 
 /**

@@ -7,6 +7,7 @@ import type { ChatRenderState } from '../../connectors/chat/connectChat';
  */
 export type ChatReferer =
   | 'ai-mode'
+  | 'compare'
   | 'prompt-suggestions-widget'
   | 'prompt-suggestions-autocomplete'
   // Custom entry points tag themselves; the built-in values still autocomplete.

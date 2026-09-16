@@ -70,4 +70,5 @@ export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
 export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';
 export { default as chatTrigger } from './chat-trigger/chat-trigger';
+export { default as compareBar } from './compare-bar/compare-bar';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
