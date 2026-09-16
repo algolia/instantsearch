@@ -2745,7 +2745,7 @@ export function createOptionsTests(
                       src: (hit as typeof hit & { thumbnail_url: string })
                         .thumbnail_url,
                       alt: '',
-                    }),
+                    }) as any, // VNode incompatibility between React and Preact - only relevant for the tests
                 },
               },
               react: {

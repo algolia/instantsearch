@@ -269,7 +269,6 @@ const createRenderer = <TItem extends BaseHit>(
           onApply={onApply}
           onRemoveRecentSearch={onRemoveRecentSearch}
         >
-          {/* @ts-expect-error - it should accept string as return value */}
           <ConditionalReverseHighlight
             item={item as unknown as Hit<{ query: string }>}
           />
@@ -1287,7 +1286,6 @@ export function autocomplete<TItem extends BaseHit = BaseHit>(
             onSelect={onSelectItem}
             onApply={onApply}
           >
-            {/* @ts-expect-error - it should accept string as return value */}
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
             />
