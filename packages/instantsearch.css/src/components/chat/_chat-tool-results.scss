@@ -2,7 +2,7 @@
 
 .ais-ChatMessage-message {
   .ais-ChatToolSearchIndexCarouselHeader,
-  .ais-ChatToolDisplayResultsCarouselHeader {
+  .ais-ChatToolGroupedResultsCarouselHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,7 +16,7 @@
   }
 
   .ais-ChatToolSearchIndexCarouselHeaderCount,
-  .ais-ChatToolDisplayResultsCarouselHeaderCount {
+  .ais-ChatToolGroupedResultsCarouselHeaderCount {
     color: rgba(var(--ais-text-color-rgb), 0.8);
     font-weight: var(--ais-font-weight-semibold);
   }
@@ -28,7 +28,7 @@
   }
 
   .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
-  .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
+  .ais-ChatToolGroupedResultsCarouselHeaderScrollButtons {
     display: flex;
     align-items: center;
     gap: calc(var(--ais-spacing) * 0.25);
@@ -38,38 +38,38 @@
     }
   }
 
-  .ais-ChatToolDisplayResults {
+  .ais-ChatToolGroupedResults {
     display: flex;
     flex-direction: column;
     gap: var(--ais-spacing);
   }
 
-  .ais-ChatToolDisplayResults-intro {
+  .ais-ChatToolGroupedResults-intro {
     color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
     line-height: 1.5;
   }
 
-  .ais-ChatToolDisplayResults-group {
+  .ais-ChatToolGroupedResults-group {
     display: flex;
     flex-direction: column;
     gap: calc(var(--ais-spacing) * 0.5);
   }
 
-  .ais-ChatToolDisplayResults-groupTitle {
+  .ais-ChatToolGroupedResults-groupTitle {
     font-size: calc(var(--ais-spacing) * 1.05);
     font-weight: var(--ais-font-weight-semibold);
     color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
     margin: 0;
   }
 
-  .ais-ChatToolDisplayResults-groupWhy {
+  .ais-ChatToolGroupedResults-groupWhy {
     color: rgba(var(--ais-text-color-rgb), 0.7);
     font-size: calc(var(--ais-spacing) * 0.85);
     line-height: 1.4;
     margin: 0;
   }
 
-  .ais-ChatToolDisplayResults-streaming {
+  .ais-ChatToolGroupedResults-streaming {
     color: rgba(var(--ais-text-color-rgb), 0.6);
     font-size: calc(var(--ais-spacing) * 0.85);
     font-style: italic;
@@ -165,7 +165,7 @@
 
   @media (max-width: variables.$ais-chat-breakpoint) {
     .ais-ChatToolSearchIndexCarouselHeaderScrollButtons,
-    .ais-ChatToolDisplayResultsCarouselHeaderScrollButtons {
+    .ais-ChatToolGroupedResultsCarouselHeaderScrollButtons {
       display: none;
     }
   }

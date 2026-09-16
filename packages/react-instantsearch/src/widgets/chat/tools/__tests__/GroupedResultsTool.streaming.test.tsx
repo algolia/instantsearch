@@ -45,7 +45,7 @@ function chunkStream(chunks: UIMessageChunk[]) {
 }
 
 /**
- * Streams `deltas` as the display tool's input and returns every committed
+ * Streams `deltas` as the Grouped Results tool's input and returns every committed
  * frame of its message part. No `tool-input-available` is sent, so the final
  * frame is still `input-streaming`, the state that must already render.
  */
@@ -148,12 +148,14 @@ const renderAllFrames = (
   frames: Array<ClientSideToolComponentProps['context']['message']>
 ) => frames.map(renderFrame);
 
-const toolNames = ['algolia_display_results', 'algolia_grouped_results'];
-describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
-  const streamDisplayInput = (deltas: string[]) =>
-    streamToolInput(deltas, toolName);
+// Partial-JSON repair is independent of which name registered the tool, so
+// this runs on the canonical name only. That the legacy name resolves to the
+// same registration is pinned by the chat widget's common tests.
+describe('streamed identifiers', () => {
+  const streamGroupedInput = (deltas: string[]) =>
+    streamToolInput(deltas, 'algolia_grouped_results');
   test('a split identifier never renders the record its prefix matches', async () => {
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"intro":"Top picks","groups":[{"title":"Best value","results":[{"objectID":"12',
       '34"}]}]}',
     ]);
@@ -170,7 +172,7 @@ describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
   });
 
   test('a split escaped identifier never renders the record its decoded prefix matches', async () => {
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"groups":[{"results":[{"objectID":"AB\\"',
       'CD"}]}]}',
     ]);
@@ -191,7 +193,7 @@ describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
   test('a split identifier is withheld when every path key uses an escaped spelling', async () => {
     // All three path keys decode to the names the payload is read by, so the
     // renderer sees an ordinary group while the raw text spells none of them.
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"gro\\u0075ps":[{"res\\u0075lts":[{"object\\u0049D":"12',
       '34"}]}]}',
     ]);
@@ -210,7 +212,7 @@ describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
   });
 
   test('a fully emitted single result renders while input is still streaming', async () => {
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"intro":"Top picks","groups":[{"title":"Best value","results":[{"objectID":"1234"}]}]}',
     ]);
     const last = frames[frames.length - 1];
@@ -220,7 +222,7 @@ describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
   });
 
   test('a completed result stays visible when a later truncated field repeats its identifier', async () => {
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"groups":[{"results":[{"objectID":"1234"}],"why":"1234',
     ]);
     const last = frames[frames.length - 1] as any;
@@ -232,7 +234,7 @@ describe.each(toolNames)('streamed identifiers (%s)', (toolName) => {
   });
 
   test('a persisted intermediate frame cannot restore the record its prefix matches', async () => {
-    const frames = await streamDisplayInput([
+    const frames = await streamGroupedInput([
       '{"groups":[{"results":[{"objectID":"12',
     ]);
     const last = frames[frames.length - 1];

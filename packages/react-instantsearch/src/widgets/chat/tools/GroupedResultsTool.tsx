@@ -2,7 +2,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   createButtonComponent,
-  createDisplayResultsToolComponent,
+  createGroupedResultsToolComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useEffect, useRef } from 'react';
 
@@ -22,7 +22,7 @@ type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 function createGroupedResultsTool<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
 ): UserClientSideTool {
-  const DisplayResultsUIComponent = createDisplayResultsToolComponent<TObject>({
+  const GroupedResultsUIComponent = createGroupedResultsToolComponent<TObject>({
     createElement: createElement as Pragma,
     Fragment,
     useEffect,
@@ -33,18 +33,18 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
     createElement: createElement as Pragma,
   });
 
-  const DisplayResultsCarouselHeader = ({
+  const GroupedResultsCarouselHeader = ({
     nbItems,
     canScrollLeft,
     canScrollRight,
     scrollLeft,
     scrollRight,
   }: HeaderComponentProps) => (
-    <div className="ais-ChatToolDisplayResultsCarouselHeader">
-      <div className="ais-ChatToolDisplayResultsCarouselHeaderCount">
+    <div className="ais-ChatToolGroupedResultsCarouselHeader">
+      <div className="ais-ChatToolGroupedResultsCarouselHeaderCount">
         {nbItems} result{nbItems > 1 ? 's' : ''}
       </div>
-      <div className="ais-ChatToolDisplayResultsCarouselHeaderScrollButtons">
+      <div className="ais-ChatToolGroupedResultsCarouselHeaderScrollButtons">
         <Button
           variant="outline"
           size="sm"
@@ -52,7 +52,7 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
           aria-label="Previous"
           onClick={scrollLeft}
           disabled={!canScrollLeft}
-          className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+          className="ais-ChatToolGroupedResultsCarouselHeaderScrollButton"
         >
           <ChevronLeftIcon createElement={createElement as Pragma} />
         </Button>
@@ -63,7 +63,7 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
           aria-label="Next"
           onClick={scrollRight}
           disabled={!canScrollRight}
-          className="ais-ChatToolDisplayResultsCarouselHeaderScrollButton"
+          className="ais-ChatToolGroupedResultsCarouselHeaderScrollButton"
         >
           <ChevronRightIcon createElement={createElement as Pragma} />
         </Button>
@@ -71,11 +71,11 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
     </div>
   );
 
-  const DisplayResultsLayoutComponent = (
+  const GroupedResultsLayoutComponent = (
     toolProps: ClientSideToolComponentProps
   ) => {
     return (
-      <DisplayResultsUIComponent
+      <GroupedResultsUIComponent
         toolProps={toolProps}
         groupCarouselComponent={({ items, sendEvent }) => (
           <Carousel
@@ -83,7 +83,7 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
             itemComponent={itemComponent}
             sendEvent={sendEvent}
             showNavigation={false}
-            headerComponent={DisplayResultsCarouselHeader}
+            headerComponent={GroupedResultsCarouselHeader}
           />
         )}
       />
@@ -91,7 +91,7 @@ function createGroupedResultsTool<TObject extends RecordWithObjectID>(
   };
 
   return {
-    layoutComponent: DisplayResultsLayoutComponent,
+    layoutComponent: GroupedResultsLayoutComponent,
     streamInput: true,
   };
 }

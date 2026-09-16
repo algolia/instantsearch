@@ -2,6 +2,7 @@ export {
   findTool,
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
+  shouldSearchToolRenderResults,
 } from './chat';
 export {
   collectChatRecords,

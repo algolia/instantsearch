@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { collectChatRecords } from 'instantsearch-ui-components';
 import React from 'react';
 
-import { createGroupedResultsTool } from '../DisplayResultsTool';
+import { createGroupedResultsTool } from '../GroupedResultsTool';
 
 import type {
   ChatComponentContext,
@@ -33,7 +33,7 @@ type TestResult = {
   name?: string;
   __position: number;
   // Curation payload from the display tool, kept separate from record fields.
-  __displayToolResult?: { objectID: string; why?: string };
+  __groupedToolResult?: { objectID: string; why?: string };
 };
 
 const mockItemComponent = ({ item }: { item: TestResult }) => (
@@ -43,9 +43,9 @@ const mockItemComponent = ({ item }: { item: TestResult }) => (
     {item.name && (
       <strong data-testid={`name-${item.objectID}`}>{item.name}</strong>
     )}
-    {item.__displayToolResult?.why && (
+    {item.__groupedToolResult?.why && (
       <small data-testid={`why-${item.objectID}`}>
-        {item.__displayToolResult.why}
+        {item.__groupedToolResult.why}
       </small>
     )}
   </div>
@@ -95,7 +95,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'input-streaming',
       toolCallId: 'display',
       input: {
@@ -136,7 +136,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
     const createToolProps = (intro: string, objectIDs: string[]) => {
       const message: ClientSideToolComponentProps['context']['message'] = {
-        type: 'tool-algolia_display_results',
+        type: 'tool-algolia_grouped_results',
         state: 'input-streaming',
         toolCallId: 'display',
         input: {
@@ -196,7 +196,7 @@ describe('createGroupedResultsTool', () => {
     const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'input-streaming',
       toolCallId: 'display',
       input: {
@@ -225,9 +225,9 @@ describe('createGroupedResultsTool', () => {
     // Icon-only controls carry no text, so the name has to come from the label.
     expect(
       within(container).getByRole('button', { name: 'Previous' })
-    ).toHaveClass('ais-ChatToolDisplayResultsCarouselHeaderScrollButton');
+    ).toHaveClass('ais-ChatToolGroupedResultsCarouselHeaderScrollButton');
     expect(within(container).getByRole('button', { name: 'Next' })).toHaveClass(
-      'ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+      'ais-ChatToolGroupedResultsCarouselHeaderScrollButton'
     );
   });
 
@@ -236,7 +236,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {},
@@ -290,7 +290,7 @@ describe('createGroupedResultsTool', () => {
     const sendEvent = jest.fn();
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {},
@@ -325,7 +325,7 @@ describe('createGroupedResultsTool', () => {
       expect.objectContaining({
         objectID: '1',
         __position: 1,
-        __displayToolResult: { objectID: '1', why: 'iconic' },
+        __groupedToolResult: { objectID: '1', why: 'iconic' },
       }),
       'Item Clicked'
     );
@@ -355,7 +355,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {},
@@ -400,7 +400,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -450,7 +450,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -490,7 +490,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -552,7 +552,7 @@ describe('createGroupedResultsTool', () => {
     const sendEvent = jest.fn();
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -620,7 +620,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -671,7 +671,7 @@ describe('createGroupedResultsTool', () => {
         {...chatToolProps({
           ...metadata,
           message: {
-            type: 'tool-algolia_display_results',
+            type: 'tool-algolia_grouped_results',
             state: 'output-available',
             toolCallId: 'display',
             input: {},
@@ -697,7 +697,7 @@ describe('createGroupedResultsTool', () => {
     const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -743,7 +743,7 @@ describe('createGroupedResultsTool', () => {
         {...chatToolProps({
           ...metadata,
           message: {
-            type: 'tool-algolia_display_results',
+            type: 'tool-algolia_grouped_results',
             state: 'output-available',
             toolCallId: 'display',
             input: {},
@@ -766,7 +766,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -806,7 +806,7 @@ describe('createGroupedResultsTool', () => {
     const tool = createGroupedResultsTool<TestResult>(mockItemComponent);
     const LayoutComponent = tool.layoutComponent!;
     const message = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'input-streaming',
       toolCallId: 'display',
       input: {},
@@ -840,7 +840,7 @@ describe('createGroupedResultsTool', () => {
         {...chatToolProps({
           ...metadata,
           message: {
-            type: 'tool-algolia_display_results',
+            type: 'tool-algolia_grouped_results',
             state: 'output-available',
             toolCallId: 'display',
             input: { groups: 'invalid' },
@@ -863,7 +863,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
 
     const message: ClientSideToolComponentProps['context']['message'] = {
-      type: 'tool-algolia_display_results',
+      type: 'tool-algolia_grouped_results',
       state: 'output-available',
       toolCallId: 'display',
       input: {
@@ -941,7 +941,7 @@ describe('createGroupedResultsTool', () => {
     const LayoutComponent = tool.layoutComponent!;
     const firstDisplayMessage: ClientSideToolComponentProps['context']['message'] =
       {
-        type: 'tool-algolia_display_results',
+        type: 'tool-algolia_grouped_results',
         state: 'output-available',
         toolCallId: 'display',
         input: {
@@ -953,7 +953,7 @@ describe('createGroupedResultsTool', () => {
       };
     const secondDisplayMessage: ClientSideToolComponentProps['context']['message'] =
       {
-        type: 'tool-algolia_display_results',
+        type: 'tool-algolia_grouped_results',
         state: 'output-available',
         toolCallId: 'display',
         input: {

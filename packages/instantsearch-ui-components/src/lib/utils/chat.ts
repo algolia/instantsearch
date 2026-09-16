@@ -6,6 +6,7 @@ import type { ChatMessageBase } from '../../components';
 import type {
   ApplyFiltersParams,
   ChatToolMessage,
+  ClientSideToolShouldRenderContext,
   ResolvedSearchParams,
   SearchToolInput,
   SearchToolQuery,
@@ -421,3 +422,33 @@ export const getApplyFiltersParamsFromToolInput = (
     facetFilters: getFacetFilters(query),
   };
 };
+
+/**
+ * Whether the agent handed the turn to the Grouped Results tool for this
+ * message, i.e. that tool renders the records and the search tool must not.
+ *
+ * The backend sets exactly one of the two flags, depending on which tool name
+ * the agent was configured with: `groupedResultsEnabled` for
+ * `algolia_grouped_results`, `displayResultsEnabled` for agents still on the
+ * legacy `algolia_display_results`.
+ */
+export const isGroupedResultsEnabled = (metadata: unknown) => {
+  const flags = metadata as
+    | { groupedResultsEnabled?: boolean; displayResultsEnabled?: boolean }
+    | undefined;
+
+  return (
+    flags?.groupedResultsEnabled === true ||
+    flags?.displayResultsEnabled === true
+  );
+};
+
+/**
+ * `shouldRender` for the search tool: it presents its own records only on turns
+ * the agent did not hand to the Grouped Results tool, which would otherwise
+ * present the same records a second time.
+ */
+export const shouldSearchToolRenderResults = ({
+  parentMessage,
+}: ClientSideToolShouldRenderContext) =>
+  !isGroupedResultsEnabled(parentMessage.metadata);

@@ -7,7 +7,7 @@ import { fireEvent, screen, within } from '@testing-library/dom';
 import { collectChatRecords } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
-import { createGroupedResultsTool } from '../display-results-tool';
+import { createGroupedResultsTool } from '../grouped-results-tool';
 
 import type {
   ChatComponentContext,
@@ -20,7 +20,7 @@ const createToolProps = (
   objectIDs = ['1']
 ): ClientSideToolComponentProps => {
   const message = {
-    type: 'tool-algolia_display_results',
+    type: 'tool-algolia_grouped_results',
     toolCallId: 'display',
     state: 'input-streaming',
     input: {
@@ -175,9 +175,9 @@ describe('createGroupedResultsTool', () => {
     // Icon-only controls carry no text, so the name has to come from the label.
     expect(
       within(container).getByRole('button', { name: 'Previous' })
-    ).toHaveClass('ais-ChatToolDisplayResultsCarouselHeaderScrollButton');
+    ).toHaveClass('ais-ChatToolGroupedResultsCarouselHeaderScrollButton');
     expect(within(container).getByRole('button', { name: 'Next' })).toHaveClass(
-      'ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+      'ais-ChatToolGroupedResultsCarouselHeaderScrollButton'
     );
   });
 });
