@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render, screen } from '@testing-library/preact';
+import { fireEvent, render, screen } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
@@ -204,12 +204,59 @@ describe('ResultCard', () => {
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 
-  test('dismisses', async () => {
-    const onDismiss = jest.fn();
-    render(<ResultCard {...createProps({ onDismiss })} />);
+  describe('dismiss', () => {
+    const originalMatchMedia = window.matchMedia;
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+    });
 
-    await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
-    expect(onDismiss).toHaveBeenCalledTimes(1);
+    const mockReducedMotion = (matches: boolean) => {
+      window.matchMedia = jest.fn().mockImplementation((query: string) => ({
+        matches: query === '(prefers-reduced-motion: reduce)' && matches,
+      }));
+    };
+
+    // jsdom has no `TransitionEvent`: a plain event with `propertyName` set.
+    const transitionEnd = (element: Element, propertyName = 'opacity') => {
+      const event = new Event('transitionend', { bubbles: true });
+      Object.defineProperty(event, 'propertyName', { value: propertyName });
+      fireEvent(element, event);
+    };
+
+    test('fades out, then commits when the opacity transition ends', async () => {
+      mockReducedMotion(false);
+      const onDismiss = jest.fn();
+      const { container } = render(
+        <ResultCard {...createProps({ onDismiss })} />
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+      const card = container.querySelector('.ais-ResultCard')!;
+      expect(card).toHaveClass('ais-ResultCard--leaving');
+      expect(onDismiss).not.toHaveBeenCalled();
+
+      // Children fade in with their own transitions; only the card's counts.
+      transitionEnd(container.querySelector('.ais-ResultCard-message')!);
+      transitionEnd(card, 'max-height');
+      expect(onDismiss).not.toHaveBeenCalled();
+
+      transitionEnd(card);
+      expect(onDismiss).toHaveBeenCalledTimes(1);
+    });
+
+    test('commits immediately when the user prefers reduced motion', async () => {
+      mockReducedMotion(true);
+      const onDismiss = jest.fn();
+      const { container } = render(
+        <ResultCard {...createProps({ onDismiss })} />
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(onDismiss).toHaveBeenCalledTimes(1);
+      expect(container.querySelector('.ais-ResultCard')).not.toHaveClass(
+        'ais-ResultCard--leaving'
+      );
+    });
   });
 
   test('hands off to the chat, with or without a follow-up', async () => {

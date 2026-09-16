@@ -196,6 +196,18 @@ export function createOptionsTests(
         await wait(0);
       });
 
+      // Fades out first; the dismissal commits when the transition ends.
+      const card = document.querySelector('.ais-ResultCard')!;
+      expect(card).toHaveClass('ais-ResultCard--leaving');
+      await act(async () => {
+        // jsdom has no `TransitionEvent`: a plain event with `propertyName`.
+        const transitionEnd = new Event('transitionend', { bubbles: true });
+        Object.defineProperty(transitionEnd, 'propertyName', {
+          value: 'opacity',
+        });
+        card.dispatchEvent(transitionEnd);
+        await wait(0);
+      });
       expect(document.querySelector('.ais-ResultCard')).toBeNull();
     });
 
