@@ -37,7 +37,6 @@ function ItemWrapper({
   }
 
   return (
-    // @ts-expect-error - `disabled` is not a valid attribute for <div> but people would be able to use this for CSS, so we keep it for now. @MAJOR reconsider this in the future.
     <div className={cx(cssClasses.link)} aria-label={`${value} & up`} disabled>
       {children}
     </div>
