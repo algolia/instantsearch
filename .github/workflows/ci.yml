@@ -44,7 +44,6 @@ jobs:
       - name: Package build outputs
         run: |
           tar -cf build-outputs.tar \
-            packages/algolia-experiences/dist \
             packages/algoliasearch-helper/dist \
             packages/instantsearch.js/es \
             packages/instantsearch.js/cjs \
