@@ -68,7 +68,7 @@ Then:
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-You will find a playground for the widgets, for example: <https://deploy-preview-6609--instantsearchjs.netlify.app/stories/js/>
+You will find a playground for the widgets, for example: <https://deploy-preview-7244--instantsearchjs.netlify.app/examples/js/showcase/?view=reference>
 
 ## Commit conventions
 
@@ -135,15 +135,15 @@ yarn --cwd examples/js/getting-started start
 
 Finally, go to the URL displayed on the terminal (generally http://localhost:3000) to view the example in a browser.
 
-We also use [Storybook](https://github.com/storybooks/storybook) to create stories for widgets:
+We also use [Playground](https://instantsearchjs.netlify.app/examples/js/showcase/?view=reference) to create stories for widgets:
 
 ```sh
 yarn
-cd packages/instantsearch.js
-yarn storybook
+cd examples/js/showcase
+yarn dev
 ```
 
-Go to <http://localhost:6006> for the widget playground.
+Go to <http://localhost:5173/?view=reference> for the widget playground.
 
 ## Folders of the project
 

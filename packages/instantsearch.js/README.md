@@ -164,8 +164,6 @@ To start contributing to code, you need to:
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
-1.  Run the development mode: `yarn storybook`
-1.  [Open the stories](http://localhost:6006)
 
 Please read [our contribution process](https://github.com/algolia/instantsearch/blob/master/CONTRIBUTING.md) to learn more.
 
