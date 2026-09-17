@@ -12,18 +12,45 @@ import {
   WidgetPromptSuggestionsPdp,
   WidgetPromptSuggestionsPlp,
 } from '../components/widgets/WidgetPromptSuggestions';
+import { WidgetResultCard } from '../components/widgets/WidgetResultCard';
+import { WidgetSearchBox } from '../components/widgets/WidgetSearchBox';
 import { WidgetSwitcher } from '../components/WidgetSwitcher';
 import { ChatLayoutContext } from '../context/chatLayout';
 import { SearchContext } from '../context/search';
 
 import type { ChatRenderState } from 'instantsearch.js/es/connectors/chat/connectChat';
 
-const searchClient = algoliasearch(
+const algoliaClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
 const INDEX_NAME = 'instant_search';
+
+// Stands in for the Agent Studio Rule that flags `resultCard` in
+// `renderingContent`; remove once the backend returns it for this index.
+const searchClient: typeof algoliaClient = {
+  ...algoliaClient,
+  search: ((requests, requestOptions) =>
+    algoliaClient.search(requests, requestOptions).then((response) => {
+      response.results.forEach((result) => {
+        if ('hits' in result && result.index === INDEX_NAME) {
+          // The client's `RenderingContent` type predates `widgets`.
+          const renderingContent = result.renderingContent as
+            | { widgets?: Record<string, unknown> }
+            | undefined;
+          result.renderingContent = {
+            ...result.renderingContent,
+            widgets: {
+              ...renderingContent?.widgets,
+              resultCard: { enabled: true },
+            },
+          } as typeof result.renderingContent;
+        }
+      });
+      return response;
+    })) as typeof algoliaClient.search,
+};
 
 export function AgenticView() {
   const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
@@ -56,14 +83,18 @@ export function AgenticView() {
     <SearchContext.Provider value={searchRef.current}>
       <ChatLayoutContext.Provider value={chatLayout}>
         <div class="flex flex-col gap-2">
-          {/* Row 1: AI autocomplete */}
+          {/* Row 1: AI autocomplete | searchBox. The autocomplete only sets
+              the page query on submit; searchBox does so as you type, which
+              is how the resultCard below reacts while typing. */}
           <WidgetSwitcher
+            destroy
             widgets={[
               {
                 title: 'autocomplete (showPromptSuggestions + aiMode)',
                 body: WidgetAiAutocomplete,
                 docs: ['autocomplete'],
               },
+              { title: 'searchBox', body: () => <WidgetSearchBox /> },
             ]}
           />
 
@@ -109,7 +140,13 @@ export function AgenticView() {
             </ChatLayoutSwitcher>
           </div>
 
-          {/* Row 4: Hits */}
+          {/* Row 4: ResultCard (the chat above is its "continue in chat"
+              target: same index, same agentId) */}
+          <WidgetSwitcher
+            widgets={[{ title: 'resultCard', body: WidgetResultCard }]}
+          />
+
+          {/* Row 5: Hits */}
           <WidgetSwitcher widgets={[{ title: 'hits', body: WidgetHits }]} />
         </div>
       </ChatLayoutContext.Provider>

@@ -13,5 +13,6 @@ export {
 } from './chatRecords';
 export * from './find';
 export * from './hits';
+export * from './prefersReducedMotion';
 export * from './promptSuggestions';
 export * from './startsWith';

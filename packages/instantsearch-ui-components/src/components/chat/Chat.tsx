@@ -1,6 +1,8 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
+import { prefersReducedMotion } from '../../lib/utils';
+
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
@@ -94,14 +96,6 @@ type ChatOwnProps<TMessage extends ChatMessageBase> = {
    */
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
-
-function prefersReducedMotion(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
-}
 
 export function createChatComponent({
   createElement,

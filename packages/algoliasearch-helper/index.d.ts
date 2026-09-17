@@ -1384,6 +1384,12 @@ declare namespace algoliasearchHelper {
          * Configuration for banners
          */
         banners?: Banner[];
+        /**
+         * Activation of the Result Card widget, set by a Rule consequence
+         */
+        resultCard?: {
+          enabled: boolean;
+        };
       };
     };
 

@@ -1,0 +1,167 @@
+@use '../../shared/_common';
+@use '../../shared/_variables';
+
+.ais-ResultCard {
+  // Height of the clipped body; `--expanded` lifts it. Equals the skeleton
+  // (`.ais-ResultCard-loader`) so the card keeps its height from the skeleton
+  // to a clipped answer.
+  --ais-result-card-max-height: calc(var(--ais-spacing) * 4.5);
+
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.75);
+  padding: var(--ais-spacing);
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  border-radius: var(--ais-border-radius-md);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  // `backwards` only: a `forwards` fill would pin the opacity at 1 and defeat
+  // the `--leaving` fade below.
+  animation: ais-fadeIn var(--ais-transition-duration)
+    var(--ais-transition-timing-function) backwards;
+  transition: opacity var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+// Dismissed: fades out, and the component removes it once the transition ends.
+.ais-ResultCard--leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+// Title on the left; the handoff and dismiss buttons pack on the right.
+.ais-ResultCard-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ResultCard-headerTitle {
+  display: inline-flex;
+  align-items: center;
+  margin-right: auto;
+  gap: calc(var(--ais-spacing) * 0.5);
+  font-size: calc(var(--ais-font-size) * 0.875);
+  font-weight: var(--ais-font-weight-medium);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+
+  svg {
+    width: var(--ais-spacing);
+    height: var(--ais-spacing);
+    color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  }
+}
+
+// A long answer is clipped with a fade and revealed in place by "Show more".
+// The expanded height is set inline in pixels so `max-height` animates.
+.ais-ResultCard-body {
+  position: relative;
+  max-height: var(--ais-result-card-max-height);
+  overflow: hidden;
+  transition: max-height var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+
+  .ais-ChatMessage-container {
+    width: 100%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    // Spans about three lines so the text dims progressively down to the
+    // toggle, and the line sliced by the clip ends up under the solid end.
+    height: calc(var(--ais-spacing) * 4);
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--ais-background-color-rgb), 0),
+      rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha))
+    );
+    opacity: 0;
+    // Only the disappearance animates (with the height, on expand): the clip
+    // is detected after paint, so fading in would flash the hard cut first.
+    transition: opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+    pointer-events: none;
+  }
+}
+
+.ais-ResultCard-body--clipped::after {
+  opacity: 1;
+  transition: none;
+}
+
+// The header icon pulses from the skeleton through streaming, so the answer
+// reads as in progress without anything in the body.
+.ais-ResultCard[aria-busy='true'] .ais-ResultCard-headerTitle svg {
+  animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// The toggle starts where the fade ends, so the dimmed text runs straight
+// into the button with no blank band in between.
+.ais-ResultCard-body--clipped + .ais-ResultCard-expandButton {
+  margin-top: calc(var(--ais-spacing) * -0.75);
+}
+
+// Fallback before the first measurement.
+.ais-ResultCard-body--expanded {
+  max-height: none;
+}
+
+// Each line matches a line of answer text. The three lines, gaps and padding
+// add up to `--ais-result-card-max-height`: keep them in sync.
+.ais-ResultCard-loader {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+  padding: calc(var(--ais-spacing) * 0.25) 0;
+}
+
+.ais-ResultCard-loaderLine {
+  height: var(--ais-spacing);
+  border-radius: var(--ais-border-radius-sm);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+  animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  &:last-child {
+    width: 60%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+// Eases in the answer when it replaces the skeleton, and the actions that
+// mount once the answer is complete.
+.ais-ResultCard-message,
+.ais-ResultCard-continueButton,
+.ais-ResultCard-expandButton,
+.ais-ResultCard-suggestions {
+  animation: ais-fadeIn var(--ais-transition-duration)
+    var(--ais-transition-timing-function) both;
+}
+
+// One wrapping row of compact chips under the answer: the chat's stacked
+// layout is sized for a narrow panel and dwarfs the answer here.
+.ais-ResultCard-suggestions {
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .ais-ChatPromptSuggestions-suggestion {
+    font-size: calc(var(--ais-font-size) * 0.875);
+    padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.75);
+  }
+}
+
+.ais-ResultCard-expandButton {
+  align-self: flex-start;
+
+  svg {
+    width: var(--ais-spacing);
+    height: var(--ais-spacing);
+  }
+}

@@ -14,7 +14,7 @@
 }
 
 .ais-PromptSuggestions-headerTitle {
-  font-size: var(--ais-font-size-sm);
+  font-size: calc(var(--ais-font-size) * 0.875);
   font-weight: 500;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 }

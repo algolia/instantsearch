@@ -35,6 +35,7 @@ import {
   Chat,
   ChatTrigger,
   PromptSuggestions,
+  ResultCard,
   Autocomplete,
   FilterSuggestions,
 } from '..';
@@ -472,6 +473,20 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs a <Chat> with the card's `agentId` on the same
+    // index, so the default setup renders both. `renderChat: false` is how a
+    // test asks for the unconfigured page.
+    const { renderChat = true, ...resultCardWidgetParams } = widgetParams;
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <ResultCard {...resultCardWidgetParams} />
+        {renderChat && <Chat agentId={resultCardWidgetParams.agentId} />}
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -527,6 +542,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
+  createResultCardWidgetTests: { act },
 };
 
 /**

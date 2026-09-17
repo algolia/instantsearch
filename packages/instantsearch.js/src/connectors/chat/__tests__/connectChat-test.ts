@@ -94,6 +94,23 @@ describe('connectChat', () => {
       expect(widget.dependsOn).toBe('search');
     });
 
+    it('uses the custom transport when given alongside agentId', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        new Response('data: {"type":"start"}\n\ndata: [DONE]', {
+          headers: { 'Content-Type': 'text/event-stream' },
+        })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api', fetch: fetchMock },
+      });
+
+      await widget.chatInstance.sendMessage({ text: 'hello' });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock.mock.calls[0][0]).toBe('https://custom.api');
+    });
+
     it('can be configured to depend on no backend request', () => {
       const customChat = connectChat(jest.fn());
       const widget = customChat({
@@ -973,6 +990,93 @@ describe('connectChat', () => {
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toHaveLength(0);
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
+    });
+
+    describe('adoptConversation', () => {
+      const conversation = {
+        id: 'card-conversation',
+        source: 'resultCard',
+        messages: [
+          {
+            id: 'u1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'which laptop is best?' }],
+            metadata: { turnContext: { query: 'which laptop is best?' } },
+          },
+          {
+            id: 'a1',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'The MacBook Air.' }],
+          },
+        ] as UIMessage[],
+      };
+
+      it('continues the conversation under its id when the chat is empty', () => {
+        const { getRenderState } = getInitializedWidget();
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+
+        const renderState = getRenderState();
+        expect(renderState.id).toBe('card-conversation');
+        expect(renderState.messages).toEqual([
+          expect.objectContaining({
+            id: 'u1',
+            metadata: {
+              turnContext: { query: 'which laptop is best?' },
+              source: 'resultCard',
+            },
+          }),
+          expect.objectContaining({
+            id: 'a1',
+            metadata: { source: 'resultCard' },
+          }),
+        ]);
+      });
+
+      it('appends the exchange when the chat already has messages', () => {
+        const { getRenderState } = getInitializedWidget();
+        const renderState = getRenderState();
+        const idBefore = renderState.id;
+        renderState.setMessages([
+          { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+        ]);
+
+        expect(renderState.adoptConversation(conversation)).toBe(true);
+
+        const updated = getRenderState();
+        expect(updated.id).toBe(idBefore);
+        expect(updated.messages.map((message) => message.id)).toEqual([
+          '1',
+          'u1',
+          'a1',
+        ]);
+      });
+
+      it('skips messages already in the conversation on a repeated handoff', () => {
+        const { getRenderState } = getInitializedWidget();
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+        getRenderState().setMessages([
+          ...getRenderState().messages,
+          { id: 'u2', role: 'user', parts: [{ type: 'text', text: 'Why?' }] },
+        ]);
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+
+        expect(getRenderState().messages.map((message) => message.id)).toEqual([
+          'u1',
+          'a1',
+          'u2',
+        ]);
+      });
+
+      it('refuses while a response is in flight', () => {
+        const { getRenderState, widget } = getInitializedWidget();
+        widget.chatInstance._state.status = 'streaming';
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(false);
+        expect(getRenderState().messages).toHaveLength(0);
+      });
     });
 
     it('renders the rotated conversation id when clearing', () => {

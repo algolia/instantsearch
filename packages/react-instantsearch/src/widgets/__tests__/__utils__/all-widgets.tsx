@@ -88,6 +88,9 @@ function Widget<TWidget extends SingleWidget>({
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
+    case 'ResultCard': {
+      return <widget.Component agentId="test-agent-id" {...props} />;
+    }
     case 'PromptSuggestions': {
       // The connector requires `agentId` unless a custom `transport` is given.
       return (

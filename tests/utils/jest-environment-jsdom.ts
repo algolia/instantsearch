@@ -19,6 +19,21 @@ export default class Fixed extends JSDOMEnv {
     this.global.TextDecoder = TextDecoder as typeof global.TextDecoder;
     this.global.ReadableStream = ReadableStream;
     this.global.Response = Response;
+
+    // Preact only maps an `onTransitionEnd` prop to the lowercase
+    // `transitionend` event when `ontransitionend` exists on the element,
+    // which jsdom omits.
+    if (!('ontransitionend' in this.global.HTMLElement.prototype)) {
+      Object.defineProperty(
+        this.global.HTMLElement.prototype,
+        'ontransitionend',
+        {
+          value: null,
+          writable: true,
+          configurable: true,
+        }
+      );
+    }
   }
 
   async setup() {
