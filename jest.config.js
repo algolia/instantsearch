@@ -1,11 +1,5 @@
 // @ts-check
 
-/** @type {any} */
-const packagejson = require('./package.json');
-/** @type {'3' | '4' | '5'} */
-const algoliaSearchMajor =
-  packagejson.devDependencies.algoliasearch.split('.')[0];
-
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
   rootDir: process.cwd(),
@@ -23,8 +17,7 @@ const config = {
     '<rootDir>/packages/react-instantsearch-router-nextjs/__tests__',
     '<rootDir>/packages/react-instantsearch-nextjs/__tests__',
     '/__utils__/',
-    algoliaSearchMajor !== '5' && '<rootDir>/packages/algolia-experiences',
-  ].filter((x) => x !== false),
+  ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',
     '<rootDir>/packages/*/dist',
