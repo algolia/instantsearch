@@ -266,7 +266,8 @@ export default (function connectGeoSearch<
     return {
       $$type,
 
-      init(initArgs) {
+      // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      init(initArgs: InitOptions<GeoSearchWidgetDescription<THit>>) {
         const { instantSearchInstance } = initArgs;
         const isFirstRendering = true;
 
