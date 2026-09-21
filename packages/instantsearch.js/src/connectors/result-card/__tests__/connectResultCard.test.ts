@@ -715,7 +715,13 @@ describe('connectResultCard', () => {
 
       expect(chat.adoptConversation).toHaveBeenCalledWith({
         id: expect.any(String),
-        messages: renderState.messages,
+        messages: [
+          {
+            ...renderState.messages[0],
+            parts: [{ type: 'text', text: 'running shoes' }],
+          },
+          ...renderState.messages.slice(1),
+        ],
         source: 'resultCard',
       });
       expect(chat.setOpen).toHaveBeenCalledWith(true);

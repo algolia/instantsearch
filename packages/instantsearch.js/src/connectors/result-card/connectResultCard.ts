@@ -450,13 +450,25 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
 
     const continueInChat = (message?: string) => {
       const defaultChat = getDefaultChat(latestRenderOptions);
-      if (!defaultChat || !chatState) return;
+      if (!defaultChat || !chatState || !activation) return;
+
+      // Keep the inner prompt's directives private when it becomes chat history.
+      const messages = chatState.messages.map((chatMessage) =>
+        chatMessage.role === 'user'
+          ? {
+              ...chatMessage,
+              parts: [
+                { type: 'text' as const, text: activation.context.query },
+              ],
+            }
+          : chatMessage
+      );
 
       // A chat mid-generation refuses the conversation: opening it anyway
       // would show an unrelated exchange instead of the card's.
       const adopted = defaultChat.adoptConversation!({
         id: chatState.id,
-        messages: chatState.messages,
+        messages,
         source: RESULT_CARD_SOURCE,
       });
       if (!adopted) return;
