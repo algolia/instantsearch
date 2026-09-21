@@ -1,7 +1,6 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 import { cx } from '../../lib';
-import { prefersReducedMotion, TRANSITION_FALLBACK_MS } from '../../lib/utils';
 import { isPartText, isPartTextEmpty } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -182,9 +181,8 @@ export function createResultCardComponent({
     const [contentHeight, setContentHeight] = useState<number | undefined>(
       undefined
     );
-    const latest = useState({ expanded, onDismiss })[0];
+    const latest = useState({ expanded })[0];
     latest.expanded = expanded;
-    latest.onDismiss = onDismiss;
     useEffect(() => {
       if (!body) return undefined;
       const measure = () => {
@@ -197,30 +195,6 @@ export function createResultCardComponent({
       window.addEventListener('resize', measure);
       return () => window.removeEventListener('resize', measure);
     }, [body, latest, messages, status]);
-
-    // Dismissing fades the card out first (`--leaving`), and only commits on
-    // `transitionend`, like the chat's clear. Reduced motion disables the
-    // transition, so that event never fires: commit right away instead.
-    const [dismissing, setDismissing] = useState(false);
-    const dismiss = () => {
-      if (prefersReducedMotion()) {
-        onDismiss();
-        return;
-      }
-      setDismissing(true);
-    };
-    const commitDismiss = () => {
-      latest.onDismiss();
-      setDismissing(false);
-    };
-    useEffect(() => {
-      if (!dismissing) return undefined;
-      const timer = setTimeout(() => {
-        latest.onDismiss();
-        setDismissing(false);
-      }, TRANSITION_FALLBACK_MS);
-      return () => clearTimeout(timer);
-    }, [dismissing, latest]);
 
     const isBusy = status === 'loading' || status === 'streaming';
     const isComplete = status === 'complete';
@@ -261,29 +235,15 @@ export function createResultCardComponent({
       },
       stop: () => Promise.resolve(),
       onReload: onRetry,
-      onClose: dismiss,
+      onClose: onDismiss,
     };
     return (
       <section
         {...props}
-        className={cx(
-          'ais-ResultCard',
-          dismissing && 'ais-ResultCard--leaving',
-          classNames.root,
-          props.className
-        )}
+        className={cx('ais-ResultCard', classNames.root, props.className)}
         data-status={status}
         aria-busy={isBusy ? 'true' : undefined}
         aria-live="polite"
-        onTransitionEnd={(event) => {
-          if (
-            dismissing &&
-            event.target === event.currentTarget &&
-            event.propertyName === 'opacity'
-          ) {
-            commitDismiss();
-          }
-        }}
       >
         <div className={cx('ais-ResultCard-header', classNames.header)}>
           <span
@@ -316,7 +276,7 @@ export function createResultCardComponent({
             )}
             title={translations.dismissLabel}
             aria-label={translations.dismissLabel}
-            onClick={dismiss}
+            onClick={onDismiss}
           >
             <CloseIcon createElement={createElement} />
           </Button>

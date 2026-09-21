@@ -18,18 +18,8 @@
     var(--ais-background-color-rgb),
     var(--ais-background-color-alpha)
   );
-  // `backwards` only: a `forwards` fill would pin the opacity at 1 and defeat
-  // the `--leaving` fade below.
   animation: ais-fadeIn var(--ais-transition-duration)
-    var(--ais-transition-timing-function) backwards;
-  transition: opacity var(--ais-transition-duration)
-    var(--ais-transition-timing-function);
-}
-
-// Dismissed: fades out, and the component removes it once the transition ends.
-.ais-ResultCard--leaving {
-  opacity: 0;
-  pointer-events: none;
+    var(--ais-transition-timing-function) both;
 }
 
 // Title on the left; the handoff and dismiss buttons pack on the right.

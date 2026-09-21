@@ -1,8 +1,6 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
-import { prefersReducedMotion, TRANSITION_FALLBACK_MS } from '../../lib/utils';
-
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
 import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
@@ -97,6 +95,14 @@ type ChatOwnProps<TMessage extends ChatMessageBase> = {
   layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
 export function createChatComponent({
   createElement,
   Fragment,
@@ -173,16 +179,6 @@ export function createChatComponent({
       commitClear?.();
       setIsClearing(false);
     };
-    const latest = useState({ finishClear })[0];
-    latest.finishClear = finishClear;
-    useEffect(() => {
-      if (!isClearing) return undefined;
-      const timer = setTimeout(
-        () => latest.finishClear(),
-        TRANSITION_FALLBACK_MS
-      );
-      return () => clearTimeout(timer);
-    }, [isClearing, latest]);
 
     const headerComponent = createElement(HeaderComponent || ChatHeader, {
       ...headerProps,
