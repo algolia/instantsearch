@@ -1,4 +1,4 @@
-import { openChat } from '../../lib/chat/openChat';
+import { isChatBusy, openChat } from '../../lib/chat/openChat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -6,6 +6,7 @@ import {
 } from '../../lib/utils';
 
 import type { ChatRenderState } from './connectChat';
+import type { OpenChatOptions } from '../../lib/chat/openChat';
 import type {
   Connector,
   IndexRenderState,
@@ -23,7 +24,11 @@ const withUsage = createDocumentationMessageGenerator({
  * ChatTrigger connector.
  *
  * This connector reads the sibling `chat` widget's render state to expose
- * `open` (whether the chat is open) and `toggleOpen` (to toggle it).
+ * `open` (whether the chat is open), `toggleOpen` (to toggle it), `openChat`
+ * (to open it and optionally submit a message) and `isChatBusy`. Custom entry
+ * points — a hero CTA, a keyboard shortcut, an "ask about this product" link —
+ * go through the same connector as the built-in trigger button.
+ *
  * It also acts as a presence marker in the widget tree
  * (`$$type: 'ais.chatTrigger'`, `opensChat: true`). The `connectChat`
  * connector's entry-point validation looks for widgets with `opensChat`
@@ -40,6 +45,17 @@ export type ChatTriggerRenderState = {
    * Toggle the sibling chat widget open/closed.
    */
   toggleOpen: () => void;
+  /**
+   * Opens the sibling chat widget, optionally submitting a message to it.
+   * Without a message, the chat is opened and its input focused. Returns
+   * `true` when a message was submitted.
+   */
+  openChat: (options?: OpenChatOptions) => boolean;
+  /**
+   * Whether the chat is submitting or streaming a message, and so can't accept
+   * a new one. `false` until the chat has initialized.
+   */
+  isChatBusy: boolean;
   widgetParams: ChatTriggerConnectorParams;
 };
 
@@ -79,6 +95,11 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
   return (widgetParams) => {
     const params = widgetParams ?? ({} as ChatTriggerConnectorParams);
     let lastOptions: InitOptions | RenderOptions | null = null;
+
+    function openChatFromTrigger(options?: OpenChatOptions) {
+      if (!lastOptions) return false;
+      return openChat(getChatRenderState(lastOptions), options);
+    }
 
     function toggleOpen() {
       if (!lastOptions) return;
@@ -127,6 +148,10 @@ const connectChatTrigger: ChatTriggerConnector = function connectChatTrigger(
         return {
           open: chatState?.open ?? false,
           toggleOpen,
+          openChat: openChatFromTrigger,
+          isChatBusy: chatState
+            ? !chatState.sendMessage || isChatBusy(chatState)
+            : false,
           widgetParams: params,
         };
       },

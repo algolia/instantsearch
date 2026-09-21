@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.40.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.40.0...instantsearch-ui-components@0.40.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **chat:** hide suggestions until response finishes ([#7231](https://github.com/algolia/instantsearch/issues/7231)) ([795f1de](https://github.com/algolia/instantsearch/commit/795f1de7d1dd9f5fe0debdc67d39e7ca567955b7))
+* **chat:** support both results tool names ([#7238](https://github.com/algolia/instantsearch/issues/7238)) ([3a5f924](https://github.com/algolia/instantsearch/commit/3a5f924cac5bc57559a2c2e33c35831876f0cae7))
+
+
+
+
+
+# [0.40.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.39.0...instantsearch-ui-components@0.40.0) (2026-09-03)
+
+
+### Bug Fixes
+
+* **chat:** drop the empty row a contentless turn leaves behind ([#7217](https://github.com/algolia/instantsearch/issues/7217)) ([5ba4284](https://github.com/algolia/instantsearch/commit/5ba428429047315d9958413361c0e0c5cd16bdbb))
+* **chat:** hide empty assistant placeholder ([#7215](https://github.com/algolia/instantsearch/issues/7215)) ([1e643e5](https://github.com/algolia/instantsearch/commit/1e643e5307d90f72026f8966f02139a3bf2a8083))
+* **chat:** keep loader until assistant message exists ([#7216](https://github.com/algolia/instantsearch/issues/7216)) ([0b6b451](https://github.com/algolia/instantsearch/commit/0b6b451a83845bb6aa3209f846d87addc773cbd8))
+* **chat:** keep the actions on completed answers during a turn ([#7218](https://github.com/algolia/instantsearch/issues/7218)) ([f1f09c2](https://github.com/algolia/instantsearch/commit/f1f09c28abef1018505c1bfc5828d4b73c6d1cb2))
+* **chat:** render failed tools by default ([#7226](https://github.com/algolia/instantsearch/issues/7226)) ([147040f](https://github.com/algolia/instantsearch/commit/147040f8ab3bcc9f206dd10e61a9352aaad59b15))
+* **chat:** settle failed client-side tools ([#7219](https://github.com/algolia/instantsearch/issues/7219)) ([5fb7790](https://github.com/algolia/instantsearch/commit/5fb779013519dbcf8d3d341816eb4e0749047be5))
+* **chat:** time out stalled client-side tools ([#7222](https://github.com/algolia/instantsearch/issues/7222)) ([471d5c7](https://github.com/algolia/instantsearch/commit/471d5c729884b06fd49574b31b0ba6a67acde079))
+
+
+### Features
+
+* **chat:** add opt-in failed tool retry ([#7227](https://github.com/algolia/instantsearch/issues/7227)) ([5c37b66](https://github.com/algolia/instantsearch/commit/5c37b6641ad771a8ee38df69c07084d8bbf76b39))
+
+
+
+
+
+# [0.39.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.38.0...instantsearch-ui-components@0.39.0) (2026-09-01)
+
+
+### Bug Fixes
+
+* **chat:** restore automatic scrolling ([#7211](https://github.com/algolia/instantsearch/issues/7211)) ([4fc1e19](https://github.com/algolia/instantsearch/commit/4fc1e19c77531c53aa966cf65da0ed04922d24c9))
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
+# [0.38.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.37.0...instantsearch-ui-components@0.38.0) (2026-08-31)
+
+
+### Bug Fixes
+
+* **chat:** apply MCP boolean and numeric facets on view all ([#7197](https://github.com/algolia/instantsearch/issues/7197)) ([3406263](https://github.com/algolia/instantsearch/commit/3406263da649958be08d9286e25e8ca35d4ddc34))
+
+
+### Features
+
+* **chat:** let tools claim the names a server derives from them ([#7185](https://github.com/algolia/instantsearch/issues/7185)) ([02fc09f](https://github.com/algolia/instantsearch/commit/02fc09f182a86774962ea40304a4f6fbf2b58784))
+
+
+
+
+
+# [0.37.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.36.0...instantsearch-ui-components@0.37.0) (2026-08-24)
+
+
+### Bug Fixes
+
+* **chat:** keep loader timing stable across React renders ([#7187](https://github.com/algolia/instantsearch/issues/7187)) ([44f0dd1](https://github.com/algolia/instantsearch/commit/44f0dd18674f3ab70e02d1db57bac3c42cf128d2))
+
+
+### Features
+
+* **chat:** customizable loader placement, rendering and timing ([#7171](https://github.com/algolia/instantsearch/issues/7171)) ([073abbd](https://github.com/algolia/instantsearch/commit/073abbd159aee6772a55c3f244688cdbe62750d4))
+* **chat:** let tools control their own rendering ([#7172](https://github.com/algolia/instantsearch/issues/7172)) ([3b35274](https://github.com/algolia/instantsearch/commit/3b35274f097ab250497717df9c24345893d7ea0f))
+
+
+
+
+
+# [0.36.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.35.1...instantsearch-ui-components@0.36.0) (2026-08-19)
+
+
+### Features
+
+* **chat:** allow client side tool calls to cancel automatically if output not given before a new message ([#7162](https://github.com/algolia/instantsearch/issues/7162)) ([bdc5a5c](https://github.com/algolia/instantsearch/commit/bdc5a5cb17a1006146fcf86e57151881df2ed1d1))
+* **chat:** consolidate overridable-component props into a single `context` object ([#7123](https://github.com/algolia/instantsearch/issues/7123)) ([33eae92](https://github.com/algolia/instantsearch/commit/33eae92d39acda73b923998551f6b1672c9b3392))
+* **chat:** save search results from search tool into a chat wide map ([#7152](https://github.com/algolia/instantsearch/issues/7152)) ([236e582](https://github.com/algolia/instantsearch/commit/236e582562b48e46dc3c87b582c951ee14434a5e))
+
+
+
+
+
+## [0.35.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.35.0...instantsearch-ui-components@0.35.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **chat:** make closed layouts non-interactive ([#7164](https://github.com/algolia/instantsearch/issues/7164)) ([d3869f7](https://github.com/algolia/instantsearch/commit/d3869f710fce3d8fcf4f5c19856c1389750597b3))
+
+
+
+
+
+# [0.35.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.34.0...instantsearch-ui-components@0.35.0) (2026-08-12)
+
+
+### Features
+
+* **chat:** support custom text rendering ([#7160](https://github.com/algolia/instantsearch/issues/7160)) ([7eb2bf0](https://github.com/algolia/instantsearch/commit/7eb2bf0d4c4514985d54868df5a77e9a8af1eb92))
+
+
+
+
+
 # [0.34.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.33.2...instantsearch-ui-components@0.34.0) (2026-08-06)
 
 

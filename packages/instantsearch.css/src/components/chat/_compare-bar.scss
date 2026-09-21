@@ -1,0 +1,110 @@
+@use '../../shared/_variables';
+
+// The comparison selection bar (`compareBar` widget). Sticks to the bottom of
+// the viewport and funnels the selection into the chat via its Compare CTA.
+.ais-CompareBar {
+  position: fixed;
+  bottom: var(--ais-spacing);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ais-spacing);
+  max-width: calc(100vw - var(--ais-spacing) * 2);
+  padding: calc(var(--ais-spacing) * 0.75) var(--ais-spacing);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
+  border-radius: calc(var(--ais-spacing) * 0.75);
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  box-shadow: var(--ais-shadow-md);
+}
+
+.ais-CompareBar-header {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-CompareBar-title {
+  font-weight: var(--ais-font-weight-semibold);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-CompareBar-count {
+  font-size: calc(var(--ais-spacing) * 0.8);
+  color: rgba(var(--ais-text-color-rgb), 0.7);
+}
+
+.ais-CompareBar-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ais-CompareBar-item {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.25);
+  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
+  border-radius: calc(var(--ais-spacing) * 0.5);
+  background-color: rgba(var(--ais-text-color-rgb), 0.04);
+  font-size: calc(var(--ais-spacing) * 0.85);
+}
+
+.ais-CompareBar-itemLabel {
+  max-width: calc(var(--ais-spacing) * 10);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ais-CompareBar-itemRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: rgba(var(--ais-text-color-rgb), 0.6);
+
+  &:hover {
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  }
+
+  svg {
+    width: calc(var(--ais-icon-size) * 0.7);
+    height: calc(var(--ais-icon-size) * 0.7);
+  }
+}
+
+.ais-CompareBar-hint {
+  flex-basis: 100%;
+  font-size: calc(var(--ais-spacing) * 0.8);
+  color: rgba(var(--ais-text-color-rgb), 0.6);
+}
+
+.ais-CompareBar-actions {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+  margin-left: auto;
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-CompareBar {
+    left: var(--ais-spacing);
+    right: var(--ais-spacing);
+    transform: none;
+    max-width: none;
+  }
+}

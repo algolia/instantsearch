@@ -60,4 +60,5 @@ export { default as connectPromptSuggestions } from './prompt-suggestions/connec
 export { default as connectTasks } from './tasks/connectTasks';
 export { default as connectFeeds } from './feeds/connectFeeds';
 export { default as connectChatTrigger } from './chat/connectChatTrigger';
+export { default as connectCompare } from './compare/connectCompare';
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

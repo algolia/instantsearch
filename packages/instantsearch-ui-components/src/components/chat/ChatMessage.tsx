@@ -2,31 +2,67 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { isReasoningPartActive } from '../../lib/utils/chat';
+import {
+  findTool,
+  isPartTextEmpty,
+  isReasoningPartActive,
+} from '../../lib/utils/chat';
+import { collectChatRecords } from '../../lib/utils/chatRecords';
 import { createButtonComponent } from '../Button';
 
 import {
   createChatMessageReasoningComponent,
   type ChatMessageReasoningClassNames,
+  type ChatMessageReasoningPart,
   type ChatMessageReasoningTranslations,
 } from './ChatMessageReasoning';
-import { MenuIcon } from './icons';
+import { MenuIcon, ReloadIcon } from './icons';
 
 import type {
   AddToolResult,
   AddToolResultWithOutput,
+  ChatComponentContext,
+  ChatComponentPropsWithContext,
   ChatMessageBase,
   ChatStatus,
   ChatToolMessage,
   ClientSideTool,
+  ClientSideToolContext,
   ClientSideTools,
+  ReasoningUIPart,
+  TextUIPart,
 } from './types';
+import type { ChatRecordsStore } from '../../lib/utils/chatRecords';
 import type {
   ComponentProps,
   Renderer,
   SendEventForHits,
   VNode,
 } from '../../types';
+
+/**
+ * The root-level props tool layout components received before everything moved
+ * under `context`. Passed alongside `context` so components written against the
+ * previous API keep working. Remove together with
+ * `DeprecatedClientSideToolRootProps` in the next major.
+ */
+function getDeprecatedToolRootProps<TMessage extends ChatMessageBase>(
+  context: ClientSideToolContext<TMessage>
+) {
+  return {
+    message: context.message,
+    messages: context.messages,
+    records: context.records,
+    insightsEventContext: context.insightsEventContext,
+    status: context.status,
+    indexUiState: context.indexUiState,
+    setIndexUiState: context.setIndexUiState,
+    onClose: context.onClose,
+    addToolResult: context.addToolResult,
+    applyFilters: context.applyFilters,
+    sendEvent: context.sendEvent,
+  };
+}
 
 type MessageScopedClientSideTool = ClientSideTool & {
   '~addToolResultForMessage'?: (
@@ -47,6 +83,10 @@ export type ChatMessageTranslations = {
    * The label for message actions
    */
   actionsLabel: string;
+  /**
+   * The retry button text for failed tools
+   */
+  toolErrorRetryText?: string;
 } & Partial<ChatMessageReasoningTranslations>;
 
 export type ChatMessageClassNames = {
@@ -99,15 +139,64 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type ChatMessageProps = ComponentProps<'article'> & {
+export type ChatMessageTextComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = {
+  /**
+   * The text part to render
+   */
+  part: TextUIPart;
+  /**
+   * The message containing the text part
+   */
+  message: TMessage;
+  /**
+   * The full conversation, when available
+   */
+  messages?: TMessage[];
+  /**
+   * The current chat status
+   */
+  status: ChatStatus;
+  /**
+   * The text part's index in the full `message.parts` array
+   */
+  partIndex: number;
+};
+
+export type { ChatMessageReasoningPart } from './ChatMessageReasoning';
+
+export type ChatMessageReasoningComponentProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ChatComponentPropsWithContext<
+  {
+    /**
+     * The reasoning part to render
+     */
+    part: ReasoningUIPart;
+    /**
+     * The reasoning part's index in the full `message.parts` array
+     */
+    partIndex: number;
+    /**
+     * Whether this reasoning part is currently being produced
+     */
+    isStreaming: boolean;
+    /**
+     * The message containing the reasoning part
+     */
+    message: TMessage;
+  },
+  TMessage
+>;
+
+export type ChatMessageProps<
+  TMessage extends ChatMessageBase = ChatMessageBase,
+> = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
    */
-  message: ChatMessageBase;
-  /**
-   * The status of the message (e.g. whether it's still streaming)
-   */
-  status: ChatStatus;
+  message: TMessage;
   /**
    * The side of the message
    */
@@ -131,14 +220,31 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Custom actions renderer
    */
-  actionsComponent?: (props: {
-    actions: ChatMessageActionProps[];
-    message: ChatMessageBase;
-  }) => JSX.Element | null;
+  actionsComponent?: (
+    props: ChatComponentPropsWithContext<{
+      actions: ChatMessageActionProps[];
+      message: ChatMessageBase;
+    }>
+  ) => JSX.Element | null;
   /**
    * Footer content
    */
   footerComponent?: () => JSX.Element;
+  /**
+   * Custom text part renderer
+   */
+  textComponent?: (
+    props: ChatMessageTextComponentProps<TMessage>
+  ) => JSX.Element | null;
+  /**
+   * Custom reasoning renderer, called once per reasoning part at that part's own
+   * stream position. It changes how reasoning renders, not whether: reasoning
+   * renders by default, and `showReasoning: false` suppresses this renderer
+   * along with it.
+   */
+  reasoningComponent?: (
+    props: ChatMessageReasoningComponentProps<TMessage>
+  ) => JSX.Element | null;
   /**
    * The index UI state
    */
@@ -148,25 +254,40 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
-   * The full conversation. Forwarded to tool components so those that only
-   * receive object IDs (e.g. display results) can hydrate records from a
-   * preceding search tool's hits.
+   * The full conversation. Forwarded to tool and text components so those that
+   * only receive object IDs (e.g. Grouped Results) can hydrate records from a
+   * preceding search tool's hits. Defaults to `context.messages` when omitted.
    */
-  messages?: ChatMessageBase[];
+  messages?: TMessage[];
   /**
-   * Close the chat
+   * @deprecated Read `context.status` instead. Overrides `context.status` when
+   * provided, for callers written against the previous API.
    */
-  onClose: () => void;
+  status?: ChatStatus;
   /**
-   * Array of tools available for the assistant (for tool messages)
+   * @deprecated Read `context.tools` instead. Overrides `context.tools` when
+   * provided, for callers written against the previous API.
    */
-  tools: ClientSideTools;
+  tools?: ClientSideTools;
+  /**
+   * @deprecated Read `context.onClose` instead. Overrides `context.onClose`
+   * when provided, for callers written against the previous API.
+   */
+  onClose?: () => void;
   /**
    * Optional suggestions element
    */
   suggestionsElement?: VNode;
   /**
-   * Whether to render reasoning parts
+   * Optional loader element, rendered under the message's parts. Set by
+   * `ChatMessages` when `loaderPosition` is `message-inline`.
+   */
+  loaderElement?: VNode;
+  /**
+   * Whether to render the reasoning an agent sends. `true` by default, so
+   * reasoning that arrives is shown. Pass `false` to suppress it in this
+   * widget. It cannot make an agent send reasoning: whether reasoning reaches
+   * the client at all is the agent's own `sendReasoning` setting.
    */
   showReasoning?: boolean;
   /**
@@ -190,20 +311,26 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   parseMarkdown?: boolean;
 };
 
-// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
-const SearchIndexToolType = 'algolia_search_index';
-
-export function createChatMessageComponent({ createElement }: Renderer) {
+export function createChatMessageComponent({
+  createElement,
+  Fragment,
+}: Renderer) {
   const Button = createButtonComponent({ createElement });
   const ChatMessageReasoning = createChatMessageReasoningComponent({
     createElement,
   });
 
-  return function ChatMessage(userProps: ChatMessageProps) {
+  return function ChatMessage<
+    TMessage extends ChatMessageBase = ChatMessageBase,
+  >(
+    userProps: ChatComponentPropsWithContext<
+      ChatMessageProps<TMessage>,
+      TMessage
+    >
+  ) {
     const {
       classNames = {},
       message,
-      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -211,23 +338,55 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      tools = {},
+      textComponent: TextComponent,
+      reasoningComponent: ReasoningComponent,
       indexUiState,
       setIndexUiState,
-      messages,
-      onClose,
       translations: userTranslations,
       suggestionsElement,
-      showReasoning = false,
+      loaderElement,
+      showReasoning = true,
       parseMarkdown = true,
+      messages: ownMessages,
+      /* eslint-disable typescript/no-deprecated -- reading the
+         deprecated aliases is the point: they are resolved into `context`
+         below so callers on the previous API keep working. */
+      status: ownStatus,
+      tools: ownTools,
+      onClose: ownOnClose,
+      /* eslint-enable typescript/no-deprecated */
+      context: sharedContext,
       ...props
     } = userProps;
+
+    // Root-level overrides win over the shared context, so a caller can scope
+    // these to a single message. `messages` is supported going forward; the
+    // other three are deprecated aliases kept for callers written against the
+    // pre-`context` API. Resolving them into one object up front means every
+    // consumer below (tools, actions, text) reads consistent values.
+    const context: ChatComponentContext<TMessage> = {
+      ...sharedContext,
+      messages: ownMessages ?? sharedContext.messages,
+      status: ownStatus ?? sharedContext.status,
+      tools: ownTools ?? sharedContext.tools,
+      onClose: ownOnClose ?? sharedContext.onClose,
+    };
+    const { messages, status, tools } = context;
 
     const translations: Required<ChatMessageTranslations> = {
       messageLabel: 'Message',
       actionsLabel: 'Message actions',
+      toolErrorRetryText: 'Retry',
       reasoningLabel: 'Reasoning',
       ...userTranslations,
+    };
+
+    // A message rendered without a connector-attached store falls back to
+    // collecting from the conversation it was handed.
+    let fallbackRecords: ChatRecordsStore | undefined;
+    const getFallbackRecords = () => {
+      fallbackRecords = fallbackRecords || collectChatRecords(messages);
+      return fallbackRecords;
     };
 
     const hasLeading = Boolean(LeadingComponent);
@@ -235,8 +394,50 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       messages === undefined ||
       messages[messages.length - 1]?.id === message.id;
 
+    const reasoningParts = showReasoning
+      ? message.parts.reduce<ChatMessageReasoningPart[]>(
+          (receivedParts, part, partIndex) => {
+            if (part.type !== 'reasoning') {
+              return receivedParts;
+            }
+
+            const isStreaming =
+              status === 'streaming' &&
+              isCurrentMessage &&
+              isReasoningPartActive(message.parts, partIndex);
+
+            if (!isStreaming && part.text.trim().length === 0) {
+              return receivedParts;
+            }
+
+            receivedParts.push({ part, partIndex, isStreaming });
+            return receivedParts;
+          },
+          []
+        )
+      : [];
+    const firstReasoningPartIndex = reasoningParts[0]?.partIndex;
+    // Keep the built-in native disclosure mounted through a temporary
+    // eligibility gap so its reader-owned state survives resumed reasoning.
+    const reasoningPartIndex =
+      firstReasoningPartIndex ??
+      (showReasoning &&
+      !ReasoningComponent &&
+      status === 'streaming' &&
+      isCurrentMessage
+        ? message.parts.findIndex((part) => part.type === 'reasoning')
+        : -1);
+    const isReasoningStreaming = reasoningParts.some(
+      (part) => part.isStreaming
+    );
+
+    // `status` is the chat's, not the row's: gating every row on it took the
+    // actions off completed answers the moment a follow-up turn started,
+    // reflowing rows the turn hasn't touched. Only the row the turn is
+    // producing waits for the status to settle.
     const showActions =
-      Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
+      Boolean(actions.length > 0 || ActionsComponent) &&
+      (status === 'ready' || !isCurrentMessage);
 
     const cssClasses: Required<ChatMessageClassNames> = {
       root: cx(
@@ -287,48 +488,75 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'reasoning') {
-        if (!showReasoning) {
-          return null;
+        // A custom component renders each step where it arrived, so the rendered
+        // order matches the stream. The built-in disclosure below aggregates the
+        // whole message into a single row, which is why only it is placed by
+        // index.
+        if (ReasoningComponent) {
+          const receivedPart = reasoningParts.find(
+            (candidate) => candidate.partIndex === index
+          );
+
+          if (!receivedPart) {
+            return null;
+          }
+
+          return (
+            <Fragment key={`${message.id}-reasoning-${index}`}>
+              <ReasoningComponent
+                part={receivedPart.part}
+                partIndex={index}
+                isStreaming={receivedPart.isStreaming}
+                message={message}
+                context={context}
+              />
+            </Fragment>
+          );
         }
 
-        const isReasoningStreaming =
-          status === 'streaming' &&
-          isCurrentMessage &&
-          isReasoningPartActive(message.parts, index);
-
-        if (!isReasoningStreaming && part.text.trim().length === 0) {
+        if (index !== reasoningPartIndex) {
           return null;
         }
 
         return (
           <ChatMessageReasoning
-            key={`${message.id}-${index}`}
-            part={part}
-            isStreaming={isReasoningStreaming}
+            key={`${message.id}-reasoning`}
+            parts={reasoningParts}
+            hidden={reasoningParts.length === 0}
             parseMarkdown={parseMarkdown}
             translations={translations}
             classNames={{
               ...cssClasses,
-              reasoningLabel: cx(
-                'ais-ChatMessageReasoning-label',
+              reasoningIcon: cx(
+                cssClasses.reasoningIcon,
                 isReasoningStreaming &&
-                  'ais-ChatMessageReasoning-label--streaming',
-                classNames.reasoningLabel
+                  'ais-ChatMessageReasoning-icon--streaming'
+              ),
+              reasoningLabel: cx(
+                cssClasses.reasoningLabel,
+                isReasoningStreaming &&
+                  'ais-ChatMessageReasoning-label--streaming'
               ),
             }}
           />
         );
       }
       if (part.type === 'text') {
-        // Back-compat shim for sessions started before the move from a
-        // `<context>{...}</context>` text part to `metadata.turnContext`.
-        // Safe to remove once existing sessionStorage transcripts have
-        // rolled over (~2 weeks after release).
-        if (
-          part.text.startsWith('<context>') &&
-          part.text.endsWith('</context>')
-        ) {
+        if (isPartTextEmpty(part)) {
           return null;
+        }
+        if (TextComponent) {
+          return (
+            <Fragment key={`${message.id}-${index}`}>
+              <TextComponent
+                part={part}
+                message={message}
+                messages={messages}
+                status={status}
+                partIndex={index}
+              />
+            </Fragment>
+          );
         }
         if (!parseMarkdown) {
           // Render the literal text. The `ais-ChatMessage-text` class applies
@@ -350,24 +578,16 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const toolName = part.type.replace('tool-', '');
-        let tool = tools[toolName] as MessageScopedClientSideTool | undefined;
-
-        // Compatibility shim with Algolia MCP Server search tool
-        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
-          tool = tools[SearchIndexToolType] as
-            | MessageScopedClientSideTool
-            | undefined;
-        }
-
-        const displayResultsEnabled =
-          (message.metadata as { displayResultsEnabled?: boolean } | undefined)
-            ?.displayResultsEnabled === true;
+        const tool = findTool(part.type, tools) as
+          | MessageScopedClientSideTool
+          | undefined;
 
         if (
-          displayResultsEnabled &&
-          tool &&
-          tool === tools[SearchIndexToolType]
+          tool?.shouldRender?.({
+            ...context,
+            message: part as ChatToolMessage,
+            parentMessage: message,
+          }) === false
         ) {
           return null;
         }
@@ -394,7 +614,43 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           }
 
           if (!ToolLayoutComponent) {
-            return null;
+            if (toolMessage.state !== 'output-error') {
+              return null;
+            }
+
+            const messageIndex = messages.findIndex(
+              (candidate) => candidate.id === message.id
+            );
+            const canRetry =
+              tool.retryOnError === true &&
+              Boolean(tool.onToolCall) &&
+              status === 'ready' &&
+              messageIndex >= 0 &&
+              !messages
+                .slice(messageIndex + 1)
+                .some((candidate) => candidate.role === 'user');
+
+            return (
+              <div
+                key={`${message.id}-${index}`}
+                className="ais-ChatMessage-tool ais-ChatMessage-toolError"
+              >
+                <span className="ais-ChatMessage-toolError-message">
+                  {toolMessage.errorText || 'Tool call failed.'}
+                </span>
+                {canRetry && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="ais-ChatMessage-toolError-action"
+                    onClick={() => context.onReload(message.id)}
+                  >
+                    <ReloadIcon createElement={createElement} />
+                    {translations.toolErrorRetryText}
+                  </Button>
+                )}
+              </div>
+            );
           }
 
           const toolSendEvent = tool.sendEvent || (() => {});
@@ -421,28 +677,44 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             });
           }) as SendEventForHits;
 
+          const toolContext: ClientSideToolContext<TMessage> = {
+            ...context,
+            records: tool.records || getFallbackRecords(),
+            message: toolMessage,
+            insightsEventContext: tool.insightsEventContext,
+            indexUiState,
+            setIndexUiState,
+            addToolResult: boundAddToolResult,
+            applyFilters: tool.applyFilters,
+            sendEvent,
+          };
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
               <ToolLayoutComponent
-                message={toolMessage}
-                insightsEventContext={tool.insightsEventContext}
-                status={status}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
-                messages={messages}
-                addToolResult={boundAddToolResult}
-                applyFilters={tool.applyFilters}
-                sendEvent={sendEvent}
-                onClose={onClose}
+                {...getDeprecatedToolRootProps(toolContext)}
+                context={toolContext}
               />
             </div>
           );
         }
       }
       return null;
+    }
+
+    const renderedParts = message.parts.map(renderMessagePart);
+    const hasRenderedParts = renderedParts.some((part) => part != null);
+
+    if (
+      !hasRenderedParts &&
+      !loaderElement &&
+      !(ActionsComponent && showActions) &&
+      !FooterComponent
+    ) {
+      return suggestionsElement ?? null;
     }
 
     return (
@@ -460,7 +732,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
-              {message.parts.map(renderMessagePart)}
+              {renderedParts}
+              {loaderElement}
             </div>
 
             {suggestionsElement}
@@ -471,7 +744,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 aria-label={translations.actionsLabel}
               >
                 {ActionsComponent ? (
-                  <ActionsComponent actions={actions} message={message} />
+                  <ActionsComponent
+                    actions={actions}
+                    message={message}
+                    context={context}
+                  />
                 ) : (
                   actions.map((action, index) => (
                     <Button

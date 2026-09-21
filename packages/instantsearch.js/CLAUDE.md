@@ -8,6 +8,7 @@ The core package. **Every connector lives here and is consumed by all flavors** 
 - `src/widgets/<name>/<name>.tsx` — vanilla JS widget = connector + default template/rendering. Exported from `src/widgets/index.ts`.
 - `src/components/` — the **JS flavor's Preact components** (the widgets' markup). This is the _legacy_ home for widget layout; newer widgets pull their layout from the shared `instantsearch-ui-components` package instead, and some components here are now thin wrappers that import from it. Add **new shared** markup to `instantsearch-ui-components`, not here.
 - `src/lib/` — the InstantSearch runtime: lifecycle orchestration, routing, helper integration.
+- `src/lib/ai-lite/` — hand-written reimplementation of the Vercel AI SDK's UI layer (`UIMessage` parts, the SSE chunk protocol, the `Chat` state machine `connectChat` drives). It replaced `ai@^5.0.18` in #6880 and tracks nothing upstream: AI SDK fixes land on the `ai@6` line and never reach us. **Before changing its semantics, diff the matching file under [`vercel/ai/packages/ai/src/ui`](https://github.com/vercel/ai/tree/main/packages/ai/src/ui)** — the auto-continue predicate silently missed vercel/ai#9944 (don't resend provider-executed tool turns) for months. Deliberate gaps: no tool-approval flow, no metadata/data-part schema validation, no `finishReason`.
 - `src/types/` — public type definitions.
 
 ## Working here

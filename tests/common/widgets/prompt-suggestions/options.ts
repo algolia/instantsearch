@@ -12,6 +12,27 @@ const DEBOUNCE_MS = 300;
 
 const SUGGESTIONS = ['Suggestion A', 'Suggestion B', 'Suggestion C'];
 
+function textStreamResponse(suggestions: string[]): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(encoder.encode(JSON.stringify({ suggestions })));
+      controller.close();
+    },
+  });
+  return {
+    ok: true,
+    status: 200,
+    headers: {
+      get: (name: string) =>
+        name.toLowerCase() === 'content-type'
+          ? 'text/plain; charset=utf-8'
+          : null,
+    },
+    body,
+  } as unknown as Response;
+}
+
 function createResultsClient(hits: Array<Record<string, unknown>>) {
   return createSearchClient({
     search: jest.fn(() =>
@@ -36,14 +57,11 @@ function createResultsClient(hits: Array<Record<string, unknown>>) {
 
 /**
  * Mocks `global.fetch` (the agent-studio transport, not the search client)
- * with the Agent Studio `tasks` response shape `{ output: { suggestions } }`.
+ * with the Agent Studio streaming `tasks` response.
  */
 function mockAgentFetch(suggestions: string[] = SUGGESTIONS) {
   const fetchMock = jest.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve({ output: { suggestions } }),
-    } as Response)
+    Promise.resolve(textStreamResponse(suggestions))
   );
   global.fetch = fetchMock as unknown as typeof fetch;
   return fetchMock;
@@ -130,12 +148,7 @@ export function createOptionsTests(
       global.fetch = jest.fn(
         () =>
           new Promise<Response>((resolve) => {
-            resolveFetch = () =>
-              resolve({
-                ok: true,
-                json: () =>
-                  Promise.resolve({ output: { suggestions: SUGGESTIONS } }),
-              } as Response);
+            resolveFetch = () => resolve(textStreamResponse(SUGGESTIONS));
           })
       ) as unknown as typeof fetch;
 
@@ -285,6 +298,152 @@ export function createOptionsTests(
       );
     });
 
+    test('composes agent identity with a custom fetch transport', async () => {
+      const searchClient = Object.assign(
+        createResultsClient([{ objectID: '1', name: 'Product 1' }]),
+        { _ua: 'instantsearch.js (test)' }
+      );
+      const fetchMock = jest.fn(
+        (..._args: Parameters<typeof fetch>): ReturnType<typeof fetch> =>
+          Promise.resolve(textStreamResponse(SUGGESTIONS))
+      );
+      const transport = {
+        fetch: fetchMock,
+        headers: {
+          'x-custom-header': 'custom-value',
+          'X-Algolia-Application-ID': 'custom-app',
+          'X-Algolia-API-Key': 'custom-key',
+          'X-Algolia-Agent': 'custom-agent',
+        },
+      };
+
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            transport,
+            configurationId: 'prompt-suggestions',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://appId.algolia.net/agent-studio/1/agents/test-agent-id/tasks?stream=true',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'x-custom-header': 'custom-value',
+            'x-algolia-application-id': 'appId',
+            'x-algolia-api-key': 'apiKey',
+            'x-algolia-agent': 'instantsearch.js (test); tasks',
+            'Content-Type': 'application/json',
+          },
+        })
+      );
+    });
+
+    test('requests suggestions with an explicit context when no search is triggered', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+      const context = { title: 'A product', brand: 'A brand' };
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          // The common query gate: a page with no query never searches, so the
+          // widget never gets results. With an explicit `context` the request
+          // does not read them, so it must not wait for them either.
+          searchFunction(helper) {
+            if (helper.state.query) {
+              helper.search();
+            }
+          },
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+            context,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      expect(searchClient.search).not.toHaveBeenCalled();
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      expect(JSON.parse(init.body as string).input).toEqual(context);
+
+      const pills = document.querySelectorAll(
+        '.ais-PromptSuggestions-suggestion'
+      );
+      expect(pills).toHaveLength(SUGGESTIONS.length);
+    });
+
+    test('requests nothing without a context when no search is triggered', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          searchFunction(helper) {
+            if (helper.state.query) {
+              helper.search();
+            }
+          },
+        },
+        widgetParams: {
+          javascript: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          react: {
+            agentId: 'test-agent-id',
+            configurationId: 'prompt-suggestions',
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      // Auto-extraction has nothing to extract from, so nothing goes out.
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
     test('sends only the provided context and skips auto-extraction', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
@@ -327,22 +486,32 @@ export function createOptionsTests(
       expect(body.input.hitsSample).toBeUndefined();
     });
 
-    test('throws without configurationId', () => {
-      const searchClient = createSearchClient({});
+    test('selects the Prompt Suggestions task kind without configurationId', async () => {
+      const searchClient = createResultsClient([
+        { objectID: '1', name: 'Product 1' },
+      ]);
+      const fetchMock = mockAgentFetch();
 
-      expect(() =>
-        setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: { agentId: 'test-agent-id' } as any,
-            react: { agentId: 'test-agent-id' } as any,
-            vue: {},
-          },
-        })
-      ).toThrow('The `configurationId` option is required.');
+      await setup({
+        instantSearchOptions: { indexName: 'indexName', searchClient },
+        widgetParams: {
+          javascript: { agentId: 'test-agent-id' },
+          react: { agentId: 'test-agent-id' },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 50);
+      });
+
+      const [, init] = fetchMock.mock.calls[0] as unknown as [
+        string,
+        RequestInit,
+      ];
+      const body = JSON.parse(init.body as string);
+      expect(body).toMatchObject({ kind: 'prompt_suggestions' });
+      expect(body).not.toHaveProperty('task');
     });
 
     test('forwards a custom configurationId to the request payload', async () => {
@@ -377,6 +546,7 @@ export function createOptionsTests(
       ];
       const body = JSON.parse(init.body as string);
       expect(body.task).toBe('my_custom_task');
+      expect(body.kind).toBe('prompt_suggestions');
     });
 
     test('applies transformItems to the rendered suggestions', async () => {
@@ -416,7 +586,10 @@ export function createOptionsTests(
       expect(document.body.textContent).toContain('Custom Suggestion A');
     });
 
-    test('runs the onSuggestionClick override when a pill is clicked', async () => {
+    // An `onSuggestionClick` override owns the click, so this setup needs no
+    // chat widget — and must not be reported as the misconfigured page that
+    // renders pills leading nowhere.
+    test('runs the onSuggestionClick override when a pill is clicked, with no chat widget mounted', async () => {
       const searchClient = createResultsClient([
         { objectID: '1', name: 'Product 1' },
       ]);
@@ -430,11 +603,13 @@ export function createOptionsTests(
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
             onSuggestionClick,
+            renderChat: false,
           },
           react: {
             agentId: 'test-agent-id',
             configurationId: 'prompt-suggestions',
             onSuggestionClick,
+            renderChat: false,
           },
           vue: {},
         },

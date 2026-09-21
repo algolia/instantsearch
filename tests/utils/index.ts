@@ -1,4 +1,5 @@
 export * from './castToJestMock';
+export * from './chatToolProps';
 export * from './createInstantSearchSpy';
 export * from './enzyme';
 export * from './InstantSearchTestWrapper';

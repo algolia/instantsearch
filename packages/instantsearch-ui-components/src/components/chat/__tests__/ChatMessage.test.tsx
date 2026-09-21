@@ -9,14 +9,33 @@ import { Fragment, createElement } from 'preact';
 import {
   createChatMessageComponent,
   type ChatMessageClassNames,
+  type ChatMessageReasoningComponentProps,
+  type ChatMessageTextComponentProps,
   type ChatMessageTranslations,
 } from '../ChatMessage';
 
 import type { AddToolResult, ChatMessageBase, ClientSideTool } from '../types';
+import type { ChatComponentContext } from '../types';
 
 const ChatMessage = createChatMessageComponent({
   createElement,
   Fragment,
+});
+
+const createContext = <TMessage extends ChatMessageBase = ChatMessageBase>(
+  overrides: Partial<ChatComponentContext<TMessage>> = {}
+): ChatComponentContext<TMessage> => ({
+  messages: [],
+  status: 'ready',
+  isClearing: false,
+  open: true,
+  maximized: false,
+  tools: {},
+  regenerate: jest.fn(),
+  stop: jest.fn(),
+  onReload: jest.fn(),
+  onClose: jest.fn(),
+  ...overrides,
 });
 
 describe('ChatMessage', () => {
@@ -57,10 +76,12 @@ describe('ChatMessage', () => {
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        message={{ role: 'user', id: '1', parts: [] }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        message={{
+          role: 'user',
+          id: '1',
+          parts: [{ type: 'text', text: 'Hello' }],
+        }}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -77,12 +98,149 @@ describe('ChatMessage', () => {
             >
               <div
                 class="ais-ChatMessage-message"
-              />
+              >
+                <span>
+                  <span>
+                    Hello
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </article>
       </div>
     `);
+  });
+
+  test('does not render an empty message', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{ role: 'assistant', id: '1', parts: [] }}
+        context={createContext()}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  test('does not render a text part that has no content yet', () => {
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'text', text: '', state: 'streaming' }],
+        }}
+        context={createContext({ status: 'streaming' })}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  describe('actions visibility', () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [{ type: 'text', text: 'The answer is 2001.' }],
+    };
+    const actions = [{ title: 'Regenerate', onClick: jest.fn() }];
+
+    test('keeps them on a completed row while a new turn runs', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={actions}
+          context={createContext({
+            status: 'streaming',
+            messages: [
+              message,
+              {
+                role: 'user',
+                id: '2',
+                parts: [{ type: 'text', text: 'And?' }],
+              },
+            ],
+          })}
+        />
+      );
+
+      expect(container.querySelector('.ais-ChatMessage-action')).not.toBeNull();
+    });
+
+    test('hides them on the row the turn is producing', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={actions}
+          context={createContext({ status: 'streaming', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('.ais-ChatMessage-action')).toBeNull();
+    });
+  });
+
+  describe('a row with nothing to render', () => {
+    // A turn that ended without renderable content: aborted, or answered only
+    // by a tool hidden through `shouldRender`.
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [{ type: 'step-start' }],
+    };
+
+    test('is not kept alive by the default actions', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={[{ title: 'Regenerate', onClick: jest.fn() }]}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    test('is kept by a custom actions component', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actionsComponent={() => <span className="custom-action" />}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('.custom-action')).not.toBeNull();
+    });
+
+    test('hands its suggestions on rather than keeping the row', () => {
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          actions={[{ title: 'Regenerate', onClick: jest.fn() }]}
+          suggestionsElement={<span className="suggestions" />}
+          context={createContext({ status: 'ready', messages: [message] })}
+        />
+      );
+
+      expect(container.querySelector('article')).toBeNull();
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
   });
 
   test('renders with custom class names', () => {
@@ -93,9 +251,8 @@ describe('ChatMessage', () => {
         message={{
           role: 'user',
           id: '1',
-          parts: [],
+          parts: [{ type: 'text', text: 'Hello' }],
         }}
-        status="ready"
         classNames={{
           root: 'root',
           container: 'container',
@@ -104,8 +261,7 @@ describe('ChatMessage', () => {
           message: 'message',
           actions: 'actions',
         }}
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -122,7 +278,13 @@ describe('ChatMessage', () => {
             >
               <div
                 class="ais-ChatMessage-message message"
-              />
+              >
+                <span>
+                  <span>
+                    Hello
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </article>
@@ -141,9 +303,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -153,9 +313,7 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -165,9 +323,7 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
-          status="ready"
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext()}
         />
       </div>
     );
@@ -261,9 +417,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -272,7 +426,7 @@ describe('ChatMessage', () => {
     expect(getByText('I should search the catalog first.')).toBeInTheDocument();
   });
 
-  test('makes overflowing reasoning keyboard reachable', () => {
+  test('keeps the non-scrollable reasoning body out of the tab order', () => {
     const { getByRole, queryByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -291,9 +445,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
       />
     );
@@ -303,15 +455,34 @@ describe('ChatMessage', () => {
     userEvent.click(summary);
 
     const body = disclosure.querySelector('.ais-ChatMessageReasoning-body')!;
-    expect(body).toHaveAttribute('tabindex', '0');
+    expect(body).not.toHaveAttribute('tabindex');
     expect(queryByRole('region', { hidden: true })).not.toBeInTheDocument();
 
     summary.focus();
+    expect(summary).toHaveFocus();
     userEvent.tab();
-    expect(body).toHaveFocus();
+    expect(body).not.toHaveFocus();
   });
 
-  test('does not render reasoning unless it is enabled', () => {
+  test('renders reasoning without being asked to', () => {
+    const { getByRole, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: 'Public reasoning' }],
+        }}
+        context={createContext()}
+      />
+    );
+
+    expect(getByRole('group', { name: 'Reasoning' })).toBeInTheDocument();
+    expect(getByText('Public reasoning')).toBeInTheDocument();
+  });
+
+  test('does not render reasoning once it is suppressed', () => {
     const { queryByRole, queryByText } = render(
       <ChatMessage
         indexUiState={{}}
@@ -321,9 +492,8 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Private reasoning' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
+        showReasoning={false}
       />
     );
 
@@ -338,7 +508,7 @@ describe('ChatMessage', () => {
   ])(
     'does not render blank reasoning after a response is %s',
     (_responseState, status, text) => {
-      const { queryByRole } = render(
+      const { container, queryByRole } = render(
         <ChatMessage
           indexUiState={{}}
           setIndexUiState={jest.fn()}
@@ -347,9 +517,7 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'reasoning', text, state: 'done' }],
           }}
-          status={status}
-          tools={{}}
-          onClose={jest.fn()}
+          context={createContext({ status })}
           showReasoning={true}
         />
       );
@@ -357,33 +525,80 @@ describe('ChatMessage', () => {
       expect(
         queryByRole('group', { name: 'Reasoning' })
       ).not.toBeInTheDocument();
+      expect(
+        container.querySelector('.ais-ChatMessageReasoning')
+      ).not.toBeInTheDocument();
     }
   );
 
-  test('renders empty reasoning while the response is active', () => {
-    const { getByRole } = render(
+  test('does not mount blank reasoning for a non-current response', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [{ type: 'reasoning' as const, text: '', state: 'done' as const }],
+    };
+    const { container } = render(
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        message={{
-          role: 'assistant',
-          id: '1',
-          parts: [{ type: 'reasoning', text: '', state: 'streaming' }],
-        }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        message={message}
+        context={createContext({
+          status: 'streaming',
+          messages: [message, { role: 'assistant', id: '2', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
 
-    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
-      'aria-busy',
-      'true'
-    );
+    expect(
+      container.querySelector('.ais-ChatMessageReasoning')
+    ).not.toBeInTheDocument();
   });
 
-  test('keeps reasoning disclosures in message part order', () => {
+  test.each(['', ' \n '])(
+    'keeps blank reasoning active without rendering an empty status',
+    (text) => {
+      const { getByRole } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={{
+            role: 'assistant',
+            id: '1',
+            parts: [{ type: 'reasoning', text, state: 'streaming' }],
+          }}
+          context={createContext({
+            status: 'streaming',
+            messages: [{ role: 'assistant', id: '1', parts: [] }],
+          })}
+          showReasoning={true}
+        />
+      );
+
+      const disclosure = getByRole('group', { name: 'Reasoning' });
+      expect(disclosure).toHaveAttribute('aria-busy', 'true');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-icon')
+      ).toHaveClass('ais-ChatMessageReasoning-icon--streaming');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-label')
+      ).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-status')
+      ).not.toBeInTheDocument();
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-separator')
+      ).not.toBeInTheDocument();
+      expect(
+        disclosure.querySelector('.ais-ChatMessageReasoning-hint')
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  test('aggregates reasoning around a tool without absorbing the tool', () => {
+    const textComponent = jest.fn(({ part }: ChatMessageTextComponentProps) => (
+      <span data-testid="custom-text">{part.text}</span>
+    ));
     const { container, getAllByRole, getByText, queryAllByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -404,32 +619,234 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Final answer' },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: () => <div>Tool result</div>,
-            addToolResult: jest.fn(),
-            applyFilters: jest.fn(),
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: () => <div>Tool result</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-        }}
-        onClose={jest.fn()}
+        })}
         showReasoning={true}
+        textComponent={textComponent}
       />
     );
 
     const message = container.querySelector('.ais-ChatMessage-message')!;
     const children = Array.from(message.children);
     const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    const entries = getAllByRole('listitem');
 
-    expect(children).toHaveLength(4);
+    expect(children).toHaveLength(3);
+    expect(disclosures).toHaveLength(1);
     expect(children[0]).toBe(disclosures[0]);
     expect(children[1]).toContainElement(getByText('Tool result'));
-    expect(children[2]).toBe(disclosures[1]);
-    expect(children[3]).toContainElement(getByText('Final answer'));
+    expect(children[2]).toContainElement(getByText('Final answer'));
+    expect(children[2]).toContainElement(
+      container.querySelector('[data-testid="custom-text"]')
+    );
+    expect(entries.map((entry) => entry.textContent)).toEqual([
+      'First thought',
+      'Second thought',
+    ]);
+    expect(textComponent).toHaveBeenCalledTimes(1);
     expect(queryAllByRole('region')).toHaveLength(0);
   });
 
-  test('marks only the streaming reasoning disclosure as busy', () => {
+  test('renders a custom reasoning component once per eligible part', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'tool-test_tool' as const,
+          toolCallId: '123',
+          input: {},
+          state: 'output-available' as const,
+          output: {},
+        },
+        { type: 'reasoning' as const, text: '   ', state: 'done' as const },
+        {
+          type: 'reasoning' as const,
+          text: 'Current thought',
+          state: 'streaming' as const,
+        },
+      ],
+    };
+    const context = createContext({
+      status: 'streaming',
+      messages: [message],
+      tools: {
+        test_tool: {
+          layoutComponent: () => <div>Tool result</div>,
+          addToolResult: jest.fn(),
+          applyFilters: jest.fn(),
+        },
+      },
+    });
+    const reasoningComponent = jest.fn(
+      ({ part }: ChatMessageReasoningComponentProps) => (
+        <div data-testid="custom-reasoning">{part.text}</div>
+      )
+    );
+
+    const { getAllByTestId, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={context}
+        showReasoning={true}
+        reasoningComponent={reasoningComponent}
+      />
+    );
+
+    // The blank part at index 2 stays ineligible, so it gets no call.
+    expect(
+      getAllByTestId('custom-reasoning').map((node) => node.textContent)
+    ).toEqual(['First thought', 'Current thought']);
+    expect(getByText('Tool result')).toBeInTheDocument();
+    expect(reasoningComponent).toHaveBeenCalledTimes(2);
+    expect(reasoningComponent.mock.calls[0][0]).toEqual({
+      part: message.parts[0],
+      partIndex: 0,
+      isStreaming: false,
+      message,
+      context,
+    });
+    expect(reasoningComponent.mock.calls[1][0]).toEqual({
+      part: message.parts[3],
+      partIndex: 3,
+      isStreaming: true,
+      message,
+      context,
+    });
+  });
+
+  test('does not call a custom reasoning renderer once reasoning is suppressed', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        { type: 'text' as const, text: 'Answer', state: 'done' as const },
+      ],
+    };
+    const reasoningComponent = jest.fn(
+      ({ part }: ChatMessageReasoningComponentProps) => (
+        <div data-testid="custom-reasoning">{part.text}</div>
+      )
+    );
+
+    // The renderer replaces the built-in disclosure; it does not decide whether
+    // reasoning renders at all. `showReasoning` stays the single switch, and
+    // the JSDoc on all three public surfaces says so.
+    const { queryByTestId, getByText } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({ messages: [message] })}
+        reasoningComponent={reasoningComponent}
+        showReasoning={false}
+      />
+    );
+
+    expect(reasoningComponent).not.toHaveBeenCalled();
+    expect(queryByTestId('custom-reasoning')).not.toBeInTheDocument();
+    expect(getByText('Answer')).toBeInTheDocument();
+  });
+
+  test('keeps custom reasoning in stream order around tool calls', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'First thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'tool-first_tool' as const,
+          toolCallId: 'a',
+          input: {},
+          state: 'output-available' as const,
+          output: {},
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Second thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'tool-second_tool' as const,
+          toolCallId: 'b',
+          input: {},
+          state: 'output-available' as const,
+          output: {},
+        },
+        {
+          type: 'reasoning' as const,
+          text: 'Third thought',
+          state: 'done' as const,
+        },
+        { type: 'text' as const, text: 'Final answer' },
+      ],
+    };
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({
+          messages: [message],
+          tools: {
+            first_tool: {
+              layoutComponent: () => <div>TOOL a</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            second_tool: {
+              layoutComponent: () => <div>TOOL b</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+        showReasoning={true}
+        reasoningComponent={({ part }: ChatMessageReasoningComponentProps) => (
+          <div>{part.text}</div>
+        )}
+      />
+    );
+
+    const rendered = container.querySelector('.ais-ChatMessage-message')!;
+
+    expect(
+      Array.from(rendered.children).map((child) => child.textContent)
+    ).toEqual([
+      'First thought',
+      'TOOL a',
+      'Second thought',
+      'TOOL b',
+      'Third thought',
+      'Final answer',
+    ]);
+  });
+
+  test('marks the aggregate disclosure busy while reasoning streams', () => {
     const message = {
       role: 'assistant' as const,
       id: '1',
@@ -451,28 +868,21 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={message}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({ status: 'streaming', messages: [message] })}
         showReasoning={true}
       />
     );
 
     let disclosures = getAllByRole('group', { name: 'Reasoning' });
-    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
-    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    expect(disclosures).toHaveLength(1);
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'true');
     expect(disclosures[0]).not.toHaveAttribute('open');
-    expect(disclosures[1]).not.toHaveAttribute('open');
     expect(
       disclosures[0].querySelector('.ais-ChatMessageReasoning-label')
     ).toHaveTextContent(/^Reasoning$/);
     expect(
-      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
-    ).toHaveTextContent(/^Reasoning$/);
-    expect(
-      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
-        .nextElementSibling
-    ).toHaveClass('ais-ChatMessageReasoning-chevron');
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-hint')
+    ).toHaveTextContent('Second thought');
 
     rerender(
       <ChatMessage
@@ -482,28 +892,24 @@ describe('ChatMessage', () => {
           ...message,
           parts: [message.parts[0], { ...message.parts[1], state: 'done' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({ status: 'ready', messages: [message] })}
         showReasoning={true}
       />
     );
 
     disclosures = getAllByRole('group', { name: 'Reasoning' });
+    expect(disclosures).toHaveLength(1);
     expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
-    expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
     expect(disclosures[0]).not.toHaveAttribute('open');
-    expect(disclosures[1]).not.toHaveAttribute('open');
     expect(
-      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-label')
     ).toHaveTextContent(/^Reasoning$/);
     expect(
-      disclosures[1].querySelector('.ais-ChatMessageReasoning-label')!
-        .nextElementSibling
-    ).toHaveClass('ais-ChatMessageReasoning-chevron');
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-hint')
+    ).not.toBeInTheDocument();
   });
 
-  test('signals activity on the label alone while streaming', () => {
+  test('signals activity on the icon and shows the current hint', () => {
     const { getByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -513,16 +919,18 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        messages={[
-          {
-            role: 'assistant',
-            id: '1',
-            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
-          },
-        ]}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [
+            {
+              role: 'assistant',
+              id: '1',
+              parts: [
+                { type: 'reasoning', text: 'Working', state: 'streaming' },
+              ],
+            },
+          ],
+        })}
         showReasoning={true}
         translations={{
           reasoningLabel: 'Raisonnement de la demande en cours',
@@ -535,19 +943,58 @@ describe('ChatMessage', () => {
     });
     const summary = disclosure.querySelector('summary')!;
     const label = summary.querySelector('.ais-ChatMessageReasoning-label')!;
+    const hint = summary.querySelector('.ais-ChatMessageReasoning-hint')!;
 
     expect(disclosure).toHaveAttribute('aria-busy', 'true');
     expect(label).toHaveTextContent(/^Raisonnement de la demande en cours$/);
     expect(label).toHaveClass('ais-ChatMessageReasoning-label--streaming');
+    expect(hint).toHaveTextContent('Working');
 
     expect(
       Array.from(summary.children).map((child) => child.className)
     ).toEqual([
-      'ais-ChatMessageReasoning-icon',
+      'ais-ChatMessageReasoning-icon ais-ChatMessageReasoning-icon--streaming',
       'ais-ChatMessageReasoning-label ais-ChatMessageReasoning-label--streaming',
+      'ais-ChatMessageReasoning-status',
       'ais-ChatMessageReasoning-chevron',
     ]);
-    expect(summary).toHaveTextContent(/^Raisonnement de la demande en cours$/);
+    expect(summary).toHaveTextContent(
+      /^Raisonnement de la demande en cours·Working$/
+    );
+    // The hint is visible but must stay out of the toggle's accessible name,
+    // which would otherwise change on every streamed delta.
+    expect(summary).toHaveAccessibleName('Raisonnement de la demande en cours');
+  });
+
+  test('renders the current Markdown hint without exposing markup', () => {
+    const hint = '**Searching for TVs** I need… <img src=x onerror=alert(1)>';
+    const { getByRole } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [{ type: 'reasoning', text: hint, state: 'streaming' }],
+        }}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
+        showReasoning={true}
+      />
+    );
+
+    const hintElement = getByRole('group', {
+      name: 'Reasoning',
+    }).querySelector('.ais-ChatMessageReasoning-hint')!;
+    expect(hintElement).toHaveTextContent('Searching for TVs I need…');
+    expect(hintElement).not.toHaveTextContent('**');
+    expect(hintElement).not.toHaveTextContent('<img');
+    expect(hintElement.querySelector('strong')).toHaveTextContent(
+      'Searching for TVs'
+    );
+    expect(hintElement.querySelector('img')).toBeNull();
   });
 
   test('routes custom header and label class names to their own elements', () => {
@@ -560,16 +1007,18 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
         }}
-        messages={[
-          {
-            role: 'assistant',
-            id: '1',
-            parts: [{ type: 'reasoning', text: 'Working', state: 'streaming' }],
-          },
-        ]}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [
+            {
+              role: 'assistant',
+              id: '1',
+              parts: [
+                { type: 'reasoning', text: 'Working', state: 'streaming' },
+              ],
+            },
+          ],
+        })}
         showReasoning={true}
         classNames={{
           reasoningHeader: 'custom-header',
@@ -591,7 +1040,7 @@ describe('ChatMessage', () => {
     ).not.toHaveClass('custom-label');
   });
 
-  test('marks only the latest unfinished reasoning block as busy', () => {
+  test('marks only the current reasoning entry as active', () => {
     const { getAllByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -612,22 +1061,23 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
 
     const disclosures = getAllByRole('group', { name: 'Reasoning' });
-    expect(disclosures[0]).toHaveAttribute('aria-busy', 'false');
-    expect(disclosures[1]).toHaveAttribute('aria-busy', 'true');
+    const entries = getAllByRole('listitem');
+    expect(disclosures).toHaveLength(1);
+    expect(disclosures[0]).toHaveAttribute('aria-busy', 'true');
+    expect(entries[0]).not.toHaveAttribute('aria-current');
+    expect(entries[1]).toHaveAttribute('aria-current', 'step');
     expect(
-      disclosures[0].querySelector('.ais-ChatMessageReasoning-label--streaming')
-    ).not.toBeInTheDocument();
-    expect(
-      disclosures[1].querySelector('.ais-ChatMessageReasoning-label--streaming')
-    ).toBeInTheDocument();
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-hint')
+    ).toHaveTextContent('Check one candidate');
   });
 
   test('marks reasoning as busy only on the active response', () => {
@@ -664,10 +1114,7 @@ describe('ChatMessage', () => {
             indexUiState={{}}
             setIndexUiState={jest.fn()}
             message={message}
-            messages={messages}
-            status="streaming"
-            tools={{}}
-            onClose={jest.fn()}
+            context={createContext({ status: 'streaming', messages })}
             showReasoning={true}
           />
         ))}
@@ -700,9 +1147,10 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -714,7 +1162,7 @@ describe('ChatMessage', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('marks an earlier unfinished reasoning block as busy after a later block ends', () => {
+  test('keeps an earlier unfinished reasoning entry active after a later block ends', () => {
     const { getAllByRole } = render(
       <ChatMessage
         indexUiState={{}}
@@ -735,16 +1183,141 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
 
     const disclosures = getAllByRole('group', { name: 'Reasoning' });
+    const entries = getAllByRole('listitem');
+    expect(disclosures).toHaveLength(1);
     expect(disclosures[0]).toHaveAttribute('aria-busy', 'true');
-    expect(disclosures[1]).toHaveAttribute('aria-busy', 'false');
+    expect(entries[0]).toHaveAttribute('aria-current', 'step');
+    expect(entries[1]).not.toHaveAttribute('aria-current');
+    expect(
+      disclosures[0].querySelector('.ais-ChatMessageReasoning-hint')
+    ).toHaveTextContent('Compare the candidates');
+  });
+
+  test('keeps the reader choice through interleaved updates and completion', () => {
+    const renderMessage = (
+      parts: ChatMessageBase['parts'],
+      status: 'streaming' | 'ready' = 'streaming'
+    ) => (
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{ role: 'assistant', id: '1', parts }}
+        context={createContext({
+          status,
+          messages: [{ role: 'assistant', id: '1', parts }],
+          tools: {
+            test_tool: {
+              layoutComponent: () => <div>Tool result</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+        showReasoning={true}
+      />
+    );
+    const firstParts: ChatMessageBase['parts'] = [
+      { type: 'reasoning', text: 'First thought', state: 'streaming' },
+    ];
+    const interleavedParts: ChatMessageBase['parts'] = [
+      { type: 'reasoning', text: 'First thought', state: 'done' },
+      {
+        type: 'tool-test_tool',
+        toolCallId: '123',
+        input: {},
+        state: 'output-available',
+        output: {},
+      },
+      { type: 'reasoning', text: 'Second thought', state: 'streaming' },
+    ];
+    const answeringParts: ChatMessageBase['parts'] = [
+      ...interleavedParts.slice(0, -1),
+      { type: 'reasoning', text: 'Second thought', state: 'done' },
+      { type: 'text', text: 'Final answer', state: 'streaming' },
+    ];
+    const { getByRole, rerender } = render(renderMessage(firstParts));
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+
+    userEvent.click(disclosure.querySelector('summary')!);
+    expect(disclosure).toHaveAttribute('open');
+
+    rerender(renderMessage(interleavedParts));
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
+
+    userEvent.click(
+      getByRole('group', { name: 'Reasoning' }).querySelector('summary')!
+    );
+    expect(getByRole('group', { name: 'Reasoning' })).not.toHaveAttribute(
+      'open'
+    );
+
+    rerender(renderMessage(answeringParts));
+    expect(getByRole('group', { name: 'Reasoning' })).not.toHaveAttribute(
+      'open'
+    );
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute(
+      'aria-busy',
+      'false'
+    );
+
+    rerender(renderMessage(answeringParts, 'ready'));
+    expect(getByRole('group', { name: 'Reasoning' })).not.toHaveAttribute(
+      'open'
+    );
+  });
+
+  test('mounts restored completed history static and reader-owned', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: 'restored',
+      parts: [
+        {
+          type: 'reasoning' as const,
+          text: 'Restored thought',
+          state: 'done' as const,
+        },
+        {
+          type: 'text' as const,
+          text: 'Restored answer',
+          state: 'done' as const,
+        },
+      ],
+    };
+    const renderMessage = () => (
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{ ...message, parts: [...message.parts] }}
+        context={createContext({ status: 'ready', messages: [message] })}
+        showReasoning={true}
+      />
+    );
+    const { getByRole, rerender } = render(renderMessage());
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+
+    expect(disclosure).not.toHaveAttribute('open');
+    expect(disclosure).toHaveAttribute('aria-busy', 'false');
+    expect(
+      disclosure.querySelector('.ais-ChatMessageReasoning-hint')
+    ).not.toBeInTheDocument();
+    expect(
+      disclosure.querySelector('.ais-ChatMessageReasoning-icon--streaming')
+    ).not.toBeInTheDocument();
+
+    userEvent.click(disclosure.querySelector('summary')!);
+    expect(disclosure).toHaveAttribute('open');
+
+    rerender(renderMessage());
+    expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
   });
 
   test('preserves an open disclosure while reasoning text streams', () => {
@@ -757,9 +1330,10 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'reasoning', text, state: 'streaming' }],
         }}
-        status="streaming"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -771,6 +1345,66 @@ describe('ChatMessage', () => {
 
     rerender(renderMessage('First second'));
     expect(getByRole('group', { name: 'Reasoning' })).toHaveAttribute('open');
+  });
+
+  test('preserves an open disclosure across a textless reasoning-to-tool gap', () => {
+    const renderMessage = (parts: ChatMessageBase['parts']) => (
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{ role: 'assistant', id: '1', parts }}
+        context={createContext({
+          status: 'streaming',
+          messages: [{ role: 'assistant', id: '1', parts }],
+          tools: {
+            test_tool: {
+              layoutComponent: () => <div>Tool result</div>,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+        showReasoning={true}
+      />
+    );
+    const { getByRole, getByText, queryByRole, rerender } = render(
+      renderMessage([{ type: 'reasoning', text: '', state: 'streaming' }])
+    );
+    const disclosure = getByRole('group', { name: 'Reasoning' });
+    const toolPart = {
+      type: 'tool-test_tool' as const,
+      toolCallId: '123',
+      input: {},
+      state: 'output-available' as const,
+      output: {},
+    };
+
+    userEvent.click(disclosure.querySelector('summary')!);
+    expect(disclosure).toHaveAttribute('open');
+
+    rerender(
+      renderMessage([{ type: 'reasoning', text: '', state: 'done' }, toolPart])
+    );
+    expect(queryByRole('group', { name: 'Reasoning' })).not.toBeInTheDocument();
+    expect(disclosure).toBeInTheDocument();
+    expect(disclosure).toHaveAttribute('hidden');
+    expect(disclosure).toHaveAttribute('open');
+    expect(getByText('Tool result').closest('.ais-ChatMessage-tool')).not.toBe(
+      null
+    );
+
+    rerender(
+      renderMessage([
+        { type: 'reasoning', text: '', state: 'done' },
+        toolPart,
+        { type: 'reasoning', text: 'Next thought', state: 'streaming' },
+      ])
+    );
+    const resumedDisclosure = getByRole('group', { name: 'Reasoning' });
+
+    expect(resumedDisclosure).toHaveAttribute('open');
+    expect(resumedDisclosure).toBe(disclosure);
+    expect(resumedDisclosure).not.toContainElement(getByText('Tool result'));
   });
 
   test('keeps a reader-opened disclosure open once the answer starts and the response completes', () => {
@@ -804,9 +1438,10 @@ describe('ChatMessage', () => {
               : []),
           ],
         }}
-        status={status}
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext({
+          status,
+          messages: [{ role: 'assistant', id: '1', parts: [] }],
+        })}
         showReasoning={true}
       />
     );
@@ -846,9 +1481,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
         translations={{ reasoningLabel: 'Raisonnement' }}
       />
@@ -874,9 +1507,7 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         showReasoning={true}
         parseMarkdown={false}
       />
@@ -900,9 +1531,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -911,6 +1540,63 @@ describe('ChatMessage', () => {
     expect(container.querySelector('em')).not.toBeNull();
     expect(container.querySelector('em')!.textContent).toBe('b');
     expect(container.querySelector('.ais-ChatMessage-text')).toBeNull();
+  });
+
+  test('renders each text part with a custom component and its message context', () => {
+    const message = {
+      role: 'assistant' as const,
+      id: '1',
+      parts: [
+        { type: 'text' as const, text: 'First answer' },
+        { type: 'step-start' as const },
+        { type: 'text' as const, text: 'Second answer' },
+      ],
+    };
+    const textComponent = jest.fn(
+      ({ part, partIndex }: ChatMessageTextComponentProps) => (
+        <p data-part-index={partIndex}>{part.text}</p>
+      )
+    );
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({ status: 'streaming', messages: [message] })}
+        textComponent={textComponent}
+      />
+    );
+
+    expect(
+      textComponent.mock.calls.map(([props]) => ({
+        part: props.part,
+        message: props.message,
+        messages: props.messages,
+        status: props.status,
+        partIndex: props.partIndex,
+      }))
+    ).toEqual([
+      {
+        part: message.parts[0],
+        message,
+        messages: [message],
+        status: 'streaming',
+        partIndex: 0,
+      },
+      {
+        part: message.parts[2],
+        message,
+        messages: [message],
+        status: 'streaming',
+        partIndex: 2,
+      },
+    ]);
+    expect(
+      Array.from(container.querySelectorAll('[data-part-index]')).map(
+        (element) => element.textContent
+      )
+    ).toEqual(['First answer', 'Second answer']);
   });
 
   test('renders text parts as plain text when parseMarkdown is false', () => {
@@ -923,9 +1609,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'a *b* c' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -947,9 +1631,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'Use * and _ literally' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -992,9 +1674,7 @@ describe('ChatMessage', () => {
           id: '1',
           parts: [{ type: 'text', text: 'line one\nline two' }],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1020,9 +1700,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
         parseMarkdown={false}
       />
     );
@@ -1051,9 +1729,7 @@ describe('ChatMessage', () => {
             { type: 'text', text: 'Hello' },
           ],
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -1080,9 +1756,7 @@ describe('ChatMessage', () => {
             },
           },
         }}
-        status="ready"
-        tools={{}}
-        onClose={jest.fn()}
+        context={createContext()}
       />
     );
 
@@ -1092,8 +1766,8 @@ describe('ChatMessage', () => {
   });
 
   test('renders with tools', () => {
-    const layoutComponent = jest.fn(({ message }) => (
-      <div className="wrapper">{JSON.stringify(message.output)}</div>
+    const layoutComponent = jest.fn(({ context }) => (
+      <div className="wrapper">{JSON.stringify(context.message.output)}</div>
     ));
     const { container } = render(
       <ChatMessage
@@ -1112,20 +1786,22 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent,
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
     expect(layoutComponent.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ status: 'ready' })
+      expect.objectContaining({
+        context: expect.objectContaining({ status: 'ready' }),
+      })
     );
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -1159,6 +1835,316 @@ describe('ChatMessage', () => {
     `);
   });
 
+  test('renders a default tool error only when no custom layout exists', () => {
+    const layoutComponent = jest.fn(() => (
+      <div className="custom-tool">Custom tool error</div>
+    ));
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'tool-default',
+              toolCallId: 'default',
+              input: {},
+              state: 'output-error',
+              errorText: 'The operation may have completed.',
+            },
+            {
+              type: 'tool-custom',
+              toolCallId: 'custom',
+              input: {},
+              state: 'output-error',
+              errorText: 'This should be handled by the custom layout.',
+            },
+          ],
+        }}
+        context={createContext({
+          tools: {
+            default: {
+              onToolCall: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            custom: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError')
+    ).toHaveTextContent('The operation may have completed.');
+    expect(container.querySelector('.custom-tool')).toHaveTextContent(
+      'Custom tool error'
+    );
+    expect(container).not.toHaveTextContent(
+      'This should be handled by the custom layout.'
+    );
+    expect(layoutComponent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          message: expect.objectContaining({ state: 'output-error' }),
+        }),
+      }),
+      {}
+    );
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError-action')
+    ).toBeNull();
+  });
+
+  test('reloads a failed tool response when retry is enabled', async () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: 'assistant-1',
+      parts: [
+        {
+          type: 'tool-save',
+          toolCallId: 'call-1',
+          input: {},
+          state: 'output-error',
+          errorText: 'The operation may have completed.',
+        },
+      ],
+    };
+    const onReload = jest.fn();
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        translations={{ toolErrorRetryText: 'Try again' }}
+        context={createContext({
+          messages: [message],
+          onReload,
+          tools: {
+            save: {
+              retryOnError: true,
+              onToolCall: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    const retry = container.querySelector('.ais-ChatMessage-toolError-action')!;
+    expect(retry).toHaveTextContent('Try again');
+
+    await userEvent.click(retry);
+
+    expect(onReload).toHaveBeenCalledWith('assistant-1');
+  });
+
+  test.each(['submitted', 'streaming', 'error'] as const)(
+    'does not offer retry while the chat status is %s',
+    (status) => {
+      const message: ChatMessageBase = {
+        role: 'assistant',
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'tool-save',
+            toolCallId: 'call-1',
+            input: {},
+            state: 'output-error',
+            errorText: 'The operation may have completed.',
+          },
+        ],
+      };
+      const { container } = render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={message}
+          context={createContext({
+            messages: [message],
+            status,
+            tools: {
+              save: {
+                retryOnError: true,
+                onToolCall: jest.fn(),
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessage-toolError-action')
+      ).toBeNull();
+    }
+  );
+
+  test('does not offer retry after a later user message', () => {
+    const message: ChatMessageBase = {
+      role: 'assistant',
+      id: 'assistant-1',
+      parts: [
+        {
+          type: 'tool-save',
+          toolCallId: 'call-1',
+          input: {},
+          state: 'output-error',
+          errorText: 'The operation may have completed.',
+        },
+      ],
+    };
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        context={createContext({
+          messages: [
+            message,
+            {
+              role: 'user',
+              id: 'user-2',
+              parts: [{ type: 'text', text: 'What happened?' }],
+            },
+          ],
+          tools: {
+            save: {
+              retryOnError: true,
+              onToolCall: jest.fn(),
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError-action')
+    ).toBeNull();
+  });
+
+  test('passes the explicit messages override to tool components', () => {
+    const layoutComponent = jest.fn(({ context }) => (
+      <div>{context.messages?.length}</div>
+    ));
+    const overrideMessages: ChatMessageBase[] = [
+      {
+        role: 'assistant',
+        id: 'override',
+        parts: [{ type: 'text', text: 'Override' }],
+      },
+    ];
+    const sharedMessages: ChatMessageBase[] = [
+      { role: 'user', id: 'shared', parts: [{ type: 'text', text: 'Shared' }] },
+    ];
+    render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        messages={overrideMessages}
+        message={{
+          role: 'assistant',
+          id: '1',
+          parts: [
+            {
+              type: 'tool-test_tool',
+              toolCallId: '123',
+              input: {},
+              state: 'output-available',
+              output: { data: 'Test data' },
+            },
+          ],
+        }}
+        context={createContext({
+          messages: sharedMessages,
+          tools: {
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(layoutComponent.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        context: expect.objectContaining({ messages: overrideMessages }),
+      })
+    );
+  });
+
+  test('hands any tool the records the conversation searched for', () => {
+    const searchPart = {
+      type: 'tool-algolia_search_index',
+      toolCallId: 'search',
+      input: { query: 'shoes' },
+      state: 'output-available',
+      output: { hits: [{ objectID: 'record-1', name: 'Runner' }] },
+    } as const;
+    // A tool of our own, handed nothing but an object ID.
+    const customPart = {
+      type: 'tool-custom_tool',
+      toolCallId: 'custom',
+      input: { objectID: 'record-1' },
+      state: 'output-available',
+      output: {},
+    } as const;
+    const message = {
+      role: 'assistant',
+      id: '1',
+      parts: [searchPart, customPart],
+    } as ChatMessageBase;
+
+    const { container } = render(
+      <ChatMessage
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        message={message}
+        messages={[message]}
+        context={createContext({
+          status: 'ready',
+          tools: {
+            algolia_search_index: {
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+            custom_tool: {
+              layoutComponent: ({ context }) => {
+                const { message: part, records } = context;
+                return (
+                  <div className="custom">
+                    {
+                      records?.get(
+                        (part.input as { objectID: string }).objectID
+                      )?.name as string
+                    }
+                  </div>
+                );
+              },
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          },
+        })}
+      />
+    );
+
+    expect(container.querySelector('.custom')).toHaveTextContent('Runner');
+  });
+
   test('adds assistant message attribution to tool result events', () => {
     const sendEvent = jest.fn();
     const hit = {
@@ -1184,26 +2170,26 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: ({ sendEvent: toolSendEvent }) => {
-              toolSendEvent('click', hit, 'Product Clicked', {
-                customField: 'custom value',
-              });
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: ({ context: { sendEvent: toolSendEvent } }) => {
+                toolSendEvent('click', hit, 'Product Clicked', {
+                  customField: 'custom value',
+                });
 
-              return <div>Tool result</div>;
-            },
-            addToolResult: jest.fn(),
-            onToolCall: jest.fn(),
-            applyFilters: jest.fn(),
-            sendEvent,
-            insightsEventContext: {
-              agentId: 'agent-id',
+                return <div>Tool result</div>;
+              },
+              addToolResult: jest.fn(),
+              onToolCall: jest.fn(),
+              applyFilters: jest.fn(),
+              sendEvent,
+              insightsEventContext: {
+                agentId: 'agent-id',
+              },
             },
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
 
@@ -1225,7 +2211,7 @@ describe('ChatMessage', () => {
         params: Parameters<AddToolResult>[0]
       ) => ReturnType<AddToolResult>;
     } = {
-      layoutComponent: ({ addToolResult: submit }) => {
+      layoutComponent: ({ context: { addToolResult: submit } }) => {
         submitResult = submit;
         return <div />;
       },
@@ -1250,11 +2236,11 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: tool,
-        }}
-        onClose={jest.fn()}
+        context={createContext({
+          tools: {
+            test_tool: tool,
+          },
+        })}
       />
     );
 
@@ -1291,18 +2277,18 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        status="ready"
-        tools={{
-          test_tool: {
-            layoutComponent: ({ addToolResult: submit }) => {
-              submitResult = submit;
-              return <div />;
+        context={createContext({
+          tools: {
+            test_tool: {
+              layoutComponent: ({ context: { addToolResult: submit } }) => {
+                submitResult = submit;
+                return <div />;
+              },
+              addToolResult,
+              applyFilters: jest.fn(),
             },
-            addToolResult,
-            applyFilters: jest.fn(),
           },
-        }}
-        onClose={jest.fn()}
+        })}
       />
     );
 
@@ -1314,4 +2300,156 @@ describe('ChatMessage', () => {
       output: { owner: 'public' },
     });
   });
+
+  /* eslint-disable typescript/no-deprecated -- these tests exist to
+     pin the deprecated root-level props until they are removed. */
+  describe('deprecated root-level props', () => {
+    const toolMessage: ChatMessageBase = {
+      role: 'assistant',
+      id: '1',
+      parts: [
+        {
+          type: 'tool-test_tool',
+          toolCallId: '123',
+          input: {},
+          state: 'output-available',
+          output: { data: 'Test data' },
+        },
+      ],
+    };
+
+    test('still passes the pre-`context` root props to tool components', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const setIndexUiState = jest.fn();
+      const onClose = jest.fn();
+      const applyFilters = jest.fn();
+      const messages = [toolMessage];
+
+      render(
+        <ChatMessage
+          indexUiState={{ query: 'shoes' }}
+          setIndexUiState={setIndexUiState}
+          message={toolMessage}
+          context={createContext({
+            messages,
+            status: 'streaming',
+            onClose,
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters,
+              },
+            },
+          })}
+        />
+      );
+
+      // A tool component written against the previous API reads these from the
+      // root; they must stay in lockstep with `context`.
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.objectContaining({ toolCallId: '123' }),
+          messages,
+          status: 'streaming',
+          indexUiState: { query: 'shoes' },
+          setIndexUiState,
+          onClose,
+          applyFilters,
+          addToolResult: expect.any(Function),
+          sendEvent: expect.any(Function),
+          records: expect.anything(),
+        }),
+        {}
+      );
+    });
+
+    test('root `status` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          status="streaming"
+          context={createContext({
+            status: 'ready',
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'streaming',
+          context: expect.objectContaining({ status: 'streaming' }),
+        }),
+        {}
+      );
+    });
+
+    test('root `tools` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          tools={{
+            test_tool: {
+              layoutComponent,
+              addToolResult: jest.fn(),
+              applyFilters: jest.fn(),
+            },
+          }}
+          // The context registers no tools, so the part only renders if the
+          // root-level override wins.
+          context={createContext({ tools: {} })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledTimes(1);
+    });
+
+    test('root `onClose` overrides the shared context', () => {
+      const layoutComponent = jest.fn(() => <div />);
+      const onClose = jest.fn();
+
+      render(
+        <ChatMessage
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          message={toolMessage}
+          onClose={onClose}
+          context={createContext({
+            onClose: jest.fn(),
+            tools: {
+              test_tool: {
+                layoutComponent,
+                addToolResult: jest.fn(),
+                applyFilters: jest.fn(),
+              },
+            },
+          })}
+        />
+      );
+
+      expect(layoutComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          onClose,
+          context: expect.objectContaining({ onClose }),
+        }),
+        {}
+      );
+    });
+  });
+  /* eslint-enable typescript/no-deprecated */
 });

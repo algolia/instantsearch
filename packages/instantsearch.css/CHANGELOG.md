@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.22.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.22.0...instantsearch.css@8.22.1) (2026-09-15)
+
+**Note:** Version bump only for package instantsearch.css
+
+
+
+
+
+# [8.22.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.21.0...instantsearch.css@8.22.0) (2026-09-03)
+
+
+### Features
+
+* **chat:** add opt-in failed tool retry ([#7227](https://github.com/algolia/instantsearch/issues/7227)) ([5c37b66](https://github.com/algolia/instantsearch/commit/5c37b6641ad771a8ee38df69c07084d8bbf76b39))
+
+
+
+
+
+# [8.21.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.20.0...instantsearch.css@8.21.0) (2026-09-01)
+
+
+### Features
+
+* **chat:** show reasoning progress ([#7191](https://github.com/algolia/instantsearch/issues/7191)) ([1b0cced](https://github.com/algolia/instantsearch/commit/1b0ccededc7df5a1a5cf0b3b5893a41345a3edc9))
+
+
+
+
+
+# [8.20.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.1...instantsearch.css@8.20.0) (2026-08-24)
+
+
+### Features
+
+* **chat:** customizable loader placement, rendering and timing ([#7171](https://github.com/algolia/instantsearch/issues/7171)) ([073abbd](https://github.com/algolia/instantsearch/commit/073abbd159aee6772a55c3f244688cdbe62750d4))
+
+
+
+
+
+## [8.19.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.19.0...instantsearch.css@8.19.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **chat:** keep the maximized overlay panel inside the viewport ([#7177](https://github.com/algolia/instantsearch/issues/7177)) ([10966a5](https://github.com/algolia/instantsearch/commit/10966a5362a96cc45295fa2a2becc5cc9489f297))
+
+
+
+
+
 # [8.19.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.18.0...instantsearch.css@8.19.0) (2026-08-06)
 
 

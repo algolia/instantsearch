@@ -15,7 +15,27 @@ import type {
   DisposeOptions,
   RenderOptions,
 } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
+function reduceChildrenUiState(
+  widgets: Array<Widget | IndexWidget>,
+  uiState: IndexUiState,
+  widgetUiStateOptions: {
+    searchParameters: SearchParameters;
+    helper: AlgoliaSearchHelper;
+  }
+): IndexUiState {
+  return widgets.reduce<IndexUiState>(
+    (state, widget) =>
+      widget.getWidgetUiState
+        ? widget.getWidgetUiState(state, widgetUiStateOptions)
+        : state,
+    uiState
+  );
+}
 
 export function createFeedContainer(
   feedID: string,
@@ -271,17 +291,10 @@ export function createFeedContainer(
       uiState: TUiState
     ): TUiState {
       const helper = parentIndex.getHelper()!;
-      const widgetUiStateOptions = {
+      return reduceChildrenUiState(localWidgets, uiState, {
         searchParameters: helper.state,
         helper,
-      };
-      return localWidgets.reduce<TUiState>(
-        (state, widget) =>
-          widget.getWidgetUiState
-            ? (widget.getWidgetUiState(state, widgetUiStateOptions) as TUiState)
-            : state,
-        uiState
-      );
+      }) as TUiState;
     },
 
     getWidgetSearchParameters(
@@ -295,6 +308,109 @@ export function createFeedContainer(
             : params,
         searchParameters
       );
+    },
+
+    updateWidget(previousWidget, nextWidget) {
+      const helper = parentIndex.getHelper();
+
+      // The `uiState` the children own, read before the previous widget is
+      // detached, so that the state it owns can be handed over to the next one.
+      const previousUiState = helper
+        ? reduceChildrenUiState(
+            localWidgets,
+            {},
+            { searchParameters: helper.state, helper }
+          )
+        : {};
+
+      previousWidget.parent = undefined;
+      nextWidget.parent = container;
+
+      // The next widget takes the place of the previous one, so that the order
+      // in which children contribute to the search parameters is unchanged.
+      const nextWidgets = localWidgets.slice();
+      const position = nextWidgets.indexOf(previousWidget);
+      if (position === -1) {
+        nextWidgets.push(nextWidget);
+      } else {
+        nextWidgets[position] = nextWidget;
+      }
+      localWidgets = nextWidgets;
+
+      if (!helper || !initialized) {
+        return container;
+      }
+
+      // We still dispose the previous widget, for its side effects and so that
+      // it drops the search parameters it declared on the parent helper.
+      let cleanedState = helper.state;
+      if (previousWidget.dispose) {
+        const next = previousWidget.dispose({
+          helper,
+          state: cleanedState,
+          recommendState: helper.recommendState,
+          parent: container,
+        });
+
+        if (
+          next &&
+          !(next instanceof algoliasearchHelper.RecommendParameters)
+        ) {
+          cleanedState = next;
+        }
+      }
+
+      // We hand the previous `uiState` over to the children, then read the
+      // `uiState` back from them, so that state no mounted child claims anymore
+      // is dropped. This mirrors the index widget's `updateWidget`.
+      const narrowedUiState = reduceChildrenUiState(
+        localWidgets,
+        {},
+        {
+          searchParameters: container.getWidgetSearchParameters(cleanedState, {
+            uiState: previousUiState,
+          }),
+          helper,
+        }
+      );
+
+      // The search parameters are then computed again from that narrowed
+      // `uiState`, so that they can't hold state the `uiState` doesn't describe.
+      const newState = container.getWidgetSearchParameters(cleanedState, {
+        uiState: narrowedUiState,
+      });
+
+      if (nextWidget.getRenderState) {
+        const renderState = nextWidget.getRenderState(
+          instantSearchInstance.renderState[container.getIndexId()] || {},
+          createInitArgs(
+            instantSearchInstance,
+            container,
+            instantSearchInstance._initialUiState
+          )
+        );
+        storeRenderState({
+          renderState,
+          instantSearchInstance,
+          parent: container,
+        });
+      }
+
+      if (nextWidget.init) {
+        nextWidget.init(
+          createInitArgs(
+            instantSearchInstance,
+            container,
+            instantSearchInstance._initialUiState
+          )
+        );
+      }
+
+      if (newState !== helper.state) {
+        helper.setState(newState);
+      }
+
+      return container;
     },
 
     refreshUiState() {

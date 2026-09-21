@@ -58,6 +58,7 @@ export class ChatState<
   _messagesCallbacks = new Set<() => void>();
   _statusCallbacks = new Set<() => void>();
   _errorCallbacks = new Set<() => void>();
+  private persistenceKey: string | undefined;
 
   constructor(
     id: string | undefined = undefined,
@@ -76,22 +77,14 @@ export class ChatState<
       return;
     }
 
-    const saveMessagesInLocalStorage = () => {
+    this.persistenceKey = CACHE_KEY + (id ? `-${id}` : '');
+    const saveMessagesInSessionStorage = () => {
       if (this.status === 'ready') {
-        safelyRunOnBrowser(() => {
-          try {
-            sessionStorage.setItem(
-              CACHE_KEY + (id ? `-${id}` : ''),
-              JSON.stringify(this.messages)
-            );
-          } catch (e) {
-            // Do nothing if sessionStorage is not available or full
-          }
-        });
+        this['~persistMessages']();
       }
     };
-    this['~registerMessagesCallback'](saveMessagesInLocalStorage);
-    this['~registerStatusCallback'](saveMessagesInLocalStorage);
+    this['~registerMessagesCallback'](saveMessagesInSessionStorage);
+    this['~registerStatusCallback'](saveMessagesInSessionStorage);
   }
 
   get status(): ChatStatus {
@@ -145,6 +138,19 @@ export class ChatState<
     return JSON.parse(JSON.stringify(thing)) as T;
   };
 
+  '~persistMessages' = (): void => {
+    const persistenceKey = this.persistenceKey;
+    if (!persistenceKey) return;
+
+    safelyRunOnBrowser(() => {
+      try {
+        sessionStorage.setItem(persistenceKey, JSON.stringify(this.messages));
+      } catch (e) {
+        // Do nothing if sessionStorage is not available or full
+      }
+    });
+  };
+
   '~registerMessagesCallback' = (onChange: () => void): (() => void) => {
     const callback = onChange;
     this._messagesCallbacks.add(callback);
@@ -184,6 +190,7 @@ export class Chat<
   TUiMessage extends UIMessage,
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
+  private hasRestoredMessages = false;
 
   constructor({
     messages,
@@ -194,7 +201,21 @@ export class Chat<
     const state = new ChatState(agentId, messages, persistence);
     super({ ...init, state });
     this._state = state;
+    if (messages === undefined && persistence) {
+      this.hasRestoredMessages = true;
+      this.captureRestoredToolCalls();
+      this.repairRestoredPendingToolParts();
+    }
   }
+
+  '~repairRestoredPendingToolParts' = (): void => {
+    if (!this.hasRestoredMessages) return;
+
+    this.hasRestoredMessages = false;
+    this.repairRestoredPendingToolParts();
+    this.clearRestoredToolCalls();
+    this._state['~persistMessages']();
+  };
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
     this._state['~registerMessagesCallback'](onChange);

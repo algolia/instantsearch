@@ -11,6 +11,7 @@ export * from './connectors/useBreadcrumb';
 export * from './connectors/useChat';
 export * from './connectors/usePromptSuggestions';
 export * from './connectors/useChatTrigger';
+export * from './connectors/useCompare';
 export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
 export * from './connectors/useCurrentRefinements';

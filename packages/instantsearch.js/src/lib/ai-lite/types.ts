@@ -122,6 +122,11 @@ export type DynamicToolUIPart = {
   type: 'dynamic-tool';
   toolName: string;
   toolCallId: string;
+  /**
+   * Whether the tool call was executed by the provider. Carried by the
+   * `dynamic: true` tool chunks, like on `ToolUIPart`.
+   */
+  providerExecuted?: boolean;
 } & (
   | {
       state: 'input-streaming';
@@ -484,17 +489,35 @@ export type IdGenerator = () => string;
 
 export type ChatOnErrorCallback = (error: Error) => void;
 
-export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
+export type ToolResultSubmissionOptions<
+  UI_MESSAGE extends UIMessage,
   TOOL extends keyof InferUIMessageTools<UI_MESSAGE>,
->(options: {
+> = {
   tool: TOOL;
   toolCallId: string;
-  output: InferUIMessageTools<UI_MESSAGE>[TOOL]['output'];
-}) => Promise<void>;
+} & (
+  | {
+      state?: 'output-available';
+      output: InferUIMessageTools<UI_MESSAGE>[TOOL]['output'];
+      errorText?: never;
+    }
+  | {
+      state: 'output-error';
+      output?: never;
+      errorText: string;
+    }
+);
+
+export type ToolResultSubmission<UI_MESSAGE extends UIMessage = UIMessage> = <
+  TOOL extends keyof InferUIMessageTools<UI_MESSAGE>,
+>(
+  options: ToolResultSubmissionOptions<UI_MESSAGE, TOOL>
+) => Promise<void>;
 
 export type ChatOnToolCallCallback<UI_MESSAGE extends UIMessage = UIMessage> = (
   options: {
     toolCall: InferUIMessageToolCall<UI_MESSAGE>;
+    signal: AbortSignal;
   },
   addToolResult: ToolResultSubmission<UI_MESSAGE>
 ) => void | PromiseLike<void>;
@@ -524,6 +547,20 @@ export interface ChatInit<UI_MESSAGE extends UIMessage> {
     messages: UI_MESSAGE[];
   }) => boolean | PromiseLike<boolean>;
   shouldRepairToolInput?: (toolName: string) => boolean;
+  shouldRepairRestoredPendingToolPart?: (params: {
+    toolName: string;
+    toolCallId: string;
+    input: unknown;
+  }) => boolean;
+  /**
+   * Output to report for a tool call a request carries while it is still
+   * awaiting its result. Return `undefined` to report the call as failed.
+   */
+  resolveCancelledToolOutput?: (params: {
+    toolName: string;
+    toolCallId: string;
+    input: unknown;
+  }) => { output: unknown } | undefined;
 }
 
 export type CreateUIMessage<UI_MESSAGE extends UIMessage> = Omit<

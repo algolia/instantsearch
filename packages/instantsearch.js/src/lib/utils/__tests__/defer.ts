@@ -1,6 +1,12 @@
 import { defer } from '../defer';
 
 describe('defer', () => {
+  // Joins the pending and the next arguments so a single assertion on the
+  // callback shows the whole fold, not just the last pair.
+  const joinArguments = ([pending]: [string], [next]: [string]): [string] => [
+    `${pending}+${next}`,
+  ];
+
   it('defers the call to the function', async () => {
     const fn = jest.fn();
     const deferred = defer(fn);
@@ -148,5 +154,117 @@ describe('defer', () => {
     await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps the arguments of the first call of the window', async () => {
+    const fn = jest.fn((value: string) => value);
+    const deferred = defer(fn);
+
+    deferred('first');
+    deferred('second');
+    deferred('third');
+
+    await deferred.wait();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith('first');
+  });
+
+  it('folds the arguments of later calls with `mergeArguments`', async () => {
+    const fn = jest.fn((value: string) => value);
+    const mergeArguments = jest.fn(joinArguments);
+    const deferred = defer(fn, mergeArguments);
+
+    deferred('a');
+    deferred('b');
+    deferred('c');
+
+    await deferred.wait();
+
+    // The merger folds the pending arguments with the next ones, so the third
+    // call sees the result of the second fold rather than the original call.
+    expect(mergeArguments).toHaveBeenCalledTimes(2);
+    expect(mergeArguments).toHaveBeenNthCalledWith(1, ['a'], ['b']);
+    expect(mergeArguments).toHaveBeenNthCalledWith(2, ['a+b'], ['c']);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith('a+b+c');
+  });
+
+  it('does not call `mergeArguments` for a window of one call', async () => {
+    const fn = jest.fn((value: string) => value);
+    const mergeArguments = jest.fn(joinArguments);
+    const deferred = defer(fn, mergeArguments);
+
+    deferred('only');
+
+    await deferred.wait();
+
+    expect(mergeArguments).not.toHaveBeenCalled();
+    expect(fn).toHaveBeenCalledWith('only');
+  });
+
+  it('starts every window from the arguments of its own first call', async () => {
+    const fn = jest.fn((value: string) => value);
+    const mergeArguments = jest.fn(joinArguments);
+    const deferred = defer(fn, mergeArguments);
+
+    deferred('a');
+    deferred('b');
+
+    await deferred.wait();
+
+    expect(fn).toHaveBeenNthCalledWith(1, 'a+b');
+
+    deferred('c');
+    deferred('d');
+
+    await deferred.wait();
+
+    // The second window folds `c` with `d`, not the previous window's result.
+    expect(mergeArguments).toHaveBeenNthCalledWith(2, ['c'], ['d']);
+    expect(fn).toHaveBeenCalledTimes(2);
+    expect(fn).toHaveBeenNthCalledWith(2, 'c+d');
+  });
+
+  it('cancels a merged run and leaves no arguments behind', async () => {
+    const fn = jest.fn((value: string) => value);
+    const mergeArguments = jest.fn(joinArguments);
+    const deferred = defer(fn, mergeArguments);
+
+    deferred('a');
+    deferred('b');
+    deferred.cancel();
+
+    await deferred.wait();
+
+    expect(mergeArguments).toHaveBeenCalledTimes(1);
+    expect(fn).not.toHaveBeenCalled();
+
+    deferred('c');
+
+    await deferred.wait();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith('c');
+  });
+
+  it('merges every argument of a multi-argument callback', async () => {
+    const fn = jest.fn((label: string, count: number) => `${label}${count}`);
+    const deferred = defer(
+      fn,
+      ([label, count], [nextLabel, nextCount]): [string, number] => [
+        `${label}|${nextLabel}`,
+        count + nextCount,
+      ]
+    );
+
+    deferred('a', 1);
+    deferred('b', 2);
+    deferred('c', 3);
+
+    await deferred.wait();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith('a|b|c', 6);
   });
 });

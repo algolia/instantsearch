@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.29.9](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.8...vue-instantsearch@4.29.9) (2026-09-15)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.7...vue-instantsearch@4.29.8) (2026-09-03)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.7](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.6...vue-instantsearch@4.29.7) (2026-09-01)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.6](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.5...vue-instantsearch@4.29.6) (2026-08-31)
+
+
+### Bug Fixes
+
+* **index:** keep widget uiState when its parameters change ([#7206](https://github.com/algolia/instantsearch/issues/7206)) ([2afe171](https://github.com/algolia/instantsearch/commit/2afe171a896adcfacdd3ba5f52dc73972cce75e5)), closes [#7201](https://github.com/algolia/instantsearch/issues/7201) [#6635](https://github.com/algolia/instantsearch/issues/6635)
+
+
+
+
+
+## [4.29.5](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.4...vue-instantsearch@4.29.5) (2026-08-24)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.4](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.3...vue-instantsearch@4.29.4) (2026-08-19)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.2...vue-instantsearch@4.29.3) (2026-08-13)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.2](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.1...vue-instantsearch@4.29.2) (2026-08-12)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.29.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.0...vue-instantsearch@4.29.1) (2026-08-10)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
 # [4.29.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.28.1...vue-instantsearch@4.29.0) (2026-08-06)
 
 

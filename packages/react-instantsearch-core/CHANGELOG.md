@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.49.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.49.0...react-instantsearch-core@7.49.1) (2026-09-15)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.49.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.48.1...react-instantsearch-core@7.49.0) (2026-09-03)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.48.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.48.0...react-instantsearch-core@7.48.1) (2026-09-03)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.48.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.47.0...react-instantsearch-core@7.48.0) (2026-09-01)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.47.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.46.1...react-instantsearch-core@7.47.0) (2026-08-31)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.46.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.46.0...react-instantsearch-core@7.46.1) (2026-08-31)
+
+
+### Bug Fixes
+
+* **chat:** warn before prop changes reset state ([#7183](https://github.com/algolia/instantsearch/issues/7183)) ([bf379c6](https://github.com/algolia/instantsearch/commit/bf379c69894db6869fbeee4ddb7e880e3ab8529e))
+* **index:** keep widget uiState when its parameters change ([#7206](https://github.com/algolia/instantsearch/issues/7206)) ([2afe171](https://github.com/algolia/instantsearch/commit/2afe171a896adcfacdd3ba5f52dc73972cce75e5)), closes [#7201](https://github.com/algolia/instantsearch/issues/7201) [#6635](https://github.com/algolia/instantsearch/issues/6635)
+
+
+
+
+
+## [7.46.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.45.0...react-instantsearch-core@7.46.0) (2026-08-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+# [7.45.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.44.1...react-instantsearch-core@7.45.0) (2026-08-19)
+
+
+### Features
+
+* **chat:** let the chat trigger open the chat with a message ([#7166](https://github.com/algolia/instantsearch/issues/7166)) ([39bc620](https://github.com/algolia/instantsearch/commit/39bc62057d27fbe73f6eb88aafdf35b49fcca1a4))
+
+
+
+
+
+## [7.44.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.44.0...react-instantsearch-core@7.44.1) (2026-08-13)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.44.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.43.0...react-instantsearch-core@7.44.0) (2026-08-12)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+# [7.43.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.42.0...react-instantsearch-core@7.43.0) (2026-08-10)
+
+
+### Features
+
+* **chat:** persist open state ([#7136](https://github.com/algolia/instantsearch/issues/7136)) ([50807b6](https://github.com/algolia/instantsearch/commit/50807b693cd300064f79e12e837cf3c21c06ef67))
+
+
+
+
+
 # [7.42.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.41.0...react-instantsearch-core@7.42.0) (2026-08-06)
 
 

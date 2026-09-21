@@ -35,6 +35,30 @@ const ItemComponent: ItemComponentProps = ({ item }: ItemArgs) =>
     </div>
   ) as JSX.Element;
 
+/**
+ * The widget hands tool components the shared `context` *and* the deprecated
+ * root-level props kept for back compat, so fixtures mirror both. Drop this
+ * once the deprecated root props are removed.
+ */
+function toolProps(
+  context: ClientSideToolComponentProps['context']
+): ClientSideToolComponentProps {
+  return {
+    context,
+    message: context.message,
+    messages: context.messages,
+    records: context.records,
+    insightsEventContext: context.insightsEventContext,
+    status: context.status,
+    indexUiState: context.indexUiState,
+    setIndexUiState: context.setIndexUiState,
+    onClose: context.onClose,
+    addToolResult: context.addToolResult,
+    applyFilters: context.applyFilters,
+    sendEvent: context.sendEvent,
+  };
+}
+
 function buildMessage(
   input: { query: string; number_of_results?: number },
   output: { hits?: InputHit[]; nbHits?: number; queryID?: string }
@@ -52,7 +76,7 @@ function renderTool(
   message: ChatToolMessage,
   overrides: Partial<{
     showViewAll: boolean;
-    applyFilters: ClientSideToolComponentProps['applyFilters'];
+    applyFilters: ClientSideToolComponentProps['context']['applyFilters'];
     onClose: () => void;
     getSearchPageURL: (params: any) => string;
   }> = {}
@@ -67,15 +91,24 @@ function renderTool(
         getSearchPageURL={overrides.getSearchPageURL}
         headerProps={{ showViewAll: overrides.showViewAll ?? false }}
         itemComponent={ItemComponent}
-        toolProps={{
+        toolProps={toolProps({
+          messages: [],
+          status: 'ready',
+          isClearing: false,
+          open: true,
+          maximized: false,
+          tools: {},
+          regenerate: jest.fn(),
+          stop: jest.fn(),
+          onReload: jest.fn(),
+          onClose,
           message,
           indexUiState: {},
           setIndexUiState: jest.fn(),
-          onClose,
           addToolResult: jest.fn(),
           applyFilters,
           sendEvent: jest.fn(),
-        }}
+        })}
       />
     );
   }
@@ -237,18 +270,27 @@ describe('CarouselTool', () => {
         <CarouselTool
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
-          toolProps={{
+          toolProps={toolProps({
+            messages: [],
+            status: 'ready',
+            isClearing: false,
+            open: true,
+            maximized: false,
+            tools: {},
+            regenerate: jest.fn(),
+            stop: jest.fn(),
+            onReload: jest.fn(),
+            onClose: jest.fn(),
             message: buildMessage(
               { query: 'tv' },
               { hits: makeHits(2), nbHits: 100, queryID: 'abc' }
             ),
             indexUiState: {},
             setIndexUiState: jest.fn(),
-            onClose: jest.fn(),
             addToolResult: jest.fn(),
             applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
-          }}
+          })}
         />
       );
     }
@@ -272,18 +314,27 @@ describe('CarouselTool', () => {
         <CarouselTool
           headerProps={{ showViewAll: false }}
           itemComponent={SpyItem}
-          toolProps={{
+          toolProps={toolProps({
+            messages: [],
+            status: 'ready',
+            isClearing: false,
+            open: true,
+            maximized: false,
+            tools: {},
+            regenerate: jest.fn(),
+            stop: jest.fn(),
+            onReload: jest.fn(),
+            onClose: jest.fn(),
             message: buildMessage(
               { query: 'tv' },
               { hits: makeHits(1), nbHits: 1 }
             ),
             indexUiState: {},
             setIndexUiState: jest.fn(),
-            onClose: jest.fn(),
             addToolResult: jest.fn(),
             applyFilters: jest.fn(() => ({}) as any) as any,
             sendEvent: jest.fn(),
-          }}
+          })}
         />
       );
     }

@@ -2,25 +2,34 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render, screen } from '@testing-library/preact';
+import { act, render, screen } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import * as chatUtils from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
+import type {
+  ChatMessageReasoningComponentProps,
+  ChatMessageTextComponentProps,
+} from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
+import type { ChatComponentPropsWithContext } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo: (factory) => factory(),
+  useState,
+  useEffect,
 });
 const MemoizedChatMessages = createChatMessagesComponent({
   createElement,
   Fragment,
   useMemo,
+  useState,
+  useEffect,
 });
 const ChatMessageError = createChatMessageErrorComponent({ createElement });
 
@@ -151,7 +160,7 @@ describe('ChatMessages', () => {
     `);
   });
 
-  test('shows the loader while streaming reasoning is hidden', () => {
+  test('shows the loader while streaming reasoning is suppressed', () => {
     const { container } = render(
       <ChatMessages
         messages={[
@@ -170,6 +179,7 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         status="streaming"
+        assistantMessageProps={{ showReasoning: false }}
         tools={{}}
         onReload={jest.fn()}
         onClose={jest.fn()}
@@ -761,7 +771,7 @@ describe('ChatMessages', () => {
     );
   });
 
-  test('does not scan for active reasoning while the disclosure is off', () => {
+  test('does not scan for active reasoning once the disclosure is off', () => {
     const isReasoningPartActive = jest.spyOn(
       chatUtils,
       'isReasoningPartActive'
@@ -792,19 +802,19 @@ describe('ChatMessages', () => {
       onClose: jest.fn(),
     };
 
-    const { unmount } = render(<ChatMessages {...props} />);
+    const { unmount } = render(
+      <ChatMessages
+        {...props}
+        assistantMessageProps={{ showReasoning: false }}
+      />
+    );
 
-    // The scan slices the remaining parts per candidate, so it must not run while
-    // the opt-in is off.
+    // The scan slices the remaining parts per candidate, so it must not run once
+    // reasoning is suppressed.
     expect(isReasoningPartActive).not.toHaveBeenCalled();
 
     unmount();
-    render(
-      <ChatMessages
-        {...props}
-        assistantMessageProps={{ showReasoning: true }}
-      />
-    );
+    render(<ChatMessages {...props} />);
 
     expect(isReasoningPartActive).toHaveBeenCalled();
     isReasoningPartActive.mockRestore();
@@ -842,6 +852,430 @@ describe('ChatMessages', () => {
     rerender(<MemoizedChatMessages {...createProps(true)} />);
 
     expect(container.querySelector('details')).not.toBeNull();
+  });
+
+  describe('textComponent', () => {
+    test('routes the ordered conversation through both message prop paths', () => {
+      const messages = [
+        {
+          role: 'user' as const,
+          id: 'user-1',
+          parts: [{ type: 'text' as const, text: 'Question' }],
+        },
+        {
+          role: 'assistant' as const,
+          id: 'assistant-1',
+          parts: [{ type: 'text' as const, text: 'Answer' }],
+        },
+      ];
+      const userTextComponent = jest.fn(
+        ({ part }: ChatMessageTextComponentProps) => (
+          <span data-testid="user-text">{part.text}</span>
+        )
+      );
+      const assistantTextComponent = jest.fn(
+        ({ part }: ChatMessageTextComponentProps) => (
+          <span data-testid="assistant-text">{part.text}</span>
+        )
+      );
+
+      render(
+        <ChatMessages
+          messages={messages}
+          indexUiState={{}}
+          setIndexUiState={jest.fn()}
+          status="ready"
+          userMessageProps={{ textComponent: userTextComponent }}
+          assistantMessageProps={{ textComponent: assistantTextComponent }}
+          tools={{}}
+          onReload={jest.fn()}
+          onClose={jest.fn()}
+        />
+      );
+
+      expect(userTextComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          part: messages[0].parts[0],
+          message: messages[0],
+          messages,
+          status: 'ready',
+          partIndex: 0,
+        })
+      );
+      expect(assistantTextComponent.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          part: messages[1].parts[0],
+          message: messages[1],
+          messages,
+          status: 'ready',
+          partIndex: 0,
+        })
+      );
+      expect(screen.getByTestId('user-text')).toHaveTextContent('Question');
+      expect(screen.getByTestId('assistant-text')).toHaveTextContent('Answer');
+    });
+
+    test('updates completed messages when the text component changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [message];
+      const FirstTextComponent = ({ part }: ChatMessageTextComponentProps) => (
+        <span data-testid="first-text">{part.text}</span>
+      );
+      const SecondTextComponent = ({ part }: ChatMessageTextComponentProps) => (
+        <span data-testid="second-text">{part.text}</span>
+      );
+      const createProps = (
+        textComponent: (props: ChatMessageTextComponentProps) => JSX.Element
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: { textComponent },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(FirstTextComponent)} />
+      );
+      expect(screen.getByTestId('first-text')).toHaveTextContent('Answer');
+
+      rerender(<MemoizedChatMessages {...createProps(SecondTextComponent)} />);
+
+      expect(screen.queryByTestId('first-text')).not.toBeInTheDocument();
+      expect(screen.getByTestId('second-text')).toHaveTextContent('Answer');
+    });
+
+    test('updates completed messages when the reasoning component changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const FirstReasoningComponent = ({
+        part,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="first-reasoning">{part.text}</span>
+      );
+      const SecondReasoningComponent = ({
+        part,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="second-reasoning">{part.text}</span>
+      );
+      const createProps = (
+        reasoningComponent: (
+          props: ChatMessageReasoningComponentProps
+        ) => JSX.Element
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent,
+        },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(FirstReasoningComponent)} />
+      );
+      expect(screen.getByTestId('first-reasoning')).toHaveTextContent(
+        'Thought'
+      );
+
+      rerender(
+        <MemoizedChatMessages {...createProps(SecondReasoningComponent)} />
+      );
+
+      expect(screen.queryByTestId('first-reasoning')).not.toBeInTheDocument();
+      expect(screen.getByTestId('second-reasoning')).toHaveTextContent(
+        'Thought'
+      );
+    });
+
+    test('does not rerender completed custom reasoning for scroll or callback-only changes', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const tools = {};
+      const ReasoningComponent = jest.fn(
+        ({ part }: ChatMessageReasoningComponentProps) => (
+          <span data-testid="reasoning-render">{part.text}</span>
+        )
+      );
+      const firstCallbacks = {
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      };
+      const secondCallbacks = {
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      };
+      const createProps = (
+        isScrollAtBottom: boolean,
+        callbacks: typeof firstCallbacks
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent: ReasoningComponent,
+        },
+        tools,
+        isScrollAtBottom,
+        ...callbacks,
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false, firstCallbacks)} />
+      );
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+
+      rerender(<MemoizedChatMessages {...createProps(true, firstCallbacks)} />);
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+
+      rerender(
+        <MemoizedChatMessages {...createProps(true, secondCallbacks)} />
+      );
+      expect(ReasoningComponent).toHaveBeenCalledTimes(1);
+    });
+
+    test('keeps the full reasoning component context current for completed messages', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'reasoning' as const,
+            text: 'Thought',
+            state: 'done' as const,
+          },
+        ],
+      };
+      const messages = [message];
+      const ReasoningComponent = ({
+        context,
+      }: ChatMessageReasoningComponentProps) => (
+        <span data-testid="reasoning-state">
+          {context.isClearing ? 'clearing' : 'idle'}:
+          {context.open ? 'open' : 'closed'}
+        </span>
+      );
+      const createProps = (isClearing: boolean) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          showReasoning: true,
+          reasoningComponent: ReasoningComponent,
+        },
+        tools: {},
+        isClearing,
+        open: true,
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false)} />
+      );
+      expect(screen.getByTestId('reasoning-state')).toHaveTextContent(
+        'idle:open'
+      );
+
+      rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+      expect(screen.getByTestId('reasoning-state')).toHaveTextContent(
+        'clearing:open'
+      );
+    });
+
+    test('updates completed tool rows when the panel is maximized', () => {
+      // A completed (non-current) tool row: the memo must still track
+      // `context.maximized` so tool components see the panel state change.
+      const toolMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [
+          {
+            type: 'tool-test_tool' as const,
+            toolCallId: '123',
+            input: {},
+            state: 'output-available' as const,
+            output: {},
+          },
+        ],
+      };
+      const trailingMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-2',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [toolMessage, trailingMessage];
+      const tools = {
+        test_tool: {
+          layoutComponent: ({
+            context,
+          }: {
+            context: { maximized?: boolean };
+          }) => (
+            <span data-testid="tool-maximized">
+              {String(context.maximized)}
+            </span>
+          ),
+          addToolResult: jest.fn(),
+          onToolCall: jest.fn(),
+          applyFilters: jest.fn(),
+        },
+      };
+      const createProps = (maximized: boolean) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        tools,
+        maximized,
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps(false)} />
+      );
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('false');
+
+      rerender(<MemoizedChatMessages {...createProps(true)} />);
+
+      expect(screen.getByTestId('tool-maximized')).toHaveTextContent('true');
+    });
+
+    test('keeps the ordered conversation current for completed messages', () => {
+      const firstMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'First answer' }],
+      };
+      const secondMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-2',
+        parts: [{ type: 'text' as const, text: 'Second answer' }],
+      };
+      const thirdMessage = {
+        role: 'assistant' as const,
+        id: 'assistant-3',
+        parts: [{ type: 'text' as const, text: 'Third answer' }],
+      };
+      const textComponent = ({
+        message,
+        messages,
+      }: ChatMessageTextComponentProps) => (
+        <span data-testid={`conversation-length-${message.id}`}>
+          {messages?.length}
+        </span>
+      );
+      const createProps = (
+        messages: Array<typeof firstMessage | typeof secondMessage>
+      ) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: { textComponent },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps([firstMessage, secondMessage])} />
+      );
+      expect(
+        screen.getByTestId('conversation-length-assistant-1')
+      ).toHaveTextContent('2');
+
+      rerender(
+        <MemoizedChatMessages
+          {...createProps([firstMessage, secondMessage, thirdMessage])}
+        />
+      );
+
+      expect(
+        screen.getByTestId('conversation-length-assistant-1')
+      ).toHaveTextContent('3');
+      expect(
+        screen.getByTestId('conversation-length-assistant-2')
+      ).toHaveTextContent('3');
+      expect(
+        screen.getByTestId('conversation-length-assistant-3')
+      ).toHaveTextContent('3');
+    });
+
+    test('keeps the conversation owned by ChatMessages', () => {
+      const message = {
+        role: 'assistant' as const,
+        id: 'assistant-1',
+        parts: [{ type: 'text' as const, text: 'Answer' }],
+      };
+      const messages = [message];
+      const textComponent = ({
+        messages: currentMessages,
+      }: ChatMessageTextComponentProps) => (
+        <span data-testid="conversation-id">{currentMessages?.[0].id}</span>
+      );
+      const createProps = (conversationId: string) => ({
+        messages,
+        indexUiState: {},
+        setIndexUiState: jest.fn(),
+        assistantMessageProps: {
+          textComponent,
+          messages: [
+            {
+              ...message,
+              id: conversationId,
+            },
+          ],
+        },
+        tools: {},
+        onReload: jest.fn(),
+        onClose: jest.fn(),
+      });
+
+      const { rerender } = render(
+        <MemoizedChatMessages {...createProps('override-a')} />
+      );
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+
+      rerender(<MemoizedChatMessages {...createProps('override-b')} />);
+
+      expect(screen.getByTestId('conversation-id')).toHaveTextContent(
+        'assistant-1'
+      );
+    });
   });
 
   describe('parseMarkdown', () => {
@@ -1207,7 +1641,9 @@ describe('ChatMessages', () => {
   });
 
   test('allows error translation to use raw error message', () => {
-    const CustomError = (props: ChatMessageErrorProps) => (
+    const CustomError = (
+      props: ChatComponentPropsWithContext<ChatMessageErrorProps>
+    ) => (
       <ChatMessageError
         {...props}
         translations={{
@@ -1290,5 +1726,739 @@ describe('ChatMessages', () => {
         </div>
       </div>
     `);
+  });
+
+  describe('loader visibility', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const pendingTool = {
+      type: 'tool-some_tool' as const,
+      toolCallId: '1',
+      input: undefined,
+      state: 'input-streaming' as const,
+    };
+
+    const assistant = (parts: any[]) => [
+      { role: 'assistant' as const, id: '1', parts },
+    ];
+
+    const loader = (container: Element) =>
+      container.querySelector('.ais-ChatMessageLoader');
+
+    test('ignores a trailing data part after the answer', () => {
+      // Renders nothing, so it must not bring the loader back.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([
+            { type: 'text', text: 'Here you go.', state: 'done' },
+            { type: 'data-suggestions', data: { suggestions: ['More?'] } },
+          ])}
+        />
+      );
+
+      expect(loader(container)).toBeNull();
+    });
+
+    test('keeps the loader while a text part has no content yet', () => {
+      // `text-start` creates the part before the first delta.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([
+            {
+              type: 'tool-some_tool',
+              toolCallId: '1',
+              input: {},
+              state: 'output-available',
+              output: {},
+            },
+            { type: 'text', text: '', state: 'streaming' },
+          ])}
+        />
+      );
+
+      expect(loader(container)).not.toBeNull();
+    });
+
+    test('sets aria-busy while loading', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
+    });
+
+    test('keeps aria-busy set while a suppressed loader hides progress', () => {
+      // The log keeps updating even when the loader is overridden away, so the
+      // busy state follows the turn rather than the loader.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={assistant([pendingTool])}
+          shouldShowLoader={() => false}
+        />
+      );
+
+      expect(loader(container)).toBeNull();
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-busy',
+        'true'
+      );
+    });
+
+    describe('with timers', () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      // Arms the delay; the turn's first loader is always immediate.
+      function renderAfterFirstCycle() {
+        const utils = render(
+          <ChatMessages {...baseProps} status="streaming" messages={[]} />
+        );
+
+        expect(loader(utils.container)).not.toBeNull();
+
+        utils.rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+            ])}
+          />
+        );
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(utils.container)).toBeNull();
+
+        return utils;
+      }
+
+      test('keeps the loader up after streaming starts before the assistant message exists', () => {
+        // `processStream` sets `streaming` before the `start` chunk pushes the
+        // assistant. The last message is still the user's, and its text must
+        // not be read as the answer.
+        const user = {
+          role: 'user' as const,
+          id: '1',
+          parts: [{ type: 'text' as const, text: 'hello' }],
+        };
+
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[user]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages {...baseProps} status="streaming" messages={[user]} />
+        );
+
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(container)).not.toBeNull();
+      });
+
+      test('holds the loader briefly so it cannot flash', () => {
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        // Without the hold this is a one-frame flash.
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'H', state: 'streaming' },
+            ])}
+          />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(200);
+        });
+
+        expect(loader(container)).toBeNull();
+      });
+
+      test('does not bring the loader back for a gap between steps', () => {
+        const { container, rerender } = renderAfterFirstCycle();
+
+        // All within the delay, so the loader never returns.
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              { type: 'step-start' },
+              pendingTool,
+            ])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(100);
+        });
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              { type: 'step-start' },
+              { ...pendingTool, state: 'output-available', output: {} },
+              { type: 'text', text: 'Found it.', state: 'streaming' },
+            ])}
+          />
+        );
+        act(() => {
+          jest.advanceTimersByTime(1000);
+        });
+
+        expect(loader(container)).toBeNull();
+      });
+
+      test('brings the loader back for a wait that lasts', () => {
+        const { container, rerender } = renderAfterFirstCycle();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="streaming"
+            messages={assistant([
+              { type: 'text', text: 'Working on it.', state: 'done' },
+              pendingTool,
+            ])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        act(() => {
+          jest.advanceTimersByTime(250);
+        });
+
+        expect(loader(container)).not.toBeNull();
+      });
+
+      test("starts the next turn's loader immediately", () => {
+        const answer = {
+          role: 'assistant' as const,
+          id: '1',
+          parts: [
+            { type: 'text' as const, text: 'Done.', state: 'done' as const },
+          ],
+        };
+
+        // The loader is still up when the turn ends, so the turn's end is what
+        // hides it. That hide must not arm the delay for the next turn.
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages {...baseProps} status="ready" messages={[answer]} />
+        );
+
+        expect(loader(container)).toBeNull();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="submitted"
+            messages={[
+              answer,
+              {
+                role: 'user' as const,
+                id: '2',
+                parts: [{ type: 'text' as const, text: 'More?' }],
+              },
+            ]}
+          />
+        );
+
+        expect(loader(container)).not.toBeNull();
+      });
+
+      test('hides the loader as soon as the turn ends', () => {
+        const { container, rerender } = render(
+          <ChatMessages {...baseProps} status="submitted" messages={[]} />
+        );
+
+        expect(loader(container)).not.toBeNull();
+
+        rerender(
+          <ChatMessages
+            {...baseProps}
+            status="ready"
+            messages={assistant([{ type: 'text', text: 'Done.' }])}
+          />
+        );
+
+        expect(loader(container)).toBeNull();
+      });
+    });
+  });
+
+  describe('loader customization', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const searchingMessages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'tool-some_tool' as const,
+            toolCallId: '1',
+            input: undefined,
+            state: 'input-streaming' as const,
+          },
+        ],
+      },
+    ];
+
+    test('leaves the loader message unset while the turn has none', () => {
+      const LoaderComponent = jest.fn(() => <span>Loading</span>);
+
+      // `submitted` still shows the user's own message, which the loader does
+      // not belong to.
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[
+            {
+              role: 'user' as const,
+              id: '1',
+              parts: [{ type: 'text' as const, text: 'Hi' }],
+            },
+          ]}
+          loaderComponent={LoaderComponent}
+        />
+      );
+
+      expect(LoaderComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            phase: 'submitted',
+            message: undefined,
+          }),
+        }),
+        {}
+      );
+    });
+
+    test('passes the turn context to a custom loader', () => {
+      const LoaderComponent = jest.fn(() => <span>Loading</span>);
+
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          loaderComponent={LoaderComponent}
+        />
+      );
+
+      expect(LoaderComponent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            status: 'streaming',
+            phase: 'tool',
+            message: searchingMessages[0],
+            messages: searchingMessages,
+          }),
+        }),
+        {}
+      );
+    });
+
+    test('resolves loaderText against the turn context', () => {
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          translations={{
+            loaderText: ({ phase }) =>
+              phase === 'tool' ? 'Searching…' : 'Thinking…',
+          }}
+        />
+      );
+
+      expect(screen.getByText('Searching…')).toBeInTheDocument();
+    });
+
+    test('lets shouldShowLoader narrow the built-in decision', () => {
+      const shouldShowLoader = jest.fn(({ defaultValue, phase }) => {
+        return defaultValue && phase !== 'tool';
+      });
+
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          shouldShowLoader={shouldShowLoader}
+        />
+      );
+
+      expect(shouldShowLoader).toHaveBeenCalledWith(
+        expect.objectContaining({ defaultValue: true, phase: 'tool' })
+      );
+      expect(container.querySelector('.ais-ChatMessageLoader')).toBeNull();
+    });
+
+    test('renders the loader inside the streaming message when inline', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={searchingMessages}
+          loaderPosition="message-inline"
+        />
+      );
+
+      const message = container.querySelector('.ais-ChatMessage-message')!;
+
+      expect(
+        message.querySelector('.ais-ChatMessageLoader--inline')
+      ).not.toBeNull();
+      expect(container.querySelectorAll('.ais-ChatMessageLoader')).toHaveLength(
+        1
+      );
+    });
+
+    test('falls back to its own row when there is no message to host it', () => {
+      // Right after submitting there is no assistant message to host it.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[{ role: 'user', id: '1', parts: [] }]}
+          loaderPosition="message-inline"
+        />
+      );
+
+      expect(
+        container.querySelector('.ais-ChatMessageLoader--inline')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('does not render an empty assistant placeholder next to the loader', () => {
+      // AbstractChat pushes `{ role: 'assistant', parts: [] }` on the stream
+      // `start` chunk, before any part exists. That row must not sit above
+      // the messages-end loader — it is an empty article plus a flex gap.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            { role: 'assistant', id: '2', parts: [] },
+          ]}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('does not render an assistant row for an unwritten text part next to the loader', () => {
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            {
+              role: 'assistant',
+              id: '2',
+              parts: [{ type: 'text', text: '', state: 'streaming' }],
+            },
+          ]}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+    });
+
+    test('does not render an assistant row for a turn that ended without content', () => {
+      // The widget passes a suggestions element for every settled turn, and the
+      // default actions come with every assistant row — neither is a reason to
+      // keep an empty article (and its avatar) on screen for good.
+      const { container } = render(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[
+            {
+              role: 'user',
+              id: '1',
+              parts: [{ type: 'text', text: 'hello' }],
+            },
+            { role: 'assistant', id: '2', parts: [{ type: 'step-start' }] },
+          ]}
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(
+        container.querySelector('article[data-role="assistant"]')
+      ).toBeNull();
+      expect(container.querySelector('.ais-ChatMessage-action')).toBeNull();
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
+  });
+
+  describe('suggestions visibility', () => {
+    const baseProps = {
+      indexUiState: {},
+      setIndexUiState: jest.fn(),
+      tools: {},
+      onReload: jest.fn(),
+      onClose: jest.fn(),
+    };
+
+    const answered = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [
+          {
+            type: 'text' as const,
+            text: 'Here you go.',
+            state: 'done' as const,
+          },
+        ],
+      },
+    ];
+
+    test('waits for the turn to settle before mounting suggestions', () => {
+      const { container, rerender } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={answered}
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(container.querySelector('.suggestions')).toBeNull();
+
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={answered}
+          suggestionsElement={<span className="suggestions" />}
+        />
+      );
+
+      expect(container.querySelector('.suggestions')).not.toBeNull();
+    });
+  });
+
+  test('forwards context to overridable components', () => {
+    const Loader = jest.fn(() => <span>Loader</span>);
+    const setIndexUiState = jest.fn();
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Working on it' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{ query: 'shoes' }}
+        setIndexUiState={setIndexUiState}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        loaderComponent={Loader}
+      />
+    );
+
+    expect(Loader).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          messages,
+          status: 'submitted',
+          error: undefined,
+          isClearing: false,
+          activePart: { type: 'text', text: 'Working on it' },
+          tools: {},
+          sendMessage,
+          setInput,
+          onClose,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('clears activePart once the response settles', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'assistant' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Done' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'ready',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('leaves activePart unset until the assistant produces a part', () => {
+    const Message = jest.fn(() => <span>Message</span>);
+    const messages = [
+      {
+        role: 'user' as const,
+        id: '1',
+        parts: [{ type: 'text' as const, text: 'Find me shoes' }],
+      },
+    ];
+
+    render(
+      <ChatMessages
+        messages={messages}
+        status="submitted"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+        messageComponent={Message}
+      />
+    );
+
+    expect(Message).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context: expect.objectContaining({
+          status: 'submitted',
+          activePart: undefined,
+        }),
+      }),
+      {}
+    );
+  });
+
+  test('still passes the pre-`context` root props to a custom empty component', () => {
+    const Empty = jest.fn(() => <span>Empty</span>);
+    const onClose = jest.fn();
+    const sendMessage = jest.fn();
+    const setInput = jest.fn();
+
+    render(
+      <ChatMessages
+        messages={[]}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={onClose}
+        sendMessage={sendMessage}
+        setInput={setInput}
+        emptyComponent={Empty}
+      />
+    );
+
+    // An empty/greeting component written against the previous API reads these
+    // from the root rather than from `context`.
+    expect(Empty).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sendMessage,
+        setInput,
+        status: 'ready',
+        onClose,
+        context: expect.objectContaining({ status: 'ready' }),
+      }),
+      {}
+    );
   });
 });
