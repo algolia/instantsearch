@@ -457,11 +457,14 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       const defaultChat = getDefaultChat(latestRenderOptions);
       if (!defaultChat || !chatState) return;
 
-      defaultChat.adoptConversation!({
+      // A chat mid-generation refuses the conversation: opening it anyway
+      // would show an unrelated exchange instead of the card's.
+      const adopted = defaultChat.adoptConversation!({
         id: chatState.id,
         messages: chatState.messages,
         source: RESULT_CARD_SOURCE,
       });
+      if (!adopted) return;
       openChat(defaultChat, { message, referer: RESULT_CARD_REFERER });
     };
 

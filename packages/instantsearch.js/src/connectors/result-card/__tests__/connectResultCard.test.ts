@@ -634,6 +634,20 @@ describe('connectResultCard', () => {
       expect(chat.sendMessage).not.toHaveBeenCalled();
     });
 
+    it('does not open the chat when it refuses the conversation', async () => {
+      const { renderFn, renderAndWait, instantSearchInstance } = setup();
+      const chat = mountDefaultChat(instantSearchInstance);
+      chat.adoptConversation.mockReturnValue(false);
+      await renderAndWait(makeResults());
+      await wait(0);
+
+      lastRender(renderFn).continueInChat('Which one is waterproof?');
+
+      expect(chat.adoptConversation).toHaveBeenCalledTimes(1);
+      expect(chat.setOpen).not.toHaveBeenCalled();
+      expect(chat.sendMessage).not.toHaveBeenCalled();
+    });
+
     it('sends a follow-up suggestion after the handoff', async () => {
       const { renderFn, renderAndWait, instantSearchInstance } = setup();
       const chat = mountDefaultChat(instantSearchInstance);
