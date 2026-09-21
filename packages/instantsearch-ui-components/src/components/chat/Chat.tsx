@@ -111,8 +111,7 @@ export function createChatComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect'>) {
   const ChatHeader = createChatHeaderComponent({ createElement, Fragment });
   const ChatMessages = createChatMessagesComponent({
     createElement,
@@ -120,7 +119,6 @@ export function createChatComponent({
     useMemo,
     useState,
     useEffect,
-    useRef,
   });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
@@ -207,7 +205,6 @@ export function createChatComponent({
         error={error}
         classNames={classNames.messages}
         messageClassNames={classNames.message}
-        suggestionsLoading={suggestionsProps.isLoading}
         suggestionsElement={createElement(
           SuggestionsComponent || ChatPromptSuggestions,
           {

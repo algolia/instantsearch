@@ -29,6 +29,7 @@ import type {
   InferUIMessageTools,
   ProviderMetadata,
   ToolResultSubmission,
+  ToolResultSubmissionOptions,
   UIMessage,
   UIMessageChunk,
   ChatOnErrorCallback,
@@ -57,10 +58,40 @@ const defaultGuardrailFallbackResponse =
 
 const TOOL_CALL_CANCELLED_ERROR_TEXT =
   'The tool call was cancelled: the conversation moved on before a result was provided.';
+const RESTORED_TOOL_CALL_ERROR_TEXT =
+  'The page was reloaded before a tool result was received. The operation may have completed.';
+const RESTORED_TOOL_INPUT_ERROR_TEXT =
+  'The page was reloaded before the tool input was complete. The operation was not started.';
 
 type TerminalToolState =
   | { state: 'output-available'; output: unknown }
   | { state: 'output-error'; errorText: string };
+
+function getTerminalToolState(
+  options:
+    | { state?: 'output-available'; output: unknown }
+    | { state: 'output-error'; errorText: string }
+): TerminalToolState {
+  if (options.state === 'output-error') {
+    return {
+      state: 'output-error',
+      errorText: options.errorText || 'Tool call failed.',
+    };
+  }
+
+  if (
+    options.state === undefined &&
+    'errorText' in options &&
+    typeof options.errorText === 'string'
+  ) {
+    return {
+      state: 'output-error',
+      errorText: options.errorText || 'Tool call failed.',
+    };
+  }
+
+  return { state: 'output-available', output: options.output };
+}
 
 function getToolName(part: { type: string; toolName?: string }): string {
   if (part.type === 'dynamic-tool') {
@@ -78,9 +109,10 @@ function warnInvalidGlobalToolResult(toolCallId: string): void {
 
 // A tool call awaiting an output that the client owns. Provider-executed calls
 // are resolved server-side, so they are left alone.
-function isPendingToolPart<TPart>(
-  part: TPart
-): part is TPart & { toolCallId: string } {
+function isPendingToolPart<TPart>(part: TPart): part is TPart & {
+  toolCallId: string;
+  state: 'input-streaming' | 'input-available';
+} {
   const candidate = part as {
     type?: unknown;
     toolCallId?: unknown;
@@ -139,12 +171,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     messages: TUIMessage[];
   }) => boolean | PromiseLike<boolean>;
   private shouldRepairToolInput?: (toolName: string) => boolean;
+  private shouldRepairRestoredPendingToolPart?: ChatInit<TUIMessage>['shouldRepairRestoredPendingToolPart'];
   private resolveCancelledToolOutput?: ChatInit<TUIMessage>['resolveCancelledToolOutput'];
 
   private activeResponse: ResponseRecord | null = null;
   private latestResponse: ResponseRecord | null = null;
   private responsesByToolCallId = new Map<string, Set<ResponseRecord>>();
   private responseByMessage = new WeakMap<TUIMessage, ResponseRecord>();
+  private restoredToolCalls: Map<string, Set<string>> | undefined;
   // Once tool ownership is discarded, an identifier-only result cannot prove
   // which response generation submitted it. Scoped submissions remain safe.
   private acceptsIdentifierOnlyToolResults = true;
@@ -161,6 +195,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     onData,
     sendAutomaticallyWhen,
     shouldRepairToolInput,
+    shouldRepairRestoredPendingToolPart,
     resolveCancelledToolOutput,
   }: Omit<ChatInit<TUIMessage>, 'messages'> & {
     state: ChatState<TUIMessage>;
@@ -175,6 +210,8 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.onData = onData;
     this.sendAutomaticallyWhen = sendAutomaticallyWhen;
     this.shouldRepairToolInput = shouldRepairToolInput;
+    this.shouldRepairRestoredPendingToolPart =
+      shouldRepairRestoredPendingToolPart;
     this.resolveCancelledToolOutput = resolveCancelledToolOutput;
   }
 
@@ -634,7 +671,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private commit(
     toolCallId: string,
-    output: unknown,
+    terminalState: TerminalToolState,
     messageId?: string,
     response?: ResponseRecord,
     expectedMessage?: TUIMessage
@@ -661,10 +698,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       return false;
     }
     const updatedParts = [...message.parts];
-    updatedParts[partIndex] = withTerminalToolState(part, {
-      state: 'output-available',
-      output,
-    });
+    updatedParts[partIndex] = withTerminalToolState(part, terminalState);
 
     const updatedMessage = {
       ...message,
@@ -672,6 +706,69 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     } as TUIMessage;
     this.replaceMessage(messageIndex, updatedMessage, response);
     return true;
+  }
+
+  protected captureRestoredToolCalls(): void {
+    const restoredToolCalls = new Map<string, Set<string>>();
+    this.messages.forEach((message) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+
+        const toolCallIds =
+          restoredToolCalls.get(message.id) ?? new Set<string>();
+        toolCallIds.add(part.toolCallId);
+        restoredToolCalls.set(message.id, toolCallIds);
+      });
+    });
+    this.restoredToolCalls = restoredToolCalls;
+  }
+
+  protected clearRestoredToolCalls(): void {
+    this.restoredToolCalls = undefined;
+  }
+
+  protected repairRestoredPendingToolParts(): void {
+    const shouldRepairRestoredPendingToolPart =
+      this.shouldRepairRestoredPendingToolPart;
+    if (!shouldRepairRestoredPendingToolPart) return;
+
+    this.messages.forEach((message, messageIndex) => {
+      message.parts.forEach((part) => {
+        if (!isPendingToolPart(part)) return;
+        if (
+          this.restoredToolCalls &&
+          !this.restoredToolCalls.get(message.id)?.has(part.toolCallId)
+        ) {
+          return;
+        }
+
+        let shouldRepair = false;
+        try {
+          shouldRepair = shouldRepairRestoredPendingToolPart({
+            toolName: getToolName(part),
+            toolCallId: part.toolCallId,
+            input: 'input' in part ? part.input : undefined,
+          });
+        } catch {
+          return;
+        }
+        if (!shouldRepair) return;
+
+        this.commit(
+          part.toolCallId,
+          {
+            state: 'output-error',
+            errorText:
+              part.state === 'input-streaming'
+                ? RESTORED_TOOL_INPUT_ERROR_TEXT
+                : RESTORED_TOOL_CALL_ERROR_TEXT,
+          },
+          message.id,
+          undefined,
+          this.messages[messageIndex]
+        );
+      });
+    });
   }
 
   /**
@@ -820,14 +917,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
   private submitToolResult<TTool extends keyof InferUIMessageTools<TUIMessage>>(
     response: ResponseRecord | undefined,
-    {
-      toolCallId,
-      output,
-    }: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    },
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>,
     messageId = response?.messageId,
     expectedMessage = messageId
       ? this.messages.find((message) => message.id === messageId)
@@ -837,13 +927,19 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
 
     const commitResult = (): Promise<void> => {
       if (
-        !this.commit(toolCallId, output, messageId, response, expectedMessage)
+        !this.commit(
+          options.toolCallId,
+          getTerminalToolState(options),
+          messageId,
+          response,
+          expectedMessage
+        )
       ) {
         return Promise.resolve();
       }
 
-      if (response?.requiredToolCallIds.has(toolCallId)) {
-        response.resolvedToolCallIds.add(toolCallId);
+      if (response?.requiredToolCallIds.has(options.toolCallId)) {
+        response.resolvedToolCallIds.add(options.toolCallId);
       }
       return this.continueResponse(response);
     };
@@ -902,7 +998,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
       if (
         !this.commit(
           options.toolCallId,
-          options.output,
+          getTerminalToolState(options),
           message.id,
           undefined,
           message
@@ -919,11 +1015,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     TTool extends keyof InferUIMessageTools<TUIMessage>,
   >(
     message: TUIMessage,
-    options: {
-      tool: TTool;
-      toolCallId: string;
-      output: InferUIMessageTools<TUIMessage>[TTool]['output'];
-    }
+    options: ToolResultSubmissionOptions<TUIMessage, TTool>
   ): Promise<void> => {
     const hasToolCall = (candidate: TUIMessage): boolean =>
       candidate.parts?.some(
@@ -1454,6 +1546,9 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                 response.pendingToolCallbacks++;
 
                 try {
+                  this.restoredToolCalls
+                    ?.get(currentMessage.id)
+                    ?.delete(chunk.toolCallId);
                   const result = this.onToolCall(
                     {
                       toolCall: {
@@ -1462,6 +1557,7 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
                         input: chunk.input,
                         dynamic: 'dynamic' in chunk ? chunk.dynamic : undefined,
                       } as InferUIMessageToolCall<TUIMessage>,
+                      signal: response.abortController.signal,
                     },
                     (options) =>
                       response.isRetired

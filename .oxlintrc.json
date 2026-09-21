@@ -299,13 +299,6 @@
       }
     },
     {
-      "files": ["**/.storybook/**/*", "**/stories/**/*"],
-      "rules": {
-        "new-cap": "off",
-        "no-console": "off"
-      }
-    },
-    {
       "files": ["packages/instantsearch.js/src/**/*"],
       "rules": {
         "no-restricted-globals": [

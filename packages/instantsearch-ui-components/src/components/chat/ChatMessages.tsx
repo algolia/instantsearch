@@ -127,7 +127,21 @@ export type ChatMessagesProps<
    * Custom message renderer
    */
   messageComponent?: (
-    props: ChatComponentPropsWithContext<{ message: TMessage }, TMessage>
+    props: ChatComponentPropsWithContext<
+      {
+        message: TMessage;
+        /**
+         * The loader, on the row hosting it while `loaderPosition` is
+         * `'message-inline'`. Render it to keep the loader inside the message.
+         */
+        loaderElement?: VNode;
+        /**
+         * The prompt suggestions, on the row they belong to.
+         */
+        suggestionsElement?: VNode;
+      },
+      TMessage
+    >
   ) => JSX.Element;
   /**
    * Custom loader component. Receives the turn context alongside the resolved
@@ -309,11 +323,6 @@ export type ChatMessagesProps<
    */
   suggestionsElement?: VNode;
   /**
-   * Whether the suggestions for the current turn are still on their way. Mounts
-   * `suggestionsElement` early so it can render its own loading state.
-   */
-  suggestionsLoading?: boolean;
-  /**
    * Callback for feedback (thumbs up/down) on a message.
    */
   onFeedback?: (messageId: string, vote: 0 | 1) => void;
@@ -475,8 +484,7 @@ export function createChatMessagesComponent({
   useMemo,
   useState,
   useEffect,
-  useRef,
-}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect' | 'useRef'>) {
+}: Renderer & Pick<Hooks, 'useMemo' | 'useState' | 'useEffect'>) {
   const Button = createButtonComponent({ createElement });
 
   /**
@@ -496,68 +504,144 @@ export function createChatMessagesComponent({
     showDelay: number;
     minDuration: number;
   }) {
-    // Derived during render, not committed from an effect: an effect-driven
-    // show lands a frame late. State is only here to wake on a deadline.
-    const [, scheduleRerender] = useState(0);
-    const stateRef = useRef({
-      isVisible: false,
-      shownAt: 0,
-      pendingSince: 0,
-      hasHiddenInTurn: false,
+    type LoaderState =
+      | { phase: 'idle' }
+      | { phase: 'visible'; shownAt: number; elapsedDuration: number }
+      | { phase: 'hidden' }
+      | { phase: 'ready'; shownAt: number; elapsedDuration: number }
+      | { phase: 'waiting'; pendingSince: number };
+
+    const [loaderState, setLoaderState] = useState<LoaderState>({
+      phase: 'idle',
     });
 
-    const state = stateRef.current;
-    const now = Date.now();
-
-    if (!isTurnActive) {
-      state.hasHiddenInTurn = false;
-    }
-
-    let isVisible = state.isVisible;
-
-    if (isLoading) {
-      state.pendingSince = state.pendingSince || now;
-      // Only a loader coming *back* waits; the first one must be immediate.
-      const delay = state.hasHiddenInTurn ? showDelay : 0;
-      isVisible = now - state.pendingSince >= delay;
-    } else {
-      state.pendingSince = 0;
-      // The minimum only applies while the turn is still running.
-      if (isVisible) {
-        isVisible = isTurnActive && now - state.shownAt < minDuration;
-      }
-    }
-
-    if (isVisible && !state.isVisible) {
-      state.shownAt = now;
-    }
-    // Only a hide *within* the turn arms the delay. The turn ending hides the
-    // loader too, and arming on that would delay the next turn's first loader,
-    // which has to be immediate.
-    if (!isVisible && state.isVisible && isTurnActive) {
-      state.hasHiddenInTurn = true;
-    }
-    state.isVisible = isVisible;
-
-    let deadline = 0;
-    if (isLoading && !isVisible) {
-      deadline = state.pendingSince + showDelay;
-    } else if (!isLoading && isVisible) {
-      deadline = state.shownAt + minDuration;
-    }
+    const isVisible =
+      isTurnActive &&
+      ((isLoading &&
+        (loaderState.phase === 'idle' ||
+          loaderState.phase === 'ready' ||
+          (loaderState.phase === 'hidden' && showDelay <= 0))) ||
+        (loaderState.phase === 'visible' &&
+          (isLoading || minDuration > loaderState.elapsedDuration)));
 
     useEffect(() => {
-      if (!deadline) {
+      if (!isTurnActive) {
+        if (loaderState.phase !== 'idle') {
+          setLoaderState({ phase: 'idle' });
+        }
         return undefined;
       }
 
-      const timer = setTimeout(
-        () => scheduleRerender((tick) => tick + 1),
-        Math.max(0, deadline - Date.now())
+      if (loaderState.phase === 'idle') {
+        if (isLoading) {
+          setLoaderState({
+            phase: 'visible',
+            shownAt: Date.now(),
+            elapsedDuration: 0,
+          });
+        }
+        return undefined;
+      }
+
+      if (loaderState.phase === 'visible') {
+        if (!isLoading && minDuration <= loaderState.elapsedDuration) {
+          setLoaderState({ phase: 'hidden' });
+          return undefined;
+        }
+
+        if (minDuration <= loaderState.elapsedDuration) {
+          return undefined;
+        }
+
+        const remaining = Math.max(
+          0,
+          loaderState.shownAt + minDuration - Date.now()
+        );
+        if (remaining === 0) {
+          setLoaderState({ ...loaderState, elapsedDuration: minDuration });
+          return undefined;
+        }
+
+        const timer = setTimeout(() => {
+          setLoaderState((current) =>
+            current.phase === 'visible' &&
+            current.shownAt === loaderState.shownAt
+              ? {
+                  ...current,
+                  elapsedDuration: Math.max(
+                    current.elapsedDuration,
+                    minDuration
+                  ),
+                }
+              : current
+          );
+        }, remaining);
+
+        return () => clearTimeout(timer);
+      }
+
+      if (loaderState.phase === 'hidden') {
+        if (isLoading) {
+          const now = Date.now();
+          setLoaderState(
+            showDelay <= 0
+              ? {
+                  phase: 'visible',
+                  shownAt: now,
+                  elapsedDuration: 0,
+                }
+              : { phase: 'waiting', pendingSince: now }
+          );
+        }
+        return undefined;
+      }
+
+      if (loaderState.phase === 'ready') {
+        setLoaderState(
+          isLoading
+            ? {
+                phase: 'visible',
+                shownAt: loaderState.shownAt,
+                elapsedDuration: loaderState.elapsedDuration,
+              }
+            : { phase: 'hidden' }
+        );
+        return undefined;
+      }
+
+      if (!isLoading) {
+        setLoaderState({ phase: 'hidden' });
+        return undefined;
+      }
+
+      const remaining = Math.max(
+        0,
+        loaderState.pendingSince + showDelay - Date.now()
       );
+      if (remaining === 0) {
+        setLoaderState({
+          phase: 'visible',
+          shownAt: Date.now(),
+          elapsedDuration: 0,
+        });
+        return undefined;
+      }
+
+      const timer = setTimeout(() => {
+        setLoaderState((current) =>
+          current.phase === 'waiting' &&
+          current.pendingSince === loaderState.pendingSince
+            ? {
+                phase: 'ready',
+                shownAt: Date.now(),
+                elapsedDuration: 0,
+              }
+            : current
+        );
+      }, remaining);
 
       return () => clearTimeout(timer);
-    }, [deadline]);
+    }, [isLoading, isTurnActive, loaderState, minDuration, showDelay]);
 
     return isVisible;
   }
@@ -583,9 +667,10 @@ export function createChatMessagesComponent({
       props.message.role === 'user'
         ? props.userMessageProps
         : props.assistantMessageProps;
-    const showReasoning = messageProps?.showReasoning;
+    const showReasoning = messageProps?.showReasoning !== false;
     const parseMarkdown = messageProps?.parseMarkdown;
     const textComponent = messageProps?.textComponent;
+    const reasoningComponent = messageProps?.reasoningComponent;
     // A completed row is memoized against its own message, but `shouldRender`
     // reads the whole `context`: a predicate can hide an older tool result once a
     // newer message arrives. Track the verdicts themselves rather than
@@ -599,6 +684,29 @@ export function createChatMessagesComponent({
     // must update with it. Keep the default renderer's streaming optimization.
     const textComponentMessages = textComponent
       ? props.context.messages
+      : undefined;
+    // A custom reasoning component receives the full context, but completed
+    // rows only need to update for its semantic state, so the memo tracks those
+    // fields rather than `props.context`. The context's callback identities and
+    // its scroll-only changes stay out. `reasoningComponent` is tracked, so
+    // replacing the component still takes effect.
+    const reasoningComponentMessages = reasoningComponent
+      ? props.context.messages
+      : undefined;
+    const reasoningComponentStatus = reasoningComponent
+      ? props.context.status
+      : undefined;
+    const reasoningComponentError = reasoningComponent
+      ? props.context.error
+      : undefined;
+    const reasoningComponentIsClearing = reasoningComponent
+      ? props.context.isClearing
+      : undefined;
+    const reasoningComponentActivePart = reasoningComponent
+      ? props.context.activePart
+      : undefined;
+    const reasoningComponentTools = reasoningComponent
+      ? props.context.tools
       : undefined;
     // Object-level fallback, matching the render: the spread replaces
     // `translations` wholesale, and it copies a key holding `undefined` too. Both
@@ -640,6 +748,13 @@ export function createChatMessagesComponent({
         parseMarkdown,
         textComponent,
         textComponentMessages,
+        reasoningComponent,
+        reasoningComponentMessages,
+        reasoningComponentStatus,
+        reasoningComponentError,
+        reasoningComponentIsClearing,
+        reasoningComponentActivePart,
+        reasoningComponentTools,
         reasoningLabel,
         reasoningClassName,
         reasoningHeaderClassName,
@@ -701,7 +816,6 @@ export function createChatMessagesComponent({
       contentRef,
       onScrollToBottom,
       suggestionsElement,
-      suggestionsLoading = false,
       onFeedback,
       feedbackState,
       ...props
@@ -806,21 +920,13 @@ export function createChatMessagesComponent({
       />
     ) : undefined;
 
-    // Waits for the answer's text and for the loader to step aside, so two
-    // progress affordances never stack up.
-    const showPendingSuggestions =
-      suggestionsLoading &&
-      !showLoader &&
-      context.lastMessage !== undefined &&
-      hasTextContent(context.lastMessage);
-
     return (
       <div
         {...props}
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-busy={showLoader ? 'true' : undefined}
+        aria-busy={context.isBusy ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
@@ -871,7 +977,7 @@ export function createChatMessagesComponent({
                 messageTranslations={messageTranslations}
                 context={context}
                 suggestionsElement={
-                  (status === 'ready' || showPendingSuggestions) &&
+                  status === 'ready' &&
                   message.role === 'assistant' &&
                   context.lastMessage?.id === message.id
                     ? suggestionsElement
@@ -929,7 +1035,6 @@ export function createChatMessagesComponent({
     );
   };
 }
-
 /**
  * A stable signature of every `shouldRender` verdict in a message, so a memoized
  * row can be invalidated when a verdict changes. `undefined` when no tool part

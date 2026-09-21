@@ -2,13 +2,25 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
-import { fetchTask } from '..';
+import { buildTaskPayload, fetchTask } from '..';
 
 describe('fetchTask compatibility', () => {
   const originalFetch = global.fetch;
 
   afterEach(() => {
     global.fetch = originalFetch;
+  });
+
+  it('builds a kind-only payload when no task ID is specified', () => {
+    expect(
+      buildTaskPayload({
+        kind: 'prompt_suggestions',
+        input: { query: 'shoes' },
+      })
+    ).toEqual({
+      kind: 'prompt_suggestions',
+      input: { query: 'shoes' },
+    });
   });
 
   it('performs one request and returns the response envelope', async () => {

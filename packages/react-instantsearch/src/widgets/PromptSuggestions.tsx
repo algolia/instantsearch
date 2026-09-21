@@ -20,6 +20,7 @@ const PromptSuggestionsUi = createPromptSuggestionsComponent({
 export type PromptSuggestionsLayoutComponentProps = {
   suggestions: string[];
   isLoading: boolean;
+  error: Error | undefined;
   onSuggestionClick: (prompt: string) => void;
   isChatBusy: boolean;
 };
@@ -61,22 +62,39 @@ export function PromptSuggestions({
   ...props
 }: PromptSuggestionsProps) {
   const source = agentId !== undefined ? { agentId, transport } : { transport };
-  const { suggestions, isLoading, onSuggestionClick, isChatBusy, sendToChat } =
-    usePromptSuggestions(
-      {
-        ...source,
-        configurationId,
-        transformHits,
-        context,
-        transformItems,
-      },
-      {
-        $$widgetType: 'ais.promptSuggestions',
-      }
+  const {
+    suggestions,
+    isLoading,
+    error,
+    onSuggestionClick,
+    isChatBusy,
+    sendToChat,
+  } = usePromptSuggestions(
+    {
+      ...source,
+      configurationId,
+      transformHits,
+      context,
+      transformItems,
+    },
+    {
+      $$widgetType: 'ais.promptSuggestions',
+    }
+  );
+
+  if (!sendToChat && !onSuggestionClickOverride) {
+    throw new Error(
+      'No <Chat> widget is mounted on this index, so there is nothing to send a clicked suggestion to. Mount a <Chat> on the same index, or pass `onSuggestionClick` to handle the click yourself.'
     );
+  }
 
   const handleClick = onSuggestionClickOverride
-    ? (prompt: string) => onSuggestionClickOverride(prompt, { sendToChat })
+    ? (prompt: string) =>
+        onSuggestionClickOverride(prompt, {
+          // `sendToChat` is only absent when the override above owns the click,
+          // in which case falling through to the chat is a no-op.
+          sendToChat: sendToChat ?? (() => false),
+        })
     : onSuggestionClick;
 
   if (LayoutComponent) {
@@ -84,6 +102,7 @@ export function PromptSuggestions({
       <LayoutComponent
         suggestions={suggestions}
         isLoading={isLoading}
+        error={error}
         onSuggestionClick={handleClick}
         isChatBusy={isChatBusy}
       />

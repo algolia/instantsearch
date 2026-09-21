@@ -1,0 +1,395 @@
+name: 'Docs agent'
+description: >-
+  Run Claude against the docs-new checkout with that repo's own conventions loaded, verify the result against its checks, and report telemetry.
+
+
+inputs:
+  prompt-file:
+    description: 'Absolute path to the task prompt'
+    required: true
+  context-file:
+    description: 'Absolute path to the precomputed context appended to the prompt'
+    required: true
+  max-turns:
+    description: 'Turn budget per pass'
+    default: '80'
+  max-passes:
+    description: 'Continuation passes before giving up'
+    default: '3'
+  deadline-minutes:
+    description: 'Wall-clock budget for the whole loop'
+    default: '25'
+  anthropic-api-key:
+    required: true
+
+outputs:
+  status:
+    description: 'complete | incomplete'
+    value: ${{ steps.agent.outputs.status }}
+  passes:
+    description: 'Number of Claude passes used'
+    value: ${{ steps.agent.outputs.passes }}
+  cost:
+    description: 'Total USD spent across all passes'
+    value: ${{ steps.agent.outputs.cost }}
+  changed:
+    description: 'true if the agent left uncommitted changes in docs-new'
+    value: ${{ steps.agent.outputs.changed }}
+  verify:
+    description: 'clean | issues'
+    value: ${{ steps.agent.outputs.verify }}
+
+runs:
+  using: composite
+  steps:
+    - id: agent
+      shell: bash
+      env:
+        # Deliberately no push token here. The agent reads contributor-authored
+        # text and anything it writes gets pushed, so the credential must not be
+        # reachable - and a token in this step's env is readable out of
+        # /proc/self/environ, not just out of .git/config.
+        # docs-staging-prepare.sh strips the credential actions/checkout
+        # persisted; docs-staging-commit.sh restores it for the push alone, in
+        # its own step.
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
+        PROMPT_FILE: ${{ inputs.prompt-file }}
+        CONTEXT_FILE: ${{ inputs.context-file }}
+        MAX_TURNS: ${{ inputs.max-turns }}
+        MAX_PASSES: ${{ inputs.max-passes }}
+        DEADLINE_MINUTES: ${{ inputs.deadline-minutes }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        set -uo pipefail
+
+        WS="${GITHUB_WORKSPACE}"
+        DOCS="${WS}/docs-new"
+        SRC="${WS}/instantsearch"
+        STATE="${WS}/agent-state"
+        mkdir -p "$STATE"
+
+        # Running from inside docs-new is what loads its .claude/CLAUDE.md ->
+        # @../AGENTS.md -> @../style-guide.md chain and its .claude/skills.
+        # The InstantSearch source is reachable read-only via --add-dir.
+        ALLOWED_TOOLS="Read,Edit,Write,Glob,Grep,Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(wc:*),Bash(sed:*),Bash(grep:*),Bash(rg:*),Bash(find:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(npm run check:*),Bash(npm run generate:*),Bash(npx @vvago/vale:*)"
+
+        build_prompt() {
+          local preamble="${1:-}"
+          {
+            if [ -n "$preamble" ]; then cat "$preamble"; echo; echo "---"; echo; fi
+            cat "$PROMPT_FILE"
+            echo
+            echo "---"
+            echo
+            echo "## Paths for this run"
+            echo
+            echo "- Your working directory is the docs repository: \`${DOCS}\`"
+            echo "- InstantSearch source, read-only: \`${SRC}\`"
+            echo "- Scratch directory: \`${STATE}\`. Write \`PROGRESS.md\` and"
+            echo "  \`CHANGES_SUMMARY.md\` there, never inside the docs repository."
+            echo
+            echo "---"
+            echo
+            cat "$CONTEXT_FILE"
+          } > "$STATE/prompt.md"
+        }
+
+        run_claude() {
+          local log="$1"
+          ( cd "$DOCS" && claude -p "$(cat "$STATE/prompt.md")" \
+              --add-dir "$SRC" --add-dir "$STATE" \
+              --allowedTools "$ALLOWED_TOOLS" \
+              --max-turns "$MAX_TURNS" \
+              --verbose --output-format stream-json ) 2>&1 | tee "$log"
+          return "${PIPESTATUS[0]}"
+        }
+
+        # --- telemetry ---------------------------------------------------
+        # The final `result` line of the stream carries cost, turns and the
+        # permission denials. Surfacing it is how you tune the budget from
+        # data instead of guessing, and how a broken allowlist gets noticed.
+        : > "$STATE/telemetry.tsv"
+        : > "$STATE/denials.txt"
+
+        record_pass() {
+          local log="$1" label="$2" rc="$3" result
+          result=$(grep '"type":"result"' "$log" | tail -1)
+          if [ -z "$result" ]; then
+            printf '%s\t?\t?\t?\texit %s\t?\n' "$label" "$rc" >> "$STATE/telemetry.tsv"
+            return
+          fi
+          printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+            "$label" \
+            "$(printf '%s' "$result" | jq -r '.num_turns // "?"')" \
+            "$(printf '%s' "$result" | jq -r 'if .total_cost_usd then (.total_cost_usd * 100 | round / 100 | tostring) else "?" end')" \
+            "$(printf '%s' "$result" | jq -r 'if .duration_ms then ((.duration_ms / 1000) | floor | tostring) + "s" else "?" end')" \
+            "$(printf '%s' "$result" | jq -r '.subtype // "?"')" \
+            "$(printf '%s' "$result" | jq -r '(.permission_denials // []) | length')" \
+            >> "$STATE/telemetry.tsv"
+          printf '%s' "$result" \
+            | jq -r '(.permission_denials // [])[] | (.tool_input.command // .tool_name)' \
+            >> "$STATE/denials.txt" 2>/dev/null
+        }
+
+        # --- verification ------------------------------------------------
+        # docs-new's AGENTS.md: "Treat Vale and link checks as mandatory
+        # before opening a PR." Plus two failure modes it calls out that
+        # nothing else catches: unbalanced JSX tags break the build, and a
+        # new page invisible to docs.json navigation is a page nobody reads.
+        verify() {
+          : > "$STATE/verify-report.md"
+          # Intent-to-add: a brand new page is untracked, and `git diff` cannot
+          # see untracked files. Without this the navigation check - the one
+          # that only ever fires for new pages - never runs.
+          git -C "$DOCS" add -A -N
+
+          # Both the uncommitted edits and everything already committed on the
+          # branch. A revision-less diff cannot see committed work, so the
+          # release sweep would otherwise open a pull request over content it
+          # never checked.
+          local base="origin/${DOCS_DEFAULT_BRANCH:-main}"
+          {
+            git -C "$DOCS" diff --name-only --diff-filter=ACM -- '*.mdx'
+            git -C "$DOCS" diff --name-only --diff-filter=ACM "${base}...HEAD" -- '*.mdx' 2>/dev/null || true
+          } | sort -u > "$STATE/changed-mdx.txt"
+          {
+            git -C "$DOCS" diff --name-only --diff-filter=A -- 'doc/*.mdx'
+            git -C "$DOCS" diff --name-only --diff-filter=A "${base}...HEAD" -- 'doc/*.mdx' 2>/dev/null || true
+          } | sort -u > "$STATE/added-mdx.txt"
+
+          if [ ! -s "$STATE/changed-mdx.txt" ]; then
+            echo "No .mdx changes to verify."
+            return 0
+          fi
+
+          # 1. Vale, scoped to changed files so pre-existing debt stays out.
+          # .vale.ini sets MinAlertLevel=suggestion, which is too noisy to
+          # gate on; errors and warnings are what AGENTS.md calls mandatory.
+          local vale_out
+          vale_out=$( cd "$DOCS" && xargs -a "$STATE/changed-mdx.txt" npx --no-install @vvago/vale --minAlertLevel=warning 2>&1 )
+          if printf '%s' "$vale_out" | grep -qE '[[:space:]](error|warning)[[:space:]]'; then
+            {
+              echo "### Vale (\`check:styleguide\`) on the files you changed"
+              echo
+              echo '```'
+              printf '%s\n' "$vale_out" | head -n 80
+              echo '```'
+              echo
+            } >> "$STATE/verify-report.md"
+          fi
+
+          # 2. Unbalanced JSX tags - the check AGENTS.md ships
+          local tag_out=""
+          while IFS= read -r file; do
+            [ -f "$DOCS/$file" ] || continue
+            for tag in Steps Step Tabs Tab CodeGroup Accordion AccordionGroup Note Tip Warning Info Card CardGroup Frame; do
+              # grep -c exits 1 on zero matches but still prints "0";
+              # `|| echo 0` would append a second line and corrupt the compare
+              local opens closes
+              opens=$(grep -c "<${tag}[ >]" "$DOCS/$file" 2>/dev/null)
+              closes=$(grep -c "</${tag}>" "$DOCS/$file" 2>/dev/null)
+              if [ "$opens" != "$closes" ]; then
+                tag_out="${tag_out}- ${file}: <${tag}> opened ${opens}x, closed ${closes}x"$'\n'
+              fi
+            done
+          done < "$STATE/changed-mdx.txt"
+          if [ -n "$tag_out" ]; then
+            {
+              echo "### Unbalanced JSX tags (these break the Mintlify build)"
+              echo
+              printf '%s\n' "$tag_out"
+            } >> "$STATE/verify-report.md"
+          fi
+
+          # 3. New pages must be reachable from the navigation
+          local nav_out=""
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            local slug
+            slug="${file#doc/}"
+            slug="${slug%.mdx}"
+            if ! grep -rqF "$slug" "$DOCS/docs.json" "$DOCS/config" 2>/dev/null; then
+              nav_out="${nav_out}- ${file} (slug \`${slug}\`) is not referenced in docs.json or config/*.json"$'\n'
+            fi
+          done < "$STATE/added-mdx.txt"
+          if [ -n "$nav_out" ]; then
+            {
+              echo "### New pages missing from the navigation"
+              echo
+              printf '%s\n' "$nav_out"
+              echo "Add them to \`docs.json\` (or the relevant \`config/*.json\`), then re-run \`npm run generate:flavors\` if you added a flavor variant."
+              echo
+            } >> "$STATE/verify-report.md"
+          fi
+
+          # 4. Broken links, but only ones in files this run touched
+          local links_out
+          links_out=$( cd "$DOCS" && npm run --silent check:links 2>&1 )
+          local links_hits=""
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            if printf '%s' "$links_out" | grep -qF "$file"; then
+              links_hits="${links_hits}${file}"$'\n'
+            fi
+          done < "$STATE/changed-mdx.txt"
+          if [ -n "$links_hits" ]; then
+            {
+              echo "### Broken links in files you changed"
+              echo
+              echo '```'
+              printf '%s\n' "$links_out" | head -n 60
+              echo '```'
+              echo
+            } >> "$STATE/verify-report.md"
+          fi
+
+          [ ! -s "$STATE/verify-report.md" ]
+        }
+
+        # --- main loop -----------------------------------------------------
+        DEADLINE=$(( $(date +%s) + DEADLINE_MINUTES * 60 ))
+        STATUS="incomplete"
+        PASS=0
+
+        while [ "$PASS" -lt "$MAX_PASSES" ]; do
+          PASS=$(( PASS + 1 ))
+
+          if [ "$PASS" -gt 1 ] && [ "$(date +%s)" -ge "$DEADLINE" ]; then
+            PASS=$(( PASS - 1 ))
+            echo "::notice::Wall-clock budget (${DEADLINE_MINUTES}m) exhausted; stopping after pass ${PASS}."
+            break
+          fi
+
+          if [ "$PASS" -gt 1 ]; then
+            build_prompt "${ACTION_PATH}/prompts/continue.md"
+          else
+            build_prompt ""
+          fi
+
+          echo "::group::Claude pass ${PASS}/${MAX_PASSES} (max ${MAX_TURNS} turns)"
+          run_claude "$STATE/pass-${PASS}.log"
+          RC=$?
+          echo "::endgroup::"
+          record_pass "$STATE/pass-${PASS}.log" "work ${PASS}" "$RC"
+          echo "Pass ${PASS} exited with code ${RC}"
+
+          if grep -qiE '^STATUS:[[:space:]]*DONE' "$STATE/PROGRESS.md" 2>/dev/null; then
+            STATUS="complete"
+            echo "Agent reported STATUS: DONE after pass ${PASS}."
+            break
+          fi
+
+          if [ "$RC" -eq 0 ]; then
+            # PROGRESS.md's marker is the contract, not the exit code: a model
+            # that stopped early exits 0 too. Don't spend another pass - it
+            # would just exit again - but don't claim the work is finished.
+            echo "::warning::Pass ${PASS} exited cleanly without a STATUS: DONE marker; reporting this run as incomplete."
+            break
+          fi
+
+          echo "::warning::Pass ${PASS} did not finish (exit ${RC}). Resuming from the checkpoint."
+        done
+
+        # --- verify, then one fix-up pass ------------------------------------
+        VERIFY="clean"
+        BASE_REF="origin/${DOCS_DEFAULT_BRANCH:-main}"
+        HAS_COMMITS=$(git -C "$DOCS" rev-list --count "${BASE_REF}..HEAD" 2>/dev/null || echo 0)
+        if [ -n "$(git -C "$DOCS" status --porcelain)" ] || [ "${HAS_COMMITS:-0}" -gt 0 ]; then
+          echo "::group::Verification"
+          if verify; then
+            echo "All checks clean."
+          else
+            echo "Checks reported issues:"
+            cat "$STATE/verify-report.md"
+            VERIFY="issues"
+          fi
+          echo "::endgroup::"
+
+          if [ "$VERIFY" = "issues" ] && [ "$(date +%s)" -lt "$DEADLINE" ]; then
+            echo "::group::Claude fix-up pass"
+            build_prompt "${ACTION_PATH}/prompts/fixup.md"
+            {
+              echo
+              echo "## Check output to fix"
+              echo
+              cat "$STATE/verify-report.md"
+            } >> "$STATE/prompt.md"
+            run_claude "$STATE/pass-fixup.log"
+            RC=$?
+            echo "::endgroup::"
+            record_pass "$STATE/pass-fixup.log" "fixup" "$RC"
+
+            if verify; then
+              VERIFY="clean"
+              echo "Fix-up pass resolved the issues."
+            else
+              echo "::warning::Checks still failing after the fix-up pass."
+              cat "$STATE/verify-report.md"
+            fi
+          fi
+
+          # Flavor switchers are generated, not authored. A failure here leaves
+          # the navigation stale, which is a check failure like any other - not
+          # something to log and then report the run as clean.
+          if ! ( cd "$DOCS" && npm run --silent generate:flavors ); then
+            echo "::warning::generate:flavors failed; the navigation may be stale."
+            {
+              echo "### \`npm run generate:flavors\` failed"
+              echo
+              echo "Flavor switchers are generated from the page files. Until this"
+              echo "succeeds the navigation may not list every flavor of a new page."
+              echo
+            } >> "$STATE/verify-report.md"
+            VERIFY="issues"
+          fi
+        fi
+
+        CHANGED=false
+        [ -n "$(git -C "$DOCS" status --porcelain)" ] && CHANGED=true
+
+        TOTAL_COST=$(awk -F'\t' '{ if ($3 != "?") s += $3 } END { printf "%.2f", s }' "$STATE/telemetry.tsv")
+
+        {
+          echo "status=${STATUS}"
+          echo "passes=${PASS}"
+          echo "cost=${TOTAL_COST}"
+          echo "changed=${CHANGED}"
+          echo "verify=${VERIFY}"
+        } >> "$GITHUB_OUTPUT"
+
+        # --- step summary ----------------------------------------------------
+        {
+          echo "### Agent run"
+          echo
+          echo "| Pass | Turns | Cost (USD) | Duration | Stop reason | Denied tools |"
+          echo "| --- | ---: | ---: | ---: | --- | ---: |"
+          awk -F'\t' '{ printf "| %s | %s | %s | %s | `%s` | %s |\n", $1, $2, $3, $4, $5, $6 }' "$STATE/telemetry.tsv"
+          echo
+          echo "**Total:** \$${TOTAL_COST} · status \`${STATUS}\` · checks \`${VERIFY}\` · changes \`${CHANGED}\`"
+          echo
+          if [ -s "$STATE/denials.txt" ]; then
+            echo "<details><summary>Denied tool calls (each one is a wasted turn - widen the allowlist)</summary>"
+            echo
+            echo '```'
+            sort -u "$STATE/denials.txt" | head -n 20
+            echo '```'
+            echo
+            echo "</details>"
+            echo
+          fi
+          if [ "$VERIFY" = "issues" ]; then
+            echo "<details><summary>Outstanding check failures</summary>"
+            echo
+            cat "$STATE/verify-report.md"
+            echo
+            echo "</details>"
+            echo
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        # Deliberately not failing the step: a composite action that fails may
+        # not surface its outputs, and callers branch on `status`/`changed` to
+        # decide whether to ship a partial result.
+        if [ "$STATUS" != "complete" ]; then
+          echo "::warning::The agent did not finish (${PASS} pass(es) used). Callers should treat this run as partial."
+        fi

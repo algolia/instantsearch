@@ -110,7 +110,7 @@ describe('createTaskTransport', () => {
       const customFetch = createFetch();
       const prepareSendMessagesRequest = jest.fn(
         (request: {
-          task: string;
+          task?: string;
           input: Record<string, unknown>;
           stream: boolean;
           body: Record<string, unknown> | undefined;

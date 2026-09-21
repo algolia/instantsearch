@@ -29,6 +29,13 @@ export function createTemplatesTests(
   { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
+    afterEach(() => {
+      // Two tests below stub `Storage.prototype.getItem` to seed recent
+      // searches. Left in place it answers every later storage read in the file
+      // — including another widget's persisted state — with recent searches.
+      jest.restoreAllMocks();
+    });
+
     test('renders indices headers', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(

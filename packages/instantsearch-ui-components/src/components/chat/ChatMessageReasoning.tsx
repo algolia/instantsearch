@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { compiler } from 'markdown-to-jsx';
+import { RuleType, compiler } from 'markdown-to-jsx';
 
 import { cx } from '../../lib';
 
@@ -46,16 +46,28 @@ export type ChatMessageReasoningClassNames = {
   reasoningText: string | string[];
 };
 
-type ChatMessageReasoningProps = {
-  key?: string | number;
+export type ChatMessageReasoningPart = {
   /**
-   * The reasoning part to render
+   * The received reasoning part
    */
   part: ReasoningUIPart;
   /**
-   * Whether this part is the one currently being produced
+   * The reasoning part's index in the full message parts array
+   */
+  partIndex: number;
+  /**
+   * Whether this reasoning part is currently being produced
    */
   isStreaming: boolean;
+};
+
+type ChatMessageReasoningProps = {
+  key?: string | number;
+  hidden?: boolean;
+  /**
+   * The received reasoning parts to render
+   */
+  parts: ChatMessageReasoningPart[];
   /**
    * Whether to parse the reasoning text as Markdown
    */
@@ -69,28 +81,52 @@ export function createChatMessageReasoningComponent({
 }: Pick<Renderer, 'createElement'>) {
   return function ChatMessageReasoning(userProps: ChatMessageReasoningProps) {
     const {
-      part,
-      isStreaming,
+      parts,
+      hidden,
       parseMarkdown = true,
       translations,
       classNames,
     } = userProps;
-    const body = parseMarkdown ? (
-      compiler(part.text, {
-        createElement: createElement as any,
-        disableParsingRawHTML: true,
-      })
-    ) : (
-      // Borrowed from text parts for its `white-space: pre-wrap`, which keeps the
-      // newlines markdown would collapse.
-      <p className="ais-ChatMessage-text">{part.text}</p>
-    );
+    const activePart = parts.find(({ isStreaming }) => isStreaming);
+    const isStreaming = Boolean(activePart);
+    const hasActiveHint = Boolean(activePart?.part.text.trim());
+
+    const renderPart = ({ part }: ChatMessageReasoningPart) =>
+      parseMarkdown ? (
+        compiler(part.text, {
+          createElement: createElement as any,
+          disableParsingRawHTML: true,
+        })
+      ) : (
+        // Preserve newlines in plain-text reasoning.
+        <p className="ais-ChatMessage-text">{part.text}</p>
+      );
+
+    const renderHint = (part: ReasoningUIPart) =>
+      parseMarkdown
+        ? compiler(part.text, {
+            createElement: createElement as any,
+            forceInline: true,
+            renderRule(next, node) {
+              if (
+                node.type === RuleType.htmlBlock ||
+                node.type === RuleType.htmlComment ||
+                node.type === RuleType.htmlSelfClosing
+              ) {
+                return null;
+              }
+
+              return next();
+            },
+          })
+        : part.text;
 
     return (
       <details
         className={cx(classNames.reasoning)}
         aria-label={translations.reasoningLabel}
         aria-busy={isStreaming}
+        hidden={hidden}
       >
         <summary className={cx(classNames.reasoningHeader)}>
           <span className={cx(classNames.reasoningIcon)} aria-hidden="true">
@@ -99,13 +135,38 @@ export function createChatMessageReasoningComponent({
           <span className={cx(classNames.reasoningLabel)}>
             {translations.reasoningLabel}
           </span>
+          {/* A `<summary>` takes its accessible name from its own contents, so
+              leaving the hint exposed would rewrite the toggle's name on every
+              streamed delta. `aria-busy` on the `<details>` carries the
+              activity, and the reasoning text itself stays in the body. */}
+          {activePart && hasActiveHint && (
+            <span
+              className="ais-ChatMessageReasoning-status"
+              aria-hidden="true"
+            >
+              <span className="ais-ChatMessageReasoning-separator">·</span>
+              <span className="ais-ChatMessageReasoning-hint">
+                {renderHint(activePart.part)}
+              </span>
+            </span>
+          )}
           <span className={cx(classNames.reasoningChevron)} aria-hidden="true">
             <ChevronDownIcon createElement={createElement} />
           </span>
         </summary>
 
-        <div className={cx(classNames.reasoningBody)} tabIndex={0}>
-          <div className={cx(classNames.reasoningText)}>{body}</div>
+        <div className={cx(classNames.reasoningBody)}>
+          <ol className={cx(classNames.reasoningText)}>
+            {parts.map((reasoningPart) => (
+              <li
+                key={reasoningPart.partIndex}
+                className="ais-ChatMessageReasoning-item"
+                aria-current={reasoningPart.isStreaming ? 'step' : undefined}
+              >
+                {renderPart(reasoningPart)}
+              </li>
+            ))}
+          </ol>
         </div>
       </details>
     );

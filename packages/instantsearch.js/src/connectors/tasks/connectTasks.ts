@@ -41,8 +41,9 @@ export type TasksRenderState<TOutput = unknown> = {
   submit: (variables: Record<string, unknown>) => Promise<TOutput | undefined>;
   /**
    * Supersedes any in-flight `submit` so its pending result is ignored (the
-   * underlying request is not aborted, just abandoned) and clears the loading
-   * flag. Use when the inputs that produced the request are no longer valid.
+   * underlying request is not aborted, just abandoned) and clears the output,
+   * error, and loading state. Use when the inputs that produced the request are
+   * no longer valid.
    */
   invalidate: () => void;
 };
@@ -61,7 +62,10 @@ export type TasksSource =
     };
 
 export type TasksConnectorParams = TasksSource & {
-  task: string;
+  /** ID of the configured task to run. Either `task` or `kind` is required. */
+  task?: string;
+  /** Kind of configured task to run. Either `task` or `kind` is required. */
+  kind?: string;
   stream?: boolean;
 };
 
@@ -86,7 +90,7 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { agentId, transport, task, stream = true } = widgetParams;
+    const { agentId, transport, task, kind, stream = true } = widgetParams;
 
     if (!agentId && !transport) {
       throw new Error(
@@ -96,8 +100,10 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       );
     }
 
-    if (!task) {
-      throw new Error(withUsage('The `task` option is required.'));
+    if (!task && !kind) {
+      throw new Error(
+        withUsage('Either the `task` or `kind` option is required.')
+      );
     }
 
     let runner: TaskRunner;
@@ -159,6 +165,8 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
       // Bump the request id so any in-flight request's callbacks see
       // `isStale()` and are ignored. The fetch itself is left to complete.
       requestId += 1;
+      output = undefined;
+      error = undefined;
       isLoading = false;
       triggerRender();
     };
@@ -203,12 +211,14 @@ const connectTasks: TasksConnector = function connectTasks<TOutput = unknown>(
           runner = createTaskRunner({
             transport: taskTransport,
             task,
+            kind,
             stream,
           });
         } else {
           runner = createTaskRunner({
             transport: createTaskTransport({ transport }),
             task,
+            kind,
             stream,
           });
         }

@@ -1,14 +1,12 @@
-import {
-  parseJsonEventStream,
-  parsePartialJson,
-  processStream,
-} from '../ai-lite';
+import { parsePartialJson } from '../ai-lite';
 import { resolveValue } from '../ai-lite/utils';
+import { isEqual } from '../utils/isEqual';
 
 import type { Resolvable } from '../ai-lite';
 
 export type TaskPrepareSendMessagesRequest = (options: {
-  task: string;
+  task?: string;
+  kind?: string;
   input: Record<string, unknown>;
   stream: boolean;
   body: Record<string, unknown> | undefined;
@@ -39,7 +37,8 @@ export type TaskTransportOptions = {
 };
 
 export type TaskSendOptions = {
-  task: string;
+  task?: string;
+  kind?: string;
   input: Record<string, unknown>;
   stream: boolean;
   onData?: (output: unknown) => void;
@@ -79,10 +78,6 @@ function withJsonContentType(headers: HeadersInit | undefined) {
 
 function withStreamParam(url: string): string {
   return url.includes('?') ? `${url}&stream=true` : `${url}?stream=true`;
-}
-
-function resolveStreamedOutput(data: unknown, previous: unknown): unknown {
-  return typeof data === 'string' ? parsePartialJson(data, previous) : data;
 }
 
 function createTaskPreparationContext(
@@ -128,33 +123,59 @@ function unwrap(envelope: unknown): unknown {
   return undefined;
 }
 
-function consumeTaskStream(
+function consumeTaskTextStream(
   body: ReadableStream<Uint8Array>,
   onData?: (data: unknown) => void
 ): Promise<unknown> {
   return new Promise<unknown>((resolve, reject) => {
-    const chunkStream = parseJsonEventStream(body);
+    const decoder = new TextDecoder();
+    const reader = body.getReader();
+    let accumulatedText = '';
     let latest: unknown;
-    processStream(
-      chunkStream,
-      (chunk) => {
-        if (!chunk) {
-          return;
+
+    const publish = (output: unknown) => {
+      if (!isEqual(output, latest)) {
+        latest = output;
+        onData?.({ output });
+      }
+    };
+
+    const read = (): void => {
+      reader.read().then(
+        ({ done, value }) => {
+          if (done) {
+            accumulatedText += decoder.decode();
+            reader.releaseLock();
+            try {
+              const output = JSON.parse(accumulatedText);
+              publish(output);
+              resolve({ output });
+            } catch (error) {
+              reject(error);
+            }
+            return;
+          }
+
+          try {
+            accumulatedText += decoder.decode(value, { stream: true });
+            const partial = parsePartialJson(accumulatedText, latest);
+            if (partial !== undefined) {
+              publish(partial);
+            }
+            read();
+          } catch (error) {
+            reader.releaseLock();
+            reject(error);
+          }
+        },
+        (error) => {
+          reader.releaseLock();
+          reject(error);
         }
-        if (chunk.type === 'error') {
-          throw new Error(chunk.errorText || 'Task stream error');
-        }
-        if (chunk.type !== 'data-task-output') {
-          return;
-        }
-        latest = resolveStreamedOutput(chunk.data, latest);
-        if (onData) {
-          onData(latest);
-        }
-      },
-      () => resolve(latest),
-      reject
-    );
+      );
+    };
+
+    read();
   });
 }
 
@@ -185,9 +206,16 @@ export class DefaultTaskTransport {
     this.prepareSendMessagesRequest = prepareSendMessagesRequest;
   }
 
-  sendTask({ task, input, stream, onData }: TaskSendOptions): Promise<unknown> {
+  sendTask({
+    task,
+    kind,
+    input,
+    stream,
+    onData,
+  }: TaskSendOptions): Promise<unknown> {
     return this.sendTaskRequest({
       task,
+      kind,
       input,
       stream,
       onData: onData ? (data) => onData(unwrap(data)) : undefined,
@@ -197,6 +225,7 @@ export class DefaultTaskTransport {
   /** @internal */
   sendTaskRequest({
     task,
+    kind,
     input,
     stream,
     onData,
@@ -212,7 +241,8 @@ export class DefaultTaskTransport {
       let credentials = resolvedCredentials;
       let headers: HeadersInit = withJsonContentType(resolvedHeaders);
       let body: object = {
-        task,
+        ...(task === undefined ? {} : { task }),
+        ...(kind === undefined ? {} : { kind }),
         input,
         ...resolvedBody,
       };
@@ -222,6 +252,7 @@ export class DefaultTaskTransport {
             this.prepareSendMessagesRequest(
               createTaskPreparationContext({
                 task,
+                kind,
                 input,
                 stream,
                 body: preparedBody,
@@ -262,12 +293,11 @@ export class DefaultTaskTransport {
               throw new Error(`HTTP error ${response.status}`);
             }
             const contentType = response.headers?.get?.('content-type') || '';
-            if (
-              stream &&
-              response.body &&
-              contentType.includes('text/event-stream')
-            ) {
-              return consumeTaskStream(response.body, onData);
+            if (stream && contentType.includes('text/plain')) {
+              if (!response.body) {
+                throw new Error('Response body is empty');
+              }
+              return consumeTaskTextStream(response.body, onData);
             }
             return response.json();
           }

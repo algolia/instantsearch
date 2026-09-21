@@ -33,54 +33,6 @@ describe('ChatPromptSuggestions', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  test('renders placeholders while loading', () => {
-    const { container } = render(
-      <ChatPromptSuggestions
-        suggestions={[]}
-        isLoading
-        onSuggestionClick={jest.fn()}
-      />
-    );
-
-    expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-skeletonItem')
-    ).toHaveLength(3);
-  });
-
-  test('honors skeletonCount', () => {
-    const { container } = render(
-      <ChatPromptSuggestions
-        suggestions={[]}
-        isLoading
-        skeletonCount={2}
-        onSuggestionClick={jest.fn()}
-      />
-    );
-
-    expect(
-      container.querySelectorAll('.ais-ChatPromptSuggestions-skeletonItem')
-    ).toHaveLength(2);
-  });
-
-  test('renders suggestions that arrive early but ignores clicks until loading finishes', () => {
-    const onSuggestionClick = jest.fn();
-    const { container } = render(
-      <ChatPromptSuggestions
-        suggestions={['Cheaper opt']}
-        isLoading
-        onSuggestionClick={onSuggestionClick}
-      />
-    );
-
-    expect(
-      container.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
-    ).toBeNull();
-
-    screen.getByText('Cheaper opt').click();
-
-    expect(onSuggestionClick).not.toHaveBeenCalled();
-  });
-
   test('ignores blank suggestions', () => {
     const { container } = render(
       <ChatPromptSuggestions

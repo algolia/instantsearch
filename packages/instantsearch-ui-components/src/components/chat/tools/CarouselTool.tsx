@@ -1,6 +1,9 @@
 /** @jsx createElement */
 
-import { getApplyFiltersParamsFromToolInput } from '../../../lib/utils/chat';
+import {
+  getApplyFiltersParamsFromToolInput,
+  getResolvedSearchParams,
+} from '../../../lib/utils/chat';
 import { addAbsolutePosition, addQueryID } from '../../../lib/utils/hits';
 import { createButtonComponent } from '../../Button';
 import { createCarouselComponent, generateCarouselId } from '../../Carousel';
@@ -11,7 +14,11 @@ import type {
   CarouselProps,
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
-import type { ClientSideToolComponentProps, SearchToolInput } from '../types';
+import type {
+  ClientSideToolComponentProps,
+  ResolvedSearchParams,
+  SearchToolInput,
+} from '../types';
 import type { SearchParameters } from 'algoliasearch-helper';
 
 type HeaderProps = {
@@ -22,6 +29,11 @@ type HeaderProps = {
   scrollRight: () => void;
   nbHits?: number;
   input?: SearchToolInput;
+  /**
+   * The filters the search tool was actually answered with, when the server
+   * sent them. Preferred over `input`, which cannot express a numeric filter.
+   */
+  resolvedSearchParams?: ResolvedSearchParams;
   nbItems: number;
   applyFilters: ClientSideToolComponentProps['context']['applyFilters'];
   getSearchPageURL?: (params: SearchParameters) => string;
@@ -47,6 +59,7 @@ function createHeaderComponent({ createElement }: Renderer) {
     scrollRight,
     nbHits,
     input,
+    resolvedSearchParams,
     nbItems,
     applyFilters,
     getSearchPageURL,
@@ -73,7 +86,10 @@ function createHeaderComponent({ createElement }: Renderer) {
                 if (!input || !applyFilters) return;
 
                 const params = applyFilters(
-                  getApplyFiltersParamsFromToolInput(input)
+                  getApplyFiltersParamsFromToolInput(
+                    input,
+                    resolvedSearchParams
+                  )
                 );
 
                 if (getSearchPageURL) {
@@ -160,6 +176,13 @@ export function createCarouselToolComponent<
 
     const input = message?.input as SearchToolInput | undefined;
 
+    // What the server actually searched with, when it sent it. Absent for the
+    // default search tool and whenever the MCP server emits no `_meta`.
+    const resolvedSearchParams = useMemo(
+      () => getResolvedSearchParams(context.messages, message?.toolCallId),
+      [context.messages, message?.toolCallId]
+    );
+
     const output = message?.output as
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
@@ -233,6 +256,7 @@ export function createCarouselToolComponent<
             showViewAll={showViewAll}
             nbHits={output?.nbHits}
             input={input}
+            resolvedSearchParams={resolvedSearchParams}
             applyFilters={applyFilters}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
@@ -246,6 +270,7 @@ export function createCarouselToolComponent<
           showViewAll={showViewAll}
           nbHits={output?.nbHits}
           input={input}
+          resolvedSearchParams={resolvedSearchParams}
           applyFilters={applyFilters}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
@@ -257,6 +282,7 @@ export function createCarouselToolComponent<
       HeaderComponent,
       output?.nbHits,
       input,
+      resolvedSearchParams,
       applyFilters,
       getSearchPageURL,
       onClose,

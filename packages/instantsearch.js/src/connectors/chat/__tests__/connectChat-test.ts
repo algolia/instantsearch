@@ -3,6 +3,7 @@
  */
 
 import {
+  createControlledSearchClient,
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
@@ -17,6 +18,7 @@ import {
 } from '../../../../test/createWidget';
 import instantsearch from '../../../index.es';
 import { Chat } from '../../../lib/chat';
+import connectSearchBox from '../../search-box/connectSearchBox';
 import connectChat from '../connectChat';
 
 import type {
@@ -24,8 +26,9 @@ import type {
   UIMessageChunk,
   ChatTransport,
 } from '../../../lib/ai-lite';
-import type { InstantSearch, IndexWidget } from '../../../types';
+import type { InstantSearch, IndexWidget, Widget } from '../../../types';
 import type { ChatConnectorParams } from '../connectChat';
+import type { AddToolResultForToolCall } from 'instantsearch-ui-components';
 
 jest.mock('../../../lib/utils/sendChatMessageFeedback', () => ({
   sendChatMessageFeedback: jest.fn(() => Promise.resolve(new Response('{}'))),
@@ -257,115 +260,6 @@ describe('connectChat', () => {
           }),
         })
       );
-    });
-
-    describe('suggestionsStatus', () => {
-      const suggestionsPart = {
-        type: 'data-suggestions',
-        data: { suggestions: ['Cheaper options?'] },
-      };
-
-      function getSuggestionsStatus({
-        messages,
-        status,
-      }: {
-        messages: unknown[];
-        status?: string;
-      }) {
-        const chat = new Chat<any>({
-          persistence: false,
-          transport: {} as any,
-        });
-        const widget = connectChat(jest.fn())({
-          chat,
-          disableTriggerValidation: true,
-        });
-        const helper = algoliasearchHelper(createSearchClient(), '');
-
-        widget.init(createInitOptions({ helper }));
-        chat.messages = messages as any;
-        if (status) {
-          chat._state.status = status as any;
-        }
-
-        return widget.getWidgetRenderState(createInitOptions({ helper }))
-          .suggestionsStatus;
-      }
-
-      it('is idle when no turn is running', () => {
-        expect(
-          getSuggestionsStatus({
-            messages: [
-              { id: '1', role: 'assistant', parts: [suggestionsPart] },
-            ],
-          })
-        ).toBe('idle');
-      });
-
-      it('is idle for a turn with no reason to expect suggestions', () => {
-        expect(
-          getSuggestionsStatus({
-            status: 'streaming',
-            messages: [
-              {
-                id: '1',
-                role: 'assistant',
-                parts: [{ type: 'text', text: 'Hello' }],
-              },
-            ],
-          })
-        ).toBe('idle');
-      });
-
-      it('is loading when the agent declared suggestions', () => {
-        expect(
-          getSuggestionsStatus({
-            status: 'streaming',
-            messages: [
-              {
-                id: '1',
-                role: 'assistant',
-                metadata: { suggestionsEnabled: true },
-                parts: [{ type: 'text', text: 'Hello' }],
-              },
-            ],
-          })
-        ).toBe('loading');
-      });
-
-      it('is loading when an earlier turn produced suggestions', () => {
-        expect(
-          getSuggestionsStatus({
-            status: 'streaming',
-            messages: [
-              { id: '1', role: 'assistant', parts: [suggestionsPart] },
-              { id: '2', role: 'user', parts: [] },
-              {
-                id: '3',
-                role: 'assistant',
-                parts: [{ type: 'text', text: 'Hello' }],
-              },
-            ],
-          })
-        ).toBe('loading');
-      });
-
-      it('is idle once the suggestions arrive', () => {
-        expect(
-          getSuggestionsStatus({
-            status: 'streaming',
-            messages: [
-              { id: '1', role: 'assistant', parts: [suggestionsPart] },
-              { id: '2', role: 'user', parts: [] },
-              {
-                id: '3',
-                role: 'assistant',
-                parts: [{ type: 'text', text: 'Hello' }, suggestionsPart],
-              },
-            ],
-          })
-        ).toBe('idle');
-      });
     });
   });
 
@@ -1577,6 +1471,283 @@ describe('connectChat', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
+    it.each([
+      [
+        'throws',
+        {
+          onToolCall: () => {
+            throw new Error('The operation may have completed.');
+          },
+          errorText: 'The operation may have completed.',
+        },
+      ],
+      [
+        'rejects',
+        {
+          onToolCall: () =>
+            Promise.reject(new Error('The operation may have completed.')),
+          errorText: 'The operation may have completed.',
+        },
+      ],
+      [
+        'throws undefined',
+        {
+          onToolCall: () => {
+            throw undefined;
+          },
+          errorText: 'Tool call failed.',
+        },
+      ],
+      [
+        'rejects null',
+        {
+          onToolCall: () => Promise.reject(null),
+          errorText: 'Tool call failed.',
+        },
+      ],
+    ])('settles a configured tool that %s', async (_name, toolCase) => {
+      const { onToolCall, errorText } = toolCase;
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'save',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            { type: 'finish' },
+          ])
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'text-start', id: 'text-1' },
+            {
+              type: 'text-delta',
+              id: 'text-1',
+              delta: 'Please check whether the save completed.',
+            },
+            { type: 'text-end', id: 'text-1' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await widget.chatInstance.sendMessage({ text: 'save this' });
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.id === 'assistant-1'
+      );
+      expect(assistant?.parts[0]).toMatchObject({
+        type: 'tool-save',
+        toolCallId: 'call-1',
+        state: 'output-error',
+        errorText,
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+      expect(widget.chatInstance.error).toBeUndefined();
+      expect(widget.chatInstance.messages.at(-1)?.parts[0]).toMatchObject({
+        type: 'text',
+        text: 'Please check whether the save completed.',
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
+    it.each([
+      ['default timeout', undefined, 20_000],
+      ['configured timeout', 10, 10],
+    ] as const)(
+      'uses the %s for an unsettled tool and aborts its signal',
+      async (_name, timeout, timeoutDelay) => {
+        jest.useFakeTimers();
+
+        try {
+          let toolSignal!: AbortSignal;
+          let markToolStarted!: () => void;
+          const toolStarted = new Promise<void>((resolve) => {
+            markToolStarted = resolve;
+          });
+          const fetchMock = jest
+            .fn()
+            .mockResolvedValueOnce(
+              chatStream([
+                { type: 'start', messageId: 'assistant-1' },
+                {
+                  type: 'tool-input-available',
+                  toolName: 'save',
+                  toolCallId: 'call-1',
+                  input: {},
+                },
+                { type: 'finish' },
+              ])
+            )
+            .mockResolvedValueOnce(
+              chatStream([
+                { type: 'start', messageId: 'assistant-2' },
+                { type: 'finish' },
+              ])
+            );
+          const { widget } = getInitializedWidget({
+            agentId: undefined,
+            persistence: false,
+            transport: { fetch: fetchMock },
+            tools: {
+              save: {
+                timeout,
+                onToolCall({ signal }) {
+                  toolSignal = signal;
+                  markToolStarted();
+                },
+              },
+            },
+          });
+
+          const send = widget.chatInstance.sendMessage({ text: 'save this' });
+          await toolStarted;
+          await Promise.resolve();
+
+          jest.advanceTimersByTime(timeoutDelay - 1);
+          expect(toolSignal.aborted).toBe(false);
+
+          jest.advanceTimersByTime(1);
+          await send;
+
+          const assistant = widget.chatInstance.messages.find(
+            (message) => message.id === 'assistant-1'
+          );
+          expect(toolSignal.aborted).toBe(true);
+          expect(assistant?.parts[0]).toMatchObject({
+            state: 'output-error',
+            errorText:
+              'The tool call timed out before a result was received. The operation may have completed.',
+          });
+          expect(widget.chatInstance.status).toBe('ready');
+          expect(fetchMock).toHaveBeenCalledTimes(2);
+        } finally {
+          jest.useRealTimers();
+        }
+      }
+    );
+
+    it('allows a configured tool timeout to be disabled', async () => {
+      jest.useFakeTimers();
+
+      try {
+        let toolSignal!: AbortSignal;
+        let addToolResult!: AddToolResultForToolCall;
+        let markToolStarted!: () => void;
+        const toolStarted = new Promise<void>((resolve) => {
+          markToolStarted = resolve;
+        });
+        const fetchMock = jest.fn().mockResolvedValue(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            {
+              type: 'tool-input-available',
+              toolName: 'save',
+              toolCallId: 'call-1',
+              input: {},
+            },
+            { type: 'finish' },
+          ])
+        );
+        const { widget } = getInitializedWidget({
+          agentId: undefined,
+          persistence: false,
+          transport: { fetch: fetchMock },
+          sendAutomaticallyWhen: () => false,
+          tools: {
+            save: {
+              timeout: false,
+              onToolCall(params) {
+                toolSignal = params.signal;
+                addToolResult = params.addToolResult;
+                markToolStarted();
+              },
+            },
+          },
+        });
+
+        const send = widget.chatInstance.sendMessage({ text: 'save this' });
+        await toolStarted;
+        await Promise.resolve();
+
+        jest.advanceTimersByTime(20_000);
+        expect(toolSignal.aborted).toBe(false);
+
+        await addToolResult({ output: { saved: true } });
+        await send;
+
+        const assistant = widget.chatInstance.messages.find(
+          (message) => message.id === 'assistant-1'
+        );
+        expect(assistant?.parts[0]).toMatchObject({
+          state: 'output-available',
+          output: { saved: true },
+        });
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('aborts and settles a configured tool when the response is stopped', async () => {
+      let toolSignal!: AbortSignal;
+      let markToolStarted!: () => void;
+      const toolStarted = new Promise<void>((resolve) => {
+        markToolStarted = resolve;
+      });
+      const fetchMock = jest.fn().mockResolvedValue(
+        chatStream([
+          { type: 'start', messageId: 'assistant-1' },
+          {
+            type: 'tool-input-available',
+            toolName: 'save',
+            toolCallId: 'call-1',
+            input: {},
+          },
+          { type: 'finish' },
+        ])
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        persistence: false,
+        transport: { fetch: fetchMock },
+        tools: {
+          save: {
+            timeout: false,
+            onToolCall({ signal }) {
+              toolSignal = signal;
+              markToolStarted();
+              return new Promise<void>(() => {});
+            },
+          },
+        },
+      });
+
+      const send = widget.chatInstance.sendMessage({ text: 'save this' });
+      await toolStarted;
+      await widget.chatInstance.stop();
+      await send;
+
+      const assistant = widget.chatInstance.messages.find(
+        (message) => message.id === 'assistant-1'
+      );
+      expect(toolSignal.aborted).toBe(true);
+      expect(assistant?.parts[0]).toMatchObject({
+        state: 'output-error',
+        errorText: 'The tool call was cancelled before a result was received.',
+      });
+      expect(widget.chatInstance.status).toBe('ready');
+    });
+
     describe('cancelling a tool call the user never answered', () => {
       const pendingToolCallResponse = () =>
         chatStream([
@@ -1612,7 +1783,7 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser } },
+          tools: { confirm: { onToolCall: awaitUser, timeout: false } },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1637,7 +1808,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1666,7 +1839,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1693,7 +1868,9 @@ describe('connectChat', () => {
           agentId: undefined,
           persistence: false,
           transport: { fetch: fetchMock },
-          tools: { confirm: { onToolCall: awaitUser, cancelOutput } },
+          tools: {
+            confirm: { onToolCall: awaitUser, cancelOutput, timeout: false },
+          },
         });
 
         await widget.chatInstance.sendMessage({ text: 'buy the first one' });
@@ -1737,6 +1914,449 @@ describe('connectChat', () => {
       });
 
       expect(getRenderState().messages).toEqual([]);
+    });
+
+    it('settles restored auto-executed tool calls without rerunning them', () => {
+      const storageKey = `${cacheKey}-agentId`;
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: { value: 'static' },
+            },
+            {
+              type: 'dynamic-tool',
+              toolName: 'save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: { value: 'dynamic' },
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-streaming',
+              input: { value: 'partial' },
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(storageKey, JSON.stringify(previousMessages));
+      const onToolCall = jest.fn();
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: { save: { onToolCall } },
+      });
+
+      expect(getRenderState().messages[0].parts).toEqual([
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        }),
+        expect.objectContaining({
+          toolCallId: 'call-3',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before the tool input was complete. The operation was not started.',
+        }),
+      ]);
+      expect(onToolCall).not.toHaveBeenCalled();
+      expect(JSON.parse(sessionStorage.getItem(storageKey)!)[0].parts).toEqual(
+        getRenderState().messages[0].parts
+      );
+    });
+
+    it('keeps restored timeout-disabled, interactive, and provider-executed tools pending', () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-approve',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-confirm',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-3',
+              state: 'input-available',
+              input: {},
+              providerExecuted: true,
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(
+        `${cacheKey}-agentId`,
+        JSON.stringify(previousMessages)
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        tools: {
+          approve: {},
+          confirm: { onToolCall: jest.fn(), timeout: false },
+          save: { onToolCall: jest.fn() },
+        },
+      });
+
+      expect(getRenderState().messages).toEqual(previousMessages);
+    });
+
+    it('does not repair explicitly provided pending messages', () => {
+      const messages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: 'agentId',
+        messages,
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      expect(getRenderState().messages).toEqual(messages);
+    });
+
+    it('repairs pending tools after a resume attempt finds no stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      let resolveFetch!: (response: Response) => void;
+      const fetchMock = jest.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveFetch = resolve;
+          })
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+      expect(getRenderState().messages).toEqual(previousMessages);
+
+      resolveFetch(new Response(null, { status: 404 }));
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts[0]).toMatchObject({
+          toolCallId: 'call-1',
+          state: 'output-error',
+          errorText:
+            'The page was reloaded before a tool result was received. The operation may have completed.',
+        })
+      );
+    });
+
+    it('persists repaired tools after a failed resume attempt', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(new Response(null, { status: 500 }));
+
+      const { getRenderState, widget } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts[0]).toMatchObject({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+
+      expect(widget.chatInstance.status).toBe('error');
+      expect(JSON.parse(sessionStorage.getItem(cacheKey)!)[0].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-error',
+        })
+      );
+    });
+
+    it('repairs only the tools left pending by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const fetchMock = jest.fn().mockResolvedValue(
+        new Response(
+          `data: {"type":"start","messageId":"assistant-1"}
+
+data: {"type":"tool-output-available","toolCallId":"call-1","output":{"saved":true}}
+
+data: {"type":"finish"}
+
+data: [DONE]`,
+          { headers: { 'Content-Type': 'text/event-stream' } }
+        )
+      );
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall: jest.fn() } },
+      });
+
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'output-available',
+            output: { saved: true },
+          }),
+          expect.objectContaining({
+            toolCallId: 'call-2',
+            state: 'output-error',
+            errorText:
+              'The page was reloaded before a tool result was received. The operation may have completed.',
+          }),
+        ])
+      );
+    });
+
+    it('does not repair tool calls started by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const chunks = [
+        'data: {"type":"start","messageId":"assistant-2"}\n\n',
+        'data: {"type":"tool-input-available","toolName":"save","toolCallId":"call-2","input":{}}\n\n',
+      ].map((chunk) => new TextEncoder().encode(chunk));
+      let failResume!: () => void;
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                chunks.forEach((chunk) => controller.enqueue(chunk));
+                failResume = () =>
+                  controller.error(new Error('Resume failed.'));
+              },
+            }),
+            { headers: { 'Content-Type': 'text/event-stream' } }
+          )
+        )
+      );
+      let addToolResult!: AddToolResultForToolCall;
+      const onToolCall = jest.fn((options) => {
+        addToolResult = options.addToolResult;
+      });
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await waitFor(() => expect(onToolCall).toHaveBeenCalledTimes(1));
+      failResume();
+      await waitFor(() =>
+        expect(getRenderState().messages).toEqual([
+          expect.objectContaining({
+            id: 'assistant-1',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-1',
+                state: 'output-error',
+              }),
+            ],
+          }),
+          expect.objectContaining({
+            id: 'assistant-2',
+            parts: [
+              expect.objectContaining({
+                toolCallId: 'call-2',
+                state: 'input-available',
+              }),
+            ],
+          }),
+        ])
+      );
+
+      await addToolResult({ output: { saved: true } });
+
+      expect(getRenderState().messages[1].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-2',
+          state: 'output-available',
+          output: { saved: true },
+        })
+      );
+    });
+
+    it('does not repair a restored tool call reactivated by a resumed stream', async () => {
+      const previousMessages: UIMessage[] = [
+        {
+          id: 'assistant-1',
+          role: 'assistant',
+          parts: [
+            {
+              type: 'tool-save',
+              toolCallId: 'call-1',
+              state: 'input-streaming',
+              input: {},
+            },
+            {
+              type: 'tool-save',
+              toolCallId: 'call-2',
+              state: 'input-available',
+              input: {},
+            },
+          ],
+        },
+      ];
+      sessionStorage.setItem(cacheKey, JSON.stringify(previousMessages));
+      const chunks = [
+        'data: {"type":"start","messageId":"assistant-1"}\n\n',
+        'data: {"type":"tool-input-available","toolName":"save","toolCallId":"call-1","input":{}}\n\n',
+      ].map((chunk) => new TextEncoder().encode(chunk));
+      let failResume!: () => void;
+      const fetchMock = jest.fn(() =>
+        Promise.resolve(
+          new Response(
+            new ReadableStream({
+              start(controller) {
+                chunks.forEach((chunk) => controller.enqueue(chunk));
+                failResume = () =>
+                  controller.error(new Error('Resume failed.'));
+              },
+            }),
+            { headers: { 'Content-Type': 'text/event-stream' } }
+          )
+        )
+      );
+      let addToolResult!: AddToolResultForToolCall;
+      const onToolCall = jest.fn((options) => {
+        addToolResult = options.addToolResult;
+      });
+
+      const { getRenderState } = getInitializedWidget({
+        agentId: undefined,
+        resume: true,
+        transport: { api: '/api', fetch: fetchMock },
+        tools: { save: { onToolCall } },
+      });
+
+      await waitFor(() => expect(onToolCall).toHaveBeenCalledTimes(1));
+      failResume();
+      await waitFor(() =>
+        expect(getRenderState().messages[0].parts).toEqual([
+          expect.objectContaining({
+            toolCallId: 'call-1',
+            state: 'input-available',
+          }),
+          expect.objectContaining({
+            toolCallId: 'call-2',
+            state: 'output-error',
+          }),
+        ])
+      );
+
+      await addToolResult({ output: { saved: true } });
+
+      expect(getRenderState().messages[0].parts[0]).toEqual(
+        expect.objectContaining({
+          toolCallId: 'call-1',
+          state: 'output-available',
+          output: { saved: true },
+        })
+      );
     });
 
     it('does not save messages to sessionStorage when persistence is disabled', () => {
@@ -1826,7 +2446,12 @@ data: [DONE]`,
               )
             ),
         },
-        tools: { algolia_search_index: { onToolCall: onSearchToolCall } },
+        tools: {
+          algolia_search_index: {
+            onToolCall: onSearchToolCall,
+            timeout: false,
+          },
+        },
       });
 
       const { chatInstance } = widget;
@@ -1846,6 +2471,98 @@ data: [DONE]`,
           })
         );
       });
+    });
+
+    it('lets a tool claim the names a server derives from it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        tools: {
+          my_tool: {
+            onToolCall,
+            matchesToolName: (toolName: string) =>
+              toolName.startsWith('my_tool_'),
+            timeout: false,
+          },
+        },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      await waitFor(() => {
+        expect(onToolCall).toHaveBeenCalledWith(
+          expect.objectContaining({ toolName: 'my_tool_movies' })
+        );
+      });
+    });
+
+    it('does not resolve a derived name for a tool that does not claim it', async () => {
+      const onToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "my_tool_movies", "input": {}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        // `my_tool` and `my_tool_movies` are separate tools to the registry.
+        tools: { my_tool: { onToolCall } },
+      });
+
+      await widget.chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      expect(onToolCall).not.toHaveBeenCalled();
     });
 
     it('streams tool input parts from tool-input-delta without tool-input-available', async () => {
@@ -2041,7 +2758,7 @@ data: [DONE]`,
       const { widget } = getInitializedWidget({
         agentId: undefined,
         tools: {
-          algolia_display_results: {},
+          algolia_grouped_results: {},
         },
         transport: {
           fetch: () =>
@@ -2051,13 +2768,13 @@ data: [DONE]`,
 
 data: {"type": "start-step"}
 
-data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_display_results"}
+data: {"type": "tool-input-start", "toolCallId": "call_1", "toolName": "algolia_grouped_results"}
 
-data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_display_results", "input": {}}
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_grouped_results", "input": {}}
 
-data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_grouped_results", "delta": "{\\"intro\\":\\"curated"}, "transient": true}
 
-data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_display_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
+data: {"type": "data-tool-output-delta", "data": {"toolCallId": "call_1", "toolName": "algolia_grouped_results", "delta": "\\",\\"groups\\":[{\\"title\\":\\"Shoes\\"}]}"}, "transient": true}
 
 data: {"type": "finish-step"}
 
@@ -2086,7 +2803,7 @@ data: [DONE]`,
         const toolPart = lastMessage?.parts.find(
           (part) =>
             'type' in part &&
-            part.type === 'tool-algolia_display_results' &&
+            part.type === 'tool-algolia_grouped_results' &&
             'toolCallId' in part &&
             part.toolCallId === 'call_1'
         ) as
@@ -2110,6 +2827,9 @@ data: [DONE]`,
       });
     });
 
+    // Deliberately on the legacy tool name: the connector resolves tool parts by
+    // name off the wire, so this pins that an agent configured before the rename
+    // still streams. The canonical name is covered by the test above.
     it('finalizes a streamed tool output with tool-output-available', async () => {
       const { widget } = getInitializedWidget({
         agentId: undefined,
@@ -3048,6 +3768,256 @@ data: [DONE]`,
       // all. This is the escape hatch for the runaway auto-continuation loop: a
       // resolved tool no longer forces another completions request.
       expect(fetchMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('main search status', () => {
+    const openStateKey = 'instantsearch-chat-open-state-chat';
+
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    const startFailingSearch = (
+      widgetParams: ChatConnectorParams,
+      extraWidgets: Widget[] = []
+    ) => {
+      const { searches, searchClient } = createControlledSearchClient();
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const errorEvent = new Promise<void>((resolve) => {
+        search.on('error', () => resolve());
+      });
+      const widget = connectChat(jest.fn())({
+        disableTriggerValidation: true,
+        persistence: false,
+        ...widgetParams,
+      } as ChatConnectorParams);
+
+      search.addWidgets([widget, ...extraWidgets]);
+      search.start();
+
+      return { errorEvent, search, searchClient, searches, widget };
+    };
+
+    beforeEach(() => {
+      sessionStorage.clear();
+    });
+
+    it('schedules sibling renders that never reset the main search status', () => {
+      sessionStorage.setItem(openStateKey, 'true');
+      const scheduleRender = jest.fn();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender:
+          scheduleRender as unknown as InstantSearch['scheduleRender'],
+      });
+      const widget = connectChat(jest.fn())({
+        agentId: 'agentId',
+        disableTriggerValidation: true,
+        persistence: { messages: false, open: true },
+      } as ChatConnectorParams);
+
+      // `init`, with the open panel restored from the previous session.
+      widget.init(createInitOptions({ instantSearchInstance }));
+
+      expect(scheduleRender).toHaveBeenCalledTimes(1);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+
+      // `updateOpen`.
+      widget
+        .getWidgetRenderState(createInitOptions({ instantSearchInstance }))
+        .setOpen(false);
+
+      expect(scheduleRender).toHaveBeenCalledTimes(2);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+
+      // `renderOnStatusChange`.
+      widget.chatInstance._state.status = 'streaming';
+
+      expect(scheduleRender).toHaveBeenCalledTimes(3);
+      expect(scheduleRender).toHaveBeenLastCalledWith(false);
+    });
+
+    it('leaves a failed main search in error when the chat opens', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams
+      );
+
+      await wait(0);
+      searches[0].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves a failed main search in error across a chat turn', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          chatStream([
+            { type: 'start', messageId: 'assistant-1' },
+            { type: 'text-start', id: 'text-1' },
+            { type: 'text-delta', id: 'text-1', delta: 'Hello' },
+            { type: 'text-end', id: 'text-1' },
+            { type: 'finish' },
+          ])
+        );
+      const { errorEvent, search, searchClient, searches, widget } =
+        startFailingSearch({
+          agentId: undefined,
+          transport: { fetch: fetchMock },
+        } as ChatConnectorParams);
+
+      await wait(0);
+      searches[0].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+
+      await widget.chatInstance.sendMessage({ text: 'hello' });
+      await wait(0);
+
+      expect(widget.chatInstance.messages).toHaveLength(2);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps the error state stable when the chat renders after a late failure', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams
+      );
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      expect(search.status).toBe('idle');
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // A chat render now sees the `error` status, which is what the index
+      // reads to restore the last valid search parameters. Neither the render
+      // nor that restore may turn into another request.
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(search.error).toEqual(new Error('SERVER_ERROR'));
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+    });
+
+    it('keeps a refinement made after a failure that a chat render shares a tick with', async () => {
+      const { errorEvent, search, searchClient, searches } = startFailingSearch(
+        {
+          agentId: 'agentId',
+        } as ChatConnectorParams,
+        [connectSearchBox(jest.fn())({})]
+      );
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // A chat render and a refinement land in the same tick. The chat render
+      // runs before the search `setUiState` defers, so the index must not roll
+      // the refinement back on it.
+      search.renderState.indexName.chat!.setOpen(false);
+      search.setUiState({ indexName: { query: 'shoes' } });
+      await wait(0);
+
+      expect(search.getUiState()).toEqual({ indexName: { query: 'shoes' } });
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(
+        (searchClient.search as jest.Mock).mock.calls[2][0][0].params.query
+      ).toBe('shoes');
+    });
+
+    it('does not restore the previous search parameters again on later chat renders', async () => {
+      const { errorEvent, search, searches } = startFailingSearch({
+        agentId: 'agentId',
+      } as ChatConnectorParams);
+
+      await wait(0);
+      searches[0].resolver();
+      await wait(0);
+
+      search.mainHelper!.search();
+      await wait(0);
+      searches[1].rejecter(new Error('SERVER_ERROR'));
+      await errorEvent;
+      await wait(0);
+
+      expect(search.status).toBe('error');
+
+      // The failed search already rolled the parameters back. Repeated chat
+      // renders must not keep re-emitting that write, or every middleware
+      // `onStateChange` fires for chat panel activity.
+      const onChange = jest.fn();
+      search.mainIndex.getHelper()!.on('change', onChange);
+
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+      search.renderState.indexName.chat!.setOpen(false);
+      await wait(0);
+      search.renderState.indexName.chat!.setOpen(true);
+      await wait(0);
+
+      expect(search.status).toBe('error');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('still settles the main search once its results arrive after a chat render', async () => {
+      const { search, searches, widget } = startFailingSearch({
+        agentId: 'agentId',
+      } as ChatConnectorParams);
+
+      await wait(0);
+
+      expect(search.status).toBe('loading');
+
+      // A chat render lands while the search it knows nothing about is still
+      // in flight. Suppressing the status reset must not strand it on
+      // `loading`.
+      widget.chatInstance._state.status = 'streaming';
+      searches[0].resolver();
+      await wait(0);
+
+      expect(search.status).toBe('idle');
+      expect(search.error).toBeUndefined();
     });
   });
 });

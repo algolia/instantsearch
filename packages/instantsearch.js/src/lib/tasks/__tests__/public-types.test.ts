@@ -31,6 +31,7 @@ describe('tasks public types', () => {
           headers: request.headers,
           body: {
             task: request.task,
+            kind: request.kind,
             input: request.input,
             ...request.body,
           },
@@ -42,6 +43,7 @@ describe('tasks public types', () => {
       agentId: 'agent',
       transport,
       task: 'generate',
+      kind: 'prompt_suggestions',
     };
     const releasedTransport: TaskTransport = {
       api: '/custom/tasks',
@@ -87,6 +89,7 @@ describe('tasks public types', () => {
     });
     const payloadOptions: BuildTaskPayloadOptions = {
       task: 'recommend',
+      kind: 'prompt_suggestions',
       input: { query: 'shoes' },
       prepareRequest,
     };
@@ -115,6 +118,7 @@ describe('tasks public types', () => {
 
     expect(fetchOptions.payload).toEqual({
       task: 'recommend',
+      kind: 'prompt_suggestions',
       input: { query: 'shoes' },
       locale: 'en',
     });

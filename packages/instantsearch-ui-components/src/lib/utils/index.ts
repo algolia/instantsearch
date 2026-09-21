@@ -1,7 +1,12 @@
 export {
+  createClientSideToolContextExtras,
   findTool,
   getApplyFiltersParamsFromToolInput,
+  getResolvedSearchParams,
   isStatusBusy,
+  shouldSearchToolRenderResults,
+  type ClientSideToolContextExtras,
+  type MessageScopedClientSideTool,
 } from './chat';
 export {
   collectChatRecords,

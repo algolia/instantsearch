@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event';
 import {
   Chat,
   DisplayResultsToolType,
+  GroupedResultsToolType,
   SearchIndexToolType,
 } from 'instantsearch.js/es/lib/chat';
 import {
@@ -1411,7 +1412,7 @@ export function createOptionsTests(
     });
 
     describe('suggestions', () => {
-      test('holds placeholders until the turn produces its suggestions', async () => {
+      test('shows suggestions after the turn settles', async () => {
         const searchClient = createSearchClient();
         const chat = new Chat({});
 
@@ -1456,8 +1457,8 @@ export function createOptionsTests(
         });
 
         expect(
-          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
-        ).toBeInTheDocument();
+          document.querySelector('.ais-ChatPromptSuggestions')
+        ).not.toBeInTheDocument();
 
         await act(async () => {
           chat._state.messages = [
@@ -1478,9 +1479,6 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(
-          document.querySelector('.ais-ChatPromptSuggestions-skeletonItem')
-        ).not.toBeInTheDocument();
         expect(
           document.querySelector('.ais-ChatPromptSuggestions-suggestion')
         ).toHaveTextContent('Anything cheaper?');
@@ -1664,6 +1662,88 @@ export function createOptionsTests(
             }),
           })
         );
+      });
+
+      test('renders a tool part under a name the tool claims with `matchesToolName`', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'tool-hello_products',
+                  toolCallId: '1',
+                  input: { text: 'hello' },
+                  state: 'output-available',
+                  output: 'hello',
+                },
+                {
+                  type: 'tool-goodbye_products',
+                  toolCallId: '2',
+                  input: {},
+                  state: 'output-available',
+                  output: 'goodbye',
+                },
+              ],
+            },
+          ] as any,
+          id: 'chat-id',
+        });
+
+        // `goodbye_products` stays unresolved: `goodbye` is a prefix of it
+        // but claims nothing.
+        const matchesToolName = (toolName: string) =>
+          toolName.startsWith('hello_');
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  matchesToolName,
+                  templates: {
+                    layout: '<div id="tool-content">Hello!</div>',
+                  },
+                },
+                goodbye: {
+                  templates: {
+                    layout: '<div id="other-tool-content">Goodbye!</div>',
+                  },
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              tools: {
+                hello: {
+                  matchesToolName,
+                  layoutComponent: () => <div id="tool-content">Hello!</div>,
+                },
+                goodbye: {
+                  layoutComponent: () => (
+                    <div id="other-tool-content">Goodbye!</div>
+                  ),
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelector('#tool-content')).toBeInTheDocument();
+        expect(
+          document.querySelector('#other-tool-content')
+        ).not.toBeInTheDocument();
       });
 
       test('re-evaluates `shouldRender` of an older message when the chat changes', async () => {
@@ -2054,6 +2134,200 @@ export function createOptionsTests(
         );
       });
 
+      test('applies numeric filters from the MCP search tool resolved search params on view all', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    // Cannot be expressed as a facet refinement; only the
+                    // resolved params below can apply it.
+                    facet_price: ['<=1500'],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+                // Agent Studio forwards the MCP result `_meta` as this part.
+                {
+                  type: 'data-tool-output-metadata',
+                  data: {
+                    toolCallId: '1',
+                    metadata: {
+                      'com.algolia/resolved-search-params': {
+                        query: 'test',
+                        facetFilters: [['brand:Apple']],
+                        numericFilters: ['price <= 1500'],
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple']],
+                numericFilters: ['price<=1500'],
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('falls back to the raw facet keys on view all when the resolved search params are not a single bag', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_brand: ['Apple'],
+                    facet_price: ['<=1500'],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: 'data-tool-output-metadata',
+                  data: {
+                    toolCallId: '1',
+                    metadata: {
+                      // A bulk search resolves one bag per variation, so this
+                      // value is an array. Nothing can be read out of it, and
+                      // an empty bag would drop every refinement.
+                      'com.algolia/resolved-search-params': [
+                        {
+                          query: 'test',
+                          facetFilters: [['brand:Apple']],
+                          numericFilters: ['price <= 1500'],
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple']],
+              }),
+            }),
+          ])
+        );
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.not.objectContaining({
+                numericFilters: expect.anything(),
+              }),
+            }),
+          ])
+        );
+      });
+
       test('applies filters for custom tools', async () => {
         const searchClient = createSearchClient();
 
@@ -2395,8 +2669,11 @@ export function createOptionsTests(
         );
       });
 
-      describe('display results tool', () => {
-        const displayResultsMessage = (
+      describe('Grouped Results tool', () => {
+        const toolType = GroupedResultsToolType;
+        const groupedResultsMetadata = { groupedResultsEnabled: true };
+
+        const groupedResultsMessage = (
           input: unknown,
           {
             state = 'output-available',
@@ -2424,7 +2701,7 @@ export function createOptionsTests(
                 },
               },
               {
-                type: `tool-${DisplayResultsToolType}`,
+                type: `tool-${toolType}`,
                 toolCallId: 'display',
                 input,
                 state,
@@ -2438,7 +2715,7 @@ export function createOptionsTests(
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage({
+              groupedResultsMessage({
                 intro: 'Curated for you',
                 groups: [
                   {
@@ -2475,64 +2752,64 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-intro')!
+            document.querySelector('.ais-ChatToolGroupedResults-intro')!
               .textContent
           ).toBe('Curated for you');
 
           const titles = document.querySelectorAll(
-            '.ais-ChatToolDisplayResults-groupTitle'
+            '.ais-ChatToolGroupedResults-groupTitle'
           );
           expect(titles).toHaveLength(2);
           expect(titles[0].textContent).toBe('Runners');
           expect(titles[1].textContent).toBe('Casual');
 
           const whys = document.querySelectorAll(
-            '.ais-ChatToolDisplayResults-groupWhy'
+            '.ais-ChatToolGroupedResults-groupWhy'
           );
           expect(whys).toHaveLength(1);
           expect(whys[0].textContent).toBe('matches your stride');
 
           expect(
             document.querySelectorAll(
-              '.ais-ChatToolDisplayResults .ais-Carousel'
+              '.ais-ChatToolGroupedResults .ais-Carousel'
             )
           ).toHaveLength(2);
           expect(
             document.querySelectorAll(
-              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+              '.ais-ChatToolGroupedResults .ais-Carousel-item'
             )
           ).toHaveLength(5);
 
           const counts = document.querySelectorAll(
-            '.ais-ChatToolDisplayResultsCarouselHeaderCount'
+            '.ais-ChatToolGroupedResultsCarouselHeaderCount'
           );
           expect(counts).toHaveLength(2);
           expect(counts[0].textContent).toBe('2 results');
           expect(counts[1].textContent).toBe('3 results');
 
           const scrollButtonGroups = document.querySelectorAll(
-            '.ais-ChatToolDisplayResultsCarouselHeaderScrollButtons'
+            '.ais-ChatToolGroupedResultsCarouselHeaderScrollButtons'
           );
           expect(scrollButtonGroups).toHaveLength(2);
           scrollButtonGroups.forEach((group) => {
             expect(
               group.querySelectorAll(
-                '.ais-ChatToolDisplayResultsCarouselHeaderScrollButton'
+                '.ais-ChatToolGroupedResultsCarouselHeaderScrollButton'
               )
             ).toHaveLength(2);
           });
         });
 
-        test('renders a non-default image attribute in display results', async () => {
+        test('renders a non-default image attribute in Grouped Results', async () => {
           const searchClient = createSearchClient();
           const thumbnailUrl = 'https://example.com/shoe.jpg';
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   groups: [{ results: [{ objectID: '1' }] }],
                 },
@@ -2581,7 +2858,7 @@ export function createOptionsTests(
 
           expect(
             document.querySelector(
-              '.ais-ChatToolDisplayResults .ais-Carousel-item img'
+              '.ais-ChatToolGroupedResults .ais-Carousel-item img'
             )
           ).toHaveAttribute('src', thumbnailUrl);
         });
@@ -2591,7 +2868,7 @@ export function createOptionsTests(
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   intro: 'Curating',
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
@@ -2617,10 +2894,10 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).not.toBeInTheDocument();
 
           await act(async () => {
@@ -2629,7 +2906,7 @@ export function createOptionsTests(
           });
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).toBeInTheDocument();
 
           await act(async () => {
@@ -2639,10 +2916,10 @@ export function createOptionsTests(
 
           expect(chat.status).toBe('ready');
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).not.toBeInTheDocument();
 
           const restoredChat = new Chat({ agentId: 'chat-id' });
@@ -2656,7 +2933,7 @@ export function createOptionsTests(
           });
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).toBeInTheDocument();
 
           await act(async () => {
@@ -2672,7 +2949,7 @@ export function createOptionsTests(
           });
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).not.toBeInTheDocument();
         });
 
@@ -2680,7 +2957,7 @@ export function createOptionsTests(
           const searchClient = createSearchClient();
 
           const chat = new Chat({
-            messages: [displayResultsMessage({ groups: [] })],
+            messages: [groupedResultsMessage({ groups: [] })],
             id: 'chat-id',
           });
 
@@ -2699,11 +2976,11 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).not.toBeInTheDocument();
         });
 
-        test('skips the search index tool when the display results tool needs to be rendered', async () => {
+        test('skips the search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2711,7 +2988,7 @@ export function createOptionsTests(
               {
                 id: '1',
                 role: 'assistant',
-                metadata: { displayResultsEnabled: true },
+                metadata: groupedResultsMetadata,
                 parts: [
                   {
                     type: `tool-${SearchIndexToolType}`,
@@ -2721,7 +2998,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -2752,7 +3029,7 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
             document.querySelector(
@@ -2761,7 +3038,7 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('keeps skipping an overridden search index tool when the display results tool needs to be rendered', async () => {
+        test('keeps skipping an overridden search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2769,7 +3046,7 @@ export function createOptionsTests(
               {
                 id: '1',
                 role: 'assistant',
-                metadata: { displayResultsEnabled: true },
+                metadata: groupedResultsMetadata,
                 parts: [
                   {
                     type: `tool-${SearchIndexToolType}`,
@@ -2779,7 +3056,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -2828,14 +3105,14 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
             document.querySelector('#tool-content')
           ).not.toBeInTheDocument();
         });
 
-        test('skips the MCP-shimmed search index tool when the display results tool needs to be rendered', async () => {
+        test('skips the MCP-shimmed search index tool when the Grouped Results tool needs to be rendered', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
@@ -2843,7 +3120,7 @@ export function createOptionsTests(
               {
                 id: '1',
                 role: 'assistant',
-                metadata: { displayResultsEnabled: true },
+                metadata: groupedResultsMetadata,
                 parts: [
                   {
                     type: `tool-${SearchIndexToolType}_test`,
@@ -2853,7 +3130,7 @@ export function createOptionsTests(
                     output: { hits: [{ objectID: '1' }] },
                   },
                   {
-                    type: `tool-${DisplayResultsToolType}`,
+                    type: `tool-${toolType}`,
                     toolCallId: '2',
                     input: {
                       groups: [
@@ -2884,7 +3161,7 @@ export function createOptionsTests(
           await openChat(act);
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
             document.querySelector(
@@ -2893,12 +3170,12 @@ export function createOptionsTests(
           ).not.toBeInTheDocument();
         });
 
-        test('streams input with a layout-only display results override', async () => {
+        test('streams input with a layout-only Grouped Results override', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
@@ -2917,7 +3194,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
                     },
@@ -2927,7 +3204,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>
                     ),
@@ -2944,7 +3221,7 @@ export function createOptionsTests(
             'custom display'
           );
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).not.toBeInTheDocument();
         });
 
@@ -2968,7 +3245,7 @@ export function createOptionsTests(
 
           await act(async () => {
             chat._state.messages = [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   intro: 'Curating',
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
@@ -2981,26 +3258,26 @@ export function createOptionsTests(
           });
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).toBeInTheDocument();
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-groupTitle')
+            document.querySelector('.ais-ChatToolGroupedResults-groupTitle')
               ?.textContent
           ).toBe('Runners');
           expect(
             document.querySelectorAll(
-              '.ais-ChatToolDisplayResults .ais-Carousel-item'
+              '.ais-ChatToolGroupedResults .ais-Carousel-item'
             )
           ).toHaveLength(1);
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults-streaming')
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).toBeInTheDocument();
           expect(
             document.querySelector('.ais-ChatMessageLoader')
           ).not.toBeInTheDocument();
         });
 
-        test('shows the loader for a callback-only display results override', async () => {
+        test('shows the loader for a callback-only Grouped Results override', async () => {
           const searchClient = createSearchClient();
           const chat = new Chat({});
 
@@ -3013,7 +3290,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     templates: {},
                     onToolCall: jest.fn(),
                   },
@@ -3022,7 +3299,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     onToolCall: jest.fn(),
                   },
                 },
@@ -3035,7 +3312,7 @@ export function createOptionsTests(
 
           await act(async () => {
             chat._state.messages = [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
@@ -3047,19 +3324,19 @@ export function createOptionsTests(
           });
 
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).not.toBeInTheDocument();
           expect(
             document.querySelector('.ais-ChatMessageLoader')
           ).toBeInTheDocument();
         });
 
-        test('allows a display results override to disable input streaming', async () => {
+        test('allows a Grouped Results override to disable input streaming', async () => {
           const searchClient = createSearchClient();
 
           const chat = new Chat({
             messages: [
-              displayResultsMessage(
+              groupedResultsMessage(
                 {
                   groups: [{ title: 'Runners', results: [{ objectID: '1' }] }],
                 },
@@ -3078,7 +3355,7 @@ export function createOptionsTests(
               javascript: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     templates: {
                       layout: '<div id="custom-display">custom display</div>',
@@ -3089,7 +3366,7 @@ export function createOptionsTests(
               react: {
                 ...createDefaultWidgetParams(chat),
                 tools: {
-                  [DisplayResultsToolType]: {
+                  [toolType]: {
                     streamInput: false,
                     layoutComponent: () => (
                       <div id="custom-display">custom display</div>
@@ -3113,10 +3390,135 @@ export function createOptionsTests(
             document.querySelector('#custom-display')
           ).not.toBeInTheDocument();
           expect(
-            document.querySelector('.ais-ChatToolDisplayResults')
+            document.querySelector('.ais-ChatToolGroupedResults')
           ).not.toBeInTheDocument();
           expect(
             document.querySelector('.ais-ChatMessageLoader')
+          ).toBeInTheDocument();
+        });
+      });
+
+      // Temp compat: drop this block with the compat layer once every agent is
+      // migrated. The canonical `algolia_grouped_results` name and its
+      // `groupedResultsEnabled` flag are what the suite above asserts; these
+      // two tests only pin that an agent configured before the rename — legacy
+      // tool name, legacy flag — still resolves to the same tool.
+      describe('legacy algolia_display_results tool name', () => {
+        // eslint-disable-next-line typescript/no-deprecated
+        const legacyToolType = DisplayResultsToolType;
+        const legacyMetadata = { displayResultsEnabled: true };
+
+        test('renders Grouped Results and skips the search index tool', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: legacyMetadata,
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${legacyToolType}`,
+                    toolCallId: '2',
+                    input: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                    state: 'output-available',
+                    output: { status: 'success' },
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: { indexName: 'indexName', searchClient },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          expect(
+            document.querySelector('.ais-ChatToolGroupedResults-groupTitle')
+          ).toHaveTextContent('Picks');
+          expect(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )
+          ).not.toBeInTheDocument();
+        });
+
+        test('streams its input', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                metadata: legacyMetadata,
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: { query: 'test' },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '1' }] },
+                  },
+                  {
+                    type: `tool-${legacyToolType}`,
+                    toolCallId: '2',
+                    input: {
+                      groups: [
+                        { title: 'Picks', results: [{ objectID: '1' }] },
+                      ],
+                    },
+                    state: 'input-streaming',
+                  },
+                ],
+              },
+            ] as any,
+            id: 'chat-id',
+          });
+
+          await setup({
+            instantSearchOptions: { indexName: 'indexName', searchClient },
+            widgetParams: {
+              javascript: createDefaultWidgetParams(chat),
+              react: createDefaultWidgetParams(chat),
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          await act(async () => {
+            chat._state.status = 'streaming';
+            await wait(0);
+          });
+
+          // `streamInput` comes from the tool definition, so this is what would
+          // break if the two names stopped sharing one registration.
+          expect(
+            document.querySelector('.ais-ChatToolGroupedResults-groupTitle')
+          ).toHaveTextContent('Picks');
+          expect(
+            document.querySelector('.ais-ChatToolGroupedResults-streaming')
           ).toBeInTheDocument();
         });
       });
@@ -3125,14 +3527,14 @@ export function createOptionsTests(
     describe('sendEvent', () => {
       const createSearchResultMessage = ({
         id = 'assistant-message-id',
-        displayResults = false,
+        groupedResults = false,
         searchToolCallId = 'search-call-id',
-        displayToolCallId = 'display-call-id',
+        groupedToolCallId = 'grouped-call-id',
       } = {}) => ({
         id,
         role: 'assistant' as const,
-        ...(displayResults
-          ? { metadata: { displayResultsEnabled: true } }
+        ...(groupedResults
+          ? { metadata: { groupedResultsEnabled: true } }
           : {}),
         parts: [
           {
@@ -3152,11 +3554,11 @@ export function createOptionsTests(
               nbHits: 1,
             },
           },
-          ...(displayResults
+          ...(groupedResults
             ? [
                 {
-                  type: `tool-${DisplayResultsToolType}` as const,
-                  toolCallId: displayToolCallId,
+                  type: `tool-${GroupedResultsToolType}` as const,
+                  toolCallId: groupedToolCallId,
                   input: {},
                   state: 'output-available' as const,
                   output: {
@@ -3322,17 +3724,17 @@ export function createOptionsTests(
       test.each([
         {
           resultType: 'fallback search results',
-          displayResults: false,
+          groupedResults: false,
           toolCallId: 'retry-search-call-id',
         },
         {
           resultType: 'displayed results',
-          displayResults: true,
+          groupedResults: true,
           toolCallId: 'retry-display-call-id',
         },
       ])(
         'sends the $resultType view event after InstantSearch becomes idle',
-        async ({ displayResults, toolCallId }) => {
+        async ({ groupedResults, toolCallId }) => {
           const { searchClient, searches } = createControlledSearchClient();
 
           (window as any).aa = Object.assign(jest.fn(), { version: '2.17.2' });
@@ -3359,9 +3761,9 @@ export function createOptionsTests(
           await act(async () => {
             chat.messages = [
               createSearchResultMessage({
-                displayResults,
-                ...(displayResults
-                  ? { displayToolCallId: toolCallId }
+                groupedResults,
+                ...(groupedResults
+                  ? { groupedToolCallId: toolCallId }
                   : { searchToolCallId: toolCallId }),
               }),
             ];
@@ -3409,7 +3811,7 @@ export function createOptionsTests(
             {
               id: 'assistant-message-id',
               role: 'assistant',
-              metadata: { displayResultsEnabled: true },
+              metadata: { groupedResultsEnabled: true },
               parts: [
                 {
                   type: `tool-${SearchIndexToolType}`,
@@ -3429,8 +3831,8 @@ export function createOptionsTests(
                   },
                 },
                 {
-                  type: `tool-${DisplayResultsToolType}`,
-                  toolCallId: 'display-call-id',
+                  type: `tool-${GroupedResultsToolType}`,
+                  toolCallId: 'grouped-call-id',
                   input: {},
                   state: 'output-available',
                   output: {
@@ -3461,7 +3863,7 @@ export function createOptionsTests(
         (window as any).aa.mockClear();
 
         const carouselItem = document.querySelector(
-          '.ais-ChatToolDisplayResults .ais-Carousel-item'
+          '.ais-ChatToolGroupedResults .ais-Carousel-item'
         );
         expect(carouselItem).toBeInTheDocument();
 
@@ -3478,7 +3880,7 @@ export function createOptionsTests(
             objectIDs: ['123'],
             positions: [1],
             queryID: 'message_assistant-message-id',
-            toolCallId: 'display-call-id',
+            toolCallId: 'grouped-call-id',
           }),
           expect.objectContaining({
             headers: expect.objectContaining({
@@ -3499,7 +3901,7 @@ export function createOptionsTests(
             {
               id: 'assistant-message-id',
               role: 'assistant',
-              metadata: { displayResultsEnabled: true },
+              metadata: { groupedResultsEnabled: true },
               parts: [
                 {
                   type: `tool-${SearchIndexToolType}`,
@@ -3519,8 +3921,8 @@ export function createOptionsTests(
                   },
                 },
                 {
-                  type: `tool-${DisplayResultsToolType}`,
-                  toolCallId: 'display-call-id',
+                  type: `tool-${GroupedResultsToolType}`,
+                  toolCallId: 'grouped-call-id',
                   input: {},
                   state: 'output-available',
                   output: {
@@ -3567,7 +3969,7 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id',
-            toolCallId: 'display-call-id',
+            toolCallId: 'grouped-call-id',
           }),
           expect.objectContaining({
             headers: expect.objectContaining({
@@ -3606,15 +4008,15 @@ export function createOptionsTests(
           chat.messages = [
             createSearchResultMessage({
               id: 'assistant-message-id-1',
-              displayResults: true,
+              groupedResults: true,
               searchToolCallId: 'search-call-id-assistant-message-id-1',
-              displayToolCallId: 'display-call-id-assistant-message-id-1',
+              groupedToolCallId: 'grouped-call-id-assistant-message-id-1',
             }),
             createSearchResultMessage({
               id: 'assistant-message-id-2',
-              displayResults: true,
+              groupedResults: true,
               searchToolCallId: 'search-call-id-assistant-message-id-2',
-              displayToolCallId: 'display-call-id-assistant-message-id-2',
+              groupedToolCallId: 'grouped-call-id-assistant-message-id-2',
             }),
           ];
           await wait(0);
@@ -3636,7 +4038,7 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id-1',
-            toolCallId: 'display-call-id-assistant-message-id-1',
+            toolCallId: 'grouped-call-id-assistant-message-id-1',
           }),
           expect.any(Object)
         );
@@ -3646,7 +4048,7 @@ export function createOptionsTests(
             eventName: 'items_shown',
             objectIDs: ['123'],
             queryID: 'message_assistant-message-id-2',
-            toolCallId: 'display-call-id-assistant-message-id-2',
+            toolCallId: 'grouped-call-id-assistant-message-id-2',
           }),
           expect.any(Object)
         );
@@ -3698,6 +4100,11 @@ export function createOptionsTests(
         expect(
           document.querySelector('.ais-ChatInlineLayout')
         ).not.toBeInTheDocument();
+        await waitFor(() => {
+          expect(document.activeElement).toBe(
+            document.querySelector('.ais-ChatPrompt-textarea')
+          );
+        });
       });
 
       test('exposes sendMessage to custom layout component', async () => {
