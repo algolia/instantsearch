@@ -1,9 +1,12 @@
 import { ChevronDown, ChevronUp } from 'lucide-preact';
 import { useState } from 'preact/hooks';
 
-// Per-card, keyed by the card's title; persisted so a reload keeps the layout.
+import { useView } from '../context/view';
+
+// Per-card, keyed by view + card title (titles repeat across views);
+// persisted so a reload keeps the layout.
 export function useMinimized(id: string) {
-  const storageKey = `minimized:${id}`;
+  const storageKey = `minimized:${useView()}:${id}`;
   const [minimized, setMinimized] = useState(
     () => localStorage.getItem(storageKey) === 'true'
   );
