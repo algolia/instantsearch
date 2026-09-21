@@ -331,6 +331,26 @@ describe('ResultCard', () => {
       expect(onExpandedChange).toHaveBeenCalledWith(true);
     });
 
+    test('never clips the error, so Retry stays reachable', () => {
+      const { container } = render(
+        <ResultCard
+          {...createProps({
+            status: 'failed',
+            messages: [userMessage],
+            error: new Error('boom'),
+          })}
+        />
+      );
+
+      const body = container.querySelector('.ais-ResultCard-body')!;
+      expect(body).not.toHaveClass('ais-ResultCard-body--clipped');
+      expect(body).toHaveClass('ais-ResultCard-body--expanded');
+      expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Show more' })
+      ).not.toBeInTheDocument();
+    });
+
     test('hides the suggestions until expanded', () => {
       const { rerender } = render(
         <ResultCard {...createProps({ suggestions: ['Waterproof?'] })} />

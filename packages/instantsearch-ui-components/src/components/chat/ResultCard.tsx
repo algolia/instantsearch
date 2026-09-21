@@ -218,7 +218,9 @@ export function createResultCardComponent({
     }
     const showSuggestions =
       isComplete && canContinueInChat && Boolean(suggestions?.length);
-    const clipped = overflowing && !expanded;
+    // The error is never clipped: there is no toggle to reveal a hidden Retry.
+    const unclipped = expanded || status === 'failed';
+    const clipped = overflowing && !unclipped;
     const showExpandToggle = isComplete && (overflowing || expanded);
 
     const context: ChatComponentContext<TMessage> = {
@@ -286,7 +288,7 @@ export function createResultCardComponent({
           ref={setBody}
           className={cx(
             'ais-ResultCard-body',
-            expanded && 'ais-ResultCard-body--expanded',
+            unclipped && 'ais-ResultCard-body--expanded',
             clipped && 'ais-ResultCard-body--clipped',
             classNames.body
           )}
