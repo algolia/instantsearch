@@ -453,13 +453,12 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       if (!defaultChat || !chatState || !activation) return;
 
       // Keep the inner prompt's directives private when it becomes chat history.
+      const query = activation.context.query;
       const messages = chatState.messages.map((chatMessage) =>
         chatMessage.role === 'user'
           ? {
               ...chatMessage,
-              parts: [
-                { type: 'text' as const, text: activation.context.query },
-              ],
+              parts: [{ type: 'text' as const, text: query }],
             }
           : chatMessage
       );
