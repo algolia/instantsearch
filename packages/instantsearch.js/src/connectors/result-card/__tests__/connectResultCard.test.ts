@@ -279,13 +279,8 @@ describe('connectResultCard', () => {
     });
 
     it('starts fresh when re-added', async () => {
-      const {
-        widget,
-        initOptions,
-        renderFn,
-        renderAndWait,
-        disposeWidget,
-      } = setup();
+      const { widget, initOptions, renderFn, renderAndWait, disposeWidget } =
+        setup();
       await renderAndWait(makeResults());
 
       disposeWidget();
