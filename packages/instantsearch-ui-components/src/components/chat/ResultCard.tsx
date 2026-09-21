@@ -1,7 +1,7 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 import { cx } from '../../lib';
-import { prefersReducedMotion } from '../../lib/utils';
+import { prefersReducedMotion, TRANSITION_FALLBACK_MS } from '../../lib/utils';
 import { isPartText, isPartTextEmpty } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -182,8 +182,9 @@ export function createResultCardComponent({
     const [contentHeight, setContentHeight] = useState<number | undefined>(
       undefined
     );
-    const latest = useState({ expanded })[0];
+    const latest = useState({ expanded, onDismiss })[0];
     latest.expanded = expanded;
+    latest.onDismiss = onDismiss;
     useEffect(() => {
       if (!body) return undefined;
       const measure = () => {
@@ -208,6 +209,19 @@ export function createResultCardComponent({
       }
       setDismissing(true);
     };
+    const commitDismiss = () => {
+      latest.onDismiss();
+      setDismissing(false);
+    };
+    // The fade is the theme's: without it there is no `transitionend` either.
+    useEffect(() => {
+      if (!dismissing) return undefined;
+      const timer = setTimeout(() => {
+        latest.onDismiss();
+        setDismissing(false);
+      }, TRANSITION_FALLBACK_MS);
+      return () => clearTimeout(timer);
+    }, [dismissing, latest]);
 
     const isBusy = status === 'loading' || status === 'streaming';
     const isComplete = status === 'complete';
@@ -268,8 +282,7 @@ export function createResultCardComponent({
             event.target === event.currentTarget &&
             event.propertyName === 'opacity'
           ) {
-            onDismiss();
-            setDismissing(false);
+            commitDismiss();
           }
         }}
       >

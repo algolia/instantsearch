@@ -16,3 +16,4 @@ export * from './hits';
 export * from './prefersReducedMotion';
 export * from './promptSuggestions';
 export * from './startsWith';
+export * from './transitionFallback';

@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { fireEvent, render } from '@testing-library/preact';
+import { fireEvent, render, waitFor } from '@testing-library/preact';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
@@ -359,6 +359,19 @@ describe('Chat', () => {
       expect(
         content.classList.contains('ais-ChatMessages-content--clearing')
       ).toBe(false);
+    });
+
+    test('commits the clear on its own when no opacity transition ends', async () => {
+      mockReducedMotion(false);
+      const onClear = jest.fn();
+      const { container } = render(<Chat {...baseProps(onClear)} />);
+
+      fireEvent.click(container.querySelector('.ais-ChatHeader-clear')!);
+      expect(onClear).not.toHaveBeenCalled();
+
+      await waitFor(() => expect(onClear).toHaveBeenCalledTimes(1), {
+        timeout: 1500,
+      });
     });
   });
 });

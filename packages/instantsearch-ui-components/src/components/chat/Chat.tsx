@@ -1,7 +1,7 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 
-import { prefersReducedMotion } from '../../lib/utils';
+import { prefersReducedMotion, TRANSITION_FALLBACK_MS } from '../../lib/utils';
 
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
@@ -173,6 +173,17 @@ export function createChatComponent({
       commitClear?.();
       setIsClearing(false);
     };
+    // The fade is the theme's: without it there is no `transitionend` either.
+    const latest = useState({ finishClear })[0];
+    latest.finishClear = finishClear;
+    useEffect(() => {
+      if (!isClearing) return undefined;
+      const timer = setTimeout(
+        () => latest.finishClear(),
+        TRANSITION_FALLBACK_MS
+      );
+      return () => clearTimeout(timer);
+    }, [isClearing, latest]);
 
     const headerComponent = createElement(HeaderComponent || ChatHeader, {
       ...headerProps,

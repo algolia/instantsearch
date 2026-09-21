@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { fireEvent, render, screen } from '@testing-library/preact';
+import { fireEvent, render, screen, waitFor } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
@@ -256,6 +256,19 @@ describe('ResultCard', () => {
       expect(container.querySelector('.ais-ResultCard')).not.toHaveClass(
         'ais-ResultCard--leaving'
       );
+    });
+
+    test('commits on its own when no opacity transition ends', async () => {
+      mockReducedMotion(false);
+      const onDismiss = jest.fn();
+      render(<ResultCard {...createProps({ onDismiss })} />);
+
+      await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(onDismiss).not.toHaveBeenCalled();
+
+      await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1), {
+        timeout: 1500,
+      });
     });
   });
 
