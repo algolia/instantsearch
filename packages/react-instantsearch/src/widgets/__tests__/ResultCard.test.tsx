@@ -76,4 +76,26 @@ describe('ResultCard rendering', () => {
       'test title'
     );
   });
+
+  test('throws when both `transport` and `requestOptions` are provided', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    expect(() => {
+      render(
+        <InstantSearchTestWrapper searchClient={createActivatingSearchClient()}>
+          <ResultCard
+            {...({
+              agentId: 'test-agent-id',
+              transport: { api: '/api/chat' },
+              requestOptions: { headers: { 'X-Test': '1' } },
+            } as React.ComponentProps<typeof ResultCard>)}
+          />
+        </InstantSearchTestWrapper>
+      );
+    }).toThrow(/mutually exclusive/);
+
+    consoleError.mockRestore();
+  });
 });

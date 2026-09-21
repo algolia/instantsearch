@@ -50,11 +50,9 @@ export function ResultCard({
   requestOptions,
   ...props
 }: ResultCardProps) {
+  // Forwarded as-is so the connector rejects `transport` + `requestOptions`.
   const renderState = useResultCard(
-    {
-      agentId,
-      ...(transport ? { transport } : { requestOptions }),
-    } as UseResultCardProps,
+    { agentId, transport, requestOptions } as UseResultCardProps,
     { $$widgetType: 'ais.resultCard' }
   );
 
