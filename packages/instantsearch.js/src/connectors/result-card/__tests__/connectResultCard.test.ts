@@ -410,6 +410,17 @@ describe('connectResultCard', () => {
               toolCallId: 'call-2',
               output: { ok: true },
             },
+            {
+              type: 'tool-input-available',
+              toolCallId: 'call-3',
+              toolName: 'algolia_grouped_results',
+              input: { groups: [{ title: 'Trail' }] },
+            },
+            {
+              type: 'tool-output-available',
+              toolCallId: 'call-3',
+              output: { groups: [{ title: 'Trail', hits: [] }] },
+            },
             { type: 'finish-step' },
             { type: 'finish' },
           ])
@@ -431,6 +442,11 @@ describe('connectResultCard', () => {
             type: 'tool-algolia_ponder',
             state: 'output-available',
             output: { ok: true },
+          }),
+          expect.objectContaining({
+            type: 'tool-algolia_grouped_results',
+            state: 'output-available',
+            output: { groups: [{ title: 'Trail', hits: [] }] },
           }),
         ])
       );

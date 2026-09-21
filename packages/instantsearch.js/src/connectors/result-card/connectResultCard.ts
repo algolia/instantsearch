@@ -1,6 +1,8 @@
 import {
   buildFilters,
+  CompareProductsToolType,
   DisplayResultsToolType,
+  GroupedResultsToolType,
   isChatBusy,
   MemorizeToolType,
   MemorySearchToolType,
@@ -295,11 +297,14 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       // The agent runs its built-in tools server-side and streams their
       // output. Registering them without `onToolCall` keeps that output; an
       // unknown tool is answered with "No tool implemented", which drops the
-      // hits the chat's display-results needs after the handoff.
+      // hits the chat's grouped-results needs after the handoff. Same set as
+      // the `chat` widget's defaults.
       tools: {
         [SearchIndexToolType]: {},
         [RecommendToolType]: {},
+        [GroupedResultsToolType]: {},
         [DisplayResultsToolType]: {},
+        [CompareProductsToolType]: {},
         [MemorizeToolType]: {},
         [MemorySearchToolType]: {},
         [PonderToolType]: {},
