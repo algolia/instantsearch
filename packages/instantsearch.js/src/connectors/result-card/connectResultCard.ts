@@ -200,7 +200,16 @@ function computeActivation(
     return previous;
   }
 
-  const hits = (results.hits as Hit[]).slice(0, HITS_SAMPLE_SIZE);
+  // Positions and query ID are attached now: by the time the Insights event
+  // fires, the latest results may be another page of the same question.
+  const hits = addQueryID(
+    addAbsolutePosition(
+      (results.hits as Hit[]).slice(0, HITS_SAMPLE_SIZE),
+      results.page,
+      results.hitsPerPage
+    ),
+    results.queryID
+  );
   const hitIds = JSON.stringify(hits.map((hit) => hit.objectID));
 
   return {
@@ -351,25 +360,8 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         { headers: { 'x-algolia-referer': RESULT_CARD_REFERER } }
       );
 
-      if (
-        sendEvent &&
-        latestRenderOptions &&
-        'results' in latestRenderOptions
-      ) {
-        const results = latestRenderOptions.results;
-        if (results) {
-          sendEvent(
-            'view:internal',
-            addQueryID(
-              addAbsolutePosition(
-                context.hits,
-                results.page,
-                results.hitsPerPage
-              ),
-              results.queryID
-            )
-          );
-        }
+      if (sendEvent) {
+        sendEvent('view:internal', context.hits);
       }
     };
 

@@ -451,6 +451,27 @@ describe('connectResultCard', () => {
         })
       );
     });
+
+    it('describes the sampled page in the view event after paginating', async () => {
+      const { render, instantSearchInstance } = setup();
+      render(makeResults());
+      // Same question, next page: the first-page sample is kept.
+      render(
+        makeResults({ page: 1, hits: [{ objectID: '9' }, { objectID: '10' }] })
+      );
+      await wait(DEBOUNCE_WAIT);
+      await wait(0);
+
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith(
+        expect.objectContaining({
+          eventType: 'view',
+          hits: [
+            expect.objectContaining({ objectID: '1', __position: 1 }),
+            expect.objectContaining({ objectID: '2', __position: 2 }),
+          ],
+        })
+      );
+    });
   });
 
   describe('signature', () => {
