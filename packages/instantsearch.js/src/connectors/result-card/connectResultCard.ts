@@ -50,9 +50,9 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 /** `x-algolia-referer` sent with the card's completion requests. */
-export const RESULT_CARD_REFERER: ChatReferer = 'result-card';
+const RESULT_CARD_REFERER: ChatReferer = 'result-card';
 /** `metadata.source` set on the messages handed off to the chat. */
-export const RESULT_CARD_SOURCE = 'resultCard';
+const RESULT_CARD_SOURCE = 'resultCard';
 const RULE_CONTEXT_PREFIX = 'agent-studio-result-card-';
 const CHAT_RENDER_STATE_KEY = 'chat' as const;
 const MAX_RULE_CONTEXTS = 10;
