@@ -473,9 +473,12 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     ): ResultCardStatus => {
       if (!currentActivation) return 'hidden';
       if (dismissed) return 'dismissed';
+      // Checked before the inner chat's status: until the debounced request
+      // runs, that status (and its error) still belongs to the previous question.
+      if (requestPending) return 'loading';
       if (chatState?.status === 'error') return 'failed';
       if (chatState?.status === 'streaming') return 'streaming';
-      if (chatState?.status === 'submitted' || requestPending) return 'loading';
+      if (chatState?.status === 'submitted') return 'loading';
       return hasAssistantMessage(chatState?.messages) ? 'complete' : 'loading';
     };
 
@@ -517,10 +520,13 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       return {
         status,
         query: currentActivation?.context.query ?? '',
-        messages: chatState?.messages ?? [],
+        // Same as the status: the inner chat holds the previous answer until
+        // the debounced request clears it, and the card is already about a
+        // new question.
+        messages: requestPending ? [] : chatState?.messages ?? [],
         // The inner chat keeps the last error around after recovering.
         error: status === 'failed' ? chatState?.error : undefined,
-        suggestions: chatState?.suggestions,
+        suggestions: requestPending ? undefined : chatState?.suggestions,
         retry,
         dismiss,
         canContinueInChat,

@@ -121,8 +121,14 @@ describe('connectResultCard', () => {
     };
     const getRequestBody = (call = 0) =>
       JSON.parse(fetchMock.mock.calls[call][1].body as string);
+    // For tests that leave a debounced request pending: the timer would
+    // otherwise fire into the next test's fetch mock.
+    const disposeWidget = () => {
+      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+    };
 
     return {
+      disposeWidget,
       widget,
       renderFn,
       unmountFn,
@@ -484,6 +490,36 @@ describe('connectResultCard', () => {
       await renderAndWait(makeResults({ facets: { brand: ['Nike'] } }));
 
       expect(fetchMock).toHaveBeenCalledTimes(2);
+    });
+
+    it('hides the previous answer while the new request is pending', async () => {
+      const { renderFn, render, renderAndWait, disposeWidget } = setup();
+      await renderAndWait(makeResults());
+      expect(lastRender(renderFn).status).toBe('complete');
+
+      render(makeResults({ query: 'trail shoes' }));
+
+      const renderState = lastRender(renderFn);
+      expect(renderState.status).toBe('loading');
+      expect(renderState.query).toBe('trail shoes');
+      expect(renderState.messages).toEqual([]);
+      expect(renderState.suggestions).toBeUndefined();
+      disposeWidget();
+    });
+
+    it('hides the previous error while the new request is pending', async () => {
+      fetchMock.mockImplementationOnce(() =>
+        Promise.reject(new Error('network down'))
+      );
+      const { renderFn, render, renderAndWait, disposeWidget } = setup();
+      await renderAndWait(makeResults());
+      expect(lastRender(renderFn).status).toBe('failed');
+
+      render(makeResults({ query: 'trail shoes' }));
+
+      expect(lastRender(renderFn).status).toBe('loading');
+      expect(lastRender(renderFn).error).toBeUndefined();
+      disposeWidget();
     });
 
     it('requests again when the top hits change on the first page', async () => {
