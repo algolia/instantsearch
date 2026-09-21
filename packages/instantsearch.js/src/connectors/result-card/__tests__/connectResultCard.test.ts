@@ -278,6 +278,26 @@ describe('connectResultCard', () => {
       expect(renderFn.mock.calls[0][1]).toBe(true);
     });
 
+    it('starts fresh when re-added', async () => {
+      const {
+        widget,
+        initOptions,
+        renderFn,
+        renderAndWait,
+        disposeWidget,
+      } = setup();
+      await renderAndWait(makeResults());
+
+      disposeWidget();
+      widget.init!(initOptions);
+      await renderAndWait(makeResults());
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(lastRender(renderFn).status).toBe('complete');
+
+      disposeWidget();
+    });
+
     it('stays hidden when the Rule did not enable the card', async () => {
       const { renderFn, renderAndWait } = setup();
       await renderAndWait(makeResults({ enabled: false }));

@@ -285,7 +285,7 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     // Set in `dispose()`: a stream can still deliver chunks into the inner
     // chat afterwards, and those renders must not reach a torn-down container.
     let disposed = false;
-    let sendEvent: SendEventForHits;
+    let sendEvent: SendEventForHits | undefined;
 
     const chatParams = {
       agentId,
@@ -542,6 +542,15 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       opensChat: true as const,
 
       init(initOptions) {
+        disposed = false;
+        cancelPendingRequest();
+        chatState = undefined;
+        latestRenderOptions = null;
+        activation = null;
+        dismissed = false;
+        expanded = false;
+        sendEvent = undefined;
+
         chatWidget.init(initOptions);
         // After the inner init so its first render is stored, not painted.
         latestRenderOptions = initOptions;
