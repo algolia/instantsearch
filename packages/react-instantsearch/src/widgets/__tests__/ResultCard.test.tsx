@@ -90,7 +90,7 @@ describe('ResultCard rendering', () => {
               agentId: 'test-agent-id',
               transport: { api: '/api/chat' },
               requestOptions: { headers: { 'X-Test': '1' } },
-            } as React.ComponentProps<typeof ResultCard>)}
+            } as unknown as React.ComponentProps<typeof ResultCard>)}
           />
         </InstantSearchTestWrapper>
       );
