@@ -27,25 +27,21 @@ const algoliaClient = algoliasearch(
 
 const INDEX_NAME = 'instant_search';
 
-// Stands in for the Agent Studio Rule that flags `resultCard` in
-// `renderingContent`; remove once the backend returns it for this index.
+// Stands in for the Agent Studio Rule whose consequence is
+// `{ "userData": { "resultCard": { "enabled": true } } }`; remove once such a
+// Rule exists on this index.
 const searchClient: typeof algoliaClient = {
   ...algoliaClient,
   search: ((requests, requestOptions) =>
     algoliaClient.search(requests, requestOptions).then((response) => {
       response.results.forEach((result) => {
         if ('hits' in result && result.index === INDEX_NAME) {
-          // The client's `RenderingContent` type predates `widgets`.
-          const renderingContent = result.renderingContent as
-            | { widgets?: Record<string, unknown> }
-            | undefined;
-          result.renderingContent = {
-            ...result.renderingContent,
-            widgets: {
-              ...renderingContent?.widgets,
-              resultCard: { enabled: true },
-            },
-          } as typeof result.renderingContent;
+          // The client types `userData` as an object; the engine returns an array.
+          const userData = (result.userData ?? []) as unknown as unknown[];
+          result.userData = [
+            ...userData,
+            { resultCard: { enabled: true } },
+          ] as unknown as typeof result.userData;
         }
       });
       return response;

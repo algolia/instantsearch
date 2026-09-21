@@ -43,11 +43,14 @@ function answerResponse(text = 'Here is the answer.'): Response {
   ]);
 }
 
+const ENABLING_PAYLOAD = { resultCard: { enabled: true } };
+
 function makeResults(
   overrides: {
     hits?: Array<Record<string, unknown>>;
     query?: string;
-    enabled?: boolean;
+    /** The Rule payloads in `userData`; defaults to one enabling the card. */
+    userData?: unknown[];
     page?: number;
     index?: string;
     facets?: Record<string, string[]>;
@@ -56,7 +59,7 @@ function makeResults(
   const {
     hits = [{ objectID: '1' }, { objectID: '2' }],
     query = 'running shoes',
-    enabled = true,
+    userData = [ENABLING_PAYLOAD],
     page = 0,
     index = 'indexName',
     facets,
@@ -71,11 +74,9 @@ function makeResults(
     page,
     index,
     queryID: 'queryID',
-    ...(enabled
-      ? { renderingContent: { widgets: { resultCard: { enabled: true } } } }
-      : {}),
-    // The search client's response type does not know `resultCard` yet.
-  } as Parameters<typeof createSingleSearchResponse>[0]);
+    // The search client types `userData` as an object; the engine returns an array.
+    userData: userData as unknown as Record<string, unknown>,
+  });
   return new algoliasearchHelper.SearchResults(helper.state, [response]);
 }
 
@@ -293,12 +294,96 @@ describe('connectResultCard', () => {
       disposeWidget();
     });
 
-    it('stays hidden when the Rule did not enable the card', async () => {
-      const { renderFn, renderAndWait } = setup();
-      await renderAndWait(makeResults({ enabled: false }));
+    describe('Rule payloads in userData', () => {
+      it('activates when a payload has `resultCard.enabled: true`', async () => {
+        const { renderFn, renderAndWait } = setup();
+        await renderAndWait(
+          makeResults({ userData: [{ resultCard: { enabled: true } }] })
+        );
 
-      expect(lastRender(renderFn).status).toBe('hidden');
-      expect(fetchMock).not.toHaveBeenCalled();
+        expect(lastRender(renderFn).status).toBe('complete');
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('stays hidden when the payload disables the card', async () => {
+        const { renderFn, renderAndWait } = setup();
+        await renderAndWait(
+          makeResults({ userData: [{ resultCard: { enabled: false } }] })
+        );
+
+        expect(lastRender(renderFn).status).toBe('hidden');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('stays hidden without userData', async () => {
+        const { renderFn, renderAndWait } = setup();
+        const results = makeResults();
+        results.userData = undefined as unknown as SearchResults['userData'];
+        await renderAndWait(results);
+
+        expect(lastRender(renderFn).status).toBe('hidden');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('stays hidden with an empty userData', async () => {
+        const { renderFn, renderAndWait } = setup();
+        await renderAndWait(makeResults({ userData: [] }));
+
+        expect(lastRender(renderFn).status).toBe('hidden');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('ignores payloads from other Rules and malformed ones', async () => {
+        const { renderFn, renderAndWait } = setup();
+        await renderAndWait(
+          makeResults({
+            userData: [
+              { banner: 'https://banner.jpg' },
+              null,
+              'resultCard',
+              42,
+              { resultCard: null },
+              { resultCard: true },
+              { resultCard: 'enabled' },
+              { resultCard: { enabled: 'true' } },
+              { resultCard: { enabled: 1 } },
+              { resultCard: {} },
+            ],
+          })
+        );
+
+        expect(lastRender(renderFn).status).toBe('hidden');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('activates when any of several payloads enables the card', async () => {
+        const { renderFn, renderAndWait } = setup();
+        await renderAndWait(
+          makeResults({
+            userData: [
+              { banner: 'https://banner.jpg' },
+              { resultCard: { enabled: false } },
+              null,
+              { resultCard: { enabled: true } },
+            ],
+          })
+        );
+
+        expect(lastRender(renderFn).status).toBe('complete');
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('does not activate from renderingContent', async () => {
+        const { renderFn, renderAndWait } = setup();
+        const results = makeResults({ userData: [] });
+        (results as unknown as Record<string, unknown>).renderingContent = {
+          widgets: { resultCard: { enabled: true } },
+        };
+        await renderAndWait(results);
+
+        expect(lastRender(renderFn).status).toBe('hidden');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
     });
 
     it('stays hidden when the query has fewer than two words', async () => {
@@ -597,7 +682,7 @@ describe('connectResultCard', () => {
     it('hides again when the Rule stops matching', async () => {
       const { renderFn, renderAndWait } = setup();
       await renderAndWait(makeResults());
-      await renderAndWait(makeResults({ enabled: false }));
+      await renderAndWait(makeResults({ userData: [] }));
 
       expect(lastRender(renderFn).status).toBe('hidden');
     });

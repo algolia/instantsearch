@@ -181,9 +181,32 @@ function countWords(query: string): number {
   return query.trim().split(/\s+/).filter(Boolean).length;
 }
 
+/**
+ * Whether a Rule enabled the card. The Dashboard creates Rules with the
+ * consequence `{ "userData": { "resultCard": { "enabled": true } } }`; the
+ * engine collects matching payloads in `results.userData`. Any payload with
+ * `resultCard.enabled === true` activates; malformed ones and `enabled: false`
+ * are ignored (no suppression). Stopgap until the engine returns
+ * `renderingContent.widgets.resultCard`: only this function changes then.
+ */
+function isEnabledByRule(results: SearchResults): boolean {
+  const payloads: unknown[] = Array.isArray(results.userData)
+    ? results.userData
+    : [];
+  return payloads.some((payload) => {
+    if (typeof payload !== 'object' || payload === null) return false;
+    const { resultCard } = payload as { resultCard?: unknown };
+    return (
+      typeof resultCard === 'object' &&
+      resultCard !== null &&
+      (resultCard as { enabled?: unknown }).enabled === true
+    );
+  });
+}
+
 function isActivated(results: SearchResults): boolean {
   return (
-    results.renderingContent?.widgets?.resultCard?.enabled === true &&
+    isEnabledByRule(results) &&
     countWords(results.query || '') >= MIN_QUERY_WORDS
   );
 }

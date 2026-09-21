@@ -21,8 +21,12 @@ function makeResults(query = 'running shoes'): SearchResults {
     createSingleSearchResponse({
       hits: [{ objectID: '1' }] as unknown as SearchResults['hits'],
       query,
-      renderingContent: { widgets: { resultCard: { enabled: true } } },
-    } as Parameters<typeof createSingleSearchResponse>[0]),
+      // The Rule payload enabling the card; the client types `userData` as an object.
+      userData: [{ resultCard: { enabled: true } }] as unknown as Record<
+        string,
+        unknown
+      >,
+    }),
   ]);
 }
 
