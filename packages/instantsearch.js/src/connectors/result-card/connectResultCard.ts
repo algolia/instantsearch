@@ -350,7 +350,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       if (disposed || !chatState || !activation) return;
 
       const { context } = activation;
-      // A fresh conversation per question: new id, no previous turns, no error.
       chatState.clearMessages();
       chatState.sendMessage(
         {
@@ -396,7 +395,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         return;
       }
 
-      // A new question: the previous answer, error, and dismissal go with it.
       activation = next;
       dismissed = false;
       expanded = false;
@@ -512,10 +510,9 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       return {
         status,
         query: currentActivation?.context.query ?? '',
-        // Same as the status: the inner chat holds the previous answer until
-        // the debounced request clears it, and the card is already about a
-        // new question.
-        messages: requestPending ? [] : chatState?.messages ?? [],
+        // Until the debounced request runs, the inner chat still holds the
+        // previous question's answer.
+        messages: requestPending ? [] : (chatState?.messages ?? []),
         // The inner chat keeps the last error around after recovering.
         error: status === 'failed' ? chatState?.error : undefined,
         suggestions: requestPending ? undefined : chatState?.suggestions,
@@ -570,7 +567,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         chatWidget.dispose();
         unmountFn();
 
-        // Only this widget's context leaves with it.
         const remaining = (disposeOptions.state.ruleContexts || []).filter(
           (context) => context !== ruleContext
         );

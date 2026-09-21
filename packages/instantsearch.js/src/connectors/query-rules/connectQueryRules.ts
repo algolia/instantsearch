@@ -276,7 +276,6 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
         if (hasTrackedFilters) {
           helper.removeListener('change', onHelperChange);
 
-          // Only this widget's contexts leave with it.
           return state.setQueryParameter(
             'ruleContexts',
             (state.ruleContexts || []).filter(

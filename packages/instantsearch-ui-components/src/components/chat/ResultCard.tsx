@@ -213,7 +213,6 @@ export function createResultCardComponent({
       latest.onDismiss();
       setDismissing(false);
     };
-    // The fade is the theme's: without it there is no `transitionend` either.
     useEffect(() => {
       if (!dismissing) return undefined;
       const timer = setTimeout(() => {

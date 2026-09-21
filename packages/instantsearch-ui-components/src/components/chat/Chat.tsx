@@ -173,7 +173,6 @@ export function createChatComponent({
       commitClear?.();
       setIsClearing(false);
     };
-    // The fade is the theme's: without it there is no `transitionend` either.
     const latest = useState({ finishClear })[0];
     latest.finishClear = finishClear;
     useEffect(() => {

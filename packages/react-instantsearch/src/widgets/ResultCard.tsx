@@ -45,7 +45,6 @@ export type ResultCardProps = Omit<ResultCardOwnProps, OwnedUiProps> &
 export function ResultCard({
   classNames = {},
   layoutComponent: LayoutComponent,
-  // Connector params — forwarded to the hook, not the UI root.
   agentId,
   transport,
   requestOptions,
