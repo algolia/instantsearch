@@ -191,8 +191,13 @@ jobs:
 
       - name: Commit the sweep to the staging branch
         id: commit
+        # Deliberately not gated on `steps.agent.outputs.changed`: if the sweep
+        # step dies before it writes its outputs, that expression is empty and
+        # the work already on disk gets thrown away with the runner.
+        # docs-staging-commit.sh reads the working tree itself, no-ops when it
+        # is clean, and refuses paths outside the docs content directories.
         if: >-
-          always() && steps.agent.outputs.changed == 'true' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+          always() && steps.agent.conclusion != 'skipped' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
 
 
         env:
@@ -374,5 +379,8 @@ jobs:
             if [[ "${{ steps.agent.outputs.status }}" == "incomplete" ]]; then
               echo
               echo ":warning: The sweep was cut short. The pull request is marked accordingly."
+            elif [[ "${{ steps.agent.conclusion }}" != "skipped" && "${{ steps.agent.outputs.status }}" == "" ]]; then
+              echo
+              echo ":x: The sweep crashed before reporting a status, so it did not finish checking this release for undocumented changes. Anything it had already written was committed above. Re-run the workflow to sweep the rest."
             fi
           } >> "$GITHUB_STEP_SUMMARY"

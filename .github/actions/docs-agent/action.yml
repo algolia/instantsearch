@@ -60,6 +60,15 @@ runs:
         DEADLINE_MINUTES: ${{ inputs.deadline-minutes }}
         ACTION_PATH: ${{ github.action_path }}
       run: |
+        # `shell: bash` runs this as `bash -e -o pipefail`, and `set -uo
+        # pipefail` below does not clear that inherited `-e`. Every non-zero
+        # return in this script is handled deliberately - a `max_turns` exit is
+        # the ordinary way a large change ends a pass, and the loop resumes from
+        # the checkpoint - so `-e` has to go. With it left on, the step dies
+        # inside `run_claude` before `RC=$?`, which skips the resume pass, the
+        # verification, and the `changed` output the caller needs to ship the
+        # work the agent already wrote to disk.
+        set +e
         set -uo pipefail
 
         WS="${GITHUB_WORKSPACE}"

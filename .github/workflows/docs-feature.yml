@@ -178,7 +178,12 @@ jobs:
 
       - name: Commit to the staging branch
         id: commit
-        if: always() && steps.agent.conclusion != 'skipped' && steps.agent.outputs.changed == 'true'
+        # Deliberately not gated on `steps.agent.outputs.changed`: if the agent
+        # step dies before it writes its outputs, that expression is empty and
+        # the work already on disk gets thrown away with the runner.
+        # docs-staging-commit.sh reads the working tree itself, no-ops when it
+        # is clean, and refuses paths outside the docs content directories.
+        if: always() && steps.agent.conclusion != 'skipped'
         env:
           DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
           DOCS_FALLBACK_TITLE: 'fix(ui-libraries): update the InstantSearch documentation'
@@ -202,6 +207,10 @@ jobs:
               echo "It ships in the next release pull request."
             elif [[ "${{ steps.agent.conclusion }}" == "skipped" ]]; then
               echo "The agent did not run."
+            elif [[ "${{ steps.agent.outputs.status }}" == "" ]]; then
+              echo ":x: The agent crashed before reporting a status, and left nothing on disk to commit."
+              echo
+              echo "This change is undocumented. Re-run this workflow, or leave it for the release sweep."
             else
               echo "The agent found nothing to document."
             fi
