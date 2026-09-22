@@ -40230,7 +40230,6 @@ __metadata:
     vue: "npm:2.7.14"
     vue-i18n: "npm:8.24.4"
     vue-i18n-vue3: "npm:vue-i18n@^9.2.2"
-    vue-loader: "npm:15.11.1"
     vue-router: "npm:3.4.3"
     vue-router4: "npm:vue-router@4.0.0"
     vue-server-renderer: "npm:2.7.14"
@@ -40250,7 +40249,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"vue-loader@npm:15.11.1, vue-loader@npm:^15.11.1, vue-loader@npm:^15.7.0":
+"vue-loader@npm:^15.11.1, vue-loader@npm:^15.7.0":
   version: 15.11.1
   resolution: "vue-loader@npm:15.11.1"
   dependencies:
