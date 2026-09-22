@@ -196,8 +196,12 @@ jobs:
         # the work already on disk gets thrown away with the runner.
         # docs-staging-commit.sh reads the working tree itself, no-ops when it
         # is clean, and refuses paths outside the docs content directories.
+        # `!cancelled()` rather than `always()`: recover from a crashed sweep,
+        # but never push after someone stopped the run or the job timed out. A
+        # cancel can land mid-Edit, so the tree may hold a page without the
+        # navigation entry that goes with it - losing that beats publishing it.
         if: >-
-          always() && steps.agent.conclusion != 'skipped' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+          !cancelled() && steps.agent.conclusion != 'skipped' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
 
 
         env:
@@ -226,8 +230,10 @@ jobs:
 
       - name: Open or update the release pull request
         id: pr
+        # Same reasoning as the commit step: opening or updating a pull request
+        # is outward-facing, so it must not happen after someone stopped the run.
         if: >-
-          always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+          !cancelled() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
 
 
         env:
@@ -347,7 +353,7 @@ jobs:
       # published yet. Say so on the pull request instead of leaving reviewers to
       # work it out.
       - name: Report release status on the docs pull request
-        if: always() && steps.pr.outputs.number != ''
+        if: ${{ !cancelled() && steps.pr.outputs.number != '' }}
         continue-on-error: true
         env:
           DOCS_TOKEN: ${{ steps.app-token.outputs.token }}

@@ -183,7 +183,11 @@ jobs:
         # the work already on disk gets thrown away with the runner.
         # docs-staging-commit.sh reads the working tree itself, no-ops when it
         # is clean, and refuses paths outside the docs content directories.
-        if: always() && steps.agent.conclusion != 'skipped'
+        # `!cancelled()` rather than `always()`: recover from a crashed agent,
+        # but never push after someone stopped the run or the job timed out. A
+        # cancel can land mid-Edit, so the tree may hold a page without the
+        # navigation entry that goes with it - losing that beats publishing it.
+        if: ${{ !cancelled() && steps.agent.conclusion != 'skipped' }}
         env:
           DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
           DOCS_FALLBACK_TITLE: 'fix(ui-libraries): update the InstantSearch documentation'
