@@ -363,6 +363,13 @@ jobs:
           bash instantsearch/.github/scripts/docs-release-status.sh \
             "${{ steps.pr.outputs.number }}" /tmp/released-prs.txt
 
+      # `cancelled()` is only valid in an `if`, not in `env`, so record it
+      # where it is legal and let the summary below read the result.
+      - name: Note a cancellation
+        id: cancel
+        if: cancelled()
+        run: echo "cancelled=true" >> "$GITHUB_OUTPUT"
+
       - name: Summary
         if: always()
         # Two independent facts, reported separately: what happened to the pull
@@ -370,12 +377,13 @@ jobs:
         # its work has to report both, and neither claim may be made when the
         # commit step was skipped on purpose - preview mode or a cancel.
         env:
-          CANCELLED: ${{ cancelled() }}
+          CANCELLED: ${{ steps.cancel.outputs.cancelled }}
           PREVIEW: ${{ github.event_name == 'workflow_dispatch' && inputs.create_pr == false }}
           SWEEP_CONCLUSION: ${{ steps.agent.conclusion }}
           SWEEP_STATUS: ${{ steps.agent.outputs.status }}
           SWEEP_VERIFY: ${{ steps.agent.outputs.verify }}
           COMMITTED: ${{ steps.commit.outputs.committed }}
+          COMMIT_CONCLUSION: ${{ steps.commit.conclusion }}
           PR_OPENED: ${{ steps.pr.outputs.opened }}
           PR_NUMBER: ${{ steps.pr.outputs.number }}
           PR_URL: ${{ steps.pr.outputs.url }}
@@ -397,7 +405,9 @@ jobs:
             elif [[ "$PREVIEW" == "true" ]]; then
               echo "Preview run: nothing was committed and no pull request was touched. See \"Show changes (no PR)\" above for what the sweep would have written."
             elif [[ "$CANCELLED" == "true" ]]; then
-              echo "No pull request: the run was cancelled."
+              echo "No pull request: the run was cancelled. Whatever the sweep had written was left where it was, uninspected."
+            elif [[ "$COMMIT_CONCLUSION" == "failure" ]]; then
+              echo ":x: No pull request: the commit step failed, so nothing reached the branch. Check that step's log - it refuses paths outside the docs content directories, and it fails rather than pushing them."
             else
               echo "No pull request: nothing was documented this cycle."
             fi
@@ -415,8 +425,10 @@ jobs:
                 echo ":x: The sweep crashed before reporting a status, so it did not finish checking this release for undocumented changes."
                 if [[ "$COMMITTED" == "true" ]]; then
                   echo "What it had written before the crash was committed. Re-run the workflow to sweep the rest."
+                elif [[ "$COMMIT_CONCLUSION" == "success" ]]; then
+                  echo "It left nothing on disk to commit. Re-run the workflow."
                 else
-                  echo "Nothing was committed. Re-run the workflow."
+                  echo "Nothing reached the branch. Re-run the workflow."
                 fi
               fi
             fi

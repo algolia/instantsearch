@@ -197,6 +197,13 @@ jobs:
           SOURCE_COMMIT: ${{ steps.context.outputs.sha }}
         run: bash instantsearch/.github/scripts/docs-staging-commit.sh
 
+      # `cancelled()` is only valid in an `if`, not in `env`, so record it
+      # where it is legal and let the summary below read the result.
+      - name: Note a cancellation
+        id: cancel
+        if: cancelled()
+        run: echo "cancelled=true" >> "$GITHUB_OUTPUT"
+
       - name: Summary
         if: always()
         # Two independent facts, reported separately: where the documentation
@@ -205,11 +212,12 @@ jobs:
         # crash that still committed its work needs to report both.
         env:
           SKIPPED: ${{ steps.context.outputs.skip }}
-          CANCELLED: ${{ cancelled() }}
+          CANCELLED: ${{ steps.cancel.outputs.cancelled }}
           AGENT_CONCLUSION: ${{ steps.agent.conclusion }}
           AGENT_STATUS: ${{ steps.agent.outputs.status }}
           COMMITTED: ${{ steps.commit.outputs.committed }}
           COMMIT_TITLE: ${{ steps.commit.outputs.title }}
+          COMMIT_CONCLUSION: ${{ steps.commit.conclusion }}
         run: |
           {
             echo "## Documentation (per change)"
@@ -224,9 +232,13 @@ jobs:
             elif [[ "$AGENT_CONCLUSION" == "skipped" ]]; then
               echo "The agent did not run."
             elif [[ "$CANCELLED" == "true" ]]; then
-              echo "Nothing was committed: the run was cancelled."
+              echo "Nothing was committed: the run was cancelled. Whatever the agent had written was left where it was, uninspected."
+            elif [[ "$COMMIT_CONCLUSION" == "failure" ]]; then
+              echo ":x: The commit step failed, so anything the agent wrote is still uncommitted. Check that step's log - it refuses paths outside the docs content directories, and it fails rather than pushing them."
+            elif [[ "$COMMIT_CONCLUSION" == "success" ]]; then
+              echo "Nothing to commit: the agent left no changes on disk."
             else
-              echo "Nothing was committed: the agent left no changes on disk."
+              echo "Nothing was committed, and the commit step did not report why."
             fi
 
             # How the agent ended, whatever happened to the commit above.
@@ -240,7 +252,7 @@ jobs:
                 if [[ "$COMMITTED" == "true" ]]; then
                   echo "What it had written was committed anyway, but treat it as unfinished and check it over."
                 else
-                  echo "This change is undocumented. Re-run this workflow, or leave it for the release sweep."
+                  echo "Nothing reached the branch, so this change is undocumented. Re-run this workflow, or leave it for the release sweep."
                 fi
               elif [[ "$AGENT_STATUS" == "incomplete" ]]; then
                 echo
