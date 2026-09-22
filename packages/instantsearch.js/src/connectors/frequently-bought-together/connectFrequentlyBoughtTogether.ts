@@ -197,7 +197,7 @@ export default (function connectFrequentlyBoughtTogether<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID,
+          itemsWithAbsolutePositionAndQueryID as unknown as Hit<THit>[],
           {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
           }
@@ -222,7 +222,7 @@ export default (function connectFrequentlyBoughtTogether<
               objectID,
               maxRecommendations: limit,
               threshold,
-              // @ts-expect-error until @algolia/recommend types are updated
+              // @ts-ignore until @algolia/recommend types are updated
               fallbackParameters: fallbackParameters
                 ? {
                     ...fallbackParameters,
