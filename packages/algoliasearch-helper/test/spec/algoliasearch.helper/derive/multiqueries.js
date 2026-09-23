@@ -37,13 +37,15 @@ describe('search', function () {
     var helper = algoliasearchHelper(client, 'indexName');
 
     helper.derive(function (state) {
-      return state;
+      return state.setIndex('anotherIndex');
     });
 
     helper.search();
 
     function searchAssertions(requests) {
-      expect(requests.length).toBe(1);
+      expect(requests.length).toBe(2);
+      expect(requests[0].indexName).toBe('indexName');
+      expect(requests[1].indexName).toBe('anotherIndex');
     }
   });
 
