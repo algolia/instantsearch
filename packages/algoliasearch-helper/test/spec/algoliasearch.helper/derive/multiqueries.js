@@ -43,8 +43,7 @@ describe('search', function () {
     helper.search();
 
     function searchAssertions(requests) {
-      expect(requests.length).toBe(2);
-      expect(requests[0]).toEqual(requests[1]);
+      expect(requests.length).toBe(1);
     }
   });
 
@@ -83,6 +82,97 @@ describe('search', function () {
     function searchAssertions(requests) {
       expect(requests.length).toBe(1);
     }
+  });
+
+  test('trigger a search with derivation that deduplicates queries and fans out results', function (done) {
+    var client = {
+      search: function () {
+        return Promise.resolve({
+          results: [{ hits: [{ objectID: '1' }] }],
+        });
+      },
+    };
+    var helper = algoliasearchHelper(client, 'indexName');
+
+    var derivedHelper = helper.derive(function (state) {
+      return state;
+    });
+
+    var mainHelperCalled = false;
+    var derivedHelperCalled = false;
+
+    helper.on('result', function (results) {
+      expect(results.results.hits).toEqual([{ objectID: '1' }]);
+      mainHelperCalled = true;
+      if (derivedHelperCalled) {
+        done();
+      }
+    });
+
+    derivedHelper.on('result', function (results) {
+      expect(results.results.hits).toEqual([{ objectID: '1' }]);
+      derivedHelperCalled = true;
+      if (mainHelperCalled) {
+        done();
+      }
+    });
+
+    helper.search();
+  });
+
+  test('trigger a search with derivations that partially deduplicate and fan out correctly', function (done) {
+    var client = {
+      search: function (queries) {
+        expect(queries).toHaveLength(2);
+        return Promise.resolve({
+          results: [
+            { hits: [{ objectID: 'main' }] },
+            { hits: [{ objectID: 'unique' }] },
+          ],
+        });
+      },
+    };
+    var helper = algoliasearchHelper(client, 'indexName');
+
+    // derived1 changes state (unique query)
+    var derived1 = helper.derive(function (state) {
+      return state.setQuery('unique query');
+    });
+
+    // derived2 does not change state (duplicate of main)
+    var derived2 = helper.derive(function (state) {
+      return state;
+    });
+
+    var mainCalled = false;
+    var derived1Called = false;
+    var derived2Called = false;
+
+    function checkDone() {
+      if (mainCalled && derived1Called && derived2Called) {
+        done();
+      }
+    }
+
+    helper.on('result', function (results) {
+      expect(results.results.hits).toEqual([{ objectID: 'main' }]);
+      mainCalled = true;
+      checkDone();
+    });
+
+    derived1.on('result', function (results) {
+      expect(results.results.hits).toEqual([{ objectID: 'unique' }]);
+      derived1Called = true;
+      checkDone();
+    });
+
+    derived2.on('result', function (results) {
+      expect(results.results.hits).toEqual([{ objectID: 'main' }]);
+      derived2Called = true;
+      checkDone();
+    });
+
+    helper.search();
   });
 });
 
