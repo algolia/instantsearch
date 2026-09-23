@@ -178,7 +178,16 @@ jobs:
 
       - name: Commit to the staging branch
         id: commit
-        if: always() && steps.agent.conclusion != 'skipped' && steps.agent.outputs.changed == 'true'
+        # Deliberately not gated on `steps.agent.outputs.changed`: if the agent
+        # step dies before it writes its outputs, that expression is empty and
+        # the work already on disk gets thrown away with the runner.
+        # docs-staging-commit.sh reads the working tree itself, no-ops when it
+        # is clean, and refuses paths outside the docs content directories.
+        # `!cancelled()` rather than `always()`: recover from a crashed agent,
+        # but never push after someone stopped the run or the job timed out. A
+        # cancel can land mid-Edit, so the tree may hold a page without the
+        # navigation entry that goes with it - losing that beats publishing it.
+        if: ${{ !cancelled() && steps.agent.conclusion != 'skipped' }}
         env:
           DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
           DOCS_FALLBACK_TITLE: 'fix(ui-libraries): update the InstantSearch documentation'
@@ -188,25 +197,66 @@ jobs:
           SOURCE_COMMIT: ${{ steps.context.outputs.sha }}
         run: bash instantsearch/.github/scripts/docs-staging-commit.sh
 
+      # `cancelled()` is only valid in an `if`, not in `env`, so record it
+      # where it is legal and let the summary below read the result.
+      - name: Note a cancellation
+        id: cancel
+        if: cancelled()
+        run: echo "cancelled=true" >> "$GITHUB_OUTPUT"
+
       - name: Summary
         if: always()
+        # Two independent facts, reported separately: where the documentation
+        # ended up, and how the agent itself ended. Folding them into one chain
+        # is what let a crash hide behind "found nothing to document" - and a
+        # crash that still committed its work needs to report both.
+        env:
+          SKIPPED: ${{ steps.context.outputs.skip }}
+          CANCELLED: ${{ steps.cancel.outputs.cancelled }}
+          AGENT_CONCLUSION: ${{ steps.agent.conclusion }}
+          AGENT_STATUS: ${{ steps.agent.outputs.status }}
+          COMMITTED: ${{ steps.commit.outputs.committed }}
+          COMMIT_TITLE: ${{ steps.commit.outputs.title }}
+          COMMIT_CONCLUSION: ${{ steps.commit.conclusion }}
         run: |
           {
             echo "## Documentation (per change)"
             echo
-            if [[ "${{ steps.context.outputs.skip }}" == "true" ]]; then
+
+            if [[ "$SKIPPED" == "true" ]]; then
               echo "Skipped: this commit cannot affect the documentation."
-            elif [[ "${{ steps.commit.outputs.committed }}" == "true" ]]; then
-              echo "Committed to \`${DOCS_BRANCH_NAME}\`: \`${{ steps.commit.outputs.title }}\`"
+            elif [[ "$COMMITTED" == "true" ]]; then
+              echo "Committed to \`${DOCS_BRANCH_NAME}\`: \`${COMMIT_TITLE}\`"
               echo
               echo "It ships in the next release pull request."
-            elif [[ "${{ steps.agent.conclusion }}" == "skipped" ]]; then
+            elif [[ "$AGENT_CONCLUSION" == "skipped" ]]; then
               echo "The agent did not run."
+            elif [[ "$CANCELLED" == "true" ]]; then
+              echo "Nothing was committed: the run was cancelled. Whatever the agent had written was left where it was, uninspected."
+            elif [[ "$COMMIT_CONCLUSION" == "failure" ]]; then
+              echo ":x: The commit step failed, so anything the agent wrote is still uncommitted. Check that step's log - it refuses paths outside the docs content directories, and it fails rather than pushing them."
+            elif [[ "$COMMIT_CONCLUSION" == "success" ]]; then
+              echo "Nothing to commit: the agent left no changes on disk."
             else
-              echo "The agent found nothing to document."
+              echo "Nothing was committed, and the commit step did not report why."
             fi
-            if [[ "${{ steps.agent.outputs.status }}" == "incomplete" ]]; then
-              echo
-              echo ":warning: The agent ran out of budget. Whatever it finished is on \`${DOCS_BRANCH_NAME}\`; the release sweep will look for the rest."
+
+            # How the agent ended, whatever happened to the commit above.
+            if [[ "$SKIPPED" != "true" && "$AGENT_CONCLUSION" != "skipped" ]]; then
+              if [[ "$CANCELLED" == "true" ]]; then
+                echo
+                echo ":warning: Cancelled mid-run. Anything the agent had written was deliberately left uncommitted, because a cancel can land mid-edit. Re-run this workflow to document the change."
+              elif [[ "$AGENT_STATUS" == "" ]]; then
+                echo
+                echo ":x: The agent crashed before reporting a status."
+                if [[ "$COMMITTED" == "true" ]]; then
+                  echo "What it had written was committed anyway, but treat it as unfinished and check it over."
+                else
+                  echo "Nothing reached the branch, so this change is undocumented. Re-run this workflow, or leave it for the release sweep."
+                fi
+              elif [[ "$AGENT_STATUS" == "incomplete" ]]; then
+                echo
+                echo ":warning: The agent ran out of budget. Whatever it finished is on \`${DOCS_BRANCH_NAME}\`; the release sweep will look for the rest."
+              fi
             fi
           } >> "$GITHUB_STEP_SUMMARY"

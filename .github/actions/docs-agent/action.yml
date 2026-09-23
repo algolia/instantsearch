@@ -60,6 +60,12 @@ runs:
         DEADLINE_MINUTES: ${{ inputs.deadline-minutes }}
         ACTION_PATH: ${{ github.action_path }}
       run: |
+        # `shell: bash` runs this as `bash -e -o pipefail`, and the `set -uo
+        # pipefail` below does not clear that inherited `-e`. Keep it: an
+        # unexpected failure should still stop the step. The two places where a
+        # non-zero status is expected rather than exceptional - the Claude CLI,
+        # which exits non-zero on `max_turns`, and a `grep` that legitimately
+        # matches nothing - handle it explicitly at the call site instead.
         set -uo pipefail
 
         WS="${GITHUB_WORKSPACE}"
@@ -113,7 +119,10 @@ runs:
 
         record_pass() {
           local log="$1" label="$2" rc="$3" result
-          result=$(grep '"type":"result"' "$log" | tail -1)
+          # No result line is expected for a pass that died early - that is
+          # what the `-z` check below is for. Without `|| true`, `-e` turns a
+          # missing line into a dead step and the run loses its work.
+          result=$(grep '"type":"result"' "$log" | tail -1) || true
           if [ -z "$result" ]; then
             printf '%s\t?\t?\t?\texit %s\t?\n' "$label" "$rc" >> "$STATE/telemetry.tsv"
             return
@@ -128,7 +137,7 @@ runs:
             >> "$STATE/telemetry.tsv"
           printf '%s' "$result" \
             | jq -r '(.permission_denials // [])[] | (.tool_input.command // .tool_name)' \
-            >> "$STATE/denials.txt" 2>/dev/null
+            >> "$STATE/denials.txt" 2>/dev/null || true
         }
 
         # --- verification ------------------------------------------------
@@ -267,8 +276,12 @@ runs:
           fi
 
           echo "::group::Claude pass ${PASS}/${MAX_PASSES} (max ${MAX_TURNS} turns)"
-          run_claude "$STATE/pass-${PASS}.log"
-          RC=$?
+          # `|| RC=$?` rather than a bare call followed by `RC=$?`: the CLI
+          # exits non-zero on `max_turns`, and `-e` would kill the step before
+          # the assignment, skipping the resume pass, the verification and the
+          # outputs that ship whatever the agent already wrote to disk.
+          RC=0
+          run_claude "$STATE/pass-${PASS}.log" || RC=$?
           echo "::endgroup::"
           record_pass "$STATE/pass-${PASS}.log" "work ${PASS}" "$RC"
           echo "Pass ${PASS} exited with code ${RC}"
@@ -314,8 +327,8 @@ runs:
               echo
               cat "$STATE/verify-report.md"
             } >> "$STATE/prompt.md"
-            run_claude "$STATE/pass-fixup.log"
-            RC=$?
+            RC=0
+            run_claude "$STATE/pass-fixup.log" || RC=$?
             echo "::endgroup::"
             record_pass "$STATE/pass-fixup.log" "fixup" "$RC"
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.50.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.49.1...react-instantsearch-core@7.50.0) (2026-09-22)
+
+
+### Features
+
+* **compare:** funnel product selections into a grounded chat comparison ([#7207](https://github.com/algolia/instantsearch/issues/7207)) ([fe56799](https://github.com/algolia/instantsearch/commit/fe567997e5ffafaa00ad95c043e88545df6c40fa)), closes [algolia/conversational-ai#1662](https://github.com/algolia/conversational-ai/issues/1662)
+
+
+
+
+
 ## [7.49.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.49.0...react-instantsearch-core@7.49.1) (2026-09-15)
 
 **Note:** Version bump only for package react-instantsearch-core
