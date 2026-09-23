@@ -191,8 +191,17 @@ jobs:
 
       - name: Commit the sweep to the staging branch
         id: commit
+        # Deliberately not gated on `steps.agent.outputs.changed`: if the sweep
+        # step dies before it writes its outputs, that expression is empty and
+        # the work already on disk gets thrown away with the runner.
+        # docs-staging-commit.sh reads the working tree itself, no-ops when it
+        # is clean, and refuses paths outside the docs content directories.
+        # `!cancelled()` rather than `always()`: recover from a crashed sweep,
+        # but never push after someone stopped the run or the job timed out. A
+        # cancel can land mid-Edit, so the tree may hold a page without the
+        # navigation entry that goes with it - losing that beats publishing it.
         if: >-
-          always() && steps.agent.outputs.changed == 'true' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+          !cancelled() && steps.agent.conclusion != 'skipped' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
 
 
         env:
@@ -221,8 +230,10 @@ jobs:
 
       - name: Open or update the release pull request
         id: pr
+        # Same reasoning as the commit step: opening or updating a pull request
+        # is outward-facing, so it must not happen after someone stopped the run.
         if: >-
-          always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
+          !cancelled() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true))
 
 
         env:
@@ -342,7 +353,7 @@ jobs:
       # published yet. Say so on the pull request instead of leaving reviewers to
       # work it out.
       - name: Report release status on the docs pull request
-        if: always() && steps.pr.outputs.number != ''
+        if: ${{ !cancelled() && steps.pr.outputs.number != '' }}
         continue-on-error: true
         env:
           DOCS_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -352,27 +363,73 @@ jobs:
           bash instantsearch/.github/scripts/docs-release-status.sh \
             "${{ steps.pr.outputs.number }}" /tmp/released-prs.txt
 
+      # `cancelled()` is only valid in an `if`, not in `env`, so record it
+      # where it is legal and let the summary below read the result.
+      - name: Note a cancellation
+        id: cancel
+        if: cancelled()
+        run: echo "cancelled=true" >> "$GITHUB_OUTPUT"
+
       - name: Summary
         if: always()
+        # Two independent facts, reported separately: what happened to the pull
+        # request, and how the sweep itself ended. A crash that still committed
+        # its work has to report both, and neither claim may be made when the
+        # commit step was skipped on purpose - preview mode or a cancel.
+        env:
+          CANCELLED: ${{ steps.cancel.outputs.cancelled }}
+          PREVIEW: ${{ github.event_name == 'workflow_dispatch' && inputs.create_pr == false }}
+          SWEEP_CONCLUSION: ${{ steps.agent.conclusion }}
+          SWEEP_STATUS: ${{ steps.agent.outputs.status }}
+          SWEEP_VERIFY: ${{ steps.agent.outputs.verify }}
+          COMMITTED: ${{ steps.commit.outputs.committed }}
+          COMMIT_CONCLUSION: ${{ steps.commit.conclusion }}
+          PR_OPENED: ${{ steps.pr.outputs.opened }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_URL: ${{ steps.pr.outputs.url }}
         run: |
           {
             echo "## Release documentation"
             echo
             echo "- **Branch:** \`${DOCS_BRANCH:-${DOCS_BRANCH_NAME}}\`"
-            echo "- **Sweep status:** \`${{ steps.agent.outputs.status || 'not run' }}\`"
-            echo "- **Checks:** \`${{ steps.agent.outputs.verify || 'not run' }}\`"
+            echo "- **Sweep status:** \`${SWEEP_STATUS:-not run}\`"
+            echo "- **Checks:** \`${SWEEP_VERIFY:-not run}\`"
             echo
-            if [[ "${{ steps.pr.outputs.opened }}" == "true" ]]; then
-              if [[ -n "${{ steps.pr.outputs.number }}" ]]; then
+
+            if [[ "$PR_OPENED" == "true" ]]; then
+              if [[ -n "$PR_NUMBER" ]]; then
                 echo "Updated the existing draft pull request in algolia/docs-new."
               else
-                echo "Opened a draft pull request in algolia/docs-new: ${{ steps.pr.outputs.url }}"
+                echo "Opened a draft pull request in algolia/docs-new: ${PR_URL}"
               fi
+            elif [[ "$PREVIEW" == "true" ]]; then
+              echo "Preview run: nothing was committed and no pull request was touched. See \"Show changes (no PR)\" above for what the sweep would have written."
+            elif [[ "$CANCELLED" == "true" ]]; then
+              echo "No pull request: the run was cancelled. Whatever the sweep had written was left where it was, uninspected."
+            elif [[ "$COMMIT_CONCLUSION" == "failure" ]]; then
+              echo ":x: No pull request: the commit step failed, so nothing reached the branch. Check that step's log - it refuses paths outside the docs content directories, and it fails rather than pushing them."
             else
               echo "No pull request: nothing was documented this cycle."
             fi
-            if [[ "${{ steps.agent.outputs.status }}" == "incomplete" ]]; then
-              echo
-              echo ":warning: The sweep was cut short. The pull request is marked accordingly."
+
+            # How the sweep ended, whatever happened to the pull request above.
+            if [[ "$SWEEP_CONCLUSION" != "skipped" ]]; then
+              if [[ "$CANCELLED" == "true" ]]; then
+                echo
+                echo ":warning: Cancelled mid-run, so this release has not been swept. Anything the sweep had written was deliberately left uncommitted, because a cancel can land mid-edit. Re-run the workflow."
+              elif [[ "$SWEEP_STATUS" == "incomplete" ]]; then
+                echo
+                echo ":warning: The sweep was cut short. The pull request is marked accordingly."
+              elif [[ "$SWEEP_STATUS" == "" ]]; then
+                echo
+                echo ":x: The sweep crashed before reporting a status, so it did not finish checking this release for undocumented changes."
+                if [[ "$COMMITTED" == "true" ]]; then
+                  echo "What it had written before the crash was committed. Re-run the workflow to sweep the rest."
+                elif [[ "$COMMIT_CONCLUSION" == "success" ]]; then
+                  echo "It left nothing on disk to commit. Re-run the workflow."
+                else
+                  echo "Nothing reached the branch. Re-run the workflow."
+                fi
+              fi
             fi
           } >> "$GITHUB_STEP_SUMMARY"
