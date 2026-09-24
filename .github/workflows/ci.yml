@@ -77,7 +77,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Test package versions
-        run: yarn run test:versions
+        run: node ./tests/versions/index.js
 
   lint:
     name: lint

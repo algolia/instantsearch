@@ -4,6 +4,10 @@ plans/
 # Dependencies
 node_modules/
 
+# Yarn — commit the release binary, ignore the rest
+.yarn/*
+!.yarn/releases
+
 # Build output
 /packages/instantsearch.js/dist
 /packages/instantsearch.js/cjs
