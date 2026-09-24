@@ -24,6 +24,8 @@
     "build": "BABEL_ENV=rollup rollup -c rollup.config.mjs"
   },
   "dependencies": {
+    "@babel/core": "7.29.7",
+    "@babel/preset-env": "7.15.6",
     "@codeshift/utils": "^0.2.5",
     "jscodeshift": "^0.13.1"
   },

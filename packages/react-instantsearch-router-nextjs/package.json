@@ -51,7 +51,7 @@
     "react-instantsearch-core": "7.50.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.49.1"
+    "@playwright/test": "1.51.1"
   },
   "peerDependencies": {
     "next": ">= 9 < 17"

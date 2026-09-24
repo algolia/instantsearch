@@ -4441,7 +4441,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@instantsearch/e2e-tests@workspace:tests/e2e"
   dependencies:
-    "@playwright/test": "npm:1.49.1"
+    "@playwright/test": "npm:1.51.1"
     "@types/jasmine": "npm:3.3.16"
     "@wdio/cli": "npm:5.16.9"
     "@wdio/jasmine-framework": "npm:5.16.5"
@@ -4454,6 +4454,7 @@ __metadata:
     dotenv: "npm:8.2.0"
     serve: "npm:14.2.4"
     ts-node: "npm:8.4.1"
+    typescript: "npm:5.5.2"
     webdriverio: "npm:5.16.9"
   languageName: unknown
   linkType: soft
@@ -6881,14 +6882,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.49.1":
-  version: 1.49.1
-  resolution: "@playwright/test@npm:1.49.1"
+"@playwright/test@npm:1.51.1":
+  version: 1.51.1
+  resolution: "@playwright/test@npm:1.51.1"
   dependencies:
-    playwright: "npm:1.49.1"
+    playwright: "npm:1.51.1"
   bin:
     playwright: cli.js
-  checksum: 10c0/2fca0bb7b334f7a23c7c5dfa5dbe37b47794c56f39b747c8d74a2f95c339e7902a296f2f1dd32c47bdd723cfa92cee05219f1a5876725dc89a1871b9137a286d
+  checksum: 10c0/bdb98f3df58f60b5c62e6d5c79c30910404d1855afea0803af0efd6dc63f90c473dbf92ff7dc212f1459f1d32c85dc44a60f70c2e0ea604f975b953d59523234
   languageName: node
   linkType: hard
 
@@ -8130,7 +8131,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.18.1, @testing-library/dom@npm:^8.11.1":
+"@testing-library/dom@npm:10.4.1":
+  version: 10.4.1
+  resolution: "@testing-library/dom@npm:10.4.1"
+  dependencies:
+    "@babel/code-frame": "npm:^7.10.4"
+    "@babel/runtime": "npm:^7.12.5"
+    "@types/aria-query": "npm:^5.0.1"
+    aria-query: "npm:5.3.0"
+    dom-accessibility-api: "npm:^0.5.9"
+    lz-string: "npm:^1.5.0"
+    picocolors: "npm:1.1.1"
+    pretty-format: "npm:^27.0.2"
+  checksum: 10c0/19ce048012d395ad0468b0dbcc4d0911f6f9e39464d7a8464a587b29707eed5482000dad728f5acc4ed314d2f4d54f34982999a114d2404f36d048278db815b1
+  languageName: node
+  linkType: hard
+
+"@testing-library/dom@npm:^8.11.1":
   version: 8.18.1
   resolution: "@testing-library/dom@npm:8.18.1"
   dependencies:
@@ -8322,6 +8339,13 @@ __metadata:
   version: 4.2.1
   resolution: "@types/aria-query@npm:4.2.1"
   checksum: 10c0/9e82ba2f071da46a76fa432f40db39dcef7df40e4802124e5084bfe47a23cc1e715dd28a5fd251be22389098c938a03fccabd899ecd98a5aae2e88d61d09e04b
+  languageName: node
+  linkType: hard
+
+"@types/aria-query@npm:^5.0.1":
+  version: 5.0.4
+  resolution: "@types/aria-query@npm:5.0.4"
+  checksum: 10c0/dc667bc6a3acc7bba2bccf8c23d56cb1f2f4defaa704cfef595437107efaa972d3b3db9ec1d66bc2711bfc35086821edd32c302bffab36f2e79b97f312069f08
   languageName: node
   linkType: hard
 
@@ -10965,6 +10989,15 @@ __metadata:
   dependencies:
     sprintf-js: "npm:~1.0.2"
   checksum: 10c0/b2972c5c23c63df66bca144dbc65d180efa74f25f8fd9b7d9a0a6c88ae839db32df3d54770dcb6460cf840d232b60695d1a6b1053f599d84e73f7437087712de
+  languageName: node
+  linkType: hard
+
+"aria-query@npm:5.3.0":
+  version: 5.3.0
+  resolution: "aria-query@npm:5.3.0"
+  dependencies:
+    dequal: "npm:^2.0.3"
+  checksum: 10c0/2bff0d4eba5852a9dd578ecf47eaef0e82cc52569b48469b0aac2db5145db0b17b7a58d9e01237706d1e14b7a1b0ac9b78e9c97027ad97679dd8f91b85da1469
   languageName: node
   linkType: hard
 
@@ -15768,7 +15801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dequal@npm:^2.0.0":
+"dequal@npm:^2.0.0, dequal@npm:^2.0.3":
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 10c0/f98860cdf58b64991ae10205137c0e97d384c3a4edc7f807603887b7c4b850af1224a33d88012009f150861cbee4fa2d322c4cc04b9313bee312e47f6ecaa888
@@ -17640,6 +17673,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-instantsearch-showcase@workspace:examples/js/showcase"
   dependencies:
+    "@babel/core": "npm:7.29.7"
     "@googlemaps/js-api-loader": "npm:2.0.2"
     "@preact/preset-vite": "npm:2.10.5"
     "@tailwindcss/vite": "npm:4.1.3"
@@ -17945,6 +17979,7 @@ __metadata:
     nuxt: "npm:^2.4.5"
     vue-instantsearch: "npm:4.29.10"
     vue-server-renderer: "npm:2.7.14"
+    webpack: "npm:4.47.0"
   languageName: unknown
   linkType: soft
 
@@ -17966,6 +18001,7 @@ __metadata:
     vue-router: "npm:^3.0.2"
     vue-server-renderer: "npm:2.7.14"
     vue-template-compiler: "npm:2.7.14"
+    webpack: "npm:4.47.0"
   languageName: unknown
   linkType: soft
 
@@ -21444,6 +21480,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "instantsearch-codemods@workspace:packages/instantsearch-codemods"
   dependencies:
+    "@babel/core": "npm:7.29.7"
+    "@babel/preset-env": "npm:7.15.6"
     "@codeshift/cli": "npm:^0.15.6"
     "@codeshift/utils": "npm:^0.2.5"
     "@types/jscodeshift": "npm:^0.11.6"
@@ -21480,7 +21518,7 @@ __metadata:
     "@rollup/plugin-terser": "npm:0.4.4"
     "@swc/core": "npm:1.15.11"
     "@swc/helpers": "npm:0.5.18"
-    "@testing-library/dom": "npm:8.18.1"
+    "@testing-library/dom": "npm:10.4.1"
     "@testing-library/jest-dom": "npm:5.16.5"
     "@testing-library/preact": "npm:3.2.2"
     "@testing-library/react": "npm:16.1.0"
@@ -21518,6 +21556,7 @@ __metadata:
     jest-junit: "npm:12.2.0"
     jest-vue-preprocessor: "npm:1.7.1"
     jest-watch-typeahead: "npm:1.0.0"
+    jsdom: "npm:16.7.0"
     jsdom-global: "npm:3.0.2"
     lerna: "npm:9.0.7"
     oxfmt: "npm:0.51.0"
@@ -23781,7 +23820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^16.6.0":
+"jsdom@npm:16.7.0, jsdom@npm:^16.6.0":
   version: 16.7.0
   resolution: "jsdom@npm:16.7.0"
   dependencies:
@@ -25226,6 +25265,15 @@ __metadata:
   bin:
     lz-string: bin/bin.js
   checksum: 10c0/683d2d01607444605bee9902b05851415ae54e4de75ff14971c7e070d0fab53a7f1f82e659f24e6ccdc63080832b937418e278a611ed4a354bf2e7ad6f0b874b
+  languageName: node
+  linkType: hard
+
+"lz-string@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "lz-string@npm:1.5.0"
+  bin:
+    lz-string: bin/bin.js
+  checksum: 10c0/36128e4de34791838abe979b19927c26e67201ca5acf00880377af7d765b38d1c60847e01c5ec61b1a260c48029084ab3893a3925fd6e48a04011364b089991b
   languageName: node
   linkType: hard
 
@@ -29768,27 +29816,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.49.1":
-  version: 1.49.1
-  resolution: "playwright-core@npm:1.49.1"
+"playwright-core@npm:1.51.1":
+  version: 1.51.1
+  resolution: "playwright-core@npm:1.51.1"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/990b619c75715cd98b2c10c1180a126e3a454b247063b8352bc67792fe01183ec07f31d30c8714c3768cefed12886d1d64ac06da701f2baafc2cad9b439e3919
+  checksum: 10c0/4f004d9dea5ecbd76b84c858fa4880ed955600b6cda972a3e8093ea47e150ce20bf2ea806e73e740497d34f4b61b080c208339a661fc75ad04d8f00bedcc21e0
   languageName: node
   linkType: hard
 
-"playwright@npm:1.49.1":
-  version: 1.49.1
-  resolution: "playwright@npm:1.49.1"
+"playwright@npm:1.51.1":
+  version: 1.51.1
+  resolution: "playwright@npm:1.51.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.49.1"
+    playwright-core: "npm:1.51.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/2368762c898920d4a0a5788b153dead45f9c36c3f5cf4d2af5228d0b8ea65823e3bbe998877950a2b9bb23a211e4633996f854c6188769dc81a25543ac818ab5
+  checksum: 10c0/2aea553b8b1086ee419e72c9d4f4117686e6bdb5e09e0f47dfe563ce0f0bd79c4ee79dd9c8a0f023a2fb7803b81d4fdc552887410d16c036be07f21ab72b3f46
   languageName: node
   linkType: hard
 
@@ -32386,7 +32434,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-instantsearch-nextjs@workspace:packages/react-instantsearch-nextjs"
   dependencies:
-    "@playwright/test": "npm:1.49.1"
+    "@playwright/test": "npm:1.51.1"
     "@swc/helpers": "npm:0.5.18"
     instantsearch.js: "npm:4.118.0"
     next: "npm:16.0.7"
@@ -32403,7 +32451,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs"
   dependencies:
-    "@playwright/test": "npm:1.49.1"
+    "@playwright/test": "npm:1.51.1"
     "@swc/helpers": "npm:0.5.18"
     instantsearch.js: "npm:4.118.0"
     react-instantsearch-core: "npm:7.50.0"
