@@ -103,26 +103,35 @@ function getRuleContextsFromTrackedFilters({
   return ruleContexts;
 }
 
+type RuleContextsTracker = {
+  helper: Helper;
+  trackedFilters: ParamTrackedFilters;
+  transformRuleContexts: ParamTransformRuleContexts;
+  /**
+   * The contexts this widget wrote on the last change. Anything else in the
+   * state belongs to the initial parameters or to another widget (e.g. a
+   * `resultCard`) and is carried over untouched.
+   */
+  ownedRuleContexts: string[];
+};
+
 function applyRuleContexts(
-  this: {
-    helper: Helper;
-    initialRuleContexts: string[];
-    trackedFilters: ParamTrackedFilters;
-    transformRuleContexts: ParamTransformRuleContexts;
-  },
+  this: RuleContextsTracker,
   event: { state: SearchParameters }
 ): void {
-  const { helper, initialRuleContexts, trackedFilters, transformRuleContexts } =
-    this;
+  const { helper, trackedFilters, transformRuleContexts } = this;
 
   const sharedHelperState = event.state;
   const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
+  const foreignRuleContexts = previousRuleContexts.filter(
+    (ruleContext) => !this.ownedRuleContexts.includes(ruleContext)
+  );
   const newRuleContexts = getRuleContextsFromTrackedFilters({
     helper,
     sharedHelperState,
     trackedFilters,
   });
-  const nextRuleContexts = [...initialRuleContexts, ...newRuleContexts];
+  const nextRuleContexts = [...foreignRuleContexts, ...newRuleContexts];
 
   warning(
     nextRuleContexts.length <= 10,
@@ -133,6 +142,10 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   );
 
   const ruleContexts = transformRuleContexts(nextRuleContexts).slice(0, 10);
+
+  this.ownedRuleContexts = ruleContexts.filter(
+    (ruleContext) => !foreignRuleContexts.includes(ruleContext)
+  );
 
   if (!isEqual(previousRuleContexts, ruleContexts)) {
     helper.overrideStateWithoutTriggeringChangeEvent({
@@ -185,9 +198,7 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
 
     const hasTrackedFilters = Object.keys(trackedFilters).length > 0;
 
-    // We store the initial rule contexts applied before creating the widget
-    // so that we do not override them with the rules created from `trackedFilters`.
-    let initialRuleContexts: string[] = [];
+    let tracker: RuleContextsTracker;
     let onHelperChange: (event: { state: SearchParameters }) => void;
 
     return {
@@ -196,13 +207,13 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
       init(initOptions) {
         const { helper, state, instantSearchInstance } = initOptions;
 
-        initialRuleContexts = state.ruleContexts || [];
-        onHelperChange = applyRuleContexts.bind({
+        tracker = {
           helper,
-          initialRuleContexts,
           trackedFilters,
           transformRuleContexts,
-        });
+          ownedRuleContexts: [],
+        };
+        onHelperChange = applyRuleContexts.bind(tracker);
 
         if (hasTrackedFilters) {
           // We need to apply the `ruleContexts` based on the `trackedFilters`
@@ -265,7 +276,12 @@ const connectQueryRules: QueryRulesConnector = function connectQueryRules(
         if (hasTrackedFilters) {
           helper.removeListener('change', onHelperChange);
 
-          return state.setQueryParameter('ruleContexts', initialRuleContexts);
+          return state.setQueryParameter(
+            'ruleContexts',
+            (state.ruleContexts || []).filter(
+              (ruleContext) => !tracker.ownedRuleContexts.includes(ruleContext)
+            )
+          );
         }
 
         return state;

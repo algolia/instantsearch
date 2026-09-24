@@ -109,6 +109,18 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   clearMessages: () => void;
   /**
+   * Takes over a conversation started by another widget (e.g. `resultCard`).
+   * An empty chat continues it under its `id`; a chat with messages appends
+   * the exchange to its own conversation. The adopted messages are tagged
+   * with `metadata.source` for attribution. Returns `false` when the chat is
+   * mid-generation, in which case nothing is adopted.
+   */
+  adoptConversation: (conversation: {
+    id: string;
+    messages: TUiMessage[];
+    source: string;
+  }) => boolean;
+  /**
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
@@ -624,6 +636,40 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       _chatInstance.clearError();
     };
 
+    const adoptConversation: ChatRenderState<TUiMessage>['adoptConversation'] =
+      ({ id, messages, source }) => {
+        const status = _chatInstance.status;
+        if (status === 'submitted' || status === 'streaming') {
+          return false;
+        }
+        const tagged = messages.map(
+          (message) =>
+            ({
+              ...message,
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                source,
+              },
+            }) as TUiMessage
+        );
+        if (_chatInstance.messages.length === 0) {
+          _chatInstance.setConversationId(id);
+          setMessages(tagged);
+        } else {
+          // The handing-off widget may still be mounted and hand off again
+          // (e.g. a second follow-up suggestion): only new turns are appended.
+          const existingIds = new Set(
+            _chatInstance.messages.map((message) => message.id)
+          );
+          setMessages([
+            ..._chatInstance.messages,
+            ...tagged.filter((message) => !existingIds.has(message.id)),
+          ]);
+        }
+        _chatInstance.clearError();
+        return true;
+      };
+
     const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
       if (disableTriggerValidation || hasValidatedEntryPoints) {
         return;
@@ -716,7 +762,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
         });
       }
-      if ('agentId' in options && options.agentId) {
+      // A custom `transport` wins: `agentId` alongside it only serves feedback
+      // (and, for the result card, the Rule context).
+      if (!transport && 'agentId' in options && options.agentId) {
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(
@@ -1204,6 +1252,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,
+          adoptConversation,
           tools: toolsWithAddToolResult,
           records,
           sendChatMessageFeedback: _sendChatMessageFeedback,

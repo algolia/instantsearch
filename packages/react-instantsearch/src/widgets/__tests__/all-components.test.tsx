@@ -8,7 +8,9 @@ import React from 'react';
 import { getAllWidgets } from './__utils__/all-widgets';
 
 describe('rendering', () => {
-  const widgets = getAllWidgets();
+  // `ResultCard` renders nothing until a Rule enables it in the results, so
+  // its root assertions live in `ResultCard.test.tsx` with such a response.
+  const widgets = getAllWidgets().filter(({ name }) => name !== 'ResultCard');
 
   describe('className', () => {
     test.each(widgets)('sets root class name $name', ({ Component }) => {

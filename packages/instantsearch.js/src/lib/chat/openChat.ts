@@ -10,6 +10,7 @@ export type ChatReferer =
   | 'compare'
   | 'prompt-suggestions-widget'
   | 'prompt-suggestions-autocomplete'
+  | 'result-card'
   // Custom entry points tag themselves; the built-in values still autocomplete.
   | (string & {});
 

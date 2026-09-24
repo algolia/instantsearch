@@ -38,6 +38,7 @@ import {
   chat,
   chatTrigger,
   promptSuggestions,
+  resultCard,
   autocomplete,
   filterSuggestions,
 } from '../widgets';
@@ -797,6 +798,37 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createResultCardWidgetTests({ instantSearchOptions, widgetParams }) {
+    // "Continue in chat" needs a `chat` with the card's `agentId` on the same
+    // index, so the default setup mounts both. `renderChat: false` is how a
+    // test asks for the unconfigured page.
+    const { renderChat = true, ...resultCardWidgetParams } = widgetParams;
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        resultCard({
+          container: document.body.appendChild(document.createElement('div')),
+          ...resultCardWidgetParams,
+        }),
+        ...(renderChat
+          ? [
+              chat({
+                container: document.body.appendChild(
+                  document.createElement('div')
+                ),
+                agentId: resultCardWidgetParams.agentId,
+              }),
+            ]
+          : []),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -835,6 +867,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: undefined,
+  createResultCardWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

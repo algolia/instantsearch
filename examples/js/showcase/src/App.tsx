@@ -3,6 +3,7 @@ import { useState } from 'preact/hooks';
 
 import { ColorModeSwitcher } from './components/ColorModeSwitcher';
 import { FlavorContext } from './context/flavor';
+import { ViewContext } from './context/view';
 import { getFlavorFromURL, getIndexFromURL, setParams } from './utils/url';
 import { AgenticView } from './views/AgenticView';
 import { GeoSearchView } from './views/GeoSearchView';
@@ -121,7 +122,11 @@ export function App() {
         </div>
 
         {experiences.map((experience, index) =>
-          currentIndex === index ? <experience.view key={index} /> : null
+          currentIndex === index ? (
+            <ViewContext.Provider key={index} value={experience.slug}>
+              <experience.view />
+            </ViewContext.Provider>
+          ) : null
         )}
       </div>
     </FlavorContext.Provider>
