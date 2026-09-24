@@ -93,4 +93,8 @@ fs.writeFileSync(
 
 // Yarn resolves each package's own `@algolia/*` versions, so `algoliasearch@4`
 // and the `algoliasearch-v5` alias coexist without hand-built nesting.
-shell.exec('yarn install --no-immutable');
+const install = shell.exec('yarn install --no-immutable');
+
+if (install.code !== 0) {
+  process.exit(install.code);
+}

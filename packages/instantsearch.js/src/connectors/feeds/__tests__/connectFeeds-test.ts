@@ -247,6 +247,7 @@ describe('connectFeeds', () => {
         query: '',
         params: '',
         exhaustiveNbHits: true,
+        exhaustiveFacetsCount: true,
       };
       const results = new SearchResults(state, [response]);
 

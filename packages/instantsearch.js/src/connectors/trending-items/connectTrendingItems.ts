@@ -211,7 +211,7 @@ export default (function connectTrendingItems<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID,
+          itemsWithAbsolutePositionAndQueryID as unknown as Hit<THit>[],
           {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
           }

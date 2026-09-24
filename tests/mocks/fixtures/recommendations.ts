@@ -59,7 +59,7 @@ export function createTrendingFacetsSearchClient() {
           // @ts-ignore
           requests.map((request) => {
             return createSingleSearchResponse({
-              // @ts-expect-error trending facet items aren't Hit objects
+              // @ts-ignore trending facet items aren't Hit objects
               hits: trendingFacetsFixture.slice(
                 0,
                 typeof request.maxRecommendations === 'number'

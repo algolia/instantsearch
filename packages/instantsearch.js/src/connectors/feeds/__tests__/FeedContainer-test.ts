@@ -29,6 +29,7 @@ function makeParentWithFeeds(
     query: '',
     params: '',
     exhaustiveNbHits: true,
+    exhaustiveFacetsCount: true,
   };
 
   const results = new SearchResults(state, [response]);
@@ -149,6 +150,7 @@ describe('FeedContainer', () => {
           query: '',
           params: '',
           exhaustiveNbHits: true,
+          exhaustiveFacetsCount: true,
         },
       ]);
       parent.getResults = () => results;
