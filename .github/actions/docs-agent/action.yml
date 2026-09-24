@@ -92,7 +92,8 @@ runs:
             echo "- Your working directory is the docs repository: \`${DOCS}\`"
             echo "- InstantSearch source, read-only: \`${SRC}\`"
             echo "- Scratch directory: \`${STATE}\`. Write \`PROGRESS.md\` and"
-            echo "  \`CHANGES_SUMMARY.md\` there, never inside the docs repository."
+            echo "  \`CHANGES_SUMMARY.md\` there with the Write tool, never inside the"
+            echo "  docs repository. Shell redirects to these files are denied."
             echo
             echo "---"
             echo
