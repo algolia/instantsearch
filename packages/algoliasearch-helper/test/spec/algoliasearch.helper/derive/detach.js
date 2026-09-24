@@ -8,7 +8,7 @@ test('[derived helper] detach a derived helper', function (done) {
   };
   var helper = algoliasearchHelper(client, 'indexName');
   var derivedHelper = helper.derive(function (s) {
-    return s;
+    return s.setIndex('anotherIndex');
   });
   derivedHelper.on('result', function () {});
   helper.search();
@@ -20,7 +20,8 @@ test('[derived helper] detach a derived helper', function (done) {
     nbRequest = nbRequest || 0;
     if (nbRequest === 0) {
       expect(requests.length).toBe(2);
-      expect(requests[0]).toEqual(requests[1]);
+      expect(requests[0].indexName).toBe('indexName');
+      expect(requests[1].indexName).toBe('anotherIndex');
       expect(derivedHelper.listeners('result').length).toBe(1);
       nbRequest++;
     } else if (nbRequest === 1) {

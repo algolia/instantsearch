@@ -336,7 +336,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 Index,
                 {
                   attrs: {
-                    indexName: 'hello',
+                    indexName: 'hello2',
                     indexId: 'nestedIndex',
                   },
                 },
@@ -405,7 +405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                   facetsRefinements: {},
                   hierarchicalFacets: [],
                   hierarchicalFacetsRefinements: {},
-                  index: 'hello',
+                  index: 'hello2',
                   numericRefinements: {},
                   tagRefinements: [],
                 },
