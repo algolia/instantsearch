@@ -1,6 +1,7 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { isStatusBusy } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { ArrowUpIcon, StopIcon } from './icons';
@@ -234,7 +235,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
     const hasValue =
       typeof value === 'string' ? value.trim() !== '' : Boolean(value);
-    const canStop = status === 'submitted' || status === 'streaming';
+    const canStop = isStatusBusy(status);
     const buttonDisabled = (!hasValue && !canStop) || disabled;
 
     const submitIcon = canStop ? (

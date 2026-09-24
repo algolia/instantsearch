@@ -14,7 +14,12 @@ import type {
   ClientSideToolComponentProps,
 } from 'instantsearch-ui-components';
 
-const metadata: ChatComponentContext = {
+// The turn state is left out so `chatToolProps` derives it from `status`,
+// keeping a fixture from declaring a busy status and an idle turn at once.
+const metadata: Omit<
+  ChatComponentContext,
+  'hasActiveReasoning' | 'isBusy' | 'lastMessage' | 'phase' | 'showLoader'
+> = {
   messages: [],
   status: 'ready',
   isClearing: false,

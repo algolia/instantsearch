@@ -2,13 +2,11 @@
 
 import { cx } from '../../lib';
 import {
-  findLastProgressPart,
   findTool,
   getTextContent,
   hasTextContent,
-  isReasoningPartActive,
-  isPartText,
   isPartTool,
+  isStatusBusy,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -39,10 +37,10 @@ import type {
   ChatEmptyProps,
   ChatLayoutOwnProps,
   ChatLoaderContext,
-  ChatLoaderPhase,
   ChatLoaderPosition,
   ChatMessageBase,
   ChatStatus,
+  ChatTurnState,
   ClientSideTools,
 } from './types';
 import type {
@@ -212,6 +210,16 @@ export type ChatMessagesProps<
    * Current chat status
    */
   status?: ChatStatus;
+  /**
+   * The turn state reported by the chat instance — phase, active part, active
+   * reasoning, busy, last message, and whether the loader shows.
+   *
+   * Passed as one object because it is one thing: the chat's own account of
+   * what it is doing, derived where the messages live and forwarded into
+   * `context` untouched. Omitted fields fall back to what `status` alone can
+   * say, which is only "something is in flight".
+   */
+  turnState?: Partial<ChatTurnState<TMessage>>;
   /**
    * Error from the last failed request, if any. When set, its `message` is
    * available to custom error components or translation functions (for example
@@ -786,6 +794,7 @@ export function createChatMessagesComponent({
       indexUiState,
       setIndexUiState,
       status = 'ready',
+      turnState,
       error,
       hideScrollToBottom = false,
       onReload,
@@ -837,32 +846,10 @@ export function createChatMessagesComponent({
       ),
     };
 
-    const lastMessage = messages[messages.length - 1];
-    const showReasoning = assistantMessageProps?.showReasoning !== false;
-    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
-    // `activePart` means "the part currently being processed". It must clear
-    // when nothing is in progress: once the response settles (`ready`/`error`),
-    // and while `submitted` still shows the user's own message (the assistant
-    // hasn't produced a part yet). Otherwise overrides render a part that isn't
-    // actually streaming.
-    const isProcessing = status === 'submitted' || status === 'streaming';
-    const activePart =
-      isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
-    // The scan slices the remaining parts per candidate, and only the loader reads
-    // it, so skip it entirely once `showReasoning` is off.
-    // The loader reports on the assistant's turn, so it only ever belongs to an
-    // assistant message. While `submitted` the last message is still the user's
-    // own, and the loader belongs to no message at all.
-    const loaderMessage =
-      lastMessage?.role === 'assistant' ? lastMessage : undefined;
-    const hasActiveReasoning = showReasoning
-      ? (lastMessage?.parts?.some((_, index, parts) =>
-          isReasoningPartActive(parts, index)
-        ) ?? false)
-      : false;
     // The shared context handed to every overridable chat component, so custom
     // components can read the current chat state and common callbacks from a
     // single, consistent place.
+    const isBusy = turnState?.isBusy ?? isStatusBusy(status);
     const context: ChatComponentContext<TMessage> = {
       messages,
       status,
@@ -870,7 +857,15 @@ export function createChatMessagesComponent({
       isClearing,
       open,
       maximized,
-      activePart,
+      // The chat instance is the authority on all of these; the fallbacks only
+      // cover callers that render `ChatMessages` on its own, outside a widget.
+      phase: 'idle',
+      activePart: undefined,
+      hasActiveReasoning: false,
+      isBusy,
+      lastMessage: messages[messages.length - 1],
+      showLoader: isBusy,
+      ...turnState,
       tools,
       sendMessage,
       regenerate,
@@ -881,25 +876,22 @@ export function createChatMessagesComponent({
       onClose,
     };
 
-    // The loader also reads what the turn is doing, which no other component
-    // needs, so its context extends the shared one.
-    const loaderContext: ChatLoaderContext<TMessage> = {
-      ...context,
-      phase: getLoaderPhase(status, loaderMessage, showReasoning),
-      message: loaderMessage,
-    };
+    // The loader reads `phase` and `lastMessage` off the shared context, so it
+    // gets that context as-is.
+    const loaderContext: ChatLoaderContext<TMessage> = context;
 
-    const defaultShowLoader = getShowLoader(
-      context,
-      showReasoning,
-      hasActiveReasoning
-    );
+    // Whether the turn *is* loading is the chat's answer, decided where the
+    // messages and the tool registry are. Whether the loader is *visible* is
+    // this component's, because it is a question about time on screen.
     const isLoading = shouldShowLoader
-      ? shouldShowLoader({ ...loaderContext, defaultValue: defaultShowLoader })
-      : defaultShowLoader;
+      ? shouldShowLoader({
+          ...loaderContext,
+          defaultValue: context.showLoader,
+        })
+      : context.showLoader;
     const showLoader = useLoaderVisibility({
       isLoading,
-      isTurnActive: isProcessing,
+      isTurnActive: context.isBusy,
       showDelay: loaderShowDelay,
       minDuration: loaderMinDuration,
     });
@@ -914,7 +906,8 @@ export function createChatMessagesComponent({
     // An inline loader needs an assistant message to live in; before the first
     // response part there is none, so it falls back to its own row.
     const isLoaderInline =
-      loaderPosition === 'message-inline' && loaderMessage !== undefined;
+      loaderPosition === 'message-inline' &&
+      context.lastMessage?.role === 'assistant';
     const loaderText =
       typeof translations.loaderText === 'function'
         ? translations.loaderText(loaderContext)
@@ -933,7 +926,7 @@ export function createChatMessagesComponent({
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-busy={isProcessing ? 'true' : undefined}
+        aria-busy={context.isBusy ? 'true' : undefined}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
@@ -965,11 +958,11 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
-                isCurrentMessage={index === messages.length - 1}
+                isCurrentMessage={context.lastMessage?.id === message.id}
                 status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
@@ -986,12 +979,12 @@ export function createChatMessagesComponent({
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
-                  index === messages.length - 1
+                  context.lastMessage?.id === message.id
                     ? suggestionsElement
                     : undefined
                 }
                 loaderElement={
-                  isLoaderInline && index === messages.length - 1
+                  isLoaderInline && context.lastMessage?.id === message.id
                     ? loaderElement
                     : undefined
                 }
@@ -1042,22 +1035,6 @@ export function createChatMessagesComponent({
     );
   };
 }
-
-const getLoaderPhase = (
-  status: ChatStatus,
-  message: ChatMessageBase | undefined,
-  showReasoning: boolean
-): ChatLoaderPhase => {
-  if (status === 'submitted') return 'submitted';
-
-  const lastPart = findLastProgressPart(message?.parts);
-  if (!lastPart) return 'thinking';
-  if (isPartTool(lastPart)) return 'tool';
-  if (showReasoning && lastPart.type === 'reasoning') return 'reasoning';
-
-  return 'thinking';
-};
-
 /**
  * A stable signature of every `shouldRender` verdict in a message, so a memoized
  * row can be invalidated when a verdict changes. `undefined` when no tool part
@@ -1088,54 +1065,4 @@ const getShouldRenderVerdicts = <TMessage extends ChatMessageBase>(
   });
 
   return verdicts;
-};
-
-const getShowLoader = <TMessage extends ChatMessageBase>(
-  context: ChatComponentContext<TMessage>,
-  showReasoning: boolean,
-  hasActiveReasoning: boolean
-): boolean => {
-  const { status, messages, tools } = context;
-
-  if (status !== 'submitted' && status !== 'streaming') return false;
-  if (status === 'submitted') return true;
-
-  const lastMessage = messages[messages.length - 1];
-  // `processStream` sets `streaming` before the `start` chunk pushes the
-  // assistant. Until then the last message is still the user's, and its text
-  // must not be read as the answer or the loader hides and comes back.
-  if (lastMessage?.role !== 'assistant') return true;
-  // Parts that render nothing must not answer for the turn's progress, or the
-  // loader flips on a part that changed nothing on screen.
-  const lastPart = findLastProgressPart(lastMessage.parts);
-
-  if (!lastPart) return true;
-  // An active disclosure carries its own progress affordance, so the loader would
-  // double it. Settled reasoning still shows it: the answer has not started.
-  if (showReasoning && hasActiveReasoning) return false;
-  if (isPartText(lastPart)) return false;
-
-  if (isPartTool(lastPart)) {
-    const tool = findTool(lastPart.type, tools);
-
-    // A part the tool declines to render leaves nothing on screen, so the turn
-    // still reads as in progress — keep the loader up rather than letting a
-    // settled-but-hidden part terminate it.
-    if (
-      lastMessage &&
-      tool?.shouldRender?.({
-        ...context,
-        message: lastPart,
-        parentMessage: lastMessage,
-      }) === false
-    ) {
-      return true;
-    }
-
-    if (lastPart.state === 'input-streaming') {
-      return !tool?.streamInput;
-    }
-  }
-
-  return true;
 };

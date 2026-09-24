@@ -40,11 +40,46 @@ const ItemComponent: ItemComponentProps = ({ item }: ItemArgs) =>
  * root-level props kept for back compat, so fixtures mirror both. Drop this
  * once the deprecated root props are removed.
  */
+// Kept local rather than shared with `@instantsearch/testutils` so this
+// package's own tests never import its built output.
+type ToolContext = ClientSideToolComponentProps['context'];
+type DerivedKeys =
+  | 'hasActiveReasoning'
+  | 'isBusy'
+  | 'lastMessage'
+  | 'parentMessage'
+  | 'phase'
+  | 'showLoader';
+
 function toolProps(
-  context: ClientSideToolComponentProps['context']
+  context: Omit<ToolContext, DerivedKeys> &
+    Partial<Pick<ToolContext, DerivedKeys>>
 ): ClientSideToolComponentProps {
+  // Fixtures that don't care which message owns the tool call get the one from
+  // the conversation, or a minimal stand-in wrapping the part.
+  const parentMessage = context.parentMessage ||
+    context.messages.find((message) =>
+      message.parts.includes(context.message)
+    ) || {
+      id: 'parent',
+      role: 'assistant' as const,
+      parts: [context.message],
+    };
+
+  const isBusy =
+    context.status === 'submitted' || context.status === 'streaming';
+
   return {
-    context,
+    context: {
+      phase: isBusy ? 'ran-tool' : 'idle',
+      hasActiveReasoning: false,
+      showLoader: false,
+      ...context,
+      isBusy: context.isBusy ?? isBusy,
+      lastMessage:
+        context.lastMessage ?? context.messages[context.messages.length - 1],
+      parentMessage,
+    },
     message: context.message,
     messages: context.messages,
     records: context.records,
