@@ -1,3 +1,4 @@
+/* oxlint-disable typescript-eslint/no-deprecated -- this entry point intentionally re-exports deprecated helpers for backwards compatibility */
 import {
   snippet,
   reverseSnippet,

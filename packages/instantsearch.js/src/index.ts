@@ -1,3 +1,4 @@
+/* oxlint-disable typescript-eslint/no-deprecated -- this entry point intentionally re-exports deprecated helpers for backwards compatibility */
 import * as connectors from './connectors/index';
 import * as helpers from './helpers/index';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
