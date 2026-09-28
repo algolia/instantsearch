@@ -11,8 +11,7 @@ export function WidgetResultCard() {
   return (
     <div class="flex flex-col gap-3">
       <p class="text-xs text-neutral-500 dark:text-neutral-400">
-        Shows for queries of two words or more. The enabling Rule (a{' '}
-        <code>userData</code> consequence) is mocked in the search client.
+        Shows for queries of two words or more.
       </p>
       <div ref={ref} />
     </div>

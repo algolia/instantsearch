@@ -27,33 +27,12 @@ const algoliaClient = algoliasearch(
 
 const INDEX_NAME = 'instant_search';
 
-// Stands in for the Agent Studio Rule whose consequence is
-// `{ "userData": { "resultCard": { "enabled": true } } }`; remove once such a
-// Rule exists on this index.
-const searchClient: typeof algoliaClient = {
-  ...algoliaClient,
-  search: ((requests, requestOptions) =>
-    algoliaClient.search(requests, requestOptions).then((response) => {
-      response.results.forEach((result) => {
-        if ('hits' in result && result.index === INDEX_NAME) {
-          // The client types `userData` as an object; the engine returns an array.
-          const userData = (result.userData ?? []) as unknown as unknown[];
-          result.userData = [
-            ...userData,
-            { resultCard: { enabled: true } },
-          ] as unknown as typeof result.userData;
-        }
-      });
-      return response;
-    })) as typeof algoliaClient.search,
-};
-
 export function AgenticView() {
   const searchRef = useRef<ReturnType<typeof instantsearch> | null>(null);
   if (searchRef.current === null) {
     searchRef.current = instantsearch({
       indexName: INDEX_NAME,
-      searchClient,
+      searchClient: algoliaClient,
     });
   }
 
