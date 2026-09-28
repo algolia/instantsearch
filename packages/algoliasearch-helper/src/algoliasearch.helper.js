@@ -1650,18 +1650,53 @@ AlgoliaSearchHelper.prototype._search = function (options) {
 
   var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
 
+  var uniqueQueries = [];
+  var deduplicationMap = [];
+  var deduplicated = false;
+
+  var queryKeys = {};
+
+  queries.forEach(function (query) {
+    var key = JSON.stringify({
+      indexName: query.indexName,
+      params: query.params,
+    });
+
+    if (Object.prototype.hasOwnProperty.call(queryKeys, key)) {
+      var index = queryKeys[key];
+      deduplicationMap.push(index);
+      deduplicated = true;
+    } else {
+      var newIndex = uniqueQueries.length;
+      uniqueQueries.push(query);
+      queryKeys[key] = newIndex;
+      deduplicationMap.push(newIndex);
+    }
+  });
+
   var queryId = this._queryId++;
   this._currentNbQueries++;
 
-  if (!queries.length) {
+  if (!uniqueQueries.length) {
     return Promise.resolve({ results: [] }).then(
       this._dispatchAlgoliaResponse.bind(this, states, queryId)
     );
   }
 
   try {
-    this.client
-      .search(queries)
+    var searchPromise = this.client.search(uniqueQueries);
+
+    if (deduplicated) {
+      searchPromise = searchPromise.then(function (res) {
+        return {
+          results: deduplicationMap.map(function (index) {
+            return res.results[index];
+          }),
+        };
+      });
+    }
+
+    searchPromise
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
