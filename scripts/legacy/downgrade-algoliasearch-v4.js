@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const fs = require('fs');
 const path = require('path');
 
 const shell = require('shelljs');
@@ -75,19 +76,21 @@ shell.sed(
   ...shell.ls('examples/*/*/package.json')
 );
 
-shell.exec('yarn install');
+// `@algolia/requester-node-http` ships in both majors, and nothing at the root
+// depends on it directly, so Yarn is free to hoist the copy that the
+// `algoliasearch-v5` alias pulls in. `tests/mocks/createAlgoliaSearchClient.ts`
+// imports it by name and needs `createNodeHttpRequester`, which only exists in
+// v4, so pin the root to v4 explicitly.
+const rootPackageJsonPath = packageJsonPaths[0];
+const rootPackageJson = JSON.parse(
+  fs.readFileSync(rootPackageJsonPath, 'utf8')
+);
+rootPackageJson.devDependencies['@algolia/requester-node-http'] = '4.23.2';
+fs.writeFileSync(
+  rootPackageJsonPath,
+  `${JSON.stringify(rootPackageJson, null, 2)}\n`
+);
 
-// Make sure a specific version of algoliasearch is installed
-shell.exec(
-  'yarn install --force --cwd scripts/legacy/algoliasearch@4-dependency-container'
-);
-shell.exec(
-  'yarn install --force --cwd scripts/legacy/algoliasearch-v5-dependency-container'
-);
-shell.rm('-rf', 'node_modules/@algolia');
-shell.exec(
-  'cp -rf scripts/legacy/algoliasearch@4-dependency-container/node_modules/* node_modules/'
-);
-shell.exec(
-  'cp -rf scripts/legacy/algoliasearch-v5-dependency-container/node_modules/* node_modules/'
-);
+// Yarn resolves each package's own `@algolia/*` versions, so `algoliasearch@4`
+// and the `algoliasearch-v5` alias coexist without hand-built nesting.
+shell.exec('yarn install --no-immutable');

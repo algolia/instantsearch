@@ -38,4 +38,7 @@ shell.sed(
 );
 
 console.log('installing');
-shell.exec('yarn');
+// `--no-immutable`: swapping the Vue major above intentionally desyncs
+// package.json from the lockfile, and Yarn enables immutable installs by
+// default on CI.
+shell.exec('yarn install --no-immutable');
