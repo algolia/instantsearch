@@ -76,6 +76,82 @@ export const isPartTextEmpty = (
 };
 
 /**
+ * The comparison prompt-shortcut sentinel, per the Agent Studio wire contract
+ * (mirrors the runtime's matching): the id segment is ASCII
+ * `[A-Za-z][\w-]{2,63}` and the sentinel must be the whole (trimmed) text.
+ */
+const COMPARISON_SENTINEL_PATTERN = /^__ALGOLIA_COMPARISON_[A-Za-z][\w-]{2,63}__$/;
+
+/** What the selection renders as when it is absent or malformed (same fallback as the runtime). */
+const COMPARISON_PRODUCTS_FALLBACK = 'the selected products';
+
+/**
+ * Product names for a comparison message, read from the selection the compare
+ * entry point attached to the message (`metadata.turnContext.selected_products`,
+ * a JSON-encoded array of records). Mirrors the runtime's naming: first
+ * non-empty of `name`, `title`, `objectID` per record; anything unexpected
+ * yields `[]`.
+ */
+function getComparisonProductNames(message: ChatMessageBase): string[] {
+  const metadata = message.metadata as
+    | { turnContext?: Record<string, unknown> }
+    | undefined;
+  const raw = metadata?.turnContext?.selected_products;
+  if (typeof raw !== 'string') {
+    return [];
+  }
+  let records: unknown;
+  try {
+    records = JSON.parse(raw);
+  } catch (error) {
+    return [];
+  }
+  if (!Array.isArray(records)) {
+    return [];
+  }
+  const names: string[] = [];
+  records.forEach((record) => {
+    if (typeof record !== 'object' || record === null) {
+      return;
+    }
+    for (const key of ['name', 'title', 'objectID']) {
+      const value = (record as Record<string, unknown>)[key];
+      if (typeof value === 'string' && value.trim()) {
+        names.push(value.trim());
+        break;
+      }
+    }
+  });
+  return names;
+}
+
+/**
+ * The display text for a user message that carries a comparison prompt-shortcut
+ * sentinel (`__ALGOLIA_COMPARISON_<id>__`), or `null` for any other text.
+ *
+ * The sentinel is a wire token: the Agent Studio runtime expands it into the
+ * configuration's instructions for the LLM and its display text for the
+ * PERSISTED transcript — the live conversation renders local state and would
+ * show the raw token. The client doesn't know the configured display text, so
+ * it renders the runtime's default (`Compare these products: <names>`) with the
+ * names read from the selection the compare entry point attached to the
+ * message. A reloaded conversation carries the persisted display text instead
+ * of the sentinel and passes through untouched.
+ */
+export function getComparisonSentinelDisplayText(
+  text: string,
+  message: ChatMessageBase
+): string | null {
+  if (!COMPARISON_SENTINEL_PATTERN.test(text.trim())) {
+    return null;
+  }
+  const names = getComparisonProductNames(message);
+  return `Compare these products: ${
+    names.length > 0 ? names.join(', ') : COMPARISON_PRODUCTS_FALLBACK
+  }`;
+}
+
+/**
  * Whether a part says something about the turn's progress. Data parts and
  * unwritten text parts render nothing, so reading them would answer "what is
  * this turn doing" with a part that changed nothing on screen.

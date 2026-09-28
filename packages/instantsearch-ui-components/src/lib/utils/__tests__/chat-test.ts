@@ -2,11 +2,73 @@ import { warnCache } from '../../../warn';
 import {
   findTool,
   getApplyFiltersParamsFromToolInput,
+  getComparisonSentinelDisplayText,
   getResolvedSearchParams,
   isGroupedResultsEnabled,
   shouldSearchToolRenderResults,
 } from '../chat';
 import { startsWith } from '../startsWith';
+
+import type { ChatMessageBase } from '../../../components';
+
+describe('getComparisonSentinelDisplayText', () => {
+  const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_123__';
+
+  const messageWith = (selectedProducts?: string): ChatMessageBase => ({
+    role: 'user',
+    id: '1',
+    parts: [{ type: 'text', text: SENTINEL }],
+    ...(selectedProducts !== undefined
+      ? { metadata: { turnContext: { selected_products: selectedProducts } } }
+      : {}),
+  });
+
+  test('renders the selection names for a sentinel message', () => {
+    expect(
+      getComparisonSentinelDisplayText(
+        SENTINEL,
+        messageWith(
+          JSON.stringify([
+            { objectID: '1', name: 'Trail Jacket' },
+            { objectID: '2', title: 'Storm Shell' },
+            { objectID: 'product-3' },
+          ])
+        )
+      )
+    ).toBe('Compare these products: Trail Jacket, Storm Shell, product-3');
+  });
+
+  test('accepts surrounding whitespace but not a sentinel wrapped in prose', () => {
+    const message = messageWith(
+      JSON.stringify([{ objectID: '1', name: 'Trail Jacket' }])
+    );
+
+    expect(getComparisonSentinelDisplayText(`  ${SENTINEL}\n`, message)).toBe(
+      'Compare these products: Trail Jacket'
+    );
+    expect(
+      getComparisonSentinelDisplayText(`Please ${SENTINEL}`, message)
+    ).toBeNull();
+  });
+
+  test('falls back to a generic selection when it is absent or malformed', () => {
+    expect(getComparisonSentinelDisplayText(SENTINEL, messageWith())).toBe(
+      'Compare these products: the selected products'
+    );
+    expect(
+      getComparisonSentinelDisplayText(SENTINEL, messageWith('not json'))
+    ).toBe('Compare these products: the selected products');
+    expect(
+      getComparisonSentinelDisplayText(SENTINEL, messageWith('{}'))
+    ).toBe('Compare these products: the selected products');
+  });
+
+  test('returns null for ordinary text', () => {
+    expect(
+      getComparisonSentinelDisplayText('Compare these jackets', messageWith())
+    ).toBeNull();
+  });
+});
 
 describe('getApplyFiltersParamsFromToolInput', () => {
   test('returns nothing to refine when input is undefined', () => {

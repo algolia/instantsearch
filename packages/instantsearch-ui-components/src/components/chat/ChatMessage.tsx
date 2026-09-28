@@ -4,6 +4,7 @@ import { compiler } from 'markdown-to-jsx';
 import { cx, startsWith } from '../../lib';
 import {
   findTool,
+  getComparisonSentinelDisplayText,
   isPartTextEmpty,
   isReasoningPartActive,
 } from '../../lib/utils/chat';
@@ -558,6 +559,12 @@ export function createChatMessageComponent({
             </Fragment>
           );
         }
+        // A comparison entry point sends the raw prompt-shortcut sentinel on
+        // the wire; only the DEFAULT renderer substitutes its display text.
+        // A custom `textComponent` (above) gets the raw part and stays in
+        // charge of its own rendering.
+        const text =
+          getComparisonSentinelDisplayText(part.text, message) ?? part.text;
         if (!parseMarkdown) {
           // Render the literal text. The `ais-ChatMessage-text` class applies
           // `white-space: pre-wrap` to preserve the newlines that markdown
@@ -567,11 +574,11 @@ export function createChatMessageComponent({
           // (markdown produces semantic elements; a bare text node would not).
           return (
             <p key={`${message.id}-${index}`} className="ais-ChatMessage-text">
-              {part.text}
+              {text}
             </p>
           );
         }
-        const markdown = compiler(part.text, {
+        const markdown = compiler(text, {
           createElement: createElement as any,
           disableParsingRawHTML: true,
         });
