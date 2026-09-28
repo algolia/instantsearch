@@ -68,15 +68,16 @@ export function getResultCardRuleContext(agentId: string): string {
 }
 
 export type ResultCardStatus =
-  /** No Rule matched the current search (or the query is too short). */
+  /**
+   * No Rule matched the current search (or the query is too short), or the
+   * user dismissed the card until the query, filters, or top hits change.
+   */
   | 'hidden'
   /** Activated, no answer text yet: debouncing, requesting, or awaiting the first token. */
   | 'loading'
   | 'streaming'
   | 'complete'
-  | 'failed'
-  /** Dismissed by the user for the current query and filters. */
-  | 'dismissed';
+  | 'failed';
 
 export type ResultCardRenderState<TUiMessage extends UIMessage = UIMessage> = {
   status: ResultCardStatus;
@@ -493,8 +494,7 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     const getStatus = (
       currentActivation: Activation | null
     ): ResultCardStatus => {
-      if (!currentActivation) return 'hidden';
-      if (dismissed) return 'dismissed';
+      if (!currentActivation || dismissed) return 'hidden';
       // Checked before the inner chat's status: until the debounced request
       // runs, that status (and its error) still belongs to the previous question.
       if (requestPending) return 'loading';

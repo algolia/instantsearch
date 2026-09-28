@@ -47,13 +47,10 @@ function createProps(
 }
 
 describe('ResultCard', () => {
-  test('renders nothing when hidden or dismissed', () => {
-    const { container, rerender } = render(
+  test('renders nothing when hidden', () => {
+    const { container } = render(
       <ResultCard {...createProps({ status: 'hidden' })} />
     );
-    expect(container).toBeEmptyDOMElement();
-
-    rerender(<ResultCard {...createProps({ status: 'dismissed' })} />);
     expect(container).toBeEmptyDOMElement();
   });
 

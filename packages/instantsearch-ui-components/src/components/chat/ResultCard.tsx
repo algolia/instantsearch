@@ -26,8 +26,7 @@ export type ResultCardStatus =
   | 'loading'
   | 'streaming'
   | 'complete'
-  | 'failed'
-  | 'dismissed';
+  | 'failed';
 
 export type ResultCardClassNames = {
   root: string | string[];
@@ -114,7 +113,6 @@ const noop = () => {};
 
 const CHAT_STATUS: Record<ResultCardStatus, ChatStatus> = {
   hidden: 'ready',
-  dismissed: 'ready',
   loading: 'submitted',
   streaming: 'streaming',
   complete: 'ready',
@@ -202,7 +200,6 @@ export function createResultCardComponent({
 
     if (
       status === 'hidden' ||
-      status === 'dismissed' ||
       // A finished answer with no text (tool output only) has nothing to show;
       // the skeleton is reserved for busy states.
       (isComplete && !hasVisibleAnswer)
