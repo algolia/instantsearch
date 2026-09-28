@@ -4,7 +4,7 @@ import { compiler } from 'markdown-to-jsx';
 import { cx, startsWith } from '../../lib';
 import {
   findTool,
-  getComparisonSentinelDisplayText,
+  getShortcutSentinelDisplayText,
   isPartTextEmpty,
   isReasoningPartActive,
 } from '../../lib/utils/chat';
@@ -564,7 +564,7 @@ export function createChatMessageComponent({
         // A custom `textComponent` (above) gets the raw part and stays in
         // charge of its own rendering.
         const text =
-          getComparisonSentinelDisplayText(part.text, message) ?? part.text;
+          getShortcutSentinelDisplayText(part.text, message) ?? part.text;
         if (!parseMarkdown) {
           // Render the literal text. The `ais-ChatMessage-text` class applies
           // `white-space: pre-wrap` to preserve the newlines that markdown

@@ -76,13 +76,10 @@ export const isPartTextEmpty = (
 };
 
 /**
- * The comparison prompt-shortcut sentinel, per the Agent Studio wire contract
- * (mirrors the runtime's matching): the id segment is ASCII
- * `[A-Za-z][\w-]{2,63}` and the sentinel must be the whole (trimmed) text.
+ * What the selection renders as when it is absent or malformed. Same fallback
+ * as the runtime, which renders this exact string into the persisted
+ * transcript, so the live bubble and a reloaded conversation read the same.
  */
-const COMPARISON_SENTINEL_PATTERN = /^__ALGOLIA_COMPARISON_[A-Za-z][\w-]{2,63}__$/;
-
-/** What the selection renders as when it is absent or malformed (same fallback as the runtime). */
 const COMPARISON_PRODUCTS_FALLBACK = 'the selected products';
 
 /**
@@ -126,29 +123,54 @@ function getComparisonProductNames(message: ChatMessageBase): string[] {
 }
 
 /**
- * The display text for a user message that carries a comparison prompt-shortcut
- * sentinel (`__ALGOLIA_COMPARISON_<id>__`), or `null` for any other text.
+ * One entry per prompt-shortcut kind the runtime defines, mirroring its
+ * per-kind sentinel patterns (`__ALGOLIA_<KIND>_<id>__`, id segment ASCII
+ * `[A-Za-z][\w-]{2,63}`, matched against the whole trimmed text). Each kind
+ * derives its display text from what the entry point attached to the message,
+ * since the client cannot know the configured display text. `COMPARISON` is
+ * the only kind today; register new kinds here as the runtime grows them —
+ * until then their sentinels render as sent, exactly like the runtime leaves
+ * an unknown sentinel unresolved.
+ */
+const SHORTCUT_SENTINEL_RENDERERS: Array<{
+  pattern: RegExp;
+  render: (message: ChatMessageBase) => string;
+}> = [
+  {
+    pattern: /^__ALGOLIA_COMPARISON_[A-Za-z][\w-]{2,63}__$/,
+    render: (message) => {
+      const names = getComparisonProductNames(message);
+      return `Compare these products: ${
+        names.length > 0 ? names.join(', ') : COMPARISON_PRODUCTS_FALLBACK
+      }`;
+    },
+  },
+];
+
+/**
+ * The display text for a user message that carries a prompt-shortcut sentinel
+ * (`__ALGOLIA_<KIND>_<id>__`), or `null` for any other text.
  *
  * The sentinel is a wire token: the Agent Studio runtime expands it into the
  * configuration's instructions for the LLM and its display text for the
  * PERSISTED transcript — the live conversation renders local state and would
  * show the raw token. The client doesn't know the configured display text, so
- * it renders the runtime's default (`Compare these products: <names>`) with the
- * names read from the selection the compare entry point attached to the
- * message. A reloaded conversation carries the persisted display text instead
- * of the sentinel and passes through untouched.
+ * it renders the runtime's default for the kind (for a comparison,
+ * `Compare these products: <names>` with the names read from the selection
+ * attached to the message). A reloaded conversation carries the persisted
+ * display text instead of the sentinel and passes through untouched.
  */
-export function getComparisonSentinelDisplayText(
+export function getShortcutSentinelDisplayText(
   text: string,
   message: ChatMessageBase
 ): string | null {
-  if (!COMPARISON_SENTINEL_PATTERN.test(text.trim())) {
-    return null;
+  const trimmed = text.trim();
+  for (const { pattern, render } of SHORTCUT_SENTINEL_RENDERERS) {
+    if (pattern.test(trimmed)) {
+      return render(message);
+    }
   }
-  const names = getComparisonProductNames(message);
-  return `Compare these products: ${
-    names.length > 0 ? names.join(', ') : COMPARISON_PRODUCTS_FALLBACK
-  }`;
+  return null;
 }
 
 /**
