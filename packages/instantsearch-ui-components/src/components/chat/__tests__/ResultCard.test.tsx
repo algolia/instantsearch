@@ -36,9 +36,6 @@ function createProps(
   return {
     status: 'complete',
     messages: [userMessage, assistantMessage],
-    tools: {},
-    indexUiState: {},
-    setIndexUiState: jest.fn(),
     onDismiss: jest.fn(),
     onRetry: jest.fn(),
     canContinueInChat: true,
@@ -174,6 +171,36 @@ describe('ResultCard', () => {
     );
 
     expect(container).toBeEmptyDOMElement();
+  });
+
+  test('renders only the answer text, not failed tool calls', () => {
+    const withFailedTool: ChatMessageBase = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-algolia_search_index_products',
+          toolCallId: 'call-1',
+          state: 'output-error',
+          input: {},
+          errorText: 'Search failed.',
+        },
+        { type: 'text', text: 'Pick the Pegasus for daily runs.' },
+      ],
+    };
+    const { container } = render(
+      <ResultCard
+        {...createProps({ messages: [userMessage, withFailedTool] })}
+      />
+    );
+
+    expect(
+      screen.getByText('Pick the Pegasus for daily runs.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Search failed.')).not.toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ChatMessage-toolError')
+    ).not.toBeInTheDocument();
   });
 
   test('renders the streamed text before completion', () => {

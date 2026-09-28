@@ -18,7 +18,6 @@ import type {
   ChatComponentContext,
   ChatMessageBase,
   ChatStatus,
-  ClientSideTools,
 } from './types';
 import type { ComponentProps, Hooks, Renderer } from '../../types';
 
@@ -87,12 +86,6 @@ export type ResultCardOwnProps<
    * the conversation can continue in the chat.
    */
   suggestions?: string[];
-  /**
-   * Tools the message renderer needs to render tool parts.
-   */
-  tools: ClientSideTools;
-  indexUiState: object;
-  setIndexUiState: (state: object) => void;
   onDismiss: () => void;
   onRetry: () => void;
   /**
@@ -115,6 +108,9 @@ export type ResultCardOwnProps<
 
 // Keeps the card compact: the chat shows the full list after the handoff.
 const MAX_SUGGESTIONS = 2;
+
+// The card renders no tool layouts, the only readers of the index UI state.
+const noop = () => {};
 
 const CHAT_STATUS: Record<ResultCardStatus, ChatStatus> = {
   hidden: 'ready',
@@ -147,9 +143,6 @@ export function createResultCardComponent({
       messages,
       error,
       suggestions,
-      tools,
-      indexUiState,
-      setIndexUiState,
       onDismiss,
       onRetry,
       canContinueInChat,
@@ -230,7 +223,7 @@ export function createResultCardComponent({
       isClearing: false,
       open: true,
       maximized: false,
-      tools,
+      tools: {},
       regenerate: () => {
         onRetry();
         return Promise.resolve();
@@ -329,8 +322,8 @@ export function createResultCardComponent({
                 side="left"
                 variant="subtle"
                 showReasoning={false}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
+                indexUiState={{}}
+                setIndexUiState={noop}
                 classNames={{
                   root: cx('ais-ResultCard-message', classNames.message),
                 }}

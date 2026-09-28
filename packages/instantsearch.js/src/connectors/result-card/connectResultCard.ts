@@ -32,8 +32,6 @@ import type {
   DisposeOptions,
   Hit,
   IndexRenderState,
-  IndexUiState,
-  IndexWidget,
   InitOptions,
   RenderOptions,
   WidgetRenderState,
@@ -44,7 +42,6 @@ import type {
   ChatRenderState,
 } from '../chat/connectChat';
 import type { SearchResults } from 'algoliasearch-helper';
-import type { ClientSideTools } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'result-card',
@@ -115,10 +112,6 @@ export type ResultCardRenderState<TUiMessage extends UIMessage = UIMessage> = {
   /** Whether a long answer shows in full rather than clipped with a scroll. */
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
-  /** Tools the shared chat message renderer needs to render tool parts. */
-  tools: ClientSideTools;
-  indexUiState: IndexUiState;
-  setIndexUiState: IndexWidget['setIndexUiState'];
   /** Sends an event to the Insights middleware. */
   sendEvent: SendEventForHits;
 };
@@ -516,7 +509,7 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     ): ResultCardRenderState & {
       widgetParams: ResultCardConnectorParams;
     } => {
-      const { instantSearchInstance, helper, parent } = renderOptions;
+      const { instantSearchInstance, helper } = renderOptions;
       const results =
         'results' in renderOptions ? renderOptions.results : undefined;
 
@@ -561,9 +554,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         continueInChat,
         expanded,
         setExpanded,
-        tools: chatState?.tools ?? {},
-        indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
-        setIndexUiState: parent.setIndexUiState.bind(parent),
         sendEvent,
         widgetParams,
       };

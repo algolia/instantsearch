@@ -25,9 +25,6 @@ type OwnedUiProps =
   | 'messages'
   | 'error'
   | 'suggestions'
-  | 'tools'
-  | 'indexUiState'
-  | 'setIndexUiState'
   | 'onDismiss'
   | 'onRetry'
   | 'canContinueInChat'
@@ -68,9 +65,6 @@ export function ResultCard({
       messages={renderState.messages}
       error={renderState.error}
       suggestions={renderState.suggestions}
-      tools={renderState.tools}
-      indexUiState={renderState.indexUiState}
-      setIndexUiState={renderState.setIndexUiState}
       onDismiss={renderState.dismiss}
       onRetry={renderState.retry}
       canContinueInChat={renderState.canContinueInChat}

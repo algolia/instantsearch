@@ -100,9 +100,6 @@ const createRenderer =
       continueInChat,
       expanded,
       setExpanded,
-      tools,
-      indexUiState,
-      setIndexUiState,
       sendEvent,
       instantSearchInstance,
     },
@@ -135,9 +132,6 @@ const createRenderer =
             continueInChat,
             expanded,
             setExpanded,
-            tools,
-            indexUiState,
-            setIndexUiState,
             sendEvent,
           }}
         />,
@@ -154,9 +148,6 @@ const createRenderer =
         messages={messages}
         error={error}
         suggestions={suggestions}
-        tools={tools}
-        indexUiState={indexUiState}
-        setIndexUiState={setIndexUiState}
         onDismiss={dismiss}
         onRetry={retry}
         canContinueInChat={canContinueInChat}
