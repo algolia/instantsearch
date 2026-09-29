@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "7.6.10",
+  "version": "7.6.11",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
   "keywords": [
@@ -10,9 +10,7 @@
   "repository": "algolia/instantsearch",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
-  "bin": {
-    "create-instantsearch-app": "src/cli/index.js"
-  },
+  "bin": "src/cli/index.js",
   "scripts": {
     "start": "node src/cli/index.js",
     "test": "jest --no-color src && yarn run test:e2e",
@@ -48,7 +46,7 @@
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.114.0",
+    "@instantsearch/testutils": "1.115.0",
     "jest-image-snapshot": "2.12.0",
     "walk-sync": "2.0.2"
   }
