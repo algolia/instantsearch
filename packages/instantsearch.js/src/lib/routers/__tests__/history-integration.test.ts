@@ -138,3 +138,90 @@ test('clears url with cleanUrlOnDispose: undefined', async () => {
   // URL has been cleaned
   expect(window.location.search).toBe('');
 });
+
+describe('after a popstate', () => {
+  const indexName = 'indexName';
+
+  function createSearch() {
+    const search = instantsearch({
+      indexName,
+      searchClient: createSearchClient(),
+      routing: {
+        router: historyRouter({ writeDelay, cleanUrlOnDispose: false }),
+      },
+    });
+
+    search.addWidgets([connectPagination(() => {})({})]);
+    search.start();
+
+    return search;
+  }
+
+  function navigate(go: () => void) {
+    const popState = new Promise((resolve) =>
+      window.addEventListener('popstate', resolve, { once: true })
+    );
+    go();
+    return popState;
+  }
+
+  test('writes the next change when the popstate left the state unchanged', async () => {
+    const search = createSearch();
+
+    // Following an anchor fires a popstate too.
+    await navigate(() => {
+      window.location.hash = 'details';
+    });
+    await wait(writeWait);
+
+    // Going back does not change the search state.
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+
+    search.dispose();
+  });
+
+  test('writes a change made before the popstate write is flushed', async () => {
+    const search = createSearch();
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    await navigate(() => window.history.back());
+    search.renderState[indexName].pagination!.refine(4);
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+
+    search.dispose();
+  });
+
+  test('does not push the state it navigated to', async () => {
+    const search = createSearch();
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+    search.renderState[indexName].pagination!.refine(2);
+    await wait(writeWait);
+
+    const historyLength = window.history.length;
+
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+    expect(window.history.length).toBe(historyLength);
+
+    await navigate(() => window.history.forward());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=3')}`);
+
+    search.dispose();
+  });
+});

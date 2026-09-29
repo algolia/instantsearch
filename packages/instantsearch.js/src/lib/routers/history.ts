@@ -170,6 +170,10 @@ See documentation: ${createDocumentationLink({
     safelyRunOnBrowser(({ window: browserWindow }) => {
       const url = this.createURL(routeState);
       const title = this.windowTitle && this.windowTitle(routeState);
+      // The first write after a popstate is the one it caused: the URL already
+      // reflects that state, so it should not be pushed. Later writes should.
+      const causedByPopState = this.inPopState;
+      this.inPopState = false;
 
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -178,7 +182,7 @@ See documentation: ${createDocumentationLink({
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
 
-        if (this.shouldWrite(url)) {
+        if (!causedByPopState && this.shouldWrite(url)) {
           if (this._push) {
             this._push(url);
           } else {
@@ -186,7 +190,6 @@ See documentation: ${createDocumentationLink({
           }
           this.latestAcknowledgedHistory = browserWindow.history.length;
         }
-        this.inPopState = false;
         this.writeTimer = undefined;
       }, this.writeDelay);
     });
@@ -214,6 +217,10 @@ See documentation: ${createDocumentationLink({
       // We always read the state from the URL because the state of the history
       // can be incorect in some cases (e.g. using React Router).
       callback(this.read());
+      // If the popstate did not change the state, no write consumed the flag.
+      setTimeout(() => {
+        this.inPopState = false;
+      });
     };
 
     safelyRunOnBrowser(({ window: browserWindow }) => {
@@ -299,9 +306,6 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       );
 
       return (
-        // When the last state change was through popstate, the IS.js state changes,
-        // but that should not write the URL.
-        !this.inPopState &&
         // When the previous pushState after dispose was by IS.js, we want to write the URL.
         lastPushWasByISAfterDispose &&
         // When the URL is the same as the current one, we do not want to write it.
