@@ -3060,6 +3060,138 @@ data: [DONE]`,
     });
   });
 
+  describe('prompt shortcuts', () => {
+    const SENTINEL = '__ALGOLIA_COMPARISON_comparison_default__';
+    const DISPLAY_TEXT = 'Compare these products: Trail Jacket, Storm Shell';
+
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    const echoStream = (data: unknown) =>
+      chatStream([
+        { type: 'start', messageId: 'assistant-1' },
+        { type: 'data-prompt-shortcut', data, transient: true },
+        { type: 'text-start', id: 'text-1' },
+        { type: 'text-delta', id: 'text-1', delta: 'Both are waterproof.' },
+        { type: 'text-end', id: 'text-1' },
+        { type: 'finish' },
+      ] as UIMessageChunk[]);
+
+    it('rewrites the sentinel the compare widget sent with the text the server persisted', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      const [userMessage, assistantMessage] = widget.chatInstance.messages;
+      expect(userMessage.role).toBe('user');
+      expect(userMessage.parts).toEqual([{ type: 'text', text: DISPLAY_TEXT }]);
+      expect(assistantMessage.parts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'text',
+            text: 'Both are waterproof.',
+          }),
+        ])
+      );
+    });
+
+    it('rewrites only the message being answered when an earlier turn holds the same sentinel', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const earlierText = 'Compare these products: Rain Coat, Wind Breaker';
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+        initialMessages: [
+          {
+            id: 'user-0',
+            role: 'user',
+            parts: [{ type: 'text', text: earlierText }],
+          },
+          {
+            id: 'assistant-0',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'The coat is heavier.' }],
+          },
+        ],
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      const texts = widget.chatInstance.messages
+        .filter((message) => message.role === 'user')
+        .map((message) => (message.parts[0] as { text: string }).text);
+      expect(texts).toEqual([earlierText, DISPLAY_TEXT]);
+    });
+
+    it('leaves the transcript alone when the echo does not match what was sent', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        echoStream({
+          sentinel: '__ALGOLIA_COMPARISON_other__',
+          displayText: DISPLAY_TEXT,
+        })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: SENTINEL },
+      ]);
+    });
+
+    it('ignores a malformed echo and still forwards every data part to onData', async () => {
+      const onData = jest.fn();
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(echoStream({ sentinel: SENTINEL }));
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+        onData,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: SENTINEL },
+      ]);
+      expect(onData).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'data-prompt-shortcut',
+          data: { sentinel: SENTINEL },
+        })
+      );
+    });
+  });
+
   describe('transport configuration', () => {
     it('throws error when neither agentId nor transport is provided', () => {
       const renderFn = jest.fn();

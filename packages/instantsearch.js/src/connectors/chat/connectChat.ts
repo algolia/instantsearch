@@ -780,9 +780,61 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
+      // A prompt-shortcut turn (the `compare` widget's
+      // `__ALGOLIA_COMPARISON_<id>__`) sends a sentinel as the user message,
+      // which Agent Studio resolves into the natural-language text it
+      // persists on that row. The local transcript still holds the sentinel,
+      // so the server echoes the persisted text as a transient
+      // `data-prompt-shortcut` part right after `start`. Swapping it into the
+      // message that sent it keeps the live bubble, the session-restored
+      // transcript and a history reload in agreement, without the client
+      // knowing how shortcuts are configured or rendered.
+      const applyPromptShortcutEcho = (dataPart: {
+        type: string;
+        data?: unknown;
+      }) => {
+        if (dataPart.type !== 'data-prompt-shortcut') return;
+        const data = dataPart.data as
+          | { sentinel?: unknown; displayText?: unknown }
+          | undefined;
+        const sentinel = data?.sentinel;
+        const displayText = data?.displayText;
+        if (typeof sentinel !== 'string' || typeof displayText !== 'string') {
+          return;
+        }
+
+        setMessages((messages) => {
+          // Only the message being answered sent this sentinel: earlier turns
+          // were rewritten by their own echo, and the same shortcut resolves
+          // to a different text per selection.
+          for (let index = messages.length - 1; index >= 0; index--) {
+            const message = messages[index];
+            if (message.role !== 'user' || message.parts?.length !== 1) {
+              continue;
+            }
+            const part = message.parts[0];
+            if (part.type !== 'text' || part.text.trim() !== sentinel) {
+              continue;
+            }
+
+            const updated = [...messages];
+            updated[index] = {
+              ...message,
+              parts: [{ ...part, text: displayText }],
+            } as TUiMessage;
+            return updated;
+          }
+          return messages;
+        });
+      };
+
       let canRepairRestoredPendingToolParts = !resume;
       const chat = new Chat({
         ...options,
+        onData: (dataPart) => {
+          applyPromptShortcutEcho(dataPart);
+          options.onData?.(dataPart);
+        },
         persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
         transport,
