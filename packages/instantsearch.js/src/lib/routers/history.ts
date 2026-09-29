@@ -1,6 +1,11 @@
 import qs from 'qs';
 
-import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
+import {
+  createDocumentationLink,
+  isEqual,
+  safelyRunOnBrowser,
+  warning,
+} from '../utils';
 
 import type { Router, UiState } from '../../types';
 
@@ -227,10 +232,7 @@ See documentation: ${createDocumentationLink({
       // last write. Otherwise, no write would consume the flag and the next
       // change would be skipped. The write can come later than this callback,
       // e.g. with a controlled `onStateChange`.
-      this.inPopState =
-        this.lastWrittenRouteState === undefined ||
-        this.createURL(routeState) !==
-          this.createURL(this.lastWrittenRouteState);
+      this.inPopState = !this.isLastWrittenRouteState(routeState);
 
       callback(routeState);
     };
@@ -301,6 +303,27 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 
   public start() {
     this.isDisposed = false;
+  }
+
+  /**
+   * Whether a route state read from the URL is the last written one. The last
+   * written state is read back from its URL so that both are compared the way
+   * the URL stores them: values as strings, without empty objects, in any
+   * key order.
+   */
+  private isLastWrittenRouteState(routeState: TRouteState): boolean {
+    return safelyRunOnBrowser(({ window: browserWindow }) => {
+      if (this.lastWrittenRouteState === undefined) {
+        return false;
+      }
+
+      const location = new URL(
+        this.createURL(this.lastWrittenRouteState),
+        browserWindow.location.href
+      ) as unknown as Location;
+
+      return isEqual(routeState, this.parseURL({ qsModule: qs, location }));
+    });
   }
 
   private shouldWrite(url: string): boolean {

@@ -193,6 +193,42 @@ describe('after a popstate', () => {
     search.dispose();
   });
 
+  test('writes the next change when the popstate URL has reordered parameters', async () => {
+    const search = instantsearch({
+      indexName,
+      searchClient: createSearchClient(),
+      routing: {
+        router: historyRouter({ writeDelay, cleanUrlOnDispose: false }),
+      },
+    });
+    search.addWidgets([
+      connectPagination(() => {})({}),
+      connectSearchBox(() => {})({}),
+    ]);
+    search.start();
+
+    search.renderState[indexName].searchBox!.refine('query');
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    // The same state, with its parameters in another order.
+    const parameters = window.location.search.slice(1).split('&');
+    expect(parameters).toHaveLength(2);
+    window.history.replaceState({}, '', `?${parameters.reverse().join('&')}`);
+
+    await navigate(() => {
+      window.location.hash = 'details';
+    });
+    await wait(writeWait);
+
+    search.renderState[indexName].pagination!.refine(2);
+    await wait(writeWait);
+
+    expect(window.location.search).toContain(encodeURI('indexName[page]=3'));
+
+    search.dispose();
+  });
+
   test('writes a change made before the popstate write is flushed', async () => {
     const search = createSearch();
 
