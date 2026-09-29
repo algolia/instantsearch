@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce",
-  "version": "1.128.0",
+  "version": "1.129.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.29.3",
+    "algoliasearch-helper": "3.29.4",
     "instantsearch-ui-components": "0.41.0",
     "instantsearch.css": "8.23.0",
-    "instantsearch.js": "4.118.0"
+    "instantsearch.js": "4.118.1"
   },
   "devDependencies": {
     "vite": "5.0.7",
