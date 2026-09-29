@@ -54,6 +54,6 @@
     "@playwright/test": "1.49.1"
   },
   "peerDependencies": {
-    "next": ">= 9 && < 17"
+    "next": ">= 9 < 17"
   }
 }

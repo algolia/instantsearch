@@ -56,4 +56,10 @@ shell.sed(
   ...shell.ls('examples/*/*/package.json')
 );
 
-shell.exec('yarn install');
+// `--no-immutable`: the rewrites above intentionally desync package.json from
+// the lockfile, and Yarn enables immutable installs by default on CI.
+const install = shell.exec('yarn install --no-immutable');
+
+if (install.code !== 0) {
+  process.exit(install.code);
+}

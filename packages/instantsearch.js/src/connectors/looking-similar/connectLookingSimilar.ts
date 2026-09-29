@@ -190,7 +190,7 @@ export default (function connectLookingSimilar<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID,
+          itemsWithAbsolutePositionAndQueryID as unknown as Hit<THit>[],
           {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
           }
