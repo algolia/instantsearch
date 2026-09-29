@@ -49,7 +49,7 @@ Only after choosing an approach should you edit files. Record the chosen approac
 
 After editing, run a bounded generic validation loop before writing the final report:
 
-- If dependencies are unavailable, run `yarn install --frozen-lockfile` once.
+- If dependencies are unavailable, run `yarn install --immutable` once.
 - Run `yarn lint:changed`.
 - For changed JavaScript, TypeScript, TSX, JSX, CJS, or Vue source files, run `yarn jest --findRelatedTests <changed source files> --ci --runInBand --passWithNoTests`.
 - Run `yarn type-check` only when the candidate changes shared TypeScript contracts, generated declarations, public exports, or cross-package APIs. Otherwise, leave full type-checking to PR CI and say so in the report.
