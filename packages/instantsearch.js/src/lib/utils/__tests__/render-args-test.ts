@@ -3,7 +3,7 @@ import { createInitArgs, createRenderArgs } from '../render-args';
 import type { IndexWidget, InstantSearch, Widget } from '../../../types';
 
 const createFakeHelper = (state: Record<string, unknown> = {}) =>
-  ({ state } as any);
+  ({ state }) as any;
 
 const createFakeParent = (helper: any): IndexWidget =>
   ({
@@ -12,7 +12,7 @@ const createFakeParent = (helper: any): IndexWidget =>
     getScopedResults: () => [],
     getIndexId: () => 'indexName',
     createURL: () => '',
-  } as any);
+  }) as any;
 
 const createFakeInstantSearch = (): InstantSearch =>
   ({
@@ -20,7 +20,7 @@ const createFakeInstantSearch = (): InstantSearch =>
     templatesConfig: {},
     status: 'idle',
     error: undefined,
-  } as any);
+  }) as any;
 
 describe('render-args', () => {
   describe('renderState', () => {
