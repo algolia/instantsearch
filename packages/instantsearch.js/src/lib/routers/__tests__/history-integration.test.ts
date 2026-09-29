@@ -142,13 +142,20 @@ test('clears url with cleanUrlOnDispose: undefined', async () => {
 describe('after a popstate', () => {
   const indexName = 'indexName';
 
-  function createSearch() {
+  type OnStateChange = NonNullable<
+    Parameters<typeof instantsearch>[0]['onStateChange']
+  >;
+
+  function createSearch({
+    onStateChange,
+  }: { onStateChange?: OnStateChange } = {}) {
     const search = instantsearch({
       indexName,
       searchClient: createSearchClient(),
       routing: {
         router: historyRouter({ writeDelay, cleanUrlOnDispose: false }),
       },
+      onStateChange,
     });
 
     search.addWidgets([connectPagination(() => {})({})]);
@@ -223,5 +230,56 @@ describe('after a popstate', () => {
     expect(window.location.search).toBe(`?${encodeURI('indexName[page]=3')}`);
 
     search.dispose();
+  });
+
+  describe('with a controlled state applied later', () => {
+    const onStateChange: OnStateChange = ({ uiState, setUiState }) => {
+      setTimeout(() => setUiState(uiState), writeDelay);
+    };
+
+    test('does not push the state it navigated to', async () => {
+      // InstantSearch drops the unknown parameter when writing this state.
+      window.history.pushState(
+        {},
+        '',
+        `/?${encodeURI('indexName[unknown]=value')}`
+      );
+      const search = createSearch({ onStateChange });
+      await wait(writeWait);
+
+      search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+
+      const historyLength = window.history.length;
+
+      await navigate(() => window.history.back());
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(
+        `?${encodeURI('indexName[unknown]=value')}`
+      );
+      expect(window.history.length).toBe(historyLength);
+
+      search.dispose();
+    });
+
+    test('writes the next change when the popstate left the state unchanged', async () => {
+      const search = createSearch({ onStateChange });
+
+      await navigate(() => {
+        window.location.hash = 'details';
+      });
+      await wait(writeWait);
+
+      await navigate(() => window.history.back());
+      await wait(writeWait);
+
+      search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+
+      search.dispose();
+    });
   });
 });

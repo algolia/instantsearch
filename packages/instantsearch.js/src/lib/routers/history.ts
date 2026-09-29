@@ -92,6 +92,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private inPopState: boolean = false;
 
   /**
+   * The route state of the last write, used to know whether a popstate will
+   * cause a write. `undefined` until the first write.
+   */
+  private lastWrittenRouteState?: TRouteState;
+
+  /**
    * Indicates whether the history router is disposed or not.
    */
   protected isDisposed: boolean = false;
@@ -174,6 +180,7 @@ See documentation: ${createDocumentationLink({
       // reflects that state, so it should not be pushed. Later writes should.
       const causedByPopState = this.inPopState;
       this.inPopState = false;
+      this.lastWrittenRouteState = routeState;
 
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -212,15 +219,20 @@ See documentation: ${createDocumentationLink({
         this.writeTimer = undefined;
       }
 
-      this.inPopState = true;
-
       // We always read the state from the URL because the state of the history
       // can be incorect in some cases (e.g. using React Router).
-      callback(this.read());
-      // If the popstate did not change the state, no write consumed the flag.
-      setTimeout(() => {
-        this.inPopState = false;
-      });
+      const routeState = this.read();
+
+      // The popstate only causes a write when it changes the state from the
+      // last write. Otherwise, no write would consume the flag and the next
+      // change would be skipped. The write can come later than this callback,
+      // e.g. with a controlled `onStateChange`.
+      this.inPopState =
+        this.lastWrittenRouteState === undefined ||
+        this.createURL(routeState) !==
+          this.createURL(this.lastWrittenRouteState);
+
+      callback(routeState);
     };
 
     safelyRunOnBrowser(({ window: browserWindow }) => {
@@ -282,6 +294,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
     if (this._cleanUrlOnDispose) {
       this.write({} as TRouteState);
     }
+
+    // A new InstantSearch instance starts without a written state.
+    this.lastWrittenRouteState = undefined;
   }
 
   public start() {
