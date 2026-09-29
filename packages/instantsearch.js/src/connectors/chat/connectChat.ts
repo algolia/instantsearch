@@ -668,14 +668,41 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
 
-      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
-      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
-        messages.map((message) => ({
-          ...message,
-          parts: message.parts?.filter(
-            (part) => !('type' in part && part.type.startsWith('data-'))
-          ),
-        }));
+      // Shapes the local transcript into what the backend accepts: drops the
+      // custom data parts (like data-suggestions) it does not take, and puts a
+      // prompt-shortcut sentinel back on the user message that displays its
+      // resolved text (see `applyPromptShortcutEcho`). The wire always carries
+      // the sentinel, so a regenerate or a follow-up turn still resolves the
+      // configured prompt exactly like the first send did.
+      const prepareOutgoingMessages = (messages: UIMessage[]): UIMessage[] =>
+        messages.map((message) => {
+          const { promptShortcut, ...metadata } =
+            (message.metadata as
+              | { promptShortcut?: { sentinel?: unknown } }
+              | undefined) ?? {};
+          const sentinel =
+            typeof promptShortcut?.sentinel === 'string'
+              ? promptShortcut.sentinel
+              : undefined;
+
+          return {
+            ...message,
+            ...(sentinel
+              ? {
+                  metadata: Object.keys(metadata).length ? metadata : undefined,
+                }
+              : {}),
+            parts: message.parts
+              ?.filter(
+                (part) => !('type' in part && part.type.startsWith('data-'))
+              )
+              .map((part) =>
+                sentinel && part.type === 'text'
+                  ? { ...part, text: sentinel }
+                  : part
+              ),
+          };
+        });
 
       if ('transport' in options && options.transport) {
         const originalPrepare = options.transport.prepareSendMessagesRequest;
@@ -697,12 +724,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                     ...params.body,
                   },
                 };
-            // Then filter out data-* parts
+            // Then shape the messages for the wire
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
               body: {
                 ...prepared.body,
-                messages: filterDataParts(
+                messages: prepareOutgoingMessages(
                   (prepared.body as { messages: UIMessage[] }).messages
                 ),
               },
@@ -768,7 +795,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               body: {
                 id,
                 messageId,
-                messages: filterDataParts(messages),
+                messages: prepareOutgoingMessages(messages),
               },
             };
           },
@@ -788,7 +815,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       // `data-prompt-shortcut` part right after `start`. Swapping it into the
       // message that sent it keeps the live bubble, the session-restored
       // transcript and a history reload in agreement, without the client
-      // knowing how shortcuts are configured or rendered.
+      // knowing how shortcuts are configured or rendered. The sentinel moves
+      // to the message metadata so `prepareOutgoingMessages` can put it back
+      // on the wire: the backend resolves the shortcut from the token, not
+      // from its display text.
       const applyPromptShortcutEcho = (dataPart: {
         type: string;
         data?: unknown;
@@ -821,6 +851,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             updated[index] = {
               ...message,
               parts: [{ ...part, text: displayText }],
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                promptShortcut: { sentinel },
+              },
             } as TUiMessage;
             return updated;
           }

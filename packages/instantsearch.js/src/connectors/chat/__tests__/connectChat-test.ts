@@ -3110,6 +3110,78 @@ data: [DONE]`,
       );
     });
 
+    it('puts the sentinel back on the wire when regenerating, so the configured prompt still resolves', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({
+        text: SENTINEL,
+        metadata: { turnContext: { selected_products: '[]' } },
+      });
+      await wait(0);
+      await widget.chatInstance.regenerate();
+      await wait(0);
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      const [sentUserMessage] = JSON.parse(fetchMock.mock.calls[1][1].body)
+        .messages as UIMessage[];
+      expect(sentUserMessage.parts).toEqual([{ type: 'text', text: SENTINEL }]);
+      // The connector's bookkeeping stays local; the caller's metadata goes through.
+      expect(sentUserMessage.metadata).toEqual({
+        turnContext: { selected_products: '[]' },
+      });
+      // While the local transcript keeps showing the readable text.
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: DISPLAY_TEXT },
+      ]);
+    });
+
+    it('replays the sentinel, not the display text, on a follow-up turn', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'text-start', id: 'text-2' },
+            { type: 'text-delta', id: 'text-2', delta: 'The jacket.' },
+            { type: 'text-end', id: 'text-2' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+      await widget.chatInstance.sendMessage({ text: 'which one is lighter?' });
+      await wait(0);
+
+      const sentUserMessages = (
+        JSON.parse(fetchMock.mock.calls[1][1].body).messages as UIMessage[]
+      ).filter((message) => message.role === 'user');
+      expect(
+        sentUserMessages.map(
+          (message) => (message.parts[0] as { text: string }).text
+        )
+      ).toEqual([SENTINEL, 'which one is lighter?']);
+      // Nothing of the connector's bookkeeping reaches the wire.
+      expect(sentUserMessages[0]).not.toHaveProperty('metadata');
+    });
+
     it('rewrites only the message being answered when an earlier turn holds the same sentinel', async () => {
       const fetchMock = jest
         .fn()
