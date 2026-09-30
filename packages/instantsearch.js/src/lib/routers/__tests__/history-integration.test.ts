@@ -293,6 +293,26 @@ describe('after a popstate', () => {
     search.dispose();
   });
 
+  test('writes a change made in the same task as the popstate', async () => {
+    const search = createSearch();
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    // Another popstate listener refines after the router applied the route.
+    const refineOnPopState = () => {
+      search.renderState[indexName].pagination!.refine(4);
+    };
+    window.addEventListener('popstate', refineOnPopState, { once: true });
+
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+
+    search.dispose();
+  });
+
   test('does not push the state it navigated to', async () => {
     const search = createSearch();
 

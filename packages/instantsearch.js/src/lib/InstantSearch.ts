@@ -851,7 +851,7 @@ See documentation: ${createDocumentationLink({
    * Set the UI state and trigger a search.
    * @param uiState The next UI state or a function computing it from the current state
    * @param callOnStateChange private parameter used to know if the method is called from a state change
-   * @param onApply private parameter called when this UI state is applied, which can be later or never with a controlled `onStateChange`
+   * @param onApply private parameter called right before the middleware are notified of the state change applying this UI state, unless other changes are part of it. With a controlled `onStateChange`, it can be later or never.
    */
   public setUiState(
     uiState: TUiState | ((previousUiState: TUiState) => TUiState),
@@ -876,25 +876,36 @@ See documentation: ${createDocumentationLink({
       this.onStateChange({
         uiState: nextUiState,
         setUiState: (finalUiState) => {
-          setIndexHelperState(
+          this._applyUiState(
             typeof finalUiState === 'function'
               ? finalUiState(nextUiState)
               : finalUiState,
-            this.mainIndex
+            onApply
           );
-
-          onApply?.();
-          this.scheduleSearch();
-          this.onInternalStateChange();
         },
       });
     } else {
-      setIndexHelperState(nextUiState, this.mainIndex);
-
-      onApply?.();
-      this.scheduleSearch();
-      this.onInternalStateChange();
+      this._applyUiState(nextUiState, onApply);
     }
+  }
+
+  /**
+   * Whether `_applyUiState` is setting the helper state, which also notifies
+   * the state change.
+   */
+  public _isApplyingUiState = false;
+
+  public _applyUiState(uiState: TUiState, onApply?: () => void) {
+    this.onInternalStateChange(onApply);
+
+    this._isApplyingUiState = true;
+    try {
+      setIndexHelperState(uiState, this.mainIndex);
+    } finally {
+      this._isApplyingUiState = false;
+    }
+
+    this.scheduleSearch();
   }
 
   public getUiState(): TUiState {
@@ -906,15 +917,26 @@ See documentation: ${createDocumentationLink({
     return this.mainIndex.getWidgetUiState({}) as TUiState;
   }
 
-  public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
+  public onInternalStateChange = defer(
+    (onApply?: () => void) => {
+      const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
-    this.middleware.forEach(({ instance }) => {
-      instance.onStateChange({
-        uiState: nextUiState,
+      onApply?.();
+
+      this.middleware.forEach(({ instance }) => {
+        instance.onStateChange({
+          uiState: nextUiState,
+        });
       });
-    });
-  });
+    },
+    // The notified state only applies a UI state given to `setUiState` when no
+    // other change is part of it. Changes made while applying it are.
+    ([pendingOnApply], [nextOnApply]): [(() => void)?] => [
+      this._isApplyingUiState || pendingOnApply === nextOnApply
+        ? pendingOnApply
+        : undefined,
+    ]
+  );
 
   public createURL(nextState: TUiState = {} as TUiState): string {
     if (!this.started) {
