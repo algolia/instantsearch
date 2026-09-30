@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { DocsLinks } from './DocsLink';
+import { MinimizeToggle, useMinimized } from './MinimizeToggle';
 
 import type { ChatLayout } from './widgets/WidgetChat';
 import type { ComponentChildren } from 'preact';
@@ -26,6 +27,7 @@ export function ChatLayoutSwitcher({
   children,
 }: Props) {
   const [hovered, setHovered] = useState(false);
+  const { minimized, toggle } = useMinimized('chat');
 
   return (
     <div
@@ -33,7 +35,9 @@ export function ChatLayoutSwitcher({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <header class="-mx-1 -mt-1 mb-3 flex items-start gap-1 text-xs">
+      <header
+        class={`-mx-1 -mt-1 flex items-start gap-1 text-xs ${minimized ? '' : 'mb-3'}`}
+      >
         <span class="flex flex-wrap items-center">
           <span class="mx-1 cursor-default font-mono leading-relaxed text-neutral-400 dark:text-neutral-500">
             chat
@@ -59,16 +63,26 @@ export function ChatLayoutSwitcher({
           ))}
         </span>
         <DocsLinks names={['chat']} visible={hovered} />
+        <MinimizeToggle
+          minimized={minimized}
+          visible={hovered}
+          onToggle={toggle}
+        />
       </header>
 
-      {layout !== 'inline' && (
+      {layout !== 'inline' && !minimized && (
         <p class="mb-3 text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
           The <span class="font-mono">{layout}</span> layout renders relative to
           the viewport, so the chat UI appears outside this tile.
         </p>
       )}
 
-      {children}
+      {/* Hidden rather than unmounted so the conversation survives. Only the
+          inline layout lives in this tile; `display: none` would also hide the
+          fixed-position overlay/sidePanel chat. */}
+      <div class={minimized && layout === 'inline' ? 'hidden' : ''}>
+        {children}
+      </div>
     </div>
   );
 }

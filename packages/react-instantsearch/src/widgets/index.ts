@@ -2,6 +2,7 @@ export * from './Autocomplete';
 export * from './Breadcrumb';
 export * from './Chat';
 export * from './PromptSuggestions';
+export * from './ResultCard';
 export * from './ChatTrigger';
 export * from './CompareBar';
 export * from './ClearRefinements';
