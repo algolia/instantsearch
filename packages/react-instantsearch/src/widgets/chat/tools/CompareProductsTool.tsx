@@ -13,8 +13,9 @@ import type {
  *
  * Registered by default in the chat widget so the agent can trigger a grounded
  * side-by-side comparison: its tool call names only the product objectIDs and
- * the attribute keys, and every cell is hydrated client-side from the real
- * `algolia_search_index` hits. The model never types a value, so it cannot
+ * the attribute keys, and every cell is hydrated client-side from real records
+ * (the shopper's selection and `algolia_search_index` hits). The model never
+ * types a value, so it cannot
  * hallucinate one. See `instantsearch-ui-components` `CompareProductsTool` for
  * the contract, and `comparison-eval/README.md` for the study behind it.
  */
