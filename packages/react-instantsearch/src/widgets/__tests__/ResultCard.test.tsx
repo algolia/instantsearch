@@ -30,7 +30,7 @@ function createActivatingSearchClient() {
           query: 'running shoes',
           params: '',
           index: 'indexName',
-          userData: [{ resultCard: { enabled: true } }],
+          renderingContent: { widgets: { resultCard: { enabled: true } } },
         })) as unknown as Array<SearchResponse<any>>,
       })
     ) as MockSearchClient['search'],
