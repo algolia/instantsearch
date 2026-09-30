@@ -1117,7 +1117,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (!instantSearchInstance.onStateChange) {
           // While `setUiState` applies a state, the change is part of it.
           instantSearchInstance.onInternalStateChange(
-            instantSearchInstance._isApplyingUiState ? null : undefined
+            instantSearchInstance._onApplyUiState
           );
         }
       });

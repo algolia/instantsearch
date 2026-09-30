@@ -11,6 +11,8 @@ import { index } from '../../../widgets';
 import simpleStateMapping from '../../stateMappings/simple';
 import historyRouter from '../history';
 
+import type { Widget } from '../../../types';
+
 beforeEach(() => {
   window.history.pushState({}, '', '/');
 });
@@ -365,6 +367,83 @@ describe('after a popstate', () => {
     await wait(writeWait);
 
     expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+
+    search.dispose();
+  });
+
+  test('does not push the state it navigated to when a child index throws applying it', async () => {
+    let shouldThrow = false;
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (shouldThrow && uiState.query === 'a') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    window.history.pushState(
+      {},
+      '',
+      `/?${encodeURI('indexName[page]=5&childIndexName[query]=a')}`
+    );
+    const search = instantsearch({
+      indexName,
+      searchClient: createSearchClient(),
+      routing: {
+        router: historyRouter({ writeDelay, cleanUrlOnDispose: false }),
+      },
+    });
+    search.addWidgets([
+      connectPagination(() => {})({}),
+      index({ indexName: 'childIndexName' }).addWidgets([throwingWidget]),
+    ]);
+    search.start();
+    await wait(writeWait);
+
+    search.setUiState({
+      [indexName]: { page: 2 },
+      childIndexName: { query: 'b' },
+    });
+    await wait(writeWait);
+
+    const nextEntry = window.location.search;
+    const historyLength = window.history.length;
+
+    // The error is thrown in the popstate listener.
+    const errors: unknown[] = [];
+    const onError = (event: ErrorEvent) => {
+      event.preventDefault();
+      errors.push(event.error);
+    };
+    window.addEventListener('error', onError);
+
+    shouldThrow = true;
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+    shouldThrow = false;
+
+    window.removeEventListener('error', onError);
+    expect(errors).toEqual([new Error('Cannot apply the UI state')]);
+
+    // The main index is applied, but the partial state isn't pushed.
+    expect(search.getUiState()[indexName].page).toBe(5);
+    expect(window.location.search).toBe(
+      `?${encodeURI('indexName[page]=5&childIndexName[query]=a')}`
+    );
+    expect(window.history.length).toBe(historyLength);
+
+    await navigate(() => window.history.forward());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(nextEntry);
 
     search.dispose();
   });

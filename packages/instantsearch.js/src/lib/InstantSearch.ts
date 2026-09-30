@@ -890,20 +890,20 @@ See documentation: ${createDocumentationLink({
   }
 
   /**
-   * Whether `_applyUiState` is setting the helper state. The index widgets then
-   * notify their state change as part of it.
+   * The `onApply` of the UI state `_applyUiState` is setting. The index widgets
+   * notify their state change with it, as part of applying that UI state.
    */
-  public _isApplyingUiState = false;
+  public _onApplyUiState?: (notifiedUiState: TUiState) => void;
 
   public _applyUiState(
     uiState: TUiState,
     onApply?: (notifiedUiState: TUiState) => void
   ) {
-    this._isApplyingUiState = true;
+    this._onApplyUiState = onApply;
     try {
       setIndexHelperState(uiState, this.mainIndex);
     } finally {
-      this._isApplyingUiState = false;
+      this._onApplyUiState = undefined;
     }
 
     this.scheduleSearch();
@@ -919,13 +919,8 @@ See documentation: ${createDocumentationLink({
     return this.mainIndex.getWidgetUiState({}) as TUiState;
   }
 
-  /**
-   * Notifies the middleware of the state change. `onApply` is the one given to
-   * `setUiState` when applying its UI state, `null` for a change made while
-   * applying it, and `undefined` for any other change.
-   */
   public onInternalStateChange = defer(
-    (onApply?: ((notifiedUiState: TUiState) => void) | null) => {
+    (onApply?: (notifiedUiState: TUiState) => void) => {
       const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
       onApply?.(nextUiState);
@@ -937,19 +932,13 @@ See documentation: ${createDocumentationLink({
       });
     },
     // The notified state only applies a UI state given to `setUiState` when no
-    // other change is part of it. Changes made while applying it are.
+    // other change is part of it.
     (
       [pendingOnApply],
       [nextOnApply]
-    ): [((notifiedUiState: TUiState) => void) | null | undefined] => {
-      if (pendingOnApply === null) {
-        return [nextOnApply];
-      }
-      if (nextOnApply === null || nextOnApply === pendingOnApply) {
-        return [pendingOnApply];
-      }
-      return [undefined];
-    }
+    ): [((notifiedUiState: TUiState) => void)?] => [
+      pendingOnApply === nextOnApply ? pendingOnApply : undefined,
+    ]
   );
 
   public createURL(nextState: TUiState = {} as TUiState): string {
