@@ -18,7 +18,11 @@ export function createInitArgs(
     parent,
     instantSearchInstance,
     state: helper.state,
-    renderState: instantSearchInstance.renderState,
+    // Keep renderState live so render options retained by connector closures
+    // don't retain previous renderState snapshots. See #6669.
+    get renderState() {
+      return instantSearchInstance.renderState;
+    },
     templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     scopedResults: [],
@@ -45,7 +49,10 @@ export function createRenderArgs(
     results,
     scopedResults: parent.getScopedResults(),
     state: results && '_state' in results ? results._state : helper.state,
-    renderState: instantSearchInstance.renderState,
+    // Keep renderState live to avoid retaining previous renderState snapshots.
+    get renderState() {
+      return instantSearchInstance.renderState;
+    },
     templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     searchMetadata: {
