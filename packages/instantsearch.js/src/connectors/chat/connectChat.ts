@@ -9,27 +9,24 @@ import {
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
 import {
+  applyAgentFilters,
   Chat,
   matchesSearchIndexToolName,
   SearchIndexToolType,
 } from '../../lib/chat';
 import {
   checkRendering,
-  clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  getRefinements,
   noop,
   safelyRunOnBrowser,
   sendChatMessageFeedback,
-  uniq,
   walkIndex,
   warning,
 } from '../../lib/utils';
 import { defer } from '../../lib/utils/defer';
-import { flat } from '../../lib/utils/flat';
 
 import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
@@ -51,11 +48,6 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import type {
   AddToolResultForToolCall,
   UserClientSideTool,
@@ -109,13 +101,26 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   clearMessages: () => void;
   /**
+   * Takes over a conversation started by another widget (e.g. `resultCard`).
+   * An empty chat continues it under its `id`; a chat with messages appends
+   * the exchange to its own conversation. The adopted messages are tagged
+   * with `metadata.source` for attribution. Returns `false` when the chat is
+   * mid-generation, in which case nothing is adopted.
+   */
+  adoptConversation: (conversation: {
+    id: string;
+    messages: TUiMessage[];
+    source: string;
+  }) => boolean;
+  /**
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
   /**
-   * The records the chat's tools have fetched, keyed by `objectID`: every tool
-   * call that returned `hits` contributes them, last write winning. Attached to
-   * every tool too, which is how a `layoutComponent` reads it.
+   * The records the conversation holds, keyed by `objectID`: every tool call
+   * that returned `hits` contributes them, as does the selection a `compare`
+   * widget attaches to its message, last write winning. Attached to every tool
+   * too, which is how a `layoutComponent` reads it.
    */
   records: ChatRecordsStore;
   /**
@@ -280,6 +285,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * length and shape) and rejects malformed contexts. Pass a function when the
    * values change per-turn — it is invoked once per send. If the source is
    * async, resolve it upstream and close over the value.
+   *
+   * Merged with any turn context an entry point attaches to the message it
+   * sends (the compare bar's selected products, `openChat`'s `turnContext`);
+   * on a key both provide, the entry point's value wins for that turn.
    */
   context?: Record<string, string> | (() => Record<string, string>);
   /**
@@ -384,122 +393,6 @@ function writePersistedOpen(type: string, open: boolean) {
   } catch {
     // Storage availability must not block the visible state change.
   }
-}
-
-function getAttributesToClear({
-  results,
-  helper,
-}: {
-  results: SearchResults;
-  helper: AlgoliaSearchHelper;
-}) {
-  return uniq(
-    getRefinements(results, helper.state, true).map(
-      (refinement) => refinement.attribute
-    )
-  );
-}
-
-/**
- * One Algolia `numericFilters` entry: `'price <= 1500'`. The operators are
- * exactly the set `helper.addNumericRefinement` accepts, and exactly the set
- * the Algolia MCP Server emits.
- */
-const NUMERIC_FILTER = /^(.+?)\s*(<=|>=|!=|=|<|>)\s*(-?\d+(?:\.\d+)?)$/;
-
-function updateStateFromSearchToolInput(
-  params: ApplyFiltersParams,
-  helper: AlgoliaSearchHelper
-) {
-  // clear all filters first
-  const attributesToClear = getAttributesToClear({
-    results: helper.lastResults!,
-    helper,
-  });
-
-  helper.setState(
-    clearRefinements({
-      helper,
-      attributesToClear,
-    })
-  );
-
-  if (params.facetFilters) {
-    const refinements = flat(params.facetFilters).reduce<
-      Array<{ attribute: string; value: string }>
-    >((acc, filter) => {
-      const separatorIndex = filter.indexOf(':');
-
-      if (separatorIndex > 0) {
-        acc.push({
-          attribute: filter.slice(0, separatorIndex),
-          value: filter.slice(separatorIndex + 1),
-        });
-      }
-
-      return acc;
-    }, []);
-
-    const hierarchicalRefinements = new Map<string, string>();
-
-    refinements.forEach(({ attribute, value }) => {
-      const hierarchicalFacet = helper.state.hierarchicalFacets.find(
-        (facet) =>
-          facet.name === attribute || facet.attributes.includes(attribute)
-      );
-
-      if (hierarchicalFacet) {
-        const currentValue = hierarchicalRefinements.get(
-          hierarchicalFacet.name
-        );
-
-        if (currentValue === undefined || value.length > currentValue.length) {
-          hierarchicalRefinements.set(hierarchicalFacet.name, value);
-        }
-
-        return;
-      }
-
-      if (
-        !helper.state.isConjunctiveFacet(attribute) &&
-        !helper.state.isDisjunctiveFacet(attribute)
-      ) {
-        helper.setState(helper.state.addDisjunctiveFacet(attribute));
-      }
-
-      helper.toggleFacetRefinement(attribute, value);
-    });
-
-    hierarchicalRefinements.forEach((value, name) => {
-      helper.toggleFacetRefinement(name, value);
-    });
-  }
-
-  if (params.numericFilters) {
-    params.numericFilters.forEach((filter) => {
-      const match = filter.match(NUMERIC_FILTER);
-
-      if (!match) {
-        return;
-      }
-
-      const [, attribute, operator, value] = match;
-
-      helper.addNumericRefinement(
-        attribute,
-        operator as SearchParameters.Operator,
-        Number(value)
-      );
-    });
-  }
-
-  if (params.query) {
-    helper.setQuery(params.query);
-  }
-
-  helper.search();
-
-  return helper.state;
 }
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
@@ -624,6 +517,40 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       _chatInstance.clearError();
     };
 
+    const adoptConversation: ChatRenderState<TUiMessage>['adoptConversation'] =
+      ({ id, messages, source }) => {
+        const status = _chatInstance.status;
+        if (status === 'submitted' || status === 'streaming') {
+          return false;
+        }
+        const tagged = messages.map(
+          (message) =>
+            ({
+              ...message,
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                source,
+              },
+            }) as TUiMessage
+        );
+        if (_chatInstance.messages.length === 0) {
+          _chatInstance.setConversationId(id);
+          setMessages(tagged);
+        } else {
+          // The handing-off widget may still be mounted and hand off again
+          // (e.g. a second follow-up suggestion): only new turns are appended.
+          const existingIds = new Set(
+            _chatInstance.messages.map((message) => message.id)
+          );
+          setMessages([
+            ..._chatInstance.messages,
+            ...tagged.filter((message) => !existingIds.has(message.id)),
+          ]);
+        }
+        _chatInstance.clearError();
+        return true;
+      };
+
     const validateEntryPoints = (instantSearchInstance: InstantSearch) => {
       if (disableTriggerValidation || hasValidatedEntryPoints) {
         return;
@@ -668,14 +595,41 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       const { client } = instantSearchInstance;
       const [appId, apiKey] = getAppIdAndApiKey(client);
 
-      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
-      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
-        messages.map((message) => ({
-          ...message,
-          parts: message.parts?.filter(
-            (part) => !('type' in part && part.type.startsWith('data-'))
-          ),
-        }));
+      // Shapes the local transcript into what the backend accepts: drops the
+      // custom data parts (like data-suggestions) it does not take, and puts a
+      // prompt-shortcut sentinel back on the user message that displays its
+      // resolved text (see `applyPromptShortcutEcho`). The wire always carries
+      // the sentinel, so a regenerate or a follow-up turn still resolves the
+      // configured prompt exactly like the first send did.
+      const prepareOutgoingMessages = (messages: UIMessage[]): UIMessage[] =>
+        messages.map((message) => {
+          const { promptShortcut, ...metadata } =
+            (message.metadata as
+              | { promptShortcut?: { sentinel?: unknown } }
+              | undefined) ?? {};
+          const sentinel =
+            typeof promptShortcut?.sentinel === 'string'
+              ? promptShortcut.sentinel
+              : undefined;
+
+          return {
+            ...message,
+            ...(sentinel
+              ? {
+                  metadata: Object.keys(metadata).length ? metadata : undefined,
+                }
+              : {}),
+            parts: message.parts
+              ?.filter(
+                (part) => !('type' in part && part.type.startsWith('data-'))
+              )
+              .map((part) =>
+                sentinel && part.type === 'text'
+                  ? { ...part, text: sentinel }
+                  : part
+              ),
+          };
+        });
 
       if ('transport' in options && options.transport) {
         const originalPrepare = options.transport.prepareSendMessagesRequest;
@@ -697,12 +651,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
                     ...params.body,
                   },
                 };
-            // Then filter out data-* parts
+            // Then shape the messages for the wire
             const applyFilter = (prepared: { body: object }) => ({
               ...prepared,
               body: {
                 ...prepared.body,
-                messages: filterDataParts(
+                messages: prepareOutgoingMessages(
                   (prepared.body as { messages: UIMessage[] }).messages
                 ),
               },
@@ -716,7 +670,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           },
         });
       }
-      if ('agentId' in options && options.agentId) {
+      // A custom `transport` wins: `agentId` alongside it only serves feedback
+      // (and, for the result card, the Rule context).
+      if (!transport && 'agentId' in options && options.agentId) {
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(
@@ -768,7 +724,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               body: {
                 id,
                 messageId,
-                messages: filterDataParts(messages),
+                messages: prepareOutgoingMessages(messages),
               },
             };
           },
@@ -780,9 +736,68 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
+      // A prompt-shortcut turn (the `compare` widget's
+      // `__ALGOLIA_COMPARISON_<id>__`) sends a sentinel as the user message,
+      // which Agent Studio resolves into the natural-language text it
+      // persists on that row. The local transcript still holds the sentinel,
+      // so the server echoes the persisted text as a transient
+      // `data-prompt-shortcut` part right after `start`. Swapping it into the
+      // message that sent it keeps the live bubble, the session-restored
+      // transcript and a history reload in agreement, without the client
+      // knowing how shortcuts are configured or rendered. The sentinel moves
+      // to the message metadata so `prepareOutgoingMessages` can put it back
+      // on the wire: the backend resolves the shortcut from the token, not
+      // from its display text.
+      const applyPromptShortcutEcho = (dataPart: {
+        type: string;
+        data?: unknown;
+      }) => {
+        if (dataPart.type !== 'data-prompt-shortcut') return;
+        const data = dataPart.data as
+          | { sentinel?: unknown; displayText?: unknown }
+          | undefined;
+        const sentinel = data?.sentinel;
+        const displayText = data?.displayText;
+        if (typeof sentinel !== 'string' || typeof displayText !== 'string') {
+          return;
+        }
+
+        setMessages((messages) => {
+          // Only the message being answered sent this sentinel: earlier turns
+          // were rewritten by their own echo, and the same shortcut resolves
+          // to a different text per selection.
+          for (let index = messages.length - 1; index >= 0; index--) {
+            const message = messages[index];
+            if (message.role !== 'user' || message.parts?.length !== 1) {
+              continue;
+            }
+            const part = message.parts[0];
+            if (part.type !== 'text' || part.text.trim() !== sentinel) {
+              continue;
+            }
+
+            const updated = [...messages];
+            updated[index] = {
+              ...message,
+              parts: [{ ...part, text: displayText }],
+              metadata: {
+                ...(message.metadata as Record<string, unknown> | undefined),
+                promptShortcut: { sentinel },
+              },
+            } as TUiMessage;
+            return updated;
+          }
+          return messages;
+        });
+      };
+
       let canRepairRestoredPendingToolParts = !resume;
       const chat = new Chat({
         ...options,
+        onData: (dataPart) => {
+          applyPromptShortcutEcho(dataPart);
+          options.onData?.(dataPart);
+        },
         persistence: normalizedPersistence.messages,
         sendAutomaticallyWhen,
         transport,
@@ -1133,7 +1148,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         }
 
         function applyFilters(params: ApplyFiltersParams) {
-          return updateStateFromSearchToolInput(params, helper);
+          return applyAgentFilters(params, helper);
         }
 
         // A restored or server-rendered conversation never emitted the messages
@@ -1171,15 +1186,29 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           // Resolve once per send; let the server validate the payload and
           // surface any contract violations.
-          const turnContext =
+          const widgetContext =
             typeof context === 'function' ? context() : context;
+          const metadata = message.metadata as
+            | Record<string, unknown>
+            | undefined;
+          // An entry point (compare bar, prompt suggestions, `openChat`) may
+          // have attached its own turn context to the message — e.g. the
+          // selected products of a comparison. Add the ambient widget context
+          // to it rather than replacing it; on a key both provide, the entry
+          // point knows the turn better.
+          const messageTurnContext =
+            metadata?.turnContext &&
+            typeof metadata.turnContext === 'object' &&
+            !Array.isArray(metadata.turnContext)
+              ? (metadata.turnContext as Record<string, string>)
+              : undefined;
 
           return _chatInstance.sendMessage(
             {
               ...message,
               metadata: {
-                ...(message.metadata as Record<string, unknown> | undefined),
-                turnContext,
+                ...metadata,
+                turnContext: { ...widgetContext, ...messageTurnContext },
               },
             } as Parameters<typeof _chatInstance.sendMessage>[0],
             ...rest
@@ -1204,6 +1233,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           clearMessages,
+          adoptConversation,
           tools: toolsWithAddToolResult,
           records,
           sendChatMessageFeedback: _sendChatMessageFeedback,

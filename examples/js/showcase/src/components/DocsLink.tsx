@@ -66,8 +66,7 @@ export function DocsLinks({
 }) {
   return (
     <span
-      class={`ml-auto flex gap-1 transition-opacity ${visible ? 'opacity-100' : 'opacity-0'}`}
-      inert={!visible}
+      class={`ml-auto flex gap-1 transition-opacity ${visible ? 'opacity-100' : 'opacity-0 focus-within:opacity-100'}`}
     >
       {names.map((name) => (
         <DocsLink key={name} name={name} />

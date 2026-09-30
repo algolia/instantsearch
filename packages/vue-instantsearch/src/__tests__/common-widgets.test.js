@@ -599,6 +599,9 @@ const testSetups = {
   createPromptSuggestionsWidgetTests() {
     throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
   },
+  createResultCardWidgetTests() {
+    throw new Error('ResultCard is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -663,6 +666,9 @@ const testOptions = {
   },
   createPromptSuggestionsWidgetTests: {
     skippedTests: { 'PromptSuggestions widget common tests': true },
+  },
+  createResultCardWidgetTests: {
+    skippedTests: { 'ResultCard widget common tests': true },
   },
 };
 

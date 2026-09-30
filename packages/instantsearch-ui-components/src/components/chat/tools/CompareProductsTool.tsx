@@ -15,8 +15,9 @@ import type { ComparisonTableTranslations } from './createGroundedComparisonTabl
  * The agent triggers this client-side tool when it detects a comparison
  * request. Its arguments name ONLY the products (by objectID) and the attribute
  * *keys* to compare — never the values. Every cell is hydrated from the chat
- * records store (`context.records`, filled by the search tools), so the model
- * physically cannot type (and therefore cannot hallucinate) a price or spec.
+ * records store (`context.records`, filled by the shopper's comparison
+ * selection and by the search tools), so the model physically cannot type
+ * (and therefore cannot hallucinate) a price or spec.
  * This is the "grounded table" fix from the agentic-evals comparison study,
  * promoted from the display-block prototype to a first-class tool.
  *

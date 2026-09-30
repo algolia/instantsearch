@@ -138,11 +138,11 @@ export function getComparisonPlaceholderMessage(
 }
 
 /**
- * Builds the default comparison message. It names each selected item so the
- * agent can ground the comparison: it re-retrieves the records with
- * `algolia_search_index` and renders them with the builtin
- * `algolia_compare_products` tool. Works with the default shopping assistant
- * prompt — no agent configuration required.
+ * Builds the default comparison message. It names each selected item; the
+ * records themselves travel in the turn context (`selected_products`), where
+ * both the agent and the builtin `algolia_compare_products` table read them,
+ * so no search round-trip is needed to render the comparison. Works with the
+ * default shopping assistant prompt — no agent configuration required.
  */
 export function getDefaultComparisonMessage(items: CompareItem[]): string {
   const labels = items.map((item) => {

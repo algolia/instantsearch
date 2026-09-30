@@ -258,6 +258,14 @@ export abstract class AbstractChat<TUIMessage extends UIMessage> {
     this.conversationId = this.generateId();
   }
 
+  /**
+   * Continues a conversation started elsewhere (e.g. by a Result Card) under
+   * its server-side id, so the next request carries that thread's context.
+   */
+  setConversationId(id: string): void {
+    this.conversationId = id;
+  }
+
   get messages(): TUIMessage[] {
     return this.state.messages;
   }

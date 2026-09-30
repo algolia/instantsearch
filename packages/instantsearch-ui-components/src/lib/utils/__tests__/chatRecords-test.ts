@@ -135,6 +135,68 @@ describe('createChatRecordsStore', () => {
 });
 
 describe('collectChatRecords', () => {
+  const compareMessage = (id: string, selectedProducts: unknown) =>
+    ({
+      id,
+      role: 'user',
+      parts: [
+        { type: 'text', text: 'Compare these products: Runner vs Trail' },
+      ],
+      metadata: { turnContext: { selected_products: selectedProducts } },
+    }) as ChatMessageBase;
+
+  test('collects the records a comparison selection carries', () => {
+    // The compare connector attaches the selected records to its user message
+    // (JSON-encoded, per the Agent Studio contract), so the comparison table
+    // can be built from them without the agent searching for them again.
+    const store = collectChatRecords([
+      compareMessage(
+        '1',
+        JSON.stringify([
+          { objectID: '1', name: 'Runner', price: 120 },
+          { objectID: '3', name: 'Trail', price: 140 },
+        ])
+      ),
+    ]);
+
+    expect(store.getAll()).toEqual({
+      1: { objectID: '1', name: 'Runner', price: 120 },
+      3: { objectID: '3', name: 'Trail', price: 140 },
+    });
+  });
+
+  test('lets a record the agent re-fetched after the selection win', () => {
+    const store = collectChatRecords([
+      compareMessage('1', JSON.stringify([{ objectID: '1', name: 'Runner' }])),
+      assistantMessage('2', [
+        searchPart('search', [{ objectID: '1', name: 'Runner Pro' }]),
+      ]),
+    ]);
+
+    expect(store.get('1')).toEqual({ objectID: '1', name: 'Runner Pro' });
+  });
+
+  test('ignores a malformed or absent selection', () => {
+    const store = collectChatRecords([
+      compareMessage('1', 'not json'),
+      compareMessage('2', JSON.stringify({ objectID: 'not-an-array' })),
+      compareMessage('3', JSON.stringify(['1', null, { name: 'no objectID' }])),
+      compareMessage('4', undefined),
+      { id: '5', role: 'user', parts: [{ type: 'text', text: 'hi' }] },
+      // Only the user's own selection counts, not a look-alike on a reply.
+      {
+        ...assistantMessage('6', []),
+        metadata: {
+          turnContext: {
+            selected_products: JSON.stringify([{ objectID: '9' }]),
+          },
+        },
+      },
+    ]);
+
+    expect(store.getAll()).toEqual({});
+  });
+
   test('combines the records of every tool call of the conversation', () => {
     const store = collectChatRecords([
       assistantMessage('1', [

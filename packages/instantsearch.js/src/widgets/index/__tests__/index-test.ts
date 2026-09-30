@@ -3092,7 +3092,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           state: expect.anything(),
           parent: expect.anything(),
           instantSearchInstance,
-          renderState: {},
+          renderState: expect.anything(),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
           scopedResults: [],

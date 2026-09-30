@@ -53,6 +53,7 @@ $ais-chat-breakpoint: 680px;
 
   /* Typography */
   --ais-font-size: calc(var(--ais-base-unit) * 1px);
+  --ais-font-size-sm: calc(var(--ais-font-size) * 0.875);
   --ais-font-weight-medium: 500;
   --ais-font-weight-semibold: 600;
   --ais-font-weight-bold: 700;

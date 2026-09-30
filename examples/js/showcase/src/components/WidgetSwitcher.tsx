@@ -2,6 +2,7 @@ import { Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { DocsLinks } from './DocsLink';
+import { MinimizeToggle, useMinimized } from './MinimizeToggle';
 
 import type { ComponentType } from 'preact';
 
@@ -26,6 +27,9 @@ export function WidgetSwitcher({
 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const { minimized, toggle } = useMinimized(
+    title ?? widgets.map((widget) => widget.title).join('|')
+  );
   const hasMultiple = widgets.length > 1;
 
   return (
@@ -34,7 +38,9 @@ export function WidgetSwitcher({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <header class="-mx-1 -mt-1 mb-3 flex items-start gap-1 text-xs">
+      <header
+        class={`-mx-1 -mt-1 flex items-start gap-1 text-xs ${minimized ? '' : 'mb-3'}`}
+      >
         <span class="flex flex-wrap items-center">
           {title && (
             <>
@@ -67,17 +73,25 @@ export function WidgetSwitcher({
           names={widgets[currentIndex].docs ?? [widgets[currentIndex].title]}
           visible={hovered}
         />
+        <MinimizeToggle
+          minimized={minimized}
+          visible={hovered}
+          onToggle={toggle}
+        />
       </header>
 
-      {destroy ? (
-        <CurrentBody key={currentIndex} Body={widgets[currentIndex].body} />
-      ) : (
-        widgets.map((widget, index) => (
-          <div key={index} class={index !== currentIndex ? 'hidden' : ''}>
-            <widget.body />
-          </div>
-        ))
-      )}
+      {/* Hidden rather than unmounted: the widgets keep their state. */}
+      <div class={minimized ? 'hidden' : ''}>
+        {destroy ? (
+          <CurrentBody key={currentIndex} Body={widgets[currentIndex].body} />
+        ) : (
+          widgets.map((widget, index) => (
+            <div key={index} class={index !== currentIndex ? 'hidden' : ''}>
+              <widget.body />
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

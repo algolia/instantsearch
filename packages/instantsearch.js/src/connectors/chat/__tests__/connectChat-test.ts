@@ -94,6 +94,23 @@ describe('connectChat', () => {
       expect(widget.dependsOn).toBe('search');
     });
 
+    it('uses the custom transport when given alongside agentId', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        new Response('data: {"type":"start"}\n\ndata: [DONE]', {
+          headers: { 'Content-Type': 'text/event-stream' },
+        })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: 'agentId',
+        transport: { api: 'https://custom.api', fetch: fetchMock },
+      });
+
+      await widget.chatInstance.sendMessage({ text: 'hello' });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock.mock.calls[0][0]).toBe('https://custom.api');
+    });
+
     it('can be configured to depend on no backend request', () => {
       const customChat = connectChat(jest.fn());
       const widget = customChat({
@@ -973,6 +990,93 @@ describe('connectChat', () => {
       const updatedRenderState = getRenderState();
       expect(updatedRenderState.messages).toHaveLength(0);
       expect(updatedRenderState.id).not.toBe(conversationIdBeforeClear);
+    });
+
+    describe('adoptConversation', () => {
+      const conversation = {
+        id: 'card-conversation',
+        source: 'resultCard',
+        messages: [
+          {
+            id: 'u1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'which laptop is best?' }],
+            metadata: { turnContext: { query: 'which laptop is best?' } },
+          },
+          {
+            id: 'a1',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'The MacBook Air.' }],
+          },
+        ] as UIMessage[],
+      };
+
+      it('continues the conversation under its id when the chat is empty', () => {
+        const { getRenderState } = getInitializedWidget();
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+
+        const renderState = getRenderState();
+        expect(renderState.id).toBe('card-conversation');
+        expect(renderState.messages).toEqual([
+          expect.objectContaining({
+            id: 'u1',
+            metadata: {
+              turnContext: { query: 'which laptop is best?' },
+              source: 'resultCard',
+            },
+          }),
+          expect.objectContaining({
+            id: 'a1',
+            metadata: { source: 'resultCard' },
+          }),
+        ]);
+      });
+
+      it('appends the exchange when the chat already has messages', () => {
+        const { getRenderState } = getInitializedWidget();
+        const renderState = getRenderState();
+        const idBefore = renderState.id;
+        renderState.setMessages([
+          { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] },
+        ]);
+
+        expect(renderState.adoptConversation(conversation)).toBe(true);
+
+        const updated = getRenderState();
+        expect(updated.id).toBe(idBefore);
+        expect(updated.messages.map((message) => message.id)).toEqual([
+          '1',
+          'u1',
+          'a1',
+        ]);
+      });
+
+      it('skips messages already in the conversation on a repeated handoff', () => {
+        const { getRenderState } = getInitializedWidget();
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+        getRenderState().setMessages([
+          ...getRenderState().messages,
+          { id: 'u2', role: 'user', parts: [{ type: 'text', text: 'Why?' }] },
+        ]);
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(true);
+
+        expect(getRenderState().messages.map((message) => message.id)).toEqual([
+          'u1',
+          'a1',
+          'u2',
+        ]);
+      });
+
+      it('refuses while a response is in flight', () => {
+        const { getRenderState, widget } = getInitializedWidget();
+        widget.chatInstance._state.status = 'streaming';
+
+        expect(getRenderState().adoptConversation(conversation)).toBe(false);
+        expect(getRenderState().messages).toHaveLength(0);
+      });
     });
 
     it('renders the rotated conversation id when clearing', () => {
@@ -3060,6 +3164,210 @@ data: [DONE]`,
     });
   });
 
+  describe('prompt shortcuts', () => {
+    const SENTINEL = '__ALGOLIA_COMPARISON_comparison_default__';
+    const DISPLAY_TEXT = 'Compare these products: Trail Jacket, Storm Shell';
+
+    const chatStream = (chunks: UIMessageChunk[]) =>
+      new Response(
+        `${chunks
+          .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+          .join('')}data: [DONE]`,
+        { headers: { 'Content-Type': 'text/event-stream' } }
+      );
+
+    const echoStream = (data: unknown) =>
+      chatStream([
+        { type: 'start', messageId: 'assistant-1' },
+        { type: 'data-prompt-shortcut', data, transient: true },
+        { type: 'text-start', id: 'text-1' },
+        { type: 'text-delta', id: 'text-1', delta: 'Both are waterproof.' },
+        { type: 'text-end', id: 'text-1' },
+        { type: 'finish' },
+      ] as UIMessageChunk[]);
+
+    it('rewrites the sentinel the compare widget sent with the text the server persisted', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      const [userMessage, assistantMessage] = widget.chatInstance.messages;
+      expect(userMessage.role).toBe('user');
+      expect(userMessage.parts).toEqual([{ type: 'text', text: DISPLAY_TEXT }]);
+      expect(assistantMessage.parts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'text',
+            text: 'Both are waterproof.',
+          }),
+        ])
+      );
+    });
+
+    it('puts the sentinel back on the wire when regenerating, so the configured prompt still resolves', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({
+        text: SENTINEL,
+        metadata: { turnContext: { selected_products: '[]' } },
+      });
+      await wait(0);
+      await widget.chatInstance.regenerate();
+      await wait(0);
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      const [sentUserMessage] = JSON.parse(fetchMock.mock.calls[1][1].body)
+        .messages as UIMessage[];
+      expect(sentUserMessage.parts).toEqual([{ type: 'text', text: SENTINEL }]);
+      // The connector's bookkeeping stays local; the caller's metadata goes through.
+      expect(sentUserMessage.metadata).toEqual({
+        turnContext: { selected_products: '[]' },
+      });
+      // While the local transcript keeps showing the readable text.
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: DISPLAY_TEXT },
+      ]);
+    });
+
+    it('replays the sentinel, not the display text, on a follow-up turn', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        )
+        .mockResolvedValueOnce(
+          chatStream([
+            { type: 'start', messageId: 'assistant-2' },
+            { type: 'text-start', id: 'text-2' },
+            { type: 'text-delta', id: 'text-2', delta: 'The jacket.' },
+            { type: 'text-end', id: 'text-2' },
+            { type: 'finish' },
+          ])
+        );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+      await widget.chatInstance.sendMessage({ text: 'which one is lighter?' });
+      await wait(0);
+
+      const sentUserMessages = (
+        JSON.parse(fetchMock.mock.calls[1][1].body).messages as UIMessage[]
+      ).filter((message) => message.role === 'user');
+      expect(
+        sentUserMessages.map(
+          (message) => (message.parts[0] as { text: string }).text
+        )
+      ).toEqual([SENTINEL, 'which one is lighter?']);
+      // Nothing of the connector's bookkeeping reaches the wire.
+      expect(sentUserMessages[0]).not.toHaveProperty('metadata');
+    });
+
+    it('rewrites only the message being answered when an earlier turn holds the same sentinel', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(
+          echoStream({ sentinel: SENTINEL, displayText: DISPLAY_TEXT })
+        );
+      const earlierText = 'Compare these products: Rain Coat, Wind Breaker';
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+        initialMessages: [
+          {
+            id: 'user-0',
+            role: 'user',
+            parts: [{ type: 'text', text: earlierText }],
+          },
+          {
+            id: 'assistant-0',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'The coat is heavier.' }],
+          },
+        ],
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      const texts = widget.chatInstance.messages
+        .filter((message) => message.role === 'user')
+        .map((message) => (message.parts[0] as { text: string }).text);
+      expect(texts).toEqual([earlierText, DISPLAY_TEXT]);
+    });
+
+    it('leaves the transcript alone when the echo does not match what was sent', async () => {
+      const fetchMock = jest.fn().mockResolvedValue(
+        echoStream({
+          sentinel: '__ALGOLIA_COMPARISON_other__',
+          displayText: DISPLAY_TEXT,
+        })
+      );
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: SENTINEL },
+      ]);
+    });
+
+    it('ignores a malformed echo and still forwards every data part to onData', async () => {
+      const onData = jest.fn();
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(echoStream({ sentinel: SENTINEL }));
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+        onData,
+      });
+
+      await widget.chatInstance.sendMessage({ text: SENTINEL });
+      await wait(0);
+
+      expect(widget.chatInstance.messages[0].parts).toEqual([
+        { type: 'text', text: SENTINEL },
+      ]);
+      expect(onData).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'data-prompt-shortcut',
+          data: { sentinel: SENTINEL },
+        })
+      );
+    });
+  });
+
   describe('transport configuration', () => {
     it('throws error when neither agentId nor transport is provided', () => {
       const renderFn = jest.fn();
@@ -3554,6 +3862,64 @@ data: [DONE]`,
       expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
         custom: 'value',
         turnContext: { page: '/about' },
+      });
+    });
+
+    it('adds the widget context to a turn context the message already carries', async () => {
+      // The compare bar attaches the selected products to its message; the
+      // widget's ambient context must not wipe them out on the way to the agent.
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/products', locale: 'en-US' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'Compare these products: A vs B',
+        metadata: {
+          turnContext: {
+            selected_products: '[{"objectID":"A"},{"objectID":"B"}]',
+            comparison_configuration_id: 'algolia_comparison_1',
+          },
+        } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          page: '/products',
+          locale: 'en-US',
+          selected_products: '[{"objectID":"A"},{"objectID":"B"}]',
+          comparison_configuration_id: 'algolia_comparison_1',
+        },
+      });
+    });
+
+    it("lets the message's turn context win on a key the widget context also sets", async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: () => ({ page: '/home', locale: 'en-US' }),
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'hi',
+        metadata: { turnContext: { page: '/products/42' } } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { page: '/products/42', locale: 'en-US' },
       });
     });
 

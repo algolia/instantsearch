@@ -10,6 +10,7 @@ export type ChatReferer =
   | 'compare'
   | 'prompt-suggestions-widget'
   | 'prompt-suggestions-autocomplete'
+  | 'result-card'
   // Custom entry points tag themselves; the built-in values still autocomplete.
   | (string & {});
 
@@ -30,8 +31,8 @@ export type OpenChatOptions = {
    * `metadata.turnContext` — the same Agent Studio grounding channel the chat
    * widget's own `context` uses. Lets an entry point ground the agent's answer
    * in the page it was triggered from. Flat `Record<string, string>` per the
-   * backend contract. Ignored when the chat widget already attaches its own
-   * `context` (that one takes precedence for the turn).
+   * backend contract. Merged with the chat widget's own `context` when it has
+   * one; on a key both provide, this value wins for the turn.
    */
   turnContext?: Record<string, string>;
 };
