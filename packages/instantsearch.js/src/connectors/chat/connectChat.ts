@@ -125,9 +125,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   tools: ClientSideTools;
   /**
-   * The records the chat's tools have fetched, keyed by `objectID`: every tool
-   * call that returned `hits` contributes them, last write winning. Attached to
-   * every tool too, which is how a `layoutComponent` reads it.
+   * The records the conversation holds, keyed by `objectID`: every tool call
+   * that returned `hits` contributes them, as does the selection a `compare`
+   * widget attaches to its message, last write winning. Attached to every tool
+   * too, which is how a `layoutComponent` reads it.
    */
   records: ChatRecordsStore;
   /**

@@ -683,8 +683,9 @@ export type ClientSideToolContext<
 > = ChatComponentContext<TMessage> & {
   message: ChatToolMessage;
   /**
-   * The records the chat's tools have fetched. A tool handed plain object IDs
-   * hydrates them with `records.get(objectID)`.
+   * The records the conversation holds (fetched by tools or selected for a
+   * comparison). A tool handed plain object IDs hydrates them with
+   * `records.get(objectID)`.
    */
   records?: ChatRecordsStore;
   insightsEventContext?: ChatInsightsEventContext;
