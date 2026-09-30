@@ -12,6 +12,7 @@ import {
   createRenderArgs,
   storeRenderState,
   defer,
+  isPlainObject,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
@@ -168,9 +169,10 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
    * Unlike a `removeWidgets` + `addWidgets` pair, the previous widget's `uiState`
    * is handed over to the next one, so that state owned by a widget whose
    * parameters changed is preserved, as long as the replacing widget still claims
-   * the same `uiState` keys. State that no mounted widget claims anymore is
-   * dropped, like on a regular unmount. The widget also keeps its position among
-   * the index' widgets, which a remove/add pair doesn't.
+   * the same `uiState` keys. State that a mounted widget owned and that no widget
+   * claims anymore is dropped, like on a regular unmount. State that no widget had
+   * claimed before (for widgets that aren't mounted yet) is kept. The widget also
+   * keeps its position among the index' widgets, which a remove/add pair doesn't.
    */
   updateWidget: (
     previousWidget: Widget | IndexWidget,
@@ -281,6 +283,42 @@ function getLocalWidgetsUiState(
 
     return widget.getWidgetState!(uiState, widgetStateOptions);
   }, initialUiState);
+}
+
+/**
+ * Returns the part of `uiState` that isn't described by `claimedUiState`.
+ *
+ * `claimedUiState` is what the widgets that are currently mounted describe. What
+ * is left over is state that no widget has picked up (yet), like state read from
+ * the URL for widgets that only mount after the first results (for example the
+ * ones rendered by `DynamicWidgets`).
+ */
+function getUnclaimedUiState(
+  uiState: IndexUiState,
+  claimedUiState: IndexUiState
+): IndexUiState {
+  return Object.keys(uiState).reduce<Record<string, unknown>>(
+    (unclaimed, key) => {
+      const value = (uiState as Record<string, unknown>)[key];
+      const claimed = (claimedUiState as Record<string, unknown>)[key];
+
+      if (claimed === undefined) {
+        unclaimed[key] = value;
+      } else if (isPlainObject(value) && isPlainObject(claimed)) {
+        const rest = getUnclaimedUiState(
+          value as IndexUiState,
+          claimed as IndexUiState
+        );
+
+        if (Object.keys(rest).length > 0) {
+          unclaimed[key] = rest;
+        }
+      }
+
+      return unclaimed;
+    },
+    {}
+  ) as IndexUiState;
 }
 
 function getLocalWidgetsSearchParameters(
@@ -445,6 +483,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
+  // The search parameters as they were right before the most recent processed
+  // `change`, used to tell `uiState` that a widget owns from `uiState` that
+  // nobody has claimed yet, on an ordinary state change (see the `change`
+  // listener below).
+  let previousChangeSearchParameters: SearchParameters | null = null;
   // The error this index has already rolled back for. Renders also happen for
   // reasons unrelated to a search (a chat panel opening, a recommend result,
   // the stalled timer), and rolling back on every one of them would discard
@@ -670,6 +713,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // The `uiState` as it is before the previous widget is detached, so that
       // the state it owns can be handed over to the next widget.
       const previousUiState = localUiState;
+      // What the mounted widgets describe before the swap, to tell the state they
+      // own from the state nobody has claimed yet.
+      const claimedUiState = helper
+        ? getLocalWidgetsUiState(localWidgets, {
+            searchParameters: helper.state,
+            helper,
+          })
+        : {};
 
       previousWidget.parent = undefined;
       nextWidget.parent = this;
@@ -722,15 +773,21 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // We hand the previous `uiState` over to the next widgets, then read the
       // `uiState` back from them. Widgets only pick up the state they claim, so
-      // this drops state that no mounted widget owns anymore (an attribute that
-      // changed, for instance) instead of seeding it with `previousUiState`.
-      localUiState = getLocalWidgetsUiState(localWidgets, {
-        searchParameters: getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: previousUiState,
-          initialSearchParameters,
-        }),
-        helper: helper!,
-      });
+      // this drops state that a mounted widget owned and that no widget owns
+      // anymore (an attribute that changed, for instance). State that no widget
+      // had claimed before the update (widgets that aren't mounted yet) is kept,
+      // like it is when the `uiState` is refreshed on a regular state change.
+      localUiState = getLocalWidgetsUiState(
+        localWidgets,
+        {
+          searchParameters: getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: previousUiState,
+            initialSearchParameters,
+          }),
+          helper: helper!,
+        },
+        getUnclaimedUiState(previousUiState, claimedUiState)
+      );
 
       // The search parameters are then computed again from that narrowed
       // `uiState`, so that they can't hold state the `uiState` doesn't describe.
@@ -801,6 +858,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       }
 
+      // What the mounted widgets describe before the removal, to tell the state
+      // they own from the state nobody has claimed yet.
+      const claimedUiState = helper
+        ? getLocalWidgetsUiState(localWidgets, {
+            searchParameters: helper.state,
+            helper,
+          })
+        : {};
+
       localWidgets = localWidgets.filter(
         (widget) => flatWidgets.indexOf(widget) === -1
       );
@@ -854,13 +920,24 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
               initialSearchParameters: cleanedSearchState,
             });
 
-        localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: newState,
-          helper: helper!,
-        });
+        // State that no widget had claimed before the removal (widgets that aren't
+        // mounted yet) is kept, only the state of the removed widgets is dropped.
+        localUiState = getLocalWidgetsUiState(
+          localWidgets,
+          {
+            searchParameters: newState,
+            helper: helper!,
+          },
+          getUnclaimedUiState(localUiState, claimedUiState)
+        );
 
-        helper!.setState(newState);
-        helper!.recommendState = cleanedRecommendState;
+        // The `uiState` is handed over to the `change` event, so that it isn't
+        // derived from scratch (and narrowed) again by the listener.
+        privateHelperSetState(helper!, {
+          state: newState,
+          recommendState: cleanedRecommendState,
+          _uiState: localUiState,
+        });
 
         if (localWidgets.length) {
           if (isolated) {
@@ -913,6 +990,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         parameters
       );
       helper.recommendState = recommendParameters;
+      previousChangeSearchParameters = parameters;
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
@@ -1103,14 +1181,38 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         const _uiState = (event as any)._uiState;
 
+        // Callers that intentionally narrow the `uiState` (`updateWidget`,
+        // `removeWidgets`) compute and pass their own `_uiState`. An ordinary
+        // state change, triggered by a widget calling the helper directly (most
+        // connectors' `refine` do this), doesn't pass one. It never intends to
+        // drop `uiState` that no widget has claimed yet (an attribute read from
+        // the URL for a widget that hasn't mounted, for instance), so that part
+        // is kept. It also never intends to keep stale state that a widget
+        // legitimately stops claiming on this very change (an attribute going
+        // back to its default value, for instance), so only the state that was
+        // already unclaimed right before this change is carried over, not the
+        // whole of the previous `uiState`.
+        const uiStateSeed =
+          _uiState ||
+          getUnclaimedUiState(
+            localUiState,
+            previousChangeSearchParameters
+              ? getLocalWidgetsUiState(localWidgets, {
+                  searchParameters: previousChangeSearchParameters,
+                  helper: helper!,
+                })
+              : {}
+          );
+
         localUiState = getLocalWidgetsUiState(
           localWidgets,
           {
             searchParameters: state,
             helper: helper!,
           },
-          _uiState || {}
+          uiStateSeed
         );
+        previousChangeSearchParameters = state;
 
         // We don't trigger an internal change when controlled because it
         // becomes the responsibility of `setUiState`.

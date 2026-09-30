@@ -855,6 +855,84 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         );
       });
 
+      describe.each([true, false])(
+        'with `preserveSharedStateOnUnmount` set to %s',
+        (preserveSharedStateOnUnmount) => {
+          it('keeps the `uiState` that no widget has claimed yet', () => {
+            const instance = index({ indexName: 'indexName' });
+            const instantSearchInstance = createInstantSearch({
+              future: { preserveSharedStateOnUnmount },
+            });
+            const pagination = virtualPagination({});
+
+            // No widget claims `brand`, like when it's read from the URL for a
+            // widget that only mounts after the first results.
+            instance.addWidgets([virtualSearchBox({}), pagination]);
+            instance.init(
+              createIndexInitOptions({
+                instantSearchInstance,
+                parent: null,
+                uiState: {
+                  indexName: {
+                    refinementList: { brand: ['Apple'] },
+                    page: 4,
+                  },
+                },
+              })
+            );
+
+            instance.removeWidgets([pagination]);
+
+            // `page` was claimed by the removed widget, `brand` by nobody.
+            expect(instance.getWidgetUiState({})).toEqual({
+              indexName: { refinementList: { brand: ['Apple'] } },
+            });
+
+            // The state is picked up when a widget claims it later on.
+            instance.addWidgets([
+              virtualRefinementList({ attribute: 'brand' }),
+            ]);
+
+            expect(
+              instance.getHelper()!.state.disjunctiveFacetsRefinements
+            ).toEqual({ brand: ['Apple'] });
+          });
+
+          it('keeps the `uiState` of attributes that no widget has claimed yet', () => {
+            const instance = index({ indexName: 'indexName' });
+            const instantSearchInstance = createInstantSearch({
+              future: { preserveSharedStateOnUnmount },
+            });
+            const brandList = virtualRefinementList({ attribute: 'brand' });
+            const searchBox = virtualSearchBox({});
+
+            instance.addWidgets([searchBox, brandList]);
+            instance.init(
+              createIndexInitOptions({
+                instantSearchInstance,
+                parent: null,
+                uiState: {
+                  indexName: {
+                    refinementList: {
+                      brand: ['Apple'],
+                      categories: ['Phone'],
+                    },
+                  },
+                },
+              })
+            );
+
+            instance.removeWidgets([searchBox]);
+
+            expect(instance.getWidgetUiState({})).toEqual({
+              indexName: {
+                refinementList: { brand: ['Apple'], categories: ['Phone'] },
+              },
+            });
+          });
+        }
+      );
+
       it('calls `dispose` on the removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const widgets = [
@@ -1104,6 +1182,123 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(
           instance.getHelper()!.state.disjunctiveFacetsRefinements
         ).toEqual({ categories: [] });
+        expect(instance.getWidgetUiState({})).toEqual({ indexName: {} });
+      });
+
+      it('keeps the `uiState` that no widget has claimed yet', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: true },
+        });
+        const pagination = virtualPagination({});
+
+        // No widget claims `brand`, like when it's read from the URL for a
+        // widget that only mounts after the first results.
+        instance.addWidgets([virtualSearchBox({}), pagination]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: {
+              indexName: { refinementList: { brand: ['Apple'] }, page: 4 },
+            },
+          })
+        );
+
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(instance.getWidgetUiState({})).toEqual({
+          indexName: { refinementList: { brand: ['Apple'] }, page: 4 },
+        });
+
+        // The state is picked up when a widget claims it later on.
+        instance.addWidgets([virtualRefinementList({ attribute: 'brand' })]);
+
+        expect(
+          instance.getHelper()!.state.disjunctiveFacetsRefinements
+        ).toEqual({ brand: ['Apple'] });
+      });
+
+      it('keeps the `uiState` of attributes that no widget has claimed yet', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([
+          pagination,
+          virtualRefinementList({ attribute: 'brand' }),
+        ]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: {
+              indexName: {
+                refinementList: { brand: ['Apple'], categories: ['Phone'] },
+              },
+            },
+          })
+        );
+
+        instance.updateWidget(pagination, virtualPagination({ padding: 4 }));
+
+        expect(instance.getWidgetUiState({})).toEqual({
+          indexName: {
+            refinementList: { brand: ['Apple'], categories: ['Phone'] },
+          },
+        });
+      });
+
+      it('does not need `updateWidget` or `removeWidgets` for the `uiState` to be kept: an ordinary refine on an unrelated widget keeps `uiState` no widget has claimed yet', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: true },
+        });
+        const pagination = virtualPagination({});
+
+        // No widget claims `brand`, like when it's read from the URL for a
+        // widget that only mounts after the first results.
+        instance.addWidgets([pagination]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: {
+              indexName: { refinementList: { brand: ['Apple'] }, page: 4 },
+            },
+          })
+        );
+
+        // An ordinary refine, exactly what a real connector does: it talks to
+        // the helper directly (`.search()`), which never goes through
+        // `updateWidget` or `removeWidgets`.
+        instance.getHelper()!.setPage(1).search();
+
+        expect(instance.getWidgetUiState({})).toEqual({
+          indexName: { refinementList: { brand: ['Apple'] }, page: 2 },
+        });
+      });
+
+      it('still drops `uiState` a widget actively owned once it goes back to its default value on an ordinary state change', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: true },
+        });
+        const pagination = virtualPagination({});
+
+        instance.addWidgets([pagination]);
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+            uiState: { indexName: { page: 4 } },
+          })
+        );
+
+        // `page` was actively claimed (non-default) before this change, so
+        // going back to the default page is respected, not kept around.
+        instance.getHelper()!.setPage(0).search();
+
         expect(instance.getWidgetUiState({})).toEqual({ indexName: {} });
       });
 
@@ -2467,7 +2662,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('page', 5);
 
         widgets.forEach((widget) => {
-          expect(widget.getWidgetUiState).toHaveBeenCalledTimes(2); // 2 changes
+          // 2 changes, each of which now also asks the mounted widgets for
+          // their currently claimed `uiState` before recomputing it, so that
+          // `uiState` nobody has claimed yet isn't dropped by the recompute
+          // (see the `change` listener).
+          expect(widget.getWidgetUiState).toHaveBeenCalledTimes(4);
         });
 
         expect(level1.getWidgetUiState).toHaveBeenCalledTimes(0);
@@ -3456,14 +3655,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone');
 
-      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(1);
+      // 1 change, plus once more to read the `uiState` it already claimed
+      // before this change (see the `change` listener).
+      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(2);
 
       instance.dispose(createDisposeOptions());
 
       // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone 5S');
 
-      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(1);
+      // Unchanged: the listeners were removed by `dispose`, so this change
+      // isn't processed at all anymore.
+      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(2);
     });
 
     it('removes the internal Helper', () => {
