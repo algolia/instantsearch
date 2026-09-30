@@ -3865,6 +3865,64 @@ data: [DONE]`,
       });
     });
 
+    it('adds the widget context to a turn context the message already carries', async () => {
+      // The compare bar attaches the selected products to its message; the
+      // widget's ambient context must not wipe them out on the way to the agent.
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: { page: '/products', locale: 'en-US' },
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'Compare these products: A vs B',
+        metadata: {
+          turnContext: {
+            selected_products: '[{"objectID":"A"},{"objectID":"B"}]',
+            comparison_configuration_id: 'algolia_comparison_1',
+          },
+        } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: {
+          page: '/products',
+          locale: 'en-US',
+          selected_products: '[{"objectID":"A"},{"objectID":"B"}]',
+          comparison_configuration_id: 'algolia_comparison_1',
+        },
+      });
+    });
+
+    it("lets the message's turn context win on a key the widget context also sets", async () => {
+      const chatInstance = createTestChat();
+      const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');
+
+      const { widget, renderFn } = createChatWidgetWithContext({
+        chat: chatInstance,
+        context: () => ({ page: '/home', locale: 'en-US' }),
+      });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+      widget.init(createInitOptions({ helper, state: helper.state }));
+
+      const { sendMessage } = renderFn.mock.calls[0][0];
+      await sendMessage({
+        text: 'hi',
+        metadata: { turnContext: { page: '/products/42' } } as any,
+      });
+
+      expect((sendMessageSpy.mock.calls[0][0] as any).metadata).toEqual({
+        turnContext: { page: '/products/42', locale: 'en-US' },
+      });
+    });
+
     it('passes through without modification when no context is set', async () => {
       const chatInstance = createTestChat();
       const sendMessageSpy = jest.spyOn(chatInstance, 'sendMessage');

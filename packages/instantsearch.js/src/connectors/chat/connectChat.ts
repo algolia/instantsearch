@@ -292,6 +292,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * length and shape) and rejects malformed contexts. Pass a function when the
    * values change per-turn — it is invoked once per send. If the source is
    * async, resolve it upstream and close over the value.
+   *
+   * Merged with any turn context an entry point attaches to the message it
+   * sends (the compare bar's selected products, `openChat`'s `turnContext`);
+   * on a key both provide, the entry point's value wins for that turn.
    */
   context?: Record<string, string> | (() => Record<string, string>);
   /**
@@ -1305,15 +1309,29 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           // Resolve once per send; let the server validate the payload and
           // surface any contract violations.
-          const turnContext =
+          const widgetContext =
             typeof context === 'function' ? context() : context;
+          const metadata = message.metadata as
+            | Record<string, unknown>
+            | undefined;
+          // An entry point (compare bar, prompt suggestions, `openChat`) may
+          // have attached its own turn context to the message — e.g. the
+          // selected products of a comparison. Add the ambient widget context
+          // to it rather than replacing it; on a key both provide, the entry
+          // point knows the turn better.
+          const messageTurnContext =
+            metadata?.turnContext &&
+            typeof metadata.turnContext === 'object' &&
+            !Array.isArray(metadata.turnContext)
+              ? (metadata.turnContext as Record<string, string>)
+              : undefined;
 
           return _chatInstance.sendMessage(
             {
               ...message,
               metadata: {
-                ...(message.metadata as Record<string, unknown> | undefined),
-                turnContext,
+                ...metadata,
+                turnContext: { ...widgetContext, ...messageTurnContext },
               },
             } as Parameters<typeof _chatInstance.sendMessage>[0],
             ...rest
