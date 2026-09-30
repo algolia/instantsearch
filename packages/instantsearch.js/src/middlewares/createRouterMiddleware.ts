@@ -76,8 +76,9 @@ export const createRouterMiddleware = <
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
 
     let lastRouteState: TRouteState | undefined = undefined;
-    // The route from `router.onUpdate` that the next state change applies.
-    let appliedRoute: TRouteState | undefined = undefined;
+    // The route from `router.onUpdate` and the UI state notified when it's applied.
+    let appliedRoute: { route: TRouteState; uiState: UiState } | undefined =
+      undefined;
 
     const initialUiState = instantSearchInstance._initialUiState;
 
@@ -87,9 +88,14 @@ export const createRouterMiddleware = <
       }, stateMapping:${stateMapping.$$type || '__unknown__'}})`,
       $$internal,
       onStateChange({ uiState }) {
-        const routeState = stateMapping.stateToRoute(uiState);
-        const source = appliedRoute;
+        // It only applies to this notification, even if it throws.
+        const source =
+          appliedRoute && appliedRoute.uiState === uiState
+            ? appliedRoute.route
+            : undefined;
         appliedRoute = undefined;
+
+        const routeState = stateMapping.stateToRoute(uiState);
 
         if (
           lastRouteState === undefined ||
@@ -120,8 +126,8 @@ export const createRouterMiddleware = <
             instantSearchInstance.setUiState(
               stateMapping.routeToState(route),
               true,
-              () => {
-                appliedRoute = route;
+              (notifiedUiState) => {
+                appliedRoute = { route, uiState: notifiedUiState };
               }
             );
           }

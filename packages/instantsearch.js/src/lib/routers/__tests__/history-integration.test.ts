@@ -8,6 +8,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import { connectPagination, connectSearchBox } from '../../../connectors';
 import instantsearch from '../../../index.es';
 import { index } from '../../../widgets';
+import simpleStateMapping from '../../stateMappings/simple';
 import historyRouter from '../history';
 
 beforeEach(() => {
@@ -306,6 +307,61 @@ describe('after a popstate', () => {
     window.addEventListener('popstate', refineOnPopState, { once: true });
 
     await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+
+    search.dispose();
+  });
+
+  test('writes the next change when notifying the popstate update throws', async () => {
+    const stateMapping = simpleStateMapping();
+    let shouldThrow = false;
+    const search = instantsearch({
+      indexName,
+      searchClient: createSearchClient(),
+      routing: {
+        router: historyRouter({ writeDelay, cleanUrlOnDispose: false }),
+        stateMapping: {
+          ...stateMapping,
+          stateToRoute(uiState) {
+            if (shouldThrow) {
+              shouldThrow = false;
+              throw new Error('Cannot map the UI state');
+            }
+
+            return stateMapping.stateToRoute(uiState);
+          },
+        },
+      },
+    });
+    search.addWidgets([connectPagination(() => {})({})]);
+    search.start();
+
+    // Catch the error where it's thrown rather than in the deferred notification.
+    const errors: unknown[] = [];
+    const { instance: routerMiddleware } = search.middleware.find(
+      ({ instance }) => instance.$$type.startsWith('ais.router')
+    )!;
+    const onStateChange = routerMiddleware.onStateChange;
+    routerMiddleware.onStateChange = (event) => {
+      try {
+        onStateChange(event);
+      } catch (error) {
+        errors.push(error);
+      }
+    };
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    shouldThrow = true;
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    expect(errors).toEqual([new Error('Cannot map the UI state')]);
+
+    search.renderState[indexName].pagination!.refine(4);
     await wait(writeWait);
 
     expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);

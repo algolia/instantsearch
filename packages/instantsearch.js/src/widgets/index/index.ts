@@ -1112,9 +1112,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           _uiState || {}
         );
 
-        // We don't trigger an internal change when controlled because it
-        // becomes the responsibility of `setUiState`.
-        if (!instantSearchInstance.onStateChange) {
+        // We don't trigger an internal change when controlled or while
+        // `setUiState` applies a state because it becomes its responsibility.
+        if (
+          !instantSearchInstance.onStateChange &&
+          !instantSearchInstance._isApplyingUiState
+        ) {
           instantSearchInstance.onInternalStateChange();
         }
       });

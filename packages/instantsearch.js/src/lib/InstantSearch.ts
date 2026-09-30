@@ -851,12 +851,12 @@ See documentation: ${createDocumentationLink({
    * Set the UI state and trigger a search.
    * @param uiState The next UI state or a function computing it from the current state
    * @param callOnStateChange private parameter used to know if the method is called from a state change
-   * @param onApply private parameter called right before the middleware are notified of the state change applying this UI state, unless other changes are part of it. With a controlled `onStateChange`, it can be later or never.
+   * @param onApply private parameter called with the UI state notified to the middleware when this notification applies this UI state and no other change. With a controlled `onStateChange`, it can be later or never.
    */
   public setUiState(
     uiState: TUiState | ((previousUiState: TUiState) => TUiState),
     callOnStateChange: boolean = true,
-    onApply?: () => void
+    onApply?: (notifiedUiState: TUiState) => void
   ): void {
     if (!this.mainHelper) {
       throw new Error(
@@ -890,14 +890,15 @@ See documentation: ${createDocumentationLink({
   }
 
   /**
-   * Whether `_applyUiState` is setting the helper state, which also notifies
-   * the state change.
+   * Whether `_applyUiState` is setting the helper state. The index widgets then
+   * leave notifying the state change to it.
    */
   public _isApplyingUiState = false;
 
-  public _applyUiState(uiState: TUiState, onApply?: () => void) {
-    this.onInternalStateChange(onApply);
-
+  public _applyUiState(
+    uiState: TUiState,
+    onApply?: (notifiedUiState: TUiState) => void
+  ) {
     this._isApplyingUiState = true;
     try {
       setIndexHelperState(uiState, this.mainIndex);
@@ -906,6 +907,7 @@ See documentation: ${createDocumentationLink({
     }
 
     this.scheduleSearch();
+    this.onInternalStateChange(onApply);
   }
 
   public getUiState(): TUiState {
@@ -918,10 +920,10 @@ See documentation: ${createDocumentationLink({
   }
 
   public onInternalStateChange = defer(
-    (onApply?: () => void) => {
+    (onApply?: (notifiedUiState: TUiState) => void) => {
       const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
-      onApply?.();
+      onApply?.(nextUiState);
 
       this.middleware.forEach(({ instance }) => {
         instance.onStateChange({
@@ -930,11 +932,12 @@ See documentation: ${createDocumentationLink({
       });
     },
     // The notified state only applies a UI state given to `setUiState` when no
-    // other change is part of it. Changes made while applying it are.
-    ([pendingOnApply], [nextOnApply]): [(() => void)?] => [
-      this._isApplyingUiState || pendingOnApply === nextOnApply
-        ? pendingOnApply
-        : undefined,
+    // other change is part of it.
+    (
+      [pendingOnApply],
+      [nextOnApply]
+    ): [((notifiedUiState: TUiState) => void)?] => [
+      pendingOnApply === nextOnApply ? pendingOnApply : undefined,
     ]
   );
 
