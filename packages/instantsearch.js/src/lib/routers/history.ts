@@ -183,6 +183,12 @@ See documentation: ${createDocumentationLink({
         isObject(popStateRouteState) &&
         this.popStateRouteStates.has(popStateRouteState);
 
+      // Only this write is caused by the popstate, not later ones of the same
+      // route state object.
+      if (causedByPopState) {
+        this.popStateRouteStates.delete(popStateRouteState);
+      }
+
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
       }
