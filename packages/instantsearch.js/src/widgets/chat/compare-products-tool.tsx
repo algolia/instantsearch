@@ -21,14 +21,15 @@ import type {
  *
  * Registered by default in the chat widget so the agent can lay a comparison
  * out as a table: the compared products across the top (rendered with the
- * widget's `item` template, from the records the chat collected) and the
- * agent's criteria down the side, one value per product. See
- * `instantsearch-ui-components` `CompareProductsTool` for the contract.
+ * widget's `item` template when one is provided, otherwise the record's name,
+ * from the records the chat collected) and the agent's criteria down the
+ * side, one value per product. See `instantsearch-ui-components`
+ * `CompareProductsTool` for the contract.
  */
 export function createCompareProductsTool<
   THit extends RecordWithObjectID = RecordWithObjectID,
 >(
-  templates: ChatTemplates<THit>,
+  templates?: ChatTemplates<THit>,
   translations?: Partial<ComparisonTableTranslations>
 ): UserClientSideToolWithTemplate {
   const CompareProductsUIComponent = createCompareProductsToolComponent<
@@ -38,16 +39,18 @@ export function createCompareProductsTool<
     Fragment,
   });
 
-  const itemComponent: NonNullable<
-    CompareProductsToolProps<RecordWithObjectID<THit>>['itemComponent']
-  > = ({ item }) => (
-    <TemplateComponent
-      templates={templates}
-      templateKey="item"
-      data={item}
-      rootTagName="fragment"
-    />
-  );
+  const itemComponent:
+    | CompareProductsToolProps<RecordWithObjectID<THit>>['itemComponent']
+    | undefined = templates
+    ? ({ item }) => (
+        <TemplateComponent
+          templates={templates}
+          templateKey="item"
+          data={item}
+          rootTagName="fragment"
+        />
+      )
+    : undefined;
 
   function CompareProductsLayoutComponent(
     toolProps: ClientSideToolTemplateData
