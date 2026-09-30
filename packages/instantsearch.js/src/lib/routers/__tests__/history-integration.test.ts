@@ -448,6 +448,46 @@ describe('after a popstate', () => {
     search.dispose();
   });
 
+  test('does not push the state it navigated to after a change made earlier in the same task', async () => {
+    // Registered before InstantSearch, so it refines before the router applies
+    // the route, which overwrites the refinement.
+    let shouldRefine = false;
+    const refineOnPopState = () => {
+      if (shouldRefine) {
+        shouldRefine = false;
+        search.renderState[indexName].pagination!.refine(4);
+      }
+    };
+    window.addEventListener('popstate', refineOnPopState);
+
+    // InstantSearch drops the unknown parameter when writing this state.
+    window.history.pushState(
+      {},
+      '',
+      `/?${encodeURI('indexName[unknown]=value')}`
+    );
+    const search = createSearch();
+    await wait(writeWait);
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    const historyLength = window.history.length;
+
+    shouldRefine = true;
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+    window.removeEventListener('popstate', refineOnPopState);
+
+    expect(search.getUiState()[indexName].page).toBeUndefined();
+    expect(window.location.search).toBe(
+      `?${encodeURI('indexName[unknown]=value')}`
+    );
+    expect(window.history.length).toBe(historyLength);
+
+    search.dispose();
+  });
+
   test('does not push the state it navigated to', async () => {
     const search = createSearch();
 

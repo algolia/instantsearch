@@ -933,14 +933,11 @@ See documentation: ${createDocumentationLink({
         });
       });
     },
-    // The notified state only applies a UI state given to `setUiState` when no
-    // other change is part of it.
-    (
-      [pendingOnApply],
-      [nextOnApply]
-    ): [((notifiedUiState: TUiState) => void)?] => [
-      pendingOnApply === nextOnApply ? pendingOnApply : undefined,
-    ]
+    // The notified state applies a UI state given to `setUiState` when it's the
+    // last change: applying it overwrites earlier changes, but a later change
+    // is part of the notified state. The changes made while applying it pass
+    // the same `onApply`.
+    (_pending, next) => next
   );
 
   public createURL(nextState: TUiState = {} as TUiState): string {
