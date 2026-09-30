@@ -229,6 +229,55 @@ describe('after a popstate', () => {
     search.dispose();
   });
 
+  test('writes the next change when the popstate URL is rewritten to the current state', async () => {
+    const search = createSearch();
+    await wait(writeWait);
+
+    // InstantSearch drops the unknown parameter, so this URL has the current state.
+    window.history.pushState(
+      {},
+      '',
+      `/?${encodeURI('indexName[unknown]=value')}`
+    );
+    await navigate(() => {
+      window.location.hash = 'details';
+    });
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+
+    search.dispose();
+  });
+
+  test('does not push the state it navigated to when InstantSearch rewrites its URL', async () => {
+    window.history.pushState(
+      {},
+      '',
+      `/?${encodeURI('indexName[unknown]=value')}`
+    );
+    const search = createSearch();
+    await wait(writeWait);
+
+    search.renderState[indexName].pagination!.refine(1);
+    await wait(writeWait);
+
+    const historyLength = window.history.length;
+
+    await navigate(() => window.history.back());
+    await wait(writeWait);
+
+    expect(window.location.search).toBe(
+      `?${encodeURI('indexName[unknown]=value')}`
+    );
+    expect(window.history.length).toBe(historyLength);
+
+    search.dispose();
+  });
+
   test('writes a change made before the popstate write is flushed', async () => {
     const search = createSearch();
 
@@ -311,6 +360,57 @@ describe('after a popstate', () => {
       await wait(writeWait);
 
       search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+
+      search.dispose();
+    });
+
+    test('writes a change that supersedes the popstate update', async () => {
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const search = createSearch({
+        // Only the last state within the delay is applied.
+        onStateChange({ uiState, setUiState }) {
+          clearTimeout(timer);
+          timer = setTimeout(() => setUiState(uiState), 2 * writeDelay);
+        },
+      });
+      await wait(writeWait);
+
+      search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+
+      await navigate(() => window.history.back());
+      // Refine before the popstate update is applied, which drops it.
+      search.renderState[indexName].pagination!.refine(4);
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+
+      search.dispose();
+    });
+
+    test('does not push any of several popstate updates applied late', async () => {
+      const search = createSearch({ onStateChange });
+      await wait(writeWait);
+
+      search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+      search.renderState[indexName].pagination!.refine(2);
+      await wait(writeWait);
+
+      const historyLength = window.history.length;
+
+      // Going back twice before the first update is applied.
+      await navigate(() => window.history.back());
+      await navigate(() => window.history.back());
+      await wait(writeWait);
+
+      expect(window.location.search).toBe('');
+      expect(window.history.length).toBe(historyLength);
+
+      await navigate(() => window.history.forward());
       await wait(writeWait);
 
       expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);

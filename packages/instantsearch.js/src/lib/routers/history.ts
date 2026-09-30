@@ -1,13 +1,8 @@
 import qs from 'qs';
 
-import {
-  createDocumentationLink,
-  isEqual,
-  safelyRunOnBrowser,
-  warning,
-} from '../utils';
+import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
 
-import type { Router, UiState } from '../../types';
+import type { Router, RouterWriteOptions, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
@@ -41,6 +36,9 @@ export type BrowserHistoryArgs<TRouteState> = {
   // @MAJOR: Switch the default to `false` and remove the console info in the next major version.
   cleanUrlOnDispose?: boolean;
 };
+
+const isObject = (value: unknown): value is object =>
+  typeof value === 'object' && value !== null;
 
 const setWindowTitle = (title?: string): void => {
   if (title) {
@@ -92,15 +90,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private _onPopState?: (event: PopStateEvent) => void;
 
   /**
-   * Indicates if last action was back/forward in the browser.
+   * The route states read on popstate (back/forward in the browser). A write
+   * applying one of them must not push it: the URL already reflects it.
    */
-  private inPopState: boolean = false;
-
-  /**
-   * The route state of the last write, used to know whether a popstate will
-   * cause a write. `undefined` until the first write.
-   */
-  private lastWrittenRouteState?: TRouteState;
+  private popStateRouteStates = new WeakSet<object>();
 
   /**
    * Indicates whether the history router is disposed or not.
@@ -177,15 +170,15 @@ See documentation: ${createDocumentationLink({
   /**
    * Pushes a search state into the URL.
    */
-  public write(routeState: TRouteState): void {
+  public write(
+    routeState: TRouteState,
+    { source }: RouterWriteOptions<TRouteState> = {}
+  ): void {
     safelyRunOnBrowser(({ window: browserWindow }) => {
       const url = this.createURL(routeState);
       const title = this.windowTitle && this.windowTitle(routeState);
-      // The first write after a popstate is the one it caused: the URL already
-      // reflects that state, so it should not be pushed. Later writes should.
-      const causedByPopState = this.inPopState;
-      this.inPopState = false;
-      this.lastWrittenRouteState = routeState;
+      const causedByPopState =
+        isObject(source) && this.popStateRouteStates.has(source);
 
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -228,11 +221,9 @@ See documentation: ${createDocumentationLink({
       // can be incorect in some cases (e.g. using React Router).
       const routeState = this.read();
 
-      // The popstate only causes a write when it changes the state from the
-      // last write. Otherwise, no write would consume the flag and the next
-      // change would be skipped. The write can come later than this callback,
-      // e.g. with a controlled `onStateChange`.
-      this.inPopState = !this.isLastWrittenRouteState(routeState);
+      if (isObject(routeState)) {
+        this.popStateRouteStates.add(routeState);
+      }
 
       callback(routeState);
     };
@@ -296,34 +287,10 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
     if (this._cleanUrlOnDispose) {
       this.write({} as TRouteState);
     }
-
-    // A new InstantSearch instance starts without a written state.
-    this.lastWrittenRouteState = undefined;
   }
 
   public start() {
     this.isDisposed = false;
-  }
-
-  /**
-   * Whether a route state read from the URL is the last written one. The last
-   * written state is read back from its URL so that both are compared the way
-   * the URL stores them: values as strings, without empty objects, in any
-   * key order.
-   */
-  private isLastWrittenRouteState(routeState: TRouteState): boolean {
-    return safelyRunOnBrowser(({ window: browserWindow }) => {
-      if (this.lastWrittenRouteState === undefined) {
-        return false;
-      }
-
-      const location = new URL(
-        this.createURL(this.lastWrittenRouteState),
-        browserWindow.location.href
-      ) as unknown as Location;
-
-      return isEqual(routeState, this.parseURL({ qsModule: qs, location }));
-    });
   }
 
   private shouldWrite(url: string): boolean {

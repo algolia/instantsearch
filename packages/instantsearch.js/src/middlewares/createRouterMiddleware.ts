@@ -76,6 +76,8 @@ export const createRouterMiddleware = <
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
 
     let lastRouteState: TRouteState | undefined = undefined;
+    // The route from `router.onUpdate` that the next state change applies.
+    let appliedRoute: TRouteState | undefined = undefined;
 
     const initialUiState = instantSearchInstance._initialUiState;
 
@@ -86,12 +88,18 @@ export const createRouterMiddleware = <
       $$internal,
       onStateChange({ uiState }) {
         const routeState = stateMapping.stateToRoute(uiState);
+        const source = appliedRoute;
+        appliedRoute = undefined;
 
         if (
           lastRouteState === undefined ||
           !isEqual(lastRouteState, routeState)
         ) {
-          router.write(routeState);
+          if (source === undefined) {
+            router.write(routeState);
+          } else {
+            router.write(routeState, { source });
+          }
           lastRouteState = routeState;
         }
       },
@@ -109,7 +117,13 @@ export const createRouterMiddleware = <
 
         router.onUpdate((route) => {
           if (instantSearchInstance.mainIndex.getWidgets().length > 0) {
-            instantSearchInstance.setUiState(stateMapping.routeToState(route));
+            instantSearchInstance.setUiState(
+              stateMapping.routeToState(route),
+              true,
+              () => {
+                appliedRoute = route;
+              }
+            );
           }
         });
       },
