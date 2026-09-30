@@ -1,5 +1,5 @@
 import {
-  buildFilters,
+  getAgentFilters,
   isChatBusy as isChatStreaming,
   openChat,
   stripInternalHitMetadata,
@@ -245,7 +245,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
           return results.queryID;
         }
         const query = results.query || '';
-        const filters = JSON.stringify(buildFilters(results) ?? []);
+        const filters = JSON.stringify(getAgentFilters(results) ?? []);
         const hitIds = (results.hits || [])
           .map((hit) => hit.objectID)
           .join(',');
@@ -302,7 +302,7 @@ const connectPromptSuggestions: PromptSuggestionsConnector =
         if (!results) {
           return undefined;
         }
-        const filters = buildFilters(results);
+        const filters = getAgentFilters(results);
         return {
           query: results.query || '',
           ...(filters ? { filters } : {}),

@@ -9,27 +9,24 @@ import {
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
 import {
+  applyAgentFilters,
   Chat,
   matchesSearchIndexToolName,
   SearchIndexToolType,
 } from '../../lib/chat';
 import {
   checkRendering,
-  clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  getRefinements,
   noop,
   safelyRunOnBrowser,
   sendChatMessageFeedback,
-  uniq,
   walkIndex,
   warning,
 } from '../../lib/utils';
 import { defer } from '../../lib/utils/defer';
-import { flat } from '../../lib/utils/flat';
 
 import type { ChatOnToolCallCallback } from '../../lib/ai-lite';
 import type {
@@ -51,11 +48,6 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import type {
   AddToolResultForToolCall,
   UserClientSideTool,
@@ -397,122 +389,6 @@ function writePersistedOpen(type: string, open: boolean) {
   } catch {
     // Storage availability must not block the visible state change.
   }
-}
-
-function getAttributesToClear({
-  results,
-  helper,
-}: {
-  results: SearchResults;
-  helper: AlgoliaSearchHelper;
-}) {
-  return uniq(
-    getRefinements(results, helper.state, true).map(
-      (refinement) => refinement.attribute
-    )
-  );
-}
-
-/**
- * One Algolia `numericFilters` entry: `'price <= 1500'`. The operators are
- * exactly the set `helper.addNumericRefinement` accepts, and exactly the set
- * the Algolia MCP Server emits.
- */
-const NUMERIC_FILTER = /^(.+?)\s*(<=|>=|!=|=|<|>)\s*(-?\d+(?:\.\d+)?)$/;
-
-function updateStateFromSearchToolInput(
-  params: ApplyFiltersParams,
-  helper: AlgoliaSearchHelper
-) {
-  // clear all filters first
-  const attributesToClear = getAttributesToClear({
-    results: helper.lastResults!,
-    helper,
-  });
-
-  helper.setState(
-    clearRefinements({
-      helper,
-      attributesToClear,
-    })
-  );
-
-  if (params.facetFilters) {
-    const refinements = flat(params.facetFilters).reduce<
-      Array<{ attribute: string; value: string }>
-    >((acc, filter) => {
-      const separatorIndex = filter.indexOf(':');
-
-      if (separatorIndex > 0) {
-        acc.push({
-          attribute: filter.slice(0, separatorIndex),
-          value: filter.slice(separatorIndex + 1),
-        });
-      }
-
-      return acc;
-    }, []);
-
-    const hierarchicalRefinements = new Map<string, string>();
-
-    refinements.forEach(({ attribute, value }) => {
-      const hierarchicalFacet = helper.state.hierarchicalFacets.find(
-        (facet) =>
-          facet.name === attribute || facet.attributes.includes(attribute)
-      );
-
-      if (hierarchicalFacet) {
-        const currentValue = hierarchicalRefinements.get(
-          hierarchicalFacet.name
-        );
-
-        if (currentValue === undefined || value.length > currentValue.length) {
-          hierarchicalRefinements.set(hierarchicalFacet.name, value);
-        }
-
-        return;
-      }
-
-      if (
-        !helper.state.isConjunctiveFacet(attribute) &&
-        !helper.state.isDisjunctiveFacet(attribute)
-      ) {
-        helper.setState(helper.state.addDisjunctiveFacet(attribute));
-      }
-
-      helper.toggleFacetRefinement(attribute, value);
-    });
-
-    hierarchicalRefinements.forEach((value, name) => {
-      helper.toggleFacetRefinement(name, value);
-    });
-  }
-
-  if (params.numericFilters) {
-    params.numericFilters.forEach((filter) => {
-      const match = filter.match(NUMERIC_FILTER);
-
-      if (!match) {
-        return;
-      }
-
-      const [, attribute, operator, value] = match;
-
-      helper.addNumericRefinement(
-        attribute,
-        operator as SearchParameters.Operator,
-        Number(value)
-      );
-    });
-  }
-
-  if (params.query) {
-    helper.setQuery(params.query);
-  }
-
-  helper.search();
-
-  return helper.state;
 }
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
@@ -1268,7 +1144,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         }
 
         function applyFilters(params: ApplyFiltersParams) {
-          return updateStateFromSearchToolInput(params, helper);
+          return applyAgentFilters(params, helper);
         }
 
         // A restored or server-rendered conversation never emitted the messages

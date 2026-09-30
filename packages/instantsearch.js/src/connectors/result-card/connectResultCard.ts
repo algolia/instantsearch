@@ -1,5 +1,5 @@
 import {
-  buildFilters,
+  getAgentFilters,
   CompareProductsToolType,
   DisplayResultsToolType,
   GroupedResultsToolType,
@@ -187,7 +187,7 @@ function computeActivation(
   previous: Activation | null
 ): Activation {
   const query = results.query || '';
-  const filters = buildFilters(results);
+  const filters = getAgentFilters(results);
   const base = `${results.index}|${query}|${JSON.stringify(filters ?? [])}`;
 
   // Pagination and "load more" change the hits but not the question, so the
