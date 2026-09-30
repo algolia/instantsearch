@@ -170,7 +170,7 @@ export function createOptionsTests(
       ).not.toHaveTextContent('running shoes');
     });
 
-    test('minimizes to the header while the answer keeps generating', async () => {
+    test('still requests the answer while minimized and shows it on restore', async () => {
       const searchClient = createResultsClient();
       const fetchMock = mockAgentFetch();
 
