@@ -154,6 +154,23 @@ describe('life cycle', () => {
       expect(pushState).toHaveBeenCalledTimes(2);
     });
 
+    test('skips history push when writing the route read on back/forward actions', () => {
+      const pushState = jest.spyOn(window.history, 'pushState');
+      const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
+      router.onUpdate((routeState) => {
+        router.write(routeState);
+      });
+
+      // A URL that `createURL` writes differently (it encodes the brackets).
+      window.history.replaceState({}, '', '?indexName[page]=2');
+      pushState.mockClear();
+
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      jest.runAllTimers();
+
+      expect(pushState).toHaveBeenCalledTimes(0);
+    });
+
     test("doesn't throw if an index history state is null", () => {
       const router = historyRouter<UiState>({ cleanUrlOnDispose: true });
       const stateMapping = simple();

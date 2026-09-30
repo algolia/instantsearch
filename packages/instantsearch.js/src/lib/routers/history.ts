@@ -177,8 +177,11 @@ See documentation: ${createDocumentationLink({
     safelyRunOnBrowser(({ window: browserWindow }) => {
       const url = this.createURL(routeState);
       const title = this.windowTitle && this.windowTitle(routeState);
+      // Without a source, the route state can be the one read on popstate.
+      const popStateRouteState = source === undefined ? routeState : source;
       const causedByPopState =
-        isObject(source) && this.popStateRouteStates.has(source);
+        isObject(popStateRouteState) &&
+        this.popStateRouteStates.has(popStateRouteState);
 
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
