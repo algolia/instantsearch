@@ -16,7 +16,7 @@ const ResultCardUi = createResultCardComponent({
 /**
  * Props passed to a custom `layoutComponent`: the connector render state, so a
  * layout component owns the full markup, including every status and the
- * dismiss, retry, and handoff actions.
+ * retry and handoff actions.
  */
 export type ResultCardLayoutComponentProps = ResultCardRenderState;
 
@@ -25,8 +25,9 @@ type OwnedUiProps =
   | 'messages'
   | 'error'
   | 'suggestions'
-  | 'onDismiss'
   | 'onRetry'
+  | 'minimized'
+  | 'onToggleMinimize'
   | 'canContinueInChat'
   | 'onContinueInChat'
   | 'expanded'
@@ -52,6 +53,7 @@ export function ResultCard({
     { agentId, transport, requestOptions } as UseResultCardProps,
     { $$widgetType: 'ais.resultCard' }
   );
+  const [minimized, setMinimized] = useState(false);
 
   if (LayoutComponent) {
     return <LayoutComponent {...renderState} />;
@@ -65,8 +67,9 @@ export function ResultCard({
       messages={renderState.messages}
       error={renderState.error}
       suggestions={renderState.suggestions}
-      onDismiss={renderState.dismiss}
       onRetry={renderState.retry}
+      minimized={minimized}
+      onToggleMinimize={() => setMinimized(!minimized)}
       canContinueInChat={renderState.canContinueInChat}
       onContinueInChat={renderState.continueInChat}
       expanded={renderState.expanded}

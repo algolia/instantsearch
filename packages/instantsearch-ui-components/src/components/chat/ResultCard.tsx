@@ -10,7 +10,8 @@ import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-  CloseIcon,
+  MaximizeIcon,
+  MinimizeIcon,
   SparklesIcon,
 } from './icons';
 
@@ -32,7 +33,7 @@ export type ResultCardClassNames = {
   root: string | string[];
   header: string | string[];
   headerTitle: string | string[];
-  dismissButton: string | string[];
+  minimizeButton: string | string[];
   body: string | string[];
   loader: string | string[];
   message: string | string[];
@@ -47,9 +48,13 @@ export type ResultCardTranslations = {
    */
   headerTitle: string;
   /**
-   * The label of the dismiss button.
+   * Accessible label for the button that collapses the card to its header.
    */
-  dismissLabel: string;
+  minimizeLabel: string;
+  /**
+   * Accessible label for the button that restores a minimized card.
+   */
+  maximizeLabel: string;
   /**
    * The text of the button that shows a clipped answer in full.
    */
@@ -85,8 +90,13 @@ export type ResultCardOwnProps<
    * the conversation can continue in the chat.
    */
   suggestions?: string[];
-  onDismiss: () => void;
   onRetry: () => void;
+  /**
+   * Whether the card is collapsed to its header. The answer keeps generating
+   * meanwhile.
+   */
+  minimized: boolean;
+  onToggleMinimize: () => void;
   /**
    * Whether a `chat` widget with the same agent is available to hand the
    * conversation to.
@@ -108,7 +118,8 @@ export type ResultCardOwnProps<
 // Keeps the card compact: the chat shows the full list after the handoff.
 const MAX_SUGGESTIONS = 2;
 
-// The card renders no tool layouts, the only readers of the index UI state.
+// The card renders no tool layouts, the only readers of the index UI state
+// and of `onClose`.
 const noop = () => {};
 
 const CHAT_STATUS: Record<ResultCardStatus, ChatStatus> = {
@@ -141,8 +152,9 @@ export function createResultCardComponent({
       messages,
       error,
       suggestions,
-      onDismiss,
       onRetry,
+      minimized,
+      onToggleMinimize,
       canContinueInChat,
       onContinueInChat,
       expanded,
@@ -154,7 +166,8 @@ export function createResultCardComponent({
 
     const translations: ResultCardTranslations = {
       headerTitle: 'AI Overview',
-      dismissLabel: 'Dismiss',
+      minimizeLabel: 'Minimize',
+      maximizeLabel: 'Maximize',
       expandText: 'Show more',
       collapseText: 'Show less',
       continueInChatText: 'Continue in chat',
@@ -207,11 +220,15 @@ export function createResultCardComponent({
       return null;
     }
     const showSuggestions =
-      isComplete && canContinueInChat && Boolean(suggestions?.length);
+      !minimized &&
+      isComplete &&
+      canContinueInChat &&
+      Boolean(suggestions?.length);
     // The error is never clipped: there is no toggle to reveal a hidden Retry.
     const unclipped = expanded || status === 'failed';
     const clipped = overflowing && !unclipped;
-    const showExpandToggle = isComplete && (overflowing || expanded);
+    const showExpandToggle =
+      !minimized && isComplete && (overflowing || expanded);
 
     const context: ChatComponentContext<TMessage> = {
       messages,
@@ -227,8 +244,11 @@ export function createResultCardComponent({
       },
       stop: () => Promise.resolve(),
       onReload: onRetry,
-      onClose: onDismiss,
+      onClose: noop,
     };
+    const minimizeToggleLabel = minimized
+      ? translations.maximizeLabel
+      : translations.minimizeLabel;
     return (
       <section
         {...props}
@@ -245,7 +265,7 @@ export function createResultCardComponent({
             {translations.headerTitle}
           </span>
           {/* In the header so it stays reachable when the answer is clipped. */}
-          {isComplete && canContinueInChat && (
+          {isComplete && canContinueInChat && !minimized && (
             <Button
               variant="outline"
               size="sm"
@@ -263,71 +283,79 @@ export function createResultCardComponent({
             size="sm"
             iconOnly
             className={cx(
-              'ais-ResultCard-dismissButton',
-              classNames.dismissButton
+              'ais-ResultCard-minimizeButton',
+              classNames.minimizeButton
             )}
-            title={translations.dismissLabel}
-            aria-label={translations.dismissLabel}
-            onClick={onDismiss}
+            title={minimizeToggleLabel}
+            aria-label={minimizeToggleLabel}
+            aria-expanded={minimized ? 'false' : 'true'}
+            onClick={onToggleMinimize}
           >
-            <CloseIcon createElement={createElement} />
+            {minimized ? (
+              <MaximizeIcon createElement={createElement} />
+            ) : (
+              <MinimizeIcon createElement={createElement} />
+            )}
           </Button>
         </div>
 
-        <div
-          ref={setBody}
-          className={cx(
-            'ais-ResultCard-body',
-            unclipped && 'ais-ResultCard-body--expanded',
-            clipped && 'ais-ResultCard-body--clipped',
-            classNames.body
-          )}
-          style={
-            expanded && contentHeight !== undefined
-              ? { maxHeight: `${contentHeight}px` }
-              : undefined
-          }
-          // Clipping is visual only: links below the fold stay in the tab
-          // order, so reaching one reveals it. Capture phase because `focus`
-          // does not bubble in Preact.
-          onFocusCapture={() => {
-            if (clipped) onExpandedChange(true);
-          }}
-        >
-          {status === 'failed' ? (
-            <ChatMessageError
-              context={context}
-              errorMessage={error?.message}
-              onReload={onRetry}
-              translations={{ retryText: translations.retryText }}
-            />
-          ) : !hasVisibleAnswer ? (
-            // Skeleton only: the header already marks the card as AI, and
-            // three lines match the clipped body height (see the theme).
-            <div className={cx('ais-ResultCard-loader', classNames.loader)}>
-              <div className="ais-ResultCard-loaderLine" />
-              <div className="ais-ResultCard-loaderLine" />
-              <div className="ais-ResultCard-loaderLine" />
-            </div>
-          ) : (
-            assistantMessages.map((message) => (
-              <ChatMessage
-                key={message.id}
+        {/* Unmounted rather than hidden: it is measured again on restore. */}
+        {!minimized && (
+          <div
+            ref={setBody}
+            className={cx(
+              'ais-ResultCard-body',
+              unclipped && 'ais-ResultCard-body--expanded',
+              clipped && 'ais-ResultCard-body--clipped',
+              classNames.body
+            )}
+            style={
+              expanded && contentHeight !== undefined
+                ? { maxHeight: `${contentHeight}px` }
+                : undefined
+            }
+            // Clipping is visual only: links below the fold stay in the tab
+            // order, so reaching one reveals it. Capture phase because `focus`
+            // does not bubble in Preact.
+            onFocusCapture={() => {
+              if (clipped) onExpandedChange(true);
+            }}
+          >
+            {status === 'failed' ? (
+              <ChatMessageError
                 context={context}
-                message={message}
-                messages={messages}
-                side="left"
-                variant="subtle"
-                showReasoning={false}
-                indexUiState={{}}
-                setIndexUiState={noop}
-                classNames={{
-                  root: cx('ais-ResultCard-message', classNames.message),
-                }}
+                errorMessage={error?.message}
+                onReload={onRetry}
+                translations={{ retryText: translations.retryText }}
               />
-            ))
-          )}
-        </div>
+            ) : !hasVisibleAnswer ? (
+              // Skeleton only: the header already marks the card as AI, and
+              // three lines match the clipped body height (see the theme).
+              <div className={cx('ais-ResultCard-loader', classNames.loader)}>
+                <div className="ais-ResultCard-loaderLine" />
+                <div className="ais-ResultCard-loaderLine" />
+                <div className="ais-ResultCard-loaderLine" />
+              </div>
+            ) : (
+              assistantMessages.map((message) => (
+                <ChatMessage
+                  key={message.id}
+                  context={context}
+                  message={message}
+                  messages={messages}
+                  side="left"
+                  variant="subtle"
+                  showReasoning={false}
+                  indexUiState={{}}
+                  setIndexUiState={noop}
+                  classNames={{
+                    root: cx('ais-ResultCard-message', classNames.message),
+                  }}
+                />
+              ))
+            )}
+          </div>
+        )}
 
         {/* Outside the clipped body so a row of chips is never cut through:
             a clipped card hides them until "Show more". */}

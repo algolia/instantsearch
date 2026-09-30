@@ -22,7 +22,7 @@
     var(--ais-transition-timing-function) both;
 }
 
-// Title on the left; the handoff and dismiss buttons pack on the right.
+// Title on the left; the handoff and minimize buttons pack on the right.
 .ais-ResultCard-header {
   display: flex;
   align-items: center;
@@ -43,6 +43,11 @@
     height: var(--ais-spacing);
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
   }
+}
+
+// Same size as the chat header's maximize icon.
+.ais-ResultCard-minimizeButton svg {
+  width: calc(var(--ais-icon-size) * 0.8);
 }
 
 // A long answer is clipped with a fade and revealed in place by "Show more".

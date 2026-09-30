@@ -603,34 +603,7 @@ describe('connectResultCard', () => {
     });
   });
 
-  describe('dismiss and retry', () => {
-    it('hides for the current signature and reopens on a new one', async () => {
-      const { renderFn, renderAndWait } = setup();
-      await renderAndWait(makeResults());
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-
-      lastRender(renderFn).dismiss();
-      expect(lastRender(renderFn).status).toBe('hidden');
-
-      await renderAndWait(makeResults());
-      expect(lastRender(renderFn).status).toBe('hidden');
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-
-      await renderAndWait(makeResults({ query: 'trail shoes' }));
-      expect(lastRender(renderFn).status).toBe('complete');
-      expect(fetchMock).toHaveBeenCalledTimes(2);
-    });
-
-    it('cancels a pending request when dismissed', async () => {
-      const { renderFn, render } = setup();
-      render(makeResults());
-      lastRender(renderFn).dismiss();
-      await wait(DEBOUNCE_WAIT);
-
-      expect(fetchMock).not.toHaveBeenCalled();
-      expect(lastRender(renderFn).status).toBe('hidden');
-    });
-
+  describe('retry and expand', () => {
     it('fails on a request error and retries on demand', async () => {
       fetchMock.mockImplementationOnce(() =>
         Promise.reject(new Error('network down'))

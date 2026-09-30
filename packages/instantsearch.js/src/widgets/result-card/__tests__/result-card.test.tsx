@@ -3,6 +3,8 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { fireEvent, within } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createSingleSearchResponse } from '../../../../../../tests/mocks/createAPIResponse';
@@ -66,6 +68,42 @@ describe('resultCard', () => {
     expect(
       container.querySelector('.ais-ResultCard-headerTitle')
     ).toHaveTextContent('AI Overview');
+  });
+
+  it('stays minimized for a new query', async () => {
+    const container = document.createElement('div');
+    const search = createInstantSearch();
+    const widget = resultCard({ container, agentId: 'a' });
+    const renderResults = (query: string) =>
+      widget.render!(
+        createRenderOptions({
+          instantSearchInstance: search,
+          helper: search.helper!,
+          results: makeResults(query),
+        })
+      );
+
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance: search,
+        helper: search.helper!,
+      })
+    );
+    renderResults('running shoes');
+
+    fireEvent.click(
+      within(container).getByRole('button', { name: 'Minimize' })
+    );
+    await wait(0);
+    expect(container.querySelector('.ais-ResultCard-body')).toBeNull();
+
+    renderResults('trail shoes');
+    await wait(0);
+
+    expect(container.querySelector('.ais-ResultCard-body')).toBeNull();
+    expect(
+      within(container).getByRole('button', { name: 'Maximize' })
+    ).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('renders a custom `layout` template with the render state', () => {

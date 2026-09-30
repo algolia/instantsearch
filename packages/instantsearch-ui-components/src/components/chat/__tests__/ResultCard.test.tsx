@@ -36,8 +36,9 @@ function createProps(
   return {
     status: 'complete',
     messages: [userMessage, assistantMessage],
-    onDismiss: jest.fn(),
     onRetry: jest.fn(),
+    minimized: false,
+    onToggleMinimize: jest.fn(),
     canContinueInChat: true,
     onContinueInChat: jest.fn(),
     expanded: false,
@@ -228,12 +229,59 @@ describe('ResultCard', () => {
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 
-  test('dismisses on click', async () => {
-    const onDismiss = jest.fn();
-    render(<ResultCard {...createProps({ onDismiss })} />);
+  test('minimizes on click', async () => {
+    const onToggleMinimize = jest.fn();
+    render(<ResultCard {...createProps({ onToggleMinimize })} />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
-    expect(onDismiss).toHaveBeenCalledTimes(1);
+    const toggle = screen.getByRole('button', { name: 'Minimize' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    await userEvent.click(toggle);
+    expect(onToggleMinimize).toHaveBeenCalledTimes(1);
+  });
+
+  test('collapses to the header when minimized', async () => {
+    const onToggleMinimize = jest.fn();
+    const { container } = render(
+      <ResultCard
+        {...createProps({
+          minimized: true,
+          onToggleMinimize,
+          suggestions: ['Which one is waterproof?'],
+        })}
+      />
+    );
+
+    expect(screen.getByText('AI Overview')).toBeInTheDocument();
+    expect(
+      container.querySelector('.ais-ResultCard-body')
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Continue in chat' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Which one is waterproof?')
+    ).not.toBeInTheDocument();
+
+    const toggle = screen.getByRole('button', { name: 'Maximize' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+    await userEvent.click(toggle);
+    expect(onToggleMinimize).toHaveBeenCalledTimes(1);
+  });
+
+  test('keeps showing progress in the header when minimized', () => {
+    const { container } = render(
+      <ResultCard {...createProps({ status: 'streaming', minimized: true })} />
+    );
+
+    expect(container.querySelector('.ais-ResultCard')).toHaveAttribute(
+      'aria-busy',
+      'true'
+    );
+    expect(
+      container.querySelector('.ais-ResultCard-body')
+    ).not.toBeInTheDocument();
   });
 
   test('hands off to the chat, with or without a follow-up', async () => {
@@ -355,6 +403,23 @@ describe('ResultCard', () => {
       expect(onExpandedChange).toHaveBeenCalledWith(true);
     });
 
+    test('measures the answer again when restored', () => {
+      const { container, rerender } = render(
+        <ResultCard {...createProps({ minimized: true })} />
+      );
+      expect(
+        screen.queryByRole('button', { name: 'Show more' })
+      ).not.toBeInTheDocument();
+
+      rerender(<ResultCard {...createProps({ minimized: false })} />);
+      expect(container.querySelector('.ais-ResultCard-body')).toHaveClass(
+        'ais-ResultCard-body--clipped'
+      );
+      expect(
+        screen.getByRole('button', { name: 'Show more' })
+      ).toBeInTheDocument();
+    });
+
     test('never clips the error, so Retry stays reachable', () => {
       const { container } = render(
         <ResultCard
@@ -409,11 +474,13 @@ describe('ResultCard', () => {
         translations={{
           headerTitle: 'Aperçu',
           continueInChatText: 'Continuer',
+          minimizeLabel: 'Réduire',
         }}
         classNames={{
           root: 'ROOT',
           header: 'HEADER',
           continueButton: 'CONTINUE',
+          minimizeButton: 'MINIMIZE',
         }}
       />
     );
@@ -425,6 +492,9 @@ describe('ResultCard', () => {
     expect(screen.getByText('Aperçu')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Continuer' })).toHaveClass(
       'CONTINUE'
+    );
+    expect(screen.getByRole('button', { name: 'Réduire' })).toHaveClass(
+      'MINIMIZE'
     );
   });
 });
