@@ -890,20 +890,22 @@ See documentation: ${createDocumentationLink({
   }
 
   /**
-   * The `onApply` of the UI state `_applyUiState` is setting. The index widgets
-   * notify their state change with it, as part of applying that UI state.
+   * Set while `_applyUiState` sets the helper state. The index widgets notify
+   * their state change with its `onApply`, as part of applying that UI state.
    */
-  public _onApplyUiState?: (notifiedUiState: TUiState) => void;
+  public _applyingUiState?: {
+    onApply?: (notifiedUiState: TUiState) => void;
+  };
 
   public _applyUiState(
     uiState: TUiState,
     onApply?: (notifiedUiState: TUiState) => void
   ) {
-    this._onApplyUiState = onApply;
+    this._applyingUiState = { onApply };
     try {
       setIndexHelperState(uiState, this.mainIndex);
     } finally {
-      this._onApplyUiState = undefined;
+      this._applyingUiState = undefined;
     }
 
     this.scheduleSearch();

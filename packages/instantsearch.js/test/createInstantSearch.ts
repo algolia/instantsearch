@@ -48,7 +48,7 @@ export const createInstantSearch = (
     _hasRecommendWidget: false,
     _hasSearchWidget: false,
     _manuallyResetScheduleSearch: false,
-    _onApplyUiState: undefined,
+    _applyingUiState: undefined,
     _applyUiState: jest.fn(),
     onStateChange: null,
     setUiState: jest.fn(),
