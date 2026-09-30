@@ -21,6 +21,7 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
   ResultCardClassNames,
+  ResultCardOwnProps,
   ResultCardTranslations,
 } from 'instantsearch-ui-components';
 
@@ -35,6 +36,21 @@ const ResultCard = createResultCardComponent({
   useEffect,
 });
 
+// Kept across renders, so a minimized card stays minimized for new queries
+// until the widget is removed.
+function MinimizableResultCard(
+  props: Omit<ResultCardOwnProps, 'minimized' | 'onToggleMinimize'>
+) {
+  const [minimized, setMinimized] = useState(false);
+  return (
+    <ResultCard
+      {...props}
+      minimized={minimized}
+      onToggleMinimize={() => setMinimized(!minimized)}
+    />
+  );
+}
+
 export type ResultCardCSSClasses = Partial<ResultCardClassNames>;
 
 /**
@@ -47,7 +63,7 @@ export type ResultCardTemplates = {
   /**
    * Replaces the default card with custom markup. Receives the full render
    * state: the template is responsible for every status, including the
-   * dismiss, retry, and handoff actions.
+   * retry and handoff actions.
    */
   layout?: Template<ResultCardLayoutTemplateData>;
 };
@@ -95,7 +111,6 @@ const createRenderer =
       error,
       suggestions,
       retry,
-      dismiss,
       canContinueInChat,
       continueInChat,
       expanded,
@@ -127,7 +142,6 @@ const createRenderer =
             error,
             suggestions,
             retry,
-            dismiss,
             canContinueInChat,
             continueInChat,
             expanded,
@@ -141,14 +155,13 @@ const createRenderer =
     }
 
     render(
-      <ResultCard
+      <MinimizableResultCard
         classNames={cssClasses}
         translations={translations}
         status={status}
         messages={messages}
         error={error}
         suggestions={suggestions}
-        onDismiss={dismiss}
         onRetry={retry}
         canContinueInChat={canContinueInChat}
         onContinueInChat={continueInChat}

@@ -68,10 +68,7 @@ export function getResultCardRuleContext(agentId: string): string {
 }
 
 export type ResultCardStatus =
-  /**
-   * No Rule matched the current search (or the query is too short), or the
-   * user dismissed the card until the query, filters, or top hits change.
-   */
+  /** No Rule matched the current search, or the query is too short. */
   | 'hidden'
   /** Activated, no answer text yet: debouncing, requesting, or awaiting the first token. */
   | 'loading'
@@ -94,11 +91,6 @@ export type ResultCardRenderState<TUiMessage extends UIMessage = UIMessage> = {
   suggestions?: string[];
   /** Sends the request again. Always a new request, never a resume. */
   retry: () => void;
-  /**
-   * Hides the card until the query, filters, or top hits change. Cancels a
-   * generation in progress.
-   */
-  dismiss: () => void;
   /**
    * Whether a `chat` widget using the same `agentId` is mounted on this index,
    * i.e. whether `continueInChat` has somewhere to go.
@@ -270,7 +262,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     let chatState: ChatRenderState | undefined;
     let latestRenderOptions: InitOptions | RenderOptions | null = null;
     let activation: Activation | null = null;
-    let dismissed = false;
     let expanded = false;
     // True between a signature change and the debounced request that follows
     // it, so the card shows its skeleton rather than the previous answer.
@@ -379,7 +370,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     const deactivate = () => {
       cancelPendingRequest();
       activation = null;
-      dismissed = false;
       stopGeneration();
     };
 
@@ -395,23 +385,14 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
       }
 
       activation = next;
-      dismissed = false;
       expanded = false;
       scheduleRequest();
       stopGeneration();
     };
 
     const retry = () => {
-      if (!activation || dismissed) return;
+      if (!activation) return;
       send();
-    };
-
-    const dismiss = () => {
-      if (!activation || dismissed) return;
-      cancelPendingRequest();
-      dismissed = true;
-      stopGeneration();
-      rerender();
     };
 
     const setExpanded = (nextExpanded: boolean) => {
@@ -471,7 +452,7 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
     const getStatus = (
       currentActivation: Activation | null
     ): ResultCardStatus => {
-      if (!currentActivation || dismissed) return 'hidden';
+      if (!currentActivation) return 'hidden';
       // Checked before the inner chat's status: until the debounced request
       // runs, that status (and its error) still belongs to the previous question.
       if (requestPending) return 'loading';
@@ -526,7 +507,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         error: status === 'failed' ? chatState?.error : undefined,
         suggestions: requestPending ? undefined : chatState?.suggestions,
         retry,
-        dismiss,
         canContinueInChat,
         continueInChat,
         expanded,
@@ -548,7 +528,6 @@ const connectResultCard: ResultCardConnector = function connectResultCard(
         chatState = undefined;
         latestRenderOptions = null;
         activation = null;
-        dismissed = false;
         expanded = false;
         sendEvent = undefined;
 

@@ -170,9 +170,9 @@ export function createOptionsTests(
       ).not.toHaveTextContent('running shoes');
     });
 
-    test('dismisses the card', async () => {
+    test('minimizes to the header while the answer keeps generating', async () => {
       const searchClient = createResultsClient();
-      mockAgentFetch();
+      const fetchMock = mockAgentFetch();
 
       await setup({
         instantSearchOptions: { indexName: 'indexName', searchClient },
@@ -184,19 +184,47 @@ export function createOptionsTests(
       });
 
       await act(async () => {
-        await wait(DEBOUNCE_MS + 100);
-      });
-
-      await act(async () => {
-        await userEvent.click(
-          document.querySelector<HTMLButtonElement>(
-            '.ais-ResultCard-dismissButton'
-          )!
-        );
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-ResultCard')).toBeNull();
+      const toggle = () =>
+        document.querySelector<HTMLButtonElement>(
+          '.ais-ResultCard-minimizeButton'
+        )!;
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+
+      await act(async () => {
+        await userEvent.click(toggle());
+        await wait(0);
+      });
+
+      expect(toggle()).toHaveAttribute('aria-expanded', 'false');
+      expect(toggle()).toHaveAccessibleName('Maximize');
+      expect(document.querySelector('.ais-ResultCard-body')).toBeNull();
+
+      await act(async () => {
+        await wait(DEBOUNCE_MS + 100);
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(document.querySelector('.ais-ResultCard')).toHaveAttribute(
+        'data-status',
+        'complete'
+      );
+      expect(document.querySelector('.ais-ResultCard-body')).toBeNull();
+      expect(
+        document.querySelector('.ais-ResultCard-continueButton')
+      ).toBeNull();
+
+      await act(async () => {
+        await userEvent.click(toggle());
+        await wait(0);
+      });
+
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+      expect(document.querySelector('.ais-ResultCard-body')).toHaveTextContent(
+        ANSWER
+      );
     });
 
     test('shows the error and retries on demand', async () => {

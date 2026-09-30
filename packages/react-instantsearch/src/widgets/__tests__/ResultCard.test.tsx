@@ -5,10 +5,12 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import { ResultCard } from '../ResultCard';
+import { SearchBox } from '../SearchBox';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchResponse } from 'instantsearch.js';
@@ -18,16 +20,16 @@ import type { SearchResponse } from 'instantsearch.js';
 // that activates it (the connector then shows its skeleton before requesting).
 function createActivatingSearchClient() {
   return createSearchClient({
-    search: jest.fn((requests: unknown[]) =>
+    search: jest.fn((requests: Array<{ params?: { query?: string } }>) =>
       Promise.resolve({
-        results: requests.map(() => ({
+        results: requests.map((request) => ({
           hits: [{ objectID: '1' }],
           nbHits: 1,
           page: 0,
           nbPages: 1,
           hitsPerPage: 20,
           processingTimeMS: 1,
-          query: 'running shoes',
+          query: request.params?.query || 'running shoes',
           params: '',
           index: 'indexName',
           renderingContent: { widgets: { resultCard: { enabled: true } } },
@@ -75,6 +77,34 @@ describe('ResultCard rendering', () => {
     expect(container.querySelector<HTMLElement>('.BASECLASS')!.title).toBe(
       'test title'
     );
+  });
+
+  test('stays minimized for a new query', async () => {
+    const { container } = await renderInSearch(
+      <>
+        <SearchBox />
+        <ResultCard agentId="test-agent-id" />
+      </>
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'Minimize' }));
+    });
+    expect(container.querySelector('.ais-ResultCard-body')).toBeNull();
+
+    await act(async () => {
+      await userEvent.type(screen.getByRole('searchbox'), 'trail shoes');
+      await wait(0);
+    });
+
+    expect(container.querySelector('.ais-ResultCard')).toHaveAttribute(
+      'data-status',
+      'loading'
+    );
+    expect(container.querySelector('.ais-ResultCard-body')).toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Maximize' })
+    ).toBeInTheDocument();
   });
 
   test('throws when both `transport` and `requestOptions` are provided', () => {
