@@ -13,6 +13,7 @@ import {
 } from '../../../../test/createWidget';
 import resultCard from '../result-card';
 
+import type { SearchResponse } from '../../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
 function makeResults(query = 'running shoes'): SearchResults {
@@ -21,11 +22,10 @@ function makeResults(query = 'running shoes'): SearchResults {
     createSingleSearchResponse({
       hits: [{ objectID: '1' }] as unknown as SearchResults['hits'],
       query,
-      // The Rule payload enabling the card; the client types `userData` as an object.
-      userData: [{ resultCard: { enabled: true } }] as unknown as Record<
-        string,
-        unknown
-      >,
+      // The Rule payload enabling the card; search client versions disagree on `userData`'s type.
+      userData: [
+        { resultCard: { enabled: true } },
+      ] as unknown as SearchResponse<any>['userData'],
     }),
   ]);
 }

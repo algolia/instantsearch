@@ -18,6 +18,7 @@ import connectResultCard, {
   getResultCardRuleContext,
 } from '../connectResultCard';
 
+import type { SearchResponse } from '../../../types';
 import type { ResultCardConnectorParams } from '../connectResultCard';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -74,8 +75,8 @@ function makeResults(
     page,
     index,
     queryID: 'queryID',
-    // The search client types `userData` as an object; the engine returns an array.
-    userData: userData as unknown as Record<string, unknown>,
+    // Search client versions disagree on `userData`'s type; the engine returns an array.
+    userData: userData as unknown as SearchResponse<any>['userData'],
   });
   return new algoliasearchHelper.SearchResults(helper.state, [response]);
 }
