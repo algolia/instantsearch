@@ -387,6 +387,7 @@ function ChatInner<
     messages,
     sendMessage,
     status,
+    turnState,
     regenerate,
     stop,
     error,
@@ -457,10 +458,10 @@ function ChatInner<
   // `preserveScrollPosition` reuses the existing "only if already at the
   // bottom" gate, so this never fights a user who has scrolled up to read.
   useEffect(() => {
-    if (status === 'streaming' || status === 'submitted') {
+    if (turnState.isBusy) {
       scrollToBottom({ preserveScrollPosition: true });
     }
-  }, [messages, status, scrollToBottom]);
+  }, [messages, turnState.isBusy, scrollToBottom]);
 
   if (__DEV__ && error) {
     throw error;
@@ -500,6 +501,7 @@ function ChatInner<
       }}
       messagesProps={{
         status,
+        turnState,
         onReload: (messageId) => regenerate({ messageId }),
         onNewConversation: clearMessages,
         onClose: () => setOpen(false),

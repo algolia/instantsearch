@@ -186,6 +186,7 @@ type ChatWrapperProps = {
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
+  chatTurnState: ChatRenderState['turnState'];
   chatInput: ChatRenderState['input'];
   setChatInput: ChatRenderState['setInput'];
   sendMessage: ChatRenderState['sendMessage'];
@@ -271,6 +272,7 @@ function ChatWrapper({
   indexUiState,
   setIndexUiState,
   chatStatus,
+  chatTurnState,
   chatInput,
   setChatInput,
   sendMessage,
@@ -309,10 +311,10 @@ function ChatWrapper({
   // `preserveScrollPosition` reuses the existing "only if already at the
   // bottom" gate, so this never fights a user who has scrolled up to read.
   useEffect(() => {
-    if (chatStatus === 'streaming' || chatStatus === 'submitted') {
+    if (chatTurnState.isBusy) {
       scrollToBottom({ preserveScrollPosition: true });
     }
-  }, [chatMessages, chatStatus, scrollToBottom]);
+  }, [chatMessages, chatTurnState.isBusy, scrollToBottom]);
 
   state.init();
 
@@ -345,6 +347,7 @@ function ChatWrapper({
       }}
       messagesProps={{
         status: chatStatus,
+        turnState: chatTurnState,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
         onFeedback,
@@ -672,6 +675,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       setInput,
       setOpen,
       status,
+      turnState,
       error,
       regenerate,
       stop,
@@ -844,6 +848,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           indexUiState={indexUiState}
           setIndexUiState={setIndexUiState}
           chatStatus={status}
+          chatTurnState={turnState}
           chatInput={input}
           setChatInput={setInput}
           sendMessage={sendMessage}
@@ -999,7 +1004,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
 
     /**
      * Text to display in the loader. Pass a function to label the wait by what
-     * the turn is doing, e.g. `({ phase }) => phase === 'tool' ? 'Searching…' : 'Thinking…'`.
+     * the turn is doing, e.g. `({ phase }) => phase === 'calling-tool' ? 'Searching…' : 'Thinking…'`.
      */
     loaderText: ChatMessagesTranslations['loaderText'];
 
@@ -1349,6 +1354,7 @@ export default (function chat<
     ...makeWidget({
       resume,
       tools,
+      showReasoning,
       disableTriggerValidation: effectiveDisableTriggerValidation,
       ...options,
     }),

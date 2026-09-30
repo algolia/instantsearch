@@ -36,6 +36,10 @@ type ToolMessage = ClientSideToolComponentProps['context']['message'];
 const metadata: ChatComponentContext = {
   messages: [],
   status: 'ready',
+  phase: 'idle',
+  hasActiveReasoning: false,
+  isBusy: false,
+  showLoader: false,
   isClearing: false,
   open: true,
   maximized: false,

@@ -13,6 +13,8 @@ export { GuardrailViolationError } from './utils';
 // Utilities
 export {
   generateId,
+  isReasoningPartActive,
+  isToolPart,
   lastAssistantMessageIsCompleteWithToolCalls,
   SerialJobExecutor,
 } from './utils';
@@ -29,6 +31,7 @@ export {
 // Types
 export type {
   // Status
+  ChatPhase,
   ChatStatus,
 
   // Message types

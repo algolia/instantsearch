@@ -5,6 +5,61 @@ import type {
   UITools,
 } from './types';
 
+export function isToolPart(
+  part: UIMessage['parts'][number]
+): part is UIMessage['parts'][number] & { state: string } {
+  return part.type.indexOf('tool-') === 0 || part.type === 'dynamic-tool';
+}
+
+/**
+ * Whether the reasoning part at `index` is the one still being produced, i.e.
+ * it is streaming and nothing settled has followed it.
+ */
+export function isReasoningPartActive(
+  parts: UIMessage['parts'],
+  index: number
+): boolean {
+  const part = parts[index];
+
+  return (
+    part?.type === 'reasoning' &&
+    part.state === 'streaming' &&
+    !parts
+      .slice(index + 1)
+      .some(
+        (laterPart) =>
+          laterPart.type !== 'reasoning' || laterPart.state === 'streaming'
+      )
+  );
+}
+
+/**
+ * Whether a text part renders nothing. `text-start` creates the part before its
+ * first delta, and `<context>` wrappers are a shim the view drops as well.
+ */
+function isTextPartEmpty(part: { text: string }): boolean {
+  return (
+    part.text.trim().length === 0 ||
+    (part.text.startsWith('<context>') && part.text.endsWith('</context>'))
+  );
+}
+
+/**
+ * Whether a part says anything about the turn's progress. Data parts and
+ * unwritten text parts render nothing, so letting them answer "what is this
+ * turn doing" would report progress that changed nothing on screen.
+ */
+export function isProgressPart(part: UIMessage['parts'][number]): boolean {
+  if (part.type.indexOf('data-') === 0) {
+    return false;
+  }
+  if (part.type === 'text') {
+    return !isTextPartEmpty(part);
+  }
+
+  return true;
+}
+
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 9);
 }

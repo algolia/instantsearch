@@ -67,6 +67,10 @@ describe('ChatMessages with React', () => {
 
   const loader = (container: Element) =>
     container.querySelector('.ais-ChatMessageLoader');
+  const turnState = (showLoader: boolean) => ({
+    isBusy: true,
+    showLoader,
+  });
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -79,13 +83,23 @@ describe('ChatMessages with React', () => {
 
   test('keeps a delayed loader hidden across identical renders until its timer fires', () => {
     const { container, rerender } = render(
-      <ChatMessages {...baseProps} status="streaming" messages={[]} />
+      <ChatMessages
+        {...baseProps}
+        status="streaming"
+        messages={[]}
+        turnState={turnState(true)}
+      />
     );
 
     expect(loader(container)).not.toBeNull();
 
     rerender(
-      <ChatMessages {...baseProps} status="streaming" messages={answered} />
+      <ChatMessages
+        {...baseProps}
+        status="streaming"
+        messages={answered}
+        turnState={turnState(false)}
+      />
     );
     act(() => {
       jest.advanceTimersByTime(200);
@@ -97,6 +111,7 @@ describe('ChatMessages with React', () => {
       ...baseProps,
       status: 'streaming' as const,
       messages: waiting,
+      turnState: turnState(true),
     };
     rerender(<ChatMessages {...delayedProps} />);
 
@@ -118,11 +133,21 @@ describe('ChatMessages with React', () => {
 
   test('keeps a delayed loader hidden when loading stops before its timer commits', () => {
     const { container, rerender } = render(
-      <ChatMessages {...baseProps} status="streaming" messages={[]} />
+      <ChatMessages
+        {...baseProps}
+        status="streaming"
+        messages={[]}
+        turnState={turnState(true)}
+      />
     );
 
     rerender(
-      <ChatMessages {...baseProps} status="streaming" messages={answered} />
+      <ChatMessages
+        {...baseProps}
+        status="streaming"
+        messages={answered}
+        turnState={turnState(false)}
+      />
     );
     act(() => {
       jest.advanceTimersByTime(200);
@@ -131,14 +156,24 @@ describe('ChatMessages with React', () => {
     expect(loader(container)).toBeNull();
 
     rerender(
-      <ChatMessages {...baseProps} status="streaming" messages={waiting} />
+      <ChatMessages
+        {...baseProps}
+        status="streaming"
+        messages={waiting}
+        turnState={turnState(true)}
+      />
     );
 
     expect(loader(container)).toBeNull();
 
     act(() => {
       rerender(
-        <ChatMessages {...baseProps} status="streaming" messages={answered} />
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={answered}
+          turnState={turnState(false)}
+        />
       );
       jest.advanceTimersByTime(250);
     });
@@ -152,6 +187,7 @@ describe('ChatMessages with React', () => {
         {...baseProps}
         status="streaming"
         messages={[]}
+        turnState={turnState(true)}
         loaderMinDuration={100}
       />
     );
@@ -166,6 +202,7 @@ describe('ChatMessages with React', () => {
         {...baseProps}
         status="streaming"
         messages={[]}
+        turnState={turnState(true)}
         loaderMinDuration={1000}
       />
     );
@@ -174,6 +211,7 @@ describe('ChatMessages with React', () => {
         {...baseProps}
         status="streaming"
         messages={answered}
+        turnState={turnState(false)}
         loaderMinDuration={1000}
       />
     );
