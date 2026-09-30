@@ -34,7 +34,7 @@
   align-items: center;
   margin-right: auto;
   gap: calc(var(--ais-spacing) * 0.5);
-  font-size: calc(var(--ais-font-size) * 0.875);
+  font-size: var(--ais-font-size-sm);
   font-weight: var(--ais-font-weight-medium);
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 
@@ -147,7 +147,7 @@
   flex-wrap: wrap;
 
   .ais-ChatPromptSuggestions-suggestion {
-    font-size: calc(var(--ais-font-size) * 0.875);
+    font-size: var(--ais-font-size-sm);
     padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.75);
   }
 }
