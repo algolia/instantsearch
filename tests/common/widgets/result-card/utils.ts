@@ -10,9 +10,8 @@ export const ANSWER = 'Pick the Pegasus for daily runs.';
 
 /**
  * Search client whose every response carries `query` and activates the card
- * through the Rule payload in `userData` (unless `enabled` is `false`). No
- * widget owns the query in these setups, so the response states it rather
- * than echoing the request.
+ * (unless `enabled` is `false`). No widget owns the query in these setups, so
+ * the response states it rather than echoing the request.
  */
 export function createResultsClient({
   hits = [
@@ -39,7 +38,13 @@ export function createResultsClient({
           query,
           params: '',
           index: 'indexName',
-          ...(enabled ? { userData: [{ resultCard: { enabled: true } }] } : {}),
+          ...(enabled
+            ? {
+                renderingContent: {
+                  widgets: { resultCard: { enabled: true } },
+                },
+              }
+            : {}),
         })) as unknown as Array<SearchResponse<any>>,
       })
     ) as MockSearchClient['search'],
