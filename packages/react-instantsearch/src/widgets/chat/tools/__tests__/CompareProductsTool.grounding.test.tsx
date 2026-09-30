@@ -188,7 +188,9 @@ describe('CompareProductsTool', () => {
     });
 
     const tool = createCompareProductsTool(({ item }) => (
-      <article data-testid={`card-${item.objectID}`}>{item.name} card</article>
+      <article data-testid={`card-${item.objectID}`}>
+        {String(item.name)} card
+      </article>
     ));
 
     renderCompare(compareMessage, messages, tool);
@@ -211,7 +213,7 @@ describe('CompareProductsTool', () => {
     );
 
     const tool = createCompareProductsTool(({ item }) => (
-      <span>{item.name} card</span>
+      <span>{String(item.name)} card</span>
     ));
 
     renderCompare(compareMessage, messages, tool);
