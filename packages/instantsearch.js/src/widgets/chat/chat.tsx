@@ -170,7 +170,7 @@ function createDefaultTools<
     // Agents configured before the rename still emit the legacy tool name.
     // eslint-disable-next-line typescript/no-deprecated
     [DisplayResultsToolType]: groupedResultsTool,
-    [CompareProductsToolType]: createCompareProductsTool(),
+    [CompareProductsToolType]: createCompareProductsTool(templates),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },

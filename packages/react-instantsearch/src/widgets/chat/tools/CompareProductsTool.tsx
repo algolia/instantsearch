@@ -5,33 +5,38 @@ import type {
   ClientSideToolComponentProps,
   ComparisonTableTranslations,
   Pragma,
+  RecommendComponentProps,
+  RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
+
+type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 /**
  * Builtin comparison tool (`algolia_compare_products`).
  *
- * Registered by default in the chat widget so the agent can trigger a grounded
- * side-by-side comparison: its tool call names only the product objectIDs and
- * the attribute keys, and every cell is hydrated client-side from real records
- * (the shopper's selection and `algolia_search_index` hits). The model never
- * types a value, so it cannot
- * hallucinate one. See `instantsearch-ui-components` `CompareProductsTool` for
- * the contract, and `comparison-eval/README.md` for the study behind it.
+ * Registered by default in the chat widget so the agent can lay a comparison
+ * out as a table: the compared products across the top (rendered with the
+ * widget's `itemComponent`, from the records the chat collected) and the
+ * agent's criteria down the side, one value per product. See
+ * `instantsearch-ui-components` `CompareProductsTool` for the contract.
  */
-function createCompareProductsTool(
+function createCompareProductsTool<TObject extends RecordWithObjectID>(
+  itemComponent?: ItemComponent<TObject>,
   translations?: Partial<ComparisonTableTranslations>
 ): UserClientSideTool {
-  const CompareProductsUIComponent = createCompareProductsToolComponent({
-    createElement: createElement as Pragma,
-    Fragment,
-  });
+  const CompareProductsUIComponent =
+    createCompareProductsToolComponent<TObject>({
+      createElement: createElement as Pragma,
+      Fragment,
+    });
 
   const CompareProductsLayoutComponent = (
     toolProps: ClientSideToolComponentProps
   ) => (
     <CompareProductsUIComponent
       toolProps={toolProps}
+      itemComponent={itemComponent}
       translations={translations}
     />
   );
@@ -39,7 +44,7 @@ function createCompareProductsTool(
   return {
     layoutComponent: CompareProductsLayoutComponent,
     // Client-side tool: acknowledge the call so the agent's turn can complete.
-    // The table itself is rendered from the call's input + real search hits.
+    // The table itself is rendered from the call's input + the chat's records.
     onToolCall: ({ input, addToolResult }) => {
       const objectIDs = (input as { objectIDs?: string[] } | undefined)
         ?.objectIDs;
