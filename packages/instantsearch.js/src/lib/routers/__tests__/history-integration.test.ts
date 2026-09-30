@@ -493,5 +493,43 @@ describe('after a popstate', () => {
 
       search.dispose();
     });
+
+    test('does not push a transformed popstate state', async () => {
+      window.history.pushState({}, '', `/?${encodeURI('indexName[page]=5')}`);
+      const search = createSearch({
+        // The page applied is at most 3.
+        onStateChange: ({ uiState, setUiState }) => {
+          setUiState({
+            ...uiState,
+            [indexName]: {
+              ...uiState[indexName],
+              page: Math.min(uiState[indexName].page ?? 1, 3),
+            },
+          });
+        },
+      });
+      await wait(writeWait);
+
+      search.renderState[indexName].pagination!.refine(1);
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+      const historyLength = window.history.length;
+
+      await navigate(() => window.history.back());
+      await wait(writeWait);
+
+      // Page 3 is applied, but isn't pushed as it would drop the Forward entry.
+      expect(search.getUiState()[indexName].page).toBe(3);
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=5')}`);
+      expect(window.history.length).toBe(historyLength);
+
+      await navigate(() => window.history.forward());
+      await wait(writeWait);
+
+      expect(window.location.search).toBe(`?${encodeURI('indexName[page]=2')}`);
+
+      search.dispose();
+    });
   });
 });

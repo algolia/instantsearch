@@ -891,7 +891,7 @@ See documentation: ${createDocumentationLink({
 
   /**
    * Whether `_applyUiState` is setting the helper state. The index widgets then
-   * leave notifying the state change to it.
+   * notify their state change as part of it.
    */
   public _isApplyingUiState = false;
 
@@ -919,8 +919,13 @@ See documentation: ${createDocumentationLink({
     return this.mainIndex.getWidgetUiState({}) as TUiState;
   }
 
+  /**
+   * Notifies the middleware of the state change. `onApply` is the one given to
+   * `setUiState` when applying its UI state, `null` for a change made while
+   * applying it, and `undefined` for any other change.
+   */
   public onInternalStateChange = defer(
-    (onApply?: (notifiedUiState: TUiState) => void) => {
+    (onApply?: ((notifiedUiState: TUiState) => void) | null) => {
       const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
       onApply?.(nextUiState);
@@ -932,13 +937,19 @@ See documentation: ${createDocumentationLink({
       });
     },
     // The notified state only applies a UI state given to `setUiState` when no
-    // other change is part of it.
+    // other change is part of it. Changes made while applying it are.
     (
       [pendingOnApply],
       [nextOnApply]
-    ): [((notifiedUiState: TUiState) => void)?] => [
-      pendingOnApply === nextOnApply ? pendingOnApply : undefined,
-    ]
+    ): [((notifiedUiState: TUiState) => void) | null | undefined] => {
+      if (pendingOnApply === null) {
+        return [nextOnApply];
+      }
+      if (nextOnApply === null || nextOnApply === pendingOnApply) {
+        return [pendingOnApply];
+      }
+      return [undefined];
+    }
   );
 
   public createURL(nextState: TUiState = {} as TUiState): string {
