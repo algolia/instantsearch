@@ -3,14 +3,9 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.30.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.11...vue-instantsearch@4.30.0) (2026-10-01)
+## [4.30.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.29.11...vue-instantsearch@4.30.0) (2026-10-01)
 
-
-### Features
-
-* **result-card:** add result card widget ([#7243](https://github.com/algolia/instantsearch/issues/7243)) ([a04eb0d](https://github.com/algolia/instantsearch/commit/a04eb0d65a5653e96afb0ff182239bd335e7cc6b))
-
-
+**Note:** Version bump only for package vue-instantsearch
 
 
 
