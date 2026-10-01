@@ -17772,7 +17772,7 @@ __metadata:
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
     react-instantsearch: "npm:7.51.0"
-    react-instantsearch-router-nextjs: "npm:7.50.2"
+    react-instantsearch-router-nextjs: "npm:7.51.0"
     typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
@@ -17794,7 +17794,7 @@ __metadata:
     react-dom: "npm:19.0.0"
     react-instantsearch: "npm:7.51.0"
     react-instantsearch-core: "npm:7.51.0"
-    react-instantsearch-router-nextjs: "npm:7.50.2"
+    react-instantsearch-router-nextjs: "npm:7.51.0"
     typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
@@ -32399,7 +32399,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-instantsearch-router-nextjs@npm:7.50.2, react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs":
+"react-instantsearch-router-nextjs@npm:7.51.0, react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs":
   version: 0.0.0-use.local
   resolution: "react-instantsearch-router-nextjs@workspace:packages/react-instantsearch-router-nextjs"
   dependencies:
