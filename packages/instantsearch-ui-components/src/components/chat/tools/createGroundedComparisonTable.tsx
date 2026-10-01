@@ -1,45 +1,52 @@
 /** @jsx createElement */
 
 import type { ChatRecord, ChatRecordsStore } from '../../../lib/utils';
-import type { Renderer } from '../../../types';
+import type {
+  RecommendItemComponentProps,
+  RecordWithObjectID,
+  Renderer,
+} from '../../../types';
 
 /**
- * Shared presentational component for grounded comparison tables. Used by both
- * the `algolia_display_results` markdownTable path (`ComparisonTableTool`) and
- * the builtin `algolia_compare_products` tool (`CompareProductsTool`).
+ * Shared presentational component for chat comparison tables. Used by the
+ * builtin `algolia_compare_products` tool (`CompareProductsTool`) and the
+ * `algolia_display_results` markdownTable path (`ComparisonTableTool`).
  *
- * This is the "render the table from product IDs, not model text" fix from the
- * agentic-evals comparison study: the agent emits ONLY the product objectIDs
- * and the attribute *keys* to compare — never the values. Every cell is
- * hydrated from the chat records store (the records the search tools actually
- * fetched), so the model physically cannot type (and therefore cannot
- * hallucinate) a price or spec.
+ * Layout: the compared products run across the top (one column each, rendered
+ * with the same item component as the search results so the comparison reads
+ * as a display), and the comparison criteria run down the side (one row each).
+ *
+ * Products are identified by objectID only: the header is hydrated from the
+ * chat records store (the records the search tools fetched or the user
+ * selected), so the model never names a product that isn't in the catalog.
+ * Criteria are model-authored: a label plus one value per product, which lets
+ * the agent compare on aspects that aren't stored as a single attribute (a
+ * feature buried in the description, a derived "best for" verdict, …). A
+ * missing value renders as an explicit marker, never a made-up one.
  */
 
 export type ComparisonTableTranslations = {
-  /** Text shown in a cell when the catalog record has no value for it. */
+  /** Text shown in a cell when there is no value for a product. */
   missingValueLabel: string;
-  /** Header for the first (product) column when no label is provided. */
-  productColumnLabel: string;
+  /** Header of the criteria column (top-left corner of the table). */
+  criteriaColumnLabel: string;
 };
 
 export const defaultComparisonTableTranslations: ComparisonTableTranslations = {
   missingValueLabel: '—',
-  productColumnLabel: 'Product',
+  criteriaColumnLabel: '',
 };
 
-export type ComparisonTableCellProps = {
-  /** Hydrated catalog record for this row (undefined if the record is missing). */
-  hit?: ChatRecord;
-  /** Attribute key to display (undefined for the product/name column). */
-  attribute?: string;
-  /** Resolved, catalog-sourced value (undefined if missing). */
-  value?: unknown;
-  isHeader: boolean;
+/** One row of the table: what is compared, and one value per product. */
+export type ComparisonCriterion = {
+  /** Model-authored row label, e.g. "Battery life". */
+  label: string;
+  /** One value per compared product, aligned to `objectIDs`. */
+  values: unknown[];
 };
 
 /** The display name of a product, sourced ONLY from the catalog record. */
-function productLabel(hit: ChatRecord | undefined): unknown {
+export function productLabel(hit: ChatRecord | undefined): unknown {
   if (!hit) {
     return undefined;
   }
@@ -47,12 +54,12 @@ function productLabel(hit: ChatRecord | undefined): unknown {
 }
 
 /**
- * Catalog values are arbitrary JSON. Primitives (and arrays of them) have an
- * obvious textual form; objects (e.g. `price: { value, currency }`) would
- * stringify to `[object Object]`, so they render as the missing marker
- * instead — an honest "no displayable value" beats a garbled cell.
+ * Values are arbitrary JSON. Primitives (and arrays of them) have an obvious
+ * textual form; objects (e.g. `price: { value, currency }`) would stringify to
+ * `[object Object]`, so they render as the missing marker instead — an honest
+ * "no displayable value" beats a garbled cell.
  */
-function formatCellValue(value: unknown): string | undefined {
+export function formatCellValue(value: unknown): string | undefined {
   if (value === undefined || value === null || value === '') {
     return undefined;
   }
@@ -72,46 +79,63 @@ function formatCellValue(value: unknown): string | undefined {
 }
 
 /**
- * Everything the grounded table needs to render. Note there is deliberately no
- * field for attribute VALUES: they can only come from `records`.
+ * Builds criteria rows by reading attribute keys off the records: the
+ * attribute-based contract, where the agent names only keys and the table
+ * reads every value from the catalog record.
  */
-export type GroundedComparisonTableProps = {
+export function criteriaFromAttributes(
+  objectIDs: string[],
+  attributes: string[],
+  records: Pick<ChatRecordsStore, 'get'> | undefined,
+  labels?: string[]
+): ComparisonCriterion[] {
+  // `labels` is model-authored and only trusted when it labels EVERY
+  // attribute; a shorter list would shift labels onto the wrong rows.
+  const rowLabels =
+    labels && labels.length === attributes.length ? labels : undefined;
+
+  return attributes.map((attribute, index) => ({
+    label: rowLabels?.[index] ?? attribute,
+    values: objectIDs.map((objectID) => records?.get(objectID)?.[attribute]),
+  }));
+}
+
+export type GroundedComparisonTableProps<
+  THit extends RecordWithObjectID = RecordWithObjectID,
+> = {
   /** Optional model-authored lead-in (prose, rendered above the table). */
   intro?: string;
-  /** Products to compare, one row each, referenced by objectID only. */
+  /** Products to compare, one column each, referenced by objectID only. */
   objectIDs: string[];
-  /** Attribute keys to read off each record (also used as default headers). */
-  attributes: string[];
-  /** Optional display labels: [productColumn, ...attributeColumns]. */
-  columns?: string[];
-  /** The records the chat's tools have fetched, keyed by `objectID`. */
+  /** Comparison rows, each with one value per product. */
+  criteria: ComparisonCriterion[];
+  /** The records the chat has collected, keyed by `objectID`. */
   records?: Pick<ChatRecordsStore, 'get'>;
+  /**
+   * Renders a product in the header. Defaults to the record's name/title so the
+   * header always comes from the catalog, never from the model.
+   */
+  itemComponent?: (
+    props: RecommendItemComponentProps<RecordWithObjectID<THit>>
+  ) => JSX.Element;
+  sendEvent?: RecommendItemComponentProps<
+    RecordWithObjectID<THit>
+  >['sendEvent'];
   translations: ComparisonTableTranslations;
 };
 
-export function createGroundedComparisonTableComponent({
-  createElement,
-  Fragment,
-}: Renderer) {
-  return function GroundedComparisonTable(props: GroundedComparisonTableProps) {
-    const { intro, objectIDs, attributes, columns, records } = props;
-    const { translations } = props;
+export function createGroundedComparisonTableComponent<
+  THit extends RecordWithObjectID = RecordWithObjectID,
+>({ createElement, Fragment }: Renderer) {
+  return function GroundedComparisonTable(
+    props: GroundedComparisonTableProps<THit>
+  ) {
+    const { intro, objectIDs, criteria, records, sendEvent } = props;
+    const { itemComponent: ItemComponent, translations } = props;
 
     if (objectIDs.length === 0) {
       return <Fragment />;
     }
-
-    // `columns` is model-authored and only trusted when it labels EVERY
-    // column (`[product, ...attributes]`). A shorter list would shift labels
-    // onto the wrong cells — `['Price', 'Rating']` over product/price/rating
-    // puts the product names under "Price". Misaligned input falls back to
-    // the attribute keys: correct data under plain headers.
-    const columnLabels =
-      columns && columns.length === attributes.length + 1 ? columns : undefined;
-    const headerLabels = [
-      columnLabels?.[0] ?? translations.productColumnLabel,
-      ...attributes.map((attr, index) => columnLabels?.[index + 1] ?? attr),
-    ];
 
     return (
       <div className="ais-ChatToolComparisonTable">
@@ -121,54 +145,61 @@ export function createGroundedComparisonTableComponent({
         <table className="ais-ChatToolComparisonTable-table">
           <thead>
             <tr>
-              {headerLabels.map((label, index) => (
-                <th
-                  key={`h-${index}`}
-                  scope="col"
-                  className="ais-ChatToolComparisonTable-header"
-                >
-                  {label}
-                </th>
-              ))}
+              <th
+                scope="col"
+                className="ais-ChatToolComparisonTable-header ais-ChatToolComparisonTable-corner"
+              >
+                {translations.criteriaColumnLabel}
+              </th>
+              {objectIDs.map((objectID) => {
+                const hit = records?.get(objectID) as
+                  | RecordWithObjectID<THit>
+                  | undefined;
+
+                return (
+                  <th
+                    key={objectID}
+                    scope="col"
+                    data-object-id={objectID}
+                    data-testid={`product-${objectID}`}
+                    className="ais-ChatToolComparisonTable-header ais-ChatToolComparisonTable-product"
+                  >
+                    {hit && ItemComponent && sendEvent ? (
+                      <ItemComponent item={hit} sendEvent={sendEvent} />
+                    ) : (
+                      (formatCellValue(productLabel(hit)) ??
+                      translations.missingValueLabel)
+                    )}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
-            {objectIDs.map((objectID) => {
-              const hit = records?.get(objectID);
-              const name = productLabel(hit);
-
-              return (
-                <tr
-                  key={objectID}
-                  data-object-id={objectID}
-                  className="ais-ChatToolComparisonTable-row"
+            {criteria.map((criterion, rowIndex) => (
+              <tr
+                key={`row-${rowIndex}`}
+                className="ais-ChatToolComparisonTable-row"
+              >
+                <th
+                  scope="row"
+                  data-testid={`criterion-${rowIndex}`}
+                  className="ais-ChatToolComparisonTable-criterion"
                 >
-                  <th
-                    scope="row"
-                    data-testid={`product-${objectID}`}
-                    className="ais-ChatToolComparisonTable-product"
+                  {criterion.label}
+                </th>
+                {objectIDs.map((objectID, columnIndex) => (
+                  <td
+                    key={`${objectID}-${rowIndex}`}
+                    data-testid={`cell-${objectID}-${rowIndex}`}
+                    className="ais-ChatToolComparisonTable-cell"
                   >
-                    {formatCellValue(name) ?? translations.missingValueLabel}
-                  </th>
-                  {attributes.map((attribute) => {
-                    // The ONLY source of a cell value is the catalog record.
-                    const value = formatCellValue(
-                      hit ? hit[attribute] : undefined
-                    );
-
-                    return (
-                      <td
-                        key={`${objectID}-${attribute}`}
-                        data-testid={`cell-${objectID}-${attribute}`}
-                        className="ais-ChatToolComparisonTable-cell"
-                      >
-                        {value ?? translations.missingValueLabel}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+                    {formatCellValue(criterion.values[columnIndex]) ??
+                      translations.missingValueLabel}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

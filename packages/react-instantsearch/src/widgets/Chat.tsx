@@ -93,7 +93,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
     // Agents configured before the rename still emit the legacy tool name.
     // eslint-disable-next-line typescript/no-deprecated
     [DisplayResultsToolType]: groupedResultsTool,
-    [CompareProductsToolType]: createCompareProductsTool(),
+    [CompareProductsToolType]: createCompareProductsTool(itemComponent),
     [MemorizeToolType]: {},
     [MemorySearchToolType]: {},
     [PonderToolType]: {},
