@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.24.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.23.0...instantsearch.css@8.24.0) (2026-10-01)
+
+
+### Features
+
+* **chat:** lay the comparison table out as products × criteria ([#7268](https://github.com/algolia/instantsearch/issues/7268)) ([a41d107](https://github.com/algolia/instantsearch/commit/a41d107ae4e000ed04be13e08441d4a015f42e33))
+* **instantsearch.css:** add `--ais-font-size-sm` variable ([#7270](https://github.com/algolia/instantsearch/issues/7270)) ([b590cad](https://github.com/algolia/instantsearch/commit/b590cad84e135ba6512ed8b578efdd7c693d32cf))
+* **result-card:** add result card widget ([#7243](https://github.com/algolia/instantsearch/issues/7243)) ([a04eb0d](https://github.com/algolia/instantsearch/commit/a04eb0d65a5653e96afb0ff182239bd335e7cc6b))
+* **result-card:** minimize instead of dismiss ([#7264](https://github.com/algolia/instantsearch/issues/7264)) ([8972961](https://github.com/algolia/instantsearch/commit/89729618ec0c5519789290238cebc6188988a139))
+
+
+
+
+
 # [8.23.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.22.1...instantsearch.css@8.23.0) (2026-09-22)
 
 
