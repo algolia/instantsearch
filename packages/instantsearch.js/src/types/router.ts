@@ -23,7 +23,10 @@ export type Router<TRouteState = UiState> = {
    * Pushes a route object into a storage. Takes the UI state mapped by the state
    * mapping configured in the mapping
    */
-  write: (route: TRouteState) => void;
+  write: (
+    route: TRouteState,
+    options?: RouterWriteOptions<TRouteState>
+  ) => void;
 
   /**
    * Transforms a route object into a URL. It receives an object and should
@@ -45,6 +48,14 @@ export type Router<TRouteState = UiState> = {
    * Identifier for this router. Used to differentiate between routers.
    */
   $$type?: string;
+};
+
+export type RouterWriteOptions<TRouteState = UiState> = {
+  /**
+   * The route received in the `onUpdate` callback that this write applies,
+   * if any. It lets the router tell apart the writes it caused itself.
+   */
+  source?: TRouteState;
 };
 
 /**
