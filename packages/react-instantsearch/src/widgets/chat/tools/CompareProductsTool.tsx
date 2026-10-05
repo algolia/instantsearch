@@ -43,6 +43,9 @@ function createCompareProductsTool<TObject extends RecordWithObjectID>(
 
   return {
     layoutComponent: CompareProductsLayoutComponent,
+    // Render as the arguments stream in: the columns once `objectIDs` is
+    // complete, then a row per finished criterion.
+    streamInput: true,
     // Client-side tool: acknowledge the call so the agent's turn can complete.
     // The table itself is rendered from the call's input + the chat's records.
     onToolCall: ({ input, addToolResult }) => {

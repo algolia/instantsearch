@@ -1,6 +1,11 @@
 /** @jsx createElement */
 
 import {
+  endsInsideRootProperty,
+  getJsonCursor,
+} from '../../../lib/utils/jsonCursor';
+
+import {
   createGroundedComparisonTableComponent,
   criteriaFromAttributes,
   defaultComparisonTableTranslations,
@@ -39,6 +44,10 @@ import type {
  * The attribute-based shape (`attributes: ['price']`, values read off the
  * records) is still accepted for agents configured with the previous tool
  * definition.
+ *
+ * Registered with `streamInput`, the table renders while the arguments
+ * stream: the product columns appear as soon as `objectIDs` is complete and
+ * each criterion row follows once the agent has finished writing it.
  */
 
 export type CompareProductsToolInput = {
@@ -135,26 +144,55 @@ export function createCompareProductsToolComponent<
       ...userTranslations,
     };
 
-    // Wait for the agent's arguments to be complete before rendering.
     if (
       !message ||
-      (message.state !== 'input-available' &&
+      (message.state !== 'input-streaming' &&
+        message.state !== 'input-available' &&
         message.state !== 'output-available')
     ) {
       return <Fragment />;
     }
 
     const input = (message.input ?? {}) as CompareProductsToolInput;
-    const objectIDs = stringList(input.objectIDs);
-    const intro = typeof input.intro === 'string' ? input.intro : undefined;
+    // While the arguments stream in, `input` is parsed with partial-JSON
+    // repair, so the value under the cursor looks complete when it isn't. The
+    // table grows as the settled part of the document does: all the columns
+    // once `objectIDs` has closed, then one row per finished criterion.
+    const cursor =
+      message.state === 'input-streaming'
+        ? typeof message.rawInput === 'string'
+          ? getJsonCursor(message.rawInput)
+          : undefined
+        : undefined;
+    const settled = (key: keyof CompareProductsToolInput) =>
+      !cursor || !endsInsideRootProperty(cursor, key);
+
+    if (message.state === 'input-streaming' && !cursor) {
+      return <Fragment />;
+    }
+
+    const objectIDs = settled('objectIDs') ? stringList(input.objectIDs) : [];
+    const intro =
+      settled('intro') && typeof input.intro === 'string'
+        ? input.intro
+        : undefined;
 
     if (objectIDs.length === 0) {
       return <Fragment />;
     }
 
+    // The row under the cursor (a frame below the `criteria` array) is still
+    // being written — its label or last value may be cut mid-string.
+    const criteriaRowInProgress =
+      cursor !== undefined &&
+      cursor.frames[1]?.key === 'criteria' &&
+      cursor.frames.length > 2;
+    const rawCriteria = Array.isArray(input.criteria) ? input.criteria : [];
     const criteria =
       input.criteria !== undefined
-        ? criteriaList(input.criteria)
+        ? criteriaList(
+            criteriaRowInProgress ? rawCriteria.slice(0, -1) : rawCriteria
+          )
         : legacyCriteria(objectIDs, input, records);
 
     return (

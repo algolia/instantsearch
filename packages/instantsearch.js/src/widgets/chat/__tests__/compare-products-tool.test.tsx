@@ -109,4 +109,10 @@ describe('createCompareProductsTool', () => {
     expect(screen.getByTestId('product-2')).toHaveTextContent('Product 2');
     expect(screen.queryByText(/"objectID"/)).not.toBeInTheDocument();
   });
+
+  test('renders while the tool input streams', () => {
+    // The table grows as the arguments arrive (columns, then rows); the
+    // connector only repairs partial input for tools that opt in.
+    expect(createCompareProductsTool().streamInput).toBe(true);
+  });
 });

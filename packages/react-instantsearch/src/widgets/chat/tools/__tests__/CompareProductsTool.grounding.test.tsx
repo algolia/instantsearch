@@ -17,6 +17,7 @@
 import { chatToolProps } from '@instantsearch/testutils';
 import { render, screen } from '@testing-library/react';
 import { collectChatRecords } from 'instantsearch-ui-components';
+import { parsePartialJson } from 'instantsearch.js/es/lib/ai-lite';
 import React from 'react';
 
 import { createCompareProductsTool } from '../CompareProductsTool';
@@ -288,16 +289,97 @@ describe('CompareProductsTool', () => {
     expect(screen.getByTestId('cell-B-1')).toHaveTextContent('5');
   });
 
-  test('renders nothing while the tool arguments are still streaming', () => {
-    const { compareMessage, messages } = buildCompareTurn(phones, {
-      objectIDs: ['A'],
-      criteria: [{ label: 'Price', values: ['$199'] }],
+  describe('while the tool arguments stream', () => {
+    /**
+     * A streaming part as the chat exposes it with `streamInput`: `rawInput`
+     * is the text received so far, `input` its partial-JSON repair (open
+     * strings, arrays and objects closed).
+     */
+    function streamingTurn(rawInput: string) {
+      const input = parsePartialJson(rawInput, undefined) as Record<
+        string,
+        unknown
+      >;
+      const { compareMessage, messages } = buildCompareTurn(phones, input);
+      Object.assign(compareMessage, { state: 'input-streaming', rawInput });
+      return { compareMessage, messages };
+    }
+
+    test('is registered to render while the input streams', () => {
+      expect(createCompareProductsTool().streamInput).toBe(true);
     });
-    (compareMessage as { state: string }).state = 'input-streaming';
 
-    const { container } = renderCompare(compareMessage, messages);
+    test('renders nothing until the product list is complete', () => {
+      // "B" could still become "B2": the columns wait for the array to close.
+      const { compareMessage, messages } = streamingTurn(
+        '{"objectIDs": ["A", "B'
+      );
 
-    expect(container).toBeEmptyDOMElement();
+      const { container } = renderCompare(compareMessage, messages);
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    test('shows the columns once the products are known, then rows as they finish', () => {
+      const { compareMessage, messages } = streamingTurn(
+        '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": ["$199", "$299"]}, {"label": "Rat'
+      );
+
+      renderCompare(compareMessage, messages);
+
+      const headers = screen
+        .getAllByRole('columnheader')
+        .map((th) => th.textContent);
+      expect(headers).toEqual(['', 'Galaxy A50', 'OnePlus 6T']);
+      // The finished row is in; the one being written ("Rat…") is not.
+      expect(screen.getByTestId('criterion-0')).toHaveTextContent('Price');
+      expect(screen.getByTestId('cell-B-0')).toHaveTextContent('$299');
+      expect(screen.queryByTestId('criterion-1')).not.toBeInTheDocument();
+    });
+
+    test('withholds a row whose last value is still being written', () => {
+      // Repair closes the open string, so "$2" would otherwise render as a value.
+      const { compareMessage, messages } = streamingTurn(
+        '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": ["$199", "$2'
+      );
+
+      renderCompare(compareMessage, messages);
+
+      expect(screen.getAllByRole('columnheader')).toHaveLength(3);
+      expect(screen.queryByTestId('criterion-0')).not.toBeInTheDocument();
+    });
+
+    test('shows every row between rows and once the criteria array has closed', () => {
+      const betweenRows = streamingTurn(
+        '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": ["$199", "$299"]},'
+      );
+      const { unmount } = renderCompare(
+        betweenRows.compareMessage,
+        betweenRows.messages
+      );
+      expect(screen.getByTestId('criterion-0')).toHaveTextContent('Price');
+      unmount();
+
+      const closed = streamingTurn(
+        '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": ["$199", "$299"]}, {"label": "Rating", "values": [4, 5]}], "intro": "Two solid mid-ran'
+      );
+      renderCompare(closed.compareMessage, closed.messages);
+      expect(screen.getByTestId('criterion-1')).toHaveTextContent('Rating');
+      // The intro is a string under the cursor: shown once it is complete.
+      expect(screen.queryByText(/Two solid/)).not.toBeInTheDocument();
+    });
+
+    test('renders nothing when a streaming part carries no raw input', () => {
+      const { compareMessage, messages } = buildCompareTurn(phones, {
+        objectIDs: ['A'],
+        criteria: [{ label: 'Price', values: ['$199'] }],
+      });
+      (compareMessage as { state: string }).state = 'input-streaming';
+
+      const { container } = renderCompare(compareMessage, messages);
+
+      expect(container).toBeEmptyDOMElement();
+    });
   });
 
   test('renders nothing without products', () => {
