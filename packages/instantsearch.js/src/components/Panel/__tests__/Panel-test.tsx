@@ -28,6 +28,7 @@ const getDefaultProps = () => ({
   hidden: false,
   collapsible: false,
   isCollapsed: false,
+  hasCustomCollapseButtonText: true,
   data: createRenderOptions(),
   templates: {
     header: '',

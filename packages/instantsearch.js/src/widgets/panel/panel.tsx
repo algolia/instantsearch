@@ -147,11 +147,13 @@ const renderer =
     bodyContainerNode,
     cssClasses,
     templates,
+    hasCustomCollapseButtonText,
   }: {
     containerNode: HTMLElement;
     bodyContainerNode: HTMLElement;
     cssClasses: PanelComponentCSSClasses;
     templates: PanelTemplates<TWidget>;
+    hasCustomCollapseButtonText: boolean;
   }) =>
   ({
     options,
@@ -171,6 +173,7 @@ const renderer =
         collapsible={collapsible}
         isCollapsed={collapsed}
         templates={templates}
+        hasCustomCollapseButtonText={hasCustomCollapseButtonText}
         data={options}
         bodyElement={bodyContainerNode}
       />,
@@ -263,9 +266,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
 
     const defaultTemplates: PanelTemplates<typeof widgetFactory> = {
       collapseButtonText: ({ collapsed: isCollapsed }) =>
-        `<span style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">${
-          isCollapsed ? 'Expand panel' : 'Collapse panel'
-        }</span><svg
+        `<svg
           aria-hidden="true"
           focusable="false"
           class="${cssClasses.collapseIcon}"
@@ -286,6 +287,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
         ...defaultTemplates,
         ...templates,
       },
+      hasCustomCollapseButtonText: templates.collapseButtonText !== undefined,
     });
 
     const widget = widgetFactory({

@@ -28,6 +28,7 @@ export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   data: PanelSharedOptions<TWidget>;
   cssClasses: PanelComponentCSSClasses;
   templates: PanelComponentTemplates<TWidget>;
+  hasCustomCollapseButtonText: boolean;
   bodyElement: HTMLElement;
 };
 
@@ -78,6 +79,13 @@ function Panel<TWidget extends UnknownWidgetFactory>(
             <button
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
+              aria-label={
+                props.hasCustomCollapseButtonText
+                  ? undefined
+                  : isCollapsed
+                    ? 'Expand panel'
+                    : 'Collapse panel'
+              }
               onClick={(event) => {
                 event.preventDefault();
 
