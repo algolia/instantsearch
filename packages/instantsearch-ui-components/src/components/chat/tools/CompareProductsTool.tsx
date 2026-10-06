@@ -1,8 +1,12 @@
 /** @jsx createElement */
 
 import {
+  endsInsideRootProperty,
+  getJsonCursor,
+} from '../../../lib/utils/jsonCursor';
+
+import {
   createGroundedComparisonTableComponent,
-  criteriaFromAttributes,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
@@ -35,17 +39,11 @@ import type {
  *     ],
  *     intro?: 'Both are great for...'          // optional one-line lead-in
  *   }
- *
- * The attribute-based shape (`attributes: ['price']`, values read off the
- * records) is still accepted for agents configured with the previous tool
- * definition.
  */
 
 export type CompareProductsToolInput = {
   objectIDs?: unknown;
   criteria?: unknown;
-  attributes?: unknown;
-  columns?: unknown;
   intro?: unknown;
 };
 
@@ -91,27 +89,6 @@ function criteriaList(value: unknown): ComparisonCriterion[] {
   });
 }
 
-/**
- * Previous tool contract: `attributes` (keys read off the records) plus an
- * optional `columns` list labelling `[product, ...attributes]`.
- */
-function legacyCriteria(
-  objectIDs: string[],
-  input: CompareProductsToolInput,
-  records: ClientSideToolComponentProps['context']['records']
-): ComparisonCriterion[] {
-  const attributes = stringList(input.attributes);
-  const columns = Array.isArray(input.columns)
-    ? stringList(input.columns)
-    : undefined;
-  const labels =
-    columns && columns.length === attributes.length + 1
-      ? columns.slice(1)
-      : columns;
-
-  return criteriaFromAttributes(objectIDs, attributes, records, labels);
-}
-
 export function createCompareProductsToolComponent<
   THit extends RecordWithObjectID = RecordWithObjectID,
 >({ createElement, Fragment }: Renderer) {
@@ -135,27 +112,55 @@ export function createCompareProductsToolComponent<
       ...userTranslations,
     };
 
-    // Wait for the agent's arguments to be complete before rendering.
     if (
       !message ||
-      (message.state !== 'input-available' &&
+      (message.state !== 'input-streaming' &&
+        message.state !== 'input-available' &&
         message.state !== 'output-available')
     ) {
       return <Fragment />;
     }
 
     const input = (message.input ?? {}) as CompareProductsToolInput;
-    const objectIDs = stringList(input.objectIDs);
-    const intro = typeof input.intro === 'string' ? input.intro : undefined;
+    // Streaming input is repaired to parse, so the value under the cursor can
+    // look complete before it is. Render only what the cursor has passed.
+    const cursor =
+      message.state === 'input-streaming'
+        ? typeof message.rawInput === 'string'
+          ? getJsonCursor(message.rawInput)
+          : undefined
+        : undefined;
+    const settled = (key: keyof CompareProductsToolInput) =>
+      !cursor || !endsInsideRootProperty(cursor, key);
+
+    if (message.state === 'input-streaming' && !cursor) {
+      return <Fragment />;
+    }
+
+    const objectIDs = settled('objectIDs') ? stringList(input.objectIDs) : [];
+    const intro =
+      settled('intro') && typeof input.intro === 'string'
+        ? input.intro
+        : undefined;
 
     if (objectIDs.length === 0) {
       return <Fragment />;
     }
 
-    const criteria =
-      input.criteria !== undefined
-        ? criteriaList(input.criteria)
-        : legacyCriteria(objectIDs, input, records);
+    const rawCriteria = Array.isArray(input.criteria) ? input.criteria : [];
+    // The row under the cursor is still being written (its label or last
+    // value may be cut mid-string) — leave it out, but only when the parsed
+    // input already contains it: when a chunk can't be repaired (`{"`), the
+    // parsed input lags the raw text and every row in it is complete.
+    const criteriaFrame = cursor?.frames[1];
+    const rowInProgress =
+      cursor !== undefined &&
+      criteriaFrame?.key === 'criteria' &&
+      cursor.frames.length > 2 &&
+      rawCriteria.length >= criteriaFrame.items;
+    const criteria = criteriaList(
+      rowInProgress ? rawCriteria.slice(0, -1) : rawCriteria
+    );
 
     return (
       <GroundedComparisonTable

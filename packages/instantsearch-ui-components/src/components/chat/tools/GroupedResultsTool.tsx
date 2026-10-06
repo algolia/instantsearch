@@ -1,5 +1,7 @@
 /** @jsx createElement */
 
+import { getJsonCursor } from '../../../lib/utils/jsonCursor';
+
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
 
@@ -33,25 +35,6 @@ const claimsGroupedResultsPayload = (
 ): value is Record<string, unknown> =>
   isObject(value) && (hasOwn(value, 'intro') || hasOwn(value, 'groups'));
 
-type JsonFrame = { key: string; lastKey: string; isObject: boolean };
-
-/**
- * Decodes a raw property-key body with JSON string semantics, so an escaped
- * spelling of `objectID` compares equal to the name `JSON.parse` produces.
- * An undecodable key is kept verbatim: it matches no name below, and the
- * document holding it cannot parse either.
- */
-const decodeJsonKey = (rawKey: string) => {
-  if (rawKey.indexOf('\\') === -1) {
-    return rawKey;
-  }
-  try {
-    return JSON.parse(`"${rawKey}"`) as string;
-  } catch {
-    return rawKey;
-  }
-};
-
 /**
  * Reports whether the raw input ends inside an unterminated
  * `groups[].results[].objectID` value.
@@ -61,54 +44,7 @@ const decodeJsonKey = (rawKey: string) => {
  * different record whose identifier is a prefix of the real one.
  */
 const endsInsideResultObjectId = (rawInput: string) => {
-  const frames: JsonFrame[] = [];
-  let inString = false;
-  let isEscaped = false;
-  let isKey = false;
-  let expectValue = false;
-  let stringStart = 0;
-
-  for (let index = 0; index < rawInput.length; index++) {
-    const char = rawInput[index];
-
-    if (inString) {
-      if (isEscaped) {
-        isEscaped = false;
-      } else if (char === '\\') {
-        isEscaped = true;
-      } else if (char === '"') {
-        inString = false;
-        if (isKey) {
-          frames[frames.length - 1].lastKey = decodeJsonKey(
-            rawInput.slice(stringStart, index)
-          );
-        } else {
-          expectValue = false;
-        }
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      stringStart = index + 1;
-      isKey = !expectValue && frames[frames.length - 1]?.isObject === true;
-    } else if (char === ':') {
-      expectValue = true;
-    } else if (char === ',') {
-      expectValue = false;
-    } else if (char === '{' || char === '[') {
-      frames.push({
-        key: expectValue ? (frames[frames.length - 1]?.lastKey ?? '') : '',
-        lastKey: '',
-        isObject: char === '{',
-      });
-      expectValue = false;
-    } else if (char === '}' || char === ']') {
-      frames.pop();
-      expectValue = false;
-    }
-  }
+  const { frames, inString, isKey } = getJsonCursor(rawInput);
 
   return (
     inString &&
