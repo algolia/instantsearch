@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-default-theme",
-  "version": "0.130.0",
+  "version": "0.131.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -13,9 +13,9 @@
     "algoliasearch-helper": "3.30.0",
     "instantsearch-ui-components": "0.42.0",
     "instantsearch.css": "8.24.0",
-    "instantsearch.js": "4.119.0",
+    "instantsearch.js": "4.119.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.30.0"
+    "vue-instantsearch": "4.30.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "2.3.1",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.119.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.119.0...instantsearch.js@4.119.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **routing:** only skip the write a popstate causes ([#7261](https://github.com/algolia/instantsearch/issues/7261)) ([3f4f442](https://github.com/algolia/instantsearch/commit/3f4f44204fd675774038659f6e4288dbf3637348)), closes [#7260](https://github.com/algolia/instantsearch/issues/7260)
+
+
+
+
+
 # [4.119.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.118.1...instantsearch.js@4.119.0) (2026-10-01)
 
 
