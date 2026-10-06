@@ -1,3 +1,5 @@
+import { getJsonCursor } from 'instantsearch-ui-components';
+
 export const tryParseJson = (value: string): unknown | undefined => {
   try {
     return JSON.parse(value);
@@ -6,6 +8,11 @@ export const tryParseJson = (value: string): unknown | undefined => {
   }
 };
 
+/**
+ * Closes whatever a truncated JSON document left open — a string, then every
+ * container — so it parses. Tools that render streaming input read the same
+ * cursor to know which part of the result is still being written.
+ */
 export const repairPartialJson = (value: string): string => {
   let repaired = value.trim();
 
@@ -13,53 +20,19 @@ export const repairPartialJson = (value: string): string => {
     return repaired;
   }
 
-  let inString = false;
-  let isEscaped = false;
-  const stack: Array<'{' | '['> = [];
+  const cursor = getJsonCursor(repaired);
 
-  for (let index = 0; index < repaired.length; index++) {
-    const char = repaired[index];
-    if (inString) {
-      if (isEscaped) {
-        isEscaped = false;
-      } else if (char === '\\') {
-        isEscaped = true;
-      } else if (char === '"') {
-        inString = false;
-      }
-      continue;
-    }
-
-    if (char === '"') {
-      inString = true;
-      continue;
-    }
-
-    if (char === '{' || char === '[') {
-      stack.push(char);
-      continue;
-    }
-
-    if (char === '}' && stack[stack.length - 1] === '{') {
-      stack.pop();
-      continue;
-    }
-
-    if (char === ']' && stack[stack.length - 1] === '[') {
-      stack.pop();
-    }
-  }
-
-  if (inString && !isEscaped) {
+  if (cursor.inString && !cursor.isEscaped) {
     repaired += '"';
   }
 
   repaired = repaired.replace(/,\s*$/u, '');
 
-  if (stack.length > 0) {
-    repaired += stack
+  if (cursor.frames.length > 0) {
+    repaired += cursor.frames
+      .slice()
       .reverse()
-      .map((opening) => (opening === '{' ? '}' : ']'))
+      .map((frame) => (frame.isObject ? '}' : ']'))
       .join('');
   }
 

@@ -1,11 +1,12 @@
 /**
- * Where a streamed JSON document currently ends.
+ * Where a streamed JSON document currently ends: the containers still open,
+ * and whether the text stops inside a string.
  *
- * Tool input streams in as raw text and is parsed with partial-JSON repair, so
- * a value still mid-delta reaches `input` looking complete: an open string is
- * closed, an open array or object is closed. A tool that renders while the
- * input streams uses this cursor to tell the settled part of the document from
- * the part still being written.
+ * The one scanner behind partial-JSON handling in the chat: the connector
+ * closes the open containers to repair a tool's streaming input, and a tool
+ * that renders while the input streams reads the same cursor to tell the
+ * settled part of the document from the part still being written (repair
+ * makes a half-written value look complete).
  */
 
 export type JsonCursorFrame = {
@@ -14,15 +15,22 @@ export type JsonCursorFrame = {
   /** The last property name read inside this container, when it is an object. */
   lastKey: string;
   isObject: boolean;
+  /**
+   * How many entries have started in this container so far: array items, or
+   * object properties. Counts the entry under the cursor too.
+   */
+  items: number;
 };
 
 export type JsonCursor = {
-  /** The innermost container first opened last: `frames[0]` is the root. */
+  /** The open containers, outermost first: `frames[0]` is the root. */
   frames: JsonCursorFrame[];
   /** Whether the document ends inside an unterminated string literal. */
   inString: boolean;
   /** When `inString`, whether that string is a property name rather than a value. */
   isKey: boolean;
+  /** When `inString`, whether the last character is a lone escaping backslash. */
+  isEscaped: boolean;
 };
 
 /**
@@ -42,12 +50,15 @@ function decodeJsonKey(rawKey: string) {
   }
 }
 
+const WHITESPACE = /\s/;
+
 export function getJsonCursor(rawJson: string): JsonCursor {
   const frames: JsonCursorFrame[] = [];
   let inString = false;
   let isEscaped = false;
   let isKey = false;
   let expectValue = false;
+  let entryStarted = false;
   let stringStart = 0;
 
   for (let index = 0; index < rawJson.length; index++) {
@@ -71,28 +82,51 @@ export function getJsonCursor(rawJson: string): JsonCursor {
       continue;
     }
 
+    if (char === ',' || WHITESPACE.test(char)) {
+      if (char === ',') {
+        expectValue = false;
+        entryStarted = false;
+      }
+      continue;
+    }
+
+    if (char === ':') {
+      expectValue = true;
+      continue;
+    }
+
+    if (char === '}' || char === ']') {
+      frames.pop();
+      expectValue = false;
+      entryStarted = true;
+      continue;
+    }
+
+    // Anything else starts a value (or a property name): a string, a nested
+    // container, or the first character of a number / literal.
+    const frame = frames[frames.length - 1];
+    if (frame && !entryStarted) {
+      frame.items++;
+    }
+    entryStarted = true;
+
     if (char === '"') {
       inString = true;
       stringStart = index + 1;
-      isKey = !expectValue && frames[frames.length - 1]?.isObject === true;
-    } else if (char === ':') {
-      expectValue = true;
-    } else if (char === ',') {
-      expectValue = false;
+      isKey = !expectValue && frame?.isObject === true;
     } else if (char === '{' || char === '[') {
       frames.push({
-        key: expectValue ? (frames[frames.length - 1]?.lastKey ?? '') : '',
+        key: expectValue ? (frame?.lastKey ?? '') : '',
         lastKey: '',
         isObject: char === '{',
+        items: 0,
       });
       expectValue = false;
-    } else if (char === '}' || char === ']') {
-      frames.pop();
-      expectValue = false;
+      entryStarted = false;
     }
   }
 
-  return { frames, inString, isKey };
+  return { frames, inString, isKey, isEscaped };
 }
 
 /**

@@ -269,10 +269,8 @@ describe('CompareProductsTool', () => {
     expect(screen.queryByText('no label')).not.toBeInTheDocument();
   });
 
-  test('still renders the attribute-based contract by reading the records', () => {
-    // Agents configured with the previous tool definition send attribute keys
-    // (and optionally `[product, ...attributes]` labels); values come from the
-    // records, laid out in the same products-on-top table.
+  test('ignores the previous attribute-based input shape', () => {
+    // Only `criteria` rows are read; values never come off the records.
     const { compareMessage, messages } = buildCompareTurn(phones, {
       objectIDs: ['A', 'B'],
       attributes: ['price', 'rating'],
@@ -281,12 +279,8 @@ describe('CompareProductsTool', () => {
 
     renderCompare(compareMessage, messages);
 
-    expect(screen.getByTestId('criterion-0')).toHaveTextContent('Price');
-    expect(screen.getByTestId('cell-A-0')).toHaveTextContent('199');
-    expect(screen.getByTestId('cell-B-0')).toHaveTextContent('299');
-    expect(screen.getByTestId('criterion-1')).toHaveTextContent('Rating');
-    expect(screen.getByTestId('cell-A-1')).toHaveTextContent('4');
-    expect(screen.getByTestId('cell-B-1')).toHaveTextContent('5');
+    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
+    expect(screen.queryByTestId('criterion-0')).not.toBeInTheDocument();
   });
 
   describe('while the tool arguments stream', () => {
@@ -295,8 +289,8 @@ describe('CompareProductsTool', () => {
      * is the text received so far, `input` its partial-JSON repair (open
      * strings, arrays and objects closed).
      */
-    function streamingTurn(rawInput: string) {
-      const input = parsePartialJson(rawInput, undefined) as Record<
+    function streamingTurn(rawInput: string, previousInput?: unknown) {
+      const input = parsePartialJson(rawInput, previousInput) as Record<
         string,
         unknown
       >;
@@ -347,6 +341,24 @@ describe('CompareProductsTool', () => {
 
       expect(screen.getAllByRole('columnheader')).toHaveLength(3);
       expect(screen.queryByTestId('criterion-0')).not.toBeInTheDocument();
+    });
+
+    test('keeps a finished row while the next one opens on an unrepairable chunk', () => {
+      // `{"` cannot be repaired into JSON, so `input` stays at the previous
+      // parse (one row) while the cursor is already inside the next row. That
+      // row is not in the parsed input yet, so nothing must be withheld.
+      const settledRaw =
+        '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": ["$199", "$299"]}';
+      const previous = parsePartialJson(settledRaw, undefined);
+      expect(parsePartialJson(`${settledRaw}, {"`, previous)).toBe(previous);
+      const { compareMessage, messages } = streamingTurn(
+        `${settledRaw}, {"`,
+        previous
+      );
+
+      renderCompare(compareMessage, messages);
+
+      expect(screen.getByTestId('criterion-0')).toHaveTextContent('Price');
     });
 
     test('shows every row between rows and once the criteria array has closed', () => {

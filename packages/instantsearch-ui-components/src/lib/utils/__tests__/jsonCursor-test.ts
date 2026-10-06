@@ -42,6 +42,29 @@ describe('getJsonCursor', () => {
     expect(frames[1].key).toBe('objectIDs');
   });
 
+  test('counts the entries started in each open container', () => {
+    const { frames } = getJsonCursor(
+      '{"objectIDs": ["A", "B"], "criteria": [{"label": "Price", "values": [4, null, "x"]}, {"'
+    );
+
+    // root: objectIDs, criteria · criteria: two rows (the second just opened)
+    // · row: one property name under the cursor
+    expect(frames.map((frame) => frame.items)).toEqual([2, 2, 1]);
+    expect(getJsonCursor('["a", 1, true, {"k": 1}, [').frames[0].items).toBe(5);
+    expect(getJsonCursor('["a", ').frames[0].items).toBe(1);
+  });
+
+  test('reports a trailing escape inside a string', () => {
+    expect(getJsonCursor('{"intro": "a \\')).toMatchObject({
+      inString: true,
+      isEscaped: true,
+    });
+    expect(getJsonCursor('{"intro": "a \\\\')).toMatchObject({
+      inString: true,
+      isEscaped: false,
+    });
+  });
+
   test('is empty once the document has closed', () => {
     expect(getJsonCursor('{"objectIDs": ["A"]}').frames).toEqual([]);
   });
