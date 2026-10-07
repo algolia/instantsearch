@@ -131,9 +131,7 @@ describe('Templates', () => {
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates).toEqual({
-      collapseButtonText: expect.any(Function),
-    });
+    expect(templates).toEqual({});
   });
 
   test('with header template', () => {

@@ -13,10 +13,7 @@ import type {
   PanelTemplates,
 } from '../../widgets/panel/panel';
 
-export type PanelComponentCSSClasses = ComponentCSSClasses<
-  // `collapseIcon` is only used in the default templates of the widget
-  Omit<PanelCSSClasses, 'collapseIcon'>
->;
+export type PanelComponentCSSClasses = ComponentCSSClasses<PanelCSSClasses>;
 
 export type PanelComponentTemplates<TWidget extends UnknownWidgetFactory> =
   PanelTemplates<TWidget>;
@@ -28,7 +25,6 @@ export type PanelProps<TWidget extends UnknownWidgetFactory> = {
   data: PanelSharedOptions<TWidget>;
   cssClasses: PanelComponentCSSClasses;
   templates: PanelComponentTemplates<TWidget>;
-  hasCustomCollapseButtonText: boolean;
   bodyElement: HTMLElement;
 };
 
@@ -38,6 +34,22 @@ function Panel<TWidget extends UnknownWidgetFactory>(
   const [isCollapsed, setIsCollapsed] = useState<boolean>(props.isCollapsed);
   const [isControlled, setIsControlled] = useState<boolean>(false);
   const bodyRef = useRef<HTMLDivElement>(null);
+
+  const defaultTemplates: PanelComponentTemplates<TWidget> = {
+    collapseButtonText: ({ collapsed: isCollapsed }) =>
+      `<svg
+          aria-hidden="true"
+          focusable="false"
+          class="${props.cssClasses.collapseIcon}"
+          style="width: 1em; height: 1em;"
+          viewBox="0 0 500 500"
+        >
+        <path d="${
+          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
+        }" fill="currentColor" />
+        </svg>`,
+  };
+  const templates = { ...defaultTemplates, ...props.templates };
 
   useEffect(() => {
     const node = bodyRef.current;
@@ -69,7 +81,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
       {props.templates.header && (
         <div className={props.cssClasses.header}>
           <Template
-            templates={props.templates}
+            templates={templates}
             templateKey="header"
             rootTagName="span"
             data={props.data}
@@ -80,7 +92,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
               aria-label={
-                props.hasCustomCollapseButtonText
+                props.templates.collapseButtonText !== undefined
                   ? undefined
                   : isCollapsed
                     ? 'Expand panel'
@@ -94,7 +106,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
               }}
             >
               <Template
-                templates={props.templates}
+                templates={templates}
                 templateKey="collapseButtonText"
                 rootTagName="span"
                 data={{ collapsed: isCollapsed }}
@@ -108,7 +120,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
 
       {props.templates.footer && (
         <Template
-          templates={props.templates}
+          templates={templates}
           templateKey="footer"
           rootProps={{
             className: props.cssClasses.footer,
