@@ -3214,6 +3214,37 @@ data: [DONE]`,
       );
     });
 
+    it('empties the user message for a silent shortcut while keeping the sentinel for the wire', async () => {
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValue(echoStream({ sentinel: SENTINEL, displayText: '' }));
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: { fetch: fetchMock },
+        persistence: false,
+      });
+
+      await widget.chatInstance.sendMessage({
+        text: SENTINEL,
+        metadata: { promptShortcut: { sentinel: SENTINEL } },
+      });
+      await wait(0);
+
+      const [userMessage] = widget.chatInstance.messages;
+      // No display text: `ChatMessages` renders no bubble for this message.
+      expect(userMessage.parts).toEqual([{ type: 'text', text: '' }]);
+      expect(userMessage.metadata).toEqual({
+        promptShortcut: { sentinel: SENTINEL },
+      });
+
+      await widget.chatInstance.regenerate();
+      await wait(0);
+
+      const [sentUserMessage] = JSON.parse(fetchMock.mock.calls[1][1].body)
+        .messages as UIMessage[];
+      expect(sentUserMessage.parts).toEqual([{ type: 'text', text: SENTINEL }]);
+    });
+
     it('puts the sentinel back on the wire when regenerating, so the configured prompt still resolves', async () => {
       const fetchMock = jest
         .fn()

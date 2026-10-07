@@ -160,6 +160,89 @@ describe('ChatMessages', () => {
     `);
   });
 
+  test('renders no bubble for a silent user message, only the answer', () => {
+    const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_abc__';
+    const { container, rerender } = render(
+      <ChatMessages
+        messages={[
+          {
+            id: 'user-1',
+            role: 'user',
+            // Sent by the compare widget: shown nowhere until the server
+            // says what the transcript displays for it.
+            parts: [{ type: 'text', text: SENTINEL }],
+            metadata: { promptShortcut: { sentinel: SENTINEL } },
+          },
+        ]}
+        status="submitted"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.querySelector('[data-role="user"]')).toBeNull();
+    expect(container.textContent).not.toContain(SENTINEL);
+    // The pending answer still gets its loader.
+    expect(container.querySelector('.ais-ChatMessageLoader')).not.toBeNull();
+
+    rerender(
+      <ChatMessages
+        messages={[
+          {
+            id: 'user-1',
+            role: 'user',
+            // The silent shortcut resolved to no display text.
+            parts: [{ type: 'text', text: '' }],
+            metadata: { promptShortcut: { sentinel: SENTINEL } },
+          },
+          {
+            id: 'assistant-1',
+            role: 'assistant',
+            parts: [{ type: 'text', text: 'The Trail Jacket is lighter.' }],
+          },
+        ]}
+        status="ready"
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(container.querySelector('[data-role="user"]')).toBeNull();
+    expect(container.querySelector('[data-role="assistant"]')).not.toBeNull();
+    expect(container.textContent).toContain('The Trail Jacket is lighter.');
+  });
+
+  test('shows the user message once the shortcut resolves to display text', () => {
+    const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_abc__';
+    const { container } = render(
+      <ChatMessages
+        messages={[
+          {
+            id: 'user-1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Compare these products: A, B' }],
+            metadata: { promptShortcut: { sentinel: SENTINEL } },
+          },
+        ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
+      />
+    );
+
+    expect(
+      container.querySelector('[data-role="user"]')?.textContent
+    ).toContain('Compare these products: A, B');
+  });
+
   test('shows the loader while streaming reasoning is suppressed', () => {
     const { container } = render(
       <ChatMessages

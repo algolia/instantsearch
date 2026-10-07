@@ -23,6 +23,8 @@ import {
   ToggleRefinement,
   Chat,
   ChatTrigger,
+  CompareBar,
+  useCompare,
 } from 'react-instantsearch';
 
 import {
@@ -51,10 +53,24 @@ type HitProps = {
 };
 
 function Hit({ hit }: HitProps) {
+  // Every `useCompare` call shares one selection with the `<CompareBar>`, so
+  // this toggle and the bar stay in sync.
+  const { isSelected, toggleItem, canAddItems } = useCompare();
+  const selected = isSelected(hit.objectID);
+
   return (
     <>
       <Highlight hit={hit} attribute="name" className="Hit-label" />
       <span className="Hit-price">${hit.price}</span>
+      <label className="Hit-compare">
+        <input
+          type="checkbox"
+          checked={selected}
+          disabled={!selected && !canAddItems}
+          onChange={() => toggleItem(hit)}
+        />
+        Compare
+      </label>
     </>
   );
 }
@@ -205,6 +221,7 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
+      <CompareBar />
     </InstantSearch>
   );
 }

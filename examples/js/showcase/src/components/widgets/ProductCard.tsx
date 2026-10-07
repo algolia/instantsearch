@@ -1,9 +1,13 @@
 import type { Hit, TemplateParams } from 'instantsearch.js';
+import type { CompareRenderState } from 'instantsearch.js/es/connectors/compare/connectCompare';
 
 export function renderProductCard(
   hit: Hit,
-  { html, components }: TemplateParams
+  { html, components }: TemplateParams,
+  compare?: CompareRenderState
 ) {
+  const selected = compare?.isSelected(hit.objectID) ?? false;
+
   return html`
     <div class="flex h-full flex-col">
       <div class="flex aspect-square items-center justify-center bg-white p-4">
@@ -32,6 +36,20 @@ export function renderProductCard(
         >
           $${hit.price?.toFixed(2)}
         </p>
+        ${compare &&
+        html`
+          <label
+            class="flex items-center gap-2 pt-2 text-xs text-neutral-500 dark:text-neutral-400"
+          >
+            <input
+              type="checkbox"
+              checked=${selected}
+              disabled=${!selected && !compare.canAddItems}
+              onChange=${() => compare.toggleItem(hit)}
+            />
+            Compare
+          </label>
+        `}
       </div>
     </div>
   `;

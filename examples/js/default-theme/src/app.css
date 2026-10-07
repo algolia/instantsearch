@@ -56,6 +56,15 @@ img {
   color: lightslategray;
 }
 
+.Hit-compare {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 1rem;
+  color: lightslategray;
+  font-size: 0.875rem;
+}
+
 .Pagination {
   display: flex;
   justify-content: center;

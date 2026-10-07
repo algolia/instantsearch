@@ -9,6 +9,7 @@ import {
   isReasoningPartActive,
   isPartText,
   isPartTool,
+  isSilentUserMessage,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -965,38 +966,43 @@ export function createChatMessagesComponent({
               />
             )}
 
-            {messages.map((message, index) => (
-              <DefaultMessage
-                key={message.id}
-                message={message}
-                isCurrentMessage={index === messages.length - 1}
-                status={status}
-                userMessageProps={userMessageProps}
-                assistantMessageProps={assistantMessageProps}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
-                onReload={onReload}
-                onFeedback={onFeedback}
-                feedbackState={feedbackState}
-                actionsComponent={ActionsComponent}
-                translations={translations}
-                classNames={messageClassNames}
-                messageTranslations={messageTranslations}
-                context={context}
-                suggestionsElement={
-                  status === 'ready' &&
-                  message.role === 'assistant' &&
-                  index === messages.length - 1
-                    ? suggestionsElement
-                    : undefined
-                }
-                loaderElement={
-                  isLoaderInline && index === messages.length - 1
-                    ? loaderElement
-                    : undefined
-                }
-              />
-            ))}
+            {/* A silent user message (a prompt shortcut with no display
+                text, or one still awaiting it) stays in the transcript and
+                on the wire but gets no bubble. */}
+            {messages.map((message, index) =>
+              isSilentUserMessage(message) ? null : (
+                <DefaultMessage
+                  key={message.id}
+                  message={message}
+                  isCurrentMessage={index === messages.length - 1}
+                  status={status}
+                  userMessageProps={userMessageProps}
+                  assistantMessageProps={assistantMessageProps}
+                  indexUiState={indexUiState}
+                  setIndexUiState={setIndexUiState}
+                  onReload={onReload}
+                  onFeedback={onFeedback}
+                  feedbackState={feedbackState}
+                  actionsComponent={ActionsComponent}
+                  translations={translations}
+                  classNames={messageClassNames}
+                  messageTranslations={messageTranslations}
+                  context={context}
+                  suggestionsElement={
+                    status === 'ready' &&
+                    message.role === 'assistant' &&
+                    index === messages.length - 1
+                      ? suggestionsElement
+                      : undefined
+                  }
+                  loaderElement={
+                    isLoaderInline && index === messages.length - 1
+                      ? loaderElement
+                      : undefined
+                  }
+                />
+              )
+            )}
 
             {!isLoaderInline && loaderElement}
 
