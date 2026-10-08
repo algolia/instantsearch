@@ -206,7 +206,7 @@ export function createCompareBarComponent({ createElement }: Renderer) {
           </Button>
           <Button
             variant="primary"
-            size="md"
+            size="sm"
             className={cx(
               'ais-CompareBar-compareButton',
               classNames.compareButton
