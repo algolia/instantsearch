@@ -199,7 +199,12 @@ const BREAK_THEMATIC_R = /^(?:([-*_])( *\1){2,}) *(?:\n *)+\n/;
 const CODE_BLOCK_FENCED_R =
   /^(?: {1,3})?(`{3,}|~{3,}) *(\S+)? *([^\n]*?)?\n([\s\S]*?)(?:\1\n?|$)/;
 const CODE_BLOCK_R = /^(?: {4}[^\n]+\n*)+(?:\n *)+\n?/;
-const CODE_INLINE_R = /^(`+)((?:\\`|(?!\1)`|[^`])+)\1/;
+/**
+ * The opening run of backticks must not be followed by another backtick:
+ * otherwise a run without a matching closing run is retried with every
+ * shorter opener, which is cubic over the whole input.
+ */
+const CODE_INLINE_R = /^(`+)(?!`)((?:\\`|(?!\1)`|[^`])+)\1/;
 const CONSECUTIVE_NEWLINE_R = /^(?:\n *)*\n/;
 const CR_NEWLINE_R = /\r\n?/g;
 
@@ -1025,6 +1030,40 @@ function anyScopeRegex(regex: RegExp) {
   });
 }
 
+const HTML_OPENING_TAG_NAME_R = /^ *<([a-z][^ >/]*)/i;
+const REGEXP_SPECIAL_CHARS_R = /[.*+?^${}()|[\]\\]/g;
+
+/**
+ * `HTML_BLOCK_ELEMENT_R` can only match when the source contains the closing
+ * tag of the element it opens with. Checking that first keeps every unclosed
+ * tag from rescanning the rest of the source with nested lazy quantifiers.
+ */
+function matchHtmlBlockElement(source: string) {
+  const openingTag = HTML_OPENING_TAG_NAME_R.exec(source);
+
+  if (
+    !openingTag ||
+    !new RegExp(
+      '</' + openingTag[1].replace(REGEXP_SPECIAL_CHARS_R, '\\$&') + '>',
+      'i'
+    ).test(source)
+  ) {
+    return null;
+  }
+
+  return HTML_BLOCK_ELEMENT_R.exec(source);
+}
+
+/**
+ * `HTML_SELF_CLOSING_ELEMENT_R` can only match when the source contains a
+ * `>`, which saves the same rescanning for every unterminated tag.
+ */
+function matchHtmlSelfClosingElement(source: string) {
+  return source.indexOf('>') === -1
+    ? null
+    : HTML_SELF_CLOSING_ELEMENT_R.exec(source);
+}
+
 const SANITIZE_R = /(javascript|vbscript|data(?!:image)):/i;
 
 export function sanitizer(input: string): string | null {
@@ -1689,7 +1728,7 @@ export function compiler(
       /**
        * find the first matching end tag and process the interior
        */
-      _match: anyScopeRegex(HTML_BLOCK_ELEMENT_R),
+      _match: allowInline(matchHtmlBlockElement),
       _order: Priority.HIGH,
       _parse(capture, parse, state) {
         const [, whitespace] = capture[3].match(HTML_LEFT_TRIM_AMOUNT_R)!;
@@ -1752,7 +1791,7 @@ export function compiler(
       /**
        * find the first matching end tag and process the interior
        */
-      _match: anyScopeRegex(HTML_SELF_CLOSING_ELEMENT_R),
+      _match: allowInline(matchHtmlSelfClosingElement),
       _order: Priority.HIGH,
       _parse(capture /*, parse, state*/) {
         const tag = capture[1].trim();

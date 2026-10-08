@@ -52,3 +52,60 @@ describe('vendored markdown-to-jsx', () => {
     );
   });
 });
+
+describe('vendored markdown-to-jsx backtracking', () => {
+  // These inputs took seconds in upstream's regexes (cubic in the input
+  // length); the budget is far above the time they take now.
+  function timeOf(run: () => void) {
+    const start = performance.now();
+    run();
+    return performance.now() - start;
+  }
+
+  test('a long run of backticks is parsed in linear-ish time', () => {
+    expect(timeOf(() => renderMarkdown('`'.repeat(3000)))).toBeLessThan(500);
+  });
+
+  test('unclosed HTML block elements are parsed in linear-ish time', () => {
+    const html = { disableParsingRawHTML: false, forceInline: true };
+
+    expect(
+      timeOf(() => renderMarkdown('<div>'.repeat(1500) + 'text', html))
+    ).toBeLessThan(500);
+  });
+
+  test('unterminated HTML tags are parsed in linear-ish time', () => {
+    const html = { disableParsingRawHTML: false, forceInline: true };
+
+    expect(
+      timeOf(() => renderMarkdown('<a>' + '<b '.repeat(1500), html))
+    ).toBeLessThan(500);
+  });
+
+  test('inline code spans still match their closing run of backticks', () => {
+    expect(renderMarkdown('`a`')).toContain('<code>a</code>');
+    expect(renderMarkdown('``a`b``')).toContain('<code>a`b</code>');
+    expect(renderMarkdown('text `one` and `two`')).toContain(
+      '<code>one</code> and <code>two</code>'
+    );
+  });
+
+  test('an opening run of backticks longer than the closing run no longer opens a code span with a shorter opener', () => {
+    // Used to render a code span containing "`x"; now the extra backtick is
+    // plain text and the remaining run of two opens the code span.
+    expect(renderMarkdown('```x``')).toBe(
+      '<span><span>`<code>x</code></span></span>'
+    );
+  });
+
+  test('HTML elements are still parsed when HTML parsing is enabled', () => {
+    const html = { disableParsingRawHTML: false };
+
+    expect(renderMarkdown('<div>hi</div>', html)).toContain('<div>hi</div>');
+    expect(renderMarkdown('before<br/>after', html)).toContain('<br');
+    expect(renderMarkdown('<Div>hi</div>', html)).toContain('hi</div>');
+    expect(renderMarkdown('<b>one</b> and <i>two</i>', html)).toContain(
+      '<b>one</b>'
+    );
+  });
+});
