@@ -149,7 +149,7 @@ export function createAlgoliaProvider({
 
   const provider: AlgoliaProvider = {
     addWidgets(newWidgets) {
-      widgets = widgets.concat(newWidgets.flat() as Widget[]);
+      widgets = widgets.concat(newWidgets.flat());
       if (started) {
         // Widgets added after start() are initialized and rendered right away.
         initWidgets();
@@ -158,7 +158,7 @@ export function createAlgoliaProvider({
       return provider;
     },
     removeWidgets(oldWidgets) {
-      const toRemove = oldWidgets.flat() as Widget[];
+      const toRemove = oldWidgets.flat();
       widgets = widgets.filter((widget) => !toRemove.includes(widget));
       toRemove.forEach((widget) => {
         initialized.delete(widget);
