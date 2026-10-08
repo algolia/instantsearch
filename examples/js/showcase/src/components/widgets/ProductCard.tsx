@@ -43,6 +43,7 @@ export function renderProductCard(
           >
             <input
               type="checkbox"
+              aria-label="Compare ${hit.name}"
               checked=${selected}
               disabled=${!selected && !compare.canAddItems}
               onChange=${() => compare.toggleItem(hit)}

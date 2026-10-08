@@ -40,7 +40,8 @@ export type OpenChatOptions = {
 // A prompt-shortcut sentinel (`__ALGOLIA_<KIND>_<id>__`, e.g. the `compare`
 // widget's configured comparison) stands for a prompt the server holds; the
 // server also decides what the transcript shows for it. Mirrors the backend's
-// matching: SCREAMING_SNAKE kind, then an id of 3-64 word characters/hyphens.
+// matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
+// runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
 const PROMPT_SHORTCUT_SENTINEL =
   /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
 

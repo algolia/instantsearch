@@ -65,6 +65,7 @@ function Hit({ hit }: HitProps) {
       <label className="Hit-compare">
         <input
           type="checkbox"
+          aria-label={`Compare ${hit.name}`}
           checked={selected}
           disabled={!selected && !canAddItems}
           onChange={() => toggleItem(hit)}

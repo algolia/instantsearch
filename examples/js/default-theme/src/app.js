@@ -63,6 +63,7 @@ const hitTemplate = (hit, { html, components }) => {
       <label class="Hit-compare">
         <input
           type="checkbox"
+          aria-label="Compare ${hit.name}"
           checked=${selected}
           disabled=${!selected && !compare.canAddItems}
           onChange=${() => compare.toggleItem(hit)}
