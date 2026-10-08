@@ -1,7 +1,6 @@
 /** @jsx createElement */
-import { RuleType, compiler } from 'markdown-to-jsx';
-
 import { cx } from '../../lib';
+import { RuleType, compiler } from '../../lib/markdown-to-jsx';
 
 import { BrainIcon, ChevronDownIcon } from './icons';
 
