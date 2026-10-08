@@ -6,7 +6,9 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
+import { createAlgoliaProvider } from '../lib/AlgoliaProvider';
 import { Chat as InstantSearchChat } from '../lib/chat';
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -45,6 +47,7 @@ import {
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type { RecordWithObjectID } from 'instantsearch-ui-components';
+import type { SearchClient } from '../types';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -731,6 +734,29 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createAlgoliaProviderWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { chat: chatWidgetParams, insights } = widgetParams;
+    const provider = createAlgoliaProvider({
+      searchClient: instantSearchOptions.searchClient as SearchClient,
+      indexName: instantSearchOptions.indexName,
+    });
+
+    if (insights) {
+      provider.use(createInsightsMiddleware({}));
+    }
+
+    provider
+      .addWidgets([
+        chatTrigger({
+          container: document.body.appendChild(document.createElement('div')),
+        }),
+        chat<RecordWithObjectID>({
+          container: document.body.appendChild(document.createElement('div')),
+          ...chatWidgetParams,
+        } as Parameters<typeof chat<RecordWithObjectID>>[0]),
+      ])
+      .start();
+  },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -864,6 +890,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createMenuSelectWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
+  createAlgoliaProviderWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: undefined,

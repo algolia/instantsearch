@@ -590,6 +590,9 @@ const testSetups = {
   createChatWidgetTests() {
     throw new Error('Chat is not supported in Vue InstantSearch');
   },
+  createAlgoliaProviderWidgetTests() {
+    throw new Error('AlgoliaProvider is not supported in Vue InstantSearch');
+  },
   createAutocompleteWidgetTests() {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
   },
@@ -657,6 +660,9 @@ const testOptions = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: {
     skippedTests: { 'Chat widget common tests': true },
+  },
+  createAlgoliaProviderWidgetTests: {
+    skippedTests: { 'AlgoliaProvider widget common tests': true },
   },
   createAutocompleteWidgetTests: {
     skippedTests: { 'Autocomplete widget common tests': true },
