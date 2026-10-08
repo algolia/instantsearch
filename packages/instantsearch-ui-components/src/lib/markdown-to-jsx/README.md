@@ -3,6 +3,6 @@ taken from the original TypeScript embedded in the npm package's source map.
 
 Changes from upstream:
 
-- `react` is imported as a type only, so it isn't bundled.
+- React types are replaced by the shared `Renderer` types, so the module has no `react` import, not even as a type.
 - `createElement` must be passed in options (no `React.createElement` fallback).
 - The `<Markdown>` React component and the default export are removed.

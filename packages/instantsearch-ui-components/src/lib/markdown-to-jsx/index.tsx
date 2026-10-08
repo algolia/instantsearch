@@ -7,7 +7,7 @@
  * and extensible parsing infra... without it, half of the
  * optimizations here wouldn't be feasible. 🙏🏼
  */
-import type * as React from 'react'
+import type { ComponentChildren, ElementType, Pragma } from '../../types'
 
 /**
  * Analogous to `node.type`. Please note that the values here may change at any time,
@@ -835,7 +835,7 @@ function parseStyleAttribute(styleString: string): StyleTuple[] {
 
 function attributeValueToJSXPropValue(
   tag: MarkdownToJSX.HTMLTags,
-  key: keyof React.AllHTMLAttributes<Element>,
+  key: string,
   value: string,
   sanitizeUrlFn: MarkdownToJSX.Options['sanitizer']
 ): any {
@@ -1128,7 +1128,7 @@ function createRenderer(
     ast: MarkdownToJSX.ParserResult,
     render: MarkdownToJSX.RuleOutput,
     state: MarkdownToJSX.State
-  ): React.ReactNode {
+  ): ComponentChildren {
     const renderer = rules[ast.type]._render as MarkdownToJSX.Rule['_render']
 
     return userRender
@@ -1139,7 +1139,7 @@ function createRenderer(
   return function patchedRender(
     ast: MarkdownToJSX.ParserResult | MarkdownToJSX.ParserResult[],
     state: MarkdownToJSX.State = {}
-  ): React.ReactNode[] | React.ReactNode {
+  ): ComponentChildren[] | ComponentChildren {
     if (Array.isArray(ast)) {
       const oldKey = state.key
       const result = []
@@ -1206,15 +1206,15 @@ export function compiler(
   options: MarkdownToJSX.Options & {
     wrapper: null
   }
-): React.ReactNode[]
+): ComponentChildren[]
 export function compiler(
   markdown: string,
   options?: MarkdownToJSX.Options
-): React.JSX.Element
+): JSX.Element
 export function compiler(
   markdown: string = '',
   options: MarkdownToJSX.Options = {}
-): React.JSX.Element | React.ReactNode[] {
+): JSX.Element | ComponentChildren[] {
   options.overrides = options.overrides || {}
   options.namedCodesToUnicode = options.namedCodesToUnicode
     ? { ...namedCodesToUnicode, ...options.namedCodesToUnicode }
@@ -1329,7 +1329,7 @@ export function compiler(
     )
   }
 
-  function compile(input: string): React.JSX.Element | React.ReactNode[] {
+  function compile(input: string): JSX.Element | ComponentChildren[] {
     input = input.replace(FRONT_MATTER_R, '')
 
     let inline = false
@@ -1353,7 +1353,7 @@ export function compiler(
           inline,
         }
       )
-    ) as React.ReactNode[]
+    ) as ComponentChildren[]
 
     while (
       isString(arr[arr.length - 1]) &&
@@ -1385,13 +1385,13 @@ export function compiler(
       jsx = null
     }
 
-    return createElement(wrapper, { key: 'outer' }, jsx) as React.JSX.Element
+    return createElement(wrapper, { key: 'outer' }, jsx) as JSX.Element
   }
 
   function attrStringToMap(
     tag: MarkdownToJSX.HTMLTags,
     str: string
-  ): React.JSX.IntrinsicAttributes {
+  ): Record<string, any> {
     if (!str || !str.trim()) {
       return null
     }
@@ -2155,9 +2155,9 @@ export namespace MarkdownToJSX {
       [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>
     }[Keys]
 
-  export type CreateElement = typeof React.createElement
+  export type CreateElement = Pragma
 
-  export type HTMLTags = keyof React.JSX.IntrinsicElements
+  export type HTMLTags = string
 
   export type State = {
     /** true if the current content is inside anchor link grammar */
@@ -2169,7 +2169,7 @@ export namespace MarkdownToJSX {
     /** true if in a table */
     inTable?: boolean
     /** use this for the `key` prop */
-    key?: React.Key
+    key?: string | number
     /** true if in a list */
     list?: boolean
     /** used for lookbacks */
@@ -2194,7 +2194,7 @@ export namespace MarkdownToJSX {
 
   export interface CodeBlockNode {
     type: typeof RuleType.codeBlock
-    attrs?: React.JSX.IntrinsicAttributes
+    attrs?: Record<string, any>
     lang?: string
     text: string
   }
@@ -2348,7 +2348,7 @@ export namespace MarkdownToJSX {
 
   export interface HTMLNode {
     type: typeof RuleType.htmlBlock
-    attrs: React.JSX.IntrinsicAttributes
+    attrs: Record<string, any>
     children?: ReturnType<MarkdownToJSX.NestedParser> | undefined
     noInnerParse: Boolean
     tag: MarkdownToJSX.HTMLTags
@@ -2357,7 +2357,7 @@ export namespace MarkdownToJSX {
 
   export interface HTMLSelfClosingNode {
     type: typeof RuleType.htmlSelfClosing
-    attrs: React.JSX.IntrinsicAttributes
+    attrs: Record<string, any>
     tag: string
   }
 
@@ -2411,7 +2411,7 @@ export namespace MarkdownToJSX {
   export type RuleOutput = (
     ast: MarkdownToJSX.ParserResult | MarkdownToJSX.ParserResult[],
     state: MarkdownToJSX.State
-  ) => React.ReactNode
+  ) => ComponentChildren
 
   export type Rule<ParserOutput = MarkdownToJSX.ParserResult> = {
     _match: (
@@ -2440,7 +2440,7 @@ export namespace MarkdownToJSX {
        */
       render: RuleOutput,
       state?: MarkdownToJSX.State
-    ) => React.ReactNode
+    ) => ComponentChildren
   }
 
   export type Rules = {
@@ -2451,10 +2451,10 @@ export namespace MarkdownToJSX {
 
   export type Override =
     | RequireAtLeastOne<{
-        component: React.ElementType
+        component: ElementType
         props: Object
       }>
-    | React.ElementType
+    | ElementType
 
   export type Overrides = {
     [tag in HTMLTags]?: Override
@@ -2468,9 +2468,9 @@ export namespace MarkdownToJSX {
      */
     createElement: (
       tag: Parameters<CreateElement>[0],
-      props: React.JSX.IntrinsicAttributes,
-      ...children: React.ReactNode[]
-    ) => React.ReactNode
+      props: Record<string, any>,
+      ...children: ComponentChildren[]
+    ) => ComponentChildren
 
     /**
      * The library automatically generates an anchor tag for bare URLs included in the markdown
@@ -2562,14 +2562,14 @@ export namespace MarkdownToJSX {
      */
     renderRule: (
       /** Resume normal processing, call this function as a fallback if you are not returning custom JSX. */
-      next: () => React.ReactNode,
+      next: () => ComponentChildren,
       /** the current AST node, use `RuleType` against `node.type` for identification */
       node: ParserResult,
       /** use as `renderChildren(node.children)` for block nodes */
       renderChildren: RuleOutput,
       /** contains `key` which should be supplied to the topmost JSX element */
       state: State
-    ) => React.ReactNode
+    ) => ComponentChildren
 
     /**
      * Override the built-in sanitizer function for URLs, etc if desired. The built-in version is available as a library export called `sanitizer`.
@@ -2592,6 +2592,6 @@ export namespace MarkdownToJSX {
      * without any wrapper, or use `React.Fragment` to get a React element
      * that won't show up in the DOM.
      */
-    wrapper: React.ElementType | null
+    wrapper: ElementType | null
   }>
 }
