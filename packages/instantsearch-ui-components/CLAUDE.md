@@ -27,7 +27,7 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
 - `src/components/<Name>.tsx` — a `create<Name>Component` factory. Exported from `src/components/index.ts` → `src/index.ts`.
 - Grouped families: `src/components/autocomplete/`, `src/components/chat/`, `src/components/recommend-shared/` (+ the recommend widgets `RelatedProducts`, `FrequentlyBoughtTogether`, `LookingSimilar`, `TrendingItems`, `TrendingFacets`).
 - `src/lib/` — `cx`, `stickToBottom`, shared `utils`. `src/types/` — `Renderer`, `ComponentProps`, `Hooks`, `Recommend`, `shared`.
-- Runtime deps are minimal on purpose (`@swc/helpers`); **no framework as a dependency**. Markdown rendering uses a vendored copy of `markdown-to-jsx` in `src/lib/markdown-to-jsx/` (React removed, see its README); it is excluded from lint, format and type-checking.
+- Runtime deps are minimal on purpose (`@swc/helpers`); **no framework as a dependency**. Markdown rendering uses a vendored copy of `markdown-to-jsx` in `src/lib/markdown-to-jsx/` (React removed, see its README); it is excluded from lint and format but type-checked like the rest.
 
 ## Old vs new (important)
 

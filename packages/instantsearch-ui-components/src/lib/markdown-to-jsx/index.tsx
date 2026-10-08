@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* @jsx h */
 /**
  * markdown-to-jsx is a fork of
@@ -58,7 +57,7 @@ export const RuleType = {
 } as const
 
 if (process.env.NODE_ENV === 'test') {
-  Object.keys(RuleType).forEach(key => (RuleType[key] = key))
+  Object.keys(RuleType).forEach(key => ((RuleType as any)[key] = key))
 }
 
 export type RuleType = (typeof RuleType)[keyof typeof RuleType]
@@ -129,7 +128,7 @@ const ATTRIBUTE_TO_JSX_PROP_MAP = [
   'useMap',
 ].reduce(
   (obj, x) => {
-    obj[x.toLowerCase()] = x
+    ;(obj as any)[x.toLowerCase()] = x
     return obj
   },
   { class: 'className', for: 'htmlFor' }
@@ -463,7 +462,7 @@ function generateListRule(
       // lists can be inline, because they might be inside another list,
       // in which case we can parse with inline scope, but need to allow
       // nested lists inside this inline scope.
-      const isStartOfLine = LIST_LOOKBEHIND_R.exec(state.prevCapture)
+      const isStartOfLine = LIST_LOOKBEHIND_R.exec(state.prevCapture!)
       const isListAllowed = state.list || (!state.inline && !state.simple)
 
       if (isStartOfLine && isListAllowed) {
@@ -486,9 +485,9 @@ function generateListRule(
 
       let lastItemWasAParagraph = false
 
-      const itemContent = items.map(function (item, i) {
+      const itemContent = items!.map(function (item, i) {
         // We need to see how far indented the item is:
-        const space = LIST_ITEM_PREFIX_R.exec(item)[0].length
+        const space = LIST_ITEM_PREFIX_R.exec(item)![0].length
 
         // And then we construct a regex to "unindent" the subsequent
         // lines of the items by that amount:
@@ -508,7 +507,7 @@ function generateListRule(
         //  * as is this
         //
         //  * as is this
-        const isLastItem = i === items.length - 1
+        const isLastItem = i === items!.length - 1
         const containsBlocks = content.indexOf('\n\n') !== -1
 
         // Any element in a list is a block if it contains multiple
@@ -524,26 +523,26 @@ function generateListRule(
         // backup our state for delta afterwards. We're going to
         // want to set state.list to true, and state.inline depending
         // on our list's looseness.
-        const oldStateInline = state.inline
-        const oldStateList = state.list
-        state.list = true
+        const oldStateInline = state!.inline
+        const oldStateList = state!.list
+        state!.list = true
 
         // Parse inline if we're in a tight list, or block if we're in
         // a loose list.
         let adjustedContent
         if (thisItemIsAParagraph) {
-          state.inline = false
+          state!.inline = false
           adjustedContent = trimEnd(content) + '\n\n'
         } else {
-          state.inline = true
+          state!.inline = true
           adjustedContent = trimEnd(content)
         }
 
         const result = parse(adjustedContent, state)
 
         // Restore our state before returning
-        state.inline = oldStateInline
-        state.list = oldStateList
+        state!.inline = oldStateInline
+        state!.list = oldStateList
 
         return result
       })
@@ -559,7 +558,7 @@ function generateListRule(
 
       return (
         <Tag
-          key={state.key}
+          key={state!.key}
           start={node.type === RuleType.orderedList ? node.start : undefined}
         >
           {node.items.map(function generateListItem(item, i) {
@@ -607,7 +606,7 @@ function qualifies(
     return false
   }
 
-  return qualify(source, state)
+  return qualify!(source, state)
 }
 
 /** Remove symmetrical leading and trailing quotes */
@@ -749,7 +748,7 @@ function parseTable(
       }
 }
 
-function getTableStyle(node, colIndex) {
+function getTableStyle(node: any, colIndex: any) {
   return node.align[colIndex] == null
     ? {}
     : {
@@ -758,11 +757,11 @@ function getTableStyle(node, colIndex) {
 }
 
 /** TODO: remove for react 16 */
-function normalizeAttributeKey(key) {
+function normalizeAttributeKey(key: any) {
   const hyphenIndex = key.indexOf('-')
 
   if (hyphenIndex !== -1 && key.match(HTML_CUSTOM_ATTR_R) === null) {
-    key = key.replace(CAPTURE_LETTER_AFTER_HYPHEN, function (_, letter) {
+    key = key.replace(CAPTURE_LETTER_AFTER_HYPHEN, function (_: any, letter: any) {
       return letter.toUpperCase()
     })
   }
@@ -848,12 +847,12 @@ function attributeValueToJSXPropValue(
       )
 
       // key.length + 1 to skip over the colon
-      styles[camelCasedKey] = sanitizeUrlFn(value, tag, key)
+      ;(styles as any)[camelCasedKey] = sanitizeUrlFn!(value, tag, key)
 
       return styles
     }, {})
   } else if (ATTRIBUTES_TO_SANITIZE.indexOf(key) !== -1) {
-    return sanitizeUrlFn(unescape(value), tag, key)
+    return sanitizeUrlFn!(unescape(value), tag, key)
   } else if (value.match(INTERPOLATION_R)) {
     // return as a string and let the consumer decide what to do with it
     value = unescape(value.slice(1, value.length - 1))
@@ -904,7 +903,7 @@ function parserFor(
 
   if (process.env.NODE_ENV !== 'production') {
     ruleList.forEach(function (type) {
-      const order = rules[type]._order
+      const order = (rules as any)[type]._order
       if (typeof order !== 'number' || !isFinite(order)) {
         console.warn(
           'markdown-to-jsx: Invalid order for rule `' + type + '`: ' + order
@@ -916,7 +915,7 @@ function parserFor(
   // Sorts rules in order of increasing order, then
   // ascending rule name in case of ties.
   ruleList.sort(function (a, b) {
-    return rules[a]._order - rules[b]._order || (a < b ? -1 : 1)
+    return (rules as any)[a]._order - (rules as any)[b]._order || (a < b ? -1 : 1)
   })
 
   function nestedParse(
@@ -931,7 +930,7 @@ function parserFor(
         var i = 0
         while (i < ruleList.length) {
           var ruleType = ruleList[i]
-          var rule = rules[ruleType]
+          var rule = (rules as any)[ruleType]
 
           if (rule._qualify && !qualifies(source, state, rule._qualify)) {
             i++
@@ -978,7 +977,7 @@ function allowInline<T extends Function & { inline?: 0 | 1 }>(fn: T) {
 
 // Creates a match function for an inline scoped or simple element from a regex
 function inlineRegex(regex: RegExp) {
-  return allowInline(function match(source, state: MarkdownToJSX.State) {
+  return allowInline(function match(source: any, state: MarkdownToJSX.State) {
     if (state.inline) {
       return regex.exec(source)
     } else {
@@ -1021,7 +1020,7 @@ function anyScopeRegex(regex: RegExp) {
 
 const SANITIZE_R = /(javascript|vbscript|data(?!:image)):/i
 
-export function sanitizer(input: string): string {
+export function sanitizer(input: string): string | null {
   try {
     const decoded = decodeURIComponent(input).replace(/[^A-Za-z0-9/:]/g, '')
 
@@ -1093,8 +1092,8 @@ function parseSimpleInline(
 }
 
 function parseBlock(
-  parse,
-  children,
+  parse: any,
+  children: any,
   state: MarkdownToJSX.State
 ): MarkdownToJSX.ParserResult[] {
   const isCurrentlyInline = state.inline || false
@@ -1132,8 +1131,8 @@ function createRenderer(
     const renderer = rules[ast.type]._render as MarkdownToJSX.Rule['_render']
 
     return userRender
-      ? userRender(() => renderer(ast, render, state), ast, render, state)
-      : renderer(ast, render, state)
+      ? userRender(() => renderer!(ast, render, state), ast, render, state)
+      : renderer!(ast, render, state)
   }
 
   return function patchedRender(
@@ -1172,7 +1171,7 @@ function createRenderer(
   }
 }
 
-function cx(...args) {
+function cx(...args: any[]) {
   return args.filter(Boolean).join(' ')
 }
 
@@ -1181,7 +1180,7 @@ function get(src: Object, path: string, fb?: any) {
   const frags = path.split('.')
 
   while (frags.length) {
-    ptr = ptr[frags[0]]
+    ptr = (ptr as any)[frags[0]]
 
     if (ptr === undefined) break
     else frags.shift()
@@ -1265,7 +1264,7 @@ export function compiler(
       state.simple ||
       (state.inHTML &&
         source.indexOf('\n\n') === -1 &&
-        state.prevCapture.indexOf('\n\n') === -1)
+        state.prevCapture!.indexOf('\n\n') === -1)
     ) {
       return null
     }
@@ -1314,16 +1313,16 @@ export function compiler(
       className?: string
       id?: string
     },
-    ...children
+    ...children: any[]
   ) {
-    const overrideProps = get(options.overrides, `${tag}.props`, {})
+    const overrideProps = get(options.overrides!, `${tag}.props`, {})
 
-    return createElement(
-      getTag(tag, options.overrides),
+    return createElement!(
+      getTag(tag, options.overrides!),
       {
         ...props,
         ...overrideProps,
-        className: cx(props?.className, overrideProps.className) || undefined,
+        className: cx(props?.className, (overrideProps as any).className) || undefined,
       },
       ...children
     )
@@ -1378,20 +1377,20 @@ export function compiler(
       if (typeof jsx === 'string') {
         return <span key="outer">{jsx}</span>
       } else {
-        return jsx
+        return jsx as JSX.Element | ComponentChildren[]
       }
     } else {
       // TODO: return null for React 16
       jsx = null
     }
 
-    return createElement(wrapper, { key: 'outer' }, jsx) as JSX.Element
+    return createElement!(wrapper, { key: 'outer' }, jsx) as JSX.Element
   }
 
   function attrStringToMap(
     tag: MarkdownToJSX.HTMLTags,
     str: string
-  ): Record<string, any> {
+  ): Record<string, any> | null {
     if (!str || !str.trim()) {
       return null
     }
@@ -1408,12 +1407,12 @@ export function compiler(
         const key = normalizeAttributeKey(raw.slice(0, delimiterIdx)).trim()
         const value = unquote(raw.slice(delimiterIdx + 1).trim())
 
-        const mappedKey = ATTRIBUTE_TO_JSX_PROP_MAP[key] || key
+        const mappedKey = (ATTRIBUTE_TO_JSX_PROP_MAP as any)[key] || key
 
         // bail out, not supported
         if (mappedKey === 'ref') return map
 
-        const normalizedValue = (map[mappedKey] = attributeValueToJSXPropValue(
+        const normalizedValue = ((map as any)[mappedKey] = attributeValueToJSXPropValue(
           tag,
           key,
           value,
@@ -1425,10 +1424,10 @@ export function compiler(
           (HTML_BLOCK_ELEMENT_R.test(normalizedValue) ||
             HTML_SELF_CLOSING_ELEMENT_R.test(normalizedValue))
         ) {
-          map[mappedKey] = compile(normalizedValue.trim())
+          ;(map as any)[mappedKey] = compile(normalizedValue.trim())
         }
       } else if (raw !== 'style') {
-        map[ATTRIBUTE_TO_JSX_PROP_MAP[raw] || raw] = true
+        ;(map as any)[(ATTRIBUTE_TO_JSX_PROP_MAP as any)[raw] || raw] = true
       }
 
       return map
@@ -1472,7 +1471,7 @@ export function compiler(
       _parse(capture, parse, state) {
         const [, alert, content] = capture[0]
           .replace(BLOCKQUOTE_TRIM_LEFT_MULTILINE_R, '')
-          .match(BLOCKQUOTE_ALERT_R)
+          .match(BLOCKQUOTE_ALERT_R)!
 
         return {
           alert,
@@ -1481,7 +1480,7 @@ export function compiler(
       },
       _render(node, output, state) {
         const props = {
-          key: state.key,
+          key: state!.key,
         } as Record<string, unknown>
 
         if (node.alert) {
@@ -1507,7 +1506,7 @@ export function compiler(
       _order: Priority.HIGH,
       _parse: captureNothing,
       _render(_, __, state) {
-        return <br key={state.key} />
+        return <br key={state!.key} />
       },
     },
 
@@ -1517,7 +1516,7 @@ export function compiler(
       _order: Priority.HIGH,
       _parse: captureNothing,
       _render(_, __, state) {
-        return <hr key={state.key} />
+        return <hr key={state!.key} />
       },
     },
 
@@ -1532,9 +1531,9 @@ export function compiler(
         }
       },
 
-      _render(node, output, state) {
+      _render(node, _output, state) {
         return (
-          <pre key={state.key}>
+          <pre key={state!.key}>
             <code
               {...node.attrs}
               className={node.lang ? `lang-${node.lang}` : ''}
@@ -1574,8 +1573,8 @@ export function compiler(
           text: unescape(capture[2]),
         }
       },
-      _render(node, output, state) {
-        return <code key={state.key}>{node.text}</code>
+      _render(node, _output, state) {
+        return <code key={state!.key}>{node.text}</code>
       },
     },
 
@@ -1607,10 +1606,10 @@ export function compiler(
           text: capture[1],
         }
       },
-      _render(node, output, state) {
+      _render(node, _output, state) {
         return (
-          <a key={state.key} href={sanitize(node.target, 'a', 'href')}>
-            <sup key={state.key}>{node.text}</sup>
+          <a key={state!.key} href={sanitize(node.target, 'a', 'href')!}>
+            <sup key={state!.key}>{node.text}</sup>
           </a>
         )
       },
@@ -1625,11 +1624,11 @@ export function compiler(
           completed: capture[1].toLowerCase() === 'x',
         }
       },
-      _render(node, output, state) {
+      _render(node, _output, state) {
         return (
           <input
             checked={node.completed}
-            key={state.key}
+            key={state!.key}
             readOnly
             type="checkbox"
           />
@@ -1653,7 +1652,7 @@ export function compiler(
       _render(node, output, state) {
         return h(
           `h${node.level}`,
-          { id: node.id, key: state.key },
+          { id: node.id, key: state!.key },
           output(node.children, state)
         )
       },
@@ -1687,7 +1686,7 @@ export function compiler(
       _match: anyScopeRegex(HTML_BLOCK_ELEMENT_R),
       _order: Priority.HIGH,
       _parse(capture, parse, state) {
-        const [, whitespace] = capture[3].match(HTML_LEFT_TRIM_AMOUNT_R)
+        const [, whitespace] = capture[3].match(HTML_LEFT_TRIM_AMOUNT_R)!
 
         const trimmer = new RegExp(`^${whitespace}`, 'gm')
         const trimmed = capture[3].replace(trimmer, '')
@@ -1716,28 +1715,28 @@ export function compiler(
           text?: string | undefined
         }
 
-        state.inAnchor = state.inAnchor || tagName === 'a'
+        state!.inAnchor = state!.inAnchor || tagName === 'a'
 
         if (noInnerParse) {
           ast.text = capture[3]
         } else {
-          const prevInHTML = state.inHTML
-          state.inHTML = true
+          const prevInHTML = state!.inHTML
+          state!.inHTML = true
           ast.children = parseFunc(parse, trimmed, state)
-          state.inHTML = prevInHTML
+          state!.inHTML = prevInHTML
         }
 
         /**
          * if another html block is detected within, parse as block,
          * otherwise parse as inline to pick up any further markdown
          */
-        state.inAnchor = false
+        state!.inAnchor = false
 
         return ast
       },
       _render(node, output, state) {
         return (
-          <node.tag key={state.key} {...node.attrs}>
+          <node.tag key={state!.key} {...node.attrs}>
             {node.text || (node.children ? output(node.children, state) : '')}
           </node.tag>
         )
@@ -1758,8 +1757,8 @@ export function compiler(
           tag,
         }
       },
-      _render(node, output, state) {
-        return <node.tag {...node.attrs} key={state.key} />
+      _render(node, _output, state) {
+        return <node.tag {...node.attrs} key={state!.key} />
       },
     },
 
@@ -1784,13 +1783,13 @@ export function compiler(
           title: unescape(capture[3]),
         }
       },
-      _render(node, output, state) {
+      _render(node, _output, state) {
         return (
           <img
-            key={state.key}
+            key={state!.key}
             alt={node.alt || undefined}
             title={node.title || undefined}
-            src={sanitize(node.target, 'img', 'src')}
+            src={sanitize(node.target, 'img', 'src')!}
           />
         )
       },
@@ -1814,8 +1813,8 @@ export function compiler(
       _render(node, output, state) {
         return (
           <a
-            key={state.key}
-            href={sanitize(node.target, 'a', 'href')}
+            key={state!.key}
+            href={sanitize(node.target, 'a', 'href')!}
             title={node.title}
           >
             {output(node.children, state)}
@@ -1902,7 +1901,7 @@ export function compiler(
       _order: Priority.LOW,
       _parse: parseCaptureInline,
       _render(node, output, state) {
-        return <p key={state.key}>{output(node.children, state)}</p>
+        return <p key={state!.key}>{output(node.children, state)}</p>
       },
     } as MarkdownToJSX.Rule<ReturnType<typeof parseCaptureInline>>,
 
@@ -1931,12 +1930,12 @@ export function compiler(
           ref: capture[2],
         }
       },
-      _render(node, output, state) {
+      _render(node, _output, state) {
         return refs[node.ref] ? (
           <img
-            key={state.key}
+            key={state!.key}
             alt={node.alt}
-            src={sanitize(refs[node.ref].target, 'img', 'src')}
+            src={sanitize(refs[node.ref].target, 'img', 'src')!}
             title={refs[node.ref].title}
           />
         ) : null
@@ -1957,14 +1956,14 @@ export function compiler(
       _render(node, output, state) {
         return refs[node.ref] ? (
           <a
-            key={state.key}
-            href={sanitize(refs[node.ref].target, 'a', 'href')}
+            key={state!.key}
+            href={sanitize(refs[node.ref].target, 'a', 'href')!}
             title={refs[node.ref].title}
           >
             {output(node.children, state)}
           </a>
         ) : (
-          <span key={state.key}>{node.fallbackChildren}</span>
+          <span key={state!.key}>{node.fallbackChildren}</span>
         )
       },
     },
@@ -1977,7 +1976,7 @@ export function compiler(
       _render(node, output, state) {
         const table = node as MarkdownToJSX.TableNode
         return (
-          <table key={state.key}>
+          <table key={state!.key}>
             <thead>
               <tr>
                 {table.header.map(function generateHeaderCell(content, i) {
@@ -2015,7 +2014,7 @@ export function compiler(
       // double newlines, or double-space-newlines
       // We break on any symbol characters so that this grammar
       // is easy to extend without needing to modify this regex
-      _match: allowInline(function (source, state) {
+      _match: allowInline(function (source, _state) {
         let ret
         if (startsWith(source, ':')) ret = SHORTCODE_R.exec(source)
         if (ret) return ret
@@ -2031,7 +2030,7 @@ export function compiler(
               ? text
               : text.replace(
                   HTML_CHAR_CODE_R,
-                  (full, inner) => options.namedCodesToUnicode[inner] || full
+                  (full, inner) => options.namedCodesToUnicode![inner] || full
                 ),
         }
       },
@@ -2052,7 +2051,7 @@ export function compiler(
         }
       },
       _render(node, output, state) {
-        return <strong key={state.key}>{output(node.children, state)}</strong>
+        return <strong key={state!.key}>{output(node.children, state)}</strong>
       },
     },
 
@@ -2071,7 +2070,7 @@ export function compiler(
         }
       },
       _render(node, output, state) {
-        return <em key={state.key}>{output(node.children, state)}</em>
+        return <em key={state!.key}>{output(node.children, state)}</em>
       },
     },
 
@@ -2097,7 +2096,7 @@ export function compiler(
       _order: Priority.LOW,
       _parse: parseCaptureInline,
       _render(node, output, state) {
-        return <mark key={state.key}>{output(node.children, state)}</mark>
+        return <mark key={state!.key}>{output(node.children, state)}</mark>
       },
     },
 
@@ -2107,14 +2106,14 @@ export function compiler(
       _order: Priority.LOW,
       _parse: parseCaptureInline,
       _render(node, output, state) {
-        return <del key={state.key}>{output(node.children, state)}</del>
+        return <del key={state!.key}>{output(node.children, state)}</del>
       },
     },
   }
 
   if (options.disableParsingRawHTML === true) {
-    delete rules[RuleType.htmlBlock]
-    delete rules[RuleType.htmlSelfClosing]
+    delete (rules as any)[RuleType.htmlBlock]
+    delete (rules as any)[RuleType.htmlSelfClosing]
   }
 
   const parser = parserFor(rules)
@@ -2194,7 +2193,7 @@ export namespace MarkdownToJSX {
 
   export interface CodeBlockNode {
     type: typeof RuleType.codeBlock
-    attrs?: Record<string, any>
+    attrs?: Record<string, any> | null
     lang?: string
     text: string
   }
@@ -2348,7 +2347,7 @@ export namespace MarkdownToJSX {
 
   export interface HTMLNode {
     type: typeof RuleType.htmlBlock
-    attrs: Record<string, any>
+    attrs: Record<string, any> | null
     children?: ReturnType<MarkdownToJSX.NestedParser> | undefined
     noInnerParse: Boolean
     tag: MarkdownToJSX.HTMLTags
@@ -2357,7 +2356,7 @@ export namespace MarkdownToJSX {
 
   export interface HTMLSelfClosingNode {
     type: typeof RuleType.htmlSelfClosing
-    attrs: Record<string, any>
+    attrs: Record<string, any> | null
     tag: string
   }
 
@@ -2405,12 +2404,12 @@ export namespace MarkdownToJSX {
   export type Parser<ParserOutput> = (
     capture: RegExpMatchArray,
     nestedParse: NestedParser,
-    state?: MarkdownToJSX.State
+    state: MarkdownToJSX.State
   ) => ParserOutput
 
   export type RuleOutput = (
     ast: MarkdownToJSX.ParserResult | MarkdownToJSX.ParserResult[],
-    state: MarkdownToJSX.State
+    state?: MarkdownToJSX.State
   ) => ComponentChildren
 
   export type Rule<ParserOutput = MarkdownToJSX.ParserResult> = {
@@ -2418,7 +2417,7 @@ export namespace MarkdownToJSX {
       source: string,
       state: MarkdownToJSX.State,
       prevCapturedString?: string
-    ) => RegExpMatchArray
+    ) => RegExpMatchArray | null
     _order: (typeof Priority)[keyof typeof Priority]
     _parse: MarkdownToJSX.Parser<Omit<ParserOutput, 'type'>>
     /**
