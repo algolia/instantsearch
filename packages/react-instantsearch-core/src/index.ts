@@ -1,4 +1,5 @@
 export { default as version } from './version';
+export * from './components/AlgoliaProvider';
 export * from './components/Configure';
 export * from './components/DynamicWidgets';
 export * from './components/Feeds';
