@@ -45,9 +45,9 @@ import {
   filterSuggestions,
 } from '../widgets';
 
+import type { SearchClient } from '../types';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type { RecordWithObjectID } from 'instantsearch-ui-components';
-import type { SearchClient } from '../types';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
