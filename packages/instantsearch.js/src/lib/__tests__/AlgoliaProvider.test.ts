@@ -7,18 +7,20 @@ import connectChat from '../../connectors/chat/connectChat';
 import { createInsightsMiddleware } from '../../middlewares/createInsightsMiddleware';
 import chat from '../../widgets/chat/chat';
 import chatTrigger from '../../widgets/chat-trigger/chat-trigger';
-import { createAlgoliaProvider } from '../AlgoliaProvider';
+import { algoliaProvider } from '../AlgoliaProvider';
 import { getAppIdAndApiKey } from '../utils';
 
 import type { Middleware, Widget } from '../../types';
 
-describe('createAlgoliaProvider', () => {
+describe('algoliaProvider', () => {
   test('mounts chat and chatTrigger without instantsearch()', async () => {
     const chatContainer = document.createElement('div');
     const triggerContainer = document.createElement('div');
     document.body.append(chatContainer, triggerContainer);
 
-    const provider = createAlgoliaProvider({ appId: 'app', apiKey: 'key' });
+    const provider = algoliaProvider({
+      searchClient: { appId: 'app', apiKey: 'key' },
+    });
     provider
       .addWidgets([
         chat({
@@ -68,9 +70,8 @@ describe('createAlgoliaProvider', () => {
         requiresSearch: false,
         disableTriggerValidation: true,
       });
-      const provider = createAlgoliaProvider({
-        appId: 'app',
-        apiKey: 'key',
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'products',
       });
 
@@ -142,9 +143,7 @@ describe('createAlgoliaProvider', () => {
   });
 
   describe('credentials', () => {
-    function captureClient(
-      options: Parameters<typeof createAlgoliaProvider>[0]
-    ) {
+    function captureClient(options: Parameters<typeof algoliaProvider>[0]) {
       let client: unknown;
       const widget: Widget = {
         $$type: 'test.capture',
@@ -152,7 +151,7 @@ describe('createAlgoliaProvider', () => {
           client = instantSearchInstance.client;
         },
       };
-      createAlgoliaProvider(options).addWidgets([widget]).start();
+      algoliaProvider(options).addWidgets([widget]).start();
 
       return client;
     }
@@ -168,7 +167,9 @@ describe('createAlgoliaProvider', () => {
     });
 
     test('can be given as an app ID and API key', () => {
-      const client = captureClient({ appId: 'myApp', apiKey: 'myKey' });
+      const client = captureClient({
+        searchClient: { appId: 'myApp', apiKey: 'myKey' },
+      });
 
       expect(getAppIdAndApiKey(client)).toEqual(['myApp', 'myKey']);
     });
@@ -196,7 +197,9 @@ describe('createAlgoliaProvider', () => {
 
     test('follows the lifecycle of the provider', () => {
       const { calls, middleware } = createRecordingMiddleware();
-      const provider = createAlgoliaProvider({ appId: 'app', apiKey: 'key' });
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
+      });
 
       provider.use(middleware);
       expect(calls).toEqual([]);
@@ -210,7 +213,9 @@ describe('createAlgoliaProvider', () => {
 
     test('is subscribed right away when added after the provider started', () => {
       const { calls, middleware } = createRecordingMiddleware();
-      const provider = createAlgoliaProvider({ appId: 'app', apiKey: 'key' });
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
+      });
 
       provider.start();
       provider.use(middleware);
@@ -241,9 +246,8 @@ describe('createAlgoliaProvider', () => {
       const calls: string[] = [];
       const first = createWidget('first', calls);
       const second = createWidget('second', calls);
-      const provider = createAlgoliaProvider({
-        appId: 'app',
-        apiKey: 'key',
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'indexName',
       }) as any;
 
@@ -268,9 +272,8 @@ describe('createAlgoliaProvider', () => {
     });
 
     test('exposes what the hooks read without searching', () => {
-      const provider = createAlgoliaProvider({
-        appId: 'app',
-        apiKey: 'key',
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'indexName',
       }) as any;
 
@@ -283,9 +286,8 @@ describe('createAlgoliaProvider', () => {
     });
 
     test('notifies listeners after each render', () => {
-      const provider = createAlgoliaProvider({
-        appId: 'app',
-        apiKey: 'key',
+      const provider = algoliaProvider({
+        searchClient: { appId: 'app', apiKey: 'key' },
       }) as any;
       const onRender = jest.fn();
 

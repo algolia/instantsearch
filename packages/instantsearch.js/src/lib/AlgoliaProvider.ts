@@ -1,31 +1,12 @@
-import { getAppIdAndApiKey } from './utils/getAppIdAndApiKey';
-
 import type { Middleware, SearchClient, Widget } from '../types';
 
-export type AlgoliaProviderOptions = (
-  | {
-      /**
-       * Your Algolia application ID.
-       */
-      appId: string;
-      /**
-       * A search-only API key.
-       */
-      apiKey: string;
-    }
-  | {
-      /**
-       * A search client to read the credentials from, like `instantsearch()`.
-       * It is never used to search.
-       */
-      searchClient: SearchClient;
-    }
-) & {
+export type AlgoliaProviderOptions = {
   /**
-   * The user agent suffix sent with Agent Studio requests when there is no
-   * `searchClient` to read it from.
+   * What the credentials are read from, like the search client of
+   * `instantsearch()`: a search client, or any object it reads credentials
+   * from, such as `{ appId, apiKey }`. It is never used to search.
    */
-  algoliaAgent?: string;
+  searchClient: SearchClient | { appId: string; apiKey: string };
   /**
    * The main index of this implementation. Not used to search.
    */
@@ -80,15 +61,10 @@ const PROVIDER_INDEX_ID = 'algoliaProvider';
  * Widgets that depend on search state (`searchBox`, `hits`, recommend) are not
  * supported: they need the helper.
  */
-export function createAlgoliaProvider(
-  options: AlgoliaProviderOptions
-): AlgoliaProvider {
-  const { algoliaAgent = 'algolia-provider', indexName } = options;
-  const searchClient = 'searchClient' in options ? options.searchClient : null;
-  const [appId, apiKey] = searchClient
-    ? getAppIdAndApiKey(searchClient)
-    : [(options as any).appId, (options as any).apiKey];
-
+export function algoliaProvider({
+  searchClient,
+  indexName,
+}: AlgoliaProviderOptions): AlgoliaProvider {
   let widgets: Widget[] = [];
   let middleware: Array<{
     creator: Middleware;
@@ -112,12 +88,7 @@ export function createAlgoliaProvider(
     [PROVIDER_INDEX_ID]: {},
   };
 
-  // `getAppIdAndApiKey` and `getAlgoliaAgent` read these two shapes.
-  const client = searchClient ?? {
-    appId,
-    apiKey,
-    transporter: { userAgent: { value: algoliaAgent } },
-  };
+  const client = searchClient;
 
   // There is no search helper. This is just enough of one for the parts that
   // read it without searching: the index name of hit events, and the Insights

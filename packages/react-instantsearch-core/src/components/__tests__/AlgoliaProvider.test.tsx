@@ -53,7 +53,7 @@ function createRecordingMiddleware() {
 describe('AlgoliaProvider', () => {
   test('renders its children', () => {
     render(
-      <AlgoliaProvider appId="appId" apiKey="apiKey">
+      <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
         <p>hello</p>
       </AlgoliaProvider>
     );
@@ -90,7 +90,10 @@ describe('AlgoliaProvider', () => {
     }
 
     render(
-      <AlgoliaProvider appId="appId" apiKey="apiKey" indexName="indexName">
+      <AlgoliaProvider
+        searchClient={{ appId: 'appId', apiKey: 'apiKey' }}
+        indexName="indexName"
+      >
         <Probe />
       </AlgoliaProvider>
     );
@@ -110,7 +113,7 @@ describe('AlgoliaProvider', () => {
     }
 
     const { unmount } = render(
-      <AlgoliaProvider appId="appId" apiKey="apiKey">
+      <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
         <AddMiddleware />
       </AlgoliaProvider>
     );
@@ -136,7 +139,7 @@ describe('AlgoliaProvider', () => {
 
     const { unmount } = render(
       <StrictMode>
-        <AlgoliaProvider appId="appId" apiKey="apiKey">
+        <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
           <AddMiddleware />
         </AlgoliaProvider>
       </StrictMode>

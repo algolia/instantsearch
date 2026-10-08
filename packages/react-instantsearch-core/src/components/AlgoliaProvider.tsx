@@ -1,4 +1,4 @@
-import { createAlgoliaProvider } from 'instantsearch.js/es/lib/AlgoliaProvider';
+import { algoliaProvider } from 'instantsearch.js/es/lib/AlgoliaProvider';
 import React, { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -77,18 +77,17 @@ function useAlgoliaProviderApi(options: AlgoliaProviderOptions) {
   const providerRef = useRef<InternalAlgoliaProvider | null>(null);
 
   if (providerRef.current === null) {
-    const searchClient =
-      'searchClient' in options ? options.searchClient : undefined;
-    if (typeof searchClient?.addAlgoliaAgent === 'function') {
+    const { searchClient } = options;
+    if (
+      'addAlgoliaAgent' in searchClient &&
+      typeof searchClient.addAlgoliaAgent === 'function'
+    ) {
       defaultUserAgents.forEach((userAgent) => {
         searchClient.addAlgoliaAgent!(userAgent);
       });
     }
 
-    const provider = createAlgoliaProvider({
-      algoliaAgent: defaultUserAgents.join('; '),
-      ...options,
-    }) as InternalAlgoliaProvider;
+    const provider = algoliaProvider(options) as InternalAlgoliaProvider;
 
     provider._schedule = function _schedule(cb: () => void) {
       provider._schedule.queue.push(cb);

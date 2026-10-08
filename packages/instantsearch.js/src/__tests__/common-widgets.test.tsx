@@ -6,7 +6,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
-import { createAlgoliaProvider } from '../lib/AlgoliaProvider';
+import { algoliaProvider } from '../lib/AlgoliaProvider';
 import { Chat as InstantSearchChat } from '../lib/chat';
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
@@ -736,7 +736,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   },
   createAlgoliaProviderWidgetTests({ instantSearchOptions, widgetParams }) {
     const { chat: chatWidgetParams, insights } = widgetParams;
-    const provider = createAlgoliaProvider({
+    const provider = algoliaProvider({
       searchClient: instantSearchOptions.searchClient as SearchClient,
       indexName: instantSearchOptions.indexName,
     });
