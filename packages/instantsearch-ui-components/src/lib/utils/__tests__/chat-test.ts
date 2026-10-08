@@ -4,6 +4,7 @@ import {
   getApplyFiltersParamsFromToolInput,
   getResolvedSearchParams,
   isGroupedResultsEnabled,
+  isSilentUserMessage,
   shouldSearchToolRenderResults,
 } from '../chat';
 import { startsWith } from '../startsWith';
@@ -529,6 +530,68 @@ describe('shouldSearchToolRenderResults', () => {
     // Agents configured before the rename still emit the legacy flag.
     expect(
       shouldSearchToolRenderResults(context({ displayResultsEnabled: true }))
+    ).toBe(false);
+  });
+});
+
+describe('isSilentUserMessage', () => {
+  const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_abc__';
+  const user = (
+    parts: Array<{ type: string; text?: string }>,
+    metadata?: unknown
+  ) =>
+    ({ id: 'u', role: 'user', parts, metadata }) as unknown as Parameters<
+      typeof isSilentUserMessage
+    >[0];
+
+  test('hides a user message whose text is empty', () => {
+    // A silent prompt shortcut is persisted (and echoed) without display text.
+    expect(isSilentUserMessage(user([{ type: 'text', text: '' }]))).toBe(true);
+    expect(isSilentUserMessage(user([{ type: 'text', text: '  \n' }]))).toBe(
+      true
+    );
+    expect(isSilentUserMessage(user([]))).toBe(true);
+  });
+
+  test('hides the sentinel of a pending prompt shortcut', () => {
+    expect(
+      isSilentUserMessage(
+        user([{ type: 'text', text: SENTINEL }], {
+          promptShortcut: { sentinel: SENTINEL },
+        })
+      )
+    ).toBe(true);
+  });
+
+  test('shows the message once the sentinel is replaced by display text', () => {
+    expect(
+      isSilentUserMessage(
+        user([{ type: 'text', text: 'Compare these products: A, B' }], {
+          promptShortcut: { sentinel: SENTINEL },
+        })
+      )
+    ).toBe(false);
+  });
+
+  test('shows a sentinel-looking text that was not sent as a shortcut', () => {
+    expect(isSilentUserMessage(user([{ type: 'text', text: SENTINEL }]))).toBe(
+      false
+    );
+  });
+
+  test('shows a user message with a non-text part', () => {
+    expect(
+      isSilentUserMessage(user([{ type: 'text', text: '' }, { type: 'file' }]))
+    ).toBe(false);
+  });
+
+  test('never hides assistant messages', () => {
+    expect(
+      isSilentUserMessage({
+        id: 'a',
+        role: 'assistant',
+        parts: [{ type: 'text', text: '' }],
+      } as Parameters<typeof isSilentUserMessage>[0])
     ).toBe(false);
   });
 });

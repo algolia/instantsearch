@@ -77,6 +77,47 @@ describe('openChat', () => {
     );
   });
 
+  test('marks a prompt-shortcut sentinel as pending so the chat shows no bubble for it', () => {
+    const chat = createChatRenderState();
+
+    openChat(chat, {
+      message: ' __ALGOLIA_COMPARISON_algolia_comparison_abc__ ',
+      turnContext: { selected_products: '[]' },
+    });
+
+    expect(chat.sendMessage).toHaveBeenCalledWith(
+      {
+        text: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
+        metadata: {
+          turnContext: { selected_products: '[]' },
+          promptShortcut: {
+            sentinel: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
+          },
+        },
+      },
+      undefined
+    );
+  });
+
+  test.each([
+    'hey __ALGOLIA_COMPARISON_abc__',
+    '__ALGOLIA_COMPARISON_ab__',
+    '__ALGOLIA_comparison_abc__',
+    '__ALGOLIA_COMPARISON_abc',
+  ])(
+    'leaves a message that is not exactly a sentinel unmarked: %s',
+    (message) => {
+      const chat = createChatRenderState();
+
+      openChat(chat, { message });
+
+      expect(chat.sendMessage).toHaveBeenCalledWith(
+        { text: message },
+        undefined
+      );
+    }
+  );
+
   test('does not add the x-algolia-referer header when no referer is provided', () => {
     const chat = createChatRenderState();
 

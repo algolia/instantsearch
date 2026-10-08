@@ -247,7 +247,7 @@ describe('connectCompare', () => {
       );
     });
 
-    it('sends the configuration placeholder when `configurationId` is set', () => {
+    it('sends the configuration placeholder, marked as a pending prompt shortcut, when `configurationId` is set', () => {
       const chatRenderState = createChatRenderState();
       const { getRenderState } = setup({
         chatRenderState,
@@ -268,6 +268,11 @@ describe('connectCompare', () => {
                 { objectID: 'B', name: 'MacBook Pro 16' },
               ]),
               comparison_configuration_id: 'algolia_comparison_abc',
+            },
+            // The chat shows no bubble for the placeholder: the server decides
+            // what, if anything, the transcript displays for it.
+            promptShortcut: {
+              sentinel: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
             },
           },
         },

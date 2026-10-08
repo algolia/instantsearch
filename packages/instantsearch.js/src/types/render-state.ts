@@ -3,6 +3,7 @@ import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/c
 import type { BreadcrumbWidgetDescription } from '../connectors/breadcrumb/connectBreadcrumb';
 import type { ChatWidgetDescription } from '../connectors/chat/connectChat';
 import type { ClearRefinementsWidgetDescription } from '../connectors/clear-refinements/connectClearRefinements';
+import type { CompareWidgetDescription } from '../connectors/compare/connectCompare';
 import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
 import type { CurrentRefinementsWidgetDescription } from '../connectors/current-refinements/connectCurrentRefinements';
 import type { FeedsWidgetDescription } from '../connectors/feeds/connectFeeds';
@@ -33,6 +34,7 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   BreadcrumbWidgetDescription['indexRenderState'] &
   ChatWidgetDescription['indexRenderState'] &
   ClearRefinementsWidgetDescription['indexRenderState'] &
+  CompareWidgetDescription['indexRenderState'] &
   ConfigureWidgetDescription['indexRenderState'] &
   CurrentRefinementsWidgetDescription['indexRenderState'] &
   FeedsWidgetDescription['indexRenderState'] &
