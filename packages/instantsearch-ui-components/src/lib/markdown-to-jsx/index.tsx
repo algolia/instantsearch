@@ -1212,12 +1212,15 @@ function getTag(tag: string, overrides: MarkdownToJSX.Overrides) {
 export function compiler(
   markdown: string,
   options: MarkdownToJSX.Options & {
+    createElement: NonNullable<MarkdownToJSX.Options['createElement']>;
     wrapper: null;
   }
 ): ComponentChildren[];
 export function compiler(
   markdown: string,
-  options?: MarkdownToJSX.Options
+  options: MarkdownToJSX.Options & {
+    createElement: NonNullable<MarkdownToJSX.Options['createElement']>;
+  }
 ): JSX.Element;
 export function compiler(
   markdown: string = '',
