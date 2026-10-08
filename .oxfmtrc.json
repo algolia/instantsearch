@@ -24,6 +24,7 @@
     ".next",
     "**/.nuxt",
     "**/.nuxt/**",
+    "packages/instantsearch-ui-components/src/lib/markdown-to-jsx",
     "examples/js/e-commerce-umd/public/packages",
     "examples/**/polyfills.js",
     "examples/react/react-native",

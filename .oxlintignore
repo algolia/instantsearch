@@ -50,3 +50,6 @@ packages/instantsearch-codemods/__testfixtures__/**
 **/playwright-report/**
 **/test-results/**
 tests/e2e/playwright/**
+
+# Vendored third-party source (see its README)
+packages/instantsearch-ui-components/src/lib/markdown-to-jsx
