@@ -1,11 +1,16 @@
 /**
  * @jest-environment jsdom
  */
+import { createSearchClient } from '@instantsearch/mocks';
+
 import connectChat from '../../connectors/chat/connectChat';
 import { createInsightsMiddleware } from '../../middlewares/createInsightsMiddleware';
 import chat from '../../widgets/chat/chat';
 import chatTrigger from '../../widgets/chat-trigger/chat-trigger';
 import { createAlgoliaProvider } from '../AlgoliaProvider';
+import { getAppIdAndApiKey } from '../utils';
+
+import type { Middleware, Widget } from '../../types';
 
 describe('createAlgoliaProvider', () => {
   test('mounts chat and chatTrigger without instantsearch()', async () => {
@@ -133,6 +138,164 @@ describe('createAlgoliaProvider', () => {
         expect.anything(),
         expect.anything()
       );
+    });
+  });
+
+  describe('credentials', () => {
+    function captureClient(
+      options: Parameters<typeof createAlgoliaProvider>[0]
+    ) {
+      let client: unknown;
+      const widget: Widget = {
+        $$type: 'test.capture',
+        init({ instantSearchInstance }) {
+          client = instantSearchInstance.client;
+        },
+      };
+      createAlgoliaProvider(options).addWidgets([widget]).start();
+
+      return client;
+    }
+
+    test('are read from a search client, which is never used to search', () => {
+      const searchClient = createSearchClient();
+
+      const client = captureClient({ searchClient });
+
+      expect(client).toBe(searchClient);
+      expect(getAppIdAndApiKey(client)).toEqual(['appId', 'apiKey']);
+      expect(searchClient.search).not.toHaveBeenCalled();
+    });
+
+    test('can be given as an app ID and API key', () => {
+      const client = captureClient({ appId: 'myApp', apiKey: 'myKey' });
+
+      expect(getAppIdAndApiKey(client)).toEqual(['myApp', 'myKey']);
+    });
+  });
+
+  describe('middleware', () => {
+    function createRecordingMiddleware() {
+      const calls: string[] = [];
+      const middleware: Middleware = () => ({
+        $$type: 'recording',
+        subscribe() {
+          calls.push('subscribe');
+        },
+        started() {
+          calls.push('started');
+        },
+        unsubscribe() {
+          calls.push('unsubscribe');
+        },
+        onStateChange() {},
+      });
+
+      return { calls, middleware };
+    }
+
+    test('follows the lifecycle of the provider', () => {
+      const { calls, middleware } = createRecordingMiddleware();
+      const provider = createAlgoliaProvider({ appId: 'app', apiKey: 'key' });
+
+      provider.use(middleware);
+      expect(calls).toEqual([]);
+
+      provider.start();
+      expect(calls).toEqual(['subscribe', 'started']);
+
+      provider.dispose();
+      expect(calls).toEqual(['subscribe', 'started', 'unsubscribe']);
+    });
+
+    test('is subscribed right away when added after the provider started', () => {
+      const { calls, middleware } = createRecordingMiddleware();
+      const provider = createAlgoliaProvider({ appId: 'app', apiKey: 'key' });
+
+      provider.start();
+      provider.use(middleware);
+      expect(calls).toEqual(['subscribe', 'started']);
+
+      provider.unuse(middleware);
+      expect(calls).toEqual(['subscribe', 'started', 'unsubscribe']);
+    });
+  });
+
+  describe('main index', () => {
+    function createWidget(name: string, calls: string[]): Widget {
+      return {
+        $$type: `test.${name}`,
+        init() {
+          calls.push(`${name}:init`);
+        },
+        render() {
+          calls.push(`${name}:render`);
+        },
+        dispose() {
+          calls.push(`${name}:dispose`);
+        },
+      };
+    }
+
+    test('adds, replaces and removes widgets like an index', () => {
+      const calls: string[] = [];
+      const first = createWidget('first', calls);
+      const second = createWidget('second', calls);
+      const provider = createAlgoliaProvider({
+        appId: 'app',
+        apiKey: 'key',
+        indexName: 'indexName',
+      }) as any;
+
+      provider.start();
+      provider.mainIndex.addWidgets([first]);
+      expect(provider.mainIndex.getWidgets()).toEqual([first]);
+      expect(calls).toEqual(['first:init', 'first:render']);
+
+      provider.mainIndex.updateWidget(first, second);
+      expect(provider.mainIndex.getWidgets()).toEqual([second]);
+      expect(calls).toEqual([
+        'first:init',
+        'first:render',
+        'first:dispose',
+        'second:init',
+        'second:render',
+      ]);
+
+      provider.mainIndex.removeWidgets([second]);
+      expect(provider.mainIndex.getWidgets()).toEqual([]);
+      expect(calls.slice(-1)).toEqual(['second:dispose']);
+    });
+
+    test('exposes what the hooks read without searching', () => {
+      const provider = createAlgoliaProvider({
+        appId: 'app',
+        apiKey: 'key',
+        indexName: 'indexName',
+      }) as any;
+
+      expect(provider.mainIndex.getIndexId()).toBe('algoliaProvider');
+      expect(provider.mainIndex.getIndexName()).toBe('indexName');
+      expect(provider.mainIndex.getHelper().state.index).toBe('indexName');
+      expect(provider.mainIndex.getScopedResults()).toEqual([]);
+      expect(provider.status).toBe('idle');
+      expect(provider.getUiState()).toEqual({ algoliaProvider: {} });
+    });
+
+    test('notifies listeners after each render', () => {
+      const provider = createAlgoliaProvider({
+        appId: 'app',
+        apiKey: 'key',
+      }) as any;
+      const onRender = jest.fn();
+
+      provider.addListener('render', onRender);
+      provider.start();
+      expect(onRender).toHaveBeenCalledTimes(1);
+
+      provider.removeListener('render', onRender);
+      provider.addWidgets([createWidget('late', [])]);
+      expect(onRender).toHaveBeenCalledTimes(1);
     });
   });
 });

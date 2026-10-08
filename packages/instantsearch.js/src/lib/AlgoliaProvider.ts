@@ -1,16 +1,29 @@
-import type { InstantSearch, Middleware, Widget } from '../types';
+import { getAppIdAndApiKey } from './utils/getAppIdAndApiKey';
 
-export type AlgoliaProviderOptions = {
+import type { Middleware, SearchClient, Widget } from '../types';
+
+export type AlgoliaProviderOptions = (
+  | {
+      /**
+       * Your Algolia application ID.
+       */
+      appId: string;
+      /**
+       * A search-only API key.
+       */
+      apiKey: string;
+    }
+  | {
+      /**
+       * A search client to read the credentials from, like `instantsearch()`.
+       * It is never used to search.
+       */
+      searchClient: SearchClient;
+    }
+) & {
   /**
-   * Your Algolia application ID.
-   */
-  appId: string;
-  /**
-   * A search-only API key.
-   */
-  apiKey: string;
-  /**
-   * The user agent suffix sent with Agent Studio requests.
+   * The user agent suffix sent with Agent Studio requests when there is no
+   * `searchClient` to read it from.
    */
   algoliaAgent?: string;
   /**
@@ -20,6 +33,10 @@ export type AlgoliaProviderOptions = {
 };
 
 export type AlgoliaProvider = {
+  /**
+   * Whether `start()` has been called and `dispose()` hasn't.
+   */
+  readonly started: boolean;
   /**
    * Mounts widgets that don't run searches (`chat`, `chatTrigger`).
    */
@@ -55,18 +72,23 @@ const PROVIDER_INDEX_ID = 'algoliaProvider';
  * routing and the index tree.
  *
  * It implements only the part of the `InstantSearch` instance those widgets
- * read: the credentials, the shared `renderState` (how `chatTrigger` finds
- * `chat`), `scheduleRender` and `templatesConfig`.
+ * (and the React hooks wrapping them) read: the credentials, the shared
+ * `renderState` (how `chatTrigger` finds `chat`), `scheduleRender`,
+ * `templatesConfig`, the middleware lifecycle and a main index to attach
+ * widgets to.
  *
  * Widgets that depend on search state (`searchBox`, `hits`, recommend) are not
  * supported: they need the helper.
  */
-export function createAlgoliaProvider({
-  appId,
-  apiKey,
-  algoliaAgent = 'algolia-provider',
-  indexName,
-}: AlgoliaProviderOptions): AlgoliaProvider {
+export function createAlgoliaProvider(
+  options: AlgoliaProviderOptions
+): AlgoliaProvider {
+  const { algoliaAgent = 'algolia-provider', indexName } = options;
+  const searchClient = 'searchClient' in options ? options.searchClient : null;
+  const [appId, apiKey] = searchClient
+    ? getAppIdAndApiKey(searchClient)
+    : [(options as any).appId, (options as any).apiKey];
+
   let widgets: Widget[] = [];
   let middleware: Array<{
     creator: Middleware;
@@ -91,15 +113,10 @@ export function createAlgoliaProvider({
   };
 
   // `getAppIdAndApiKey` and `getAlgoliaAgent` read these two shapes.
-  const client = {
+  const client = searchClient ?? {
     appId,
     apiKey,
     transporter: { userAgent: { value: algoliaAgent } },
-  };
-
-  const parent = {
-    getIndexId: () => PROVIDER_INDEX_ID,
-    setIndexUiState: () => {},
   };
 
   // There is no search helper. This is just enough of one for the parts that
@@ -108,6 +125,7 @@ export function createAlgoliaProvider({
   const helper: Record<string, any> = {
     state: { index: indexName ?? PROVIDER_INDEX_ID },
     lastResults: null,
+    lastRecommendResults: null,
     _recommendCache: {},
     derivedHelpers: [{ on() {} }],
     overrideStateWithoutTriggeringChangeEvent(nextState: unknown) {
@@ -115,70 +133,81 @@ export function createAlgoliaProvider({
     },
   };
 
-  const instance = {
-    client,
-    indexName,
-    mainHelper: helper,
-    mainIndex: { getWidgets: () => widgets },
-    get middleware() {
-      return middleware;
-    },
-    renderState,
-    status: 'idle',
-    templatesConfig: { helpers: {}, compileOptions: {} },
-    sendEventToInsights: () => {},
-    getUiState: () => ({ [PROVIDER_INDEX_ID]: {} }),
-    scheduleSearch: () => {},
-    use: (...newMiddleware: Middleware[]) => {
-      useMiddleware(...newMiddleware);
-      return instance;
-    },
-    unuse: (...oldMiddleware: Middleware[]) => {
-      unuseMiddleware(...oldMiddleware);
-      return instance;
-    },
-    _createdAt: createdAt,
-    _initialResults: null,
-    _initialOptions: undefined,
-    emit(event: string, ...args: any[]) {
-      listeners
-        .filter((entry) => entry.event === event)
-        .forEach((entry) => {
-          if (entry.once) {
-            listeners.splice(listeners.indexOf(entry), 1);
-          }
-          entry.listener(...args);
-        });
-      return instance;
-    },
-    on(event: string, listener: (...args: any[]) => void) {
-      listeners.push({ event, listener, once: false });
-      return instance;
-    },
-    once(event: string, listener: (...args: any[]) => void) {
-      listeners.push({ event, listener, once: true });
-      return instance;
-    },
-    removeListener(event: string, listener: (...args: any[]) => void) {
-      const index = listeners.findIndex(
-        (entry) => entry.event === event && entry.listener === listener
-      );
-      if (index !== -1) {
-        listeners.splice(index, 1);
-      }
-      return instance;
-    },
-    scheduleRender: () => {
-      if (!started || renderScheduled) {
-        return;
-      }
-      renderScheduled = true;
-      Promise.resolve().then(() => {
-        renderScheduled = false;
-        renderWidgets();
-      });
-    },
-  } as unknown as InstantSearch;
+  // There are never results: the React hooks only read them as a fallback.
+  const results = {
+    __isArtificial: true,
+    hits: [],
+    nbHits: 0,
+    page: 0,
+    nbPages: 0,
+    query: '',
+    index: indexName ?? PROVIDER_INDEX_ID,
+  };
+
+  function getOptions() {
+    return {
+      instantSearchInstance: provider,
+      parent: mainIndex,
+      helper,
+      state: helper.state,
+      results: undefined,
+      scopedResults: [],
+      uiState: {},
+      templatesConfig: provider.templatesConfig,
+      createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
+      status: 'idle',
+      error: undefined,
+    } as any;
+  }
+
+  // Mirrors what the index does after each widget lifecycle call: the widget's
+  // render state is published so siblings can read it.
+  function publishRenderState(widget: Widget, widgetOptions: any) {
+    if (widget.getRenderState) {
+      renderState[PROVIDER_INDEX_ID] = widget.getRenderState(
+        renderState[PROVIDER_INDEX_ID] as any,
+        widgetOptions
+      ) as Record<string, unknown>;
+    }
+  }
+
+  // Same order as the index: every widget's render state is published before
+  // any widget runs, so siblings can read each other's state.
+  function initWidgets() {
+    const widgetOptions = getOptions();
+    const pending = widgets.filter((widget) => !initialized.has(widget));
+    pending.forEach((widget) => publishRenderState(widget, widgetOptions));
+    pending.forEach((widget) => {
+      initialized.add(widget);
+      widget.init?.(widgetOptions);
+    });
+  }
+
+  function renderWidgets() {
+    const widgetOptions = getOptions();
+    widgets.forEach((widget) => publishRenderState(widget, widgetOptions));
+    widgets.forEach((widget) => widget.render?.(widgetOptions));
+    provider.emit('render');
+  }
+
+  function addWidgets(newWidgets: Array<Widget | Widget[]>) {
+    widgets = widgets.concat(newWidgets.flat());
+    if (started) {
+      // Widgets added after start() are initialized and rendered right away.
+      initWidgets();
+      renderWidgets();
+    }
+  }
+
+  function removeWidgets(oldWidgets: Array<Widget | Widget[]>) {
+    const toRemove = oldWidgets.flat();
+    widgets = widgets.filter((widget) => !toRemove.includes(widget));
+    toRemove.forEach((widget) => {
+      initialized.delete(widget);
+      widget.dispose?.({} as any);
+    });
+  }
 
   function useMiddleware(...newMiddleware: Middleware[]) {
     const created = newMiddleware.map((creator) => {
@@ -189,7 +218,7 @@ export function createAlgoliaProvider({
         started() {},
         unsubscribe() {},
         onStateChange() {},
-        ...creator({ instantSearchInstance: instance as any }),
+        ...creator({ instantSearchInstance: provider as any }),
       };
       middleware.push({ creator, instance: entry as any });
       return entry;
@@ -211,77 +240,124 @@ export function createAlgoliaProvider({
     );
   }
 
-  function getOptions() {
-    return {
-      instantSearchInstance: instance,
-      parent,
-      helper,
-      state: helper.state,
-      results: undefined,
-      scopedResults: [],
-      uiState: {},
-      templatesConfig: instance.templatesConfig,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-      status: 'idle',
-      error: undefined,
-    } as any;
-  }
-
-  // Mirrors what the index does after each widget lifecycle call: the widget's
-  // render state is published so siblings can read it.
-  function publishRenderState(widget: Widget, options: any) {
-    if (widget.getRenderState) {
-      renderState[PROVIDER_INDEX_ID] = widget.getRenderState(
-        renderState[PROVIDER_INDEX_ID] as any,
-        options
-      ) as Record<string, unknown>;
-    }
-  }
-
-  // Same order as the index: every widget's render state is published before
-  // any widget runs, so siblings can read each other's state.
-  function initWidgets() {
-    const options = getOptions();
-    const pending = widgets.filter((widget) => !initialized.has(widget));
-    pending.forEach((widget) => publishRenderState(widget, options));
-    pending.forEach((widget) => {
-      initialized.add(widget);
-      widget.init?.(options);
-    });
-  }
-
-  function renderWidgets() {
-    const options = getOptions();
-    widgets.forEach((widget) => publishRenderState(widget, options));
-    widgets.forEach((widget) => widget.render?.(options));
-    instance.emit('render');
-  }
-
-  const provider: AlgoliaProvider = {
-    addWidgets(newWidgets) {
-      widgets = widgets.concat(newWidgets.flat());
+  // The part of an index the widgets and the React hooks talk to.
+  const mainIndex = {
+    getIndexId: () => PROVIDER_INDEX_ID,
+    getIndexName: () => indexName ?? '',
+    getHelper: () => helper,
+    getResults: () => results,
+    getScopedResults: () => [],
+    getWidgets: () => widgets,
+    getWidgetUiState: () => ({}),
+    setIndexUiState: () => {},
+    createURL: () => '#',
+    addWidgets(newWidgets: Array<Widget | Widget[]>) {
+      addWidgets(newWidgets);
+      return mainIndex;
+    },
+    removeWidgets(oldWidgets: Array<Widget | Widget[]>) {
+      removeWidgets(oldWidgets);
+      return mainIndex;
+    },
+    updateWidget(previousWidget: Widget, nextWidget: Widget) {
+      const position = widgets.indexOf(previousWidget);
+      initialized.delete(previousWidget);
+      previousWidget.dispose?.({} as any);
+      if (position === -1) {
+        widgets = widgets.concat(nextWidget);
+      } else {
+        widgets = widgets.slice();
+        widgets[position] = nextWidget;
+      }
       if (started) {
-        // Widgets added after start() are initialized and rendered right away.
         initWidgets();
         renderWidgets();
       }
-      return provider;
+      return mainIndex;
     },
-    removeWidgets(oldWidgets) {
-      const toRemove = oldWidgets.flat();
-      widgets = widgets.filter((widget) => !toRemove.includes(widget));
-      toRemove.forEach((widget) => {
-        initialized.delete(widget);
-        widget.dispose?.({} as any);
+  };
+
+  // Both the public API and the instance the widgets and middleware receive,
+  // like `InstantSearch` is.
+  const provider = {
+    client,
+    indexName,
+    mainIndex,
+    mainHelper: helper,
+    helper,
+    renderState,
+    status: 'idle',
+    error: undefined,
+    templatesConfig: { helpers: {}, compileOptions: {} },
+    sendEventToInsights: () => {},
+    getUiState: () => ({ [PROVIDER_INDEX_ID]: {} }),
+    setUiState: () => {},
+    refresh: () => {},
+    scheduleSearch: () => {},
+    _createdAt: createdAt,
+    _initialResults: null,
+    _initialOptions: undefined,
+    get middleware() {
+      return middleware;
+    },
+    get started() {
+      return started;
+    },
+    scheduleRender() {
+      if (!started || renderScheduled) {
+        return;
+      }
+      renderScheduled = true;
+      Promise.resolve().then(() => {
+        renderScheduled = false;
+        renderWidgets();
       });
+    },
+    emit(event: string, ...args: any[]) {
+      listeners
+        .filter((entry) => entry.event === event)
+        .forEach((entry) => {
+          if (entry.once) {
+            listeners.splice(listeners.indexOf(entry), 1);
+          }
+          entry.listener(...args);
+        });
       return provider;
     },
-    use(...newMiddleware) {
+    on(event: string, listener: (...args: any[]) => void) {
+      listeners.push({ event, listener, once: false });
+      return provider;
+    },
+    // What the React hooks subscribe with.
+    addListener(event: string, listener: (...args: any[]) => void) {
+      return provider.on(event, listener);
+    },
+    once(event: string, listener: (...args: any[]) => void) {
+      listeners.push({ event, listener, once: true });
+      return provider;
+    },
+    removeListener(event: string, listener: (...args: any[]) => void) {
+      const index = listeners.findIndex(
+        (entry) => entry.event === event && entry.listener === listener
+      );
+      if (index !== -1) {
+        listeners.splice(index, 1);
+      }
+      return provider;
+    },
+    addWidgets(newWidgets: Array<Widget | Widget[]>) {
+      addWidgets(newWidgets);
+      return provider;
+    },
+    removeWidgets(oldWidgets: Array<Widget | Widget[]>) {
+      removeWidgets(oldWidgets);
+      return provider;
+    },
+    use(...newMiddleware: Middleware[]) {
       useMiddleware(...newMiddleware);
       return provider;
     },
-    unuse(...oldMiddleware) {
+    unuse(...oldMiddleware: Middleware[]) {
       unuseMiddleware(...oldMiddleware);
       return provider;
     },
@@ -304,5 +380,5 @@ export function createAlgoliaProvider({
     },
   };
 
-  return provider;
+  return provider as unknown as AlgoliaProvider;
 }
