@@ -3,7 +3,7 @@
 # These files are build-time scripts that use Rollup's internal module resolution,
 # not web-facing code that processes untrusted user input.
 engines:
-  semgrep:
+  opengrep:
     exclude_paths:
       - '**/rollup.config.mjs'
       # Vendored `markdown-to-jsx` (see its README). The flagged `RegExp`
