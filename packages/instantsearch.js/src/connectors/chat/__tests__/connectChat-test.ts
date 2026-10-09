@@ -3496,6 +3496,26 @@ data: [DONE]`,
         );
       });
 
+      it('only sends the `chat` marker when the client has no agent', async () => {
+        const client = { appId: 'appId', apiKey: 'apiKey' };
+        const instantSearchInstance = createInstantSearch({ client } as any);
+
+        const renderFn = jest.fn();
+        const widget = connectChat(renderFn)({ agentId: 'agentId' });
+
+        widget.init(
+          createInitOptions({
+            helper: instantSearchInstance.helper!,
+            instantSearchInstance,
+          })
+        );
+
+        await widget.chatInstance.sendMessage({ text: 'hello' });
+
+        const { headers } = getRequestPayload();
+        expect(headers['x-algolia-agent']).toBe('chat');
+      });
+
       it('sends persistent query parameters on agent requests', async () => {
         const { widget } = getInitializedWidget({
           agentId: 'agentId',
@@ -3605,7 +3625,7 @@ data: [DONE]`,
         const { headers } = getRequestPayload();
         expect(headers['x-algolia-application-id']).toBe('appId');
         expect(headers['x-algolia-api-key']).toBe('apiKey');
-        expect(headers['x-algolia-agent']).toContain('; chat');
+        expect(headers['x-algolia-agent']).toMatch(/(^|; )chat$/);
         expect(headers['x-algolia-agent']).not.toBe('spoofed-agent');
         expect(headers['x-algolia-referer']).toBe('chat-widget');
       });

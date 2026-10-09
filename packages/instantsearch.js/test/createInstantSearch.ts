@@ -77,6 +77,11 @@ export const createInstantSearch = (
     emit: jest.fn(),
     listenerCount: jest.fn(),
     sendEventToInsights: jest.fn(),
+    _beforeStart: jest.fn(),
+    _afterInit: jest.fn(),
+    _afterStart: jest.fn(),
+    _disposeSearch: jest.fn(),
+    _beforeRender: jest.fn(),
     _createdAt: now(),
     future: {
       ...INSTANTSEARCH_FUTURE_DEFAULTS,

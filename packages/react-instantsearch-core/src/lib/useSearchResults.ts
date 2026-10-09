@@ -17,7 +17,10 @@ export function useSearchResults(): SearchResultsApi {
   const search = useInstantSearchContext();
   const searchIndex = useIndexContext();
   const [searchResults, setSearchResults] = useState<SearchResultsApi>(() => {
-    const indexSearchResults = getIndexSearchResults(searchIndex);
+    const indexSearchResults = getIndexSearchResults(
+      searchIndex,
+      search._createSearchResults
+    );
     // We do this not to leak `recommendResults` in the API.
     return {
       results: indexSearchResults.results,
@@ -43,7 +46,10 @@ export function useSearchResults(): SearchResultsApi {
         const childIndex = search.mainIndex.getWidgets().find(isIndexWidget);
         childIndex &&
           setSearchResults({
-            results: getIndexSearchResults(searchIndex).results,
+            results: getIndexSearchResults(
+              searchIndex,
+              search._createSearchResults
+            ).results,
             scopedResults: childIndex.getScopedResults(),
           });
       }

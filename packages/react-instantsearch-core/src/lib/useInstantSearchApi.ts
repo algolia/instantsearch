@@ -6,6 +6,7 @@ import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 import version from '../version';
 
+import { createSearchResults } from './createSearchResults';
 import { dequal } from './dequal';
 import { useForceUpdate } from './useForceUpdate';
 import { useInstantSearchServerContext } from './useInstantSearchServerContext';
@@ -13,6 +14,7 @@ import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';
 import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 
+import type { CreateSearchResults } from './getIndexSearchResults';
 import type {
   CompositionClient,
   InstantSearchOptions,
@@ -53,6 +55,13 @@ export type InternalInstantSearch<
    * @private
    */
   _preventWidgetCleanup?: boolean;
+  /**
+   * Creates the empty results used until the first search returns. Set here,
+   * and not imported where it is used, so the search helper only ships with
+   * `<InstantSearch>`.
+   * @private
+   */
+  _createSearchResults?: CreateSearchResults;
 };
 
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
@@ -99,6 +108,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       }, 0);
     } as typeof search._schedule;
     search._schedule.queue = [];
+    search._createSearchResults = createSearchResults;
 
     if (shouldRenderAtOnce) {
       // InstantSearch.js has a private Initial Results API that lets us inject

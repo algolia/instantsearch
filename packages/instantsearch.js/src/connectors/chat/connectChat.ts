@@ -710,7 +710,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             // marker, even when requestOptions.headers contains the same keys.
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,
-            'x-algolia-agent': `${getAlgoliaAgent(client)}; chat`,
+            // A client without an agent, like `{ appId, apiKey }`, only has the marker.
+            'x-algolia-agent': [getAlgoliaAgent(client), 'chat']
+              .filter(Boolean)
+              .join('; '),
           },
           prepareSendMessagesRequest: ({
             id,

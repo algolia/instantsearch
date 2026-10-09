@@ -7,6 +7,8 @@ import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
 import { Chat as InstantSearchChat } from '../lib/chat';
+import { instantsearchBase } from '../lib/InstantSearchBase';
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   hierarchicalMenu,
   breadcrumb,
@@ -43,6 +45,7 @@ import {
   filterSuggestions,
 } from '../widgets';
 
+import type { SearchClient } from '../types';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type { RecordWithObjectID } from 'instantsearch-ui-components';
 
@@ -731,6 +734,29 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createInstantSearchBaseWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { chat: chatWidgetParams, insights } = widgetParams;
+    const base = instantsearchBase({
+      searchClient: instantSearchOptions.searchClient as SearchClient,
+      indexName: instantSearchOptions.indexName,
+    });
+
+    if (insights) {
+      base.use(createInsightsMiddleware({}));
+    }
+
+    base
+      .addWidgets([
+        chatTrigger({
+          container: document.body.appendChild(document.createElement('div')),
+        }),
+        chat<RecordWithObjectID>({
+          container: document.body.appendChild(document.createElement('div')),
+          ...chatWidgetParams,
+        } as Parameters<typeof chat<RecordWithObjectID>>[0]),
+      ])
+      .start();
+  },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -864,6 +890,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createMenuSelectWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
+  createInstantSearchBaseWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
   createPromptSuggestionsWidgetTests: undefined,
