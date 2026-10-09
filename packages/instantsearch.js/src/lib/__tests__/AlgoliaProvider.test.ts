@@ -242,7 +242,10 @@ describe('algoliaProvider', () => {
       };
     }
 
-    test('adds, replaces and removes widgets like an index', () => {
+    // Renders are scheduled, like on an index.
+    const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    test('adds, replaces and removes widgets like an index', async () => {
       const calls: string[] = [];
       const first = createWidget('first', calls);
       const second = createWidget('second', calls);
@@ -253,10 +256,12 @@ describe('algoliaProvider', () => {
 
       provider.start();
       provider.mainIndex.addWidgets([first]);
+      await flush();
       expect(provider.mainIndex.getWidgets()).toEqual([first]);
       expect(calls).toEqual(['first:init', 'first:render']);
 
       provider.mainIndex.updateWidget(first, second);
+      await flush();
       expect(provider.mainIndex.getWidgets()).toEqual([second]);
       expect(calls).toEqual([
         'first:init',
@@ -277,6 +282,8 @@ describe('algoliaProvider', () => {
         indexName: 'indexName',
       }) as any;
 
+      provider.start();
+
       expect(provider.mainIndex.getIndexId()).toBe('algoliaProvider');
       expect(provider.mainIndex.getIndexName()).toBe('indexName');
       expect(provider.mainIndex.getHelper().state.index).toBe('indexName');
@@ -285,7 +292,7 @@ describe('algoliaProvider', () => {
       expect(provider.getUiState()).toEqual({ algoliaProvider: {} });
     });
 
-    test('notifies listeners after each render', () => {
+    test('notifies listeners after each render', async () => {
       const provider = algoliaProvider({
         searchClient: { appId: 'app', apiKey: 'key' },
       }) as any;
@@ -293,10 +300,12 @@ describe('algoliaProvider', () => {
 
       provider.addListener('render', onRender);
       provider.start();
+      await flush();
       expect(onRender).toHaveBeenCalledTimes(1);
 
       provider.removeListener('render', onRender);
       provider.addWidgets([createWidget('late', [])]);
+      await flush();
       expect(onRender).toHaveBeenCalledTimes(1);
     });
   });

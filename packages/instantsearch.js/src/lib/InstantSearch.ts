@@ -1,4 +1,3 @@
-import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
@@ -10,6 +9,7 @@ import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import index from '../widgets/index/index';
 
 import createHelpers from './createHelpers';
+import { InstantSearchBase } from './InstantSearchBase';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
@@ -17,7 +17,6 @@ import {
   hydrateRecommendCache,
   hydrateSearchClient,
   noop,
-  now,
   warning,
   setIndexHelperState,
   isIndexWidget,
@@ -37,8 +36,6 @@ import type {
   UiState,
   CreateURL,
   Middleware,
-  MiddlewareDefinition,
-  RenderState,
   InitialResults,
   CompositionClient,
 } from '../types';
@@ -212,23 +209,15 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
 class InstantSearch<
   TUiState extends UiState = UiState,
   TRouteState = TUiState,
-> extends EventEmitter {
-  public client: InstantSearchOptions['searchClient'];
-  public indexName: string;
+> extends InstantSearchBase<TUiState, InstantSearchOptions['searchClient']> {
   public compositionID?: string;
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
   public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   public helper: AlgoliaSearchHelper | null;
-  public mainHelper: AlgoliaSearchHelper | null;
-  public mainIndex: IndexWidget;
-  public started: boolean;
-  public templatesConfig: Record<string, unknown>;
-  public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
-  public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
   public _manuallyResetScheduleSearch: boolean = false;
   public _resetScheduleSearch?: () => void;
@@ -247,12 +236,7 @@ class InstantSearch<
    * assignability of `InstantSearch<SpecificUiState>` to `InstantSearch`.
    */
   public _initialOptions: InstantSearchOptions | null;
-  public middleware: Array<{
-    creator: Middleware<TUiState>;
-    instance: MiddlewareDefinition<TUiState>;
-  }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
-  public _createdAt: number = now();
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
    */
@@ -278,11 +262,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
   }
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
-    super();
-
-    // prevent `render` event listening from causing a warning
-    this.setMaxListeners(100);
-
     const {
       indexName = '',
       compositionID,
@@ -360,22 +339,23 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
+    super({
+      client: searchClient,
+      indexName,
+      mainIndex: index({
+        // we use an index widget to render compositions
+        // this only works because there's only one composition index allow for now
+        indexName: compositionID || indexName,
+      }),
+    });
+
     this._initialOptions = options as unknown as InstantSearchOptions;
-    this.client = searchClient;
     this.future = future;
     this.insightsClient = insightsClient;
-    this.indexName = indexName;
     this.compositionID = compositionID;
     this.helper = null;
-    this.mainHelper = null;
-    this.mainIndex = index({
-      // we use an index widget to render compositions
-      // this only works because there's only one composition index allow for now
-      indexName: this.compositionID || this.indexName,
-    });
     this.onStateChange = onStateChange;
 
-    this.started = false;
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
@@ -418,59 +398,6 @@ See documentation: ${createDocumentationLink({
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware({ $$internal: true }));
     }
-  }
-
-  /**
-   * Hooks a middleware into the InstantSearch lifecycle.
-   */
-  public use(...middleware: Array<Middleware<TUiState>>): this {
-    const newMiddlewareList = middleware.map((fn) => {
-      const newMiddleware = {
-        $$type: '__unknown__',
-        $$internal: false,
-        subscribe: noop,
-        started: noop,
-        unsubscribe: noop,
-        onStateChange: noop,
-        ...fn({
-          instantSearchInstance: this as unknown as InstantSearch<
-            UiState,
-            UiState
-          >,
-        }),
-      };
-      this.middleware.push({
-        creator: fn,
-        instance: newMiddleware,
-      });
-      return newMiddleware;
-    });
-
-    // If the instance has already started, we directly subscribe the
-    // middleware so they're notified of changes.
-    if (this.started) {
-      newMiddlewareList.forEach((m) => {
-        m.subscribe();
-        m.started();
-      });
-    }
-
-    return this;
-  }
-
-  /**
-   * Removes a middleware from the InstantSearch lifecycle.
-   */
-  public unuse(...middlewareToUnuse: Array<Middleware<TUiState>>): this {
-    this.middleware
-      .filter((m) => middlewareToUnuse.includes(m.creator))
-      .forEach((m) => m.instance.unsubscribe());
-
-    this.middleware = this.middleware.filter(
-      (m) => !middlewareToUnuse.includes(m.creator)
-    );
-
-    return this;
   }
 
   // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
@@ -526,9 +453,7 @@ See documentation: ${createDocumentationLink({
       );
     }
 
-    this.mainIndex.addWidgets(widgets);
-
-    return this;
+    return super.addWidgets(widgets);
   }
 
   /**
@@ -562,9 +487,7 @@ See documentation: ${createDocumentationLink({
       );
     }
 
-    this.mainIndex.removeWidgets(widgets);
-
-    return this;
+    return super.removeWidgets(widgets);
   }
 
   /**
@@ -578,6 +501,10 @@ See documentation: ${createDocumentationLink({
       );
     }
 
+    super.start();
+  }
+
+  public _beforeStart() {
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
@@ -685,20 +612,12 @@ See documentation: ${createDocumentationLink({
     });
 
     this.mainHelper = mainHelper;
+  }
 
-    this.middleware.forEach(({ instance }) => {
-      instance.subscribe();
-    });
-
-    this.mainIndex.init({
-      instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
-      parent: null,
-      uiState: this._initialUiState,
-    });
-
+  public _afterInit() {
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
-      hydrateRecommendCache(this.mainHelper, this._initialResults);
+      hydrateRecommendCache(this.mainHelper!, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
@@ -740,20 +659,14 @@ See documentation: ${createDocumentationLink({
     // Keep the previous reference for legacy purpose, some pattern use
     // the direct Helper access `search.helper` (e.g multi-index).
     this.helper = this.mainIndex.getHelper();
+  }
 
-    // track we started the search if we add more widgets,
-    // to init them directly after add
-    this.started = true;
-
-    this.middleware.forEach(({ instance }) => {
-      instance.started();
-    });
-
+  public _afterStart() {
     // This is the automatic Insights middleware,
     // added when `insights` is unset and the initial results possess `queryID`.
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
-      mainHelper.derivedHelpers[0].once('result', () => {
+      this.mainHelper!.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
           .some(({ results }) => results?._automaticInsights);
@@ -775,31 +688,21 @@ See documentation: ${createDocumentationLink({
    */
   public dispose(): void {
     this.scheduleSearch.cancel();
-    this.scheduleRender.cancel();
     clearTimeout(this._searchStalledTimer);
 
-    this.removeWidgets(this.mainIndex.getWidgets());
-    this.mainIndex.dispose();
-
-    // You can not start an instance two times, therefore a disposed instance
-    // needs to set started as false otherwise this can not be restarted at a
-    // later point.
-    this.started = false;
-
-    // The helper needs to be reset to perform the next search from a fresh state.
-    // If not reset, it would use the state stored before calling `dispose()`.
-    this.removeAllListeners();
-    this.mainHelper?.removeAllListeners();
-    this.mainHelper = null;
-    this.helper = null;
-
-    this.middleware.forEach(({ instance }) => {
-      instance.unsubscribe();
-    });
+    super.dispose();
 
     // Cleared after unsubscribe so in-flight readers (e.g. the insights
     // start-event listener) have detached before the reference goes away.
     this._initialOptions = null;
+  }
+
+  public _disposeSearch() {
+    // The helper needs to be reset to perform the next search from a fresh state.
+    // If not reset, it would use the state stored before calling `dispose()`.
+    this.mainHelper?.removeAllListeners();
+    this.mainHelper = null;
+    this.helper = null;
   }
 
   public scheduleSearch = defer(() => {
@@ -808,35 +711,17 @@ See documentation: ${createDocumentationLink({
     }
   });
 
-  public scheduleRender = defer(
-    (shouldResetStatus: boolean = true) => {
-      if (!this.mainHelper?.hasPendingRequests()) {
-        clearTimeout(this._searchStalledTimer);
-        this._searchStalledTimer = null;
+  public _beforeRender(shouldResetStatus: boolean) {
+    if (!this.mainHelper?.hasPendingRequests()) {
+      clearTimeout(this._searchStalledTimer);
+      this._searchStalledTimer = null;
 
-        if (shouldResetStatus) {
-          this.status = 'idle';
-          this.error = undefined;
-        }
+      if (shouldResetStatus) {
+        this.status = 'idle';
+        this.error = undefined;
       }
-
-      this.mainIndex.render({
-        instantSearchInstance: this as unknown as InstantSearch<
-          UiState,
-          UiState
-        >,
-      });
-
-      this.emit('render');
-    },
-    // Renders scheduled in the same microtask collapse into one run, so the
-    // status reset accumulates instead of letting the first caller decide: a
-    // render scheduled for a reason unrelated to the search must not cancel the
-    // one a search result asks for, or it would strand the status on `loading`.
-    ([shouldResetStatus = true], [nextShouldResetStatus = true]): [boolean] => [
-      shouldResetStatus || nextShouldResetStatus,
-    ]
-  );
+    }
+  }
 
   public scheduleStalledRender() {
     if (!this._searchStalledTimer) {
