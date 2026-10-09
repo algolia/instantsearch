@@ -15,7 +15,6 @@ function renderMarkdown(
     <span>
       {compiler(markdown, {
         createElement: createElement as any,
-        disableParsingRawHTML: true,
         ...options,
       })}
     </span>,
@@ -38,8 +37,14 @@ describe('vendored markdown-to-jsx', () => {
     );
   });
 
-  test('does not parse raw HTML when `disableParsingRawHTML` is set', () => {
+  test('does not parse raw HTML', () => {
     expect(renderMarkdown('<b>hi</b>')).not.toContain('<b>');
+  });
+
+  test('renders alert blockquotes', () => {
+    expect(renderMarkdown('> [!NOTE]\n> hi')).toContain(
+      '<blockquote class="markdown-alert-note">'
+    );
   });
 
   test('exposes the rule types', () => {

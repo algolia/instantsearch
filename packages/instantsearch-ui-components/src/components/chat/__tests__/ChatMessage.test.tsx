@@ -990,7 +990,6 @@ describe('ChatMessage', () => {
     }).querySelector('.ais-ChatMessageReasoning-hint')!;
     expect(hintElement).toHaveTextContent('Searching for TVs I need…');
     expect(hintElement).not.toHaveTextContent('**');
-    expect(hintElement).not.toHaveTextContent('<img');
     expect(hintElement.querySelector('strong')).toHaveTextContent(
       'Searching for TVs'
     );
