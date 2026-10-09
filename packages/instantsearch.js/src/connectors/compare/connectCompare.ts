@@ -45,9 +45,12 @@ export type CompareConnectorParams = {
    * (Components > Comparison). When set, the chat hand-off sends the
    * `__ALGOLIA_COMPARISON_<id>__` placeholder instead of a prose
    * message: the backend replaces it with the configuration's instructions
-   * for the agent and a natural-language message for the transcript. Leave
-   * unset to send the default prose message, which works with the default
-   * shopping assistant prompt — no agent configuration required.
+   * for the agent and decides what the transcript shows for it. Dashboard
+   * configurations show nothing, so the shopper goes straight to the
+   * comparison; a configuration with a display text shows that text as the
+   * user message instead. Leave unset to send the default prose
+   * message, which works with the default shopping assistant prompt — no
+   * agent configuration required.
    */
   configurationId?: string;
   /**
@@ -128,8 +131,9 @@ export type CompareConnector = Connector<
 /**
  * Builds the placeholder message for a dashboard-configured comparison. The
  * Agent Studio backend resolves it against the agent's comparison
- * configuration: the LLM gets the configured instructions and the transcript
- * keeps a natural-language message naming the selection.
+ * configuration: the LLM gets the configured instructions, and the transcript
+ * shows whatever the configuration displays for it — by default nothing, so
+ * the chat renders no user bubble for the hand-off.
  */
 export function getComparisonPlaceholderMessage(
   configurationId: string

@@ -21456,7 +21456,6 @@ __metadata:
   resolution: "instantsearch-ui-components@workspace:packages/instantsearch-ui-components"
   dependencies:
     "@swc/helpers": "npm:0.5.18"
-    markdown-to-jsx: "npm:^7.7.15"
   languageName: unknown
   linkType: soft
 
@@ -25412,18 +25411,6 @@ __metadata:
   version: 3.0.3
   resolution: "markdown-table@npm:3.0.3"
   checksum: 10c0/47433a3f31e4637a184e38e873ab1d2fadfb0106a683d466fec329e99a2d8dfa09f091fa42202c6f13ec94aef0199f449a684b28042c636f2edbc1b7e1811dcd
-  languageName: node
-  linkType: hard
-
-"markdown-to-jsx@npm:^7.7.15":
-  version: 7.7.15
-  resolution: "markdown-to-jsx@npm:7.7.15"
-  peerDependencies:
-    react: ">= 0.14.0"
-  peerDependenciesMeta:
-    react:
-      optional: true
-  checksum: 10c0/f2e5222a46dfa27088113572f0206da89b373509a36145104f45142eb46eeb07ae31bb0d076a35ed2352a8b656527b1591522d2331fb65f007149085a796610a
   languageName: node
   linkType: hard
 

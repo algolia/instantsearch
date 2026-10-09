@@ -6,7 +6,8 @@ import { ChatLayoutSwitcher } from '../components/ChatLayoutSwitcher';
 import { WidgetAiAutocomplete } from '../components/widgets/WidgetAiAutocomplete';
 import { WidgetChat, type ChatLayout } from '../components/widgets/WidgetChat';
 import { WidgetChatTrigger } from '../components/widgets/WidgetChatTrigger';
-import { WidgetHits } from '../components/widgets/WidgetHits';
+import { WidgetCompareBar } from '../components/widgets/WidgetCompareBar';
+import { WidgetHitsWithCompare } from '../components/widgets/WidgetHits';
 import {
   WidgetPromptSuggestionsCustom,
   WidgetPromptSuggestionsPdp,
@@ -121,8 +122,22 @@ export function AgenticView() {
             widgets={[{ title: 'resultCard', body: WidgetResultCard }]}
           />
 
-          {/* Row 5: Hits */}
-          <WidgetSwitcher widgets={[{ title: 'hits', body: WidgetHits }]} />
+          {/* Row 5: CompareBar (the chat above is its hand-off target; the
+              hits below carry the per-hit toggles that fill its selection) */}
+          <WidgetSwitcher
+            widgets={[{ title: 'compareBar', body: WidgetCompareBar }]}
+          />
+
+          {/* Row 6: Hits, with Compare toggles */}
+          <WidgetSwitcher
+            widgets={[
+              {
+                title: 'hits (+ compare)',
+                body: WidgetHitsWithCompare,
+                docs: ['hits', 'compareBar'],
+              },
+            ]}
+          />
         </div>
       </ChatLayoutContext.Provider>
     </SearchContext.Provider>

@@ -8,7 +8,6 @@
 // Classes
 export { AbstractChat } from './abstract-chat';
 export { DefaultChatTransport, HttpChatTransport } from './transport';
-export { GuardrailViolationError } from './utils';
 
 // Utilities
 export {

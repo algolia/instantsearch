@@ -166,6 +166,92 @@ export function createWrapWarningsWithDevCheckPlugin() {
 }
 
 /**
+ * Creates a plugin that marks top-level calls to the given functions as pure
+ * (with a `__PURE__` annotation comment) in the build output.
+ *
+ * A call like `export const EXPERIMENTAL_x = deprecate(fn, message)` cannot be
+ * proven side-effect free by a bundler, so it keeps `fn` (and everything `fn`
+ * imports) even when nothing uses the export. Annotating the call lets a
+ * consumer's bundler tree-shake it.
+ * @param {Object} [options]
+ * @param {string[]} [options.callees] - Names of the functions whose calls are pure
+ * @returns Rollup plugin
+ */
+export function createAnnotatePureCallsPlugin({
+  callees = ['deprecate'],
+} = {}) {
+  const calleeNames = new Set(callees);
+  const mayContainCall = new RegExp(`\\b(?:${callees.join('|')})\\s*\\(`);
+  const PURE_ANNOTATION = '/* @__PURE__ */ ';
+
+  function getCall(node) {
+    return node &&
+      node.type === 'CallExpression' &&
+      node.callee.type === 'Identifier' &&
+      calleeNames.has(node.callee.name)
+      ? node
+      : null;
+  }
+
+  return {
+    name: 'annotate-pure-calls',
+    transform(code, id) {
+      if (!id || id.includes('node_modules') || !mayContainCall.test(code)) {
+        return null;
+      }
+
+      let ast;
+      try {
+        ast = this.parse(code);
+      } catch {
+        return null;
+      }
+
+      const magicString = new MagicString(code);
+      let hasChanges = false;
+
+      function annotate(call) {
+        if (
+          !call ||
+          /@__PURE__|#__PURE__/.test(
+            code.slice(Math.max(0, call.start - 20), call.start)
+          )
+        ) {
+          return;
+        }
+        magicString.appendLeft(call.start, PURE_ANNOTATION);
+        hasChanges = true;
+      }
+
+      // Only module-level declarations: those are what `sideEffects: false`
+      // plus a pure call lets a bundler drop.
+      ast.body.forEach((statement) => {
+        const declaration =
+          statement.type === 'ExportNamedDeclaration' ||
+          statement.type === 'ExportDefaultDeclaration'
+            ? statement.declaration
+            : statement;
+
+        if (declaration && declaration.type === 'VariableDeclaration') {
+          declaration.declarations.forEach((declarator) =>
+            annotate(getCall(declarator.init))
+          );
+        } else if (statement.type === 'ExportDefaultDeclaration') {
+          annotate(getCall(declaration));
+        }
+      });
+
+      return hasChanges
+        ? {
+            code: magicString.toString(),
+            map: magicString.generateMap({ hires: true }),
+          }
+        : null;
+    },
+  };
+}
+
+/**
  * Creates the commonjs plugin with common settings.
  * @param {Object} [options] - Additional options to merge
  * @returns Configured commonjs plugin
