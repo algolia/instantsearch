@@ -563,7 +563,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 };
 
 /**
- * Adds the Insights middleware the way a React app does with the provider.
+ * Adds the Insights middleware the way a React app does with `<InstantSearchBase>`.
  */
 function InsightsMiddleware() {
   const { addMiddlewares } = useInstantSearch();

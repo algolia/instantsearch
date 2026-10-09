@@ -8,13 +8,13 @@ import type { JSChatWidgetParams, ReactChatWidgetParams } from '../chat';
 
 type InstantSearchBaseParams<TChatParams> = {
   /**
-   * The params of the `chat` widget mounted in the provider, next to a
+   * The params of the `chat` widget mounted in the instance, next to a
    * `chatTrigger`.
    */
   chat: TChatParams;
   /**
    * Whether to add the Insights middleware the way the flavor documents it:
-   * `provider.use(createInsightsMiddleware())` in JavaScript, and
+   * `base.use(createInsightsMiddleware())` in JavaScript, and
    * `addMiddlewares` from `useInstantSearch` in React.
    */
   insights?: boolean;
@@ -33,7 +33,7 @@ declare module '../../common' {
 }
 
 /**
- * The provider takes its credentials from `instantSearchOptions.searchClient`
+ * The instance takes its credentials from `instantSearchOptions.searchClient`
  * and its index name from `instantSearchOptions.indexName`, like the
  * `InstantSearch` it replaces, but never searches with the client.
  */

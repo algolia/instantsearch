@@ -6,8 +6,8 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
-import { instantsearchBase } from '../lib/InstantSearchBase';
 import { Chat as InstantSearchChat } from '../lib/chat';
+import { instantsearchBase } from '../lib/InstantSearchBase';
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   hierarchicalMenu,
@@ -736,16 +736,16 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   },
   createInstantSearchBaseWidgetTests({ instantSearchOptions, widgetParams }) {
     const { chat: chatWidgetParams, insights } = widgetParams;
-    const provider = instantsearchBase({
+    const base = instantsearchBase({
       searchClient: instantSearchOptions.searchClient as SearchClient,
       indexName: instantSearchOptions.indexName,
     });
 
     if (insights) {
-      provider.use(createInsightsMiddleware({}));
+      base.use(createInsightsMiddleware({}));
     }
 
-    provider
+    base
       .addWidgets([
         chatTrigger({
           container: document.body.appendChild(document.createElement('div')),

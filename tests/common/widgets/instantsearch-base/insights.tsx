@@ -75,7 +75,7 @@ export function createInsightsTests(
       };
     }
 
-    test('sends a click event with the index and credentials of the provider', async () => {
+    test('sends a click event with the index and credentials of the instance', async () => {
       const searchClient = createSearchClient();
 
       await setup({

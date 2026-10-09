@@ -23,7 +23,7 @@ function createHelper(index: string): any {
  * initializes and renders them the way the `index` widget does, minus the
  * helper, the search state and the nested indices.
  *
- * It has the shape of the `index` widget the instance, the widgets and the
+ * It has the shape of the `index` widget that the instance, the widgets and the
  * React hooks talk to, so it is given to `InstantSearchBase` as `mainIndex`.
  */
 export function createWidgetContainer({

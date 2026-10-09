@@ -125,14 +125,14 @@ describe('InstantSearchBase', () => {
     expect(calls).toEqual(['subscribe', 'started', 'unsubscribe']);
   });
 
-  test('disposes of the provider once unmounted, but not in Strict Mode', async () => {
+  test('disposes of the instance once unmounted, but not in Strict Mode', async () => {
     const { calls, middleware } = createRecordingMiddleware();
 
     function AddMiddleware() {
       const { addMiddlewares } = useInstantSearch();
       useEffect(() => {
         addMiddlewares(middleware);
-        // Not cleaned up on purpose: the provider is what disposes of it.
+        // Not cleaned up on purpose: the component is what disposes of it.
       }, [addMiddlewares]);
       return null;
     }
@@ -149,7 +149,7 @@ describe('InstantSearchBase', () => {
       await wait(0);
     });
 
-    // Strict Mode mounts twice, but the provider is only started once.
+    // Strict Mode mounts twice, but the instance is only started once.
     expect(calls.filter((call) => call === 'unsubscribe')).toHaveLength(0);
 
     unmount();

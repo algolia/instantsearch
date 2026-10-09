@@ -40,8 +40,9 @@ export type InstantSearchBaseConfig<TClient = any> = {
  * smallest thing that can host widgets that don't search (`chat`,
  * `chatTrigger`), and every module (Insights, routing, …) is added by the user.
  *
- * The hooks (`_afterInit`, `_afterStart`, `_disposeSearch`, `_render`) are the
- * places an implementation plugs its own behavior into the lifecycle.
+ * The hooks (`_beforeStart`, `_afterInit`, `_afterStart`, `_disposeSearch`,
+ * `_beforeRender`) are the places an implementation plugs its own behavior into
+ * the lifecycle.
  */
 export class InstantSearchBase<
   TUiState extends UiState = UiState,
@@ -140,16 +141,25 @@ export class InstantSearchBase<
     return this;
   }
 
+  /**
+   * The UI state of the widgets. Without a search side, there is none.
+   */
   public getUiState(): TUiState {
     return { [this.mainIndex.getIndexId()]: {} } as unknown as TUiState;
   }
 
+  /**
+   * Sets the UI state. Without a search side, this does nothing.
+   */
   public setUiState(
     _uiState: TUiState | ((previousUiState: TUiState) => TUiState),
     _callOnStateChange?: boolean,
     _onApply?: (notifiedUiState: TUiState) => void
   ): void {}
 
+  /**
+   * Refreshes the search. Without a search side, this does nothing.
+   */
   public refresh() {}
 
   /**
