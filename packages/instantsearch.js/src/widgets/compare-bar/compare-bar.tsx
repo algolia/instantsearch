@@ -3,9 +3,8 @@
 import { createCompareBarComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectCompare from '../../connectors/compare/connectCompare';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -99,19 +98,12 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
       removeItem,
       clearItems,
       compare,
-      instantSearchInstance,
     } = renderState;
-
-    const templateProps = prepareTemplateProps({
-      defaultTemplates: {} as unknown as CompareBarTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
 
     const itemComponent = templates.item
       ? ({ item }: { item: CompareBarItem }) => (
           <TemplateComponent
-            {...templateProps}
+            templates={templates}
             templateKey="item"
             rootTagName="fragment"
             data={{ item }}

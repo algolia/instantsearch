@@ -9,7 +9,7 @@ import {
 import { Fragment, h } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import { carousel } from '../../templates';
 
 import type {

@@ -8,7 +8,7 @@ import {
 import { Fragment, h, render } from 'preact';
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectChat from '../../connectors/chat/connectChat';
 import {
   SearchIndexToolType,
@@ -26,7 +26,6 @@ import {
   holdContainerInertUntilReveal,
   restoreContainerInertUntilReveal,
 } from '../../lib/chat/focusAfterReveal';
-import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
   getContainerNode,
@@ -37,13 +36,12 @@ import { createCompareProductsTool } from './compare-products-tool';
 import { createGroupedResultsTool } from './grouped-results-tool';
 import { createCarouselTool } from './search-index-tool';
 
-import type { TemplateProps } from '../../components/Template/Template';
+import type { FunctionTemplateProps } from '../../components/Template/FunctionTemplate';
 import type {
   ChatRenderState,
   ChatConnectorParams,
   ChatWidgetDescription,
 } from '../../connectors/chat/connectChat';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
   Renderer,
@@ -53,6 +51,7 @@ import type {
   Template,
   IndexUiState,
   IndexWidget,
+  Templates,
 } from '../../types';
 import type {
   ChatClassNames,
@@ -406,7 +405,6 @@ function ChatWrapper({
 }
 
 const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
-  renderState,
   cssClasses,
   containerNode,
   templates,
@@ -420,9 +418,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
-  renderState: {
-    templateProps?: PreparedTemplateProps<ChatTemplates<THit>>;
-  };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
   showReasoning: boolean;
@@ -439,11 +434,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   // Template wrappers are rendered as component types downstream. Recreating
   // them each render would make Preact remount the chat subtree (and drop
   // textarea focus) on every keystroke. Create them once and read the latest
-  // `PreparedTemplateProps` from mutable refs updated per render.
-  type TemplateRef = {
-    current: PreparedTemplateProps<ChatTemplates<THit>> | undefined;
-  };
-  const makeTemplateRef = (): TemplateRef => ({ current: undefined });
+  // templates from mutable refs updated per render.
+  type TemplateRef = { current: Templates };
+  const makeTemplateRef = (): TemplateRef => ({ current: {} });
   const headerTemplateRef = makeTemplateRef();
   const messagesTemplateRef = makeTemplateRef();
   const loaderTemplateRef = makeTemplateRef();
@@ -469,11 +462,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   function createStableTemplateComponent<TProps>(
     templateRef: TemplateRef,
     templateKey: string,
-    rootTagName: TemplateProps['rootTagName']
+    rootTagName: FunctionTemplateProps['rootTagName']
   ): (props?: TProps) => JSX.Element {
     return (props?: TProps) => (
       <TemplateComponent
-        {...(templateRef.current as PreparedTemplateProps<ChatTemplates<THit>>)}
+        templates={templateRef.current}
         templateKey={templateKey}
         rootTagName={rootTagName}
         data={props as unknown as Record<string, unknown>}
@@ -608,7 +601,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }>
       ) => (
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates}
           templateKey="actions"
           rootTagName="div"
           data={actionsProps}
@@ -628,7 +621,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         onSuggestionClick: (suggestion: string) => void;
       }) => (
         <TemplateComponent
-          {...renderState.templateProps}
+          templates={templates}
           templateKey="suggestions"
           rootTagName="fragment"
           data={suggestionsProps}
@@ -645,9 +638,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         } = layoutProps;
         return (
           <TemplateComponent
-            {...(layoutTemplateRef.current as PreparedTemplateProps<
-              ChatTemplates<THit>
-            >)}
+            templates={layoutTemplateRef.current}
             templateKey="layout"
             rootTagName="fragment"
             data={{
@@ -668,7 +659,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     const {
       indexUiState,
       input,
-      instantSearchInstance,
       messages,
       open,
       sendMessage,
@@ -693,11 +683,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }
 
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: {} as unknown as ChatTemplates<THit>,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
       return;
     }
 
@@ -742,13 +727,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       };
     });
 
-    headerTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['header']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.header,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    headerTemplateRef.current = templates.header ?? {};
     const headerTranslations: Partial<ChatHeaderTranslations> =
       getDefinedProperties({
         title: templates.header?.titleText,
@@ -758,27 +737,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         clearLabel: templates.header?.clearLabelText,
       });
 
-    messagesTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['messages']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.messages,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    loaderTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<Pick<ChatTemplates<THit>, 'loader'>>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: { loader: templates.loader },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    emptyTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<Pick<ChatTemplates<THit>, 'empty'>>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: { empty: templates.empty },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    messagesTemplateRef.current = templates.messages ?? {};
+    loaderTemplateRef.current = { loader: templates.loader };
+    emptyTemplateRef.current = { empty: templates.empty };
     const messagesTranslations: Partial<ChatMessagesTranslations> =
       getDefinedProperties({
         scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
@@ -787,13 +748,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
 
-    assistantMessageTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['assistantMessage']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.assistantMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    assistantMessageTemplateRef.current = templates.assistantMessage ?? {};
 
     const messageTranslations = getDefinedProperties({
       actionsLabel: templates.message?.actionsLabelText,
@@ -802,21 +757,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       toolErrorRetryText: templates.message?.toolErrorRetryText,
     });
 
-    userMessageTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['userMessage']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.userMessage,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    userMessageTemplateRef.current = templates.userMessage ?? {};
 
-    promptTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['prompt']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.prompt,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    promptTemplateRef.current = templates.prompt ?? {};
     const promptTranslations: Partial<ChatPromptTranslations> =
       getDefinedProperties({
         textareaLabel: templates.prompt?.textareaLabelText,
@@ -827,13 +770,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
-    layoutTemplateRef.current = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<Pick<ChatTemplates<THit>, 'layout'>>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: { layout: templates.layout },
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    layoutTemplateRef.current = { layout: templates.layout };
 
     state.subscribe(rerender);
 
@@ -1334,7 +1271,6 @@ export default (function chat<
   const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
-    renderState: {},
     templates,
     tools,
     showReasoning,
