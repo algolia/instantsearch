@@ -4,6 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
 
+import { renderTemplate } from '../../lib/templating';
 import Template from '../Template/Template';
 
 import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
@@ -35,22 +36,6 @@ function Panel<TWidget extends UnknownWidgetFactory>(
   const [isControlled, setIsControlled] = useState<boolean>(false);
   const bodyRef = useRef<HTMLDivElement>(null);
 
-  const defaultTemplates: PanelComponentTemplates<TWidget> = {
-    collapseButtonText: ({ collapsed: isCollapsed }) =>
-      `<svg
-          aria-hidden="true"
-          focusable="false"
-          class="${props.cssClasses.collapseIcon}"
-          style="width: 1em; height: 1em;"
-          viewBox="0 0 500 500"
-        >
-        <path d="${
-          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
-        }" fill="currentColor" />
-        </svg>`,
-  };
-  const templates = { ...defaultTemplates, ...props.templates };
-
   useEffect(() => {
     const node = bodyRef.current;
     if (!node) {
@@ -81,7 +66,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
       {props.templates.header && (
         <div className={props.cssClasses.header}>
           <Template
-            templates={templates}
+            templates={props.templates}
             templateKey="header"
             rootTagName="span"
             data={props.data}
@@ -92,11 +77,13 @@ function Panel<TWidget extends UnknownWidgetFactory>(
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
               aria-label={
-                props.templates.collapseButtonText !== undefined
+                props.templates.collapseButtonLabel === undefined
                   ? undefined
-                  : isCollapsed
-                    ? 'Expand panel'
-                    : 'Collapse panel'
+                  : renderTemplate({
+                      templates: props.templates,
+                      templateKey: 'collapseButtonLabel',
+                      data: { collapsed: isCollapsed },
+                    })
               }
               onClick={(event) => {
                 event.preventDefault();
@@ -106,7 +93,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
               }}
             >
               <Template
-                templates={templates}
+                templates={props.templates}
                 templateKey="collapseButtonText"
                 rootTagName="span"
                 data={{ collapsed: isCollapsed }}
@@ -120,7 +107,7 @@ function Panel<TWidget extends UnknownWidgetFactory>(
 
       {props.templates.footer && (
         <Template
-          templates={templates}
+          templates={props.templates}
           templateKey="footer"
           rootProps={{
             className: props.cssClasses.footer,

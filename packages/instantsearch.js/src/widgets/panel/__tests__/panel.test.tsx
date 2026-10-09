@@ -65,20 +65,102 @@ describe('panel', () => {
         panel({
           collapsed: () => true,
           templates: {
-            header: 'Résultats',
+            header: () => 'Résultats',
             collapseButtonText: ({ collapsed }, { html }) =>
               html`<span>${collapsed ? 'Développer' : 'Réduire'}</span>`,
           },
         })(stats)({ container }),
       ]);
-      search.start();
-      await wait(0);
+      await expect(async () => {
+        search.start();
+        await wait(0);
+      }).not.toWarnDev();
       const button = within(container).getByRole('button', {
         name: 'Développer',
       });
+      expect(button).not.toHaveAttribute('aria-label');
       userEvent.click(button);
       await wait(0);
       expect(button).toHaveAccessibleName('Réduire');
+      search.dispose();
+    });
+
+    test.each([
+      {
+        type: 'function',
+        collapseButtonLabel: ({ collapsed }: { collapsed: boolean }) =>
+          collapsed ? 'Développer' : 'Réduire',
+      },
+      {
+        type: 'string',
+        collapseButtonLabel:
+          '{{#collapsed}}Développer{{/collapsed}}{{^collapsed}}Réduire{{/collapsed}}',
+      },
+    ])(
+      'renders a $type collapse button label template',
+      async ({ collapseButtonLabel }) => {
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient: createMockedSearchClient(),
+        });
+        search.addWidgets([
+          panel({
+            collapsed: () => true,
+            templates: {
+              header: () => 'Résultats',
+              collapseButtonLabel,
+            },
+          })(stats)({ container }),
+        ]);
+        search.start();
+        await wait(0);
+
+        const button = within(container).getByRole('button', {
+          name: 'Développer',
+        });
+        expect(button).toHaveAttribute('aria-expanded', 'false');
+        expect(button.querySelector('svg')).toHaveAttribute(
+          'aria-hidden',
+          'true'
+        );
+        userEvent.click(button);
+        await wait(0);
+        expect(button).toHaveAccessibleName('Réduire');
+        expect(button).toHaveAttribute('aria-expanded', 'true');
+        search.dispose();
+      }
+    );
+
+    test('uses an explicit label with custom collapse button content', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+      search.addWidgets([
+        panel({
+          collapsed: () => true,
+          templates: {
+            header: () => 'Résultats',
+            collapseButtonText: ({ collapsed }) => (collapsed ? '+' : '−'),
+            collapseButtonLabel: 'Basculer le panneau "A & B"',
+          },
+        })(stats)({ container }),
+      ]);
+      search.start();
+      await wait(0);
+
+      const button = within(container).getByRole('button', {
+        name: 'Basculer le panneau "A & B"',
+      });
+      expect(button).toHaveTextContent('+');
+      userEvent.click(button);
+      await wait(0);
+      expect(button).toHaveAccessibleName('Basculer le panneau "A & B"');
+      expect(button).toHaveTextContent('−');
       search.dispose();
     });
 

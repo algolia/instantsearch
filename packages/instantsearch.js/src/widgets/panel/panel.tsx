@@ -94,6 +94,12 @@ export type PanelTemplates<TWidget extends AnyWidgetFactory> = Partial<{
    * Template to use for collapse button.
    */
   collapseButtonText: Template<{ collapsed: boolean }>;
+
+  /**
+   * Text template for the collapse button's accessible name.
+   * Defaults to "Expand panel" or "Collapse panel" unless `collapseButtonText` is set.
+   */
+  collapseButtonLabel: string | ((data: { collapsed: boolean }) => string);
 }>;
 
 type GetWidgetRenderState<TWidgetFactory extends AnyWidgetFactory> =
@@ -261,11 +267,34 @@ const panel: PanelWidget = (panelWidgetParams) => {
 
     const containerNode = getContainerNode(widgetParams.container);
 
+    const defaultTemplates: PanelTemplates<typeof widgetFactory> = {
+      collapseButtonText: ({ collapsed: isCollapsed }) =>
+        `<svg
+          aria-hidden="true"
+          focusable="false"
+          class="${cssClasses.collapseIcon}"
+          style="width: 1em; height: 1em;"
+          viewBox="0 0 500 500"
+        >
+        <path d="${
+          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
+        }" fill="currentColor" />
+        </svg>`,
+    };
+
+    if (templates.collapseButtonText === undefined) {
+      defaultTemplates.collapseButtonLabel = ({ collapsed: isCollapsed }) =>
+        isCollapsed ? 'Expand panel' : 'Collapse panel';
+    }
+
     const renderPanel = renderer<typeof widgetFactory>({
       containerNode,
       bodyContainerNode,
       cssClasses,
-      templates,
+      templates: {
+        ...defaultTemplates,
+        ...templates,
+      },
     });
 
     const widget = widgetFactory({
