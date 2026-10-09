@@ -13,7 +13,7 @@ export type FunctionTemplateProps = BaseTemplateProps;
 
 /**
  * Renders function templates only.
- * using it. String templates aren't compiled: they render as plain text.
+ * String templates aren't compiled: they render as plain text.
  */
 class FunctionTemplate extends BaseTemplate {
   protected renderContent() {
