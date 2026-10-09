@@ -6,7 +6,7 @@ import { createInsightsTests } from './insights';
 import type { TestOptions, TestSetup } from '../../common';
 import type { JSChatWidgetParams, ReactChatWidgetParams } from '../chat';
 
-type AlgoliaProviderParams<TChatParams> = {
+type InstantSearchBaseParams<TChatParams> = {
   /**
    * The params of the `chat` widget mounted in the provider, next to a
    * `chatTrigger`.
@@ -20,15 +20,15 @@ type AlgoliaProviderParams<TChatParams> = {
   insights?: boolean;
 };
 
-type AlgoliaProviderWidgetParams = {
-  javascript: AlgoliaProviderParams<JSChatWidgetParams>;
-  react: AlgoliaProviderParams<ReactChatWidgetParams>;
+type InstantSearchBaseWidgetParams = {
+  javascript: InstantSearchBaseParams<JSChatWidgetParams>;
+  react: InstantSearchBaseParams<ReactChatWidgetParams>;
   vue: Record<string, never>;
 };
 
 declare module '../../common' {
   interface FlavoredWidgetParams {
-    createAlgoliaProviderWidgetTests: AlgoliaProviderWidgetParams;
+    createInstantSearchBaseWidgetTests: InstantSearchBaseWidgetParams;
   }
 }
 
@@ -37,12 +37,12 @@ declare module '../../common' {
  * and its index name from `instantSearchOptions.indexName`, like the
  * `InstantSearch` it replaces, but never searches with the client.
  */
-export type AlgoliaProviderWidgetSetup = TestSetup<{
-  widgetParams: AlgoliaProviderWidgetParams;
+export type InstantSearchBaseWidgetSetup = TestSetup<{
+  widgetParams: InstantSearchBaseWidgetParams;
 }>;
 
-export function createAlgoliaProviderWidgetTests(
-  setup: AlgoliaProviderWidgetSetup,
+export function createInstantSearchBaseWidgetTests(
+  setup: InstantSearchBaseWidgetSetup,
   { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
@@ -50,9 +50,13 @@ export function createAlgoliaProviderWidgetTests(
     sessionStorage.clear();
   });
 
-  skippableDescribe('AlgoliaProvider widget common tests', skippedTests, () => {
-    createChatTests(setup, { act, skippedTests, flavor });
-    createInsightsTests(setup, { act, skippedTests, flavor });
-  });
+  skippableDescribe(
+    'InstantSearchBase widget common tests',
+    skippedTests,
+    () => {
+      createChatTests(setup, { act, skippedTests, flavor });
+      createInsightsTests(setup, { act, skippedTests, flavor });
+    }
+  );
 }
-createAlgoliaProviderWidgetTests.flavored = true;
+createInstantSearchBaseWidgetTests.flavored = true;

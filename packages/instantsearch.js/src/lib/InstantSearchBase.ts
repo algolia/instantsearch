@@ -1,11 +1,13 @@
 import EventEmitter from '@algolia/events';
 
+import { createWidgetContainer } from './createWidgetContainer';
 import { defer, noop, now } from './utils';
 
 import type {
   IndexWidget,
   Middleware,
   MiddlewareDefinition,
+  SearchClient,
   RenderState,
   UiState,
   Widget,
@@ -14,7 +16,7 @@ import type InstantSearch from './InstantSearch';
 import type { InstantSearchStatus } from './InstantSearch';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
-export type InstantSearchBaseOptions<TClient = any> = {
+export type InstantSearchBaseConfig<TClient = any> = {
   /**
    * What the credentials are read from: a search client, or any object with
    * `appId` and `apiKey`.
@@ -74,7 +76,7 @@ export class InstantSearchBase<
     client,
     indexName,
     mainIndex,
-  }: InstantSearchBaseOptions<TClient>) {
+  }: InstantSearchBaseConfig<TClient>) {
     super();
 
     // prevent `render` event listening from causing a warning
@@ -256,4 +258,45 @@ export class InstantSearchBase<
   public _disposeSearch?(): void;
 
   public _beforeRender?(shouldResetStatus: boolean): void;
+}
+
+export type InstantSearchBaseOptions = {
+  /**
+   * What the credentials are read from, like the search client of
+   * `instantsearch()`: a search client, or any object it reads credentials
+   * from, such as `{ appId, apiKey }`. It is never used to search.
+   */
+  searchClient: SearchClient | { appId: string; apiKey: string };
+  /**
+   * The main index of this implementation. Not used to search.
+   */
+  indexName?: string;
+};
+
+const BASE_INDEX_ID = 'instantSearchBase';
+
+/**
+ * A minimal stand-in for `instantsearch()` that hosts widgets which don't
+ * search (`chat`, `chatTrigger`), without pulling in the search helper, the
+ * routing and the index tree.
+ *
+ * It is `InstantSearchBase` with a container for the widgets, which is all an
+ * instance needs when nothing searches. Modules are added with `use()`: for
+ * example Insights, with `createInsightsMiddleware()`.
+ *
+ * Widgets that depend on search state (`searchBox`, `hits`, recommend) are not
+ * supported: they need the helper.
+ */
+export function instantsearchBase({
+  searchClient,
+  indexName,
+}: InstantSearchBaseOptions): InstantSearchBase {
+  return new InstantSearchBase({
+    client: searchClient,
+    indexName: indexName ?? BASE_INDEX_ID,
+    mainIndex: createWidgetContainer({
+      indexId: BASE_INDEX_ID,
+      indexName,
+    }),
+  });
 }

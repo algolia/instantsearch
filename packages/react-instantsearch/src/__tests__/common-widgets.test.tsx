@@ -8,7 +8,7 @@ import { createInsightsMiddleware } from 'instantsearch.js/es/middlewares';
 import React, { useEffect } from 'react';
 
 import {
-  AlgoliaProvider,
+  InstantSearchBase,
   InstantSearch,
   RefinementList,
   HierarchicalMenu,
@@ -440,18 +440,18 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createAlgoliaProviderWidgetTests({ instantSearchOptions, widgetParams }) {
+  createInstantSearchBaseWidgetTests({ instantSearchOptions, widgetParams }) {
     const { chat: chatWidgetParams, insights } = widgetParams;
 
     render(
-      <AlgoliaProvider
+      <InstantSearchBase
         searchClient={instantSearchOptions.searchClient as SearchClient}
         indexName={instantSearchOptions.indexName}
       >
         {insights && <InsightsMiddleware />}
         <ChatTrigger />
         <Chat {...chatWidgetParams} />
-      </AlgoliaProvider>
+      </InstantSearchBase>
     );
   },
   createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
@@ -555,7 +555,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: {
     act,
   },
-  createAlgoliaProviderWidgetTests: { act },
+  createInstantSearchBaseWidgetTests: { act },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },

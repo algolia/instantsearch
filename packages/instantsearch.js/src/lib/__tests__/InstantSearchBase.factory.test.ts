@@ -7,21 +7,21 @@ import connectChat from '../../connectors/chat/connectChat';
 import { createInsightsMiddleware } from '../../middlewares/createInsightsMiddleware';
 import chat from '../../widgets/chat/chat';
 import chatTrigger from '../../widgets/chat-trigger/chat-trigger';
-import { algoliaProvider } from '../AlgoliaProvider';
+import { instantsearchBase } from '../InstantSearchBase';
 import { getAppIdAndApiKey } from '../utils';
 
 import type { Middleware, Widget } from '../../types';
 
-describe('algoliaProvider', () => {
+describe('instantsearchBase', () => {
   test('mounts chat and chatTrigger without instantsearch()', async () => {
     const chatContainer = document.createElement('div');
     const triggerContainer = document.createElement('div');
     document.body.append(chatContainer, triggerContainer);
 
-    const provider = algoliaProvider({
+    const base = instantsearchBase({
       searchClient: { appId: 'app', apiKey: 'key' },
     });
-    provider
+    base
       .addWidgets([
         chat({
           container: chatContainer,
@@ -40,14 +40,14 @@ describe('algoliaProvider', () => {
     button.click();
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    // The trigger found the chat through the provider's shared render state,
+    // The trigger found the chat through the base's shared render state,
     // opened it, and re-rendered itself from the chat's new state.
     expect(
       chatContainer.querySelector('.ais-Chat-container--open')
     ).not.toBeNull();
     expect(button.classList).toContain('ais-ChatToggleButton--open');
 
-    provider.dispose();
+    base.dispose();
   });
 
   describe('insights', () => {
@@ -70,14 +70,14 @@ describe('algoliaProvider', () => {
         requiresSearch: false,
         disableTriggerValidation: true,
       });
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'products',
       });
 
       return {
         insightsClient,
-        provider,
+        base,
         widget,
         getRenderState: () => renderState,
       };
@@ -86,8 +86,8 @@ describe('algoliaProvider', () => {
     const hit = { objectID: 'p1', __position: 1, __queryID: 'q1' };
 
     test('drops events without the insights middleware', () => {
-      const { provider, widget, insightsClient, getRenderState } = setup();
-      provider.addWidgets([widget]).start();
+      const { base, widget, insightsClient, getRenderState } = setup();
+      base.addWidgets([widget]).start();
 
       expect(() =>
         getRenderState().sendEvent('click', hit, 'Product Clicked')
@@ -100,8 +100,8 @@ describe('algoliaProvider', () => {
     });
 
     test('sends events through the regular insights middleware', () => {
-      const { provider, widget, insightsClient, getRenderState } = setup();
-      provider
+      const { base, widget, insightsClient, getRenderState } = setup();
+      base
         .use(createInsightsMiddleware({ insightsClient }))
         .addWidgets([widget])
         .start();
@@ -126,10 +126,10 @@ describe('algoliaProvider', () => {
     });
 
     test('stops sending events once the middleware is removed', () => {
-      const { provider, widget, insightsClient, getRenderState } = setup();
+      const { base, widget, insightsClient, getRenderState } = setup();
       const middleware = createInsightsMiddleware({ insightsClient });
-      provider.use(middleware).addWidgets([widget]).start();
-      provider.unuse(middleware);
+      base.use(middleware).addWidgets([widget]).start();
+      base.unuse(middleware);
       insightsClient.mockClear();
 
       getRenderState().sendEvent('click', hit, 'Product Clicked');
@@ -143,7 +143,7 @@ describe('algoliaProvider', () => {
   });
 
   describe('credentials', () => {
-    function captureClient(options: Parameters<typeof algoliaProvider>[0]) {
+    function captureClient(options: Parameters<typeof instantsearchBase>[0]) {
       let client: unknown;
       const widget: Widget = {
         $$type: 'test.capture',
@@ -151,7 +151,7 @@ describe('algoliaProvider', () => {
           client = instantSearchInstance.client;
         },
       };
-      algoliaProvider(options).addWidgets([widget]).start();
+      instantsearchBase(options).addWidgets([widget]).start();
 
       return client;
     }
@@ -195,33 +195,33 @@ describe('algoliaProvider', () => {
       return { calls, middleware };
     }
 
-    test('follows the lifecycle of the provider', () => {
+    test('follows the lifecycle of the base', () => {
       const { calls, middleware } = createRecordingMiddleware();
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
       });
 
-      provider.use(middleware);
+      base.use(middleware);
       expect(calls).toEqual([]);
 
-      provider.start();
+      base.start();
       expect(calls).toEqual(['subscribe', 'started']);
 
-      provider.dispose();
+      base.dispose();
       expect(calls).toEqual(['subscribe', 'started', 'unsubscribe']);
     });
 
-    test('is subscribed right away when added after the provider started', () => {
+    test('is subscribed right away when added after the base started', () => {
       const { calls, middleware } = createRecordingMiddleware();
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
       });
 
-      provider.start();
-      provider.use(middleware);
+      base.start();
+      base.use(middleware);
       expect(calls).toEqual(['subscribe', 'started']);
 
-      provider.unuse(middleware);
+      base.unuse(middleware);
       expect(calls).toEqual(['subscribe', 'started', 'unsubscribe']);
     });
   });
@@ -249,20 +249,20 @@ describe('algoliaProvider', () => {
       const calls: string[] = [];
       const first = createWidget('first', calls);
       const second = createWidget('second', calls);
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'indexName',
       }) as any;
 
-      provider.start();
-      provider.mainIndex.addWidgets([first]);
+      base.start();
+      base.mainIndex.addWidgets([first]);
       await flush();
-      expect(provider.mainIndex.getWidgets()).toEqual([first]);
+      expect(base.mainIndex.getWidgets()).toEqual([first]);
       expect(calls).toEqual(['first:init', 'first:render']);
 
-      provider.mainIndex.updateWidget(first, second);
+      base.mainIndex.updateWidget(first, second);
       await flush();
-      expect(provider.mainIndex.getWidgets()).toEqual([second]);
+      expect(base.mainIndex.getWidgets()).toEqual([second]);
       expect(calls).toEqual([
         'first:init',
         'first:render',
@@ -271,40 +271,40 @@ describe('algoliaProvider', () => {
         'second:render',
       ]);
 
-      provider.mainIndex.removeWidgets([second]);
-      expect(provider.mainIndex.getWidgets()).toEqual([]);
+      base.mainIndex.removeWidgets([second]);
+      expect(base.mainIndex.getWidgets()).toEqual([]);
       expect(calls.slice(-1)).toEqual(['second:dispose']);
     });
 
     test('exposes what the hooks read without searching', () => {
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
         indexName: 'indexName',
       }) as any;
 
-      provider.start();
+      base.start();
 
-      expect(provider.mainIndex.getIndexId()).toBe('algoliaProvider');
-      expect(provider.mainIndex.getIndexName()).toBe('indexName');
-      expect(provider.mainIndex.getHelper().state.index).toBe('indexName');
-      expect(provider.mainIndex.getScopedResults()).toEqual([]);
-      expect(provider.status).toBe('idle');
-      expect(provider.getUiState()).toEqual({ algoliaProvider: {} });
+      expect(base.mainIndex.getIndexId()).toBe('instantSearchBase');
+      expect(base.mainIndex.getIndexName()).toBe('indexName');
+      expect(base.mainIndex.getHelper().state.index).toBe('indexName');
+      expect(base.mainIndex.getScopedResults()).toEqual([]);
+      expect(base.status).toBe('idle');
+      expect(base.getUiState()).toEqual({ instantSearchBase: {} });
     });
 
     test('notifies listeners after each render', async () => {
-      const provider = algoliaProvider({
+      const base = instantsearchBase({
         searchClient: { appId: 'app', apiKey: 'key' },
       }) as any;
       const onRender = jest.fn();
 
-      provider.addListener('render', onRender);
-      provider.start();
+      base.addListener('render', onRender);
+      base.start();
       await flush();
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      provider.removeListener('render', onRender);
-      provider.addWidgets([createWidget('late', [])]);
+      base.removeListener('render', onRender);
+      base.addWidgets([createWidget('late', [])]);
       await flush();
       expect(onRender).toHaveBeenCalledTimes(1);
     });

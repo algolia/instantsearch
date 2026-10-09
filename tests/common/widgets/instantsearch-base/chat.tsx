@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { createDefaultWidgetParams, openChat } from '../chat/utils';
 
-import type { AlgoliaProviderWidgetSetup } from '.';
+import type { InstantSearchBaseWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 function streamedText(messageId: string, text: string) {
@@ -24,7 +24,7 @@ function streamedText(messageId: string, text: string) {
 }
 
 export function createChatTests(
-  setup: AlgoliaProviderWidgetSetup,
+  setup: InstantSearchBaseWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('chat and chatTrigger', () => {

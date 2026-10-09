@@ -30,4 +30,4 @@ export * from './autocomplete';
 export * from './filter-suggestions';
 export * from './prompt-suggestions';
 export * from './result-card';
-export * from './algolia-provider';
+export * from './instantsearch-base';
