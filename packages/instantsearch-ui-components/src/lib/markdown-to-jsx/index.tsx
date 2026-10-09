@@ -24,11 +24,7 @@ export const RuleType = {
   gfmTask: '8',
   heading: '9',
   headingSetext: '10',
-  /** only available if not `disableHTMLParsing` */
-  htmlBlock: '11',
   htmlComment: '12',
-  /** only available if not `disableHTMLParsing` */
-  htmlSelfClosing: '13',
   image: '14',
   link: '15',
   /** emits a `link` 'node', does not render directly */
@@ -143,7 +139,6 @@ const namedCodesToUnicode = {
   quot: '\u201c',
 } as const;
 
-const DO_NOT_PROCESS_HTML_ELEMENTS = ['style', 'script', 'pre'];
 const ATTRIBUTES_TO_SANITIZE = [
   'src',
   'href',
@@ -288,7 +283,6 @@ const LINK_AUTOLINK_R = /^<([^ >]+[:@\/][^ >]+)>/;
 const CAPTURE_LETTER_AFTER_HYPHEN = /-([a-z])?/gi;
 const NP_TABLE_R =
   /^(\|.*)\n(?: *(\|? *[-:]+ *\|[-| :]*)\n((?:.*\|.*\n)*))?\n?/;
-const PARAGRAPH_R = /^[^\n]+(?:  \n|\n{2,})/;
 const REFERENCE_IMAGE_OR_LINK = /^\[([^\]]*)\]:\s+<?([^\s>]+)>?\s*("([^"]*)")?/;
 const REFERENCE_IMAGE_R = /^!\[([^\]]*)\] ?\[([^\]]*)\]/;
 const REFERENCE_LINK_R = /^\[([^\]]*)\] ?\[([^\]]*)\]/;
@@ -355,8 +349,6 @@ const UNESCAPE_R = /\\([^0-9A-Za-z\s])/g;
 const TEXT_PLAIN_R = /^[\s\S](?:(?!  \n|[0-9]\.|http)[^=*_~\-\n:<`\\\[!])*/;
 
 const TRIM_STARTING_NEWLINES = /^\n+/;
-
-const HTML_LEFT_TRIM_AMOUNT_R = /^([ \t]*)/;
 
 type LIST_TYPE = 1 | 2;
 const ORDERED: LIST_TYPE = 1;
@@ -1100,18 +1092,6 @@ function parseSimpleInline(
   return result;
 }
 
-function parseBlock(
-  parse: any,
-  children: any,
-  state: MarkdownToJSX.State
-): MarkdownToJSX.ParserResult[] {
-  const isCurrentlyInline = state.inline || false;
-  state.inline = false;
-  const result = parse(children, state);
-  state.inline = isCurrentlyInline;
-  return result;
-}
-
 const parseCaptureInline: MarkdownToJSX.Parser<{
   children: MarkdownToJSX.ParserResult[];
 }> = (capture, parse, state: MarkdownToJSX.State) => {
@@ -1249,14 +1229,6 @@ export function compiler(
     UNORDERED_LIST_R,
   ];
 
-  const BLOCK_SYNTAXES = [
-    ...NON_PARAGRAPH_BLOCK_SYNTAXES,
-    PARAGRAPH_R,
-    HTML_BLOCK_ELEMENT_R,
-    HTML_COMMENT_R,
-    HTML_SELF_CLOSING_ELEMENT_R,
-  ];
-
   function some(regexes: RegExp[], input: string) {
     for (let i = 0; i < regexes.length; i++) {
       if (regexes[i].test(input)) {
@@ -1266,18 +1238,8 @@ export function compiler(
     return false;
   }
 
-  function containsBlockSyntax(input: string) {
-    return some(BLOCK_SYNTAXES, input);
-  }
-
   function matchParagraph(source: string, state: MarkdownToJSX.State) {
-    if (
-      state.inline ||
-      state.simple ||
-      (state.inHTML &&
-        source.indexOf('\n\n') === -1 &&
-        state.prevCapture!.indexOf('\n\n') === -1)
-    ) {
+    if (state.inline || state.simple) {
       return null;
     }
 
@@ -1495,14 +1457,6 @@ export function compiler(
         if (node.alert) {
           props.className =
             'markdown-alert-' + slug(node.alert.toLowerCase(), slugify);
-
-          node.children.unshift({
-            attrs: {},
-            children: [{ type: RuleType.text, text: node.alert }],
-            noInnerParse: true,
-            type: RuleType.htmlBlock,
-            tag: 'header',
-          });
         }
 
         return h('blockquote', props, output(node.children, state));
@@ -1687,88 +1641,6 @@ export function compiler(
       },
     },
 
-    [RuleType.htmlBlock]: {
-      _qualify: ['<'],
-      /**
-       * find the first matching end tag and process the interior
-       */
-      _match: anyScopeRegex(HTML_BLOCK_ELEMENT_R),
-      _order: Priority.HIGH,
-      _parse(capture, parse, state) {
-        const [, whitespace] = capture[3].match(HTML_LEFT_TRIM_AMOUNT_R)!;
-
-        const trimmer = new RegExp(`^${whitespace}`, 'gm');
-        const trimmed = capture[3].replace(trimmer, '');
-
-        const parseFunc = containsBlockSyntax(trimmed)
-          ? parseBlock
-          : parseInline;
-
-        const tagName = capture[1].toLowerCase();
-        const noInnerParse =
-          DO_NOT_PROCESS_HTML_ELEMENTS.indexOf(tagName) !== -1;
-
-        const tag = (noInnerParse ? tagName : capture[1]).trim();
-
-        const ast = {
-          attrs: attrStringToMap(tag, capture[2]),
-          noInnerParse: noInnerParse,
-          tag,
-        } as {
-          attrs: ReturnType<typeof attrStringToMap>;
-          children?: ReturnType<MarkdownToJSX.NestedParser> | undefined;
-          noInnerParse: Boolean;
-          tag: MarkdownToJSX.HTMLTags;
-          text?: string | undefined;
-        };
-
-        state.inAnchor = state.inAnchor || tagName === 'a';
-
-        if (noInnerParse) {
-          ast.text = capture[3];
-        } else {
-          const prevInHTML = state.inHTML;
-          state.inHTML = true;
-          ast.children = parseFunc(parse, trimmed, state);
-          state.inHTML = prevInHTML;
-        }
-
-        /**
-         * if another html block is detected within, parse as block,
-         * otherwise parse as inline to pick up any further markdown
-         */
-        state.inAnchor = false;
-
-        return ast;
-      },
-      _render(node, output, state) {
-        return (
-          <node.tag key={state!.key} {...node.attrs}>
-            {node.text || (node.children ? output(node.children, state) : '')}
-          </node.tag>
-        );
-      },
-    },
-
-    [RuleType.htmlSelfClosing]: {
-      _qualify: ['<'],
-      /**
-       * find the first matching end tag and process the interior
-       */
-      _match: anyScopeRegex(HTML_SELF_CLOSING_ELEMENT_R),
-      _order: Priority.HIGH,
-      _parse(capture /*, parse, state*/) {
-        const tag = capture[1].trim();
-        return {
-          attrs: attrStringToMap(tag, capture[2] || ''),
-          tag,
-        };
-      },
-      _render(node, _output, state) {
-        return <node.tag {...node.attrs} key={state!.key} />;
-      },
-    },
-
     [RuleType.htmlComment]: {
       _qualify: ['<!--'],
       _match: anyScopeRegex(HTML_COMMENT_R),
@@ -1862,8 +1734,8 @@ export function compiler(
     },
 
     [RuleType.linkBareUrlDetector]: {
-      _qualify: (source, state) => {
-        if (state.inAnchor || options.disableAutoLink) return false;
+      _qualify: (source) => {
+        if (options.disableAutoLink) return false;
         return startsWith(source, 'http://') || startsWith(source, 'https://');
       },
       _match: inlineRegex(LINK_AUTOLINK_BARE_URL_R),
@@ -2118,11 +1990,6 @@ export function compiler(
     },
   };
 
-  if (options.disableParsingRawHTML === true) {
-    delete (rules as any)[RuleType.htmlBlock];
-    delete (rules as any)[RuleType.htmlSelfClosing];
-  }
-
   const parser = parserFor(rules);
   const emitter = createRenderer(rules, options.renderRule);
 
@@ -2168,10 +2035,6 @@ export namespace MarkdownToJSX {
   export type HTMLTags = string;
 
   export type State = {
-    /** true if the current content is inside anchor link grammar */
-    inAnchor?: boolean;
-    /** true if parsing in an HTML context */
-    inHTML?: boolean;
     /** true if parsing in an inline context (subset of rules around formatting and links) */
     inline?: boolean;
     /** true if in a table */
@@ -2355,21 +2218,6 @@ export namespace MarkdownToJSX {
     children: MarkdownToJSX.ParserResult[];
   }
 
-  export interface HTMLNode {
-    type: typeof RuleType.htmlBlock;
-    attrs: Record<string, any> | null;
-    children?: ReturnType<MarkdownToJSX.NestedParser> | undefined;
-    noInnerParse: Boolean;
-    tag: MarkdownToJSX.HTMLTags;
-    text?: string | undefined;
-  }
-
-  export interface HTMLSelfClosingNode {
-    type: typeof RuleType.htmlSelfClosing;
-    attrs: Record<string, any> | null;
-    tag: string;
-  }
-
   export type ParserResult =
     | BlockQuoteNode
     | BreakLineNode
@@ -2402,9 +2250,7 @@ export namespace MarkdownToJSX {
     | ItalicTextNode
     | EscapedTextNode
     | MarkedTextNode
-    | StrikethroughTextNode
-    | HTMLNode
-    | HTMLSelfClosingNode;
+    | StrikethroughTextNode;
 
   export type NestedParser = (
     input: string,
@@ -2486,13 +2332,6 @@ export namespace MarkdownToJSX {
      * document, but this behavior can be disabled if desired.
      */
     disableAutoLink: boolean;
-
-    /**
-     * Disable the compiler's best-effort transcription of provided raw HTML
-     * into JSX-equivalent. This is the functionality that prevents the need to
-     * use `dangerouslySetInnerHTML` in React.
-     */
-    disableParsingRawHTML: boolean;
 
     /**
      * Forces the compiler to have space between hash sign and the header text which

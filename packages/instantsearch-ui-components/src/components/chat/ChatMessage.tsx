@@ -572,7 +572,6 @@ export function createChatMessageComponent({
         }
         const markdown = compiler(part.text, {
           createElement: createElement as any,
-          disableParsingRawHTML: true,
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }

@@ -1,6 +1,6 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
-import { RuleType, compiler } from '../../lib/markdown-to-jsx';
+import { compiler } from '../../lib/markdown-to-jsx';
 
 import { BrainIcon, ChevronDownIcon } from './icons';
 
@@ -94,7 +94,6 @@ export function createChatMessageReasoningComponent({
       parseMarkdown ? (
         compiler(part.text, {
           createElement: createElement as any,
-          disableParsingRawHTML: true,
         })
       ) : (
         // Preserve newlines in plain-text reasoning.
@@ -106,17 +105,6 @@ export function createChatMessageReasoningComponent({
         ? compiler(part.text, {
             createElement: createElement as any,
             forceInline: true,
-            renderRule(next, node) {
-              if (
-                node.type === RuleType.htmlBlock ||
-                node.type === RuleType.htmlComment ||
-                node.type === RuleType.htmlSelfClosing
-              ) {
-                return null;
-              }
-
-              return next();
-            },
           })
         : part.text;
 
