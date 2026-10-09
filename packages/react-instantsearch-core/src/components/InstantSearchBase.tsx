@@ -1,4 +1,4 @@
-import { algoliaProvider } from 'instantsearch.js/es/lib/AlgoliaProvider';
+import { instantsearchBase } from 'instantsearch.js/es/lib/InstantSearchBase';
 import React, { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -9,9 +9,9 @@ import version from '../version';
 
 import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
 import type {
-  AlgoliaProvider as AlgoliaProviderInstance,
-  AlgoliaProviderOptions,
-} from 'instantsearch.js/es/lib/AlgoliaProvider';
+  InstantSearchBase as InstantSearchBaseInstance,
+  InstantSearchBaseOptions,
+} from 'instantsearch.js/es/lib/InstantSearchBase';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 
 const defaultUserAgents = [
@@ -20,7 +20,7 @@ const defaultUserAgents = [
   `react-instantsearch-core (${version})`,
 ];
 
-type InternalAlgoliaProvider = AlgoliaProviderInstance & {
+type InternalInstantSearchBase = InstantSearchBaseInstance & {
   mainIndex: IndexWidget;
   /**
    * Schedule a function to be called on the next timer tick
@@ -38,7 +38,7 @@ type InternalAlgoliaProvider = AlgoliaProviderInstance & {
   _preventWidgetCleanup?: boolean;
 };
 
-export type AlgoliaProviderProps = AlgoliaProviderOptions & {
+export type InstantSearchBaseProps = InstantSearchBaseOptions & {
   children?: React.ReactNode;
 };
 
@@ -51,32 +51,30 @@ export type AlgoliaProviderProps = AlgoliaProviderOptions & {
  *
  * Server-side rendering isn't supported: nothing renders on the server.
  */
-export function AlgoliaProvider({
+export function InstantSearchBase({
   children,
   ...options
-}: AlgoliaProviderProps) {
-  const provider = useAlgoliaProviderApi(options as AlgoliaProviderOptions);
+}: InstantSearchBaseProps) {
+  const base = useInstantSearchBaseApi(options as InstantSearchBaseOptions);
 
-  if (!provider.started) {
+  if (!base.started) {
     return null;
   }
 
   return (
-    <InstantSearchContext.Provider
-      value={provider as unknown as InstantSearchType}
-    >
-      <IndexContext.Provider value={provider.mainIndex}>
+    <InstantSearchContext.Provider value={base as unknown as InstantSearchType}>
+      <IndexContext.Provider value={base.mainIndex}>
         {children}
       </IndexContext.Provider>
     </InstantSearchContext.Provider>
   );
 }
 
-function useAlgoliaProviderApi(options: AlgoliaProviderOptions) {
+function useInstantSearchBaseApi(options: InstantSearchBaseOptions) {
   const forceUpdate = useForceUpdate();
-  const providerRef = useRef<InternalAlgoliaProvider | null>(null);
+  const baseRef = useRef<InternalInstantSearchBase | null>(null);
 
-  if (providerRef.current === null) {
+  if (baseRef.current === null) {
     const { searchClient } = options;
     if (
       'addAlgoliaAgent' in searchClient &&
@@ -87,57 +85,57 @@ function useAlgoliaProviderApi(options: AlgoliaProviderOptions) {
       });
     }
 
-    const provider = algoliaProvider(options) as InternalAlgoliaProvider;
+    const base = instantsearchBase(options) as InternalInstantSearchBase;
 
-    provider._schedule = function _schedule(cb: () => void) {
-      provider._schedule.queue.push(cb);
+    base._schedule = function _schedule(cb: () => void) {
+      base._schedule.queue.push(cb);
 
-      clearTimeout(provider._schedule.timer);
-      provider._schedule.timer = setTimeout(() => {
-        provider._schedule.queue.forEach((callback) => {
+      clearTimeout(base._schedule.timer);
+      base._schedule.timer = setTimeout(() => {
+        base._schedule.queue.forEach((callback) => {
           callback();
         });
-        provider._schedule.queue = [];
+        base._schedule.queue = [];
       }, 0);
-    } as typeof provider._schedule;
-    provider._schedule.queue = [];
+    } as typeof base._schedule;
+    base._schedule.queue = [];
 
-    providerRef.current = provider;
+    baseRef.current = base;
   }
 
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  return useSyncExternalStore<InternalAlgoliaProvider>(
+  return useSyncExternalStore<InternalInstantSearchBase>(
     useCallback(() => {
-      const provider = providerRef.current!;
+      const base = baseRef.current!;
 
       // Scenario 1: the component mounts.
       if (cleanupTimerRef.current === null) {
-        if (!provider.started) {
-          provider.start();
+        if (!base.started) {
+          base.start();
           forceUpdate();
         }
       }
       // Scenario 2: the component updates. We cancel the previous cleanup
-      // function because we don't want to dispose the provider during an
+      // function because we don't want to dispose the base during an
       // update.
       else {
         clearTimeout(cleanupTimerRef.current);
-        provider._preventWidgetCleanup = false;
+        base._preventWidgetCleanup = false;
       }
 
       return () => {
-        clearTimeout(provider._schedule.timer);
+        clearTimeout(base._schedule.timer);
         // Executing the cleanup function in a `setTimeout()` lets us cancel it
-        // in the next effect, so that Strict Mode doesn't dispose the provider.
+        // in the next effect, so that Strict Mode doesn't dispose the base.
         cleanupTimerRef.current = setTimeout(() => {
-          provider.dispose();
+          base.dispose();
         });
-        // The widgets are disposed along with the provider, not one by one.
-        provider._preventWidgetCleanup = true;
+        // The widgets are disposed along with the base, not one by one.
+        base._preventWidgetCleanup = true;
       };
     }, [forceUpdate]),
-    () => providerRef.current!,
-    () => providerRef.current!
+    () => baseRef.current!,
+    () => baseRef.current!
   );
 }

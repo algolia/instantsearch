@@ -11,7 +11,7 @@ import React, { StrictMode, useEffect } from 'react';
 import { useChat } from '../../connectors/useChat';
 import { useChatTrigger } from '../../connectors/useChatTrigger';
 import { useInstantSearch } from '../../hooks/useInstantSearch';
-import { AlgoliaProvider } from '../AlgoliaProvider';
+import { InstantSearchBase } from '../InstantSearchBase';
 
 import type { Middleware } from 'instantsearch.js';
 
@@ -50,12 +50,12 @@ function createRecordingMiddleware() {
   return { calls, middleware };
 }
 
-describe('AlgoliaProvider', () => {
+describe('InstantSearchBase', () => {
   test('renders its children', () => {
     render(
-      <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
+      <InstantSearchBase searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
         <p>hello</p>
-      </AlgoliaProvider>
+      </InstantSearchBase>
     );
 
     expect(screen.getByText('hello')).toBeInTheDocument();
@@ -65,9 +65,9 @@ describe('AlgoliaProvider', () => {
     const searchClient = createSearchClient();
 
     render(
-      <AlgoliaProvider searchClient={searchClient}>
+      <InstantSearchBase searchClient={searchClient}>
         <ChatWithTrigger />
-      </AlgoliaProvider>
+      </InstantSearchBase>
     );
 
     expect(screen.getByTestId('open')).toHaveTextContent('false');
@@ -90,17 +90,17 @@ describe('AlgoliaProvider', () => {
     }
 
     render(
-      <AlgoliaProvider
+      <InstantSearchBase
         searchClient={{ appId: 'appId', apiKey: 'apiKey' }}
         indexName="indexName"
       >
         <Probe />
-      </AlgoliaProvider>
+      </InstantSearchBase>
     );
 
     expect(api!.status).toBe('idle');
     expect(api!.error).toBeUndefined();
-    expect(Object.keys(api!.uiState)).toEqual(['algoliaProvider']);
+    expect(Object.keys(api!.uiState)).toEqual(['instantSearchBase']);
   });
 
   test('adds middleware with `addMiddlewares`, and removes it on cleanup', () => {
@@ -113,9 +113,9 @@ describe('AlgoliaProvider', () => {
     }
 
     const { unmount } = render(
-      <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
+      <InstantSearchBase searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
         <AddMiddleware />
-      </AlgoliaProvider>
+      </InstantSearchBase>
     );
 
     expect(calls).toEqual(['subscribe', 'started']);
@@ -139,9 +139,9 @@ describe('AlgoliaProvider', () => {
 
     const { unmount } = render(
       <StrictMode>
-        <AlgoliaProvider searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
+        <InstantSearchBase searchClient={{ appId: 'appId', apiKey: 'apiKey' }}>
           <AddMiddleware />
-        </AlgoliaProvider>
+        </InstantSearchBase>
       </StrictMode>
     );
 

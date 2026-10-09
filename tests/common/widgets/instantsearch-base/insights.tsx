@@ -6,7 +6,7 @@ import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 
 import { createDefaultWidgetParams, openChat } from '../chat/utils';
 
-import type { AlgoliaProviderWidgetSetup } from '.';
+import type { InstantSearchBaseWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 type InsightsClient = jest.Mock & { version: string };
@@ -44,7 +44,7 @@ function createChatWithSearchResults({ queryID }: { queryID?: string } = {}) {
 }
 
 export function createInsightsTests(
-  setup: AlgoliaProviderWidgetSetup,
+  setup: InstantSearchBaseWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('insights middleware', () => {
