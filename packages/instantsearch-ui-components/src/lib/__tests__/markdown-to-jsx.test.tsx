@@ -38,7 +38,9 @@ describe('vendored markdown-to-jsx', () => {
   });
 
   test('does not parse raw HTML', () => {
-    expect(renderMarkdown('<b>hi</b>')).not.toContain('<b>');
+    const html = renderMarkdown('<b>hi</b>');
+    expect(html).not.toContain('<b>');
+    expect(html).toContain('&lt;b&gt;hi&lt;/b&gt;');
   });
 
   test('renders alert blockquotes', () => {
