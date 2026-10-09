@@ -17,6 +17,7 @@ const cssClasses = {
   collapsibleRoot: 'collapsibleRoot',
   collapsedRoot: 'collapsedRoot',
   collapseButton: 'collapseButton',
+  collapseIcon: 'collapseIcon',
   body: 'body',
   header: 'header',
   footer: 'footer',

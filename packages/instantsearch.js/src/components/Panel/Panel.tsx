@@ -4,6 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
 
+import { renderTemplate } from '../../lib/templating';
 import Template from '../Template/Template';
 
 import type { ComponentCSSClasses, UnknownWidgetFactory } from '../../types';
@@ -13,10 +14,7 @@ import type {
   PanelTemplates,
 } from '../../widgets/panel/panel';
 
-export type PanelComponentCSSClasses = ComponentCSSClasses<
-  // `collapseIcon` is only used in the default templates of the widget
-  Omit<PanelCSSClasses, 'collapseIcon'>
->;
+export type PanelComponentCSSClasses = ComponentCSSClasses<PanelCSSClasses>;
 
 export type PanelComponentTemplates<TWidget extends UnknownWidgetFactory> =
   PanelTemplates<TWidget>;
@@ -78,6 +76,15 @@ function Panel<TWidget extends UnknownWidgetFactory>(
             <button
               className={props.cssClasses.collapseButton}
               aria-expanded={!isCollapsed}
+              aria-label={
+                props.templates.collapseButtonLabel === undefined
+                  ? undefined
+                  : renderTemplate({
+                      templates: props.templates,
+                      templateKey: 'collapseButtonLabel',
+                      data: { collapsed: isCollapsed },
+                    })
+              }
               onClick={(event) => {
                 event.preventDefault();
 
