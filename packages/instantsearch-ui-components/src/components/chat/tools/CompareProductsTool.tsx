@@ -1,48 +1,57 @@
 /** @jsx createElement */
 
 import {
+  endsInsideRootProperty,
+  getJsonCursor,
+} from '../../../lib/utils/jsonCursor';
+
+import {
   createGroundedComparisonTableComponent,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
-import type { Renderer } from '../../../types';
+import type { RecordWithObjectID, Renderer } from '../../../types';
 import type { ClientSideToolComponentProps } from '../types';
-import type { ComparisonTableTranslations } from './createGroundedComparisonTable';
+import type {
+  ComparisonCriterion,
+  ComparisonTableTranslations,
+  GroundedComparisonTableProps,
+} from './createGroundedComparisonTable';
 
 /**
  * Builtin comparison tool (`algolia_compare_products`).
  *
- * The agent triggers this client-side tool when it detects a comparison
- * request. Its arguments name ONLY the products (by objectID) and the attribute
- * *keys* to compare — never the values. Every cell is hydrated from the chat
- * records store (`context.records`, filled by the shopper's comparison
- * selection and by the search tools), so the model physically cannot type
- * (and therefore cannot hallucinate) a price or spec.
- * This is the "grounded table" fix from the agentic-evals comparison study,
- * promoted from the display-block prototype to a first-class tool.
+ * The agent calls this client-side tool to lay out a comparison as a table:
+ * the compared products across the top (hydrated from the chat records store,
+ * `context.records`, so the header never shows a product that isn't in the
+ * catalog) and model-authored criteria down the side. Each criterion carries
+ * one value per product; the agent fills them from the records it has (an
+ * attribute, a detail from the description, a derived verdict), so the table
+ * can say everything a Markdown table could — with a proper layout.
  *
  * Tool-call input it consumes:
  *
  *   {
- *     objectIDs: ['A', 'B'],                    // 2+ products, one row each
- *     attributes: ['price', 'rating'],          // attribute KEYS (also headers)
- *     columns?: ['Product', 'Price', 'Rating'], // optional display labels
- *     intro?: 'Both are great for...'           // optional one-line lead-in
+ *     objectIDs: ['A', 'B'],                   // 2+ products, one column each
+ *     criteria: [                              // one row each, values aligned
+ *       { label: 'Price', values: ['$199', '$299'] },
+ *       { label: 'Battery', values: ['4000 mAh', null] },   // null → "—"
+ *     ],
+ *     intro?: 'Both are great for...'          // optional one-line lead-in
  *   }
- *
- * Any other input field (e.g. smuggled attribute values) is ignored by
- * construction: the renderer never reads values off the input.
  */
 
 export type CompareProductsToolInput = {
   objectIDs?: unknown;
-  attributes?: unknown;
-  columns?: unknown;
+  criteria?: unknown;
   intro?: unknown;
 };
 
-export type CompareProductsToolProps = {
+export type CompareProductsToolProps<
+  THit extends RecordWithObjectID = RecordWithObjectID,
+> = {
   toolProps: ClientSideToolComponentProps;
+  itemComponent?: GroundedComparisonTableProps<THit>['itemComponent'];
   translations?: Partial<ComparisonTableTranslations>;
 };
 
@@ -56,52 +65,111 @@ function stringList(value: unknown): string[] {
   );
 }
 
-export function createCompareProductsToolComponent({
-  createElement,
-  Fragment,
-}: Renderer) {
-  const GroundedComparisonTable = createGroundedComparisonTableComponent({
+/** Keeps only well-formed `{ label, values[] }` rows. */
+function criteriaList(value: unknown): ComparisonCriterion[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.flatMap((entry): ComparisonCriterion[] => {
+    if (
+      !entry ||
+      typeof entry !== 'object' ||
+      typeof (entry as ComparisonCriterion).label !== 'string' ||
+      (entry as ComparisonCriterion).label === ''
+    ) {
+      return [];
+    }
+    const values = (entry as ComparisonCriterion).values;
+    return [
+      {
+        label: (entry as ComparisonCriterion).label,
+        values: Array.isArray(values) ? values : [],
+      },
+    ];
+  });
+}
+
+export function createCompareProductsToolComponent<
+  THit extends RecordWithObjectID = RecordWithObjectID,
+>({ createElement, Fragment }: Renderer) {
+  const GroundedComparisonTable = createGroundedComparisonTableComponent<THit>({
     createElement,
     Fragment,
   });
 
-  return function CompareProductsTool(userProps: CompareProductsToolProps) {
-    const { toolProps, translations: userTranslations } = userProps;
-    const { message, records } = toolProps.context;
+  return function CompareProductsTool(
+    userProps: CompareProductsToolProps<THit>
+  ) {
+    const {
+      toolProps,
+      itemComponent,
+      translations: userTranslations,
+    } = userProps;
+    const { message, records, sendEvent } = toolProps.context;
 
     const translations: ComparisonTableTranslations = {
       ...defaultComparisonTableTranslations,
       ...userTranslations,
     };
 
-    // Wait for the agent's arguments to be complete before rendering.
     if (
       !message ||
-      (message.state !== 'input-available' &&
+      (message.state !== 'input-streaming' &&
+        message.state !== 'input-available' &&
         message.state !== 'output-available')
     ) {
       return <Fragment />;
     }
 
     const input = (message.input ?? {}) as CompareProductsToolInput;
-    const objectIDs = stringList(input.objectIDs);
-    const attributes = stringList(input.attributes);
-    const columns = Array.isArray(input.columns)
-      ? stringList(input.columns)
-      : undefined;
-    const intro = typeof input.intro === 'string' ? input.intro : undefined;
+    // Streaming input is repaired to parse, so the value under the cursor can
+    // look complete before it is. Render only what the cursor has passed.
+    const cursor =
+      message.state === 'input-streaming'
+        ? typeof message.rawInput === 'string'
+          ? getJsonCursor(message.rawInput)
+          : undefined
+        : undefined;
+    const settled = (key: keyof CompareProductsToolInput) =>
+      !cursor || !endsInsideRootProperty(cursor, key);
+
+    if (message.state === 'input-streaming' && !cursor) {
+      return <Fragment />;
+    }
+
+    const objectIDs = settled('objectIDs') ? stringList(input.objectIDs) : [];
+    const intro =
+      settled('intro') && typeof input.intro === 'string'
+        ? input.intro
+        : undefined;
 
     if (objectIDs.length === 0) {
       return <Fragment />;
     }
 
+    const rawCriteria = Array.isArray(input.criteria) ? input.criteria : [];
+    // The row under the cursor is still being written (its label or last
+    // value may be cut mid-string) — leave it out, but only when the parsed
+    // input already contains it: when a chunk can't be repaired (`{"`), the
+    // parsed input lags the raw text and every row in it is complete.
+    const criteriaFrame = cursor?.frames[1];
+    const rowInProgress =
+      cursor !== undefined &&
+      criteriaFrame?.key === 'criteria' &&
+      cursor.frames.length > 2 &&
+      rawCriteria.length >= criteriaFrame.items;
+    const criteria = criteriaList(
+      rowInProgress ? rawCriteria.slice(0, -1) : rawCriteria
+    );
+
     return (
       <GroundedComparisonTable
         intro={intro}
         objectIDs={objectIDs}
-        attributes={attributes}
-        columns={columns}
+        criteria={criteria}
         records={records}
+        itemComponent={itemComponent}
+        sendEvent={sendEvent}
         translations={translations}
       />
     );

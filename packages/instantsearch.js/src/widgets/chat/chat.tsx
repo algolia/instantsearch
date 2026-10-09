@@ -170,7 +170,11 @@ function createDefaultTools<
     // Agents configured before the rename still emit the legacy tool name.
     // eslint-disable-next-line typescript/no-deprecated
     [DisplayResultsToolType]: groupedResultsTool,
-    [CompareProductsToolType]: createCompareProductsTool(),
+    [CompareProductsToolType]: createCompareProductsTool(
+      // The default `item` template dumps the record as JSON; without a custom
+      // one, the product headers show the record's name instead.
+      templates.item === defaultTemplates.item ? undefined : templates
+    ),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },
     [PonderToolType]: { templates: {} },

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.51.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.50.1...react-instantsearch@7.51.0) (2026-10-01)
+
+
+### Features
+
+* **chat:** hydrate the comparison table from the selected records ([#7262](https://github.com/algolia/instantsearch/issues/7262)) ([034e740](https://github.com/algolia/instantsearch/commit/034e740c2d17ee4fd7983b18f027976f2b8f844c))
+* **chat:** lay the comparison table out as products × criteria ([#7268](https://github.com/algolia/instantsearch/issues/7268)) ([a41d107](https://github.com/algolia/instantsearch/commit/a41d107ae4e000ed04be13e08441d4a015f42e33))
+* **result-card:** activate from `renderingContent` ([#7266](https://github.com/algolia/instantsearch/issues/7266)) ([d8069fa](https://github.com/algolia/instantsearch/commit/d8069fa2ee978211abbf33ed613f0cc05e82d192))
+* **result-card:** add result card widget ([#7243](https://github.com/algolia/instantsearch/issues/7243)) ([a04eb0d](https://github.com/algolia/instantsearch/commit/a04eb0d65a5653e96afb0ff182239bd335e7cc6b))
+* **result-card:** minimize instead of dismiss ([#7264](https://github.com/algolia/instantsearch/issues/7264)) ([8972961](https://github.com/algolia/instantsearch/commit/89729618ec0c5519789290238cebc6188988a139))
+
+
+
+
+
 ## [7.50.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.50.0...react-instantsearch@7.50.1) (2026-09-29)
 
 **Note:** Version bump only for package react-instantsearch

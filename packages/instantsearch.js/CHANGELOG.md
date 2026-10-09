@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.119.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.118.1...instantsearch.js@4.119.0) (2026-10-01)
+
+
+### Bug Fixes
+
+* **chat:** merge the widget context with the message's turn context ([#7267](https://github.com/algolia/instantsearch/issues/7267)) ([4bb9824](https://github.com/algolia/instantsearch/commit/4bb98245c531ee0a031d850a6eaac0361d947021))
+* **chat:** take the prompt-shortcut display text from the server echo ([#7257](https://github.com/algolia/instantsearch/issues/7257)) ([3892320](https://github.com/algolia/instantsearch/commit/3892320b3aa642121c1b610441017f41ef947b2f)), closes [algolia/conversational-ai#1741](https://github.com/algolia/conversational-ai/issues/1741)
+* **render-state:** avoid retaining previous search results ([#7258](https://github.com/algolia/instantsearch/issues/7258)) ([315cf07](https://github.com/algolia/instantsearch/commit/315cf07fa0fb0175ce97a601eed80d697ec6d953)), closes [#6669](https://github.com/algolia/instantsearch/issues/6669)
+
+
+### Features
+
+* **chat:** hydrate the comparison table from the selected records ([#7262](https://github.com/algolia/instantsearch/issues/7262)) ([034e740](https://github.com/algolia/instantsearch/commit/034e740c2d17ee4fd7983b18f027976f2b8f844c))
+* **chat:** lay the comparison table out as products × criteria ([#7268](https://github.com/algolia/instantsearch/issues/7268)) ([a41d107](https://github.com/algolia/instantsearch/commit/a41d107ae4e000ed04be13e08441d4a015f42e33))
+* **result-card:** activate from `renderingContent` ([#7266](https://github.com/algolia/instantsearch/issues/7266)) ([d8069fa](https://github.com/algolia/instantsearch/commit/d8069fa2ee978211abbf33ed613f0cc05e82d192))
+* **result-card:** add result card widget ([#7243](https://github.com/algolia/instantsearch/issues/7243)) ([a04eb0d](https://github.com/algolia/instantsearch/commit/a04eb0d65a5653e96afb0ff182239bd335e7cc6b))
+* **result-card:** minimize instead of dismiss ([#7264](https://github.com/algolia/instantsearch/issues/7264)) ([8972961](https://github.com/algolia/instantsearch/commit/89729618ec0c5519789290238cebc6188988a139))
+
+
+
+
+
 ## [4.118.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.118.0...instantsearch.js@4.118.1) (2026-09-29)
 
 **Note:** Version bump only for package instantsearch.js

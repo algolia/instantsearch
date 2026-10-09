@@ -94,7 +94,7 @@
   }
 
   .ais-ChatToolComparisonTable-header,
-  .ais-ChatToolComparisonTable-product,
+  .ais-ChatToolComparisonTable-criterion,
   .ais-ChatToolComparisonTable-cell {
     padding: calc(var(--ais-spacing) * 0.5);
     border-bottom: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
@@ -102,14 +102,24 @@
     vertical-align: top;
   }
 
+  // Products run across the top, one column each.
   .ais-ChatToolComparisonTable-header {
     font-weight: var(--ais-font-weight-semibold);
     color: rgba(var(--ais-text-color-rgb), 0.8);
     border-bottom: 1px solid rgba(var(--ais-border-color-rgb), 0.6);
+    vertical-align: bottom;
   }
 
   .ais-ChatToolComparisonTable-product {
+    min-width: calc(var(--ais-spacing) * 8);
+    max-width: calc(var(--ais-spacing) * 14);
+  }
+
+  // Criteria run down the side, one row each.
+  .ais-ChatToolComparisonTable-criterion {
     font-weight: var(--ais-font-weight-semibold);
+    color: rgba(var(--ais-text-color-rgb), 0.8);
+    white-space: nowrap;
   }
 
   // Chat-only carousel overrides on top of `components/_carousel.scss`

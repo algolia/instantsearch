@@ -23,6 +23,7 @@ import {
   queryRuleCustomData,
   chat,
   chatTrigger,
+  compareBar,
 } from 'instantsearch.js/es/widgets';
 
 import { createTabsWidget, createRefreshButton } from './helpers';
@@ -45,6 +46,33 @@ const search = instantsearch({
 });
 
 const customQueryRuleContext = connectQueryRules(() => {});
+
+// The compare selection lives in the shared render state, so the per-hit
+// toggle reads and writes the same selection the `compareBar` widget shows.
+const hitTemplate = (hit, { html, components }) => {
+  const compare = search.renderState.instant_search?.compare;
+  const selected = compare?.isSelected(hit.objectID) ?? false;
+
+  return html`
+    <span class="Hit-label">
+      ${components.Highlight({ hit, attribute: 'name' })}
+    </span>
+    <span class="Hit-price">$${hit.price}</span>
+    ${compare &&
+    html`
+      <label class="Hit-compare">
+        <input
+          type="checkbox"
+          aria-label="Compare ${hit.name}"
+          checked=${selected}
+          disabled=${!selected && !compare.canAddItems}
+          onChange=${() => compare.toggleItem(hit)}
+        />
+        Compare
+      </label>
+    `}
+  `;
+};
 
 const itemTemplate = (item, { html }) => html`
   <article class="ais-Carousel-hit">
@@ -198,12 +226,7 @@ search.addWidgets([
           hits({
             container,
             templates: {
-              item: (hit, { html, components }) => html`
-                <span class="Hit-label">
-                  ${components.Highlight({ hit, attribute: 'name' })}
-                </span>
-                <span class="Hit-price">$${hit.price}</span>
-              `,
+              item: hitTemplate,
             },
           }),
         secondaryWidgetFactory: (container) =>
@@ -221,12 +244,7 @@ search.addWidgets([
             container,
             showPrevious: true,
             templates: {
-              item: (hit, { html, components }) => html`
-                <span class="Hit-label">
-                  ${components.Highlight({ hit, attribute: 'name' })}
-                </span>
-                <span class="Hit-price">$${hit.price}</span>
-              `,
+              item: hitTemplate,
             },
           }),
       },
@@ -242,6 +260,9 @@ search.addWidgets([
   }),
   chatTrigger({
     container: '#chat-trigger',
+  }),
+  compareBar({
+    container: '#compare-bar',
   }),
 ]);
 

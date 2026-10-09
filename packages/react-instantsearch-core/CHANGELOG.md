@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.51.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.50.1...react-instantsearch-core@7.51.0) (2026-10-01)
+
+
+### Features
+
+* **result-card:** add result card widget ([#7243](https://github.com/algolia/instantsearch/issues/7243)) ([a04eb0d](https://github.com/algolia/instantsearch/commit/a04eb0d65a5653e96afb0ff182239bd335e7cc6b))
+
+
+
+
+
 ## [7.50.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.50.0...react-instantsearch-core@7.50.1) (2026-09-29)
 
 **Note:** Version bump only for package react-instantsearch-core

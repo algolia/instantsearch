@@ -154,10 +154,10 @@ describe('ComparisonTable grounding', () => {
     expect(screen.getByTestId('product-B')).toHaveTextContent('OnePlus 6T');
 
     // Every attribute cell is the EXACT value from the search hit.
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
-    expect(screen.getByTestId('cell-A-rating')).toHaveTextContent('4');
-    expect(screen.getByTestId('cell-B-price')).toHaveTextContent('299');
-    expect(screen.getByTestId('cell-B-rating')).toHaveTextContent('5');
+    expect(screen.getByTestId('cell-A-0')).toHaveTextContent('199');
+    expect(screen.getByTestId('cell-A-1')).toHaveTextContent('4');
+    expect(screen.getByTestId('cell-B-0')).toHaveTextContent('299');
+    expect(screen.getByTestId('cell-B-1')).toHaveTextContent('5');
   });
 
   test('a missing attribute renders an em-dash, never a fabricated value', () => {
@@ -169,9 +169,9 @@ describe('ComparisonTable grounding', () => {
 
     renderComparison(displayMessage, messages);
 
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
+    expect(screen.getByTestId('cell-A-0')).toHaveTextContent('199');
     // No rating in the record → explicit missing marker, nothing invented.
-    expect(screen.getByTestId('cell-A-rating')).toHaveTextContent('—');
+    expect(screen.getByTestId('cell-A-1')).toHaveTextContent('—');
   });
 
   test('an item referenced without a backing search hit shows no fabricated cells', () => {
@@ -184,10 +184,10 @@ describe('ComparisonTable grounding', () => {
 
     renderComparison(displayMessage, messages);
 
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('199');
+    expect(screen.getByTestId('cell-A-0')).toHaveTextContent('199');
     // B has no record: product label AND attribute cell are the missing marker.
     expect(screen.getByTestId('product-B')).toHaveTextContent('—');
-    expect(screen.getByTestId('cell-B-price')).toHaveTextContent('—');
+    expect(screen.getByTestId('cell-B-0')).toHaveTextContent('—');
   });
 
   test('values are never sourced from the display output (model cannot smuggle them)', () => {
@@ -231,9 +231,11 @@ describe('ComparisonTable grounding', () => {
 
     renderComparison(displayMessage, messages);
 
-    const row = screen.getByTestId('product-A').closest('tr')!;
-    expect(within(row).getByTestId('product-A')).toHaveTextContent('Real Name');
-    expect(within(row).getByTestId('cell-A-price')).toHaveTextContent('10');
+    const table = screen.getByTestId('product-A').closest('table')!;
+    expect(within(table).getByTestId('product-A')).toHaveTextContent(
+      'Real Name'
+    );
+    expect(within(table).getByTestId('cell-A-0')).toHaveTextContent('10');
     expect(screen.queryByText('FABRICATED')).not.toBeInTheDocument();
     expect(screen.queryByText('9999')).not.toBeInTheDocument();
   });
@@ -295,6 +297,6 @@ describe('ComparisonTable grounding', () => {
     renderComparison(displayMessage, messages);
 
     expect(screen.getByTestId('product-A')).toHaveTextContent('Galaxy A50');
-    expect(screen.getByTestId('cell-A-price')).toHaveTextContent('999');
+    expect(screen.getByTestId('cell-A-0')).toHaveTextContent('999');
   });
 });

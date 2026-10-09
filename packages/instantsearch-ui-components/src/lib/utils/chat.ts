@@ -32,6 +32,33 @@ export const hasTextContent = (message: ChatMessageBase) => {
   return getTextContent(message).trim() !== '';
 };
 
+/**
+ * Whether a user message has nothing to show, so the transcript renders no
+ * bubble for it and the shopper goes straight to the answer.
+ *
+ * That is a message whose text is empty — a silent prompt shortcut, which
+ * Agent Studio persists without display text — or whose text is still the
+ * shortcut sentinel the entry point sent (`metadata.promptShortcut.sentinel`)
+ * while the server's resolved text is on its way. Any non-text part keeps the
+ * message visible.
+ */
+export const isSilentUserMessage = (message: ChatMessageBase): boolean => {
+  if (message.role !== 'user') {
+    return false;
+  }
+  const sentinel = (
+    message.metadata as { promptShortcut?: { sentinel?: unknown } } | undefined
+  )?.promptShortcut?.sentinel;
+
+  return message.parts.every((part) => {
+    if (!isPartText(part)) {
+      return false;
+    }
+    const text = part.text.trim();
+    return text === '' || (typeof sentinel === 'string' && text === sentinel);
+  });
+};
+
 export const isPartText = (
   part: ChatMessageBase['parts'][number]
 ): part is Extract<ChatMessageBase['parts'][number], { type: 'text' }> => {

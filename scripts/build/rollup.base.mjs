@@ -31,6 +31,7 @@ import {
   createReplacePlugin,
   createResolvePlugin,
   createStripJsxPragmaPlugin,
+  createAnnotatePureCallsPlugin,
   createWrapWarningsWithDevCheckPlugin,
   createTerserPlugin,
   onWarn,
@@ -76,6 +77,7 @@ export function createESMConfig({
       ...preSwcPlugins,
       createSwcPlugin(swc),
       createWrapWarningsWithDevCheckPlugin(),
+      createAnnotatePureCallsPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
       extensionResolver({
@@ -142,6 +144,7 @@ export function createCJSConfig({
         ...swc,
       }),
       createWrapWarningsWithDevCheckPlugin(),
+      createAnnotatePureCallsPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
@@ -201,6 +204,7 @@ export function createUMDConfig({
     ...preSwcPlugins,
     createSwcPlugin(swc),
     createWrapWarningsWithDevCheckPlugin(),
+    createAnnotatePureCallsPlugin(),
   ];
 
   // Development build (unminified)

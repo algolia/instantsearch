@@ -1,7 +1,6 @@
 /** @jsx createElement */
-import { compiler } from 'markdown-to-jsx';
-
 import { cx, startsWith } from '../../lib';
+import { compiler } from '../../lib/markdown-to-jsx';
 import {
   findTool,
   isPartTextEmpty,

@@ -37,6 +37,14 @@ export type OpenChatOptions = {
   turnContext?: Record<string, string>;
 };
 
+// A prompt-shortcut sentinel (`__ALGOLIA_<KIND>_<id>__`, e.g. the `compare`
+// widget's configured comparison) stands for a prompt the server holds; the
+// server also decides what the transcript shows for it. Mirrors the backend's
+// matching: SCREAMING_SNAKE kind, then an id that starts with a letter and
+// runs 3-64 word characters/hyphens (`SHORTCUT_ID_PATTERN` on the backend).
+const PROMPT_SHORTCUT_SENTINEL =
+  /^__ALGOLIA_[A-Z][A-Z_]*_[A-Za-z][\w-]{2,63}__$/;
+
 // Centralizes the "open the chat from an entry point" behavior shared by the
 // SearchBox AI button, the Autocomplete AI button, prompt suggestions, and any
 // future entry point. The chat is always opened; the message is only sent when
@@ -66,10 +74,20 @@ export function openChat(
     return false;
   }
 
+  // Marking a sentinel as a pending prompt shortcut keeps its bubble hidden
+  // until the server echoes the text to show (see `applyPromptShortcutEcho`
+  // in `connectChat`) — or for good, when the shortcut is silent.
+  const metadata = {
+    ...(turnContext ? { turnContext } : {}),
+    ...(PROMPT_SHORTCUT_SENTINEL.test(trimmed)
+      ? { promptShortcut: { sentinel: trimmed } }
+      : {}),
+  };
+
   chatRenderState.sendMessage(
     {
       text: trimmed,
-      ...(turnContext ? { metadata: { turnContext } } : {}),
+      ...(Object.keys(metadata).length > 0 ? { metadata } : {}),
     } as Parameters<NonNullable<typeof chatRenderState.sendMessage>>[0],
     referer ? { headers: { 'x-algolia-referer': referer } } : undefined
   );

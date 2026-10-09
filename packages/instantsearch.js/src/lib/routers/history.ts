@@ -2,7 +2,7 @@ import qs from 'qs';
 
 import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
 
-import type { Router, UiState } from '../../types';
+import type { Router, RouterWriteOptions, UiState } from '../../types';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
@@ -36,6 +36,9 @@ export type BrowserHistoryArgs<TRouteState> = {
   // @MAJOR: Switch the default to `false` and remove the console info in the next major version.
   cleanUrlOnDispose?: boolean;
 };
+
+const isObject = (value: unknown): value is object =>
+  typeof value === 'object' && value !== null;
 
 const setWindowTitle = (title?: string): void => {
   if (title) {
@@ -87,9 +90,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private _onPopState?: (event: PopStateEvent) => void;
 
   /**
-   * Indicates if last action was back/forward in the browser.
+   * The route states read on popstate (back/forward in the browser). A write
+   * applying one of them must not push it: the URL already reflects it.
    */
-  private inPopState: boolean = false;
+  private popStateRouteStates = new WeakSet<object>();
 
   /**
    * Indicates whether the history router is disposed or not.
@@ -166,10 +170,24 @@ See documentation: ${createDocumentationLink({
   /**
    * Pushes a search state into the URL.
    */
-  public write(routeState: TRouteState): void {
+  public write(
+    routeState: TRouteState,
+    { source }: RouterWriteOptions<TRouteState> = {}
+  ): void {
     safelyRunOnBrowser(({ window: browserWindow }) => {
       const url = this.createURL(routeState);
       const title = this.windowTitle && this.windowTitle(routeState);
+      // Without a source, the route state can be the one read on popstate.
+      const popStateRouteState = source === undefined ? routeState : source;
+      const causedByPopState =
+        isObject(popStateRouteState) &&
+        this.popStateRouteStates.has(popStateRouteState);
+
+      // Only this write is caused by the popstate, not later ones of the same
+      // route state object.
+      if (causedByPopState) {
+        this.popStateRouteStates.delete(popStateRouteState);
+      }
 
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -178,7 +196,7 @@ See documentation: ${createDocumentationLink({
       this.writeTimer = setTimeout(() => {
         setWindowTitle(title);
 
-        if (this.shouldWrite(url)) {
+        if (!causedByPopState && this.shouldWrite(url)) {
           if (this._push) {
             this._push(url);
           } else {
@@ -186,7 +204,6 @@ See documentation: ${createDocumentationLink({
           }
           this.latestAcknowledgedHistory = browserWindow.history.length;
         }
-        this.inPopState = false;
         this.writeTimer = undefined;
       }, this.writeDelay);
     });
@@ -209,11 +226,15 @@ See documentation: ${createDocumentationLink({
         this.writeTimer = undefined;
       }
 
-      this.inPopState = true;
-
       // We always read the state from the URL because the state of the history
       // can be incorect in some cases (e.g. using React Router).
-      callback(this.read());
+      const routeState = this.read();
+
+      if (isObject(routeState)) {
+        this.popStateRouteStates.add(routeState);
+      }
+
+      callback(routeState);
     };
 
     safelyRunOnBrowser(({ window: browserWindow }) => {
@@ -299,9 +320,6 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       );
 
       return (
-        // When the last state change was through popstate, the IS.js state changes,
-        // but that should not write the URL.
-        !this.inPopState &&
         // When the previous pushState after dispose was by IS.js, we want to write the URL.
         lastPushWasByISAfterDispose &&
         // When the URL is the same as the current one, we do not want to write it.

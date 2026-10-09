@@ -1214,10 +1214,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
         previousChangeSearchParameters = state;
 
-        // We don't trigger an internal change when controlled because it
-        // becomes the responsibility of `setUiState`.
-        if (!instantSearchInstance.onStateChange) {
-          instantSearchInstance.onInternalStateChange();
+        // While `setUiState` applies a state, the change is part of it, also
+        // when controlled: a state partially applied before a widget throws is
+        // still notified. Otherwise, we don't trigger an internal change when
+        // controlled because it becomes the responsibility of `setUiState`.
+        const applyingUiState = instantSearchInstance._applyingUiState;
+        if (!instantSearchInstance.onStateChange || applyingUiState) {
+          instantSearchInstance.onInternalStateChange(
+            applyingUiState && applyingUiState.onApply
+          );
         }
       });
 

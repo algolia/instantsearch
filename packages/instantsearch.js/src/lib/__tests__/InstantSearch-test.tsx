@@ -2552,6 +2552,162 @@ describe('setUiState', () => {
     });
   });
 
+  test('does not notify middlewares when applying the UI state throws', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([throwingWidget]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
+  });
+
+  test('notifies middlewares of the applied part of the UI state when a child index throws', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([
+      virtualSearchBox({}),
+      index({ indexName: 'childIndexName' }).addWidgets([throwingWidget]),
+    ]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'applied' },
+        childIndexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: expect.objectContaining({
+        indexName: { query: 'applied' },
+      }),
+    });
+  });
+
+  test('notifies middlewares of the applied part of the UI state when a child index throws with a controlled state', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange({ uiState, setUiState }) {
+        setUiState(uiState);
+      },
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+    const throwingWidget = {
+      $$type: 'ais.throwing',
+      init() {},
+      render() {},
+      getWidgetUiState(uiState) {
+        return uiState;
+      },
+      getWidgetSearchParameters(state, { uiState }) {
+        if (uiState.query === 'throw') {
+          throw new Error('Cannot apply the UI state');
+        }
+
+        return state;
+      },
+    } as Widget;
+
+    search.use(middleware);
+    search.addWidgets([
+      virtualSearchBox({}),
+      index({ indexName: 'childIndexName' }).addWidgets([throwingWidget]),
+    ]);
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: { query: 'applied' },
+        childIndexName: { query: 'throw' },
+      });
+    }).toThrow('Cannot apply the UI state');
+
+    await wait(0);
+
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: expect.objectContaining({
+        indexName: { query: 'applied' },
+      }),
+    });
+  });
+
   test('notifies all middlewares in multi-index when called multiple times', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({

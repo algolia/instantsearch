@@ -2,6 +2,7 @@
 
 import {
   createGroundedComparisonTableComponent,
+  criteriaFromAttributes,
   defaultComparisonTableTranslations,
 } from './createGroundedComparisonTable';
 
@@ -29,9 +30,9 @@ import type { ComparisonTableTranslations } from './createGroundedComparisonTabl
  *     }
  *   ]
  *
- * The first column is always the product (its `name`/`title`, sourced from the
- * hit). Remaining columns are the requested attributes, read off the hit. A
- * missing attribute renders as an explicit em-dash, never a fabricated value.
+ * Products run across the top (their `name`/`title`, sourced from the hit) and
+ * the requested attributes run down the side, read off the hit. A missing
+ * attribute renders as an explicit em-dash, never a fabricated value.
  */
 
 type MarkdownTableRow = {
@@ -104,12 +105,25 @@ export function createComparisonTableToolComponent({
       return <Fragment />;
     }
 
+    const objectIDs = table.rows.map((row) => row.objectID);
+    const attributes = table.attributes ?? [];
+    // `columns` labels `[product, ...attributes]`; the product label is now
+    // the header row, so only the attribute labels are kept.
+    const labels =
+      table.columns && table.columns.length === attributes.length + 1
+        ? table.columns.slice(1)
+        : table.columns;
+
     return (
       <GroundedComparisonTable
         intro={intro}
-        objectIDs={table.rows.map((row) => row.objectID)}
-        attributes={table.attributes ?? []}
-        columns={table.columns}
+        objectIDs={objectIDs}
+        criteria={criteriaFromAttributes(
+          objectIDs,
+          attributes,
+          records,
+          labels
+        )}
         records={records}
         translations={translations}
       />

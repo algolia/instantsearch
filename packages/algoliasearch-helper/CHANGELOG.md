@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.30.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.4...algoliasearch-helper@3.30.0) (2026-10-01)
+
+
+### Features
+
+* **result-card:** activate from `renderingContent` ([#7266](https://github.com/algolia/instantsearch/issues/7266)) ([d8069fa](https://github.com/algolia/instantsearch/commit/d8069fa2ee978211abbf33ed613f0cc05e82d192))
+
+
+
+
+
 ## [3.29.4](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.29.3...algoliasearch-helper@3.29.4) (2026-09-29)
 
 
