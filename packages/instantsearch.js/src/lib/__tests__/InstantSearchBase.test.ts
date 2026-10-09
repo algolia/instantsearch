@@ -1,10 +1,14 @@
 /**
  * @jest-environment jsdom
  */
+import { createSearchClient } from '@instantsearch/mocks';
+
+import connectHits from '../../connectors/hits/connectHits';
 import chat from '../../widgets/chat/chat';
 import chatTrigger from '../../widgets/chat-trigger/chat-trigger';
 import { createWidgetContainer } from '../createWidgetContainer';
 import { InstantSearchBase } from '../InstantSearchBase';
+import { InstantSearchWithSearch } from '../InstantSearchWithSearch';
 
 import type { Middleware } from '../../types';
 
@@ -89,5 +93,25 @@ describe('InstantSearchBase', () => {
     expect(base.mainHelper!.state.index).toBe('indexName');
 
     base.dispose();
+  });
+
+  test('searches when the search side is added, without routing or Insights', async () => {
+    const searchClient = createSearchClient();
+    const render = jest.fn();
+
+    const search = new InstantSearchWithSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    search.addWidgets([connectHits(render)({})]);
+    search.start();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalled();
+    expect(search.status).toBe('idle');
+    expect(search.getUiState()).toEqual({ indexName: {} });
+
+    search.dispose();
   });
 });
