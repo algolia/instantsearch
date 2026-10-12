@@ -26,13 +26,22 @@ export default {
     };
   },
   props: {
+    // Not `required` because it's optional when `isolated` is `true`. The
+    // underlying index widget throws when neither `indexName` nor `isolated`
+    // is provided.
     indexName: {
       type: String,
-      required: true,
+      required: false,
+      default: undefined,
     },
     indexId: {
       type: String,
       required: false,
+    },
+    isolated: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   render: renderCompat(function (h) {
@@ -43,6 +52,7 @@ export default {
       return {
         indexName: this.indexName,
         indexId: this.indexId,
+        isolated: this.isolated,
       };
     },
   },
