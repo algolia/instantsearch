@@ -450,6 +450,176 @@ describe('routing', () => {
 
       expect(queries(client).pop()).toBe('galaxy');
     });
+
+    it('does not search again for a URL the router applied on popstate', async () => {
+      const client = createSearchClient();
+      const { rerender } = render(<App client={client} />);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      await refineAndWaitForUrl('iphone');
+
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(0);
+      });
+
+      await refineAndWaitForUrl('galaxy');
+
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(0);
+      });
+
+      const callsBefore = searchCalls(client).length;
+
+      // history.back()
+      window.history.replaceState(
+        {},
+        '',
+        '/search?indexName%5Bquery%5D=iphone'
+      );
+      await act(async () => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        await wait(10);
+      });
+      expect(queries(client).pop()).toBe('iphone');
+      expect(searchCalls(client)).toHaveLength(callsBefore + 1);
+
+      // Next.js commits the URL it was navigated to
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+
+      expect(searchCalls(client)).toHaveLength(callsBefore + 1);
+    });
+
+    it('does not search again for a popstate that follows an uncommitted write', async () => {
+      const client = createSearchClient();
+      const { rerender } = render(<App client={client} />);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      await refineAndWaitForUrl('iphone');
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(0);
+      });
+
+      await refineAndWaitForUrl('galaxy');
+
+      // history.back() before Next.js commits the 'galaxy' write
+      window.history.replaceState(
+        {},
+        '',
+        '/search?indexName%5Bquery%5D=iphone'
+      );
+      await act(async () => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        await wait(10);
+      });
+      const callsBefore = searchCalls(client).length;
+
+      mockSearchParams.mockReturnValue(
+        new URLSearchParams('indexName%5Bquery%5D=galaxy')
+      );
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+
+      expect(searchCalls(client)).toHaveLength(callsBefore);
+    });
+
+    it('applies a link to a route written before a popstate back', async () => {
+      const client = createSearchClient();
+      const { rerender } = render(<App client={client} />);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      await refineAndWaitForUrl('iphone');
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(0);
+      });
+
+      // A write, then history.back() to the committed route, before Next.js
+      // commits anything
+      await refineAndWaitForUrl('galaxy');
+      window.history.replaceState(
+        {},
+        '',
+        '/search?indexName%5Bquery%5D=iphone'
+      );
+      await act(async () => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        await wait(10);
+      });
+      const callsBefore = searchCalls(client).length;
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+      expect(searchCalls(client)).toHaveLength(callsBefore);
+
+      // A <Link> to the route that was written is still applied
+      window.history.pushState({}, '', '/search?indexName%5Bquery%5D=galaxy');
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+
+      expect(queries(client).pop()).toBe('galaxy');
+    });
+
+    it('still applies a later URL change after a popstate', async () => {
+      const client = createSearchClient();
+      const { rerender } = render(<App client={client} />);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      window.history.pushState({}, '', '/search?indexName%5Bquery%5D=iphone');
+      await act(async () => {
+        window.dispatchEvent(new PopStateEvent('popstate'));
+        await wait(10);
+      });
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+
+      // A <Link> to the same query as the one before the popstate
+      window.history.pushState({}, '', '/search?indexName%5Bquery%5D=galaxy');
+      commitLocation();
+      await act(async () => {
+        rerender(<App client={client} />);
+        await wait(10);
+      });
+
+      expect(queries(client).pop()).toBe('galaxy');
+    });
   });
 });
 
