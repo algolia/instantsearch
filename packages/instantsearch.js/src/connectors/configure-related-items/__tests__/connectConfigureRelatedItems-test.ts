@@ -2,6 +2,8 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
+/* oxlint-disable typescript-eslint/no-deprecated -- tests intentionally exercise the deprecated connectConfigureRelatedItems connector this file covers */
+
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
