@@ -26,7 +26,8 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(),
               templates: {
                 header: {
-                  layout: '<div class="custom-header">Custom header</div>',
+                  layout: (_, { html }) =>
+                    html`<div class="custom-header">Custom header</div>`,
                 },
               },
             },
@@ -60,14 +61,22 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(),
               templates: {
                 header: {
-                  titleIcon:
-                    '<span class="custom-title-icon">Custom title icon</span>',
-                  closeIcon:
-                    '<span class="custom-close-icon">Custom close icon</span>',
-                  minimizeIcon:
-                    '<span class="custom-minimize-icon">Custom minimize icon</span>',
-                  maximizeIcon:
-                    '<span class="custom-maximize-icon">Custom maximize icon</span>',
+                  titleIcon: (_, { html }) =>
+                    html`<span class="custom-title-icon"
+                      >Custom title icon</span
+                    >`,
+                  closeIcon: (_, { html }) =>
+                    html`<span class="custom-close-icon"
+                      >Custom close icon</span
+                    >`,
+                  minimizeIcon: (_, { html }) =>
+                    html`<span class="custom-minimize-icon"
+                      >Custom minimize icon</span
+                    >`,
+                  maximizeIcon: (_, { html }) =>
+                    html`<span class="custom-maximize-icon"
+                      >Custom maximize icon</span
+                    >`,
                 },
               },
             },
@@ -122,7 +131,8 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(),
               templates: {
                 prompt: {
-                  layout: '<div class="custom-prompt">Custom prompt</div>',
+                  layout: (_, { html }) =>
+                    html`<div class="custom-prompt">Custom prompt</div>`,
                 },
               },
             },
@@ -156,8 +166,10 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(),
               templates: {
                 prompt: {
-                  header: '<div class="custom-header">Custom header</div>',
-                  footer: '<div class="custom-footer">Custom footer</div>',
+                  header: (_, { html }) =>
+                    html`<div class="custom-header">Custom header</div>`,
+                  footer: (_, { html }) =>
+                    html`<div class="custom-footer">Custom footer</div>`,
                 },
               },
             },
@@ -203,7 +215,8 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                loader: '<div class="custom-loader">Custom loader</div>',
+                loader: (_, { html }) =>
+                  html`<div class="custom-loader">Custom loader</div>`,
               },
             },
             react: {
@@ -241,7 +254,8 @@ export function createTemplatesTests(
               ...createDefaultWidgetParams(chat),
               templates: {
                 messages: {
-                  error: '<div class="custom-error">Custom error</div>',
+                  error: (_, { html }) =>
+                    html`<div class="custom-error">Custom error</div>`,
                 },
               },
             },
@@ -276,7 +290,8 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty: '<div class="custom-empty">Custom empty</div>',
+                empty: (_, { html }) =>
+                  html`<div class="custom-empty">Custom empty</div>`,
               },
             },
             react: {
@@ -318,7 +333,8 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty: '<div class="custom-empty">Custom empty</div>',
+                empty: (_, { html }) =>
+                  html`<div class="custom-empty">Custom empty</div>`,
               },
             },
             react: {
@@ -353,7 +369,8 @@ export function createTemplatesTests(
             javascript: {
               ...createDefaultWidgetParams(chat),
               templates: {
-                empty: '<div class="custom-empty">Custom empty</div>',
+                empty: (_, { html }) =>
+                  html`<div class="custom-empty">Custom empty</div>`,
               },
             },
             react: {
@@ -415,12 +432,13 @@ export function createTemplatesTests(
               },
               templates: {
                 assistantMessage: {
-                  leading: '<span>Assistant Leading</span>',
-                  footer: '<span>Assistant Footer</span>',
+                  leading: (_, { html }) =>
+                    html`<span>Assistant Leading</span>`,
+                  footer: (_, { html }) => html`<span>Assistant Footer</span>`,
                 },
                 userMessage: {
-                  leading: '<span>User Leading</span>',
-                  footer: '<span>User Footer</span>',
+                  leading: (_, { html }) => html`<span>User Leading</span>`,
+                  footer: (_, { html }) => html`<span>User Footer</span>`,
                 },
               },
             },

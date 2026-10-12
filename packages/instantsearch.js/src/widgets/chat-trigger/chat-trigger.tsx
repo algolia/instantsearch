@@ -3,9 +3,8 @@
 import { createChatToggleButtonComponent } from 'instantsearch-ui-components';
 import { h, Fragment, render } from 'preact';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 import connectChatTrigger from '../../connectors/chat/connectChatTrigger';
-import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -102,20 +101,12 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
       RendererOptions<ChatTriggerConnectorParams>,
     _isFirstRender: boolean
   ) {
-    const { open, toggleOpen, instantSearchInstance } = renderState;
-
-    // Resolve template props at render time so user-provided helpers and
-    // compile options from `instantSearchInstance.templatesConfig` apply.
-    const templateProps = prepareTemplateProps({
-      defaultTemplates: {} as unknown as ChatTriggerTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
+    const { open, toggleOpen } = renderState;
 
     const LayoutComponent = templates.layout
       ? (props: ChatToggleButtonProps) => (
           <TemplateComponent
-            {...templateProps}
+            templates={templates}
             templateKey="layout"
             rootTagName="fragment"
             data={props}
@@ -126,7 +117,7 @@ export default function chatTrigger(widgetParams: ChatTriggerWidgetParams) {
     const iconComponent = templates.icon
       ? ({ isOpen }: { isOpen: boolean }) => (
           <TemplateComponent
-            {...templateProps}
+            templates={templates}
             templateKey="icon"
             rootTagName="span"
             data={{ isOpen }}

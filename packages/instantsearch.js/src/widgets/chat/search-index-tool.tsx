@@ -4,7 +4,7 @@ import { createCarouselToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
-import TemplateComponent from '../../components/Template/Template';
+import TemplateComponent from '../../components/Template/FunctionTemplate';
 
 import type {
   ChatTemplates,
