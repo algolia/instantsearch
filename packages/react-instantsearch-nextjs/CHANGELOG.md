@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.12...react-instantsearch-nextjs@1.4.13) (2026-10-12)
+
+
+### Bug Fixes
+
+* **react-instantsearch-nextjs:** do not apply a popstate URL a second time ([#7287](https://github.com/algolia/instantsearch/issues/7287)) ([042b8f6](https://github.com/algolia/instantsearch/commit/042b8f68d2ec315047ebb0ff6e8be782048f1446))
+* **react-instantsearch-nextjs:** ignore the router's own URL writes in the routing effect ([#7286](https://github.com/algolia/instantsearch/issues/7286)) ([919943a](https://github.com/algolia/instantsearch/commit/919943a100037aee75c679d912a426bf3b28ea07))
+
+
+
+
+
 ## [1.4.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.4.11...react-instantsearch-nextjs@1.4.12) (2026-10-01)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

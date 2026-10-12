@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.52.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.51.1...react-instantsearch-core@7.52.0) (2026-10-12)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+## [7.51.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.51.0...react-instantsearch-core@7.51.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* **react-instantsearch-core:** restart search and widgets after an Activity hide/reveal ([#7288](https://github.com/algolia/instantsearch/issues/7288)) ([ec40fe1](https://github.com/algolia/instantsearch/commit/ec40fe1aafa1807d59d364661741b9487aaaa381)), closes [#7026](https://github.com/algolia/instantsearch/issues/7026)
+
+
+
+
+
 # [7.51.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.50.1...react-instantsearch-core@7.51.0) (2026-10-01)
 
 

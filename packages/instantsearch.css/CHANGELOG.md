@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.24.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.24.0...instantsearch.css@8.24.1) (2026-10-12)
+
+
+### Bug Fixes
+
+* **compareBar:** styling tweaks ([#7276](https://github.com/algolia/instantsearch/issues/7276)) ([e0129e4](https://github.com/algolia/instantsearch/commit/e0129e4ee19c4ffb8da5cda7c244abc8f59a9b89))
+
+
+
+
+
 # [8.24.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.23.0...instantsearch.css@8.24.0) (2026-10-01)
 
 
