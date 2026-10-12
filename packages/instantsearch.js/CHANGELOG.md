@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.120.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.119.0...instantsearch.js@4.120.0) (2026-10-12)
+
+
+### Bug Fixes
+
+* **panel:** give collapse buttons accessible names ([#7272](https://github.com/algolia/instantsearch/issues/7272)) ([802c405](https://github.com/algolia/instantsearch/commit/802c405bb03141545e9076419b1e49fdc13ff55f))
+* **routing:** only skip the write a popstate causes ([#7261](https://github.com/algolia/instantsearch/issues/7261)) ([3f4f442](https://github.com/algolia/instantsearch/commit/3f4f44204fd675774038659f6e4288dbf3637348)), closes [#7260](https://github.com/algolia/instantsearch/issues/7260)
+
+
+### Features
+
+* **chat:** show nothing for a silent comparison shortcut ([#7275](https://github.com/algolia/instantsearch/issues/7275)) ([cc8de5f](https://github.com/algolia/instantsearch/commit/cc8de5f8519b2c4b528b6a21dcf6db057cd9cff1))
+* **chat:** stream the comparison table as the tool input arrives ([#7273](https://github.com/algolia/instantsearch/issues/7273)) ([a7917a6](https://github.com/algolia/instantsearch/commit/a7917a6999d5fd6b50681151903450db5fa1a86e))
+
+
+
+
+
 # [4.119.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.118.1...instantsearch.js@4.119.0) (2026-10-01)
 
 

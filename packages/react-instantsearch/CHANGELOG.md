@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.52.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.51.0...react-instantsearch@7.52.0) (2026-10-12)
+
+
+### Features
+
+* **chat:** stream the comparison table as the tool input arrives ([#7273](https://github.com/algolia/instantsearch/issues/7273)) ([a7917a6](https://github.com/algolia/instantsearch/commit/a7917a6999d5fd6b50681151903450db5fa1a86e))
+
+
+
+
+
 # [7.51.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.50.1...react-instantsearch@7.51.0) (2026-10-01)
 
 

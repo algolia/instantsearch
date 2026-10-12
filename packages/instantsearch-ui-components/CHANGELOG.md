@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.42.0...instantsearch-ui-components@0.43.0) (2026-10-12)
+
+
+### Bug Fixes
+
+* **compareBar:** styling tweaks ([#7276](https://github.com/algolia/instantsearch/issues/7276)) ([e0129e4](https://github.com/algolia/instantsearch/commit/e0129e4ee19c4ffb8da5cda7c244abc8f59a9b89))
+
+
+### Features
+
+* **chat:** show nothing for a silent comparison shortcut ([#7275](https://github.com/algolia/instantsearch/issues/7275)) ([cc8de5f](https://github.com/algolia/instantsearch/commit/cc8de5f8519b2c4b528b6a21dcf6db057cd9cff1))
+* **chat:** stream the comparison table as the tool input arrives ([#7273](https://github.com/algolia/instantsearch/issues/7273)) ([a7917a6](https://github.com/algolia/instantsearch/commit/a7917a6999d5fd6b50681151903450db5fa1a86e))
+
+
+### Performance Improvements
+
+* **chat:** vendor markdown-to-jsx without its React runtime ([#7280](https://github.com/algolia/instantsearch/issues/7280)) ([c66ec75](https://github.com/algolia/instantsearch/commit/c66ec75030c2e186a84653abf4f3ec3075d48361))
+
+
+
+
+
 # [0.42.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.41.0...instantsearch-ui-components@0.42.0) (2026-10-01)
 
 
