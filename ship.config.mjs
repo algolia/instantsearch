@@ -16,6 +16,7 @@ const changedPackages = packages
     ),
   }))
   .filter(({ isPublished }) => !isPublished);
+let updatedPackages = [];
 
 export default {
   shouldPrepare: () => {
@@ -26,6 +27,18 @@ export default {
   version({ exec }) {
     exec(
       'yarn lerna version --no-git-tag-version --no-push --exact --conventional-commits --yes'
+    );
+
+    const packageVersionsAfterUpdate = JSON.parse(
+      shell.exec('yarn run --silent lerna list --toposort --json', {
+        silent: true,
+      })
+    );
+    const previousVersions = new Map(
+      packages.map(({ name, version }) => [name, version])
+    );
+    updatedPackages = packageVersionsAfterUpdate.filter(
+      ({ name, version }) => previousVersions.get(name) !== version
     );
 
     return {
@@ -50,6 +63,15 @@ export default {
     // this is assuming there's a single "previous" version, so can't be used with independent versioning.
     // const diffLink = `[\`${currentVersion}\` → \`${nextVersion}\`](${diffURL})`;
     const publishCommandsTable = `\`\`\`${publishCommands}\`\`\``;
+    const updatedPackagesSummary = updatedPackages.length
+      ? [
+          '| Package | Version |',
+          '|---|---|',
+          ...updatedPackages.map(
+            ({ name, version }) => `| \`${name}\` | \`${version}\` |`
+          ),
+        ].join('\n')
+      : 'No package versions changed.';
 
     const mergeInstruction = `
 When merging this pull request, you need to **Squash and merge** and make sure that the title starts with \`${title}\`.
@@ -68,6 +90,10 @@ This pull request prepares the following release:
 | ${repoLink} | ${stagingBranch} | ${releaseType} |
 
 ### Release Summary
+The following packages have been updated:
+
+${updatedPackagesSummary}
+
 This is going to be published with the following command:
 
 ${publishCommandsTable}
