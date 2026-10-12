@@ -42,7 +42,7 @@ describe('useInstantSearchApi', () => {
     );
 
     const store = result.current;
-    
+
     // Simulate initial mount (subscribe)
     let cleanup: any;
     act(() => {
