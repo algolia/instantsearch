@@ -27,6 +27,12 @@ export function useInstantSearchRouting<
   // the URL into `_initialUiState`, and a redundant `setUiState` can wipe the
   // URL with a nested `<Index>` (see #6980).
   const previousRouteRef = useRef<string | null>(null);
+  // The URL the router is in sync with: the last one it wrote itself. Next.js
+  // commits it to `pathname` / `searchParams` a bit later, and the UI state is
+  // already up to date for it. Reading it back would at best search again, and
+  // at worst apply a state that a newer, not yet written refinement has
+  // replaced.
+  const syncedHrefRef = useRef<string | null>(null);
 
   useEffect(() => {
     const currentRoute = `${pathname ?? ''}?${searchParams?.toString() ?? ''}`;
@@ -41,6 +47,11 @@ export function useInstantSearchRouting<
     if (isFirstRun) {
       return;
     }
+
+    if (window.location.href === syncedHrefRef.current) {
+      return;
+    }
+    syncedHrefRef.current = window.location.href;
 
     if (onUpdateRef.current) {
       onUpdateRef.current();
@@ -97,6 +108,21 @@ export function useInstantSearchRouting<
       };
       routingRef.current.stateMapping = passedRouting.stateMapping;
     }
+
+    // Wrapped after the user's options are merged, so a custom `push` is
+    // tracked as well. Without one, the router pushes the state itself.
+    const configuredPush = browserHistoryOptions.push;
+    if (configuredPush) {
+      browserHistoryOptions.push = function push(
+        this: ReturnType<typeof historyRouter>,
+        url
+      ) {
+        configuredPush.call(this, url);
+        // The URL it is pushing to, as a push that happens later would land on.
+        syncedHrefRef.current = new URL(url, window.location.href).href;
+      };
+    }
+
     routingRef.current.router = historyRouter(browserHistoryOptions);
   }
 
