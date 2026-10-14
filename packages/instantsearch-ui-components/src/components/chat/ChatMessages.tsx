@@ -493,6 +493,22 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
   };
 }
 
+/**
+ * The text of a reply as it should be spoken. Only unambiguous Markdown syntax
+ * is removed (and only when the reply is rendered as Markdown), so literal
+ * characters such as `C#`, `count > 5` or `order_id` survive.
+ */
+function toSpokenText(text: string, parseMarkdown: boolean) {
+  const plain = parseMarkdown
+    ? text
+        .replace(/^\s{0,3}(#{1,6}|>)\s+/gm, '')
+        .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/(\*\*|__|`)/g, '')
+    : text;
+
+  return plain.replace(/\s+/g, ' ').trim();
+}
+
 export function createChatMessagesComponent({
   createElement,
   Fragment,
@@ -510,11 +526,13 @@ export function createChatMessagesComponent({
     status,
     isProcessing,
     messages,
+    parseMarkdown,
     translations,
   }: {
     status: ChatStatus;
     isProcessing: boolean;
     messages: TMessage[];
+    parseMarkdown: boolean;
     translations: ChatMessagesTranslations;
   }) {
     const [announcement, setAnnouncement] = useState('');
@@ -533,18 +551,17 @@ export function createChatMessagesComponent({
       } else if (status === 'error') {
         setAnnouncement(translations.errorStatusText!);
       } else if (previous.isProcessing) {
-        const reply = [...messages]
-          .reverse()
-          .find((message) => message.role === 'assistant');
-        const text = reply
-          ? getTextContent(reply)
-              .replace(/[#*_`>]+/g, ' ')
-              .replace(/\s+/g, ' ')
-              .trim()
-          : '';
+        // Only a trailing assistant message is a reply: a stopped request
+        // returns to `ready` with the previous turn's answer still last-but-one.
+        const reply = messages[messages.length - 1];
+        if (!reply || reply.role !== 'assistant') {
+          setAnnouncement('');
+          return;
+        }
+        const text = toSpokenText(getTextContent(reply), parseMarkdown);
         setAnnouncement(translations.responseCompleteStatusText!({ text }));
       }
-    }, [status, isProcessing, previous, messages, translations]);
+    }, [status, isProcessing, previous, messages, parseMarkdown, translations]);
 
     return announcement;
   }
@@ -926,6 +943,7 @@ export function createChatMessagesComponent({
       status,
       isProcessing,
       messages,
+      parseMarkdown: assistantMessageProps?.parseMarkdown !== false,
       translations,
     });
     const activePart =
@@ -1018,7 +1036,6 @@ export function createChatMessagesComponent({
         // such as VoiceOver ignore `aria-busy`), so it is silenced in favor of
         // the status region below, which announces once per reply.
         aria-live="off"
-        aria-busy={isProcessing ? 'true' : undefined}
       >
         <div
           className={cx(cssClasses.status)}
@@ -1031,6 +1048,9 @@ export function createChatMessagesComponent({
         <div
           className={cx(cssClasses.scroll)}
           ref={scrollRef}
+          // On the history rather than the root, so the status region isn't
+          // inside a busy subtree, which would defer its announcements.
+          aria-busy={isProcessing ? 'true' : undefined}
           // Focusable so keyboard users can scroll it, including when it holds
           // no focusable content of its own.
           tabIndex={0}

@@ -1975,6 +1975,100 @@ describe('ChatMessages', () => {
       ).toHaveTextContent('Reply: Hello there');
     });
 
+    test('keeps the status region out of the busy subtree', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).not.toHaveAttribute(
+        'aria-busy'
+      );
+      expect(
+        container
+          .querySelector('.ais-ChatMessages-status')
+          ?.closest('[aria-busy]')
+      ).toBeNull();
+    });
+
+    test('does not announce the previous reply when a request is stopped', () => {
+      const messages = [
+        {
+          id: 'u1',
+          role: 'user' as const,
+          parts: [{ type: 'text' as const, text: 'Hi' }],
+        },
+        {
+          id: 'a1',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Old answer' }],
+        },
+        {
+          id: 'u2',
+          role: 'user' as const,
+          parts: [{ type: 'text' as const, text: 'More' }],
+        },
+      ];
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={messages} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={messages} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('keeps literal characters in announced replies', () => {
+      const reply = (text: string) => [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text }],
+        },
+      ];
+      const text =
+        'C# has count > 5 and order_id, **bold** [link](https://x.y)';
+      const { rerender } = render(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={reply(text)}
+        />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={reply(text)} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply: C# has count > 5 and order_id, bold link');
+    });
+
+    test('announces plain-text replies verbatim', () => {
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: '**not bold**' }],
+        },
+      ];
+      const props = {
+        ...baseProps,
+        assistantMessageProps: { parseMarkdown: false },
+        messages,
+      };
+      const { rerender } = render(
+        <ChatMessages {...props} status="streaming" />
+      );
+      rerender(<ChatMessages {...props} status="ready" />);
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply: **not bold**');
+    });
+
     test('announces errors', () => {
       const { rerender } = render(
         <ChatMessages {...baseProps} status="submitted" messages={[]} />
@@ -2028,14 +2122,13 @@ describe('ChatMessages', () => {
         <ChatMessages {...baseProps} status="submitted" messages={[]} />
       );
 
-      expect(container.querySelector('[role="log"]')).toHaveAttribute(
-        'aria-busy',
-        'true'
-      );
+      expect(
+        container.querySelector('.ais-ChatMessages-scroll')
+      ).toHaveAttribute('aria-busy', 'true');
     });
 
     test('keeps aria-busy set while a suppressed loader hides progress', () => {
-      // The log keeps updating even when the loader is overridden away, so the
+      // The history keeps updating even when the loader is overridden away, so the
       // busy state follows the turn rather than the loader.
       const { container } = render(
         <ChatMessages
@@ -2047,10 +2140,9 @@ describe('ChatMessages', () => {
       );
 
       expect(loader(container)).toBeNull();
-      expect(container.querySelector('[role="log"]')).toHaveAttribute(
-        'aria-busy',
-        'true'
-      );
+      expect(
+        container.querySelector('.ais-ChatMessages-scroll')
+      ).toHaveAttribute('aria-busy', 'true');
     });
 
     describe('with timers', () => {
