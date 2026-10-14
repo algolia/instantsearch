@@ -22,6 +22,29 @@ describe('chat', () => {
     warning.cache = {};
   });
 
+  describe('chatInstance', () => {
+    test('is exposed on the widget once it has been initialized', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+
+      const widget = chat({ container, agentId: 'test-agent-id' });
+
+      expect(widget.chatInstance).toBeUndefined();
+
+      search.addWidgets([widget]);
+      search.start();
+      await wait(0);
+
+      expect(widget.chatInstance).toBeDefined();
+      expect(widget.chatInstance.messages).toEqual([]);
+    });
+  });
+
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
