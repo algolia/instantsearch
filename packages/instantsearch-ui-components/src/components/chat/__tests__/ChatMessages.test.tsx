@@ -7,6 +7,7 @@ import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import * as chatUtils from '../../../lib/utils/chat';
+import { getTextContent } from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -15,7 +16,7 @@ import type {
   ChatMessageTextComponentProps,
 } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext } from '../types';
+import type { ChatComponentPropsWithContext, ChatMessageBase } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -1972,7 +1973,7 @@ describe('ChatMessages', () => {
       );
       expect(
         document.querySelector('.ais-ChatMessages-status')
-      ).toHaveTextContent('Reply: Hello there');
+      ).toHaveTextContent('Reply received.');
     });
 
     test('keeps the status region out of the busy subtree', () => {
@@ -2020,44 +2021,24 @@ describe('ChatMessages', () => {
       ).toHaveTextContent('');
     });
 
-    test('keeps literal characters in announced replies', () => {
-      const reply = (text: string) => [
-        {
-          id: 'a',
-          role: 'assistant' as const,
-          parts: [{ type: 'text' as const, text }],
-        },
-      ];
-      const text =
-        'C# has count > 5 and order_id, **bold** [link](https://x.y)';
-      const { rerender } = render(
-        <ChatMessages
-          {...baseProps}
-          status="streaming"
-          messages={reply(text)}
-        />
-      );
-      rerender(
-        <ChatMessages {...baseProps} status="ready" messages={reply(text)} />
-      );
-
-      expect(
-        document.querySelector('.ais-ChatMessages-status')
-      ).toHaveTextContent('Reply: C# has count > 5 and order_id, bold link');
-    });
-
-    test('announces plain-text replies verbatim', () => {
+    test('lets the reply announcement be customized from the message', () => {
       const messages = [
         {
           id: 'a',
           role: 'assistant' as const,
-          parts: [{ type: 'text' as const, text: '**not bold**' }],
+          parts: [{ type: 'text' as const, text: 'C# **rocks**' }],
         },
       ];
       const props = {
         ...baseProps,
-        assistantMessageProps: { parseMarkdown: false },
         messages,
+        translations: {
+          responseCompleteStatusText: ({
+            message,
+          }: {
+            message: ChatMessageBase;
+          }) => `Said: ${getTextContent(message)}`,
+        },
       };
       const { rerender } = render(
         <ChatMessages {...props} status="streaming" />
@@ -2066,7 +2047,7 @@ describe('ChatMessages', () => {
 
       expect(
         document.querySelector('.ais-ChatMessages-status')
-      ).toHaveTextContent('Reply: **not bold**');
+      ).toHaveTextContent('Said: C# **rocks**');
     });
 
     test('announces errors', () => {

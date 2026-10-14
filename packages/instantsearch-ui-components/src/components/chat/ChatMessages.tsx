@@ -69,10 +69,13 @@ export type ChatMessagesTranslations = {
    */
   respondingStatusText?: string;
   /**
-   * Announced to screen readers once a reply is complete, with its text. The
-   * reply is announced as a whole rather than chunk by chunk while it streams.
+   * Announced to screen readers once a reply is complete, instead of chunk by
+   * chunk while it streams. Receives the reply, so it can announce its text
+   * (the library can't know how a reply is rendered) or a summary of it.
    */
-  responseCompleteStatusText?: (context: { text: string }) => string;
+  responseCompleteStatusText?: (context: {
+    message: ChatMessageBase;
+  }) => string;
   /**
    * Announced to screen readers when the chat ends in an error
    */
@@ -493,22 +496,6 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
   };
 }
 
-/**
- * The text of a reply as it should be spoken. Only unambiguous Markdown syntax
- * is removed (and only when the reply is rendered as Markdown), so literal
- * characters such as `C#`, `count > 5` or `order_id` survive.
- */
-function toSpokenText(text: string, parseMarkdown: boolean) {
-  const plain = parseMarkdown
-    ? text
-        .replace(/^\s{0,3}(#{1,6}|>)\s+/gm, '')
-        .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
-        .replace(/(\*\*|__|`)/g, '')
-    : text;
-
-  return plain.replace(/\s+/g, ' ').trim();
-}
-
 export function createChatMessagesComponent({
   createElement,
   Fragment,
@@ -526,13 +513,11 @@ export function createChatMessagesComponent({
     status,
     isProcessing,
     messages,
-    parseMarkdown,
     translations,
   }: {
     status: ChatStatus;
     isProcessing: boolean;
     messages: TMessage[];
-    parseMarkdown: boolean;
     translations: ChatMessagesTranslations;
   }) {
     const [announcement, setAnnouncement] = useState('');
@@ -558,10 +543,11 @@ export function createChatMessagesComponent({
           setAnnouncement('');
           return;
         }
-        const text = toSpokenText(getTextContent(reply), parseMarkdown);
-        setAnnouncement(translations.responseCompleteStatusText!({ text }));
+        setAnnouncement(
+          translations.responseCompleteStatusText!({ message: reply })
+        );
       }
-    }, [status, isProcessing, previous, messages, parseMarkdown, translations]);
+    }, [status, isProcessing, previous, messages, translations]);
 
     return announcement;
   }
@@ -903,8 +889,7 @@ export function createChatMessagesComponent({
       scrollToBottomLabel: 'Scroll to bottom',
       conversationLabel: 'Conversation',
       respondingStatusText: 'Responding…',
-      responseCompleteStatusText: ({ text }) =>
-        text ? `Reply: ${text}` : 'Reply received.',
+      responseCompleteStatusText: () => 'Reply received.',
       errorStatusText: 'Sorry, something went wrong. Please try again.',
       copyToClipboardLabel: 'Copy to clipboard',
       regenerateLabel: 'Regenerate',
@@ -943,7 +928,6 @@ export function createChatMessagesComponent({
       status,
       isProcessing,
       messages,
-      parseMarkdown: assistantMessageProps?.parseMarkdown !== false,
       translations,
     });
     const activePart =
