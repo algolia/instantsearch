@@ -49,12 +49,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content"
@@ -121,12 +132,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content"
@@ -1776,12 +1798,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages root"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar scroll"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content content"
@@ -1870,6 +1903,124 @@ describe('ChatMessages', () => {
       );
 
       expect(loader(container)).not.toBeNull();
+    });
+
+    test('silences the log in favor of a single status region', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="ready" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-live',
+        'off'
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveAttribute('aria-live', 'polite');
+    });
+
+    test('makes the history a focusable, named region', () => {
+      render(<ChatMessages {...baseProps} status="ready" messages={[]} />);
+
+      const region = screen.getByRole('region', { name: 'Conversation' });
+      expect(region).toHaveAttribute('tabindex', '0');
+      expect(region).toHaveClass('ais-ChatMessages-scroll');
+    });
+
+    test('announces once when a reply starts and once with the full reply', () => {
+      const user = {
+        id: 'u',
+        role: 'user' as const,
+        parts: [{ type: 'text' as const, text: 'Hi' }],
+      };
+      const assistant = (text: string) => ({
+        id: 'a',
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text }],
+      });
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="ready" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+
+      rerender(
+        <ChatMessages {...baseProps} status="submitted" messages={[user]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[user, assistant('Hel')]}
+        />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[user, assistant('**Hello** there')]}
+        />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply: Hello there');
+    });
+
+    test('announces errors', () => {
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="error"
+          error={new Error('nope')}
+          messages={[]}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Sorry, something went wrong. Please try again.');
+    });
+
+    test('uses custom announcement translations', () => {
+      const { rerender } = render(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[]}
+          translations={{
+            respondingStatusText: 'Un moment…',
+            conversationLabel: 'Gesprek',
+          }}
+        />
+      );
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[]}
+          translations={{
+            respondingStatusText: 'Un moment…',
+            conversationLabel: 'Gesprek',
+          }}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Un moment…');
+      expect(screen.getByRole('region', { name: 'Gesprek' })).toBeTruthy();
     });
 
     test('sets aria-busy while loading', () => {

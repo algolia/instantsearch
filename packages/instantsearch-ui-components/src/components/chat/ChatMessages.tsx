@@ -60,6 +60,24 @@ export type ChatMessagesTranslations = {
    */
   scrollToBottomLabel: string;
   /**
+   * Accessible name of the scrollable message history, which is focusable so
+   * keyboard users can scroll it
+   */
+  conversationLabel?: string;
+  /**
+   * Announced to screen readers when a reply starts
+   */
+  respondingStatusText?: string;
+  /**
+   * Announced to screen readers once a reply is complete, with its text. The
+   * reply is announced as a whole rather than chunk by chunk while it streams.
+   */
+  responseCompleteStatusText?: (context: { text: string }) => string;
+  /**
+   * Announced to screen readers when the chat ends in an error
+   */
+  errorStatusText?: string;
+  /**
    * Text to display in the loader. A function can label the wait by what the
    * turn is doing (`context.phase`).
    */
@@ -111,6 +129,10 @@ export type ChatMessagesClassNames = {
    * Class names to apply to the scroll to bottom button when hidden
    */
   scrollToBottomHidden: string | string[];
+  /**
+   * Class names to apply to the visually hidden status announcement
+   */
+  status: string | string[];
 };
 
 type ChatMessageRoleProps<TMessage extends ChatMessageBase = ChatMessageBase> =
@@ -481,6 +503,53 @@ export function createChatMessagesComponent({
   const Button = createButtonComponent({ createElement });
 
   /**
+   * Text for the screen-reader status region: once when a reply starts, once
+   * with the whole reply when it completes, and on error.
+   */
+  function useStatusAnnouncement<TMessage extends ChatMessageBase>({
+    status,
+    isProcessing,
+    messages,
+    translations,
+  }: {
+    status: ChatStatus;
+    isProcessing: boolean;
+    messages: TMessage[];
+    translations: ChatMessagesTranslations;
+  }) {
+    const [announcement, setAnnouncement] = useState('');
+    const [previous, setPrevious] = useState({ status, isProcessing });
+
+    useEffect(() => {
+      if (previous.status === status) {
+        return;
+      }
+      setPrevious({ status, isProcessing });
+
+      if (isProcessing) {
+        if (!previous.isProcessing) {
+          setAnnouncement(translations.respondingStatusText!);
+        }
+      } else if (status === 'error') {
+        setAnnouncement(translations.errorStatusText!);
+      } else if (previous.isProcessing) {
+        const reply = [...messages]
+          .reverse()
+          .find((message) => message.role === 'assistant');
+        const text = reply
+          ? getTextContent(reply)
+              .replace(/[#*_`>]+/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+          : '';
+        setAnnouncement(translations.responseCompleteStatusText!({ text }));
+      }
+    }, [status, isProcessing, previous, messages, translations]);
+
+    return announcement;
+  }
+
+  /**
    * Smooths the loading state into a visibility. Several transitions in a turn
    * flip it twice within a few frames, which reads as the loader popping in and
    * out, so a loader coming back mid-turn waits out `showDelay` and a visible
@@ -815,6 +884,11 @@ export function createChatMessagesComponent({
 
     const translations: ChatMessagesTranslations = {
       scrollToBottomLabel: 'Scroll to bottom',
+      conversationLabel: 'Conversation',
+      respondingStatusText: 'Responding…',
+      responseCompleteStatusText: ({ text }) =>
+        text ? `Reply: ${text}` : 'Reply received.',
+      errorStatusText: 'Sorry, something went wrong. Please try again.',
       copyToClipboardLabel: 'Copy to clipboard',
       regenerateLabel: 'Regenerate',
       thumbsUpLabel: 'Like',
@@ -836,6 +910,7 @@ export function createChatMessagesComponent({
         'ais-ChatMessages-scrollToBottom--hidden',
         classNames.scrollToBottomHidden
       ),
+      status: cx('ais-ChatMessages-status', classNames.status),
     };
 
     const lastMessage = messages[messages.length - 1];
@@ -847,6 +922,12 @@ export function createChatMessagesComponent({
     // hasn't produced a part yet). Otherwise overrides render a part that isn't
     // actually streaming.
     const isProcessing = status === 'submitted' || status === 'streaming';
+    const statusAnnouncement = useStatusAnnouncement({
+      status,
+      isProcessing,
+      messages,
+      translations,
+    });
     const activePart =
       isProcessing && lastMessage?.role === 'assistant' ? lastPart : undefined;
     // The scan slices the remaining parts per candidate, and only the loader reads
@@ -933,10 +1014,29 @@ export function createChatMessagesComponent({
         {...props}
         className={cx(cssClasses.root, props.className)}
         role="log"
-        aria-live="polite"
+        // The log would announce every streamed chunk (and screen readers
+        // such as VoiceOver ignore `aria-busy`), so it is silenced in favor of
+        // the status region below, which announces once per reply.
+        aria-live="off"
         aria-busy={isProcessing ? 'true' : undefined}
       >
-        <div className={cx(cssClasses.scroll)} ref={scrollRef}>
+        <div
+          className={cx(cssClasses.status)}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {statusAnnouncement}
+        </div>
+        <div
+          className={cx(cssClasses.scroll)}
+          ref={scrollRef}
+          // Focusable so keyboard users can scroll it, including when it holds
+          // no focusable content of its own.
+          tabIndex={0}
+          role="region"
+          aria-label={translations.conversationLabel}
+        >
           <div
             className={cx(
               cssClasses.content,
