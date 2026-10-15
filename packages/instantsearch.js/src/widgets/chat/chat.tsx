@@ -1349,14 +1349,21 @@ export default (function chat<
     render(null, containerNode)
   );
 
+  const widget = makeWidget({
+    resume,
+    tools,
+    disableTriggerValidation: effectiveDisableTriggerValidation,
+    ...options,
+  });
+
   return {
-    ...makeWidget({
-      resume,
-      tools,
-      disableTriggerValidation: effectiveDisableTriggerValidation,
-      ...options,
-    }),
+    ...widget,
     $$widgetType: 'ais.chat',
+    // Spreading would copy the getter's value (still `undefined` before `init`),
+    // so we forward to it lazily instead.
+    get chatInstance() {
+      return widget.chatInstance;
+    },
   };
 } satisfies ChatWidget);
 
