@@ -23,8 +23,6 @@ export type ChatInit<TUiMessage extends UIMessage> =
   };
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
-// Stored apart from the messages, which are a bare array: wrapping them would
-// make them unreadable to a build that predates the wrapper.
 export const CONVERSATION_ID_CACHE_KEY = 'instantsearch-chat-conversation-id';
 
 // Message history is a browser concern, and a server render constructs a Chat
@@ -81,7 +79,6 @@ export class ChatState<
   _errorCallbacks = new Set<() => void>();
   private persistenceKey: string | undefined;
   private conversationIdKey: string | undefined;
-  /** The conversation id stored with the restored messages, if any. */
   restoredConversationId: string | undefined;
 
   constructor(
@@ -229,11 +226,8 @@ export class Chat<
     ...init
   }: ChatInit<TUiMessage>) {
     const state = new ChatState(agentId, messages, persistence);
-    // An explicit `id` wins over the one stored with the messages.
     super({ ...init, id: init.id ?? state.restoredConversationId, state });
     this._state = state;
-    // Explicit `messages` don't continue the stored conversation, so they
-    // must not overwrite its id either.
     if (init.id === undefined && messages === undefined) {
       state['~persistConversationId'](this.id);
     }
