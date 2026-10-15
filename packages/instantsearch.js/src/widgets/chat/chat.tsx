@@ -785,6 +785,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         loaderText: templates.loaderText,
         copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
         regenerateLabel: templates.messages?.regenerateLabelText,
+        conversationLabel: templates.messages?.conversationLabelText,
+        respondingStatusText: templates.messages?.respondingStatusText,
+        responseCompleteStatusText:
+          templates.messages?.responseCompleteStatusText,
+        errorStatusText: templates.messages?.errorStatusText,
       });
 
     assistantMessageTemplateRef.current = prepareTemplateProps({
@@ -1073,6 +1078,25 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+      /**
+       * Accessible name of the scrollable message history
+       */
+      conversationLabelText?: string;
+      /**
+       * Announced to screen readers when a reply starts
+       */
+      respondingStatusText?: string;
+      /**
+       * Announced to screen readers once a reply is complete. Receives the
+       * reply, so it can announce its text or a summary of it.
+       */
+      responseCompleteStatusText?: (context: {
+        message: ChatMessageBase;
+      }) => string;
+      /**
+       * Announced to screen readers when the chat ends in an error
+       */
+      errorStatusText?: string;
     }>;
 
     /**
