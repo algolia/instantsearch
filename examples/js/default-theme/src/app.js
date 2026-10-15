@@ -263,6 +263,9 @@ search.addWidgets([
   }),
   compareBar({
     container: '#compare-bar',
+    // Comparison configuration of the demo agent (Agent Studio dashboard,
+    // Components > Comparison).
+    configurationId: 'algolia_comparison_REPLACE_ME',
   }),
 ]);
 

@@ -3,7 +3,14 @@ import { compareBar } from 'instantsearch.js/es/widgets';
 import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetCompareBar() {
-  const ref = useWidget((el) => compareBar({ container: el }));
+  const ref = useWidget((el) =>
+    compareBar({
+      container: el,
+      // Comparison configuration of the demo agent (Agent Studio dashboard,
+      // Components > Comparison).
+      configurationId: 'algolia_comparison_REPLACE_ME',
+    })
+  );
 
   return (
     <div class="flex flex-col gap-3">

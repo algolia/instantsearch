@@ -222,7 +222,9 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
-      <CompareBar />
+      {/* Comparison configuration of the demo agent (Agent Studio dashboard,
+          Components > Comparison). */}
+      <CompareBar configurationId="algolia_comparison_REPLACE_ME" />
     </InstantSearch>
   );
 }
