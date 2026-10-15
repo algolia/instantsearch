@@ -1,5 +1,6 @@
 /** @jsx createElement */
 
+import { mergeTranslations } from '../../../lib';
 import { getJsonCursor } from '../../../lib/utils/jsonCursor';
 
 import type { Hooks, RecordWithObjectID, Renderer } from '../../../types';
@@ -118,10 +119,12 @@ export function createGroupedResultsToolComponent<
     const instantSearchStatus =
       insightsEventContext?.instantSearchStatus ?? 'idle';
 
-    const translations: GroupedResultsTranslations = {
-      ...DEFAULT_TRANSLATIONS,
-      ...userTranslations,
-    };
+    const translations: GroupedResultsTranslations = mergeTranslations(
+      {
+        ...DEFAULT_TRANSLATIONS,
+      },
+      userTranslations
+    );
 
     const inputClaimsPayload = claimsGroupedResultsPayload(message?.input);
     const legacyOutput =

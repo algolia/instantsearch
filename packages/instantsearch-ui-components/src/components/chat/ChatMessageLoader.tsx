@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { cx } from '../../lib';
+import { cx, mergeTranslations } from '../../lib';
 
 import { LoadingSpinnerIcon } from './icons';
 
@@ -50,10 +50,13 @@ export function createChatMessageLoaderComponent({
       context: _context,
       ...props
     } = userProps;
-    const translations: Required<ChatMessageLoaderTranslations> = {
-      loaderText: '',
-      ...userTranslations,
-    };
+    const translations: Required<ChatMessageLoaderTranslations> =
+      mergeTranslations(
+        {
+          loaderText: '',
+        },
+        userTranslations
+      );
 
     const spinner = (
       <div className="ais-ChatMessageLoader-spinner">

@@ -1,6 +1,6 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
-import { cx } from '../../lib';
+import { cx, mergeTranslations } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import type { ComponentProps, Renderer } from '../../types';
@@ -104,10 +104,12 @@ export function createPromptSuggestionsComponent({ createElement }: Renderer) {
       ...props
     } = userProps;
 
-    const translations: PromptSuggestionsTranslations = {
-      headerTitle: 'Suggestions',
-      ...userTranslations,
-    };
+    const translations: PromptSuggestionsTranslations = mergeTranslations(
+      {
+        headerTitle: 'Suggestions',
+      },
+      userTranslations
+    );
 
     const HeaderComponent =
       headerComponent === false ? null : (headerComponent ?? DefaultHeader);

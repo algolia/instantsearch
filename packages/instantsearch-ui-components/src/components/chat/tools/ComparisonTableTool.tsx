@@ -1,5 +1,7 @@
 /** @jsx createElement */
 
+import { mergeTranslations } from '../../../lib';
+
 import {
   createGroundedComparisonTableComponent,
   criteriaFromAttributes,
@@ -92,10 +94,12 @@ export function createComparisonTableToolComponent({
     const { toolProps, translations: userTranslations } = userProps;
     const { message, records } = toolProps.context;
 
-    const translations: ComparisonTableTranslations = {
-      ...defaultComparisonTableTranslations,
-      ...userTranslations,
-    };
+    const translations: ComparisonTableTranslations = mergeTranslations(
+      {
+        ...defaultComparisonTableTranslations,
+      },
+      userTranslations
+    );
 
     const output = message?.output as ComparisonTableOutput | undefined;
     const intro = typeof output?.intro === 'string' ? output.intro : undefined;

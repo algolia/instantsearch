@@ -1,6 +1,6 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
-import { cx } from '../../lib';
+import { cx, mergeTranslations } from '../../lib';
 import { isPartText, isPartTextEmpty } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -164,16 +164,18 @@ export function createResultCardComponent({
       ...props
     } = userProps;
 
-    const translations: ResultCardTranslations = {
-      headerTitle: 'AI Overview',
-      minimizeLabel: 'Minimize',
-      maximizeLabel: 'Maximize',
-      expandText: 'Show more',
-      collapseText: 'Show less',
-      continueInChatText: 'Continue in chat',
-      retryText: 'Retry',
-      ...userTranslations,
-    };
+    const translations: ResultCardTranslations = mergeTranslations(
+      {
+        headerTitle: 'AI Overview',
+        minimizeLabel: 'Minimize',
+        maximizeLabel: 'Maximize',
+        expandText: 'Show more',
+        collapseText: 'Show less',
+        continueInChatText: 'Continue in chat',
+        retryText: 'Retry',
+      },
+      userTranslations
+    );
 
     // The body is measured when its content or the viewport changes: the toggle
     // only shows when there is something to reveal, and the expanded height is
