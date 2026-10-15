@@ -241,6 +241,7 @@ describe('ChatState', () => {
       const chat = new Chat<any>({ agentId, messages: [] });
 
       expect(chat.id).not.toBe(stored.id);
+      expect(sessionStorage.getItem(key)).toBe(stored.id);
     });
 
     it('does not read or write the id when persistence is disabled', () => {
