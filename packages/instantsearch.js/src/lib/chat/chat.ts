@@ -233,7 +233,7 @@ export class Chat<
     this._state = state;
     if (persistence) {
       this.conversationIdCacheKey = getConversationIdCacheKey(agentId);
-      if (init.id === undefined) {
+      if (init.id === undefined && messages === undefined) {
         this.persistConversationId();
       }
     }
