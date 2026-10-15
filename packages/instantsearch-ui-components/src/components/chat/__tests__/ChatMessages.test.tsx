@@ -2050,6 +2050,69 @@ describe('ChatMessages', () => {
       ).toHaveTextContent('Said: C# **rocks**');
     });
 
+    test('announces a request already in flight on mount', () => {
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages {...baseProps} status="streaming" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+    });
+
+    test('stays silent for an error that predates the mount', () => {
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="error"
+          error={new Error('nope')}
+          messages={[]}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('clears the reply announcement when the history is cleared', () => {
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Secret' }],
+        },
+      ];
+      const props = {
+        ...baseProps,
+        translations: {
+          responseCompleteStatusText: ({
+            message,
+          }: {
+            message: ChatMessageBase;
+          }) => `Said: ${getTextContent(message)}`,
+        },
+      };
+      const { rerender } = render(
+        <ChatMessages {...props} status="streaming" messages={messages} />
+      );
+      rerender(<ChatMessages {...props} status="ready" messages={messages} />);
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Said: Secret');
+
+      rerender(<ChatMessages {...props} status="ready" messages={[]} />);
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
     test('announces errors', () => {
       const { rerender } = render(
         <ChatMessages {...baseProps} status="submitted" messages={[]} />

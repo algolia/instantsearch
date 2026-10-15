@@ -521,9 +521,20 @@ export function createChatMessagesComponent({
     translations: ChatMessagesTranslations;
   }) {
     const [announcement, setAnnouncement] = useState('');
-    const [previous, setPrevious] = useState({ status, isProcessing });
+    // Start from idle so a request already in flight on mount is announced.
+    // Restored history stays silent, and so does an error that predates the
+    // mount, which would otherwise replay when the chat is reopened.
+    const [previous, setPrevious] = useState<{
+      status: ChatStatus;
+      isProcessing: boolean;
+    }>({ status: status === 'error' ? 'error' : 'ready', isProcessing: false });
 
     useEffect(() => {
+      // A reply announced as text must not outlive the history it came from.
+      if (status === 'ready' && messages.length === 0) {
+        setAnnouncement('');
+      }
+
       if (previous.status === status) {
         return;
       }
