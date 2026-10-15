@@ -1,6 +1,5 @@
 /** @jsx createElement */
 
-import { mergeTranslations } from '../../../lib';
 import {
   endsInsideRootProperty,
   getJsonCursor,
@@ -108,12 +107,10 @@ export function createCompareProductsToolComponent<
     } = userProps;
     const { message, records, sendEvent } = toolProps.context;
 
-    const translations: ComparisonTableTranslations = mergeTranslations(
-      {
-        ...defaultComparisonTableTranslations,
-      },
-      userTranslations
-    );
+    const translations: ComparisonTableTranslations = {
+      ...defaultComparisonTableTranslations,
+      ...userTranslations,
+    };
 
     if (
       !message ||

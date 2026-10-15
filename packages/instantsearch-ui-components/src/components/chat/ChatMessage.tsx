@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { cx, mergeTranslations, startsWith } from '../../lib';
+import { cx, startsWith } from '../../lib';
 import { compiler } from '../../lib/markdown-to-jsx';
 import {
   findTool,
@@ -372,15 +372,13 @@ export function createChatMessageComponent({
     };
     const { messages, status, tools } = context;
 
-    const translations: Required<ChatMessageTranslations> = mergeTranslations(
-      {
-        messageLabel: 'Message',
-        actionsLabel: 'Message actions',
-        toolErrorRetryText: 'Retry',
-        reasoningLabel: 'Reasoning',
-      },
-      userTranslations
-    );
+    const translations: Required<ChatMessageTranslations> = {
+      messageLabel: 'Message',
+      actionsLabel: 'Message actions',
+      toolErrorRetryText: 'Retry',
+      reasoningLabel: 'Reasoning',
+      ...userTranslations,
+    };
 
     // A message rendered without a connector-attached store falls back to
     // collecting from the conversation it was handed.

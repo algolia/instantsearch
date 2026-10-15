@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { cx, mergeTranslations } from '../../lib';
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import {
@@ -128,16 +128,14 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       translations: userTranslations,
       ...props
     } = userProps;
-    const translations: Required<ChatHeaderTranslations> = mergeTranslations(
-      {
-        title: 'Chat',
-        minimizeLabel: 'Minimize chat',
-        maximizeLabel: 'Maximize chat',
-        closeLabel: 'Close chat',
-        clearLabel: 'Clear',
-      },
-      userTranslations
-    );
+    const translations: Required<ChatHeaderTranslations> = {
+      title: 'Chat',
+      minimizeLabel: 'Minimize chat',
+      maximizeLabel: 'Maximize chat',
+      closeLabel: 'Close chat',
+      clearLabel: 'Clear',
+      ...userTranslations,
+    };
 
     const defaultMaximizeIcon = maximized ? (
       <MinimizeIconDefault createElement={createElement} />

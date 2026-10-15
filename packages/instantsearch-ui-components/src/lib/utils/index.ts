@@ -16,4 +16,3 @@ export * from './hits';
 export * from './jsonCursor';
 export * from './promptSuggestions';
 export * from './startsWith';
-export * from './mergeTranslations';

@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { cx, mergeTranslations } from '../../lib';
+import { cx } from '../../lib';
 import {
   findLastProgressPart,
   findTool,
@@ -896,22 +896,20 @@ export function createChatMessagesComponent({
       ...props
     } = userProps;
 
-    const translations = mergeTranslations<ChatMessagesTranslations>(
-      {
-        scrollToBottomLabel: 'Scroll to bottom',
-        conversationLabel: 'Conversation',
-        respondingStatusText: 'Responding…',
-        responseCompleteStatusText: () => 'Reply received.',
-        errorStatusText: 'Sorry, something went wrong. Please try again.',
-        copyToClipboardLabel: 'Copy to clipboard',
-        regenerateLabel: 'Regenerate',
-        thumbsUpLabel: 'Like',
-        thumbsDownLabel: 'Dislike',
-        feedbackThankYouText: 'Thanks for your feedback!',
-        sendingFeedbackLabel: 'Sending feedback...',
-      },
-      userTranslations
-    );
+    const translations: ChatMessagesTranslations = {
+      scrollToBottomLabel: 'Scroll to bottom',
+      conversationLabel: 'Conversation',
+      respondingStatusText: 'Responding…',
+      responseCompleteStatusText: () => 'Reply received.',
+      errorStatusText: 'Sorry, something went wrong. Please try again.',
+      copyToClipboardLabel: 'Copy to clipboard',
+      regenerateLabel: 'Regenerate',
+      thumbsUpLabel: 'Like',
+      thumbsDownLabel: 'Dislike',
+      feedbackThankYouText: 'Thanks for your feedback!',
+      sendingFeedbackLabel: 'Sending feedback...',
+      ...userTranslations,
+    };
 
     const cssClasses: ChatMessagesClassNames = {
       root: cx('ais-ChatMessages', classNames.root),

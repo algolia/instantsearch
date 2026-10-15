@@ -2113,33 +2113,6 @@ describe('ChatMessages', () => {
       ).toHaveTextContent('');
     });
 
-    test('keeps the defaults for translations explicitly set to undefined', () => {
-      const messages = [
-        {
-          id: 'a',
-          role: 'assistant' as const,
-          parts: [{ type: 'text' as const, text: 'Hi' }],
-        },
-      ];
-      const props = {
-        ...baseProps,
-        messages,
-        translations: {
-          conversationLabel: undefined,
-          responseCompleteStatusText: undefined,
-        },
-      };
-      const { rerender } = render(
-        <ChatMessages {...props} status="streaming" />
-      );
-      rerender(<ChatMessages {...props} status="ready" />);
-
-      expect(
-        document.querySelector('.ais-ChatMessages-status')
-      ).toHaveTextContent('Reply received.');
-      expect(screen.getByRole('region', { name: 'Conversation' })).toBeTruthy();
-    });
-
     test('announces errors', () => {
       const { rerender } = render(
         <ChatMessages {...baseProps} status="submitted" messages={[]} />

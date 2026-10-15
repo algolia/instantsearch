@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { cx, mergeTranslations } from '../../lib';
+import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import { ArrowUpIcon, StopIcon } from './icons';
@@ -204,17 +204,15 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       ...props
     } = userProps;
 
-    const translations: Required<ChatPromptTranslations> = mergeTranslations(
-      {
-        textareaLabel: 'Type your message...',
-        textareaPlaceholder: 'Type your message...',
-        emptyMessageTooltip: 'Message is empty',
-        stopResponseTooltip: 'Stop response',
-        sendMessageTooltip: 'Send message',
-        disclaimer: 'AI can make mistakes. Verify responses.',
-      },
-      userTranslations
-    );
+    const translations: Required<ChatPromptTranslations> = {
+      textareaLabel: 'Type your message...',
+      textareaPlaceholder: 'Type your message...',
+      emptyMessageTooltip: 'Message is empty',
+      stopResponseTooltip: 'Stop response',
+      sendMessageTooltip: 'Send message',
+      disclaimer: 'AI can make mistakes. Verify responses.',
+      ...userTranslations,
+    };
 
     const cssClasses: ChatPromptClassNames = {
       root: cx('ais-ChatPrompt', classNames.root),
