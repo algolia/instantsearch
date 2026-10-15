@@ -1,7 +1,7 @@
 /**
  * @jest-environment @instantsearch/testutils/jest-environment-node.ts
  */
-import { Chat, CACHE_KEY } from '../chat';
+import { Chat, CACHE_KEY, CONVERSATION_ID_CACHE_KEY } from '../chat';
 
 function installStorageObserver(storedValue?: string) {
   const reads: string[] = [];
@@ -98,13 +98,19 @@ describe('Chat server rendering', () => {
       const chat = new Chat<any>({ agentId, transport: {} as any });
 
       expect(chat.messages).toHaveLength(1);
-      expect(storage.reads).toEqual([`${CACHE_KEY}-${agentId}`]);
+      expect(storage.reads).toEqual([
+        `${CACHE_KEY}-${agentId}`,
+        `${CONVERSATION_ID_CACHE_KEY}-${agentId}`,
+      ]);
 
       chat.messages = [
         { id: 'live', role: 'user', parts: [{ type: 'text', text: 'L' }] },
       ] as any;
 
-      expect(storage.writes).toEqual([`${CACHE_KEY}-${agentId}`]);
+      expect(storage.writes).toEqual([
+        `${CONVERSATION_ID_CACHE_KEY}-${agentId}`,
+        `${CACHE_KEY}-${agentId}`,
+      ]);
     } finally {
       storage.restore();
     }

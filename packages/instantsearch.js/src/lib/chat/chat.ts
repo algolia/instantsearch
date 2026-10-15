@@ -23,6 +23,29 @@ export type ChatInit<TUiMessage extends UIMessage> =
   };
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
+export const CONVERSATION_ID_CACHE_KEY = 'instantsearch-chat-conversation-id';
+
+// Kept apart from the messages, which are stored as a bare array: a wrapper
+// would make the messages unreadable to a build that predates it.
+function getConversationIdCacheKey(agentId?: string) {
+  return CONVERSATION_ID_CACHE_KEY + (agentId ? `-${agentId}` : '');
+}
+
+function getStoredConversationId(agentId?: string): string | undefined {
+  return safelyRunOnBrowser<string | undefined>(
+    () => {
+      try {
+        return (
+          sessionStorage.getItem(getConversationIdCacheKey(agentId)) ||
+          undefined
+        );
+      } catch (e) {
+        return undefined;
+      }
+    },
+    { fallback: () => undefined }
+  );
+}
 
 // Message history is a browser concern, and a server render constructs a Chat
 // too. Reading storage there throws during rendering; the write below only
@@ -191,6 +214,7 @@ export class Chat<
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
   private hasRestoredMessages = false;
+  private conversationIdCacheKey: string | undefined;
 
   constructor({
     messages,
@@ -199,13 +223,48 @@ export class Chat<
     ...init
   }: ChatInit<TUiMessage>) {
     const state = new ChatState(agentId, messages, persistence);
-    super({ ...init, state });
+    // Messages restored from storage continue the conversation they belong to.
+    // An explicit `id` or explicit `messages` means the caller owns that.
+    const restoredId =
+      persistence && messages === undefined && init.id === undefined
+        ? getStoredConversationId(agentId)
+        : undefined;
+    super({ ...init, id: init.id ?? restoredId, state });
     this._state = state;
+    if (persistence) {
+      this.conversationIdCacheKey = getConversationIdCacheKey(agentId);
+      if (init.id === undefined) {
+        this.persistConversationId();
+      }
+    }
     if (messages === undefined && persistence) {
       this.hasRestoredMessages = true;
       this.captureRestoredToolCalls();
       this.repairRestoredPendingToolParts();
     }
+  }
+
+  private persistConversationId(): void {
+    const key = this.conversationIdCacheKey;
+    if (!key) return;
+
+    safelyRunOnBrowser(() => {
+      try {
+        sessionStorage.setItem(key, this.id);
+      } catch (e) {
+        // Do nothing if sessionStorage is not available or full
+      }
+    });
+  }
+
+  resetConversationId(): void {
+    super.resetConversationId();
+    this.persistConversationId();
+  }
+
+  setConversationId(id: string): void {
+    super.setConversationId(id);
+    this.persistConversationId();
   }
 
   '~repairRestoredPendingToolParts' = (): void => {
