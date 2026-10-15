@@ -2066,6 +2066,52 @@ describe('ChatMessages', () => {
       ).toHaveTextContent('Responding…');
     });
 
+    test('stays silent when a request ends without a reply', () => {
+      // A resume with no stream to reconnect to goes `submitted` → `ready`
+      // and leaves the restored history untouched.
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Old answer' }],
+        },
+      ];
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={messages} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={messages} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('announces a reply that a resumed request continues', () => {
+      const message = {
+        id: 'a',
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text: 'Partial' }],
+      };
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[message]} />
+      );
+      const continued = [
+        { ...message, parts: [{ type: 'text' as const, text: 'Full' }] },
+      ];
+      rerender(
+        <ChatMessages {...baseProps} status="streaming" messages={continued} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={continued} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply received.');
+    });
+
     test('stays silent for an error that predates the mount', () => {
       render(
         <ChatMessages

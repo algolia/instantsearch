@@ -527,7 +527,15 @@ export function createChatMessagesComponent({
     const [previous, setPrevious] = useState<{
       status: ChatStatus;
       isProcessing: boolean;
-    }>({ status: status === 'error' ? 'error' : 'ready', isProcessing: false });
+      // The last message while the request was `submitted`, before any of its
+      // reply arrived. A request that ends with it unchanged produced no reply,
+      // like a resume with no stream left to reconnect to.
+      lastMessageBeforeReply: TMessage | undefined;
+    }>({
+      status: status === 'error' ? 'error' : 'ready',
+      isProcessing: false,
+      lastMessageBeforeReply: undefined,
+    });
 
     useEffect(() => {
       // A reply announced as text must not outlive the history it came from.
@@ -538,7 +546,17 @@ export function createChatMessagesComponent({
       if (previous.status === status) {
         return;
       }
-      setPrevious({ status, isProcessing });
+      const lastMessage = messages[messages.length - 1];
+      setPrevious({
+        status,
+        isProcessing,
+        lastMessageBeforeReply:
+          status === 'submitted'
+            ? lastMessage
+            : isProcessing
+              ? previous.lastMessageBeforeReply
+              : undefined,
+      });
 
       if (isProcessing) {
         if (!previous.isProcessing) {
@@ -549,8 +567,12 @@ export function createChatMessagesComponent({
       } else if (previous.isProcessing) {
         // Only a trailing assistant message is a reply: a stopped request
         // returns to `ready` with the previous turn's answer still last-but-one.
-        const reply = messages[messages.length - 1];
-        if (!reply || reply.role !== 'assistant') {
+        const reply = lastMessage;
+        if (
+          !reply ||
+          reply.role !== 'assistant' ||
+          reply === previous.lastMessageBeforeReply
+        ) {
           setAnnouncement('');
           return;
         }
