@@ -87,6 +87,12 @@ function Widget<TWidget extends SingleWidget>({
   widget,
   ...props
 }: { widget: TWidget } & Props<TWidget>) {
+  // `CompareBar` is not part of `SingleWidget` (see `NON_COMPONENTS`), but
+  // `getAllInstantSearchWidgets` still renders it and it requires an ID.
+  if ((widget.name as string) === 'CompareBar') {
+    return <widgets.CompareBar configurationId="configurationId" />;
+  }
+
   switch (widget.name) {
     case 'ResultCard': {
       return <widget.Component agentId="test-agent-id" {...props} />;

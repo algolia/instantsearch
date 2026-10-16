@@ -55,6 +55,10 @@ export function CompareBar({
   itemComponent,
   ...props
 }: CompareBarProps) {
+  if (!props.configurationId) {
+    throw new Error('The `configurationId` prop is required.');
+  }
+
   const {
     items,
     minItems,
