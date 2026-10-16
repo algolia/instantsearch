@@ -222,7 +222,7 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
-      <CompareBar />
+      <CompareBar configurationId="algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516" />
     </InstantSearch>
   );
 }
