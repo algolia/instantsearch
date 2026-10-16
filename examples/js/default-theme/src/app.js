@@ -263,9 +263,7 @@ search.addWidgets([
   }),
   compareBar({
     container: '#compare-bar',
-    // Comparison configuration of the demo agent (Agent Studio dashboard,
-    // Components > Comparison).
-    configurationId: 'algolia_comparison_REPLACE_ME',
+    configurationId: 'algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516',
   }),
 ]);
 
