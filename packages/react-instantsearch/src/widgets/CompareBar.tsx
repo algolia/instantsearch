@@ -60,6 +60,7 @@ export function CompareBar({
     minItems,
     maxItems,
     canCompare,
+    isChatBusy,
     removeItem,
     clearItems,
     compare,
@@ -71,6 +72,7 @@ export function CompareBar({
       minItems={minItems}
       maxItems={maxItems}
       canCompare={canCompare}
+      isChatBusy={isChatBusy}
       onCompare={() => compare()}
       onRemove={(item) => removeItem(item.objectID)}
       onClear={clearItems}

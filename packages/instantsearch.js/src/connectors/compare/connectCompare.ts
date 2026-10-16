@@ -1,5 +1,8 @@
 import { getChatRenderState } from '../../lib/chat/getChatRenderState';
-import { openChat } from '../../lib/chat/openChat';
+import {
+  isChatBusy as isChatStreaming,
+  openChat,
+} from '../../lib/chat/openChat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -90,6 +93,12 @@ export type CompareRenderState = {
    * Whether a comparison can start (at least `minItems` items are selected).
    */
   canCompare: boolean;
+  /**
+   * Whether the chat widget is currently busy (mid-stream) — surface as
+   * `disabled` on the call-to-action, since `compare()` returns `false` while
+   * the chat is busy. Optimistically `false` when no chat is present.
+   */
+  isChatBusy: boolean;
   /**
    * The resolved `minItems` value.
    */
@@ -361,6 +370,14 @@ const connectCompare: CompareConnector = function connectCompare(
         lastOptions = renderOptions;
         const store = getCompareStore(renderOptions.instantSearchInstance);
 
+        const chatRenderState = getChatRenderState(
+          renderOptions.instantSearchInstance,
+          renderOptions.parent?.getIndexId()
+        );
+        const isChatBusy = chatRenderState
+          ? !chatRenderState.sendMessage || isChatStreaming(chatRenderState)
+          : false;
+
         return {
           items: store.items,
           isSelected,
@@ -370,6 +387,7 @@ const connectCompare: CompareConnector = function connectCompare(
           clearItems,
           canAddItems: store.items.length < maxItems,
           canCompare: store.items.length >= minItems,
+          isChatBusy,
           minItems,
           maxItems,
           compare,

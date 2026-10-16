@@ -440,6 +440,48 @@ describe('connectCompare', () => {
     });
   });
 
+  describe('isChatBusy', () => {
+    it('is false when no chat widget is mounted', () => {
+      const { getRenderState } = setup();
+
+      expect(getRenderState().isChatBusy).toBe(false);
+    });
+
+    it('follows the chat status', () => {
+      const chatRenderState = createChatRenderState();
+      const { widget, getRenderState, initOptions } = setup({
+        chatRenderState,
+      });
+      expect(getRenderState().isChatBusy).toBe(false);
+
+      Object.assign(chatRenderState, { status: 'streaming' });
+      widget.render!(createRenderOptions(initOptions));
+      expect(getRenderState().isChatBusy).toBe(true);
+
+      Object.assign(chatRenderState, { status: 'submitted' });
+      widget.render!(createRenderOptions(initOptions));
+      expect(getRenderState().isChatBusy).toBe(true);
+
+      Object.assign(chatRenderState, { status: 'ready' });
+      widget.render!(createRenderOptions(initOptions));
+      expect(getRenderState().isChatBusy).toBe(false);
+    });
+
+    it('does not change `canCompare`', () => {
+      const { getRenderState } = setup({
+        chatRenderState: createChatRenderState({
+          status: 'streaming' as ChatRenderState['status'],
+        }),
+      });
+
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(getRenderState().canCompare).toBe(true);
+      expect(getRenderState().isChatBusy).toBe(true);
+    });
+  });
+
   describe('getRenderState', () => {
     it('exposes the render state under the `compare` key', () => {
       const { widget, initOptions } = setup();
