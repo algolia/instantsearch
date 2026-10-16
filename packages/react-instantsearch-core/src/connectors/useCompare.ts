@@ -17,7 +17,10 @@ export type UseCompareProps = CompareConnectorParams;
  * instance, so a per-hit "Compare" toggle (`toggleItem`) and the `<CompareBar>`
  * widget stay in sync. `compare()` opens the `<Chat>` widget and sends the
  * configured comparison for the current selection; the `configurationId` is
- * set on `<CompareBar>` and shared with the toggles, which can omit it.
+ * set on `<CompareBar>` and shared with the toggles, which can omit it. The
+ * `minItems` and `maxItems` limits are shared the same way: set them on
+ * `<CompareBar>`, the toggles read them from there. They are dropped when
+ * that widget unmounts; the selection itself is kept.
  */
 export function useCompare(
   props: UseCompareProps = {},

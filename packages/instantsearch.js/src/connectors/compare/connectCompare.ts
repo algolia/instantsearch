@@ -3,6 +3,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -31,12 +32,21 @@ export type CompareItem = {
 export type CompareConnectorParams = {
   /**
    * Minimum number of items required before a comparison can start.
+   *
+   * The limits apply to the selection shared by every `compare` widget of the
+   * InstantSearch instance, so set them on the widget that owns the hand-off
+   * (the `compareBar` widget). Every other `compare` widget (per-hit toggles)
+   * reads the shared value and can leave it out. While the widget that set it
+   * is mounted, its value is used by all widgets; it is dropped when that
+   * widget is disposed. Two widgets setting different values trigger a
+   * development warning.
    * @default 2
    */
   minItems?: number;
   /**
    * Maximum number of items that can be selected. Adding an item beyond the
-   * limit is a no-op until one is removed.
+   * limit is a no-op until one is removed. Shared like `minItems`: set it on
+   * the `compareBar` widget, other `compare` widgets read it from there.
    * @default 3
    */
   maxItems?: number;
@@ -49,8 +59,8 @@ export type CompareConnectorParams = {
    *
    * Required to start a comparison. Set it on the widget that triggers the
    * hand-off (the `compareBar` widget); the other `compare` widgets of the
-   * same InstantSearch instance (per-hit toggles) share it through the
-   * selection and can leave it out.
+   * same InstantSearch instance (per-hit toggles) share it and can leave it
+   * out. It is removed when the widget that set it is disposed.
    */
   configurationId?: string;
 };
@@ -66,7 +76,7 @@ export type CompareRenderState = {
   isSelected: (objectID: string) => boolean;
   /**
    * Adds a record to the selection. No-op when the record is already selected
-   * or when the `maxItems` limit is reached.
+   * or when the shared `maxItems` limit is reached.
    */
   addItem: (item: CompareItem) => void;
   /**
@@ -82,26 +92,31 @@ export type CompareRenderState = {
    */
   clearItems: () => void;
   /**
-   * Whether more items can be added (the `maxItems` limit is not reached).
+   * Whether more items can be added (the shared `maxItems` limit is not
+   * reached).
    */
   canAddItems: boolean;
   /**
-   * Whether a comparison can start (at least `minItems` items are selected).
+   * Whether a comparison can start (at least the shared `minItems` items are
+   * selected).
    */
   canCompare: boolean;
   /**
-   * The resolved `minItems` value.
+   * The `minItems` limit in effect for the shared selection: the value set by
+   * a mounted `compare` widget (typically the `compareBar`), otherwise 2.
    */
   minItems: number;
   /**
-   * The resolved `maxItems` value.
+   * The `maxItems` limit in effect for the shared selection: the value set by
+   * a mounted `compare` widget (typically the `compareBar`), otherwise 3.
    */
   maxItems: number;
   /**
    * Opens the sibling `chat` widget and sends the comparison placeholder for
    * the current selection. Returns `true` when the message was submitted
    * (`false` when the selection is too small, the chat is missing or busy).
-   * Throws when no `compare` widget of the instance set a `configurationId`.
+   * Throws when no mounted `compare` widget of the instance set a
+   * `configurationId`.
    */
   compare: () => boolean;
   widgetParams: CompareConnectorParams;
@@ -158,13 +173,45 @@ function buildComparisonTurnContext(
   };
 }
 
+const DEFAULT_MIN_ITEMS = 2;
+const DEFAULT_MAX_ITEMS = 3;
+
+// What a single widget contributes to the shared configuration.
+type CompareConfig = {
+  configurationId?: string;
+  minItems?: number;
+  maxItems?: number;
+};
+
 type CompareStore = {
   items: CompareItem[];
   listeners: Set<() => void>;
-  // Provided by the widget that triggers the hand-off, read by `compare()` on
-  // every widget of the instance.
-  configurationId?: string;
+  // Configuration contributed by each mounted widget, keyed by the widget so
+  // that disposing it removes exactly what it added. Read by every widget of
+  // the instance through `resolveConfig`.
+  configs: Map<object, CompareConfig>;
 };
+
+function resolveConfig(store: CompareStore): {
+  configurationId?: string;
+  minItems: number;
+  maxItems: number;
+} {
+  const resolved: CompareConfig = {};
+  // Later contributors win; conflicts are reported when they register.
+  store.configs.forEach((config) => {
+    (['configurationId', 'minItems', 'maxItems'] as const).forEach((key) => {
+      if (config[key] !== undefined) {
+        (resolved as Record<string, unknown>)[key] = config[key];
+      }
+    });
+  });
+  return {
+    configurationId: resolved.configurationId,
+    minItems: resolved.minItems ?? DEFAULT_MIN_ITEMS,
+    maxItems: resolved.maxItems ?? DEFAULT_MAX_ITEMS,
+  };
+}
 
 // The selection is shared by every `compare` widget of the same InstantSearch
 // instance (per-hit toggles, the compare bar, a picker modal, ...), so it
@@ -174,7 +221,7 @@ const compareStores = new WeakMap<InstantSearch, CompareStore>();
 function getCompareStore(instantSearchInstance: InstantSearch): CompareStore {
   let store = compareStores.get(instantSearchInstance);
   if (!store) {
-    store = { items: [], listeners: new Set() };
+    store = { items: [], listeners: new Set(), configs: new Map() };
     compareStores.set(instantSearchInstance, store);
   }
   return store;
@@ -211,13 +258,13 @@ const connectCompare: CompareConnector = function connectCompare(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { minItems = 2, maxItems = 3, configurationId } = widgetParams || {};
+    const { minItems, maxItems, configurationId } = widgetParams || {};
 
-    if (minItems < 2) {
+    if (minItems !== undefined && minItems < 2) {
       throw new Error(withUsage('The `minItems` option must be at least 2.'));
     }
 
-    if (maxItems < minItems) {
+    if (maxItems !== undefined && maxItems < (minItems ?? DEFAULT_MIN_ITEMS)) {
       throw new Error(
         withUsage('The `maxItems` option must be greater than `minItems`.')
       );
@@ -225,6 +272,8 @@ const connectCompare: CompareConnector = function connectCompare(
 
     let lastOptions: InitOptions | RenderOptions | null = null;
     let unsubscribe: (() => void) | null = null;
+    // Identity under which this widget's configuration is stored.
+    const owner = {};
 
     function getStore(): CompareStore | null {
       if (!lastOptions) return null;
@@ -247,7 +296,7 @@ const connectCompare: CompareConnector = function connectCompare(
       const store = getStore();
       if (
         !store ||
-        store.items.length >= maxItems ||
+        store.items.length >= resolveConfig(store).maxItems ||
         isSelected(item.objectID)
       ) {
         return;
@@ -280,11 +329,14 @@ const connectCompare: CompareConnector = function connectCompare(
 
     function compare(): boolean {
       const store = getStore();
-      if (!store || !lastOptions || store.items.length < minItems) {
+      if (!store || !lastOptions) return false;
+
+      const config = resolveConfig(store);
+      if (store.items.length < config.minItems) {
         return false;
       }
 
-      if (!store.configurationId) {
+      if (!config.configurationId) {
         throw new Error(
           withUsage(
             'The `configurationId` option is required to start a comparison. Set it on the `compareBar` widget to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).'
@@ -293,11 +345,11 @@ const connectCompare: CompareConnector = function connectCompare(
       }
 
       return openChat(getChatRenderState(lastOptions), {
-        message: getComparisonPlaceholderMessage(store.configurationId),
+        message: getComparisonPlaceholderMessage(config.configurationId),
         referer: 'compare',
         turnContext: buildComparisonTurnContext(
           store.items,
-          store.configurationId
+          config.configurationId
         ),
       });
     }
@@ -310,8 +362,32 @@ const connectCompare: CompareConnector = function connectCompare(
         lastOptions = initOptions;
 
         const store = getCompareStore(initOptions.instantSearchInstance);
-        if (configurationId) {
-          store.configurationId = configurationId;
+        const contribution: CompareConfig = {};
+        if (configurationId !== undefined) {
+          contribution.configurationId = configurationId;
+        }
+        if (minItems !== undefined) contribution.minItems = minItems;
+        if (maxItems !== undefined) contribution.maxItems = maxItems;
+
+        (['configurationId', 'minItems', 'maxItems'] as const).forEach(
+          (key) => {
+            if (contribution[key] === undefined) return;
+            store.configs.forEach((other) => {
+              warning(
+                other[key] === undefined || other[key] === contribution[key],
+                withUsage(
+                  `Several \`compare\` widgets set a different \`${key}\` (${String(
+                    other[key]
+                  )} and ${String(
+                    contribution[key]
+                  )}). The selection is shared, so set it on a single widget (the \`compareBar\`); the last one mounted is used.`
+                )
+              );
+            });
+          }
+        );
+        if (Object.keys(contribution).length > 0) {
+          store.configs.set(owner, contribution);
         }
         const listener = () => {
           if (!lastOptions) return;
@@ -349,12 +425,20 @@ const connectCompare: CompareConnector = function connectCompare(
       dispose() {
         unsubscribe?.();
         unsubscribe = null;
+        // Only remove what this widget contributed. The selection itself stays:
+        // toggles unmount and remount as hits re-render or paginate.
+        const store = getStore();
+        if (store?.configs.delete(owner)) {
+          // The remaining widgets may now resolve different limits.
+          notify(store);
+        }
         unmountFn();
       },
 
       getWidgetRenderState(renderOptions) {
         lastOptions = renderOptions;
         const store = getCompareStore(renderOptions.instantSearchInstance);
+        const config = resolveConfig(store);
 
         return {
           items: store.items,
@@ -363,10 +447,10 @@ const connectCompare: CompareConnector = function connectCompare(
           removeItem,
           toggleItem,
           clearItems,
-          canAddItems: store.items.length < maxItems,
-          canCompare: store.items.length >= minItems,
-          minItems,
-          maxItems,
+          canAddItems: store.items.length < config.maxItems,
+          canCompare: store.items.length >= config.minItems,
+          minItems: config.minItems,
+          maxItems: config.maxItems,
           compare,
           widgetParams: widgetParams || {},
         };

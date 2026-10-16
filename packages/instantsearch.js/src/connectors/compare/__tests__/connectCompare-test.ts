@@ -8,6 +8,7 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import connectCompare, {
+  type CompareConnectorParams,
   getComparisonPlaceholderMessage,
 } from '../connectCompare';
 
@@ -360,6 +361,128 @@ describe('connectCompare', () => {
 
       expect(getRenderState().compare()).toBe(false);
       expect(chatRenderState.sendMessage).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('shared configuration', () => {
+    function setupPair(barParams: CompareConnectorParams) {
+      const chatRenderState = createChatRenderState();
+      const initOptions = createInitOptions();
+      const bar = setup({
+        initOptions,
+        chatRenderState,
+        widgetParams: barParams,
+      });
+      const toggle = setup({
+        initOptions: createInitOptions({
+          instantSearchInstance: initOptions.instantSearchInstance,
+        }),
+      });
+      return { bar, toggle, chatRenderState };
+    }
+
+    it('shares the limits of the widget that configures them with widgets that set none', () => {
+      const { toggle } = setupPair({ minItems: 2, maxItems: 4 });
+
+      expect(toggle.getRenderState().maxItems).toBe(4);
+      ['A', 'B', 'C', 'D', 'E'].forEach((objectID) =>
+        toggle.getRenderState().addItem({ objectID })
+      );
+
+      expect(toggle.getRenderState().items).toHaveLength(4);
+      expect(toggle.getRenderState().canAddItems).toBe(false);
+    });
+
+    it('uses the shared `minItems` for `canCompare` and `compare()`', () => {
+      const { toggle, chatRenderState } = setupPair({
+        configurationId: 'abc',
+        minItems: 3,
+        maxItems: 4,
+      });
+
+      toggle.getRenderState().addItem({ objectID: 'A' });
+      toggle.getRenderState().addItem({ objectID: 'B' });
+      expect(toggle.getRenderState().canCompare).toBe(false);
+      expect(toggle.getRenderState().compare()).toBe(false);
+
+      toggle.getRenderState().addItem({ objectID: 'C' });
+      expect(toggle.getRenderState().canCompare).toBe(true);
+      expect(toggle.getRenderState().compare()).toBe(true);
+      expect(chatRenderState.sendMessage).toHaveBeenCalledTimes(1);
+    });
+
+    it('falls back to 2 and 3 when no widget sets limits', () => {
+      const { toggle } = setupPair({});
+
+      expect(toggle.getRenderState().minItems).toBe(2);
+      expect(toggle.getRenderState().maxItems).toBe(3);
+    });
+
+    it('drops the configuration of a widget when it is disposed', () => {
+      const { bar, toggle } = setupPair({
+        configurationId: 'abc',
+        minItems: 2,
+        maxItems: 5,
+      });
+      toggle.getRenderState().addItem({ objectID: 'A' });
+      toggle.getRenderState().addItem({ objectID: 'B' });
+
+      bar.widget.dispose!(createDisposeOptions());
+
+      expect(toggle.getRenderState().maxItems).toBe(3);
+      expect(() => toggle.getRenderState().compare()).toThrow(
+        /`configurationId` option is required/
+      );
+    });
+
+    it('keeps the selection when a toggle is disposed', () => {
+      const { toggle } = setupPair({ configurationId: 'abc' });
+      toggle.getRenderState().addItem({ objectID: 'A' });
+
+      toggle.widget.dispose!(createDisposeOptions());
+
+      const remount = setup({ initOptions: toggle.initOptions });
+      expect(remount.getRenderState().items).toEqual([{ objectID: 'A' }]);
+    });
+
+    it('falls back to the remaining widget when one of two bars is disposed', () => {
+      const initOptions = createInitOptions();
+      const first = setup({
+        initOptions,
+        widgetParams: { configurationId: 'first' },
+      });
+      const second = setup({
+        initOptions: createInitOptions({
+          instantSearchInstance: initOptions.instantSearchInstance,
+        }),
+        widgetParams: { configurationId: 'second' },
+      });
+
+      second.widget.dispose!(createDisposeOptions());
+      second.initOptions.instantSearchInstance.renderState = {};
+
+      first.getRenderState().addItem({ objectID: 'A' });
+      first.getRenderState().addItem({ objectID: 'B' });
+      // still configured (by the first bar): no usage error
+      expect(() => first.getRenderState().compare()).not.toThrow();
+    });
+
+    it('warns when two widgets set a different value', () => {
+      const initOptions = createInitOptions();
+      setup({ initOptions, widgetParams: { maxItems: 4 } });
+
+      expect(() =>
+        setup({
+          initOptions: createInitOptions({
+            instantSearchInstance: initOptions.instantSearchInstance,
+          }),
+          widgetParams: { maxItems: 5 },
+        })
+      ).toWarnDev(
+        `[InstantSearch.js]: Several \`compare\` widgets set a different \`maxItems\` (4 and 5). The selection is shared, so set it on a single widget (the \`compareBar\`); the last one mounted is used.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/compare/js/#connector`
+      );
     });
   });
 
