@@ -99,8 +99,8 @@ export type CompareRenderState = {
   maxItems: number;
   /**
    * Opens the sibling `chat` widget and sends the comparison placeholder for
-   * the current selection. Returns `true` when the message was submitted
-   * (`false` when the selection is too small, the chat is missing or busy).
+   * the current selection, then clears the selection (which dismisses the
+   * compare bar). Returns `true` when the message was submitted (`false` when the selection is too small, the chat is missing or busy).
    * Throws when no `compare` widget of the instance set a `configurationId`.
    */
   compare: () => boolean;
@@ -292,7 +292,7 @@ const connectCompare: CompareConnector = function connectCompare(
         );
       }
 
-      return openChat(getChatRenderState(lastOptions), {
+      const submitted = openChat(getChatRenderState(lastOptions), {
         message: getComparisonPlaceholderMessage(store.configurationId),
         referer: 'compare',
         turnContext: buildComparisonTurnContext(
@@ -300,6 +300,14 @@ const connectCompare: CompareConnector = function connectCompare(
           store.configurationId
         ),
       });
+
+      // The comparison now lives in the chat; clearing the selection
+      // dismisses the compare bar.
+      if (submitted) {
+        clearItems();
+      }
+
+      return submitted;
     }
 
     return {
