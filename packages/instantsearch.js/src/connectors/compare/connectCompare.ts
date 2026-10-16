@@ -220,7 +220,9 @@ const connectCompare: CompareConnector = function connectCompare(
 
     if (maxItems < minItems) {
       throw new Error(
-        withUsage('The `maxItems` option must be greater than `minItems`.')
+        withUsage(
+          'The `maxItems` option must be greater than or equal to `minItems`.'
+        )
       );
     }
 
