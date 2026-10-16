@@ -10,6 +10,7 @@ import type {
   InitOptions,
   InstantSearch,
   RenderOptions,
+  TransformItems,
   WidgetRenderState,
 } from '../../types';
 import type { ChatRenderState } from '../chat/connectChat';
@@ -50,11 +51,29 @@ export type CompareConnectorParams = {
    * Required.
    */
   configurationId: string;
+  /**
+   * Transforms the selection items exposed in the render state (`items`), for
+   * example to drop long attributes from what the bar shows. `compare()` sends
+   * the transformed items to the agent, so what the bar shows is what the
+   * agent receives; `_`-prefixed keys are still stripped from the payload
+   * afterwards.
+   *
+   * The selection itself (`isSelected`, `addItem`, `removeItem`, `canAddItems`,
+   * `canCompare` and the `minItems`/`maxItems` limits) always works on the raw
+   * items, so the transform should map items one to one: do not add or remove
+   * items, and keep each `objectID`.
+   *
+   * It is per widget: `compare()` applies the transform of the widget it is
+   * called from, normally the `compareBar`.
+   * @default items => items
+   */
+  transformItems?: TransformItems<CompareItem>;
 };
 
 export type CompareRenderState = {
   /**
-   * Ordered selection, one entry per record (insertion order).
+   * Ordered selection, one entry per record (insertion order), after
+   * `transformItems`.
    */
   items: CompareItem[];
   /**
@@ -204,7 +223,12 @@ const connectCompare: CompareConnector = function connectCompare(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { minItems = 2, maxItems = 3, configurationId } = widgetParams || {};
+    const {
+      minItems = 2,
+      maxItems = 3,
+      configurationId,
+      transformItems = (items: CompareItem[]) => items,
+    } = widgetParams || {};
 
     if (!configurationId) {
       throw new Error(
@@ -237,6 +261,13 @@ const connectCompare: CompareConnector = function connectCompare(
     function notify(store: CompareStore) {
       store.listeners.forEach((listener) => listener());
       lastOptions?.instantSearchInstance.scheduleRender();
+    }
+
+    function getTransformedItems(
+      store: CompareStore,
+      options: InitOptions | RenderOptions
+    ): CompareItem[] {
+      return transformItems(store.items, { results: options.results });
     }
 
     function isSelected(objectID: string): boolean {
@@ -288,7 +319,10 @@ const connectCompare: CompareConnector = function connectCompare(
       const submitted = openChat(getChatRenderState(lastOptions), {
         message: getComparisonPlaceholderMessage(configurationId),
         referer: 'compare',
-        turnContext: buildComparisonTurnContext(store.items, configurationId),
+        turnContext: buildComparisonTurnContext(
+          getTransformedItems(store, lastOptions),
+          configurationId
+        ),
       });
 
       if (submitted) {
@@ -350,7 +384,7 @@ const connectCompare: CompareConnector = function connectCompare(
         const store = getCompareStore(renderOptions.instantSearchInstance);
 
         return {
-          items: store.items,
+          items: getTransformedItems(store, renderOptions),
           isSelected,
           addItem,
           removeItem,

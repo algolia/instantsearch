@@ -12,6 +12,7 @@ import connectCompare, {
 } from '../connectCompare';
 
 import type { ChatRenderState } from '../../chat/connectChat';
+import type { CompareItem } from '../connectCompare';
 
 function createChatRenderState(
   overrides: Partial<ChatRenderState> = {}
@@ -239,6 +240,55 @@ describe('connectCompare', () => {
     });
   });
 
+  describe('transformItems', () => {
+    it('transforms `items` in the render state and passes `results` as metadata', () => {
+      const transformItems = jest.fn((items: CompareItem[]) =>
+        items.map((item) => ({ objectID: item.objectID }))
+      );
+      const { getRenderState } = setup({
+        widgetParams: {
+          configurationId: 'algolia_comparison_abc',
+          transformItems,
+        },
+      });
+
+      getRenderState().addItem({ objectID: 'A', name: 'A' });
+
+      expect(getRenderState().items).toEqual([{ objectID: 'A' }]);
+      expect(transformItems).toHaveBeenLastCalledWith(
+        [{ objectID: 'A', name: 'A' }],
+        { results: undefined }
+      );
+    });
+
+    it('keeps selection, counts and limits on the raw items', () => {
+      const { getRenderState } = setup({
+        widgetParams: {
+          configurationId: 'algolia_comparison_abc',
+          maxItems: 2,
+          transformItems: (items) =>
+            items.map(({ objectID }) => ({ objectID: `t-${objectID}` })),
+        },
+      });
+
+      getRenderState().addItem({ objectID: 'A' });
+      expect(getRenderState().canCompare).toBe(false);
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(getRenderState().items).toEqual([
+        { objectID: 't-A' },
+        { objectID: 't-B' },
+      ]);
+      expect(getRenderState().isSelected('A')).toBe(true);
+      expect(getRenderState().isSelected('t-A')).toBe(false);
+      expect(getRenderState().canCompare).toBe(true);
+      expect(getRenderState().canAddItems).toBe(false);
+
+      getRenderState().removeItem('A');
+      expect(getRenderState().items).toEqual([{ objectID: 't-B' }]);
+    });
+  });
+
   describe('compare', () => {
     const CONFIGURATION_ID = 'algolia_comparison_abc';
     const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_abc__';
@@ -312,6 +362,69 @@ describe('connectCompare', () => {
       expect(
         JSON.parse(message.metadata.turnContext.selected_products)
       ).toEqual([{ objectID: 'A', name: 'MacBook Pro 14' }, { objectID: 'B' }]);
+    });
+
+    it('sends the items transformed by `transformItems`, still stripping `_` keys', () => {
+      const chatRenderState = createChatRenderState();
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: {
+          configurationId: CONFIGURATION_ID,
+          transformItems: (items) =>
+            items.map(({ description, ...item }) => ({
+              ...item,
+              _internal: 'kept by the transform',
+            })),
+        },
+      });
+
+      getRenderState().addItem({ objectID: 'A', name: 'A', description: 'x' });
+      getRenderState().addItem({ objectID: 'B', name: 'B', description: 'y' });
+      getRenderState().compare();
+
+      const [message] = (chatRenderState.sendMessage as jest.Mock).mock
+        .calls[0];
+      expect(
+        JSON.parse(message.metadata.turnContext.selected_products)
+      ).toEqual([
+        { objectID: 'A', name: 'A' },
+        { objectID: 'B', name: 'B' },
+      ]);
+    });
+
+    it('uses the `transformItems` of the widget `compare()` is called from', () => {
+      const chatRenderState = createChatRenderState();
+      const initOptions = createInitOptions();
+      const bar = setup({
+        initOptions,
+        chatRenderState,
+        widgetParams: {
+          configurationId: CONFIGURATION_ID,
+          transformItems: (items) =>
+            items.map(({ objectID }) => ({ objectID })),
+        },
+      });
+      const toggle = setup({
+        initOptions: createInitOptions({
+          instantSearchInstance: initOptions.instantSearchInstance,
+        }),
+      });
+
+      toggle.getRenderState().addItem({ objectID: 'A', name: 'A' });
+      toggle.getRenderState().addItem({ objectID: 'B', name: 'B' });
+
+      expect(toggle.getRenderState().items[0]).toEqual({
+        objectID: 'A',
+        name: 'A',
+      });
+      expect(bar.getRenderState().items[0]).toEqual({ objectID: 'A' });
+
+      bar.getRenderState().compare();
+      const [message] = (chatRenderState.sendMessage as jest.Mock).mock
+        .calls[0];
+      expect(
+        JSON.parse(message.metadata.turnContext.selected_products)
+      ).toEqual([{ objectID: 'A' }, { objectID: 'B' }]);
     });
 
     it('does nothing while fewer than `minItems` items are selected', () => {
