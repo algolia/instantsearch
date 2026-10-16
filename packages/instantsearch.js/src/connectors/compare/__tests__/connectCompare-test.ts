@@ -7,6 +7,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
 import connectCompare, {
   getComparisonPlaceholderMessage,
 } from '../connectCompare';
@@ -344,6 +345,82 @@ describe('connectCompare', () => {
       getRenderState().addItem({ objectID: 'B' });
 
       expect(getRenderState().compare()).toBe(false);
+    });
+
+    it('warns in development when no chat widget is mounted', () => {
+      warning.cache = {};
+      const { getRenderState } = setup({
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
+
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(() => {
+        getRenderState().compare();
+      }).toWarnDev(
+        '[InstantSearch.js]: `compare()` needs a `chat` widget to hand the comparison off to, but none is mounted. Add a `chat` widget to your search.\n\nSee documentation: https://www.algolia.com/doc/api-reference/widgets/compare/js/#connector'
+      );
+    });
+
+    it('finds a chat mounted in a different index than the widget', () => {
+      const chatRenderState = createChatRenderState();
+      const initOptions = createInitOptions();
+      const mainIndexId =
+        initOptions.instantSearchInstance.mainIndex.getIndexId();
+      initOptions.instantSearchInstance.renderState[mainIndexId] = {
+        chat: chatRenderState,
+      } as unknown as (typeof initOptions.instantSearchInstance.renderState)[string];
+
+      const { getRenderState } = setup({
+        widgetParams: { configurationId: CONFIGURATION_ID },
+        initOptions: {
+          ...initOptions,
+          parent: { getIndexId: () => 'nested' },
+        } as unknown as typeof initOptions,
+      });
+
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(getRenderState().compare()).toBe(true);
+      expect(chatRenderState.sendMessage).toHaveBeenCalledTimes(1);
+    });
+
+    it('prefers the chat in the widget index, then the main index, then any other', () => {
+      const own = createChatRenderState();
+      const main = createChatRenderState();
+      const other = createChatRenderState();
+      const initOptions = createInitOptions();
+      const { renderState, mainIndex } = initOptions.instantSearchInstance;
+      const mainIndexId = mainIndex.getIndexId();
+      const set = (id: string, chat: Partial<ChatRenderState>) => {
+        renderState[id] = { chat } as unknown as (typeof renderState)[string];
+      };
+      set('other', other);
+      set(mainIndexId, main);
+      set('nested', own);
+
+      const { getRenderState } = setup({
+        widgetParams: { configurationId: CONFIGURATION_ID },
+        initOptions: {
+          ...initOptions,
+          parent: { getIndexId: () => 'nested' },
+        } as unknown as typeof initOptions,
+      });
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      getRenderState().compare();
+      expect(own.sendMessage).toHaveBeenCalledTimes(1);
+
+      delete renderState.nested;
+      getRenderState().compare();
+      expect(main.sendMessage).toHaveBeenCalledTimes(1);
+
+      delete renderState[mainIndexId];
+      getRenderState().compare();
+      expect(other.sendMessage).toHaveBeenCalledTimes(1);
     });
 
     it('returns false when the chat is busy', () => {

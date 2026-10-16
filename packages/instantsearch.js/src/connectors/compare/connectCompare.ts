@@ -1,8 +1,10 @@
+import { getChatRenderState } from '../../lib/chat/getChatRenderState';
 import { openChat } from '../../lib/chat/openChat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -12,7 +14,6 @@ import type {
   RenderOptions,
   WidgetRenderState,
 } from '../../types';
-import type { ChatRenderState } from '../chat/connectChat';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'compare',
@@ -180,17 +181,6 @@ function getCompareStore(instantSearchInstance: InstantSearch): CompareStore {
   return store;
 }
 
-// Reads the sibling chat widget's render state from the live cross-index
-// `instantSearchInstance.renderState` map. Resolved at call time so that
-// `compare` always sees the latest `open`/`sendMessage` values.
-function getChatRenderState(
-  options: InitOptions | RenderOptions
-): ChatRenderState | undefined {
-  const indexId = options.parent?.getIndexId();
-  if (!indexId) return undefined;
-  return options.instantSearchInstance.renderState[indexId]?.chat;
-}
-
 /**
  * Compare connector.
  *
@@ -292,7 +282,22 @@ const connectCompare: CompareConnector = function connectCompare(
         );
       }
 
-      return openChat(getChatRenderState(lastOptions), {
+      // Resolved at call time so that `compare` always sees the latest
+      // `open`/`sendMessage` values. The chat can live in any index: the
+      // widget's own index wins, then the main index, then any other.
+      const chatRenderState = getChatRenderState(
+        lastOptions.instantSearchInstance,
+        lastOptions.parent?.getIndexId()
+      );
+
+      warning(
+        Boolean(chatRenderState),
+        withUsage(
+          '`compare()` needs a `chat` widget to hand the comparison off to, but none is mounted. Add a `chat` widget to your search.'
+        )
+      );
+
+      return openChat(chatRenderState, {
         message: getComparisonPlaceholderMessage(store.configurationId),
         referer: 'compare',
         turnContext: buildComparisonTurnContext(
