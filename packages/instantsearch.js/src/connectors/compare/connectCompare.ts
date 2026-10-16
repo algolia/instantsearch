@@ -219,7 +219,9 @@ const connectCompare: CompareConnector = function connectCompare(
 
     if (maxItems < minItems) {
       throw new Error(
-        withUsage('The `maxItems` option must be greater than `minItems`.')
+        withUsage(
+          'The `maxItems` option must be greater than or equal to `minItems`.'
+        )
       );
     }
 
@@ -287,7 +289,7 @@ const connectCompare: CompareConnector = function connectCompare(
       if (!store.configurationId) {
         throw new Error(
           withUsage(
-            'The `configurationId` option is required to start a comparison. Set it on the `compareBar` widget to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).'
+            'The `configurationId` option is required on the `compareBar` widget.'
           )
         );
       }
