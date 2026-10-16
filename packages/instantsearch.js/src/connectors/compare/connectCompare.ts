@@ -231,8 +231,9 @@ const connectCompare: CompareConnector = function connectCompare(
       return getCompareStore(lastOptions.instantSearchInstance);
     }
 
-    // Re-renders every subscribed `compare` widget, then schedules a full
-    // render so anything else reading `renderState.compare` catches up.
+    // Schedules a full render, which re-renders every `compare` widget once
+    // along with anything else reading `renderState.compare`. Listeners only
+    // render on their own when that full render would skip their widget.
     function notify(store: CompareStore) {
       store.listeners.forEach((listener) => listener());
       lastOptions?.instantSearchInstance.scheduleRender();
@@ -321,13 +322,21 @@ const connectCompare: CompareConnector = function connectCompare(
         }
         const listener = () => {
           if (!lastOptions) return;
-          renderFn(
-            {
-              ...this.getWidgetRenderState(lastOptions),
-              instantSearchInstance: lastOptions.instantSearchInstance,
-            },
-            false
-          );
+          // The index only renders widgets without `shouldRender` (like this
+          // one) once it has results; until then the scheduled full render
+          // skips them, so render directly to keep the selection UI live.
+          if (lastOptions.parent?.getResults()) return;
+
+          const widgetRenderState = this.getWidgetRenderState(lastOptions);
+          const { instantSearchInstance } = lastOptions;
+          const indexId = lastOptions.parent?.getIndexId();
+          if (indexId) {
+            instantSearchInstance.renderState[indexId] = {
+              ...instantSearchInstance.renderState[indexId],
+              compare: widgetRenderState,
+            };
+          }
+          renderFn({ ...widgetRenderState, instantSearchInstance }, false);
         };
         store.listeners.add(listener);
         unsubscribe = () => store.listeners.delete(listener);
