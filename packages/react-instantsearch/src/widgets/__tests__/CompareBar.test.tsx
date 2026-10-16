@@ -44,6 +44,26 @@ function renderCompareBar(
 }
 
 describe('CompareBar', () => {
+  test('throws when configurationId is missing', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    expect(() =>
+      render(
+        <InstantSearch
+          searchClient={createSearchClient({})}
+          indexName="indexName"
+        >
+          {/* @ts-expect-error configurationId is required */}
+          <CompareBar />
+        </InstantSearch>
+      )
+    ).toThrow('The `configurationId` prop is required.');
+
+    consoleError.mockRestore();
+  });
+
   test('renders nothing while the selection is empty', () => {
     const { container } = renderCompareBar();
 
