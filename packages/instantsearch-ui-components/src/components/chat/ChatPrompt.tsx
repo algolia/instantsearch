@@ -287,7 +287,26 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
-              if (event.key === 'Enter' && !event.shiftKey) {
+              if (event.key === 'Enter' && !event.isComposing) {
+                if (event.shiftKey) {
+                  // the browser inserts the newline natively
+                  return;
+                }
+                if (event.altKey) {
+                  // browsers don't insert a newline on alt+enter, so do it
+                  // ourselves and notify controlled consumers
+                  event.preventDefault();
+                  const textarea = event.currentTarget;
+                  const caret = textarea.selectionStart + 1;
+                  textarea.setRangeText(
+                    '\n',
+                    textarea.selectionStart,
+                    textarea.selectionEnd
+                  );
+                  textarea.setSelectionRange(caret, caret);
+                  textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                  return;
+                }
                 event.preventDefault();
                 if (canStop) {
                   onStop?.();

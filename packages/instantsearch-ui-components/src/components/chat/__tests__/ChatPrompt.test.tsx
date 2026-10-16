@@ -2,7 +2,7 @@
  * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
-import { render } from '@testing-library/preact';
+import { fireEvent, render } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
@@ -182,5 +182,65 @@ describe('ChatPrompt', () => {
     userEvent.click(button);
     expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onStop).toHaveBeenCalledTimes(0);
+  });
+
+  describe('enter key', () => {
+    test('submits on enter', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+      const textarea = container.querySelector('textarea')!;
+
+      userEvent.type(textarea, '{enter}');
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not submit on shift+enter', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+      const textarea = container.querySelector('textarea')!;
+
+      const notPrevented = fireEvent.keyDown(textarea, {
+        key: 'Enter',
+        shiftKey: true,
+      });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+      // left to the browser, which inserts the newline
+      expect(notPrevented).toBe(true);
+    });
+
+    test('inserts a newline at the cursor on alt+enter', () => {
+      const onSubmit = jest.fn();
+      const onInput = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Helloworld" onSubmit={onSubmit} onInput={onInput} />
+      );
+      const textarea = container.querySelector('textarea')!;
+      textarea.setSelectionRange(5, 5);
+
+      fireEvent.keyDown(textarea, { key: 'Enter', altKey: true });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(onInput).toHaveBeenCalledTimes(1);
+      expect(textarea.value).toBe('Hello\nworld');
+      expect(textarea.selectionStart).toBe(6);
+    });
+
+    test('does not submit while composing', () => {
+      const onSubmit = jest.fn();
+      const { container } = render(
+        <ChatPrompt value="Hello" onSubmit={onSubmit} />
+      );
+      const textarea = container.querySelector('textarea')!;
+
+      fireEvent.keyDown(textarea, { key: 'Enter', isComposing: true });
+
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
   });
 });
