@@ -65,6 +65,22 @@ describe('CompareBar', () => {
     expect(screen.getByRole('button', { name: 'Compare 2' })).toBeEnabled();
   });
 
+  test('shows the items transformed by `transformItems`', () => {
+    const transformItems = (items: Array<{ objectID: string }>) =>
+      items.map((item) => ({ ...item, name: `Item ${item.objectID}` }));
+    const { getCompareState } = renderCompareBar({ transformItems });
+
+    act(() => {
+      getCompareState().toggleItem({ objectID: 'A', name: 'MacBook Pro 14' });
+      getCompareState().toggleItem({ objectID: 'B', name: 'MacBook Pro 16' });
+    });
+
+    expect(screen.getByText('Item A')).toBeInTheDocument();
+    expect(screen.getByText('Item B')).toBeInTheDocument();
+    expect(screen.queryByText('MacBook Pro 14')).not.toBeInTheDocument();
+    expect(screen.getByText('2 of 3')).toBeInTheDocument();
+  });
+
   test('disables the call-to-action below `minItems` and shows the hint', () => {
     const { getCompareState } = renderCompareBar();
 
