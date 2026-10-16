@@ -24,7 +24,9 @@ function CompareController({
   return null;
 }
 
-function renderCompareBar(props: React.ComponentProps<typeof CompareBar> = {}) {
+function renderCompareBar(
+  props: Partial<React.ComponentProps<typeof CompareBar>> = {}
+) {
   let compareState: CompareRenderState | undefined;
 
   const utils = render(
@@ -34,7 +36,7 @@ function renderCompareBar(props: React.ComponentProps<typeof CompareBar> = {}) {
           compareState = renderState;
         }}
       />
-      <CompareBar {...props} />
+      <CompareBar configurationId="algolia_comparison_abc" {...props} />
     </InstantSearch>
   );
 

@@ -3,7 +3,13 @@ import { compareBar } from 'instantsearch.js/es/widgets';
 import { useWidget } from '../../hooks/useWidget';
 
 export function WidgetCompareBar() {
-  const ref = useWidget((el) => compareBar({ container: el }));
+  const ref = useWidget((el) =>
+    compareBar({
+      container: el,
+      configurationId:
+        'algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516',
+    })
+  );
 
   return (
     <div class="flex flex-col gap-3">

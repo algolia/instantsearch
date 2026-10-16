@@ -17,6 +17,14 @@ const CompareBarUiComponent = createCompareBarComponent({
 
 export type CompareBarProps = UseCompareProps & {
   /**
+   * ID of the comparison configuration created in the Agent Studio dashboard
+   * (Components > Comparison). The bar's "Compare" call-to-action sends its
+   * placeholder to the chat, which the backend resolves into the
+   * configuration's instructions; the chat shows no user message for it.
+   */
+  configurationId: string;
+
+  /**
    * CSS classes to add to the widget elements.
    */
   classNames?: Partial<CompareBarClassNames>;
@@ -35,7 +43,7 @@ export type CompareBarProps = UseCompareProps & {
 /**
  * Renders the comparison selection bar: the records picked for comparison,
  * a clear-selection action, and the "Compare" call-to-action that opens the
- * `<Chat>` widget with the comparison message.
+ * `<Chat>` widget with the configured comparison.
  *
  * Select records from your own UI (e.g. a "Compare" button in your hit
  * component) with `useCompare().toggleItem(hit)` — the selection is shared

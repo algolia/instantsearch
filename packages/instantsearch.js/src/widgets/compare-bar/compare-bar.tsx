@@ -41,6 +41,14 @@ export type CompareBarWidgetParams = {
   container: string | HTMLElement;
 
   /**
+   * ID of the comparison configuration created in the Agent Studio dashboard
+   * (Components > Comparison). The bar's "Compare" call-to-action sends its
+   * placeholder to the chat, which the backend resolves into the
+   * configuration's instructions; the chat shows no user message for it.
+   */
+  configurationId: string;
+
+  /**
    * Templates to use for the widget.
    */
   templates?: CompareBarTemplates;
@@ -65,7 +73,7 @@ const CompareBar = createCompareBarComponent({
  * The `compareBar` widget renders the comparison selection bar: the records
  * picked for comparison (through the shared `compare` render state), a
  * clear-selection action, and the "Compare" call-to-action that opens the
- * sibling `chat` widget with the comparison message.
+ * sibling `chat` widget with the configured comparison.
  *
  * Select records from your own UI (e.g. a "Compare" button in the `hits`
  * template) by calling `toggleItem(hit)` from the `compare` render state.

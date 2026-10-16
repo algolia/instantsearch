@@ -9,7 +9,6 @@ import {
 } from '../../../../test/createWidget';
 import connectCompare, {
   getComparisonPlaceholderMessage,
-  getDefaultComparisonMessage,
 } from '../connectCompare';
 
 import type { ChatRenderState } from '../../chat/connectChat';
@@ -220,9 +219,15 @@ describe('connectCompare', () => {
   });
 
   describe('compare', () => {
-    it('opens the chat and sends the default comparison message', () => {
+    const CONFIGURATION_ID = 'algolia_comparison_abc';
+    const SENTINEL = '__ALGOLIA_COMPARISON_algolia_comparison_abc__';
+
+    it('opens the chat and sends the configuration placeholder, marked as a pending prompt shortcut', () => {
       const chatRenderState = createChatRenderState();
-      const { getRenderState } = setup({ chatRenderState });
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
 
       getRenderState().addItem({ objectID: 'A', name: 'MacBook Pro 14' });
       getRenderState().addItem({ objectID: 'B', name: 'MacBook Pro 16' });
@@ -233,56 +238,72 @@ describe('connectCompare', () => {
       expect(chatRenderState.setOpen).toHaveBeenCalledWith(true);
       expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
         {
-          text: 'Compare these products: "MacBook Pro 14" (objectID: A) vs "MacBook Pro 16" (objectID: B)',
+          text: SENTINEL,
           metadata: {
             turnContext: {
               selected_products: JSON.stringify([
                 { objectID: 'A', name: 'MacBook Pro 14' },
                 { objectID: 'B', name: 'MacBook Pro 16' },
               ]),
+              comparison_configuration_id: CONFIGURATION_ID,
             },
+            // The chat shows no bubble for the placeholder: the shopper goes
+            // from the Compare button straight to the answer.
+            promptShortcut: { sentinel: SENTINEL },
           },
         },
         { headers: { 'x-algolia-referer': 'compare' } }
       );
     });
 
-    it('sends the configuration placeholder, marked as a pending prompt shortcut, when `configurationId` is set', () => {
+    it('uses the `configurationId` another widget of the same instance set, so per-hit toggles can omit it', () => {
       const chatRenderState = createChatRenderState();
-      const { getRenderState } = setup({
+      const initOptions = createInitOptions();
+      // The bar carries the configuration...
+      setup({
+        initOptions,
         chatRenderState,
-        widgetParams: { configurationId: 'algolia_comparison_abc' },
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
+      // ...and a toggle without one still starts the comparison.
+      const toggle = setup({
+        initOptions: createInitOptions({
+          instantSearchInstance: initOptions.instantSearchInstance,
+        }),
       });
 
-      getRenderState().addItem({ objectID: 'A', name: 'MacBook Pro 14' });
-      getRenderState().addItem({ objectID: 'B', name: 'MacBook Pro 16' });
-      getRenderState().compare();
+      toggle.getRenderState().addItem({ objectID: 'A' });
+      toggle.getRenderState().addItem({ objectID: 'B' });
 
+      expect(toggle.getRenderState().compare()).toBe(true);
       expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
-        {
-          text: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
-          metadata: {
-            turnContext: {
-              selected_products: JSON.stringify([
-                { objectID: 'A', name: 'MacBook Pro 14' },
-                { objectID: 'B', name: 'MacBook Pro 16' },
-              ]),
-              comparison_configuration_id: 'algolia_comparison_abc',
-            },
-            // The chat shows no bubble for the placeholder: the server decides
-            // what, if anything, the transcript displays for it.
-            promptShortcut: {
-              sentinel: '__ALGOLIA_COMPARISON_algolia_comparison_abc__',
-            },
-          },
-        },
+        expect.objectContaining({ text: SENTINEL }),
         { headers: { 'x-algolia-referer': 'compare' } }
       );
+    });
+
+    it('throws a usage error when no widget of the instance set a `configurationId`', () => {
+      const chatRenderState = createChatRenderState();
+      const { getRenderState } = setup({ chatRenderState });
+
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(() => getRenderState().compare())
+        .toThrowErrorMatchingInlineSnapshot(`
+        "The \`configurationId\` option is required to start a comparison. Set it on the \`compareBar\` widget to the ID of a comparison configuration created in the Agent Studio dashboard (Components > Comparison).
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/compare/js/#connector"
+      `);
+      expect(chatRenderState.sendMessage).not.toHaveBeenCalled();
     });
 
     it('strips `_`-prefixed internal metadata from `selected_products`', () => {
       const chatRenderState = createChatRenderState();
-      const { getRenderState } = setup({ chatRenderState });
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
 
       getRenderState().addItem({
         objectID: 'A',
@@ -300,39 +321,12 @@ describe('connectCompare', () => {
       ).toEqual([{ objectID: 'A', name: 'MacBook Pro 14' }, { objectID: 'B' }]);
     });
 
-    it('uses the `getComparisonMessage` option when provided', () => {
+    it('does nothing while fewer than `minItems` items are selected', () => {
       const chatRenderState = createChatRenderState();
       const { getRenderState } = setup({
         chatRenderState,
-        widgetParams: {
-          getComparisonMessage: (items) =>
-            `Which is better? ${items.map((i) => i.objectID).join(' or ')}`,
-        },
+        widgetParams: { configurationId: CONFIGURATION_ID },
       });
-
-      getRenderState().addItem({ objectID: 'A' });
-      getRenderState().addItem({ objectID: 'B' });
-      getRenderState().compare();
-
-      expect(chatRenderState.sendMessage).toHaveBeenCalledWith(
-        {
-          text: 'Which is better? A or B',
-          metadata: {
-            turnContext: {
-              selected_products: JSON.stringify([
-                { objectID: 'A' },
-                { objectID: 'B' },
-              ]),
-            },
-          },
-        },
-        { headers: { 'x-algolia-referer': 'compare' } }
-      );
-    });
-
-    it('does nothing while fewer than `minItems` items are selected', () => {
-      const chatRenderState = createChatRenderState();
-      const { getRenderState } = setup({ chatRenderState });
 
       getRenderState().addItem({ objectID: 'A' });
 
@@ -342,7 +336,9 @@ describe('connectCompare', () => {
     });
 
     it('returns false when no chat widget is mounted', () => {
-      const { getRenderState } = setup();
+      const { getRenderState } = setup({
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
 
       getRenderState().addItem({ objectID: 'A' });
       getRenderState().addItem({ objectID: 'B' });
@@ -354,7 +350,10 @@ describe('connectCompare', () => {
       const chatRenderState = createChatRenderState({
         status: 'streaming' as ChatRenderState['status'],
       });
-      const { getRenderState } = setup({ chatRenderState });
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
 
       getRenderState().addItem({ objectID: 'A' });
       getRenderState().addItem({ objectID: 'B' });
@@ -389,20 +388,6 @@ describe('connectCompare', () => {
     it('embeds the configuration id in the placeholder token', () => {
       expect(getComparisonPlaceholderMessage('algolia_comparison_abc')).toBe(
         '__ALGOLIA_COMPARISON_algolia_comparison_abc__'
-      );
-    });
-  });
-
-  describe('getDefaultComparisonMessage', () => {
-    it('names each item with its label and objectID', () => {
-      expect(
-        getDefaultComparisonMessage([
-          { objectID: 'A', name: 'MacBook Pro 14' },
-          { objectID: 'B', title: 'MacBook Pro 16' },
-          { objectID: 'C' },
-        ])
-      ).toBe(
-        'Compare these products: "MacBook Pro 14" (objectID: A) vs "MacBook Pro 16" (objectID: B) vs the product with objectID "C"'
       );
     });
   });
