@@ -599,6 +599,9 @@ const testSetups = {
   createPromptSuggestionsWidgetTests() {
     throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
   },
+  createCompareBarWidgetTests() {
+    throw new Error('CompareBar is not supported in Vue InstantSearch');
+  },
   createResultCardWidgetTests() {
     throw new Error('ResultCard is not supported in Vue InstantSearch');
   },
@@ -669,6 +672,9 @@ const testOptions = {
   },
   createResultCardWidgetTests: {
     skippedTests: { 'ResultCard widget common tests': true },
+  },
+  createCompareBarWidgetTests: {
+    skippedTests: { 'CompareBar widget common tests': true },
   },
 };
 
