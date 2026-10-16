@@ -114,6 +114,8 @@ describe('CompareBar', () => {
     });
 
     expect(container.querySelector('.ais-CompareBar')).toHaveClass('ROOTCLASS');
-    expect(screen.getByText('Side by side')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Side by side' })
+    ).toHaveClass('ais-CompareBar-title');
   });
 });
