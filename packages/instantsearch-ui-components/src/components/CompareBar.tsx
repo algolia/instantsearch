@@ -90,6 +90,8 @@ export type CompareBarProps = {
   maxItems: number;
   /** Whether the primary call-to-action is enabled. */
   canCompare: boolean;
+  /** Whether the chat is busy; disables the call-to-action until it is free. */
+  isChatBusy?: boolean;
   /** Starts the comparison (opens the chat and sends the message). */
   onCompare: () => void;
   /** Removes one item from the selection. */
@@ -117,6 +119,7 @@ export function createCompareBarComponent({ createElement }: Renderer) {
       minItems,
       maxItems,
       canCompare,
+      isChatBusy = false,
       onCompare,
       onRemove,
       onClear,
@@ -211,7 +214,7 @@ export function createCompareBarComponent({ createElement }: Renderer) {
               'ais-CompareBar-compareButton',
               classNames.compareButton
             )}
-            disabled={!canCompare}
+            disabled={!canCompare || isChatBusy}
             onClick={onCompare}
           >
             {translations.compareButtonText(items.length)}
