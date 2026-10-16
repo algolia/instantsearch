@@ -26,6 +26,7 @@ import {
   useTrendingFacets,
   useLookingSimilar,
   useFilterSuggestions,
+  useCompare,
 } from '..';
 
 import type {
@@ -44,6 +45,7 @@ import type {
   UseTrendingFacetsProps,
   UseLookingSimilarProps,
   UseFilterSuggestionsProps,
+  UseCompareProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -503,6 +505,81 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createCompareConnectorTests: ({ instantSearchOptions, widgetParams }) => {
+    const { products = [], ...connectorParams } = widgetParams;
+
+    function CustomCompare(props: UseCompareProps) {
+      const [result, setResult] = useState('');
+      const {
+        items,
+        isSelected,
+        addItem,
+        removeItem,
+        toggleItem,
+        clearItems,
+        canAddItems,
+        canCompare,
+        minItems,
+        maxItems,
+        compare,
+      } = useCompare(props);
+
+      return (
+        <div>
+          <ul>
+            {items.map((item) => (
+              <li
+                key={item.objectID}
+                data-testid="Compare-item"
+                data-object-id={item.objectID}
+              >
+                {item.objectID}
+              </li>
+            ))}
+          </ul>
+          <span data-testid="Compare-minItems">{minItems}</span>
+          <span data-testid="Compare-maxItems">{maxItems}</span>
+          <span data-testid="Compare-canAddItems">{String(canAddItems)}</span>
+          <span data-testid="Compare-canCompare">{String(canCompare)}</span>
+          {products.map((product) => (
+            <React.Fragment key={product.objectID}>
+              <button
+                data-testid={`Compare-add-${product.objectID}`}
+                onClick={() => addItem(product)}
+              />
+              <button
+                data-testid={`Compare-remove-${product.objectID}`}
+                onClick={() => removeItem(product.objectID)}
+              />
+              <button
+                data-testid={`Compare-toggle-${product.objectID}`}
+                aria-pressed={isSelected(product.objectID)}
+                onClick={() => toggleItem(product)}
+              />
+            </React.Fragment>
+          ))}
+          <button data-testid="Compare-clear" onClick={clearItems} />
+          <button
+            data-testid="Compare-compare"
+            onClick={() => {
+              try {
+                setResult(String(compare()));
+              } catch (error) {
+                setResult((error as Error).message);
+              }
+            }}
+          />
+          <output data-testid="Compare-result">{result}</output>
+        </div>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomCompare {...connectorParams} />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -529,6 +606,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
   createChatConnectorTests: { act, skippedTests: { options: true } },
   createFilterSuggestionsConnectorTests: { act },
+  createCompareConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

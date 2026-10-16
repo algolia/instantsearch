@@ -346,6 +346,9 @@ const testSetups = {
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
   createFilterSuggestionsConnectorTests: () => {},
+  createCompareConnectorTests() {
+    throw new Error('Compare is not supported in Vue InstantSearch');
+  },
 };
 
 function createCustomWidget({
@@ -455,6 +458,9 @@ const testOptions = {
     skippedTests: {
       options: true,
     },
+  },
+  createCompareConnectorTests: {
+    skippedTests: { 'Compare connector common tests': true },
   },
 };
 

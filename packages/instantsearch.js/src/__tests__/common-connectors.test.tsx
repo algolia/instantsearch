@@ -22,6 +22,7 @@ import {
   connectLookingSimilar,
   connectChat,
   connectFilterSuggestions,
+  connectCompare,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { noop } from '../lib/utils';
@@ -685,6 +686,96 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     search.start();
   },
+  createCompareConnectorTests({ instantSearchOptions, widgetParams }) {
+    const { products = [], ...connectorParams } = widgetParams;
+
+    const result = document.body.appendChild(document.createElement('output'));
+    result.setAttribute('data-testid', 'Compare-result');
+
+    const customCompare = connectCompare<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const {
+        items,
+        isSelected,
+        addItem,
+        removeItem,
+        toggleItem,
+        clearItems,
+        canAddItems,
+        canCompare,
+        minItems,
+        maxItems,
+        compare,
+        widgetParams: { container },
+      } = renderOptions;
+
+      container.innerHTML = `
+        <ul>${items
+          .map(
+            (item) =>
+              `<li data-testid="Compare-item" data-object-id="${item.objectID}">${item.objectID}</li>`
+          )
+          .join('')}</ul>
+        <span data-testid="Compare-minItems">${minItems}</span>
+        <span data-testid="Compare-maxItems">${maxItems}</span>
+        <span data-testid="Compare-canAddItems">${canAddItems}</span>
+        <span data-testid="Compare-canCompare">${canCompare}</span>
+        ${products
+          .map(
+            (product) => `
+              <button data-testid="Compare-add-${product.objectID}"></button>
+              <button data-testid="Compare-remove-${product.objectID}"></button>
+              <button
+                data-testid="Compare-toggle-${product.objectID}"
+                aria-pressed="${isSelected(product.objectID)}"
+              ></button>`
+          )
+          .join('')}
+        <button data-testid="Compare-clear"></button>
+        <button data-testid="Compare-compare"></button>
+      `;
+
+      products.forEach((product) => {
+        container
+          .querySelector(`[data-testid="Compare-add-${product.objectID}"]`)!
+          .addEventListener('click', () => addItem(product));
+        container
+          .querySelector(`[data-testid="Compare-remove-${product.objectID}"]`)!
+          .addEventListener('click', () => removeItem(product.objectID));
+        container
+          .querySelector(`[data-testid="Compare-toggle-${product.objectID}"]`)!
+          .addEventListener('click', () => toggleItem(product));
+      });
+      container
+        .querySelector('[data-testid="Compare-clear"]')!
+        .addEventListener('click', clearItems);
+      container
+        .querySelector('[data-testid="Compare-compare"]')!
+        .addEventListener('click', () => {
+          try {
+            result.textContent = String(compare());
+          } catch (error) {
+            result.textContent = (error as Error).message;
+          }
+        });
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customCompare({
+          container: document.body.appendChild(document.createElement('div')),
+          ...connectorParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
@@ -719,6 +810,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createLookingSimilarConnectorTests: undefined,
   createChatConnectorTests: undefined,
   createFilterSuggestionsConnectorTests: undefined,
+  createCompareConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {

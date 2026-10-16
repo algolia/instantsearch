@@ -15,3 +15,4 @@ export * from './trending-facets';
 export * from './looking-similar';
 export * from './chat';
 export * from './filter-suggestions';
+export * from './compare';
