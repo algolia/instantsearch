@@ -31,6 +31,8 @@
 }
 
 .ais-CompareBar-title {
+  margin: 0;
+  font-size: inherit;
   font-weight: var(--ais-font-weight-semibold);
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 }
