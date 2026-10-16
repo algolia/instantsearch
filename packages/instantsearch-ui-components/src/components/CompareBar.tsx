@@ -108,6 +108,17 @@ function getCompareBarItemLabel(item: CompareBarItem): string {
   return typeof label === 'string' && label !== '' ? label : item.objectID;
 }
 
+/**
+ * Moves focus from an item's remove button to the next item's remove button,
+ * else the previous one. With no neighbour (last item), the bar is about to
+ * unmount and focus is left to the consumer.
+ */
+function focusSiblingRemoveButton(button: EventTarget | null) {
+  const item = (button as HTMLElement | null)?.closest?.('li');
+  const sibling = item?.nextElementSibling ?? item?.previousElementSibling;
+  sibling?.querySelector<HTMLElement>('button')?.focus();
+}
+
 export function createCompareBarComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
@@ -182,7 +193,14 @@ export function createCompareBarComponent({ createElement }: Renderer) {
                     classNames.itemRemove
                   )}
                   aria-label={translations.removeItemLabel(label)}
-                  onClick={() => onRemove(item)}
+                  onClick={(event) => {
+                    // Hand focus to a neighbouring remove button *before*
+                    // removing, so it works whether the consumer re-renders
+                    // synchronously (Preact) or asynchronously (React). The
+                    // neighbour's keyed element survives the re-render.
+                    focusSiblingRemoveButton(event.currentTarget);
+                    onRemove(item);
+                  }}
                 >
                   <CloseIcon createElement={createElement} />
                 </button>

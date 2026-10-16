@@ -103,6 +103,25 @@ describe('CompareBar', () => {
     expect(getCompareState().items).toEqual([]);
   });
 
+  test('keeps focus in the bar after removing an item', async () => {
+    const { getCompareState } = renderCompareBar();
+
+    act(() => {
+      getCompareState().toggleItem({ objectID: 'A', name: 'A' });
+      getCompareState().toggleItem({ objectID: 'B', name: 'B' });
+      getCompareState().toggleItem({ objectID: 'C', name: 'C' });
+    });
+
+    const removeButton = (name: string) =>
+      screen.getByRole('button', { name: `Remove ${name} from comparison` });
+
+    await userEvent.click(removeButton('A'));
+    expect(removeButton('B')).toHaveFocus();
+
+    await userEvent.click(removeButton('C'));
+    expect(removeButton('B')).toHaveFocus();
+  });
+
   test('applies custom class names and translations', () => {
     const { container, getCompareState } = renderCompareBar({
       classNames: { root: 'ROOTCLASS' },
