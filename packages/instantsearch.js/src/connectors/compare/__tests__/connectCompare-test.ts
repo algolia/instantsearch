@@ -256,6 +256,20 @@ describe('connectCompare', () => {
       );
     });
 
+    it('clears the selection once the comparison is sent, which dismisses the bar', () => {
+      const chatRenderState = createChatRenderState();
+      const { getRenderState } = setup({
+        chatRenderState,
+        widgetParams: { configurationId: CONFIGURATION_ID },
+      });
+
+      getRenderState().addItem({ objectID: 'A' });
+      getRenderState().addItem({ objectID: 'B' });
+
+      expect(getRenderState().compare()).toBe(true);
+      expect(getRenderState().items).toEqual([]);
+    });
+
     it('uses the `configurationId` another widget of the same instance set, so per-hit toggles can omit it', () => {
       const chatRenderState = createChatRenderState();
       const initOptions = createInitOptions();
