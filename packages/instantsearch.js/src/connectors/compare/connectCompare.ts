@@ -301,8 +301,6 @@ const connectCompare: CompareConnector = function connectCompare(
         ),
       });
 
-      // The comparison now lives in the chat; clearing the selection
-      // dismisses the compare bar.
       if (submitted) {
         clearItems();
       }
