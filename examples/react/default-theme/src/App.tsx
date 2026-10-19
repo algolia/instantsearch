@@ -52,10 +52,15 @@ type HitProps = {
   }>;
 };
 
+const COMPARISON_CONFIGURATION_ID =
+  'algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516';
+
 function Hit({ hit }: HitProps) {
   // Every `useCompare` call shares one selection with the `<CompareBar>`, so
   // this toggle and the bar stay in sync.
-  const { isSelected, toggleItem, canAddItems } = useCompare();
+  const { isSelected, toggleItem, canAddItems } = useCompare({
+    configurationId: COMPARISON_CONFIGURATION_ID,
+  });
   const selected = isSelected(hit.objectID);
 
   return (
@@ -222,7 +227,7 @@ export function App() {
         itemComponent={ItemComponent}
       />
       <ChatTrigger />
-      <CompareBar configurationId="algolia_comparison_7c38cb21-cf8d-4039-a9bd-730d5b751516" />
+      <CompareBar configurationId={COMPARISON_CONFIGURATION_ID} />
     </InstantSearch>
   );
 }

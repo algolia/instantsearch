@@ -16,11 +16,10 @@ export type UseCompareProps = CompareConnectorParams;
  * The selection is shared by every `useCompare` call on the same InstantSearch
  * instance, so a per-hit "Compare" toggle (`toggleItem`) and the `<CompareBar>`
  * widget stay in sync. `compare()` opens the `<Chat>` widget and sends the
- * configured comparison for the current selection; the `configurationId` is
- * set on `<CompareBar>` and shared with the toggles, which can omit it.
+ * configured comparison for the current selection.
  */
 export function useCompare(
-  props: UseCompareProps = {},
+  props: UseCompareProps,
   additionalWidgetProperties?: AdditionalWidgetProperties
 ) {
   return useConnector<CompareConnectorParams, CompareWidgetDescription>(

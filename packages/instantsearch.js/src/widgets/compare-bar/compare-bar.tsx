@@ -81,7 +81,6 @@ const CompareBar = createCompareBarComponent({
 export default function compareBar(widgetParams: CompareBarWidgetParams) {
   const {
     container,
-    configurationId,
     templates: userTemplates = {},
     cssClasses = {},
     translations,
@@ -90,10 +89,6 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
-  }
-
-  if (!configurationId) {
-    throw new Error(withUsage('The `configurationId` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -154,7 +149,7 @@ export default function compareBar(widgetParams: CompareBarWidgetParams) {
   );
 
   return {
-    ...makeWidget({ ...connectorParams, configurationId }),
+    ...makeWidget(connectorParams),
     $$widgetType: 'ais.compareBar' as const,
   };
 }
