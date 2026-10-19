@@ -85,23 +85,39 @@ describe('AisRelatedProducts', () => {
       await nextTick();
 
       const list = wrapper.find('.ais-Carousel-list');
+      const previous = wrapper.find('.ais-Carousel-navigation--previous');
       const next = wrapper.find('.ais-Carousel-navigation--next');
 
-      // Initially the next button is visible. The shared Carousel toggles it
-      // imperatively via the ref (a DOM property), so assert on `.hidden`.
-      expect(next.element.hidden).toBe(false);
+      // When the items arrived, the shared Carousel's `useEffect` (driven by
+      // the hooks runtime) re-checked the navigation. jsdom has no layout, so
+      // the list doesn't overflow and the next button is hidden too. The
+      // shared Carousel toggles the buttons imperatively via the refs (a DOM
+      // property), so assert on `.hidden`.
+      expect(previous.element.hidden).toBe(true);
+      expect(next.element.hidden).toBe(true);
 
-      // In jsdom there's no layout, so after a scroll the carousel computes
-      // that it can no longer scroll right. This exercises:
+      // Simulate a list that overflows, then scroll it. This exercises:
       //  - the onScroll React-style handler (event adapter),
-      //  - listRef/nextButtonRef being populated (ref adapter),
-      //  - setCanScrollRight re-rendering via the hooks runtime.
+      //  - listRef/nextButtonRef/previousButtonRef being populated (ref adapter),
+      //  - setCanScrollLeft/Right re-rendering via the hooks runtime.
+      Object.defineProperties(list.element, {
+        clientWidth: { configurable: true, value: 100 },
+        scrollWidth: { configurable: true, value: 200 },
+      });
+
+      list.element.scrollLeft = 0;
       await list.trigger('scroll');
       await nextTick();
 
-      expect(
-        wrapper.find('.ais-Carousel-navigation--next').element.hidden
-      ).toBe(true);
+      expect(previous.element.hidden).toBe(true);
+      expect(next.element.hidden).toBe(false);
+
+      list.element.scrollLeft = 100;
+      await list.trigger('scroll');
+      await nextTick();
+
+      expect(previous.element.hidden).toBe(false);
+      expect(next.element.hidden).toBe(true);
     });
   });
 });

@@ -60,12 +60,17 @@ export default {
     this.hooksStore.cleanup();
   },
   render: renderReactCompat(function (h) {
+    const { useState, useRef, useEffect } = this.hooksStore.hooks;
+
+    // The shared Carousel calls `useRef`/`useEffect` itself (to re-check the
+    // navigation when the item count changes), so hand it this component's
+    // hooks store.
     const CarouselUiComponent = createCarouselComponent({
       createElement: h,
       Fragment,
+      useEffect,
+      useRef,
     });
-
-    const { useState, useRef } = this.hooksStore.hooks;
 
     this.hooksStore.beginRender();
 
