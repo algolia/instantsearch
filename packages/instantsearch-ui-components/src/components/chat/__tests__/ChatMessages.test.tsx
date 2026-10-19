@@ -7,6 +7,7 @@ import { Fragment, createElement } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 
 import * as chatUtils from '../../../lib/utils/chat';
+import { getTextContent } from '../../../lib/utils/chat';
 import { createChatMessageErrorComponent } from '../ChatMessageError';
 import { createChatMessagesComponent } from '../ChatMessages';
 
@@ -15,7 +16,7 @@ import type {
   ChatMessageTextComponentProps,
 } from '../ChatMessage';
 import type { ChatMessageErrorProps } from '../ChatMessageError';
-import type { ChatComponentPropsWithContext } from '../types';
+import type { ChatComponentPropsWithContext, ChatMessageBase } from '../types';
 
 const ChatMessages = createChatMessagesComponent({
   createElement,
@@ -49,12 +50,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content"
@@ -121,12 +133,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content"
@@ -1776,12 +1799,23 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-live="polite"
+          aria-live="off"
           class="ais-ChatMessages root"
           role="log"
         >
           <div
+            aria-atomic="true"
+            aria-live="polite"
+            class="ais-ChatMessages-status"
+            role="status"
+          >
+            
+          </div>
+          <div
+            aria-label="Conversation"
             class="ais-ChatMessages-scroll ais-Scrollbar scroll"
+            role="region"
+            tabindex="0"
           >
             <div
               class="ais-ChatMessages-content content"
@@ -1872,19 +1906,319 @@ describe('ChatMessages', () => {
       expect(loader(container)).not.toBeNull();
     });
 
+    test('silences the log in favor of a single status region', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="ready" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).toHaveAttribute(
+        'aria-live',
+        'off'
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveAttribute('aria-live', 'polite');
+    });
+
+    test('makes the history a focusable, named region', () => {
+      render(<ChatMessages {...baseProps} status="ready" messages={[]} />);
+
+      const region = screen.getByRole('region', { name: 'Conversation' });
+      expect(region).toHaveAttribute('tabindex', '0');
+      expect(region).toHaveClass('ais-ChatMessages-scroll');
+    });
+
+    test('announces once when a reply starts and once with the full reply', () => {
+      const user = {
+        id: 'u',
+        role: 'user' as const,
+        parts: [{ type: 'text' as const, text: 'Hi' }],
+      };
+      const assistant = (text: string) => ({
+        id: 'a',
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text }],
+      });
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="ready" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+
+      rerender(
+        <ChatMessages {...baseProps} status="submitted" messages={[user]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="streaming"
+          messages={[user, assistant('Hel')]}
+        />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[user, assistant('**Hello** there')]}
+        />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply received.');
+    });
+
+    test('keeps the status region out of the busy subtree', () => {
+      const { container } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+
+      expect(container.querySelector('[role="log"]')).not.toHaveAttribute(
+        'aria-busy'
+      );
+      expect(
+        container
+          .querySelector('.ais-ChatMessages-status')
+          ?.closest('[aria-busy]')
+      ).toBeNull();
+    });
+
+    test('does not announce the previous reply when a request is stopped', () => {
+      const messages = [
+        {
+          id: 'u1',
+          role: 'user' as const,
+          parts: [{ type: 'text' as const, text: 'Hi' }],
+        },
+        {
+          id: 'a1',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Old answer' }],
+        },
+        {
+          id: 'u2',
+          role: 'user' as const,
+          parts: [{ type: 'text' as const, text: 'More' }],
+        },
+      ];
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={messages} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={messages} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('lets the reply announcement be customized from the message', () => {
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'C# **rocks**' }],
+        },
+      ];
+      const props = {
+        ...baseProps,
+        messages,
+        translations: {
+          responseCompleteStatusText: ({
+            message,
+          }: {
+            message: ChatMessageBase;
+          }) => `Said: ${getTextContent(message)}`,
+        },
+      };
+      const { rerender } = render(
+        <ChatMessages {...props} status="streaming" />
+      );
+      rerender(<ChatMessages {...props} status="ready" />);
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Said: C# **rocks**');
+    });
+
+    test('announces a request already in flight on mount', () => {
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+
+      rerender(
+        <ChatMessages {...baseProps} status="streaming" messages={[]} />
+      );
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Responding…');
+    });
+
+    test('stays silent when a request ends without a reply', () => {
+      // A resume with no stream to reconnect to goes `submitted` → `ready`
+      // and leaves the restored history untouched.
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Old answer' }],
+        },
+      ];
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={messages} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={messages} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('announces a reply that a resumed request continues', () => {
+      const message = {
+        id: 'a',
+        role: 'assistant' as const,
+        parts: [{ type: 'text' as const, text: 'Partial' }],
+      };
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[message]} />
+      );
+      const continued = [
+        { ...message, parts: [{ type: 'text' as const, text: 'Full' }] },
+      ];
+      rerender(
+        <ChatMessages {...baseProps} status="streaming" messages={continued} />
+      );
+      rerender(
+        <ChatMessages {...baseProps} status="ready" messages={continued} />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Reply received.');
+    });
+
+    test('stays silent for an error that predates the mount', () => {
+      render(
+        <ChatMessages
+          {...baseProps}
+          status="error"
+          error={new Error('nope')}
+          messages={[]}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('clears the reply announcement when the history is cleared', () => {
+      const messages = [
+        {
+          id: 'a',
+          role: 'assistant' as const,
+          parts: [{ type: 'text' as const, text: 'Secret' }],
+        },
+      ];
+      const props = {
+        ...baseProps,
+        translations: {
+          responseCompleteStatusText: ({
+            message,
+          }: {
+            message: ChatMessageBase;
+          }) => `Said: ${getTextContent(message)}`,
+        },
+      };
+      const { rerender } = render(
+        <ChatMessages {...props} status="streaming" messages={messages} />
+      );
+      rerender(<ChatMessages {...props} status="ready" messages={messages} />);
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Said: Secret');
+
+      rerender(<ChatMessages {...props} status="ready" messages={[]} />);
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('');
+    });
+
+    test('announces errors', () => {
+      const { rerender } = render(
+        <ChatMessages {...baseProps} status="submitted" messages={[]} />
+      );
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="error"
+          error={new Error('nope')}
+          messages={[]}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Sorry, something went wrong. Please try again.');
+    });
+
+    test('uses custom announcement translations', () => {
+      const { rerender } = render(
+        <ChatMessages
+          {...baseProps}
+          status="ready"
+          messages={[]}
+          translations={{
+            respondingStatusText: 'Un moment…',
+            conversationLabel: 'Gesprek',
+          }}
+        />
+      );
+      rerender(
+        <ChatMessages
+          {...baseProps}
+          status="submitted"
+          messages={[]}
+          translations={{
+            respondingStatusText: 'Un moment…',
+            conversationLabel: 'Gesprek',
+          }}
+        />
+      );
+
+      expect(
+        document.querySelector('.ais-ChatMessages-status')
+      ).toHaveTextContent('Un moment…');
+      expect(screen.getByRole('region', { name: 'Gesprek' })).toBeTruthy();
+    });
+
     test('sets aria-busy while loading', () => {
       const { container } = render(
         <ChatMessages {...baseProps} status="submitted" messages={[]} />
       );
 
-      expect(container.querySelector('[role="log"]')).toHaveAttribute(
-        'aria-busy',
-        'true'
-      );
+      expect(
+        container.querySelector('.ais-ChatMessages-scroll')
+      ).toHaveAttribute('aria-busy', 'true');
     });
 
     test('keeps aria-busy set while a suppressed loader hides progress', () => {
-      // The log keeps updating even when the loader is overridden away, so the
+      // The history keeps updating even when the loader is overridden away, so the
       // busy state follows the turn rather than the loader.
       const { container } = render(
         <ChatMessages
@@ -1896,10 +2230,9 @@ describe('ChatMessages', () => {
       );
 
       expect(loader(container)).toBeNull();
-      expect(container.querySelector('[role="log"]')).toHaveAttribute(
-        'aria-busy',
-        'true'
-      );
+      expect(
+        container.querySelector('.ais-ChatMessages-scroll')
+      ).toHaveAttribute('aria-busy', 'true');
     });
 
     describe('with timers', () => {

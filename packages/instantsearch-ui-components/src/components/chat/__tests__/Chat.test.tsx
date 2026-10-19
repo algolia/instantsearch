@@ -134,12 +134,23 @@ describe('Chat', () => {
               </div>
             </div>
             <div
-              aria-live="polite"
+              aria-live="off"
               class="ais-ChatMessages"
               role="log"
             >
               <div
+                aria-atomic="true"
+                aria-live="polite"
+                class="ais-ChatMessages-status"
+                role="status"
+              >
+                
+              </div>
+              <div
+                aria-label="Conversation"
                 class="ais-ChatMessages-scroll ais-Scrollbar"
+                role="region"
+                tabindex="0"
               >
                 <div
                   class="ais-ChatMessages-content"
