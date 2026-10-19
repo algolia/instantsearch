@@ -53,8 +53,6 @@ type HitProps = {
 };
 
 function Hit({ hit }: HitProps) {
-  // Read the selection from the `<CompareBar>`'s render state rather than
-  // calling `useCompare` here, which would mount one `compare` widget per hit.
   const { indexRenderState } = useInstantSearch();
   const { isSelected, toggleItem, canAddItems } =
     indexRenderState.compare ?? {};
