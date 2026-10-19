@@ -12,7 +12,13 @@ jest.unmock('instantsearch.js/es');
 
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function mountRelatedProducts(props) {
+const defaultTemplate = `
+  <InstantSearch :search-client="searchClient" index-name="indexName">
+    <RelatedProducts v-bind="props" />
+  </InstantSearch>
+`;
+
+function mountRelatedProducts(props, template = defaultTemplate) {
   return mount(
     {
       components: { InstantSearch, RelatedProducts },
@@ -22,17 +28,155 @@ function mountRelatedProducts(props) {
           props,
         };
       },
-      template: `
-        <InstantSearch :search-client="searchClient" index-name="indexName">
-          <RelatedProducts v-bind="props" />
-        </InstantSearch>
-      `,
+      template,
     },
     { attachTo: document.body }
   );
 }
 
 describe('AisRelatedProducts', () => {
+  describe('slots', () => {
+    it('renders the `item` slot for each item', async () => {
+      const wrapper = mountRelatedProducts(
+        { objectIDs: ['1'] },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot:item="{ item }">
+              <span class="custom-item">{{ item.objectID }}</span>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      const items = wrapper.findAll('.ais-RelatedProducts-item .custom-item');
+      expect(items.length).toBeGreaterThan(0);
+      expect(items.at(0).text()).toBe('1');
+    });
+
+    it('exposes `sendEvent` to the `item` slot', async () => {
+      const wrapper = mountRelatedProducts(
+        { objectIDs: ['1'] },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot:item="{ sendEvent }">
+              <span class="custom-item">{{ typeof sendEvent }}</span>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      expect(wrapper.find('.custom-item').text()).toBe('function');
+    });
+
+    it('renders the `item` slot inside the carousel layout', async () => {
+      const wrapper = mountRelatedProducts(
+        { objectIDs: ['1'], layout: 'carousel' },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot:item="{ item }">
+              <span class="custom-item">{{ item.objectID }}</span>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      expect(wrapper.find('.ais-Carousel').exists()).toBe(true);
+      expect(
+        wrapper.findAll('.ais-Carousel-item .custom-item').length
+      ).toBeGreaterThan(0);
+    });
+
+    it('renders the `header` slot with items, translations and classNames', async () => {
+      const wrapper = mountRelatedProducts(
+        { objectIDs: ['1'] },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot:header="{ items, translations, classNames }">
+              <h2 :class="classNames.title" class="custom-header">
+                {{ translations.title }} ({{ items.length }})
+              </h2>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      const header = wrapper.find('.custom-header');
+      expect(header.exists()).toBe(true);
+      expect(header.classes()).toContain('ais-RelatedProducts-title');
+      expect(header.text()).toBe('Related products (2)');
+      expect(wrapper.find('h3').exists()).toBe(false);
+    });
+
+    it('renders the `empty` slot when there are no results', async () => {
+      const wrapper = mountRelatedProducts(
+        // `limit: 0` simulates receiving no recommendations
+        { objectIDs: ['1'], limit: 0 },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot:empty>
+              <p class="custom-empty">Nothing to recommend</p>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      expect(wrapper.find('.ais-RelatedProducts--empty').exists()).toBe(true);
+      expect(wrapper.find('.custom-empty').text()).toBe('Nothing to recommend');
+    });
+
+    it('renders only the `default` slot when it is the only slot', async () => {
+      const wrapper = mountRelatedProducts(
+        { objectIDs: ['1'] },
+        `
+        <InstantSearch :search-client="searchClient" index-name="indexName">
+          <RelatedProducts v-bind="props">
+            <template v-slot="{ items, sendEvent }">
+              <ul class="custom-list">
+                <li v-for="item in items" :key="item.objectID">{{ item.objectID }}</li>
+              </ul>
+            </template>
+          </RelatedProducts>
+        </InstantSearch>
+        `
+      );
+
+      await wait(0);
+      await nextTick();
+
+      const root = wrapper.find('.ais-RelatedProducts');
+      expect(root.exists()).toBe(true);
+      expect(root.findAll('.custom-list li').length).toBe(2);
+      // The shared markup (title / list) is not rendered.
+      expect(wrapper.find('.ais-RelatedProducts-title').exists()).toBe(false);
+      expect(wrapper.find('.ais-RelatedProducts-list').exists()).toBe(false);
+    });
+  });
+
   it('renders the default list layout', async () => {
     const wrapper = mountRelatedProducts({ objectIDs: ['1'] });
 
