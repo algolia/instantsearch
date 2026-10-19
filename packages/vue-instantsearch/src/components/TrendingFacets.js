@@ -3,7 +3,7 @@ import { connectTrendingFacets } from 'instantsearch.js/es/connectors/index';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { Fragment, renderReactCompat } from '../util/vue-compat';
+import { Fragment, getScopedSlot, renderReactCompat } from '../util/vue-compat';
 
 function mapClassNames(classNames) {
   if (!classNames) {
@@ -77,10 +77,35 @@ export default {
       Fragment,
     });
 
+    const items = this.state ? this.state.items : [];
+
+    const defaultSlot = getScopedSlot(this, 'default');
+    const itemSlot = getScopedSlot(this, 'item');
+    const headerSlot = getScopedSlot(this, 'header');
+    const emptySlot = getScopedSlot(this, 'empty');
+
+    // Like `AisHits`, the default slot replaces the whole widget body when
+    // it's the only slot provided.
+    if (defaultSlot && !itemSlot && !headerSlot && !emptySlot) {
+      return h('section', { className: this.suit() }, defaultSlot({ items }));
+    }
+
     return h(TrendingFacetsUiComponent, {
-      items: this.state ? this.state.items : [],
+      items,
       status: this.instantSearchInstance.status,
       classNames: mapClassNames(this.classNames),
+      // Scoped slots are forwarded as the shared component's `*Component`
+      // props; `undefined` keeps the shared defaults.
+      itemComponent: itemSlot && ((props) => itemSlot({ item: props.item })),
+      headerComponent:
+        headerSlot &&
+        ((props) =>
+          headerSlot({
+            items: props.items,
+            translations: props.translations,
+            classNames: props.classNames,
+          })),
+      emptyComponent: emptySlot && (() => emptySlot({})),
     });
   }),
 };
