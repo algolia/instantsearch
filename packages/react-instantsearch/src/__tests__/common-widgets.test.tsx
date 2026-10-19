@@ -8,6 +8,7 @@ import React from 'react';
 
 import {
   InstantSearch,
+  useCompare,
   RefinementList,
   HierarchicalMenu,
   Breadcrumb,
@@ -38,6 +39,7 @@ import {
   ResultCard,
   Autocomplete,
   FilterSuggestions,
+  CompareBar,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -487,6 +489,46 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createCompareBarWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The bar hands the comparison to a <Chat> on the same index, so the
+    // default setup renders both. A sibling `useCompare` consumer renders a
+    // toggle per product, the way a per-hit "Compare" button would.
+    const {
+      renderChat = true,
+      products = [],
+      ...compareBarWidgetParams
+    } = widgetParams;
+
+    function CompareToggles() {
+      const { isSelected, toggleItem } = useCompare();
+
+      return (
+        <>
+          {products.map((product) => (
+            <button
+              key={product.objectID}
+              data-testid={`CompareToggle-${product.objectID}`}
+              aria-pressed={isSelected(product.objectID)}
+              onClick={() => toggleItem(product)}
+            />
+          ))}
+        </>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CompareToggles />
+        <CompareBar {...compareBarWidgetParams} />
+        {/*
+          A dedicated id: the `agentId` the chat suites use keys persisted
+          messages in `sessionStorage` that leak across tests in this file.
+        */}
+        {renderChat && <Chat agentId="compareBarChatAgentId" />}
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -542,6 +584,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
   createPromptSuggestionsWidgetTests: { act },
+  createCompareBarWidgetTests: { act },
   createResultCardWidgetTests: { act },
 };
 
